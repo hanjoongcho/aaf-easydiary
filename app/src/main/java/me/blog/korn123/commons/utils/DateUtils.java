@@ -1,0 +1,67 @@
+package me.blog.korn123.commons.utils;
+
+import java.io.PrintStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
+/**
+ * Created by CHO HANJOONG on 2017-03-16.
+ */
+
+public class DateUtils
+{
+    public static final int HOURS_24 = 24;
+    public static final int MINUTES_60 = 60;
+    public static final int SECONDS_60 = 60;
+    public static final int MILLI_SECONDS_1000 = 1000;
+    private static final int UNIT_HEX = 16;
+    public static final String DATE_PATTERN_DASH = "yyyy-MM-dd";
+    public static final String TIME_PATTERN = "HH:mm";
+    public static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+    public static final String DATE_HMS_PATTERN = "yyyyMMddHHmmss";
+    public static final String TIMESTAMP_PATTERN = "yyyy-MM-dd HH:mm:ss.SSS";
+    public static final String YEAR_PATTERN = "yyyy";
+    public static final String MONTH_PATTERN = "MM";
+    public static final String DAY_PATTERN = "dd";
+    public static final String DATE_PATTERN = "yyyyMMdd";
+    public static final String TIME_HMS_PATTERN = "HHmmss";
+    public static final String TIME_HMS_PATTERN_COLONE = "HH:mm:ss";
+
+    public static String getCurrentDateAsString()
+    {
+        return getCurrentDateAsString("yyyy-MM-dd");
+    }
+
+    public static String getCurrentDateAsString(String pattern)
+    {
+        SimpleDateFormat df = new SimpleDateFormat(pattern);
+        return df.format(new Date());
+    }
+
+    public static void main(String[] args)
+    {
+        System.out.println(getCurrentDateTime());
+    }
+
+    public static String getCurrentDateTime()
+    {
+        return getCurrentDateTime("yyyy-MM-dd HH:mm:ss");
+    }
+
+    public static String getCurrentDateTime(String pattern)
+    {
+        DateTime dt = new DateTime();
+        DateTimeFormatter fmt = DateTimeFormat.forPattern(pattern);
+        return fmt.print(dt);
+    }
+
+    public static String getCurrentDateTime(long currentTimeMillis)
+    {
+        DateTime dt = new DateTime(currentTimeMillis);
+        DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+        return fmt.print(dt);
+    }
+}

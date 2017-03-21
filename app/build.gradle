@@ -1,0 +1,59 @@
+apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
+apply plugin: 'realm-android'
+
+// icon color: #5C5C5C
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+    defaultConfig {
+        applicationId "me.blog.korn123.easydiary"
+        minSdkVersion 15
+        targetSdkVersion 25
+        versionCode 8
+        versionName "0.10.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def date = new Date();
+                    def formattedDate = date.format('yyyyMMddHHmmss')
+                    output.outputFile = new File(output.outputFile.parent,
+                            output.outputFile.name.replace("-release", "-easy_diary-" + formattedDate)
+                            //for Debug use output.outputFile = new File(output.outputFile.parent,
+                            //                             output.outputFile.name.replace("-debug", "-" + formattedDate)
+                    )
+                }
+            }
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.3.0'
+    compile 'com.android.support:design:25.3.0'
+    compile 'com.android.support:support-v4:25.3.0'
+    compile 'com.android.support:support-vector-drawable:25.3.0'
+    testCompile 'junit:junit:4.12'
+
+    // google
+    compile 'com.google.android.gms:play-services-drive:8.4.0'
+
+    // apache commons dependency
+    compile 'org.apache.commons:commons-lang3:3.0'
+    compile group: 'commons-io', name: 'commons-io', version: '2.4'
+
+    // etc
+    apt 'com.jakewharton:butterknife-compiler:8.4.0'
+    compile 'com.jakewharton:butterknife:8.4.0'
+    compile group: 'joda-time', name: 'joda-time', version: '2.1'
+}

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/lib/com.beardedhen.androidbootstrap;"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:padding="10dp"
+        android:text="Awesome Application Factory"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+id/companyName"
+        android:gravity="left"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:src="@drawable/intro"
+            android:layout_width="100dp"
+            android:layout_height="100dp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:padding="10dp"
+        android:text="Easy Diary"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:textColor="@color/white"
+        android:textSize="25dp"
+        android:id="@+id/appName"
+        android:textStyle="bold" />
+
+</LinearLayout>

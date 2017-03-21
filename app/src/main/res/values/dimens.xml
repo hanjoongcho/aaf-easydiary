@@ -1,0 +1,16 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="nav_header_vertical_spacing">16dp</dimen>
+    <dimen name="nav_header_height">160dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="large_text_size">19dp</dimen>
+    <dimen name="medium_text_size">17dp</dimen>
+
+    <!-- kakao common -->
+    <dimen name="title_text_size">18dp</dimen>
+    <dimen name="menu_text_size">18dp</dimen>
+</resources>

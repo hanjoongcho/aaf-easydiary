@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="me.blog.korn123.easydiary">
+
+    <application
+        android:name=".helper.EasyDiaryApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:theme="@style/AppTheme.NoActionBar"
+            android:name=".IntroActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".setting.SettingsActivity" android:label="" android:theme="@style/AppTheme" />
+        <activity android:name=".setting.LicensesActivity" android:label="Licenses" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="me.blog.korn123.easydiary.diary.CreateDiaryActivity" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="me.blog.korn123.easydiary.diary.ReadDiaryDetailActivity" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="me.blog.korn123.easydiary.diary.UpdateDiaryActivity" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".diary.ReadDiaryActivity" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".googledrive.GoogleDriveUploader" />
+        <activity android:name=".googledrive.GoogleDriveDownloader" />
+    </application>
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+</manifest>
