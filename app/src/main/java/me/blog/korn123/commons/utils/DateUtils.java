@@ -35,8 +35,7 @@ public class DateUtils
         return getCurrentDateAsString("yyyy-MM-dd");
     }
 
-    public static String getCurrentDateAsString(String pattern)
-    {
+    public static String getCurrentDateAsString(String pattern) {
         SimpleDateFormat df = new SimpleDateFormat(pattern);
         return df.format(new Date());
     }
@@ -58,10 +57,21 @@ public class DateUtils
         return fmt.print(dt);
     }
 
-    public static String getCurrentDateTime(long currentTimeMillis)
-    {
+    public static String getDateTime(long currentTimeMillis) {
         DateTime dt = new DateTime(currentTimeMillis);
         DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+        return fmt.print(dt);
+    }
+
+    public static String timeMillisToDateTime(long timeMillis) {
+        DateTime dt = new DateTime(timeMillis);
+        DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+        return fmt.print(dt);
+    }
+
+    public static String timeMillisToHour(long timeMillis) {
+        DateTime dt = new DateTime(timeMillis);
+        DateTimeFormatter fmt = DateTimeFormat.forPattern("HH");
         return fmt.print(dt);
     }
 }

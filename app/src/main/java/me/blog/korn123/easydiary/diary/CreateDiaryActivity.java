@@ -62,7 +62,7 @@ public class CreateDiaryActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.create_diary_title));
-        getSupportActionBar().setSubtitle(getString(R.string.write_date) + ": " + DateUtils.getCurrentDateTime(this.mCurrentTimeMillis));
+        getSupportActionBar().setSubtitle(getString(R.string.write_date) + ": " + DateUtils.timeMillisToDateTime(this.mCurrentTimeMillis));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);

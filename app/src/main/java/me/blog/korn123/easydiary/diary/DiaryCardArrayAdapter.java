@@ -58,7 +58,7 @@ public class DiaryCardArrayAdapter extends ArrayAdapter<DiaryDto> {
         DiaryDto diaryDto = (DiaryDto)this.list.get(position);
         holder.textView1.setText(diaryDto.getTitle());
         holder.textView2.setText(diaryDto.getContents());
-        holder.textView3.setText(DateUtils.getCurrentDateTime(diaryDto.getCurrentTimeMillis()));
+        holder.textView3.setText(DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis()));
 
         return row;
     }

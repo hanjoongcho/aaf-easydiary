@@ -4,13 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,6 +35,7 @@ import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.commons.utils.DialogUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
+import me.blog.korn123.easydiary.chart.BarChartActivity;
 import me.blog.korn123.easydiary.setting.SettingsActivity;
 
 /**
@@ -127,7 +126,7 @@ public class ReadDiaryActivity extends AppCompatActivity {
                 detailIntent.putExtra("sequence", diaryDto.getSequence());
                 detailIntent.putExtra("title", diaryDto.getTitle());
                 detailIntent.putExtra("contents", diaryDto.getContents());
-                detailIntent.putExtra("date", DateUtils.getCurrentDateTime(diaryDto.getCurrentTimeMillis()));
+                detailIntent.putExtra("date", DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis()));
                 detailIntent.putExtra("current_time_millis", diaryDto.getCurrentTimeMillis());
                 startActivity(detailIntent);
             }
@@ -175,17 +174,21 @@ public class ReadDiaryActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 break;
-            case R.id.action_settings:
+            case R.id.settings:
 //                DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.notice_message));
                 Intent settingIntent = new Intent(ReadDiaryActivity.this, SettingsActivity.class);
                 startActivity(settingIntent);
+                break;
+            case R.id.chart:
+                Intent chartIntent = new Intent(ReadDiaryActivity.this, BarChartActivity.class);
+                startActivity(chartIntent);
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.read_diary, menu);
         return true;
     }
 
@@ -228,6 +231,16 @@ public class ReadDiaryActivity extends AppCompatActivity {
                 "바로 이것이 비록 사실이 가슴 아프더라도\n" +
                 "언제나 까다로운 질문을 하고 사실을 말하는 것이 안전한 이유다.\n" +
                 "- 에릭 슈미트 구글 회장, ‘구글은 어떻게 일하는가?’에서");
+
+//        for (int i = 0; i < 50; i++) {
+//            DiaryDao.createDiary(this.mCurrentTimeMillis - (i*3600000), "나쁜 소식을 많이 들을수록 기뻐해야 한다.", "여러분이 지도자로서 가장 들을 필요가 있는 것이\n" +
+//                    "바로 나쁜 소식이다.\n" +
+//                    "좋은 소식은 내일도 좋은 것이지만\n" +
+//                    "나쁜 소식은 내일이면 더 나빠질 것이다.\n" +
+//                    "바로 이것이 비록 사실이 가슴 아프더라도\n" +
+//                    "언제나 까다로운 질문을 하고 사실을 말하는 것이 안전한 이유다.\n" +
+//                    "- 에릭 슈미트 구글 회장, ‘구글은 어떻게 일하는가?’에서");
+//        }
     }
 
 }

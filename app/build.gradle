@@ -10,8 +10,8 @@ android {
         applicationId "me.blog.korn123.easydiary"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 9
-        versionName "0.10.1"
+        versionCode 10
+        versionName "0.10.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -56,4 +56,7 @@ dependencies {
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
     compile 'com.jakewharton:butterknife:8.4.0'
     compile group: 'joda-time', name: 'joda-time', version: '2.1'
+
+    // MP Chart
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.1'
 }
