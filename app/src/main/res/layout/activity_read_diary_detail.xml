@@ -106,7 +106,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:textColor="@color/color8"
+                    android:textColor="@color/defaultTextColor"
                     android:enabled="false"
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
@@ -117,7 +117,7 @@
                     android:layout_height="wrap_content" />
 
                 <TextView
-                    android:textColor="@color/color8"
+                    android:textColor="@color/defaultTextColor"
                     android:enabled="false"
                     android:paddingRight="10dp"
                     android:paddingBottom="10dp"
@@ -145,7 +145,7 @@
                         android:padding="10dp"
                         android:enabled="false"
                         android:background="@drawable/bg_card_01"
-                        android:textColor="@color/color8"
+                        android:textColor="@color/defaultTextColor"
                         android:textSize="@dimen/large_text_size"
                         android:id="@+id/contents"
                         android:gravity="left"

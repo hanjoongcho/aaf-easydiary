@@ -93,7 +93,7 @@
             </LinearLayout>
 
             <EditText
-                android:textColor="@color/color8"
+                android:textColor="@color/defaultTextColor"
                 android:paddingLeft="10dp"
                 android:gravity="center_vertical"
                 android:id="@+id/title"
@@ -117,7 +117,7 @@
                     <EditText
                         android:padding="10dp"
                         android:background="@drawable/bg_card_01"
-                        android:textColor="@color/color8"
+                        android:textColor="@color/defaultTextColor"
                         android:textSize="@dimen/large_text_size"
                         android:id="@+id/contents"
                         android:gravity="left"

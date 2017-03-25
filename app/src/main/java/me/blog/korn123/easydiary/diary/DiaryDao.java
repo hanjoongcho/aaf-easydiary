@@ -10,6 +10,7 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import me.blog.korn123.easydiary.helper.DiaryMigration;
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -22,7 +23,14 @@ public class DiaryDao {
 
     public static Realm getRealmInstance() {
         if (diaryConfig == null) {
-            diaryConfig = new RealmConfiguration.Builder().name("diary.realm").deleteRealmIfMigrationNeeded().modules(Realm.getDefaultModule()).build();
+            diaryConfig = new RealmConfiguration.Builder()
+                    .name("diary.realm")
+                    .schemaVersion(1)
+                    .migration(new DiaryMigration())
+                    /*.deleteRealmIfMigrationNeeded()*/
+                    .modules(Realm.getDefaultModule())
+                    .build();
+
         }
         final Realm diaryRealm = Realm.getInstance(diaryConfig);
         return diaryRealm;
