@@ -27,7 +27,6 @@ import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.diary.DiaryDao;
 import me.blog.korn123.easydiary.diary.DiaryDto;
 import me.blog.korn123.easydiary.diary.DiarySimpleCardArrayAdapter;
-import me.blog.korn123.easydiary.diary.ReadDiaryActivity;
 import me.blog.korn123.easydiary.diary.ReadDiaryDetailActivity;
 
 /**
@@ -35,9 +34,7 @@ import me.blog.korn123.easydiary.diary.ReadDiaryDetailActivity;
  */
 
 public class CalendarActivity extends AppCompatActivity {
-    private boolean undo = false;
     private CaldroidFragment caldroidFragment;
-    private CaldroidFragment dialogCaldroidFragment;
 
     @BindView(R.id.selectedList)
     ListView mSelectedListView;
@@ -47,30 +44,6 @@ public class CalendarActivity extends AppCompatActivity {
 
     private ArrayAdapter<DiaryDto> mArrayAdapterDiary;
     private List<DiaryDto> mDiaryList;
-
-    private void setCustomResourceForDates() {
-        Calendar cal = Calendar.getInstance();
-
-        Date currentDate = cal.getTime();
-
-        // Min date is last 7 days
-        cal.add(Calendar.DATE, -7);
-        Date blueDate = cal.getTime();
-
-        // Max date is next 7 days
-        cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, 7);
-        Date greenDate = cal.getTime();
-
-        if (caldroidFragment != null) {
-//            ColorDrawable blue = new ColorDrawable(getResources().getColor(R.color.blue));
-//            ColorDrawable green = new ColorDrawable(Color.GREEN);
-//            caldroidFragment.setBackgroundDrawableForDate(blue, blueDate);
-//            caldroidFragment.setBackgroundDrawableForDate(green, greenDate);
-//            caldroidFragment.setTextColorForDate(R.color.white, blueDate);
-//            caldroidFragment.setTextColorForDate(R.color.white, greenDate);
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +81,7 @@ public class CalendarActivity extends AppCompatActivity {
         // //////////////////////////////////////////////////////////////////////
         // **** This is to show customized fragment. If you want customized
         // version, uncomment below line ****
-        caldroidFragment = new CaldroidSampleCustomFragment();
+        caldroidFragment = new CaldroidCustomFragment();
 
         // Setup arguments
 
@@ -202,11 +175,6 @@ public class CalendarActivity extends AppCompatActivity {
         if (caldroidFragment != null) {
             caldroidFragment.saveStatesToKey(outState, "CALDROID_SAVED_STATE");
         }
-
-        if (dialogCaldroidFragment != null) {
-            dialogCaldroidFragment.saveStatesToKey(outState,
-                    "DIALOG_CALDROID_SAVED_STATE");
-        }
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -237,4 +205,29 @@ public class CalendarActivity extends AppCompatActivity {
             mEmptyInfo.setVisibility(View.VISIBLE);
         }
     }
+
+    //    private void setCustomResourceForDates() {
+//        Calendar cal = Calendar.getInstance();
+//
+//        Date currentDate = cal.getTime();
+//
+//        // Min date is last 7 days
+//        cal.add(Calendar.DATE, -7);
+//        Date blueDate = cal.getTime();
+//
+//        // Max date is next 7 days
+//        cal = Calendar.getInstance();
+//        cal.add(Calendar.DATE, 7);
+//        Date greenDate = cal.getTime();
+//
+//        if (caldroidFragment != null) {
+//            ColorDrawable blue = new ColorDrawable(getResources().getColor(R.color.blue));
+//            ColorDrawable green = new ColorDrawable(Color.GREEN);
+//            caldroidFragment.setBackgroundDrawableForDate(blue, blueDate);
+//            caldroidFragment.setBackgroundDrawableForDate(green, greenDate);
+//            caldroidFragment.setTextColorForDate(R.color.white, blueDate);
+//            caldroidFragment.setTextColorForDate(R.color.white, greenDate);
+//        }
+//    }
+
 }

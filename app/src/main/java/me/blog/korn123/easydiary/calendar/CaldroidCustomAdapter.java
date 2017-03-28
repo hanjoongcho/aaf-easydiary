@@ -18,11 +18,11 @@ import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.diary.DiaryDao;
 
-public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
+public class CaldroidCustomAdapter extends CaldroidGridAdapter {
 
-	public CaldroidSampleCustomAdapter(Context context, int month, int year,
-                                       Map<String, Object> caldroidData,
-                                       Map<String, Object> extraData) {
+	public CaldroidCustomAdapter(Context context, int month, int year,
+                                 Map<String, Object> caldroidData,
+                                 Map<String, Object> extraData) {
 		super(context, month, year, caldroidData, extraData);
 	}
 
