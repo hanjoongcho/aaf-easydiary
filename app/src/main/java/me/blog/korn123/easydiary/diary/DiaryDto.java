@@ -1,5 +1,7 @@
 package me.blog.korn123.easydiary.diary;
 
+import java.util.Date;
+
 import io.realm.RealmObject;
 import io.realm.annotations.Ignore;
 import io.realm.annotations.PrimaryKey;
@@ -22,6 +24,8 @@ public class DiaryDto extends RealmObject {
 
     private String contents;
 
+    private Date date;
+
     public DiaryDto() {}
 
     public DiaryDto(int sequence, long currentTimeMillis, String title, String contents) {
@@ -29,6 +33,14 @@ public class DiaryDto extends RealmObject {
         this.currentTimeMillis = currentTimeMillis;
         this.title = title;
         this.contents = contents;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public int getSequence() {

@@ -8,4 +8,6 @@
     <color name="introTextColor">#f0ffffff</color>
     <color name="categoryTextColor">#f0ffffff</color>
     <color name="defaultTextColor">#4A4A4C</color>
+
+    <color name="blue">#ff33b5e5</color>
 </resources>

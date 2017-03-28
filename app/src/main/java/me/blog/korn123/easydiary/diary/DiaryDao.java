@@ -25,7 +25,7 @@ public class DiaryDao {
         if (diaryConfig == null) {
             diaryConfig = new RealmConfiguration.Builder()
                     .name("diary.realm")
-                    .schemaVersion(1)
+                    .schemaVersion(2)
                     .migration(new DiaryMigration())
                     /*.deleteRealmIfMigrationNeeded()*/
                     .modules(Realm.getDefaultModule())

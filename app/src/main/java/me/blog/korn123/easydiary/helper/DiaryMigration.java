@@ -1,7 +1,13 @@
 package me.blog.korn123.easydiary.helper;
 
+import java.util.Date;
+
 import io.realm.DynamicRealm;
+import io.realm.DynamicRealmObject;
+import io.realm.FieldAttribute;
 import io.realm.RealmMigration;
+import io.realm.RealmObjectSchema;
+import io.realm.RealmSchema;
 
 /**
  * Created by hanjoong on 2017-03-25.
@@ -11,6 +17,23 @@ public class DiaryMigration implements RealmMigration {
 
     @Override
     public void migrate(DynamicRealm realm, long oldVersion, long newVersion) {
+        RealmSchema schema = realm.getSchema();
+        if (oldVersion == 1) {
+            RealmObjectSchema diarySchema = schema.get("DiaryDto");
+
+            // Combine 'firstName' and 'lastName' in a new field called 'fullName'
+            diarySchema
+                    .addField("date", Date.class)
+                    .transform(new RealmObjectSchema.Function() {
+                        @Override
+                        public void apply(DynamicRealmObject obj) {
+                            Date temp = new Date(obj.getLong("currentTimeMillis"));
+                            obj.set("date", temp);
+                        }
+                    });
+            oldVersion++;
+        }
+
 
 //        // During a migration, a DynamicRealm is exposed. A DynamicRealm is an untyped variant of a normal Realm, but
 //        // with the same object creation and query capabilities.

@@ -34,6 +34,7 @@ import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.commons.utils.DialogUtils;
 import me.blog.korn123.commons.utils.FontUtils;
+import me.blog.korn123.easydiary.calendar.CalendarActivity;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.chart.BarChartActivity;
 import me.blog.korn123.easydiary.setting.SettingsActivity;
@@ -183,6 +184,9 @@ public class ReadDiaryActivity extends AppCompatActivity {
                 Intent chartIntent = new Intent(ReadDiaryActivity.this, BarChartActivity.class);
                 startActivity(chartIntent);
                 break;
+            case R.id.planner:
+                Intent calendarIntent = new Intent(ReadDiaryActivity.this, CalendarActivity.class);
+                startActivity(calendarIntent);
         }
         return super.onOptionsItemSelected(item);
     }

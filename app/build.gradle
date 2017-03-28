@@ -59,4 +59,10 @@ dependencies {
 
     // MP Chart
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.1'
+
+    // calendar
+    // https://mvnrepository.com/artifact/com.roomorama/caldroid
+    compile group: 'com.roomorama', name: 'caldroid', version: '3.0.1'
+    compile 'com.darwinsys:hirondelle-date4j:1.5.1'
+
 }
