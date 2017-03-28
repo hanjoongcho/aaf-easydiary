@@ -63,6 +63,14 @@ public class DiaryDao {
         return list;
     }
 
+    public static List<DiaryDto> readDiaryByDateString(String dateString) {
+        RealmResults<DiaryDto> results = null;
+        results = getRealmInstance().where(DiaryDto.class).equalTo("dateString", dateString).findAllSorted("sequence", Sort.DESCENDING);
+        List<DiaryDto> list = new ArrayList<>();
+        list.addAll(results.subList(0, results.size()));
+        return list;
+    }
+
     public static int countDiaryBy(String dateString) {
         int total = 0;
         total = (int)getRealmInstance().where(DiaryDto.class).equalTo("dateString", dateString).count();

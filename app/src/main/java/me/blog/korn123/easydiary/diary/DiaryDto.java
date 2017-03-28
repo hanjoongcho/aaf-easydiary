@@ -5,6 +5,7 @@ import java.util.Date;
 import io.realm.RealmObject;
 import io.realm.annotations.Ignore;
 import io.realm.annotations.PrimaryKey;
+import me.blog.korn123.commons.utils.DateUtils;
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -33,6 +34,7 @@ public class DiaryDto extends RealmObject {
         this.currentTimeMillis = currentTimeMillis;
         this.title = title;
         this.contents = contents;
+        this.dateString = DateUtils.timeMillisToDateTime(currentTimeMillis, DateUtils.DATE_PATTERN_DASH);
     }
 
     public String getDateString() {

@@ -102,10 +102,12 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
 
 		tv1.setText("" + dateTime.getDay());
 
-		String dateString = dateTime.format(DateUtils.DATE_PATTERN_DASH);
+		String dateString = dateTime.format("YYYY-MM-DD");
 		int count = DiaryDao.countDiaryBy(dateString);
-		tv2.setText(count + "건");
-		tv2.setTextColor(parent.getResources().getColor(R.color.blue));
+		if (count > 0) {
+			tv2.setText(count + "건");
+			tv2.setTextColor(parent.getResources().getColor(R.color.blue));
+		}
 		// Somehow after setBackgroundResource, the padding collapse.
 		// This is to recover the padding
 		cellView.setPadding(leftPadding, topPadding, rightPadding,

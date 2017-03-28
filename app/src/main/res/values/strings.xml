@@ -5,6 +5,7 @@
     <string name="guide_message">제목을 입력하거나 말하세요.</string>
     <string name="guide_message_2">검색어를 입력하거나 말하세요.</string>
     <string name="guide_message_3">백업을 위한 권한이 충분하지 않습니다.</string>
+    <string name="guide_message_4">해당일에 작성된 일기가 없습니다.</string>
     <string name="create_diary_title">다이어리 쓰기</string>
     <string name="update_diary_title">다이어리 수정</string>
     <string name="read_diary_title">다이어리 검색</string>

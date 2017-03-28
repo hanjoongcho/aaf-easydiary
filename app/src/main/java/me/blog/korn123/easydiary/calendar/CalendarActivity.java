@@ -1,23 +1,34 @@
 package me.blog.korn123.easydiary.calendar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.easydiary.R;
+import me.blog.korn123.easydiary.diary.DiaryDao;
+import me.blog.korn123.easydiary.diary.DiaryDto;
+import me.blog.korn123.easydiary.diary.DiarySimpleCardArrayAdapter;
+import me.blog.korn123.easydiary.diary.ReadDiaryActivity;
+import me.blog.korn123.easydiary.diary.ReadDiaryDetailActivity;
 
 /**
  * Created by hanjoong on 2017-03-28.
@@ -28,8 +39,19 @@ public class CalendarActivity extends AppCompatActivity {
     private CaldroidFragment caldroidFragment;
     private CaldroidFragment dialogCaldroidFragment;
 
+    @BindView(R.id.selectedList)
+    ListView mSelectedListView;
+
+    @BindView(R.id.emptyInfo)
+    TextView mEmptyInfo;
+
+    private ArrayAdapter<DiaryDto> mArrayAdapterDiary;
+    private List<DiaryDto> mDiaryList;
+
     private void setCustomResourceForDates() {
         Calendar cal = Calendar.getInstance();
+
+        Date currentDate = cal.getTime();
 
         // Min date is last 7 days
         cal.add(Calendar.DATE, -7);
@@ -54,13 +76,30 @@ public class CalendarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
+        ButterKnife.bind(this);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.calendar_title));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
+        Calendar cal = Calendar.getInstance();
+        Date currentDate = cal.getTime();
+        refreshList(currentDate);
+        mArrayAdapterDiary = new DiarySimpleCardArrayAdapter(this, R.layout.list_item_diary_simple_card_array_adapter , this.mDiaryList);
+        mSelectedListView.setAdapter(mArrayAdapterDiary);
+        mSelectedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                DiaryDto diaryDto = (DiaryDto)adapterView.getAdapter().getItem(i);
+                Intent detailIntent = new Intent(CalendarActivity.this, ReadDiaryDetailActivity.class);
+                detailIntent.putExtra("sequence", diaryDto.getSequence());
+                detailIntent.putExtra("title", diaryDto.getTitle());
+                detailIntent.putExtra("contents", diaryDto.getContents());
+                detailIntent.putExtra("date", DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis()));
+                detailIntent.putExtra("current_time_millis", diaryDto.getCurrentTimeMillis());
+                startActivity(detailIntent);
+            }
+        });
 
         // Setup caldroid fragment
         // **** If you want normal CaldroidFragment, use below line ****
@@ -81,7 +120,6 @@ public class CalendarActivity extends AppCompatActivity {
         // If activity is created from fresh
         else {
             Bundle args = new Bundle();
-            Calendar cal = Calendar.getInstance();
             args.putInt(CaldroidFragment.MONTH, cal.get(Calendar.MONTH) + 1);
             args.putInt(CaldroidFragment.YEAR, cal.get(Calendar.YEAR));
             args.putBoolean(CaldroidFragment.ENABLE_SWIPE, true);
@@ -100,7 +138,9 @@ public class CalendarActivity extends AppCompatActivity {
             caldroidFragment.setArguments(args);
         }
 
-        setCustomResourceForDates();
+        caldroidFragment.setSelectedDate(currentDate);
+
+//        setCustomResourceForDates();
 
         // Attach to the activity
         FragmentTransaction t = getSupportFragmentManager().beginTransaction();
@@ -112,35 +152,36 @@ public class CalendarActivity extends AppCompatActivity {
 
             @Override
             public void onSelectDate(Date date, View view) {
-                Toast.makeText(getApplicationContext(), formatter.format(date),
-                        Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), formatter.format(date),
+//                        Toast.LENGTH_SHORT).show();
 //                ColorDrawable green = new ColorDrawable(Color.GREEN);
 //                caldroidFragment.setBackgroundDrawableForDate(green, date);
                 caldroidFragment.clearSelectedDates();
                 caldroidFragment.setSelectedDate(date);
                 caldroidFragment.refreshView();
+                refreshList(date);
             }
 
             @Override
             public void onChangeMonth(int month, int year) {
                 String text = "month: " + month + " year: " + year;
-                Toast.makeText(getApplicationContext(), text,
-                        Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), text,
+//                        Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onLongClickDate(Date date, View view) {
-                Toast.makeText(getApplicationContext(),
-                        "Long click " + formatter.format(date),
-                        Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(),
+//                        "Long click " + formatter.format(date),
+//                        Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onCaldroidViewCreated() {
                 if (caldroidFragment.getLeftArrowButton() != null) {
-                    Toast.makeText(getApplicationContext(),
-                            "Caldroid view is created", Toast.LENGTH_SHORT)
-                            .show();
+//                    Toast.makeText(getApplicationContext(),
+//                            "Caldroid view is created", Toast.LENGTH_SHORT)
+//                            .show();
                 }
             }
 
@@ -165,6 +206,35 @@ public class CalendarActivity extends AppCompatActivity {
         if (dialogCaldroidFragment != null) {
             dialogCaldroidFragment.saveStatesToKey(outState,
                     "DIALOG_CALDROID_SAVED_STATE");
+        }
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void refreshList(Date date) {
+        final SimpleDateFormat formatter = new SimpleDateFormat(DateUtils.DATE_PATTERN_DASH);
+
+        if (mDiaryList == null) {
+            mDiaryList = DiaryDao.readDiaryByDateString(formatter.format(date));
+        } else if (mDiaryList != null) {
+            mDiaryList.clear();
+            mDiaryList.addAll(DiaryDao.readDiaryByDateString(formatter.format(date)));
+            mArrayAdapterDiary.notifyDataSetChanged();
+        }
+
+        if (mDiaryList.size() > 0) {
+            mSelectedListView.setVisibility(View.VISIBLE);
+            mEmptyInfo.setVisibility(View.GONE);
+        } else {
+            mSelectedListView.setVisibility(View.GONE);
+            mEmptyInfo.setVisibility(View.VISIBLE);
         }
     }
 }
