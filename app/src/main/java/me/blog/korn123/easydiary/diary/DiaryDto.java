@@ -24,7 +24,7 @@ public class DiaryDto extends RealmObject {
 
     private String contents;
 
-    private Date date;
+    private String dateString;
 
     public DiaryDto() {}
 
@@ -35,12 +35,12 @@ public class DiaryDto extends RealmObject {
         this.contents = contents;
     }
 
-    public Date getDate() {
-        return date;
+    public String getDateString() {
+        return dateString;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDateString(String dateString) {
+        this.dateString = dateString;
     }
 
     public int getSequence() {

@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
@@ -60,6 +61,12 @@ public class DiaryDao {
         List<DiaryDto> list = new ArrayList<>();
         list.addAll(results.subList(0, results.size()));
         return list;
+    }
+
+    public static int countDiaryBy(String dateString) {
+        int total = 0;
+        total = (int)getRealmInstance().where(DiaryDto.class).equalTo("dateString", dateString).count();
+        return total;
     }
 
     public static void updateDiary(final DiaryDto diaryDto) {

@@ -8,6 +8,7 @@ import io.realm.FieldAttribute;
 import io.realm.RealmMigration;
 import io.realm.RealmObjectSchema;
 import io.realm.RealmSchema;
+import me.blog.korn123.commons.utils.DateUtils;
 
 /**
  * Created by hanjoong on 2017-03-25.
@@ -21,16 +22,27 @@ public class DiaryMigration implements RealmMigration {
         if (oldVersion == 1) {
             RealmObjectSchema diarySchema = schema.get("DiaryDto");
 
-            // Combine 'firstName' and 'lastName' in a new field called 'fullName'
+/* Date 필드는 추후 필요 시 마이그레이션 예정임 */
+//            diarySchema
+//                    .addField("date", Date.class)
+//                    .transform(new RealmObjectSchema.Function() {
+//                        @Override
+//                        public void apply(DynamicRealmObject obj) {
+//                            Date temp = new Date(obj.getLong("currentTimeMillis"));
+//                            obj.set("date", temp);
+//                        }
+//                    });
+
             diarySchema
-                    .addField("date", Date.class)
+                    .addField("dateString", String.class)
                     .transform(new RealmObjectSchema.Function() {
                         @Override
                         public void apply(DynamicRealmObject obj) {
-                            Date temp = new Date(obj.getLong("currentTimeMillis"));
-                            obj.set("date", temp);
+                            String dateString = DateUtils.timeMillisToDateTime(obj.getLong("currentTimeMillis") , DateUtils.DATE_PATTERN_DASH);
+                            obj.set("dateString", dateString);
                         }
                     });
+
             oldVersion++;
         }
 

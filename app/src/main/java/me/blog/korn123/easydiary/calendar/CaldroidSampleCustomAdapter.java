@@ -14,7 +14,9 @@ import com.roomorama.caldroid.CaldroidGridAdapter;
 import java.util.Map;
 
 import hirondelle.date4j.DateTime;
+import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.easydiary.R;
+import me.blog.korn123.easydiary.diary.DiaryDao;
 
 public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
 
@@ -99,7 +101,10 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
 		}
 
 		tv1.setText("" + dateTime.getDay());
-		tv2.setText("2건");
+
+		String dateString = dateTime.format(DateUtils.DATE_PATTERN_DASH);
+		int count = DiaryDao.countDiaryBy(dateString);
+		tv2.setText(count + "건");
 		tv2.setTextColor(parent.getResources().getColor(R.color.blue));
 		// Somehow after setBackgroundResource, the padding collapse.
 		// This is to recover the padding

@@ -63,6 +63,12 @@ public class DateUtils
         return fmt.print(dt);
     }
 
+    public static String timeMillisToDateTime(long timeMillis, String pattern) {
+        DateTime dt = new DateTime(timeMillis);
+        DateTimeFormatter fmt = DateTimeFormat.forPattern(pattern);
+        return fmt.print(dt);
+    }
+
     public static String timeMillisToDateTime(long timeMillis) {
         DateTime dt = new DateTime(timeMillis);
         DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
