@@ -23,4 +23,22 @@
         <item name="android:drawablePadding">0dp</item>
     </style>
 
+    <!--Override Caldroid theme-->
+    <style name="CaldroidDefaultGridView">
+        <item name="android:adjustViewBounds">true</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:listSelector">@null</item>
+        <item name="android:background">@color/calendarBackground</item>
+        <item name="android:horizontalSpacing">0dp</item>
+        <item name="android:padding">1dp</item>
+        <item name="android:verticalSpacing">0dp</item>
+    </style>
+
+    <style name="CaldroidDefaultCalendarViewLayout">
+        <item name="android:padding">5dp</item>
+        <item name="android:background">@drawable/bg_card_01</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
 </resources>
