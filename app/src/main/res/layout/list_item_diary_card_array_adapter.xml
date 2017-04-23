@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:padding="10dp"
@@ -18,7 +18,6 @@
             android:textSize="@dimen/large_text_size"
             android:gravity="center_vertical" />
         <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:paddingBottom="5dp"
             android:id="@+id/text3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -26,6 +25,7 @@
             android:gravity="right" />
         <TextView xmlns:android="http://schemas.android.com/apk/res/android"
             android:maxLines="3"
+            android:padding="5dp"
             android:id="@+id/text2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

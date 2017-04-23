@@ -27,13 +27,13 @@
 
         <LinearLayout
             android:orientation="vertical"
-            android:padding="5dp"
+            android:padding="@dimen/card_layout_padding"
             android:background="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <LinearLayout
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="@dimen/card_layout_margin"
                 android:background="@drawable/bg_card_01"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -50,7 +50,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:id="@+id/zoomIn"
-                        android:src="@drawable/plus"
+                        android:src="@drawable/zoom_in"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -58,7 +58,7 @@
                         android:background="@drawable/click_effect_01"
                         android:layout_marginRight="10dp"
                         android:id="@+id/zoomOut"
-                        android:src="@drawable/minus"
+                        android:src="@drawable/zoom_out"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -80,12 +80,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                     <TextView
-                        android:layout_marginLeft="9dp"
+                        android:textColor="@color/colorAccent"
+                        android:layout_marginLeft="5dp"
                         android:text="@string/special_character_a"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                     <ImageView
-                        android:src="@android:drawable/ic_btn_speak_now"
+                        android:src="@drawable/microphone_2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                     <Switch
@@ -95,7 +96,8 @@
                         android:id="@+id/inputMode" />
 
                     <ImageView
-                        android:src="@android:drawable/ic_btn_speak_now"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/microphone_2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
@@ -108,7 +110,7 @@
                 android:paddingLeft="10dp"
                 android:gravity="center_vertical"
                 android:id="@+id/title"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="@dimen/card_layout_margin"
                 android:background="@drawable/bg_card_01"
                 android:hint="@string/guide_message"
                 android:textSize="@dimen/large_text_size"

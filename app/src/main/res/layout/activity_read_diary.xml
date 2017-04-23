@@ -27,13 +27,13 @@
 
         <LinearLayout
             android:orientation="vertical"
-            android:padding="5dp"
-            android:background="@color/colorPrimary"
+            android:padding="@dimen/card_layout_padding"
+            android:background="@color/colorAccent"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <LinearLayout
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="@dimen/card_layout_margin"
                 android:background="@drawable/bg_card_01"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -61,6 +61,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent">
                     <ImageView
+                        android:layout_marginRight="5dp"
                         android:src="@drawable/keyboard"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
@@ -72,7 +73,8 @@
                         android:id="@+id/inputMode" />
 
                     <ImageView
-                        android:src="@android:drawable/ic_btn_speak_now"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/microphone_2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
@@ -80,7 +82,7 @@
             </LinearLayout>
 
             <ListView
-                android:dividerHeight="5dp"
+                android:dividerHeight="@dimen/card_layout_margin"
                 android:divider="@null"
                 android:id="@+id/diaryList"
                 android:layout_width="match_parent"
