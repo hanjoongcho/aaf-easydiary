@@ -27,13 +27,13 @@
 
         <LinearLayout
             android:orientation="vertical"
-            android:padding="5dp"
+            android:padding="@dimen/card_layout_padding"
             android:background="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <LinearLayout
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="@dimen/card_layout_margin"
                 android:background="@drawable/bg_card_01"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -99,7 +99,7 @@
                 android:paddingLeft="10dp"
                 android:gravity="center_vertical"
                 android:id="@+id/title"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="@dimen/card_layout_margin"
                 android:background="@drawable/bg_card_01"
                 android:hint="제목을 입력하거나 말하세요."
                 android:textSize="@dimen/large_text_size"
