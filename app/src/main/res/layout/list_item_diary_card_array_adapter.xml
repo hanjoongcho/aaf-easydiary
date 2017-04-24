@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -10,19 +11,42 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:paddingBottom="5dp"
-            android:id="@+id/text1"
+
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/large_text_size"
-            android:gravity="center_vertical" />
-        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/text3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/large_text_size"
-            android:gravity="right" />
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/weather"
+                android:layout_marginRight="10dp"
+                app:srcCompat="@drawable/ic_snow_2"
+                android:layout_width="32dp"
+                android:layout_height="32dp" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:paddingBottom="5dp"
+                    android:id="@+id/text1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/large_text_size"
+                    android:gravity="center_vertical" />
+                <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/text3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/large_text_size"
+                    android:gravity="right" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
         <TextView xmlns:android="http://schemas.android.com/apk/res/android"
             android:maxLines="3"
             android:padding="5dp"

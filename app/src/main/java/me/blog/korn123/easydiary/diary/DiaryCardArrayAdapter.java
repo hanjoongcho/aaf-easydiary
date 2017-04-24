@@ -7,10 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
 
+import io.realm.Realm;
+import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.commons.utils.FontUtils;
@@ -42,6 +45,7 @@ public class DiaryCardArrayAdapter extends ArrayAdapter<DiaryDto> {
             holder.textView1 = ((TextView)row.findViewById(R.id.text1));
             holder.textView2 = ((TextView)row.findViewById(R.id.text2));
             holder.textView3 = ((TextView)row.findViewById(R.id.text3));
+            holder.imageView = ((ImageView) row.findViewById(R.id.weather));
             initFontStyle(holder);
             row.setTag(holder);
         } else {
@@ -60,6 +64,32 @@ public class DiaryCardArrayAdapter extends ArrayAdapter<DiaryDto> {
         holder.textView2.setText(diaryDto.getContents());
         holder.textView3.setText(DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis()));
 
+        // 날씨 icon random 설정
+        // icon 설정기능 구현하면 변경예정
+        int weather = (int)(Math.random() * 5) + 1;
+        Realm realm = DiaryDao.getRealmInstance();
+        realm.beginTransaction();
+        diaryDto.setWeather(weather);
+        realm.commitTransaction();
+        switch (diaryDto.getWeather()) {
+            case Constants.SUN:
+                holder.imageView.setImageResource(R.drawable.ic_sun);
+                break;
+            case Constants.SUN_AND_CLOUD:
+                holder.imageView.setImageResource(R.drawable.ic_cloud);
+                break;
+            case Constants.RAIN:
+                holder.imageView.setImageResource(R.drawable.ic_rain);
+                break;
+            case Constants.THUNDER_BOLT:
+                holder.imageView.setImageResource(R.drawable.ic_storm);
+                break;
+            case Constants.SNOW:
+                holder.imageView.setImageResource(R.drawable.ic_snow);
+                break;
+        }
+
+
         return row;
     }
 
@@ -73,5 +103,6 @@ public class DiaryCardArrayAdapter extends ArrayAdapter<DiaryDto> {
         TextView textView1;
         TextView textView2;
         TextView textView3;
+        ImageView imageView;
     }
 }

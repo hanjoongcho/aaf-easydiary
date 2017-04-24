@@ -46,6 +46,18 @@ public class DiaryMigration implements RealmMigration {
             oldVersion++;
         }
 
+        if (oldVersion == 2) {
+            RealmObjectSchema diarySchema = schema.get("DiaryDto");
+            diarySchema
+                    .addField("weather", int.class)
+                    .transform(new RealmObjectSchema.Function() {
+                        @Override
+                        public void apply(DynamicRealmObject obj) {
+                            obj.set("weather", -1);
+                        }
+                    });
+            oldVersion++;
+        }
 
 //        // During a migration, a DynamicRealm is exposed. A DynamicRealm is an untyped variant of a normal Realm, but
 //        // with the same object creation and query capabilities.
