@@ -85,7 +85,7 @@ public class DiaryCardArrayAdapter extends ArrayAdapter<DiaryDto> {
                 holder.imageView.setImageResource(R.drawable.ic_storm);
                 break;
             case Constants.SNOW:
-                holder.imageView.setImageResource(R.drawable.ic_snow);
+                holder.imageView.setImageResource(R.drawable.ic_snow_2);
                 break;
         }
 
