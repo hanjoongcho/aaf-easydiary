@@ -27,7 +27,7 @@
 
         <LinearLayout
             android:orientation="vertical"
-            android:padding="5dp"
+            android:padding="@dimen/card_layout_padding"
             android:background="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -40,8 +40,8 @@
             </LinearLayout>
 
             <ListView
-                android:layout_marginTop="5dp"
-                android:dividerHeight="5dp"
+                android:layout_marginTop="@dimen/card_layout_margin"
+                android:dividerHeight="@dimen/card_layout_padding"
                 android:divider="@null"
                 android:id="@+id/selectedList"
                 android:layout_width="match_parent"

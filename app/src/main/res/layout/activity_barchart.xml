@@ -26,7 +26,7 @@
         </android.support.design.widget.AppBarLayout>
 
         <LinearLayout
-            android:padding="5dp"
+            android:padding="@dimen/card_layout_padding"
             android:background="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="match_parent">

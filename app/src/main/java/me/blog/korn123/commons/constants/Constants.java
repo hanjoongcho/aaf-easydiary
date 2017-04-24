@@ -18,4 +18,20 @@ public class Constants {
 
     final static public int SETTING_FLAG_EXPORT_GOOGLE_DRIVE = 1;
     final static public int SETTING_FLAG_IMPORT_GOOGLE_DRIVE = 2;
+
+    // 맑음, 화창함
+    final static public int SUN = 1;
+
+    // 흐림
+    final static public int SUN_AND_CLOUD = 2;
+
+    // 비
+    final static public int RAIN = 3;
+
+    // 번개
+    final static public int  THUNDER_BOLT = 4;
+
+    // 눈
+    final static public int  SNOW = 5;
+
 }

@@ -27,6 +27,8 @@ public class DiaryDto extends RealmObject {
 
     private String dateString;
 
+    private int weather;
+
     public DiaryDto() {}
 
     public DiaryDto(int sequence, long currentTimeMillis, String title, String contents) {
@@ -59,6 +61,14 @@ public class DiaryDto extends RealmObject {
 
     public void setCurrentTimeMillis(long currentTimeMillis) {
         this.currentTimeMillis = currentTimeMillis;
+    }
+
+    public int getWeather() {
+        return weather;
+    }
+
+    public void setWeather(int weather) {
+        this.weather = weather;
     }
 
     public String getTitle() {
