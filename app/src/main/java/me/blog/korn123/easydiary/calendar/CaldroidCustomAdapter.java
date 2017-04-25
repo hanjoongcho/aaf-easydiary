@@ -14,7 +14,6 @@ import com.roomorama.caldroid.CaldroidGridAdapter;
 import java.util.Map;
 
 import hirondelle.date4j.DateTime;
-import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.diary.DiaryDao;
 
@@ -82,8 +81,7 @@ public class CaldroidCustomAdapter extends CaldroidGridAdapter {
 
 		// Customize for selected dates
 		if (selectedDates != null && selectedDates.indexOf(dateTime) != -1) {
-			cellView.setBackgroundColor(resources
-					.getColor(com.caldroid.R.color.caldroid_sky_blue));
+			cellView.setBackgroundResource(R.drawable.bg_card_cell_select);
 
 			tv1.setTextColor(Color.BLACK);
 
@@ -94,9 +92,9 @@ public class CaldroidCustomAdapter extends CaldroidGridAdapter {
 		if (shouldResetDiabledView && shouldResetSelectedView) {
 			// Customize for today
 			if (dateTime.equals(getToday())) {
-				cellView.setBackgroundResource(com.caldroid.R.drawable.red_border);
+				cellView.setBackgroundResource(R.drawable.bg_card_cell_today);
 			} else {
-				cellView.setBackgroundResource(com.caldroid.R.drawable.cell_bg);
+				cellView.setBackgroundResource(R.drawable.bg_card_cell_default);
 			}
 		}
 
