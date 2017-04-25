@@ -129,6 +129,7 @@ public class ReadDiaryActivity extends AppCompatActivity {
                 detailIntent.putExtra("contents", diaryDto.getContents());
                 detailIntent.putExtra("date", DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis()));
                 detailIntent.putExtra("current_time_millis", diaryDto.getCurrentTimeMillis());
+                detailIntent.putExtra("weather", diaryDto.getWeather());
                 startActivity(detailIntent);
             }
         });

@@ -53,7 +53,7 @@ public class DiaryMigration implements RealmMigration {
                     .transform(new RealmObjectSchema.Function() {
                         @Override
                         public void apply(DynamicRealmObject obj) {
-                            obj.set("weather", -1);
+                            obj.set("weather", 0);
                         }
                     });
             oldVersion++;

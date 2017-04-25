@@ -1,0 +1,92 @@
+package me.blog.korn123.easydiary.diary;
+
+import android.app.Activity;
+import android.content.Context;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.util.List;
+
+import me.blog.korn123.commons.utils.CommonUtils;
+import me.blog.korn123.commons.utils.FontUtils;
+import me.blog.korn123.easydiary.R;
+
+/**
+ * Created by CHO HANJOONG on 2017-03-16.
+ */
+
+public class DiaryWeatherArrayAdapter extends ArrayAdapter<String> {
+    private final Context context;
+    private final List<String> list;
+    private final int layoutResourceId;
+
+    public DiaryWeatherArrayAdapter(Context context, int layoutResourceId, List<String> list) {
+        super(context, layoutResourceId, list);
+        this.context = context;
+        this.list = list;
+        this.layoutResourceId = layoutResourceId;
+    }
+
+    public View getView(int position, View convertView, ViewGroup parent) {
+        return initRow(position, convertView, parent);
+    }
+
+    @Override
+    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+        return initRow(position, convertView, parent);
+    }
+
+    private View initRow(int position, View convertView, ViewGroup parent) {
+        View row = convertView;
+        ViewHolder holder = null;
+        if (row == null) {
+            LayoutInflater inflater = ((Activity)this.context).getLayoutInflater();
+            row = inflater.inflate(this.layoutResourceId, parent, false);
+            holder = new ViewHolder();
+            holder.textView1 = ((TextView)row.findViewById(R.id.text1));
+            holder.imageView1 = ((ImageView) row.findViewById(R.id.imageView1));
+            initFontStyle(holder);
+            row.setTag(holder);
+        } else {
+            holder = (ViewHolder)row.getTag();
+        }
+
+        switch (position) {
+            case 0:
+                break;
+            case 1:
+                holder.imageView1.setImageResource(R.drawable.ic_sun);
+                break;
+            case 2:
+                holder.imageView1.setImageResource(R.drawable.ic_cloud);
+                break;
+            case 3:
+                holder.imageView1.setImageResource(R.drawable.ic_rain);
+                break;
+            case 4:
+                holder.imageView1.setImageResource(R.drawable.ic_storm);
+                break;
+            case 5:
+                holder.imageView1.setImageResource(R.drawable.ic_snow_2);
+                break;
+        }
+
+        holder.textView1.setText(list.get(position));
+
+        return row;
+    }
+
+    private void initFontStyle(ViewHolder holder) {
+        FontUtils.setTypeface(context.getAssets(), holder.textView1);
+    }
+
+    private static class ViewHolder {
+        TextView textView1;
+        ImageView imageView1;
+    }
+}

@@ -26,7 +26,7 @@ public class DiaryDao {
         if (diaryConfig == null) {
             diaryConfig = new RealmConfiguration.Builder()
                     .name("diary.realm")
-                    .schemaVersion(2)
+                    .schemaVersion(3)
                     .migration(new DiaryMigration())
                     /*.deleteRealmIfMigrationNeeded()*/
                     .modules(Realm.getDefaultModule())
@@ -46,6 +46,20 @@ public class DiaryDao {
                     sequence = number.intValue() + 1;
                 }
                 DiaryDto diaryDto = new DiaryDto(sequence, currentTimeMillis, title, contents);
+                realm.insert(diaryDto);
+            }
+        });
+    }
+
+    public static void createDiary(final DiaryDto diaryDto) {
+        getRealmInstance().executeTransaction(new Realm.Transaction() {
+            public void execute(Realm realm) {
+                int sequence = 1;
+                if (realm.where(DiaryDto.class).count() > 0L) {
+                    Number number = realm.where(DiaryDto.class).max("sequence");
+                    sequence = number.intValue() + 1;
+                }
+                diaryDto.setSequence(sequence);
                 realm.insert(diaryDto);
             }
         });

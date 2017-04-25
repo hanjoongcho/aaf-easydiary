@@ -26,6 +26,7 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.commons.utils.DialogUtils;
@@ -52,6 +53,9 @@ public class ReadDiaryDetailActivity extends AppCompatActivity {
     @BindView(R.id.date)
     TextView mDate;
 
+    @BindView(R.id.weather)
+    ImageView mWeather;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read_diary_detail);
@@ -67,6 +71,28 @@ public class ReadDiaryDetailActivity extends AppCompatActivity {
         mContents.setText(intent.getStringExtra("contents"));
         mSequence = intent.getIntExtra("sequence", 0);
         mCurrentTimeMillis = intent.getLongExtra("current_time_millis", 0);
+
+        int weather = intent.getIntExtra("weather", 0);
+        switch (weather) {
+            case 0:
+                mWeather.setVisibility(View.GONE);
+                break;
+            case Constants.SUN:
+                mWeather.setImageResource(R.drawable.ic_sun);
+                break;
+            case Constants.SUN_AND_CLOUD:
+                mWeather.setImageResource(R.drawable.ic_cloud);
+                break;
+            case Constants.RAIN:
+                mWeather.setImageResource(R.drawable.ic_rain);
+                break;
+            case Constants.THUNDER_BOLT:
+                mWeather.setImageResource(R.drawable.ic_storm);
+                break;
+            case Constants.SNOW:
+                mWeather.setImageResource(R.drawable.ic_snow_2);
+                break;
+        }
 
         initFontStyle();
     }
@@ -191,6 +217,8 @@ public class ReadDiaryDetailActivity extends AppCompatActivity {
                 updateDiaryIntent.putExtra("contents", String.valueOf(mContents.getText()));
                 updateDiaryIntent.putExtra("date", String.valueOf(mDate.getText()));
                 updateDiaryIntent.putExtra("current_time_millis", mCurrentTimeMillis);
+                updateDiaryIntent.putExtra("current_time_millis", mCurrentTimeMillis);
+                updateDiaryIntent.putExtra("weather", getIntent().getIntExtra("weather", 0));
                 startActivity(updateDiaryIntent);
                 finish();
                 break;

@@ -94,17 +94,33 @@
 
             </LinearLayout>
 
-            <EditText
-                android:textColor="@color/defaultTextColor"
-                android:paddingLeft="10dp"
-                android:gravity="center_vertical"
-                android:id="@+id/title"
+            <LinearLayout
                 android:layout_marginBottom="@dimen/card_layout_margin"
                 android:background="@drawable/bg_card_01"
-                android:hint="제목을 입력하거나 말하세요."
-                android:textSize="@dimen/large_text_size"
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="40dp" />
+                android:layout_height="40dp">
+
+                <Spinner
+                    android:layout_marginLeft="5dp"
+                    android:spinnerMode="dropdown"
+                    android:id="@+id/weatherSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+                </Spinner>
+
+                <EditText
+                    android:textColor="@color/defaultTextColor"
+                    android:gravity="center_vertical"
+                    android:id="@+id/title"
+                    android:layout_marginBottom="@dimen/card_layout_margin"
+                    android:background="@drawable/bg_card_01"
+                    android:hint="제목을 입력하거나 말하세요."
+                    android:textSize="@dimen/large_text_size"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp" />
+
+            </LinearLayout>
 
             <ScrollView
                 android:fillViewport="true"

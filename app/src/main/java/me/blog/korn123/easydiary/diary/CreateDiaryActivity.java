@@ -13,14 +13,17 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Switch;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -54,6 +57,9 @@ public class CreateDiaryActivity extends AppCompatActivity {
     @BindView(R.id.saveContents)
     ImageView mSaveContents;
 
+    @BindView(R.id.weatherSpinner)
+    Spinner mWeatherSpinner;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_diary);
@@ -75,7 +81,14 @@ public class CreateDiaryActivity extends AppCompatActivity {
         bindView();
         bindEvent();
         initFontStyle();
+        initSpinner();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+    }
+
+    public void initSpinner() {
+        String[]  weatherArr = {"날씨", "맑음", "흐림", "비", "번개", "눈"};
+        ArrayAdapter arrayAdapter = new DiaryWeatherArrayAdapter(CreateDiaryActivity.this, R.layout.spinner_item_diary_weather_array_adapter, Arrays.asList(weatherArr));
+        mWeatherSpinner.setAdapter(arrayAdapter);
     }
 
     public void initFontStyle() {
@@ -157,8 +170,15 @@ public class CreateDiaryActivity extends AppCompatActivity {
                     mContents.requestFocus();
                     DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message));
                 } else {
-                    DiaryDao.createDiary(CreateDiaryActivity.this.mCurrentTimeMillis, String.valueOf(CreateDiaryActivity.this.mTitle.getText()), String.valueOf(CreateDiaryActivity.this.mContents.getText()));
-                    CreateDiaryActivity.this.finish();
+                    DiaryDto diaryDto = new DiaryDto(
+                            -1,
+                            mCurrentTimeMillis,
+                            String.valueOf(CreateDiaryActivity.this.mTitle.getText()),
+                            String.valueOf(CreateDiaryActivity.this.mContents.getText()),
+                            mWeatherSpinner.getSelectedItemPosition()
+                    );
+                    DiaryDao.createDiary(diaryDto);
+                    finish();
                 }
                 break;
         }

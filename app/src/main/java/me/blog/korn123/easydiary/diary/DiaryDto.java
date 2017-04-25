@@ -39,6 +39,15 @@ public class DiaryDto extends RealmObject {
         this.dateString = DateUtils.timeMillisToDateTime(currentTimeMillis, DateUtils.DATE_PATTERN_DASH);
     }
 
+    public DiaryDto(int sequence, long currentTimeMillis, String title, String contents, int weather) {
+        this.sequence = sequence;
+        this.currentTimeMillis = currentTimeMillis;
+        this.title = title;
+        this.contents = contents;
+        this.dateString = DateUtils.timeMillisToDateTime(currentTimeMillis, DateUtils.DATE_PATTERN_DASH);
+        this.weather = weather;
+    }
+
     public String getDateString() {
         return dateString;
     }

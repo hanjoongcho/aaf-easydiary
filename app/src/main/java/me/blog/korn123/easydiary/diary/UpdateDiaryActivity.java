@@ -11,12 +11,15 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -49,6 +52,9 @@ public class UpdateDiaryActivity extends AppCompatActivity {
     @BindView(R.id.saveContents)
     ImageView mSaveContents;
 
+    @BindView(R.id.weatherSpinner)
+    Spinner mWeatherSpinner;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_diary);
@@ -70,7 +76,15 @@ public class UpdateDiaryActivity extends AppCompatActivity {
         bindEvent();
         initFontStyle();
         initData();
+        initSpinner();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+    }
+
+    public void initSpinner() {
+        String[]  weatherArr = {"날씨", "맑음", "흐림", "비", "번개", "눈"};
+        ArrayAdapter arrayAdapter = new DiaryWeatherArrayAdapter(UpdateDiaryActivity.this, R.layout.spinner_item_diary_weather_array_adapter, Arrays.asList(weatherArr));
+        mWeatherSpinner.setAdapter(arrayAdapter);
+        mWeatherSpinner.setSelection(getIntent().getIntExtra("weather", 0));
     }
 
     public void initData() {
@@ -145,6 +159,7 @@ public class UpdateDiaryActivity extends AppCompatActivity {
                             String.valueOf(mTitle.getText()),
                             String.valueOf(mContents.getText())
                     );
+                    diaryDto.setWeather(mWeatherSpinner.getSelectedItemPosition());
                     DiaryDao.updateDiary(diaryDto);
                     finish();
                 }

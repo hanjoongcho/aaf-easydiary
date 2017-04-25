@@ -63,15 +63,13 @@ public class DiaryCardArrayAdapter extends ArrayAdapter<DiaryDto> {
         holder.textView1.setText(diaryDto.getTitle());
         holder.textView2.setText(diaryDto.getContents());
         holder.textView3.setText(DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis()));
+        holder.imageView.setVisibility(View.VISIBLE);
 
-        // 날씨 icon random 설정
-        // icon 설정기능 구현하면 변경예정
-        int weather = (int)(Math.random() * 5) + 1;
-        Realm realm = DiaryDao.getRealmInstance();
-        realm.beginTransaction();
-        diaryDto.setWeather(weather);
-        realm.commitTransaction();
         switch (diaryDto.getWeather()) {
+            case 0:
+                holder.imageView.setImageResource(0);
+                holder.imageView.setVisibility(View.GONE);
+                break;
             case Constants.SUN:
                 holder.imageView.setImageResource(R.drawable.ic_sun);
                 break;
@@ -88,7 +86,6 @@ public class DiaryCardArrayAdapter extends ArrayAdapter<DiaryDto> {
                 holder.imageView.setImageResource(R.drawable.ic_snow_2);
                 break;
         }
-
 
         return row;
     }
