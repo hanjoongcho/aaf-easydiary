@@ -5,6 +5,8 @@
     <color name="colorPrimaryBright">#29ecf5</color>
     <color name="colorPrimaryDark">#089c90</color>
 
+    <color name="colorAccentWithAlpha">#1007abb3</color>
+
     <color name="introTextColor">#f0ffffff</color>
     <color name="categoryTextColor">#f0ffffff</color>
     <color name="defaultTextColor">#4A4A4C</color>

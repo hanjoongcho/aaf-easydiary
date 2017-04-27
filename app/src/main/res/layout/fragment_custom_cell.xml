@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/custom_cell"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,11 +9,28 @@
     android:padding="5dp"
     android:orientation="vertical">
 
-    <TextView
-        android:gravity="center|bottom"
-        android:id="@+id/tv1"
+
+    <LinearLayout
+        android:gravity="center"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent">
+
+        <TextView
+            android:text="asdas"
+            android:id="@+id/tv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:layout_marginLeft="5dp"
+            android:id="@+id/weather"
+            app:srcCompat="@drawable/ic_snow_2"
+            android:layout_width="15dp"
+            android:layout_height="15dp" />
+
+    </LinearLayout>
+
 
     <TextView
         android:textSize="10dp"
