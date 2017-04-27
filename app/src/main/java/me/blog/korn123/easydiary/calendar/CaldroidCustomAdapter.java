@@ -6,16 +6,21 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidGridAdapter;
 
+import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Map;
 
 import hirondelle.date4j.DateTime;
+import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.diary.DiaryDao;
+import me.blog.korn123.easydiary.diary.DiaryDto;
 
 public class CaldroidCustomAdapter extends CaldroidGridAdapter {
 
@@ -43,6 +48,7 @@ public class CaldroidCustomAdapter extends CaldroidGridAdapter {
 
 		TextView tv1 = (TextView) cellView.findViewById(R.id.tv1);
 		TextView tv2 = (TextView) cellView.findViewById(R.id.tv2);
+		ImageView imageView1 = (ImageView) cellView.findViewById(R.id.weather);
 
 		tv1.setTextColor(Color.BLACK);
 
@@ -102,6 +108,34 @@ public class CaldroidCustomAdapter extends CaldroidGridAdapter {
 
 		String dateString = dateTime.format("YYYY-MM-DD");
 		int count = DiaryDao.countDiaryBy(dateString);
+
+		List<DiaryDto> mDiaryList = DiaryDao.readDiaryByDateString(dateString);
+
+		if (mDiaryList.size() > 0) {
+			switch (mDiaryList.get(0).getWeather()) {
+				case 0:
+					imageView1.setImageResource(0);
+					break;
+				case 1:
+					imageView1.setImageResource(R.drawable.ic_sun);
+					break;
+				case 2:
+					imageView1.setImageResource(R.drawable.ic_cloud);
+					break;
+				case 3:
+					imageView1.setImageResource(R.drawable.ic_rain);
+					break;
+				case 4:
+					imageView1.setImageResource(R.drawable.ic_storm);
+					break;
+				case 5:
+					imageView1.setImageResource(R.drawable.ic_snow_2);
+					break;
+			}
+		} else {
+			imageView1.setImageResource(0);
+		}
+
 		if (count > 0) {
 			tv2.setText(count + "건");
 			tv2.setTextColor(parent.getResources().getColor(R.color.blue));
