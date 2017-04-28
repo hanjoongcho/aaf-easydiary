@@ -29,6 +29,7 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.commons.utils.DialogUtils;
@@ -178,6 +179,7 @@ public class CreateDiaryActivity extends AppCompatActivity {
                             mWeatherSpinner.getSelectedItemPosition()
                     );
                     DiaryDao.createDiary(diaryDto);
+                    CommonUtils.saveIntPreference(CreateDiaryActivity.this, Constants.PREVIOUS_ACTIVITY, Constants.PREVIOUS_ACTIVITY_CREATE);
                     finish();
                 }
                 break;

@@ -19,6 +19,12 @@ public class Constants {
     final static public int SETTING_FLAG_EXPORT_GOOGLE_DRIVE = 1;
     final static public int SETTING_FLAG_IMPORT_GOOGLE_DRIVE = 2;
 
+    // 이전화면
+    final static public String PREVIOUS_ACTIVITY = "previous_activity";
+
+    // 일기작성화면
+    final static public int PREVIOUS_ACTIVITY_CREATE = 1;
+
     // 맑음, 화창함
     final static public int SUN = 1;
 

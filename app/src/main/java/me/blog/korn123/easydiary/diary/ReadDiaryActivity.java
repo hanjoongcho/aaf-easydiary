@@ -30,6 +30,7 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.commons.utils.DialogUtils;
@@ -168,7 +169,12 @@ public class ReadDiaryActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         refreshList();
-        mDiaryListView.smoothScrollToPosition(0);
+        int previousActivity = CommonUtils.loadIntPreference(ReadDiaryActivity.this, Constants.PREVIOUS_ACTIVITY, -1);
+        if (previousActivity == Constants.PREVIOUS_ACTIVITY_CREATE) {
+            mDiaryListView.smoothScrollToPosition(0);
+//            mDiaryListView.setSelection(0);
+            CommonUtils.saveIntPreference(ReadDiaryActivity.this, Constants.PREVIOUS_ACTIVITY, -1);
+        }
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {

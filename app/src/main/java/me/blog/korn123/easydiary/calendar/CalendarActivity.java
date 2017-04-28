@@ -55,6 +55,7 @@ public class CalendarActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         refreshList(getCurrentDate());
+        caldroidFragment.refreshView();
     }
 
     @Override
