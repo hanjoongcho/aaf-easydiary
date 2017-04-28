@@ -139,6 +139,8 @@ public class CaldroidCustomAdapter extends CaldroidGridAdapter {
 		if (count > 0) {
 			tv2.setText(count + "건");
 			tv2.setTextColor(parent.getResources().getColor(R.color.blue));
+		} else {
+			tv2.setText(null);
 		}
 		// Somehow after setBackgroundResource, the padding collapse.
 		// This is to recover the padding
