@@ -111,11 +111,10 @@ public class CaldroidCustomAdapter extends CaldroidGridAdapter {
 
 		List<DiaryDto> mDiaryList = DiaryDao.readDiaryByDateString(dateString);
 
-		if (mDiaryList.size() > 0) {
+
+		if (mDiaryList.size() > 0 && mDiaryList.get(0).getWeather() > 0) {
+			imageView1.setVisibility(View.VISIBLE);
 			switch (mDiaryList.get(0).getWeather()) {
-				case 0:
-					imageView1.setImageResource(0);
-					break;
 				case 1:
 					imageView1.setImageResource(R.drawable.ic_sun);
 					break;
@@ -133,6 +132,7 @@ public class CaldroidCustomAdapter extends CaldroidGridAdapter {
 					break;
 			}
 		} else {
+			imageView1.setVisibility(View.GONE);
 			imageView1.setImageResource(0);
 		}
 

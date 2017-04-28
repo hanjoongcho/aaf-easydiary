@@ -7,10 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
 
+import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.commons.utils.FontUtils;
@@ -40,6 +42,7 @@ public class DiarySimpleCardArrayAdapter extends ArrayAdapter<DiaryDto> {
             row = inflater.inflate(this.layoutResourceId, parent, false);
             holder = new ViewHolder();
             holder.textView1 = ((TextView)row.findViewById(R.id.text1));
+            holder.imageView = ((ImageView) row.findViewById(R.id.weather));
             initFontStyle(holder);
             row.setTag(holder);
         } else {
@@ -53,6 +56,28 @@ public class DiarySimpleCardArrayAdapter extends ArrayAdapter<DiaryDto> {
 
         DiaryDto diaryDto = (DiaryDto)this.list.get(position);
         holder.textView1.setText(diaryDto.getTitle());
+        holder.imageView.setVisibility(View.VISIBLE);
+        switch (diaryDto.getWeather()) {
+            case 0:
+                holder.imageView.setImageResource(0);
+                holder.imageView.setVisibility(View.GONE);
+                break;
+            case Constants.SUN:
+                holder.imageView.setImageResource(R.drawable.ic_sun);
+                break;
+            case Constants.SUN_AND_CLOUD:
+                holder.imageView.setImageResource(R.drawable.ic_cloud);
+                break;
+            case Constants.RAIN:
+                holder.imageView.setImageResource(R.drawable.ic_rain);
+                break;
+            case Constants.THUNDER_BOLT:
+                holder.imageView.setImageResource(R.drawable.ic_storm);
+                break;
+            case Constants.SNOW:
+                holder.imageView.setImageResource(R.drawable.ic_snow_2);
+                break;
+        }
 
         return row;
     }
@@ -63,5 +88,6 @@ public class DiarySimpleCardArrayAdapter extends ArrayAdapter<DiaryDto> {
 
     private static class ViewHolder {
         TextView textView1;
+        ImageView imageView;
     }
 }

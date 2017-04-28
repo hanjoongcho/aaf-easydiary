@@ -44,6 +44,18 @@ public class CalendarActivity extends AppCompatActivity {
 
     private ArrayAdapter<DiaryDto> mArrayAdapterDiary;
     private List<DiaryDto> mDiaryList;
+    private Date mCurrentDate;
+
+    private Date getCurrentDate() {
+        if (mCurrentDate == null) mCurrentDate = Calendar.getInstance().getTime();
+        return mCurrentDate;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshList(getCurrentDate());
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +82,7 @@ public class CalendarActivity extends AppCompatActivity {
                 detailIntent.putExtra("contents", diaryDto.getContents());
                 detailIntent.putExtra("date", DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis()));
                 detailIntent.putExtra("current_time_millis", diaryDto.getCurrentTimeMillis());
+                detailIntent.putExtra("weather", diaryDto.getWeather());
                 startActivity(detailIntent);
             }
         });
@@ -132,6 +145,7 @@ public class CalendarActivity extends AppCompatActivity {
                 caldroidFragment.clearSelectedDates();
                 caldroidFragment.setSelectedDate(date);
                 caldroidFragment.refreshView();
+                mCurrentDate = date;
                 refreshList(date);
             }
 
