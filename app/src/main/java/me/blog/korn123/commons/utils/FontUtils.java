@@ -9,9 +9,17 @@ import android.widget.TextView;
  */
 
 public class FontUtils {
-    public static void setTypeface(AssetManager assetManager, TextView view)
-    {
-        Typeface font = Typeface.createFromAsset(assetManager, "fonts/NanumPen.ttf");
-        view.setTypeface(font);
+
+    private static Typeface mTypeface;
+
+    public static void setTypeface(AssetManager assetManager, TextView view) {
+        view.setTypeface(getTypeface(assetManager));
+    }
+
+    public static Typeface getTypeface(AssetManager assetManager) {
+        if (mTypeface == null) {
+            mTypeface = Typeface.createFromAsset(assetManager, "fonts/NanumPen.ttf");
+        }
+        return  mTypeface;
     }
 }

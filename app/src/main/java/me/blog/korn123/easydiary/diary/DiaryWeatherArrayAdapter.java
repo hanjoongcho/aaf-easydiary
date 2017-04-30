@@ -13,6 +13,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import me.blog.korn123.commons.utils.CommonUtils;
+import me.blog.korn123.commons.utils.EasyDiaryUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
 
@@ -56,25 +57,7 @@ public class DiaryWeatherArrayAdapter extends ArrayAdapter<String> {
             holder = (ViewHolder)row.getTag();
         }
 
-        switch (position) {
-            case 0:
-                break;
-            case 1:
-                holder.imageView1.setImageResource(R.drawable.ic_sun);
-                break;
-            case 2:
-                holder.imageView1.setImageResource(R.drawable.ic_cloud);
-                break;
-            case 3:
-                holder.imageView1.setImageResource(R.drawable.ic_rain);
-                break;
-            case 4:
-                holder.imageView1.setImageResource(R.drawable.ic_storm);
-                break;
-            case 5:
-                holder.imageView1.setImageResource(R.drawable.ic_snow_2);
-                break;
-        }
+        EasyDiaryUtils.initWeatherView(holder.imageView1, position, true);
 
         holder.textView1.setText(list.get(position));
 

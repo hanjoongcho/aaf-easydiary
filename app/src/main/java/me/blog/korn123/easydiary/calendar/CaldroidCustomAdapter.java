@@ -18,6 +18,7 @@ import java.util.Map;
 
 import hirondelle.date4j.DateTime;
 import me.blog.korn123.commons.utils.DateUtils;
+import me.blog.korn123.commons.utils.EasyDiaryUtils;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.diary.DiaryDao;
 import me.blog.korn123.easydiary.diary.DiaryDto;
@@ -110,27 +111,8 @@ public class CaldroidCustomAdapter extends CaldroidGridAdapter {
 		int count = DiaryDao.countDiaryBy(dateString);
 
 		List<DiaryDto> mDiaryList = DiaryDao.readDiaryByDateString(dateString);
-
-
 		if (mDiaryList.size() > 0 && mDiaryList.get(0).getWeather() > 0) {
-			imageView1.setVisibility(View.VISIBLE);
-			switch (mDiaryList.get(0).getWeather()) {
-				case 1:
-					imageView1.setImageResource(R.drawable.ic_sun);
-					break;
-				case 2:
-					imageView1.setImageResource(R.drawable.ic_cloud);
-					break;
-				case 3:
-					imageView1.setImageResource(R.drawable.ic_rain);
-					break;
-				case 4:
-					imageView1.setImageResource(R.drawable.ic_storm);
-					break;
-				case 5:
-					imageView1.setImageResource(R.drawable.ic_snow_2);
-					break;
-			}
+			EasyDiaryUtils.initWeatherView(imageView1, mDiaryList.get(0).getWeather());
 		} else {
 			imageView1.setVisibility(View.GONE);
 			imageView1.setImageResource(0);

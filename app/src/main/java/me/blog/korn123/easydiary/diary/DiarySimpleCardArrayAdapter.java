@@ -14,7 +14,7 @@ import java.util.List;
 
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.CommonUtils;
-import me.blog.korn123.commons.utils.DateUtils;
+import me.blog.korn123.commons.utils.EasyDiaryUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
 
@@ -56,28 +56,7 @@ public class DiarySimpleCardArrayAdapter extends ArrayAdapter<DiaryDto> {
 
         DiaryDto diaryDto = (DiaryDto)this.list.get(position);
         holder.textView1.setText(diaryDto.getTitle());
-        holder.imageView.setVisibility(View.VISIBLE);
-        switch (diaryDto.getWeather()) {
-            case 0:
-                holder.imageView.setImageResource(0);
-                holder.imageView.setVisibility(View.GONE);
-                break;
-            case Constants.SUN:
-                holder.imageView.setImageResource(R.drawable.ic_sun);
-                break;
-            case Constants.SUN_AND_CLOUD:
-                holder.imageView.setImageResource(R.drawable.ic_cloud);
-                break;
-            case Constants.RAIN:
-                holder.imageView.setImageResource(R.drawable.ic_rain);
-                break;
-            case Constants.THUNDER_BOLT:
-                holder.imageView.setImageResource(R.drawable.ic_storm);
-                break;
-            case Constants.SNOW:
-                holder.imageView.setImageResource(R.drawable.ic_snow_2);
-                break;
-        }
+        EasyDiaryUtils.initWeatherView(holder.imageView, diaryDto.getWeather());
 
         return row;
     }

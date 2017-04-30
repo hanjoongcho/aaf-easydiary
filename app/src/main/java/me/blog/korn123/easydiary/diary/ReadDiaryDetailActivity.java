@@ -1,8 +1,6 @@
 package me.blog.korn123.easydiary.diary;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -18,8 +16,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -28,8 +24,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.CommonUtils;
-import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.commons.utils.DialogUtils;
+import me.blog.korn123.commons.utils.EasyDiaryUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.setting.SettingsActivity;
@@ -73,26 +69,7 @@ public class ReadDiaryDetailActivity extends AppCompatActivity {
         mCurrentTimeMillis = intent.getLongExtra("current_time_millis", 0);
 
         int weather = intent.getIntExtra("weather", 0);
-        switch (weather) {
-            case 0:
-                mWeather.setVisibility(View.GONE);
-                break;
-            case Constants.SUN:
-                mWeather.setImageResource(R.drawable.ic_sun);
-                break;
-            case Constants.SUN_AND_CLOUD:
-                mWeather.setImageResource(R.drawable.ic_cloud);
-                break;
-            case Constants.RAIN:
-                mWeather.setImageResource(R.drawable.ic_rain);
-                break;
-            case Constants.THUNDER_BOLT:
-                mWeather.setImageResource(R.drawable.ic_storm);
-                break;
-            case Constants.SNOW:
-                mWeather.setImageResource(R.drawable.ic_snow_2);
-                break;
-        }
+        EasyDiaryUtils.initWeatherView(mWeather, weather);
 
         initFontStyle();
     }

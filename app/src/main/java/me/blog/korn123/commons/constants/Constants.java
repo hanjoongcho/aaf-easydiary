@@ -26,18 +26,18 @@ public class Constants {
     final static public int PREVIOUS_ACTIVITY_CREATE = 1;
 
     // 맑음, 화창함
-    final static public int SUN = 1;
+    final static public int WEATHER_FLAG_SUN = 1;
 
     // 흐림
-    final static public int SUN_AND_CLOUD = 2;
+    final static public int WEATHER_FLAG_SUN_AND_CLOUD = 2;
 
     // 비
-    final static public int RAIN = 3;
+    final static public int WEATHER_FLAG_RAIN = 3;
 
     // 번개
-    final static public int  THUNDER_BOLT = 4;
+    final static public int WEATHER_FLAG_THUNDER_BOLT = 4;
 
     // 눈
-    final static public int  SNOW = 5;
+    final static public int WEATHER_FLAG_SNOW = 5;
 
 }
