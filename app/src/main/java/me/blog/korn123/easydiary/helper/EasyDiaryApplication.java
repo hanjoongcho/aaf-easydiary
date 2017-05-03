@@ -13,4 +13,5 @@ public class EasyDiaryApplication extends Application {
         super.onCreate();
         Realm.init(this);
     }
+
 }

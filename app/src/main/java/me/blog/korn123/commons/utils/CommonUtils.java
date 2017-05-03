@@ -10,6 +10,30 @@ import android.preference.PreferenceManager;
 
 public class CommonUtils {
 
+    public static String loadStringPreference(Context context, String key, String defaultValue) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getString(key, defaultValue);
+    }
+
+    public static void saveStringPreference(Context context, String key, String value) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = preferences.edit();
+        edit.putString(key, value);
+        edit.commit();
+    }
+
+    public static long loadLongPreference(Context context, String key, int defaultValue) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getLong(key, defaultValue);
+    }
+
+    public static void saveLongPreference(Context context, String key, long value) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = preferences.edit();
+        edit.putLong(key, value);
+        edit.commit();
+    }
+
     public static float loadFloatPreference(Context context, String key, int defaultValue) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return preferences.getFloat(key, defaultValue);

@@ -24,8 +24,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import me.blog.korn123.commons.constants.Constants;
+import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.easydiary.diary.DiaryDao;
 import me.blog.korn123.easydiary.diary.ReadDiaryActivity;
+import me.blog.korn123.easydiary.diary.UpdateDiaryActivity;
 
 /**
  * Created by CHO HANJOONG on 2016-09-28.
@@ -68,6 +70,7 @@ public class GoogleDriveDownloader extends GoogleDriveUtils {
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+        CommonUtils.saveLongPreference(GoogleDriveDownloader.this, Constants.PAUSE_MILLIS, System.currentTimeMillis());
     }
 
     private void open() {

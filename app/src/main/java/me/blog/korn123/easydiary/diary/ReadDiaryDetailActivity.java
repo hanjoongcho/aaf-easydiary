@@ -28,13 +28,14 @@ import me.blog.korn123.commons.utils.DialogUtils;
 import me.blog.korn123.commons.utils.EasyDiaryUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
+import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
 import me.blog.korn123.easydiary.setting.SettingsActivity;
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
  */
 
-public class ReadDiaryDetailActivity extends AppCompatActivity {
+public class ReadDiaryDetailActivity extends EasyDiaryActivity {
 
     private long mCurrentTimeMillis;
     private int mSequence;

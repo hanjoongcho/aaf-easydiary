@@ -30,6 +30,8 @@
         <activity android:name=".googledrive.GoogleDriveDownloader" />
         <activity android:name=".chart.BarChartActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".calendar.CalendarActivity" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".diary.LockDiaryActivity" />
+        <activity android:name=".setting.LockSettingActivity" />
     </application>
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />

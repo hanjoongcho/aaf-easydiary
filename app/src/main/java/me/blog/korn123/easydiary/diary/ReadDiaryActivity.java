@@ -38,13 +38,14 @@ import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.calendar.CalendarActivity;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.chart.BarChartActivity;
+import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
 import me.blog.korn123.easydiary.setting.SettingsActivity;
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
  */
 
-public class ReadDiaryActivity extends AppCompatActivity {
+public class ReadDiaryActivity extends EasyDiaryActivity {
 
     private final int REQUEST_CODE_SPEECH_INPUT = 100;
     private Intent mRecognizerIntent;
@@ -64,6 +65,12 @@ public class ReadDiaryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read_diary);
         ButterKnife.bind(this);
+
+        // application finish 확인
+        if(getIntent().getBooleanExtra("app_finish", false)) {
+            finish();
+        }
+
         mCurrentTimeMillis = System.currentTimeMillis();
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -162,6 +169,7 @@ public class ReadDiaryActivity extends AppCompatActivity {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     mQuery.setText(result.get(0));
                 }
+                CommonUtils.saveLongPreference(ReadDiaryActivity.this, Constants.PAUSE_MILLIS, System.currentTimeMillis());
                 break;
         }
     }

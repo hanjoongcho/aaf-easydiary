@@ -3,7 +3,6 @@ package me.blog.korn123.easydiary.calendar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,12 +27,13 @@ import me.blog.korn123.easydiary.diary.DiaryDao;
 import me.blog.korn123.easydiary.diary.DiaryDto;
 import me.blog.korn123.easydiary.diary.DiarySimpleCardArrayAdapter;
 import me.blog.korn123.easydiary.diary.ReadDiaryDetailActivity;
+import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
 
 /**
  * Created by hanjoong on 2017-03-28.
  */
 
-public class CalendarActivity extends AppCompatActivity {
+public class CalendarActivity extends EasyDiaryActivity {
     private CaldroidFragment caldroidFragment;
 
     @BindView(R.id.selectedList)

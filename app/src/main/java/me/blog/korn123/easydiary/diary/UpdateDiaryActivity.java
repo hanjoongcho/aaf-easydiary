@@ -3,7 +3,6 @@ package me.blog.korn123.easydiary.diary;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -25,17 +24,19 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.DialogUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
+import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
 import me.blog.korn123.easydiary.setting.SettingsActivity;
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
  */
 
-public class UpdateDiaryActivity extends AppCompatActivity {
+public class UpdateDiaryActivity extends EasyDiaryActivity {
 
     private final int REQUEST_CODE_SPEECH_INPUT = 100;
     private Intent mRecognizerIntent;
@@ -194,6 +195,7 @@ public class UpdateDiaryActivity extends AppCompatActivity {
                         mContents.setSelection(cursorPosition);
                     }
                 }
+                CommonUtils.saveLongPreference(UpdateDiaryActivity.this, Constants.PAUSE_MILLIS, System.currentTimeMillis());
                 break;
         }
     }

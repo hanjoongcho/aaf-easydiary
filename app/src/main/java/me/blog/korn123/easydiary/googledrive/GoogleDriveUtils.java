@@ -15,7 +15,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.drive.Drive;
 
 import me.blog.korn123.commons.constants.Constants;
+import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.easydiary.diary.ReadDiaryActivity;
+import me.blog.korn123.easydiary.diary.UpdateDiaryActivity;
 
 
 /**
@@ -93,6 +95,7 @@ public class GoogleDriveUtils extends Activity implements
         } else if (resultCode == RESULT_CANCELED) {
             finish();
         }
+        CommonUtils.saveLongPreference(GoogleDriveUtils.this, Constants.PAUSE_MILLIS, System.currentTimeMillis());
     }
 
     /**

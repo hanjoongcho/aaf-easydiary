@@ -14,6 +14,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -24,12 +25,18 @@ import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 
+import org.apache.commons.lang3.StringUtils;
+
 import me.blog.korn123.commons.constants.Constants;
+import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.DialogUtils;
 import me.blog.korn123.commons.utils.PermissionUtils;
 import me.blog.korn123.easydiary.R;
+import me.blog.korn123.easydiary.diary.LockDiaryActivity;
+import me.blog.korn123.easydiary.diary.UpdateDiaryActivity;
 import me.blog.korn123.easydiary.googledrive.GoogleDriveDownloader;
 import me.blog.korn123.easydiary.googledrive.GoogleDriveUploader;
+import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -47,6 +54,30 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     private static Context mContext;
     private static Activity mActivity;
     private static int mTaskFlag = 0;
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        boolean enableLock = CommonUtils.loadBooleanPreference(SettingsActivity.this, "application_lock");
+        if (enableLock) {
+            long currentMillis = System.currentTimeMillis();
+            CommonUtils.saveLongPreference(SettingsActivity.this, Constants.PAUSE_MILLIS, currentMillis);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        boolean enableLock = CommonUtils.loadBooleanPreference(SettingsActivity.this, "application_lock");
+        long pauseMillis = CommonUtils.loadLongPreference(SettingsActivity.this, Constants.PAUSE_MILLIS, 0);
+        if (enableLock && pauseMillis != 0) {
+            if (System.currentTimeMillis() - pauseMillis > 1000) {
+                // 잠금해제 화면
+                Intent lockDiaryIntent = new Intent(SettingsActivity.this, LockDiaryActivity.class);
+                startActivity(lockDiaryIntent);
+            }
+        }
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -115,6 +146,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         preference.setSummary(name);
                     }
                 }
+            } else if (preference instanceof EditTextPreference) {
 
             } else {
                 // For all other preferences, set the summary to the value's
@@ -227,6 +259,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 //            bindPreferenceSummaryToValue(findPreference("example_text"));
 //            bindPreferenceSummaryToValue(findPreference("example_list"));
 
+//            bindPreferenceSummaryToValue(findPreference("application_lock_password"));
             initPreference();
         }
 
@@ -245,12 +278,13 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         Preference mOpenSourceLicensesInfo;
         Preference mExportGoogleDrive;
         Preference mImportGoogleDrive;
+        Preference mApplicationLockPassword;
         private void initPreference() {
             mAppVersionPreference = findPreference("aaf_app_version");
             mOpenSourceLicensesInfo = findPreference("open_source_licenses");
             mExportGoogleDrive= findPreference("export_google_drive");
             mImportGoogleDrive= findPreference("import_google_drive");
-
+            mApplicationLockPassword = findPreference("application_lock_password");
             PackageInfo pInfo = null;
             try {
                 pInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
@@ -305,6 +339,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 }
             });
 
+            mApplicationLockPassword.setSummary("설정된 잠금번호: " + CommonUtils.loadStringPreference(getActivity().getApplicationContext(), "application_lock_password", "0000"));
             mImportGoogleDrive.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -321,6 +356,25 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 }
             });
 
+            mApplicationLockPassword.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent lockSettingIntent = new Intent(getActivity(), LockSettingActivity.class);
+                    startActivityForResult(lockSettingIntent, Constants.REQUEST_CODE_LOCK_SETTING);
+                    return false;
+                }
+            });
+        }
+
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+            if (resultCode == RESULT_OK) {
+                String password = data.getStringExtra("password");
+                CommonUtils.saveStringPreference(getActivity().getApplicationContext(), "application_lock_password", password);
+                mApplicationLockPassword.setSummary("설정된 잠금번호: " + password);
+            }
+            CommonUtils.saveLongPreference(getActivity().getApplicationContext(), Constants.PAUSE_MILLIS, System.currentTimeMillis());
         }
     }
 
@@ -383,4 +437,5 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             return super.onOptionsItemSelected(item);
         }
     }
+
 }

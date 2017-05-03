@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:padding="10dp"
+        android:gravity="top|center_horizontal"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dp">
+
+        <TextView
+            android:gravity="center"
+            android:id="@+id/pass1"
+            android:background="@drawable/bg_card_01"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="50dp" />
+        <TextView
+            android:gravity="center"
+            android:id="@+id/pass2"
+            android:background="@drawable/bg_card_01"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="50dp" />
+        <TextView
+            android:gravity="center"
+            android:id="@+id/pass3"
+            android:background="@drawable/bg_card_01"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="50dp" />
+        <TextView
+            android:gravity="center"
+            android:id="@+id/pass4"
+            android:background="@drawable/bg_card_01"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="50dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:src="@drawable/intro"
+            android:layout_width="60dp"
+            android:layout_height="60dp" />
+
+        <TextView
+            android:padding="10dp"
+            android:text="잠금번호를 입력하세요"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/introTextColor"
+            android:textSize="25dp"
+            android:id="@+id/infoMessage"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:gravity="bottom"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_weight="2"
+        android:layout_height="0dp">
+
+        <LinearLayout
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/num1"
+                android:layout_marginRight="5dp"
+                android:gravity="center"
+                android:background="@drawable/bg_card_01"
+                android:text="1"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="50dp" />
+            <TextView
+                android:id="@+id/num2"
+                android:layout_marginRight="5dp"
+                android:gravity="center"
+                android:background="@drawable/bg_card_01"
+                android:text="2"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="50dp" />
+            <TextView
+                android:id="@+id/num3"
+                android:gravity="center"
+                android:background="@drawable/bg_card_01"
+                android:text="3"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="50dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/num4"
+                android:layout_marginRight="5dp"
+                android:gravity="center"
+                android:background="@drawable/bg_card_01"
+                android:text="4"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="50dp" />
+            <TextView
+                android:id="@+id/num5"
+                android:layout_marginRight="5dp"
+                android:gravity="center"
+                android:background="@drawable/bg_card_01"
+                android:text="5"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="50dp" />
+            <TextView
+                android:id="@+id/num6"
+                android:gravity="center"
+                android:background="@drawable/bg_card_01"
+                android:text="6"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="50dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/num7"
+                android:layout_marginRight="5dp"
+                android:gravity="center"
+                android:background="@drawable/bg_card_01"
+                android:text="7"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="50dp" />
+            <TextView
+                android:id="@+id/num8"
+                android:layout_marginRight="5dp"
+                android:gravity="center"
+                android:background="@drawable/bg_card_01"
+                android:text="8"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="50dp" />
+            <TextView
+                android:id="@+id/num9"
+                android:gravity="center"
+                android:background="@drawable/bg_card_01"
+                android:text="9"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="50dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_marginRight="5dp"
+                android:gravity="center"
+                android:background="@drawable/bg_card_01"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="50dp" />
+            <TextView
+                android:id="@+id/num0"
+                android:layout_marginRight="5dp"
+                android:gravity="center"
+                android:background="@drawable/bg_card_01"
+                android:text="0"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="50dp" />
+            <TextView
+                android:gravity="center"
+                android:background="@drawable/bg_card_01"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="50dp" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

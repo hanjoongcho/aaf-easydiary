@@ -18,6 +18,8 @@
             android:layout_width="20dp"
             android:layout_height="20dp" />
         <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
             android:textColor="@color/defaultTextColor"
             android:id="@+id/text1"
             android:layout_width="match_parent"

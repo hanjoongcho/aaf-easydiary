@@ -3,14 +3,14 @@ package me.blog.korn123.easydiary.chart;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
+
+import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
 
 /**
  * Created by CHO HANJOONG on 2017-03-23.
  */
 
-public class ChartBase extends AppCompatActivity {
+public class ChartBase extends EasyDiaryActivity {
     protected String[] mMonths = new String[] {
             "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"
     };

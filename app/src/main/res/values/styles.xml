@@ -19,6 +19,13 @@
         <item name="android:actionButtonStyle">@style/MyActionButtonStyle</item>
     </style>
 
+    <style name="AppTheme.FullScreen">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
     <style name="MyActionButtonStyle"  parent="@android:style/Widget.ActionButton">
         <item name="android:drawablePadding">0dp</item>
     </style>

@@ -7,12 +7,13 @@ import android.webkit.WebView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.blog.korn123.easydiary.R;
+import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
 
 /**
  * Created by CHO HANJOONG on 2017-02-11.
  */
 
-public class LicensesActivity extends AppCompatActivity {
+public class LicensesActivity extends EasyDiaryActivity {
 
     @BindView(R.id.licenses) WebView webView;
 

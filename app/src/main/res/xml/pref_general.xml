@@ -3,6 +3,15 @@
     <PreferenceCategory
         android:layout="@layout/preference_category"
         android:title="Application Setting">
+        <SwitchPreference
+            android:key="application_lock"
+            android:title="@string/application_lock_title"
+            android:summary="@string/application_lock_summary"
+            android:defaultValue="false" />
+        <Preference
+            android:inputType="number"
+            android:key="application_lock_password"
+            android:title="@string/application_lock_password_title"/>
         <Preference
             android:key="import_google_drive"
             android:title="다이어리 복구하기"

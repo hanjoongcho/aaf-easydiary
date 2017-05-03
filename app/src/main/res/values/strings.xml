@@ -22,6 +22,10 @@
     <string name="delete_confirm">삭제 하시겠습니까?</string>
     <string name="write_date">작성일</string>
 
+    <string name="application_lock_title">어플잠금설정</string>
+    <string name="application_lock_summary">잠금설정이 활성화되면 설정된 비밀번호로 어플리케이션이 잠깁니다.</string>
+    <string name="application_lock_password_title">잠금번호 설정</string>
+
     <!-- Strings related to Settings -->
 
     <!-- Example General settings -->

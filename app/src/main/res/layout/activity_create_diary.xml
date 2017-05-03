@@ -109,7 +109,7 @@
                 android:background="@drawable/bg_card_01"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="40dp">
+                android:layout_height="50dp">
 
                 <Spinner
                     android:layout_marginLeft="5dp"
@@ -120,6 +120,8 @@
                 </Spinner>
 
                 <EditText
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
                     android:background="@drawable/bg_card_01"
                     android:textColor="@color/defaultTextColor"
                     android:enabled="false"
@@ -128,7 +130,7 @@
                     android:hint="@string/guide_message"
                     android:textSize="@dimen/large_text_size"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp" />
+                    android:layout_height="match_parent" />
 
             </LinearLayout>
 

@@ -32,6 +32,7 @@
 
                 <TextView
                     android:textColor="@color/defaultTextColor"
+                    android:paddingTop="5dp"
                     android:paddingBottom="5dp"
                     android:id="@+id/text1"
                     android:layout_width="match_parent"
