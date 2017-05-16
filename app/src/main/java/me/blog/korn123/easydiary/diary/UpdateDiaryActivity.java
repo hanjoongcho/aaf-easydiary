@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.diary;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.v7.widget.Toolbar;
@@ -70,6 +71,7 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
         mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
 
+        FontUtils.setToolbarTypeface(toolbar, Typeface.DEFAULT);
         FontUtils.setTypeface(getAssets(), this.mContents);
         FontUtils.setTypeface(getAssets(), this.mTitle);
 

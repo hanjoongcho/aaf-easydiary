@@ -2,6 +2,8 @@ package me.blog.korn123.easydiary.diary;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
@@ -20,6 +22,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -84,6 +87,7 @@ public class ReadDiaryActivity extends EasyDiaryActivity {
         mArrayAdapterDiary = new DiaryCardArrayAdapter(this, R.layout.list_item_diary_card_array_adapter , this.mDiaryList);
         mDiaryListView.setAdapter(this.mArrayAdapterDiary);
 
+        FontUtils.setToolbarTypeface(toolbar, Typeface.DEFAULT);
         FontUtils.setTypeface(getAssets(), this.mQuery);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -95,6 +99,8 @@ public class ReadDiaryActivity extends EasyDiaryActivity {
         bindView();
         bindEvent();
     }
+
+
 
     private void bindView() {
         mInputMode = ((Switch) findViewById(R.id.inputMode));

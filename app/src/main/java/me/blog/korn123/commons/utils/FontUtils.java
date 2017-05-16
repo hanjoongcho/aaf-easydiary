@@ -2,6 +2,8 @@ package me.blog.korn123.commons.utils;
 
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.TextView;
 
 /**
@@ -21,5 +23,24 @@ public class FontUtils {
             mTypeface = Typeface.createFromAsset(assetManager, "fonts/NanumPen.ttf");
         }
         return  mTypeface;
+    }
+
+    public static void setToolbarTypeface(Toolbar toolbar, AssetManager assetManager) {
+        for (int i = 0; i < toolbar.getChildCount(); i++) {
+            View view = toolbar.getChildAt(i);
+            if (view instanceof  TextView) {
+                FontUtils.setTypeface(assetManager, (TextView)view);
+//                ((TextView) view).setTypeface(Typeface.DEFAULT);
+            }
+        }
+    }
+
+    public static void setToolbarTypeface(Toolbar toolbar, Typeface typeface) {
+        for (int i = 0; i < toolbar.getChildCount(); i++) {
+            View view = toolbar.getChildAt(i);
+            if (view instanceof  TextView) {
+                ((TextView) view).setTypeface(typeface);
+            }
+        }
     }
 }

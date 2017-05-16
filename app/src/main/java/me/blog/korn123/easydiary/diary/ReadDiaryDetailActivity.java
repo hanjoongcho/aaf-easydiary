@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.diary;
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
@@ -61,6 +62,8 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.read_diary_detail_title));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        FontUtils.setToolbarTypeface(toolbar, Typeface.DEFAULT);
 
         Intent intent = getIntent();
         mTitle.setText(intent.getStringExtra("title"));

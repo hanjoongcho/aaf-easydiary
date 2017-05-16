@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.calendar;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
@@ -22,6 +23,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.blog.korn123.commons.utils.DateUtils;
+import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.diary.DiaryDao;
 import me.blog.korn123.easydiary.diary.DiaryDto;
@@ -68,6 +70,7 @@ public class CalendarActivity extends EasyDiaryActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.calendar_title));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        FontUtils.setToolbarTypeface(toolbar, Typeface.DEFAULT);
 
         Calendar cal = Calendar.getInstance();
         Date currentDate = cal.getTime();

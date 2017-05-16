@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.chart;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import me.blog.korn123.commons.utils.DateUtils;
+import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.diary.DiaryDao;
 import me.blog.korn123.easydiary.diary.DiaryDto;
@@ -46,6 +48,8 @@ public class BarChartActivity extends ChartBase {
         getSupportActionBar().setTitle(getString(R.string.bar_chart_title));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mChart = (BarChart) findViewById(R.id.chart1);
+
+        FontUtils.setToolbarTypeface(toolbar, Typeface.DEFAULT);
 
         mChart.setDrawBarShadow(false);
         mChart.setDrawValueAboveBar(true);
