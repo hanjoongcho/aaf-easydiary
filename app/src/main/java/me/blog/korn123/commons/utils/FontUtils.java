@@ -2,6 +2,7 @@ package me.blog.korn123.commons.utils;
 
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
+import android.icu.text.DisplayContext;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
@@ -13,6 +14,10 @@ import android.widget.TextView;
 public class FontUtils {
 
     private static Typeface mTypeface;
+
+    public static void setTypefaceDefault(TextView view) {
+        view.setTypeface(Typeface.DEFAULT);
+    }
 
     public static void setTypeface(AssetManager assetManager, TextView view) {
         view.setTypeface(getTypeface(assetManager));

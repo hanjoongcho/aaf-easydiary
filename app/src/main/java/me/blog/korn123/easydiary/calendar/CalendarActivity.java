@@ -71,6 +71,7 @@ public class CalendarActivity extends EasyDiaryActivity {
         getSupportActionBar().setTitle(getString(R.string.calendar_title));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         FontUtils.setToolbarTypeface(toolbar, Typeface.DEFAULT);
+        FontUtils.setTypefaceDefault(mEmptyInfo);
 
         Calendar cal = Calendar.getInstance();
         Date currentDate = cal.getTime();

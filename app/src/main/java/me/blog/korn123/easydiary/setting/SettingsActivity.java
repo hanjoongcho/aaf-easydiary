@@ -15,6 +15,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -25,9 +26,17 @@ import android.preference.RingtonePreference;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
+import org.w3c.dom.Text;
+
+import java.util.logging.Handler;
 
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.CommonUtils;
@@ -201,6 +210,50 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
         mContext = SettingsActivity.this;
         mActivity = SettingsActivity.this;
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //ViewGroup viewGroup = (ViewGroup) findViewById(android.R.id.content);
+
+                new android.os.Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Window window = getWindow();
+                        View v = window.getDecorView();
+                        determineView((ViewGroup)v);
+                    }
+                });
+
+            }
+        }).start();
+
+//        ViewGroup viewGroup = (ViewGroup) findViewById(android.R.id.content);
+////        Window window = getWindow();
+////        ViewGroup viewGroup = (ViewGroup) window.getDecorView();
+//        determineView(viewGroup);
+
+    }
+
+    public static void determineView(ViewGroup viewGroup) {
+        for (int i = 0; i < viewGroup.getChildCount(); i++) {
+//            Log.i("info index ", String.format("%d", i));
+            if (viewGroup.getChildAt(i) instanceof ViewGroup) {
+                determineView((ViewGroup)viewGroup.getChildAt(i));
+            } else {
+                if (viewGroup.getChildAt(i) instanceof TextView) {
+                    TextView tv = (TextView) viewGroup.getChildAt(i);
+                    tv.setTypeface(Typeface.DEFAULT);
+                    Log.i("view info", String.format("%s", tv.getText()));
+
+                }
+            }
+        }
     }
 
     /**
