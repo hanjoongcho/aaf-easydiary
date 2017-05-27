@@ -16,6 +16,7 @@
         android:layout_height="0dp">
 
         <TextView
+            android:textStyle="bold"
             android:gravity="center"
             android:id="@+id/pass1"
             android:background="@drawable/bg_card_01"
@@ -24,6 +25,7 @@
             android:layout_width="0dp"
             android:layout_height="50dp" />
         <TextView
+            android:textStyle="bold"
             android:gravity="center"
             android:id="@+id/pass2"
             android:background="@drawable/bg_card_01"
@@ -32,6 +34,7 @@
             android:layout_width="0dp"
             android:layout_height="50dp" />
         <TextView
+            android:textStyle="bold"
             android:gravity="center"
             android:id="@+id/pass3"
             android:background="@drawable/bg_card_01"
@@ -40,6 +43,7 @@
             android:layout_width="0dp"
             android:layout_height="50dp" />
         <TextView
+            android:textStyle="bold"
             android:gravity="center"
             android:id="@+id/pass4"
             android:background="@drawable/bg_card_01"
@@ -62,7 +66,7 @@
 
         <TextView
             android:padding="10dp"
-            android:text="잠금번호를 입력하세요"
+            android:text="@string/unlock_guide_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -90,6 +94,7 @@
             android:layout_height="wrap_content">
 
             <TextView
+                android:textStyle="bold"
                 android:id="@+id/num1"
                 android:layout_marginRight="5dp"
                 android:gravity="center"
@@ -99,6 +104,7 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp" />
             <TextView
+                android:textStyle="bold"
                 android:id="@+id/num2"
                 android:layout_marginRight="5dp"
                 android:gravity="center"
@@ -108,6 +114,7 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp" />
             <TextView
+                android:textStyle="bold"
                 android:id="@+id/num3"
                 android:gravity="center"
                 android:background="@drawable/bg_card_01"
@@ -128,6 +135,7 @@
             android:layout_height="wrap_content">
 
             <TextView
+                android:textStyle="bold"
                 android:id="@+id/num4"
                 android:layout_marginRight="5dp"
                 android:gravity="center"
@@ -137,6 +145,7 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp" />
             <TextView
+                android:textStyle="bold"
                 android:id="@+id/num5"
                 android:layout_marginRight="5dp"
                 android:gravity="center"
@@ -146,6 +155,7 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp" />
             <TextView
+                android:textStyle="bold"
                 android:id="@+id/num6"
                 android:gravity="center"
                 android:background="@drawable/bg_card_01"
@@ -166,6 +176,7 @@
             android:layout_height="wrap_content">
 
             <TextView
+                android:textStyle="bold"
                 android:id="@+id/num7"
                 android:layout_marginRight="5dp"
                 android:gravity="center"
@@ -175,6 +186,7 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp" />
             <TextView
+                android:textStyle="bold"
                 android:id="@+id/num8"
                 android:layout_marginRight="5dp"
                 android:gravity="center"
@@ -184,6 +196,7 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp" />
             <TextView
+                android:textStyle="bold"
                 android:id="@+id/num9"
                 android:gravity="center"
                 android:background="@drawable/bg_card_01"
@@ -204,6 +217,7 @@
             android:layout_height="wrap_content">
 
             <TextView
+                android:textStyle="bold"
                 android:layout_marginRight="5dp"
                 android:gravity="center"
                 android:background="@drawable/bg_card_01"
@@ -211,6 +225,7 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp" />
             <TextView
+                android:textStyle="bold"
                 android:id="@+id/num0"
                 android:layout_marginRight="5dp"
                 android:gravity="center"
@@ -220,6 +235,7 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp" />
             <TextView
+                android:textStyle="bold"
                 android:gravity="center"
                 android:background="@drawable/bg_card_01"
                 android:layout_weight="1"

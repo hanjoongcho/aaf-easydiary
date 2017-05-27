@@ -11,19 +11,22 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 public class DayAxisValueFormatter implements IAxisValueFormatter
 {
 
+    BarChartActivity barChartActivity;
+
     protected String[] mMonths = new String[]{
             "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
     };
 
     private BarLineChartBase<?> chart;
 
-    public DayAxisValueFormatter(BarLineChartBase<?> chart) {
+    public DayAxisValueFormatter(BarChartActivity barChartActivity , BarLineChartBase<?> chart) {
         this.chart = chart;
+        this.barChartActivity = barChartActivity;
     }
 
     @Override
     public String getFormattedValue(float value, AxisBase axis) {
-        String hourRange = BarChartActivity.itemNumberToRange((int)value);
+        String hourRange = barChartActivity.itemNumberToRange((int)value);
         return hourRange;
     }
 

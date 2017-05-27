@@ -16,6 +16,6 @@
     <item
         android:id="@+id/settings"
         android:orderInCategory="100"
-        android:title="환경설정"
+        android:title="@string/preference"
         app:showAsAction="never" />
 </menu>

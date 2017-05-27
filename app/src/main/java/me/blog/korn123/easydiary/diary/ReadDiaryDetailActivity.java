@@ -217,7 +217,6 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
 //                this.overridePendingTransition(R.anim.anim_left_to_center, R.anim.anim_center_to_right);
                 break;
             case R.id.action_settings:
-//                DialogUtils.makeSnackBar(findViewById(R.id.contents), getString(R.string.notice_message));
                 Intent settingIntent = new Intent(ReadDiaryDetailActivity.this, SettingsActivity.class);
                 startActivity(settingIntent);
                 break;

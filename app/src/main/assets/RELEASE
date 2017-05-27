@@ -3,6 +3,10 @@
              Easy Diary
 
 ---------------------------------------------------
+# Changes in 0.14.2 (date: 2017/05/27)
+  [기능추가/New Feature]
+  1. 영어 지원기능 추가/Added support for English language
+
 # Changes in 0.14.1 (date: 2017/05/04)
   [기타]
   1. Calendar arrow icon 변경

@@ -1,30 +1,90 @@
 <resources>
     <string name="app_name">Easy Diary</string>
 
-    <string name="notice_message">This feature is available as of version 1.0.0</string>
-    <string name="guide_message">Please enter your search term.</string>
-    <string name="guide_message_2">Type or speak your search term.</string>
-    <string name="guide_message_3">Insufficient permissions for backup.</string>
-    <string name="guide_message_4">There is no diary created on that day.</string>
+    <!--CreateDiaryActivity-->
     <string name="create_diary_title">Write Diary</string>
-    <string name="update_diary_title">Edit Diary</string>
-    <string name="read_diary_title">Search Diary</string>
-    <string name="read_diary_detail_title">Diary View<![CDATA[&]]>Listening</string>
-    <string name="bar_chart_title">View Chart</string>
-    <string name="calendar_title">View Calendar</string>
-    <string name="setting_title">Preferences</string>
-    <string name="input_mode_a">Speech mode</string>
-    <string name="input_mode_b">Keypad <![CDATA[&]]> Speech mode</string>
-    <string name="input_mode_c">Keypad mode</string>
+    <string name="write_date">Date</string>
     <string name="request_title_message">Please enter a title.</string>
     <string name="request_content_message">Please enter your content.</string>
+    <string name="guide_message">Type or speak the title.</string>
+    <string name="input_mode_b">Keypad <![CDATA[&]]> Speech mode</string>
     <string name="special_character_a"><![CDATA[+]]></string>
-    <string name="delete_confirm">Are you sure you want to delete?</string>
-    <string name="write_date">Date Created</string>
 
+    <!--ReadDiaryActivity-->
+    <string name="read_diary_title">Search Diary</string>
+    <string name="input_mode_a">Speech mode</string>
+    <string name="input_mode_c">Keypad mode</string>
+    <string name="guide_message_2">Type or speak the subject.</string>
+    <string name="sample_diary_title_1">Be dangerous rather than careful.</string>
+    <string name="sample_diary_title_2">I repeat what I know when I speak.</string>
+    <string name="sample_diary_title_3">The more bad news we hear, the more we should be happy.</string>
+    <string name="sample_diary_title_4">Abundance calls comfort, constraint calls creativity.</string>
+    <string name="sample_diary_1">When you look back at your past life, you will surely know that you have been damaging your life because you are too careful not to be in danger.\nDanger of danger.\nDanger rather than being careful.\n- Grant money, In the law of</string>
+    <string name="sample_diary_2">When you talk, you are only repeating what you already know.\nBut if you listen, you may learn something new.\n-The Dalai Lama</string>
+    <string name="sample_diary_3">It is the bad news that you need to hear most as a leader. \nThe good news is good tomorrow, but the bad news will be worse tomorrow. \nThis is because even if the facts are heartbreaking, That\'s why it\'s safe to say. \n- Eric Schmidt, President of Google, \"How does Google work?\"</string>
+    <string name="sample_diary_4">Constraints are not a barrier to creativity, but creativity is used to overcome constraints. \nAll great works or creative solutions are those that have a lot of time constraints, physical constraints, and resource constraints. Creativity is born in a constrained environment. \n- Representative Kim Bong-Jin</string>
+
+    <!--ReadDiaryDetailActivity-->
+    <string name="read_diary_detail_title">Diary View<![CDATA[&]]>Listening</string>
+    <string name="delete_confirm">Are you sure you want to delete?</string>
+
+    <!--UpdateDiaryActivity-->
+    <string name="update_diary_title">Edit Diary</string>
+
+    <!--SettingsActivity-->
+    <string name="setting_title">Preferences</string>
+    <string name="lock_number">Lock Number: </string>
+    <string name="rate_app">Rate App</string>
+    <string name="guide_message_3">Insufficient permissions for backup.</string>
     <string name="application_lock_title">Lock apps</string>
     <string name="application_lock_summary">When the lock setting is enabled, the application is locked with the set password.</string>
     <string name="application_lock_password_title">Set lock number</string>
+    <string name="restore_diary">Recover Diary</string>
+    <string name="restore_diary_summary">Recover data from Google Drive</string>
+    <string name="backup_diary">Backup diary</string>
+    <string name="backup_diary_summary">Backup data to Google Drive</string>
+
+    <!--CalendarActivity-->
+    <string name="calendar_title">View Calendar</string>
+    <string name="guide_message_4">There is no diary created on that day.</string>
+
+    <!--BarChartActivity-->
+    <string name="bar_chart_title">View Chart</string>
+    <string name="bar_chart_status">Time Diary Creation Status</string>
+    <string name="range_a">0h~3h</string>
+    <string name="range_b">4h~7h</string>
+    <string name="range_c">8h~11h</string>
+    <string name="range_d">12h~15h</string>
+    <string name="range_e">16h~19h</string>
+    <string name="range_f">20h~23h</string>
+    <string name="range_g">1h~24h</string>
+    <string name="write_time">write time</string>
+    <string name="write_count">write count</string>
+
+    <!--LockDiaryActivity-->
+    <string name="unlock_guide_message">Please enter your lock number</string>
+
+    <!--CaldroidCustomAdapter-->
+    <string name="diary_count"></string>
+
+    <!--read_diary.xml-->
+    <string name="preference">Preferences</string>
+
+    <!--Array-->
+    <string-array name="weather_item_array">
+        <item>Weather</item>
+        <item>Sunny</item>
+        <item>Blur</item>
+        <item>Rain</item>
+        <item>Thunderbolt</item>
+        <item>Snow</item>
+    </string-array>
+
+
+
+
+
+
 
 
 

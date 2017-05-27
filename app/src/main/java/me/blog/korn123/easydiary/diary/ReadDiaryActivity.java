@@ -197,7 +197,6 @@ public class ReadDiaryActivity extends EasyDiaryActivity {
                 finish();
                 break;
             case R.id.settings:
-//                DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.notice_message));
                 Intent settingIntent = new Intent(ReadDiaryActivity.this, SettingsActivity.class);
                 startActivity(settingIntent);
                 break;
@@ -231,42 +230,22 @@ public class ReadDiaryActivity extends EasyDiaryActivity {
     private void initSampleData() {
         DiaryDao.createDiary(new DiaryDto(
                 -1,
-                this.mCurrentTimeMillis - 95000000L, "조심하기 보다는 위험해져라.", "지나온 인생을 돌아보면 위험에 빠진 경우보다는\n" +
-                "너무 조심한 탓에\n" +
-                "손해를 자초해 왔음을 분명 알게 될 것이다.\n" +
-                "위험해져라.\n" +
-                "조심하기 보다는 위험해져라.\n" +
-                "- 그랜트 가돈, ‘10배의 법칙’에서",
+                this.mCurrentTimeMillis - 395000000L, getString(R.string.sample_diary_title_1), getString(R.string.sample_diary_1),
                 1
         ));
         DiaryDao.createDiary(new DiaryDto(
                 -1,
-                this.mCurrentTimeMillis - 63000000L, "말할 때는 아는 것만 반복한다.", "당신이 말할 때는 아는 것만 반복한다.\n" +
-                "하지만 들으면 새로운 것을 배우게 된다.\n" +
-                "(When you talk, you are only repeating what you already know.\n" +
-                "But if you listen, you may learn something new.)\n" +
-                "- 달라이 라마",
+                this.mCurrentTimeMillis - 263000000L, getString(R.string.sample_diary_title_2), getString(R.string.sample_diary_2),
                 2
         ));
         DiaryDao.createDiary(new DiaryDto(
                 -1,
-                this.mCurrentTimeMillis - 32000000L, "나쁜 소식을 많이 들을수록 기뻐해야 한다.", "여러분이 지도자로서 가장 들을 필요가 있는 것이\n" +
-                "바로 나쁜 소식이다.\n" +
-                "좋은 소식은 내일도 좋은 것이지만\n" +
-                "나쁜 소식은 내일이면 더 나빠질 것이다.\n" +
-                "바로 이것이 비록 사실이 가슴 아프더라도\n" +
-                "언제나 까다로운 질문을 하고 사실을 말하는 것이 안전한 이유다.\n" +
-                "- 에릭 슈미트 구글 회장, ‘구글은 어떻게 일하는가?’에서",
+                this.mCurrentTimeMillis - 132000000L, getString(R.string.sample_diary_title_3), getString(R.string.sample_diary_3),
                 3
         ));
         DiaryDao.createDiary(new DiaryDto(
                 -1,
-                this.mCurrentTimeMillis - 4000000L, "풍요는 안락을, 제약은 창의를 부른다.", "제약이 창의성을 가두는 게 아니라,\n" +
-                "제약을 극복하기 위해 창의성이 발휘된다.\n" +
-                "모든 위대한 작품이나 창의적인 솔루션은 시간적인 제약,\n" +
-                "물리적인 제약, 자원의 제약들이 엄청 많았던 것들이었다.\n" +
-                "뭐가 됐든 어렵고 제약된 환경에서 창의성이 태어나곤 한다.\n" +
-                "- 김봉진 대표, ‘배민다움’에서",
+                this.mCurrentTimeMillis - 4000000L, getString(R.string.sample_diary_title_4), getString(R.string.sample_diary_4),
                 4
         ));
 

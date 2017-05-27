@@ -62,7 +62,7 @@
 
         <TextView
             android:padding="10dp"
-            android:text="잠금번호를 입력하세요"
+            android:text="@string/unlock_guide_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"

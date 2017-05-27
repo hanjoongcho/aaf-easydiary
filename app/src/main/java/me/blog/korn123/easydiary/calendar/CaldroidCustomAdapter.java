@@ -119,7 +119,7 @@ public class CaldroidCustomAdapter extends CaldroidGridAdapter {
 		}
 
 		if (count > 0) {
-			tv2.setText(count + "건");
+			tv2.setText(count + parent.getResources().getString(R.string.diary_count));
 			tv2.setTextColor(parent.getResources().getColor(R.color.blue));
 		} else {
 			tv2.setText(null);

@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.chart;
 
+import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -66,7 +67,7 @@ public class BarChartActivity extends ChartBase {
         mChart.setDrawGridBackground(false);
         // mChart.setDrawYLabels(false);
 
-        IAxisValueFormatter xAxisFormatter = new DayAxisValueFormatter(mChart);
+        IAxisValueFormatter xAxisFormatter = new DayAxisValueFormatter(this, mChart);
 
         XAxis xAxis = mChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -76,7 +77,7 @@ public class BarChartActivity extends ChartBase {
         xAxis.setLabelCount(7);
         xAxis.setValueFormatter(xAxisFormatter);
 
-        IAxisValueFormatter custom = new MyAxisValueFormatter();
+        IAxisValueFormatter custom = new MyAxisValueFormatter(this);
 
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.setTypeface(mTfLight);
@@ -138,8 +139,8 @@ public class BarChartActivity extends ChartBase {
 
         BarDataSet set1;
 
-        set1 = new BarDataSet(yVals1, "시간대별 일기작성 현황");
-        IValueFormatter iValueFormatter = new IValueFormatterExt();
+        set1 = new BarDataSet(yVals1, getString(R.string.bar_chart_status));
+        IValueFormatter iValueFormatter = new IValueFormatterExt(this);
         set1.setValueFormatter(iValueFormatter);
 //            set1.setDrawIcons(false);
 
@@ -165,29 +166,29 @@ public class BarChartActivity extends ChartBase {
         return super.onOptionsItemSelected(item);
     }
 
-    public static String itemNumberToRange(int itemNumber) {
+    public String itemNumberToRange(int itemNumber) {
         String hourRange = null;
         switch (itemNumber) {
             case 1:
-                hourRange = "0시~3시";
+                hourRange = getString(R.string.range_a);
                 break;
             case 2:
-                hourRange = "4시~7시";
+                hourRange = getString(R.string.range_b);
                 break;
             case 3:
-                hourRange = "8시~11시";
+                hourRange = getString(R.string.range_c);
                 break;
             case 4:
-                hourRange = "12시~15시";
+                hourRange = getString(R.string.range_d);
                 break;
             case 5:
-                hourRange = "16시~19시";
+                hourRange = getString(R.string.range_e);
                 break;
             case 6:
-                hourRange = "20시~23시";
+                hourRange = getString(R.string.range_f);
                 break;
             default:
-                hourRange = "1시~24시";
+                hourRange = getString(R.string.range_g);
                 break;
 
         }

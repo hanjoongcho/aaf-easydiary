@@ -14,13 +14,13 @@
             android:title="@string/application_lock_password_title"/>
         <Preference
             android:key="import_google_drive"
-            android:title="다이어리 복구하기"
-            android:summary="구글 드라이브에 백업된 데이터를 복구">
+            android:title="@string/restore_diary"
+            android:summary="@string/restore_diary_summary">
         </Preference>
         <Preference
             android:key="export_google_drive"
-            android:title="다이어리 백업하기"
-            android:summary="구글 드라이브로 데이터를 백업">
+            android:title="@string/backup_diary"
+            android:summary="@string/backup_diary_summary">
         </Preference>
     </PreferenceCategory>
 

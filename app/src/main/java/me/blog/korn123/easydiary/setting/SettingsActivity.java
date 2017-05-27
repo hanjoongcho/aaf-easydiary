@@ -350,7 +350,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 e.printStackTrace();
             }
             String version = pInfo.versionName;
-            mAppVersionPreference.setTitle("어플 평가하기");
+            mAppVersionPreference.setTitle(getString(R.string.rate_app));
             mAppVersionPreference.setSummary("Easy Diary v " + version);
             mAppVersionPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
@@ -397,7 +397,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 }
             });
 
-            mApplicationLockPassword.setSummary("설정된 잠금번호: " + CommonUtils.loadStringPreference(getActivity().getApplicationContext(), "application_lock_password", "0000"));
+            mApplicationLockPassword.setSummary(getString(R.string.lock_number) + CommonUtils.loadStringPreference(getActivity().getApplicationContext(), "application_lock_password", "0000"));
             mImportGoogleDrive.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -430,7 +430,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             if (resultCode == RESULT_OK) {
                 String password = data.getStringExtra("password");
                 CommonUtils.saveStringPreference(getActivity().getApplicationContext(), "application_lock_password", password);
-                mApplicationLockPassword.setSummary("설정된 잠금번호: " + password);
+                mApplicationLockPassword.setSummary(getString(R.string.lock_number) + password);
             }
             CommonUtils.saveLongPreference(getActivity().getApplicationContext(), Constants.PAUSE_MILLIS, System.currentTimeMillis());
         }

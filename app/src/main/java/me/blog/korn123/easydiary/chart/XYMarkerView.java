@@ -38,9 +38,7 @@ public class XYMarkerView extends MarkerView {
     // content (user-interface)
     @Override
     public void refreshContent(Entry e, Highlight highlight) {
-
-        tvContent.setText("작성시간: " + xAxisValueFormatter.getFormattedValue(e.getX(), null) + ", 작성건수: " + (int)e.getY());
-
+        tvContent.setText(getContext().getString(R.string.write_time) + ": " + xAxisValueFormatter.getFormattedValue(e.getX(), null) + ", " + getContext().getString(R.string.write_count) +": " + (int)e.getY());
         super.refreshContent(e, highlight);
     }
 

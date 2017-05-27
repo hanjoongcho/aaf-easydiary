@@ -84,7 +84,7 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
     }
 
     public void initSpinner() {
-        String[]  weatherArr = {"날씨", "맑음", "흐림", "비", "번개", "눈"};
+        String[]  weatherArr = getResources().getStringArray(R.array.weather_item_array);
         ArrayAdapter arrayAdapter = new DiaryWeatherArrayAdapter(UpdateDiaryActivity.this, R.layout.spinner_item_diary_weather_array_adapter, Arrays.asList(weatherArr));
         mWeatherSpinner.setAdapter(arrayAdapter);
         mWeatherSpinner.setSelection(getIntent().getIntExtra("weather", 0));
@@ -209,7 +209,6 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
 //                this.overridePendingTransition(R.anim.anim_left_to_center, R.anim.anim_center_to_right);
                 break;
             case R.id.action_settings:
-//                DialogUtils.makeSnackBar(findViewById(R.id.contents), getString(R.string.notice_message));
                 Intent settingIntent = new Intent(UpdateDiaryActivity.this, SettingsActivity.class);
                 startActivity(settingIntent);
                 break;
