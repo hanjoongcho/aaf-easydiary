@@ -3,6 +3,7 @@ package me.blog.korn123.commons.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.TypedValue;
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -69,5 +70,23 @@ public class CommonUtils {
         SharedPreferences.Editor edit = preferences.edit();
         edit.putBoolean(key, isEnable);
         edit.commit();
+    }
+
+    public static int dpToPixel(Context context, int dp) {
+        return dpToPixel(context, dp, 0);
+    }
+
+    public static int dpToPixel(Context context, int dp, int policy) {
+        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
+        int pixel = 0;
+        switch (policy) {
+            case 0:
+                pixel = (int) px;
+                break;
+            case 1:
+                pixel = Math.round(px);
+                break;
+        }
+        return pixel;
     }
 }

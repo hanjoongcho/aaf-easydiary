@@ -11,12 +11,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 
@@ -61,6 +64,9 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
 
     @BindView(R.id.weatherSpinner)
     Spinner mWeatherSpinner;
+
+    @BindView(R.id.photoContainer)
+    ViewGroup mPhotoContainer;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -149,7 +155,7 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
         });
     }
 
-    @OnClick({R.id.speechButton, R.id.zoomIn, R.id.zoomOut, R.id.saveContents})
+    @OnClick({R.id.speechButton, R.id.zoomIn, R.id.zoomOut, R.id.saveContents, R.id.photoView})
     public void onClick(View view) {
         float fontSize = mContents.getTextSize();
 
@@ -184,6 +190,21 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
                     CommonUtils.saveIntPreference(CreateDiaryActivity.this, Constants.PREVIOUS_ACTIVITY, Constants.PREVIOUS_ACTIVITY_CREATE);
                     finish();
                 }
+                break;
+            case R.id.photoView:
+                ImageView imageView = new ImageView(this);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(view.getWidth(), view.getHeight());
+                layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(this, 3, 1), 0);
+                imageView.setLayoutParams(layoutParams);
+                imageView.setBackgroundResource(R.drawable.bg_card_01);
+                imageView.setImageResource(R.drawable.ic_snow_2);
+                imageView.setScaleType(ImageView.ScaleType.CENTER);
+                mPhotoContainer.addView(imageView, mPhotoContainer.getChildCount() - 1);
+                mPhotoContainer.postDelayed(new Runnable() {
+                    public void run() {
+                        ((HorizontalScrollView)mPhotoContainer.getParent()).fullScroll(HorizontalScrollView.FOCUS_RIGHT);
+                    }
+                }, 100L);
                 break;
         }
     }
