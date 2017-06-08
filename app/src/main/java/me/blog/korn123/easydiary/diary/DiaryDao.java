@@ -26,7 +26,7 @@ public class DiaryDao {
         if (diaryConfig == null) {
             diaryConfig = new RealmConfiguration.Builder()
                     .name("diary.realm")
-                    .schemaVersion(3)
+                    .schemaVersion(4)
                     .migration(new DiaryMigration())
                     /*.deleteRealmIfMigrationNeeded()*/
                     .modules(Realm.getDefaultModule())
@@ -75,6 +75,11 @@ public class DiaryDao {
         List<DiaryDto> list = new ArrayList<>();
         list.addAll(results.subList(0, results.size()));
         return list;
+    }
+
+    public static DiaryDto readDiaryBy(int sequence) {
+        DiaryDto diaryDto = getRealmInstance().where(DiaryDto.class).equalTo("sequence", sequence).findFirst();
+        return diaryDto;
     }
 
     public static List<DiaryDto> readDiaryByDateString(String dateString) {

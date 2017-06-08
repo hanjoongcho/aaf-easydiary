@@ -150,15 +150,15 @@
             </LinearLayout>
 
             <ScrollView
+                android:layout_marginBottom="@dimen/card_layout_margin"
                 android:fillViewport="true"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
+                android:layout_weight="1"
+                android:layout_height="0dp">
                 <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-
                     <TextView
                         android:padding="10dp"
                         android:enabled="false"
@@ -170,10 +170,22 @@
                         android:layout_width="match_parent"
                         android:layout_weight="1"
                         android:layout_height="0dp" />
+                </LinearLayout>
+            </ScrollView>
+
+            <HorizontalScrollView
+                android:id="@+id/photoContainerScrollView"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp">
+                <LinearLayout
+                    android:id="@+id/photoContainer"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
 
                 </LinearLayout>
-
-            </ScrollView>
+            </HorizontalScrollView>
 
         </LinearLayout>
 

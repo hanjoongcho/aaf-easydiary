@@ -140,12 +140,10 @@
                 android:layout_width="match_parent"
                 android:layout_weight="1"
                 android:layout_height="0dp">
-
                 <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-
                     <EditText
                         android:padding="10dp"
                         android:enabled="false"
@@ -157,9 +155,7 @@
                         android:layout_width="match_parent"
                         android:layout_weight="1"
                         android:layout_height="0dp" />
-
                 </LinearLayout>
-
             </ScrollView>
 
             <HorizontalScrollView

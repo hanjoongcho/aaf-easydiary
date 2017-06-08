@@ -5,6 +5,7 @@ import android.widget.ImageView;
 
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.easydiary.R;
+import me.blog.korn123.easydiary.diary.DiaryDao;
 
 /**
  * Created by hanjoong on 2017-04-30.
@@ -46,6 +47,10 @@ public class EasyDiaryUtils {
         }
     }
 
+    public static String getEasyDiaryMimeType() {
+        String easyDiaryMimeType = "text/aaf_v" + DiaryDao.getRealmInstance().getVersion();
+        return  easyDiaryMimeType;
+    }
 
 
 }

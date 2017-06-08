@@ -25,6 +25,7 @@ import java.io.OutputStream;
 
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.CommonUtils;
+import me.blog.korn123.commons.utils.EasyDiaryUtils;
 import me.blog.korn123.easydiary.diary.DiaryDao;
 import me.blog.korn123.easydiary.diary.ReadDiaryActivity;
 import me.blog.korn123.easydiary.diary.UpdateDiaryActivity;
@@ -50,7 +51,7 @@ public class GoogleDriveDownloader extends GoogleDriveUtils {
 
         IntentSender intentSender = Drive.DriveApi
                 .newOpenFileActivityBuilder()
-                .setMimeType(new String[] { "text/aaf"})
+                .setMimeType(new String[] { EasyDiaryUtils.getEasyDiaryMimeType() })
                 .build(getGoogleApiClient());
 
         try {

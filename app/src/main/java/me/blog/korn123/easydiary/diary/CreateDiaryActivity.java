@@ -2,9 +2,18 @@ package me.blog.korn123.easydiary.diary;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -25,14 +34,18 @@ import android.widget.Switch;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.realm.RealmList;
 import me.blog.korn123.commons.constants.Constants;
+import me.blog.korn123.commons.utils.BitmapUtils;
 import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.commons.utils.DialogUtils;
@@ -52,6 +65,9 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
     private Switch mInputMode;
     private long mCurrentTimeMillis;
     private int mCurrentCursor = 1;
+    private int mThumbnailWidth;
+    private int mThumbnailHeight;
+    private RealmList<PhotoUriDto> mPhotoUris;
 
     @BindView(R.id.contents)
     EditText mContents;
@@ -186,25 +202,18 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
                             String.valueOf(CreateDiaryActivity.this.mContents.getText()),
                             mWeatherSpinner.getSelectedItemPosition()
                     );
+                    diaryDto.setPhotoUris(mPhotoUris);
                     DiaryDao.createDiary(diaryDto);
                     CommonUtils.saveIntPreference(CreateDiaryActivity.this, Constants.PREVIOUS_ACTIVITY, Constants.PREVIOUS_ACTIVITY_CREATE);
                     finish();
                 }
                 break;
             case R.id.photoView:
-                ImageView imageView = new ImageView(this);
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(view.getWidth(), view.getHeight());
-                layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(this, 3, 1), 0);
-                imageView.setLayoutParams(layoutParams);
-                imageView.setBackgroundResource(R.drawable.bg_card_01);
-                imageView.setImageResource(R.drawable.ic_snow_2);
-                imageView.setScaleType(ImageView.ScaleType.CENTER);
-                mPhotoContainer.addView(imageView, mPhotoContainer.getChildCount() - 1);
-                mPhotoContainer.postDelayed(new Runnable() {
-                    public void run() {
-                        ((HorizontalScrollView)mPhotoContainer.getParent()).fullScroll(HorizontalScrollView.FOCUS_RIGHT);
-                    }
-                }, 100L);
+                mThumbnailWidth = view.getWidth();
+                mThumbnailHeight = view.getHeight();
+                Intent pickImageIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                pickIntent.setType("image/*");
+                startActivityForResult(pickImageIntent, Constants.REQUEST_CODE_IMAGE_PICKER);
                 break;
         }
     }
@@ -248,6 +257,33 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
                     }
                 }
                 CommonUtils.saveLongPreference(CreateDiaryActivity.this, Constants.PAUSE_MILLIS, System.currentTimeMillis());
+                break;
+            case Constants.REQUEST_CODE_IMAGE_PICKER:
+//                String path = CommonUtils.uriToPath(getContentResolver(), data.getData());
+                try {
+                    if (data.getData() != null) {
+                        if (mPhotoUris == null) mPhotoUris = new RealmList<>();
+                        mPhotoUris.add(new PhotoUriDto(data.getData().toString()));
+                        Bitmap bitmap = BitmapUtils.decodeUri(this, data.getData(), CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 60, 1), CommonUtils.dpToPixel(this, 40, 1));
+                        ImageView imageView = new ImageView(this);
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(mThumbnailWidth, mThumbnailHeight);
+                        layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(this, 3, 1), 0);
+                        imageView.setLayoutParams(layoutParams);
+                        imageView.setBackgroundResource(R.drawable.bg_card_01);
+                        imageView.setImageBitmap(bitmap);
+                        imageView.setScaleType(ImageView.ScaleType.CENTER);
+//                    imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                        mPhotoContainer.addView(imageView, mPhotoContainer.getChildCount() - 1);
+                        mPhotoContainer.postDelayed(new Runnable() {
+                            public void run() {
+                                ((HorizontalScrollView)mPhotoContainer.getParent()).fullScroll(HorizontalScrollView.FOCUS_RIGHT);
+                            }
+                        }, 100L);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 break;
             default:
                 break;

@@ -18,6 +18,7 @@ import java.io.OutputStream;
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.constants.Path;
 import me.blog.korn123.commons.utils.DateUtils;
+import me.blog.korn123.commons.utils.EasyDiaryUtils;
 import me.blog.korn123.easydiary.diary.DiaryDao;
 
 /**
@@ -47,7 +48,7 @@ public class GoogleDriveUploader extends GoogleDriveUtils {
 
                     MetadataChangeSet metadataChangeSet = new MetadataChangeSet.Builder()
                             .setTitle(Path.DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"))
-                            .setMimeType("text/aaf").build();
+                            .setMimeType(EasyDiaryUtils.getEasyDiaryMimeType()).build();
                     IntentSender intentSender = Drive.DriveApi
                             .newCreateFileActivityBuilder()
                             .setInitialMetadata(metadataChangeSet)

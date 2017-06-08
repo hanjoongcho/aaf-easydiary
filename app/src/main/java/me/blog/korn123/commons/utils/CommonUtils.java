@@ -1,7 +1,10 @@
 package me.blog.korn123.commons.utils;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.TypedValue;
 
@@ -88,5 +91,19 @@ public class CommonUtils {
                 break;
         }
         return pixel;
+    }
+
+    public static String uriToPath(ContentResolver contentResolver, Uri uri) {
+        String path = null;
+        Cursor cursor = contentResolver.query(uri, null, null, null, null);
+        cursor.moveToNext();
+        int columnIndex = cursor.getColumnIndex("_data");
+        if (columnIndex > 0) {
+            path = cursor.getString(columnIndex);
+        } else {
+            path = uri.toString();
+        }
+        cursor.close();
+        return path;
     }
 }

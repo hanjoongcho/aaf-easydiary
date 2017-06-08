@@ -1,7 +1,9 @@
 package me.blog.korn123.easydiary.diary;
 
 import java.util.Date;
+import java.util.List;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.Ignore;
 import io.realm.annotations.PrimaryKey;
@@ -28,6 +30,8 @@ public class DiaryDto extends RealmObject {
     private String dateString;
 
     private int weather;
+
+    private RealmList<PhotoUriDto> photoUris;
 
     public DiaryDto() {}
 
@@ -94,5 +98,13 @@ public class DiaryDto extends RealmObject {
 
     public void setContents(String contents) {
         this.contents = contents;
+    }
+
+    public RealmList<PhotoUriDto> getPhotoUris() {
+        return photoUris;
+    }
+
+    public void setPhotoUris(RealmList<PhotoUriDto> photoUris) {
+        this.photoUris = photoUris;
     }
 }

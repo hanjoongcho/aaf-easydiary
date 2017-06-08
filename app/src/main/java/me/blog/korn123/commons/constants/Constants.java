@@ -17,6 +17,7 @@ public class Constants {
 
     // startActivityForResult Request Code: Etc
     final static public int REQUEST_CODE_LOCK_SETTING = 21;
+    final static public int REQUEST_CODE_IMAGE_PICKER = 22;
 
 
     final static public String[] PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.SEND_SMS, Manifest.permission.READ_CONTACTS};

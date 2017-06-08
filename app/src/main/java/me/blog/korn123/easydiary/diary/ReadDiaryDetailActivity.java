@@ -3,7 +3,9 @@ package me.blog.korn123.easydiary.diary;
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
@@ -14,16 +16,22 @@ import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.realm.RealmList;
 import me.blog.korn123.commons.constants.Constants;
+import me.blog.korn123.commons.utils.BitmapUtils;
 import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.DialogUtils;
 import me.blog.korn123.commons.utils.EasyDiaryUtils;
@@ -54,6 +62,12 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
     @BindView(R.id.weather)
     ImageView mWeather;
 
+    @BindView(R.id.photoContainer)
+    ViewGroup mPhotoContainer;
+
+    @BindView(R.id.photoContainerScrollView)
+    HorizontalScrollView mHorizontalScrollView;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read_diary_detail);
@@ -65,6 +79,7 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
 
         FontUtils.setToolbarTypeface(toolbar, Typeface.DEFAULT);
 
+        // TODO search from sequence
         Intent intent = getIntent();
         mTitle.setText(intent.getStringExtra("title"));
         mDate.setText(intent.getStringExtra("date"));
@@ -76,6 +91,30 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
         EasyDiaryUtils.initWeatherView(mWeather, weather);
 
         initFontStyle();
+
+        // TODO fixme elegance
+        DiaryDto diaryDto = DiaryDao.readDiaryBy(mSequence);
+        if (diaryDto.getPhotoUris() != null && diaryDto.getPhotoUris().size() > 0) {
+            for (PhotoUriDto dto : diaryDto.getPhotoUris()) {
+                Uri uri = Uri.parse(dto.getPhotoUri());
+                Bitmap bitmap = null;
+                try {
+                    bitmap = BitmapUtils.decodeUri(this, uri, CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 60, 1), CommonUtils.dpToPixel(this, 40, 1));
+                    ImageView imageView = new ImageView(this);
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 50, 1));
+                    layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(this, 3, 1), 0);
+                    imageView.setLayoutParams(layoutParams);
+                    imageView.setBackgroundResource(R.drawable.bg_card_01);
+                    imageView.setImageBitmap(bitmap);
+                    imageView.setScaleType(ImageView.ScaleType.CENTER);
+                    mPhotoContainer.addView(imageView);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            mHorizontalScrollView.setVisibility(View.GONE);
+        }
     }
 
     private void initModule() {

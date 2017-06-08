@@ -1,14 +1,17 @@
 package me.blog.korn123.easydiary.helper;
 
 import java.util.Date;
+import java.util.List;
 
 import io.realm.DynamicRealm;
 import io.realm.DynamicRealmObject;
 import io.realm.FieldAttribute;
+import io.realm.RealmList;
 import io.realm.RealmMigration;
 import io.realm.RealmObjectSchema;
 import io.realm.RealmSchema;
 import me.blog.korn123.commons.utils.DateUtils;
+import me.blog.korn123.easydiary.diary.PhotoUriDto;
 
 /**
  * Created by hanjoong on 2017-03-25.
@@ -54,6 +57,23 @@ public class DiaryMigration implements RealmMigration {
                         @Override
                         public void apply(DynamicRealmObject obj) {
                             obj.set("weather", 0);
+                        }
+                    });
+            oldVersion++;
+        }
+
+        if (oldVersion == 3) {
+            RealmObjectSchema diarySchema = schema.get("DiaryDto");
+
+            RealmObjectSchema photoUriSchema = schema.create("PhotoUriDto")
+                    .addField("photoUri", String.class);
+
+            diarySchema
+                    .addRealmListField("photoUris", photoUriSchema)
+                    .transform(new RealmObjectSchema.Function() {
+                        @Override
+                        public void apply(DynamicRealmObject obj) {
+//                            obj.set("photoUris", null);
                         }
                     });
             oldVersion++;
