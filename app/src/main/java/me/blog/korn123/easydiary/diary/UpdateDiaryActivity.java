@@ -40,6 +40,7 @@ import me.blog.korn123.commons.utils.BitmapUtils;
 import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.DialogUtils;
 import me.blog.korn123.commons.utils.FontUtils;
+import me.blog.korn123.commons.utils.PermissionUtils;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
 import me.blog.korn123.easydiary.photo.PhotoViewPagerActivity;
@@ -238,10 +239,20 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
                 }
                 break;
             case R.id.photoView:
-                Intent pickImageIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(pickImageIntent, Constants.REQUEST_CODE_IMAGE_PICKER);
+                if (PermissionUtils.checkPermission(this, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
+                    // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
+                    callImagePicker();
+                } else {
+                    // API Level 23 이상이면서 권한취득 안한경우
+                    PermissionUtils.confirmPermission(this, this, Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE);
+                }
                 break;
         }
+    }
+
+    private void callImagePicker() {
+        Intent pickImageIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(pickImageIntent, Constants.REQUEST_CODE_IMAGE_PICKER);
     }
 
     private void showSpeechDialog() {
@@ -317,7 +328,9 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
+                break;
+            case Constants.REQUEST_CODE_EXTERNAL_STORAGE:
+                callImagePicker();
                 break;
         }
     }

@@ -51,7 +51,9 @@ import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.commons.utils.DialogUtils;
 import me.blog.korn123.commons.utils.FontUtils;
+import me.blog.korn123.commons.utils.PermissionUtils;
 import me.blog.korn123.easydiary.R;
+import me.blog.korn123.easydiary.googledrive.GoogleDriveDownloader;
 import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
 import me.blog.korn123.easydiary.setting.SettingsActivity;
 
@@ -66,8 +68,6 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
     private Switch mInputMode;
     private long mCurrentTimeMillis;
     private int mCurrentCursor = 1;
-    private int mThumbnailWidth;
-    private int mThumbnailHeight;
     private RealmList<PhotoUriDto> mPhotoUris;
 
     @BindView(R.id.contents)
@@ -210,13 +210,21 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
                 }
                 break;
             case R.id.photoView:
-                mThumbnailWidth = view.getWidth();
-                mThumbnailHeight = view.getHeight();
-                Intent pickImageIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//                pickIntent.setType("image/*");
-                startActivityForResult(pickImageIntent, Constants.REQUEST_CODE_IMAGE_PICKER);
+                if (PermissionUtils.checkPermission(this, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
+                    // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
+                    callImagePicker();
+                } else {
+                    // API Level 23 이상이면서 권한취득 안한경우
+                    PermissionUtils.confirmPermission(this, this, Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE);
+                }
                 break;
         }
+    }
+
+    private void callImagePicker() {
+        Intent pickImageIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                pickIntent.setType("image/*");
+        startActivityForResult(pickImageIntent, Constants.REQUEST_CODE_IMAGE_PICKER);
     }
 
     private void showSpeechDialog() {
@@ -267,7 +275,7 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
                         mPhotoUris.add(new PhotoUriDto(data.getData().toString()));
                         Bitmap bitmap = BitmapUtils.decodeUri(this, data.getData(), CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 60, 1), CommonUtils.dpToPixel(this, 40, 1));
                         ImageView imageView = new ImageView(this);
-                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(mThumbnailWidth, mThumbnailHeight);
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 50, 1));
                         layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(this, 3, 1), 0);
                         imageView.setLayoutParams(layoutParams);
                         imageView.setBackgroundResource(R.drawable.bg_card_01);
@@ -306,6 +314,9 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
                     e.printStackTrace();
                 }
 
+                break;
+            case Constants.REQUEST_CODE_EXTERNAL_STORAGE:
+                callImagePicker();
                 break;
             default:
                 break;
