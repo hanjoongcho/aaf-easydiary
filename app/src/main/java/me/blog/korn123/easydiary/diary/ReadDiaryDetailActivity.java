@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
@@ -38,6 +39,7 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
+import me.blog.korn123.easydiary.photo.PhotoViewPagerActivity;
 import me.blog.korn123.easydiary.setting.SettingsActivity;
 
 /**
@@ -95,22 +97,33 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
         // TODO fixme elegance
         DiaryDto diaryDto = DiaryDao.readDiaryBy(mSequence);
         if (diaryDto.getPhotoUris() != null && diaryDto.getPhotoUris().size() > 0) {
+            View.OnClickListener onClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent photoViewPager = new Intent(ReadDiaryDetailActivity.this, PhotoViewPagerActivity.class);
+                    photoViewPager.putExtra("sequence", mSequence);
+                    startActivity(photoViewPager);
+                }
+            };
+
             for (PhotoUriDto dto : diaryDto.getPhotoUris()) {
                 Uri uri = Uri.parse(dto.getPhotoUri());
                 Bitmap bitmap = null;
                 try {
                     bitmap = BitmapUtils.decodeUri(this, uri, CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 60, 1), CommonUtils.dpToPixel(this, 40, 1));
-                    ImageView imageView = new ImageView(this);
-                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 50, 1));
-                    layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(this, 3, 1), 0);
-                    imageView.setLayoutParams(layoutParams);
-                    imageView.setBackgroundResource(R.drawable.bg_card_01);
-                    imageView.setImageBitmap(bitmap);
-                    imageView.setScaleType(ImageView.ScaleType.CENTER);
-                    mPhotoContainer.addView(imageView);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
+                    bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.question_mark_4);
                 }
+                ImageView imageView = new ImageView(this);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 50, 1));
+                layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(this, 3, 1), 0);
+                imageView.setLayoutParams(layoutParams);
+                imageView.setBackgroundResource(R.drawable.bg_card_01);
+                imageView.setImageBitmap(bitmap);
+                imageView.setScaleType(ImageView.ScaleType.CENTER);
+                mPhotoContainer.addView(imageView);
+                imageView.setOnClickListener(onClickListener);
             }
         } else {
             mHorizontalScrollView.setVisibility(View.GONE);

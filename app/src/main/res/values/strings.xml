@@ -9,6 +9,8 @@
     <string name="guide_message">제목을 입력하거나 말하세요.</string>
     <string name="input_mode_b">키패드 <![CDATA[&]]> 스피치 모드</string>
     <string name="special_character_a"><![CDATA[+]]></string>
+    <string name="delete_photo_confirm_message">해당 사진을 삭제할까요?</string>
+
 
     <!--ReadDiaryActivity-->
     <string name="read_diary_title">다이어리 검색</string>
@@ -33,7 +35,7 @@
 
     <!--SettingsActivity-->
     <string name="setting_title">환경설정</string>
-    <string name="lock_number">설정된 잠금번호: </string>
+    <string name="lock_number">설정된 잠금번호:</string>
     <string name="rate_app">어플 평가하기</string>
     <string name="guide_message_3">백업을 위한 권한이 충분하지 않습니다.</string>
     <string name="application_lock_title">어플잠금설정</string>

@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.diary;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -224,6 +225,7 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        CommonUtils.saveLongPreference(CreateDiaryActivity.this, Constants.PAUSE_MILLIS, System.currentTimeMillis()); // clear screen lock policy
         switch (requestCode) {
             case REQUEST_CODE_SPEECH_INPUT:
                 if ((resultCode == RESULT_OK) && (data != null)) {
@@ -256,7 +258,6 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
                         }
                     }
                 }
-                CommonUtils.saveLongPreference(CreateDiaryActivity.this, Constants.PAUSE_MILLIS, System.currentTimeMillis());
                 break;
             case Constants.REQUEST_CODE_IMAGE_PICKER:
 //                String path = CommonUtils.uriToPath(getContentResolver(), data.getData());
@@ -273,6 +274,27 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
                         imageView.setImageBitmap(bitmap);
                         imageView.setScaleType(ImageView.ScaleType.CENTER);
 //                    imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                        final int currentIndex = mPhotoUris.size() - 1;
+                        imageView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                DialogUtils.showAlertDialog(
+                                        CreateDiaryActivity.this,
+                                        getString(R.string.delete_photo_confirm_message),
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                mPhotoUris.remove(currentIndex);
+                                                mPhotoContainer.removeViewAt(currentIndex);
+                                            }
+                                        },
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {}
+                                        }
+                                );
+                            }
+                        });
                         mPhotoContainer.addView(imageView, mPhotoContainer.getChildCount() - 1);
                         mPhotoContainer.postDelayed(new Runnable() {
                             public void run() {
@@ -308,5 +330,4 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-
 }

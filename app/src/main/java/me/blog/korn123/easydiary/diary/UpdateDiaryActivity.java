@@ -1,7 +1,11 @@
 package me.blog.korn123.easydiary.diary;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.v7.widget.Toolbar;
@@ -10,14 +14,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
@@ -25,12 +34,15 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.realm.RealmList;
 import me.blog.korn123.commons.constants.Constants;
+import me.blog.korn123.commons.utils.BitmapUtils;
 import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.DialogUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
+import me.blog.korn123.easydiary.photo.PhotoViewPagerActivity;
 import me.blog.korn123.easydiary.setting.SettingsActivity;
 
 /**
@@ -44,6 +56,7 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
     private long mCurrentTimeMillis;
     private int mSequence;
     private int mCurrentCursor = 1;
+    private RealmList<PhotoUriDto> mPhotoUris;
 
     @BindView(R.id.contents)
     EditText mContents;
@@ -56,6 +69,12 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
 
     @BindView(R.id.weatherSpinner)
     Spinner mWeatherSpinner;
+
+    @BindView(R.id.photoContainer)
+    ViewGroup mPhotoContainer;
+
+    @BindView(R.id.photoContainerScrollView)
+    HorizontalScrollView mHorizontalScrollView;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +110,7 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
     }
 
     public void initData() {
+        // TODO search from sequence
         Intent intent = getIntent();
         mTitle.setText(intent.getStringExtra("title"));
         getSupportActionBar().setSubtitle(getString(R.string.write_date) + ": " + intent.getStringExtra("date"));
@@ -98,6 +118,55 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
         mSequence = intent.getIntExtra("sequence", 0);
         mCurrentTimeMillis = intent.getLongExtra("current_time_millis", 0);
         mContents.requestFocus();
+
+        // TODO fixme elegance
+        DiaryDto diaryDto = DiaryDao.readDiaryBy(mSequence);
+        mPhotoUris = new RealmList<>();
+        mPhotoUris.addAll(diaryDto.getPhotoUris());
+        if (mPhotoUris != null && mPhotoUris.size() > 0) {
+            int currentIndex = 0;
+            for (PhotoUriDto dto : mPhotoUris) {
+                final int targetIndex = currentIndex++;
+                Uri uri = Uri.parse(dto.getPhotoUri());
+                Bitmap bitmap = null;
+                try {
+                    bitmap = BitmapUtils.decodeUri(this, uri, CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 60, 1), CommonUtils.dpToPixel(this, 40, 1));
+
+                } catch (FileNotFoundException e) {
+                    bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.question_mark_4);
+                    e.printStackTrace();
+                }
+
+                ImageView imageView = new ImageView(this);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 50, 1));
+                layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(this, 3, 1), 0);
+                imageView.setLayoutParams(layoutParams);
+                imageView.setBackgroundResource(R.drawable.bg_card_01);
+                imageView.setImageBitmap(bitmap);
+                imageView.setScaleType(ImageView.ScaleType.CENTER);
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DialogUtils.showAlertDialog(
+                                UpdateDiaryActivity.this,
+                                getString(R.string.delete_photo_confirm_message),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        mPhotoUris.remove(targetIndex);
+                                        mPhotoContainer.removeViewAt(targetIndex);
+                                    }
+                                },
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {}
+                                }
+                        );
+                    }
+                });
+                mPhotoContainer.addView(imageView, mPhotoContainer.getChildCount() - 1);
+            }
+        }
     }
 
     public void initFontStyle() {
@@ -132,7 +201,7 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
         });
     }
 
-    @OnClick({R.id.speechButton, R.id.zoomIn, R.id.zoomOut, R.id.saveContents})
+    @OnClick({R.id.speechButton, R.id.zoomIn, R.id.zoomOut, R.id.saveContents, R.id.photoView})
     public void onClick(View view) {
         float fontSize = mContents.getTextSize();
 
@@ -163,9 +232,14 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
                             String.valueOf(mContents.getText())
                     );
                     diaryDto.setWeather(mWeatherSpinner.getSelectedItemPosition());
+                    diaryDto.setPhotoUris(mPhotoUris);
                     DiaryDao.updateDiary(diaryDto);
                     finish();
                 }
+                break;
+            case R.id.photoView:
+                Intent pickImageIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(pickImageIntent, Constants.REQUEST_CODE_IMAGE_PICKER);
                 break;
         }
     }
@@ -176,6 +250,7 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        CommonUtils.saveLongPreference(UpdateDiaryActivity.this, Constants.PAUSE_MILLIS, System.currentTimeMillis()); // clear screen lock policy
         switch (requestCode) {
             case REQUEST_CODE_SPEECH_INPUT:
                 if ((resultCode == RESULT_OK) && (data != null)) {
@@ -197,7 +272,52 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
                         mContents.setSelection(cursorPosition);
                     }
                 }
-                CommonUtils.saveLongPreference(UpdateDiaryActivity.this, Constants.PAUSE_MILLIS, System.currentTimeMillis());
+                break;
+            case Constants.REQUEST_CODE_IMAGE_PICKER:
+                try {
+                    if (data.getData() != null) {
+                        if (mPhotoUris == null) mPhotoUris =new RealmList<PhotoUriDto>();
+                        mPhotoUris.add(new PhotoUriDto(data.getData().toString()));
+                        Bitmap bitmap = BitmapUtils.decodeUri(this, data.getData(), CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 60, 1), CommonUtils.dpToPixel(this, 40, 1));
+                        ImageView imageView = new ImageView(this);
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 50, 1));
+                        layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(this, 3, 1), 0);
+                        imageView.setLayoutParams(layoutParams);
+                        imageView.setBackgroundResource(R.drawable.bg_card_01);
+                        imageView.setImageBitmap(bitmap);
+                        imageView.setScaleType(ImageView.ScaleType.CENTER);
+                        final int currentIndex = mPhotoUris.size() - 1;
+                        imageView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                DialogUtils.showAlertDialog(
+                                        UpdateDiaryActivity.this,
+                                        getString(R.string.delete_photo_confirm_message),
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                mPhotoUris.remove(currentIndex);
+                                                mPhotoContainer.removeViewAt(currentIndex);
+                                            }
+                                        },
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {}
+                                        }
+                                );
+                            }
+                        });
+                        mPhotoContainer.addView(imageView, mPhotoContainer.getChildCount() - 1);
+                        mPhotoContainer.postDelayed(new Runnable() {
+                            public void run() {
+                                ((HorizontalScrollView)mPhotoContainer.getParent()).fullScroll(HorizontalScrollView.FOCUS_RIGHT);
+                            }
+                        }, 100L);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 break;
         }
     }

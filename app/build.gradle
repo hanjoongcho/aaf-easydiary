@@ -10,8 +10,8 @@ android {
         applicationId "me.blog.korn123.easydiary"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 24
-        versionName "0.14.2"
+        versionCode 25
+        versionName "0.15.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -64,5 +64,8 @@ dependencies {
     // https://mvnrepository.com/artifact/com.roomorama/caldroid
     compile group: 'com.roomorama', name: 'caldroid', version: '3.0.1'
     compile 'com.darwinsys:hirondelle-date4j:1.5.1'
+
+    // photo view
+    compile 'com.github.chrisbanes:PhotoView:2.0.0'
 
 }

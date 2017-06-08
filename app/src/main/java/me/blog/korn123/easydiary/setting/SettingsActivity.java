@@ -249,7 +249,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 if (viewGroup.getChildAt(i) instanceof TextView) {
                     TextView tv = (TextView) viewGroup.getChildAt(i);
                     tv.setTypeface(Typeface.DEFAULT);
-                    Log.i("view info", String.format("%s", tv.getText()));
+//                    Log.i("view info", String.format("%s", tv.getText()));
 
                 }
             }
@@ -397,7 +397,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 }
             });
 
-            mApplicationLockPassword.setSummary(getString(R.string.lock_number) + CommonUtils.loadStringPreference(getActivity().getApplicationContext(), "application_lock_password", "0000"));
+            mApplicationLockPassword.setSummary(getString(R.string.lock_number) + " " +CommonUtils.loadStringPreference(getActivity().getApplicationContext(), "application_lock_password", "0000"));
             mImportGoogleDrive.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {

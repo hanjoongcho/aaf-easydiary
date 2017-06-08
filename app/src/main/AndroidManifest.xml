@@ -32,6 +32,7 @@
         <activity android:name=".calendar.CalendarActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".diary.LockDiaryActivity" />
         <activity android:name=".setting.LockSettingActivity" />
+        <activity android:name=".photo.PhotoViewPagerActivity" android:theme="@style/AppTheme.NoActionBar" android:hardwareAccelerated="false" />
     </application>
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />

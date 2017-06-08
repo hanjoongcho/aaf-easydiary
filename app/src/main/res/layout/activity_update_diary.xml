@@ -124,15 +124,15 @@
             </LinearLayout>
 
             <ScrollView
+                android:layout_marginBottom="@dimen/card_layout_margin"
                 android:fillViewport="true"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
+                android:layout_weight="1"
+                android:layout_height="0dp">
                 <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-
                     <EditText
                         android:padding="10dp"
                         android:background="@drawable/bg_card_01"
@@ -143,10 +143,28 @@
                         android:layout_width="match_parent"
                         android:layout_weight="1"
                         android:layout_height="0dp" />
-
                 </LinearLayout>
-
             </ScrollView>
+
+            <HorizontalScrollView
+                android:id="@+id/photoContainerScrollView"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp">
+                <LinearLayout
+                    android:id="@+id/photoContainer"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:id="@+id/photoView"
+                        android:scaleType="center"
+                        android:background="@drawable/bg_card_01"
+                        android:src="@drawable/image_2"
+                        android:layout_width="70dp"
+                        android:layout_height="50dp" />
+                </LinearLayout>
+            </HorizontalScrollView>
 
         </LinearLayout>
 
@@ -157,7 +175,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginBottom="66dp"
+        android:layout_marginLeft="@dimen/fab_margin"
         app:srcCompat="@drawable/microphone" />
 
 </android.support.design.widget.CoordinatorLayout>

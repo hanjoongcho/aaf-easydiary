@@ -9,6 +9,7 @@
     <string name="guide_message">Type or speak the title.</string>
     <string name="input_mode_b">Keypad <![CDATA[&]]> Speech mode</string>
     <string name="special_character_a"><![CDATA[+]]></string>
+    <string name="delete_photo_confirm_message">Are you sure you want to delete this photo?</string>
 
     <!--ReadDiaryActivity-->
     <string name="read_diary_title">Search Diary</string>
@@ -33,7 +34,7 @@
 
     <!--SettingsActivity-->
     <string name="setting_title">Preferences</string>
-    <string name="lock_number">Lock Number: </string>
+    <string name="lock_number">Lock Number:</string>
     <string name="rate_app">Rate App</string>
     <string name="guide_message_3">Insufficient permissions for backup.</string>
     <string name="application_lock_title">Lock apps</string>

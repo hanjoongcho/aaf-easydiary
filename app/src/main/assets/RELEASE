@@ -3,6 +3,12 @@
              Easy Diary
 
 ---------------------------------------------------
+# Changes in 0.15.0 (date: 2017/06/09)
+  [기능추가/New Feature]
+  1. 사진첨부기능 추가/Added photo attachment feature to diary
+  [기타/Etc]
+  1. update realm schema version(4)
+
 # Changes in 0.14.2 (date: 2017/05/27)
   [기능추가/New Feature]
   1. 영어 지원기능 추가/Added support for English language
