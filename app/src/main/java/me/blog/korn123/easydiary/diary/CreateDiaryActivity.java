@@ -282,7 +282,7 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
             case Constants.REQUEST_CODE_IMAGE_PICKER:
 //                String path = CommonUtils.uriToPath(getContentResolver(), data.getData());
                 try {
-                    if (data.getData() != null) {
+                    if (resultCode == RESULT_OK && (data != null)) {
                         if (mPhotoUris == null) mPhotoUris = new RealmList<>();
                         mPhotoUris.add(new PhotoUriDto(data.getData().toString()));
                         Bitmap bitmap = BitmapUtils.decodeUri(this, data.getData(), CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 60, 1), CommonUtils.dpToPixel(this, 40, 1));
