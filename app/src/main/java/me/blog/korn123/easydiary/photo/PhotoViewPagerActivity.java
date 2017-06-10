@@ -1,11 +1,13 @@
 package me.blog.korn123.easydiary.photo;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -14,6 +16,7 @@ import com.github.chrisbanes.photoview.PhotoView;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.diary.CreateDiaryActivity;
@@ -28,6 +31,7 @@ import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
 
 public class PhotoViewPagerActivity extends EasyDiaryActivity {
 
+    ViewPager mViewPager;
     private TextView mPageInfo;
     private int mPhotoCount;
 
@@ -36,7 +40,7 @@ public class PhotoViewPagerActivity extends EasyDiaryActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_view_pager);
         ButterKnife.bind(this);
-        ViewPager viewPager = (HackyViewPager) findViewById(R.id.view_pager);
+        mViewPager = (HackyViewPager) findViewById(R.id.view_pager);
         mPageInfo = (TextView)findViewById(R.id.pageInfo);
         FontUtils.setTypefaceDefault(mPageInfo);
 
@@ -46,8 +50,8 @@ public class PhotoViewPagerActivity extends EasyDiaryActivity {
         mPhotoCount = diaryDto.getPhotoUris().size();
         mPageInfo.setText("1 / " + mPhotoCount);
 
-        viewPager.setAdapter(new SamplePagerAdapter(diaryDto));
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mViewPager.setAdapter(new SamplePagerAdapter(diaryDto));
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             }
@@ -91,10 +95,20 @@ public class PhotoViewPagerActivity extends EasyDiaryActivity {
 //            photoView.setImageResource(sDrawables[position]);
             Uri uri = Uri.parse(diaryDto.getPhotoUris().get(position).getPhotoUri());
             photoView.setImageURI(uri);
-
-            // Now just add PhotoView to ViewPager and return it
-            container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            return photoView;
+            if (photoView.getDrawable() == null) {
+                TextView textView = new TextView(container.getContext());
+                textView.setGravity(Gravity.CENTER);
+                int padding = CommonUtils.dpToPixel(container.getContext(), 10, 1);
+                textView.setPadding(padding, padding, padding, padding);
+                FontUtils.setTypefaceDefault(textView);
+                textView.setText(container.getContext().getString(R.string.photo_view_error_info));
+                container.addView(textView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                return textView;
+            } else {
+                // Now just add PhotoView to ViewPager and return it
+                container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                return photoView;
+            }
         }
 
         @Override

@@ -29,6 +29,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -43,7 +45,6 @@ import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.commons.utils.PermissionUtils;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
-import me.blog.korn123.easydiary.photo.PhotoViewPagerActivity;
 import me.blog.korn123.easydiary.setting.SettingsActivity;
 
 /**
@@ -58,6 +59,7 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
     private int mSequence;
     private int mCurrentCursor = 1;
     private RealmList<PhotoUriDto> mPhotoUris;
+    private List<Integer> mRemoveIndexes = new ArrayList<>();
 
     @BindView(R.id.contents)
     EditText mContents;
@@ -127,7 +129,6 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
         if (mPhotoUris != null && mPhotoUris.size() > 0) {
             int currentIndex = 0;
             for (PhotoUriDto dto : mPhotoUris) {
-                final int targetIndex = currentIndex++;
                 Uri uri = Uri.parse(dto.getPhotoUri());
                 Bitmap bitmap = null;
                 try {
@@ -145,26 +146,7 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
                 imageView.setBackgroundResource(R.drawable.bg_card_01);
                 imageView.setImageBitmap(bitmap);
                 imageView.setScaleType(ImageView.ScaleType.CENTER);
-                imageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        DialogUtils.showAlertDialog(
-                                UpdateDiaryActivity.this,
-                                getString(R.string.delete_photo_confirm_message),
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        mPhotoUris.remove(targetIndex);
-                                        mPhotoContainer.removeViewAt(targetIndex);
-                                    }
-                                },
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {}
-                                }
-                        );
-                    }
-                });
+                imageView.setOnClickListener(new PhotoClickListener(currentIndex++));
                 mPhotoContainer.addView(imageView, mPhotoContainer.getChildCount() - 1);
             }
         }
@@ -233,6 +215,7 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
                             String.valueOf(mContents.getText())
                     );
                     diaryDto.setWeather(mWeatherSpinner.getSelectedItemPosition());
+                    applyRemoveIndex();
                     diaryDto.setPhotoUris(mPhotoUris);
                     DiaryDao.updateDiary(diaryDto);
                     finish();
@@ -248,6 +231,14 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
                 }
                 break;
         }
+    }
+
+    private void applyRemoveIndex() {
+        Collections.sort(mRemoveIndexes, Collections.<Integer>reverseOrder());
+        for (int index : mRemoveIndexes) {
+            mPhotoUris.remove(index);
+        }
+        mRemoveIndexes.clear();
     }
 
     private void callImagePicker() {
@@ -298,26 +289,7 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
                         imageView.setImageBitmap(bitmap);
                         imageView.setScaleType(ImageView.ScaleType.CENTER);
                         final int currentIndex = mPhotoUris.size() - 1;
-                        imageView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                DialogUtils.showAlertDialog(
-                                        UpdateDiaryActivity.this,
-                                        getString(R.string.delete_photo_confirm_message),
-                                        new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                mPhotoUris.remove(currentIndex);
-                                                mPhotoContainer.removeViewAt(currentIndex);
-                                            }
-                                        },
-                                        new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {}
-                                        }
-                                );
-                            }
-                        });
+                        imageView.setOnClickListener(new PhotoClickListener(currentIndex));
                         mPhotoContainer.addView(imageView, mPhotoContainer.getChildCount() - 1);
                         mPhotoContainer.postDelayed(new Runnable() {
                             public void run() {
@@ -329,8 +301,23 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
                     e.printStackTrace();
                 }
                 break;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
             case Constants.REQUEST_CODE_EXTERNAL_STORAGE:
-                callImagePicker();
+                if (PermissionUtils.checkPermission(this, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
+                    // 권한이 있는경우
+                    callImagePicker();
+                } else {
+                    // 권한이 없는경우
+                    DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3));
+                }
+                break;
+            default:
                 break;
         }
     }
@@ -352,6 +339,35 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+    class PhotoClickListener implements View.OnClickListener {
+
+        int index;
+        PhotoClickListener(int index) {
+            this.index = index;
+        }
+
+        @Override
+        public void onClick(View v) {
+            final View targetView = v;
+            final int targetIndex = index;
+            DialogUtils.showAlertDialog(
+                    UpdateDiaryActivity.this,
+                    getString(R.string.delete_photo_confirm_message),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mRemoveIndexes.add(targetIndex);
+                            mPhotoContainer.removeView(targetView);
+                        }
+                    },
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {}
+                    }
+            );
+        }
     }
 
 }
