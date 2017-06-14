@@ -10,12 +10,14 @@
     <string name="input_mode_b">Keypad <![CDATA[&]]> Speech mode</string>
     <string name="special_character_a"><![CDATA[+]]></string>
     <string name="delete_photo_confirm_message">Are you sure you want to delete this photo?</string>
+    <string name="gallery_intent_not_found_message">The Gallery app is not installed or is disabled.</string>
 
     <!--ReadDiaryActivity-->
     <string name="read_diary_title">Search Diary</string>
     <string name="input_mode_a">Speech mode</string>
     <string name="input_mode_c">Keypad mode</string>
     <string name="guide_message_2">Type or speak the subject.</string>
+    <string name="recognizer_intent_not_found_message">The speech recognition module is not installed or is disabled.</string>
     <string name="sample_diary_title_1">Be dangerous rather than careful.</string>
     <string name="sample_diary_title_2">I repeat what I know when I speak.</string>
     <string name="sample_diary_title_3">The more bad news we hear, the more we should be happy.</string>

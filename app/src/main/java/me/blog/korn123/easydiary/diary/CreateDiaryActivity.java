@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.diary;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -236,11 +237,29 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
     private void callImagePicker() {
         Intent pickImageIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 //                pickIntent.setType("image/*");
-        startActivityForResult(pickImageIntent, Constants.REQUEST_CODE_IMAGE_PICKER);
+        try {
+            startActivityForResult(pickImageIntent, Constants.REQUEST_CODE_IMAGE_PICKER);
+        } catch (ActivityNotFoundException e) {
+            DialogUtils.showAlertDialog(this, getString(R.string.gallery_intent_not_found_message), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+        }
     }
 
     private void showSpeechDialog() {
-        startActivityForResult(this.mRecognizerIntent, REQUEST_CODE_SPEECH_INPUT);
+        try {
+            startActivityForResult(mRecognizerIntent, REQUEST_CODE_SPEECH_INPUT);
+        } catch (ActivityNotFoundException e) {
+            DialogUtils.showAlertDialog(this, getString(R.string.recognizer_intent_not_found_message), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+        }
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

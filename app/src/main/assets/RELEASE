@@ -4,6 +4,27 @@
 
 ---------------------------------------------------
 
+# Changes in 0.15.5 (date: 2017/06/14)
+  [기능추가]
+  1. 사진첨부기능 추가
+
+  [버그수정]
+  1. 첨부사진 삭제시 순서가 바뀌는 오류수정
+  2. RecognizerIntent 없는경우 발생하는 App Crash 오류수정
+
+  [기타]
+  1. update realm schema version(4)
+
+  [New Feature]
+  1. Added photo attachment feature to diary
+
+  [Fixed Bug]
+  1. Fixed an error that changed the order when deleting attached pictures
+  2. Fixed App Crash error when there is no RecognizerIntent
+
+  [Etc]
+  1. update realm schema version(4)
+
 # Changes in 0.15.4 (date: 2017/06/10)
   [기능추가]
   1. 사진첨부기능 추가
@@ -22,7 +43,6 @@
 
   [Etc]
   1. update realm schema version(4)
-
 
 # Changes in 0.15.2 (date: 2017/06/10)
   [기능추가/New Feature]

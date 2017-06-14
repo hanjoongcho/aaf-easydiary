@@ -240,7 +240,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     }
 
-    public static void determineView(ViewGroup viewGroup) {
+    public void determineView(ViewGroup viewGroup) {
         for (int i = 0; i < viewGroup.getChildCount(); i++) {
 //            Log.i("info index ", String.format("%d", i));
             if (viewGroup.getChildAt(i) instanceof ViewGroup) {
@@ -248,9 +248,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             } else {
                 if (viewGroup.getChildAt(i) instanceof TextView) {
                     TextView tv = (TextView) viewGroup.getChildAt(i);
-                    tv.setTypeface(Typeface.DEFAULT);
+                    if (StringUtils.equals(getString(R.string.setting_title), tv.getText())) {
+                        tv.setTypeface(Typeface.DEFAULT);
+                    }
 //                    Log.i("view info", String.format("%s", tv.getText()));
-
                 }
             }
         }
@@ -343,6 +344,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             mExportGoogleDrive= findPreference("export_google_drive");
             mImportGoogleDrive= findPreference("import_google_drive");
             mApplicationLockPassword = findPreference("application_lock_password");
+
             PackageInfo pInfo = null;
             try {
                 pInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);

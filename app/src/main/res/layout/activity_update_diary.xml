@@ -116,7 +116,7 @@
                     android:gravity="center_vertical"
                     android:id="@+id/title"
                     android:background="@drawable/bg_card_01"
-                    android:hint="제목을 입력하거나 말하세요."
+                    android:hint="@string/guide_message"
                     android:textSize="@dimen/large_text_size"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />

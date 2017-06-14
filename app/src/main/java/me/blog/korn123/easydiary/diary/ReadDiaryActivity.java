@@ -1,6 +1,8 @@
 package me.blog.korn123.easydiary.diary;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
@@ -164,7 +166,16 @@ public class ReadDiaryActivity extends EasyDiaryActivity {
     }
 
     private void showSpeechDialog() {
-        startActivityForResult(mRecognizerIntent, REQUEST_CODE_SPEECH_INPUT);
+        try {
+            startActivityForResult(mRecognizerIntent, REQUEST_CODE_SPEECH_INPUT);
+        } catch (ActivityNotFoundException e) {
+            DialogUtils.showAlertDialog(this, getString(R.string.recognizer_intent_not_found_message), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+        }
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

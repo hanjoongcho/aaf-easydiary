@@ -10,12 +10,14 @@
     <string name="input_mode_b">키패드 <![CDATA[&]]> 스피치 모드</string>
     <string name="special_character_a"><![CDATA[+]]></string>
     <string name="delete_photo_confirm_message">해당 사진을 삭제할까요?</string>
+    <string name="gallery_intent_not_found_message">갤러리 앱이 설치되지 않았거나 비활성화 상태입니다.</string>
 
     <!--ReadDiaryActivity-->
     <string name="read_diary_title">다이어리 검색</string>
     <string name="input_mode_a">스피치 모드</string>
     <string name="input_mode_c">키패드 모드</string>
     <string name="guide_message_2">검색어를 입력하거나 말하세요.</string>
+    <string name="recognizer_intent_not_found_message">음성인식 모듈이 설치되지 않았거나 비활성화 상태입니다.</string>
     <string name="sample_diary_title_1">조심하기 보다는 위험해져라.</string>
     <string name="sample_diary_title_2">말할 때는 아는 것만 반복한다.</string>
     <string name="sample_diary_title_3">나쁜 소식을 많이 들을수록 기뻐해야 한다.</string>
