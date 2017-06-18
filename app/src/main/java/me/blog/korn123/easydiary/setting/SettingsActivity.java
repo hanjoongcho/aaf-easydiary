@@ -2,7 +2,6 @@ package me.blog.korn123.easydiary.setting;
 
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -24,9 +23,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,9 +31,6 @@ import android.view.Window;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
-import org.w3c.dom.Text;
-
-import java.util.logging.Handler;
 
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.CommonUtils;
@@ -45,10 +39,8 @@ import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.commons.utils.PermissionUtils;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.diary.LockDiaryActivity;
-import me.blog.korn123.easydiary.diary.UpdateDiaryActivity;
 import me.blog.korn123.easydiary.googledrive.GoogleDriveDownloader;
 import me.blog.korn123.easydiary.googledrive.GoogleDriveUploader;
-import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -63,8 +55,6 @@ import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
  */
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
-    private static Context mContext;
-    private static Activity mActivity;
     private static int mTaskFlag = 0;
 
     @Override
@@ -75,6 +65,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             long currentMillis = System.currentTimeMillis();
             CommonUtils.saveLongPreference(SettingsActivity.this, Constants.PAUSE_MILLIS, currentMillis);
         }
+
+        // init current selected font
+        FontUtils.setCurrentTypeface(SettingsActivity.this, getAssets());
     }
 
     @Override
@@ -96,14 +89,14 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case Constants.REQUEST_CODE_EXTERNAL_STORAGE:
-                if (PermissionUtils.checkPermission(mContext, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
+                if (PermissionUtils.checkPermission(getApplicationContext(), Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
                     // 권한이 있는경우
                     if (mTaskFlag == Constants.SETTING_FLAG_EXPORT_GOOGLE_DRIVE) {
 //                            FileUtils.copyFile(new File(DiaryDao.getRealmInstance().getPath()), new File(Path.WORKING_DIRECTORY + Path.DIARY_DB_NAME));
-                        Intent uploadIntent = new Intent(mContext, GoogleDriveUploader.class);
+                        Intent uploadIntent = new Intent(getApplicationContext(), GoogleDriveUploader.class);
                         startActivity(uploadIntent);
                     } else if (mTaskFlag == Constants.SETTING_FLAG_IMPORT_GOOGLE_DRIVE) {
-                        Intent downloadIntent = new Intent(mContext, GoogleDriveDownloader.class);
+                        Intent downloadIntent = new Intent(getApplicationContext(), GoogleDriveDownloader.class);
                         startActivity(downloadIntent);
                     }
                 } else {
@@ -136,10 +129,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         index >= 0
                                 ? listPreference.getEntries()[index]
                                 : null);
-
-                // init current selected font
-                FontUtils.initSelectedFont(mContext.getAssets(), stringValue);
-
             } else if (preference instanceof RingtonePreference) {
                 // For ringtone preferences, look up the correct display value
                 // using RingtoneManager.
@@ -210,9 +199,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new GeneralPreferenceFragment())
                 .commit();
-
-        mContext = SettingsActivity.this;
-        mActivity = SettingsActivity.this;
 
         new Thread(new Runnable() {
             @Override
@@ -390,13 +376,13 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     mTaskFlag = Constants.SETTING_FLAG_EXPORT_GOOGLE_DRIVE;
-                    if (PermissionUtils.checkPermission(mContext, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
+                    if (PermissionUtils.checkPermission(getActivity().getApplicationContext() , Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
                         // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
-                        Intent uploadIntent = new Intent(mContext, GoogleDriveUploader.class);
+                        Intent uploadIntent = new Intent(getActivity(), GoogleDriveUploader.class);
                         startActivity(uploadIntent);
                     } else {
                         // API Level 23 이상이면서 권한취득 안한경우
-                        PermissionUtils.confirmPermission(mContext, mActivity, Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE);
+                        PermissionUtils.confirmPermission(getActivity(), getActivity(), Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE);
                     }
                     return false;
                 }
@@ -407,13 +393,13 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     mTaskFlag = Constants.SETTING_FLAG_IMPORT_GOOGLE_DRIVE;
-                    if (PermissionUtils.checkPermission(mContext, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
+                    if (PermissionUtils.checkPermission(getActivity(), Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
                         // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
-                        Intent downloadIntent = new Intent(mContext, GoogleDriveDownloader.class);
+                        Intent downloadIntent = new Intent(getActivity(), GoogleDriveDownloader.class);
                         startActivity(downloadIntent);
                     } else {
                         // API Level 23 이상이면서 권한취득 안한경우
-                        PermissionUtils.confirmPermission(mContext, mActivity, Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE);
+                        PermissionUtils.confirmPermission(getActivity(), getActivity(), Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE);
                     }
                     return false;
                 }

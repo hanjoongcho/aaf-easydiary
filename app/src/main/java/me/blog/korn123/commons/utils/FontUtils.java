@@ -28,12 +28,12 @@ public class FontUtils {
 
     public static Typeface getTypeface(Context context, AssetManager assetManager) {
         if (mTypeface == null) {
-            mTypeface = getCurrentTypeface(context, assetManager);
+            mTypeface = setCurrentTypeface(context, assetManager);
         }
         return  mTypeface;
     }
 
-    public static Typeface getCurrentTypeface(Context context, AssetManager assetManager) {
+    public static Typeface setCurrentTypeface(Context context, AssetManager assetManager) {
         String currentFont = CommonUtils.loadStringPreference(context, "font_setting", "NanumPen.ttf");
         if (StringUtils.equals(currentFont, "Default")) {
             mTypeface = Typeface.DEFAULT;
@@ -41,14 +41,6 @@ public class FontUtils {
             mTypeface = Typeface.createFromAsset(assetManager, "fonts/" + currentFont);
         }
         return mTypeface;
-    }
-
-    public static void initSelectedFont(AssetManager assetManager, String selectedFont) {
-        if (StringUtils.equals(selectedFont, "Default")) {
-            mTypeface = Typeface.DEFAULT;
-        } else {
-            mTypeface = Typeface.createFromAsset(assetManager, "fonts/" + selectedFont);
-        }
     }
 
     public static void setToolbarTypeface(Context context, Toolbar toolbar, AssetManager assetManager) {
