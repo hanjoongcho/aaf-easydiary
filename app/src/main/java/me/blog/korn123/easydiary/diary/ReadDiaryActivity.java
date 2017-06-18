@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -90,8 +91,6 @@ public class ReadDiaryActivity extends EasyDiaryActivity {
         mDiaryListView.setAdapter(this.mArrayAdapterDiary);
 
         FontUtils.setToolbarTypeface(toolbar, Typeface.DEFAULT);
-        FontUtils.setTypeface(getAssets(), this.mQuery);
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         if (!CommonUtils.loadBooleanPreference(this, "init_dummy_data")) {
             initSampleData();
@@ -193,12 +192,25 @@ public class ReadDiaryActivity extends EasyDiaryActivity {
 
     protected void onResume() {
         super.onResume();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        FontUtils.setTypeface(this, getAssets(), this.mQuery);
+        setDiaryFontSize();
+
         refreshList();
+
         int previousActivity = CommonUtils.loadIntPreference(ReadDiaryActivity.this, Constants.PREVIOUS_ACTIVITY, -1);
         if (previousActivity == Constants.PREVIOUS_ACTIVITY_CREATE) {
             mDiaryListView.smoothScrollToPosition(0);
 //            mDiaryListView.setSelection(0);
             CommonUtils.saveIntPreference(ReadDiaryActivity.this, Constants.PREVIOUS_ACTIVITY, -1);
+        }
+    }
+
+    private void setDiaryFontSize() {
+        float fontSize = CommonUtils.loadFloatPreference(this, "font_size", 0);
+        if (fontSize > 0) {
+            mQuery.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
         }
     }
 
@@ -231,11 +243,9 @@ public class ReadDiaryActivity extends EasyDiaryActivity {
         String query = "";
         if (!StringUtils.isEmpty(mQuery.getText())) query = String.valueOf(mQuery.getText());
 
-        if (this.mDiaryList != null) {
-            this.mDiaryList.clear();
-            this.mDiaryList.addAll(DiaryDao.readDiary(query));
-            this.mArrayAdapterDiary.notifyDataSetChanged();
-        }
+        mDiaryList.clear();
+        mDiaryList.addAll(DiaryDao.readDiary(query));
+        mArrayAdapterDiary.notifyDataSetChanged();
     }
 
     private void initSampleData() {

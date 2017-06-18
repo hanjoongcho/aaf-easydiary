@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.TypedValue;
 import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.diary.ReadDiaryActivity;
 
@@ -31,8 +33,13 @@ public class IntroActivity extends Activity implements Handler.Callback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
         ButterKnife.bind(this);
-        FontUtils.setTypeface(getAssets(), mAppName);
-        FontUtils.setTypeface(getAssets(), mCompanyName);
+        FontUtils.setTypeface(this, getAssets(), mAppName);
+        FontUtils.setTypeface(this, getAssets(), mCompanyName);
+        float fontSize = CommonUtils.loadFloatPreference(this, "font_size", 0);
+        if (fontSize > 0) {
+            mAppName.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
+            mCompanyName.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
+        }
         new Handler(this).sendEmptyMessageDelayed(START_MAIN_ACTIVITY, 500);
     }
 

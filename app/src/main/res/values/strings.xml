@@ -46,6 +46,7 @@
     <string name="restore_diary_summary">구글 드라이브에 백업된 데이터를 이용하여 모든 컨텐츠를 복구합니다.\n첨부사진의 경우 링크정보만 존재하므로, 원본사진이 존재하지 않는 디바이스에서는 첨부사진을 제외한 컨텐츠만 복구됩니다.\n원본사진을 포함한 복구기능은 추후 제공예정입니다.</string>
     <string name="backup_diary">다이어리 백업하기</string>
     <string name="backup_diary_summary">모든 컨텐츠를 구글 드라이브에 백업합니다.\n첨부사진의 경우 링크정보만 백업이 되므로 원본사진이 존재하지 않는 디바이스에서는 첨부사진을 제외한 컨텐츠만 복구됩니다.\n원본사진을 포함한 백업기능은 추후 제공예정입니다.</string>
+    <string name="font_setting">폰트설정</string>
 
     <!--CalendarActivity-->
     <string name="calendar_title">달력 보기</string>
@@ -86,10 +87,16 @@
         <item>눈</item>
     </string-array>
 
-
-
-
-
+    <string-array name="pref_list_fonts_title">
+        <item>나눔손글씨 펜</item>
+        <item>나눔손글씨 붓</item>
+        <item>디바이스 설정폰트</item>
+    </string-array>
+    <string-array name="pref_list_fonts_values">
+        <item>NanumPen.ttf</item>
+        <item>NanumBrush.ttf</item>
+        <item>Default</item>
+    </string-array>
 
 
     <!-- Strings related to Settings -->

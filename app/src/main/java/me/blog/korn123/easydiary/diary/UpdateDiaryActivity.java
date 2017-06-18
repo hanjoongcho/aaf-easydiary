@@ -95,8 +95,8 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
         mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
 
         FontUtils.setToolbarTypeface(toolbar, Typeface.DEFAULT);
-        FontUtils.setTypeface(getAssets(), this.mContents);
-        FontUtils.setTypeface(getAssets(), this.mTitle);
+        FontUtils.setTypeface(this, getAssets(), this.mContents);
+        FontUtils.setTypeface(this, getAssets(), this.mTitle);
 
         bindView();
         bindEvent();
@@ -159,8 +159,8 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
             mContents.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
         }
 
-        FontUtils.setTypeface(getAssets(), mTitle);
-        FontUtils.setTypeface(getAssets(), mContents);
+        FontUtils.setTypeface(this, getAssets(), mTitle);
+        FontUtils.setTypeface(this, getAssets(), mContents);
     }
 
     private void bindView() {
@@ -194,12 +194,12 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
                 showSpeechDialog();
                 break;
             case R.id.zoomIn:
-                mContents.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize + 5);
                 CommonUtils.saveFloatPreference(UpdateDiaryActivity.this, "font_size", fontSize + 5);
+                setDiaryFontSize();
                 break;
             case R.id.zoomOut:
-                mContents.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize - 5);
                 CommonUtils.saveFloatPreference(UpdateDiaryActivity.this, "font_size", fontSize - 5);
+                setDiaryFontSize();
                 break;
             case R.id.saveContents:
                 if (StringUtils.isEmpty(mTitle.getText())) {
@@ -358,6 +358,24 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        FontUtils.setTypeface(this, getAssets(), this.mContents);
+        FontUtils.setTypeface(this, getAssets(), this.mTitle);
+        setDiaryFontSize();
+        initSpinner();
+    }
+
+    private void setDiaryFontSize() {
+        float fontSize = CommonUtils.loadFloatPreference(this, "font_size", 0);
+        if (fontSize > 0) {
+            mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
+            mContents.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
+        }
     }
 
     class PhotoClickListener implements View.OnClickListener {

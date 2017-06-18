@@ -137,6 +137,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                                 ? listPreference.getEntries()[index]
                                 : null);
 
+                // init current selected font
+                FontUtils.initSelectedFont(mContext.getAssets(), stringValue);
+
             } else if (preference instanceof RingtonePreference) {
                 // For ringtone preferences, look up the correct display value
                 // using RingtoneManager.
@@ -318,7 +321,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 //            bindPreferenceSummaryToValue(findPreference("example_text"));
 //            bindPreferenceSummaryToValue(findPreference("example_list"));
 
-//            bindPreferenceSummaryToValue(findPreference("application_lock_password"));
+            bindPreferenceSummaryToValue(findPreference("font_setting"));
             initPreference();
         }
 

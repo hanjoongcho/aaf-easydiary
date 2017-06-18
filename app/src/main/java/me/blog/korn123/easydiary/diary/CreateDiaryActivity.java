@@ -105,12 +105,9 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
         mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
 
         FontUtils.setToolbarTypeface(toolbar, Typeface.DEFAULT);
-        FontUtils.setTypeface(getAssets(), this.mContents);
-        FontUtils.setTypeface(getAssets(), this.mTitle);
 
         bindView();
         bindEvent();
-        initFontStyle();
         initSpinner();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
@@ -119,16 +116,6 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
         String[]  weatherArr = getResources().getStringArray(R.array.weather_item_array);
         ArrayAdapter arrayAdapter = new DiaryWeatherArrayAdapter(CreateDiaryActivity.this, R.layout.spinner_item_diary_weather_array_adapter, Arrays.asList(weatherArr));
         mWeatherSpinner.setAdapter(arrayAdapter);
-    }
-
-    public void initFontStyle() {
-        float fontSize = CommonUtils.loadFloatPreference(CreateDiaryActivity.this, "font_size", 0);
-        if (fontSize > 0) {
-            mContents.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
-        }
-
-        FontUtils.setTypeface(getAssets(), mTitle);
-        FontUtils.setTypeface(getAssets(), mContents);
     }
 
     private void bindView() {
@@ -185,12 +172,12 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
                 showSpeechDialog();
                 break;
             case R.id.zoomIn:
-                mContents.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize + 5);
                 CommonUtils.saveFloatPreference(CreateDiaryActivity.this, "font_size", fontSize + 5);
+                setDiaryFontSize();
                 break;
             case R.id.zoomOut:
-                mContents.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize - 5);
                 CommonUtils.saveFloatPreference(CreateDiaryActivity.this, "font_size", fontSize - 5);
+                setDiaryFontSize();
                 break;
             case R.id.saveContents:
                 if (StringUtils.isEmpty(mTitle.getText())) {
@@ -347,6 +334,24 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
                 break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        FontUtils.setTypeface(this, getAssets(), this.mContents);
+        FontUtils.setTypeface(this, getAssets(), this.mTitle);
+        setDiaryFontSize();
+        initSpinner();
+    }
+
+    private void setDiaryFontSize() {
+        float fontSize = CommonUtils.loadFloatPreference(this, "font_size", 0);
+        if (fontSize > 0) {
+            mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
+            mContents.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
         }
     }
 

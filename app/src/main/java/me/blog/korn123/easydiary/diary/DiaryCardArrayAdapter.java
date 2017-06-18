@@ -46,12 +46,12 @@ public class DiaryCardArrayAdapter extends ArrayAdapter<DiaryDto> {
             holder.textView2 = ((TextView)row.findViewById(R.id.text2));
             holder.textView3 = ((TextView)row.findViewById(R.id.text3));
             holder.imageView = ((ImageView) row.findViewById(R.id.weather));
-            initFontStyle(holder);
             row.setTag(holder);
         } else {
             holder = (ViewHolder)row.getTag();
         }
 
+        initFontStyle(holder);
         float fontSize = CommonUtils.loadFloatPreference(context, "font_size", 0);
         if (fontSize > 0) {
             holder.textView1.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
@@ -69,9 +69,9 @@ public class DiaryCardArrayAdapter extends ArrayAdapter<DiaryDto> {
     }
 
     private void initFontStyle(ViewHolder holder) {
-        FontUtils.setTypeface(context.getAssets(), holder.textView1);
-        FontUtils.setTypeface(context.getAssets(), holder.textView2);
-        FontUtils.setTypeface(context.getAssets(), holder.textView3);
+        FontUtils.setTypeface(context, context.getAssets(), holder.textView1);
+        FontUtils.setTypeface(context, context.getAssets(), holder.textView2);
+        FontUtils.setTypeface(context, context.getAssets(), holder.textView3);
     }
 
     private static class ViewHolder {

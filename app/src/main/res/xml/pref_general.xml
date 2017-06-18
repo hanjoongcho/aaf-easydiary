@@ -3,6 +3,13 @@
     <PreferenceCategory
         android:layout="@layout/preference_category"
         android:title="Application Setting">
+        <ListPreference
+            android:key="font_setting"
+            android:title="@string/font_setting"
+            android:entries="@array/pref_list_fonts_title"
+            android:entryValues="@array/pref_list_fonts_values"
+            android:defaultValue="NanumPen.ttf"
+            />
         <SwitchPreference
             android:key="application_lock"
             android:title="@string/application_lock_title"

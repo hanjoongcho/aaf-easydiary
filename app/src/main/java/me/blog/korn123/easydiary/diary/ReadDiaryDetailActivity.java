@@ -92,8 +92,6 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
         int weather = intent.getIntExtra("weather", 0);
         EasyDiaryUtils.initWeatherView(mWeather, weather);
 
-        initFontStyle();
-
         // TODO fixme elegance
         DiaryDto diaryDto = DiaryDao.readDiaryBy(mSequence);
         if (diaryDto.getPhotoUris() != null && diaryDto.getPhotoUris().size() > 0) {
@@ -163,6 +161,20 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
     protected void onResume() {
         super.onResume();
         initModule();
+
+        FontUtils.setTypeface(this, getAssets(), mTitle);
+        FontUtils.setTypeface(this, getAssets(), mDate);
+        FontUtils.setTypeface(this, getAssets(), mContents);
+        setDiaryFontSize();
+    }
+
+    private void setDiaryFontSize() {
+        float fontSize = CommonUtils.loadFloatPreference(this, "font_size", 0);
+        if (fontSize > 0) {
+            mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
+            mDate.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
+            mContents.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
+        }
     }
 
     @Override
@@ -203,30 +215,18 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
         mTextToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
     }
 
-
-    public void initFontStyle() {
-        float fontSize = CommonUtils.loadFloatPreference(ReadDiaryDetailActivity.this, "font_size", 0);
-        if (fontSize > 0) {
-            mContents.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
-        }
-
-        FontUtils.setTypeface(getAssets(), mTitle);
-        FontUtils.setTypeface(getAssets(), mDate);
-        FontUtils.setTypeface(getAssets(), mContents);
-    }
-
     @OnClick({R.id.zoomIn, R.id.zoomOut, R.id.delete, R.id.edit, R.id.speechOutButton})
     public void onClick(View view) {
         float fontSize = mContents.getTextSize();
 
         switch(view.getId()) {
             case R.id.zoomIn:
-                mContents.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize + 5);
                 CommonUtils.saveFloatPreference(ReadDiaryDetailActivity.this, "font_size", fontSize + 5);
+                setDiaryFontSize();
                 break;
             case R.id.zoomOut:
-                mContents.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize - 5);
                 CommonUtils.saveFloatPreference(ReadDiaryDetailActivity.this, "font_size", fontSize - 5);
+                setDiaryFontSize();
                 break;
             case R.id.delete:
                 DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener() {
