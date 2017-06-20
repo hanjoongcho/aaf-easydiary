@@ -37,7 +37,8 @@
                 android:background="@drawable/bg_card_01"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="50dp">
+                android:minHeight="50dp"
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:gravity="left|center_vertical"
@@ -48,11 +49,11 @@
                     <EditText
                         android:maxLines="1"
                         android:id="@+id/query"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="@dimen/toolbar_icon_margin_side"
                         android:gravity="center_vertical"
                         android:hint="@string/guide_message_2"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
 
@@ -60,21 +61,22 @@
                     android:gravity="right|center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent">
-                    <ImageView
-                        android:layout_marginRight="5dp"
-                        android:src="@drawable/keyboard"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
                     <Switch
                         android:checked="false"
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
-                        android:id="@+id/inputMode" />
-
+                        android:id="@+id/toggleSwitch" />
                     <ImageView
-                        android:layout_marginRight="10dp"
+                        android:visibility="gone"
+                        android:id="@+id/toggleMicOn"
+                        android:layout_marginRight="@dimen/toolbar_icon_margin_side"
                         android:src="@drawable/microphone_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <ImageView
+                        android:id="@+id/toggleMicOff"
+                        android:layout_marginRight="@dimen/toolbar_icon_margin_side"
+                        android:src="@drawable/microphone_off"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>

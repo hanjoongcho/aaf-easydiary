@@ -13,9 +13,10 @@
             android:layout_height="20dp" />
 
         <TextView
+            android:layout_marginLeft="5dp"
             android:id="@+id/text1"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:textSize="@dimen/medium_text_size"
             android:gravity="center" />
 

@@ -23,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -55,7 +56,6 @@ public class ReadDiaryActivity extends EasyDiaryActivity {
 
     private final int REQUEST_CODE_SPEECH_INPUT = 100;
     private Intent mRecognizerIntent;
-    private Switch mInputMode;
     private FloatingActionButton mSpeechButton;
     private long mCurrentTimeMillis;
     private ArrayAdapter<DiaryDto> mArrayAdapterDiary;
@@ -66,6 +66,15 @@ public class ReadDiaryActivity extends EasyDiaryActivity {
 
     @BindView(R.id.query)
     EditText mQuery;
+
+    @BindView(R.id.toggleSwitch)
+    Switch mToggleSwitch;
+
+    @BindView(R.id.toggleMicOn)
+    ImageView mToggleMicOn;
+
+    @BindView(R.id.toggleMicOff)
+    ImageView mToggleMicOff;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,27 +110,34 @@ public class ReadDiaryActivity extends EasyDiaryActivity {
         bindEvent();
     }
 
-
-
     private void bindView() {
-        mInputMode = ((Switch) findViewById(R.id.inputMode));
         mSpeechButton = (FloatingActionButton)findViewById(R.id.speechButton);
     }
 
     private void bindEvent() {
-        mInputMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+
+        mToggleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    mQuery.setEnabled(false);
-                    mSpeechButton.setVisibility(View.VISIBLE);
-                    DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.input_mode_a));
+                    enableRecognizer();
                 } else {
-                    mQuery.setEnabled(true);
-                    mSpeechButton.setVisibility(View.GONE);
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.showSoftInput(mQuery, InputMethodManager.HIDE_IMPLICIT_ONLY);
-                    DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.input_mode_c));
+                    disableRecognizer();
                 }
+            }
+        });
+
+        mToggleMicOn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                disableRecognizer();
+            }
+        });
+
+        mToggleMicOff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                enableRecognizer();
             }
         });
 
@@ -148,6 +164,20 @@ public class ReadDiaryActivity extends EasyDiaryActivity {
                 startActivity(detailIntent);
             }
         });
+    }
+
+    private void enableRecognizer() {
+        mToggleMicOff.setVisibility(View.GONE);
+        mToggleMicOn.setVisibility(View.VISIBLE);
+        mSpeechButton.setVisibility(View.VISIBLE);
+        mToggleSwitch.setChecked(true);
+    }
+
+    private void disableRecognizer() {
+        mToggleMicOn.setVisibility(View.GONE);
+        mToggleMicOff.setVisibility(View.VISIBLE);
+        mSpeechButton.setVisibility(View.GONE);
+        mToggleSwitch.setChecked(false);
     }
 
     @OnClick({R.id.speechButton, R.id.insertDiaryButton})

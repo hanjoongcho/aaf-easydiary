@@ -9,6 +9,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -18,11 +19,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Switch;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -71,6 +74,15 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
     @BindView(R.id.saveContents)
     ImageView mSaveContents;
 
+    @BindView(R.id.toggleSwitch)
+    Switch mToggleSwitch;
+
+    @BindView(R.id.toggleMicOn)
+    ImageView mToggleMicOn;
+
+    @BindView(R.id.toggleMicOff)
+    ImageView mToggleMicOff;
+
     @BindView(R.id.weatherSpinner)
     Spinner mWeatherSpinner;
 
@@ -79,6 +91,9 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
 
     @BindView(R.id.photoContainerScrollView)
     HorizontalScrollView mHorizontalScrollView;
+
+    @BindView(R.id.speechButton)
+    FloatingActionButton mSpeechButton;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -168,6 +183,17 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
 
     private void bindEvent() {
 
+        mToggleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    enableRecognizer();
+                } else {
+                    disableRecognizer();
+                }
+            }
+        });
+
         mTitle.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -183,6 +209,34 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
                 return false;
             }
         });
+
+        mToggleMicOn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                disableRecognizer();
+            }
+        });
+
+        mToggleMicOff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                enableRecognizer();
+            }
+        });
+    }
+
+    private void enableRecognizer() {
+        mToggleMicOff.setVisibility(View.GONE);
+        mToggleMicOn.setVisibility(View.VISIBLE);
+        mSpeechButton.setVisibility(View.VISIBLE);
+        mToggleSwitch.setChecked(true);
+    }
+
+    private void disableRecognizer() {
+        mToggleMicOn.setVisibility(View.GONE);
+        mToggleMicOff.setVisibility(View.VISIBLE);
+        mSpeechButton.setVisibility(View.GONE);
+        mToggleSwitch.setChecked(false);
     }
 
     @OnClick({R.id.speechButton, R.id.zoomIn, R.id.zoomOut, R.id.saveContents, R.id.photoView})
@@ -276,7 +330,6 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
             case REQUEST_CODE_SPEECH_INPUT:
                 if ((resultCode == RESULT_OK) && (data != null)) {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-
                     if (mCurrentCursor == 0) { // edit title
                         String title = String.valueOf(mTitle.getText());
                         StringBuilder sb = new StringBuilder(title);
@@ -367,7 +420,6 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
         FontUtils.setTypeface(this, getAssets(), this.mContents);
         FontUtils.setTypeface(this, getAssets(), this.mTitle);
         setDiaryFontSize();
-        initSpinner();
     }
 
     private void setDiaryFontSize() {
@@ -375,6 +427,7 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
         if (fontSize > 0) {
             mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
             mContents.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
+            initSpinner();
         }
     }
 

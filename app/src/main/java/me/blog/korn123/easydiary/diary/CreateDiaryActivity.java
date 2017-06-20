@@ -1,21 +1,13 @@
 package me.blog.korn123.easydiary.diary;
 
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -24,7 +16,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -55,8 +46,6 @@ import me.blog.korn123.commons.utils.DialogUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.commons.utils.PermissionUtils;
 import me.blog.korn123.easydiary.R;
-import me.blog.korn123.easydiary.googledrive.GoogleDriveDownloader;
-import me.blog.korn123.easydiary.googledrive.GoogleDriveUploader;
 import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
 import me.blog.korn123.easydiary.setting.SettingsActivity;
 
@@ -68,9 +57,8 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
 
     private final int REQUEST_CODE_SPEECH_INPUT = 100;
     private Intent mRecognizerIntent;
-    private Switch mInputMode;
     private long mCurrentTimeMillis;
-    private int mCurrentCursor = 1;
+    private int mCurrentCursor = 0;
     private RealmList<PhotoUriDto> mPhotoUris;
     private List<Integer> mRemoveIndexes = new ArrayList<>();
 
@@ -83,11 +71,23 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
     @BindView(R.id.saveContents)
     ImageView mSaveContents;
 
+    @BindView(R.id.toggleSwitch)
+    Switch mToggleSwitch;
+
+    @BindView(R.id.toggleMicOn)
+    ImageView mToggleMicOn;
+
+    @BindView(R.id.toggleMicOff)
+    ImageView mToggleMicOff;
+
     @BindView(R.id.weatherSpinner)
     Spinner mWeatherSpinner;
 
     @BindView(R.id.photoContainer)
     ViewGroup mPhotoContainer;
+
+    @BindView(R.id.speechButton)
+    FloatingActionButton mSpeechButton;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,30 +118,39 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
         mWeatherSpinner.setAdapter(arrayAdapter);
     }
 
-    private void bindView() {
-        mInputMode = ((Switch) findViewById(R.id.inputMode));
-    }
+    private void bindView() {}
 
     private void bindEvent() {
-        mInputMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+//        mInputMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+//                if (isChecked) {
+//                    mTitle.setEnabled(false);
+//                    mContents.setEnabled(false);
+//                    DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.input_mode_a));
+//                } else {
+//                    CreateDiaryActivity.this.mTitle.setEnabled(true);
+//                    CreateDiaryActivity.this.mContents.setEnabled(true);
+//                    InputMethodManager imm = (InputMethodManager)CreateDiaryActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+//                    if (StringUtils.isEmpty(CreateDiaryActivity.this.mTitle.getText())) {
+//                        imm.showSoftInput(mTitle, InputMethodManager.HIDE_IMPLICIT_ONLY);
+//                        CreateDiaryActivity.this.mTitle.clearFocus();
+//                    } else  {
+//                        CreateDiaryActivity.this.mContents.requestFocus();
+//                        imm.showSoftInput(mContents, InputMethodManager.HIDE_IMPLICIT_ONLY);
+//                        CreateDiaryActivity.this.mContents.setSelection(CreateDiaryActivity.this.mContents.getText().length());
+//                    }
+//                    DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.input_mode_b));
+//                }
+//            }
+//        });
+
+        mToggleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    mTitle.setEnabled(false);
-                    mContents.setEnabled(false);
-                    DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.input_mode_a));
+                    enableRecognizer();
                 } else {
-                    CreateDiaryActivity.this.mTitle.setEnabled(true);
-                    CreateDiaryActivity.this.mContents.setEnabled(true);
-                    InputMethodManager imm = (InputMethodManager)CreateDiaryActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
-                    if (StringUtils.isEmpty(CreateDiaryActivity.this.mTitle.getText())) {
-                        imm.showSoftInput(mTitle, InputMethodManager.HIDE_IMPLICIT_ONLY);
-                        CreateDiaryActivity.this.mTitle.clearFocus();
-                    } else  {
-                        CreateDiaryActivity.this.mContents.requestFocus();
-                        imm.showSoftInput(mContents, InputMethodManager.HIDE_IMPLICIT_ONLY);
-                        CreateDiaryActivity.this.mContents.setSelection(CreateDiaryActivity.this.mContents.getText().length());
-                    }
-                    DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.input_mode_b));
+                    disableRecognizer();
                 }
             }
         });
@@ -161,6 +170,34 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
                 return false;
             }
         });
+
+        mToggleMicOn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                disableRecognizer();
+            }
+        });
+
+        mToggleMicOff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                enableRecognizer();
+            }
+        });
+    }
+
+    private void enableRecognizer() {
+        mToggleMicOff.setVisibility(View.GONE);
+        mToggleMicOn.setVisibility(View.VISIBLE);
+        mSpeechButton.setVisibility(View.VISIBLE);
+        mToggleSwitch.setChecked(true);
+    }
+
+    private void disableRecognizer() {
+        mToggleMicOn.setVisibility(View.GONE);
+        mToggleMicOff.setVisibility(View.VISIBLE);
+        mSpeechButton.setVisibility(View.GONE);
+        mToggleSwitch.setChecked(false);
     }
 
     @OnClick({R.id.speechButton, R.id.zoomIn, R.id.zoomOut, R.id.saveContents, R.id.photoView})
@@ -256,32 +293,20 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
             case REQUEST_CODE_SPEECH_INPUT:
                 if ((resultCode == RESULT_OK) && (data != null)) {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    if (mInputMode.isChecked()) {
-                        if ((resultCode == RESULT_OK) && (data != null)) {
-                            if (StringUtils.isEmpty(this.mTitle.getText())) {
-                                this.mTitle.setText((CharSequence)result.get(0));
-                                CreateDiaryActivity.this.mContents.requestFocus();
-                            } else {
-                                this.mContents.setText(String.valueOf(this.mContents.getText()) + (String)result.get(0) + "\n");
-                                this.mContents.setSelection(this.mContents.getText().length());
-                            }
-                        }
-                    } else {
-                        if (mCurrentCursor == 0) { // edit title
-                            String title = String.valueOf(mTitle.getText());
-                            StringBuilder sb = new StringBuilder(title);
-                            sb.insert(mTitle.getSelectionStart(), result.get(0));
-                            int cursorPosition = mTitle.getSelectionStart() + result.get(0).length();
-                            mTitle.setText(sb.toString());
-                            mTitle.setSelection(cursorPosition);
-                        } else {                   // edit contents
-                            String contents = String.valueOf(mContents.getText());
-                            StringBuilder sb = new StringBuilder(contents);
-                            sb.insert(mContents.getSelectionStart(), result.get(0));
-                            int cursorPosition = mContents.getSelectionStart() + result.get(0).length();
-                            mContents.setText(sb.toString());
-                            mContents.setSelection(cursorPosition);
-                        }
+                    if (mCurrentCursor == 0) { // edit title
+                        String title = String.valueOf(mTitle.getText());
+                        StringBuilder sb = new StringBuilder(title);
+                        sb.insert(mTitle.getSelectionStart(), result.get(0));
+                        int cursorPosition = mTitle.getSelectionStart() + result.get(0).length();
+                        mTitle.setText(sb.toString());
+                        mTitle.setSelection(cursorPosition);
+                    } else {                   // edit contents
+                        String contents = String.valueOf(mContents.getText());
+                        StringBuilder sb = new StringBuilder(contents);
+                        sb.insert(mContents.getSelectionStart(), result.get(0));
+                        int cursorPosition = mContents.getSelectionStart() + result.get(0).length();
+                        mContents.setText(sb.toString());
+                        mContents.setSelection(cursorPosition);
                     }
                 }
                 break;
@@ -344,7 +369,6 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
         FontUtils.setTypeface(this, getAssets(), this.mContents);
         FontUtils.setTypeface(this, getAssets(), this.mTitle);
         setDiaryFontSize();
-        initSpinner();
     }
 
     private void setDiaryFontSize() {
@@ -352,6 +376,7 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
         if (fontSize > 0) {
             mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
             mContents.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
+            initSpinner();
         }
     }
 

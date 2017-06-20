@@ -7,6 +7,7 @@
     <string name="request_title_message">Please enter a title.</string>
     <string name="request_content_message">Please enter your content.</string>
     <string name="guide_message">Type or speak the title.</string>
+    <string name="contents_text_hint">Type or speak the contents.</string>
     <string name="input_mode_b">Keypad <![CDATA[&]]> Speech mode</string>
     <string name="special_character_a"><![CDATA[+]]></string>
     <string name="delete_photo_confirm_message">Are you sure you want to delete this photo?</string>

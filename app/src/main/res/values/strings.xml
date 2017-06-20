@@ -7,6 +7,7 @@
     <string name="request_title_message">제목을 입력하세요.</string>
     <string name="request_content_message">내용을 입력하세요.</string>
     <string name="guide_message">제목을 입력하거나 말하세요.</string>
+    <string name="contents_text_hint">내용을 입력하거나 말하세요.</string>
     <string name="input_mode_b">키패드 <![CDATA[&]]> 스피치 모드</string>
     <string name="special_character_a"><![CDATA[+]]></string>
     <string name="delete_photo_confirm_message">해당 사진을 삭제할까요?</string>

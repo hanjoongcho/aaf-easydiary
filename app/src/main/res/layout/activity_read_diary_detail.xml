@@ -47,34 +47,33 @@
 
                     <ImageView
                         android:background="@drawable/click_effect_01"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="@dimen/toolbar_icon_margin_side"
+                        android:layout_marginRight="@dimen/toolbar_icon_margin_right"
                         android:id="@+id/zoomIn"
-                        android:src="@drawable/zoom_in"
+                        android:src="@drawable/plus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
                     <ImageView
                         android:background="@drawable/click_effect_01"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginRight="@dimen/toolbar_icon_margin_right"
                         android:id="@+id/zoomOut"
-                        android:src="@drawable/zoom_out"
+                        android:src="@drawable/minus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
                     <ImageView
                         android:background="@drawable/click_effect_01"
-                        android:layout_marginRight="10dp"
-                        android:id="@+id/speechOutButton"
-                        android:src="@drawable/speaker"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <ImageView
-                        android:background="@drawable/click_effect_01"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginRight="@dimen/toolbar_icon_margin_right"
                         android:id="@+id/edit"
-                        android:src="@drawable/edit_02"
+                        android:src="@drawable/save_as"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <ImageView
+                        android:background="@drawable/click_effect_01"
+                        android:id="@+id/speechOutButton"
+                        android:src="@drawable/assistant"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -88,7 +87,7 @@
 
                     <ImageView
                         android:background="@drawable/click_effect_01"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginRight="@dimen/toolbar_icon_margin_side"
                         android:id="@+id/delete"
                         android:src="@drawable/delete"
                         android:layout_width="wrap_content"
