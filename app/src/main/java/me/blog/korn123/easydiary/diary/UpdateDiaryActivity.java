@@ -89,6 +89,9 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
     @BindView(R.id.photoContainer)
     ViewGroup mPhotoContainer;
 
+//    @BindView(R.id.subToolbar)
+//    ViewGroup mSubToolbar;
+
     @BindView(R.id.photoContainerScrollView)
     HorizontalScrollView mHorizontalScrollView;
 
@@ -404,6 +407,13 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
                 Intent settingIntent = new Intent(UpdateDiaryActivity.this, SettingsActivity.class);
                 startActivity(settingIntent);
                 break;
+//            case R.id.toolbarToggle:
+//                if (mSubToolbar.getVisibility() == View.GONE) {
+//                    mSubToolbar.setVisibility(View.VISIBLE);
+//                } else if (mSubToolbar.getVisibility() == View.VISIBLE) {
+//                    mSubToolbar.setVisibility(View.GONE);
+//                }
+//                break;
         }
         return super.onOptionsItemSelected(item);
     }

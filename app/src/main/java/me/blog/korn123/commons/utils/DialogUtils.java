@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import me.blog.korn123.easydiary.R;
+
 /**
  * Created by CHO HANJOONG on 2017-03-16.
  */
@@ -25,6 +27,8 @@ public class DialogUtils {
                                        DialogInterface.OnClickListener positiveListener,
                                        DialogInterface.OnClickListener negativeListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
+//        builder.setIcon(R.drawable.ic_launcher);
+//        builder.setTitle("일기삭제");
         builder.setMessage(message);
         builder.setCancelable(true);
         builder.setNegativeButton("취소", negativeListener);

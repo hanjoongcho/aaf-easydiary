@@ -33,6 +33,7 @@
             android:layout_height="match_parent">
 
             <LinearLayout
+                android:id="@+id/subToolbar"
                 android:layout_marginBottom="@dimen/card_layout_margin"
                 android:background="@drawable/bg_card_01"
                 android:orientation="horizontal"

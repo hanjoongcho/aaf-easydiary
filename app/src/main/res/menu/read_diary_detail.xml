@@ -2,16 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:icon="@drawable/planner"
-        android:id="@+id/planner"
+        android:icon="@drawable/top_navigation_toolbar"
+        android:id="@+id/toolbarToggle"
         android:orderInCategory="100"
-        android:title="달력보기"
-        app:showAsAction="ifRoom" />
-    <item
-        android:icon="@drawable/combo"
-        android:id="@+id/chart"
-        android:orderInCategory="100"
-        android:title="차트보기"
+        android:title=""
         app:showAsAction="ifRoom" />
     <item
         android:icon="@drawable/settings"
