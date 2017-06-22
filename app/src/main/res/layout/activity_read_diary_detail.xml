@@ -149,7 +149,6 @@
             </LinearLayout>
 
             <ScrollView
-                android:layout_marginBottom="@dimen/card_layout_margin"
                 android:fillViewport="true"
                 android:layout_width="match_parent"
                 android:layout_weight="1"
@@ -173,6 +172,7 @@
             </ScrollView>
 
             <HorizontalScrollView
+                android:layout_marginTop="@dimen/card_layout_margin"
                 android:id="@+id/photoContainerScrollView"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp">
