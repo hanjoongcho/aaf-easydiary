@@ -23,6 +23,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Locale;
@@ -86,6 +88,9 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
 
         // TODO search from sequence
         Intent intent = getIntent();
+        if (StringUtils.isEmpty(intent.getStringExtra("title"))) {
+            mTitle.setVisibility(View.GONE);
+        }
         mTitle.setText(intent.getStringExtra("title"));
         mDate.setText(intent.getStringExtra("date"));
         mContents.setText(intent.getStringExtra("contents"));

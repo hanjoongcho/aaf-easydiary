@@ -10,6 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.List;
 
 import me.blog.korn123.commons.constants.Constants;
@@ -60,6 +62,11 @@ public class DiaryCardArrayAdapter extends ArrayAdapter<DiaryDto> {
         }
 
         DiaryDto diaryDto = (DiaryDto)this.list.get(position);
+        if (StringUtils.isEmpty(diaryDto.getTitle())) {
+            holder.textView1.setVisibility(View.GONE);
+        } else {
+            holder.textView1.setVisibility(View.VISIBLE);
+        }
         holder.textView1.setText(diaryDto.getTitle());
         holder.textView2.setText(diaryDto.getContents());
         holder.textView3.setText(DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis()));

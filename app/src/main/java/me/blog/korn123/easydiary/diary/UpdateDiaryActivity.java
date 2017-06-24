@@ -259,10 +259,7 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
                 setDiaryFontSize();
                 break;
             case R.id.saveContents:
-                if (StringUtils.isEmpty(mTitle.getText())) {
-                    mTitle.requestFocus();
-                    DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_title_message));
-                } else if (StringUtils.isEmpty(mContents.getText())) {
+                if (StringUtils.isEmpty(mContents.getText())) {
                     mContents.requestFocus();
                     DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message));
                 } else {

@@ -10,6 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.List;
 
 import me.blog.korn123.commons.constants.Constants;
@@ -55,7 +57,11 @@ public class DiarySimpleCardArrayAdapter extends ArrayAdapter<DiaryDto> {
         }
 
         DiaryDto diaryDto = (DiaryDto)this.list.get(position);
-        holder.textView1.setText(diaryDto.getTitle());
+        if (StringUtils.isNotEmpty(diaryDto.getTitle())) {
+            holder.textView1.setText(diaryDto.getTitle());
+        } else {
+            holder.textView1.setText(StringUtils.split(diaryDto.getContents(), "\n")[0]);
+        }
         EasyDiaryUtils.initWeatherView(holder.imageView, diaryDto.getWeather());
 
         return row;

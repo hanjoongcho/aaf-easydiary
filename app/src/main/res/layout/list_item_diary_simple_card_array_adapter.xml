@@ -21,6 +21,8 @@
             android:paddingBottom="5dp"
             android:paddingTop="5dp"
             android:textColor="@color/defaultTextColor"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:id="@+id/text1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

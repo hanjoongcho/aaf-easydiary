@@ -4,6 +4,15 @@
 
 ---------------------------------------------------
 
+# Changes in 0.16.3 (date: 2017/06/24)
+  [기타]
+  1. 제목없이 일기작성 가능하도록 정책변경
+  2. 동그라미재단L 폰트추가
+
+  [Etc]
+  1. Change policy to enable diary writing without title
+  2. Add The Circle Foundatioin L font
+
 # Changes in 0.16.2 (date: 2017/06/20)
   [기타]
   1. 사용자경험(UX) 최적화
