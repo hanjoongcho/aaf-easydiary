@@ -58,7 +58,7 @@ public class ReadDiaryActivity extends EasyDiaryActivity {
     private Intent mRecognizerIntent;
     private FloatingActionButton mSpeechButton;
     private long mCurrentTimeMillis;
-    private ArrayAdapter<DiaryDto> mArrayAdapterDiary;
+    private DiaryCardArrayAdapter mDiaryCardArrayAdapter;
     private List<DiaryDto> mDiaryList;
 
     @BindView(R.id.diaryList)
@@ -96,8 +96,8 @@ public class ReadDiaryActivity extends EasyDiaryActivity {
         mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
 
         mDiaryList = DiaryDao.readDiary(null);
-        mArrayAdapterDiary = new DiaryCardArrayAdapter(this, R.layout.list_item_diary_card_array_adapter , this.mDiaryList);
-        mDiaryListView.setAdapter(this.mArrayAdapterDiary);
+        mDiaryCardArrayAdapter = new DiaryCardArrayAdapter(this, R.layout.list_item_diary_card_array_adapter , this.mDiaryList);
+        mDiaryListView.setAdapter(mDiaryCardArrayAdapter);
 
         FontUtils.setToolbarTypeface(toolbar, Typeface.DEFAULT);
 
@@ -161,6 +161,7 @@ public class ReadDiaryActivity extends EasyDiaryActivity {
                 detailIntent.putExtra("date", DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis()));
                 detailIntent.putExtra("current_time_millis", diaryDto.getCurrentTimeMillis());
                 detailIntent.putExtra("weather", diaryDto.getWeather());
+                detailIntent.putExtra("query", mDiaryCardArrayAdapter.getCurrentQuery());
                 startActivity(detailIntent);
             }
         });
@@ -271,11 +272,12 @@ public class ReadDiaryActivity extends EasyDiaryActivity {
 
     public void refreshList() {
         String query = "";
-        if (!StringUtils.isEmpty(mQuery.getText())) query = String.valueOf(mQuery.getText());
+        if (StringUtils.isNotEmpty(mQuery.getText())) query = String.valueOf(mQuery.getText());
 
         mDiaryList.clear();
         mDiaryList.addAll(DiaryDao.readDiary(query));
-        mArrayAdapterDiary.notifyDataSetChanged();
+        mDiaryCardArrayAdapter.setCurrentQuery(query);
+        mDiaryCardArrayAdapter.notifyDataSetChanged();
     }
 
     private void initSampleData() {

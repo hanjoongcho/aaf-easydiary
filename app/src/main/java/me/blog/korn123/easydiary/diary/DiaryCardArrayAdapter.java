@@ -29,6 +29,15 @@ public class DiaryCardArrayAdapter extends ArrayAdapter<DiaryDto> {
     private final Context context;
     private final List<DiaryDto> list;
     private final int layoutResourceId;
+    private String query;
+
+    public void setCurrentQuery(String query) {
+        this.query = query;
+    }
+
+    public String getCurrentQuery() {
+        return this.query;
+    }
 
     public DiaryCardArrayAdapter(Context context, int layoutResourceId, List<DiaryDto> list) {
         super(context, layoutResourceId, list);
@@ -69,6 +78,12 @@ public class DiaryCardArrayAdapter extends ArrayAdapter<DiaryDto> {
         }
         holder.textView1.setText(diaryDto.getTitle());
         holder.textView2.setText(diaryDto.getContents());
+
+        // highlight current query
+        if (StringUtils.isNotEmpty(query)) {
+            EasyDiaryUtils.highlightString(holder.textView1, query);
+            EasyDiaryUtils.highlightString(holder.textView2, query);
+        }
         holder.textView3.setText(DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis()));
         EasyDiaryUtils.initWeatherView(holder.imageView, diaryDto.getWeather());
 

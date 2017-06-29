@@ -92,8 +92,15 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
             mTitle.setVisibility(View.GONE);
         }
         mTitle.setText(intent.getStringExtra("title"));
-        mDate.setText(intent.getStringExtra("date"));
         mContents.setText(intent.getStringExtra("contents"));
+        mDate.setText(intent.getStringExtra("date"));
+
+        // highlight current query
+        String query = intent.getStringExtra("query");
+        if (StringUtils.isNotEmpty(query)) {
+            EasyDiaryUtils.highlightString(mTitle, query);
+            EasyDiaryUtils.highlightString(mContents, query);
+        }
         mSequence = intent.getIntExtra("sequence", 0);
         mCurrentTimeMillis = intent.getLongExtra("current_time_millis", 0);
 
