@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -145,7 +146,8 @@ public class ReadDiaryActivity extends EasyDiaryActivity {
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                refreshList();
+                Log.i("query", String.valueOf(charSequence));
+                refreshList(String.valueOf(charSequence));
             }
 
             public void afterTextChanged(Editable editable) {}
@@ -273,7 +275,10 @@ public class ReadDiaryActivity extends EasyDiaryActivity {
     public void refreshList() {
         String query = "";
         if (StringUtils.isNotEmpty(mQuery.getText())) query = String.valueOf(mQuery.getText());
+        refreshList(query);
+    }
 
+    public void refreshList(String query) {
         mDiaryList.clear();
         mDiaryList.addAll(DiaryDao.readDiary(query));
         mDiaryCardArrayAdapter.setCurrentQuery(query);

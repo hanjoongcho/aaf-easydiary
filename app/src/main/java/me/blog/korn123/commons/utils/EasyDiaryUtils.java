@@ -71,7 +71,7 @@ public class EasyDiaryUtils {
         //Search for all occurrences of the keyword in the string
         int indexOfKeyword = spannableString.toString().indexOf(input);
 
-        while (indexOfKeyword > 0) {
+        while (indexOfKeyword >= 0) {
             //Create a background color span on the keyword
             spannableString.setSpan(new BackgroundColorSpan(Color.YELLOW), indexOfKeyword, indexOfKeyword + input.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
