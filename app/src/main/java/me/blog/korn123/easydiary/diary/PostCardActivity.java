@@ -3,23 +3,17 @@ package me.blog.korn123.easydiary.diary;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.TypedValue;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Random;
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.UUID;
 
 import butterknife.BindView;
@@ -44,6 +38,8 @@ import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
 public class PostCardActivity extends EasyDiaryActivity {
 
     private int mSequence;
+    private String mBgHexColor;
+    private String mTextHexColor;
 
     @BindView(R.id.contents)
     TextView mContents;
@@ -83,10 +79,16 @@ public class PostCardActivity extends EasyDiaryActivity {
         switch (view.getId()) {
             case R.id.bgColor:
                 Intent bgColorPickerIntent = new Intent(PostCardActivity.this, ColorPickerActivity.class);
+                if (StringUtils.isNotEmpty(mBgHexColor)) {
+                    bgColorPickerIntent.putExtra("hexStringColor", mBgHexColor);
+                }
                 startActivityForResult(bgColorPickerIntent, Constants.REQUEST_CODE_BACKGROUND_COLOR_PICKER);
                 break;
             case R.id.textColor:
                 Intent textColorPickerIntent = new Intent(PostCardActivity.this, ColorPickerActivity.class);
+                if (StringUtils.isNotEmpty(mTextHexColor)) {
+                    textColorPickerIntent.putExtra("hexStringColor", mTextHexColor);
+                }
                 startActivityForResult(textColorPickerIntent, Constants.REQUEST_CODE_TEXT_COLOR_PICKER);
                 break;
             case R.id.close:
@@ -140,6 +142,7 @@ public class PostCardActivity extends EasyDiaryActivity {
             case Constants.REQUEST_CODE_BACKGROUND_COLOR_PICKER:
                 if ((resultCode == RESULT_OK) && (data != null)) {
                     String hexStringColor = "#" + data.getStringExtra("color");
+                    mBgHexColor = hexStringColor;
 //                    GradientDrawable shape =  new GradientDrawable();
 //                    shape.setCornerRadius(CommonUtils.dpToPixel(PostCardActivity.this, 5));
 //                    shape.setColor(Color.parseColor(hexStringColor));
@@ -148,10 +151,13 @@ public class PostCardActivity extends EasyDiaryActivity {
                 }
                 break;
             case Constants.REQUEST_CODE_TEXT_COLOR_PICKER:
-                String hexStringColor = "#" + data.getStringExtra("color");
-                mTitle.setTextColor(Color.parseColor(hexStringColor));
-                mDate.setTextColor(Color.parseColor(hexStringColor));
-                mContents.setTextColor(Color.parseColor(hexStringColor));
+                if ((resultCode == RESULT_OK) && (data != null)) {
+                    String hexStringColor = "#" + data.getStringExtra("color");
+                    mTextHexColor = hexStringColor;
+                    mTitle.setTextColor(Color.parseColor(hexStringColor));
+                    mDate.setTextColor(Color.parseColor(hexStringColor));
+                    mContents.setTextColor(Color.parseColor(hexStringColor));
+                }
                 break;
         }
     }
