@@ -26,8 +26,8 @@ public class EasyDiaryUtils {
         initWeatherView(imageView, weatherFlag, false);
     }
 
-    public static void initWorkingDirectory() {
-        File workingDirectory = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + Path.WORKING_DIRECTORY);
+    public static void initWorkingDirectory(String path) {
+        File workingDirectory = new File(path);
         if (!workingDirectory.exists()) workingDirectory.mkdirs();
     }
 

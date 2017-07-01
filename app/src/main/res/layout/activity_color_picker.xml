@@ -18,7 +18,7 @@
             app:alphaSlider="true"
             app:density="12"
             app:lightnessSlider="true"
-            app:wheelType="FLOWER"
+            app:wheelType="CIRCLE"
             app:lightnessSliderView="@+id/v_lightness_slider"
             app:alphaSliderView="@+id/v_alpha_slider"
             />
@@ -43,6 +43,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@drawable/ok" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="60dp"
         app:srcCompat="@drawable/ok" />
 
 

@@ -21,6 +21,7 @@ public class DateUtils
     public static final String DATE_PATTERN_DASH = "yyyy-MM-dd";
     public static final String TIME_PATTERN = "HH:mm";
     public static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+    public static final String DATE_TIME_PATTERN_WITHOUT_DELIMITER = "yyyyMMddHHmmss";
     public static final String DATE_HMS_PATTERN = "yyyyMMddHHmmss";
     public static final String TIMESTAMP_PATTERN = "yyyy-MM-dd HH:mm:ss.SSS";
     public static final String YEAR_PATTERN = "yyyy";
