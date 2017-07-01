@@ -230,7 +230,7 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
         mTextToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
     }
 
-    @OnClick({R.id.zoomIn, R.id.zoomOut, R.id.delete, R.id.edit, R.id.speechOutButton})
+    @OnClick({R.id.zoomIn, R.id.zoomOut, R.id.delete, R.id.edit, R.id.speechOutButton, R.id.postCard})
     public void onClick(View view) {
         float fontSize = mContents.getTextSize();
 
@@ -273,8 +273,15 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
             case R.id.speechOutButton:
                 textToSpeech();
                 break;
+            case R.id.postCard:
+                Intent postCardIntent = new Intent(ReadDiaryDetailActivity.this, PostCardActivity.class);
+                postCardIntent.putExtra("sequence", mSequence);
+                startActivityForResult(postCardIntent, Constants.REQUEST_CODE_BACKGROUND_COLOR_PICKER);
+                break;
         }
     }
+
+
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())

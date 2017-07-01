@@ -1,6 +1,7 @@
 package me.blog.korn123.commons.utils;
 
 import android.graphics.Color;
+import android.os.Environment;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.BackgroundColorSpan;
@@ -8,7 +9,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
+
 import me.blog.korn123.commons.constants.Constants;
+import me.blog.korn123.commons.constants.Path;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.diary.DiaryDao;
 
@@ -20,6 +24,11 @@ public class EasyDiaryUtils {
 
     public static void initWeatherView(ImageView imageView, int weatherFlag) {
         initWeatherView(imageView, weatherFlag, false);
+    }
+
+    public static void initWorkingDirectory() {
+        File workingDirectory = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + Path.WORKING_DIRECTORY);
+        if (!workingDirectory.exists()) workingDirectory.mkdirs();
     }
 
     public static void initWeatherView(ImageView imageView, int weatherFlag, boolean isShowEmptyWeatherView) {

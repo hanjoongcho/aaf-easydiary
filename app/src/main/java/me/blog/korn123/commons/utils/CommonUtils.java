@@ -14,6 +14,10 @@ import android.util.TypedValue;
 
 public class CommonUtils {
 
+    public static int getBuildVersion() {
+        return android.os.Build.VERSION.SDK_INT;
+    }
+
     public static String loadStringPreference(Context context, String key, String defaultValue) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return preferences.getString(key, defaultValue);

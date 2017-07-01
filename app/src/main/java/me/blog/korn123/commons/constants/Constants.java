@@ -19,6 +19,10 @@ public class Constants {
     final static public int REQUEST_CODE_LOCK_SETTING = 21;
     final static public int REQUEST_CODE_IMAGE_PICKER = 22;
 
+    // startActivityForResult Request Code: ColorPicker
+    final static public int REQUEST_CODE_BACKGROUND_COLOR_PICKER = 31;
+    final static public int REQUEST_CODE_TEXT_COLOR_PICKER = 32;
+
 
     final static public String[] PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.SEND_SMS, Manifest.permission.READ_CONTACTS};
     final static public String[] EXTERNAL_STORAGE_PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};

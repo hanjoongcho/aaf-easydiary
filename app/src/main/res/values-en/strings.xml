@@ -72,6 +72,9 @@
     <!--PhotoViewPagerActivity-->
     <string name="photo_view_error_info">No photos found.\nAttached photos from Gallery may have been deleted or moved.</string>
 
+    <!--PostCardActivity-->
+    <string name="diary_card_export_info">Diary card saved path</string>
+
     <!--CaldroidCustomAdapter-->
     <string name="diary_count"></string>
 

@@ -47,4 +47,18 @@ public class DialogUtils {
         AlertDialog alert = builder.create();
         alert.show();
     }
+
+    public static void showAlertDialog(Context context,
+                                       String title,
+                                       String message,
+                                       DialogInterface.OnClickListener positiveListener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(title);
+        builder.setIcon(R.drawable.book);
+        builder.setMessage(message);
+        builder.setCancelable(true);
+        builder.setPositiveButton("확인", positiveListener);
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
 }

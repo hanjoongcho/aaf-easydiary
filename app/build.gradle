@@ -68,4 +68,7 @@ dependencies {
     // photo view
     compile 'com.github.chrisbanes:PhotoView:2.0.0'
 
+    // color picker
+    compile 'com.github.QuadFlask:colorpicker:0.0.13'
+
 }

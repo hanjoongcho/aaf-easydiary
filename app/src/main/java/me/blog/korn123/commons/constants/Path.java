@@ -7,6 +7,6 @@ import android.os.Environment;
  */
 
 public class Path {
-    final static public String WORKING_DIRECTORY = Environment.getExternalStorageDirectory().getAbsolutePath() + "/AAFactory/";
+    final static public String WORKING_DIRECTORY = "/AAFactory/EasyDiary/";
     final static public String DIARY_DB_NAME = "diary.realm";
 }
