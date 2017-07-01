@@ -52,6 +52,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
+                    <ImageView
+                        android:background="@drawable/click_effect_01"
+                        android:layout_marginRight="@dimen/toolbar_icon_margin_right"
+                        android:id="@+id/share"
+                        android:src="@drawable/sharethis"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
                 </LinearLayout>
 
                 <LinearLayout

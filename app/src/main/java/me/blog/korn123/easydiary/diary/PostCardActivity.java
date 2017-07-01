@@ -4,9 +4,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +19,7 @@ import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.UUID;
+import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,7 +34,6 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.commons.utils.PermissionUtils;
 import me.blog.korn123.easydiary.R;
-import me.blog.korn123.easydiary.colorpicker.ColorPickerActivity;
 import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
 
 /**
@@ -43,6 +42,7 @@ import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
 
 public class PostCardActivity extends EasyDiaryActivity {
 
+    private String mSavedDiaryCardPath;
     private int mSequence;
     private int mBgColor = 0xffffffff;
     private int mTextColor = 0xff4A4A4C;
@@ -80,7 +80,7 @@ public class PostCardActivity extends EasyDiaryActivity {
         mDate.setText(diaryDto.getDateString());
     }
 
-    @OnClick({R.id.bgColor, R.id.textColor, R.id.close, R.id.save})
+    @OnClick({R.id.bgColor, R.id.textColor, R.id.close, R.id.save, R.id.share})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bgColor:
@@ -150,26 +150,52 @@ public class PostCardActivity extends EasyDiaryActivity {
             case R.id.save:
                 if (PermissionUtils.checkPermission(this, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
                     // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
-                    exportDiaryCard();
+                    exportDiaryCard(true);
                 } else {
                     // API Level 23 이상이면서 권한취득 안한경우
                     PermissionUtils.confirmPermission(this, this, Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE);
                 }
                 break;
+            case R.id.share:
+                if (StringUtils.isNotEmpty(mSavedDiaryCardPath)) {
+                    shareDiary();
+                } else {
+                    if (PermissionUtils.checkPermission(this, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
+                        // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
+                        exportDiaryCard(false);
+                        shareDiary();
+                    } else {
+                        // API Level 23 이상이면서 권한취득 안한경우
+                        PermissionUtils.confirmPermission(this, this, Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE_WITH_SHARE_DIARY_CARD);
+                    }
+                }
+                break;
         }
     }
 
-    private void exportDiaryCard() {
+    private void exportDiaryCard(boolean showInfoDialog) {
         Bitmap bitmap = BitmapUtils.viewToBitmap(mPostContainer);
         EasyDiaryUtils.initWorkingDirectory(Environment.getExternalStorageDirectory().getAbsolutePath() + Path.WORKING_DIRECTORY);
         String diaryCardPath = Path.WORKING_DIRECTORY + mSequence + "_" + DateUtils.getCurrentDateAsString(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".jpg";
-        BitmapUtils.saveBitmapToFileCache(bitmap, Environment.getExternalStorageDirectory().getAbsolutePath() + diaryCardPath);
-        DialogUtils.showAlertDialog(PostCardActivity.this, getString(R.string.diary_card_export_info) , diaryCardPath, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        mSavedDiaryCardPath = Environment.getExternalStorageDirectory().getAbsolutePath() + diaryCardPath;
+        BitmapUtils.saveBitmapToFileCache(bitmap, mSavedDiaryCardPath);
+        if (showInfoDialog) {
+            DialogUtils.showAlertDialog(PostCardActivity.this, getString(R.string.diary_card_export_info) , diaryCardPath, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
 
-            }
-        });
+                }
+            });
+        }
+    }
+
+    private void shareDiary() {
+        File file = new File(mSavedDiaryCardPath);
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+        shareIntent.setType("image/jpeg");
+        startActivity(Intent.createChooser(shareIntent, getString(R.string.diary_card_share_info)));
     }
 
     @Override
@@ -179,7 +205,17 @@ public class PostCardActivity extends EasyDiaryActivity {
             case Constants.REQUEST_CODE_EXTERNAL_STORAGE:
                 if (PermissionUtils.checkPermission(this, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
                     // 권한이 있는경우
-                    exportDiaryCard();
+                    exportDiaryCard(true);
+                } else {
+                    // 권한이 없는경우
+                    DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3));
+                }
+                break;
+            case Constants.REQUEST_CODE_EXTERNAL_STORAGE_WITH_SHARE_DIARY_CARD:
+                if (PermissionUtils.checkPermission(this, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
+                    // 권한이 있는경우
+                    exportDiaryCard(false);
+                    shareDiary();
                 } else {
                     // 권한이 없는경우
                     DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3));

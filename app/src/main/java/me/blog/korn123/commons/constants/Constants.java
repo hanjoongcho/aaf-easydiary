@@ -10,6 +10,7 @@ public class Constants {
 
     // startActivityForResult Request Code: Permission
     final static public int REQUEST_CODE_EXTERNAL_STORAGE = 1;
+    final static public int REQUEST_CODE_EXTERNAL_STORAGE_WITH_SHARE_DIARY_CARD = 2;
 
     // startActivityForResult Request Code: Google Drive
     final static public int REQUEST_CODE_GOOGLE_DRIVE_UPLOAD = 11;
@@ -22,7 +23,6 @@ public class Constants {
     // startActivityForResult Request Code: ColorPicker
     final static public int REQUEST_CODE_BACKGROUND_COLOR_PICKER = 31;
     final static public int REQUEST_CODE_TEXT_COLOR_PICKER = 32;
-
 
     final static public String[] PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.SEND_SMS, Manifest.permission.READ_CONTACTS};
     final static public String[] EXTERNAL_STORAGE_PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
