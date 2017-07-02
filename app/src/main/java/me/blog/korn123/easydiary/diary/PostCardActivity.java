@@ -157,17 +157,13 @@ public class PostCardActivity extends EasyDiaryActivity {
                 }
                 break;
             case R.id.share:
-                if (StringUtils.isNotEmpty(mSavedDiaryCardPath)) {
+                if (PermissionUtils.checkPermission(this, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
+                    // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
+                    exportDiaryCard(false);
                     shareDiary();
                 } else {
-                    if (PermissionUtils.checkPermission(this, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
-                        // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
-                        exportDiaryCard(false);
-                        shareDiary();
-                    } else {
-                        // API Level 23 이상이면서 권한취득 안한경우
-                        PermissionUtils.confirmPermission(this, this, Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE_WITH_SHARE_DIARY_CARD);
-                    }
+                    // API Level 23 이상이면서 권한취득 안한경우
+                    PermissionUtils.confirmPermission(this, this, Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE_WITH_SHARE_DIARY_CARD);
                 }
                 break;
         }
