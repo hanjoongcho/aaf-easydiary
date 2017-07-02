@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.net.Uri;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -48,29 +49,21 @@ public class BitmapUtils {
     }
 
     public static void saveBitmapToFileCache(Bitmap bitmap, String strFilePath) {
-
         File fileCacheItem = new File(strFilePath);
         OutputStream out = null;
 
-        try
-        {
+        try {
             fileCacheItem.createNewFile();
             out = new FileOutputStream(fileCacheItem);
 
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-        }
-        catch (Exception e)
-        {
+            //quality int: Hint to the compressor, 0-100. 0 meaning compress for small size, 100 meaning compress for max quality. Some formats, like PNG which is lossless, will ignore the quality setting
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally
-        {
-            try
-            {
+        } finally {
+            try {
                 out.close();
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -90,6 +83,14 @@ public class BitmapUtils {
             view.draw(canvas);
             return bitmap;
         }
+    }
+
+    public static Bitmap diaryViewGroupToBitmap(ViewGroup view) {
+        ViewGroup scrollView = (ViewGroup) view.getChildAt(0);
+        Bitmap bitmap = Bitmap.createBitmap(scrollView.getWidth(), scrollView.getChildAt(0).getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        scrollView.draw(canvas);
+        return bitmap;
     }
 
 }

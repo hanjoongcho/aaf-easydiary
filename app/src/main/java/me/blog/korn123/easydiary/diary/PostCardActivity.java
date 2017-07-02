@@ -7,10 +7,12 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Looper;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.flask.colorpicker.ColorPickerView;
@@ -160,7 +162,6 @@ public class PostCardActivity extends EasyDiaryActivity {
                 if (PermissionUtils.checkPermission(this, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
                     // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
                     exportDiaryCard(false);
-                    shareDiary();
                 } else {
                     // API Level 23 이상이면서 권한취득 안한경우
                     PermissionUtils.confirmPermission(this, this, Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE_WITH_SHARE_DIARY_CARD);
@@ -169,20 +170,37 @@ public class PostCardActivity extends EasyDiaryActivity {
         }
     }
 
-    private void exportDiaryCard(boolean showInfoDialog) {
-        Bitmap bitmap = BitmapUtils.viewToBitmap(mPostContainer);
-        EasyDiaryUtils.initWorkingDirectory(Environment.getExternalStorageDirectory().getAbsolutePath() + Path.WORKING_DIRECTORY);
-        String diaryCardPath = Path.WORKING_DIRECTORY + mSequence + "_" + DateUtils.getCurrentDateAsString(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".jpg";
-        mSavedDiaryCardPath = Environment.getExternalStorageDirectory().getAbsolutePath() + diaryCardPath;
-        BitmapUtils.saveBitmapToFileCache(bitmap, mSavedDiaryCardPath);
-        if (showInfoDialog) {
-            DialogUtils.showAlertDialog(PostCardActivity.this, getString(R.string.diary_card_export_info) , diaryCardPath, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
 
-                }
-            });
-        }
+    private void exportDiaryCard(final boolean showInfoDialog) {
+        progressBar.setVisibility(View.VISIBLE);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Bitmap bitmap = BitmapUtils.diaryViewGroupToBitmap(mPostContainer);
+                EasyDiaryUtils.initWorkingDirectory(Environment.getExternalStorageDirectory().getAbsolutePath() + Path.WORKING_DIRECTORY);
+                final String diaryCardPath = Path.WORKING_DIRECTORY + mSequence + "_" + DateUtils.getCurrentDateAsString(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".jpg";
+                mSavedDiaryCardPath = Environment.getExternalStorageDirectory().getAbsolutePath() + diaryCardPath;
+                BitmapUtils.saveBitmapToFileCache(bitmap, mSavedDiaryCardPath);
+                new android.os.Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressBar.setVisibility(View.GONE);
+                        if (showInfoDialog) {
+                            DialogUtils.showAlertDialog(PostCardActivity.this, getString(R.string.diary_card_export_info) , diaryCardPath, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            });
+                        } else {
+                            shareDiary();
+                        }
+                    }
+                });
+            }
+        }).start();
     }
 
     private void shareDiary() {
@@ -211,7 +229,6 @@ public class PostCardActivity extends EasyDiaryActivity {
                 if (PermissionUtils.checkPermission(this, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
                     // 권한이 있는경우
                     exportDiaryCard(false);
-                    shareDiary();
                 } else {
                     // 권한이 없는경우
                     DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3));

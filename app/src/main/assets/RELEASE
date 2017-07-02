@@ -4,6 +4,14 @@
 
 ---------------------------------------------------
 
+
+# Changes in 1.1.1 (date: 2017/07/02)
+  [기능개선]
+  1. 컨텐츠가 디바이스 화면보다 길어도 일기카드 생성 가능하도록 개선
+
+  [Improved Feature]
+  1. Improved that diary cards can be generated even if content is longer than device screen
+
 # Changes in 1.1.0 (date: 2017/07/02)
   [기능추가]
   1. 일기카드 생성 및 공유
