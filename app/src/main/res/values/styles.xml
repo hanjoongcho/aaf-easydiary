@@ -73,4 +73,14 @@
         <item name="android:background">@drawable/arrow_3_b</item>
     </style>
 
+    <style name="CaldroidDefaultMonthNameLand">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">3dp</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:textSize">17sp</item>
+    </style>
+
 </resources>
