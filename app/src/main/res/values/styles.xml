@@ -46,9 +46,9 @@
         <item name="android:gravity">center_horizontal</item>
         <!--<item name="android:listSelector">@null</item>-->
         <item name="android:background">@color/calendarBackground</item>
-        <item name="android:horizontalSpacing">0dp</item>
+        <item name="android:horizontalSpacing">1dp</item>
         <item name="android:padding">1dp</item>
-        <item name="android:verticalSpacing">0dp</item>
+        <item name="android:verticalSpacing">1dp</item>
     </style>
 
     <style name="CaldroidDefaultCalendarViewLayout">
