@@ -132,17 +132,17 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
     }
 
     public void initData() {
-        // TODO search from sequence
         Intent intent = getIntent();
-        mTitle.setText(intent.getStringExtra("title"));
-        getSupportActionBar().setSubtitle(getString(R.string.write_date) + ": " + intent.getStringExtra("date"));
-        mContents.setText(intent.getStringExtra("contents"));
         mSequence = intent.getIntExtra("sequence", 0);
-        mCurrentTimeMillis = intent.getLongExtra("current_time_millis", 0);
+        DiaryDto diaryDto = DiaryDao.readDiaryBy(mSequence);
+
+        mTitle.setText(diaryDto.getTitle());
+        getSupportActionBar().setSubtitle(getString(R.string.write_date) + ": " + diaryDto.getDateString());
+        mContents.setText(diaryDto.getContents());
+        mCurrentTimeMillis = diaryDto.getCurrentTimeMillis();
         mContents.requestFocus();
 
         // TODO fixme elegance
-        DiaryDto diaryDto = DiaryDao.readDiaryBy(mSequence);
         mPhotoUris = new RealmList<>();
         mPhotoUris.addAll(diaryDto.getPhotoUris());
         if (mPhotoUris != null && mPhotoUris.size() > 0) {
@@ -169,6 +169,24 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
                 mPhotoContainer.addView(imageView, mPhotoContainer.getChildCount() - 1);
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        DialogUtils.showAlertDialog(UpdateDiaryActivity.this, getString(R.string.back_pressed_confirm),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                },
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                }
+        );
     }
 
     public void initFontStyle() {
