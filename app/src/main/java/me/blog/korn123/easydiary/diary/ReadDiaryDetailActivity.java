@@ -11,9 +11,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +32,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.FileNotFoundException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -51,29 +57,20 @@ import me.blog.korn123.easydiary.setting.SettingsActivity;
 public class ReadDiaryDetailActivity extends EasyDiaryActivity {
 
     private long mCurrentTimeMillis;
-    private int mSequence;
-    private TextToSpeech mTextToSpeech;
 
-    @BindView(R.id.contents)
-    TextView mContents;
 
-    @BindView(R.id.title)
-    TextView mTitle;
+    @BindView(R.id.container)
+    ViewPager mViewPager;
 
-    @BindView(R.id.date)
-    TextView mDate;
-
-    @BindView(R.id.weather)
-    ImageView mWeather;
-
-    @BindView(R.id.photoContainer)
-    ViewGroup mPhotoContainer;
-
-//    @BindView(R.id.subToolbar)
-//    ViewGroup mSubToolbar;
-
-    @BindView(R.id.photoContainerScrollView)
-    HorizontalScrollView mHorizontalScrollView;
+    /**
+     * The {@link android.support.v4.view.PagerAdapter} that will provide
+     * fragments for each of the sections. We use a
+     * {@link FragmentPagerAdapter} derivative, which will keep every
+     * loaded fragment in memory. If this becomes too memory intensive, it
+     * may be best to switch to a
+     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     */
+    private SectionsPagerAdapter mSectionsPagerAdapter;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,199 +83,71 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
 
         FontUtils.setToolbarTypeface(toolbar, Typeface.DEFAULT);
 
-        // TODO search from sequence
-        Intent intent = getIntent();
-        if (StringUtils.isEmpty(intent.getStringExtra("title"))) {
-            mTitle.setVisibility(View.GONE);
-        }
-        mTitle.setText(intent.getStringExtra("title"));
-        mContents.setText(intent.getStringExtra("contents"));
-        mDate.setText(intent.getStringExtra("date"));
 
-        // highlight current query
-        String query = intent.getStringExtra("query");
-        if (StringUtils.isNotEmpty(query)) {
-            EasyDiaryUtils.highlightString(mTitle, query);
-            EasyDiaryUtils.highlightString(mContents, query);
-        }
-        mSequence = intent.getIntExtra("sequence", 0);
-        mCurrentTimeMillis = intent.getLongExtra("current_time_millis", 0);
+        // init viewpager
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        int weather = intent.getIntExtra("weather", 0);
-        EasyDiaryUtils.initWeatherView(mWeather, weather);
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        // TODO fixme elegance
-        DiaryDto diaryDto = DiaryDao.readDiaryBy(mSequence);
-        if (diaryDto.getPhotoUris() != null && diaryDto.getPhotoUris().size() > 0) {
-            View.OnClickListener onClickListener = new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent photoViewPager = new Intent(ReadDiaryDetailActivity.this, PhotoViewPagerActivity.class);
-                    photoViewPager.putExtra("sequence", mSequence);
-                    startActivity(photoViewPager);
-                }
-            };
 
-            for (PhotoUriDto dto : diaryDto.getPhotoUris()) {
-                Uri uri = Uri.parse(dto.getPhotoUri());
-                Bitmap bitmap = null;
-                try {
-                    bitmap = BitmapUtils.decodeUri(this, uri, CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 60, 1), CommonUtils.dpToPixel(this, 40, 1));
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                    bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.question_mark_4);
-                }
-                ImageView imageView = new ImageView(this);
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 50, 1));
-                layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(this, 3, 1), 0);
-                imageView.setLayoutParams(layoutParams);
-                imageView.setBackgroundResource(R.drawable.bg_card_01);
-                imageView.setImageBitmap(bitmap);
-                imageView.setScaleType(ImageView.ScaleType.CENTER);
-                mPhotoContainer.addView(imageView);
-                imageView.setOnClickListener(onClickListener);
-            }
-        } else {
-            mHorizontalScrollView.setVisibility(View.GONE);
-        }
-    }
-
-    private void initModule() {
-        mTextToSpeech = new TextToSpeech(ReadDiaryDetailActivity.this, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if (status == TextToSpeech.SUCCESS) {
-                    mTextToSpeech.setLanguage(Locale.getDefault());
-                    mTextToSpeech.setPitch(1.3f);
-                    mTextToSpeech.setSpeechRate(1f);
-                }
-            }
-        });
-    }
-
-    private void textToSpeech() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ttsGreater21(String.valueOf(mContents.getText()));
-        } else {
-            ttsUnder20(String.valueOf(mContents.getText()));
-        }
-    }
-
-    private void destroyModule() {
-        if (mTextToSpeech != null) {
-            mTextToSpeech.stop();
-            mTextToSpeech.shutdown();
-            mTextToSpeech = null;
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        initModule();
-
-        FontUtils.setTypeface(this, getAssets(), mTitle);
-        FontUtils.setTypeface(this, getAssets(), mDate);
-        FontUtils.setTypeface(this, getAssets(), mContents);
-        setDiaryFontSize();
-    }
-
-    private void setDiaryFontSize() {
-        float fontSize = CommonUtils.loadFloatPreference(this, "font_size", 0);
-        if (fontSize > 0) {
-            mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
-            mDate.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
-            mContents.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        destroyModule();
-    }
-
-    @SuppressWarnings("deprecation")
-    private void ttsUnder20(String text) {
-        HashMap<String, String> map = new HashMap<>();
-        map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "MessageId");
-
-        mTextToSpeech.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-            @Override
-            public void onStart(String utteranceId) {
-                // TODO Auto-generated method stub
-            }
-
-            @Override
-            public void onError(String utteranceId) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void onDone(String utteranceId) {
-                // TODO Auto-generated method stub
-            }
-        });
-
-        mTextToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, map);
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void ttsGreater21(String text) {
-        String utteranceId = this.hashCode() + "";
-        mTextToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
     }
 
     @OnClick({R.id.zoomIn, R.id.zoomOut, R.id.delete, R.id.edit, R.id.speechOutButton, R.id.postCard})
     public void onClick(View view) {
-        float fontSize = mContents.getTextSize();
 
-        switch(view.getId()) {
-            case R.id.zoomIn:
-                CommonUtils.saveFloatPreference(ReadDiaryDetailActivity.this, "font_size", fontSize + 5);
-                setDiaryFontSize();
-                break;
-            case R.id.zoomOut:
-                CommonUtils.saveFloatPreference(ReadDiaryDetailActivity.this, "font_size", fontSize - 5);
-                setDiaryFontSize();
-                break;
-            case R.id.delete:
-                DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        DiaryDao.deleteDiary(mSequence);
-                        finish();
-                    }
-                };
-                DialogInterface.OnClickListener negativeListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                };
-                DialogUtils.showAlertDialog(ReadDiaryDetailActivity.this, getString(R.string.delete_confirm), positiveListener, negativeListener);
-                break;
-            case R.id.edit:
-                Intent updateDiaryIntent = new Intent(ReadDiaryDetailActivity.this, UpdateDiaryActivity.class);
-                updateDiaryIntent.putExtra("sequence", mSequence);
-                updateDiaryIntent.putExtra("title", String.valueOf(mTitle.getText()));
-                updateDiaryIntent.putExtra("contents", String.valueOf(mContents.getText()));
-                updateDiaryIntent.putExtra("date", String.valueOf(mDate.getText()));
-                updateDiaryIntent.putExtra("current_time_millis", mCurrentTimeMillis);
-                updateDiaryIntent.putExtra("current_time_millis", mCurrentTimeMillis);
-                updateDiaryIntent.putExtra("weather", getIntent().getIntExtra("weather", 0));
-                startActivity(updateDiaryIntent);
-                finish();
-                break;
-            case R.id.speechOutButton:
-                textToSpeech();
-                break;
-            case R.id.postCard:
-                Intent postCardIntent = new Intent(ReadDiaryDetailActivity.this, PostCardActivity.class);
-                postCardIntent.putExtra("sequence", mSequence);
-                startActivityForResult(postCardIntent, Constants.REQUEST_CODE_BACKGROUND_COLOR_PICKER);
-                break;
-        }
+        String testTitle = ((TextView)(mViewPager.getChildAt(0).findViewById(R.id.title))).getText().toString();
+        DialogUtils.makeSnackBar(findViewById(android.R.id.content), testTitle);
+        mViewPager.setCurrentItem(2);
+
+//        float fontSize = mContents.getTextSize();
+
+//        switch(view.getId()) {
+//            case R.id.zoomIn:
+//                CommonUtils.saveFloatPreference(ReadDiaryDetailActivity.this, "font_size", fontSize + 5);
+//                setDiaryFontSize();
+//                break;
+//            case R.id.zoomOut:
+//                CommonUtils.saveFloatPreference(ReadDiaryDetailActivity.this, "font_size", fontSize - 5);
+//                setDiaryFontSize();
+//                break;
+//            case R.id.delete:
+//                DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        DiaryDao.deleteDiary(mSequence);
+//                        finish();
+//                    }
+//                };
+//                DialogInterface.OnClickListener negativeListener = new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                    }
+//                };
+//                DialogUtils.showAlertDialog(ReadDiaryDetailActivity.this, getString(R.string.delete_confirm), positiveListener, negativeListener);
+//                break;
+//            case R.id.edit:
+//                Intent updateDiaryIntent = new Intent(ReadDiaryDetailActivity.this, UpdateDiaryActivity.class);
+//                updateDiaryIntent.putExtra("sequence", mSequence);
+//                updateDiaryIntent.putExtra("title", String.valueOf(mTitle.getText()));
+//                updateDiaryIntent.putExtra("contents", String.valueOf(mContents.getText()));
+//                updateDiaryIntent.putExtra("date", String.valueOf(mDate.getText()));
+//                updateDiaryIntent.putExtra("current_time_millis", mCurrentTimeMillis);
+//                updateDiaryIntent.putExtra("current_time_millis", mCurrentTimeMillis);
+//                updateDiaryIntent.putExtra("weather", getIntent().getIntExtra("weather", 0));
+//                startActivity(updateDiaryIntent);
+//                finish();
+//                break;
+//            case R.id.speechOutButton:
+//                textToSpeech();
+//                break;
+//            case R.id.postCard:
+//                Intent postCardIntent = new Intent(ReadDiaryDetailActivity.this, PostCardActivity.class);
+//                postCardIntent.putExtra("sequence", mSequence);
+//                startActivityForResult(postCardIntent, Constants.REQUEST_CODE_BACKGROUND_COLOR_PICKER);
+//                break;
+//        }
     }
 
 
@@ -309,4 +178,237 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
+
+    /**
+     * A placeholder fragment containing a simple view.
+     */
+    public static class PlaceholderFragment extends Fragment {
+        /**
+         * The fragment argument representing the section number for this
+         * fragment.
+         */
+        private static final String DIARY_SEQUENCE = "diary_sequence";
+        private int mSequence;
+        private TextToSpeech mTextToSpeech;
+
+        @BindView(R.id.contents)
+        TextView mContents;
+
+        @BindView(R.id.title)
+        TextView mTitle;
+
+        @BindView(R.id.date)
+        TextView mDate;
+
+        @BindView(R.id.weather)
+        ImageView mWeather;
+
+        @BindView(R.id.photoContainer)
+        ViewGroup mPhotoContainer;
+
+        @BindView(R.id.photoContainerScrollView)
+        HorizontalScrollView mHorizontalScrollView;
+
+        public PlaceholderFragment() {}
+
+        /**
+         * Returns a new instance of this fragment for the given section
+         * number.
+         */
+        public static PlaceholderFragment newInstance(int sequence) {
+            PlaceholderFragment fragment = new PlaceholderFragment();
+            Bundle args = new Bundle();
+            args.putInt(DIARY_SEQUENCE, sequence);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+
+            // bind view
+            View rootView = inflater.inflate(R.layout.fragment_read_diary_detail, container, false);
+            mContents = (TextView) rootView.findViewById(R.id.contents);
+            mTitle = (TextView) rootView.findViewById(R.id.title);
+            mDate = (TextView) rootView.findViewById(R.id.date);
+            mWeather = (ImageView) rootView.findViewById(R.id.weather);
+            ViewGroup mPhotoContainer = (ViewGroup) rootView.findViewById(R.id.photoContainer);
+            HorizontalScrollView mHorizontalScrollView = (HorizontalScrollView) rootView.findViewById(R.id.photoContainerScrollView);
+
+            mSequence = getArguments().getInt(DIARY_SEQUENCE);
+            DiaryDto diaryDto = DiaryDao.readDiaryBy(mSequence);
+            if (StringUtils.isEmpty(diaryDto.getTitle())) {
+                mTitle.setVisibility(View.GONE);
+            }
+            mTitle.setText(diaryDto.getTitle());
+            mContents.setText(diaryDto.getContents());
+            mDate.setText(diaryDto.getDateString());
+
+            // FIXME highlight current query
+//            String query = intent.getStringExtra("query");
+//            if (StringUtils.isNotEmpty(query)) {
+//                EasyDiaryUtils.highlightString(mTitle, query);
+//                EasyDiaryUtils.highlightString(mContents, query);
+//            }
+
+            int weather = diaryDto.getWeather();
+            EasyDiaryUtils.initWeatherView(mWeather, weather);
+
+            // TODO fixme elegance
+            if (diaryDto.getPhotoUris() != null && diaryDto.getPhotoUris().size() > 0) {
+                View.OnClickListener onClickListener = new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent photoViewPager = new Intent(getContext(), PhotoViewPagerActivity.class);
+                        photoViewPager.putExtra("sequence", mSequence);
+                        startActivity(photoViewPager);
+                    }
+                };
+
+                for (PhotoUriDto dto : diaryDto.getPhotoUris()) {
+                    Uri uri = Uri.parse(dto.getPhotoUri());
+                    Bitmap bitmap = null;
+                    try {
+                        bitmap = BitmapUtils.decodeUri(getContext(), uri, CommonUtils.dpToPixel(getContext(), 70, 1), CommonUtils.dpToPixel(getContext(), 60, 1), CommonUtils.dpToPixel(getContext(), 40, 1));
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.question_mark_4);
+                    }
+                    ImageView imageView = new ImageView(getContext());
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(CommonUtils.dpToPixel(getContext(), 70, 1), CommonUtils.dpToPixel(getContext(), 50, 1));
+                    layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(getContext(), 3, 1), 0);
+                    imageView.setLayoutParams(layoutParams);
+                    imageView.setBackgroundResource(R.drawable.bg_card_01);
+                    imageView.setImageBitmap(bitmap);
+                    imageView.setScaleType(ImageView.ScaleType.CENTER);
+                    mPhotoContainer.addView(imageView);
+                    imageView.setOnClickListener(onClickListener);
+                }
+            } else {
+                mHorizontalScrollView.setVisibility(View.GONE);
+            }
+            return rootView;
+        }
+
+        private void textToSpeech() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ttsGreater21(String.valueOf(mContents.getText()));
+            } else {
+                ttsUnder20(String.valueOf(mContents.getText()));
+            }
+        }
+
+        @SuppressWarnings("deprecation")
+        private void ttsUnder20(String text) {
+            HashMap<String, String> map = new HashMap<>();
+            map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "MessageId");
+
+            mTextToSpeech.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                @Override
+                public void onStart(String utteranceId) {
+                    // TODO Auto-generated method stub
+                }
+
+                @Override
+                public void onError(String utteranceId) {
+                    // TODO Auto-generated method stub
+
+                }
+
+                @Override
+                public void onDone(String utteranceId) {
+                    // TODO Auto-generated method stub
+                }
+            });
+
+            mTextToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, map);
+        }
+
+        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+        private void ttsGreater21(String text) {
+            String utteranceId = this.hashCode() + "";
+            mTextToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            initModule();
+
+            FontUtils.setTypeface(getContext(), getContext().getAssets(), mTitle);
+            FontUtils.setTypeface(getContext(), getContext().getAssets(), mDate);
+            FontUtils.setTypeface(getContext(), getContext().getAssets(), mContents);
+            setDiaryFontSize();
+        }
+
+        @Override
+        public void onPause() {
+            super.onPause();
+            destroyModule();
+        }
+
+        private void initModule() {
+            mTextToSpeech = new TextToSpeech(getContext(), new TextToSpeech.OnInitListener() {
+                @Override
+                public void onInit(int status) {
+                    if (status == TextToSpeech.SUCCESS) {
+                        mTextToSpeech.setLanguage(Locale.getDefault());
+                        mTextToSpeech.setPitch(1.3f);
+                        mTextToSpeech.setSpeechRate(1f);
+                    }
+                }
+            });
+        }
+
+        private void destroyModule() {
+            if (mTextToSpeech != null) {
+                mTextToSpeech.stop();
+                mTextToSpeech.shutdown();
+                mTextToSpeech = null;
+            }
+        }
+
+        private void setDiaryFontSize() {
+            float fontSize = CommonUtils.loadFloatPreference(getContext(), "font_size", 0);
+            if (fontSize > 0) {
+                mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
+                mDate.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
+                mContents.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
+            }
+        }
+
+    }
+
+    /**
+     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+     * one of the sections/tabs/pages.
+     */
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        private List<DiaryDto> mDiaryList;
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+            this.mDiaryList = DiaryDao.readDiary(null);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            // getItem is called to instantiate the fragment for the given page.
+            // Return a PlaceholderFragment (defined as a static inner class below).
+            return PlaceholderFragment.newInstance(mDiaryList.get(position).getSequence());
+        }
+
+        @Override
+        public int getCount() {
+            return mDiaryList.size();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return null;
+        }
+    }
+
 }
