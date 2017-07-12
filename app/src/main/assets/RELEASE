@@ -4,6 +4,14 @@
 
 ---------------------------------------------------
 
+# Changes in 1.1.2 (date: 2017/07/12)
+  [기능개선]
+  1. 열람모드에서 이전 or 이후 다이어리로 이동 가능하도록 개선
+  2. 다이어리 작성 or 수정중 뒤로가기 버튼을 누르는 경우 알림메시지 제공되도록 개선
+
+  [Improved Feature]
+  1. Move to previous or next diary in viewing mode
+  2. Provide notification message when the back button is pressed during diary creation or editing
 
 # Changes in 1.1.1 (date: 2017/07/02)
   [기능개선]
