@@ -21,6 +21,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -104,7 +105,11 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
             @Override
             public void onPageSelected(int position) {
                 PlaceholderFragment fragment = mSectionsPagerAdapter.getFragment(mViewPager.getCurrentItem());
-                fragment.onResume();
+//                Log.i("determine", String.valueOf(fragment.getActivity()));
+                if (fragment.getActivity() != null) {
+                    fragment.setDiaryTypeface();
+                    fragment.setDiaryFontSize();
+                }
             }
 
             @Override
@@ -284,8 +289,6 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
         private static final String DIARY_SEQUENCE = "diary_sequence";
         private static final String DIARY_SEARCH_QUERY = "diary_search_query";
         private int mSequence;
-        private Context mContext;
-        private Activity mActivity;
 
         @BindView(R.id.contents)
         TextView mContents;
@@ -390,10 +393,14 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
         @Override
         public void onResume() {
             super.onResume();
-//            FontUtils.setTypeface(getContext(), mActivity.getAssets(), mTitle);
-//            FontUtils.setTypeface(getContext(), mActivity.getAssets(), mDate);
-//            FontUtils.setTypeface(getContext(), mActivity.getAssets(), mContents);
-//            setDiaryFontSize();
+            setDiaryTypeface();
+            setDiaryFontSize();
+        }
+
+        private void setDiaryTypeface() {
+            FontUtils.setTypeface(getContext(), getActivity().getAssets(), mTitle);
+            FontUtils.setTypeface(getContext(), getActivity().getAssets(), mDate);
+            FontUtils.setTypeface(getContext(), getActivity().getAssets(), mContents);
         }
 
         private void setDiaryFontSize() {

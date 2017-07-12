@@ -188,8 +188,7 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        DialogUtils.showAlertDialog(CreateDiaryActivity.this, "todo guide message",
+        DialogUtils.showAlertDialog(CreateDiaryActivity.this, getString(R.string.back_pressed_confirm),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -202,7 +201,7 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
 
                     }
                 }
-         );
+        );
     }
 
     private void enableRecognizer() {

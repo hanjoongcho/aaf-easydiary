@@ -54,7 +54,7 @@ public class DialogUtils {
                                        DialogInterface.OnClickListener positiveListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(title);
-        builder.setIcon(R.drawable.book);
+//        builder.setIcon(R.drawable.book);
         builder.setMessage(message);
         builder.setCancelable(true);
         builder.setPositiveButton("확인", positiveListener);

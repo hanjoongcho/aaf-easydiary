@@ -173,7 +173,7 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
 
     @Override
     public void onBackPressed() {
-        DialogUtils.showAlertDialog(UpdateDiaryActivity.this, "todo guide message",
+        DialogUtils.showAlertDialog(UpdateDiaryActivity.this, getString(R.string.back_pressed_confirm),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
