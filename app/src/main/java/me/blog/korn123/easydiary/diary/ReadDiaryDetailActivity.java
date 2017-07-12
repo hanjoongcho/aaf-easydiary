@@ -1,6 +1,8 @@
 package me.blog.korn123.easydiary.diary;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,6 +11,8 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import android.support.v4.app.Fragment;
@@ -31,6 +35,7 @@ import android.widget.TextView;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -56,8 +61,8 @@ import me.blog.korn123.easydiary.setting.SettingsActivity;
 
 public class ReadDiaryDetailActivity extends EasyDiaryActivity {
 
+    private TextToSpeech mTextToSpeech;
     private long mCurrentTimeMillis;
-
 
     @BindView(R.id.container)
     ViewPager mViewPager;
@@ -83,71 +88,160 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
 
         FontUtils.setToolbarTypeface(toolbar, Typeface.DEFAULT);
 
-
         // init viewpager
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), getIntent().getStringExtra("query"));
+        final int startPageIndex = mSectionsPagerAdapter.sequenceToPageIndex(getIntent().getIntExtra("sequence", -1));
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
+            }
 
+            @Override
+            public void onPageSelected(int position) {
+                PlaceholderFragment fragment = mSectionsPagerAdapter.getFragment(mViewPager.getCurrentItem());
+                fragment.onResume();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                mViewPager.setCurrentItem(startPageIndex, false);
+            }
+        });
+    }
+
+    private void initModule() {
+        mTextToSpeech = new TextToSpeech(ReadDiaryDetailActivity.this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status == TextToSpeech.SUCCESS) {
+                    mTextToSpeech.setLanguage(Locale.getDefault());
+                    mTextToSpeech.setPitch(1.3f);
+                    mTextToSpeech.setSpeechRate(1f);
+                }
+            }
+        });
+    }
+
+    private void destroyModule() {
+        if (mTextToSpeech != null) {
+            mTextToSpeech.stop();
+            mTextToSpeech.shutdown();
+            mTextToSpeech = null;
+        }
+    }
+
+    private void textToSpeech(String text) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ttsGreater21(String.valueOf(text));
+        } else {
+            ttsUnder20(String.valueOf(text));
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    private void ttsUnder20(String text) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "MessageId");
+
+        mTextToSpeech.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+            @Override
+            public void onStart(String utteranceId) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void onError(String utteranceId) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void onDone(String utteranceId) {
+                // TODO Auto-generated method stub
+            }
+        });
+
+        mTextToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, map);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void ttsGreater21(String text) {
+        String utteranceId = this.hashCode() + "";
+        mTextToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        destroyModule();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initModule();
     }
 
     @OnClick({R.id.zoomIn, R.id.zoomOut, R.id.delete, R.id.edit, R.id.speechOutButton, R.id.postCard})
     public void onClick(View view) {
 
-        String testTitle = ((TextView)(mViewPager.getChildAt(0).findViewById(R.id.title))).getText().toString();
-        DialogUtils.makeSnackBar(findViewById(android.R.id.content), testTitle);
-        mViewPager.setCurrentItem(2);
+//        ViewGroup viewPagerRootView = (ViewGroup) mViewPager.getChildAt(0);
+//        mViewPager.setCurrentItem(2);
+//        float fontSize = ((TextView) viewPagerRootView.findViewById(R.id.title)).getTextSize();
+        final PlaceholderFragment fragment = mSectionsPagerAdapter.getFragment(mViewPager.getCurrentItem());
+        float fontSize = fragment.mTitle.getTextSize();
 
-//        float fontSize = mContents.getTextSize();
-
-//        switch(view.getId()) {
-//            case R.id.zoomIn:
-//                CommonUtils.saveFloatPreference(ReadDiaryDetailActivity.this, "font_size", fontSize + 5);
-//                setDiaryFontSize();
-//                break;
-//            case R.id.zoomOut:
-//                CommonUtils.saveFloatPreference(ReadDiaryDetailActivity.this, "font_size", fontSize - 5);
-//                setDiaryFontSize();
-//                break;
-//            case R.id.delete:
-//                DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//                        DiaryDao.deleteDiary(mSequence);
-//                        finish();
-//                    }
-//                };
-//                DialogInterface.OnClickListener negativeListener = new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//                    }
-//                };
-//                DialogUtils.showAlertDialog(ReadDiaryDetailActivity.this, getString(R.string.delete_confirm), positiveListener, negativeListener);
-//                break;
-//            case R.id.edit:
-//                Intent updateDiaryIntent = new Intent(ReadDiaryDetailActivity.this, UpdateDiaryActivity.class);
-//                updateDiaryIntent.putExtra("sequence", mSequence);
-//                updateDiaryIntent.putExtra("title", String.valueOf(mTitle.getText()));
-//                updateDiaryIntent.putExtra("contents", String.valueOf(mContents.getText()));
-//                updateDiaryIntent.putExtra("date", String.valueOf(mDate.getText()));
-//                updateDiaryIntent.putExtra("current_time_millis", mCurrentTimeMillis);
-//                updateDiaryIntent.putExtra("current_time_millis", mCurrentTimeMillis);
-//                updateDiaryIntent.putExtra("weather", getIntent().getIntExtra("weather", 0));
-//                startActivity(updateDiaryIntent);
-//                finish();
-//                break;
-//            case R.id.speechOutButton:
-//                textToSpeech();
-//                break;
-//            case R.id.postCard:
-//                Intent postCardIntent = new Intent(ReadDiaryDetailActivity.this, PostCardActivity.class);
-//                postCardIntent.putExtra("sequence", mSequence);
-//                startActivityForResult(postCardIntent, Constants.REQUEST_CODE_BACKGROUND_COLOR_PICKER);
-//                break;
-//        }
+        switch(view.getId()) {
+            case R.id.zoomIn:
+                CommonUtils.saveFloatPreference(ReadDiaryDetailActivity.this, "font_size", fontSize + 5);
+                fragment.setDiaryFontSize();
+                break;
+            case R.id.zoomOut:
+                CommonUtils.saveFloatPreference(ReadDiaryDetailActivity.this, "font_size", fontSize - 5);
+                fragment.setDiaryFontSize();
+                break;
+            case R.id.delete:
+                DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        DiaryDao.deleteDiary(fragment.mSequence);
+                        finish();
+                    }
+                };
+                DialogInterface.OnClickListener negativeListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                };
+                DialogUtils.showAlertDialog(ReadDiaryDetailActivity.this, getString(R.string.delete_confirm), positiveListener, negativeListener);
+                break;
+            case R.id.edit:
+                Intent updateDiaryIntent = new Intent(ReadDiaryDetailActivity.this, UpdateDiaryActivity.class);
+                updateDiaryIntent.putExtra("sequence", fragment.mSequence);
+                startActivity(updateDiaryIntent);
+                finish();
+                break;
+            case R.id.speechOutButton:
+                textToSpeech(fragment.mContents.getText().toString());
+                break;
+            case R.id.postCard:
+                Intent postCardIntent = new Intent(ReadDiaryDetailActivity.this, PostCardActivity.class);
+                postCardIntent.putExtra("sequence", fragment.mSequence);
+                startActivityForResult(postCardIntent, Constants.REQUEST_CODE_BACKGROUND_COLOR_PICKER);
+                break;
+        }
     }
 
 
@@ -188,8 +282,10 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
          * fragment.
          */
         private static final String DIARY_SEQUENCE = "diary_sequence";
+        private static final String DIARY_SEARCH_QUERY = "diary_search_query";
         private int mSequence;
-        private TextToSpeech mTextToSpeech;
+        private Context mContext;
+        private Activity mActivity;
 
         @BindView(R.id.contents)
         TextView mContents;
@@ -215,10 +311,11 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public static PlaceholderFragment newInstance(int sequence) {
+        public static PlaceholderFragment newInstance(int sequence, String query) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
             args.putInt(DIARY_SEQUENCE, sequence);
+            args.putString(DIARY_SEARCH_QUERY, query);
             fragment.setArguments(args);
             return fragment;
         }
@@ -245,12 +342,11 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
             mContents.setText(diaryDto.getContents());
             mDate.setText(diaryDto.getDateString());
 
-            // FIXME highlight current query
-//            String query = intent.getStringExtra("query");
-//            if (StringUtils.isNotEmpty(query)) {
-//                EasyDiaryUtils.highlightString(mTitle, query);
-//                EasyDiaryUtils.highlightString(mContents, query);
-//            }
+            String query = getArguments().getString(DIARY_SEARCH_QUERY);
+            if (StringUtils.isNotEmpty(query)) {
+                EasyDiaryUtils.highlightString(mTitle, query);
+                EasyDiaryUtils.highlightString(mContents, query);
+            }
 
             int weather = diaryDto.getWeather();
             EasyDiaryUtils.initWeatherView(mWeather, weather);
@@ -291,82 +387,13 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
             return rootView;
         }
 
-        private void textToSpeech() {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                ttsGreater21(String.valueOf(mContents.getText()));
-            } else {
-                ttsUnder20(String.valueOf(mContents.getText()));
-            }
-        }
-
-        @SuppressWarnings("deprecation")
-        private void ttsUnder20(String text) {
-            HashMap<String, String> map = new HashMap<>();
-            map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "MessageId");
-
-            mTextToSpeech.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-                @Override
-                public void onStart(String utteranceId) {
-                    // TODO Auto-generated method stub
-                }
-
-                @Override
-                public void onError(String utteranceId) {
-                    // TODO Auto-generated method stub
-
-                }
-
-                @Override
-                public void onDone(String utteranceId) {
-                    // TODO Auto-generated method stub
-                }
-            });
-
-            mTextToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, map);
-        }
-
-        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-        private void ttsGreater21(String text) {
-            String utteranceId = this.hashCode() + "";
-            mTextToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
-        }
-
         @Override
         public void onResume() {
             super.onResume();
-            initModule();
-
-            FontUtils.setTypeface(getContext(), getContext().getAssets(), mTitle);
-            FontUtils.setTypeface(getContext(), getContext().getAssets(), mDate);
-            FontUtils.setTypeface(getContext(), getContext().getAssets(), mContents);
-            setDiaryFontSize();
-        }
-
-        @Override
-        public void onPause() {
-            super.onPause();
-            destroyModule();
-        }
-
-        private void initModule() {
-            mTextToSpeech = new TextToSpeech(getContext(), new TextToSpeech.OnInitListener() {
-                @Override
-                public void onInit(int status) {
-                    if (status == TextToSpeech.SUCCESS) {
-                        mTextToSpeech.setLanguage(Locale.getDefault());
-                        mTextToSpeech.setPitch(1.3f);
-                        mTextToSpeech.setSpeechRate(1f);
-                    }
-                }
-            });
-        }
-
-        private void destroyModule() {
-            if (mTextToSpeech != null) {
-                mTextToSpeech.stop();
-                mTextToSpeech.shutdown();
-                mTextToSpeech = null;
-            }
+//            FontUtils.setTypeface(getContext(), mActivity.getAssets(), mTitle);
+//            FontUtils.setTypeface(getContext(), mActivity.getAssets(), mDate);
+//            FontUtils.setTypeface(getContext(), mActivity.getAssets(), mContents);
+//            setDiaryFontSize();
         }
 
         private void setDiaryFontSize() {
@@ -387,17 +414,38 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         private List<DiaryDto> mDiaryList;
+        private List<PlaceholderFragment> mFragmentList = new ArrayList<>();
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+        public SectionsPagerAdapter(FragmentManager fm, String query) {
             super(fm);
-            this.mDiaryList = DiaryDao.readDiary(null);
+            this.mDiaryList = DiaryDao.readDiary(query);
+            for (DiaryDto diaryDto : mDiaryList) {
+                mFragmentList.add(PlaceholderFragment.newInstance(diaryDto.getSequence(), query));
+            }
         }
 
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(mDiaryList.get(position).getSequence());
+            return mFragmentList.get(position);
+        }
+
+        public PlaceholderFragment getFragment(int position) {
+            return mFragmentList.get(position);
+        }
+
+        public int sequenceToPageIndex(int sequence) {
+            int pageIndex = 0;
+            if (sequence > -1) {
+                for (int i = 0; i < mDiaryList.size(); i++) {
+                    if (mDiaryList.get(i).getSequence() == sequence) {
+                        pageIndex = i;
+                        break;
+                    }
+                }
+            }
+            return pageIndex;
         }
 
         @Override

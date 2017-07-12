@@ -186,6 +186,25 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        DialogUtils.showAlertDialog(CreateDiaryActivity.this, "todo guide message",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                },
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                }
+         );
+    }
+
     private void enableRecognizer() {
         mToggleMicOff.setVisibility(View.GONE);
         mToggleMicOn.setVisibility(View.VISIBLE);

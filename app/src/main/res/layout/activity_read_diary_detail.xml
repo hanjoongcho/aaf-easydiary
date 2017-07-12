@@ -26,14 +26,15 @@
 
         <LinearLayout
             android:orientation="vertical"
-            android:padding="@dimen/card_layout_padding"
             android:background="@color/colorAccentWithAlpha"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <LinearLayout
                 android:id="@+id/subToolbar"
-                android:layout_marginBottom="@dimen/card_layout_margin"
+                android:layout_marginTop="@dimen/card_layout_margin"
+                android:layout_marginRight="@dimen/card_layout_margin"
+                android:layout_marginLeft="@dimen/card_layout_margin"
                 android:background="@drawable/bg_card_01"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
