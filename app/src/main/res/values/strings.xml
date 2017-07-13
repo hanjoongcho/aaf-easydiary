@@ -76,6 +76,7 @@
     <!--PostCardActivity-->
     <string name="diary_card_export_info">다이어리카드 저장경로</string>
     <string name="diary_card_share_info">다이어리카드 공유</string>
+    <string name="diary_card_export_error_message">다이어리카드 생성중 오류가 발생되었습니다. 다시 시도해 주세요.</string>
 
     <!--CaldroidCustomAdapter-->
     <string name="diary_count">건</string>

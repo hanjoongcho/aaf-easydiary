@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.Looper;
 import android.util.TypedValue;
 import android.view.View;
@@ -178,27 +179,46 @@ public class PostCardActivity extends EasyDiaryActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Bitmap bitmap = BitmapUtils.diaryViewGroupToBitmap(mPostContainer);
-                EasyDiaryUtils.initWorkingDirectory(Environment.getExternalStorageDirectory().getAbsolutePath() + Path.WORKING_DIRECTORY);
-                final String diaryCardPath = Path.WORKING_DIRECTORY + mSequence + "_" + DateUtils.getCurrentDateAsString(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".jpg";
-                mSavedDiaryCardPath = Environment.getExternalStorageDirectory().getAbsolutePath() + diaryCardPath;
-                BitmapUtils.saveBitmapToFileCache(bitmap, mSavedDiaryCardPath);
-                new android.os.Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        progressBar.setVisibility(View.GONE);
-                        if (showInfoDialog) {
-                            DialogUtils.showAlertDialog(PostCardActivity.this, getString(R.string.diary_card_export_info) , diaryCardPath, new DialogInterface.OnClickListener() {
+                Bitmap bitmap = null;
+                try {
+                    bitmap = BitmapUtils.diaryViewGroupToBitmap(mPostContainer);
+                    EasyDiaryUtils.initWorkingDirectory(Environment.getExternalStorageDirectory().getAbsolutePath() + Path.WORKING_DIRECTORY);
+                    final String diaryCardPath = Path.WORKING_DIRECTORY + mSequence + "_" + DateUtils.getCurrentDateAsString(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".jpg";
+                    mSavedDiaryCardPath = Environment.getExternalStorageDirectory().getAbsolutePath() + diaryCardPath;
+                    BitmapUtils.saveBitmapToFileCache(bitmap, mSavedDiaryCardPath);
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            progressBar.setVisibility(View.GONE);
+                            if (showInfoDialog) {
+                                DialogUtils.showAlertDialog(PostCardActivity.this, getString(R.string.diary_card_export_info) , diaryCardPath, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                    }
+                                });
+                            } else {
+                                shareDiary();
+                            }
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    final String errorMessage = e.getMessage();
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            progressBar.setVisibility(View.GONE);
+                            String errorInfo = String.format("%s\n\n[ERROR: %s]", getString(R.string.diary_card_export_error_message), errorMessage);
+                            DialogUtils.showAlertDialog(PostCardActivity.this, errorInfo, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
 
                                 }
                             });
-                        } else {
-                            shareDiary();
                         }
-                    }
-                });
+                    });
+                }
             }
         }).start();
     }

@@ -76,6 +76,7 @@
     <!--PostCardActivity-->
     <string name="diary_card_export_info">Diary card saved path</string>
     <string name="diary_card_share_info">Share diary card</string>
+    <string name="diary_card_export_error_message">An error occurred while generating the diary card. Please try again.</string>
 
     <!--CaldroidCustomAdapter-->
     <string name="diary_count"></string>
