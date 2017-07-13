@@ -20,8 +20,6 @@ import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.File;
 
 import butterknife.BindView;
@@ -175,13 +173,15 @@ public class PostCardActivity extends EasyDiaryActivity {
     ProgressBar progressBar;
 
     private void exportDiaryCard(final boolean showInfoDialog) {
+        // draw viewGroup on UI Thread
+        final Bitmap bitmap = BitmapUtils.diaryViewGroupToBitmap(mPostContainer);
         progressBar.setVisibility(View.VISIBLE);
+
+        // generate postcard file another thread
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Bitmap bitmap = null;
                 try {
-                    bitmap = BitmapUtils.diaryViewGroupToBitmap(mPostContainer);
                     EasyDiaryUtils.initWorkingDirectory(Environment.getExternalStorageDirectory().getAbsolutePath() + Path.WORKING_DIRECTORY);
                     final String diaryCardPath = Path.WORKING_DIRECTORY + mSequence + "_" + DateUtils.getCurrentDateAsString(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".jpg";
                     mSavedDiaryCardPath = Environment.getExternalStorageDirectory().getAbsolutePath() + diaryCardPath;
