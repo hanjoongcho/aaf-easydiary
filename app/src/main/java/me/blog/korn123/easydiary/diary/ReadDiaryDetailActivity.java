@@ -73,10 +73,20 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     public void onCreate(Bundle savedInstanceState) {
-        // fixme elegance
+        // fixme elegance start    =============================================================================
         // activity destroy 시 저장된 savedInstance 값이 전달되면 갱신된 fragment 접근이 안됨
-//        super.onCreate(savedInstanceState);
+        // super.onCreate(savedInstanceState);
         super.onCreate(null);
+
+        final int startPageIndex;
+        // init viewpager
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), getIntent().getStringExtra("query"));
+        if (savedInstanceState == null) {
+            startPageIndex = mSectionsPagerAdapter.sequenceToPageIndex(getIntent().getIntExtra("sequence", -1));
+        } else {
+            startPageIndex = mSectionsPagerAdapter.sequenceToPageIndex(savedInstanceState.getInt("sequence", -1));
+        }
+        // fixme elegance end      =============================================================================
 
         setContentView(R.layout.activity_read_diary_detail);
         ButterKnife.bind(this);
@@ -86,10 +96,6 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         FontUtils.setToolbarTypeface(toolbar, Typeface.DEFAULT);
-
-        // init viewpager
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), getIntent().getStringExtra("query"));
-        final int startPageIndex = mSectionsPagerAdapter.sequenceToPageIndex(getIntent().getIntExtra("sequence", -1));
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -189,8 +195,13 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
     protected void onPause() {
         super.onPause();
         destroyModule();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
         PlaceholderFragment fragment = mSectionsPagerAdapter.getFragment(mViewPager.getCurrentItem());
-        getIntent().putExtra("sequence", fragment.mSequence);
+        outState.putInt("sequence", fragment.mSequence);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
