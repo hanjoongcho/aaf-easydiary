@@ -14,7 +14,7 @@
     <string name="gallery_intent_not_found_message">The Gallery app is not installed or is disabled.</string>
 
     <!--ReadDiaryActivity-->
-    <string name="read_diary_title">Search Diary</string>
+    <string name="read_diary_title">Search</string>
     <string name="input_mode_a">Speech mode</string>
     <string name="input_mode_c">Keypad mode</string>
     <string name="guide_message_2">Type or speak the subject.</string>
@@ -51,11 +51,11 @@
     <string name="font_setting">Font setting</string>
 
     <!--CalendarActivity-->
-    <string name="calendar_title">View Calendar</string>
+    <string name="calendar_title">Calendar</string>
     <string name="guide_message_4">There is no diary created on that day.</string>
 
     <!--BarChartActivity-->
-    <string name="bar_chart_title">View Chart</string>
+    <string name="bar_chart_title">Chart</string>
     <string name="bar_chart_status">Time Diary Creation Status</string>
     <string name="range_a">0h~3h</string>
     <string name="range_b">4h~7h</string>
@@ -85,7 +85,10 @@
     <string name="diary_count"></string>
 
     <!--read_diary.xml-->
-    <string name="preference">Preferences</string>
+    <string name="menu_calendar">Calendar</string>
+    <string name="menu_chart">Chart</string>
+    <string name="menu_timeline">Timeline</string>
+    <string name="menu_preference">Preferences</string>
 
     <!--Array-->
     <string-array name="weather_item_array">

@@ -5,18 +5,24 @@
         android:icon="@drawable/planner"
         android:id="@+id/planner"
         android:orderInCategory="100"
-        android:title="달력보기"
-        app:showAsAction="ifRoom" />
+        android:title="@string/menu_calendar"
+        app:showAsAction="always" />
+    <item
+        android:icon="@drawable/settings_11"
+        android:id="@+id/timeline"
+        android:orderInCategory="100"
+        android:title="@string/menu_timeline"
+        app:showAsAction="always" />
     <item
         android:icon="@drawable/combo"
         android:id="@+id/chart"
         android:orderInCategory="100"
-        android:title="차트보기"
-        app:showAsAction="ifRoom" />
+        android:title="@string/menu_chart"
+        app:showAsAction="always" />
     <item
-        android:icon="@drawable/settings"
+        android:icon="@drawable/settings_7"
         android:id="@+id/settings"
         android:orderInCategory="100"
-        android:title="@string/preference"
-        app:showAsAction="ifRoom" />
+        android:title="@string/menu_preference"
+        app:showAsAction="always" />
 </menu>

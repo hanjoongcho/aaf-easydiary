@@ -14,7 +14,7 @@
     <string name="gallery_intent_not_found_message">갤러리 앱이 설치되지 않았거나 비활성화 상태입니다.</string>
 
     <!--ReadDiaryActivity-->
-    <string name="read_diary_title">다이어리 검색</string>
+    <string name="read_diary_title">검색</string>
     <string name="input_mode_a">스피치 모드</string>
     <string name="input_mode_c">키패드 모드</string>
     <string name="guide_message_2">검색어를 입력하거나 말하세요.</string>
@@ -51,11 +51,11 @@
     <string name="font_setting">폰트설정</string>
 
     <!--CalendarActivity-->
-    <string name="calendar_title">달력 보기</string>
+    <string name="calendar_title">캘린더</string>
     <string name="guide_message_4">해당일에 작성된 일기가 없습니다.</string>
 
     <!--BarChartActivity-->
-    <string name="bar_chart_title">차트 보기</string>
+    <string name="bar_chart_title">차트</string>
     <string name="bar_chart_status">시간대별 일기작성 현황</string>
     <string name="range_a">0시~3시</string>
     <string name="range_b">4시~7시</string>
@@ -85,7 +85,10 @@
     <string name="diary_count">건</string>
 
     <!--read_diary.xml-->
-    <string name="preference">환경설정</string>
+    <string name="menu_calendar">캘린더</string>
+    <string name="menu_chart">차트</string>
+    <string name="menu_timeline">타임라인</string>
+    <string name="menu_preference">환경설정</string>
 
     <!--Array-->
     <string-array name="weather_item_array">

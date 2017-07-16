@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 
 import me.blog.korn123.commons.utils.CommonUtils;
+import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.diary.DiaryDto;
@@ -68,7 +69,7 @@ public class TimelineArrayAdapter extends ArrayAdapter<DiaryDto> {
             holder.titleContainer.setVisibility(View.GONE);
         } else {
             holder.titleContainer.setVisibility(View.VISIBLE);
-            holder.title.setText(diaryDto.getDateString());
+            holder.title.setText(diaryDto.getDateString() + " " + DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis(), "EEEE"));
         }
 
         if (position % 2 == 0) {
@@ -76,14 +77,17 @@ public class TimelineArrayAdapter extends ArrayAdapter<DiaryDto> {
             holder.textView2.setVisibility(View.INVISIBLE);
             holder.horizontalLine1.setVisibility(View.VISIBLE);
             holder.horizontalLine2.setVisibility(View.INVISIBLE);
-            holder.textView1.setText(diaryDto.getTitle());
+            holder.textView1.setText(DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis(), DateUtils.TIME_HMS_PATTERN_COLONE) + "\n" + diaryDto.getTitle());
+//            holder.textView1.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         } else {
             holder.textView1.setVisibility(View.INVISIBLE);
             holder.textView2.setVisibility(View.VISIBLE);
             holder.horizontalLine1.setVisibility(View.INVISIBLE);
             holder.horizontalLine2.setVisibility(View.VISIBLE);
-            holder.textView2.setText(diaryDto.getTitle());
+            holder.textView2.setText(DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis(), DateUtils.TIME_HMS_PATTERN_COLONE) + "\n" + diaryDto.getTitle());
+//            holder.textView2.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         }
+
 
         return row;
     }

@@ -61,6 +61,7 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
     private Intent mRecognizerIntent;
     private long mCurrentTimeMillis;
     private int mSequence;
+    private int mWeather;
     private int mCurrentCursor = 1;
     private RealmList<PhotoUriDto> mPhotoUris;
     private List<Integer> mRemoveIndexes = new ArrayList<>();
@@ -120,7 +121,6 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
         bindEvent();
         initFontStyle();
         initData();
-        initSpinner();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
@@ -128,13 +128,14 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
         String[]  weatherArr = getResources().getStringArray(R.array.weather_item_array);
         ArrayAdapter arrayAdapter = new DiaryWeatherArrayAdapter(UpdateDiaryActivity.this, R.layout.spinner_item_diary_weather_array_adapter, Arrays.asList(weatherArr));
         mWeatherSpinner.setAdapter(arrayAdapter);
-        mWeatherSpinner.setSelection(getIntent().getIntExtra("weather", 0));
+        mWeatherSpinner.setSelection(mWeather);
     }
 
     public void initData() {
         Intent intent = getIntent();
         mSequence = intent.getIntExtra("sequence", 0);
         DiaryDto diaryDto = DiaryDao.readDiaryBy(mSequence);
+        mWeather = diaryDto.getWeather();
 
         mTitle.setText(diaryDto.getTitle());
         getSupportActionBar().setSubtitle(getString(R.string.write_date) + ": " + diaryDto.getDateString());
@@ -169,6 +170,7 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
                 mPhotoContainer.addView(imageView, mPhotoContainer.getChildCount() - 1);
             }
         }
+        initSpinner();
     }
 
     @Override
@@ -452,6 +454,7 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
         if (fontSize > 0) {
             mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
             mContents.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
+            mWeather = mWeatherSpinner.getSelectedItemPosition();
             initSpinner();
         }
     }

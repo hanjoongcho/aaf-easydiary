@@ -5,6 +5,8 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.Collections;
@@ -12,12 +14,15 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.diary.CreateDiaryActivity;
 import me.blog.korn123.easydiary.diary.DiaryCardArrayAdapter;
 import me.blog.korn123.easydiary.diary.DiaryDao;
 import me.blog.korn123.easydiary.diary.DiaryDto;
+import me.blog.korn123.easydiary.diary.ReadDiaryActivity;
+import me.blog.korn123.easydiary.diary.ReadDiaryDetailActivity;
 import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
 import me.blog.korn123.easydiary.setting.SettingsActivity;
 
@@ -49,6 +54,15 @@ public class TimelineActivity extends EasyDiaryActivity {
         mTimelineArrayAdapter = new TimelineArrayAdapter(this, R.layout.list_item_diary_time_line_array_adapter, mDiaryList);
         mTimelineListView.setAdapter(mTimelineArrayAdapter);
         mTimelineListView.setSelection(mDiaryList.size() - 1);
+
+        mTimelineListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                DiaryDto diaryDto = (DiaryDto)adapterView.getAdapter().getItem(i);
+                Intent detailIntent = new Intent(TimelineActivity.this, ReadDiaryDetailActivity.class);
+                detailIntent.putExtra("sequence", diaryDto.getSequence());
+                startActivity(detailIntent);
+            }
+        });
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -11,8 +11,11 @@ import org.joda.time.format.DateTimeFormatter;
  * Created by CHO HANJOONG on 2017-03-16.
  */
 
-public class DateUtils
-{
+public class DateUtils {
+
+    // EEE: Tue
+    // EEEE: Tuesday
+    // EEEEE: T
     public static final int HOURS_24 = 24;
     public static final int MINUTES_60 = 60;
     public static final int SECONDS_60 = 60;

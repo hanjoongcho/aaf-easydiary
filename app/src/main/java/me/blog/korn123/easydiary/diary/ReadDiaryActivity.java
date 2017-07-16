@@ -258,8 +258,10 @@ public class ReadDiaryActivity extends EasyDiaryActivity {
                 startActivity(settingIntent);
                 break;
             case R.id.chart:
-//                Intent chartIntent = new Intent(ReadDiaryActivity.this, BarChartActivity.class);
-//                startActivity(chartIntent);
+                Intent chartIntent = new Intent(ReadDiaryActivity.this, BarChartActivity.class);
+                startActivity(chartIntent);
+                break;
+            case R.id.timeline:
                 Intent timelineIntent = new Intent(ReadDiaryActivity.this, TimelineActivity.class);
                 startActivity(timelineIntent);
                 break;
