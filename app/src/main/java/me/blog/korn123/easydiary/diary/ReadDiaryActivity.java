@@ -218,6 +218,7 @@ public class ReadDiaryActivity extends EasyDiaryActivity {
                 if ((resultCode == RESULT_OK) && (data != null)) {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     mQuery.setText(result.get(0));
+                    mQuery.setSelection(result.get(0).length());
                 }
                 CommonUtils.saveLongPreference(ReadDiaryActivity.this, Constants.PAUSE_MILLIS, System.currentTimeMillis());
                 break;

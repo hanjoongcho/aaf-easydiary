@@ -10,8 +10,8 @@ android {
         applicationId "me.blog.korn123.easydiary"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 39
-        versionName "1.1.3"
+        versionCode 40
+        versionName "1.2.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
