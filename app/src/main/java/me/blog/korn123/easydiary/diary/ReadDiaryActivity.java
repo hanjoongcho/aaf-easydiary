@@ -48,6 +48,7 @@ import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.chart.BarChartActivity;
 import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
 import me.blog.korn123.easydiary.setting.SettingsActivity;
+import me.blog.korn123.easydiary.timeline.TimelineActivity;
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -257,8 +258,10 @@ public class ReadDiaryActivity extends EasyDiaryActivity {
                 startActivity(settingIntent);
                 break;
             case R.id.chart:
-                Intent chartIntent = new Intent(ReadDiaryActivity.this, BarChartActivity.class);
-                startActivity(chartIntent);
+//                Intent chartIntent = new Intent(ReadDiaryActivity.this, BarChartActivity.class);
+//                startActivity(chartIntent);
+                Intent timelineIntent = new Intent(ReadDiaryActivity.this, TimelineActivity.class);
+                startActivity(timelineIntent);
                 break;
             case R.id.planner:
                 Intent calendarIntent = new Intent(ReadDiaryActivity.this, CalendarActivity.class);

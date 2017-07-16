@@ -13,4 +13,6 @@
     <color name="calendarBackground">#ffffff</color>
 
     <color name="blue">#ff33b5e5</color>
+
+    <color name="bubbleBackground">#bcb9b9</color>
 </resources>

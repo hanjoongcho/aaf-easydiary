@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/titleContainer"
+        android:orientation="horizontal"
+        android:background="@drawable/bg_card_02"
+        android:layout_marginTop="@dimen/card_layout_padding"
+        android:layout_marginBottom="@dimen/card_layout_padding"
+        android:layout_width="match_parent"
+        android:layout_height="30dp">
+        <TextView
+            android:gravity="center"
+            android:textColor="@color/categoryTextColor"
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/text1"
+            android:padding="10dp"
+            android:background="@drawable/bg_card_01"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:layout_width="10dp"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:background="@drawable/bg_card_01"
+                android:id="@+id/horizontalLine1"
+                android:layout_width="match_parent"
+                android:layout_height="3dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:background="@drawable/bg_card_01"
+            android:layout_width="3dp"
+            android:layout_height="match_parent">
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="10dp"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/horizontalLine2"
+                android:background="@drawable/bg_card_01"
+                android:layout_width="match_parent"
+                android:layout_height="3dp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/text2"
+            android:padding="10dp"
+            android:background="@drawable/bg_card_01"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+</LinearLayout>

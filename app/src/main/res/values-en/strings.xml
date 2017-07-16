@@ -78,6 +78,9 @@
     <string name="diary_card_share_info">Share diary card</string>
     <string name="diary_card_export_error_message">An error occurred while generating the diary card. Please try again.</string>
 
+    <!--TimelineActivity-->
+    <string name="timeline_title">Timeline</string>
+
     <!--CaldroidCustomAdapter-->
     <string name="diary_count"></string>
 
