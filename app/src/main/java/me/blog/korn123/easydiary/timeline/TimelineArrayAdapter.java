@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +18,7 @@ import java.util.List;
 
 import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.DateUtils;
+import me.blog.korn123.commons.utils.EasyDiaryUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.diary.DiaryDto;
@@ -51,6 +53,7 @@ public class TimelineArrayAdapter extends ArrayAdapter<DiaryDto> {
             holder.horizontalLine1 = row.findViewById(R.id.horizontalLine1);
             holder.horizontalLine2 = row.findViewById(R.id.horizontalLine2);
             holder.titleContainer = (ViewGroup) row.findViewById(R.id.titleContainer);
+            holder.weather = (ImageView) row.findViewById(R.id.weather);
             row.setTag(holder);
         } else {
             holder = (ViewHolder)row.getTag();
@@ -67,10 +70,12 @@ public class TimelineArrayAdapter extends ArrayAdapter<DiaryDto> {
         DiaryDto diaryDto = list.get(position);
         if (position > 0 && StringUtils.equals(diaryDto.getDateString(), list.get(position - 1).getDateString())) {
             holder.titleContainer.setVisibility(View.GONE);
+            holder.weather.setImageResource(0);
         } else {
             holder.titleContainer.setVisibility(View.VISIBLE);
 //            holder.title.setText(diaryDto.getDateString() + " " + DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis(), "EEEE"));
             holder.title.setText(DateUtils.getFullPatternDate(diaryDto.getCurrentTimeMillis()));
+            EasyDiaryUtils.initWeatherView(holder.weather, diaryDto.getWeather());
         }
 
         if (position % 2 == 0) {
@@ -106,5 +111,6 @@ public class TimelineArrayAdapter extends ArrayAdapter<DiaryDto> {
         View horizontalLine1;
         View horizontalLine2;
         ViewGroup titleContainer;
+        ImageView weather;
     }
 }

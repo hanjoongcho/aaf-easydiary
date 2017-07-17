@@ -112,7 +112,13 @@ public class CaldroidCustomAdapter extends CaldroidGridAdapter {
 
 		List<DiaryDto> mDiaryList = DiaryDao.readDiaryByDateString(dateString);
 		if (mDiaryList.size() > 0 && mDiaryList.get(0).getWeather() > 0) {
-			EasyDiaryUtils.initWeatherView(imageView1, mDiaryList.get(0).getWeather());
+			for (DiaryDto diaryDto : mDiaryList) {
+				if (diaryDto.getWeather() > 0) {
+					EasyDiaryUtils.initWeatherView(imageView1, diaryDto.getWeather());
+					break;
+				}
+			}
+
 		} else {
 			imageView1.setVisibility(View.GONE);
 			imageView1.setImageResource(0);
