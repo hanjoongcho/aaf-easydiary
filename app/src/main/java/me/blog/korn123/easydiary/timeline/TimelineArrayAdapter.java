@@ -21,6 +21,7 @@ import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.commons.utils.EasyDiaryUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
+import me.blog.korn123.easydiary.diary.DiaryDao;
 import me.blog.korn123.easydiary.diary.DiaryDto;
 
 /**
@@ -72,10 +73,28 @@ public class TimelineArrayAdapter extends ArrayAdapter<DiaryDto> {
             holder.titleContainer.setVisibility(View.GONE);
             holder.weather.setImageResource(0);
         } else {
-            holder.titleContainer.setVisibility(View.VISIBLE);
 //            holder.title.setText(diaryDto.getDateString() + " " + DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis(), "EEEE"));
             holder.title.setText(DateUtils.getFullPatternDate(diaryDto.getCurrentTimeMillis()));
-            EasyDiaryUtils.initWeatherView(holder.weather, diaryDto.getWeather());
+            holder.titleContainer.setVisibility(View.VISIBLE);
+            // 현재 날짜의 목록을 조회
+            List<DiaryDto> mDiaryList = DiaryDao.readDiaryByDateString(diaryDto.getDateString());
+            boolean initWeather = false;
+            if (mDiaryList.size() > 0) {
+                for (DiaryDto temp : mDiaryList) {
+                    if (temp.getWeather() > 0) {
+                        initWeather = true;
+                        EasyDiaryUtils.initWeatherView(holder.weather, temp.getWeather());
+                        break;
+                    }
+                }
+                if (!initWeather) {
+                    holder.weather.setVisibility(View.GONE);
+                    holder.weather.setImageResource(0);
+                }
+            } else {
+                holder.weather.setVisibility(View.GONE);
+                holder.weather.setImageResource(0);
+            }
         }
 
         if (position % 2 == 0) {

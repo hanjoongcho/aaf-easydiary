@@ -20,7 +20,6 @@
             android:layout_height="20dp" />
         <TextView
             android:layout_marginLeft="10dp"
-            android:text="asdasdasdsd"
             android:textSize="@dimen/large_text_size"
             android:textColor="@color/categoryTextColor"
             android:id="@+id/title"
