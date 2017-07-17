@@ -97,7 +97,7 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.create_diary_title));
-        getSupportActionBar().setSubtitle(getString(R.string.write_date) + ": " + DateUtils.timeMillisToDateTime(this.mCurrentTimeMillis));
+        getSupportActionBar().setSubtitle(DateUtils.getFullPatternDateWithTime(mCurrentTimeMillis));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
