@@ -84,7 +84,7 @@ public class DiaryCardArrayAdapter extends ArrayAdapter<DiaryDto> {
             EasyDiaryUtils.highlightString(holder.textView1, query);
             EasyDiaryUtils.highlightString(holder.textView2, query);
         }
-        holder.textView3.setText(DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis()));
+        holder.textView3.setText(DateUtils.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
         EasyDiaryUtils.initWeatherView(holder.imageView, diaryDto.getWeather());
 
         return row;

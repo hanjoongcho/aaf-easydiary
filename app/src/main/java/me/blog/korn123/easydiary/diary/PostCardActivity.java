@@ -78,7 +78,7 @@ public class PostCardActivity extends EasyDiaryActivity {
         EasyDiaryUtils.initWeatherView(mWeather, diaryDto.getWeather());
         mTitle.setText(diaryDto.getTitle());
         mContents.setText(diaryDto.getContents());
-        mDate.setText(diaryDto.getDateString());
+        mDate.setText(DateUtils.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
     }
 
     @OnClick({R.id.bgColor, R.id.textColor, R.id.close, R.id.save, R.id.share})

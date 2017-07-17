@@ -69,7 +69,8 @@ public class TimelineArrayAdapter extends ArrayAdapter<DiaryDto> {
             holder.titleContainer.setVisibility(View.GONE);
         } else {
             holder.titleContainer.setVisibility(View.VISIBLE);
-            holder.title.setText(diaryDto.getDateString() + " " + DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis(), "EEEE"));
+//            holder.title.setText(diaryDto.getDateString() + " " + DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis(), "EEEE"));
+            holder.title.setText(DateUtils.getFullPatternDate(diaryDto.getCurrentTimeMillis()));
         }
 
         if (position % 2 == 0) {

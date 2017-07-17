@@ -42,6 +42,7 @@ import butterknife.OnClick;
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.BitmapUtils;
 import me.blog.korn123.commons.utils.CommonUtils;
+import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.commons.utils.DialogUtils;
 import me.blog.korn123.commons.utils.EasyDiaryUtils;
 import me.blog.korn123.commons.utils.FontUtils;
@@ -354,7 +355,7 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
             }
             mTitle.setText(diaryDto.getTitle());
             mContents.setText(diaryDto.getContents());
-            mDate.setText(diaryDto.getDateString());
+            mDate.setText(DateUtils.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
 
             String query = getArguments().getString(DIARY_SEARCH_QUERY);
             if (StringUtils.isNotEmpty(query)) {

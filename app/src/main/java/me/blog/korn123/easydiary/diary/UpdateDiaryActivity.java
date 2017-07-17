@@ -44,6 +44,7 @@ import io.realm.RealmList;
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.BitmapUtils;
 import me.blog.korn123.commons.utils.CommonUtils;
+import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.commons.utils.DialogUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.commons.utils.PermissionUtils;
@@ -138,7 +139,7 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
         mWeather = diaryDto.getWeather();
 
         mTitle.setText(diaryDto.getTitle());
-        getSupportActionBar().setSubtitle(getString(R.string.write_date) + ": " + diaryDto.getDateString());
+        getSupportActionBar().setSubtitle(DateUtils.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
         mContents.setText(diaryDto.getContents());
         mCurrentTimeMillis = diaryDto.getCurrentTimeMillis();
         mContents.requestFocus();
