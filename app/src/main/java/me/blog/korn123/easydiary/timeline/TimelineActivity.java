@@ -65,6 +65,19 @@ public class TimelineActivity extends EasyDiaryActivity {
         });
     }
 
+    public void refreshList() {
+        mDiaryList.clear();
+        mDiaryList.addAll(DiaryDao.readDiary(null));
+        Collections.reverse(mDiaryList);
+        mTimelineArrayAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshList();
+    }
+
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
