@@ -29,7 +29,7 @@
     <string name="sample_diary_4">Constraints are not a barrier to creativity, but creativity is used to overcome constraints. \nAll great works or creative solutions are those that have a lot of time constraints, physical constraints, and resource constraints. Creativity is born in a constrained environment. \n- Representative Kim Bong-Jin</string>
 
     <!--ReadDiaryDetailActivity-->
-    <string name="read_diary_detail_title">Diary View<![CDATA[&]]>Listening</string>
+    <string name="read_diary_detail_title">Read Diary</string>
     <string name="delete_confirm">Are you sure you want to delete?</string>
 
     <!--UpdateDiaryActivity-->

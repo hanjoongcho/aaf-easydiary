@@ -5,6 +5,13 @@
 ---------------------------------------------------
 
 
+# Changes in 1.2.2 (date: 2017/07/18)
+  [버그수정]
+  1. 타임라인에서 다이어리 아이템 삭제시 목록 업데이트 되도록 수정
+
+  [Fixed Bug]
+  1. Fixed to update list when deleting diary items in timeline
+
 # Changes in 1.2.1 (date: 2017/07/18)
   [기능추가]
   1. 다이어리 타임라인
