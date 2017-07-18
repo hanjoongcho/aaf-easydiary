@@ -44,6 +44,7 @@ import io.realm.RealmList;
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.BitmapUtils;
 import me.blog.korn123.commons.utils.CommonUtils;
+import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.commons.utils.DialogUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.commons.utils.PermissionUtils;
@@ -61,6 +62,7 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
     private Intent mRecognizerIntent;
     private long mCurrentTimeMillis;
     private int mSequence;
+    private int mWeather;
     private int mCurrentCursor = 1;
     private RealmList<PhotoUriDto> mPhotoUris;
     private List<Integer> mRemoveIndexes = new ArrayList<>();
@@ -120,7 +122,6 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
         bindEvent();
         initFontStyle();
         initData();
-        initSpinner();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
@@ -128,21 +129,22 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
         String[]  weatherArr = getResources().getStringArray(R.array.weather_item_array);
         ArrayAdapter arrayAdapter = new DiaryWeatherArrayAdapter(UpdateDiaryActivity.this, R.layout.spinner_item_diary_weather_array_adapter, Arrays.asList(weatherArr));
         mWeatherSpinner.setAdapter(arrayAdapter);
-        mWeatherSpinner.setSelection(getIntent().getIntExtra("weather", 0));
+        mWeatherSpinner.setSelection(mWeather);
     }
 
     public void initData() {
-        // TODO search from sequence
         Intent intent = getIntent();
-        mTitle.setText(intent.getStringExtra("title"));
-        getSupportActionBar().setSubtitle(getString(R.string.write_date) + ": " + intent.getStringExtra("date"));
-        mContents.setText(intent.getStringExtra("contents"));
         mSequence = intent.getIntExtra("sequence", 0);
-        mCurrentTimeMillis = intent.getLongExtra("current_time_millis", 0);
+        DiaryDto diaryDto = DiaryDao.readDiaryBy(mSequence);
+        mWeather = diaryDto.getWeather();
+
+        mTitle.setText(diaryDto.getTitle());
+        getSupportActionBar().setSubtitle(DateUtils.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
+        mContents.setText(diaryDto.getContents());
+        mCurrentTimeMillis = diaryDto.getCurrentTimeMillis();
         mContents.requestFocus();
 
         // TODO fixme elegance
-        DiaryDto diaryDto = DiaryDao.readDiaryBy(mSequence);
         mPhotoUris = new RealmList<>();
         mPhotoUris.addAll(diaryDto.getPhotoUris());
         if (mPhotoUris != null && mPhotoUris.size() > 0) {
@@ -169,6 +171,25 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
                 mPhotoContainer.addView(imageView, mPhotoContainer.getChildCount() - 1);
             }
         }
+        initSpinner();
+    }
+
+    @Override
+    public void onBackPressed() {
+        DialogUtils.showAlertDialog(UpdateDiaryActivity.this, getString(R.string.back_pressed_confirm),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                },
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                }
+        );
     }
 
     public void initFontStyle() {
@@ -434,6 +455,7 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
         if (fontSize > 0) {
             mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
             mContents.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
+            mWeather = mWeatherSpinner.getSelectedItemPosition();
             initSpinner();
         }
     }

@@ -14,7 +14,7 @@
     <string name="gallery_intent_not_found_message">갤러리 앱이 설치되지 않았거나 비활성화 상태입니다.</string>
 
     <!--ReadDiaryActivity-->
-    <string name="read_diary_title">다이어리 검색</string>
+    <string name="read_diary_title">검색</string>
     <string name="input_mode_a">스피치 모드</string>
     <string name="input_mode_c">키패드 모드</string>
     <string name="guide_message_2">검색어를 입력하거나 말하세요.</string>
@@ -29,11 +29,12 @@
     <string name="sample_diary_4">제약이 창의성을 가두는 게 아니라, 제약을 극복하기 위해 창의성이 발휘된다.\n모든 위대한 작품이나 창의적인 솔루션은 시간적인 제약, 물리적인 제약, 자원의 제약들이 엄청 많았던 것들이었다.\n뭐가 됐든 어렵고 제약된 환경에서 창의성이 태어나곤 한다.\n- 김봉진 대표, ‘배민다움’에서</string>
 
     <!--ReadDiaryDetailActivity-->
-    <string name="read_diary_detail_title">다이어리 보기<![CDATA[&]]>듣기</string>
+    <string name="read_diary_detail_title">다이어리 읽기</string>
     <string name="delete_confirm">삭제 하시겠습니까?</string>
 
     <!--UpdateDiaryActivity-->
     <string name="update_diary_title">다이어리 수정</string>
+    <string name="back_pressed_confirm">\'확인\' 버튼을 누르시면 현재 다이어리를 저장하지 않고 다이어리 검색화면으로 이동합니다.</string>
 
     <!--SettingsActivity-->
     <string name="setting_title">환경설정</string>
@@ -50,11 +51,11 @@
     <string name="font_setting">폰트설정</string>
 
     <!--CalendarActivity-->
-    <string name="calendar_title">달력 보기</string>
+    <string name="calendar_title">캘린더</string>
     <string name="guide_message_4">해당일에 작성된 일기가 없습니다.</string>
 
     <!--BarChartActivity-->
-    <string name="bar_chart_title">차트 보기</string>
+    <string name="bar_chart_title">차트</string>
     <string name="bar_chart_status">시간대별 일기작성 현황</string>
     <string name="range_a">0시~3시</string>
     <string name="range_b">4시~7시</string>
@@ -75,12 +76,19 @@
     <!--PostCardActivity-->
     <string name="diary_card_export_info">다이어리카드 저장경로</string>
     <string name="diary_card_share_info">다이어리카드 공유</string>
+    <string name="diary_card_export_error_message">다이어리카드 생성중 오류가 발생되었습니다. 다시 시도해 주세요.</string>
+
+    <!--TimelineActivity-->
+    <string name="timeline_title">타임라인</string>
 
     <!--CaldroidCustomAdapter-->
     <string name="diary_count">건</string>
 
     <!--read_diary.xml-->
-    <string name="preference">환경설정</string>
+    <string name="menu_calendar">캘린더</string>
+    <string name="menu_chart">차트</string>
+    <string name="menu_timeline">타임라인</string>
+    <string name="menu_preference">환경설정</string>
 
     <!--Array-->
     <string-array name="weather_item_array">

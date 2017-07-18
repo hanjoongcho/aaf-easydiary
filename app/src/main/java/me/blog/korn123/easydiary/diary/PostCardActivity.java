@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.Looper;
 import android.util.TypedValue;
 import android.view.View;
@@ -18,8 +19,6 @@ import android.widget.TextView;
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
-
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 
@@ -79,7 +78,7 @@ public class PostCardActivity extends EasyDiaryActivity {
         EasyDiaryUtils.initWeatherView(mWeather, diaryDto.getWeather());
         mTitle.setText(diaryDto.getTitle());
         mContents.setText(diaryDto.getContents());
-        mDate.setText(diaryDto.getDateString());
+        mDate.setText(DateUtils.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
     }
 
     @OnClick({R.id.bgColor, R.id.textColor, R.id.close, R.id.save, R.id.share})
@@ -174,31 +173,52 @@ public class PostCardActivity extends EasyDiaryActivity {
     ProgressBar progressBar;
 
     private void exportDiaryCard(final boolean showInfoDialog) {
+        // draw viewGroup on UI Thread
+        final Bitmap bitmap = BitmapUtils.diaryViewGroupToBitmap(mPostContainer);
         progressBar.setVisibility(View.VISIBLE);
+
+        // generate postcard file another thread
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Bitmap bitmap = BitmapUtils.diaryViewGroupToBitmap(mPostContainer);
-                EasyDiaryUtils.initWorkingDirectory(Environment.getExternalStorageDirectory().getAbsolutePath() + Path.WORKING_DIRECTORY);
-                final String diaryCardPath = Path.WORKING_DIRECTORY + mSequence + "_" + DateUtils.getCurrentDateAsString(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".jpg";
-                mSavedDiaryCardPath = Environment.getExternalStorageDirectory().getAbsolutePath() + diaryCardPath;
-                BitmapUtils.saveBitmapToFileCache(bitmap, mSavedDiaryCardPath);
-                new android.os.Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        progressBar.setVisibility(View.GONE);
-                        if (showInfoDialog) {
-                            DialogUtils.showAlertDialog(PostCardActivity.this, getString(R.string.diary_card_export_info) , diaryCardPath, new DialogInterface.OnClickListener() {
+                try {
+                    EasyDiaryUtils.initWorkingDirectory(Environment.getExternalStorageDirectory().getAbsolutePath() + Path.WORKING_DIRECTORY);
+                    final String diaryCardPath = Path.WORKING_DIRECTORY + mSequence + "_" + DateUtils.getCurrentDateAsString(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".jpg";
+                    mSavedDiaryCardPath = Environment.getExternalStorageDirectory().getAbsolutePath() + diaryCardPath;
+                    BitmapUtils.saveBitmapToFileCache(bitmap, mSavedDiaryCardPath);
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            progressBar.setVisibility(View.GONE);
+                            if (showInfoDialog) {
+                                DialogUtils.showAlertDialog(PostCardActivity.this, getString(R.string.diary_card_export_info) , diaryCardPath, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                    }
+                                });
+                            } else {
+                                shareDiary();
+                            }
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    final String errorMessage = e.getMessage();
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            progressBar.setVisibility(View.GONE);
+                            String errorInfo = String.format("%s\n\n[ERROR: %s]", getString(R.string.diary_card_export_error_message), errorMessage);
+                            DialogUtils.showAlertDialog(PostCardActivity.this, errorInfo, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
 
                                 }
                             });
-                        } else {
-                            shareDiary();
                         }
-                    }
-                });
+                    });
+                }
             }
         }).start();
     }

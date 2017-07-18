@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:gravity="center"
+        android:id="@+id/titleContainer"
+        android:orientation="horizontal"
+        android:background="@drawable/bg_card_02"
+        android:layout_marginTop="@dimen/card_layout_padding"
+        android:layout_marginBottom="@dimen/card_layout_padding"
+        android:layout_width="match_parent"
+        android:layout_height="30dp">
+        <ImageView
+            android:layout_marginLeft="5dp"
+            android:id="@+id/weather"
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:textSize="@dimen/large_text_size"
+            android:textColor="@color/categoryTextColor"
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:textSize="@dimen/large_text_size"
+            android:textColor="@color/defaultTextColor"
+            android:id="@+id/text1"
+            android:padding="10dp"
+            android:background="@drawable/bg_card_timeline_01"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+
+        <FrameLayout
+            android:layout_width="30dp"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_marginTop="2.5dp"
+                android:layout_gravity="left"
+                android:background="@drawable/bg_card_timeline_03"
+                android:id="@+id/horizontalLine1"
+                android:layout_width="15dp"
+                android:layout_height="3dp" />
+            <TextView
+                android:layout_marginTop="2.5dp"
+                android:layout_gravity="right"
+                android:id="@+id/horizontalLine2"
+                android:background="@drawable/bg_card_timeline_03"
+                android:layout_width="15dp"
+                android:layout_height="3dp" />
+            <LinearLayout
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/bg_card_timeline_03"
+                android:layout_width="3dp"
+                android:layout_height="match_parent">
+            </LinearLayout>
+            <ImageView
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/bg_card_timeline_circle"
+                android:layout_width="8dp"
+                android:layout_height="8dp" />
+        </FrameLayout>
+
+        <TextView
+            android:textSize="@dimen/large_text_size"
+            android:textColor="@color/defaultTextColor"
+            android:id="@+id/text2"
+            android:padding="10dp"
+            android:background="@drawable/bg_card_timeline_01"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</LinearLayout>

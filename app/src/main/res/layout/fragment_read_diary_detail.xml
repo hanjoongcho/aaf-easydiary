@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/card_layout_padding"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:padding="10dp"
+        android:layout_marginBottom="@dimen/card_layout_margin"
+        android:background="@drawable/bg_card_01"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/weather"
+                android:layout_marginRight="10dp"
+                app:srcCompat="@drawable/ic_snow_2"
+                android:layout_width="32dp"
+                android:layout_height="32dp" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:textColor="@color/defaultTextColor"
+                    android:enabled="false"
+                    android:gravity="center_vertical"
+                    android:id="@+id/title"
+                    android:textSize="@dimen/large_text_size"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:textColor="@color/defaultTextColor"
+                    android:enabled="false"
+                    android:gravity="center_vertical|right"
+                    android:id="@+id/date"
+                    android:textSize="@dimen/large_text_size"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ScrollView
+        android:fillViewport="true"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dp">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:padding="10dp"
+                android:enabled="false"
+                android:background="@drawable/bg_card_01"
+                android:textColor="@color/defaultTextColor"
+                android:textSize="@dimen/large_text_size"
+                android:id="@+id/contents"
+                android:gravity="left"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="0dp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <HorizontalScrollView
+        android:layout_marginTop="@dimen/card_layout_margin"
+        android:id="@+id/photoContainerScrollView"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp">
+        <LinearLayout
+            android:id="@+id/photoContainer"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+</LinearLayout>

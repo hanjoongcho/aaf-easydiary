@@ -11,6 +11,6 @@
         android:icon="@drawable/settings"
         android:id="@+id/settings"
         android:orderInCategory="100"
-        android:title="@string/preference"
+        android:title="@string/menu_preference"
         app:showAsAction="ifRoom" />
 </menu>

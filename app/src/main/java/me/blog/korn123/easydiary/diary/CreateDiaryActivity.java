@@ -97,7 +97,7 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.create_diary_title));
-        getSupportActionBar().setSubtitle(getString(R.string.write_date) + ": " + DateUtils.timeMillisToDateTime(this.mCurrentTimeMillis));
+        getSupportActionBar().setSubtitle(DateUtils.getFullPatternDateWithTime(mCurrentTimeMillis));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -184,6 +184,24 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
                 enableRecognizer();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        DialogUtils.showAlertDialog(CreateDiaryActivity.this, getString(R.string.back_pressed_confirm),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                },
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                }
+        );
     }
 
     private void enableRecognizer() {

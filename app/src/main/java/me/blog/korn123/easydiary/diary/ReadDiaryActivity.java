@@ -48,6 +48,7 @@ import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.chart.BarChartActivity;
 import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
 import me.blog.korn123.easydiary.setting.SettingsActivity;
+import me.blog.korn123.easydiary.timeline.TimelineActivity;
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -217,6 +218,7 @@ public class ReadDiaryActivity extends EasyDiaryActivity {
                 if ((resultCode == RESULT_OK) && (data != null)) {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     mQuery.setText(result.get(0));
+                    mQuery.setSelection(result.get(0).length());
                 }
                 CommonUtils.saveLongPreference(ReadDiaryActivity.this, Constants.PAUSE_MILLIS, System.currentTimeMillis());
                 break;
@@ -259,6 +261,10 @@ public class ReadDiaryActivity extends EasyDiaryActivity {
             case R.id.chart:
                 Intent chartIntent = new Intent(ReadDiaryActivity.this, BarChartActivity.class);
                 startActivity(chartIntent);
+                break;
+            case R.id.timeline:
+                Intent timelineIntent = new Intent(ReadDiaryActivity.this, TimelineActivity.class);
+                startActivity(timelineIntent);
                 break;
             case R.id.planner:
                 Intent calendarIntent = new Intent(ReadDiaryActivity.this, CalendarActivity.class);

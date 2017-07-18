@@ -1,8 +1,11 @@
 package me.blog.korn123.commons.utils;
 
 import java.io.PrintStream;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
+
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -11,8 +14,11 @@ import org.joda.time.format.DateTimeFormatter;
  * Created by CHO HANJOONG on 2017-03-16.
  */
 
-public class DateUtils
-{
+public class DateUtils {
+
+    // EEE: Tue
+    // EEEE: Tuesday
+    // EEEEE: T
     public static final int HOURS_24 = 24;
     public static final int MINUTES_60 = 60;
     public static final int SECONDS_60 = 60;
@@ -80,5 +86,21 @@ public class DateUtils
         DateTime dt = new DateTime(timeMillis);
         DateTimeFormatter fmt = DateTimeFormat.forPattern("HH");
         return fmt.print(dt);
+    }
+
+    public static String getFullPatternDate(long timeMillis) {
+//        DateTime dt = new DateTime(timeMillis);
+//        DateTimeFormatter fmt = DateTimeFormat.forPattern(DateTimeFormat.patternForStyle("LL", Locale.getDefault()));
+//        return fmt.print(dt);
+        Date date = new Date(timeMillis);
+        DateFormat dateFormat = SimpleDateFormat.getDateInstance(SimpleDateFormat.FULL, Locale.getDefault());
+        return dateFormat.format(date);
+    }
+
+    public static String getFullPatternDateWithTime(long timeMillis) {
+        Date date = new Date(timeMillis);
+        DateFormat dateFormat = SimpleDateFormat.getDateInstance(SimpleDateFormat.FULL, Locale.getDefault());
+        DateFormat hourFormat = new SimpleDateFormat("HH:mm");
+        return String.format("%s %s", dateFormat.format(date), hourFormat.format(date));
     }
 }

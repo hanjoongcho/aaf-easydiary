@@ -5,6 +5,29 @@
 ---------------------------------------------------
 
 
+# Changes in 1.2.2 (date: 2017/07/18)
+  [버그수정]
+  1. 타임라인에서 다이어리 아이템 삭제시 목록 업데이트 되도록 수정
+
+  [Fixed Bug]
+  1. Fixed to update list when deleting diary items in timeline
+
+# Changes in 1.2.1 (date: 2017/07/18)
+  [기능추가]
+  1. 다이어리 타임라인
+
+  [New Feature]
+  1. Diary Timeline
+
+# Changes in 1.1.3 (date: 2017/07/13)
+  [기능개선]
+  1. 열람모드에서 이전 or 이후 다이어리로 이동 가능하도록 개선
+  2. 다이어리 작성 or 수정중 뒤로가기 버튼을 누르는 경우 알림메시지 제공되도록 개선
+
+  [Improved Feature]
+  1. Move to previous or next diary in viewing mode
+  2. Provide notification message when the back button is pressed during diary creation or editing
+
 # Changes in 1.1.1 (date: 2017/07/02)
   [기능개선]
   1. 컨텐츠가 디바이스 화면보다 길어도 일기카드 생성 가능하도록 개선
