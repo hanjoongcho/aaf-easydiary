@@ -68,9 +68,9 @@ public class DiaryDao {
     public static List<DiaryDto> readDiary(String query) {
         RealmResults<DiaryDto> results = null;
         if (StringUtils.isEmpty(query)) {
-            results = getRealmInstance().where(DiaryDto.class).findAllSorted("sequence", Sort.DESCENDING);
+            results = getRealmInstance().where(DiaryDto.class).findAllSorted("currentTimeMillis", Sort.DESCENDING);
         } else {
-            results = getRealmInstance().where(DiaryDto.class).beginGroup().contains("contents", query).or().contains("title", query).endGroup().findAllSorted("sequence", Sort.DESCENDING);
+            results = getRealmInstance().where(DiaryDto.class).beginGroup().contains("contents", query).or().contains("title", query).endGroup().findAllSorted("currentTimeMillis", Sort.DESCENDING);
         }
         List<DiaryDto> list = new ArrayList<>();
         list.addAll(results.subList(0, results.size()));
