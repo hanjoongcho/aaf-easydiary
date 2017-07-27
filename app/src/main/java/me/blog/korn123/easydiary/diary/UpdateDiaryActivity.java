@@ -1,5 +1,7 @@
 package me.blog.korn123.easydiary.diary;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,20 +22,25 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TimePicker;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -104,7 +111,6 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_diary);
         ButterKnife.bind(this);
-        mCurrentTimeMillis = System.currentTimeMillis();
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.update_diary_title));
@@ -122,6 +128,8 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
         bindEvent();
         initFontStyle();
         initData();
+        initDateTime();
+        setDateTime();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
@@ -263,7 +271,7 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
         mToggleSwitch.setChecked(false);
     }
 
-    @OnClick({R.id.speechButton, R.id.zoomIn, R.id.zoomOut, R.id.saveContents, R.id.photoView})
+    @OnClick({R.id.speechButton, R.id.zoomIn, R.id.zoomOut, R.id.saveContents, R.id.photoView, R.id.datePicker, R.id.timePicker})
     public void onClick(View view) {
         float fontSize = mContents.getTextSize();
 
@@ -306,6 +314,72 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
                     PermissionUtils.confirmPermission(this, this, Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE);
                 }
                 break;
+            case R.id.datePicker:
+                if (mDatePickerDialog == null) {
+                    mDatePickerDialog = new DatePickerDialog(this, mStartDateListener, mYear, mMonth - 1, mDayOfMonth);
+                }
+                mDatePickerDialog.show();
+                break;
+            case R.id.timePicker:
+                if (mTimePickerDialog == null) {
+                    mTimePickerDialog = new TimePickerDialog(this, mTimeSetListener, mHourOfDay, mMinute, false);
+                }
+                mTimePickerDialog.show();
+                break;
+        }
+    }
+
+    private int mYear;
+    private int mMonth;
+    private int mDayOfMonth;
+    private int mHourOfDay;
+    private int mMinute;
+
+    private DatePickerDialog mDatePickerDialog;
+    private TimePickerDialog mTimePickerDialog;
+    DatePickerDialog.OnDateSetListener mStartDateListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+            mYear = year;
+            mMonth = month + 1;
+            mDayOfMonth = dayOfMonth;
+            setDateTime();
+        }
+    };
+
+    TimePickerDialog.OnTimeSetListener mTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            mHourOfDay = hourOfDay;
+            mMinute = minute;
+            setDateTime();
+        }
+    };
+
+    private void initDateTime() {
+        mYear = Integer.valueOf(DateUtils.timeMillisToDateTime(mCurrentTimeMillis, DateUtils.YEAR_PATTERN));
+        mMonth = Integer.valueOf(DateUtils.timeMillisToDateTime(mCurrentTimeMillis, DateUtils.MONTH_PATTERN));
+        mDayOfMonth = Integer.valueOf(DateUtils.timeMillisToDateTime(mCurrentTimeMillis, DateUtils.DAY_PATTERN));
+        mHourOfDay = Integer.valueOf(DateUtils.timeMillisToDateTime(mCurrentTimeMillis,"HH"));
+        mMinute = Integer.valueOf(DateUtils.timeMillisToDateTime(mCurrentTimeMillis,"mm"));
+    }
+
+    private void setDateTime() {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmm");
+            String dateTimeString = String.format(
+                    "%d%s%s%s%s",
+                    mYear,
+                    StringUtils.leftPad(String.valueOf(mMonth), 2, "0"),
+                    StringUtils.leftPad(String.valueOf(mDayOfMonth), 2, "0"),
+                    StringUtils.leftPad(String.valueOf(mHourOfDay), 2, "0"),
+                    StringUtils.leftPad(String.valueOf(mMinute), 2, "0")
+            );
+            Date parsedDate = format.parse(dateTimeString);
+            mCurrentTimeMillis = parsedDate.getTime();
+            getSupportActionBar().setSubtitle(DateUtils.getFullPatternDateWithTime(mCurrentTimeMillis));
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
 
