@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
@@ -38,6 +39,7 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.realm.Realm;
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.DateUtils;
@@ -82,6 +84,11 @@ public class ReadDiaryActivity extends EasyDiaryActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read_diary);
         ButterKnife.bind(this);
+
+        // android marshmallow minor version bug workaround
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
+            Realm.init(this);
+        }
 
         // application finish 확인
         if(getIntent().getBooleanExtra("app_finish", false)) {

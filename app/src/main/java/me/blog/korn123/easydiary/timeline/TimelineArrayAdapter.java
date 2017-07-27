@@ -102,14 +102,14 @@ public class TimelineArrayAdapter extends ArrayAdapter<DiaryDto> {
             holder.textView2.setVisibility(View.INVISIBLE);
             holder.horizontalLine1.setVisibility(View.VISIBLE);
             holder.horizontalLine2.setVisibility(View.INVISIBLE);
-            holder.textView1.setText(DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis(), DateUtils.TIME_HMS_PATTERN_COLONE) + "\n" + diaryDto.getTitle());
+            holder.textView1.setText(DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis(), DateUtils.TIME_PATTERN) + "\n" + diaryDto.getTitle());
 //            holder.textView1.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         } else {
             holder.textView1.setVisibility(View.INVISIBLE);
             holder.textView2.setVisibility(View.VISIBLE);
             holder.horizontalLine1.setVisibility(View.INVISIBLE);
             holder.horizontalLine2.setVisibility(View.VISIBLE);
-            holder.textView2.setText(DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis(), DateUtils.TIME_HMS_PATTERN_COLONE) + "\n" + diaryDto.getTitle());
+            holder.textView2.setText(DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis(), DateUtils.TIME_PATTERN) + "\n" + diaryDto.getTitle());
 //            holder.textView2.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         }
 

@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.CommonUtils;
-import me.blog.korn123.commons.utils.DialogUtils;
 import me.blog.korn123.easydiary.diary.LockDiaryActivity;
 
 /**
