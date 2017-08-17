@@ -7,7 +7,7 @@ This is a diary application optimized to user experience. <br />
 
 <img src="screenshots/app_easydiary01.png" width="288" height="512">
 
-# precautions
+# Precautions
 The current version of code has a part that has failed to follow the Android coding convention, and there is also a redundant code.
 I will continue refactoring whenever i have spare time.
 
@@ -69,6 +69,7 @@ Step4. Build 'aaf-easydiary' project with android studio.
 
 # License
 [LICENSE][LICENSE.md]
+
 [licensesvg]: https://img.shields.io/badge/License-Apache--2.0-brightgreen.svg
 [README_ko.md]: https://github.com/hanjoongcho/aaf-easydiary/blob/master/README_ko.md
 [LICENSE.md]: https://github.com/hanjoongcho/aaf-easydiary/blob/master/LICENSE.md

@@ -68,6 +68,7 @@ Step4. Build 'aaf-easydiary' project with android studio.
 
 # 라이선스
 [LICENSE][LICENSE.md]
+
 [licensesvg]: https://img.shields.io/badge/License-Apache--2.0-brightgreen.svg
 [README.md]: https://github.com/hanjoongcho/aaf-easydiary/blob/master/README.md
 [LICENSE.md]: https://github.com/hanjoongcho/aaf-easydiary/blob/master/LICENSE.md
