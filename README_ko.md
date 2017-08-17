@@ -62,10 +62,10 @@
 
 # 빌드방법
 ```
-Step1. Fork or download 'aaf-easydiary' project.
-Step2. Import 'aaf-easydiary' project into android studio.
-Step3. Register your package name and SHA-1 signature certificate fingerprint for Google Drive use.(https://console.developers.google.com/)
-Step4. Build 'aaf-easydiary' project with android studio.
+Step1. 'aaf-easydiary' 프로젝트를 포크하거나 다운로드 합니다.
+Step2. 안드로이드 스튜디오에서 'aaf-easydiary' 프로젝트를 임포트 합니다.
+Step3. 구글드라이브 사용을 위해 'aaf-easydiary'의 패키지이름과 SHA-1 서명인증서 지문을 등록합니다.(https://console.developers.google.com/)
+Step4. 안드로이드 스튜디오에서 'aaf-easydiary' 프로젝트를 빌드합니다.
 ```
 
 # 라이선스
