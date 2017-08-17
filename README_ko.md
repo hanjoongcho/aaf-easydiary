@@ -1,6 +1,8 @@
 # :blue_book: Easy Diary
+## [README of English][README.md] <br />
+
 [![License][licensesvg]][LICENSE.md] <br />
-[README of English][README.md] <br />
+
 이지다이어리는 사용자 경험을 기반으로 개발한 다이어리 어플리케이션입니다. <br />
 
 <a href='https://play.google.com/store/apps/details?id=me.blog.korn123.easydiary'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="258" height="98"/></a><br />

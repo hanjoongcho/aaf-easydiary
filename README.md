@@ -1,6 +1,7 @@
 # :blue_book: Easy Diary
+## [README of Korean(한국어)][README_ko.md] <br />
+
 [![License][licensesvg]][LICENSE.md] <br />
-[README of Korean][README_ko.md] <br />
 This is a diary application optimized to user experience. <br />
 
 <a href='https://play.google.com/store/apps/details?id=me.blog.korn123.easydiary'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="258" height="98"/></a><br />
