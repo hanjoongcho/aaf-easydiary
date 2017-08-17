@@ -92,12 +92,6 @@ http://www.thecircle.or.kr
 이를 원치 않는 사용자는 언제든지 재단에 요청하실 수 있습니다.
 ```
 
-### showcase contents
-http://www.happyceo.co.kr/Contents/Calendar.aspx?sYear=2017&sMonth=6
-```
-HUNET
-```
-
 ### opensans fonts
 https://www.fontsquirrel.com/fonts/open-sans
 ```
@@ -108,6 +102,12 @@ This license can also be found at this permalink: https://www.fontsquirrel.com/l
 Apache License
                   Version 2.0, January 2004
                 http://www.apache.org/licenses/
+```
+
+### showcase contents
+http://www.happyceo.co.kr/Contents/Calendar.aspx?sYear=2017&sMonth=6
+```
+HUNET
 ```
 
 ### colorpicker
