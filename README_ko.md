@@ -7,7 +7,8 @@
 
 <a href='https://play.google.com/store/apps/details?id=me.blog.korn123.easydiary'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="258" height="98"/></a><br />
 
-<img src="screenshots/app_easydiary01.png" width="288" height="512">
+<img src="screenshots/app_easydiary01.png" width="288" height="512">&nbsp;
+<img src="screenshots/showcase.gif" width="288" height="512">
 
 # 주의사항
 현재 버전의 코드는 Android 코딩컨벤션을 따르지 못한 부분이 존재하며, 중복 코드도 존재합니다.
