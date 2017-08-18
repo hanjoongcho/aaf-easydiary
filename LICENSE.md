@@ -301,3 +301,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ```
+
+### ShowcaseView
+https://github.com/amlcurran/ShowcaseView
+```
+Copyright Alex Curran (@amlcurran) © 2012-2014. All rights reserved.
+
+This library is distributed under an Apache 2.0 License.
+```

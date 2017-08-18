@@ -12,6 +12,26 @@
     <string name="special_character_a"><![CDATA[+]]></string>
     <string name="delete_photo_confirm_message">해당 사진을 삭제할까요?</string>
     <string name="gallery_intent_not_found_message">갤러리 앱이 설치되지 않았거나 비활성화 상태입니다.</string>
+    <string name="create_diary_showcase_button_1">다음</string>
+    <string name="create_diary_showcase_button_2">닫기</string>
+    <string name="create_diary_showcase_title_1">날씨</string>
+    <string name="create_diary_showcase_title_2">제목</string>
+    <string name="create_diary_showcase_title_3">내용</string>
+    <string name="create_diary_showcase_title_4">사진첨부</string>
+    <string name="create_diary_showcase_title_5">글씨확대</string>
+    <string name="create_diary_showcase_title_6">글씨축소</string>
+    <string name="create_diary_showcase_title_7">날짜선택</string>
+    <string name="create_diary_showcase_title_8">시간선택</string>
+    <string name="create_diary_showcase_title_9">저장</string>
+    <string name="create_diary_showcase_message_1">다이어리 작성 시간의 날씨를 선택합니다. 날씨 선택은 필수가 아닙니다.</string>
+    <string name="create_diary_showcase_message_2">다이어리의 제목을 입력합니다. 제목 입력은 필수가 아닙니다.</string>
+    <string name="create_diary_showcase_message_3">일기, 메모, 요약노트등의 내용을 입력합니다.</string>
+    <string name="create_diary_showcase_message_4">다이어리에 사진을 첨부합니다.</string>
+    <string name="create_diary_showcase_message_5">다이어리에서 사용하는 글씨를 확대합니다.</string>
+    <string name="create_diary_showcase_message_6">다이어리에서 사용하는 글씨를 축소합니다.</string>
+    <string name="create_diary_showcase_message_7">다이어리 작성 날짜를 선택합니다. 지난일자의 다이어리 작성을 원할경우 날짜를 변경할 수 있습니다.</string>
+    <string name="create_diary_showcase_message_8">다이어리 작성 시간을 선택합니다. 지난시간의 다이어리 작성을 원할경우 시간을 변경할 수 있습니다.</string>
+    <string name="create_diary_showcase_message_9">작성이 완료된 다이어리를 저장합니다.</string>
 
     <!--ReadDiaryActivity-->
     <string name="read_diary_title">검색</string>
@@ -27,6 +47,24 @@
     <string name="sample_diary_2">당신이 말할 때는 아는 것만 반복한다.\n하지만 들으면 새로운 것을 배우게 된다.\n- 달라이 라마</string>
     <string name="sample_diary_3">여러분이 지도자로서 가장 들을 필요가 있는 것이 바로 나쁜 소식이다.\n좋은 소식은 내일도 좋은 것이지만 나쁜 소식은 내일이면 더 나빠질 것이다.\n바로 이것이 비록 사실이 가슴 아프더라도 언제나 까다로운 질문을 하고 사실을 말하는 것이 안전한 이유다.\n- 에릭 슈미트 구글 회장, ‘구글은 어떻게 일하는가?’에서</string>
     <string name="sample_diary_4">제약이 창의성을 가두는 게 아니라, 제약을 극복하기 위해 창의성이 발휘된다.\n모든 위대한 작품이나 창의적인 솔루션은 시간적인 제약, 물리적인 제약, 자원의 제약들이 엄청 많았던 것들이었다.\n뭐가 됐든 어렵고 제약된 환경에서 창의성이 태어나곤 한다.\n- 김봉진 대표, ‘배민다움’에서</string>
+    <string name="read_diary_showcase_button_1">다음</string>
+    <string name="read_diary_showcase_button_2">닫기</string>
+    <string name="read_diary_showcase_title_1">다이어리 쓰기</string>
+    <string name="read_diary_showcase_title_2">검색</string>
+    <string name="read_diary_showcase_title_3">음성인식</string>
+    <string name="read_diary_showcase_title_4">캘린더</string>
+    <string name="read_diary_showcase_title_5">타임라인</string>
+    <string name="read_diary_showcase_title_6">차트</string>
+    <string name="read_diary_showcase_title_7">고급설정</string>
+    <string name="read_diary_showcase_title_8">다이어리 보기</string>
+    <string name="read_diary_showcase_message_1">일기, 메모, 요약노트등 여러가지 형태의 다이어리를 시간의 흐름에 따라 다양하게 작성할 수 있습니다.</string>
+    <string name="read_diary_showcase_message_2">키워드를 이용하여 다이어리를 검색할 수 있습니다. 키워드가 입력되면 키워드가 일치하는 다이어리가 검색되고 해당 키워드는 하이라이트 됩니다.</string>
+    <string name="read_diary_showcase_message_3">음성인식 기능을 이용하여 키패드 없이 검색 키워드를 입력할 수 있습니다.</string>
+    <string name="read_diary_showcase_message_4">작성된 일기는 캘린더를 이용하여 날짜별로 모아서 볼 수 있습니다.</string>
+    <string name="read_diary_showcase_message_5">작성된 일기는 타임라인으로 제공됩니다.</string>
+    <string name="read_diary_showcase_message_6">전체기간 동안의 일기작성 현황을 차트로 볼 수 있습니다.</string>
+    <string name="read_diary_showcase_message_7">고급설정을 이용하여 폰트변경, 잠금번호설정, 다이어리 백업 및 복구 작업을 할 수 있습니다.</string>
+    <string name="read_diary_showcase_message_8">목록내의 다이어리카드를 클릭하면 해당 다이어리를 볼 수 있습니다.</string>
 
     <!--ReadDiaryDetailActivity-->
     <string name="read_diary_detail_title">다이어리 읽기</string>

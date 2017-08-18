@@ -12,6 +12,26 @@
     <string name="special_character_a"><![CDATA[+]]></string>
     <string name="delete_photo_confirm_message">Are you sure you want to delete this photo?</string>
     <string name="gallery_intent_not_found_message">The Gallery app is not installed or is disabled.</string>
+    <string name="create_diary_showcase_button_1">Next</string>
+    <string name="create_diary_showcase_button_2">Close</string>
+    <string name="create_diary_showcase_title_1">Weather</string>
+    <string name="create_diary_showcase_title_2">Title</string>
+    <string name="create_diary_showcase_title_3">Contents</string>
+    <string name="create_diary_showcase_title_4">Attach photo</string>
+    <string name="create_diary_showcase_title_5">Scale up font</string>
+    <string name="create_diary_showcase_title_6">Scale down font</string>
+    <string name="create_diary_showcase_title_7">Pick date</string>
+    <string name="create_diary_showcase_title_8">Pick time</string>
+    <string name="create_diary_showcase_title_9">Save</string>
+    <string name="create_diary_showcase_message_1">Select the weather for the diary creation time. Weather selection is not mandatory.</string>
+    <string name="create_diary_showcase_message_2">Type the title of the diary. Entering a subject is not mandatory.</string>
+    <string name="create_diary_showcase_message_3">Enter diaries, notes, summary notes, and more.</string>
+    <string name="create_diary_showcase_message_4">Attach a photo to the diary.</string>
+    <string name="create_diary_showcase_message_5">Enlarge the text used in the diary.</string>
+    <string name="create_diary_showcase_message_6">Reduce the font used in the diary.</string>
+    <string name="create_diary_showcase_message_7">Select the diary creation date. If you want to create a diary for the past date, you can change the date.</string>
+    <string name="create_diary_showcase_message_8">Select diary creation time. You can change the time if you want to create a diary for the last time.</string>
+    <string name="create_diary_showcase_message_9">Save the completed diary.</string>
 
     <!--ReadDiaryActivity-->
     <string name="read_diary_title">Search</string>
@@ -27,6 +47,24 @@
     <string name="sample_diary_2">When you talk, you are only repeating what you already know.\nBut if you listen, you may learn something new.\n-The Dalai Lama</string>
     <string name="sample_diary_3">It is the bad news that you need to hear most as a leader. \nThe good news is good tomorrow, but the bad news will be worse tomorrow. \nThis is because even if the facts are heartbreaking, That\'s why it\'s safe to say. \n- Eric Schmidt, President of Google, \"How does Google work?\"</string>
     <string name="sample_diary_4">Constraints are not a barrier to creativity, but creativity is used to overcome constraints. \nAll great works or creative solutions are those that have a lot of time constraints, physical constraints, and resource constraints. Creativity is born in a constrained environment. \n- Representative Kim Bong-Jin</string>
+    <string name="read_diary_showcase_button_1">Next</string>
+    <string name="read_diary_showcase_button_2">Close</string>
+    <string name="read_diary_showcase_title_1">Write diary</string>
+    <string name="read_diary_showcase_title_2">Search</string>
+    <string name="read_diary_showcase_title_3">Speech recognition</string>
+    <string name="read_diary_showcase_title_4">Calendar</string>
+    <string name="read_diary_showcase_title_5">Timeline</string>
+    <string name="read_diary_showcase_title_6">Chart</string>
+    <string name="read_diary_showcase_title_7">Advanced setting</string>
+    <string name="read_diary_showcase_title_8">View diary</string>
+    <string name="read_diary_showcase_message_1">You can create various diaries such as diary, memo, summary note, etc. according to the flow of time.</string>
+    <string name="read_diary_showcase_message_2">You can search for diaries using keywords. When a keyword is entered, the matching diary is searched and the keyword is highlighted.</string>
+    <string name="read_diary_showcase_message_3">You can use the speech recognition feature to enter search keywords without a keypad.</string>
+    <string name="read_diary_showcase_message_4">The created diary can be collected by date using the calendar.</string>
+    <string name="read_diary_showcase_message_5">The created diary is provided as a timeline.</string>
+    <string name="read_diary_showcase_message_6">You can view charts of diary entries for the entire period.</string>
+    <string name="read_diary_showcase_message_7">You can use advanced settings to change fonts, set lock number, backup and restore diary.</string>
+    <string name="read_diary_showcase_message_8">Click the diary card in the list to view the diary.</string>
 
     <!--ReadDiaryDetailActivity-->
     <string name="read_diary_detail_title">Read Diary</string>

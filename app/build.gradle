@@ -71,4 +71,7 @@ dependencies {
     // color picker
     compile 'com.github.QuadFlask:colorpicker:0.0.13'
 
+    // showcaseview
+    compile 'com.github.amlcurran.showcaseview:library:5.4.3'
+
 }

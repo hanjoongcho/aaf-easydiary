@@ -1,16 +1,13 @@
 package me.blog.korn123.easydiary.diary;
 
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,16 +16,18 @@ import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
-import android.widget.TextView;
+
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -45,8 +44,8 @@ import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.commons.utils.DialogUtils;
 import me.blog.korn123.commons.utils.FontUtils;
-import me.blog.korn123.easydiary.calendar.CalendarActivity;
 import me.blog.korn123.easydiary.R;
+import me.blog.korn123.easydiary.calendar.CalendarActivity;
 import me.blog.korn123.easydiary.chart.BarChartActivity;
 import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
 import me.blog.korn123.easydiary.setting.SettingsActivity;
@@ -79,6 +78,9 @@ public class ReadDiaryActivity extends EasyDiaryActivity {
 
     @BindView(R.id.toggleMicOff)
     ImageView mToggleMicOff;
+
+    @BindView(R.id.insertDiaryButton)
+    FloatingActionButton mInsertDiaryButton;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,6 +119,91 @@ public class ReadDiaryActivity extends EasyDiaryActivity {
 
         bindView();
         bindEvent();
+        initShowcase();
+    }
+
+    private int showcaseIndex = 0;
+    ShowcaseView mShowcaseView;
+
+    private void initShowcase() {
+        int margin = ((Number) (getResources().getDisplayMetrics().density * 12)).intValue();
+
+        final RelativeLayout.LayoutParams centerParams =
+                new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        centerParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        centerParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        centerParams.setMargins(0, 0, 0, margin);
+
+        final RelativeLayout.LayoutParams leftParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        leftParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        leftParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        leftParams.setMargins(margin, margin, margin, margin);
+        View.OnClickListener showcaseViewOnClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switch (showcaseIndex) {
+                    case 0:
+                        mShowcaseView.setButtonPosition(centerParams);
+                        mShowcaseView.setShowcase(new ViewTarget(mQuery), true);
+                        mShowcaseView.setContentTitle(getString(R.string.read_diary_showcase_title_2));
+                        mShowcaseView.setContentText(getString(R.string.read_diary_showcase_message_2));
+                        break;
+                    case 1:
+                        mShowcaseView.setButtonPosition(centerParams);
+                        mShowcaseView.setShowcase(new ViewTarget(mToggleSwitch), true);
+                        mShowcaseView.setContentTitle(getString(R.string.read_diary_showcase_title_3));
+                        mShowcaseView.setContentText(getString(R.string.read_diary_showcase_message_3));
+                        break;
+                    case 2:
+                        mShowcaseView.setButtonPosition(centerParams);
+                        mShowcaseView.setShowcase(new ViewTarget(mDiaryListView.getChildAt(0)), true);
+                        mShowcaseView.setContentTitle(getString(R.string.read_diary_showcase_title_8));
+                        mShowcaseView.setContentText(getString(R.string.read_diary_showcase_message_8));
+                        break;
+                    case 3:
+                        mShowcaseView.setButtonPosition(centerParams);
+                        mShowcaseView.setTarget(new ViewTarget(R.id.planner, ReadDiaryActivity.this));
+                        mShowcaseView.setContentTitle(getString(R.string.read_diary_showcase_title_4));
+                        mShowcaseView.setContentText(getString(R.string.read_diary_showcase_message_4));
+                        break;
+                    case 4:
+                        mShowcaseView.setButtonPosition(centerParams);
+                        mShowcaseView.setTarget(new ViewTarget(R.id.timeline, ReadDiaryActivity.this));
+                        mShowcaseView.setContentTitle(getString(R.string.read_diary_showcase_title_5));
+                        mShowcaseView.setContentText(getString(R.string.read_diary_showcase_message_5));
+                        break;
+                    case 5:
+                        mShowcaseView.setButtonPosition(centerParams);
+                        mShowcaseView.setTarget(new ViewTarget(R.id.chart, ReadDiaryActivity.this));
+                        mShowcaseView.setContentTitle(getString(R.string.read_diary_showcase_title_6));
+                        mShowcaseView.setContentText(getString(R.string.read_diary_showcase_message_6));
+                        break;
+                    case 6:
+                        mShowcaseView.setButtonPosition(centerParams);
+                        mShowcaseView.setTarget(new ViewTarget(R.id.settings, ReadDiaryActivity.this));
+                        mShowcaseView.setContentTitle(getString(R.string.read_diary_showcase_title_7));
+                        mShowcaseView.setContentText(getString(R.string.read_diary_showcase_message_7));
+                        mShowcaseView.setButtonText(getString(R.string.read_diary_showcase_button_2));
+                        break;
+                    case 7:
+                        mShowcaseView.hide();
+                        break;
+                }
+                showcaseIndex++;
+            }
+        };
+
+        mShowcaseView = new ShowcaseView.Builder(this)
+                .withMaterialShowcase()
+                .setTarget(new ViewTarget(mInsertDiaryButton))
+                .setContentTitle(getString(R.string.read_diary_showcase_title_1))
+                .setContentText(getString(R.string.read_diary_showcase_message_1))
+                .setStyle(R.style.ShowcaseTheme)
+//                .singleShot(Constants.SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER)
+                .setOnClickListener(showcaseViewOnClickListener)
+                .build();
+        mShowcaseView.setButtonText(getString(R.string.read_diary_showcase_button_1));
+        mShowcaseView.setButtonPosition(centerParams);
     }
 
     private void bindView() {
