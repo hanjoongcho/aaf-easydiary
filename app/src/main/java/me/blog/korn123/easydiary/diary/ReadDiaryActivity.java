@@ -199,7 +199,7 @@ public class ReadDiaryActivity extends EasyDiaryActivity {
                 .setContentTitle(getString(R.string.read_diary_showcase_title_1))
                 .setContentText(getString(R.string.read_diary_showcase_message_1))
                 .setStyle(R.style.ShowcaseTheme)
-//                .singleShot(Constants.SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER)
+                .singleShot(Constants.SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER)
                 .setOnClickListener(showcaseViewOnClickListener)
                 .build();
         mShowcaseView.setButtonText(getString(R.string.read_diary_showcase_button_1));

@@ -1,0 +1,17 @@
+---------------------------------------------------
+
+             Easy Diary
+
+---------------------------------------------------
+
+# Changes in 1.3.0 (date: 2017/08/19)
+  * Added showcase feature for first time users
+
+# Changes in 1.2.3 (date: 2017/07/27)
+  * Improved the ability to specify a time when creating or editing a diary
+
+# Changes in 1.2.2 (date: 2017/07/18)
+  * Fixed to update list when deleting diary items in timeline
+
+# Changes in 1.2.1 (date: 2017/07/18)
+  * Diary Timeline

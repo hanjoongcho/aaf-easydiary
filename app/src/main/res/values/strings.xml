@@ -27,10 +27,10 @@
     <string name="create_diary_showcase_message_2">다이어리의 제목을 입력합니다. 제목 입력은 필수가 아닙니다.</string>
     <string name="create_diary_showcase_message_3">일기, 메모, 요약노트등의 내용을 입력합니다.</string>
     <string name="create_diary_showcase_message_4">다이어리에 사진을 첨부합니다.</string>
-    <string name="create_diary_showcase_message_5">다이어리에서 사용하는 글씨를 확대합니다.</string>
-    <string name="create_diary_showcase_message_6">다이어리에서 사용하는 글씨를 축소합니다.</string>
-    <string name="create_diary_showcase_message_7">다이어리 작성 날짜를 선택합니다. 지난일자의 다이어리 작성을 원할경우 날짜를 변경할 수 있습니다.</string>
-    <string name="create_diary_showcase_message_8">다이어리 작성 시간을 선택합니다. 지난시간의 다이어리 작성을 원할경우 시간을 변경할 수 있습니다.</string>
+    <string name="create_diary_showcase_message_5">다이어리의 텍스트크기를 확대합니다.</string>
+    <string name="create_diary_showcase_message_6">다이어리의 텍스트크기를 축소합니다.</string>
+    <string name="create_diary_showcase_message_7">다이어리 작성날짜를 선택합니다. 지난일자의 다이어리 작성을 원할경우 날짜를 변경할 수 있습니다.</string>
+    <string name="create_diary_showcase_message_8">다이어리 작성시간을 선택합니다. 지난시간의 다이어리 작성을 원할경우 시간을 변경할 수 있습니다.</string>
     <string name="create_diary_showcase_message_9">작성이 완료된 다이어리를 저장합니다.</string>
 
     <!--ReadDiaryActivity-->
@@ -137,7 +137,7 @@
     <string name="post_card_showcase_message_1">포스트카드 텍스트색상을 변경합니다. 컬러피커를 이용하여 원하는 컬러를 선택할 수 있습니다.</string>
     <string name="post_card_showcase_message_2">포스트카드 배경색상을 변경합니다. 컬러피커를 이용하여 원하는 컬러를 선택할 수 있습니다.</string>
     <string name="post_card_showcase_message_3">만들어진 포스트카드는 이미지 파일로 저장 할 수 있습니다.</string>
-    <string name="post_card_showcase_message_4">만들어진 포스트카드는 친구들과 공유 할 수 있습니다. 이메일, 문자, 메시저등을 이용해 포스트카드를 공유해 보세요.</string>
+    <string name="post_card_showcase_message_4">만들어진 포스트카드는 친구들과 공유 할 수 있습니다. 이메일, 문자, 메신저등을 이용해 포스트카드를 공유해 보세요.</string>
     <string name="post_card_showcase_message_5">포스트카드 편집화면을 종료하고 이전 화면으로 돌아갑니다.</string>
 
     <!--TimelineActivity-->

@@ -54,4 +54,6 @@ public class Constants {
 
     final static public int SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER = 0;
     final static public int SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER = 1;
+    final static public int SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_NUMBER = 2;
+    final static public int SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER = 3;
 }
