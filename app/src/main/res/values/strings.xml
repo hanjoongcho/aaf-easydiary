@@ -74,12 +74,12 @@
     <string name="read_diary_detail_showcase_title_1">페이지이동</string>
     <string name="read_diary_detail_showcase_title_2">다이어리 수정</string>
     <string name="read_diary_detail_showcase_title_3">TTS</string>
-    <string name="read_diary_detail_showcase_title_4">다이어리카드 공유</string>
+    <string name="read_diary_detail_showcase_title_4">포스트카드</string>
     <string name="read_diary_detail_showcase_title_5">다이어리 삭제</string>
     <string name="read_diary_detail_showcase_message_1">화면을 좌우로 드래그 하면 이전 또는 이후에 작성된 다이어리를 열람 할 수 있습니다.</string>
     <string name="read_diary_detail_showcase_message_2">열람중인 다이어리 편집을 위해 다이어리 수정화면으로 이동 할 수 있습니다.</string>
     <string name="read_diary_detail_showcase_message_3">다이어리 본문을 구글 TTS 기능을 이용하여 음성으로 들을 수 있습니다.</string>
-    <string name="read_diary_detail_showcase_message_4">다이어리의 배경 및 텍스트를 원하는 색상으로 변경하여 다른 사람과 공유 할 수 있습니다.</string>
+    <string name="read_diary_detail_showcase_message_4">다이어리를 이용하여 포스트카드를 만들고 다른 사람과 공유 할 수 있습니다.</string>
     <string name="read_diary_detail_showcase_message_5">현재 열람중인 다이어리를 삭제하고 검색화면으로 이동 할 수 있습니다.</string>
 
     <!--UpdateDiaryActivity-->
@@ -127,6 +127,18 @@
     <string name="diary_card_export_info">다이어리카드 저장경로</string>
     <string name="diary_card_share_info">다이어리카드 공유</string>
     <string name="diary_card_export_error_message">다이어리카드 생성중 오류가 발생되었습니다. 다시 시도해 주세요.</string>
+    <string name="post_card_showcase_button_1">다음</string>
+    <string name="post_card_showcase_button_2">닫기</string>
+    <string name="post_card_showcase_title_1">텍스트색</string>
+    <string name="post_card_showcase_title_2">배경색</string>
+    <string name="post_card_showcase_title_3">포스트카드 생성</string>
+    <string name="post_card_showcase_title_4">포스트카드 공유</string>
+    <string name="post_card_showcase_title_5">편집종료</string>
+    <string name="post_card_showcase_message_1">포스트카드 텍스트색상을 변경합니다. 컬러피커를 이용하여 원하는 컬러를 선택할 수 있습니다.</string>
+    <string name="post_card_showcase_message_2">포스트카드 배경색상을 변경합니다. 컬러피커를 이용하여 원하는 컬러를 선택할 수 있습니다.</string>
+    <string name="post_card_showcase_message_3">만들어진 포스트카드는 이미지 파일로 저장 할 수 있습니다.</string>
+    <string name="post_card_showcase_message_4">만들어진 포스트카드는 친구들과 공유 할 수 있습니다. 이메일, 문자, 메시저등을 이용해 포스트카드를 공유해 보세요.</string>
+    <string name="post_card_showcase_message_5">포스트카드 편집화면을 종료하고 이전 화면으로 돌아갑니다.</string>
 
     <!--TimelineActivity-->
     <string name="timeline_title">타임라인</string>
@@ -163,76 +175,4 @@
         <item>Default</item>
     </string-array>
 
-
-    <!-- Strings related to Settings -->
-
-    <!-- Example General settings -->
-    <string name="pref_header_general">General</string>
-
-    <string name="pref_title_social_recommendations">Enable social recommendations</string>
-    <string name="pref_description_social_recommendations">Recommendations for people to contact
-        based on your message history
-    </string>
-
-    <string name="pref_title_display_name">Display name</string>
-    <string name="pref_default_display_name">John Smith</string>
-
-    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
-    <string-array name="pref_example_list_titles">
-        <item>Always</item>
-        <item>When possible</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_example_list_values">
-        <item>1</item>
-        <item>0</item>
-        <item>-1</item>
-    </string-array>
-
-    <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Data &amp; sync</string>
-
-    <string name="pref_title_sync_frequency">Sync frequency</string>
-    <string-array name="pref_sync_frequency_titles">
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>3 hours</item>
-        <item>6 hours</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_sync_frequency_values">
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
-        <item>180</item>
-        <item>360</item>
-        <item>-1</item>
-    </string-array>
-
-    <string-array name="list_preference_entries">
-        <item>Entry 1</item>
-        <item>Entry 2</item>
-        <item>Entry 3</item>
-    </string-array>
-
-    <string-array name="list_preference_entry_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-
-    <string-array name="multi_select_list_preference_default_value" />
-
-    <string name="pref_title_system_sync_settings">System sync settings</string>
-
-    <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notifications</string>
-
-    <string name="pref_title_new_message_notifications">New message notifications</string>
-
-    <string name="pref_title_ringtone">Ringtone</string>
-    <string name="pref_ringtone_silent">Silent</string>
-
-    <string name="pref_title_vibrate">Vibrate</string>
 </resources>
