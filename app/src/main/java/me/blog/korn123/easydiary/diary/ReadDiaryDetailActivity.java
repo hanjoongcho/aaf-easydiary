@@ -26,7 +26,11 @@ import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -62,6 +66,19 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
 
     @BindView(R.id.container)
     ViewPager mViewPager;
+
+    @BindView(R.id.edit)
+    ImageView mEdit;
+
+    @BindView(R.id.speechOutButton)
+    ImageView mSpeechOutButton;
+
+    @BindView(R.id.postCard)
+    ImageView mPostCard;
+
+    @BindView(R.id.delete)
+    ImageView mDelete;
+
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -129,6 +146,70 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
                 mViewPager.setCurrentItem(startPageIndex, false);
             }
         });
+
+        initShowcase();
+    }
+
+    private int showcaseIndex = 2;
+    ShowcaseView mShowcaseView;
+
+    private void initShowcase() {
+        int margin = ((Number) (getResources().getDisplayMetrics().density * 12)).intValue();
+
+        final RelativeLayout.LayoutParams centerParams =
+                new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        centerParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        centerParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        centerParams.setMargins(0, 0, 0, margin);
+
+        View.OnClickListener showcaseViewOnClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switch (showcaseIndex) {
+                    case 2:
+                        mShowcaseView.setButtonPosition(centerParams);
+                        mShowcaseView.setShowcase(new ViewTarget(mEdit), true);
+                        mShowcaseView.setContentTitle(getString(R.string.read_diary_detail_showcase_title_2));
+                        mShowcaseView.setContentText(getString(R.string.read_diary_detail_showcase_message_2));
+                        break;
+                    case 3:
+                        mShowcaseView.setButtonPosition(centerParams);
+                        mShowcaseView.setShowcase(new ViewTarget(mSpeechOutButton), true);
+                        mShowcaseView.setContentTitle(getString(R.string.read_diary_detail_showcase_title_3));
+                        mShowcaseView.setContentText(getString(R.string.read_diary_detail_showcase_message_3));
+                        break;
+                    case 4:
+                        mShowcaseView.setButtonPosition(centerParams);
+                        mShowcaseView.setShowcase(new ViewTarget(mPostCard), true);
+                        mShowcaseView.setContentTitle(getString(R.string.read_diary_detail_showcase_title_4));
+                        mShowcaseView.setContentText(getString(R.string.read_diary_detail_showcase_message_4));
+                        break;
+                    case 5:
+                        mShowcaseView.setButtonPosition(centerParams);
+                        mShowcaseView.setShowcase(new ViewTarget(mDelete), true);
+                        mShowcaseView.setContentTitle(getString(R.string.read_diary_detail_showcase_title_5));
+                        mShowcaseView.setContentText(getString(R.string.read_diary_detail_showcase_message_5));
+                        mShowcaseView.setButtonText(getString(R.string.read_diary_detail_showcase_button_2));
+                        break;
+                    case 6:
+                        mShowcaseView.hide();
+                        break;
+                }
+                showcaseIndex++;
+            }
+        };
+
+        mShowcaseView = new ShowcaseView.Builder(this)
+                .withMaterialShowcase()
+                .setTarget(new ViewTarget(mViewPager))
+                .setContentTitle(getString(R.string.read_diary_detail_showcase_title_1))
+                .setContentText(getString(R.string.read_diary_detail_showcase_message_1))
+                .setStyle(R.style.ShowcaseTheme)
+//                .singleShot(Constants.SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER)
+                .setOnClickListener(showcaseViewOnClickListener)
+                .build();
+        mShowcaseView.setButtonText(getString(R.string.read_diary_detail_showcase_button_1));
+        mShowcaseView.setButtonPosition(centerParams);
     }
 
     private void initModule() {
