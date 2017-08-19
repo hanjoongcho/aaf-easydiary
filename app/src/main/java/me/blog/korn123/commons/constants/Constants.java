@@ -52,4 +52,6 @@ public class Constants {
     // 눈
     final static public int WEATHER_FLAG_SNOW = 5;
 
+    final static public int SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER = 0;
+    final static public int SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER = 1;
 }

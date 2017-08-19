@@ -29,34 +29,34 @@ I will continue refactoring whenever i have spare time.
 ```
 # Screen Shot
 ## Write diary (voice or keypad)
-<img src="screenshots/app_easydiary02_01.png" width="288" height="512">&nbsp;
-<img src="screenshots/app_easydiary02_02.png" width="288" height="512">&nbsp;
+<img src="screenshots/app_easydiary02_01_en.png" width="288" height="512">&nbsp;
+<img src="screenshots/app_easydiary02_02_en.png" width="288" height="512">&nbsp;
 ## Search diary
-<img src="screenshots/app_easydiary03.png" width="288" height="512">&nbsp;
+<img src="screenshots/app_easydiary03_en.png" width="288" height="512">&nbsp;
 ## Read Diary
-<img src="screenshots/app_easydiary04.png" width="288" height="512">&nbsp;
-<img src="screenshots/app_easydiary04_02.png" width="288" height="512">&nbsp;
+<img src="screenshots/app_easydiary04_en.png" width="288" height="512">&nbsp;
+<img src="screenshots/app_easydiary04_02_en.png" width="288" height="512">&nbsp;
 ## Edit Diary
-<img src="screenshots/app_easydiary05.png" width="288" height="512">&nbsp;
+<img src="screenshots/app_easydiary05_en.png" width="288" height="512">&nbsp;
 ## Chart
-<img src="screenshots/app_easydiary07.png" width="288" height="512">&nbsp;
+<img src="screenshots/app_easydiary07_en.png" width="288" height="512">&nbsp;
 ## Calendar
-<img src="screenshots/app_easydiary08.png" width="288" height="512">&nbsp;
+<img src="screenshots/app_easydiary08_en.png" width="288" height="512">&nbsp;
 ## Diary Card
-<img src="screenshots/app_easydiary10_01.png" width="288" height="512">&nbsp;
-<img src="screenshots/app_easydiary10_02.png" width="288" height="512">&nbsp;
+<img src="screenshots/app_easydiary10_01_en.png" width="288" height="512">&nbsp;
+<img src="screenshots/app_easydiary10_02_en.png" width="288" height="512">&nbsp;
 <img src="screenshots/app_easydiary10_03.png" width="288" height="512">&nbsp;
 <img src="screenshots/app_easydiary10_04.png" width="288" height="512">&nbsp;
-<img src="screenshots/app_easydiary10_05.png" width="288" height="512">&nbsp;
-<img src="screenshots/app_easydiary10_06.png" width="288" height="512">&nbsp;
-<img src="screenshots/app_easydiary10_07.png" width="288" height="512">&nbsp;
+<img src="screenshots/app_easydiary10_05_en.png" width="288" height="512">&nbsp;
+<img src="screenshots/app_easydiary10_06_en.png" width="288" height="512">&nbsp;
+<img src="screenshots/app_easydiary10_07_en.png" width="288" height="512">&nbsp;
 ## Time Line
-<img src="screenshots/app_easydiary11_01.png" width="288" height="512">&nbsp;
+<img src="screenshots/app_easydiary11_01_en.png" width="288" height="512">&nbsp;
 ## Advanced Settings
-<img src="screenshots/app_easydiary09_01.png" width="288" height="512">&nbsp;
-<img src="screenshots/app_easydiary09_03.png" width="288" height="512">&nbsp;
-<img src="screenshots/app_easydiary09_02.png" width="288" height="512">&nbsp;
-<img src="screenshots/app_easydiary06.png" width="288" height="512">&nbsp;
+<img src="screenshots/app_easydiary09_01_en.png" width="288" height="512">&nbsp;
+<img src="screenshots/app_easydiary09_03_en.png" width="288" height="512">&nbsp;
+<img src="screenshots/app_easydiary09_02_en.png" width="288" height="512">&nbsp;
+<img src="screenshots/app_easydiary06_en.png" width="288" height="512">&nbsp;
 
 
 

@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -14,11 +15,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import java.io.File;
 
@@ -66,6 +70,21 @@ public class PostCardActivity extends EasyDiaryActivity {
     @BindView(R.id.postContainer)
     ViewGroup mPostContainer;
 
+    @BindView(R.id.textColor)
+    ImageView mTextColorPicker;
+
+    @BindView(R.id.bgColor)
+    ImageView mBgColorPicker;
+
+    @BindView(R.id.save)
+    ImageView mSave;
+
+    @BindView(R.id.share)
+    ImageView mShare;
+
+    @BindView(R.id.close)
+    ImageView mClose;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_card);
@@ -79,6 +98,69 @@ public class PostCardActivity extends EasyDiaryActivity {
         mTitle.setText(diaryDto.getTitle());
         mContents.setText(diaryDto.getContents());
         mDate.setText(DateUtils.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
+        initShowcase();
+    }
+
+    private int showcaseIndex = 2;
+    ShowcaseView mShowcaseView;
+
+    private void initShowcase() {
+        int margin = ((Number) (getResources().getDisplayMetrics().density * 12)).intValue();
+
+        final RelativeLayout.LayoutParams centerParams =
+                new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        centerParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        centerParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        centerParams.setMargins(0, 0, 0, margin);
+
+        View.OnClickListener showcaseViewOnClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switch (showcaseIndex) {
+                    case 2:
+                        mShowcaseView.setButtonPosition(centerParams);
+                        mShowcaseView.setShowcase(new ViewTarget(mBgColorPicker), true);
+                        mShowcaseView.setContentTitle(getString(R.string.post_card_showcase_title_2));
+                        mShowcaseView.setContentText(getString(R.string.post_card_showcase_message_2));
+                        break;
+                    case 3:
+                        mShowcaseView.setButtonPosition(centerParams);
+                        mShowcaseView.setShowcase(new ViewTarget(mSave), true);
+                        mShowcaseView.setContentTitle(getString(R.string.post_card_showcase_title_3));
+                        mShowcaseView.setContentText(getString(R.string.post_card_showcase_message_3));
+                        break;
+                    case 4:
+                        mShowcaseView.setButtonPosition(centerParams);
+                        mShowcaseView.setShowcase(new ViewTarget(mShare), true);
+                        mShowcaseView.setContentTitle(getString(R.string.post_card_showcase_title_4));
+                        mShowcaseView.setContentText(getString(R.string.post_card_showcase_message_4));
+                        break;
+                    case 5:
+                        mShowcaseView.setButtonPosition(centerParams);
+                        mShowcaseView.setShowcase(new ViewTarget(mClose), true);
+                        mShowcaseView.setContentTitle(getString(R.string.post_card_showcase_title_5));
+                        mShowcaseView.setContentText(getString(R.string.post_card_showcase_message_5));
+                        mShowcaseView.setButtonText(getString(R.string.post_card_showcase_button_2));
+                        break;
+                    case 6:
+                        mShowcaseView.hide();
+                        break;
+                }
+                showcaseIndex++;
+            }
+        };
+
+        mShowcaseView = new ShowcaseView.Builder(this)
+                .withMaterialShowcase()
+                .setTarget(new ViewTarget(mTextColorPicker))
+                .setContentTitle(getString(R.string.post_card_showcase_title_1))
+                .setContentText(getString(R.string.post_card_showcase_message_1))
+                .setStyle(R.style.ShowcaseTheme)
+//                .singleShot(Constants.SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER)
+                .setOnClickListener(showcaseViewOnClickListener)
+                .build();
+        mShowcaseView.setButtonText(getString(R.string.post_card_showcase_button_1));
+        mShowcaseView.setButtonPosition(centerParams);
     }
 
     @OnClick({R.id.bgColor, R.id.textColor, R.id.close, R.id.save, R.id.share})

@@ -15,4 +15,8 @@
     <color name="blue">#ff33b5e5</color>
 
     <color name="bubbleBackground">#bcb9b9</color>
+
+    <!--ShowcaseTheme-->
+    <color name="showCaseViewBackground">#e570A3B4</color>
+    <color name="showCaseButtonBackground">#4A4A4C</color>
 </resources>

@@ -83,4 +83,22 @@
         <item name="android:textSize">17sp</item>
     </style>
 
+    <!--Showcase theme-->
+    <style name="ShowcaseTheme" parent="ShowcaseView">
+        <item name="sv_backgroundColor">@color/showCaseViewBackground</item>
+        <item name="sv_buttonBackgroundColor">@color/showCaseButtonBackground</item>
+        <item name="sv_titleTextAppearance">@style/CustomTitle</item>
+        <item name="sv_detailTextAppearance">@style/CustomText</item>
+    </style>
+
+    <style name="CustomTitle" parent="TextAppearance.ShowcaseView.Title.Light">
+        <item name="android:textColor">#ffffffff</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="CustomText" parent="TextAppearance.ShowcaseView.Detail.Light">
+        <item name="android:textColor">#deffffff</item>
+    </style>
+
+
 </resources>

@@ -26,9 +26,13 @@ import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TimePicker;
+
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -76,9 +80,6 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
     @BindView(R.id.title)
     EditText mTitle;
 
-    @BindView(R.id.saveContents)
-    ImageView mSaveContents;
-
     @BindView(R.id.toggleSwitch)
     Switch mToggleSwitch;
 
@@ -96,6 +97,24 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
 
     @BindView(R.id.speechButton)
     FloatingActionButton mSpeechButton;
+
+    @BindView(R.id.zoomIn)
+    ImageView mZoomIn;
+
+    @BindView(R.id.zoomOut)
+    ImageView mZoomOut;
+
+    @BindView(R.id.saveContents)
+    ImageView mSaveContents;
+
+    @BindView(R.id.datePicker)
+    ImageView mDatePicker;
+
+    @BindView(R.id.timePicker)
+    ImageView mTimePicker;
+
+    @BindView(R.id.photoView)
+    ImageView mPhotoView;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,6 +136,93 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
         bindEvent();
         initSpinner();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        initShowcase();
+    }
+
+    private int showcaseIndex = 2;
+    ShowcaseView mShowcaseView;
+
+    private void initShowcase() {
+        int margin = ((Number) (getResources().getDisplayMetrics().density * 12)).intValue();
+
+        final RelativeLayout.LayoutParams centerParams =
+                new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        centerParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        centerParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        centerParams.setMargins(0, 0, 0, margin);
+
+        View.OnClickListener showcaseViewOnClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switch (showcaseIndex) {
+                    case 2:
+                        mShowcaseView.setButtonPosition(centerParams);
+                        mShowcaseView.setShowcase(new ViewTarget(mTitle), true);
+                        mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_2));
+                        mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_2));
+                        break;
+                    case 3:
+                        mShowcaseView.setButtonPosition(centerParams);
+                        mShowcaseView.setShowcase(new ViewTarget(mContents), true);
+                        mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_3));
+                        mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_3));
+                        break;
+                    case 4:
+                        mShowcaseView.setButtonPosition(centerParams);
+                        mShowcaseView.setShowcase(new ViewTarget(mPhotoView), true);
+                        mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_4));
+                        mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_4));
+                        break;
+                    case 5:
+                        mShowcaseView.setButtonPosition(centerParams);
+                        mShowcaseView.setShowcase(new ViewTarget(mZoomIn), true);
+                        mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_5));
+                        mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_5));
+                        break;
+                    case 6:
+                        mShowcaseView.setButtonPosition(centerParams);
+                        mShowcaseView.setShowcase(new ViewTarget(mZoomOut), true);
+                        mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_6));
+                        mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_6));
+                        break;
+                    case 7:
+                        mShowcaseView.setButtonPosition(centerParams);
+                        mShowcaseView.setShowcase(new ViewTarget(mDatePicker), true);
+                        mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_7));
+                        mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_7));
+                        break;
+                    case 8:
+                        mShowcaseView.setButtonPosition(centerParams);
+                        mShowcaseView.setShowcase(new ViewTarget(mTimePicker), true);
+                        mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_8));
+                        mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_8));
+                        break;
+                    case 9:
+                        mShowcaseView.setButtonPosition(centerParams);
+                        mShowcaseView.setShowcase(new ViewTarget(mSaveContents), true);
+                        mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_9));
+                        mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_9));
+                        mShowcaseView.setButtonText(getString(R.string.create_diary_showcase_button_2));
+                        break;
+                    case 10:
+                        mShowcaseView.hide();
+                        break;
+                }
+                showcaseIndex++;
+            }
+        };
+
+        mShowcaseView = new ShowcaseView.Builder(this)
+                .withMaterialShowcase()
+                .setTarget(new ViewTarget(mWeatherSpinner))
+                .setContentTitle(getString(R.string.create_diary_showcase_title_1))
+                .setContentText(getString(R.string.create_diary_showcase_message_1))
+                .setStyle(R.style.ShowcaseTheme)
+//                .singleShot(Constants.SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER)
+                .setOnClickListener(showcaseViewOnClickListener)
+                .build();
+        mShowcaseView.setButtonText(getString(R.string.create_diary_showcase_button_1));
+        mShowcaseView.setButtonPosition(centerParams);
     }
 
     public void initSpinner() {
