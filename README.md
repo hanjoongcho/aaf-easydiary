@@ -36,7 +36,7 @@ I will continue refactoring whenever i have spare time.
 <img src="screenshots/app_easydiary03_en.png" width="288" height="512">&nbsp;
 ## Read Diary
 <img src="screenshots/app_easydiary04_en.png" width="288" height="512">&nbsp;
-<img src="screenshots/app_easydiary04_02_en.png" width="288" height="512">&nbsp;
+<img src="screenshots/app_easydiary04_02.png" width="288" height="512">&nbsp;
 ## Edit Diary
 <img src="screenshots/app_easydiary05_en.png" width="288" height="512">&nbsp;
 ## Chart
