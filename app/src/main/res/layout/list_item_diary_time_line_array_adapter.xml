@@ -21,7 +21,7 @@
         <TextView
             android:layout_marginLeft="10dp"
             android:textSize="@dimen/large_text_size"
-            android:textColor="@color/categoryTextColor"
+            android:textColor="@color/categoryText"
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -34,7 +34,7 @@
 
         <TextView
             android:textSize="@dimen/large_text_size"
-            android:textColor="@color/defaultTextColor"
+            android:textColor="@color/defaultText"
             android:id="@+id/text1"
             android:padding="10dp"
             android:background="@drawable/bg_card_timeline_01"
@@ -75,7 +75,7 @@
 
         <TextView
             android:textSize="@dimen/large_text_size"
-            android:textColor="@color/defaultTextColor"
+            android:textColor="@color/defaultText"
             android:id="@+id/text2"
             android:padding="10dp"
             android:background="@drawable/bg_card_timeline_01"

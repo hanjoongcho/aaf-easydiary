@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
 apply plugin: 'realm-android'
 
-// icon color: #5C5C5C
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -39,39 +38,42 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    testCompile 'junit:junit:4.12'
+
+    // google
     compile 'com.android.support:appcompat-v7:25.3.0'
     compile 'com.android.support:design:25.3.0'
     compile 'com.android.support:support-v4:25.3.0'
     compile 'com.android.support:support-vector-drawable:25.3.0'
-    testCompile 'junit:junit:4.12'
-
-    // google
     compile 'com.google.android.gms:play-services-drive:8.4.0'
 
-    // apache commons dependency
+    // apache commons
     compile 'org.apache.commons:commons-lang3:3.0'
     compile group: 'commons-io', name: 'commons-io', version: '2.4'
 
-    // etc
+    // Jake Wharton
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
     compile 'com.jakewharton:butterknife:8.4.0'
+
+    // Joda.org
     compile group: 'joda-time', name: 'joda-time', version: '2.1'
 
-    // MP Chart
+    // Philipp Jahoda
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.1'
 
-    // calendar
-    // https://mvnrepository.com/artifact/com.roomorama/caldroid
+    // Roomorama
     compile group: 'com.roomorama', name: 'caldroid', version: '3.0.1'
+
+    // com.darwinsys
     compile 'com.darwinsys:hirondelle-date4j:1.5.1'
 
-    // photo view
+    // Chris Banes
     compile 'com.github.chrisbanes:PhotoView:2.0.0'
 
-    // color picker
+    // QuadFlask
     compile 'com.github.QuadFlask:colorpicker:0.0.13'
 
-    // showcaseview
+    // Alex Curran
     compile 'com.github.amlcurran.showcaseview:library:5.4.3'
 
 }

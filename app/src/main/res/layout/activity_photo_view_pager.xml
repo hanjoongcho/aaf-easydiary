@@ -20,7 +20,7 @@
             android:layout_marginLeft="20dp"
             android:layout_alignParentLeft="true"
             android:textSize="20dp"
-            android:textColor="@color/defaultTextColor"
+            android:textColor="@color/defaultText"
             android:id="@+id/pageInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

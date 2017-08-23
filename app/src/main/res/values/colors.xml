@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorAccent">#07abb3</color>
-    <color name="colorPrimary">#07abb3</color>
-    <color name="colorPrimaryBright">#29ecf5</color>
-    <color name="colorPrimaryDark">#089c90</color>
+    <!--App Color-->
+    <color name="colorAccent">#07ABB3</color>
+    <color name="colorAccentWithAlpha">#2007ABB3</color>
+    <color name="colorPrimary">#07ABB3</color>
+    <color name="colorPrimaryDark">#089C90</color>
 
-    <color name="colorAccentWithAlpha">#2007abb3</color>
+    <color name="introText">#F0FFFFFF</color>
+    <color name="categoryText">#F0FFFFFF</color>
+    <color name="defaultText">#4A4A4C</color>
+    <color name="diaryCountText">#FF33B5E5</color>
 
-    <color name="introTextColor">#f0ffffff</color>
-    <color name="categoryTextColor">#f0ffffff</color>
-    <color name="defaultTextColor">#4A4A4C</color>
-    <color name="calendarBackground">#ffffff</color>
+    <color name="calendarBackground">#FFFFFF</color>
 
-    <color name="blue">#ff33b5e5</color>
-
-    <color name="bubbleBackground">#bcb9b9</color>
-
-    <!--ShowcaseTheme-->
+    <!--Showcase Color-->
     <color name="showCaseViewBackground">#e570A3B4</color>
     <color name="showCaseButtonBackground">#4A4A4C</color>
 </resources>

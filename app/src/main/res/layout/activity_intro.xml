@@ -13,7 +13,7 @@
         android:layout_weight="1"
         android:id="@+id/companyName"
         android:gravity="left"
-        android:textColor="@color/introTextColor"
+        android:textColor="@color/introText"
         android:textSize="20dp"
         android:textStyle="bold" />
 
@@ -36,7 +36,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center_horizontal"
-        android:textColor="@color/introTextColor"
+        android:textColor="@color/introText"
         android:textSize="25dp"
         android:id="@+id/appName"
         android:textStyle="bold" />
