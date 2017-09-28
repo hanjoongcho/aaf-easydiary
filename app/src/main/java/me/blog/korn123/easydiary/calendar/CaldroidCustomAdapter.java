@@ -12,16 +12,14 @@ import android.widget.TextView;
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidGridAdapter;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 
 import hirondelle.date4j.DateTime;
-import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.commons.utils.EasyDiaryUtils;
 import me.blog.korn123.easydiary.R;
-import me.blog.korn123.easydiary.diary.DiaryDao;
-import me.blog.korn123.easydiary.diary.DiaryDto;
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
+import me.blog.korn123.easydiary.models.DiaryDto;
 
 public class CaldroidCustomAdapter extends CaldroidGridAdapter {
 
@@ -108,9 +106,9 @@ public class CaldroidCustomAdapter extends CaldroidGridAdapter {
 		tv1.setText("" + dateTime.getDay());
 
 		String dateString = dateTime.format("YYYY-MM-DD");
-		int count = DiaryDao.countDiaryBy(dateString);
+		int count = EasyDiaryDbHelper.countDiaryBy(dateString);
 
-		List<DiaryDto> mDiaryList = DiaryDao.readDiaryByDateString(dateString);
+		List<DiaryDto> mDiaryList = EasyDiaryDbHelper.readDiaryByDateString(dateString);
 		boolean initWeather = false;
 		if (mDiaryList.size() > 0) {
 			for (DiaryDto diaryDto : mDiaryList) {

@@ -1,7 +1,6 @@
 package me.blog.korn123.commons.utils;
 
 import android.graphics.Color;
-import android.os.Environment;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.BackgroundColorSpan;
@@ -12,9 +11,8 @@ import android.widget.TextView;
 import java.io.File;
 
 import me.blog.korn123.commons.constants.Constants;
-import me.blog.korn123.commons.constants.Path;
 import me.blog.korn123.easydiary.R;
-import me.blog.korn123.easydiary.diary.DiaryDao;
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
 
 /**
  * Created by hanjoong on 2017-04-30.
@@ -62,7 +60,7 @@ public class EasyDiaryUtils {
     }
 
     public static String getEasyDiaryMimeType() {
-        String easyDiaryMimeType = "text/aaf_v" + DiaryDao.getRealmInstance().getVersion();
+        String easyDiaryMimeType = "text/aaf_v" + EasyDiaryDbHelper.getRealmInstance().getVersion();
         return  easyDiaryMimeType;
     }
 

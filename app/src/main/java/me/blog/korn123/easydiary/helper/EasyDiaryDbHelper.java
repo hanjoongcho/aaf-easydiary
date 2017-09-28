@@ -1,33 +1,31 @@
-package me.blog.korn123.easydiary.diary;
+package me.blog.korn123.easydiary.helper;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import me.blog.korn123.easydiary.helper.DiaryMigration;
+import me.blog.korn123.easydiary.models.DiaryDto;
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
  */
 
-public class DiaryDao {
+public class EasyDiaryDbHelper {
     private static RealmConfiguration diaryConfig;
 
-    private DiaryDao() {}
+    private EasyDiaryDbHelper() {}
 
     public static Realm getRealmInstance() {
         if (diaryConfig == null) {
             diaryConfig = new RealmConfiguration.Builder()
                     .name("diary.realm")
-                    .schemaVersion(4)
-                    .migration(new DiaryMigration())
+                    .schemaVersion(6)
+                    .migration(new EasyDiaryMigration())
                     /*.deleteRealmIfMigrationNeeded()*/
                     .modules(Realm.getDefaultModule())
                     .build();

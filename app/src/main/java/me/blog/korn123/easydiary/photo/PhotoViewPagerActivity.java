@@ -1,12 +1,10 @@
 package me.blog.korn123.easydiary.photo;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +17,8 @@ import butterknife.OnClick;
 import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
-import me.blog.korn123.easydiary.diary.CreateDiaryActivity;
-import me.blog.korn123.easydiary.diary.DiaryDao;
-import me.blog.korn123.easydiary.diary.DiaryDto;
-import me.blog.korn123.easydiary.diary.ReadDiaryActivity;
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
+import me.blog.korn123.easydiary.models.DiaryDto;
 import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
 
 /**
@@ -46,7 +42,7 @@ public class PhotoViewPagerActivity extends EasyDiaryActivity {
 
         Intent intent = getIntent();
         int sequence = intent.getIntExtra("sequence", 0);
-        DiaryDto diaryDto = DiaryDao.readDiaryBy(sequence);
+        DiaryDto diaryDto = EasyDiaryDbHelper.readDiaryBy(sequence);
         mPhotoCount = diaryDto.getPhotoUris().size();
         mPageInfo.setText("1 / " + mPhotoCount);
 

@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.diary;
+package me.blog.korn123.easydiary.models;
 
 import java.util.Date;
 import java.util.List;
@@ -8,6 +8,7 @@ import io.realm.RealmObject;
 import io.realm.annotations.Ignore;
 import io.realm.annotations.PrimaryKey;
 import me.blog.korn123.commons.utils.DateUtils;
+import me.blog.korn123.easydiary.diary.PhotoUriDto;
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -32,6 +33,10 @@ public class DiaryDto extends RealmObject {
     private int weather;
 
     private RealmList<PhotoUriDto> photoUris;
+
+    private String fontName;
+
+    private float fontSize;
 
     public DiaryDto() {}
 
@@ -107,4 +112,21 @@ public class DiaryDto extends RealmObject {
     public void setPhotoUris(RealmList<PhotoUriDto> photoUris) {
         this.photoUris = photoUris;
     }
+
+    public String getFontName() {
+        return fontName;
+    }
+
+    public void setFontName(String fontName) {
+        this.fontName = fontName;
+    }
+
+    public float getFontSize() {
+        return fontSize;
+    }
+
+    public void setFontSize(float fontSize) {
+        this.fontSize = fontSize;
+    }
+
 }

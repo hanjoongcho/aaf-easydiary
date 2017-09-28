@@ -47,7 +47,9 @@ import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.calendar.CalendarActivity;
 import me.blog.korn123.easydiary.chart.BarChartActivity;
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
 import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
+import me.blog.korn123.easydiary.models.DiaryDto;
 import me.blog.korn123.easydiary.setting.SettingsActivity;
 import me.blog.korn123.easydiary.timeline.TimelineActivity;
 
@@ -106,7 +108,7 @@ public class ReadDiaryActivity extends EasyDiaryActivity {
         mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
 
-        mDiaryList = DiaryDao.readDiary(null);
+        mDiaryList = EasyDiaryDbHelper.readDiary(null);
         mDiaryCardArrayAdapter = new DiaryCardArrayAdapter(this, R.layout.list_item_diary_card_array_adapter , this.mDiaryList);
         mDiaryListView.setAdapter(mDiaryCardArrayAdapter);
 
@@ -380,35 +382,35 @@ public class ReadDiaryActivity extends EasyDiaryActivity {
 
     public void refreshList(String query) {
         mDiaryList.clear();
-        mDiaryList.addAll(DiaryDao.readDiary(query));
+        mDiaryList.addAll(EasyDiaryDbHelper.readDiary(query));
         mDiaryCardArrayAdapter.setCurrentQuery(query);
         mDiaryCardArrayAdapter.notifyDataSetChanged();
     }
 
     private void initSampleData() {
-        DiaryDao.createDiary(new DiaryDto(
+        EasyDiaryDbHelper.createDiary(new DiaryDto(
                 -1,
                 this.mCurrentTimeMillis - 395000000L, getString(R.string.sample_diary_title_1), getString(R.string.sample_diary_1),
                 1
         ));
-        DiaryDao.createDiary(new DiaryDto(
+        EasyDiaryDbHelper.createDiary(new DiaryDto(
                 -1,
                 this.mCurrentTimeMillis - 263000000L, getString(R.string.sample_diary_title_2), getString(R.string.sample_diary_2),
                 2
         ));
-        DiaryDao.createDiary(new DiaryDto(
+        EasyDiaryDbHelper.createDiary(new DiaryDto(
                 -1,
                 this.mCurrentTimeMillis - 132000000L, getString(R.string.sample_diary_title_3), getString(R.string.sample_diary_3),
                 3
         ));
-        DiaryDao.createDiary(new DiaryDto(
+        EasyDiaryDbHelper.createDiary(new DiaryDto(
                 -1,
                 this.mCurrentTimeMillis - 4000000L, getString(R.string.sample_diary_title_4), getString(R.string.sample_diary_4),
                 4
         ));
 
 //        for (int i = 0; i < 50; i++) {
-//            DiaryDao.createDiary(this.mCurrentTimeMillis - (i*3600000), "나쁜 소식을 많이 들을수록 기뻐해야 한다.", "여러분이 지도자로서 가장 들을 필요가 있는 것이\n" +
+//            EasyDiaryDbHelper.createDiary(this.mCurrentTimeMillis - (i*3600000), "나쁜 소식을 많이 들을수록 기뻐해야 한다.", "여러분이 지도자로서 가장 들을 필요가 있는 것이\n" +
 //                    "바로 나쁜 소식이다.\n" +
 //                    "좋은 소식은 내일도 좋은 것이지만\n" +
 //                    "나쁜 소식은 내일이면 더 나빠질 것이다.\n" +

@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
-import android.os.Parcel;
 
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Drive;
@@ -14,8 +13,6 @@ import com.google.android.gms.drive.DriveApi;
 import com.google.android.gms.drive.DriveFile;
 import com.google.android.gms.drive.DriveId;
 import com.google.android.gms.drive.OpenFileActivityBuilder;
-import com.google.android.gms.drive.query.Filter;
-import com.google.android.gms.drive.query.internal.zzf;
 
 import org.apache.commons.io.IOUtils;
 
@@ -26,9 +23,8 @@ import java.io.OutputStream;
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.EasyDiaryUtils;
-import me.blog.korn123.easydiary.diary.DiaryDao;
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
 import me.blog.korn123.easydiary.diary.ReadDiaryActivity;
-import me.blog.korn123.easydiary.diary.UpdateDiaryActivity;
 
 /**
  * Created by CHO HANJOONG on 2016-09-28.
@@ -94,7 +90,7 @@ public class GoogleDriveDownloader extends GoogleDriveUtils {
                 if (result.getStatus().isSuccess()) {
                     try {
                         InputStream driveContents = result.getDriveContents().getInputStream();
-                        OutputStream outputStream = new FileOutputStream(DiaryDao.getRealmInstance().getPath());
+                        OutputStream outputStream = new FileOutputStream(EasyDiaryDbHelper.getRealmInstance().getPath());
                         IOUtils.copy(driveContents, outputStream);
                         IOUtils.closeQuietly(outputStream);
                     } catch (Exception e) {

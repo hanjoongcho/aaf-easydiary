@@ -14,17 +14,12 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
-import me.blog.korn123.easydiary.diary.CreateDiaryActivity;
-import me.blog.korn123.easydiary.diary.DiaryCardArrayAdapter;
-import me.blog.korn123.easydiary.diary.DiaryDao;
-import me.blog.korn123.easydiary.diary.DiaryDto;
-import me.blog.korn123.easydiary.diary.ReadDiaryActivity;
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
+import me.blog.korn123.easydiary.models.DiaryDto;
 import me.blog.korn123.easydiary.diary.ReadDiaryDetailActivity;
 import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
-import me.blog.korn123.easydiary.setting.SettingsActivity;
 
 /**
  * Created by hanjoong on 2017-07-16.
@@ -49,7 +44,7 @@ public class TimelineActivity extends EasyDiaryActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         FontUtils.setToolbarTypeface(toolbar, Typeface.DEFAULT);
 
-        mDiaryList = DiaryDao.readDiary(null);
+        mDiaryList = EasyDiaryDbHelper.readDiary(null);
         Collections.reverse(mDiaryList);
         mTimelineArrayAdapter = new TimelineArrayAdapter(this, R.layout.list_item_diary_time_line_array_adapter, mDiaryList);
         mTimelineListView.setAdapter(mTimelineArrayAdapter);
@@ -67,7 +62,7 @@ public class TimelineActivity extends EasyDiaryActivity {
 
     public void refreshList() {
         mDiaryList.clear();
-        mDiaryList.addAll(DiaryDao.readDiary(null));
+        mDiaryList.addAll(EasyDiaryDbHelper.readDiary(null));
         Collections.reverse(mDiaryList);
         mTimelineArrayAdapter.notifyDataSetChanged();
     }

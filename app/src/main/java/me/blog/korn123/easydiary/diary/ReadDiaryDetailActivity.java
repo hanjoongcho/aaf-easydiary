@@ -51,7 +51,9 @@ import me.blog.korn123.commons.utils.DialogUtils;
 import me.blog.korn123.commons.utils.EasyDiaryUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
 import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
+import me.blog.korn123.easydiary.models.DiaryDto;
 import me.blog.korn123.easydiary.photo.PhotoViewPagerActivity;
 import me.blog.korn123.easydiary.setting.SettingsActivity;
 
@@ -314,7 +316,7 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
                 DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        DiaryDao.deleteDiary(fragment.mSequence);
+                        EasyDiaryDbHelper.deleteDiary(fragment.mSequence);
                         finish();
                     }
                 };
@@ -430,7 +432,7 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
             HorizontalScrollView mHorizontalScrollView = (HorizontalScrollView) rootView.findViewById(R.id.photoContainerScrollView);
 
             mSequence = getArguments().getInt(DIARY_SEQUENCE);
-            DiaryDto diaryDto = DiaryDao.readDiaryBy(mSequence);
+            DiaryDto diaryDto = EasyDiaryDbHelper.readDiaryBy(mSequence);
             if (StringUtils.isEmpty(diaryDto.getTitle())) {
                 mTitle.setVisibility(View.GONE);
             }
@@ -518,7 +520,7 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
 
         public SectionsPagerAdapter(FragmentManager fm, String query) {
             super(fm);
-            this.mDiaryList = DiaryDao.readDiary(query);
+            this.mDiaryList = EasyDiaryDbHelper.readDiary(query);
             for (DiaryDto diaryDto : mDiaryList) {
                 mFragmentList.add(PlaceholderFragment.newInstance(diaryDto.getSequence(), query));
             }

@@ -1,6 +1,5 @@
 package me.blog.korn123.easydiary.chart;
 
-import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -26,8 +25,8 @@ import java.util.Map;
 import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
-import me.blog.korn123.easydiary.diary.DiaryDao;
-import me.blog.korn123.easydiary.diary.DiaryDto;
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
+import me.blog.korn123.easydiary.models.DiaryDto;
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -118,7 +117,7 @@ public class BarChartActivity extends ChartBase {
 
     private void setData(int count, float range) {
 
-        List<DiaryDto> listDiary = DiaryDao.readDiary(null);
+        List<DiaryDto> listDiary = EasyDiaryDbHelper.readDiary(null);
         Map<Integer, Integer> map = new HashMap<>();
         for (DiaryDto diaryDto : listDiary) {
             String writeHour = DateUtils.timeMillisToHour(diaryDto.getCurrentTimeMillis());

@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -58,7 +57,9 @@ import me.blog.korn123.commons.utils.DialogUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.commons.utils.PermissionUtils;
 import me.blog.korn123.easydiary.R;
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
 import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
+import me.blog.korn123.easydiary.models.DiaryDto;
 import me.blog.korn123.easydiary.setting.SettingsActivity;
 
 /**
@@ -361,7 +362,7 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
                     );
                     applyRemoveIndex();
                     diaryDto.setPhotoUris(mPhotoUris);
-                    DiaryDao.createDiary(diaryDto);
+                    EasyDiaryDbHelper.createDiary(diaryDto);
                     CommonUtils.saveIntPreference(CreateDiaryActivity.this, Constants.PREVIOUS_ACTIVITY, Constants.PREVIOUS_ACTIVITY_CREATE);
                     finish();
                 }

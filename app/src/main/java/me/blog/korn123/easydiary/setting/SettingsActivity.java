@@ -92,7 +92,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 if (PermissionUtils.checkPermission(getApplicationContext(), Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
                     // 권한이 있는경우
                     if (mTaskFlag == Constants.SETTING_FLAG_EXPORT_GOOGLE_DRIVE) {
-//                            FileUtils.copyFile(new File(DiaryDao.getRealmInstance().getPath()), new File(Path.WORKING_DIRECTORY + Path.DIARY_DB_NAME));
+//                            FileUtils.copyFile(new File(EasyDiaryDbHelper.getRealmInstance().getPath()), new File(Path.WORKING_DIRECTORY + Path.DIARY_DB_NAME));
                         Intent uploadIntent = new Intent(getApplicationContext(), GoogleDriveUploader.class);
                         startActivity(uploadIntent);
                     } else if (mTaskFlag == Constants.SETTING_FLAG_IMPORT_GOOGLE_DRIVE) {

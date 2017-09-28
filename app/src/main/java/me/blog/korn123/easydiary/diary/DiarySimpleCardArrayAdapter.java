@@ -14,11 +14,11 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
-import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.EasyDiaryUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
+import me.blog.korn123.easydiary.models.DiaryDto;
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.

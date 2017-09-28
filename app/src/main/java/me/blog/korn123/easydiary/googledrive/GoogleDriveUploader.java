@@ -19,7 +19,7 @@ import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.constants.Path;
 import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.commons.utils.EasyDiaryUtils;
-import me.blog.korn123.easydiary.diary.DiaryDao;
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
 
 /**
  * Created by CHO HANJOONG on 2016-09-26.
@@ -39,7 +39,7 @@ public class GoogleDriveUploader extends GoogleDriveUtils {
 
                     final DriveContents driveContents = result.getDriveContents();
                     OutputStream outputStream = driveContents.getOutputStream();
-                    File backupFile = new File(DiaryDao.getRealmInstance().getPath());
+                    File backupFile = new File(EasyDiaryDbHelper.getRealmInstance().getPath());
                     try {
                         FileUtils.copyFile(backupFile, outputStream);
                     } catch (IOException e) {

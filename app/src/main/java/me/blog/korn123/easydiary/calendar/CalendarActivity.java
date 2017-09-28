@@ -25,8 +25,8 @@ import butterknife.ButterKnife;
 import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
-import me.blog.korn123.easydiary.diary.DiaryDao;
-import me.blog.korn123.easydiary.diary.DiaryDto;
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
+import me.blog.korn123.easydiary.models.DiaryDto;
 import me.blog.korn123.easydiary.diary.DiarySimpleCardArrayAdapter;
 import me.blog.korn123.easydiary.diary.ReadDiaryDetailActivity;
 import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
@@ -209,10 +209,10 @@ public class CalendarActivity extends EasyDiaryActivity {
         final SimpleDateFormat formatter = new SimpleDateFormat(DateUtils.DATE_PATTERN_DASH);
 
         if (mDiaryList == null) {
-            mDiaryList = DiaryDao.readDiaryByDateString(formatter.format(date));
+            mDiaryList = EasyDiaryDbHelper.readDiaryByDateString(formatter.format(date));
         } else if (mDiaryList != null) {
             mDiaryList.clear();
-            mDiaryList.addAll(DiaryDao.readDiaryByDateString(formatter.format(date)));
+            mDiaryList.addAll(EasyDiaryDbHelper.readDiaryByDateString(formatter.format(date)));
             mArrayAdapterDiary.notifyDataSetChanged();
         }
 

@@ -17,7 +17,7 @@ import me.blog.korn123.easydiary.diary.PhotoUriDto;
  * Created by hanjoong on 2017-03-25.
  */
 
-public class DiaryMigration implements RealmMigration {
+public class EasyDiaryMigration implements RealmMigration {
 
     @Override
     public void migrate(DynamicRealm realm, long oldVersion, long newVersion) {
@@ -76,6 +76,18 @@ public class DiaryMigration implements RealmMigration {
 //                            obj.set("photoUris", null);
                         }
                     });
+            oldVersion++;
+        }
+
+        if (oldVersion == 4) {
+            RealmObjectSchema diarySchema = schema.get("DiaryDto");
+            diarySchema.addField("fontName", String.class);
+            oldVersion++;
+        }
+
+        if (oldVersion == 5) {
+            RealmObjectSchema diarySchema = schema.get("DiaryDto");
+            diarySchema.addField("fontSize", float.class);
             oldVersion++;
         }
 

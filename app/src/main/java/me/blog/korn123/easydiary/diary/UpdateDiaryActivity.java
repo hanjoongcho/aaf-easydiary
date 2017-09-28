@@ -56,7 +56,9 @@ import me.blog.korn123.commons.utils.DialogUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.commons.utils.PermissionUtils;
 import me.blog.korn123.easydiary.R;
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
 import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
+import me.blog.korn123.easydiary.models.DiaryDto;
 import me.blog.korn123.easydiary.setting.SettingsActivity;
 
 /**
@@ -143,7 +145,7 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
     public void initData() {
         Intent intent = getIntent();
         mSequence = intent.getIntExtra("sequence", 0);
-        DiaryDto diaryDto = DiaryDao.readDiaryBy(mSequence);
+        DiaryDto diaryDto = EasyDiaryDbHelper.readDiaryBy(mSequence);
         mWeather = diaryDto.getWeather();
 
         mTitle.setText(diaryDto.getTitle());
@@ -301,7 +303,7 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
                     diaryDto.setWeather(mWeatherSpinner.getSelectedItemPosition());
                     applyRemoveIndex();
                     diaryDto.setPhotoUris(mPhotoUris);
-                    DiaryDao.updateDiary(diaryDto);
+                    EasyDiaryDbHelper.updateDiary(diaryDto);
                     finish();
                 }
                 break;

@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -39,7 +38,9 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.commons.utils.PermissionUtils;
 import me.blog.korn123.easydiary.R;
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
 import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
+import me.blog.korn123.easydiary.models.DiaryDto;
 
 /**
  * Created by hanjoong on 2017-07-01.
@@ -92,7 +93,7 @@ public class PostCardActivity extends EasyDiaryActivity {
 
         Intent intent = getIntent();
         mSequence = intent.getIntExtra("sequence", 0);
-        DiaryDto diaryDto = DiaryDao.readDiaryBy(mSequence);
+        DiaryDto diaryDto = EasyDiaryDbHelper.readDiaryBy(mSequence);
 
         EasyDiaryUtils.initWeatherView(mWeather, diaryDto.getWeather());
         mTitle.setText(diaryDto.getTitle());
