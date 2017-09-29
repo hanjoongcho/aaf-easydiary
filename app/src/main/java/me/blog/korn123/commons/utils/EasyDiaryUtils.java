@@ -64,6 +64,15 @@ public class EasyDiaryUtils {
         return  easyDiaryMimeType;
     }
 
+    public static String[] getEasyDiaryMimeTypeAll() {
+        int currentVersion = (int)EasyDiaryDbHelper.getRealmInstance().getVersion();
+        String[] easyDiaryMimeType = new String[currentVersion];
+        for (int i = 0; i < currentVersion; i++) {
+            easyDiaryMimeType[i] = "text/aaf_v" + (i + 1);
+        }
+        return  easyDiaryMimeType;
+    }
+
     public static void highlightString(TextView textView, String input) {
         //Get the text from text view and create a spannable string
         SpannableString spannableString = new SpannableString(textView.getText());

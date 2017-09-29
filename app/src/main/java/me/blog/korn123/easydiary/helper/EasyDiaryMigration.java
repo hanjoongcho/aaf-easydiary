@@ -1,17 +1,11 @@
 package me.blog.korn123.easydiary.helper;
 
-import java.util.Date;
-import java.util.List;
-
 import io.realm.DynamicRealm;
 import io.realm.DynamicRealmObject;
-import io.realm.FieldAttribute;
-import io.realm.RealmList;
 import io.realm.RealmMigration;
 import io.realm.RealmObjectSchema;
 import io.realm.RealmSchema;
 import me.blog.korn123.commons.utils.DateUtils;
-import me.blog.korn123.easydiary.diary.PhotoUriDto;
 
 /**
  * Created by hanjoong on 2017-03-25.

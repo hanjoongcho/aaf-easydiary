@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.diary;
+package me.blog.korn123.easydiary.activities;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -56,16 +56,16 @@ import me.blog.korn123.commons.utils.DialogUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.commons.utils.PermissionUtils;
 import me.blog.korn123.easydiary.R;
+import me.blog.korn123.easydiary.adapters.DiaryWeatherItemAdapter;
+import me.blog.korn123.easydiary.models.PhotoUriDto;
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
-import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
 import me.blog.korn123.easydiary.models.DiaryDto;
-import me.blog.korn123.easydiary.setting.SettingsActivity;
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
  */
 
-public class UpdateDiaryActivity extends EasyDiaryActivity {
+public class DiaryUpdateActivity extends EasyDiaryActivity {
 
     private final int REQUEST_CODE_SPEECH_INPUT = 100;
     private Intent mRecognizerIntent;
@@ -111,7 +111,7 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_update_diary);
+        setContentView(R.layout.activity_diary_update);
         ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -137,7 +137,7 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
 
     public void initSpinner() {
         String[]  weatherArr = getResources().getStringArray(R.array.weather_item_array);
-        ArrayAdapter arrayAdapter = new DiaryWeatherArrayAdapter(UpdateDiaryActivity.this, R.layout.spinner_item_diary_weather_array_adapter, Arrays.asList(weatherArr));
+        ArrayAdapter arrayAdapter = new DiaryWeatherItemAdapter(DiaryUpdateActivity.this, R.layout.item_weather, Arrays.asList(weatherArr));
         mWeatherSpinner.setAdapter(arrayAdapter);
         mWeatherSpinner.setSelection(mWeather);
     }
@@ -186,7 +186,7 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
 
     @Override
     public void onBackPressed() {
-        DialogUtils.showAlertDialog(UpdateDiaryActivity.this, getString(R.string.back_pressed_confirm),
+        DialogUtils.showAlertDialog(DiaryUpdateActivity.this, getString(R.string.back_pressed_confirm),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -203,7 +203,7 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
     }
 
     public void initFontStyle() {
-        float fontSize = CommonUtils.loadFloatPreference(UpdateDiaryActivity.this, "font_size", 0);
+        float fontSize = CommonUtils.loadFloatPreference(DiaryUpdateActivity.this, "font_size", 0);
         if (fontSize > 0) {
             mContents.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
         }
@@ -282,11 +282,11 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
                 showSpeechDialog();
                 break;
             case R.id.zoomIn:
-                CommonUtils.saveFloatPreference(UpdateDiaryActivity.this, "font_size", fontSize + 5);
+                CommonUtils.saveFloatPreference(DiaryUpdateActivity.this, Constants.SETTING_FONT_SIZE, fontSize + 5);
                 setDiaryFontSize();
                 break;
             case R.id.zoomOut:
-                CommonUtils.saveFloatPreference(UpdateDiaryActivity.this, "font_size", fontSize - 5);
+                CommonUtils.saveFloatPreference(DiaryUpdateActivity.this, Constants.SETTING_FONT_SIZE, fontSize - 5);
                 setDiaryFontSize();
                 break;
             case R.id.saveContents:
@@ -331,14 +331,14 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
         }
     }
 
+    private DatePickerDialog mDatePickerDialog;
+    private TimePickerDialog mTimePickerDialog;
     private int mYear;
     private int mMonth;
     private int mDayOfMonth;
     private int mHourOfDay;
     private int mMinute;
 
-    private DatePickerDialog mDatePickerDialog;
-    private TimePickerDialog mTimePickerDialog;
     DatePickerDialog.OnDateSetListener mStartDateListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -422,7 +422,7 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        CommonUtils.saveLongPreference(UpdateDiaryActivity.this, Constants.PAUSE_MILLIS, System.currentTimeMillis()); // clear screen lock policy
+        CommonUtils.saveLongPreference(DiaryUpdateActivity.this, Constants.SETTING_PAUSE_MILLIS, System.currentTimeMillis()); // clear screen lock policy
         switch (requestCode) {
             case REQUEST_CODE_SPEECH_INPUT:
                 if ((resultCode == RESULT_OK) && (data != null)) {
@@ -498,7 +498,7 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
 //                this.overridePendingTransition(R.anim.anim_left_to_center, R.anim.anim_center_to_right);
                 break;
             case R.id.action_settings:
-                Intent settingIntent = new Intent(UpdateDiaryActivity.this, SettingsActivity.class);
+                Intent settingIntent = new Intent(DiaryUpdateActivity.this, SettingsActivity.class);
                 startActivity(settingIntent);
                 break;
 //            case R.id.toolbarToggle:
@@ -548,7 +548,7 @@ public class UpdateDiaryActivity extends EasyDiaryActivity {
             final View targetView = v;
             final int targetIndex = index;
             DialogUtils.showAlertDialog(
-                    UpdateDiaryActivity.this,
+                    DiaryUpdateActivity.this,
                     getString(R.string.delete_photo_confirm_message),
                     new DialogInterface.OnClickListener() {
                         @Override

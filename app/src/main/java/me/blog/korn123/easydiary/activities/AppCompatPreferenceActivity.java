@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.setting;
+package me.blog.korn123.easydiary.activities;
 
 import android.content.res.Configuration;
 import android.os.Bundle;

@@ -1,13 +1,12 @@
-package me.blog.korn123.easydiary.setting;
+package me.blog.korn123.easydiary.activities;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.blog.korn123.easydiary.R;
-import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
+import me.blog.korn123.easydiary.activities.EasyDiaryActivity;
 
 /**
  * Created by CHO HANJOONG on 2017-02-11.
@@ -21,7 +20,7 @@ public class LicensesActivity extends EasyDiaryActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_licenses);
         ButterKnife.bind(this);
-        webView.loadUrl("file:///android_asset/licenses.html");
+        webView.loadUrl("https://github.com/hanjoongcho/aaf-easydiary/blob/master/LICENSE.md");
     }
 
 }

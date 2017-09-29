@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.photo;
+package me.blog.korn123.easydiary.viewpagers;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;

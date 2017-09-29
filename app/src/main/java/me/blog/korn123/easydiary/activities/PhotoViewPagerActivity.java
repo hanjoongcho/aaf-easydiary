@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.photo;
+package me.blog.korn123.easydiary.activities;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -19,7 +19,7 @@ import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
 import me.blog.korn123.easydiary.models.DiaryDto;
-import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
+import me.blog.korn123.easydiary.viewpagers.HackyViewPager;
 
 /**
  * Created by hanjoong on 2017-06-08.

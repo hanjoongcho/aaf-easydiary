@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.calendar;
+package me.blog.korn123.easydiary.adapters;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -21,11 +21,11 @@ import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
 import me.blog.korn123.easydiary.models.DiaryDto;
 
-public class CaldroidCustomAdapter extends CaldroidGridAdapter {
+public class CaldroidItemAdapter extends CaldroidGridAdapter {
 
-	public CaldroidCustomAdapter(Context context, int month, int year,
-                                 Map<String, Object> caldroidData,
-                                 Map<String, Object> extraData) {
+	public CaldroidItemAdapter(Context context, int month, int year,
+                               Map<String, Object> caldroidData,
+                               Map<String, Object> extraData) {
 		super(context, month, year, caldroidData, extraData);
 	}
 

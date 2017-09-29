@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.timeline;
+package me.blog.korn123.easydiary.activities;
 
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -16,10 +16,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
+import me.blog.korn123.easydiary.adapters.TimelineItemAdapter;
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
 import me.blog.korn123.easydiary.models.DiaryDto;
-import me.blog.korn123.easydiary.diary.ReadDiaryDetailActivity;
-import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
 
 /**
  * Created by hanjoong on 2017-07-16.
@@ -27,7 +26,7 @@ import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
 
 public class TimelineActivity extends EasyDiaryActivity {
 
-    private TimelineArrayAdapter mTimelineArrayAdapter;
+    private TimelineItemAdapter mTimelineItemAdapter;
     private List<DiaryDto> mDiaryList;
 
     @BindView(R.id.timelineList)
@@ -46,14 +45,14 @@ public class TimelineActivity extends EasyDiaryActivity {
 
         mDiaryList = EasyDiaryDbHelper.readDiary(null);
         Collections.reverse(mDiaryList);
-        mTimelineArrayAdapter = new TimelineArrayAdapter(this, R.layout.list_item_diary_time_line_array_adapter, mDiaryList);
-        mTimelineListView.setAdapter(mTimelineArrayAdapter);
+        mTimelineItemAdapter = new TimelineItemAdapter(this, R.layout.item_timeline, mDiaryList);
+        mTimelineListView.setAdapter(mTimelineItemAdapter);
         mTimelineListView.setSelection(mDiaryList.size() - 1);
 
         mTimelineListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 DiaryDto diaryDto = (DiaryDto)adapterView.getAdapter().getItem(i);
-                Intent detailIntent = new Intent(TimelineActivity.this, ReadDiaryDetailActivity.class);
+                Intent detailIntent = new Intent(TimelineActivity.this, DiaryReadActivity.class);
                 detailIntent.putExtra("sequence", diaryDto.getSequence());
                 startActivity(detailIntent);
             }
@@ -64,7 +63,7 @@ public class TimelineActivity extends EasyDiaryActivity {
         mDiaryList.clear();
         mDiaryList.addAll(EasyDiaryDbHelper.readDiary(null));
         Collections.reverse(mDiaryList);
-        mTimelineArrayAdapter.notifyDataSetChanged();
+        mTimelineItemAdapter.notifyDataSetChanged();
     }
 
     @Override

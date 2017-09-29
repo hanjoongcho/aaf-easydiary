@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.diary;
+package me.blog.korn123.easydiary.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -39,7 +39,6 @@ import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.commons.utils.PermissionUtils;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
-import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
 import me.blog.korn123.easydiary.models.DiaryDto;
 
 /**

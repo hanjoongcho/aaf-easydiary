@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.timeline;
+package me.blog.korn123.easydiary.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -28,13 +28,13 @@ import me.blog.korn123.easydiary.models.DiaryDto;
  * Created by hanjoong on 2017-07-16.
  */
 
-public class TimelineArrayAdapter extends ArrayAdapter<DiaryDto> {
+public class TimelineItemAdapter extends ArrayAdapter<DiaryDto> {
 
     private final Context context;
     private final List<DiaryDto> list;
     private final int layoutResourceId;
 
-    public TimelineArrayAdapter(@NonNull Context context, @LayoutRes int layoutResourceId, @NonNull List<DiaryDto> list) {
+    public TimelineItemAdapter(@NonNull Context context, @LayoutRes int layoutResourceId, @NonNull List<DiaryDto> list) {
         super(context, layoutResourceId, list);
         this.context = context;
         this.list = list;

@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.diary;
+package me.blog.korn123.easydiary.activities;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -57,23 +57,24 @@ import me.blog.korn123.commons.utils.DialogUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.commons.utils.PermissionUtils;
 import me.blog.korn123.easydiary.R;
+import me.blog.korn123.easydiary.adapters.DiaryWeatherItemAdapter;
+import me.blog.korn123.easydiary.models.PhotoUriDto;
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
-import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
 import me.blog.korn123.easydiary.models.DiaryDto;
-import me.blog.korn123.easydiary.setting.SettingsActivity;
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
  */
 
-public class CreateDiaryActivity extends EasyDiaryActivity {
+public class DiaryInsertActivity extends EasyDiaryActivity {
 
-    private final int REQUEST_CODE_SPEECH_INPUT = 100;
     private Intent mRecognizerIntent;
     private long mCurrentTimeMillis;
     private int mCurrentCursor = 0;
     private RealmList<PhotoUriDto> mPhotoUris;
     private List<Integer> mRemoveIndexes = new ArrayList<>();
+    private int mShowcaseIndex = 2;
+    private ShowcaseView mShowcaseView;
 
     @BindView(R.id.contents)
     EditText mContents;
@@ -119,7 +120,7 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_diary);
+        setContentView(R.layout.activity_diary_insert);
         ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -133,15 +134,11 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
 
         FontUtils.setToolbarTypeface(toolbar, Typeface.DEFAULT);
 
-        bindView();
         bindEvent();
         initSpinner();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         initShowcase();
     }
-
-    private int showcaseIndex = 2;
-    ShowcaseView mShowcaseView;
 
     private void initShowcase() {
         int margin = ((Number) (getResources().getDisplayMetrics().density * 12)).intValue();
@@ -155,7 +152,7 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
         View.OnClickListener showcaseViewOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switch (showcaseIndex) {
+                switch (mShowcaseIndex) {
                     case 2:
                         mShowcaseView.setButtonPosition(centerParams);
                         mShowcaseView.setShowcase(new ViewTarget(mTitle), true);
@@ -209,7 +206,7 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
                         mShowcaseView.hide();
                         break;
                 }
-                showcaseIndex++;
+                mShowcaseIndex++;
             }
         };
 
@@ -228,36 +225,11 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
 
     public void initSpinner() {
         String[]  weatherArr = getResources().getStringArray(R.array.weather_item_array);
-        ArrayAdapter arrayAdapter = new DiaryWeatherArrayAdapter(CreateDiaryActivity.this, R.layout.spinner_item_diary_weather_array_adapter, Arrays.asList(weatherArr));
+        ArrayAdapter arrayAdapter = new DiaryWeatherItemAdapter(DiaryInsertActivity.this, R.layout.item_weather, Arrays.asList(weatherArr));
         mWeatherSpinner.setAdapter(arrayAdapter);
     }
 
-    private void bindView() {}
-
     private void bindEvent() {
-//        mInputMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-//                if (isChecked) {
-//                    mTitle.setEnabled(false);
-//                    mContents.setEnabled(false);
-//                    DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.input_mode_a));
-//                } else {
-//                    CreateDiaryActivity.this.mTitle.setEnabled(true);
-//                    CreateDiaryActivity.this.mContents.setEnabled(true);
-//                    InputMethodManager imm = (InputMethodManager)CreateDiaryActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
-//                    if (StringUtils.isEmpty(CreateDiaryActivity.this.mTitle.getText())) {
-//                        imm.showSoftInput(mTitle, InputMethodManager.HIDE_IMPLICIT_ONLY);
-//                        CreateDiaryActivity.this.mTitle.clearFocus();
-//                    } else  {
-//                        CreateDiaryActivity.this.mContents.requestFocus();
-//                        imm.showSoftInput(mContents, InputMethodManager.HIDE_IMPLICIT_ONLY);
-//                        CreateDiaryActivity.this.mContents.setSelection(CreateDiaryActivity.this.mContents.getText().length());
-//                    }
-//                    DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.input_mode_b));
-//                }
-//            }
-//        });
-
         mToggleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -302,7 +274,7 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
 
     @Override
     public void onBackPressed() {
-        DialogUtils.showAlertDialog(CreateDiaryActivity.this, getString(R.string.back_pressed_confirm),
+        DialogUtils.showAlertDialog(DiaryInsertActivity.this, getString(R.string.back_pressed_confirm),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -341,11 +313,11 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
                 showSpeechDialog();
                 break;
             case R.id.zoomIn:
-                CommonUtils.saveFloatPreference(CreateDiaryActivity.this, "font_size", fontSize + 5);
+                CommonUtils.saveFloatPreference(DiaryInsertActivity.this, Constants.SETTING_FONT_SIZE, fontSize + 5);
                 setDiaryFontSize();
                 break;
             case R.id.zoomOut:
-                CommonUtils.saveFloatPreference(CreateDiaryActivity.this, "font_size", fontSize - 5);
+                CommonUtils.saveFloatPreference(DiaryInsertActivity.this, Constants.SETTING_FONT_SIZE, fontSize - 5);
                 setDiaryFontSize();
                 break;
             case R.id.saveContents:
@@ -356,14 +328,14 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
                     DiaryDto diaryDto = new DiaryDto(
                             -1,
                             mCurrentTimeMillis,
-                            String.valueOf(CreateDiaryActivity.this.mTitle.getText()),
-                            String.valueOf(CreateDiaryActivity.this.mContents.getText()),
+                            String.valueOf(DiaryInsertActivity.this.mTitle.getText()),
+                            String.valueOf(DiaryInsertActivity.this.mContents.getText()),
                             mWeatherSpinner.getSelectedItemPosition()
                     );
                     applyRemoveIndex();
                     diaryDto.setPhotoUris(mPhotoUris);
-                    EasyDiaryDbHelper.createDiary(diaryDto);
-                    CommonUtils.saveIntPreference(CreateDiaryActivity.this, Constants.PREVIOUS_ACTIVITY, Constants.PREVIOUS_ACTIVITY_CREATE);
+                    EasyDiaryDbHelper.insertDiary(diaryDto);
+                    CommonUtils.saveIntPreference(DiaryInsertActivity.this, Constants.PREVIOUS_ACTIVITY, Constants.PREVIOUS_ACTIVITY_CREATE);
                     finish();
                 }
                 break;
@@ -391,14 +363,14 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
         }
     }
 
+    private DatePickerDialog mDatePickerDialog;
+    private TimePickerDialog mTimePickerDialog;
     private int mYear = Integer.valueOf(DateUtils.getCurrentDateAsString(DateUtils.YEAR_PATTERN));
     private int mMonth = Integer.valueOf(DateUtils.getCurrentDateAsString(DateUtils.MONTH_PATTERN));
     private int mDayOfMonth = Integer.valueOf(DateUtils.getCurrentDateAsString(DateUtils.DAY_PATTERN));
     private int mHourOfDay = Integer.valueOf(DateUtils.getCurrentDateAsString("HH"));
     private int mMinute = Integer.valueOf(DateUtils.getCurrentDateAsString("mm"));
 
-    private DatePickerDialog mDatePickerDialog;
-    private TimePickerDialog mTimePickerDialog;
     DatePickerDialog.OnDateSetListener mStartDateListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -462,7 +434,7 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
 
     private void showSpeechDialog() {
         try {
-            startActivityForResult(mRecognizerIntent, REQUEST_CODE_SPEECH_INPUT);
+            startActivityForResult(mRecognizerIntent, Constants.REQUEST_CODE_SPEECH_INPUT);
         } catch (ActivityNotFoundException e) {
             DialogUtils.showAlertDialog(this, getString(R.string.recognizer_intent_not_found_message), new DialogInterface.OnClickListener() {
                 @Override
@@ -475,9 +447,9 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        CommonUtils.saveLongPreference(CreateDiaryActivity.this, Constants.PAUSE_MILLIS, System.currentTimeMillis()); // clear screen lock policy
+        CommonUtils.saveLongPreference(DiaryInsertActivity.this, Constants.SETTING_PAUSE_MILLIS, System.currentTimeMillis()); // clear screen lock policy
         switch (requestCode) {
-            case REQUEST_CODE_SPEECH_INPUT:
+            case Constants.REQUEST_CODE_SPEECH_INPUT:
                 if ((resultCode == RESULT_OK) && (data != null)) {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     if (mCurrentCursor == 0) { // edit title
@@ -574,7 +546,7 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
 //                this.overridePendingTransition(R.anim.anim_left_to_center, R.anim.anim_center_to_right);
                 break;
             case R.id.action_settings:
-                Intent settingIntent = new Intent(CreateDiaryActivity.this, SettingsActivity.class);
+                Intent settingIntent = new Intent(DiaryInsertActivity.this, SettingsActivity.class);
                 startActivity(settingIntent);
                 break;
         }
@@ -598,7 +570,7 @@ public class CreateDiaryActivity extends EasyDiaryActivity {
             final View targetView = v;
             final int targetIndex = index;
             DialogUtils.showAlertDialog(
-                    CreateDiaryActivity.this,
+                    DiaryInsertActivity.this,
                     getString(R.string.delete_photo_confirm_message),
                     new DialogInterface.OnClickListener() {
                         @Override

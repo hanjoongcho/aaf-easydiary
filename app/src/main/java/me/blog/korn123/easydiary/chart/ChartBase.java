@@ -4,7 +4,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
+import me.blog.korn123.easydiary.activities.EasyDiaryActivity;
 
 /**
  * Created by CHO HANJOONG on 2017-03-23.

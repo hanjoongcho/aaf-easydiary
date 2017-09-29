@@ -20,25 +20,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".setting.SettingsActivity" android:label="" android:theme="@style/AppTheme" />
-        <activity android:name=".setting.LicensesActivity" android:label="Licenses" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="me.blog.korn123.easydiary.diary.CreateDiaryActivity" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="me.blog.korn123.easydiary.diary.ReadDiaryDetailActivity" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="me.blog.korn123.easydiary.diary.UpdateDiaryActivity" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".diary.ReadDiaryActivity" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.SettingsActivity" android:label="" android:theme="@style/AppTheme" />
+        <activity android:name=".activities.LicensesActivity" android:label="Licenses" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="me.blog.korn123.easydiary.activities.DiaryInsertActivity" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="me.blog.korn123.easydiary.activities.DiaryReadActivity" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="me.blog.korn123.easydiary.activities.DiaryUpdateActivity" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.DiaryMainActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".googledrive.GoogleDriveUploader" />
         <activity android:name=".googledrive.GoogleDriveDownloader" />
-        <activity android:name=".chart.BarChartActivity" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".calendar.CalendarActivity" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".diary.LockDiaryActivity" />
-        <activity android:name=".setting.LockSettingActivity" />
-        <activity android:name=".photo.PhotoViewPagerActivity" android:theme="@style/AppTheme.NoActionBar" android:hardwareAccelerated="false" />
-        <activity android:name=".diary.PostCardActivity" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".colorpicker.ColorPickerActivity" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".timeline.TimelineActivity" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.BarChartActivity" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.CalendarActivity" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.DiaryLockActivity" />
+        <activity android:name=".activities.LockSettingActivity" />
+        <activity android:name=".activities.PhotoViewPagerActivity" android:theme="@style/AppTheme.NoActionBar" android:hardwareAccelerated="false" />
+        <activity android:name=".activities.PostCardActivity" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.ColorPickerActivity" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.TimelineActivity" android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
 </manifest>

@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.diary;
+package me.blog.korn123.easydiary.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -25,7 +25,7 @@ import me.blog.korn123.easydiary.models.DiaryDto;
  * Created by CHO HANJOONG on 2017-03-16.
  */
 
-public class DiaryCardArrayAdapter extends ArrayAdapter<DiaryDto> {
+public class DiaryMainItemAdapter extends ArrayAdapter<DiaryDto> {
     private final Context context;
     private final List<DiaryDto> list;
     private final int layoutResourceId;
@@ -39,7 +39,7 @@ public class DiaryCardArrayAdapter extends ArrayAdapter<DiaryDto> {
         return this.query;
     }
 
-    public DiaryCardArrayAdapter(Context context, int layoutResourceId, List<DiaryDto> list) {
+    public DiaryMainItemAdapter(Context context, int layoutResourceId, List<DiaryDto> list) {
         super(context, layoutResourceId, list);
         this.context = context;
         this.list = list;

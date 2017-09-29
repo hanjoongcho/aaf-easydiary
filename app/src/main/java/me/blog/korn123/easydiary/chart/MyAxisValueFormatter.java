@@ -6,6 +6,7 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import java.text.DecimalFormat;
 
 import me.blog.korn123.easydiary.R;
+import me.blog.korn123.easydiary.activities.BarChartActivity;
 
 public class MyAxisValueFormatter implements IAxisValueFormatter
 {

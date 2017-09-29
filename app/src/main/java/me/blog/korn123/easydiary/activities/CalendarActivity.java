@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.calendar;
+package me.blog.korn123.easydiary.activities;
 
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -25,11 +25,10 @@ import butterknife.ButterKnife;
 import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
+import me.blog.korn123.easydiary.fragments.CaldroidCustomFragment;
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
 import me.blog.korn123.easydiary.models.DiaryDto;
-import me.blog.korn123.easydiary.diary.DiarySimpleCardArrayAdapter;
-import me.blog.korn123.easydiary.diary.ReadDiaryDetailActivity;
-import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
+import me.blog.korn123.easydiary.adapters.DiaryCalendarItemAdapter;
 
 /**
  * Created by hanjoong on 2017-03-28.
@@ -76,12 +75,12 @@ public class CalendarActivity extends EasyDiaryActivity {
         Calendar cal = Calendar.getInstance();
         Date currentDate = cal.getTime();
         refreshList(currentDate);
-        mArrayAdapterDiary = new DiarySimpleCardArrayAdapter(this, R.layout.list_item_diary_simple_card_array_adapter , this.mDiaryList);
+        mArrayAdapterDiary = new DiaryCalendarItemAdapter(this, R.layout.item_diary_calendar, this.mDiaryList);
         mSelectedListView.setAdapter(mArrayAdapterDiary);
         mSelectedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 DiaryDto diaryDto = (DiaryDto)adapterView.getAdapter().getItem(i);
-                Intent detailIntent = new Intent(CalendarActivity.this, ReadDiaryDetailActivity.class);
+                Intent detailIntent = new Intent(CalendarActivity.this, DiaryReadActivity.class);
                 detailIntent.putExtra("sequence", diaryDto.getSequence());
                 detailIntent.putExtra("title", diaryDto.getTitle());
                 detailIntent.putExtra("contents", diaryDto.getContents());

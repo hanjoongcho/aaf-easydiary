@@ -5,6 +5,7 @@ import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import me.blog.korn123.easydiary.R;
+import me.blog.korn123.easydiary.activities.BarChartActivity;
 
 /**
  * Created by CHO HANJOONG on 2017-03-23.
@@ -14,7 +15,7 @@ public class IValueFormatterExt implements IValueFormatter {
 
     BarChartActivity barChartActivity;
 
-    IValueFormatterExt(BarChartActivity barChartActivity) {
+    public IValueFormatterExt(BarChartActivity barChartActivity) {
         this.barChartActivity = barChartActivity;
     }
 

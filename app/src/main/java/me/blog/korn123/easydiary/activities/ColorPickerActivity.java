@@ -1,13 +1,10 @@
-package me.blog.korn123.easydiary.colorpicker;
+package me.blog.korn123.easydiary.activities;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Looper;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.OnColorChangedListener;
@@ -16,14 +13,11 @@ import com.flask.colorpicker.slider.LightnessSlider;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.logging.Handler;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.easydiary.R;
-import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
+import me.blog.korn123.easydiary.activities.EasyDiaryActivity;
 
 /**
  * Created by hanjoong on 2017-07-01.

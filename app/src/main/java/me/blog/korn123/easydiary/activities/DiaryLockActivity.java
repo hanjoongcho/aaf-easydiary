@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.diary;
+package me.blog.korn123.easydiary.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -17,13 +17,12 @@ import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
-import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
 
 /**
  * Created by hanjoong on 2017-05-03.
  */
 
-public class LockDiaryActivity extends Activity {
+public class DiaryLockActivity extends Activity {
 
     @BindView(R.id.pass1)
     TextView mPass1;
@@ -49,7 +48,7 @@ public class LockDiaryActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lock_diary);
+        setContentView(R.layout.activity_diary_lock);
         ButterKnife.bind(this);
         FontUtils.setTypeface(this, getAssets(), mInfoMessage);
 
@@ -105,9 +104,9 @@ public class LockDiaryActivity extends Activity {
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
-                            if (StringUtils.equals(CommonUtils.loadStringPreference(LockDiaryActivity.this, "application_lock_password", "0000"), password)) {
+                            if (StringUtils.equals(CommonUtils.loadStringPreference(DiaryLockActivity.this, "application_lock_password", "0000"), password)) {
                                 long currentMillis = System.currentTimeMillis();
-                                CommonUtils.saveLongPreference(LockDiaryActivity.this, Constants.PAUSE_MILLIS, currentMillis);
+                                CommonUtils.saveLongPreference(DiaryLockActivity.this, Constants.SETTING_PAUSE_MILLIS, currentMillis);
                                 finish();
                             } else {
                                 mCursorIndex = 0;
@@ -131,7 +130,7 @@ public class LockDiaryActivity extends Activity {
     @Override
     public void onBackPressed() {
 //        super.onBackPressed();
-        Intent readDiaryIntent = new Intent(LockDiaryActivity.this, ReadDiaryActivity.class);
+        Intent readDiaryIntent = new Intent(DiaryLockActivity.this, DiaryMainActivity.class);
         readDiaryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         readDiaryIntent.putExtra("app_finish", true);
         startActivity(readDiaryIntent);

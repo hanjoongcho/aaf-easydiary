@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.diary;
+package me.blog.korn123.easydiary.activities;
 
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
@@ -51,20 +51,17 @@ import me.blog.korn123.commons.utils.DialogUtils;
 import me.blog.korn123.commons.utils.EasyDiaryUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
+import me.blog.korn123.easydiary.models.PhotoUriDto;
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
-import me.blog.korn123.easydiary.helper.EasyDiaryActivity;
 import me.blog.korn123.easydiary.models.DiaryDto;
-import me.blog.korn123.easydiary.photo.PhotoViewPagerActivity;
-import me.blog.korn123.easydiary.setting.SettingsActivity;
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
  */
 
-public class ReadDiaryDetailActivity extends EasyDiaryActivity {
+public class DiaryReadActivity extends EasyDiaryActivity {
 
     private TextToSpeech mTextToSpeech;
-    private long mCurrentTimeMillis;
 
     @BindView(R.id.container)
     ViewPager mViewPager;
@@ -108,7 +105,7 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
         }
         // fixme elegance end      =============================================================================
 
-        setContentView(R.layout.activity_read_diary_detail);
+        setContentView(R.layout.activity_diary_read);
         ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -215,7 +212,7 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
     }
 
     private void initModule() {
-        mTextToSpeech = new TextToSpeech(ReadDiaryDetailActivity.this, new TextToSpeech.OnInitListener() {
+        mTextToSpeech = new TextToSpeech(DiaryReadActivity.this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
                 if (status == TextToSpeech.SUCCESS) {
@@ -305,11 +302,11 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
 
         switch(view.getId()) {
             case R.id.zoomIn:
-                CommonUtils.saveFloatPreference(ReadDiaryDetailActivity.this, "font_size", fontSize + 5);
+                CommonUtils.saveFloatPreference(DiaryReadActivity.this, "font_size", fontSize + 5);
                 fragment.setDiaryFontSize();
                 break;
             case R.id.zoomOut:
-                CommonUtils.saveFloatPreference(ReadDiaryDetailActivity.this, "font_size", fontSize - 5);
+                CommonUtils.saveFloatPreference(DiaryReadActivity.this, "font_size", fontSize - 5);
                 fragment.setDiaryFontSize();
                 break;
             case R.id.delete:
@@ -325,10 +322,10 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                     }
                 };
-                DialogUtils.showAlertDialog(ReadDiaryDetailActivity.this, getString(R.string.delete_confirm), positiveListener, negativeListener);
+                DialogUtils.showAlertDialog(DiaryReadActivity.this, getString(R.string.delete_confirm), positiveListener, negativeListener);
                 break;
             case R.id.edit:
-                Intent updateDiaryIntent = new Intent(ReadDiaryDetailActivity.this, UpdateDiaryActivity.class);
+                Intent updateDiaryIntent = new Intent(DiaryReadActivity.this, DiaryUpdateActivity.class);
                 updateDiaryIntent.putExtra("sequence", fragment.mSequence);
                 startActivity(updateDiaryIntent);
                 finish();
@@ -337,7 +334,7 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
                 textToSpeech(fragment.mContents.getText().toString());
                 break;
             case R.id.postCard:
-                Intent postCardIntent = new Intent(ReadDiaryDetailActivity.this, PostCardActivity.class);
+                Intent postCardIntent = new Intent(DiaryReadActivity.this, PostCardActivity.class);
                 postCardIntent.putExtra("sequence", fragment.mSequence);
                 startActivityForResult(postCardIntent, Constants.REQUEST_CODE_BACKGROUND_COLOR_PICKER);
                 break;
@@ -354,7 +351,7 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
 //                this.overridePendingTransition(R.anim.anim_left_to_center, R.anim.anim_center_to_right);
                 break;
             case R.id.action_settings:
-                Intent settingIntent = new Intent(ReadDiaryDetailActivity.this, SettingsActivity.class);
+                Intent settingIntent = new Intent(DiaryReadActivity.this, SettingsActivity.class);
                 startActivity(settingIntent);
                 break;
 //            case R.id.toolbarToggle:
@@ -423,7 +420,7 @@ public class ReadDiaryDetailActivity extends EasyDiaryActivity {
                                  Bundle savedInstanceState) {
 
             // bind view
-            View rootView = inflater.inflate(R.layout.fragment_read_diary_detail, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_diary_read, container, false);
             mContents = (TextView) rootView.findViewById(R.id.contents);
             mTitle = (TextView) rootView.findViewById(R.id.title);
             mDate = (TextView) rootView.findViewById(R.id.date);

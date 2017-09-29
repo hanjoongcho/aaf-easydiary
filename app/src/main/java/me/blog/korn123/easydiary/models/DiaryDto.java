@@ -1,14 +1,10 @@
 package me.blog.korn123.easydiary.models;
 
-import java.util.Date;
-import java.util.List;
-
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.Ignore;
 import io.realm.annotations.PrimaryKey;
 import me.blog.korn123.commons.utils.DateUtils;
-import me.blog.korn123.easydiary.diary.PhotoUriDto;
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.

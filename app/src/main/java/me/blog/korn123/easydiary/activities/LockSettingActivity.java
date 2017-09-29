@@ -1,24 +1,15 @@
-package me.blog.korn123.easydiary.setting;
+package me.blog.korn123.easydiary.activities;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.View;
 import android.widget.TextView;
-
-import org.apache.commons.lang3.StringUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import me.blog.korn123.commons.constants.Constants;
-import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
-import me.blog.korn123.easydiary.diary.LockDiaryActivity;
-import me.blog.korn123.easydiary.diary.ReadDiaryActivity;
 
 /**
  * Created by hanjoong on 2017-05-03.

@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.chart;
+package me.blog.korn123.easydiary.activities;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -25,6 +25,11 @@ import java.util.Map;
 import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
+import me.blog.korn123.easydiary.chart.ChartBase;
+import me.blog.korn123.easydiary.chart.DayAxisValueFormatter;
+import me.blog.korn123.easydiary.chart.IValueFormatterExt;
+import me.blog.korn123.easydiary.chart.MyAxisValueFormatter;
+import me.blog.korn123.easydiary.chart.XYMarkerView;
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
 import me.blog.korn123.easydiary.models.DiaryDto;
 

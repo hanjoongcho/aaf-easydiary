@@ -24,7 +24,7 @@ import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.EasyDiaryUtils;
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
-import me.blog.korn123.easydiary.diary.ReadDiaryActivity;
+import me.blog.korn123.easydiary.activities.DiaryMainActivity;
 
 /**
  * Created by CHO HANJOONG on 2016-09-28.
@@ -47,7 +47,7 @@ public class GoogleDriveDownloader extends GoogleDriveUtils {
 
         IntentSender intentSender = Drive.DriveApi
                 .newOpenFileActivityBuilder()
-                .setMimeType(new String[] { EasyDiaryUtils.getEasyDiaryMimeType() })
+                .setMimeType(EasyDiaryUtils.getEasyDiaryMimeTypeAll())
                 .build(getGoogleApiClient());
 
         try {
@@ -67,7 +67,7 @@ public class GoogleDriveDownloader extends GoogleDriveUtils {
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
-        CommonUtils.saveLongPreference(GoogleDriveDownloader.this, Constants.PAUSE_MILLIS, System.currentTimeMillis());
+        CommonUtils.saveLongPreference(GoogleDriveDownloader.this, Constants.SETTING_PAUSE_MILLIS, System.currentTimeMillis());
     }
 
     private void open() {
@@ -98,7 +98,7 @@ public class GoogleDriveDownloader extends GoogleDriveUtils {
                     }
                 }
                 Context context = GoogleDriveDownloader.this;
-                Intent readDiaryIntent = new Intent(context, ReadDiaryActivity.class);
+                Intent readDiaryIntent = new Intent(context, DiaryMainActivity.class);
                 readDiaryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                 int mPendingIntentId = 123456;
                 PendingIntent mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, readDiaryIntent, PendingIntent.FLAG_CANCEL_CURRENT);

@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.diary;
+package me.blog.korn123.easydiary.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,23 +10,26 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.List;
 
 import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.EasyDiaryUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
+import me.blog.korn123.easydiary.models.DiaryDto;
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
  */
 
-public class DiaryWeatherArrayAdapter extends ArrayAdapter<String> {
+public class DiaryCalendarItemAdapter extends ArrayAdapter<DiaryDto> {
     private final Context context;
-    private final List<String> list;
+    private final List<DiaryDto> list;
     private final int layoutResourceId;
 
-    public DiaryWeatherArrayAdapter(Context context, int layoutResourceId, List<String> list) {
+    public DiaryCalendarItemAdapter(Context context, int layoutResourceId, List<DiaryDto> list) {
         super(context, layoutResourceId, list);
         this.context = context;
         this.list = list;
@@ -34,15 +37,6 @@ public class DiaryWeatherArrayAdapter extends ArrayAdapter<String> {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        return initRow(position, convertView, parent);
-    }
-
-    @Override
-    public View getDropDownView(int position, View convertView, ViewGroup parent) {
-        return initRow(position, convertView, parent);
-    }
-
-    private View initRow(int position, View convertView, ViewGroup parent) {
         View row = convertView;
         ViewHolder holder = null;
         if (row == null) {
@@ -50,7 +44,7 @@ public class DiaryWeatherArrayAdapter extends ArrayAdapter<String> {
             row = inflater.inflate(this.layoutResourceId, parent, false);
             holder = new ViewHolder();
             holder.textView1 = ((TextView)row.findViewById(R.id.text1));
-            holder.imageView1 = ((ImageView) row.findViewById(R.id.imageView1));
+            holder.imageView = ((ImageView) row.findViewById(R.id.weather));
             row.setTag(holder);
         } else {
             holder = (ViewHolder)row.getTag();
@@ -61,9 +55,14 @@ public class DiaryWeatherArrayAdapter extends ArrayAdapter<String> {
         if (fontSize > 0) {
             holder.textView1.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
         }
-        EasyDiaryUtils.initWeatherView(holder.imageView1, position, true);
 
-        holder.textView1.setText(list.get(position));
+        DiaryDto diaryDto = (DiaryDto)this.list.get(position);
+        if (StringUtils.isNotEmpty(diaryDto.getTitle())) {
+            holder.textView1.setText(diaryDto.getTitle());
+        } else {
+            holder.textView1.setText(StringUtils.split(diaryDto.getContents(), "\n")[0]);
+        }
+        EasyDiaryUtils.initWeatherView(holder.imageView, diaryDto.getWeather());
 
         return row;
     }
@@ -74,6 +73,6 @@ public class DiaryWeatherArrayAdapter extends ArrayAdapter<String> {
 
     private static class ViewHolder {
         TextView textView1;
-        ImageView imageView1;
+        ImageView imageView;
     }
 }

@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.setting;
+package me.blog.korn123.easydiary.activities;
 
 
 import android.annotation.TargetApi;
@@ -9,8 +9,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,9 +19,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.preference.RingtonePreference;
 import android.support.v7.app.ActionBar;
-import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +34,6 @@ import me.blog.korn123.commons.utils.DialogUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.commons.utils.PermissionUtils;
 import me.blog.korn123.easydiary.R;
-import me.blog.korn123.easydiary.diary.LockDiaryActivity;
 import me.blog.korn123.easydiary.googledrive.GoogleDriveDownloader;
 import me.blog.korn123.easydiary.googledrive.GoogleDriveUploader;
 
@@ -63,7 +58,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         boolean enableLock = CommonUtils.loadBooleanPreference(SettingsActivity.this, "application_lock");
         if (enableLock) {
             long currentMillis = System.currentTimeMillis();
-            CommonUtils.saveLongPreference(SettingsActivity.this, Constants.PAUSE_MILLIS, currentMillis);
+            CommonUtils.saveLongPreference(SettingsActivity.this, Constants.SETTING_PAUSE_MILLIS, currentMillis);
         }
 
         // init current selected font
@@ -74,11 +69,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     protected void onResume() {
         super.onResume();
         boolean enableLock = CommonUtils.loadBooleanPreference(SettingsActivity.this, "application_lock");
-        long pauseMillis = CommonUtils.loadLongPreference(SettingsActivity.this, Constants.PAUSE_MILLIS, 0);
+        long pauseMillis = CommonUtils.loadLongPreference(SettingsActivity.this, Constants.SETTING_PAUSE_MILLIS, 0);
         if (enableLock && pauseMillis != 0) {
             if (System.currentTimeMillis() - pauseMillis > 1000) {
                 // 잠금해제 화면
-                Intent lockDiaryIntent = new Intent(SettingsActivity.this, LockDiaryActivity.class);
+                Intent lockDiaryIntent = new Intent(SettingsActivity.this, DiaryLockActivity.class);
                 startActivity(lockDiaryIntent);
             }
         }
@@ -400,7 +395,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 CommonUtils.saveStringPreference(getActivity().getApplicationContext(), "application_lock_password", password);
                 mApplicationLockPassword.setSummary(getString(R.string.lock_number) + password);
             }
-            CommonUtils.saveLongPreference(getActivity().getApplicationContext(), Constants.PAUSE_MILLIS, System.currentTimeMillis());
+            CommonUtils.saveLongPreference(getActivity().getApplicationContext(), Constants.SETTING_PAUSE_MILLIS, System.currentTimeMillis());
         }
     }
 

@@ -1,9 +1,6 @@
 package me.blog.korn123.easydiary.googledrive;
 
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
@@ -16,8 +13,6 @@ import com.google.android.gms.drive.Drive;
 
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.CommonUtils;
-import me.blog.korn123.easydiary.diary.ReadDiaryActivity;
-import me.blog.korn123.easydiary.diary.UpdateDiaryActivity;
 
 
 /**
@@ -95,7 +90,7 @@ public class GoogleDriveUtils extends Activity implements
         } else if (resultCode == RESULT_CANCELED) {
             finish();
         }
-        CommonUtils.saveLongPreference(GoogleDriveUtils.this, Constants.PAUSE_MILLIS, System.currentTimeMillis());
+        CommonUtils.saveLongPreference(GoogleDriveUtils.this, Constants.SETTING_PAUSE_MILLIS, System.currentTimeMillis());
     }
 
     /**

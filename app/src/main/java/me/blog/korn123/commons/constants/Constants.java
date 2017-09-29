@@ -29,10 +29,8 @@ public class Constants {
 
     final static public int SETTING_FLAG_EXPORT_GOOGLE_DRIVE = 1;
     final static public int SETTING_FLAG_IMPORT_GOOGLE_DRIVE = 2;
-    final static public String PAUSE_MILLIS = "pause_millis";
 
-    // 이전화면
-    final static public String PREVIOUS_ACTIVITY = "previous_activity";
+    final static public int REQUEST_CODE_SPEECH_INPUT = 100;
 
     // 일기작성화면
     final static public int PREVIOUS_ACTIVITY_CREATE = 1;
@@ -57,6 +55,22 @@ public class Constants {
     final static public int SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_NUMBER = 2;
     final static public int SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER = 3;
 
-    // Easy Diary custom fonts supported language
+    // custom fonts supported language
     final static public String CUSTOM_FONTS_SUPPORT_LANGUAGE = "en|ko";
+
+    final static public String CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT = "Default";
+
+    // previous screen
+    final static public String PREVIOUS_ACTIVITY = "previous_activity";
+
+    // font name preference key
+    final static public String SETTING_FONT_NAME = "font_setting";
+
+    // font size preference key
+    final static public String SETTING_FONT_SIZE = "font_size";
+
+    // pause millis preference key
+    final static public String SETTING_PAUSE_MILLIS = "pause_millis";
+
+
 }

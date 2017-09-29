@@ -4,6 +4,8 @@ import com.github.mikephil.charting.charts.BarLineChartBase;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 
+import me.blog.korn123.easydiary.activities.BarChartActivity;
+
 /**
  * Created by philipp on 02/06/16.
  * x축 데이터 관리

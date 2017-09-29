@@ -35,7 +35,7 @@ public class EasyDiaryDbHelper {
         return diaryRealm;
     }
 
-    public static void createDiary(final long currentTimeMillis, final String title, final String contents) {
+    public static void insertDiary(final long currentTimeMillis, final String title, final String contents) {
         getRealmInstance().executeTransaction(new Realm.Transaction() {
             public void execute(Realm realm) {
                 int sequence = 1;
@@ -49,7 +49,7 @@ public class EasyDiaryDbHelper {
         });
     }
 
-    public static void createDiary(final DiaryDto diaryDto) {
+    public static void insertDiary(final DiaryDto diaryDto) {
         getRealmInstance().executeTransaction(new Realm.Transaction() {
             public void execute(Realm realm) {
                 int sequence = 1;
