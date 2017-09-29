@@ -65,7 +65,7 @@ http://www.freepik.com, http://www.flaticon.com
 Icons made by Freepik from www.flaticon.com is licensed by CC 3.0 BY
 ```
 
-https://www.flaticon.com/packs/weather-76
+https://www.flaticon.com/packs/weather-set-2
 ```
 License: Flaticon Basic License 
 FREE LICENSE (WITH ATTRIBUTION)
