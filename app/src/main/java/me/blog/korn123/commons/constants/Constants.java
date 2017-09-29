@@ -35,20 +35,25 @@ public class Constants {
     // 일기작성화면
     final static public int PREVIOUS_ACTIVITY_CREATE = 1;
 
-    // 맑음, 화창함
-    final static public int WEATHER_FLAG_SUN = 1;
+    final static public int WEATHER_SUNNY = 1;
 
-    // 흐림
-    final static public int WEATHER_FLAG_SUN_AND_CLOUD = 2;
+    final static public int WEATHER_CLOUD_AND_SUN = 2;
 
-    // 비
-    final static public int WEATHER_FLAG_RAIN = 3;
+    final static public int WEATHER_RAIN_DROPS = 3;
 
-    // 번개
-    final static public int WEATHER_FLAG_THUNDER_BOLT = 4;
+    final static public int WEATHER_BOLT = 4;
 
-    // 눈
-    final static public int WEATHER_FLAG_SNOW = 5;
+    final static public int WEATHER_SNOWING = 5;
+
+    final static public int WEATHER_RAINBOW = 6;
+
+    final static public int WEATHER_UMBRELLA = 7;
+
+    final static public int WEATHER_STARS = 8;
+
+    final static public int WEATHER_MOON = 9;
+
+    final static public int WEATHER_NIGHT_RAIN = 10;
 
     final static public int SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER = 0;
     final static public int SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER = 1;

@@ -21,7 +21,6 @@
             <ImageView
                 android:id="@+id/weather"
                 android:layout_marginRight="10dp"
-                app:srcCompat="@drawable/ic_snow_2"
                 android:layout_width="32dp"
                 android:layout_height="32dp" />
 

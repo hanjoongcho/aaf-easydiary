@@ -155,11 +155,16 @@
     <!--Array-->
     <string-array name="weather_item_array">
         <item>Weather</item>
-        <item>Sunny</item>
-        <item>Blur</item>
-        <item>Rain</item>
-        <item>Thunderbolt</item>
-        <item>Snow</item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
     </string-array>
 
     <string-array name="pref_list_fonts_title">

@@ -154,12 +154,17 @@
 
     <!--Array-->
     <string-array name="weather_item_array">
-        <item>날씨</item>
-        <item>맑음</item>
-        <item>흐림</item>
-        <item>비</item>
-        <item>번개</item>
-        <item>눈</item>
+        <item>날씨선택</item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
     </string-array>
 
     <string-array name="pref_list_fonts_title">

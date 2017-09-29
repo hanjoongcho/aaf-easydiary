@@ -41,20 +41,35 @@ public class EasyDiaryUtils {
             case 0:
                 imageView.setImageResource(0);
                 break;
-            case Constants.WEATHER_FLAG_SUN:
-                imageView.setImageResource(R.drawable.ic_sun);
+            case Constants.WEATHER_SUNNY:
+                imageView.setImageResource(R.drawable.ic_sunny);
                 break;
-            case Constants.WEATHER_FLAG_SUN_AND_CLOUD:
-                imageView.setImageResource(R.drawable.ic_cloud);
+            case Constants.WEATHER_CLOUD_AND_SUN:
+                imageView.setImageResource(R.drawable.ic_clouds_and_sun);
                 break;
-            case Constants.WEATHER_FLAG_RAIN:
-                imageView.setImageResource(R.drawable.ic_rain);
+            case Constants.WEATHER_RAIN_DROPS:
+                imageView.setImageResource(R.drawable.ic_raindrops);
                 break;
-            case Constants.WEATHER_FLAG_THUNDER_BOLT:
-                imageView.setImageResource(R.drawable.ic_storm);
+            case Constants.WEATHER_BOLT:
+                imageView.setImageResource(R.drawable.ic_bolt);
                 break;
-            case Constants.WEATHER_FLAG_SNOW:
-                imageView.setImageResource(R.drawable.ic_snow_2);
+            case Constants.WEATHER_SNOWING:
+                imageView.setImageResource(R.drawable.ic_snowing);
+                break;
+            case Constants.WEATHER_RAINBOW:
+                imageView.setImageResource(R.drawable.ic_rainbow);
+                break;
+            case Constants.WEATHER_UMBRELLA:
+                imageView.setImageResource(R.drawable.ic_umbrella_1);
+                break;
+            case Constants.WEATHER_STARS:
+                imageView.setImageResource(R.drawable.ic_stars_2);
+                break;
+            case Constants.WEATHER_MOON:
+                imageView.setImageResource(R.drawable.ic_moon_9);
+                break;
+            case Constants.WEATHER_NIGHT_RAIN:
+                imageView.setImageResource(R.drawable.ic_night_rain);
                 break;
         }
     }

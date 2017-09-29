@@ -64,6 +64,11 @@ public class DiaryWeatherItemAdapter extends ArrayAdapter<String> {
         EasyDiaryUtils.initWeatherView(holder.imageView1, position, true);
 
         holder.textView1.setText(list.get(position));
+        if (position == 0) {
+            holder.imageView1.setVisibility(View.GONE);
+        } else {
+            holder.imageView1.setVisibility(View.VISIBLE);
+        }
 
         return row;
     }
