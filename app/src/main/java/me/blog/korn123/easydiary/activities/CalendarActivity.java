@@ -22,6 +22,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
@@ -81,7 +82,7 @@ public class CalendarActivity extends EasyDiaryActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 DiaryDto diaryDto = (DiaryDto)adapterView.getAdapter().getItem(i);
                 Intent detailIntent = new Intent(CalendarActivity.this, DiaryReadActivity.class);
-                detailIntent.putExtra("sequence", diaryDto.getSequence());
+                detailIntent.putExtra(Constants.DIARY_SEQUENCE, diaryDto.getSequence());
                 detailIntent.putExtra("title", diaryDto.getTitle());
                 detailIntent.putExtra("contents", diaryDto.getContents());
                 detailIntent.putExtra("date", DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis()));

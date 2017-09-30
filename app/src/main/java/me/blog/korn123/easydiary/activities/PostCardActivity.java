@@ -91,7 +91,7 @@ public class PostCardActivity extends EasyDiaryActivity {
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-        mSequence = intent.getIntExtra("sequence", 0);
+        mSequence = intent.getIntExtra(Constants.DIARY_SEQUENCE, 0);
         DiaryDto diaryDto = EasyDiaryDbHelper.readDiaryBy(mSequence);
 
         EasyDiaryUtils.initWeatherView(mWeather, diaryDto.getWeather());
@@ -264,7 +264,6 @@ public class PostCardActivity extends EasyDiaryActivity {
             @Override
             public void run() {
                 try {
-                    EasyDiaryUtils.initWorkingDirectory(Environment.getExternalStorageDirectory().getAbsolutePath() + Path.WORKING_DIRECTORY);
                     final String diaryCardPath = Path.WORKING_DIRECTORY + mSequence + "_" + DateUtils.getCurrentDateAsString(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".jpg";
                     mSavedDiaryCardPath = Environment.getExternalStorageDirectory().getAbsolutePath() + diaryCardPath;
                     BitmapUtils.saveBitmapToFileCache(bitmap, mSavedDiaryCardPath);

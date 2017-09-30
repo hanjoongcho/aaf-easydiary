@@ -14,6 +14,7 @@ import com.github.chrisbanes.photoview.PhotoView;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
@@ -41,7 +42,7 @@ public class PhotoViewPagerActivity extends EasyDiaryActivity {
         FontUtils.setTypefaceDefault(mPageInfo);
 
         Intent intent = getIntent();
-        int sequence = intent.getIntExtra("sequence", 0);
+        int sequence = intent.getIntExtra(Constants.DIARY_SEQUENCE, 0);
         DiaryDto diaryDto = EasyDiaryDbHelper.readDiaryBy(sequence);
         mPhotoCount = diaryDto.getPhotoUris().size();
         mPageInfo.setText("1 / " + mPhotoCount);

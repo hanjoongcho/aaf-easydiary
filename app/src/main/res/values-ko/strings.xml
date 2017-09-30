@@ -146,7 +146,7 @@
     <!--CaldroidItemAdapter-->
     <string name="diary_count">건</string>
 
-    <!--read_diary.xml-->
+    <!--diary_main.xml-->
     <string name="menu_calendar">캘린더</string>
     <string name="menu_chart">차트</string>
     <string name="menu_timeline">타임라인</string>

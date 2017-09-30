@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -69,11 +68,17 @@ import me.blog.korn123.easydiary.models.DiaryDto;
 public class DiaryInsertActivity extends EasyDiaryActivity {
 
     private Intent mRecognizerIntent;
+
     private long mCurrentTimeMillis;
+
     private int mCurrentCursor = 0;
+
     private RealmList<PhotoUriDto> mPhotoUris;
+
     private List<Integer> mRemoveIndexes = new ArrayList<>();
+
     private int mShowcaseIndex = 2;
+
     private ShowcaseView mShowcaseView;
 
     @BindView(R.id.contents)
@@ -118,6 +123,7 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
     @BindView(R.id.photoView)
     ImageView mPhotoView;
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diary_insert);
@@ -138,6 +144,124 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
         initSpinner();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         initShowcase();
+    }
+
+    @Override
+    public void onBackPressed() {
+        DialogUtils.showAlertDialog(DiaryInsertActivity.this, getString(R.string.back_pressed_confirm),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                },
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                }
+        );
+    }
+
+    @OnClick({R.id.speechButton, R.id.zoomIn, R.id.zoomOut, R.id.saveContents, R.id.photoView, R.id.datePicker, R.id.timePicker})
+    public void onClick(View view) {
+        float fontSize = mContents.getTextSize();
+
+        switch(view.getId()) {
+            case R.id.speechButton:
+                showSpeechDialog();
+                break;
+            case R.id.zoomIn:
+                CommonUtils.saveFloatPreference(DiaryInsertActivity.this, Constants.SETTING_FONT_SIZE, fontSize + 5);
+                setFontsSize();
+                break;
+            case R.id.zoomOut:
+                CommonUtils.saveFloatPreference(DiaryInsertActivity.this, Constants.SETTING_FONT_SIZE, fontSize - 5);
+                setFontsSize();
+                break;
+            case R.id.saveContents:
+                if (StringUtils.isEmpty(mContents.getText())) {
+                    mContents.requestFocus();
+                    DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message));
+                } else {
+                    DiaryDto diaryDto = new DiaryDto(
+                            -1,
+                            mCurrentTimeMillis,
+                            String.valueOf(DiaryInsertActivity.this.mTitle.getText()),
+                            String.valueOf(DiaryInsertActivity.this.mContents.getText()),
+                            mWeatherSpinner.getSelectedItemPosition()
+                    );
+                    applyRemoveIndex();
+                    diaryDto.setPhotoUris(mPhotoUris);
+                    EasyDiaryDbHelper.insertDiary(diaryDto);
+                    CommonUtils.saveIntPreference(DiaryInsertActivity.this, Constants.PREVIOUS_ACTIVITY, Constants.PREVIOUS_ACTIVITY_CREATE);
+                    finish();
+                }
+                break;
+            case R.id.photoView:
+                if (PermissionUtils.checkPermission(this, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
+                    // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
+                    callImagePicker();
+                } else {
+                    // API Level 23 이상이면서 권한취득 안한경우
+                    PermissionUtils.confirmPermission(this, this, Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE);
+                }
+                break;
+            case R.id.datePicker:
+                if (mDatePickerDialog == null) {
+                    mDatePickerDialog = new DatePickerDialog(this, mStartDateListener, mYear, mMonth - 1, mDayOfMonth);
+                }
+                mDatePickerDialog.show();
+                break;
+            case R.id.timePicker:
+                if (mTimePickerDialog == null) {
+                    mTimePickerDialog = new TimePickerDialog(this, mTimeSetListener, mHourOfDay, mMinute, false);
+                }
+                mTimePickerDialog.show();
+                break;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case Constants.REQUEST_CODE_EXTERNAL_STORAGE:
+                if (PermissionUtils.checkPermission(this, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
+                    // 권한이 있는경우
+                    callImagePicker();
+                } else {
+                    // 권한이 없는경우
+                    DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3));
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setFontsTypeface();
+        setFontsSize();
+    }
+
+    public void initSpinner() {
+        String[]  weatherArr = getResources().getStringArray(R.array.weather_item_array);
+        ArrayAdapter arrayAdapter = new DiaryWeatherItemAdapter(DiaryInsertActivity.this, R.layout.item_weather, Arrays.asList(weatherArr));
+        mWeatherSpinner.setAdapter(arrayAdapter);
+    }
+
+    private void setFontsTypeface() {
+        FontUtils.setFontsTypeface(DiaryInsertActivity.this, getAssets(), null, mTitle, mContents);
+    }
+
+    private void setFontsSize() {
+        float commonSize = CommonUtils.loadFloatPreference(DiaryInsertActivity.this, Constants.SETTING_FONT_SIZE, mTitle.getTextSize());
+        FontUtils.setFontsSize(commonSize, -1, mTitle, mContents);
+        initSpinner();
     }
 
     private void initShowcase() {
@@ -223,12 +347,6 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
         mShowcaseView.setButtonPosition(centerParams);
     }
 
-    public void initSpinner() {
-        String[]  weatherArr = getResources().getStringArray(R.array.weather_item_array);
-        ArrayAdapter arrayAdapter = new DiaryWeatherItemAdapter(DiaryInsertActivity.this, R.layout.item_weather, Arrays.asList(weatherArr));
-        mWeatherSpinner.setAdapter(arrayAdapter);
-    }
-
     private void bindEvent() {
         mToggleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -272,24 +390,6 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
         });
     }
 
-    @Override
-    public void onBackPressed() {
-        DialogUtils.showAlertDialog(DiaryInsertActivity.this, getString(R.string.back_pressed_confirm),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        finish();
-                    }
-                },
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                    }
-                }
-        );
-    }
-
     private void enableRecognizer() {
         mToggleMicOff.setVisibility(View.GONE);
         mToggleMicOn.setVisibility(View.VISIBLE);
@@ -302,65 +402,6 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
         mToggleMicOff.setVisibility(View.VISIBLE);
         mSpeechButton.setVisibility(View.GONE);
         mToggleSwitch.setChecked(false);
-    }
-
-    @OnClick({R.id.speechButton, R.id.zoomIn, R.id.zoomOut, R.id.saveContents, R.id.photoView, R.id.datePicker, R.id.timePicker})
-    public void onClick(View view) {
-        float fontSize = mContents.getTextSize();
-
-        switch(view.getId()) {
-            case R.id.speechButton:
-                showSpeechDialog();
-                break;
-            case R.id.zoomIn:
-                CommonUtils.saveFloatPreference(DiaryInsertActivity.this, Constants.SETTING_FONT_SIZE, fontSize + 5);
-                setDiaryFontSize();
-                break;
-            case R.id.zoomOut:
-                CommonUtils.saveFloatPreference(DiaryInsertActivity.this, Constants.SETTING_FONT_SIZE, fontSize - 5);
-                setDiaryFontSize();
-                break;
-            case R.id.saveContents:
-                if (StringUtils.isEmpty(mContents.getText())) {
-                    mContents.requestFocus();
-                    DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message));
-                } else {
-                    DiaryDto diaryDto = new DiaryDto(
-                            -1,
-                            mCurrentTimeMillis,
-                            String.valueOf(DiaryInsertActivity.this.mTitle.getText()),
-                            String.valueOf(DiaryInsertActivity.this.mContents.getText()),
-                            mWeatherSpinner.getSelectedItemPosition()
-                    );
-                    applyRemoveIndex();
-                    diaryDto.setPhotoUris(mPhotoUris);
-                    EasyDiaryDbHelper.insertDiary(diaryDto);
-                    CommonUtils.saveIntPreference(DiaryInsertActivity.this, Constants.PREVIOUS_ACTIVITY, Constants.PREVIOUS_ACTIVITY_CREATE);
-                    finish();
-                }
-                break;
-            case R.id.photoView:
-                if (PermissionUtils.checkPermission(this, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
-                    // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
-                    callImagePicker();
-                } else {
-                    // API Level 23 이상이면서 권한취득 안한경우
-                    PermissionUtils.confirmPermission(this, this, Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE);
-                }
-                break;
-            case R.id.datePicker:
-                if (mDatePickerDialog == null) {
-                    mDatePickerDialog = new DatePickerDialog(this, mStartDateListener, mYear, mMonth - 1, mDayOfMonth);
-                }
-                mDatePickerDialog.show();
-                break;
-            case R.id.timePicker:
-                if (mTimePickerDialog == null) {
-                    mTimePickerDialog = new TimePickerDialog(this, mTimeSetListener, mHourOfDay, mMinute, false);
-                }
-                mTimePickerDialog.show();
-                break;
-        }
     }
 
     private DatePickerDialog mDatePickerDialog;
@@ -503,42 +544,6 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case Constants.REQUEST_CODE_EXTERNAL_STORAGE:
-                if (PermissionUtils.checkPermission(this, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
-                    // 권한이 있는경우
-                    callImagePicker();
-                } else {
-                    // 권한이 없는경우
-                    DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3));
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        FontUtils.setTypeface(this, getAssets(), this.mContents);
-        FontUtils.setTypeface(this, getAssets(), this.mTitle);
-        setDiaryFontSize();
-    }
-
-    private void setDiaryFontSize() {
-        float fontSize = CommonUtils.loadFloatPreference(this, "font_size", 0);
-        if (fontSize > 0) {
-            mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
-            mContents.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
-            initSpinner();
-        }
-    }
-
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -554,7 +559,7 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.diary_common, menu);
         return true;
     }
 

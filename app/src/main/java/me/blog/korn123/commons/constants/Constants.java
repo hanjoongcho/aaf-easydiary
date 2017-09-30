@@ -77,5 +77,11 @@ public class Constants {
     // pause millis preference key
     final static public String SETTING_PAUSE_MILLIS = "pause_millis";
 
+    final static public String INIT_DUMMY_DATA_FLAG = "init_dummy_data";
 
+    final static public String APP_FINISH_FLAG = "app_finish";
+
+    final public static String DIARY_SEQUENCE = "diary_sequence";
+
+    final public static String DIARY_SEARCH_QUERY = "diary_search_query";
 }

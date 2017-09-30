@@ -14,6 +14,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.adapters.TimelineItemAdapter;
@@ -53,7 +54,7 @@ public class TimelineActivity extends EasyDiaryActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 DiaryDto diaryDto = (DiaryDto)adapterView.getAdapter().getItem(i);
                 Intent detailIntent = new Intent(TimelineActivity.this, DiaryReadActivity.class);
-                detailIntent.putExtra("sequence", diaryDto.getSequence());
+                detailIntent.putExtra(Constants.DIARY_SEQUENCE, diaryDto.getSequence());
                 startActivity(detailIntent);
             }
         });

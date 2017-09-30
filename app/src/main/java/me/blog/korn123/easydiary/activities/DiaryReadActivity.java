@@ -17,7 +17,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -61,7 +60,21 @@ import me.blog.korn123.easydiary.models.DiaryDto;
 
 public class DiaryReadActivity extends EasyDiaryActivity {
 
+    /**
+     * The {@link android.support.v4.view.PagerAdapter} that will provide
+     * fragments for each of the sections. We use a
+     * {@link FragmentPagerAdapter} derivative, which will keep every
+     * loaded fragment in memory. If this becomes too memory intensive, it
+     * may be best to switch to a
+     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     */
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+
     private TextToSpeech mTextToSpeech;
+
+    private int mShowcaseIndex = 2;
+
+    private ShowcaseView mShowcaseView;
 
     @BindView(R.id.container)
     ViewPager mViewPager;
@@ -78,17 +91,7 @@ public class DiaryReadActivity extends EasyDiaryActivity {
     @BindView(R.id.delete)
     ImageView mDelete;
 
-
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         // fixme elegance start    =============================================================================
         // activity destroy 시 저장된 savedInstance 값이 전달되면 갱신된 fragment 접근이 안됨
@@ -97,11 +100,11 @@ public class DiaryReadActivity extends EasyDiaryActivity {
 
         final int startPageIndex;
         // init viewpager
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), getIntent().getStringExtra("query"));
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), getIntent().getStringExtra(Constants.DIARY_SEARCH_QUERY));
         if (savedInstanceState == null) {
-            startPageIndex = mSectionsPagerAdapter.sequenceToPageIndex(getIntent().getIntExtra("sequence", -1));
+            startPageIndex = mSectionsPagerAdapter.sequenceToPageIndex(getIntent().getIntExtra(Constants.DIARY_SEQUENCE, -1));
         } else {
-            startPageIndex = mSectionsPagerAdapter.sequenceToPageIndex(savedInstanceState.getInt("sequence", -1));
+            startPageIndex = mSectionsPagerAdapter.sequenceToPageIndex(savedInstanceState.getInt(Constants.DIARY_SEQUENCE, -1));
         }
         // fixme elegance end      =============================================================================
 
@@ -128,8 +131,8 @@ public class DiaryReadActivity extends EasyDiaryActivity {
                 PlaceholderFragment fragment = mSectionsPagerAdapter.getFragment(mViewPager.getCurrentItem());
 //                Log.i("determine", String.valueOf(fragment.getActivity()));
                 if (fragment.getActivity() != null) {
-                    fragment.setDiaryTypeface();
-                    fragment.setDiaryFontSize();
+                    fragment.setFontsTypeface();
+                    fragment.setFontsSize();
                 }
             }
 
@@ -149,8 +152,100 @@ public class DiaryReadActivity extends EasyDiaryActivity {
         initShowcase();
     }
 
-    private int showcaseIndex = 2;
-    ShowcaseView mShowcaseView;
+    @Override
+    protected void onPause() {
+        super.onPause();
+        destroyModule();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        PlaceholderFragment fragment = mSectionsPagerAdapter.getFragment(mViewPager.getCurrentItem());
+        outState.putInt(Constants.DIARY_SEQUENCE, fragment.mSequence);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initModule();
+    }
+
+    @OnClick({R.id.zoomIn, R.id.zoomOut, R.id.delete, R.id.edit, R.id.speechOutButton, R.id.postCard})
+    public void onClick(View view) {
+
+        final PlaceholderFragment fragment = mSectionsPagerAdapter.getFragment(mViewPager.getCurrentItem());
+        float fontSize = fragment.mTitle.getTextSize();
+
+        switch(view.getId()) {
+            case R.id.zoomIn:
+                CommonUtils.saveFloatPreference(DiaryReadActivity.this, Constants.SETTING_FONT_SIZE, fontSize + 5);
+                fragment.setFontsSize();
+                break;
+            case R.id.zoomOut:
+                CommonUtils.saveFloatPreference(DiaryReadActivity.this, Constants.SETTING_FONT_SIZE, fontSize - 5);
+                fragment.setFontsSize();
+                break;
+            case R.id.delete:
+                DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        EasyDiaryDbHelper.deleteDiary(fragment.mSequence);
+                        finish();
+                    }
+                };
+                DialogInterface.OnClickListener negativeListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                };
+                DialogUtils.showAlertDialog(DiaryReadActivity.this, getString(R.string.delete_confirm), positiveListener, negativeListener);
+                break;
+            case R.id.edit:
+                Intent updateDiaryIntent = new Intent(DiaryReadActivity.this, DiaryUpdateActivity.class);
+                updateDiaryIntent.putExtra(Constants.DIARY_SEQUENCE, fragment.mSequence);
+                startActivity(updateDiaryIntent);
+                finish();
+                break;
+            case R.id.speechOutButton:
+                textToSpeech(fragment.mContents.getText().toString());
+                break;
+            case R.id.postCard:
+                Intent postCardIntent = new Intent(DiaryReadActivity.this, PostCardActivity.class);
+                postCardIntent.putExtra(Constants.DIARY_SEQUENCE, fragment.mSequence);
+                startActivityForResult(postCardIntent, Constants.REQUEST_CODE_BACKGROUND_COLOR_PICKER);
+                break;
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                finish();
+//                this.overridePendingTransition(R.anim.anim_left_to_center, R.anim.anim_center_to_right);
+                break;
+            case R.id.action_settings:
+                Intent settingIntent = new Intent(DiaryReadActivity.this, SettingsActivity.class);
+                startActivity(settingIntent);
+                break;
+//            case R.id.toolbarToggle:
+//                if (mSubToolbar.getVisibility() == View.GONE) {
+//                    mSubToolbar.setVisibility(View.VISIBLE);
+//                } else if (mSubToolbar.getVisibility() == View.VISIBLE) {
+//                    mSubToolbar.setVisibility(View.GONE);
+//                }
+//                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.diary_common, menu);
+        return true;
+    }
 
     private void initShowcase() {
         int margin = ((Number) (getResources().getDisplayMetrics().density * 12)).intValue();
@@ -164,7 +259,7 @@ public class DiaryReadActivity extends EasyDiaryActivity {
         View.OnClickListener showcaseViewOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switch (showcaseIndex) {
+                switch (mShowcaseIndex) {
                     case 2:
                         mShowcaseView.setButtonPosition(centerParams);
                         mShowcaseView.setShowcase(new ViewTarget(mEdit), true);
@@ -194,7 +289,7 @@ public class DiaryReadActivity extends EasyDiaryActivity {
                         mShowcaseView.hide();
                         break;
                 }
-                showcaseIndex++;
+                mShowcaseIndex++;
             }
         };
 
@@ -272,114 +367,13 @@ public class DiaryReadActivity extends EasyDiaryActivity {
         mTextToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        destroyModule();
-    }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        PlaceholderFragment fragment = mSectionsPagerAdapter.getFragment(mViewPager.getCurrentItem());
-        outState.putInt("sequence", fragment.mSequence);
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        initModule();
-    }
-
-    @OnClick({R.id.zoomIn, R.id.zoomOut, R.id.delete, R.id.edit, R.id.speechOutButton, R.id.postCard})
-    public void onClick(View view) {
-
-//        ViewGroup viewPagerRootView = (ViewGroup) mViewPager.getChildAt(0);
-//        mViewPager.setCurrentItem(2);
-//        float fontSize = ((TextView) viewPagerRootView.findViewById(R.id.title)).getTextSize();
-        final PlaceholderFragment fragment = mSectionsPagerAdapter.getFragment(mViewPager.getCurrentItem());
-        float fontSize = fragment.mTitle.getTextSize();
-
-        switch(view.getId()) {
-            case R.id.zoomIn:
-                CommonUtils.saveFloatPreference(DiaryReadActivity.this, "font_size", fontSize + 5);
-                fragment.setDiaryFontSize();
-                break;
-            case R.id.zoomOut:
-                CommonUtils.saveFloatPreference(DiaryReadActivity.this, "font_size", fontSize - 5);
-                fragment.setDiaryFontSize();
-                break;
-            case R.id.delete:
-                DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        EasyDiaryDbHelper.deleteDiary(fragment.mSequence);
-                        finish();
-                    }
-                };
-                DialogInterface.OnClickListener negativeListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                };
-                DialogUtils.showAlertDialog(DiaryReadActivity.this, getString(R.string.delete_confirm), positiveListener, negativeListener);
-                break;
-            case R.id.edit:
-                Intent updateDiaryIntent = new Intent(DiaryReadActivity.this, DiaryUpdateActivity.class);
-                updateDiaryIntent.putExtra("sequence", fragment.mSequence);
-                startActivity(updateDiaryIntent);
-                finish();
-                break;
-            case R.id.speechOutButton:
-                textToSpeech(fragment.mContents.getText().toString());
-                break;
-            case R.id.postCard:
-                Intent postCardIntent = new Intent(DiaryReadActivity.this, PostCardActivity.class);
-                postCardIntent.putExtra("sequence", fragment.mSequence);
-                startActivityForResult(postCardIntent, Constants.REQUEST_CODE_BACKGROUND_COLOR_PICKER);
-                break;
-        }
-    }
-
-
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
-        {
-            case android.R.id.home:
-                finish();
-//                this.overridePendingTransition(R.anim.anim_left_to_center, R.anim.anim_center_to_right);
-                break;
-            case R.id.action_settings:
-                Intent settingIntent = new Intent(DiaryReadActivity.this, SettingsActivity.class);
-                startActivity(settingIntent);
-                break;
-//            case R.id.toolbarToggle:
-//                if (mSubToolbar.getVisibility() == View.GONE) {
-//                    mSubToolbar.setVisibility(View.VISIBLE);
-//                } else if (mSubToolbar.getVisibility() == View.VISIBLE) {
-//                    mSubToolbar.setVisibility(View.GONE);
-//                }
-//                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
 
     /**
      * A placeholder fragment containing a simple view.
      */
     public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String DIARY_SEQUENCE = "diary_sequence";
-        private static final String DIARY_SEARCH_QUERY = "diary_search_query";
+
         private int mSequence;
 
         @BindView(R.id.contents)
@@ -409,8 +403,8 @@ public class DiaryReadActivity extends EasyDiaryActivity {
         public static PlaceholderFragment newInstance(int sequence, String query) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
-            args.putInt(DIARY_SEQUENCE, sequence);
-            args.putString(DIARY_SEARCH_QUERY, query);
+            args.putInt(Constants.DIARY_SEQUENCE, sequence);
+            args.putString(Constants.DIARY_SEARCH_QUERY, query);
             fragment.setArguments(args);
             return fragment;
         }
@@ -428,7 +422,7 @@ public class DiaryReadActivity extends EasyDiaryActivity {
             ViewGroup mPhotoContainer = (ViewGroup) rootView.findViewById(R.id.photoContainer);
             HorizontalScrollView mHorizontalScrollView = (HorizontalScrollView) rootView.findViewById(R.id.photoContainerScrollView);
 
-            mSequence = getArguments().getInt(DIARY_SEQUENCE);
+            mSequence = getArguments().getInt(Constants.DIARY_SEQUENCE);
             DiaryDto diaryDto = EasyDiaryDbHelper.readDiaryBy(mSequence);
             if (StringUtils.isEmpty(diaryDto.getTitle())) {
                 mTitle.setVisibility(View.GONE);
@@ -437,7 +431,7 @@ public class DiaryReadActivity extends EasyDiaryActivity {
             mContents.setText(diaryDto.getContents());
             mDate.setText(DateUtils.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
 
-            String query = getArguments().getString(DIARY_SEARCH_QUERY);
+            String query = getArguments().getString(Constants.DIARY_SEARCH_QUERY);
             if (StringUtils.isNotEmpty(query)) {
                 EasyDiaryUtils.highlightString(mTitle, query);
                 EasyDiaryUtils.highlightString(mContents, query);
@@ -452,7 +446,7 @@ public class DiaryReadActivity extends EasyDiaryActivity {
                     @Override
                     public void onClick(View v) {
                         Intent photoViewPager = new Intent(getContext(), PhotoViewPagerActivity.class);
-                        photoViewPager.putExtra("sequence", mSequence);
+                        photoViewPager.putExtra(Constants.DIARY_SEQUENCE, mSequence);
                         startActivity(photoViewPager);
                     }
                 };
@@ -485,23 +479,17 @@ public class DiaryReadActivity extends EasyDiaryActivity {
         @Override
         public void onResume() {
             super.onResume();
-            setDiaryTypeface();
-            setDiaryFontSize();
+            setFontsTypeface();
+            setFontsSize();
         }
 
-        private void setDiaryTypeface() {
-            FontUtils.setTypeface(getContext(), getActivity().getAssets(), mTitle);
-            FontUtils.setTypeface(getContext(), getActivity().getAssets(), mDate);
-            FontUtils.setTypeface(getContext(), getActivity().getAssets(), mContents);
+        private void setFontsTypeface() {
+            FontUtils.setFontsTypeface(getContext(), getActivity().getAssets(), null, mTitle, mDate, mContents);
         }
 
-        private void setDiaryFontSize() {
-            float fontSize = CommonUtils.loadFloatPreference(getContext(), "font_size", 0);
-            if (fontSize > 0) {
-                mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
-                mDate.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
-                mContents.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
-            }
+        private void setFontsSize() {
+            float commonSize = CommonUtils.loadFloatPreference(getContext(), Constants.SETTING_FONT_SIZE, mTitle.getTextSize());
+            FontUtils.setFontsSize(commonSize, -1, mTitle, mDate, mContents);
         }
 
     }

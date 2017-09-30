@@ -42,7 +42,7 @@ public class CommonUtils {
         edit.commit();
     }
 
-    public static float loadFloatPreference(Context context, String key, int defaultValue) {
+    public static float loadFloatPreference(Context context, String key, float defaultValue) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return preferences.getFloat(key, defaultValue);
     }

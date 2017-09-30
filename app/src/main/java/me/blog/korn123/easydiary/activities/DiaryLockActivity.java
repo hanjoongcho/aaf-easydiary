@@ -132,7 +132,7 @@ public class DiaryLockActivity extends Activity {
 //        super.onBackPressed();
         Intent readDiaryIntent = new Intent(DiaryLockActivity.this, DiaryMainActivity.class);
         readDiaryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-        readDiaryIntent.putExtra("app_finish", true);
+        readDiaryIntent.putExtra(Constants.APP_FINISH_FLAG, true);
         startActivity(readDiaryIntent);
         finish();
     }
