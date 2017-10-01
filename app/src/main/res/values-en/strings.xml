@@ -99,6 +99,9 @@
     <string name="backup_diary">Backup diary</string>
     <string name="backup_diary_summary">Back up all your content to Google Drive.\nIn the case of an attached photo, only the link information is backed up. Therefore, only the contents except the attached photo will be restored on devices that do not have the original photo.\nBackup features including original photos will be available in the future.</string>
     <string name="font_setting">Font setting</string>
+    <string name="add_ttf_fonts_title">Add TTF font</string>
+    <string name="add_ttf_fonts_summary">Add your own TTF fonts to the Easy Diary.\nIf the fonts are added, you can use the added fonts with the built-in fonts.</string>
+    <string name="add_ttf_fonts_info_url">https://github.com/hanjoongcho/aaf-easydiary/blob/master/MANUAL.md</string>
 
     <!--CalendarActivity-->
     <string name="calendar_title">Calendar</string>

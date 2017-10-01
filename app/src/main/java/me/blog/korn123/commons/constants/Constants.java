@@ -92,4 +92,7 @@ public class Constants {
     final public static String DIARY_SEQUENCE = "diary_sequence";
 
     final public static String DIARY_SEARCH_QUERY = "diary_search_query";
+
+    final public static String OPEN_URL_INFO = "diary_search_query";
+
 }

@@ -325,15 +325,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         }
 
         Preference mAppVersionPreference;
-        Preference mOpenSourceLicensesInfo;
-        Preference mExportGoogleDrive;
-        Preference mImportGoogleDrive;
         Preference mApplicationLockPassword;
         private void initPreference() {
             mAppVersionPreference = findPreference("aaf_app_version");
-            mOpenSourceLicensesInfo = findPreference("open_source_licenses");
-            mExportGoogleDrive= findPreference("export_google_drive");
-            mImportGoogleDrive= findPreference("import_google_drive");
             mApplicationLockPassword = findPreference("application_lock_password");
 
             PackageInfo pInfo = null;
@@ -365,16 +359,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 }
             });
 
-            mOpenSourceLicensesInfo.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    Intent intent = new Intent(getActivity(), LicensesActivity.class);
-                    startActivity(intent);
-                    return false;
-                }
-            });
-
-            mExportGoogleDrive.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            findPreference("export_google_drive").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     mTaskFlag = Constants.SETTING_FLAG_EXPORT_GOOGLE_DRIVE;
@@ -390,8 +375,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 }
             });
 
-            mApplicationLockPassword.setSummary(getString(R.string.lock_number) + " " + CommonUtils.loadStringPreference(getActivity().getApplicationContext(), Constants.APP_LOCK_SAVED_PASSWORD, "0000"));
-            mImportGoogleDrive.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            findPreference("import_google_drive").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     mTaskFlag = Constants.SETTING_FLAG_IMPORT_GOOGLE_DRIVE;
@@ -407,6 +391,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 }
             });
 
+            mApplicationLockPassword.setSummary(getString(R.string.lock_number) + " " + CommonUtils.loadStringPreference(getActivity().getApplicationContext(), Constants.APP_LOCK_SAVED_PASSWORD, "0000"));
             mApplicationLockPassword.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -415,6 +400,27 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     return false;
                 }
             });
+
+            findPreference("open_source_licenses").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent intent = new Intent(getActivity(), WebViewActivity.class);
+                    intent.putExtra(Constants.OPEN_URL_INFO, "https://github.com/hanjoongcho/aaf-easydiary/blob/master/LICENSE.md");
+                    startActivity(intent);
+                    return false;
+                }
+            });
+
+            findPreference("add_ttf_fonts").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent intent = new Intent(getActivity(), WebViewActivity.class);
+                    intent.putExtra(Constants.OPEN_URL_INFO, getString(R.string.add_ttf_fonts_info_url));
+                    startActivity(intent);
+                    return false;
+                }
+            });
+
         }
 
         @Override

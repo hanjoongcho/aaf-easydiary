@@ -10,6 +10,11 @@
             android:entryValues="@array/pref_list_fonts_values"
             android:defaultValue="NanumPen.ttf"
             />
+        <Preference
+            android:key="add_ttf_fonts"
+            android:title="@string/add_ttf_fonts_title"
+            android:summary="@string/add_ttf_fonts_summary">
+        </Preference>
         <SwitchPreference
             android:key="application_lock"
             android:title="@string/application_lock_title"

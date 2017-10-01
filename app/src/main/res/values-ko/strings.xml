@@ -99,6 +99,9 @@
     <string name="backup_diary">다이어리 백업하기</string>
     <string name="backup_diary_summary">모든 컨텐츠를 구글 드라이브에 백업합니다.\n첨부사진의 경우 링크정보만 백업이 되므로 원본사진이 존재하지 않는 디바이스에서는 첨부사진을 제외한 컨텐츠만 복구됩니다.\n원본사진을 포함한 백업기능은 추후 제공예정입니다.</string>
     <string name="font_setting">폰트설정</string>
+    <string name="add_ttf_fonts_title">TTF 폰트추가</string>
+    <string name="add_ttf_fonts_summary">사용자가 소유하고 있는 TTF 폰트를 이지다이어리에 추가하여 사용합니다.\n폰트가 추가되면 기본제공 폰트와 함께 사용자가 추가한 폰트를 사용할 수 있습니다.</string>
+    <string name="add_ttf_fonts_info_url">https://github.com/hanjoongcho/aaf-easydiary/blob/master/MANUAL_ko.md</string>
 
     <!--CalendarActivity-->
     <string name="calendar_title">캘린더</string>
