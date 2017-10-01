@@ -59,6 +59,44 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     private static int mTaskFlag = 0;
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setupActionBar();
+
+        getFragmentManager().beginTransaction()
+                .replace(android.R.id.content, new GeneralPreferenceFragment())
+                .commit();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //ViewGroup viewGroup = (ViewGroup) findViewById(android.R.id.content);
+
+                new android.os.Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Window window = getWindow();
+                        View v = window.getDecorView();
+                        determineView((ViewGroup)v);
+                    }
+                });
+
+            }
+        }).start();
+
+//        ViewGroup viewGroup = (ViewGroup) findViewById(android.R.id.content);
+////        Window window = getWindow();
+////        ViewGroup viewGroup = (ViewGroup) window.getDecorView();
+//        determineView(viewGroup);
+
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         boolean enableLock = CommonUtils.loadBooleanPreference(SettingsActivity.this, Constants.APP_LOCK_ENABLE);
@@ -163,74 +201,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         // Set the listener to watch for value changes.
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
 
-        File fontDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + Path.USER_CUSTOM_FONTS_DIRECTORY);
-        if (fontDir.list() != null && fontDir.list().length > 0) {
-            ListPreference temp = (ListPreference) preference;
-            FilenameFilter filter = new FilenameFilter() {
-                @Override
-                public boolean accept(File dir, String name) {
-                    boolean result = false;
-                    if (FilenameUtils.getExtension(name).equalsIgnoreCase("ttf")) result = true;
-                    return result;
-                }
-            };
-            String[] listFont = fontDir.list(filter);
-            CharSequence[] entries = new CharSequence[listFont.length + temp.getEntries().length];
-            CharSequence[] entryValues = new CharSequence[listFont.length + temp.getEntryValues().length];
-            System.arraycopy(temp.getEntries(), 0, entries, 0, temp.getEntries().length);
-            System.arraycopy(temp.getEntryValues(), 0, entryValues, 0, temp.getEntryValues().length);
-            for (int i = 0; i < listFont.length; i++) {
-                entries[i + temp.getEntries().length] = FilenameUtils.getBaseName(listFont[i]);
-                entryValues[i + temp.getEntries().length] = listFont[i];
-            }
-            temp.setEntries(entries);
-            temp.setEntryValues(entryValues);
-        }
-
         // Trigger the listener immediately with the preference's
         // current value.
         sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
                 PreferenceManager
                         .getDefaultSharedPreferences(preference.getContext())
                         .getString(preference.getKey(), ""));
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setupActionBar();
-
-        getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, new GeneralPreferenceFragment())
-                .commit();
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                //ViewGroup viewGroup = (ViewGroup) findViewById(android.R.id.content);
-
-                new android.os.Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Window window = getWindow();
-                        View v = window.getDecorView();
-                        determineView((ViewGroup)v);
-                    }
-                });
-
-            }
-        }).start();
-
-//        ViewGroup viewGroup = (ViewGroup) findViewById(android.R.id.content);
-////        Window window = getWindow();
-////        ViewGroup viewGroup = (ViewGroup) window.getDecorView();
-//        determineView(viewGroup);
-
     }
 
     public void determineView(ViewGroup viewGroup) {
@@ -308,9 +284,43 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // guidelines.
 //            bindPreferenceSummaryToValue(findPreference("example_text"));
 //            bindPreferenceSummaryToValue(findPreference("example_list"));
-
+            updateFontList();
             bindPreferenceSummaryToValue(findPreference("font_setting"));
             initPreference();
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            updateFontList();
+        }
+
+        private void updateFontList() {
+            File fontDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + Path.USER_CUSTOM_FONTS_DIRECTORY);
+            if (fontDir.list() != null && fontDir.list().length > 0) {
+                FilenameFilter filter = new FilenameFilter() {
+                    @Override
+                    public boolean accept(File dir, String name) {
+                        boolean result = false;
+                        if (FilenameUtils.getExtension(name).equalsIgnoreCase("ttf")) result = true;
+                        return result;
+                    }
+                };
+                String[] listFont = fontDir.list(filter);
+                String[] embeddedTitles = getResources().getStringArray(R.array.pref_list_fonts_title);
+                String[] embeddedListValues = getResources().getStringArray(R.array.pref_list_fonts_values);
+                CharSequence[] entries = new CharSequence[listFont.length + embeddedTitles.length];
+                CharSequence[] entryValues = new CharSequence[listFont.length + embeddedListValues.length];
+                System.arraycopy(embeddedTitles, 0, entries, 0, embeddedTitles.length);
+                System.arraycopy(embeddedListValues, 0, entryValues, 0, embeddedListValues.length);
+                for (int i = 0; i < listFont.length; i++) {
+                    entries[i + embeddedTitles.length] = FilenameUtils.getBaseName(listFont[i]);
+                    entryValues[i + embeddedListValues.length] = listFont[i];
+                }
+                ListPreference temp = (ListPreference) findPreference("font_setting");
+                temp.setEntries(entries);
+                temp.setEntryValues(entryValues);
+            }
         }
 
         @Override
