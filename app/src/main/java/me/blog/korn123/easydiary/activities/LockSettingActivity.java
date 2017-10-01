@@ -41,7 +41,7 @@ public class LockSettingActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lock_setting);
         ButterKnife.bind(this);
-        FontUtils.setTypeface(this, getAssets(), mInfoMessage);
+        setFontsTypeface();
 
         mPasswordView[0] = mPass1;
         mPasswordView[1] = mPass2;
@@ -98,6 +98,10 @@ public class LockSettingActivity extends Activity {
         } else {
             mCursorIndex++;
         }
+    }
+
+    private void setFontsTypeface() {
+        FontUtils.setFontsTypeface(LockSettingActivity.this, getAssets(), null, mInfoMessage);
     }
 
 }

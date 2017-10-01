@@ -63,6 +63,8 @@ public class Constants {
     // custom fonts supported language
     final static public String CUSTOM_FONTS_SUPPORT_LANGUAGE = "en|ko";
 
+    final static public String CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT = "NanumPen.ttf";
+
     final static public String CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT = "Default";
 
     // previous screen

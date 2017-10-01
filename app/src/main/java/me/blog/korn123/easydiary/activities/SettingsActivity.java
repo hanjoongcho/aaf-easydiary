@@ -12,6 +12,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Looper;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
@@ -26,9 +27,13 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.TextView;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
+
 import me.blog.korn123.commons.constants.Constants;
+import me.blog.korn123.commons.constants.Path;
 import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.DialogUtils;
 import me.blog.korn123.commons.utils.FontUtils;
@@ -62,7 +67,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         }
 
         // init current selected font
-        FontUtils.setCurrentTypeface(SettingsActivity.this, getAssets());
+        FontUtils.setCommonTypeface(SettingsActivity.this, getAssets());
     }
 
     @Override
@@ -156,6 +161,22 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     private static void bindPreferenceSummaryToValue(Preference preference) {
         // Set the listener to watch for value changes.
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
+
+        File fontDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + Path.USER_CUSTOM_FONTS_DIRECTORY);
+        if (fontDir.list() != null && fontDir.list().length > 0) {
+            ListPreference temp = (ListPreference) preference;
+            String[] listFont = fontDir.list();
+            CharSequence[] entries = new CharSequence[listFont.length + temp.getEntries().length];
+            CharSequence[] entryValues = new CharSequence[listFont.length + temp.getEntryValues().length];
+            System.arraycopy(temp.getEntries(), 0, entries, 0, temp.getEntries().length);
+            System.arraycopy(temp.getEntryValues(), 0, entryValues, 0, temp.getEntryValues().length);
+            for (int i = 0; i < listFont.length; i++) {
+                entries[i + temp.getEntries().length] = FilenameUtils.getBaseName(listFont[i]);
+                entryValues[i + temp.getEntries().length] = listFont[i];
+            }
+            temp.setEntries(entries);
+            temp.setEntryValues(entryValues);
+        }
 
         // Trigger the listener immediately with the preference's
         // current value.
@@ -360,7 +381,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 }
             });
 
-            mApplicationLockPassword.setSummary(getString(R.string.lock_number) + " " +CommonUtils.loadStringPreference(getActivity().getApplicationContext(), "application_lock_password", "0000"));
+            mApplicationLockPassword.setSummary(getString(R.string.lock_number) + " " + CommonUtils.loadStringPreference(getActivity().getApplicationContext(), "application_lock_password", "0000"));
             mImportGoogleDrive.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -393,7 +414,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             if (resultCode == RESULT_OK) {
                 String password = data.getStringExtra("password");
                 CommonUtils.saveStringPreference(getActivity().getApplicationContext(), "application_lock_password", password);
-                mApplicationLockPassword.setSummary(getString(R.string.lock_number) + password);
+                mApplicationLockPassword.setSummary(getString(R.string.lock_number) + " " + password);
             }
             CommonUtils.saveLongPreference(getActivity().getApplicationContext(), Constants.SETTING_PAUSE_MILLIS, System.currentTimeMillis());
         }

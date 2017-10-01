@@ -42,13 +42,8 @@ public class IntroActivity extends Activity implements Handler.Callback {
             CommonUtils.saveStringPreference(this, Constants.SETTING_FONT_NAME, Constants.CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT);
         }
 
-        FontUtils.setTypeface(this, getAssets(), mAppName);
-        FontUtils.setTypeface(this, getAssets(), mCompanyName);
-        float fontSize = CommonUtils.loadFloatPreference(this, Constants.SETTING_FONT_SIZE, 0);
-        if (fontSize > 0) {
-            mAppName.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
-            mCompanyName.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
-        }
+        setFontsTypeface();
+        setFontsSize();
         new Handler(this).sendEmptyMessageDelayed(START_MAIN_ACTIVITY, 500);
     }
 
@@ -63,6 +58,15 @@ public class IntroActivity extends Activity implements Handler.Callback {
                 break;
         }
         return false;
+    }
+
+    private void setFontsTypeface() {
+        FontUtils.setFontsTypeface(IntroActivity.this, getAssets(), null, mAppName, mCompanyName);
+    }
+
+    private void setFontsSize() {
+        float commonSize = CommonUtils.loadFloatPreference(IntroActivity.this, Constants.SETTING_FONT_SIZE, mAppName.getTextSize());
+        FontUtils.setFontsSize(commonSize, -1, mAppName, mCompanyName);
     }
 
 }
