@@ -31,6 +31,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
+import java.io.FilenameFilter;
 
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.constants.Path;
@@ -60,7 +61,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        boolean enableLock = CommonUtils.loadBooleanPreference(SettingsActivity.this, "application_lock");
+        boolean enableLock = CommonUtils.loadBooleanPreference(SettingsActivity.this, Constants.APP_LOCK_ENABLE);
         if (enableLock) {
             long currentMillis = System.currentTimeMillis();
             CommonUtils.saveLongPreference(SettingsActivity.this, Constants.SETTING_PAUSE_MILLIS, currentMillis);
@@ -73,7 +74,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        boolean enableLock = CommonUtils.loadBooleanPreference(SettingsActivity.this, "application_lock");
+        boolean enableLock = CommonUtils.loadBooleanPreference(SettingsActivity.this, Constants.APP_LOCK_ENABLE);
         long pauseMillis = CommonUtils.loadLongPreference(SettingsActivity.this, Constants.SETTING_PAUSE_MILLIS, 0);
         if (enableLock && pauseMillis != 0) {
             if (System.currentTimeMillis() - pauseMillis > 1000) {
@@ -165,7 +166,15 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         File fontDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + Path.USER_CUSTOM_FONTS_DIRECTORY);
         if (fontDir.list() != null && fontDir.list().length > 0) {
             ListPreference temp = (ListPreference) preference;
-            String[] listFont = fontDir.list();
+            FilenameFilter filter = new FilenameFilter() {
+                @Override
+                public boolean accept(File dir, String name) {
+                    boolean result = false;
+                    if (FilenameUtils.getExtension(name).equalsIgnoreCase("ttf")) result = true;
+                    return result;
+                }
+            };
+            String[] listFont = fontDir.list(filter);
             CharSequence[] entries = new CharSequence[listFont.length + temp.getEntries().length];
             CharSequence[] entryValues = new CharSequence[listFont.length + temp.getEntryValues().length];
             System.arraycopy(temp.getEntries(), 0, entries, 0, temp.getEntries().length);
@@ -381,7 +390,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 }
             });
 
-            mApplicationLockPassword.setSummary(getString(R.string.lock_number) + " " + CommonUtils.loadStringPreference(getActivity().getApplicationContext(), "application_lock_password", "0000"));
+            mApplicationLockPassword.setSummary(getString(R.string.lock_number) + " " + CommonUtils.loadStringPreference(getActivity().getApplicationContext(), Constants.APP_LOCK_SAVED_PASSWORD, "0000"));
             mImportGoogleDrive.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -412,8 +421,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
             super.onActivityResult(requestCode, resultCode, data);
             if (resultCode == RESULT_OK) {
-                String password = data.getStringExtra("password");
-                CommonUtils.saveStringPreference(getActivity().getApplicationContext(), "application_lock_password", password);
+                String password = data.getStringExtra(Constants.APP_LOCK_REQUEST_PASSWORD);
+                CommonUtils.saveStringPreference(getActivity().getApplicationContext(), Constants.APP_LOCK_SAVED_PASSWORD, password);
                 mApplicationLockPassword.setSummary(getString(R.string.lock_number) + " " + password);
             }
             CommonUtils.saveLongPreference(getActivity().getApplicationContext(), Constants.SETTING_PAUSE_MILLIS, System.currentTimeMillis());

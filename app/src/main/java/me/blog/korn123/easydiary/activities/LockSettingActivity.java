@@ -8,6 +8,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
 
@@ -92,7 +93,7 @@ public class LockSettingActivity extends Activity {
             for (TextView tv : mPasswordView) {
                 fullPassword += tv.getText();
             }
-            getIntent().putExtra("password", fullPassword);
+            getIntent().putExtra(Constants.APP_LOCK_REQUEST_PASSWORD, fullPassword);
             setResult(RESULT_OK, getIntent());
             finish();
         } else {

@@ -15,7 +15,7 @@ public class EasyDiaryActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        boolean enableLock = CommonUtils.loadBooleanPreference(EasyDiaryActivity.this, "application_lock");
+        boolean enableLock = CommonUtils.loadBooleanPreference(EasyDiaryActivity.this, Constants.APP_LOCK_ENABLE);
         if (enableLock) {
             long currentMillis = System.currentTimeMillis();
             CommonUtils.saveLongPreference(EasyDiaryActivity.this, Constants.SETTING_PAUSE_MILLIS, currentMillis);
@@ -25,7 +25,7 @@ public class EasyDiaryActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        boolean enableLock = CommonUtils.loadBooleanPreference(EasyDiaryActivity.this, "application_lock");
+        boolean enableLock = CommonUtils.loadBooleanPreference(EasyDiaryActivity.this, Constants.APP_LOCK_ENABLE);
         long pauseMillis = CommonUtils.loadLongPreference(EasyDiaryActivity.this, Constants.SETTING_PAUSE_MILLIS, 0);
         if (enableLock && pauseMillis != 0) {
             if (System.currentTimeMillis() - pauseMillis > 1000) {
