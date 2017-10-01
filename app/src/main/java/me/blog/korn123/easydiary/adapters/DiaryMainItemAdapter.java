@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
+import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.commons.utils.EasyDiaryUtils;
@@ -62,13 +63,8 @@ public class DiaryMainItemAdapter extends ArrayAdapter<DiaryDto> {
             holder = (ViewHolder)row.getTag();
         }
 
-        initFontStyle(holder);
-        float fontSize = CommonUtils.loadFloatPreference(context, "font_size", 0);
-        if (fontSize > 0) {
-            holder.textView1.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
-            holder.textView2.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
-            holder.textView3.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
-        }
+        setFontsTypeface(holder);
+        setFontsSize(holder);
 
         DiaryDto diaryDto = (DiaryDto)this.list.get(position);
         if (StringUtils.isEmpty(diaryDto.getTitle())) {
@@ -90,10 +86,13 @@ public class DiaryMainItemAdapter extends ArrayAdapter<DiaryDto> {
         return row;
     }
 
-    private void initFontStyle(ViewHolder holder) {
-        FontUtils.setTypeface(context, context.getAssets(), holder.textView1);
-        FontUtils.setTypeface(context, context.getAssets(), holder.textView2);
-        FontUtils.setTypeface(context, context.getAssets(), holder.textView3);
+    private void setFontsTypeface(ViewHolder holder) {
+        FontUtils.setFontsTypeface(context, context.getAssets(), null, holder.textView1, holder.textView2, holder.textView3);
+    }
+
+    private void setFontsSize(ViewHolder holder) {
+        float commonSize = CommonUtils.loadFloatPreference(context, Constants.SETTING_FONT_SIZE, holder.textView1.getTextSize());
+        FontUtils.setFontsSize(commonSize, -1, holder.textView1, holder.textView2, holder.textView3);
     }
 
     private static class ViewHolder {
@@ -102,4 +101,5 @@ public class DiaryMainItemAdapter extends ArrayAdapter<DiaryDto> {
         TextView textView3;
         ImageView imageView;
     }
+
 }

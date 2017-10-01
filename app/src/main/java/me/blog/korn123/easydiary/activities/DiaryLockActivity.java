@@ -50,7 +50,7 @@ public class DiaryLockActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diary_lock);
         ButterKnife.bind(this);
-        FontUtils.setTypeface(this, getAssets(), mInfoMessage);
+        setFontsTypeface();
 
         mPasswordView[0] = mPass1;
         mPasswordView[1] = mPass2;
@@ -126,7 +126,6 @@ public class DiaryLockActivity extends Activity {
         }
     }
 
-
     @Override
     public void onBackPressed() {
 //        super.onBackPressed();
@@ -135,5 +134,9 @@ public class DiaryLockActivity extends Activity {
         readDiaryIntent.putExtra(Constants.APP_FINISH_FLAG, true);
         startActivity(readDiaryIntent);
         finish();
+    }
+
+    private void setFontsTypeface() {
+        FontUtils.setFontsTypeface(DiaryLockActivity.this, getAssets(), null, mInfoMessage);
     }
 }

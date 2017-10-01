@@ -1,10 +1,8 @@
 package me.blog.korn123.commons.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
-import android.icu.text.DisplayContext;
 import android.os.Environment;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
@@ -15,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 
+import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.constants.Path;
 import me.blog.korn123.easydiary.R;
 
@@ -24,41 +23,22 @@ import me.blog.korn123.easydiary.R;
 
 public class FontUtils {
 
-    private static Typeface mTypeface;
+    private static Typeface sTypeface;
 
     public static void setTypefaceDefault(TextView view) {
         view.setTypeface(Typeface.DEFAULT);
     }
 
-    public static void setTypeface(Context context, AssetManager assetManager, TextView view) {
-        view.setTypeface(getTypeface(context, assetManager));
+    public static Typeface getCommonTypeface(Context context, AssetManager assetManager) {
+        if (sTypeface == null) {
+            setCommonTypeface(context, assetManager);
+        }
+        return sTypeface;
     }
 
-    public static Typeface getTypeface(Context context, AssetManager assetManager) {
-        if (mTypeface == null) {
-            mTypeface = setCurrentTypeface(context, assetManager);
-        }
-        return  mTypeface;
-    }
-
-    public static Typeface setCurrentTypeface(Context context, AssetManager assetManager) {
-        String currentFont = CommonUtils.loadStringPreference(context, "font_setting", "NanumPen.ttf");
-        if (StringUtils.equals(currentFont, "Default")) {
-            mTypeface = Typeface.DEFAULT;
-        } else {
-            mTypeface = Typeface.createFromAsset(assetManager, "fonts/" + currentFont);
-        }
-        return mTypeface;
-    }
-
-    public static void setToolbarTypeface(Context context, Toolbar toolbar, AssetManager assetManager) {
-        for (int i = 0; i < toolbar.getChildCount(); i++) {
-            View view = toolbar.getChildAt(i);
-            if (view instanceof  TextView) {
-                setTypeface(context, assetManager, (TextView)view);
-//                ((TextView) view).setTypeface(Typeface.DEFAULT);
-            }
-        }
+    public static void setCommonTypeface(Context context, AssetManager assetManager) {
+        String commonFontName = CommonUtils.loadStringPreference(context, "font_setting", Constants.CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT);
+        sTypeface = getTypeface(context, assetManager, commonFontName);
     }
 
     public static void setToolbarTypeface(Toolbar toolbar, Typeface typeface) {
@@ -78,20 +58,24 @@ public class FontUtils {
     }
 
     public static void setFontsTypeface(Context context, AssetManager assetManager, String customFontName, TextView... targetViews) {
-        Typeface typeface = StringUtils.isNotEmpty(customFontName) ? getCustomTypeface(context, assetManager, customFontName) : getTypeface(context, assetManager);
+        Typeface typeface = StringUtils.isNotEmpty(customFontName) ? getTypeface(context, assetManager, customFontName) : getCommonTypeface(context, assetManager);
         for (TextView textView : targetViews) {
             textView.setTypeface(typeface);
         }
     }
 
-    public static Typeface getCustomTypeface(Context context, AssetManager assetManager, String customFontName) {
+    public static Typeface getTypeface(Context context, AssetManager assetManager, String fontName) {
         Typeface typeface = null;
         String[] assetsFonts = context.getResources().getStringArray(R.array.pref_list_fonts_values);
         String[] userFonts = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + Path.USER_CUSTOM_FONTS_DIRECTORY).list();
-        if (isValidTypeface(assetsFonts, customFontName)) {
-            typeface = Typeface.createFromAsset(assetManager, "fonts/" + customFontName);
-        } else if (isValidTypeface(userFonts, customFontName)) {
-            typeface = Typeface.createFromFile(Environment.getExternalStorageDirectory().getAbsolutePath() + Path.USER_CUSTOM_FONTS_DIRECTORY + customFontName);
+        if (isValidTypeface(assetsFonts, fontName)) {
+            if (StringUtils.equals(fontName, Constants.CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT)) {
+                typeface = Typeface.DEFAULT;
+            } else {
+                typeface = Typeface.createFromAsset(assetManager, "fonts/" + fontName);
+            }
+        } else if (isValidTypeface(userFonts, fontName)) {
+            typeface = Typeface.createFromFile(Environment.getExternalStorageDirectory().getAbsolutePath() + Path.USER_CUSTOM_FONTS_DIRECTORY + fontName);
         } else {
             typeface = Typeface.DEFAULT;
         }
@@ -100,10 +84,12 @@ public class FontUtils {
 
     public static boolean isValidTypeface(String[] fontArray, String fontName) {
         boolean result = false;
-        for (String name : fontArray) {
-            if (StringUtils.equalsIgnoreCase(name, fontName)) {
-                result = true;
-                break;
+        if (fontArray != null) {
+            for (String name : fontArray) {
+                if (StringUtils.equalsIgnoreCase(name, fontName)) {
+                    result = true;
+                    break;
+                }
             }
         }
         return result;

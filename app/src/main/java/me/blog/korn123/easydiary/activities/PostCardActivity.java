@@ -369,19 +369,17 @@ public class PostCardActivity extends EasyDiaryActivity {
     protected void onResume() {
         super.onResume();
 
-        FontUtils.setTypeface(this, getAssets(), mTitle);
-        FontUtils.setTypeface(this, getAssets(), mDate);
-        FontUtils.setTypeface(this, getAssets(), mContents);
-        setDiaryFontSize();
+        setFontsTypeface();
+        setFontsSize();
     }
 
-    private void setDiaryFontSize() {
-        float fontSize = CommonUtils.loadFloatPreference(this, "font_size", 0);
-        if (fontSize > 0) {
-            mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
-            mDate.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
-            mContents.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
-        }
+    private void setFontsTypeface() {
+        FontUtils.setFontsTypeface(PostCardActivity.this, getAssets(), null, mTitle, mDate, mContents);
+    }
+
+    private void setFontsSize() {
+        float commonSize = CommonUtils.loadFloatPreference(PostCardActivity.this, Constants.SETTING_FONT_SIZE, mTitle.getTextSize());
+        FontUtils.setFontsSize(commonSize, -1, mTitle, mDate, mContents);
     }
 
 }
