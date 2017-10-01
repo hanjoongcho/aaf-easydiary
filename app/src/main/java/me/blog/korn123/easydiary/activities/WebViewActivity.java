@@ -22,6 +22,7 @@ public class WebViewActivity extends EasyDiaryActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_view);
         ButterKnife.bind(this);
+        webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl(getIntent().getStringExtra(Constants.OPEN_URL_INFO));
     }
 
