@@ -83,6 +83,12 @@ public class Constants {
 
     final static public String APP_FINISH_FLAG = "app_finish";
 
+    final static public String APP_LOCK_ENABLE = "application_lock";
+
+    final static public String APP_LOCK_REQUEST_PASSWORD = "lock_password";
+
+    final static public String APP_LOCK_SAVED_PASSWORD = "application_lock_password";
+
     final public static String DIARY_SEQUENCE = "diary_sequence";
 
     final public static String DIARY_SEARCH_QUERY = "diary_search_query";

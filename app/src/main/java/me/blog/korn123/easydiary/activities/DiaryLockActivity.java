@@ -104,7 +104,7 @@ public class DiaryLockActivity extends Activity {
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
-                            if (StringUtils.equals(CommonUtils.loadStringPreference(DiaryLockActivity.this, "application_lock_password", "0000"), password)) {
+                            if (StringUtils.equals(CommonUtils.loadStringPreference(DiaryLockActivity.this, Constants.APP_LOCK_SAVED_PASSWORD, "0000"), password)) {
                                 long currentMillis = System.currentTimeMillis();
                                 CommonUtils.saveLongPreference(DiaryLockActivity.this, Constants.SETTING_PAUSE_MILLIS, currentMillis);
                                 finish();
