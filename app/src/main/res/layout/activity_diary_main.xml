@@ -84,6 +84,8 @@
             </LinearLayout>
 
             <ListView
+                android:fastScrollAlwaysVisible="false"
+                android:fastScrollEnabled="true"
                 android:dividerHeight="@dimen/card_layout_margin"
                 android:divider="@null"
                 android:id="@+id/diaryList"

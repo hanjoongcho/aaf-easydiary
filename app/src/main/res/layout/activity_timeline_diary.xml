@@ -26,6 +26,8 @@
         </android.support.design.widget.AppBarLayout>
 
         <ListView
+            android:fastScrollAlwaysVisible="false"
+            android:fastScrollEnabled="true"
             android:padding="@dimen/card_layout_padding"
             android:dividerHeight="0dp"
             android:divider="@null"
