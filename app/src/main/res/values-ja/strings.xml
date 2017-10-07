@@ -1,0 +1,178 @@
+<resources>
+    <string name="app_name">イージー\nダイアリー</string>
+
+    <!--DiaryInsertActivity-->
+    <string name="create_diary_title">ダイアリーを書く</string>
+    <string name="write_date">作成日</string>
+    <string name="request_title_message">タイトルを入力してください.</string>
+    <string name="request_content_message">内容を入力してください.</string>
+    <string name="guide_message">タイトルを入力するか、と言うし.</string>
+    <string name="contents_text_hint">内容を入力するか、と言うし.</string>
+    <string name="delete_photo_confirm_message">この写真を削除しますか?</string>
+    <string name="gallery_intent_not_found_message">ギャラリーアプリがインストールされていないか、無効になっています.</string>
+    <string name="create_diary_showcase_button_1">次の</string>
+    <string name="create_diary_showcase_button_2">閉じる</string>
+    <string name="create_diary_showcase_title_1">天気</string>
+    <string name="create_diary_showcase_title_2">タイトル</string>
+    <string name="create_diary_showcase_title_3">内容</string>
+    <string name="create_diary_showcase_title_4">写真付き</string>
+    <string name="create_diary_showcase_title_5">文字の拡大</string>
+    <string name="create_diary_showcase_title_6">文字縮小</string>
+    <string name="create_diary_showcase_title_7">日付を選択</string>
+    <string name="create_diary_showcase_title_8">時間の選択</string>
+    <string name="create_diary_showcase_title_9">保存</string>
+    <string name="create_diary_showcase_message_1">ダイアリーの作成時間の天気を選択します. 天気選択は必須ではありません.</string>
+    <string name="create_diary_showcase_message_2">ダイアリーのタイトルを入力します. タイトル入力は必須ではありません.</string>
+    <string name="create_diary_showcase_message_3">日記, メモ, 要約ノートなどの内容を入力します.</string>
+    <string name="create_diary_showcase_message_4">ダイアリーに写真を添付します.</string>
+    <string name="create_diary_showcase_message_5">ダイアリーのテキストのサイズを拡大します.</string>
+    <string name="create_diary_showcase_message_6">ダイアリーのテキストのサイズを縮小します.</string>
+    <string name="create_diary_showcase_message_7">ダイアリーの作成日付を選択します. 過去の日付の日記を作成したい場合、日付を変更することができます.</string>
+    <string name="create_diary_showcase_message_8">ダイアリーの作成時間を選択します. 最後の時間のダイアリーの作成を希望する場合は、時間を変更することができます.</string>
+    <string name="create_diary_showcase_message_9">作成が完了したダイアリーを保存します.</string>
+
+    <!--DiaryMainActivity-->
+    <string name="read_diary_title">検索</string>
+    <string name="input_mode_a">スピーチモード</string>
+    <string name="input_mode_c">キーパッドモード</string>
+    <string name="guide_message_2">検索用語を入力するか、話す.</string>
+    <string name="recognizer_intent_not_found_message">音声認識モジュールがインストールされていないか、無効になっています.</string>
+    <string name="sample_diary_title_1">注意するより危険なれ.</string>
+    <string name="sample_diary_title_2">言うときを知っているだけ繰り返す.</string>
+    <string name="sample_diary_title_3">悪いニュースをたくさん聞くほど喜ぶべきである.</string>
+    <string name="sample_diary_title_4">豊かは慰めを、制約は、ウィンドウを呼ぶ.</string>
+    <string name="sample_diary_1">通り過ぎた人生を振り返ってみると、リスクに陥った場合、よりも注意したために損害を招いてきたことを明らかに知ることができ.\n危険なれ.\n注意するより危険なれ.\n- グラントガドン, ‘10倍の法則’</string>
+    <string name="sample_diary_2">あなたが言うときを知っているだけ繰り返す.\nしかし、聞けば、新しいことを学ぶことになる.\n- ダライ・ラマ</string>
+    <string name="sample_diary_3">あなたが指導者として最も聞く必要があるのが悪いニュースである.\n良いニュースは、明日も良いですが、悪いニュースは、明日はさらに悪化う.\nこれがたとえ事実が胸が痛いのに、いつも厳しい質問をして事実を言うことは安全理由だ.\n- エリック・シュミットグーグル会長, ‘Googleはどのように働く?’</string>
+    <string name="sample_diary_4">制約が創造性を閉じ込めるのではなく、制約を克服するために、創造性が発揮される.\nすべての偉大な作品や創造的な解決策は、時間的な制約、物理的な制約、資源の制約がすごく多かったものだった。\n何にせよ困難制約された環境で、創造性が生まれたりする.\n- ギムボンジン代表, ‘ベミンらしさ’</string>
+    <string name="read_diary_showcase_button_1">次の</string>
+    <string name="read_diary_showcase_button_2">閉じる</string>
+    <string name="read_diary_showcase_title_1">ダイアリーを書く</string>
+    <string name="read_diary_showcase_title_2">検索</string>
+    <string name="read_diary_showcase_title_3">音声認識</string>
+    <string name="read_diary_showcase_title_4">カレンダー</string>
+    <string name="read_diary_showcase_title_5">タイムライン</string>
+    <string name="read_diary_showcase_title_6">チャート</string>
+    <string name="read_diary_showcase_title_7">詳細設定</string>
+    <string name="read_diary_showcase_title_8">ダイアリーを読む</string>
+    <string name="read_diary_showcase_message_1">日記、メモ、要約ノートなど様々な形態のダイアリーを時間の流れに沿って様々に作成することができます.</string>
+    <string name="read_diary_showcase_message_2">キーワードを利用して、日記を検索することができます. キーワードが入力されると、キーワードが一致するダイアリーが検索され、そのキーワードはハイライトされます.</string>
+    <string name="read_diary_showcase_message_3">音声認識機能を利用して、キーパッドなしで検索キーワードを入力することができます.</string>
+    <string name="read_diary_showcase_message_4">作成された日記は、カレンダーを利用して、日付順にまとめて見ることができます.</string>
+    <string name="read_diary_showcase_message_5">作成された日記は、タイムラインに提供されます.</string>
+    <string name="read_diary_showcase_message_6">全期間の日記作成状況をグラフで見ることができます.</string>
+    <string name="read_diary_showcase_message_7">詳細設定を使用して、フォントの変更、ロック番号の設定、ダイアリーのバックアップおよびリカバリ操作を行うことができます.</string>
+    <string name="read_diary_showcase_message_8">リスト内のダイアリーカードをクリックすると、その日記を見ることができます.</string>
+
+    <!--DiaryReadActivity-->
+    <string name="read_diary_detail_title">ダイアリーを読む</string>
+    <string name="delete_confirm">削除しますか?</string>
+    <string name="read_diary_detail_showcase_button_1">次の</string>
+    <string name="read_diary_detail_showcase_button_2">閉じる</string>
+    <string name="read_diary_detail_showcase_title_1">ページの移動</string>
+    <string name="read_diary_detail_showcase_title_2">ダイアリー修正</string>
+    <string name="read_diary_detail_showcase_title_3">TTS</string>
+    <string name="read_diary_detail_showcase_title_4">ポストカード</string>
+    <string name="read_diary_detail_showcase_title_5">ダイアリー削除</string>
+    <string name="read_diary_detail_showcase_message_1">画面を左右にドラッグすると、前または後に作成されたダイアリーを閲覧することができます.</string>
+    <string name="read_diary_detail_showcase_message_2">閲覧中のダイアリーを編集するためダイアリー修正画面に移動することができます.</string>
+    <string name="read_diary_detail_showcase_message_3">ダイアリー本文をグーグルTTS機能を利用して音声で聞くことができます.</string>
+    <string name="read_diary_detail_showcase_message_4">ダイアリーを利用して、ポストカードを作成し、他の人と共有することができます.</string>
+    <string name="read_diary_detail_showcase_message_5">現在閲覧中のダイアリーを削除して、検索画面に移動することができます.</string>
+
+    <!--DiaryUpdateActivity-->
+    <string name="update_diary_title">ダイアリー修正</string>
+    <string name="back_pressed_confirm">\'確認\' ボタンを押すと、現在のダイアリーを保存せずにダイアリー検索画面に移動します.</string>
+
+    <!--SettingsActivity-->
+    <string name="setting_title">環境設定</string>
+    <string name="lock_number">設定されたロック番号:</string>
+    <string name="rate_app">アプリを評価する</string>
+    <string name="guide_message_3">リクエスト操作の権限がありません.</string>
+    <string name="application_lock_title">アプリロック設定</string>
+    <string name="application_lock_summary">ロックの設定が有効な場合、設定されたパスワードでアプリケーションがロックされます.</string>
+    <string name="application_lock_password_title">ロック番号の設定</string>
+    <string name="restore_diary">ダイアリー回復する</string>
+    <string name="restore_diary_summary">Googleのドライブにバックアップされたデータを利用して、すべてのコンテンツを回復します.\n添付写真の場合は、リンク情報のみが存在するので、元の写真が存在しないデバイスでは、添付の写真を除くコンテンツのみ復元されます.\n元の写真を含む回復機能は、今後提供する予定です.</string>
+    <string name="backup_diary">ダイアリーバックアップする</string>
+    <string name="backup_diary_summary">すべてのコンテンツをGoogleのドライブにバックアップします.\n添付写真の場合は、リンク情報のみのバックアップがされるため、元の写真が存在しないデバイスでは、添付の写真を除くコンテンツのみ復元されます.\n元の写真を含むバックアップ機能は、今後提供する予定です.</string>
+    <string name="font_setting">フォントの設定</string>
+    <string name="add_ttf_fonts_title">TTF フォントを追加</string>
+    <string name="add_ttf_fonts_summary">ユーザーが所有しているTTFフォントをでダイアリーに追加して使用します.\nフォントが追加されると、組み込みのフォントと一緒にユーザーが追加したフォントを使用することができます.</string>
+    <string name="add_ttf_fonts_info_url">https://github.com/hanjoongcho/aaf-easydiary/blob/master/MANUAL_ko.md</string>
+
+    <!--CalendarActivity-->
+    <string name="calendar_title">カレンダー</string>
+    <string name="guide_message_4">その日に作成された日記はありません.</string>
+
+    <!--BarChartActivity-->
+    <string name="bar_chart_title">チャート</string>
+    <string name="bar_chart_status">時間帯別の日記を作成ステータス</string>
+    <string name="range_a">0H~3H</string>
+    <string name="range_b">4H~7H</string>
+    <string name="range_c">8H~11H</string>
+    <string name="range_d">12H~15H</string>
+    <string name="range_e">16H~19H</string>
+    <string name="range_f">20H~23H</string>
+    <string name="range_g">1H~24H</string>
+    <string name="write_time">作成時間</string>
+    <string name="write_count">作成件数</string>
+
+    <!--LockDiaryActivity-->
+    <string name="unlock_guide_message">ロック番号を入力してください</string>
+
+    <!--PhotoViewPagerActivity-->
+    <string name="photo_view_error_info">写真を見つけることができませんでした.\nギャラリーから添付した画像が削除されたかの場所が変更されたことがあります.</string>
+
+    <!--PostCardActivity-->
+    <string name="diary_card_export_info">ダイアリーカード保存パス</string>
+    <string name="diary_card_share_info">ダイアリーカード共有</string>
+    <string name="diary_card_export_error_message">ダイアリーカードの作成中にエラーが発生しました. もう一度お試しください.</string>
+    <string name="post_card_showcase_button_1">次の</string>
+    <string name="post_card_showcase_button_2">閉じる</string>
+    <string name="post_card_showcase_title_1">テキストの色</string>
+    <string name="post_card_showcase_title_2">背景色</string>
+    <string name="post_card_showcase_title_3">ポストカードの作成</string>
+    <string name="post_card_showcase_title_4">ポストカード共有</string>
+    <string name="post_card_showcase_title_5">編集終了</string>
+    <string name="post_card_showcase_message_1">ポストカードのテキストの色を変更します. カラーピッカーを使用して、希望の色を選択することができます.</string>
+    <string name="post_card_showcase_message_2">ポストカードの背景色を変更します. カラーピッカーを使用して、希望の色を選択することができます.</string>
+    <string name="post_card_showcase_message_3">作成されたポストカードは、画像ファイルとして保存することができます.</string>
+    <string name="post_card_showcase_message_4">作成されたポストカードは、友人と共有することができます. 電子メール、SMS、メッセンジャーなどを利用してポストカードを共有できます.</string>
+    <string name="post_card_showcase_message_5">ポストカードの編集画面を終了して、前の画面に戻ります.</string>
+
+    <!--TimelineActivity-->
+    <string name="timeline_title">タイムライン</string>
+
+    <!--CaldroidItemAdapter-->
+    <string name="diary_count"></string>
+
+    <!--diary_main.xml-->
+    <string name="menu_calendar">カレンダー</string>
+    <string name="menu_chart">チャート</string>
+    <string name="menu_timeline">タイムライン</string>
+    <string name="menu_preference">環境設定</string>
+
+    <!--Array-->
+    <string-array name="weather_item_array">
+        <item>Weather</item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+    </string-array>
+
+    <string-array name="pref_list_fonts_title">
+        <item>デバイスの設定フォント</item>
+    </string-array>
+    <string-array name="pref_list_fonts_values">
+        <item>Default</item>
+    </string-array>
+
+</resources>

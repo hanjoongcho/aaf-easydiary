@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Easy Diary</string>
+    <string name="app_name">이지\n다이어리</string>
 
     <!--DiaryInsertActivity-->
     <string name="create_diary_title">다이어리 쓰기</string>
@@ -8,8 +8,6 @@
     <string name="request_content_message">내용을 입력하세요.</string>
     <string name="guide_message">제목을 입력하거나 말하세요.</string>
     <string name="contents_text_hint">내용을 입력하거나 말하세요.</string>
-    <string name="input_mode_b">키패드 <![CDATA[&]]> 스피치 모드</string>
-    <string name="special_character_a"><![CDATA[+]]></string>
     <string name="delete_photo_confirm_message">해당 사진을 삭제할까요?</string>
     <string name="gallery_intent_not_found_message">갤러리 앱이 설치되지 않았거나 비활성화 상태입니다.</string>
     <string name="create_diary_showcase_button_1">다음</string>

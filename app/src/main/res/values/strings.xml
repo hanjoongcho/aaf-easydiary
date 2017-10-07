@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Easy Diary</string>
+    <string name="app_name">Easy\nDiary</string>
 
     <!--DiaryInsertActivity-->
     <string name="create_diary_title">Write Diary</string>
@@ -8,8 +8,6 @@
     <string name="request_content_message">Please enter your content.</string>
     <string name="guide_message">Type or speak the title.</string>
     <string name="contents_text_hint">Type or speak the contents.</string>
-    <string name="input_mode_b">Keypad <![CDATA[&]]> Speech mode</string>
-    <string name="special_character_a"><![CDATA[+]]></string>
     <string name="delete_photo_confirm_message">Are you sure you want to delete this photo?</string>
     <string name="gallery_intent_not_found_message">The Gallery app is not installed or is disabled.</string>
     <string name="create_diary_showcase_button_1">Next</string>
@@ -33,7 +31,7 @@
     <string name="create_diary_showcase_message_8">Select diary creation time. You can change the time if you want to create a diary for the last time.</string>
     <string name="create_diary_showcase_message_9">Save the completed diary.</string>
 
-    <!--ReadDiaryActivity-->
+    <!--DiaryMainActivity-->
     <string name="read_diary_title">Search</string>
     <string name="input_mode_a">Speech mode</string>
     <string name="input_mode_c">Keypad mode</string>

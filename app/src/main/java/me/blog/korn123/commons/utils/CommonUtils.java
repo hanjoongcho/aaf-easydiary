@@ -18,6 +18,11 @@ public class CommonUtils {
         return android.os.Build.VERSION.SDK_INT;
     }
 
+    public static boolean preferencesContains(Context context, String key) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.contains(key);
+    }
+
     public static String loadStringPreference(Context context, String key, String defaultValue) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return preferences.getString(key, defaultValue);
