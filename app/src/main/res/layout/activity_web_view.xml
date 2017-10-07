@@ -21,6 +21,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/left" />
+        app:srcCompat="@drawable/logout_w" />
 
 </android.support.design.widget.CoordinatorLayout>
