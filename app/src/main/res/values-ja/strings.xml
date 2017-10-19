@@ -99,7 +99,7 @@
     <string name="font_setting">フォントの設定</string>
     <string name="add_ttf_fonts_title">TTF フォントを追加</string>
     <string name="add_ttf_fonts_summary">ユーザーが所有しているTTFフォントをでダイアリーに追加して使用します.\nフォントが追加されると、組み込みのフォントと一緒にユーザーが追加したフォントを使用することができます.</string>
-    <string name="add_ttf_fonts_info_url">https://github.com/hanjoongcho/aaf-easydiary/blob/master/MANUAL_ko.md</string>
+    <string name="add_ttf_fonts_info_url">https://github.com/hanjoongcho/aaf-easydiary/blob/master/MANUAL_ja.md</string>
 
     <!--CalendarActivity-->
     <string name="calendar_title">カレンダー</string>
