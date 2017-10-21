@@ -1,17 +1,17 @@
-# :blue_book: Easy Diary
-## [README of Korean(한국어)][README_ko.md] <br />
+# Easy Diary
+## [README of Korean(한국어)][README_ko.md]
 
-[![License][licensesvg]][LICENSE.md] <br />
-This is a diary application optimized to user experience. <br />
+[![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/sindresorhus/awesome)
+[![License][licensesvg]][LICENSE.md]
 
-<a href='https://play.google.com/store/apps/details?id=me.blog.korn123.easydiary'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="258" height="98"/></a><br />
+<img src="screenshots/ic_launcher.png" >
+
+This is a diary application optimized to user experience.
+
+<a href='https://play.google.com/store/apps/details?id=me.blog.korn123.easydiary'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="258" height="98"/></a>
 
 <img src="screenshots/app_easydiary01.png" width="288" height="512">&nbsp;
 <img src="screenshots/showcase_en.gif" width="288" height="512">
-
-# Precautions
-The current version of code has a part that has failed to follow the Android coding convention, and there is also a redundant code.
-I will continue refactoring whenever i have spare time.
 
 # Support Features
 ```
