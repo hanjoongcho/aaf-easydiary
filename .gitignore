@@ -22,4 +22,5 @@ app/*.apk
 app/*.iml
 .idea/misc.xml
 .idea/runConfigurations.xml
+local.properties
 
