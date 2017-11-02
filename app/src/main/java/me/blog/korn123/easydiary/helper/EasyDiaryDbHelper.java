@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
@@ -68,7 +69,8 @@ public class EasyDiaryDbHelper {
         if (StringUtils.isEmpty(query)) {
             results = getRealmInstance().where(DiaryDto.class).findAllSorted("currentTimeMillis", Sort.DESCENDING);
         } else {
-            results = getRealmInstance().where(DiaryDto.class).beginGroup().contains("contents", query).or().contains("title", query).endGroup().findAllSorted("currentTimeMillis", Sort.DESCENDING);
+//            results = getRealmInstance().where(DiaryDto.class).beginGroup().contains("contents", query).or().contains("title", query).endGroup().findAllSorted("currentTimeMillis", Sort.DESCENDING);
+            results = getRealmInstance().where(DiaryDto.class).beginGroup().contains("contents", query, Case.INSENSITIVE).or().contains("title", query, Case.INSENSITIVE).endGroup().findAllSorted("currentTimeMillis", Sort.DESCENDING);
         }
         List<DiaryDto> list = new ArrayList<>();
         list.addAll(results.subList(0, results.size()));

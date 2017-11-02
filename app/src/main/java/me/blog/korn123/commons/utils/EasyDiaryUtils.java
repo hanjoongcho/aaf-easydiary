@@ -114,4 +114,26 @@ public class EasyDiaryUtils {
         textView.setText(spannableString);
     }
 
+    public static void highlightStringIgnoreCase(TextView textView, String input) {
+        String inputLower = input.toLowerCase();
+        String contentsLower = textView.getText().toString().toLowerCase();
+        SpannableString spannableString = new SpannableString(textView.getText());
+
+        BackgroundColorSpan[] backgroundSpans = spannableString.getSpans(0, spannableString.length(), BackgroundColorSpan.class);
+
+        for (BackgroundColorSpan span: backgroundSpans) {
+            spannableString.removeSpan(span);
+        }
+
+        int indexOfKeyword = contentsLower.indexOf(inputLower);
+
+        while (indexOfKeyword >= 0) {
+            spannableString.setSpan(new BackgroundColorSpan(Color.YELLOW), indexOfKeyword, indexOfKeyword + inputLower.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            indexOfKeyword = contentsLower.indexOf(inputLower, indexOfKeyword + inputLower.length());
+        }
+
+        textView.setText(spannableString);
+    }
+
 }
