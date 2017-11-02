@@ -16,6 +16,11 @@
             android:summary="@string/add_ttf_fonts_summary">
         </Preference>
         <SwitchPreference
+            android:key="case_sensitive"
+            android:title="@string/diary_search_keyword_case_sensitive_title"
+            android:summary="@string/diary_search_keyword_case_sensitive_summary"
+            android:defaultValue="false" />
+        <SwitchPreference
             android:key="application_lock"
             android:title="@string/application_lock_title"
             android:summary="@string/application_lock_summary"

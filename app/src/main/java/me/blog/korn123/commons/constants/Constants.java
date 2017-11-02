@@ -93,6 +93,8 @@ public class Constants {
 
     final public static String DIARY_SEARCH_QUERY = "diary_search_query";
 
-    final public static String OPEN_URL_INFO = "diary_search_query";
+    final public static String OPEN_URL_INFO = "open_url_info";
+
+    final public static String DIARY_SEARCH_QUERY_CASE_SENSITIVE = "case_sensitive";
 
 }

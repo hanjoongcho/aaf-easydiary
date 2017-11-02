@@ -77,8 +77,14 @@ public class DiaryMainItemAdapter extends ArrayAdapter<DiaryDto> {
 
         // highlight current query
         if (StringUtils.isNotEmpty(query)) {
-            EasyDiaryUtils.highlightStringIgnoreCase(holder.textView1, query);
-            EasyDiaryUtils.highlightStringIgnoreCase(holder.textView2, query);
+            if (CommonUtils.loadBooleanPreference(getContext(), Constants.DIARY_SEARCH_QUERY_CASE_SENSITIVE)) {
+                EasyDiaryUtils.highlightString(holder.textView1, query);
+                EasyDiaryUtils.highlightString(holder.textView2, query);
+            } else {
+                EasyDiaryUtils.highlightStringIgnoreCase(holder.textView1, query);
+                EasyDiaryUtils.highlightStringIgnoreCase(holder.textView2, query);
+            }
+
         }
         holder.textView3.setText(DateUtils.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
         EasyDiaryUtils.initWeatherView(holder.imageView, diaryDto.getWeather());

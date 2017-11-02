@@ -100,6 +100,8 @@
     <string name="add_ttf_fonts_title">TTF フォントを追加</string>
     <string name="add_ttf_fonts_summary">ユーザーが所有しているTTFフォントをでダイアリーに追加して使用します.\nフォントが追加されると、組み込みのフォントと一緒にユーザーが追加したフォントを使用することができます.</string>
     <string name="add_ttf_fonts_info_url">https://github.com/hanjoongcho/aaf-easydiary/blob/master/MANUAL_ja.md</string>
+    <string name="diary_search_keyword_case_sensitive_title">大文字と小文字を区別</string>
+    <string name="diary_search_keyword_case_sensitive_summary">このオプションが有効になると、日記が大文字と小文字を区別するかどうかがチェックされます.</string>
 
     <!--CalendarActivity-->
     <string name="calendar_title">カレンダー</string>

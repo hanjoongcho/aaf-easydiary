@@ -376,7 +376,7 @@ public class DiaryMainActivity extends EasyDiaryActivity {
 
     public void refreshList(String query) {
         mDiaryList.clear();
-        mDiaryList.addAll(EasyDiaryDbHelper.readDiary(query));
+        mDiaryList.addAll(EasyDiaryDbHelper.readDiary(query, CommonUtils.loadBooleanPreference(this, Constants.DIARY_SEARCH_QUERY_CASE_SENSITIVE)));
         mDiaryMainItemAdapter.setCurrentQuery(query);
         mDiaryMainItemAdapter.notifyDataSetChanged();
     }

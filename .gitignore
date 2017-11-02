@@ -22,5 +22,6 @@ app/*.apk
 app/*.iml
 .idea/misc.xml
 .idea/runConfigurations.xml
+.idea/markdown-navigator
 local.properties
 

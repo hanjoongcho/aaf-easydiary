@@ -24,7 +24,6 @@ public class EasyDiaryUtilsTest {
         sContext = InstrumentationRegistry.getTargetContext();
     }
 
-
     @Test
     public void test_01() {
         TextView textView = new TextView(sContext);

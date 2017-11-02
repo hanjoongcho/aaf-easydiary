@@ -367,8 +367,6 @@ public class DiaryReadActivity extends EasyDiaryActivity {
         mTextToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
     }
 
-
-
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -433,8 +431,13 @@ public class DiaryReadActivity extends EasyDiaryActivity {
 
             String query = getArguments().getString(Constants.DIARY_SEARCH_QUERY);
             if (StringUtils.isNotEmpty(query)) {
-                EasyDiaryUtils.highlightString(mTitle, query);
-                EasyDiaryUtils.highlightString(mContents, query);
+                if (CommonUtils.loadBooleanPreference(getContext(), Constants.DIARY_SEARCH_QUERY_CASE_SENSITIVE)) {
+                    EasyDiaryUtils.highlightString(mTitle, query);
+                    EasyDiaryUtils.highlightString(mContents, query);
+                } else {
+                    EasyDiaryUtils.highlightStringIgnoreCase(mTitle, query);
+                    EasyDiaryUtils.highlightStringIgnoreCase(mContents, query);
+                }
             }
 
             int weather = diaryDto.getWeather();
@@ -505,7 +508,7 @@ public class DiaryReadActivity extends EasyDiaryActivity {
 
         public SectionsPagerAdapter(FragmentManager fm, String query) {
             super(fm);
-            this.mDiaryList = EasyDiaryDbHelper.readDiary(query);
+            this.mDiaryList = EasyDiaryDbHelper.readDiary(query, CommonUtils.loadBooleanPreference(getApplicationContext(), Constants.DIARY_SEARCH_QUERY_CASE_SENSITIVE));
             for (DiaryDto diaryDto : mDiaryList) {
                 mFragmentList.add(PlaceholderFragment.newInstance(diaryDto.getSequence(), query));
             }

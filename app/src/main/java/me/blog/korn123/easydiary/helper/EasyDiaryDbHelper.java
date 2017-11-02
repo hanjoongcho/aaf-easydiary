@@ -65,12 +65,19 @@ public class EasyDiaryDbHelper {
     }
 
     public static List<DiaryDto> readDiary(String query) {
+        return readDiary(query, false);
+    }
+
+    public static List<DiaryDto> readDiary(String query, boolean isSensitive) {
         RealmResults<DiaryDto> results = null;
         if (StringUtils.isEmpty(query)) {
             results = getRealmInstance().where(DiaryDto.class).findAllSorted("currentTimeMillis", Sort.DESCENDING);
         } else {
-//            results = getRealmInstance().where(DiaryDto.class).beginGroup().contains("contents", query).or().contains("title", query).endGroup().findAllSorted("currentTimeMillis", Sort.DESCENDING);
-            results = getRealmInstance().where(DiaryDto.class).beginGroup().contains("contents", query, Case.INSENSITIVE).or().contains("title", query, Case.INSENSITIVE).endGroup().findAllSorted("currentTimeMillis", Sort.DESCENDING);
+            if (isSensitive) {
+                results = getRealmInstance().where(DiaryDto.class).beginGroup().contains("contents", query).or().contains("title", query).endGroup().findAllSorted("currentTimeMillis", Sort.DESCENDING);
+            } else {
+                results = getRealmInstance().where(DiaryDto.class).beginGroup().contains("contents", query, Case.INSENSITIVE).or().contains("title", query, Case.INSENSITIVE).endGroup().findAllSorted("currentTimeMillis", Sort.DESCENDING);
+            }
         }
         List<DiaryDto> list = new ArrayList<>();
         list.addAll(results.subList(0, results.size()));
