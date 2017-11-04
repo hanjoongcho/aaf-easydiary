@@ -136,7 +136,7 @@ public class DiaryMainActivity extends EasyDiaryActivity {
 
         float commonSize = CommonUtils.loadFloatPreference(this, Constants.SETTING_FONT_SIZE, mQuery.getTextSize());
         FontUtils.setFontsSize(commonSize, -1, mQuery);
-        FontUtils.setFontsTypeface(this, getAssets(), null, this.mQuery);
+        FontUtils.setFontsTypeface(this, getAssets(), null, (ViewGroup) findViewById(android.R.id.content));
 
         refreshList();
 
@@ -170,7 +170,7 @@ public class DiaryMainActivity extends EasyDiaryActivity {
                 finish();
                 break;
             case R.id.settings:
-                Intent settingIntent = new Intent(DiaryMainActivity.this, SettingsActivity.class);
+                Intent settingIntent = new Intent(DiaryMainActivity.this, SettingsActivityExt.class);
                 startActivity(settingIntent);
                 break;
             case R.id.chart:

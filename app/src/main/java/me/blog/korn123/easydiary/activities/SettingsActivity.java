@@ -293,6 +293,16 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         public void onResume() {
             super.onResume();
             updateFontList();
+            setFontsTypeface();
+        }
+
+        private void setFontsTypeface() {
+            TextView textView = (TextView) (findPreference("add_ttf_fonts").getView(null, null)).findViewById(android.R.id.title);
+            textView.setText("AAAAAA");
+            FontUtils.setFontsTypeface(
+                    getActivity(), getActivity().getAssets(), null,
+                    textView
+            );
         }
 
         private void updateFontList() {

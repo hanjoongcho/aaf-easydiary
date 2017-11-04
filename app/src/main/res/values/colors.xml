@@ -9,6 +9,8 @@
     <color name="introText">#F0FFFFFF</color>
     <color name="categoryText">#F0FFFFFF</color>
     <color name="defaultText">#4A4A4C</color>
+    <color name="whiteText">#FFFFFF</color>
+    <color name="blackText">#000000</color>
     <color name="diaryCountText">#FF33B5E5</color>
 
     <color name="calendarBackground">#FFFFFF</color>

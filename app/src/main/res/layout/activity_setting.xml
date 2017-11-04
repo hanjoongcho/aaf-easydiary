@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        </android.support.design.widget.AppBarLayout>
+
+       <ScrollView
+           android:layout_width="match_parent"
+           android:layout_height="match_parent">
+
+           <LinearLayout
+               android:orientation="vertical"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent">
+
+               <TextView
+                   android:padding="5dp"
+                   android:layout_marginTop="5dp"
+                   android:text="Application Setting"
+                   android:textColor="@color/whiteText"
+                   android:background="@color/colorAccent"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content" />
+
+               <LinearLayout
+                   android:id="@+id/pref1"
+                   android:orientation="vertical"
+                   android:layout_marginTop="10dp"
+                   style="@style/SettingActivityItem">
+                   <TextView
+                       android:id="@+id/prefTitle1"
+                       android:text="폰트설정"
+                       style="@style/SettingActivityTitle" />
+                   <TextView
+                       android:id="@+id/prefSummary1"
+                       android:text="굴림체"
+                       style="@style/SettingActivitySummary" />
+               </LinearLayout>
+
+               <LinearLayout
+                   android:id="@+id/pref2"
+                   style="@style/SettingActivityItem">
+                   <LinearLayout
+                       android:orientation="vertical"
+                       android:layout_width="0dp"
+                       android:layout_weight="1"
+                       android:layout_height="wrap_content">
+                       <TextView
+                           android:id="@+id/prefTitle2"
+                           android:text="영문 대소문자 구분"
+                           style="@style/SettingActivityTitle" />
+                       <TextView
+                           android:id="@+id/prefSummary2"
+                           android:text="@string/diary_search_keyword_case_sensitive_summary"
+                           style="@style/SettingActivitySummary" />
+                   </LinearLayout>
+                   <Switch
+                       android:id="@+id/pref2Switcher"
+                       android:layout_marginLeft="20dp"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content" />
+               </LinearLayout>
+
+           </LinearLayout>
+
+       </ScrollView>
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

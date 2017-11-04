@@ -7,11 +7,13 @@ import android.os.Environment;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
+import java.lang.reflect.Type;
 
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.constants.Path;
@@ -61,6 +63,24 @@ public class FontUtils {
         Typeface typeface = StringUtils.isNotEmpty(customFontName) ? getTypeface(context, assetManager, customFontName) : getCommonTypeface(context, assetManager);
         for (TextView textView : targetViews) {
             textView.setTypeface(typeface);
+        }
+    }
+
+    public static void setFontsTypeface(Context context, AssetManager assetManager, String customFontName, ViewGroup viewGroup) {
+        Typeface typeface = StringUtils.isNotEmpty(customFontName) ? getTypeface(context, assetManager, customFontName) : getCommonTypeface(context, assetManager);
+        determineView(viewGroup, typeface);
+    }
+
+    public static void determineView(ViewGroup viewGroup, Typeface typeface) {
+        for (int i = 0; i < viewGroup.getChildCount(); i++) {
+            if (viewGroup.getChildAt(i) instanceof ViewGroup) {
+                determineView((ViewGroup)viewGroup.getChildAt(i), typeface);
+            } else {
+                if (viewGroup.getChildAt(i) instanceof TextView) {
+                    TextView tv = (TextView) viewGroup.getChildAt(i);
+                    tv.setTypeface(typeface);
+                }
+            }
         }
     }
 
