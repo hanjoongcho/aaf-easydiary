@@ -4,6 +4,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Legend;
@@ -53,8 +54,6 @@ public class BarChartActivity extends ChartBase {
         getSupportActionBar().setTitle(getString(R.string.bar_chart_title));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mChart = (BarChart) findViewById(R.id.chart1);
-
-        FontUtils.setToolbarTypeface(toolbar, Typeface.DEFAULT);
 
         mChart.setDrawBarShadow(false);
         mChart.setDrawValueAboveBar(true);
@@ -118,6 +117,8 @@ public class BarChartActivity extends ChartBase {
         mChart.setMarker(mv); // Set the marker to the chart
 
         setData(6, 20);
+
+        FontUtils.setFontsTypeface(this, getAssets(), null, (ViewGroup) findViewById(android.R.id.content));
     }
 
     private void setData(int count, float range) {

@@ -119,8 +119,6 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
         mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
 
-        FontUtils.setToolbarTypeface(toolbar, Typeface.DEFAULT);
-
         bindEvent();
         initData();
         initDateTime();

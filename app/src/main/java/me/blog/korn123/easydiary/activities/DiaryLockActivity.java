@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
@@ -93,7 +94,7 @@ public class DiaryLockActivity extends Activity {
                 password += "9";
                 break;
         }
-        mPasswordView[mCursorIndex].setText("*");
+        mPasswordView[mCursorIndex].setText("-");
 
         if (mCursorIndex == 3) {
 
@@ -137,6 +138,6 @@ public class DiaryLockActivity extends Activity {
     }
 
     private void setFontsTypeface() {
-        FontUtils.setFontsTypeface(DiaryLockActivity.this, getAssets(), null, mInfoMessage);
+        FontUtils.setFontsTypeface(this, getAssets(), null, (ViewGroup) findViewById(android.R.id.content));
     }
 }

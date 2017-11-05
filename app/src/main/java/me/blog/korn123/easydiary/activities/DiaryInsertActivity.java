@@ -138,8 +138,6 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
         mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
 
-        FontUtils.setToolbarTypeface(toolbar, Typeface.DEFAULT);
-
         bindEvent();
         initSpinner();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -255,7 +253,7 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
     }
 
     private void setFontsTypeface() {
-        FontUtils.setFontsTypeface(DiaryInsertActivity.this, getAssets(), null, mTitle, mContents);
+        FontUtils.setFontsTypeface(this, getAssets(), null, (ViewGroup) findViewById(android.R.id.content));
     }
 
     private void setFontsSize() {

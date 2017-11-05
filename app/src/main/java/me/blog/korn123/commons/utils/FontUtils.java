@@ -39,15 +39,15 @@ public class FontUtils {
     }
 
     public static void setCommonTypeface(Context context, AssetManager assetManager) {
-        String commonFontName = CommonUtils.loadStringPreference(context, "font_setting", Constants.CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT);
+        String commonFontName = CommonUtils.loadStringPreference(context, Constants.SETTING_FONT_NAME, Constants.CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT);
         sTypeface = getTypeface(context, assetManager, commonFontName);
     }
 
-    public static void setToolbarTypeface(Toolbar toolbar, Typeface typeface) {
+    public static void setToolbarTypeface(Toolbar toolbar, Context context, AssetManager assetManager) {
         for (int i = 0; i < toolbar.getChildCount(); i++) {
             View view = toolbar.getChildAt(i);
             if (view instanceof  TextView) {
-                ((TextView) view).setTypeface(typeface);
+                ((TextView) view).setTypeface(getCommonTypeface(context, assetManager));
             }
         }
     }

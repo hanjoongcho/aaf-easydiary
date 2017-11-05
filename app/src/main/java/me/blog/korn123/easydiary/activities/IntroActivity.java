@@ -54,7 +54,6 @@ public class IntroActivity extends Activity implements Handler.Callback {
         }
 
         setFontsTypeface();
-        setFontsSize();
         new Handler(this).sendEmptyMessageDelayed(START_MAIN_ACTIVITY, 500);
     }
 
@@ -75,9 +74,9 @@ public class IntroActivity extends Activity implements Handler.Callback {
         FontUtils.setFontsTypeface(IntroActivity.this, getAssets(), null, mAppName, mCompanyName);
     }
 
-    private void setFontsSize() {
-        float commonSize = CommonUtils.loadFloatPreference(IntroActivity.this, Constants.SETTING_FONT_SIZE, mAppName.getTextSize());
-        FontUtils.setFontsSize(commonSize, -1, mAppName, mCompanyName);
-    }
+//    private void setFontsSize() {
+//        float commonSize = CommonUtils.loadFloatPreference(IntroActivity.this, Constants.SETTING_FONT_SIZE, mAppName.getTextSize());
+//        FontUtils.setFontsSize(commonSize, -1, mAppName, mCompanyName);
+//    }
 
 }

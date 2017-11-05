@@ -34,13 +34,8 @@
                android:layout_height="match_parent">
 
                <TextView
-                   android:padding="5dp"
-                   android:layout_marginTop="5dp"
                    android:text="Application Setting"
-                   android:textColor="@color/whiteText"
-                   android:background="@color/colorAccent"
-                   android:layout_width="match_parent"
-                   android:layout_height="wrap_content" />
+                   style="@style/SettingActivityCategory" />
 
                <LinearLayout
                    android:id="@+id/pref1"
@@ -49,11 +44,24 @@
                    style="@style/SettingActivityItem">
                    <TextView
                        android:id="@+id/prefTitle1"
-                       android:text="폰트설정"
+                       android:text="@string/font_setting"
                        style="@style/SettingActivityTitle" />
                    <TextView
                        android:id="@+id/prefSummary1"
-                       android:text="굴림체"
+                       style="@style/SettingActivitySummary" />
+               </LinearLayout>
+
+               <LinearLayout
+                   android:id="@+id/pref3"
+                   android:orientation="vertical"
+                   style="@style/SettingActivityItem">
+                   <TextView
+                       android:id="@+id/prefTitle3"
+                       android:text="@string/add_ttf_fonts_title"
+                       style="@style/SettingActivityTitle" />
+                   <TextView
+                       android:id="@+id/prefSummary3"
+                       android:text="@string/add_ttf_fonts_summary"
                        style="@style/SettingActivitySummary" />
                </LinearLayout>
 
@@ -67,7 +75,7 @@
                        android:layout_height="wrap_content">
                        <TextView
                            android:id="@+id/prefTitle2"
-                           android:text="영문 대소문자 구분"
+                           android:text="@string/diary_search_keyword_case_sensitive_title"
                            style="@style/SettingActivityTitle" />
                        <TextView
                            android:id="@+id/prefSummary2"
@@ -79,6 +87,105 @@
                        android:layout_marginLeft="20dp"
                        android:layout_width="wrap_content"
                        android:layout_height="wrap_content" />
+               </LinearLayout>
+
+               <LinearLayout
+                   android:id="@+id/pref4"
+                   style="@style/SettingActivityItem">
+                   <LinearLayout
+                       android:orientation="vertical"
+                       android:layout_width="0dp"
+                       android:layout_weight="1"
+                       android:layout_height="wrap_content">
+                       <TextView
+                           android:id="@+id/prefTitle4"
+                           android:text="@string/application_lock_title"
+                           style="@style/SettingActivityTitle" />
+                       <TextView
+                           android:id="@+id/prefSummary4"
+                           android:text="@string/application_lock_summary"
+                           style="@style/SettingActivitySummary" />
+                   </LinearLayout>
+                   <Switch
+                       android:id="@+id/pref4Switcher"
+                       android:layout_marginLeft="20dp"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content" />
+               </LinearLayout>
+
+               <LinearLayout
+                   android:id="@+id/pref5"
+                   android:orientation="vertical"
+                   style="@style/SettingActivityItem">
+                   <TextView
+                       android:id="@+id/prefTitle5"
+                       android:text="@string/application_lock_password_title"
+                       style="@style/SettingActivityTitle" />
+                   <TextView
+                       android:id="@+id/prefSummary5"
+                       android:text="@string/add_ttf_fonts_summary"
+                       style="@style/SettingActivitySummary" />
+               </LinearLayout>
+
+               <LinearLayout
+                   android:id="@+id/pref6"
+                   android:orientation="vertical"
+                   style="@style/SettingActivityItem">
+                   <TextView
+                       android:id="@+id/prefTitle6"
+                       android:text="@string/restore_diary"
+                       style="@style/SettingActivityTitle" />
+                   <TextView
+                       android:id="@+id/prefSummary6"
+                       android:text="@string/restore_diary_summary"
+                       style="@style/SettingActivitySummary" />
+               </LinearLayout>
+
+               <LinearLayout
+                   android:layout_marginBottom="10dp"
+                   android:id="@+id/pref7"
+                   android:orientation="vertical"
+                   style="@style/SettingActivityItem">
+                   <TextView
+                       android:id="@+id/prefTitle7"
+                       android:text="@string/backup_diary"
+                       style="@style/SettingActivityTitle" />
+                   <TextView
+                       android:id="@+id/prefSummary7"
+                       android:text="@string/backup_diary_summary"
+                       style="@style/SettingActivitySummary" />
+               </LinearLayout>
+
+               <TextView
+                   android:text="Application Information"
+                   style="@style/SettingActivityCategory" />
+
+               <LinearLayout
+                   android:layout_marginTop="10dp"
+                   android:id="@+id/pref8"
+                   android:orientation="vertical"
+                   style="@style/SettingActivityItem">
+                   <TextView
+                       android:id="@+id/prefTitle8"
+                       android:text="@string/rate_app"
+                       style="@style/SettingActivityTitle" />
+                   <TextView
+                       android:id="@+id/prefSummary8"
+                       android:text=""
+                       style="@style/SettingActivitySummary" />
+               </LinearLayout>
+
+               <LinearLayout
+                   android:layout_marginBottom="10dp"
+                   android:id="@+id/pref9"
+                   android:orientation="vertical"
+                   style="@style/SettingActivityItem">
+                   <TextView
+                       android:text="Open Source Licenses"
+                       style="@style/SettingActivityTitle" />
+                   <TextView
+                       android:text="open source software notices"
+                       style="@style/SettingActivitySummary" />
                </LinearLayout>
 
            </LinearLayout>

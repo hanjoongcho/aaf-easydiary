@@ -116,8 +116,6 @@ public class DiaryMainActivity extends EasyDiaryActivity {
         mDiaryMainItemAdapter = new DiaryMainItemAdapter(this, R.layout.item_diary_main, this.mDiaryList);
         mDiaryListView.setAdapter(mDiaryMainItemAdapter);
 
-        FontUtils.setToolbarTypeface(toolbar, Typeface.DEFAULT);
-
         if (!CommonUtils.loadBooleanPreference(this, Constants.INIT_DUMMY_DATA_FLAG)) {
             initSampleData();
             CommonUtils.saveBooleanPreference(this, Constants.INIT_DUMMY_DATA_FLAG, true);

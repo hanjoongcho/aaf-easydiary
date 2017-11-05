@@ -115,10 +115,23 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <style name="SettingActivityCategory">
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingRight">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:textColor">@color/whiteText</item>
+        <item name="android:background">@color/colorAccent</item>
+        <item name="android:textSize">@dimen/medium_text_size</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
     <style name="SettingActivityTitle">
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/blackText</item>
-        <item name="android:textSize">20dp</item>
+        <item name="android:textSize">@dimen/large_text_size</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
@@ -126,7 +139,7 @@
     <style name="SettingActivitySummary" parent="SettingActivityTitle">
         <item name="android:textStyle">normal</item>
         <item name="android:textColor">@color/defaultText</item>
-        <item name="android:textSize">15dp</item>
+        <item name="android:textSize">@dimen/medium_text_size</item>
     </style>
 
 </resources>

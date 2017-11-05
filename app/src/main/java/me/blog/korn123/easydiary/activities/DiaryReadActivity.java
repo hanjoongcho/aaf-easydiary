@@ -115,8 +115,6 @@ public class DiaryReadActivity extends EasyDiaryActivity {
         getSupportActionBar().setTitle(getString(R.string.read_diary_detail_title));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        FontUtils.setToolbarTypeface(toolbar, Typeface.DEFAULT);
-
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -168,6 +166,7 @@ public class DiaryReadActivity extends EasyDiaryActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        FontUtils.setToolbarTypeface((Toolbar) findViewById(R.id.toolbar), DiaryReadActivity.this, getAssets());
         initModule();
     }
 

@@ -42,7 +42,6 @@ public class TimelineActivity extends EasyDiaryActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.timeline_title));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        FontUtils.setToolbarTypeface(toolbar, Typeface.DEFAULT);
 
         mDiaryList = EasyDiaryDbHelper.readDiary(null);
         Collections.reverse(mDiaryList);
@@ -70,6 +69,7 @@ public class TimelineActivity extends EasyDiaryActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        FontUtils.setToolbarTypeface((Toolbar) findViewById(R.id.toolbar), TimelineActivity.this, getAssets());
         refreshList();
     }
 

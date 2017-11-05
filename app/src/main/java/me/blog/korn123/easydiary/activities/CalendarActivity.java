@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -70,8 +71,7 @@ public class CalendarActivity extends EasyDiaryActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.calendar_title));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        FontUtils.setToolbarTypeface(toolbar, Typeface.DEFAULT);
-        FontUtils.setTypefaceDefault(mEmptyInfo);
+        FontUtils.setFontsTypeface(this, getAssets(), null, (ViewGroup) findViewById(android.R.id.content));
 
         Calendar cal = Calendar.getInstance();
         Date currentDate = cal.getTime();
