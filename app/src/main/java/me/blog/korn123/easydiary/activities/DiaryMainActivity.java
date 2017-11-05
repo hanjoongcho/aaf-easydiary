@@ -131,11 +131,7 @@ public class DiaryMainActivity extends EasyDiaryActivity {
     protected void onResume() {
         super.onResume();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-        float commonSize = CommonUtils.loadFloatPreference(this, Constants.SETTING_FONT_SIZE, mQuery.getTextSize());
-        FontUtils.setFontsSize(commonSize, -1, mQuery);
-        FontUtils.setFontsTypeface(this, getAssets(), null, (ViewGroup) findViewById(android.R.id.content));
-
+        setFontsStyle();
         refreshList();
 
         int previousActivity = CommonUtils.loadIntPreference(DiaryMainActivity.this, Constants.PREVIOUS_ACTIVITY, -1);
@@ -204,6 +200,12 @@ public class DiaryMainActivity extends EasyDiaryActivity {
 //                DiaryMainActivity.this.overridePendingTransition(R.anim.anim_right_to_center, R.anim.anim_center_to_left);
                 break;
         }
+    }
+
+    private void setFontsStyle() {
+        FontUtils.setFontsTypeface(getApplicationContext(), getAssets(), null, (ViewGroup) findViewById(android.R.id.content));
+        float fontSize = CommonUtils.loadFloatPreference(this, Constants.SETTING_FONT_SIZE, -1);
+        if (fontSize > 0) FontUtils.setFontsSize(fontSize, (ViewGroup) findViewById(android.R.id.content));
     }
 
     private void initShowcase() {

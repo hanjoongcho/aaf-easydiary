@@ -88,6 +88,10 @@ public class CommonUtils {
         return dpToPixel(context, dp, 0);
     }
 
+    public static float dpToPixelFloatValue(Context context, int dp) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
+    }
+
     public static int dpToPixel(Context context, int dp, int policy) {
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
         int pixel = 0;

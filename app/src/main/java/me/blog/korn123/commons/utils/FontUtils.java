@@ -13,7 +13,6 @@ import android.widget.TextView;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
-import java.lang.reflect.Type;
 
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.constants.Path;
@@ -59,6 +58,23 @@ public class FontUtils {
         }
     }
 
+	public static void setFontsSize(float fontSize, ViewGroup rootView) {
+		setSize(rootView, fontSize);
+	}
+
+	public static void setSize(ViewGroup viewGroup, float fontSize) {
+		for (int i = 0; i < viewGroup.getChildCount(); i++) {
+			if (viewGroup.getChildAt(i) instanceof ViewGroup) {
+				setSize((ViewGroup)viewGroup.getChildAt(i), fontSize);
+			} else {
+				if (viewGroup.getChildAt(i) instanceof TextView) {
+					TextView tv = (TextView) viewGroup.getChildAt(i);
+					tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
+				}
+			}
+		}
+	}
+
     public static void setFontsTypeface(Context context, AssetManager assetManager, String customFontName, TextView... targetViews) {
         Typeface typeface = StringUtils.isNotEmpty(customFontName) ? getTypeface(context, assetManager, customFontName) : getCommonTypeface(context, assetManager);
         for (TextView textView : targetViews) {
@@ -66,15 +82,15 @@ public class FontUtils {
         }
     }
 
-    public static void setFontsTypeface(Context context, AssetManager assetManager, String customFontName, ViewGroup viewGroup) {
+    public static void setFontsTypeface(Context context, AssetManager assetManager, String customFontName, ViewGroup rootView) {
         Typeface typeface = StringUtils.isNotEmpty(customFontName) ? getTypeface(context, assetManager, customFontName) : getCommonTypeface(context, assetManager);
-        determineView(viewGroup, typeface);
+        setTypeface(rootView, typeface);
     }
 
-    public static void determineView(ViewGroup viewGroup, Typeface typeface) {
+    public static void setTypeface(ViewGroup viewGroup, Typeface typeface) {
         for (int i = 0; i < viewGroup.getChildCount(); i++) {
             if (viewGroup.getChildAt(i) instanceof ViewGroup) {
-                determineView((ViewGroup)viewGroup.getChildAt(i), typeface);
+                setTypeface((ViewGroup)viewGroup.getChildAt(i), typeface);
             } else {
                 if (viewGroup.getChildAt(i) instanceof TextView) {
                     TextView tv = (TextView) viewGroup.getChildAt(i);

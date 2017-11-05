@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.TypedValue;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.Locale;
@@ -53,7 +54,7 @@ public class IntroActivity extends Activity implements Handler.Callback {
             }
         }
 
-        setFontsTypeface();
+        setFontsStyle();
         new Handler(this).sendEmptyMessageDelayed(START_MAIN_ACTIVITY, 500);
     }
 
@@ -70,8 +71,10 @@ public class IntroActivity extends Activity implements Handler.Callback {
         return false;
     }
 
-    private void setFontsTypeface() {
-        FontUtils.setFontsTypeface(IntroActivity.this, getAssets(), null, mAppName, mCompanyName);
+    private void setFontsStyle() {
+        FontUtils.setFontsTypeface(getApplicationContext(), getAssets(), null, (ViewGroup) findViewById(android.R.id.content));
+        float fontSize = CommonUtils.loadFloatPreference(this, Constants.SETTING_FONT_SIZE, -1);
+        if (fontSize > 0) FontUtils.setFontsSize(fontSize, (ViewGroup) findViewById(android.R.id.content));
     }
 
 //    private void setFontsSize() {

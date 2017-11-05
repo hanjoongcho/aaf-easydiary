@@ -166,7 +166,7 @@ public class DiaryReadActivity extends EasyDiaryActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        FontUtils.setToolbarTypeface((Toolbar) findViewById(R.id.toolbar), DiaryReadActivity.this, getAssets());
+        setFontsStyle();
         initModule();
     }
 
@@ -179,10 +179,12 @@ public class DiaryReadActivity extends EasyDiaryActivity {
         switch(view.getId()) {
             case R.id.zoomIn:
                 CommonUtils.saveFloatPreference(DiaryReadActivity.this, Constants.SETTING_FONT_SIZE, fontSize + 5);
+                setFontsStyle();
                 fragment.setFontsSize();
                 break;
             case R.id.zoomOut:
                 CommonUtils.saveFloatPreference(DiaryReadActivity.this, Constants.SETTING_FONT_SIZE, fontSize - 5);
+                setFontsStyle();
                 fragment.setFontsSize();
                 break;
             case R.id.delete:
@@ -244,6 +246,12 @@ public class DiaryReadActivity extends EasyDiaryActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.diary_common, menu);
         return true;
+    }
+
+    private void setFontsStyle() {
+        FontUtils.setFontsTypeface(getApplicationContext(), getAssets(), null, (ViewGroup) findViewById(android.R.id.content));
+        float fontSize = CommonUtils.loadFloatPreference(this, Constants.SETTING_FONT_SIZE, -1);
+        if (fontSize > 0) FontUtils.setFontsSize(fontSize, (ViewGroup) findViewById(android.R.id.content));
     }
 
     private void initShowcase() {
@@ -490,8 +498,8 @@ public class DiaryReadActivity extends EasyDiaryActivity {
         }
 
         private void setFontsSize() {
-            float commonSize = CommonUtils.loadFloatPreference(getContext(), Constants.SETTING_FONT_SIZE, mTitle.getTextSize());
-            FontUtils.setFontsSize(commonSize, -1, mTitle, mDate, mContents);
+            float fontSize = CommonUtils.loadFloatPreference(getContext(), Constants.SETTING_FONT_SIZE, -1);
+            if (fontSize > 0) FontUtils.setFontsSize(fontSize, -1, mTitle, mDate, mContents);
         }
 
     }

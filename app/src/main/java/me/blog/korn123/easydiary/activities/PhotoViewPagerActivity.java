@@ -39,7 +39,7 @@ public class PhotoViewPagerActivity extends EasyDiaryActivity {
         ButterKnife.bind(this);
         mViewPager = (HackyViewPager) findViewById(R.id.view_pager);
         mPageInfo = (TextView)findViewById(R.id.pageInfo);
-        FontUtils.setTypefaceDefault(mPageInfo);
+        setFontsStyle();
 
         Intent intent = getIntent();
         int sequence = intent.getIntExtra(Constants.DIARY_SEQUENCE, 0);
@@ -71,6 +71,12 @@ public class PhotoViewPagerActivity extends EasyDiaryActivity {
                 finish();
                 break;
         }
+    }
+
+    private void setFontsStyle() {
+        FontUtils.setFontsTypeface(getApplicationContext(), getAssets(), null, (ViewGroup) findViewById(android.R.id.content));
+        float fontSize = CommonUtils.loadFloatPreference(this, Constants.SETTING_FONT_SIZE, -1);
+        if (fontSize > 0) FontUtils.setFontsSize(fontSize, (ViewGroup) findViewById(android.R.id.content));
     }
 
     static class SamplePagerAdapter extends PagerAdapter {

@@ -111,6 +111,7 @@
         <item name="android:paddingRight">20dp</item>
         <item name="android:paddingLeft">20dp</item>
         <item name="android:paddingBottom">10dp</item>
+        <item name="android:textSize">@dimen/medium_text_size</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
@@ -130,15 +131,15 @@
 
     <style name="SettingActivityTitle">
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/blackText</item>
-        <item name="android:textSize">@dimen/large_text_size</item>
+        <item name="android:textColor">@color/defaultText</item>
+        <item name="android:textSize">@dimen/medium_text_size</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
 
     <style name="SettingActivitySummary" parent="SettingActivityTitle">
         <item name="android:textStyle">normal</item>
-        <item name="android:textColor">@color/defaultText</item>
+        <item name="android:textColor">@color/summaryText</item>
         <item name="android:textSize">@dimen/medium_text_size</item>
     </style>
 

@@ -6,9 +6,9 @@
     <color name="colorPrimary">#07ABB3</color>
     <color name="colorPrimaryDark">#089C90</color>
 
-    <color name="introText">#F0FFFFFF</color>
-    <color name="categoryText">#F0FFFFFF</color>
     <color name="defaultText">#4A4A4C</color>
+    <color name="summaryText">#79797c</color>
+
     <color name="whiteText">#FFFFFF</color>
     <color name="blackText">#000000</color>
     <color name="diaryCountText">#FF33B5E5</color>

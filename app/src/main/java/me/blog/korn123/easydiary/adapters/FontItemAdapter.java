@@ -50,8 +50,9 @@ public class FontItemAdapter extends ArrayAdapter<Map<String, String>> {
             holder = (ViewHolder)row.getTag();
         }
 
-        holder.textView.setText(list.get(position).get("fontName"));
-        FontUtils.setFontsTypeface(context, context.getAssets(), list.get(position).get("fontPath"), holder.textView);
+        holder.textView.setText(list.get(position).get("disPlayFontName"));
+        holder.textView.setTypeface(FontUtils.getTypeface(context, context.getAssets(), list.get(position).get("fontName")));
+
         return row;
     }
 

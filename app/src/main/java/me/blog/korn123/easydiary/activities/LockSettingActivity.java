@@ -3,12 +3,14 @@ package me.blog.korn123.easydiary.activities;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.blog.korn123.commons.constants.Constants;
+import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
 
@@ -42,7 +44,7 @@ public class LockSettingActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lock_setting);
         ButterKnife.bind(this);
-        setFontsTypeface();
+        setFontsStyle();
 
         mPasswordView[0] = mPass1;
         mPasswordView[1] = mPass2;
@@ -101,8 +103,10 @@ public class LockSettingActivity extends Activity {
         }
     }
 
-    private void setFontsTypeface() {
-        FontUtils.setFontsTypeface(LockSettingActivity.this, getAssets(), null, mInfoMessage);
+    private void setFontsStyle() {
+        FontUtils.setFontsTypeface(getApplicationContext(), getAssets(), null, (ViewGroup) findViewById(android.R.id.content));
+        float fontSize = CommonUtils.loadFloatPreference(this, Constants.SETTING_FONT_SIZE, -1);
+        if (fontSize > 0) FontUtils.setFontsSize(fontSize, (ViewGroup) findViewById(android.R.id.content));
     }
 
 }

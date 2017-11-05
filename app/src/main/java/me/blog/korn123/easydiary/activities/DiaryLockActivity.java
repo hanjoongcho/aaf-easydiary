@@ -51,7 +51,7 @@ public class DiaryLockActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diary_lock);
         ButterKnife.bind(this);
-        setFontsTypeface();
+        setFontsStyle();
 
         mPasswordView[0] = mPass1;
         mPasswordView[1] = mPass2;
@@ -137,7 +137,9 @@ public class DiaryLockActivity extends Activity {
         finish();
     }
 
-    private void setFontsTypeface() {
-        FontUtils.setFontsTypeface(this, getAssets(), null, (ViewGroup) findViewById(android.R.id.content));
+    private void setFontsStyle() {
+        FontUtils.setFontsTypeface(getApplicationContext(), getAssets(), null, (ViewGroup) findViewById(android.R.id.content));
+        float fontSize = CommonUtils.loadFloatPreference(this, Constants.SETTING_FONT_SIZE, -1);
+        if (fontSize > 0) FontUtils.setFontsSize(fontSize, (ViewGroup) findViewById(android.R.id.content));
     }
 }

@@ -136,11 +136,11 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
                 break;
             case R.id.zoomIn:
                 CommonUtils.saveFloatPreference(DiaryUpdateActivity.this, Constants.SETTING_FONT_SIZE, fontSize + 5);
-                setFontsSize();
+                setFontsStyle();
                 break;
             case R.id.zoomOut:
                 CommonUtils.saveFloatPreference(DiaryUpdateActivity.this, Constants.SETTING_FONT_SIZE, fontSize - 5);
-                setFontsSize();
+                setFontsStyle();
                 break;
             case R.id.saveContents:
                 if (StringUtils.isEmpty(mContents.getText())) {
@@ -223,8 +223,15 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        setFontsTypeface();
-        setFontsSize();
+        setFontsStyle();
+    }
+
+    private void setFontsStyle() {
+        FontUtils.setFontsTypeface(getApplicationContext(), getAssets(), null, (ViewGroup) findViewById(android.R.id.content));
+        float fontSize = CommonUtils.loadFloatPreference(this, Constants.SETTING_FONT_SIZE, -1);
+        if (fontSize > 0) FontUtils.setFontsSize(fontSize, (ViewGroup) findViewById(android.R.id.content));
+        mWeather = mWeatherSpinner.getSelectedItemPosition();
+        initSpinner();
     }
 
     public void initSpinner() {
@@ -232,17 +239,6 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
         ArrayAdapter arrayAdapter = new DiaryWeatherItemAdapter(DiaryUpdateActivity.this, R.layout.item_weather, Arrays.asList(weatherArr));
         mWeatherSpinner.setAdapter(arrayAdapter);
         mWeatherSpinner.setSelection(mWeather);
-    }
-
-    private void setFontsTypeface() {
-        FontUtils.setFontsTypeface(DiaryUpdateActivity.this, getAssets(), null, mTitle, mContents);
-    }
-
-    private void setFontsSize() {
-        float commonSize = CommonUtils.loadFloatPreference(DiaryUpdateActivity.this, Constants.SETTING_FONT_SIZE, mTitle.getTextSize());
-        FontUtils.setFontsSize(commonSize, -1, mTitle, mContents);
-        mWeather = mWeatherSpinner.getSelectedItemPosition();
-        initSpinner();
     }
 
     public void initData() {

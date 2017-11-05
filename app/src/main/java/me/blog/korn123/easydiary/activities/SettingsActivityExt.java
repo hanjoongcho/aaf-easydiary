@@ -79,41 +79,10 @@ public class SettingsActivityExt extends EasyDiaryActivity {
         initPreference();
     }
 
-    private void initPreference() {
-        prefSummary1.setText(CommonUtils.loadStringPreference(SettingsActivityExt.this, Constants.SETTING_FONT_NAME, Constants.CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT));
-        pref2Switcher.setChecked(CommonUtils.loadBooleanPreference(SettingsActivityExt.this, Constants.DIARY_SEARCH_QUERY_CASE_SENSITIVE));
-        pref4Switcher.setChecked(CommonUtils.loadBooleanPreference(SettingsActivityExt.this, Constants.APP_LOCK_ENABLE));
-        prefSummary5.setText(getString(R.string.lock_number) + " " + CommonUtils.loadStringPreference(SettingsActivityExt.this, Constants.APP_LOCK_SAVED_PASSWORD, "0000"));
-        prefSummary8.setText(String.format("Easy Diary v %s", getPackageVersion()));
-    }
-
-    String getPackageVersion() {
-        PackageInfo packageInfo = null;
-        try {
-            packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        return packageInfo.versionName;
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
-        setFontsTypeface();
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void setFontsTypeface() {
-        FontUtils.setFontsTypeface(SettingsActivityExt.this, getAssets(), null, (ViewGroup) findViewById(android.R.id.content));
+        setFontsStyle();
     }
 
     @OnClick({ R.id.pref1, R.id.pref2, R.id.pref3, R.id.pref4, R.id.pref5, R.id.pref6, R.id.pref7, R.id.pref8, R.id.pref9 })
@@ -134,8 +103,8 @@ public class SettingsActivityExt extends EasyDiaryActivity {
                 List<Map<String, String>> listFont = new ArrayList<>();
                 for (int i = 0; i < fontNameArray.length; i++) {
                     Map<String, String> map = new HashMap<>();
-                    map.put("fontName" , fontNameArray[i]);
-                    map.put("fontPath" , fontPathArray[i]);
+                    map.put("disPlayFontName" , fontNameArray[i]);
+                    map.put("fontName" , fontPathArray[i]);
                     listFont.add(map);
                 }
 
@@ -144,8 +113,8 @@ public class SettingsActivityExt extends EasyDiaryActivity {
                     for (String fontName : fontDir.list()) {
                         if (FilenameUtils.getExtension(fontName).equalsIgnoreCase("ttf")) {
                             Map<String, String> map = new HashMap<>();
-                            map.put("fontName" , FilenameUtils.getBaseName(fontName));
-                            map.put("fontPath" , fontName);
+                            map.put("disPlayFontName" , FilenameUtils.getBaseName(fontName));
+                            map.put("fontName" , fontName);
                             listFont.add(map);
                         }
                     }
@@ -160,7 +129,7 @@ public class SettingsActivityExt extends EasyDiaryActivity {
                         CommonUtils.saveStringPreference(SettingsActivityExt.this, Constants.SETTING_FONT_NAME, fontInfo.get("fontPath"));
                         FontUtils.setCommonTypeface(SettingsActivityExt.this, getAssets());
                         initPreference();
-                        setFontsTypeface();
+                        setFontsStyle();
                         mAlertDialog.cancel();
                     }
                 });
@@ -265,6 +234,39 @@ public class SettingsActivityExt extends EasyDiaryActivity {
             default:
                 break;
         }
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void setFontsStyle() {
+        FontUtils.setFontsTypeface(getApplicationContext(), getAssets(), null, (ViewGroup) findViewById(android.R.id.content));
+        float fontSize = CommonUtils.loadFloatPreference(this, Constants.SETTING_FONT_SIZE, -1);
+        if (fontSize > 0) FontUtils.setFontsSize(fontSize, (ViewGroup) findViewById(android.R.id.content));
+    }
+
+    private void initPreference() {
+        prefSummary1.setText(CommonUtils.loadStringPreference(SettingsActivityExt.this, Constants.SETTING_FONT_NAME, Constants.CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT));
+        pref2Switcher.setChecked(CommonUtils.loadBooleanPreference(SettingsActivityExt.this, Constants.DIARY_SEARCH_QUERY_CASE_SENSITIVE));
+        pref4Switcher.setChecked(CommonUtils.loadBooleanPreference(SettingsActivityExt.this, Constants.APP_LOCK_ENABLE));
+        prefSummary5.setText(getString(R.string.lock_number) + " " + CommonUtils.loadStringPreference(SettingsActivityExt.this, Constants.APP_LOCK_SAVED_PASSWORD, "0000"));
+        prefSummary8.setText(String.format("Easy Diary v %s", getPackageVersion()));
+    }
+
+    String getPackageVersion() {
+        PackageInfo packageInfo = null;
+        try {
+            packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return packageInfo.versionName;
     }
 
 }

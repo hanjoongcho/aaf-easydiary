@@ -92,7 +92,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 //        ViewGroup viewGroup = (ViewGroup) findViewById(android.R.id.content);
 ////        Window window = getWindow();
 ////        ViewGroup viewGroup = (ViewGroup) window.getDecorView();
-//        determineView(viewGroup);
+//        setTypeface(viewGroup);
 
     }
 

@@ -70,7 +70,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textColor="@color/introText"
+            android:textColor="@color/whiteText"
             android:textSize="@dimen/medium_text_size"
             android:id="@+id/infoMessage"
             android:textStyle="bold" />
