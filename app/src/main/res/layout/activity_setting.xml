@@ -51,6 +51,9 @@
                        style="@style/SettingActivitySummary" />
                </LinearLayout>
 
+               <TextView
+                   style="@style/SettingActivityDivider" />
+
                <LinearLayout
                    android:id="@+id/pref3"
                    android:orientation="vertical"
@@ -64,6 +67,9 @@
                        android:text="@string/add_ttf_fonts_summary"
                        style="@style/SettingActivitySummary" />
                </LinearLayout>
+
+               <TextView
+                   style="@style/SettingActivityDivider" />
 
                <LinearLayout
                    android:id="@+id/pref2"
@@ -89,6 +95,9 @@
                        android:layout_height="wrap_content" />
                </LinearLayout>
 
+               <TextView
+                   style="@style/SettingActivityDivider" />
+
                <LinearLayout
                    android:id="@+id/pref4"
                    style="@style/SettingActivityItem">
@@ -113,6 +122,9 @@
                        android:layout_height="wrap_content" />
                </LinearLayout>
 
+               <TextView
+                   style="@style/SettingActivityDivider" />
+
                <LinearLayout
                    android:id="@+id/pref5"
                    android:orientation="vertical"
@@ -127,6 +139,9 @@
                        style="@style/SettingActivitySummary" />
                </LinearLayout>
 
+               <TextView
+                   style="@style/SettingActivityDivider" />
+
                <LinearLayout
                    android:id="@+id/pref6"
                    android:orientation="vertical"
@@ -140,6 +155,9 @@
                        android:text="@string/restore_diary_summary"
                        style="@style/SettingActivitySummary" />
                </LinearLayout>
+
+               <TextView
+                   style="@style/SettingActivityDivider" />
 
                <LinearLayout
                    android:layout_marginBottom="10dp"
@@ -174,6 +192,9 @@
                        android:text=""
                        style="@style/SettingActivitySummary" />
                </LinearLayout>
+
+               <TextView
+                   style="@style/SettingActivityDivider" />
 
                <LinearLayout
                    android:layout_marginBottom="10dp"

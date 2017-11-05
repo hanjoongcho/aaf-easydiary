@@ -2,7 +2,7 @@
 <resources>
     <!--App Color-->
     <color name="colorAccent">#07ABB3</color>
-    <color name="colorAccentWithAlpha">#2007ABB3</color>
+    <color name="colorAccentWithAlpha">#1007ABB3</color>
     <color name="colorPrimary">#07ABB3</color>
     <color name="colorPrimaryDark">#089C90</color>
 

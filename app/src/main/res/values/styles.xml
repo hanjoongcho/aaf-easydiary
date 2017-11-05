@@ -103,6 +103,12 @@
     </style>
 
     <!--SettingActivity Style-->
+    <style name="SettingActivityDivider">
+        <item name="android:background">@color/colorAccentWithAlpha</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+    </style>
+
     <style name="SettingActivityItem">
         <item name="android:background">@drawable/click_effect_setting_item</item>
         <item name="android:orientation">horizontal</item>

@@ -7,7 +7,7 @@
 
     <LinearLayout
         android:padding="10dp"
-        android:background="@drawable/bg_card_01"
+        android:background="@drawable/click_effect_diary_main_item"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

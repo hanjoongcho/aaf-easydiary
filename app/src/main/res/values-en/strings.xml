@@ -84,7 +84,7 @@
     <string name="update_diary_title">Edit Diary</string>
     <string name="back_pressed_confirm">Click the \'OK\' button to go to the diary search screen without saving the current diary.</string>
 
-    <!--SettingsActivity-->
+    <!--SettingsActivity_-->
     <string name="setting_title">Preferences</string>
     <string name="lock_number">Lock Number:</string>
     <string name="rate_app">Rate App</string>

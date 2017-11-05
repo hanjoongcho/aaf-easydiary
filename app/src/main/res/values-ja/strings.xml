@@ -84,7 +84,7 @@
     <string name="update_diary_title">ダイアリー修正</string>
     <string name="back_pressed_confirm">\'確認\' ボタンを押すと、現在のダイアリーを保存せずにダイアリー検索画面に移動します.</string>
 
-    <!--SettingsActivity-->
+    <!--SettingsActivity_-->
     <string name="setting_title">環境設定</string>
     <string name="lock_number">設定されたロック番号:</string>
     <string name="rate_app">アプリを評価する</string>

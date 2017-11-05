@@ -3,7 +3,6 @@ package me.blog.korn123.easydiary.activities;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -164,7 +163,7 @@ public class DiaryMainActivity extends EasyDiaryActivity {
                 finish();
                 break;
             case R.id.settings:
-                Intent settingIntent = new Intent(DiaryMainActivity.this, SettingsActivityExt.class);
+                Intent settingIntent = new Intent(DiaryMainActivity.this, SettingsActivity.class);
                 startActivity(settingIntent);
                 break;
             case R.id.chart:
