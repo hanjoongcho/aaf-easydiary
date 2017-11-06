@@ -16,40 +16,21 @@
         android:layout_height="0dp">
 
         <TextView
-            android:textStyle="bold"
-            android:gravity="center"
             android:id="@+id/pass1"
-            android:background="@drawable/bg_card_01"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="50dp" />
+            style="@style/DiaryLockInputNum" />
+
         <TextView
-            android:textStyle="bold"
-            android:gravity="center"
             android:id="@+id/pass2"
-            android:background="@drawable/bg_card_01"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="50dp" />
+            style="@style/DiaryLockInputNum" />
+
         <TextView
-            android:textStyle="bold"
-            android:gravity="center"
             android:id="@+id/pass3"
-            android:background="@drawable/bg_card_01"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="50dp" />
+
+            style="@style/DiaryLockInputNum" />
         <TextView
-            android:textStyle="bold"
-            android:gravity="center"
             android:id="@+id/pass4"
-            android:background="@drawable/bg_card_01"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="50dp" />
+            android:layout_marginRight="0dp"
+            style="@style/DiaryLockInputNum" />
 
     </LinearLayout>
 
@@ -79,171 +60,75 @@
 
     <LinearLayout
         android:gravity="bottom"
+        android:layout_marginBottom="20dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_weight="2"
         android:layout_height="0dp">
 
         <LinearLayout
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="5dp"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
+            style="@style/DiaryLockKeypadGroup">
             <TextView
-                android:textStyle="bold"
+                style="@style/DiaryLockKeypad"
                 android:id="@+id/num1"
-                android:layout_marginRight="5dp"
-                android:gravity="center"
-                android:background="@drawable/bg_card_01"
-                android:text="1"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="50dp" />
+                android:text="1" />
             <TextView
-                android:textStyle="bold"
+                style="@style/DiaryLockKeypad"
                 android:id="@+id/num2"
-                android:layout_marginRight="5dp"
-                android:gravity="center"
-                android:background="@drawable/bg_card_01"
-                android:text="2"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="50dp" />
+                android:text="2" />
             <TextView
-                android:textStyle="bold"
+                style="@style/DiaryLockKeypad"
+                android:layout_marginRight="0dp"
                 android:id="@+id/num3"
-                android:gravity="center"
-                android:background="@drawable/bg_card_01"
-                android:text="3"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="50dp" />
-
+                android:text="3"/>
         </LinearLayout>
 
         <LinearLayout
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="5dp"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
+            style="@style/DiaryLockKeypadGroup">
             <TextView
-                android:textStyle="bold"
+                style="@style/DiaryLockKeypad"
                 android:id="@+id/num4"
-                android:layout_marginRight="5dp"
-                android:gravity="center"
-                android:background="@drawable/bg_card_01"
-                android:text="4"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="50dp" />
+                android:text="4" />
             <TextView
-                android:textStyle="bold"
+                style="@style/DiaryLockKeypad"
                 android:id="@+id/num5"
-                android:layout_marginRight="5dp"
-                android:gravity="center"
-                android:background="@drawable/bg_card_01"
-                android:text="5"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="50dp" />
+                android:text="5" />
             <TextView
-                android:textStyle="bold"
+                style="@style/DiaryLockKeypad"
+                android:layout_marginRight="0dp"
                 android:id="@+id/num6"
-                android:gravity="center"
-                android:background="@drawable/bg_card_01"
-                android:text="6"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="50dp" />
-
+                android:text="6" />
         </LinearLayout>
 
         <LinearLayout
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="5dp"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
+            style="@style/DiaryLockKeypadGroup">
             <TextView
-                android:textStyle="bold"
+                style="@style/DiaryLockKeypad"
                 android:id="@+id/num7"
-                android:layout_marginRight="5dp"
-                android:gravity="center"
-                android:background="@drawable/bg_card_01"
-                android:text="7"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="50dp" />
+                android:text="7" />
             <TextView
-                android:textStyle="bold"
+                style="@style/DiaryLockKeypad"
                 android:id="@+id/num8"
-                android:layout_marginRight="5dp"
-                android:gravity="center"
-                android:background="@drawable/bg_card_01"
-                android:text="8"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="50dp" />
+                android:text="8" />
             <TextView
-                android:textStyle="bold"
+                style="@style/DiaryLockKeypad"
+                android:layout_marginRight="0dp"
                 android:id="@+id/num9"
-                android:gravity="center"
-                android:background="@drawable/bg_card_01"
-                android:text="9"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="50dp" />
-
+                android:text="9" />
         </LinearLayout>
 
         <LinearLayout
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="5dp"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
+            style="@style/DiaryLockKeypadGroup">
             <TextView
-                android:textStyle="bold"
-                android:layout_marginRight="5dp"
-                android:gravity="center"
-                android:background="@drawable/bg_card_01"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="50dp" />
+                style="@style/DiaryLockKeypad" />
             <TextView
-                android:textStyle="bold"
+                style="@style/DiaryLockKeypad"
                 android:id="@+id/num0"
-                android:layout_marginRight="5dp"
-                android:gravity="center"
-                android:background="@drawable/bg_card_01"
-                android:text="0"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="50dp" />
+                android:text="0" />
             <TextView
-                android:textStyle="bold"
-                android:gravity="center"
-                android:background="@drawable/bg_card_01"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="50dp" />
-
+                style="@style/DiaryLockKeypad"
+                android:layout_marginRight="0dp"/>
         </LinearLayout>
-
 
     </LinearLayout>
 
