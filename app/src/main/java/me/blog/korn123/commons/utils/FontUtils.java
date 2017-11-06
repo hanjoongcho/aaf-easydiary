@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -141,6 +142,8 @@ public class FontUtils {
                 break;
             }
         }
+
+        if (displayName == null) displayName = FilenameUtils.getBaseName(fontFileName);
         return displayName;
     }
 

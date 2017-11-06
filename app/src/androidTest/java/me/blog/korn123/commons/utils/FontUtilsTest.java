@@ -26,4 +26,9 @@ public class FontUtilsTest {
         assertEquals("NanumPen", FontUtils.fontFileNameToDisplayName(sContext, "NanumPen.ttf"));
     }
 
+    @Test
+    public void test_04() {
+        assertEquals("consola", FontUtils.fontFileNameToDisplayName(sContext, "consola.ttf"));
+    }
+
 }

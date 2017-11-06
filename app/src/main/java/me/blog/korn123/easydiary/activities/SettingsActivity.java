@@ -89,54 +89,11 @@ public class SettingsActivity extends EasyDiaryActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.pref1:
-//                DialogUtils.makeSnackBar(view, "OK");
-                AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
-                builder.setNegativeButton("CANCEL", null);
-                builder.setTitle(getString(R.string.font_setting));
-                LayoutInflater inflater = (LayoutInflater) this.getSystemService(this.LAYOUT_INFLATER_SERVICE);
-                View fontView = inflater.inflate(R.layout.dialog_fonts, null);
-                ListView listView = (ListView) fontView.findViewById(R.id.listFont);
-
-
-                String[] fontNameArray = getResources().getStringArray(R.array.pref_list_fonts_title);
-                String[] fontPathArray = getResources().getStringArray(R.array.pref_list_fonts_values);
-                List<Map<String, String>> listFont = new ArrayList<>();
-                for (int i = 0; i < fontNameArray.length; i++) {
-                    Map<String, String> map = new HashMap<>();
-                    map.put("disPlayFontName" , fontNameArray[i]);
-                    map.put("fontName" , fontPathArray[i]);
-                    listFont.add(map);
+                if (PermissionUtils.checkPermission(SettingsActivity.this , Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
+                    openFontSettingDialog();
+                } else {
+                    PermissionUtils.confirmPermission(SettingsActivity.this, SettingsActivity.this, Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE_WITH_FONT_SETTING);
                 }
-
-                File fontDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + Path.USER_CUSTOM_FONTS_DIRECTORY);
-                if (fontDir.list() != null && fontDir.list().length > 0) {
-                    for (String fontName : fontDir.list()) {
-                        if (FilenameUtils.getExtension(fontName).equalsIgnoreCase("ttf")) {
-                            Map<String, String> map = new HashMap<>();
-                            map.put("disPlayFontName" , FilenameUtils.getBaseName(fontName));
-                            map.put("fontName" , fontName);
-                            listFont.add(map);
-                        }
-                    }
-                }
-
-                ArrayAdapter arrayAdapter = new FontItemAdapter(SettingsActivity.this, R.layout.item_font, listFont);
-                listView.setAdapter(arrayAdapter);
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Map<String, String> fontInfo = (HashMap) parent.getAdapter().getItem(position);
-                        CommonUtils.saveStringPreference(SettingsActivity.this, Constants.SETTING_FONT_NAME, fontInfo.get("fontName"));
-                        FontUtils.setCommonTypeface(SettingsActivity.this, getAssets());
-                        initPreference();
-                        setFontsStyle();
-                        mAlertDialog.cancel();
-                    }
-                });
-
-                builder.setView(fontView);
-                mAlertDialog = builder.create();
-                mAlertDialog.show();
                 break;
             case R.id.pref2:
                 pref2Switcher.toggle();
@@ -231,9 +188,65 @@ public class SettingsActivity extends EasyDiaryActivity {
                     DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3));
                 }
                 break;
+            case Constants.REQUEST_CODE_EXTERNAL_STORAGE_WITH_FONT_SETTING:
+                if (PermissionUtils.checkPermission(getApplicationContext(), Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
+                    openFontSettingDialog();
+                } else {
+                    DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3));
+                }
+                break;
             default:
                 break;
         }
+    }
+
+    private void openFontSettingDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
+        builder.setNegativeButton("CANCEL", null);
+        builder.setTitle(getString(R.string.font_setting));
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(this.LAYOUT_INFLATER_SERVICE);
+        View fontView = inflater.inflate(R.layout.dialog_fonts, null);
+        ListView listView = (ListView) fontView.findViewById(R.id.listFont);
+
+        String[] fontNameArray = getResources().getStringArray(R.array.pref_list_fonts_title);
+        String[] fontPathArray = getResources().getStringArray(R.array.pref_list_fonts_values);
+        List<Map<String, String>> listFont = new ArrayList<>();
+        for (int i = 0; i < fontNameArray.length; i++) {
+            Map<String, String> map = new HashMap<>();
+            map.put("disPlayFontName" , fontNameArray[i]);
+            map.put("fontName" , fontPathArray[i]);
+            listFont.add(map);
+        }
+
+        File fontDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + Path.USER_CUSTOM_FONTS_DIRECTORY);
+        if (fontDir.list() != null && fontDir.list().length > 0) {
+            for (String fontName : fontDir.list()) {
+                if (FilenameUtils.getExtension(fontName).equalsIgnoreCase("ttf")) {
+                    Map<String, String> map = new HashMap<>();
+                    map.put("disPlayFontName" , FilenameUtils.getBaseName(fontName));
+                    map.put("fontName" , fontName);
+                    listFont.add(map);
+                }
+            }
+        }
+
+        ArrayAdapter arrayAdapter = new FontItemAdapter(SettingsActivity.this, R.layout.item_font, listFont);
+        listView.setAdapter(arrayAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Map<String, String> fontInfo = (HashMap) parent.getAdapter().getItem(position);
+                CommonUtils.saveStringPreference(SettingsActivity.this, Constants.SETTING_FONT_NAME, fontInfo.get("fontName"));
+                FontUtils.setCommonTypeface(SettingsActivity.this, getAssets());
+                initPreference();
+                setFontsStyle();
+                mAlertDialog.cancel();
+            }
+        });
+
+        builder.setView(fontView);
+        mAlertDialog = builder.create();
+        mAlertDialog.show();
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -252,7 +265,7 @@ public class SettingsActivity extends EasyDiaryActivity {
     }
 
     private void initPreference() {
-        prefSummary1.setText(CommonUtils.loadStringPreference(SettingsActivity.this, Constants.SETTING_FONT_NAME, Constants.CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT));
+        prefSummary1.setText(FontUtils.fontFileNameToDisplayName(getApplicationContext(), CommonUtils.loadStringPreference(SettingsActivity.this, Constants.SETTING_FONT_NAME, Constants.CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT)));
         pref2Switcher.setChecked(CommonUtils.loadBooleanPreference(SettingsActivity.this, Constants.DIARY_SEARCH_QUERY_CASE_SENSITIVE));
         pref4Switcher.setChecked(CommonUtils.loadBooleanPreference(SettingsActivity.this, Constants.APP_LOCK_ENABLE));
         prefSummary5.setText(getString(R.string.lock_number) + " " + CommonUtils.loadStringPreference(SettingsActivity.this, Constants.APP_LOCK_SAVED_PASSWORD, "0000"));
