@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.EasyDiaryUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
+import me.blog.korn123.easydiary.activities.SettingsActivity;
 import me.blog.korn123.easydiary.models.DiaryDto;
 
 /**
@@ -44,12 +46,18 @@ public class FontItemAdapter extends ArrayAdapter<Map<String, String>> {
             LayoutInflater inflater = ((Activity)this.context).getLayoutInflater();
             row = inflater.inflate(this.layoutResourceId, parent, false);
             holder = new ViewHolder();
-            holder.textView = ((TextView)row.findViewById(R.id.textView));
+            holder.textView = (TextView) row.findViewById(R.id.textView);
+            holder.imageView = (ImageView) row.findViewById(R.id.checkIcon);
             row.setTag(holder);
         } else {
             holder = (ViewHolder)row.getTag();
         }
 
+        if (StringUtils.equals(CommonUtils.loadStringPreference(context, Constants.SETTING_FONT_NAME, ""), list.get(position).get("fontName"))) {
+            holder.imageView.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.check_mark));
+        } else {
+            holder.imageView.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.check_mark_off));
+        }
         holder.textView.setText(list.get(position).get("disPlayFontName"));
         holder.textView.setTypeface(FontUtils.getTypeface(context, context.getAssets(), list.get(position).get("fontName")));
 
@@ -63,6 +71,7 @@ public class FontItemAdapter extends ArrayAdapter<Map<String, String>> {
 
     private static class ViewHolder {
         TextView textView;
+        ImageView imageView;
     }
 
 }
