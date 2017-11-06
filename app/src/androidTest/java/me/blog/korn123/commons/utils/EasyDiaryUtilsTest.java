@@ -6,10 +6,14 @@ import android.text.SpannedString;
 import android.text.style.BackgroundColorSpan;
 import android.widget.TextView;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import me.blog.korn123.easydiary.R;
+
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Administrator on 2017-11-02.

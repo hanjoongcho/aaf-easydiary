@@ -131,4 +131,17 @@ public class FontUtils {
         return result;
     }
 
+    public static String fontFileNameToDisplayName(Context context, String fontFileName) {
+        String displayName = null;
+        String[] fontNames = context.getResources().getStringArray(R.array.pref_list_fonts_values);
+        String[] displayNames = context.getResources().getStringArray(R.array.pref_list_fonts_title);
+        for (int i = 0; i < fontNames.length; i++) {
+            if (StringUtils.equals(fontFileName, fontNames[i])) {
+                displayName = displayNames[i];
+                break;
+            }
+        }
+        return displayName;
+    }
+
 }
