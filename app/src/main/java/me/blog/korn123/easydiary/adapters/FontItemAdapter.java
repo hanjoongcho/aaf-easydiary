@@ -53,7 +53,7 @@ public class FontItemAdapter extends ArrayAdapter<Map<String, String>> {
             holder = (ViewHolder)row.getTag();
         }
 
-        if (StringUtils.equals(CommonUtils.loadStringPreference(context, Constants.SETTING_FONT_NAME, ""), list.get(position).get("fontName"))) {
+        if (StringUtils.equals(CommonUtils.loadStringPreference(context, Constants.SETTING_FONT_NAME, Constants.CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT), list.get(position).get("fontName"))) {
             holder.imageView.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.check_mark));
         } else {
             holder.imageView.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.check_mark_off));
