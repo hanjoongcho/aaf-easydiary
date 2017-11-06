@@ -91,8 +91,8 @@ public class SettingsActivity extends EasyDiaryActivity {
             case R.id.pref1:
 //                DialogUtils.makeSnackBar(view, "OK");
                 AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
-                builder.setPositiveButton("OK", null);
                 builder.setNegativeButton("CANCEL", null);
+                builder.setTitle(getString(R.string.font_setting));
                 LayoutInflater inflater = (LayoutInflater) this.getSystemService(this.LAYOUT_INFLATER_SERVICE);
                 View fontView = inflater.inflate(R.layout.dialog_fonts, null);
                 ListView listView = (ListView) fontView.findViewById(R.id.listFont);
@@ -126,7 +126,7 @@ public class SettingsActivity extends EasyDiaryActivity {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Map<String, String> fontInfo = (HashMap) parent.getAdapter().getItem(position);
-                        CommonUtils.saveStringPreference(SettingsActivity.this, Constants.SETTING_FONT_NAME, fontInfo.get("fontPath"));
+                        CommonUtils.saveStringPreference(SettingsActivity.this, Constants.SETTING_FONT_NAME, fontInfo.get("fontName"));
                         FontUtils.setCommonTypeface(SettingsActivity.this, getAssets());
                         initPreference();
                         setFontsStyle();
