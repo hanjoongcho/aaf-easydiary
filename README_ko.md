@@ -67,16 +67,16 @@ Step2. 안드로이드 스튜디오에서 'aaf-easydiary' 프로젝트를 임포
 Step3. 아래 링크를 이용해서 svg 이미지를 Flaticon 사이트에서 다운로드 합니다.
 Step4. 프로젝트에서 사용하는 10개의 svg파일을 안드로이드 스튜디오에서 임포트합니다.
        프로젝트 우클릭 > New > Vector Asset 메뉴에서 임포트 가능하며 리소스 이름은 다음과 같습니다.
-       -> ic_clouds_and_sun.xml
-       -> ic_umbrella_1.xml
-       -> ic_sunny.xml
-       -> ic_stars_2.xml
-       -> ic_snowing.xml
-       -> ic_raindrops.xml
-       -> ic_rainbow.xml
-       -> ic_night_rain.xml
-       -> ic_moon_9.xml
-       -> ic_bolt.xml
+       clouds-and-sun.svg -> ic_clouds_and_sun.xml
+       umbrella-1.svg     -> ic_umbrella_1.xml
+       sunny.svg          -> ic_sunny.xml
+       stars-2.svg        -> ic_stars_2.xml
+       snowing.svg        -> ic_snowing.xml
+       raindrops.svg      -> ic_raindrops.xml
+       rainbow.svg        -> ic_rainbow.xml
+       night-rain.svg     -> ic_night_rain.xml
+       moon-9.svg         -> ic_moon_9.xml
+       bolt.svg           -> ic_bolt.xml
 Step5. 구글드라이브 사용을 위해 'aaf-easydiary'의 패키지이름과 SHA-1 서명인증서 지문을 등록합니다.(https://console.developers.google.com/)
 Step6. 안드로이드 스튜디오에서 'aaf-easydiary' 프로젝트를 빌드합니다.
 ```

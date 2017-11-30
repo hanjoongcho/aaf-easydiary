@@ -68,7 +68,16 @@ Step2. Import 'aaf-easydiary' project into android studio.
 Step3. Use below link download svg images from Flaticon.
 Step4. Import 10 svg files for your project from your Android studio.
        Project rightclick > New > Vector Asset... You can import from the menu and the resource names are:
-
+       clouds-and-sun.svg -> ic_clouds_and_sun.xml
+       umbrella-1.svg     -> ic_umbrella_1.xml
+       sunny.svg          -> ic_sunny.xml
+       stars-2.svg        -> ic_stars_2.xml
+       snowing.svg        -> ic_snowing.xml
+       raindrops.svg      -> ic_raindrops.xml
+       rainbow.svg        -> ic_rainbow.xml
+       night-rain.svg     -> ic_night_rain.xml
+       moon-9.svg         -> ic_moon_9.xml
+       bolt.svg           -> ic_bolt.xml
 Step5. Register your package name and SHA-1 signature certificate fingerprint for Google Drive use.(https://console.developers.google.com/)
 Step6. Build 'aaf-easydiary' project with android studio.
 ```
