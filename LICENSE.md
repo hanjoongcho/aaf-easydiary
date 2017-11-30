@@ -65,7 +65,11 @@ http://www.freepik.com, http://www.flaticon.com
 Icons made by Freepik from www.flaticon.com is licensed by CC 3.0 BY
 ```
 
-https://www.flaticon.com/packs/weather-set-2
+https://www.flaticon.com/packs/weather-set-2   
+Published by Smashicons  2 years ago   
+License: Flaticon Basic License   
+Download format: Vector icon (SVG & EPS), PNG and PSD   
+Style: Basic Miscellany / Flat   
 ```
 License: Flaticon Basic License 
 FREE LICENSE (WITH ATTRIBUTION)
