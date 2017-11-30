@@ -65,9 +65,14 @@ This is a diary application optimized to user experience.
 ```
 Step1. Fork or download 'aaf-easydiary' project.
 Step2. Import 'aaf-easydiary' project into android studio.
-Step3. Register your package name and SHA-1 signature certificate fingerprint for Google Drive use.(https://console.developers.google.com/)
-Step4. Build 'aaf-easydiary' project with android studio.
+Step3. Use below link download svg images from Flaticon.
+Step4. Import 10 svg files for your project from your Android studio.
+       Project rightclick > New > Vector Asset... You can import from the menu and the resource names are:
+
+Step5. Register your package name and SHA-1 signature certificate fingerprint for Google Drive use.(https://console.developers.google.com/)
+Step6. Build 'aaf-easydiary' project with android studio.
 ```
+[Download miniman svg images from Flaticon](https://www.flaticon.com/packs/weather-set-2)
 
 # License
 [LICENSE][LICENSE.md]
