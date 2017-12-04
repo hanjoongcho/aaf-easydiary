@@ -149,6 +149,9 @@
     <!--TimelineActivity-->
     <string name="timeline_title">タイムライン</string>
 
+    <!--GoogleDriveUtils-->
+    <string name="google_drive_connect_message">Googleドライブの同期...</string>
+
     <!--CaldroidItemAdapter-->
     <string name="diary_count"></string>
 

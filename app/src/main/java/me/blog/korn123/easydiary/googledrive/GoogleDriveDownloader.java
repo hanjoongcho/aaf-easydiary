@@ -31,11 +31,6 @@ import me.blog.korn123.easydiary.activities.DiaryMainActivity;
  */
 public class GoogleDriveDownloader extends GoogleDriveUtils {
 
-    /**
-     * File that is selected with the open file activity.
-     */
-    private DriveId mSelectedFileDriveId;
-
     @Override
     public void onConnected(Bundle connectionHint) {
         super.onConnected(connectionHint);
@@ -52,22 +47,10 @@ public class GoogleDriveDownloader extends GoogleDriveUtils {
 
         try {
             startIntentSenderForResult(
-                    intentSender, Constants.REQUEST_CODE_GOOGLE_DRIVE_DOWNLOAD, null, 0, 0, 0);
+                    intentSender, REQUEST_CODE_GOOGLE_DRIVE_DOWNLOAD, null, 0, 0, 0);
         } catch (IntentSender.SendIntentException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Constants.REQUEST_CODE_GOOGLE_DRIVE_DOWNLOAD && resultCode == RESULT_OK && data != null) { // 계정선택 후 최초 진입 시 data가 null 임
-            // 파일다운로드 성공
-            mSelectedFileDriveId = (DriveId) data.getParcelableExtra(OpenFileActivityBuilder.EXTRA_RESPONSE_DRIVE_ID);
-
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-        CommonUtils.saveLongPreference(GoogleDriveDownloader.this, Constants.SETTING_PAUSE_MILLIS, System.currentTimeMillis());
     }
 
     private void open() {

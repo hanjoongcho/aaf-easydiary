@@ -13,10 +13,6 @@ public class Constants {
     final static public int REQUEST_CODE_EXTERNAL_STORAGE_WITH_SHARE_DIARY_CARD = 2;
     final static public int REQUEST_CODE_EXTERNAL_STORAGE_WITH_FONT_SETTING = 3;
 
-    // startActivityForResult Request Code: Google Drive
-    final static public int REQUEST_CODE_GOOGLE_DRIVE_UPLOAD = 11;
-    final static public int REQUEST_CODE_GOOGLE_DRIVE_DOWNLOAD = 12;
-
     // startActivityForResult Request Code: Etc
     final static public int REQUEST_CODE_LOCK_SETTING = 21;
     final static public int REQUEST_CODE_IMAGE_PICKER = 22;

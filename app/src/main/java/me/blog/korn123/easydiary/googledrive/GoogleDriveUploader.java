@@ -15,7 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.constants.Path;
 import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.commons.utils.EasyDiaryUtils;
@@ -56,7 +55,7 @@ public class GoogleDriveUploader extends GoogleDriveUtils {
                             .build(getGoogleApiClient());
                     try {
                         startIntentSenderForResult(
-                                intentSender, Constants.REQUEST_CODE_GOOGLE_DRIVE_UPLOAD, null, 0, 0, 0);
+                                intentSender, REQUEST_CODE_GOOGLE_DRIVE_UPLOAD, null, 0, 0, 0);
                     } catch (IntentSender.SendIntentException e) {
                         e.printStackTrace();
                     }

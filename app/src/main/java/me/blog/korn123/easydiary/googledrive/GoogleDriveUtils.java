@@ -4,15 +4,19 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.drive.Drive;
+import com.google.android.gms.drive.DriveId;
+import com.google.android.gms.drive.OpenFileActivityBuilder;
 
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.CommonUtils;
+import me.blog.korn123.easydiary.R;
 
 
 /**
@@ -22,36 +26,25 @@ public class GoogleDriveUtils extends Activity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
-    /**
-     * DriveId of an existing folder to be used as a parent folder in
-     * folder operations samples.
-     */
-    public static final String EXISTING_FOLDER_ID = "0B2EEtIjPUdX6MERsWlYxN3J6RU0";
-
-    /**
-     * DriveId of an existing file to be used in file operation samples..
-     */
-    public static final String EXISTING_FILE_ID = "0ByfSjdPVs9MZTHBmMVdSeWxaNTg";
-
-    /**
-     * Extra for account name.
-     */
-    protected static final String EXTRA_ACCOUNT_NAME = "account_name";
-
-    /**
-     * Request code for auto Google Play Services error resolution.
-     */
-    protected static final int REQUEST_CODE_RESOLUTION = 1;
-
-    /**
-     * Next available request code.
-     */
-    protected static final int NEXT_AVAILABLE_REQUEST_CODE = 2;
+    final static public int REQUEST_CODE_RESOLUTION = 1;
+    final static public int REQUEST_CODE_GOOGLE_DRIVE_UPLOAD = 2;
+    final static public int REQUEST_CODE_GOOGLE_DRIVE_DOWNLOAD = 3;
 
     /**
      * Google API client.
      */
     private GoogleApiClient mGoogleApiClient;
+
+    /**
+     * File that is selected with the open file activity.
+     */
+    protected DriveId mSelectedFileDriveId = null;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_google_drive);
+    }
 
     /**
      * Called when activity gets visible. A connection to Drive services need to
@@ -79,17 +72,29 @@ public class GoogleDriveUtils extends Activity implements
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         super.onActivityResult(requestCode, resultCode, data);
+
         if (resultCode == RESULT_OK) {
-            if (requestCode == REQUEST_CODE_RESOLUTION) {
-                mGoogleApiClient.connect();
-            } else if (requestCode == Constants.REQUEST_CODE_GOOGLE_DRIVE_UPLOAD) {
-                // 파일업로드 성공
-                finish();
+
+            switch (requestCode) {
+                case REQUEST_CODE_RESOLUTION:
+                    mGoogleApiClient.connect();
+                    break;
+                case REQUEST_CODE_GOOGLE_DRIVE_UPLOAD:
+                    finish();
+                    break;
+                case REQUEST_CODE_GOOGLE_DRIVE_DOWNLOAD:
+                    if (data != null) {
+                        mSelectedFileDriveId = data.getParcelableExtra(OpenFileActivityBuilder.EXTRA_RESPONSE_DRIVE_ID);
+                    }
+                    break;
             }
         } else if (resultCode == RESULT_CANCELED) {
+
             finish();
         }
+
         CommonUtils.saveLongPreference(GoogleDriveUtils.this, Constants.SETTING_PAUSE_MILLIS, System.currentTimeMillis());
     }
 

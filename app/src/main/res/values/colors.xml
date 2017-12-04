@@ -5,6 +5,7 @@
     <color name="colorPrimary">#07ABB3</color>
     <color name="colorAccent">#07ABB3</color>
     <color name="colorAccentWithAlpha">#1007ABB3</color>
+    <color name="appBackground">#3307ABB3</color>
 
     <color name="defaultText">#4A4A4C</color>
     <color name="summaryText">#79797c</color>

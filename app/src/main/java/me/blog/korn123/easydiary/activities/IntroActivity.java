@@ -2,12 +2,9 @@ package me.blog.korn123.easydiary.activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.preference.PreferenceManager;
-import android.util.TypedValue;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -52,6 +49,8 @@ public class IntroActivity extends Activity implements Handler.Callback {
             if(!CommonUtils.preferencesContains(this, Constants.SETTING_FONT_SIZE)) {
                 CommonUtils.saveFloatPreference(this, Constants.SETTING_FONT_SIZE, CommonUtils.dpToPixel(this, 15));
             }
+        } else {
+            CommonUtils.saveFloatPreference(this, Constants.SETTING_FONT_SIZE, CommonUtils.dpToPixel(this, 20));
         }
 
         setFontsStyle();

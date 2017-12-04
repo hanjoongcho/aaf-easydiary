@@ -4,6 +4,10 @@
 
 ---------------------------------------------------
 
+# Changes in 1.3.11 (date: 2017/12/00)
+  * Improve Google Drive sync
+  * Improve feature of diary created time include seconds
+
 # Changes in 1.3.10 (date: 2017/11/13)
   * Added diary search case sensitive option
 
