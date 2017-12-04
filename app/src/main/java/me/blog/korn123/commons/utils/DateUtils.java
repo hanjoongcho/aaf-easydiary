@@ -101,6 +101,13 @@ public class DateUtils {
     public static String getFullPatternDateWithTime(long timeMillis) {
         Date date = new Date(timeMillis);
         DateFormat dateFormat = SimpleDateFormat.getDateInstance(SimpleDateFormat.FULL, Locale.getDefault());
+        DateFormat hourFormat = new SimpleDateFormat(TIME_PATTERN);
+        return String.format("%s %s", dateFormat.format(date), hourFormat.format(date));
+    }
+
+    public static String getFullPatternDateWithTimeAndSeconds(long timeMillis) {
+        Date date = new Date(timeMillis);
+        DateFormat dateFormat = SimpleDateFormat.getDateInstance(SimpleDateFormat.FULL, Locale.getDefault());
         DateFormat hourFormat = new SimpleDateFormat(TIME_PATTERN_WITH_SECONDS);
         return String.format("%s %s", dateFormat.format(date), hourFormat.format(date));
     }

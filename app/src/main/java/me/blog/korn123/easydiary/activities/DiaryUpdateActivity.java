@@ -266,7 +266,7 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
         mWeather = diaryDto.getWeather();
 
         mTitle.setText(diaryDto.getTitle());
-        getSupportActionBar().setSubtitle(DateUtils.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
+//        getSupportActionBar().setSubtitle(DateUtils.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
         mContents.setText(diaryDto.getContents());
         mCurrentTimeMillis = diaryDto.getCurrentTimeMillis();
         mContents.requestFocus();
@@ -410,7 +410,7 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
             );
             Date parsedDate = format.parse(dateTimeString);
             mCurrentTimeMillis = parsedDate.getTime();
-            getSupportActionBar().setSubtitle(DateUtils.getFullPatternDateWithTime(mCurrentTimeMillis));
+            getSupportActionBar().setSubtitle(DateUtils.getFullPatternDateWithTimeAndSeconds(mCurrentTimeMillis));
         } catch (ParseException e) {
             e.printStackTrace();
         }

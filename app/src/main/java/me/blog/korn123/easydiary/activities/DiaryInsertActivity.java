@@ -11,7 +11,6 @@ import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -26,7 +25,6 @@ import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -47,7 +45,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -63,10 +60,9 @@ import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.commons.utils.PermissionUtils;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.adapters.DiaryWeatherItemAdapter;
-import me.blog.korn123.easydiary.adapters.SecondItemAdapter;
-import me.blog.korn123.easydiary.models.PhotoUriDto;
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
 import me.blog.korn123.easydiary.models.DiaryDto;
+import me.blog.korn123.easydiary.models.PhotoUriDto;
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -455,7 +451,7 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
             );
             Date parsedDate = format.parse(dateTimeString);
             mCurrentTimeMillis = parsedDate.getTime();
-            getSupportActionBar().setSubtitle(DateUtils.getFullPatternDateWithTime(mCurrentTimeMillis));
+            getSupportActionBar().setSubtitle(DateUtils.getFullPatternDateWithTimeAndSeconds(mCurrentTimeMillis));
         } catch (ParseException e) {
             e.printStackTrace();
         }
