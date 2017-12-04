@@ -41,16 +41,19 @@ public class IntroActivity extends Activity implements Handler.Callback {
         if (!Locale.getDefault().getLanguage().matches(Constants.CUSTOM_FONTS_SUPPORT_LANGUAGE)) {
 
             // Initial font typeface setting
-            if(!CommonUtils.preferencesContains(this, Constants.SETTING_FONT_NAME)) {
+            if (!CommonUtils.preferencesContains(this, Constants.SETTING_FONT_NAME)) {
                 CommonUtils.saveStringPreference(this, Constants.SETTING_FONT_NAME, Constants.CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT);
             }
 
             // Initial font size setting
-            if(!CommonUtils.preferencesContains(this, Constants.SETTING_FONT_SIZE)) {
+            if (!CommonUtils.preferencesContains(this, Constants.SETTING_FONT_SIZE)) {
                 CommonUtils.saveFloatPreference(this, Constants.SETTING_FONT_SIZE, CommonUtils.dpToPixel(this, 15));
             }
         } else {
-            CommonUtils.saveFloatPreference(this, Constants.SETTING_FONT_SIZE, CommonUtils.dpToPixel(this, 20));
+            // Initial font size setting
+            if (!CommonUtils.preferencesContains(this, Constants.SETTING_FONT_SIZE)) {
+                CommonUtils.saveFloatPreference(this, Constants.SETTING_FONT_SIZE, CommonUtils.dpToPixel(this, 20));
+            }
         }
 
         setFontsStyle();
