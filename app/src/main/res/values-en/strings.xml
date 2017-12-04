@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Easy\nDiary</string>
 
+    <!--Common-->
+    <string name="common_create_seconds">Creation Seconds</string>
+
     <!--DiaryInsertActivity-->
     <string name="create_diary_title">Write Diary</string>
     <string name="write_date">Date</string>

@@ -26,6 +26,7 @@ public class DateUtils {
     private static final int UNIT_HEX = 16;
     public static final String DATE_PATTERN_DASH = "yyyy-MM-dd";
     public static final String TIME_PATTERN = "HH:mm";
+    public static final String TIME_PATTERN_WITH_SECONDS = "HH:mm ss";
     public static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
     public static final String DATE_TIME_PATTERN_WITHOUT_DELIMITER = "yyyyMMddHHmmss";
     public static final String DATE_HMS_PATTERN = "yyyyMMddHHmmss";
@@ -100,7 +101,7 @@ public class DateUtils {
     public static String getFullPatternDateWithTime(long timeMillis) {
         Date date = new Date(timeMillis);
         DateFormat dateFormat = SimpleDateFormat.getDateInstance(SimpleDateFormat.FULL, Locale.getDefault());
-        DateFormat hourFormat = new SimpleDateFormat("HH:mm");
+        DateFormat hourFormat = new SimpleDateFormat(TIME_PATTERN_WITH_SECONDS);
         return String.format("%s %s", dateFormat.format(date), hourFormat.format(date));
     }
 }

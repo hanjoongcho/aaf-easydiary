@@ -1,17 +1,29 @@
 package me.blog.korn123.commons.utils;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.BackgroundColorSpan;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.easydiary.R;
+import me.blog.korn123.easydiary.activities.DiaryInsertActivity;
+import me.blog.korn123.easydiary.adapters.SecondItemAdapter;
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
 
 /**
@@ -134,6 +146,27 @@ public class EasyDiaryUtils {
         }
 
         textView.setText(spannableString);
+    }
+
+    public static AlertDialog.Builder createSecondsPickerBuilder(Context context, AdapterView.OnItemClickListener itemClickListener, int second) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setNegativeButton("CANCEL", null);
+        builder.setTitle(context.getString(R.string.common_create_seconds));
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+        View secondsPicker = inflater.inflate(R.layout.dialog_seconds_picker, null);
+        ListView listView = (ListView) secondsPicker.findViewById(R.id.seconds);
+        List<Map<String, String>> listSecond = new ArrayList<>();
+        for (int i = 0; i < 60; i++) {
+            HashMap<String, String> map = new HashMap();
+            map.put("label", String.valueOf(i) + "s");
+            map.put("value", String.valueOf(i));
+            listSecond.add(map);
+        }
+        ArrayAdapter<Map<String, String>> adapter = new SecondItemAdapter(context, R.layout.item_second, listSecond, second);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(itemClickListener);
+        builder.setView(secondsPicker);
+        return builder;
     }
 
 }

@@ -9,13 +9,16 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
@@ -23,6 +26,7 @@ import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -40,8 +44,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,10 +58,12 @@ import me.blog.korn123.commons.utils.BitmapUtils;
 import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.commons.utils.DialogUtils;
+import me.blog.korn123.commons.utils.EasyDiaryUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.commons.utils.PermissionUtils;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.adapters.DiaryWeatherItemAdapter;
+import me.blog.korn123.easydiary.adapters.SecondItemAdapter;
 import me.blog.korn123.easydiary.models.PhotoUriDto;
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
 import me.blog.korn123.easydiary.models.DiaryDto;
@@ -67,18 +75,13 @@ import me.blog.korn123.easydiary.models.DiaryDto;
 public class DiaryInsertActivity extends EasyDiaryActivity {
 
     private Intent mRecognizerIntent;
-
     private long mCurrentTimeMillis;
-
     private int mCurrentCursor = 0;
-
     private RealmList<PhotoUriDto> mPhotoUris;
-
     private List<Integer> mRemoveIndexes = new ArrayList<>();
-
     private int mShowcaseIndex = 2;
-
     private ShowcaseView mShowcaseView;
+    private AlertDialog mAlertDialog;
 
     @BindView(R.id.contents)
     EditText mContents;
@@ -161,7 +164,7 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
         );
     }
 
-    @OnClick({R.id.speechButton, R.id.zoomIn, R.id.zoomOut, R.id.saveContents, R.id.photoView, R.id.datePicker, R.id.timePicker})
+    @OnClick({R.id.speechButton, R.id.zoomIn, R.id.zoomOut, R.id.saveContents, R.id.photoView, R.id.datePicker, R.id.timePicker, R.id.secondsPicker})
     public void onClick(View view) {
         float fontSize = mContents.getTextSize();
 
@@ -216,6 +219,20 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
                     mTimePickerDialog = new TimePickerDialog(this, mTimeSetListener, mHourOfDay, mMinute, false);
                 }
                 mTimePickerDialog.show();
+                break;
+            case R.id.secondsPicker:
+                AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        HashMap<String, String> itemMap = (HashMap<String, String>) parent.getAdapter().getItem(position);
+                        mSecond = Integer.valueOf(itemMap.get("value"));
+                        setDateTime();
+                        mAlertDialog.cancel();
+                    }
+                };
+                AlertDialog.Builder builder = EasyDiaryUtils.createSecondsPickerBuilder(DiaryInsertActivity.this, itemClickListener, mSecond);
+                mAlertDialog = builder.create();
+                mAlertDialog.show();
                 break;
         }
     }
@@ -403,6 +420,7 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
     private int mDayOfMonth = Integer.valueOf(DateUtils.getCurrentDateAsString(DateUtils.DAY_PATTERN));
     private int mHourOfDay = Integer.valueOf(DateUtils.getCurrentDateAsString("HH"));
     private int mMinute = Integer.valueOf(DateUtils.getCurrentDateAsString("mm"));
+    private int mSecond = Integer.valueOf(DateUtils.getCurrentDateAsString("ss"));
 
     DatePickerDialog.OnDateSetListener mStartDateListener = new DatePickerDialog.OnDateSetListener() {
         @Override
@@ -425,14 +443,15 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
 
     private void setDateTime() {
         try {
-            SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmm");
+            SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
             String dateTimeString = String.format(
-                    "%d%s%s%s%s",
+                    "%d%s%s%s%s%s",
                     mYear,
                     StringUtils.leftPad(String.valueOf(mMonth), 2, "0"),
                     StringUtils.leftPad(String.valueOf(mDayOfMonth), 2, "0"),
                     StringUtils.leftPad(String.valueOf(mHourOfDay), 2, "0"),
-                    StringUtils.leftPad(String.valueOf(mMinute), 2, "0")
+                    StringUtils.leftPad(String.valueOf(mMinute), 2, "0"),
+                    StringUtils.leftPad(String.valueOf(mSecond), 2, "0")
             );
             Date parsedDate = format.parse(dateTimeString);
             mCurrentTimeMillis = parsedDate.getTime();
