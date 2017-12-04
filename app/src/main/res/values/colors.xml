@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--App Color-->
+    <color name="colorPrimaryDark">#089C90</color>
+    <color name="colorPrimary">#07ABB3</color>
     <color name="colorAccent">#07ABB3</color>
     <color name="colorAccentWithAlpha">#1007ABB3</color>
-    <color name="colorPrimary">#07ABB3</color>
-    <color name="colorPrimaryDark">#089C90</color>
 
     <color name="defaultText">#4A4A4C</color>
     <color name="summaryText">#79797c</color>

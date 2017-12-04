@@ -79,6 +79,14 @@
 
                     <ImageView
                         android:background="@drawable/click_effect_01"
+                        android:layout_marginRight="@dimen/toolbar_icon_margin_right"
+                        android:id="@+id/secondsPicker"
+                        android:src="@drawable/time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <ImageView
+                        android:background="@drawable/click_effect_01"
                         android:id="@+id/saveContents"
                         android:src="@drawable/save"
                         android:layout_width="wrap_content"
