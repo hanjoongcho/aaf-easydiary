@@ -85,23 +85,11 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
     @BindView(R.id.title)
     EditText mTitle;
 
-    @BindView(R.id.toggleSwitch)
-    Switch mToggleSwitch;
-
-    @BindView(R.id.toggleMicOn)
-    ImageView mToggleMicOn;
-
-    @BindView(R.id.toggleMicOff)
-    ImageView mToggleMicOff;
-
     @BindView(R.id.weatherSpinner)
     Spinner mWeatherSpinner;
 
     @BindView(R.id.photoContainer)
     ViewGroup mPhotoContainer;
-
-    @BindView(R.id.speechButton)
-    FloatingActionButton mSpeechButton;
 
     @BindView(R.id.zoomIn)
     ImageView mZoomIn;
@@ -120,7 +108,7 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
 
     @BindView(R.id.photoView)
     ImageView mPhotoView;
-
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -160,14 +148,11 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
         );
     }
 
-    @OnClick({R.id.speechButton, R.id.zoomIn, R.id.zoomOut, R.id.saveContents, R.id.photoView, R.id.datePicker, R.id.timePicker, R.id.secondsPicker})
+    @OnClick({R.id.zoomIn, R.id.zoomOut, R.id.saveContents, R.id.photoView, R.id.datePicker, R.id.timePicker, R.id.secondsPicker, R.id.microphone})
     public void onClick(View view) {
         float fontSize = mContents.getTextSize();
 
         switch(view.getId()) {
-            case R.id.speechButton:
-                showSpeechDialog();
-                break;
             case R.id.zoomIn:
                 CommonUtils.saveFloatPreference(DiaryInsertActivity.this, Constants.SETTING_FONT_SIZE, fontSize + 5);
                 setFontsStyle();
@@ -229,6 +214,9 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
                 AlertDialog.Builder builder = EasyDiaryUtils.createSecondsPickerBuilder(DiaryInsertActivity.this, itemClickListener, mSecond);
                 mAlertDialog = builder.create();
                 mAlertDialog.show();
+                break;
+            case R.id.microphone:
+                showSpeechDialog();
                 break;
         }
     }
@@ -353,16 +341,6 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
     }
 
     private void bindEvent() {
-        mToggleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    enableRecognizer();
-                } else {
-                    disableRecognizer();
-                }
-            }
-        });
 
         mTitle.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -379,34 +357,6 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
                 return false;
             }
         });
-
-        mToggleMicOn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                disableRecognizer();
-            }
-        });
-
-        mToggleMicOff.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                enableRecognizer();
-            }
-        });
-    }
-
-    private void enableRecognizer() {
-        mToggleMicOff.setVisibility(View.GONE);
-        mToggleMicOn.setVisibility(View.VISIBLE);
-        mSpeechButton.setVisibility(View.VISIBLE);
-        mToggleSwitch.setChecked(true);
-    }
-
-    private void disableRecognizer() {
-        mToggleMicOn.setVisibility(View.GONE);
-        mToggleMicOff.setVisibility(View.VISIBLE);
-        mSpeechButton.setVisibility(View.GONE);
-        mToggleSwitch.setChecked(false);
     }
 
     private DatePickerDialog mDatePickerDialog;

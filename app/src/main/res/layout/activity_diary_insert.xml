@@ -12,6 +12,7 @@
         android:layout_height="match_parent">
 
         <android.support.design.widget.AppBarLayout
+            app:elevation="0dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/AppTheme.AppBarOverlay">
@@ -26,99 +27,87 @@
         </android.support.design.widget.AppBarLayout>
 
         <LinearLayout
+            android:background="@color/colorPrimary"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:gravity="left|center_vertical"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:background="@drawable/click_effect_01"
+                    android:layout_marginLeft="@dimen/toolbar_icon_margin_side"
+                    android:layout_marginRight="@dimen/toolbar_icon_margin_right"
+                    android:id="@+id/zoomIn"
+                    android:src="@drawable/plus_w"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:background="@drawable/click_effect_01"
+                    android:layout_marginRight="@dimen/toolbar_icon_margin_right"
+                    android:id="@+id/zoomOut"
+                    android:src="@drawable/minus_w"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:background="@drawable/click_effect_01"
+                    android:layout_marginRight="@dimen/toolbar_icon_margin_right"
+                    android:id="@+id/datePicker"
+                    android:src="@drawable/calendar_4_w"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:background="@drawable/click_effect_01"
+                    android:layout_marginRight="@dimen/toolbar_icon_margin_right"
+                    android:id="@+id/timePicker"
+                    android:src="@drawable/time_8_w"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:background="@drawable/click_effect_01"
+                    android:layout_marginRight="@dimen/toolbar_icon_margin_right"
+                    android:id="@+id/secondsPicker"
+                    android:src="@drawable/time_w"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:gravity="right|center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:background="@drawable/click_effect_01"
+                    android:layout_marginRight="@dimen/toolbar_icon_margin_right"
+                    android:id="@+id/microphone"
+                    android:src="@drawable/microphone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <ImageView
+                    android:background="@drawable/click_effect_01"
+                    android:layout_marginRight="@dimen/toolbar_icon_margin_right"
+                    android:id="@+id/saveContents"
+                    android:src="@drawable/save_w"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
             android:orientation="vertical"
             android:padding="@dimen/card_layout_padding"
             android:background="@color/colorAccentWithAlpha"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-            <LinearLayout
-                android:layout_marginBottom="@dimen/card_layout_margin"
-                android:background="@drawable/bg_card_01"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="50dp">
-
-                <LinearLayout
-                    android:gravity="left|center_vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:background="@drawable/click_effect_01"
-                        android:layout_marginLeft="@dimen/toolbar_icon_margin_side"
-                        android:layout_marginRight="@dimen/toolbar_icon_margin_right"
-                        android:id="@+id/zoomIn"
-                        android:src="@drawable/plus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <ImageView
-                        android:background="@drawable/click_effect_01"
-                        android:layout_marginRight="@dimen/toolbar_icon_margin_right"
-                        android:id="@+id/zoomOut"
-                        android:src="@drawable/minus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <ImageView
-                        android:background="@drawable/click_effect_01"
-                        android:layout_marginRight="@dimen/toolbar_icon_margin_right"
-                        android:id="@+id/datePicker"
-                        android:src="@drawable/calendar_4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <ImageView
-                        android:background="@drawable/click_effect_01"
-                        android:layout_marginRight="@dimen/toolbar_icon_margin_right"
-                        android:id="@+id/timePicker"
-                        android:src="@drawable/time_8"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <ImageView
-                        android:background="@drawable/click_effect_01"
-                        android:layout_marginRight="@dimen/toolbar_icon_margin_right"
-                        android:id="@+id/secondsPicker"
-                        android:src="@drawable/time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <ImageView
-                        android:background="@drawable/click_effect_01"
-                        android:id="@+id/saveContents"
-                        android:src="@drawable/save"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:gravity="right|center_vertical"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent">
-                    <Switch
-                        android:checked="false"
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
-                        android:id="@+id/toggleSwitch" />
-                    <ImageView
-                        android:visibility="gone"
-                        android:id="@+id/toggleMicOn"
-                        android:layout_marginRight="@dimen/toolbar_icon_margin_side"
-                        android:src="@drawable/microphone_2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                    <ImageView
-                        android:id="@+id/toggleMicOff"
-                        android:layout_marginRight="@dimen/toolbar_icon_margin_side"
-                        android:src="@drawable/microphone_off"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-
-            </LinearLayout>
 
             <LinearLayout
                 android:gravity="center_vertical"
@@ -197,17 +186,5 @@
         </LinearLayout>
 
     </LinearLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:visibility="gone"
-        android:id="@+id/speechButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginTop="@dimen/fab_margin"
-        android:layout_marginRight="@dimen/fab_margin"
-        android:layout_marginBottom="66dp"
-        android:layout_marginLeft="@dimen/fab_margin"
-        app:srcCompat="@drawable/microphone" />
 
 </android.support.design.widget.CoordinatorLayout>
