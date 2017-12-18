@@ -97,6 +97,9 @@ public class SettingsActivity extends EasyDiaryActivity {
             case R.id.primaryColor:
                 if (mLineColorPickerDialog == null) {
                     mLineColorPickerDialog = new LineColorPickerDialog(SettingsActivity.this, mCurPrimaryColor, new ColorPickerListener());
+                } else {
+                    mLineColorPickerDialog = null;
+                    mLineColorPickerDialog = new LineColorPickerDialog(SettingsActivity.this, mCurPrimaryColor, new ColorPickerListener());
                 }
                 break;
             case R.id.pref1:

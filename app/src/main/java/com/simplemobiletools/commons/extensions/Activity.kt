@@ -46,17 +46,17 @@ fun Activity.copyToClipboard(text: String) {
 }
 
 fun Activity.setupDialogStuff(view: View, dialog: AlertDialog, titleId: Int = 0, callback: (() -> Unit)? = null) {
-//    if (isActivityDestroyed()) {
-//        return
-//    }
-//
+    if (isActivityDestroyed()) {
+        return
+    }
+
 //    if (view is ViewGroup)
 //        updateTextColors(view)
 //    else if (view is MyTextView) {
 //        view.setTextColor(baseConfig.textColor)
 //    }
-//
-//    var title: TextView? = null
+
+    var title: TextView? = null
 //    if (titleId != 0) {
 //        title = layoutInflater.inflate(R.layout.dialog_title, null) as TextView
 //        title.dialog_title_textview.apply {
@@ -64,17 +64,17 @@ fun Activity.setupDialogStuff(view: View, dialog: AlertDialog, titleId: Int = 0,
 //            setTextColor(baseConfig.textColor)
 //        }
 //    }
-//
-//    dialog.apply {
-//        setView(view)
-//        requestWindowFeature(Window.FEATURE_NO_TITLE)
-//        setCustomTitle(title)
-//        setCanceledOnTouchOutside(true)
-//        show()
-//        getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(baseConfig.textColor)
-//        getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(baseConfig.textColor)
-//        getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(baseConfig.textColor)
-//        window.setBackgroundDrawable(ColorDrawable(baseConfig.backgroundColor))
-//    }
-//    callback?.invoke()
+
+    dialog.apply {
+        setView(view)
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        setCustomTitle(title)
+        setCanceledOnTouchOutside(true)
+        show()
+        getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(baseConfig.textColor)
+        getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(baseConfig.textColor)
+        getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(baseConfig.textColor)
+        window.setBackgroundDrawable(ColorDrawable(baseConfig.backgroundColor))
+    }
+    callback?.invoke()
 }
