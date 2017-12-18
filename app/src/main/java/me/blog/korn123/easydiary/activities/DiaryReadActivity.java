@@ -464,7 +464,7 @@ public class DiaryReadActivity extends EasyDiaryActivity {
                     Uri uri = Uri.parse(dto.getPhotoUri());
                     Bitmap bitmap = null;
                     try {
-                        bitmap = BitmapUtils.decodeUri(getContext(), uri, CommonUtils.dpToPixel(getContext(), 70, 1), CommonUtils.dpToPixel(getContext(), 60, 1), CommonUtils.dpToPixel(getContext(), 40, 1));
+                        bitmap = BitmapUtils.decodeUri(getContext(), uri, CommonUtils.dpToPixel(getContext(), 70, 1), CommonUtils.dpToPixel(getContext(), 65, 1), CommonUtils.dpToPixel(getContext(), 45, 1));
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                         bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.question_mark_4);
@@ -473,7 +473,7 @@ public class DiaryReadActivity extends EasyDiaryActivity {
                     LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(CommonUtils.dpToPixel(getContext(), 70, 1), CommonUtils.dpToPixel(getContext(), 50, 1));
                     layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(getContext(), 3, 1), 0);
                     imageView.setLayoutParams(layoutParams);
-                    imageView.setBackgroundResource(R.drawable.bg_card_01);
+                    imageView.setBackgroundResource(R.drawable.bg_card_thumbnail);
                     imageView.setImageBitmap(bitmap);
                     imageView.setScaleType(ImageView.ScaleType.CENTER);
                     mPhotoContainer.addView(imageView);

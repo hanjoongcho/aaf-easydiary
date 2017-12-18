@@ -3,6 +3,7 @@
     <!--App Color-->
     <color name="colorPrimaryDark">#089C90</color>
     <color name="colorPrimary">#07ABB3</color>
+    <color name="colorPrimaryWithAlpha">#8007ABB3</color>
     <color name="colorAccent">#07ABB3</color>
     <color name="colorAccentWithAlpha">#1007ABB3</color>
     <color name="appBackground">#3307ABB3</color>

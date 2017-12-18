@@ -473,12 +473,12 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
                     if (resultCode == RESULT_OK && (data != null)) {
                         if (mPhotoUris == null) mPhotoUris = new RealmList<>();
                         mPhotoUris.add(new PhotoUriDto(data.getData().toString()));
-                        Bitmap bitmap = BitmapUtils.decodeUri(this, data.getData(), CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 60, 1), CommonUtils.dpToPixel(this, 40, 1));
+                        Bitmap bitmap = BitmapUtils.decodeUri(this, data.getData(), CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 65, 1), CommonUtils.dpToPixel(this, 45, 1));
                         ImageView imageView = new ImageView(this);
                         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 50, 1));
                         layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(this, 3, 1), 0);
                         imageView.setLayoutParams(layoutParams);
-                        imageView.setBackgroundResource(R.drawable.bg_card_01);
+                        imageView.setBackgroundResource(R.drawable.bg_card_thumbnail);
                         imageView.setImageBitmap(bitmap);
                         imageView.setScaleType(ImageView.ScaleType.CENTER);
 //                    imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);

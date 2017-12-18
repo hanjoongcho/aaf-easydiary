@@ -102,6 +102,8 @@
         <item name="android:textColor">#deffffff</item>
     </style>
 
+    <!--Common-->
+
     <!--DiaryLockActivity-->
     <style name="DiaryLockInputNum">
         <item name="android:textStyle">bold</item>
