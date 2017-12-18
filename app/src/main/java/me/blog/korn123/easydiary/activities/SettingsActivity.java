@@ -19,6 +19,9 @@ import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.simplemobiletools.commons.dialogs.ColorPickerListener;
+import com.simplemobiletools.commons.dialogs.LineColorPickerDialog;
+
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
@@ -64,6 +67,9 @@ public class SettingsActivity extends EasyDiaryActivity {
 
     private AlertDialog mAlertDialog;
 
+    private LineColorPickerDialog mLineColorPickerDialog;
+    private int mCurPrimaryColor = 0;
+
     private static int mTaskFlag = 0;
 
     @Override
@@ -85,9 +91,14 @@ public class SettingsActivity extends EasyDiaryActivity {
         setFontsStyle();
     }
 
-    @OnClick({ R.id.pref1, R.id.pref2, R.id.pref3, R.id.pref4, R.id.pref5, R.id.pref6, R.id.pref7, R.id.pref8, R.id.pref9 })
+    @OnClick({ R.id.primaryColor, R.id.pref1, R.id.pref2, R.id.pref3, R.id.pref4, R.id.pref5, R.id.pref6, R.id.pref7, R.id.pref8, R.id.pref9 })
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.primaryColor:
+                if (mLineColorPickerDialog == null) {
+                    mLineColorPickerDialog = new LineColorPickerDialog(SettingsActivity.this, mCurPrimaryColor, new ColorPickerListener());
+                }
+                break;
             case R.id.pref1:
                 if (PermissionUtils.checkPermission(SettingsActivity.this , Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
                     openFontSettingDialog();

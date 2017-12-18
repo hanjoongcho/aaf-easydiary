@@ -3,6 +3,8 @@ package me.blog.korn123.easydiary.activities;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 
+import com.simplemobiletools.commons.activities.BaseSimpleActivity;
+
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.CommonUtils;
 
@@ -10,7 +12,7 @@ import me.blog.korn123.commons.utils.CommonUtils;
  * Created by hanjoong on 2017-05-03.
  */
 
-public class EasyDiaryActivity extends AppCompatActivity {
+public class EasyDiaryActivity extends BaseSimpleActivity {
 
     @Override
     protected void onPause() {

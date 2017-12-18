@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">Easy\nDiary</string>
 
+    <!--https://github.com/SimpleMobileTools/Simple-Commons-->
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="simple_commons">Simple Commons</string>
+    <string name="value_copied_to_clipboard">Value copied to clipboard</string>
+
     <!--Common-->
     <string name="common_create_seconds">Creation Seconds</string>
 
@@ -105,6 +111,8 @@
     <string name="add_ttf_fonts_info_url">https://github.com/hanjoongcho/aaf-easydiary/blob/master/MANUAL.md</string>
     <string name="diary_search_keyword_case_sensitive_title">Case sensitive</string>
     <string name="diary_search_keyword_case_sensitive_summary">When the option is activated, it checks whether the diary matches case.</string>
+    <string name="setting_primary_color_title">테마변경</string>
+    <string name="setting_primary_color_summary">애플리케이션의 주요 색상을 설정합니다.</string>
 
     <!--CalendarActivity-->
     <string name="calendar_title">Calendar</string>

@@ -51,6 +51,21 @@
                        style="@style/SettingActivitySummary" />
                </LinearLayout>
 
+               <LinearLayout
+                   android:id="@+id/primaryColor"
+                   android:orientation="vertical"
+                   android:layout_marginTop="10dp"
+                   style="@style/SettingActivityItem">
+                   <TextView
+                       android:id="@+id/primaryColorTitle"
+                       android:text="@string/setting_primary_color_title"
+                       style="@style/SettingActivityTitle" />
+                   <TextView
+                       android:id="@+id/setting_primary_color_title"
+                       android:text="@string/setting_primary_color_summary"
+                       style="@style/SettingActivitySummary" />
+               </LinearLayout>
+
                <TextView
                    style="@style/SettingActivityDivider" />
 
