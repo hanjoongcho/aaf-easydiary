@@ -17,7 +17,7 @@ import java.util.*
  * https://github.com/SimpleMobileTools/Simple-Commons
  */
 
-class LineColorPickerDialog(val activity: BaseSimpleActivity, val color: Int, val colorPickerListener: ColorPickerListener) {
+class LineColorPickerDialog(val activity: BaseSimpleActivity, val color: Int, val callback: (wasPositivePressed: Boolean, color: Int) -> Unit) {
     private val PRIMARY_COLORS_COUNT = 19
     private val DEFAULT_PRIMARY_COLOR_INDEX = 14
     private val DEFAULT_SECONDARY_COLOR_INDEX = 6
@@ -85,13 +85,12 @@ class LineColorPickerDialog(val activity: BaseSimpleActivity, val color: Int, va
     private fun getDefaultColorPair() = Pair(DEFAULT_PRIMARY_COLOR_INDEX, DEFAULT_SECONDARY_COLOR_INDEX)
 
     private fun dialogDismissed() {
-        colorPickerListener.callback(false, 0)
-
+        callback(false, 0)
     }
 
     private fun dialogConfirmed() {
         val color = view.secondary_line_color_picker.getCurrentColor()
-        colorPickerListener.callback(true, color)
+        callback(true, color)
     }
 
     private fun getColorsForIndex(index: Int) = when (index) {
@@ -118,20 +117,4 @@ class LineColorPickerDialog(val activity: BaseSimpleActivity, val color: Int, va
     }
 
     private fun getColors(id: Int) = activity.resources.getIntArray(id).toCollection(ArrayList())
-}
-
-class ColorPickerListener {
-    fun callback(wasPositivePressed: Boolean, color: Int) {
-//        if (wasPositivePressed) {
-//            if (hasColorChanged(curPrimaryColor, color)) {
-//                setCurrentPrimaryColor(color)
-//                colorChanged()
-//                updateColorTheme(getUpdatedTheme())
-//                setTheme(getThemeId(color))
-//            }
-//        } else {
-//            updateActionbarColor(curPrimaryColor)
-//            setTheme(getThemeId(curPrimaryColor))
-//        }
-    }
 }

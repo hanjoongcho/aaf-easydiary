@@ -19,8 +19,7 @@ import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.simplemobiletools.commons.dialogs.ColorPickerListener;
-import com.simplemobiletools.commons.dialogs.LineColorPickerDialog;
+import com.simplemobiletools.commons.activities.CustomizationActivity;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -67,9 +66,6 @@ public class SettingsActivity extends EasyDiaryActivity {
 
     private AlertDialog mAlertDialog;
 
-    private LineColorPickerDialog mLineColorPickerDialog;
-    private int mCurPrimaryColor = 0;
-
     private static int mTaskFlag = 0;
 
     @Override
@@ -95,12 +91,7 @@ public class SettingsActivity extends EasyDiaryActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.primaryColor:
-                if (mLineColorPickerDialog == null) {
-                    mLineColorPickerDialog = new LineColorPickerDialog(SettingsActivity.this, mCurPrimaryColor, new ColorPickerListener());
-                } else {
-                    mLineColorPickerDialog = null;
-                    mLineColorPickerDialog = new LineColorPickerDialog(SettingsActivity.this, mCurPrimaryColor, new ColorPickerListener());
-                }
+                startActivity(new Intent(SettingsActivity.this, CustomizationActivity.class));
                 break;
             case R.id.pref1:
                 if (PermissionUtils.checkPermission(SettingsActivity.this , Constants.EXTERNAL_STORAGE_PERMISSIONS)) {

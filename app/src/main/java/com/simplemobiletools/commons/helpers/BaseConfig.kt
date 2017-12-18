@@ -5,6 +5,13 @@ import android.content.SharedPreferences
 import com.simplemobiletools.commons.extensions.getSharedPrefs
 import me.blog.korn123.easydiary.R
 
+/**
+ * Created by Hanjoong Cho on 2017-12-18.
+ * This code based 'Simple-Commons' package
+ * You can see original 'Simple-Commons' from below link.
+ * https://github.com/SimpleMobileTools/Simple-Commons
+ */
+
 open class BaseConfig(val context: Context) {
     protected val prefs: SharedPreferences = context.getSharedPrefs()
 

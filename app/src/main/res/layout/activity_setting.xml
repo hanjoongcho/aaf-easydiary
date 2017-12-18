@@ -40,7 +40,6 @@
                <LinearLayout
                    android:id="@+id/pref1"
                    android:orientation="vertical"
-                   android:layout_marginTop="10dp"
                    style="@style/SettingActivityItem">
                    <TextView
                        android:id="@+id/prefTitle1"
@@ -51,10 +50,12 @@
                        style="@style/SettingActivitySummary" />
                </LinearLayout>
 
+               <TextView
+                   style="@style/SettingActivityDivider" />
+               
                <LinearLayout
                    android:id="@+id/primaryColor"
                    android:orientation="vertical"
-                   android:layout_marginTop="10dp"
                    style="@style/SettingActivityItem">
                    <TextView
                        android:id="@+id/primaryColorTitle"
@@ -175,7 +176,6 @@
                    style="@style/SettingActivityDivider" />
 
                <LinearLayout
-                   android:layout_marginBottom="10dp"
                    android:id="@+id/pref7"
                    android:orientation="vertical"
                    style="@style/SettingActivityItem">
@@ -194,7 +194,6 @@
                    style="@style/SettingActivityCategory" />
 
                <LinearLayout
-                   android:layout_marginTop="10dp"
                    android:id="@+id/pref8"
                    android:orientation="vertical"
                    style="@style/SettingActivityItem">
