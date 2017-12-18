@@ -116,10 +116,10 @@ open class BaseConfig(val context: Context) {
 //        get() = prefs.getBoolean(WAS_SHARED_THEME_EVER_ACTIVATED, false)
 //        set(wasSharedThemeEverActivated) = prefs.edit().putBoolean(WAS_SHARED_THEME_EVER_ACTIVATED, wasSharedThemeEverActivated).apply()
 //
-//    var isUsingSharedTheme: Boolean
-//        get() = prefs.getBoolean(IS_USING_SHARED_THEME, false)
-//        set(isUsingSharedTheme) = prefs.edit().putBoolean(IS_USING_SHARED_THEME, isUsingSharedTheme).apply()
-//
+    var isUsingSharedTheme: Boolean
+        get() = prefs.getBoolean(IS_USING_SHARED_THEME, false)
+        set(isUsingSharedTheme) = prefs.edit().putBoolean(IS_USING_SHARED_THEME, isUsingSharedTheme).apply()
+
 //    var wasCustomThemeSwitchDescriptionShown: Boolean
 //        get() = prefs.getBoolean(WAS_CUSTOM_THEME_SWITCH_DESCRIPTION_SHOWN, false)
 //        set(wasCustomThemeSwitchDescriptionShown) = prefs.edit().putBoolean(WAS_CUSTOM_THEME_SWITCH_DESCRIPTION_SHOWN, wasCustomThemeSwitchDescriptionShown).apply()

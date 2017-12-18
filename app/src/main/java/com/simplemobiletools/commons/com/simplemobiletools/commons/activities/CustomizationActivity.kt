@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import com.simplemobiletools.commons.dialogs.*
 import com.simplemobiletools.commons.extensions.*
+import com.simplemobiletools.commons.models.MyTheme
 //import com.simplemobiletools.commons.helpers.MyContentProvider
 //import com.simplemobiletools.commons.models.MyTheme
 //import com.simplemobiletools.commons.models.RadioItem
@@ -35,7 +36,7 @@ class CustomizationActivity : BaseSimpleActivity() {
     private var curSelectedThemeId = 0
     private var hasUnsavedChanges = false
     private var isLineColorPickerVisible = false
-//    private var predefinedThemes = LinkedHashMap<Int, MyTheme>()
+    private var predefinedThemes = LinkedHashMap<Int, MyTheme>()
     private var curPrimaryLineColorPicker: LineColorPickerDialog? = null
 //    private var storedSharedTheme: SharedTheme? = null
 
@@ -43,17 +44,17 @@ class CustomizationActivity : BaseSimpleActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_customization)
 
-//        predefinedThemes.apply {
+        predefinedThemes.apply {
 //            put(THEME_LIGHT, MyTheme(R.string.light_theme, R.color.theme_light_text_color, R.color.theme_light_background_color, R.color.color_primary))
 //            put(THEME_DARK, MyTheme(R.string.dark_theme, R.color.theme_dark_text_color, R.color.theme_dark_background_color, R.color.color_primary))
-//            //put(THEME_SOLARIZED, MyTheme(R.string.solarized, R.color.theme_solarized_text_color, R.color.theme_solarized_background_color, R.color.theme_solarized_primary_color))
+            //put(THEME_SOLARIZED, MyTheme(R.string.solarized, R.color.theme_solarized_text_color, R.color.theme_solarized_background_color, R.color.theme_solarized_primary_color))
 //            put(THEME_DARK_RED, MyTheme(R.string.dark_red, R.color.theme_dark_text_color, R.color.theme_dark_background_color, R.color.theme_dark_red_primary_color))
-//            put(THEME_CUSTOM, MyTheme(R.string.custom, 0, 0, 0))
-//
+            put(THEME_CUSTOM, MyTheme(R.string.custom, 0, 0, 0))
+
 //            if (baseConfig.wasSharedThemeEverActivated) {
 //                put(THEME_SHARED, MyTheme(R.string.shared, 0, 0, 0))
 //            }
-//        }
+        }
 
 //        if (!isThankYouInstalled()) {
 //            baseConfig.isUsingSharedTheme = false
@@ -64,6 +65,7 @@ class CustomizationActivity : BaseSimpleActivity() {
 //                storedSharedTheme = it
 //            }
 //        }
+        
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_cross)
         updateTextColors(customization_holder)
         initColorVariables()
@@ -74,7 +76,10 @@ class CustomizationActivity : BaseSimpleActivity() {
         customization_primary_color_holder.setOnClickListener { pickPrimaryColor() }
 //        apply_to_all_holder.setOnClickListener { applyToAll() }
 //        apply_to_all_holder.beGoneIf(baseConfig.wasSharedThemeEverActivated)
-//        setupThemePicker()
+        setupThemePicker()
+
+        // force setting
+        updateColorTheme(getUpdatedTheme(), true)
     }
 
     override fun onResume() {
@@ -112,8 +117,8 @@ class CustomizationActivity : BaseSimpleActivity() {
         }
     }
 
-//    private fun setupThemePicker() {
-//        curSelectedThemeId = getCurrentThemeId()
+    private fun setupThemePicker() {
+        curSelectedThemeId = getCurrentThemeId()
 //        customization_theme.text = getThemeText()
 //        customization_theme_holder.setOnClickListener {
 //            val items = arrayListOf<RadioItem>()
@@ -134,25 +139,25 @@ class CustomizationActivity : BaseSimpleActivity() {
 //                }
 //            }
 //        }
-//    }
+    }
 
     private fun updateColorTheme(themeId: Int, useStored: Boolean = false) {
-//        curSelectedThemeId = themeId
+        curSelectedThemeId = themeId
 //        customization_theme.text = getThemeText()
-//
-//        resources.apply {
-//            if (curSelectedThemeId == THEME_CUSTOM) {
-//                if (useStored) {
-//                    curTextColor = baseConfig.customTextColor
-//                    curBackgroundColor = baseConfig.customBackgroundColor
-//                    curPrimaryColor = baseConfig.customPrimaryColor
-//                    setTheme(getThemeId(curPrimaryColor))
-//                    setupColorsPickers()
-//                } else {
-//                    baseConfig.customPrimaryColor = curPrimaryColor
-//                    baseConfig.customBackgroundColor = curBackgroundColor
-//                    baseConfig.customTextColor = curTextColor
-//                }
+
+        resources.apply {
+            if (curSelectedThemeId == THEME_CUSTOM) {
+                if (useStored) {
+                    curTextColor = baseConfig.customTextColor
+                    curBackgroundColor = baseConfig.customBackgroundColor
+                    curPrimaryColor = baseConfig.customPrimaryColor
+                    setTheme(getThemeId(curPrimaryColor))
+                    setupColorsPickers()
+                } else {
+                    baseConfig.customPrimaryColor = curPrimaryColor
+                    baseConfig.customBackgroundColor = curBackgroundColor
+                    baseConfig.customTextColor = curTextColor
+                }
 //            } else if (curSelectedThemeId == THEME_SHARED) {
 //                if (useStored) {
 //                    storedSharedTheme?.apply {
@@ -170,30 +175,30 @@ class CustomizationActivity : BaseSimpleActivity() {
 //                curPrimaryColor = getColor(theme.primaryColorId)
 //                setTheme(getThemeId(curPrimaryColor))
 //                colorChanged()
-//            }
-//        }
-//
-//        hasUnsavedChanges = true
-//        invalidateOptionsMenu()
-//        updateTextColors(customization_holder, curTextColor)
-//        updateBackgroundColor(curBackgroundColor)
-//        updateActionbarColor(curPrimaryColor)
+            }
+        }
+
+        hasUnsavedChanges = true
+        invalidateOptionsMenu()
+        updateTextColors(customization_holder, curTextColor)
+        updateBackgroundColor(curBackgroundColor)
+        updateActionbarColor(curPrimaryColor)
     }
 
-//    private fun getCurrentThemeId(): Int {
-//        if (baseConfig.isUsingSharedTheme)
-//            return THEME_SHARED
-//
-//        var themeId = THEME_CUSTOM
-//        resources.apply {
-//            for ((key, value) in predefinedThemes.filter { it.key != THEME_CUSTOM && it.key != THEME_SHARED }) {
-//                if (curTextColor == getColor(value.textColorId) && curBackgroundColor == getColor(value.backgroundColorId) && curPrimaryColor == getColor(value.primaryColorId)) {
-//                    themeId = key
-//                }
-//            }
-//        }
-//        return themeId
-//    }
+    private fun getCurrentThemeId(): Int {
+        if (baseConfig.isUsingSharedTheme)
+            return THEME_SHARED
+
+        var themeId = THEME_CUSTOM
+        resources.apply {
+            for ((key, value) in predefinedThemes.filter { it.key != THEME_CUSTOM && it.key != THEME_SHARED }) {
+                if (curTextColor == getColor(value.textColorId) && curBackgroundColor == getColor(value.backgroundColorId) && curPrimaryColor == getColor(value.primaryColorId)) {
+                    themeId = key
+                }
+            }
+        }
+        return themeId
+    }
 
 //    private fun getThemeText(): String {
 //        var nameId = R.string.custom
@@ -267,7 +272,7 @@ class CustomizationActivity : BaseSimpleActivity() {
 
     private fun colorChanged() {
         hasUnsavedChanges = true
-//        setupColorsPickers()
+        setupColorsPickers()
         invalidateOptionsMenu()
     }
 
