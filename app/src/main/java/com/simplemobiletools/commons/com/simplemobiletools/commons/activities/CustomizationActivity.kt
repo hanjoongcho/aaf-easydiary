@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import com.simplemobiletools.commons.dialogs.*
 import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.models.MyTheme
@@ -12,6 +14,9 @@ import com.simplemobiletools.commons.models.MyTheme
 //import com.simplemobiletools.commons.models.RadioItem
 //import com.simplemobiletools.commons.models.SharedTheme
 import kotlinx.android.synthetic.main.activity_customization.*
+import me.blog.korn123.commons.constants.Constants
+import me.blog.korn123.commons.utils.CommonUtils
+import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import java.util.*
 
@@ -65,8 +70,13 @@ class CustomizationActivity : BaseSimpleActivity() {
 //                storedSharedTheme = it
 //            }
 //        }
-        
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_cross)
+
+        setSupportActionBar(toolbar)
+        supportActionBar?.run {
+            setDisplayHomeAsUpEnabled(true);
+            setHomeAsUpIndicator(R.drawable.ic_cross)
+        }
+
         updateTextColors(customization_holder)
         initColorVariables()
         setupColorsPickers()
@@ -92,6 +102,14 @@ class CustomizationActivity : BaseSimpleActivity() {
             updateActionbarColor(this)
             setTheme(getThemeId(this))
         }
+
+        setFontsStyle()
+    }
+
+    private fun setFontsStyle() {
+        FontUtils.setFontsTypeface(applicationContext, assets, null, findViewById<View>(android.R.id.content) as ViewGroup)
+        val fontSize = CommonUtils.loadFloatPreference(this, Constants.SETTING_FONT_SIZE, -1f)
+        if (fontSize > 0) FontUtils.setFontsSize(fontSize, findViewById<View>(android.R.id.content) as ViewGroup)
     }
 
 //    override fun onCreateOptionsMenu(menu: Menu): Boolean {

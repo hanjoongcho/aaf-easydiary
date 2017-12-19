@@ -12,7 +12,7 @@ import me.blog.korn123.commons.utils.CommonUtils;
  * Created by hanjoong on 2017-05-03.
  */
 
-public class EasyDiaryActivity extends BaseSimpleActivity {
+public class EasyDiaryActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
