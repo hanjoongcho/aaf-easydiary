@@ -74,7 +74,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent">
                     <ImageView
-                        android:background="@drawable/bg_card_thumbnail"
+                        android:background="@drawable/click_effect_01"
                         android:layout_marginRight="@dimen/toolbar_icon_margin_side"
                         android:id="@+id/delete"
                         android:src="@drawable/delete_w"

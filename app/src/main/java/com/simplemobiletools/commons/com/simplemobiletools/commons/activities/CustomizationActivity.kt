@@ -87,9 +87,6 @@ class CustomizationActivity : BaseSimpleActivity() {
 //        apply_to_all_holder.setOnClickListener { applyToAll() }
 //        apply_to_all_holder.beGoneIf(baseConfig.wasSharedThemeEverActivated)
         setupThemePicker()
-
-        // force setting
-        updateColorTheme(getUpdatedTheme(), true)
     }
 
     override fun onResume() {
@@ -112,19 +109,18 @@ class CustomizationActivity : BaseSimpleActivity() {
         if (fontSize > 0) FontUtils.setFontsSize(fontSize, findViewById<View>(android.R.id.content) as ViewGroup)
     }
 
-//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-//        menuInflater.inflate(R.menu.menu_customization, menu)
-////        menu.findItem(R.id.save).isVisible = hasUnsavedChanges
-//        return true
-//    }
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_customization, menu)
+        menu.findItem(R.id.save).isVisible = hasUnsavedChanges
+        return true
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        when (item.itemId) {
-//            R.id.save -> saveChanges(true)
-//            else -> return super.onOptionsItemSelected(item)
-//        }
-//        return true
-        return super.onOptionsItemSelected(item)
+        when (item.itemId) {
+            R.id.save -> saveChanges(true)
+            else -> return super.onOptionsItemSelected(item)
+        }
+        return true
     }
 
     override fun onBackPressed() {
@@ -239,13 +235,13 @@ class CustomizationActivity : BaseSimpleActivity() {
 //        }
 //    }
 
-//    private fun saveChanges(finishAfterSave: Boolean) {
-//        baseConfig.apply {
-//            textColor = curTextColor
-//            backgroundColor = curBackgroundColor
-//            primaryColor = curPrimaryColor
-//        }
-//
+    private fun saveChanges(finishAfterSave: Boolean) {
+        baseConfig.apply {
+            textColor = curTextColor
+            backgroundColor = curBackgroundColor
+            primaryColor = curPrimaryColor
+        }
+
 //        if (curSelectedThemeId == THEME_SHARED) {
 //            val newSharedTheme = SharedTheme(curTextColor, curBackgroundColor, curPrimaryColor)
 //            updateSharedTheme(newSharedTheme)
@@ -254,15 +250,15 @@ class CustomizationActivity : BaseSimpleActivity() {
 //                sendBroadcast(this)
 //            }
 //        }
-//        baseConfig.isUsingSharedTheme = curSelectedThemeId == THEME_SHARED
-//        hasUnsavedChanges = false
-//        if (finishAfterSave) {
-//            finish()
-//        } else {
-//            invalidateOptionsMenu()
-//        }
-//    }
-//
+        baseConfig.isUsingSharedTheme = curSelectedThemeId == THEME_SHARED
+        hasUnsavedChanges = false
+        if (finishAfterSave) {
+            finish()
+        } else {
+            invalidateOptionsMenu()
+        }
+    }
+
 //    private fun resetColors() {
 //        hasUnsavedChanges = false
 //        invalidateOptionsMenu()
