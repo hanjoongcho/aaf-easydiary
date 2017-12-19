@@ -50,35 +50,12 @@
                         android:maxLines="1"
                         android:id="@+id/query"
                         android:layout_marginLeft="@dimen/toolbar_icon_margin_side"
+                        android:layout_marginRight="@dimen/toolbar_icon_margin_side"
                         android:gravity="center_vertical"
                         android:hint="@string/guide_message_2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
-                </LinearLayout>
-
-                <LinearLayout
-                    android:gravity="right|center_vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
-                    <Switch
-                        android:checked="false"
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
-                        android:id="@+id/toggleSwitch" />
-                    <ImageView
-                        android:visibility="gone"
-                        android:id="@+id/toggleMicOn"
-                        android:layout_marginRight="@dimen/toolbar_icon_margin_side"
-                        android:src="@drawable/microphone_2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                    <ImageView
-                        android:id="@+id/toggleMicOff"
-                        android:layout_marginRight="@dimen/toolbar_icon_margin_side"
-                        android:src="@drawable/microphone_off"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -102,7 +79,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <android.support.design.widget.FloatingActionButton
+        <com.simplemobiletools.commons.views.MyFloatingActionButton
             android:id="@+id/insertDiaryButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -110,7 +87,7 @@
             android:layout_margin="@dimen/fab_margin"
             app:srcCompat="@drawable/edit" />
 
-        <android.support.design.widget.FloatingActionButton
+        <com.simplemobiletools.commons.views.MyFloatingActionButton
             android:visibility="gone"
             android:id="@+id/speechButton"
             android:layout_width="wrap_content"

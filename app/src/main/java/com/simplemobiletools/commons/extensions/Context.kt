@@ -5,8 +5,15 @@ import android.os.Build
 import android.os.Looper
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import com.simplemobiletools.commons.helpers.*
+import com.simplemobiletools.commons.views.MyFloatingActionButton
 import com.simplemobiletools.commons.views.MyTextView
+import me.blog.korn123.easydiary.views.LabelLayout
+import android.graphics.PorterDuff
+import android.graphics.drawable.Drawable
+
+
 
 /**
  * Created by Hanjoong Cho on 2017-12-18.
@@ -44,10 +51,15 @@ fun Context.updateTextColors(viewGroup: ViewGroup, tmpTextColor: Int = 0, tmpAcc
 //                    is MyCompatRadioButton -> it.setColors(textColor, accentColor, backgroundColor)
 //                    is MyAppCompatCheckbox -> it.setColors(textColor, accentColor, backgroundColor)
 //                    is MyEditText -> it.setColors(textColor, accentColor, backgroundColor)
-//                    is MyFloatingActionButton -> it.setColors(textColor, accentColor, backgroundColor)
+                    is MyFloatingActionButton -> it.setColors(textColor, accentColor, backgroundColor)
 //                    is MySeekBar -> it.setColors(textColor, accentColor, backgroundColor)
 //                    is MyButton -> it.setColors(textColor, accentColor, backgroundColor)
-//                    is ViewGroup -> updateTextColors(it, textColor, accentColor)
+                    is LabelLayout -> it.setColors(textColor, accentColor, backgroundColor)
+                    is ViewGroup -> updateTextColors(it, textColor, accentColor)
+//                    is EditText -> {
+//                        val drawable = it.getBackground() 
+//                        drawable.setColorFilter(accentColor, PorterDuff.Mode.SRC_ATOP)
+//                    }
                 }
             }
 }

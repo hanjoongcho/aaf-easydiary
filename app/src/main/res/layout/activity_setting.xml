@@ -33,9 +33,14 @@
                android:layout_width="match_parent"
                android:layout_height="match_parent">
 
-               <TextView
-                   android:text="Application Setting"
-                   style="@style/SettingActivityCategory" />
+               <me.blog.korn123.easydiary.views.LabelLayout
+                   android:layout_marginTop="5dp"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content">
+                   <TextView
+                       android:text="Application Setting"
+                       style="@style/SettingActivityCategory" />
+               </me.blog.korn123.easydiary.views.LabelLayout>
 
                <LinearLayout
                    android:id="@+id/pref1"
@@ -189,9 +194,14 @@
                        style="@style/SettingActivitySummary" />
                </LinearLayout>
 
-               <TextView
-                   android:text="Application Information"
-                   style="@style/SettingActivityCategory" />
+               <me.blog.korn123.easydiary.views.LabelLayout
+                   android:layout_marginTop="5dp"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content">
+                   <TextView
+                       android:text="Application Information"
+                       style="@style/SettingActivityCategory" />
+               </me.blog.korn123.easydiary.views.LabelLayout>
 
                <LinearLayout
                    android:id="@+id/pref8"

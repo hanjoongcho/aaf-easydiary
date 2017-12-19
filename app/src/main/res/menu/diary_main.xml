@@ -2,6 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:icon="@drawable/microphone"
+        android:id="@+id/microphone"
+        android:orderInCategory="100"
+        android:title="@string/menu_calendar"
+        app:showAsAction="always" />
+    <item
         android:icon="@drawable/planner"
         android:id="@+id/planner"
         android:orderInCategory="100"

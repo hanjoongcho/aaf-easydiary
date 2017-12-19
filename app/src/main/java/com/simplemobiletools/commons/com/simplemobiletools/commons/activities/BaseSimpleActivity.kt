@@ -56,9 +56,10 @@ open class BaseSimpleActivity : AppCompatActivity() {
         super.onResume()
         if (useDynamicTheme) {
             setTheme(getThemeId())
-            updateBackgroundColor()
+//            updateBackgroundColor()
         }
         updateActionbarColor()
+        updateTextColors(findViewById(android.R.id.content))
     }
 
     override fun onStop() {
@@ -85,7 +86,7 @@ open class BaseSimpleActivity : AppCompatActivity() {
 
     fun updateActionbarColor(color: Int = baseConfig.primaryColor) {
         supportActionBar?.setBackgroundDrawable(ColorDrawable(color))
-        supportActionBar?.title = Html.fromHtml("<font color='${color.getContrastColor().toHex()}'>${supportActionBar?.title}</font>")
+//        supportActionBar?.title = Html.fromHtml("<font color='${color.getContrastColor().toHex()}'>${supportActionBar?.title}</font>")
         updateStatusbarColor(color)
 
         if (isLollipopPlus()) {

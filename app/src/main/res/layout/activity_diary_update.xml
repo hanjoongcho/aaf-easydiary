@@ -200,7 +200,7 @@
 
     </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
+    <com.simplemobiletools.commons.views.MyFloatingActionButton
         android:visibility="gone"
         android:id="@+id/speechButton"
         android:layout_width="wrap_content"

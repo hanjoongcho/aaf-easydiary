@@ -74,15 +74,6 @@ public class DiaryMainActivity extends EasyDiaryActivity {
     @BindView(R.id.query)
     EditText mQuery;
 
-    @BindView(R.id.toggleSwitch)
-    Switch mToggleSwitch;
-
-    @BindView(R.id.toggleMicOn)
-    ImageView mToggleMicOn;
-
-    @BindView(R.id.toggleMicOff)
-    ImageView mToggleMicOff;
-
     @BindView(R.id.insertDiaryButton)
     FloatingActionButton mInsertDiaryButton;
 
@@ -132,7 +123,7 @@ public class DiaryMainActivity extends EasyDiaryActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setFontsStyle();
         refreshList();
-
+        
         int previousActivity = CommonUtils.loadIntPreference(DiaryMainActivity.this, Constants.PREVIOUS_ACTIVITY, -1);
         if (previousActivity == Constants.PREVIOUS_ACTIVITY_CREATE) {
             mDiaryListView.smoothScrollToPosition(0);
@@ -177,6 +168,10 @@ public class DiaryMainActivity extends EasyDiaryActivity {
             case R.id.planner:
                 Intent calendarIntent = new Intent(DiaryMainActivity.this, CalendarActivity.class);
                 startActivity(calendarIntent);
+                break;
+            case R.id.microphone:
+                showSpeechDialog();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -187,12 +182,9 @@ public class DiaryMainActivity extends EasyDiaryActivity {
         return true;
     }
 
-    @OnClick({R.id.speechButton, R.id.insertDiaryButton})
+    @OnClick({R.id.insertDiaryButton})
     void onClick(View view) {
         switch(view.getId()) {
-            case R.id.speechButton:
-                showSpeechDialog();
-                break;
             case R.id.insertDiaryButton:
                 Intent createDiary = new Intent(DiaryMainActivity.this, DiaryInsertActivity.class);
                 startActivity(createDiary);
@@ -232,15 +224,15 @@ public class DiaryMainActivity extends EasyDiaryActivity {
                         break;
                     case 1:
                         mShowcaseView.setButtonPosition(centerParams);
-                        mShowcaseView.setShowcase(new ViewTarget(mToggleSwitch), true);
-                        mShowcaseView.setContentTitle(getString(R.string.read_diary_showcase_title_3));
-                        mShowcaseView.setContentText(getString(R.string.read_diary_showcase_message_3));
-                        break;
-                    case 2:
-                        mShowcaseView.setButtonPosition(centerParams);
                         mShowcaseView.setShowcase(new ViewTarget(mDiaryListView), true);
                         mShowcaseView.setContentTitle(getString(R.string.read_diary_showcase_title_8));
                         mShowcaseView.setContentText(getString(R.string.read_diary_showcase_message_8));
+                        break;
+                    case 2:
+                        mShowcaseView.setButtonPosition(centerParams);
+                        mShowcaseView.setTarget(new ViewTarget(R.id.microphone, DiaryMainActivity.this));
+                        mShowcaseView.setContentTitle(getString(R.string.read_diary_showcase_title_3));
+                        mShowcaseView.setContentText(getString(R.string.read_diary_showcase_message_3));
                         break;
                     case 3:
                         mShowcaseView.setButtonPosition(centerParams);
@@ -294,31 +286,6 @@ public class DiaryMainActivity extends EasyDiaryActivity {
 
     private void bindEvent() {
 
-        mToggleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    enableRecognizer();
-                } else {
-                    disableRecognizer();
-                }
-            }
-        });
-
-        mToggleMicOn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                disableRecognizer();
-            }
-        });
-
-        mToggleMicOff.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                enableRecognizer();
-            }
-        });
-
         mQuery.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
@@ -338,20 +305,6 @@ public class DiaryMainActivity extends EasyDiaryActivity {
                 startActivity(detailIntent);
             }
         });
-    }
-
-    private void enableRecognizer() {
-        mToggleMicOff.setVisibility(View.GONE);
-        mToggleMicOn.setVisibility(View.VISIBLE);
-        mSpeechButton.setVisibility(View.VISIBLE);
-        mToggleSwitch.setChecked(true);
-    }
-
-    private void disableRecognizer() {
-        mToggleMicOn.setVisibility(View.GONE);
-        mToggleMicOff.setVisibility(View.VISIBLE);
-        mSpeechButton.setVisibility(View.GONE);
-        mToggleSwitch.setChecked(false);
     }
 
     private void showSpeechDialog() {

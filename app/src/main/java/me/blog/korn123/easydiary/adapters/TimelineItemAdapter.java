@@ -12,6 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.simplemobiletools.commons.helpers.BaseConfig;
+
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -34,6 +36,7 @@ public class TimelineItemAdapter extends ArrayAdapter<DiaryDto> {
     private final Context context;
     private final List<DiaryDto> list;
     private final int layoutResourceId;
+    private int mPrimaryColor = 0;
 
     public TimelineItemAdapter(@NonNull Context context, @LayoutRes int layoutResourceId, @NonNull List<DiaryDto> list) {
         super(context, layoutResourceId, list);
@@ -61,6 +64,11 @@ public class TimelineItemAdapter extends ArrayAdapter<DiaryDto> {
             holder = (ViewHolder)row.getTag();
         }
 
+        if (mPrimaryColor == 0) {
+            mPrimaryColor = new BaseConfig(context).getPrimaryColor();
+        }
+        holder.titleContainer.setBackgroundColor(mPrimaryColor);
+        
         setFontsTypeface(holder);
         setFontsSize(holder);
 
@@ -108,7 +116,6 @@ public class TimelineItemAdapter extends ArrayAdapter<DiaryDto> {
             holder.textView2.setText(DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis(), DateUtils.TIME_PATTERN_WITH_SECONDS) + "\n" + diaryDto.getTitle());
 //            holder.textView2.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         }
-
 
         return row;
     }

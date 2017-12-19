@@ -15,7 +15,7 @@
             android:layout_height="match_parent"></WebView>
     </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
+    <com.simplemobiletools.commons.views.MyFloatingActionButton
         android:id="@+id/finish"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

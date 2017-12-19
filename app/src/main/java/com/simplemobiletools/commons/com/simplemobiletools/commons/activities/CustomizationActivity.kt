@@ -18,6 +18,7 @@ import me.blog.korn123.commons.constants.Constants
 import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import java.util.*
 
 /**
@@ -253,6 +254,9 @@ class CustomizationActivity : BaseSimpleActivity() {
         baseConfig.isUsingSharedTheme = curSelectedThemeId == THEME_SHARED
         hasUnsavedChanges = false
         if (finishAfterSave) {
+            val readDiaryIntent = Intent(this@CustomizationActivity, DiaryMainActivity::class.java)
+            readDiaryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(readDiaryIntent)
             finish()
         } else {
             invalidateOptionsMenu()

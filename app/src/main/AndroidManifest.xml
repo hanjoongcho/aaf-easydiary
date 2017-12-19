@@ -35,7 +35,6 @@
         <activity android:name=".activities.LockSettingActivity" />
         <activity android:name=".activities.PhotoViewPagerActivity" android:theme="@style/AppTheme.NoActionBar" android:hardwareAccelerated="false" />
         <activity android:name=".activities.PostCardActivity" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.ColorPickerActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.TimelineActivity" android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
