@@ -78,7 +78,7 @@
         <item>@color/md_cyan_300</item>
         <item>@color/md_cyan_400</item>
         <item>@color/md_cyan_500</item>
-        <item>@color/md_cyan_600</item>
+        <item>@color/colorPrimary</item>
         <item>@color/md_cyan_700</item>
         <item>@color/md_cyan_800</item>
         <item>@color/md_cyan_900</item>

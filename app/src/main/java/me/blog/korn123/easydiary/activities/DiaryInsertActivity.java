@@ -6,6 +6,8 @@ import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
@@ -32,6 +34,7 @@ import android.widget.TimePicker;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
+import com.simplemobiletools.commons.helpers.BaseConfig;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -78,6 +81,7 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
     private int mShowcaseIndex = 2;
     private ShowcaseView mShowcaseView;
     private AlertDialog mAlertDialog;
+    private int mPrimaryColor = 0;
 
     @BindView(R.id.contents)
     EditText mContents;
@@ -242,6 +246,13 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        // set bottom thumbnail container
+        mPrimaryColor = new BaseConfig(DiaryInsertActivity.this).getPrimaryColor();
+        GradientDrawable drawable = (GradientDrawable) mPhotoView.getBackground();
+        drawable.setColor(mPrimaryColor);
+        drawable.setAlpha(178);
+
         setFontsStyle();
     }
 
@@ -478,7 +489,11 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
                         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 50, 1));
                         layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(this, 3, 1), 0);
                         imageView.setLayoutParams(layoutParams);
-                        imageView.setBackgroundResource(R.drawable.bg_card_thumbnail);
+                        Drawable drawable = getResources().getDrawable(R.drawable.bg_card_thumbnail);
+                        GradientDrawable gradient = (GradientDrawable) drawable;
+                        gradient.setColor(mPrimaryColor);
+                        gradient.setAlpha(178);
+                        imageView.setBackground(gradient);
                         imageView.setImageBitmap(bitmap);
                         imageView.setScaleType(ImageView.ScaleType.CENTER);
 //                    imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);

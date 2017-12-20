@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.util.TypedValue;
@@ -59,6 +60,7 @@ public class TimelineItemAdapter extends ArrayAdapter<DiaryDto> {
             holder.horizontalLine2 = row.findViewById(R.id.horizontalLine2);
             holder.titleContainer = (ViewGroup) row.findViewById(R.id.titleContainer);
             holder.weather = (ImageView) row.findViewById(R.id.weather);
+            holder.circle = (ImageView) row.findViewById(R.id.circle);
             row.setTag(holder);
         } else {
             holder = (ViewHolder)row.getTag();
@@ -68,7 +70,9 @@ public class TimelineItemAdapter extends ArrayAdapter<DiaryDto> {
             mPrimaryColor = new BaseConfig(context).getPrimaryColor();
         }
         holder.titleContainer.setBackgroundColor(mPrimaryColor);
-        
+        GradientDrawable drawable = (GradientDrawable) holder.circle.getDrawable();
+        drawable.setColor(mPrimaryColor);
+
         setFontsTypeface(holder);
         setFontsSize(holder);
 
@@ -137,5 +141,6 @@ public class TimelineItemAdapter extends ArrayAdapter<DiaryDto> {
         View horizontalLine2;
         ViewGroup titleContainer;
         ImageView weather;
+        ImageView circle;
     }
 }

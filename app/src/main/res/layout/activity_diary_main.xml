@@ -74,29 +74,12 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_gravity="bottom|end"
+    <com.simplemobiletools.commons.views.MyFloatingActionButton
+        android:id="@+id/insertDiaryButton"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <com.simplemobiletools.commons.views.MyFloatingActionButton
-            android:id="@+id/insertDiaryButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            app:srcCompat="@drawable/edit" />
-
-        <com.simplemobiletools.commons.views.MyFloatingActionButton
-            android:visibility="gone"
-            android:id="@+id/speechButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginBottom="@dimen/fab_margin"
-            android:layout_marginRight="@dimen/fab_margin"
-            app:srcCompat="@drawable/microphone" />
-
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@drawable/edit" />
 
 </android.support.design.widget.CoordinatorLayout>

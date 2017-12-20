@@ -68,6 +68,7 @@
                 android:layout_height="match_parent">
             </LinearLayout>
             <ImageView
+                android:id="@+id/circle"
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/bg_card_timeline_circle"
                 android:layout_width="8dp"
