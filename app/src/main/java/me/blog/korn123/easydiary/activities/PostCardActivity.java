@@ -9,7 +9,10 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -70,25 +73,16 @@ public class PostCardActivity extends EasyDiaryActivity {
     @BindView(R.id.postContainer)
     ViewGroup mPostContainer;
 
-    @BindView(R.id.textColor)
-    ImageView mTextColorPicker;
-
-    @BindView(R.id.bgColor)
-    ImageView mBgColorPicker;
-
-    @BindView(R.id.save)
-    ImageView mSave;
-
-    @BindView(R.id.share)
-    ImageView mShare;
-
-    @BindView(R.id.close)
-    ImageView mClose;
-
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_card);
         ButterKnife.bind(this);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_cross);
 
         Intent intent = getIntent();
         mSequence = intent.getIntExtra(Constants.DIARY_SEQUENCE, 0);
@@ -119,30 +113,23 @@ public class PostCardActivity extends EasyDiaryActivity {
                 switch (showcaseIndex) {
                     case 2:
                         mShowcaseView.setButtonPosition(centerParams);
-                        mShowcaseView.setShowcase(new ViewTarget(mBgColorPicker), true);
+                        mShowcaseView.setTarget(new ViewTarget(R.id.bgColor, PostCardActivity.this));
                         mShowcaseView.setContentTitle(getString(R.string.post_card_showcase_title_2));
                         mShowcaseView.setContentText(getString(R.string.post_card_showcase_message_2));
                         break;
                     case 3:
                         mShowcaseView.setButtonPosition(centerParams);
-                        mShowcaseView.setShowcase(new ViewTarget(mSave), true);
+                        mShowcaseView.setTarget(new ViewTarget(R.id.save, PostCardActivity.this));
                         mShowcaseView.setContentTitle(getString(R.string.post_card_showcase_title_3));
                         mShowcaseView.setContentText(getString(R.string.post_card_showcase_message_3));
                         break;
                     case 4:
                         mShowcaseView.setButtonPosition(centerParams);
-                        mShowcaseView.setShowcase(new ViewTarget(mShare), true);
+                        mShowcaseView.setTarget(new ViewTarget(R.id.share, PostCardActivity.this));
                         mShowcaseView.setContentTitle(getString(R.string.post_card_showcase_title_4));
                         mShowcaseView.setContentText(getString(R.string.post_card_showcase_message_4));
                         break;
                     case 5:
-                        mShowcaseView.setButtonPosition(centerParams);
-                        mShowcaseView.setShowcase(new ViewTarget(mClose), true);
-                        mShowcaseView.setContentTitle(getString(R.string.post_card_showcase_title_5));
-                        mShowcaseView.setContentText(getString(R.string.post_card_showcase_message_5));
-                        mShowcaseView.setButtonText(getString(R.string.post_card_showcase_button_2));
-                        break;
-                    case 6:
                         mShowcaseView.hide();
                         break;
                 }
@@ -152,7 +139,7 @@ public class PostCardActivity extends EasyDiaryActivity {
 
         mShowcaseView = new ShowcaseView.Builder(this)
                 .withMaterialShowcase()
-                .setTarget(new ViewTarget(mTextColorPicker))
+                .setTarget(new ViewTarget(R.id.textColor, PostCardActivity.this))
                 .setContentTitle(getString(R.string.post_card_showcase_title_1))
                 .setContentText(getString(R.string.post_card_showcase_message_1))
                 .setStyle(R.style.ShowcaseTheme)
@@ -163,15 +150,17 @@ public class PostCardActivity extends EasyDiaryActivity {
         mShowcaseView.setButtonPosition(centerParams);
     }
 
-    @OnClick({R.id.bgColor, R.id.textColor, R.id.close, R.id.save, R.id.share})
-    public void onClick(View view) {
-        switch (view.getId()) {
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.diary_post_card, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
             case R.id.bgColor:
-//                Intent bgColorPickerIntent = new Intent(PostCardActivity.this, ColorPickerActivity.class);
-//                if (StringUtils.isNotEmpty(mBgHexColor)) {
-//                    bgColorPickerIntent.putExtra("hexStringColor", mBgHexColor);
-//                }
-//                startActivityForResult(bgColorPickerIntent, Constants.REQUEST_CODE_BACKGROUND_COLOR_PICKER);
                 ColorPickerDialogBuilder
                         .with(PostCardActivity.this)
 //                        .setTitle("Choose Color")
@@ -194,14 +183,8 @@ public class PostCardActivity extends EasyDiaryActivity {
 //                        .setColorEditTextColor(ContextCompat.getColor(PostCardActivity.this, android.R.color.holo_blue_bright))
                         .build()
                         .show();
-
                 break;
             case R.id.textColor:
-//                Intent textColorPickerIntent = new Intent(PostCardActivity.this, ColorPickerActivity.class);
-//                if (StringUtils.isNotEmpty(mTextHexColor)) {
-//                    textColorPickerIntent.putExtra("hexStringColor", mTextHexColor);
-//                }
-//                startActivityForResult(textColorPickerIntent, Constants.REQUEST_CODE_TEXT_COLOR_PICKER);
                 ColorPickerDialogBuilder
                         .with(PostCardActivity.this)
 //                        .setTitle("Choose Color")
@@ -227,9 +210,6 @@ public class PostCardActivity extends EasyDiaryActivity {
                         .build()
                         .show();
                 break;
-            case R.id.close:
-                finish();
-                break;
             case R.id.save:
                 if (PermissionUtils.checkPermission(this, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
                     // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
@@ -249,7 +229,96 @@ public class PostCardActivity extends EasyDiaryActivity {
                 }
                 break;
         }
+        return super.onOptionsItemSelected(item);
     }
+
+//    @OnClick({R.id.bgColor, R.id.textColor, R.id.close, R.id.save, R.id.share})
+//    public void onClick(View view) {
+//        switch (view.getId()) {
+//            case R.id.bgColor:
+////                Intent bgColorPickerIntent = new Intent(PostCardActivity.this, ColorPickerActivity.class);
+////                if (StringUtils.isNotEmpty(mBgHexColor)) {
+////                    bgColorPickerIntent.putExtra("hexStringColor", mBgHexColor);
+////                }
+////                startActivityForResult(bgColorPickerIntent, Constants.REQUEST_CODE_BACKGROUND_COLOR_PICKER);
+//                ColorPickerDialogBuilder
+//                        .with(PostCardActivity.this)
+////                        .setTitle("Choose Color")
+//                        .initialColor(mBgColor)
+//                        .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+//                        .density(12)
+//                        .setPositiveButton("ok", new ColorPickerClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
+//                                mBgColor = selectedColor;
+//                                mContentsContainer.setBackgroundColor(mBgColor);
+//                            }
+//                        })
+//                        .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                            }
+//                        })
+////						.showColorEdit(true)
+////                        .setColorEditTextColor(ContextCompat.getColor(PostCardActivity.this, android.R.color.holo_blue_bright))
+//                        .build()
+//                        .show();
+//
+//                break;
+//            case R.id.textColor:
+////                Intent textColorPickerIntent = new Intent(PostCardActivity.this, ColorPickerActivity.class);
+////                if (StringUtils.isNotEmpty(mTextHexColor)) {
+////                    textColorPickerIntent.putExtra("hexStringColor", mTextHexColor);
+////                }
+////                startActivityForResult(textColorPickerIntent, Constants.REQUEST_CODE_TEXT_COLOR_PICKER);
+//                ColorPickerDialogBuilder
+//                        .with(PostCardActivity.this)
+////                        .setTitle("Choose Color")
+//                        .initialColor(mTextColor)
+//                        .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+//                        .density(12)
+//                        .setPositiveButton("ok", new ColorPickerClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
+//                                mTextColor = selectedColor;
+//                                mTitle.setTextColor(mTextColor);
+//                                mDate.setTextColor(mTextColor);
+//                                mContents.setTextColor(mTextColor);
+//                            }
+//                        })
+//                        .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                            }
+//                        })
+////						.showColorEdit(true)
+////                        .setColorEditTextColor(ContextCompat.getColor(PostCardActivity.this, android.R.color.holo_blue_bright))
+//                        .build()
+//                        .show();
+//                break;
+//            case R.id.close:
+//                finish();
+//                break;
+//            case R.id.save:
+//                if (PermissionUtils.checkPermission(this, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
+//                    // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
+//                    exportDiaryCard(true);
+//                } else {
+//                    // API Level 23 이상이면서 권한취득 안한경우
+//                    PermissionUtils.confirmPermission(this, this, Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE);
+//                }
+//                break;
+//            case R.id.share:
+//                if (PermissionUtils.checkPermission(this, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
+//                    // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
+//                    exportDiaryCard(false);
+//                } else {
+//                    // API Level 23 이상이면서 권한취득 안한경우
+//                    PermissionUtils.confirmPermission(this, this, Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE_WITH_SHARE_DIARY_CARD);
+//                }
+//                break;
+//        }
+//    }
 
     @BindView(R.id.progressBar)
     ProgressBar progressBar;

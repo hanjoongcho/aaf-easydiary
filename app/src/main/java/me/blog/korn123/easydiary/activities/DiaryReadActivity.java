@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,6 +31,7 @@ import android.widget.TextView;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
+import com.simplemobiletools.commons.helpers.BaseConfig;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -379,6 +382,7 @@ public class DiaryReadActivity extends EasyDiaryActivity {
     public static class PlaceholderFragment extends Fragment {
 
         private int mSequence;
+        private int mPrimaryColor = 0;
 
         @BindView(R.id.contents)
         TextView mContents;
@@ -434,6 +438,7 @@ public class DiaryReadActivity extends EasyDiaryActivity {
             mTitle.setText(diaryDto.getTitle());
             mContents.setText(diaryDto.getContents());
             mDate.setText(DateUtils.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
+            initBottomContainer();
 
             String query = getArguments().getString(Constants.DIARY_SEARCH_QUERY);
             if (StringUtils.isNotEmpty(query)) {
@@ -474,6 +479,11 @@ public class DiaryReadActivity extends EasyDiaryActivity {
                     layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(getContext(), 3, 1), 0);
                     imageView.setLayoutParams(layoutParams);
                     imageView.setBackgroundResource(R.drawable.bg_card_thumbnail);
+                    Drawable drawable = getResources().getDrawable(R.drawable.bg_card_thumbnail);
+                    GradientDrawable gradient = (GradientDrawable) drawable;
+                    gradient.setColor(mPrimaryColor);
+                    gradient.setAlpha(178);
+                    imageView.setBackground(gradient);
                     imageView.setImageBitmap(bitmap);
                     imageView.setScaleType(ImageView.ScaleType.CENTER);
                     mPhotoContainer.addView(imageView);
@@ -488,8 +498,15 @@ public class DiaryReadActivity extends EasyDiaryActivity {
         @Override
         public void onResume() {
             super.onResume();
+
+            initBottomContainer();
             setFontsTypeface();
             setFontsSize();
+        }
+
+        private void initBottomContainer() {
+            // set bottom thumbnail container
+            mPrimaryColor = new BaseConfig(getContext()).getPrimaryColor();
         }
 
         private void setFontsTypeface() {
