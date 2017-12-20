@@ -20,6 +20,7 @@ build
 app/build
 app/*.apk
 app/*.iml
+app/release
 .idea/misc.xml
 .idea/runConfigurations.xml
 .idea/markdown-navigator
