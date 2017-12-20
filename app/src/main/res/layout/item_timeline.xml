@@ -8,7 +8,7 @@
         android:gravity="center"
         android:id="@+id/titleContainer"
         android:orientation="horizontal"
-        android:layout_marginTop="@dimen/card_layout_padding"
+        android:layout_marginTop="@dimen/item_timeline_title_margin_top"
         android:layout_marginBottom="@dimen/card_layout_padding"
         android:layout_width="match_parent"
         android:layout_height="30dp">

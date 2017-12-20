@@ -1,6 +1,56 @@
 <resources>
     <string name="app_name">이지\n다이어리</string>
 
+    <!-- https://github.com/SimpleMobileTools/Simple-Commons START -->
+    <string name="ok">확인</string>
+    <string name="cancel">취소</string>
+    <string name="simple_commons">Simple Commons</string>
+    <string name="value_copied_to_clipboard">Value copied to clipboard</string>
+
+    <!-- Color customization -->
+    <string name="background_color">배경 색상</string>
+    <string name="text_color">텍스트 색상</string>
+    <string name="primary_color">주요 색상(테마)</string>
+    <string name="restore_defaults">기본설정으로 변경</string>
+    <string name="theme">테마</string>
+    <string name="changing_color_description">Changing a color will make it switch to Custom theme</string>
+    <string name="save">저장</string>
+    <string name="discard">취소</string>
+    <string name="undo_changes">변경사항 되돌리기</string>
+    <string name="undo_changes_confirmation">변경된 사항을  되돌리겠습니까?</string>
+    <string name="save_before_closing">변경사항을 저장하지 않았습니다. 종료전에 저장 하시겠습니까?</string>
+    <string name="apply_to_all_apps">심플 시리즈 애플리케이션에 일괄적용</string>
+    <string name="share_colors_success">Colors updated successfully. A new Theme called \'Shared\' has been added, please use that for updating all app colors in the future.</string>
+    <string name="purchase_thank_you">
+        <![CDATA[
+            Please purchase <a href="https://play.google.com/store/apps/details?id=com.simplemobiletools.thankyou">Simple Thank You</a> to unlock this function and support the development. Thanks!
+        ]]>
+    </string>
+
+    <!-- Themes -->
+    <string name="light_theme">Light</string>
+    <string name="dark_theme">Dark</string>
+    <string name="solarized">Solarized</string>
+    <string name="dark_red">Dark red</string>
+    <string name="custom">Custom</string>
+    <string name="shared">Shared</string>
+
+    <!-- Settings -->
+    <string name="settings">설정</string>
+    <string name="customize_colors">앱 테마 및 색상 설정</string>
+    <string name="use_english_language">영어 사용</string>
+    <string name="show_hidden_items">숨김항목 활성화</string>
+    <string name="font_size">폰트 크기</string>
+    <string name="small">작게</string>
+    <string name="medium">중간</string>
+    <string name="large">크게</string>
+    <string name="extra_large">아주 크게</string>
+    <string name="password_protect_hidden_items">숨김파일 보기 암호설정</string>
+    <string name="password_protect_whole_app">애플리케이션 전체에서 암호를 이용한 보호기능 사용</string>
+    <string name="keep_last_modified">파일 복사/이동/변경 시 이전파일을 보관</string>
+    <string name="show_info_bubble">스크롤바 드래그 시 항목별 툴팁 활성화</string>
+    <!-- https://github.com/SimpleMobileTools/Simple-Commons END -->
+    
     <!--Common-->
     <string name="common_create_seconds">Creation Seconds</string>
 
@@ -105,7 +155,11 @@
     <string name="add_ttf_fonts_info_url">https://github.com/hanjoongcho/aaf-easydiary/blob/master/MANUAL_ko.md</string>
     <string name="diary_search_keyword_case_sensitive_title">영문 대소문자 구분</string>
     <string name="diary_search_keyword_case_sensitive_summary">옵션이 활성화되면 다이어리 검색 시 대소문자 일치여부를 체크합니다.</string>
-
+    <string name="setting_primary_color_title">테마변경</string>
+    <string name="setting_primary_color_summary">애플리케이션의 주요 색상을 설정합니다.</string>
+    <string name="pick_text_color_guide_message">현재버전은 주요 색상(테마) 변경만 지원합니다.\n텍스트색상 변경은 추후 제공 예정입니다.</string>
+    <string name="pick_background_color_guide_message">현재버전은 주요 색상(테마) 변경만 지원합니다.\n배경색상 변경은 추후 제공 예정입니다.</string>
+    
     <!--CalendarActivity-->
     <string name="calendar_title">캘린더</string>
     <string name="guide_message_4">해당일에 작성된 일기가 없습니다.</string>
@@ -135,11 +189,13 @@
     <string name="diary_card_export_error_message">다이어리카드 생성중 오류가 발생되었습니다. 다시 시도해 주세요.</string>
     <string name="post_card_showcase_button_1">다음</string>
     <string name="post_card_showcase_button_2">닫기</string>
+    <string name="post_card_showcase_title_0">다이어리 포스트카드</string>
     <string name="post_card_showcase_title_1">텍스트색</string>
     <string name="post_card_showcase_title_2">배경색</string>
     <string name="post_card_showcase_title_3">포스트카드 생성</string>
     <string name="post_card_showcase_title_4">포스트카드 공유</string>
     <string name="post_card_showcase_title_5">편집종료</string>
+    <string name="post_card_showcase_message_0">저장된 다이어리를 이용하여 사용자정의 포스트카드를 생성하고 저장 할 수 있습니다.</string>
     <string name="post_card_showcase_message_1">포스트카드 텍스트색상을 변경합니다. 컬러피커를 이용하여 원하는 컬러를 선택할 수 있습니다.</string>
     <string name="post_card_showcase_message_2">포스트카드 배경색상을 변경합니다. 컬러피커를 이용하여 원하는 컬러를 선택할 수 있습니다.</string>
     <string name="post_card_showcase_message_3">만들어진 포스트카드는 이미지 파일로 저장 할 수 있습니다.</string>

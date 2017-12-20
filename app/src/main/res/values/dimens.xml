@@ -22,6 +22,8 @@
     <dimen name="card_layout_padding">3dp</dimen>
     <dimen name="card_layout_margin">3dp</dimen>
 
+    <dimen name="item_timeline_title_margin_top">3dp</dimen>
+
     <!-- kakao common -->
     <dimen name="title_text_size">18dp</dimen>
     <dimen name="menu_text_size">18dp</dimen>

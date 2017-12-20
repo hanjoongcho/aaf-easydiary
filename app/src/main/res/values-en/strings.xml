@@ -1,6 +1,56 @@
 <resources>
     <string name="app_name">Easy\nDiary</string>
 
+    <!-- https://github.com/SimpleMobileTools/Simple-Commons START -->
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="simple_commons">Simple Commons</string>
+    <string name="value_copied_to_clipboard">Value copied to clipboard</string>
+
+    <!-- Color customization -->
+    <string name="background_color">Background color</string>
+    <string name="text_color">Text color</string>
+    <string name="primary_color">Primary color</string>
+    <string name="restore_defaults">Restore defaults</string>
+    <string name="theme">Theme</string>
+    <string name="changing_color_description">Changing a color will make it switch to Custom theme</string>
+    <string name="save">Save</string>
+    <string name="discard">Discard</string>
+    <string name="undo_changes">Undo changes</string>
+    <string name="undo_changes_confirmation">Are you sure you want to undo your changes?</string>
+    <string name="save_before_closing">You have unsaved changes. Save before exit?</string>
+    <string name="apply_to_all_apps">Apply colors to all Simple Apps</string>
+    <string name="share_colors_success">Colors updated successfully. A new Theme called \'Shared\' has been added, please use that for updating all app colors in the future.</string>
+    <string name="purchase_thank_you">
+        <![CDATA[
+            Please purchase <a href="https://play.google.com/store/apps/details?id=com.simplemobiletools.thankyou">Simple Thank You</a> to unlock this function and support the development. Thanks!
+        ]]>
+    </string>
+
+    <!-- Themes -->
+    <string name="light_theme">Light</string>
+    <string name="dark_theme">Dark</string>
+    <string name="solarized">Solarized</string>
+    <string name="dark_red">Dark red</string>
+    <string name="custom">Custom</string>
+    <string name="shared">Shared</string>
+
+    <!-- Settings -->
+    <string name="settings">Settings</string>
+    <string name="customize_colors">Customize colors</string>
+    <string name="use_english_language">Use English language</string>
+    <string name="show_hidden_items">Show hidden items</string>
+    <string name="font_size">Font size</string>
+    <string name="small">Small</string>
+    <string name="medium">Medium</string>
+    <string name="large">Large</string>
+    <string name="extra_large">Extra large</string>
+    <string name="password_protect_hidden_items">Password protect hidden item visibility</string>
+    <string name="password_protect_whole_app">Password protect the whole application</string>
+    <string name="keep_last_modified">Keep old last-modified value at file copy/move/rename</string>
+    <string name="show_info_bubble">Show an info bubble at scrolling items by scrollbar dragging</string>
+    <!-- https://github.com/SimpleMobileTools/Simple-Commons END -->
+
     <!--Common-->
     <string name="common_create_seconds">Creation Seconds</string>
 
@@ -105,6 +155,10 @@
     <string name="add_ttf_fonts_info_url">https://github.com/hanjoongcho/aaf-easydiary/blob/master/MANUAL.md</string>
     <string name="diary_search_keyword_case_sensitive_title">Case sensitive</string>
     <string name="diary_search_keyword_case_sensitive_summary">When the option is activated, it checks whether the diary matches case.</string>
+    <string name="setting_primary_color_title">Theme</string>
+    <string name="setting_primary_color_summary">Set the primary color of the application.</string>
+    <string name="pick_text_color_guide_message">The current version only supports theme color changes.\nText color changes will be available in the future.</string>
+    <string name="pick_background_color_guide_message">The current version only supports theme color changes.\nBackground color changes will be available in the future.</string>
 
     <!--CalendarActivity-->
     <string name="calendar_title">Calendar</string>
@@ -135,11 +189,13 @@
     <string name="diary_card_export_error_message">An error occurred while generating the diary card. Please try again.</string>
     <string name="post_card_showcase_button_1">Next</string>
     <string name="post_card_showcase_button_2">Close</string>
+    <string name="post_card_showcase_title_0">Diary Post Card</string>
     <string name="post_card_showcase_title_1">Text color</string>
     <string name="post_card_showcase_title_2">Background color</string>
     <string name="post_card_showcase_title_3">Create postcard</string>
     <string name="post_card_showcase_title_4">Share postcard</string>
     <string name="post_card_showcase_title_5">Exit Editing</string>
+    <string name="post_card_showcase_message_0">You can use the saved diary to create and save custom postcards.</string>
     <string name="post_card_showcase_message_1">Change the postcard text color. You can select the desired color using the color picker.</string>
     <string name="post_card_showcase_message_2">Change the postcard background color. You can select the desired color using the color picker.</string>
     <string name="post_card_showcase_message_3">Postcard created can be saved as image files.</string>
@@ -177,15 +233,9 @@
     </string-array>
 
     <string-array name="pref_list_fonts_title">
-        <item>NanumPen</item>
-        <item>NanumBrush</item>
-        <item>CircleL</item>
         <item>Device setting font</item>
     </string-array>
     <string-array name="pref_list_fonts_values">
-        <item>NanumPen.ttf</item>
-        <item>NanumBrush.ttf</item>
-        <item>TheCircleL.ttf</item>
         <item>Default</item>
     </string-array>
 

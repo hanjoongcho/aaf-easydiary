@@ -155,10 +155,10 @@
     <string name="add_ttf_fonts_info_url">https://github.com/hanjoongcho/aaf-easydiary/blob/master/MANUAL.md</string>
     <string name="diary_search_keyword_case_sensitive_title">Case sensitive</string>
     <string name="diary_search_keyword_case_sensitive_summary">When the option is activated, it checks whether the diary matches case.</string>
-    <string name="setting_primary_color_title">테마변경</string>
-    <string name="setting_primary_color_summary">애플리케이션의 주요 색상을 설정합니다.</string>
-    <string name="pick_text_color_guide_message">현재버전은 테마컬러 변경만 지원합니다.\n텍스트색상 변경은 추후 제공 예정입니다.</string>
-    <string name="pick_background_color_guide_message">현재버전은 테마컬러 변경만 지원합니다.\n배경색상 변경은 추후 제공 예정입니다.</string>
+    <string name="setting_primary_color_title">Theme</string>
+    <string name="setting_primary_color_summary">Set the primary color of the application.</string>
+    <string name="pick_text_color_guide_message">The current version only supports theme color changes.\nText color changes will be available in the future.</string>
+    <string name="pick_background_color_guide_message">The current version only supports theme color changes.\nBackground color changes will be available in the future.</string>
 
     <!--CalendarActivity-->
     <string name="calendar_title">Calendar</string>
@@ -195,7 +195,7 @@
     <string name="post_card_showcase_title_3">Create postcard</string>
     <string name="post_card_showcase_title_4">Share postcard</string>
     <string name="post_card_showcase_title_5">Exit Editing</string>
-    <string name="post_card_showcase_message_0">저장된 다이어리를 이용하여 사용자정의 포스트카드를 생성하고 저장 할 수 있습니다.</string>
+    <string name="post_card_showcase_message_0">You can use the saved diary to create and save custom postcards.</string>
     <string name="post_card_showcase_message_1">Change the postcard text color. You can select the desired color using the color picker.</string>
     <string name="post_card_showcase_message_2">Change the postcard background color. You can select the desired color using the color picker.</string>
     <string name="post_card_showcase_message_3">Postcard created can be saved as image files.</string>

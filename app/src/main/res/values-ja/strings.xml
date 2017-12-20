@@ -1,6 +1,56 @@
 <resources>
     <string name="app_name">イージー\nダイアリー</string>
 
+    <!-- https://github.com/SimpleMobileTools/Simple-Commons START -->
+    <string name="ok">OK</string>
+    <string name="cancel">キャンセル</string>
+    <string name="simple_commons">Simple Commons</string>
+    <string name="value_copied_to_clipboard">Value copied to clipboard</string>
+
+    <!-- Color customization -->
+    <string name="background_color">背景色</string>
+    <string name="text_color">文字色</string>
+    <string name="primary_color">メインカラー</string>
+    <string name="restore_defaults">デフォルトに戻す</string>
+    <string name="theme">テーマ</string>
+    <string name="changing_color_description">色を変更すると、テーマが「カスタム」に切り替わります</string>
+    <string name="save">保存</string>
+    <string name="discard">破棄</string>
+    <string name="undo_changes">変更を元に戻す</string>
+    <string name="undo_changes_confirmation">変更を元に戻してもよろしいですか?</string>
+    <string name="save_before_closing">保存していない変更があります。保存しますか?</string>
+    <string name="apply_to_all_apps">Apply colors to all Simple Apps</string>
+    <string name="share_colors_success">Colors updated successfully. A new Theme called \'Shared\' has been added, please use that for updating all app colors in the future.</string>
+    <string name="purchase_thank_you">
+        <![CDATA[
+            Please purchase <a href="https://play.google.com/store/apps/details?id=com.simplemobiletools.thankyou">Simple Thank You</a> to unlock this function and support the development. Thanks!
+        ]]>
+    </string>
+
+    <!-- Themes -->
+    <string name="light_theme">Light</string>
+    <string name="dark_theme">Dark</string>
+    <string name="solarized">Solarized</string>
+    <string name="dark_red">Dark red</string>
+    <string name="custom">Custom</string>
+    <string name="shared">Shared</string>
+
+    <!-- Settings -->
+    <string name="settings">設定</string>
+    <string name="customize_colors">表示色のカスタマイズ</string>
+    <string name="use_english_language">Use English language</string>
+    <string name="show_hidden_items">Show hidden items</string>
+    <string name="font_size">メモのフォントサイズ</string>
+    <string name="small">小</string>
+    <string name="medium">通常</string>
+    <string name="large">大</string>
+    <string name="extra_large">特大</string>
+    <string name="password_protect_hidden_items">非表示にした項目をパスワードで保護する</string>
+    <string name="password_protect_whole_app">Password protect the whole application</string>
+    <string name="keep_last_modified">Keep old last-modified value at file copy/move/rename</string>
+    <string name="show_info_bubble">Show an info bubble at scrolling items by scrollbar dragging</string>
+    <!-- https://github.com/SimpleMobileTools/Simple-Commons END -->
+    
     <!--Common-->
     <string name="common_create_seconds">Creation Seconds</string>
 
@@ -105,7 +155,11 @@
     <string name="add_ttf_fonts_info_url">https://github.com/hanjoongcho/aaf-easydiary/blob/master/MANUAL_ja.md</string>
     <string name="diary_search_keyword_case_sensitive_title">大文字と小文字を区別</string>
     <string name="diary_search_keyword_case_sensitive_summary">このオプションが有効になると、日記が大文字と小文字を区別するかどうかがチェックされます.</string>
-
+    <string name="setting_primary_color_title">テーマ</string>
+    <string name="setting_primary_color_summary">アプリケーションの原色を設定する.</string>
+    <string name="pick_text_color_guide_message">現在のバージョンではテーマの色の変更のみがサポートされています.\n将来的にテキストの色の変更が可能になります.</string>
+    <string name="pick_background_color_guide_message">現在のバージョンではテーマの色の変更のみがサポートされています.\n背景の色の変更は、将来利用可能になります.</string>
+    
     <!--CalendarActivity-->
     <string name="calendar_title">カレンダー</string>
     <string name="guide_message_4">その日に作成された日記はありません.</string>
@@ -135,11 +189,13 @@
     <string name="diary_card_export_error_message">ダイアリーカードの作成中にエラーが発生しました. もう一度お試しください.</string>
     <string name="post_card_showcase_button_1">次の</string>
     <string name="post_card_showcase_button_2">閉じる</string>
+    <string name="post_card_showcase_title_0">日記ポストカード</string>
     <string name="post_card_showcase_title_1">テキストの色</string>
     <string name="post_card_showcase_title_2">背景色</string>
     <string name="post_card_showcase_title_3">ポストカードの作成</string>
     <string name="post_card_showcase_title_4">ポストカード共有</string>
     <string name="post_card_showcase_title_5">編集終了</string>
+    <string name="post_card_showcase_message_0">保存された日記を使用して、カスタムポストカードを作成して保存することができます.</string>
     <string name="post_card_showcase_message_1">ポストカードのテキストの色を変更します. カラーピッカーを使用して、希望の色を選択することができます.</string>
     <string name="post_card_showcase_message_2">ポストカードの背景色を変更します. カラーピッカーを使用して、希望の色を選択することができます.</string>
     <string name="post_card_showcase_message_3">作成されたポストカードは、画像ファイルとして保存することができます.</string>
