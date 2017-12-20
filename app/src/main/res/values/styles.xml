@@ -156,16 +156,6 @@
         <item name="android:background">?attr/selectableItemBackground</item>
     </style>
 
-    <style name="PinNumberStyle.Base">
-        <item name="android:gravity">center</item>
-        <item name="android:padding">@dimen/small_margin</item>
-        <item name="android:textSize">@dimen/big_text_size</item>
-    </style>
-
-    <style name="PinNumberStyle" parent="PinNumberStyle.Base">
-        <item name="android:background">?attr/selectableItemBackground</item>
-    </style>
-
     <!-- App themes -->
     <style name="AppTheme.Red_100" parent="AppTheme.NoActionBar">
         <item name="colorPrimary">@color/md_red_100</item>
