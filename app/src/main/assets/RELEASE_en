@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.0 (date: 2017/12/20)
+  * Added feature to change application theme
+  
 # Changes in 1.3.12 (date: 2017/12/04)
   * Improve Google Drive sync
   * Improve feature of diary created time include seconds
