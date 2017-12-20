@@ -95,7 +95,7 @@ public class PostCardActivity extends EasyDiaryActivity {
         initShowcase();
     }
 
-    private int showcaseIndex = 2;
+    private int showcaseIndex = 1;
     ShowcaseView mShowcaseView;
 
     private void initShowcase() {
@@ -111,6 +111,12 @@ public class PostCardActivity extends EasyDiaryActivity {
             @Override
             public void onClick(View view) {
                 switch (showcaseIndex) {
+                    case 1:
+                        mShowcaseView.setButtonPosition(centerParams);
+                        mShowcaseView.setTarget(new ViewTarget(R.id.textColor, PostCardActivity.this));
+                        mShowcaseView.setContentTitle(getString(R.string.post_card_showcase_title_1));
+                        mShowcaseView.setContentText(getString(R.string.post_card_showcase_message_1));
+                        break;
                     case 2:
                         mShowcaseView.setButtonPosition(centerParams);
                         mShowcaseView.setTarget(new ViewTarget(R.id.bgColor, PostCardActivity.this));
@@ -139,9 +145,8 @@ public class PostCardActivity extends EasyDiaryActivity {
 
         mShowcaseView = new ShowcaseView.Builder(this)
                 .withMaterialShowcase()
-                .setTarget(new ViewTarget(R.id.textColor, PostCardActivity.this))
-                .setContentTitle(getString(R.string.post_card_showcase_title_1))
-                .setContentText(getString(R.string.post_card_showcase_message_1))
+                .setContentTitle(getString(R.string.post_card_showcase_title_0))
+                .setContentText(getString(R.string.post_card_showcase_message_0))
                 .setStyle(R.style.ShowcaseTheme)
                 .singleShot(Constants.SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER)
                 .setOnClickListener(showcaseViewOnClickListener)

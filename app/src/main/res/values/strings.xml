@@ -189,11 +189,13 @@
     <string name="diary_card_export_error_message">An error occurred while generating the diary card. Please try again.</string>
     <string name="post_card_showcase_button_1">Next</string>
     <string name="post_card_showcase_button_2">Close</string>
+    <string name="post_card_showcase_title_0">Diary Post Card</string>
     <string name="post_card_showcase_title_1">Text color</string>
     <string name="post_card_showcase_title_2">Background color</string>
     <string name="post_card_showcase_title_3">Create postcard</string>
     <string name="post_card_showcase_title_4">Share postcard</string>
     <string name="post_card_showcase_title_5">Exit Editing</string>
+    <string name="post_card_showcase_message_0">저장된 다이어리를 이용하여 사용자정의 포스트카드를 생성하고 저장 할 수 있습니다.</string>
     <string name="post_card_showcase_message_1">Change the postcard text color. You can select the desired color using the color picker.</string>
     <string name="post_card_showcase_message_2">Change the postcard background color. You can select the desired color using the color picker.</string>
     <string name="post_card_showcase_message_3">Postcard created can be saved as image files.</string>
