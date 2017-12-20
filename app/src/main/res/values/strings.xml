@@ -157,6 +157,8 @@
     <string name="diary_search_keyword_case_sensitive_summary">When the option is activated, it checks whether the diary matches case.</string>
     <string name="setting_primary_color_title">테마변경</string>
     <string name="setting_primary_color_summary">애플리케이션의 주요 색상을 설정합니다.</string>
+    <string name="pick_text_color_guide_message">현재버전은 테마컬러 변경만 지원합니다.\n텍스트색상 변경은 추후 제공 예정입니다.</string>
+    <string name="pick_background_color_guide_message">현재버전은 테마컬러 변경만 지원합니다.\n배경색상 변경은 추후 제공 예정입니다.</string>
 
     <!--CalendarActivity-->
     <string name="calendar_title">Calendar</string>

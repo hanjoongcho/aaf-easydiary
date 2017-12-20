@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
@@ -21,15 +23,15 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TimePicker;
+
+import com.simplemobiletools.commons.helpers.BaseConfig;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -59,9 +61,9 @@ import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.commons.utils.PermissionUtils;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.adapters.DiaryWeatherItemAdapter;
-import me.blog.korn123.easydiary.models.PhotoUriDto;
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
 import me.blog.korn123.easydiary.models.DiaryDto;
+import me.blog.korn123.easydiary.models.PhotoUriDto;
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -78,6 +80,7 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
     private RealmList<PhotoUriDto> mPhotoUris;
     private List<Integer> mRemoveIndexes = new ArrayList<>();
     private AlertDialog mAlertDialog;
+    private int mPrimaryColor = 0;
 
     @BindView(R.id.contents)
     EditText mContents;
@@ -88,26 +91,14 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
     @BindView(R.id.saveContents)
     ImageView mSaveContents;
 
-    @BindView(R.id.toggleSwitch)
-    Switch mToggleSwitch;
-
-    @BindView(R.id.toggleMicOn)
-    ImageView mToggleMicOn;
-
-    @BindView(R.id.toggleMicOff)
-    ImageView mToggleMicOff;
-
     @BindView(R.id.weatherSpinner)
     Spinner mWeatherSpinner;
 
     @BindView(R.id.photoContainer)
     ViewGroup mPhotoContainer;
 
-    @BindView(R.id.photoContainerScrollView)
-    HorizontalScrollView mHorizontalScrollView;
-
-    @BindView(R.id.speechButton)
-    FloatingActionButton mSpeechButton;
+    @BindView(R.id.photoView)
+    ImageView mPhotoView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -124,13 +115,14 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
         mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
 
         bindEvent();
+        initBottomContainer();
         initData();
         initDateTime();
         setDateTime();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
-    @OnClick({R.id.speechButton, R.id.zoomIn, R.id.zoomOut, R.id.saveContents, R.id.photoView, R.id.datePicker, R.id.timePicker, R.id.secondsPicker})
+    @OnClick({R.id.speechButton, R.id.zoomIn, R.id.zoomOut, R.id.saveContents, R.id.photoView, R.id.datePicker, R.id.timePicker, R.id.secondsPicker, R.id.microphone})
     public void onClick(View view) {
         float fontSize = mContents.getTextSize();
 
@@ -199,6 +191,9 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
                 mAlertDialog = builder.create();
                 mAlertDialog.show();
                 break;
+            case R.id.microphone:
+                showSpeechDialog();
+                break;
         }
     }
 
@@ -241,7 +236,17 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        initBottomContainer();
         setFontsStyle();
+    }
+
+    private void initBottomContainer() {
+
+        // set bottom thumbnail container
+        mPrimaryColor = new BaseConfig(DiaryUpdateActivity.this).getPrimaryColor();
+        GradientDrawable drawable = (GradientDrawable) mPhotoView.getBackground();
+        drawable.setColor(mPrimaryColor);
+        drawable.setAlpha(178);
     }
 
     private void setFontsStyle() {
@@ -280,7 +285,7 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
                 Uri uri = Uri.parse(dto.getPhotoUri());
                 Bitmap bitmap = null;
                 try {
-                    bitmap = BitmapUtils.decodeUri(this, uri, CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 60, 1), CommonUtils.dpToPixel(this, 40, 1));
+                    bitmap = BitmapUtils.decodeUri(this, uri, CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 65, 1), CommonUtils.dpToPixel(this, 45, 1));
 
                 } catch (FileNotFoundException e) {
                     bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.question_mark_4);
@@ -291,7 +296,11 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 50, 1));
                 layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(this, 3, 1), 0);
                 imageView.setLayoutParams(layoutParams);
-                imageView.setBackgroundResource(R.drawable.bg_card_01);
+                Drawable drawable = getResources().getDrawable(R.drawable.bg_card_thumbnail);
+                GradientDrawable gradient = (GradientDrawable) drawable;
+                gradient.setColor(mPrimaryColor);
+                gradient.setAlpha(178);
+                imageView.setBackground(gradient);
                 imageView.setImageBitmap(bitmap);
                 imageView.setScaleType(ImageView.ScaleType.CENTER);
                 imageView.setOnClickListener(new PhotoClickListener(currentIndex++));
@@ -302,17 +311,6 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
     }
 
     private void bindEvent() {
-
-        mToggleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    enableRecognizer();
-                } else {
-                    disableRecognizer();
-                }
-            }
-        });
 
         mTitle.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -329,34 +327,6 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
                 return false;
             }
         });
-
-        mToggleMicOn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                disableRecognizer();
-            }
-        });
-
-        mToggleMicOff.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                enableRecognizer();
-            }
-        });
-    }
-
-    private void enableRecognizer() {
-        mToggleMicOff.setVisibility(View.GONE);
-        mToggleMicOn.setVisibility(View.VISIBLE);
-        mSpeechButton.setVisibility(View.VISIBLE);
-        mToggleSwitch.setChecked(true);
-    }
-
-    private void disableRecognizer() {
-        mToggleMicOn.setVisibility(View.GONE);
-        mToggleMicOff.setVisibility(View.VISIBLE);
-        mSpeechButton.setVisibility(View.GONE);
-        mToggleSwitch.setChecked(false);
     }
 
     private DatePickerDialog mDatePickerDialog;
@@ -480,12 +450,16 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
                     if (resultCode == RESULT_OK && (data != null)) {
                         if (mPhotoUris == null) mPhotoUris =new RealmList<PhotoUriDto>();
                         mPhotoUris.add(new PhotoUriDto(data.getData().toString()));
-                        Bitmap bitmap = BitmapUtils.decodeUri(this, data.getData(), CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 60, 1), CommonUtils.dpToPixel(this, 40, 1));
+                        Bitmap bitmap = BitmapUtils.decodeUri(this, data.getData(), CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 65, 1), CommonUtils.dpToPixel(this, 45, 1));
                         ImageView imageView = new ImageView(this);
                         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 50, 1));
                         layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(this, 3, 1), 0);
                         imageView.setLayoutParams(layoutParams);
-                        imageView.setBackgroundResource(R.drawable.bg_card_01);
+                        Drawable drawable = getResources().getDrawable(R.drawable.bg_card_thumbnail);
+                        GradientDrawable gradient = (GradientDrawable) drawable;
+                        gradient.setColor(mPrimaryColor);
+                        gradient.setAlpha(178);
+                        imageView.setBackground(gradient);
                         imageView.setImageBitmap(bitmap);
                         imageView.setScaleType(ImageView.ScaleType.CENTER);
                         final int currentIndex = mPhotoUris.size() - 1;

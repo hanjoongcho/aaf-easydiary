@@ -1,5 +1,6 @@
 package com.simplemobiletools.commons.activities
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -310,6 +311,12 @@ class CustomizationActivity : BaseSimpleActivity() {
     }
 
     private fun pickTextColor() {
+
+        AlertDialog.Builder(this@CustomizationActivity)?.apply {
+            setMessage(getString(R.string.pick_text_color_guide_message))
+            setPositiveButton(getString(R.string.ok), null)
+        }.create().show()
+
 //        ColorPickerDialog(this, curTextColor) {
 //            if (hasColorChanged(curTextColor, it)) {
 //                setCurrentTextColor(it)
@@ -320,6 +327,11 @@ class CustomizationActivity : BaseSimpleActivity() {
     }
 
     private fun pickBackgroundColor() {
+
+        AlertDialog.Builder(this@CustomizationActivity)?.apply {
+            setMessage(getString(R.string.pick_background_color_guide_message))
+            setPositiveButton(getString(R.string.ok), null)
+        }.create().show()
 //        ColorPickerDialog(this, curBackgroundColor) {
 //            if (hasColorChanged(curBackgroundColor, it)) {
 //                setCurrentBackgroundColor(it)

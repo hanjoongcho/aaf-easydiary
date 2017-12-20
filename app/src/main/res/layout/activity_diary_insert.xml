@@ -91,7 +91,6 @@
                         android:layout_height="wrap_content" />
                 </LinearLayout>
             </LinearLayout>
-
         </android.support.design.widget.AppBarLayout>
 
         <LinearLayout
