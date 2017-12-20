@@ -482,7 +482,7 @@ public class DiaryReadActivity extends EasyDiaryActivity {
                     Drawable drawable = getResources().getDrawable(R.drawable.bg_card_thumbnail);
                     GradientDrawable gradient = (GradientDrawable) drawable;
                     gradient.setColor(mPrimaryColor);
-                    gradient.setAlpha(178);
+                    gradient.setAlpha(Constants.THUMBNAIL_BACKGROUND_ALPHA);
                     imageView.setBackground(gradient);
                     imageView.setImageBitmap(bitmap);
                     imageView.setScaleType(ImageView.ScaleType.CENTER);

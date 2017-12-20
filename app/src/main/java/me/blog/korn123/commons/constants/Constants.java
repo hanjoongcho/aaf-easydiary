@@ -93,5 +93,7 @@ public class Constants {
     final public static String OPEN_URL_INFO = "open_url_info";
 
     final public static String DIARY_SEARCH_QUERY_CASE_SENSITIVE = "case_sensitive";
+    
+    final public static int THUMBNAIL_BACKGROUND_ALPHA = 100;
 
 }

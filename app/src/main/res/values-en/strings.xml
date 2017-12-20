@@ -233,9 +233,15 @@
     </string-array>
 
     <string-array name="pref_list_fonts_title">
+        <item>NanumPen</item>
+        <item>NanumBrush</item>
+        <item>CircleL</item>
         <item>Device setting font</item>
     </string-array>
     <string-array name="pref_list_fonts_values">
+        <item>NanumPen.ttf</item>
+        <item>NanumBrush.ttf</item>
+        <item>TheCircleL.ttf</item>
         <item>Default</item>
     </string-array>
 

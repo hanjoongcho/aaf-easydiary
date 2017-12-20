@@ -251,7 +251,7 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
         mPrimaryColor = new BaseConfig(DiaryInsertActivity.this).getPrimaryColor();
         GradientDrawable drawable = (GradientDrawable) mPhotoView.getBackground();
         drawable.setColor(mPrimaryColor);
-        drawable.setAlpha(178);
+        drawable.setAlpha(Constants.THUMBNAIL_BACKGROUND_ALPHA);
 
         setFontsStyle();
     }
@@ -492,7 +492,7 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
                         Drawable drawable = getResources().getDrawable(R.drawable.bg_card_thumbnail);
                         GradientDrawable gradient = (GradientDrawable) drawable;
                         gradient.setColor(mPrimaryColor);
-                        gradient.setAlpha(178);
+                        gradient.setAlpha(Constants.THUMBNAIL_BACKGROUND_ALPHA);
                         imageView.setBackground(gradient);
                         imageView.setImageBitmap(bitmap);
                         imageView.setScaleType(ImageView.ScaleType.CENTER);
