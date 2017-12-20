@@ -77,13 +77,12 @@ public class SettingsActivity extends EasyDiaryActivity {
         setSupportActionBar((Toolbar)findViewById(R.id.toolbar));
         getSupportActionBar().setTitle(R.string.setting_title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        initPreference();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        initPreference();
         setFontsStyle();
     }
 

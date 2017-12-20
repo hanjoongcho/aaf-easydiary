@@ -7,7 +7,11 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.simplemobiletools.commons.activities.BaseSimpleActivity;
+import com.simplemobiletools.commons.helpers.BaseConfig;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -23,7 +27,7 @@ import me.blog.korn123.easydiary.R;
  * Created by hanjoong on 2017-05-03.
  */
 
-public class DiaryLockActivity extends Activity {
+public class DiaryLockActivity extends BaseSimpleActivity {
 
     @BindView(R.id.pass1)
     TextView mPass1;
@@ -39,6 +43,9 @@ public class DiaryLockActivity extends Activity {
 
     @BindView(R.id.infoMessage)
     TextView mInfoMessage;
+
+    @BindView(R.id.container)
+    LinearLayout mContainer;
 
     TextView[] mPasswordView = new TextView[4];
 
@@ -125,6 +132,12 @@ public class DiaryLockActivity extends Activity {
             mCursorIndex++;
 
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mContainer.setBackgroundColor(new BaseConfig(DiaryLockActivity.this).getPrimaryColor());
     }
 
     @Override

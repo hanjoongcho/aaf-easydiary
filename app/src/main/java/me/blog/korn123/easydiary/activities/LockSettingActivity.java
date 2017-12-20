@@ -4,7 +4,11 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.simplemobiletools.commons.activities.BaseSimpleActivity;
+import com.simplemobiletools.commons.helpers.BaseConfig;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -18,7 +22,7 @@ import me.blog.korn123.easydiary.R;
  * Created by hanjoong on 2017-05-03.
  */
 
-public class LockSettingActivity extends Activity {
+public class LockSettingActivity extends BaseSimpleActivity {
 
     @BindView(R.id.pass1)
     TextView mPass1;
@@ -34,6 +38,9 @@ public class LockSettingActivity extends Activity {
 
     @BindView(R.id.infoMessage)
     TextView mInfoMessage;
+    
+    @BindView(R.id.container)
+    LinearLayout mContainer;
 
     TextView[] mPasswordView = new TextView[4];
 
@@ -101,6 +108,12 @@ public class LockSettingActivity extends Activity {
         } else {
             mCursorIndex++;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mContainer.setBackgroundColor(new BaseConfig(LockSettingActivity.this).getPrimaryColor());
     }
 
     private void setFontsStyle() {
