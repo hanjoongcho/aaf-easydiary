@@ -5,24 +5,24 @@
         android:id="@+id/textColor"
         android:icon="@drawable/edit_6_w"
         android:orderInCategory="100"
-        android:title="@string/menu_preference"
+        android:title=""
         app:showAsAction="always" />
     <item
         android:id="@+id/bgColor"
         android:icon="@drawable/paint_bucket_w"
         android:orderInCategory="100"
-        android:title="@string/menu_preference"
+        android:title=""
         app:showAsAction="always" />
     <item
         android:id="@+id/save"
         android:icon="@drawable/save_w"
         android:orderInCategory="100"
-        android:title="@string/menu_preference"
+        android:title=""
         app:showAsAction="always" />
     <item
         android:id="@+id/share"
         android:icon="@drawable/sharethis_w"
         android:orderInCategory="100"
-        android:title="@string/menu_preference"
+        android:title=""
         app:showAsAction="always" />
 </menu>

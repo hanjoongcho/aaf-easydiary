@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">イージー\nダイアリー</string>
+    <string name="app_name">イージー ダイアリー</string>
 
     <!-- https://github.com/SimpleMobileTools/Simple-Commons START -->
     <string name="ok">OK</string>
@@ -122,11 +122,13 @@
     <string name="delete_confirm">削除しますか?</string>
     <string name="read_diary_detail_showcase_button_1">次の</string>
     <string name="read_diary_detail_showcase_button_2">閉じる</string>
+    <string name="read_diary_detail_showcase_title_0">ダイアリーを読む</string>
     <string name="read_diary_detail_showcase_title_1">ページの移動</string>
     <string name="read_diary_detail_showcase_title_2">ダイアリー修正</string>
     <string name="read_diary_detail_showcase_title_3">TTS</string>
     <string name="read_diary_detail_showcase_title_4">ポストカード</string>
     <string name="read_diary_detail_showcase_title_5">ダイアリー削除</string>
+    <string name="read_diary_detail_showcase_message_0"></string>
     <string name="read_diary_detail_showcase_message_1">画面を左右にドラッグすると、前または後に作成されたダイアリーを閲覧することができます.</string>
     <string name="read_diary_detail_showcase_message_2">閲覧中のダイアリーを編集するためダイアリー修正画面に移動することができます.</string>
     <string name="read_diary_detail_showcase_message_3">ダイアリー本文をグーグルTTS機能を利用して音声で聞くことができます.</string>
@@ -215,8 +217,10 @@
     <string name="menu_calendar">カレンダー</string>
     <string name="menu_chart">チャート</string>
     <string name="menu_timeline">タイムライン</string>
-    <string name="menu_preference">環境設定</string>
 
+    <!--diary_read.xml-->
+    <string name="menu_delete">削除</string>
+    
     <!--Array-->
     <string-array name="weather_item_array">
         <item>Weather</item>

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -46,6 +47,7 @@ import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter;
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
+import me.blog.korn123.easydiary.helper.TransitionHelper;
 import me.blog.korn123.easydiary.models.DiaryDto;
 
 /**
@@ -155,19 +157,23 @@ public class DiaryMainActivity extends EasyDiaryActivity {
                 break;
             case R.id.settings:
                 Intent settingIntent = new Intent(DiaryMainActivity.this, SettingsActivity.class);
-                startActivity(settingIntent);
+//                startActivity(settingIntent);
+                TransitionHelper.startActivityWithTransition(DiaryMainActivity.this, settingIntent);
                 break;
             case R.id.chart:
                 Intent chartIntent = new Intent(DiaryMainActivity.this, BarChartActivity.class);
-                startActivity(chartIntent);
+//                startActivity(chartIntent);
+                TransitionHelper.startActivityWithTransition(DiaryMainActivity.this, chartIntent);
                 break;
             case R.id.timeline:
                 Intent timelineIntent = new Intent(DiaryMainActivity.this, TimelineActivity.class);
-                startActivity(timelineIntent);
+//                startActivity(timelineIntent);
+                TransitionHelper.startActivityWithTransition(DiaryMainActivity.this, timelineIntent);
                 break;
             case R.id.planner:
                 Intent calendarIntent = new Intent(DiaryMainActivity.this, CalendarActivity.class);
-                startActivity(calendarIntent);
+//                startActivity(calendarIntent);
+                TransitionHelper.startActivityWithTransition(DiaryMainActivity.this, calendarIntent);
                 break;
             case R.id.microphone:
                 showSpeechDialog();
@@ -182,13 +188,19 @@ public class DiaryMainActivity extends EasyDiaryActivity {
         return true;
     }
 
+    @Override
+    public void onBackPressed() {
+        ActivityCompat.finishAffinity(DiaryMainActivity.this);
+    }
+
     @OnClick({R.id.insertDiaryButton})
     void onClick(View view) {
         switch(view.getId()) {
             case R.id.insertDiaryButton:
                 Intent createDiary = new Intent(DiaryMainActivity.this, DiaryInsertActivity.class);
-                startActivity(createDiary);
+//                startActivity(createDiary);
 //                DiaryMainActivity.this.overridePendingTransition(R.anim.anim_right_to_center, R.anim.anim_center_to_left);
+                TransitionHelper.startActivityWithTransition(DiaryMainActivity.this, createDiary);
                 break;
         }
     }
@@ -230,36 +242,23 @@ public class DiaryMainActivity extends EasyDiaryActivity {
                         break;
                     case 2:
                         mShowcaseView.setButtonPosition(centerParams);
-                        mShowcaseView.setTarget(new ViewTarget(R.id.microphone, DiaryMainActivity.this));
-                        mShowcaseView.setContentTitle(getString(R.string.read_diary_showcase_title_3));
-                        mShowcaseView.setContentText(getString(R.string.read_diary_showcase_message_3));
-                        break;
-                    case 3:
-                        mShowcaseView.setButtonPosition(centerParams);
                         mShowcaseView.setTarget(new ViewTarget(R.id.planner, DiaryMainActivity.this));
                         mShowcaseView.setContentTitle(getString(R.string.read_diary_showcase_title_4));
                         mShowcaseView.setContentText(getString(R.string.read_diary_showcase_message_4));
                         break;
-                    case 4:
+                    case 3:
                         mShowcaseView.setButtonPosition(centerParams);
                         mShowcaseView.setTarget(new ViewTarget(R.id.timeline, DiaryMainActivity.this));
                         mShowcaseView.setContentTitle(getString(R.string.read_diary_showcase_title_5));
                         mShowcaseView.setContentText(getString(R.string.read_diary_showcase_message_5));
                         break;
+                    case 4:
+                        mShowcaseView.setButtonPosition(centerParams);
+                        mShowcaseView.setTarget(new ViewTarget(R.id.microphone, DiaryMainActivity.this));
+                        mShowcaseView.setContentTitle(getString(R.string.read_diary_showcase_title_3));
+                        mShowcaseView.setContentText(getString(R.string.read_diary_showcase_message_3));
+                        break;
                     case 5:
-                        mShowcaseView.setButtonPosition(centerParams);
-                        mShowcaseView.setTarget(new ViewTarget(R.id.chart, DiaryMainActivity.this));
-                        mShowcaseView.setContentTitle(getString(R.string.read_diary_showcase_title_6));
-                        mShowcaseView.setContentText(getString(R.string.read_diary_showcase_message_6));
-                        break;
-                    case 6:
-                        mShowcaseView.setButtonPosition(centerParams);
-                        mShowcaseView.setTarget(new ViewTarget(R.id.settings, DiaryMainActivity.this));
-                        mShowcaseView.setContentTitle(getString(R.string.read_diary_showcase_title_7));
-                        mShowcaseView.setContentText(getString(R.string.read_diary_showcase_message_7));
-                        mShowcaseView.setButtonText(getString(R.string.read_diary_showcase_button_2));
-                        break;
-                    case 7:
                         mShowcaseView.hide();
                         break;
                 }
@@ -302,7 +301,7 @@ public class DiaryMainActivity extends EasyDiaryActivity {
                 Intent detailIntent = new Intent(DiaryMainActivity.this, DiaryReadActivity.class);
                 detailIntent.putExtra(Constants.DIARY_SEQUENCE, diaryDto.getSequence());
                 detailIntent.putExtra(Constants.DIARY_SEARCH_QUERY, mDiaryMainItemAdapter.getCurrentQuery());
-                startActivity(detailIntent);
+                TransitionHelper.startActivityWithTransition(DiaryMainActivity.this, detailIntent);
             }
         });
     }
@@ -355,5 +354,4 @@ public class DiaryMainActivity extends EasyDiaryActivity {
                 4
         ));
     }
-
 }

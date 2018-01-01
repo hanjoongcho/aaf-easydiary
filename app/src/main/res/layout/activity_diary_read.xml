@@ -9,7 +9,6 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -20,68 +19,6 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-            <LinearLayout
-                android:id="@+id/subToolbar"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="50dp">
-                <LinearLayout
-                    android:gravity="left|center_vertical"
-                    android:layout_weight="2"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent">
-                    <ImageView
-                        android:background="@drawable/click_effect_01"
-                        android:layout_marginLeft="@dimen/toolbar_icon_margin_side"
-                        android:layout_marginRight="@dimen/toolbar_icon_margin_right"
-                        android:id="@+id/zoomIn"
-                        android:src="@drawable/plus_w"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                    <ImageView
-                        android:background="@drawable/click_effect_01"
-                        android:layout_marginRight="@dimen/toolbar_icon_margin_right"
-                        android:id="@+id/zoomOut"
-                        android:src="@drawable/minus_w"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                    <ImageView
-                        android:background="@drawable/click_effect_01"
-                        android:layout_marginRight="@dimen/toolbar_icon_margin_right"
-                        android:id="@+id/edit"
-                        android:src="@drawable/save_as_w"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                    <ImageView
-                        android:background="@drawable/click_effect_01"
-                        android:layout_marginRight="@dimen/toolbar_icon_margin_right"
-                        android:id="@+id/speechOutButton"
-                        android:src="@drawable/assistant_w"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                    <ImageView
-                        android:background="@drawable/click_effect_01"
-                        android:id="@+id/postCard"
-                        android:src="@drawable/picture_w"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:gravity="right|center_vertical"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent">
-                    <ImageView
-                        android:background="@drawable/click_effect_01"
-                        android:layout_marginRight="@dimen/toolbar_icon_margin_side"
-                        android:id="@+id/delete"
-                        android:src="@drawable/delete_w"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-            </LinearLayout>
         </android.support.design.widget.AppBarLayout>
 
         <LinearLayout
@@ -89,15 +26,12 @@
             android:background="@color/colorAccentWithAlpha"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
             <android.support.v4.view.ViewPager
                 android:id="@+id/container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
         </LinearLayout>
-
     </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

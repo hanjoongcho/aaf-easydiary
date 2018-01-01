@@ -37,7 +37,7 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
-
+    
     <style name="MyActionButtonStyle"  parent="@android:style/Widget.ActionButton">
         <item name="android:drawablePadding">0dp</item>
     </style>

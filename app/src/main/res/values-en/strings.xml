@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Easy\nDiary</string>
+    <string name="app_name">Easy Diary</string>
 
     <!-- https://github.com/SimpleMobileTools/Simple-Commons START -->
     <string name="ok">OK</string>
@@ -122,11 +122,13 @@
     <string name="delete_confirm">Are you sure you want to delete?</string>
     <string name="read_diary_detail_showcase_button_1">Next</string>
     <string name="read_diary_detail_showcase_button_2">Close</string>
+    <string name="read_diary_detail_showcase_title_0">Diary View</string>
     <string name="read_diary_detail_showcase_title_1">Move page</string>
     <string name="read_diary_detail_showcase_title_2">Edit diary</string>
     <string name="read_diary_detail_showcase_title_3">TTS</string>
     <string name="read_diary_detail_showcase_title_4">Postcard</string>
     <string name="read_diary_detail_showcase_title_5">Delete diary</string>
+    <string name="read_diary_detail_showcase_message_0"></string>
     <string name="read_diary_detail_showcase_message_1">Drag the screen left or right to view diaries created before or after.</string>
     <string name="read_diary_detail_showcase_message_2">You can go to the diary editing screen to edit the diary being viewed.</string>
     <string name="read_diary_detail_showcase_message_3">You can listen to the diary text by voice using the Google TTS feature.</string>
@@ -215,7 +217,9 @@
     <string name="menu_calendar">Calendar</string>
     <string name="menu_chart">Chart</string>
     <string name="menu_timeline">Timeline</string>
-    <string name="menu_preference">Preferences</string>
+
+    <!--diary_read.xml-->
+    <string name="menu_delete">Delete</string>
 
     <!--Array-->
     <string-array name="weather_item_array">

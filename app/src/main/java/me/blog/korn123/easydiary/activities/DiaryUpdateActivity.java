@@ -203,7 +203,8 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        finish();
+//                        finish();
+                        DiaryUpdateActivity.super.onBackPressed();
                     }
                 },
                 new DialogInterface.OnClickListener() {
@@ -481,13 +482,14 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+//                finish();
 //                this.overridePendingTransition(R.anim.anim_left_to_center, R.anim.anim_center_to_right);
+                super.onBackPressed();
                 break;
-            case R.id.action_settings:
-                Intent settingIntent = new Intent(DiaryUpdateActivity.this, SettingsActivity.class);
-                startActivity(settingIntent);
-                break;
+//            case R.id.action_settings:
+//                Intent settingIntent = new Intent(DiaryUpdateActivity.this, SettingsActivity.class);
+//                startActivity(settingIntent);
+//                break;
 //            case R.id.toolbarToggle:
 //                if (mSubToolbar.getVisibility() == View.GONE) {
 //                    mSubToolbar.setVisibility(View.VISIBLE);
@@ -496,13 +498,14 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
 //                }
 //                break;
         }
-        return super.onOptionsItemSelected(item);
-    }
-
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.diary_common, menu);
+//        return super.onOptionsItemSelected(item);
         return true;
     }
+
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.diary_common, menu);
+//        return true;
+//    }
 
     class PhotoClickListener implements View.OnClickListener {
 

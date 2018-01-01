@@ -2,12 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:icon="@drawable/microphone"
-        android:id="@+id/microphone"
-        android:orderInCategory="100"
-        android:title="@string/menu_calendar"
-        app:showAsAction="always" />
-    <item
         android:icon="@drawable/planner"
         android:id="@+id/planner"
         android:orderInCategory="100"
@@ -20,15 +14,21 @@
         android:title="@string/menu_timeline"
         app:showAsAction="always" />
     <item
+        android:icon="@drawable/microphone"
+        android:id="@+id/microphone"
+        android:orderInCategory="100"
+        android:title="@string/menu_calendar"
+        app:showAsAction="always" />
+    <item
         android:icon="@drawable/combo"
         android:id="@+id/chart"
         android:orderInCategory="100"
         android:title="@string/menu_chart"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
     <item
         android:icon="@drawable/settings_7"
         android:id="@+id/settings"
         android:orderInCategory="100"
-        android:title="@string/menu_preference"
-        app:showAsAction="always" />
+        android:title="@string/settings"
+        app:showAsAction="never" />
 </menu>

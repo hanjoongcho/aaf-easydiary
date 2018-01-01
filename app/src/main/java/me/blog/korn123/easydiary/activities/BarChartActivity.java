@@ -169,15 +169,6 @@ public class BarChartActivity extends ChartBase {
         mChart.setData(data);
     }
 
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     public String itemNumberToRange(int itemNumber) {
         String hourRange = null;
         switch (itemNumber) {

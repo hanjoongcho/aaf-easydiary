@@ -203,15 +203,6 @@ public class CalendarActivity extends EasyDiaryActivity {
         if (fontSize > 0) FontUtils.setFontsSize(fontSize, (ViewGroup) findViewById(android.R.id.content));
     }
 
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     public void refreshList(Date date) {
         final SimpleDateFormat formatter = new SimpleDateFormat(DateUtils.DATE_PATTERN_DASH);
 
