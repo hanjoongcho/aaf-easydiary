@@ -407,7 +407,7 @@ public class DiaryReadActivity extends EasyDiaryActivity {
             mTitle = (TextView) rootView.findViewById(R.id.title);
             mDate = (TextView) rootView.findViewById(R.id.date);
             mWeather = (ImageView) rootView.findViewById(R.id.weather);
-            ViewGroup mPhotoContainer = (ViewGroup) rootView.findViewById(R.id.photoContainer);
+            mPhotoContainer = (ViewGroup) rootView.findViewById(R.id.photoContainer);
             mHorizontalScrollView = (HorizontalScrollView) rootView.findViewById(R.id.photoContainerScrollView);
             mSequence = getArguments().getInt(Constants.DIARY_SEQUENCE);
             return rootView;
@@ -458,6 +458,7 @@ public class DiaryReadActivity extends EasyDiaryActivity {
                     }
                 };
 
+                if (mPhotoContainer.getChildCount() > 0) mPhotoContainer.removeAllViews();
                 for (PhotoUriDto dto : diaryDto.getPhotoUris()) {
                     Uri uri = Uri.parse(dto.getPhotoUri());
                     Bitmap bitmap = null;
