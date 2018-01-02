@@ -107,23 +107,35 @@ public class TimelineItemAdapter extends ArrayAdapter<DiaryDto> {
 
         if (position % 2 == 0) {
             holder.textView1.setVisibility(View.VISIBLE);
-            holder.textView2.setVisibility(View.GONE);
+            holder.textView2.setVisibility(View.INVISIBLE);
+            holder.textView2.setText("");
             holder.horizontalLine1.setVisibility(View.VISIBLE);
-            holder.horizontalLine2.setVisibility(View.GONE);
-            holder.textView1.setText(DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis(), DateUtils.TIME_PATTERN_WITH_SECONDS) + "\n" + diaryDto.getTitle());
+            holder.horizontalLine2.setVisibility(View.INVISIBLE);
+            holder.textView1.setText(DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis(), DateUtils.TIME_PATTERN_WITH_SECONDS) + "\n" + getSummary(diaryDto));
 //            holder.textView1.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         } else {
-            holder.textView1.setVisibility(View.GONE);
+            holder.textView1.setVisibility(View.INVISIBLE);
+            holder.textView1.setText("");
             holder.textView2.setVisibility(View.VISIBLE);
-            holder.horizontalLine1.setVisibility(View.GONE);
+            holder.horizontalLine1.setVisibility(View.INVISIBLE);
             holder.horizontalLine2.setVisibility(View.VISIBLE);
-            holder.textView2.setText(DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis(), DateUtils.TIME_PATTERN_WITH_SECONDS) + "\n" + diaryDto.getTitle());
+            holder.textView2.setText(DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis(), DateUtils.TIME_PATTERN_WITH_SECONDS) + "\n" + getSummary(diaryDto));
 //            holder.textView2.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         }
 
         return row;
     }
 
+    private String getSummary(DiaryDto diaryDto) {
+        String summary = null;
+        if (StringUtils.isNotEmpty(diaryDto.getTitle())) {
+            summary = diaryDto.getTitle();
+        } else {
+            summary = StringUtils.abbreviate(diaryDto.getContents(), 10);
+        }
+        return summary;
+    }
+    
     private void setFontsTypeface(ViewHolder holder) {
         FontUtils.setFontsTypeface(context, context.getAssets(), null, holder.textView1, holder.textView2, holder.title);
     }
