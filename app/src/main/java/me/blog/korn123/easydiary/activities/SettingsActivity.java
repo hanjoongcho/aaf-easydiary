@@ -42,6 +42,7 @@ import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.adapters.FontItemAdapter;
 import me.blog.korn123.easydiary.googledrive.GoogleDriveDownloader;
 import me.blog.korn123.easydiary.googledrive.GoogleDriveUploader;
+import me.blog.korn123.easydiary.helper.TransitionHelper;
 
 /**
  * Created by CHO HANJOONG on 2017-11-04.
@@ -90,7 +91,7 @@ public class SettingsActivity extends EasyDiaryActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.primaryColor:
-                startActivity(new Intent(SettingsActivity.this, CustomizationActivity.class));
+                TransitionHelper.startActivityWithTransition(SettingsActivity.this, new Intent(SettingsActivity.this, CustomizationActivity.class));
                 break;
             case R.id.pref1:
                 if (PermissionUtils.checkPermission(SettingsActivity.this , Constants.EXTERNAL_STORAGE_PERMISSIONS)) {

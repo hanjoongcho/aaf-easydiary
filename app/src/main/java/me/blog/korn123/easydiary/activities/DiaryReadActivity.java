@@ -449,6 +449,7 @@ public class DiaryReadActivity extends EasyDiaryActivity {
 
             // TODO fixme elegance
             if (diaryDto.getPhotoUris() != null && diaryDto.getPhotoUris().size() > 0) {
+                mHorizontalScrollView.setVisibility(View.VISIBLE);
                 View.OnClickListener onClickListener = new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

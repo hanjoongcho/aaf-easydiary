@@ -20,6 +20,7 @@ import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
+import me.blog.korn123.easydiary.helper.TransitionHelper
 import java.util.*
 
 /**
@@ -120,7 +121,8 @@ class CustomizationActivity : BaseSimpleActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.save -> saveChanges(true)
-            else -> return super.onOptionsItemSelected(item)
+            android.R.id.home -> super.onBackPressed()
+//            else -> return super.onOptionsItemSelected(item)
         }
         return true
     }
@@ -258,7 +260,9 @@ class CustomizationActivity : BaseSimpleActivity() {
             val readDiaryIntent = Intent(this@CustomizationActivity, DiaryMainActivity::class.java)
             readDiaryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(readDiaryIntent)
-            finish()
+            this.overridePendingTransition(0, 0);
+//            super.onBackPressed()
+//            TransitionHelper.startActivityWithTransition(this@CustomizationActivity, readDiaryIntent)
         } else {
             invalidateOptionsMenu()
         }
