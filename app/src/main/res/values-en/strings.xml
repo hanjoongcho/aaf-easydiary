@@ -128,7 +128,7 @@
     <string name="read_diary_detail_showcase_title_3">TTS</string>
     <string name="read_diary_detail_showcase_title_4">Postcard</string>
     <string name="read_diary_detail_showcase_title_5">Delete diary</string>
-    <string name="read_diary_detail_showcase_message_0"></string>
+    <string name="read_diary_detail_showcase_message_0">Browse the saved diary. You can modify a saved diary or create a diary card by specifying a custom color.</string>
     <string name="read_diary_detail_showcase_message_1">Drag the screen left or right to view diaries created before or after.</string>
     <string name="read_diary_detail_showcase_message_2">You can go to the diary editing screen to edit the diary being viewed.</string>
     <string name="read_diary_detail_showcase_message_3">You can listen to the diary text by voice using the Google TTS feature.</string>

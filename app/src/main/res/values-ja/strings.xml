@@ -128,7 +128,7 @@
     <string name="read_diary_detail_showcase_title_3">TTS</string>
     <string name="read_diary_detail_showcase_title_4">ポストカード</string>
     <string name="read_diary_detail_showcase_title_5">ダイアリー削除</string>
-    <string name="read_diary_detail_showcase_message_0"></string>
+    <string name="read_diary_detail_showcase_message_0">保存されたダイアリーを閲覧します。保存されたダイアリーを変更したり、カスタムカラーを指定して、ダイアリーカードを作成することができます。</string>
     <string name="read_diary_detail_showcase_message_1">画面を左右にドラッグすると、前または後に作成されたダイアリーを閲覧することができます.</string>
     <string name="read_diary_detail_showcase_message_2">閲覧中のダイアリーを編集するためダイアリー修正画面に移動することができます.</string>
     <string name="read_diary_detail_showcase_message_3">ダイアリー本文をグーグルTTS機能を利用して音声で聞くことができます.</string>

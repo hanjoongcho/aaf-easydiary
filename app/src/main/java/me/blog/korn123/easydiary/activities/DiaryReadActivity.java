@@ -255,7 +255,7 @@ public class DiaryReadActivity extends EasyDiaryActivity {
                 switch (mShowcaseIndex) {
                     case 1:
                         mShowcaseView.setButtonPosition(centerParams);
-                        mShowcaseView.setShowcase(new ViewTarget(mViewPager), true);
+                        mShowcaseView.setShowcase(new ViewTarget(mViewPager), false);
                         mShowcaseView.setContentTitle(getString(R.string.read_diary_detail_showcase_title_1));
                         mShowcaseView.setContentText(getString(R.string.read_diary_detail_showcase_message_1));
                         break;

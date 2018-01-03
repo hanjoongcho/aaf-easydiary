@@ -118,7 +118,7 @@
     <string name="read_diary_showcase_message_8">목록내의 다이어리카드를 클릭하면 해당 다이어리를 볼 수 있습니다.</string>
 
     <!--DiaryReadActivity-->
-    <string name="read_diary_detail_title">다이어리 읽기</string>
+    <string name="read_diary_detail_title">다이어리 열람</string>
     <string name="delete_confirm">삭제 하시겠습니까?</string>
     <string name="read_diary_detail_showcase_button_1">다음</string>
     <string name="read_diary_detail_showcase_button_2">닫기</string>
@@ -128,7 +128,7 @@
     <string name="read_diary_detail_showcase_title_3">TTS</string>
     <string name="read_diary_detail_showcase_title_4">포스트카드</string>
     <string name="read_diary_detail_showcase_title_5">다이어리 삭제</string>
-    <string name="read_diary_detail_showcase_message_0"></string>
+    <string name="read_diary_detail_showcase_message_0">저장된 다이어리를 열람합니다. 저장된 다이어리를 수정하거나 사용자정의 컬러를 지정하여 다이어리 카드를 만들 수 있습니다.</string>
     <string name="read_diary_detail_showcase_message_1">화면을 좌우로 드래그 하면 이전 또는 이후에 작성된 다이어리를 열람 할 수 있습니다.</string>
     <string name="read_diary_detail_showcase_message_2">열람중인 다이어리 편집을 위해 다이어리 수정화면으로 이동 할 수 있습니다.</string>
     <string name="read_diary_detail_showcase_message_3">다이어리 본문을 구글 TTS 기능을 이용하여 음성으로 들을 수 있습니다.</string>
