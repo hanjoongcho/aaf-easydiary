@@ -137,7 +137,7 @@
 
     <!--DiaryUpdateActivity-->
     <string name="update_diary_title">Edit Diary</string>
-    <string name="back_pressed_confirm">Click the \'OK\' button to go to the diary search screen without saving the current diary.</string>
+    <string name="back_pressed_confirm">Click the \'OK\' button to go to the previous screen without saving the current diary.</string>
 
     <!--SettingsActivity_-->
     <string name="setting_title">Preferences</string>

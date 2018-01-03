@@ -137,7 +137,7 @@
 
     <!--DiaryUpdateActivity-->
     <string name="update_diary_title">ダイアリー修正</string>
-    <string name="back_pressed_confirm">\'確認\' ボタンを押すと、現在のダイアリーを保存せずにダイアリー検索画面に移動します.</string>
+    <string name="back_pressed_confirm">\'確認\'ボタンを押すと、現在のダイアリーを保存せずに前の画面に移動します。</string>
 
     <!--SettingsActivity_-->
     <string name="setting_title">環境設定</string>
