@@ -26,6 +26,7 @@ This is a diary application optimized to user experience.
 09. Advanced Settings
      - Font Setting
      - Lock Setting
+     - Theme Setting
      - Backup and Recovery
 ```
 # Screen Shot
@@ -59,8 +60,6 @@ This is a diary application optimized to user experience.
 <img src="screenshots/app_easydiary09_02_en.png" width="288" height="512">&nbsp;
 <img src="screenshots/app_easydiary06_en.png" width="288" height="512">&nbsp;
 
-
-
 # How to build
 ```
 Step1. Fork or download 'aaf-easydiary' project.
@@ -82,6 +81,30 @@ Step5. Register your package name and SHA-1 signature certificate fingerprint fo
 Step6. Build 'aaf-easydiary' project with android studio.
 ```
 [Download miniman svg images from Flaticon](https://www.flaticon.com/packs/weather-set-2)
+
+# Translation
+Thanks for someone help me to translate this app.   
+
+Currently supported languages are listed below:   
+
+* Korean [strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-ko/strings.xml)   
+```
+  * Translation contributor list
+    - Hanjoong Cho (native speaker)
+```
+
+* English [strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-en/strings.xml)   
+```
+  * Translation contributor list 
+    - Google translation robot 
+```
+
+* Japanese [strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-ja/strings.xml)   
+```
+  * Translation contributor list 
+    - Google translation robot 
+```
+
 
 # License
 [LICENSE][LICENSE.md]
