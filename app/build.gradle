@@ -11,7 +11,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 60
-        versionName "1.4.3"
+        versionName "1.4.3-test"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -21,12 +21,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             applicationVariants.all { variant ->
                 variant.outputs.each { output ->
-                    def date = new Date();
-                    def formattedDate = date.format('yyyyMMddHHmmss')
-                    new File(output.outputFile.parent, output.outputFile.name.replace("-release", "-easy_diary-" + formattedDate)
-                            //for Debug use output.outputFile = new File(output.outputFile.parent,
-                            //                             output.outputFile.name.replace("-debug", "-" + formattedDate)
-                    )
+                    def releaseFileName = "easy_diary-$versionName-release.apk"
+                    println("test message: $releaseFileName")
+                    output.outputFileName = releaseFileName
+//                    def date = new Date();
+//                    def formattedDate = date.format('yyyyMMddHHmmss')
+//                    new File(output.outputFile.parent, output.outputFile.name.replace("-release", "-easy_diary-" + formattedDate)
+//                            //for Debug use output.outputFile = new File(output.outputFile.parent,
+//                            //                             output.outputFile.name.replace("-debug", "-" + formattedDate)
+//                    )
                 }
             }
         }
