@@ -66,8 +66,9 @@ public class IntroActivity extends AppCompatActivity implements Handler.Callback
     public boolean handleMessage(Message message) {
         switch (message.what) {
             case START_MAIN_ACTIVITY:
-                TransitionHelper.startActivityWithTransition(IntroActivity.this, new Intent(this, DiaryMainActivity.class));
-//                finish();
+//                TransitionHelper.startActivityWithTransition(IntroActivity.this, new Intent(this, DiaryMainActivity.class));
+                startActivity(new Intent(this, DiaryMainActivity.class));
+                finish();
                 break;
             default:
                 break;
