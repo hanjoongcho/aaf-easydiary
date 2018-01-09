@@ -22,7 +22,7 @@ import java.io.OutputStream;
 public class BitmapUtils {
 
     public static Bitmap decodeUri(Context c, Uri uri, final int requiredSize, int fixedWidth, int fixedHeight)
-            throws FileNotFoundException {
+            throws FileNotFoundException, SecurityException {
         BitmapFactory.Options o = new BitmapFactory.Options();
         o.inJustDecodeBounds = true;
         BitmapFactory.decodeStream(c.getContentResolver().openInputStream(uri), null, o);

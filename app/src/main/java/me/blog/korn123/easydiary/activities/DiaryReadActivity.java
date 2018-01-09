@@ -468,6 +468,11 @@ public class DiaryReadActivity extends EasyDiaryActivity {
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                         bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.question_mark_4);
+//                        DialogUtils.makeSnackBar(mContents, e.getMessage());
+                    } catch (SecurityException se) {
+                        se.printStackTrace();
+//                        DialogUtils.makeSnackBar(mContents, se.getMessage());
+                        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.question_mark_4);
                     }
                     ImageView imageView = new ImageView(getContext());
                     LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(CommonUtils.dpToPixel(getContext(), 70, 1), CommonUtils.dpToPixel(getContext(), 50, 1));

@@ -1,30 +1,18 @@
 package com.simplemobiletools.commons.activities
 
+//import com.simplemobiletools.commons.asynctasks.CopyMoveTask
+//import com.simplemobiletools.commons.dialogs.ConfirmationDialog
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
-import android.app.Activity
 import android.app.ActivityManager
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.DocumentsContract
-import android.support.v4.app.ActivityCompat
-import android.support.v4.util.Pair
 import android.support.v7.app.AppCompatActivity
-import android.text.Html
 import android.view.MenuItem
 import android.view.WindowManager
-//import com.simplemobiletools.commons.asynctasks.CopyMoveTask
-//import com.simplemobiletools.commons.dialogs.ConfirmationDialog
 import com.simplemobiletools.commons.extensions.*
-import com.simplemobiletools.commons.helpers.APP_LICENSES
-import com.simplemobiletools.commons.helpers.APP_NAME
-import com.simplemobiletools.commons.helpers.APP_VERSION_NAME
-import com.simplemobiletools.commons.helpers.OPEN_DOCUMENT_TREE
-import java.io.File
-import java.util.*
 
 open class BaseSimpleActivity : AppCompatActivity() {
     var copyMoveCallback: (() -> Unit)? = null

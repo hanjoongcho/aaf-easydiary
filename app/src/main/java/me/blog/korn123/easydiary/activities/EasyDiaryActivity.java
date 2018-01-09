@@ -1,7 +1,6 @@
 package me.blog.korn123.easydiary.activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 
 import com.simplemobiletools.commons.activities.BaseSimpleActivity;
 
