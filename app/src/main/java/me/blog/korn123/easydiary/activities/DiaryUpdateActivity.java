@@ -287,10 +287,12 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
                 Bitmap bitmap = null;
                 try {
                     bitmap = BitmapUtils.decodeUri(this, uri, CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 65, 1), CommonUtils.dpToPixel(this, 45, 1));
-
                 } catch (FileNotFoundException e) {
-                    bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.question_mark_4);
                     e.printStackTrace();
+                    bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.question_shield);
+                } catch (SecurityException se) {
+                    se.printStackTrace();
+                    bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.question_shield);
                 }
 
                 ImageView imageView = new ImageView(this);

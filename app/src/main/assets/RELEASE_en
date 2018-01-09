@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.7 (date: 2018/01/09)
+  * Fixed an error when deleting the original of a linked photo from some devices.
+
 # Changes in 1.4.6 (date: 2018/01/07)
   * Fixed main screen button touch error on some Android 6.0 devices
   
