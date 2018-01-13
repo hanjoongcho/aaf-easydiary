@@ -9,7 +9,7 @@ android {
     defaultConfig {
         applicationId "me.blog.korn123.easydiary"
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 63
         versionName "1.4.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
