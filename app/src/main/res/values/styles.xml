@@ -1243,7 +1243,7 @@
 
     <style name="SettingActivityCategory">
         <item name="android:paddingTop">5dp</item>
-        <item name="android:paddingRight">5dp</item>
+        <item name="android:paddingRight">10dp</item>
         <item name="android:paddingBottom">5dp</item>
         <item name="android:paddingLeft">10dp</item>
         <item name="android:textColor">@color/whiteText</item>

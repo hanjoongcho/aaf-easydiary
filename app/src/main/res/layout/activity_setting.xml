@@ -197,7 +197,6 @@
                </LinearLayout>
 
                <me.blog.korn123.easydiary.views.LabelLayout
-                   android:layout_marginTop="5dp"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content">
                    <TextView
@@ -235,7 +234,6 @@
                </LinearLayout>
 
                <me.blog.korn123.easydiary.views.LabelLayout
-                   android:layout_marginTop="5dp"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content">
                    <TextView
