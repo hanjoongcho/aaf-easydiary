@@ -17,7 +17,7 @@
         android:icon="@drawable/microphone"
         android:id="@+id/microphone"
         android:orderInCategory="100"
-        android:title="@string/menu_calendar"
+        android:title=""
         app:showAsAction="always" />
     <item
         android:icon="@drawable/combo"
