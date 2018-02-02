@@ -87,7 +87,7 @@ public class SettingsActivity extends EasyDiaryActivity {
         setFontsStyle();
     }
 
-    @OnClick({ R.id.primaryColor, R.id.pref1, R.id.pref2, R.id.pref3, R.id.pref4, R.id.pref5, R.id.pref6, R.id.pref7, R.id.pref8, R.id.pref9 })
+    @OnClick({ R.id.primaryColor, R.id.pref1, R.id.pref2, R.id.pref3, R.id.pref4, R.id.pref5, R.id.pref6, R.id.pref7, R.id.pref8, R.id.pref9, R.id.easyPhotoMap, R.id.easyPassword })
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.primaryColor:
@@ -140,28 +140,38 @@ public class SettingsActivity extends EasyDiaryActivity {
                 }
                 break;
             case R.id.pref8:
-                Uri uri = Uri.parse("market://details?id=me.blog.korn123.easydiary");
-                Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-                // To count with Play market backstack, After pressing back button,
-                // to taken back to our application, we need to add following flags to intent.
-                goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
-                        Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
-                        Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                try {
-                    startActivity(goToMarket);
-                } catch (ActivityNotFoundException e) {
-                    startActivity(new Intent(Intent.ACTION_VIEW,
-                            Uri.parse("http://play.google.com/store/apps/details?id=me.blog.korn123.easydiary")));
-                }
+                openGooglePlayBy("me.blog.korn123.easydiary");
                 break;
             case R.id.pref9:
                 Intent webViewIntent = new Intent(SettingsActivity.this, WebViewActivity.class);
                 webViewIntent.putExtra(Constants.OPEN_URL_INFO, "https://github.com/hanjoongcho/aaf-easydiary/blob/master/LICENSE.md");
                 startActivity(webViewIntent);
                 break;
+            case R.id.easyPhotoMap:
+                openGooglePlayBy("me.blog.korn123.easyphotomap");
+                break;
+            case R.id.easyPassword:
+                openGooglePlayBy("io.github.hanjoongcho.easypassword");
+                break;
         }
     }
 
+    private void openGooglePlayBy(String targetAppId) {
+        Uri uri = Uri.parse("market://details?id=" + targetAppId);
+        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+        // To count with Play market backstack, After pressing back button,
+        // to taken back to our application, we need to add following flags to intent.
+        goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
+                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        try {
+            startActivity(goToMarket);
+        } catch (ActivityNotFoundException e) {
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://play.google.com/store/apps/details?id=" + targetAppId)));
+        }
+    }
+    
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

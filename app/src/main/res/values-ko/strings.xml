@@ -20,12 +20,6 @@
     <string name="undo_changes_confirmation">변경된 사항을  되돌리겠습니까?</string>
     <string name="save_before_closing">변경사항을 저장하지 않았습니다. 종료전에 저장 하시겠습니까?</string>
     <string name="apply_to_all_apps">심플 시리즈 애플리케이션에 일괄적용</string>
-    <string name="share_colors_success">Colors updated successfully. A new Theme called \'Shared\' has been added, please use that for updating all app colors in the future.</string>
-    <string name="purchase_thank_you">
-        <![CDATA[
-            Please purchase <a href="https://play.google.com/store/apps/details?id=com.simplemobiletools.thankyou">Simple Thank You</a> to unlock this function and support the development. Thanks!
-        ]]>
-    </string>
 
     <!-- Themes -->
     <string name="light_theme">Light</string>
@@ -139,13 +133,13 @@
     <string name="update_diary_title">다이어리 수정</string>
     <string name="back_pressed_confirm">\'확인\' 버튼을 누르시면 현재 다이어리를 저장하지 않고 이전 화면으로 이동합니다.</string>
 
-    <!--SettingsActivity_-->
+    <!--SettingsActivity-->
     <string name="setting_title">환경설정</string>
     <string name="lock_number">설정된 잠금번호:</string>
-    <string name="rate_app">어플 평가하기</string>
+    <string name="rate_app">앱 평가하기</string>
     <string name="guide_message_3">요청작업에 대한 권한이 충분하지 않습니다.</string>
-    <string name="application_lock_title">어플잠금설정</string>
-    <string name="application_lock_summary">잠금설정이 활성화되면 설정된 비밀번호로 어플리케이션이 잠깁니다.</string>
+    <string name="application_lock_title">앱 잠금설정</string>
+    <string name="application_lock_summary">잠금설정이 활성화되면 설정된 비밀번호로 애플리케이션이 잠깁니다.</string>
     <string name="application_lock_password_title">잠금번호 설정</string>
     <string name="restore_diary">다이어리 복구하기</string>
     <string name="restore_diary_summary">구글 드라이브에 백업된 데이터를 이용하여 모든 컨텐츠를 복구합니다.\n첨부사진의 경우 링크정보만 존재하므로, 원본사진이 존재하지 않는 디바이스에서는 첨부사진을 제외한 컨텐츠만 복구됩니다.\n원본사진을 포함한 복구기능은 추후 제공예정입니다.</string>
@@ -161,6 +155,10 @@
     <string name="setting_primary_color_summary">애플리케이션의 주요 색상을 설정합니다.</string>
     <string name="pick_text_color_guide_message">현재버전은 주요 색상(테마) 변경만 지원합니다.\n텍스트색상 변경은 추후 제공 예정입니다.</string>
     <string name="pick_background_color_guide_message">현재버전은 주요 색상(테마) 변경만 지원합니다.\n배경색상 변경은 추후 제공 예정입니다.</string>
+    <string name="easy_photo_map_title">이지 포토맵</string>
+    <string name="easy_photo_map_summary">이지 포토맵은 사진에 포함된 위치정보를 이용하여 사진이 촬영된 위치를 지도 위에 표시해주는 포토맵 애플리케이션입니다.</string>
+    <string name="easy_password_title">이지 패스워드</string>
+    <string name="easy_password_summary">이지 패스워드는 로그인, 문서보안, 도어락, 자물쇠, 신용카드, 계좌관리등에 사용하는 비밀번호를 사용자가 설정한 하나의 잠금번호를 이용하여 관리 할 수 있도록 도와주는 애플리케이션입니다.</string>
     
     <!--CalendarActivity-->
     <string name="calendar_title">캘린더</string>
@@ -248,5 +246,4 @@
         <item>TheCircleL.ttf</item>
         <item>Default</item>
     </string-array>
-
 </resources>

@@ -223,7 +223,6 @@
                    style="@style/SettingActivityDivider" />
 
                <LinearLayout
-                   android:layout_marginBottom="10dp"
                    android:id="@+id/pref9"
                    android:orientation="vertical"
                    style="@style/SettingActivityItem">
@@ -235,10 +234,65 @@
                        style="@style/SettingActivitySummary" />
                </LinearLayout>
 
+               <me.blog.korn123.easydiary.views.LabelLayout
+                   android:layout_marginTop="5dp"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content">
+                   <TextView
+                       android:text="AAF Easy Series"
+                       style="@style/SettingActivityCategory" />
+               </me.blog.korn123.easydiary.views.LabelLayout>
+               
+               <LinearLayout
+                   android:id="@+id/easyPhotoMap"
+                   android:orientation="horizontal"
+                   style="@style/SettingActivityItem">
+                   <ImageView
+                       android:src="@drawable/ic_easyphotomap"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content" />
+                   <LinearLayout
+                       android:orientation="vertical"
+                       android:layout_marginLeft="10dp"
+                       android:layout_weight="1"
+                       android:layout_width="0dp"
+                       android:layout_height="wrap_content">
+                       <TextView
+                           android:text="@string/easy_photo_map_title"
+                           style="@style/SettingActivityTitle" />
+                       <TextView
+                           android:text="@string/easy_photo_map_summary"
+                           style="@style/SettingActivitySummary" />    
+                   </LinearLayout>
+               </LinearLayout>
+
+               <TextView
+                   style="@style/SettingActivityDivider" />
+               
+               <LinearLayout
+                   android:id="@+id/easyPassword"
+                   android:orientation="horizontal"
+                   style="@style/SettingActivityItem">
+                   <ImageView
+                       android:src="@drawable/ic_easypassword"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content" />
+                   <LinearLayout
+                       android:orientation="vertical"
+                       android:layout_marginLeft="10dp"
+                       android:layout_weight="1"
+                       android:layout_width="0dp"
+                       android:layout_height="wrap_content">
+                       <TextView
+                           android:text="@string/easy_password_title"
+                           style="@style/SettingActivityTitle" />
+                       <TextView
+                           android:text="@string/easy_password_summary"
+                           style="@style/SettingActivitySummary" />
+                   </LinearLayout>
+               </LinearLayout>
            </LinearLayout>
-
        </ScrollView>
-
     </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

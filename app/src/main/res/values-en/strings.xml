@@ -20,12 +20,6 @@
     <string name="undo_changes_confirmation">Are you sure you want to undo your changes?</string>
     <string name="save_before_closing">You have unsaved changes. Save before exit?</string>
     <string name="apply_to_all_apps">Apply colors to all Simple Apps</string>
-    <string name="share_colors_success">Colors updated successfully. A new Theme called \'Shared\' has been added, please use that for updating all app colors in the future.</string>
-    <string name="purchase_thank_you">
-        <![CDATA[
-            Please purchase <a href="https://play.google.com/store/apps/details?id=com.simplemobiletools.thankyou">Simple Thank You</a> to unlock this function and support the development. Thanks!
-        ]]>
-    </string>
 
     <!-- Themes -->
     <string name="light_theme">Light</string>
@@ -139,7 +133,7 @@
     <string name="update_diary_title">Edit Diary</string>
     <string name="back_pressed_confirm">Click the \'OK\' button to go to the previous screen without saving the current diary.</string>
 
-    <!--SettingsActivity_-->
+    <!--SettingsActivity-->
     <string name="setting_title">Preferences</string>
     <string name="lock_number">Lock Number:</string>
     <string name="rate_app">Rate App</string>
@@ -161,7 +155,11 @@
     <string name="setting_primary_color_summary">Set the primary color of the application.</string>
     <string name="pick_text_color_guide_message">The current version only supports theme color changes.\nText color changes will be available in the future.</string>
     <string name="pick_background_color_guide_message">The current version only supports theme color changes.\nBackground color changes will be available in the future.</string>
-
+    <string name="easy_photo_map_title">Easy PhotoMap</string>
+    <string name="easy_photo_map_summary">Easy Photo Map is a photomap application that displays the location of the photo on the map using the location information included in the photo.</string>
+    <string name="easy_password_title">Easy Password</string>
+    <string name="easy_password_summary">Easy Password is an application that helps you manage passwords used for login, document security, door lock, lock, credit card, account management, etc. by using one pattern lock set by the user.</string>
+    
     <!--CalendarActivity-->
     <string name="calendar_title">Calendar</string>
     <string name="guide_message_4">There is no diary created on that day.</string>

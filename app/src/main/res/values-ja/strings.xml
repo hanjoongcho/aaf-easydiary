@@ -20,12 +20,6 @@
     <string name="undo_changes_confirmation">変更を元に戻してもよろしいですか?</string>
     <string name="save_before_closing">保存していない変更があります。保存しますか?</string>
     <string name="apply_to_all_apps">Apply colors to all Simple Apps</string>
-    <string name="share_colors_success">Colors updated successfully. A new Theme called \'Shared\' has been added, please use that for updating all app colors in the future.</string>
-    <string name="purchase_thank_you">
-        <![CDATA[
-            Please purchase <a href="https://play.google.com/store/apps/details?id=com.simplemobiletools.thankyou">Simple Thank You</a> to unlock this function and support the development. Thanks!
-        ]]>
-    </string>
 
     <!-- Themes -->
     <string name="light_theme">Light</string>
@@ -139,7 +133,7 @@
     <string name="update_diary_title">ダイアリー修正</string>
     <string name="back_pressed_confirm">\'確認\'ボタンを押すと、現在のダイアリーを保存せずに前の画面に移動します。</string>
 
-    <!--SettingsActivity_-->
+    <!--SettingsActivity-->
     <string name="setting_title">環境設定</string>
     <string name="lock_number">設定されたロック番号:</string>
     <string name="rate_app">アプリを評価する</string>
@@ -161,6 +155,10 @@
     <string name="setting_primary_color_summary">アプリケーションの原色を設定する.</string>
     <string name="pick_text_color_guide_message">現在のバージョンではテーマの色の変更のみがサポートされています.\n将来的にテキストの色の変更が可能になります.</string>
     <string name="pick_background_color_guide_message">現在のバージョンではテーマの色の変更のみがサポートされています.\n背景の色の変更は、将来利用可能になります.</string>
+    <string name="easy_photo_map_title">Easy PhotoMap</string>
+    <string name="easy_photo_map_summary">Easy Photo Map is a photomap application that displays the location of the photo on the map using the location information included in the photo.</string>
+    <string name="easy_password_title">Easy Password</string>
+    <string name="easy_password_summary">Easy Password is an application that helps you manage passwords used for login, document security, door lock, lock, credit card, account management, etc. by using one pattern lock set by the user.</string>
     
     <!--CalendarActivity-->
     <string name="calendar_title">カレンダー</string>
