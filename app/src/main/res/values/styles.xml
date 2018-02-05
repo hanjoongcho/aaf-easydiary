@@ -1,5 +1,4 @@
 <resources>
-
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
@@ -7,6 +6,89 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <!--<item name="actionBarStyle">@style/AppTheme.ActionBar</item>-->
+    </style>
+
+    <!--Common-->
+    <style name="ToolBarIcon">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+    </style>
+
+    <!--DiaryLockActivity-->
+    <style name="DiaryLockInputNum">
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/bg_card_01</item>
+        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">50dp</item>
+    </style>
+
+    <style name="DiaryLockKeypadGroup">
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="DiaryLockKeypad">
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/bg_card_01</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">50dp</item>
+    </style>
+
+    <!--SettingActivity Style-->
+    <style name="SettingActivityDivider">
+        <item name="android:background">@color/colorAccentWithAlpha</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+    </style>
+
+    <style name="SettingActivityItem">
+        <item name="android:background">@drawable/click_effect_setting_item</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingRight">20dp</item>
+        <item name="android:paddingLeft">20dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:textSize">@dimen/medium_text_size</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="SettingActivityCategory">
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:textColor">@color/whiteText</item>
+        <item name="android:textSize">@dimen/medium_text_size</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="SettingActivityTitle">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/defaultText</item>
+        <item name="android:textSize">@dimen/medium_text_size</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="SettingActivitySummary" parent="SettingActivityTitle">
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/summaryText</item>
+        <item name="android:textSize">@dimen/medium_text_size</item>
     </style>
 
     <style name="AppTheme.ActionBar" parent="@style/Widget.AppCompat.ActionBar.Solid">
@@ -1189,81 +1271,4 @@
         <item name="colorAccent">@color/colorPrimary</item>
     </style>
     <!-- https://github.com/SimpleMobileTools/Simple-Commons END-->
-
-    <!--DiaryLockActivity-->
-    <style name="DiaryLockInputNum">
-        <item name="android:textStyle">bold</item>
-        <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/bg_card_01</item>
-        <item name="android:layout_marginRight">5dp</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">50dp</item>
-    </style>
-
-    <style name="DiaryLockKeypadGroup">
-        <item name="android:paddingLeft">10dp</item>
-        <item name="android:paddingRight">10dp</item>
-        <item name="android:paddingBottom">5dp</item>
-        <item name="android:gravity">center</item>
-        <item name="android:orientation">horizontal</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
-
-    <style name="DiaryLockKeypad">
-        <item name="android:textStyle">bold</item>
-        <item name="android:layout_marginRight">5dp</item>
-        <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/bg_card_01</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">50dp</item>
-    </style>
-
-    <!--SettingActivity Style-->
-    <style name="SettingActivityDivider">
-        <item name="android:background">@color/colorAccentWithAlpha</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">1dp</item>
-    </style>
-
-    <style name="SettingActivityItem">
-        <item name="android:background">@drawable/click_effect_setting_item</item>
-        <item name="android:orientation">horizontal</item>
-        <item name="android:gravity">center</item>
-        <item name="android:paddingTop">10dp</item>
-        <item name="android:paddingRight">20dp</item>
-        <item name="android:paddingLeft">20dp</item>
-        <item name="android:paddingBottom">10dp</item>
-        <item name="android:textSize">@dimen/medium_text_size</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
-
-    <style name="SettingActivityCategory">
-        <item name="android:paddingTop">5dp</item>
-        <item name="android:paddingRight">10dp</item>
-        <item name="android:paddingBottom">5dp</item>
-        <item name="android:paddingLeft">10dp</item>
-        <item name="android:textColor">@color/whiteText</item>
-        <item name="android:textSize">@dimen/medium_text_size</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
-
-    <style name="SettingActivityTitle">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/defaultText</item>
-        <item name="android:textSize">@dimen/medium_text_size</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
-
-    <style name="SettingActivitySummary" parent="SettingActivityTitle">
-        <item name="android:textStyle">normal</item>
-        <item name="android:textColor">@color/summaryText</item>
-        <item name="android:textSize">@dimen/medium_text_size</item>
-    </style>
-
 </resources>

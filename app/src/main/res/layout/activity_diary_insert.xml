@@ -33,41 +33,37 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent">
                     <ImageView
-                        android:background="@drawable/click_effect_01"
                         android:layout_marginLeft="@dimen/toolbar_icon_margin_side"
                         android:layout_marginRight="@dimen/toolbar_icon_margin_right"
                         android:id="@+id/zoomIn"
                         android:src="@drawable/plus_w"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        style="@style/ToolBarIcon"/>
                     <ImageView
-                        android:background="@drawable/click_effect_01"
                         android:layout_marginRight="@dimen/toolbar_icon_margin_right"
                         android:id="@+id/zoomOut"
                         android:src="@drawable/minus_w"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        style="@style/ToolBarIcon"/>
                     <ImageView
-                        android:background="@drawable/click_effect_01"
                         android:layout_marginRight="@dimen/toolbar_icon_margin_right"
                         android:id="@+id/datePicker"
                         android:src="@drawable/calendar_4_w"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        style="@style/ToolBarIcon"/>
                     <ImageView
-                        android:background="@drawable/click_effect_01"
                         android:layout_marginRight="@dimen/toolbar_icon_margin_right"
                         android:id="@+id/timePicker"
                         android:src="@drawable/time_8_w"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        style="@style/ToolBarIcon"/>
                     <ImageView
-                        android:background="@drawable/click_effect_01"
                         android:layout_marginRight="@dimen/toolbar_icon_margin_right"
                         android:id="@+id/secondsPicker"
                         android:src="@drawable/time_w"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        style="@style/ToolBarIcon"/>
                 </LinearLayout>
                 <LinearLayout
                     android:orientation="horizontal"
@@ -75,20 +71,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent">
                     <ImageView
-                        android:background="@drawable/click_effect_01"
                         android:layout_marginRight="@dimen/toolbar_icon_margin_right"
                         android:id="@+id/microphone"
                         android:src="@drawable/microphone"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        style="@style/ToolBarIcon"/>
                     <ImageView
-                        android:background="@drawable/click_effect_01"
                         android:layout_marginRight="@dimen/toolbar_icon_margin_side"
                         android:id="@+id/saveContents"
                         android:src="@drawable/save_w"
                         android:layout_gravity="right|center_vertical"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        style="@style/ToolBarIcon"/>
                 </LinearLayout>
             </LinearLayout>
         </android.support.design.widget.AppBarLayout>
