@@ -1,10 +1,11 @@
-package com.simplemobiletools.commons.extensions
+package me.blog.korn123.easydiary.extensions
 
 import android.app.Activity
+import com.simplemobiletools.commons.extensions.baseConfig
 import me.blog.korn123.easydiary.R
 
 /**
- * Created by Hanjoong Cho on 2017-12-18.
+ * Created by CHO HANJOONG on 2018-02-06.
  * This code based 'Simple-Commons' package
  * You can see original 'Simple-Commons' from below link.
  * https://github.com/SimpleMobileTools/Simple-Commons
@@ -201,5 +202,5 @@ fun Activity.getThemeId(color: Int = baseConfig.primaryColor) = when (color) {
     -13154481 -> R.style.AppTheme_Blue_Grey_800
     -14273992 -> R.style.AppTheme_Blue_Grey_900
 
-    else -> R.style.AppTheme_Easy_Diary
+    else -> R.style.AppTheme_AAF
 }

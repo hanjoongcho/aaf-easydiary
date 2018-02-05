@@ -2,8 +2,8 @@ package me.blog.korn123.easydiary.activities;
 
 import android.content.Intent;
 
-import com.simplemobiletools.commons.activities.BaseSimpleActivity;
 
+import io.github.hanjoongcho.commons.activities.BaseSimpleActivity;
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.CommonUtils;
 
@@ -12,7 +12,6 @@ import me.blog.korn123.commons.utils.CommonUtils;
  */
 
 public class EasyDiaryActivity extends BaseSimpleActivity {
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -36,5 +35,4 @@ public class EasyDiaryActivity extends BaseSimpleActivity {
             }
         }
     }
-
 }

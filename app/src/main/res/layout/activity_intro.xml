@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/colorPrimary"
+    android:id="@+id/main_holder"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <TextView
         android:padding="10dp"
         android:text="Awesome Application Factory"
@@ -21,12 +20,10 @@
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <ImageView
             android:src="@drawable/intro"
             android:layout_width="100dp"
             android:layout_height="100dp" />
-
     </LinearLayout>
 
     <TextView
@@ -40,5 +37,4 @@
         android:textSize="@dimen/large_text_size"
         android:id="@+id/appName"
         android:textStyle="bold" />
-
 </LinearLayout>

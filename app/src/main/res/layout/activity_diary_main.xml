@@ -28,24 +28,19 @@
         <LinearLayout
             android:orientation="vertical"
             android:padding="@dimen/card_layout_padding"
-            android:background="@color/colorAccentWithAlpha"
+            android:background="@color/appBackground"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
             <LinearLayout
-                android:layout_marginBottom="@dimen/card_layout_margin"
                 android:background="@drawable/bg_card_01"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:minHeight="50dp"
                 android:layout_height="wrap_content">
-
                 <LinearLayout
                     android:gravity="left|center_vertical"
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="match_parent">
-
                     <EditText
                         android:maxLines="1"
                         android:id="@+id/query"
@@ -55,9 +50,7 @@
                         android:hint="@string/guide_message_2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
-
                 </LinearLayout>
-
             </LinearLayout>
 
             <ListView

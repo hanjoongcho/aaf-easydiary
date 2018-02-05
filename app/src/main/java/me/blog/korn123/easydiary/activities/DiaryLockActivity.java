@@ -1,6 +1,5 @@
 package me.blog.korn123.easydiary.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.simplemobiletools.commons.activities.BaseSimpleActivity;
 import com.simplemobiletools.commons.helpers.BaseConfig;
 
 import org.apache.commons.lang3.StringUtils;
@@ -18,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.github.hanjoongcho.commons.activities.BaseSimpleActivity;
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.FontUtils;

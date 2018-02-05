@@ -5,17 +5,15 @@
     android:gravity="center"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <TextView
         android:text="@string/google_drive_connect_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxLines="1"
-        android:textColor="@color/whiteText"
+        android:textColor="@color/default_text_color"
         android:textSize="@dimen/medium_text_size"/>
     <ProgressBar
         android:layout_marginTop="10dp"
         android:layout_width="20dp"
         android:layout_height="20dp" />
-
 </LinearLayout>

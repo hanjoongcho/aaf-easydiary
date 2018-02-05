@@ -1,30 +1,30 @@
 package me.blog.korn123.easydiary.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.graphics.ColorUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.github.hanjoongcho.commons.helpers.BaseConfig;
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
-import me.blog.korn123.easydiary.helper.TransitionHelper;
 
 /**
  * Created by CHO HANJOONG on 2016-12-31.
  */
 
 public class IntroActivity extends AppCompatActivity implements Handler.Callback {
-
     private final int START_MAIN_ACTIVITY = 0;
 
     @BindView(R.id.appName)
@@ -33,6 +33,9 @@ public class IntroActivity extends AppCompatActivity implements Handler.Callback
     @BindView(R.id.companyName)
     TextView mCompanyName;
 
+    @BindView(R.id.main_holder)
+    LinearLayout mMainHolder;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +66,12 @@ public class IntroActivity extends AppCompatActivity implements Handler.Callback
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        mMainHolder.setBackgroundColor(ColorUtils.setAlphaComponent(new BaseConfig(this).getPrimaryColor(), 255));
+    }
+
+    @Override
     public boolean handleMessage(Message message) {
         switch (message.what) {
             case START_MAIN_ACTIVITY:
@@ -86,5 +95,4 @@ public class IntroActivity extends AppCompatActivity implements Handler.Callback
 //        float commonSize = CommonUtils.loadFloatPreference(IntroActivity.this, Constants.SETTING_FONT_SIZE, mAppName.getTextSize());
 //        FontUtils.setFontsSize(commonSize, -1, mAppName, mCompanyName);
 //    }
-
 }
