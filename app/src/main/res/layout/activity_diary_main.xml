@@ -41,7 +41,7 @@
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="match_parent">
-                    <EditText
+                    <com.simplemobiletools.commons.views.MyEditText
                         android:maxLines="1"
                         android:id="@+id/query"
                         android:layout_marginLeft="@dimen/toolbar_icon_margin_side"
