@@ -2,7 +2,7 @@ package me.blog.korn123.easydiary.activities
 
 import android.content.Intent
 import io.github.hanjoongcho.commons.activities.BaseSimpleActivity
-import io.github.hanjoongcho.commons.extensions.updateTextColors
+import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.commons.constants.Constants
 import me.blog.korn123.commons.utils.CommonUtils
 
