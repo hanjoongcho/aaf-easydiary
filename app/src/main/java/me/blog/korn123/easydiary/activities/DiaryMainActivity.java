@@ -9,6 +9,7 @@ import android.os.Environment;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.graphics.ColorUtils;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -21,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
@@ -37,6 +39,7 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.github.hanjoongcho.commons.helpers.BaseConfig;
 import io.realm.Realm;
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.constants.Path;
@@ -78,6 +81,9 @@ public class DiaryMainActivity extends EasyDiaryActivity {
 
     @BindView(R.id.insertDiaryButton)
     FloatingActionButton mInsertDiaryButton;
+
+    @BindView(R.id.main_holder)
+    LinearLayout mMainHolder;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -132,6 +138,8 @@ public class DiaryMainActivity extends EasyDiaryActivity {
 //            mDiaryListView.setSelection(0);
             CommonUtils.saveIntPreference(DiaryMainActivity.this, Constants.PREVIOUS_ACTIVITY, -1);
         }
+
+        mMainHolder.setBackgroundColor(ColorUtils.setAlphaComponent(new BaseConfig(this).getPrimaryColor(), 50));
     }
 
     @Override
