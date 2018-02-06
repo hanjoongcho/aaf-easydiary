@@ -29,6 +29,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.github.hanjoongcho.commons.helpers.BaseConfig;
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.constants.Path;
 import me.blog.korn123.commons.utils.CommonUtils;
@@ -82,6 +83,14 @@ public class SettingsActivity extends EasyDiaryActivity {
         super.onResume();
         initPreference();
         setFontsStyle();
+        
+        if (new BaseConfig(this).isThemeChanged()) {
+            new BaseConfig(this).setThemeChanged(false);
+            Intent readDiaryIntent = new Intent(this, DiaryMainActivity.class);
+            readDiaryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(readDiaryIntent);
+            this.overridePendingTransition(0, 0);
+        }
     }
 
     @OnClick({ R.id.primaryColor, R.id.pref1, R.id.pref2, R.id.pref3, R.id.pref4, R.id.pref5, R.id.pref6, R.id.pref7, R.id.pref8, R.id.pref9, R.id.easyPhotoMap, R.id.easyPassword })

@@ -1,1 +1,4 @@
-include ':app'
+//include ':app'
+include ':app', ':commons', ':commons-android'
+project(':commons').projectDir = new File(settingsDir, "../Simple-Commons/commons")
+project(':commons-android').projectDir = new File(settingsDir, "../aaf-commons/commons-android")

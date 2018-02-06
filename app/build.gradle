@@ -92,8 +92,12 @@ dependencies {
     implementation 'com.github.amlcurran.showcaseview:library:5.4.3'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 
-    implementation 'io.github.hanjoongcho:commons-android:0.0.8'
-//    implementation project(":commons-android")
+    // https://github.com/SimpleMobileTools/Simple-Commons
+//    implementation 'com.simplemobiletools:commons:3.7.8'
+    implementation project(":commons")
+    
+//    implementation 'io.github.hanjoongcho:commons-android:0.0.8'
+    implementation project(":commons-android")
 }
 
 repositories {

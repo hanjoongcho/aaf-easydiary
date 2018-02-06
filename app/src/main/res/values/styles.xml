@@ -55,7 +55,8 @@
     </style>
 
     <style name="SettingActivityItem">
-        <item name="android:background">@drawable/click_effect_setting_item</item>
+        <item name="android:background">@drawable/click_effect_setting_item_default</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
         <item name="android:orientation">horizontal</item>
         <item name="android:gravity">center</item>
         <item name="android:paddingTop">10dp</item>

@@ -82,9 +82,6 @@ public class DiaryMainActivity extends EasyDiaryActivity {
     @BindView(R.id.insertDiaryButton)
     FloatingActionButton mInsertDiaryButton;
 
-    @BindView(R.id.main_holder)
-    LinearLayout mMainHolder;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,8 +135,6 @@ public class DiaryMainActivity extends EasyDiaryActivity {
 //            mDiaryListView.setSelection(0);
             CommonUtils.saveIntPreference(DiaryMainActivity.this, Constants.PREVIOUS_ACTIVITY, -1);
         }
-
-        mMainHolder.setBackgroundColor(ColorUtils.setAlphaComponent(new BaseConfig(this).getPrimaryColor(), 50));
     }
 
     @Override

@@ -2,10 +2,8 @@ package me.blog.korn123.easydiary.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +11,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.simplemobiletools.commons.helpers.BaseConfig;
-
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
+import io.github.hanjoongcho.commons.helpers.BaseConfig;
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.DateUtils;
@@ -70,8 +67,8 @@ public class TimelineItemAdapter extends ArrayAdapter<DiaryDto> {
             mPrimaryColor = new BaseConfig(context).getPrimaryColor();
         }
         holder.titleContainer.setBackgroundColor(mPrimaryColor);
-        GradientDrawable drawable = (GradientDrawable) holder.circle.getDrawable();
-        drawable.setColor(mPrimaryColor);
+//        GradientDrawable drawable = (GradientDrawable) holder.circle.getDrawable();
+//        drawable.setColor(mPrimaryColor);
 
         setFontsTypeface(holder);
         setFontsSize(holder);

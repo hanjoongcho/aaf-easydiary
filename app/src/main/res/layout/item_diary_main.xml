@@ -4,31 +4,27 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-
     <LinearLayout
         android:padding="10dp"
-        android:background="@drawable/click_effect_diary_main_item"
+        android:foreground="?attr/selectableItemBackground"
+        android:background="@drawable/click_effect_diary_main_item_default"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <LinearLayout
             android:padding="5dp"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
             <ImageView
                 android:id="@+id/weather"
                 android:layout_marginRight="10dp"
                 android:layout_width="32dp"
                 android:layout_height="32dp" />
-
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
                 <TextView
                     android:textColor="@color/defaultText"
                     android:paddingTop="5dp"
@@ -45,9 +41,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/large_text_size"
                     android:gravity="right" />
-
             </LinearLayout>
-
         </LinearLayout>
 
         <TextView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -60,5 +54,4 @@
             android:textSize="@dimen/large_text_size"
             android:gravity="left" />
     </LinearLayout>
-
 </LinearLayout>
