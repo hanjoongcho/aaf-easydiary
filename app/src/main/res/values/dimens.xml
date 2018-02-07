@@ -23,6 +23,7 @@
     <dimen name="card_layout_margin">3dp</dimen>
 
     <dimen name="item_timeline_title_margin_top">3dp</dimen>
+    <dimen name="item_timeline_margin">30dp</dimen>
 
     <!-- kakao common -->
     <dimen name="title_text_size">18dp</dimen>
@@ -74,5 +75,4 @@
     <dimen name="big_text_size">18sp</dimen>
     <dimen name="actionbar_text_size">20sp</dimen>
     <dimen name="extra_big_text_size">22sp</dimen>
-
 </resources>

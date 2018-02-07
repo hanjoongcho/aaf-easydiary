@@ -5,9 +5,9 @@
     android:layout_height="match_parent">
     <me.blog.korn123.easydiary.views.LabelLayout
         android:gravity="center"
+        android:background="@color/colorPrimary"
         android:id="@+id/titleContainer"
         android:orientation="horizontal"
-        android:layout_marginTop="@dimen/item_timeline_title_margin_top"
         android:layout_width="match_parent"
         android:layout_height="30dp">
         <ImageView
@@ -28,46 +28,50 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <LinearLayout
-            android:gravity="center"
-            android:layout_width="30dp"
+        <RelativeLayout
+            android:layout_marginLeft="34dp"
+            android:layout_width="20dp"
             android:layout_height="wrap_content">
             <TextView
+                android:id="@+id/topLine"
                 android:background="@drawable/bg_card_timeline_03"
                 android:layout_width="3dp"
-                android:layout_height="10dp" />
-        </LinearLayout>
-
+                android:layout_height="5dp" />
+        </RelativeLayout>
+        
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <FrameLayout
-                android:layout_width="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_width="20dp"
                 android:layout_height="match_parent">
                 <TextView
-                    android:layout_marginTop="2.5dp"
-                    android:layout_gravity="right"
-                    android:id="@+id/horizontalLine2"
-                    android:background="@drawable/bg_card_timeline_03"
-                    android:layout_width="15dp"
-                    android:layout_height="3dp" />
-                <LinearLayout
-                    android:layout_gravity="center_horizontal"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="4dp"
                     android:background="@drawable/bg_card_timeline_03"
                     android:layout_width="3dp"
                     android:layout_height="match_parent">
-                </LinearLayout>
+                </TextView>
+                <TextView
+                    android:id="@+id/horizontalLine2"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/bg_card_timeline_03"
+                    android:layout_width="20dp"
+                    android:layout_height="3dp" />
                 <ImageView
                     android:id="@+id/circle"
-                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="7dp"
+                    android:layout_gravity="left"
                     android:src="@drawable/bg_card_timeline_circle"
-                    android:layout_width="8dp"
-                    android:layout_height="8dp" />
+                    android:layout_width="10dp"
+                    android:layout_height="10dp" />
             </FrameLayout>
-
             <TextView
-                android:layout_marginRight="30dp"
+                android:layout_marginRight="34dp"
                 android:textSize="@dimen/large_text_size"
                 android:textColor="@color/defaultText"
                 android:id="@+id/text1"
@@ -77,5 +81,15 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content" />
         </LinearLayout>
+        
+        <RelativeLayout
+            android:layout_marginLeft="34dp"
+            android:layout_width="20dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:background="@drawable/bg_card_timeline_03"
+                android:layout_width="3dp"
+                android:layout_height="5dp" />
+        </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

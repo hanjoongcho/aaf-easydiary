@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
@@ -56,6 +57,7 @@ public class TimelineItemAdapter extends ArrayAdapter<DiaryDto> {
             holder.titleContainer = (ViewGroup) row.findViewById(R.id.titleContainer);
             holder.weather = (ImageView) row.findViewById(R.id.weather);
             holder.circle = (ImageView) row.findViewById(R.id.circle);
+            holder.topLine = row.findViewById(R.id.topLine);
             row.setTag(holder);
         } else {
             holder = (ViewHolder)row.getTag();
@@ -74,11 +76,13 @@ public class TimelineItemAdapter extends ArrayAdapter<DiaryDto> {
         DiaryDto diaryDto = list.get(position);
         if (position > 0 && StringUtils.equals(diaryDto.getDateString(), list.get(position - 1).getDateString())) {
             holder.titleContainer.setVisibility(View.GONE);
+            holder.topLine.setVisibility(View.GONE);
             holder.weather.setImageResource(0);
         } else {
 //            holder.title.setText(diaryDto.getDateString() + " " + DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis(), "EEEE"));
             holder.title.setText(DateUtils.getFullPatternDate(diaryDto.getCurrentTimeMillis()));
             holder.titleContainer.setVisibility(View.VISIBLE);
+            holder.topLine.setVisibility(View.VISIBLE);
             // 현재 날짜의 목록을 조회
             List<DiaryDto> mDiaryList = EasyDiaryDbHelper.readDiaryByDateString(diaryDto.getDateString());
             boolean initWeather = false;
@@ -131,5 +135,6 @@ public class TimelineItemAdapter extends ArrayAdapter<DiaryDto> {
         ViewGroup titleContainer;
         ImageView weather;
         ImageView circle;
+        TextView topLine;
     }
 }
