@@ -51,9 +51,7 @@ public class TimelineItemAdapter extends ArrayAdapter<DiaryDto> {
             row = inflater.inflate(this.layoutResourceId, parent, false);
             holder = new ViewHolder();
             holder.textView1 = (TextView) row.findViewById(R.id.text1);
-            holder.textView2 = (TextView) row.findViewById(R.id.text2);
             holder.title = (TextView) row.findViewById(R.id.title);
-            holder.horizontalLine1 = row.findViewById(R.id.horizontalLine1);
             holder.horizontalLine2 = row.findViewById(R.id.horizontalLine2);
             holder.titleContainer = (ViewGroup) row.findViewById(R.id.titleContainer);
             holder.weather = (ImageView) row.findViewById(R.id.weather);
@@ -102,24 +100,7 @@ public class TimelineItemAdapter extends ArrayAdapter<DiaryDto> {
             }
         }
 
-        if (position % 2 == 0) {
-            holder.textView1.setVisibility(View.VISIBLE);
-            holder.textView2.setVisibility(View.INVISIBLE);
-            holder.textView2.setText("");
-            holder.horizontalLine1.setVisibility(View.VISIBLE);
-            holder.horizontalLine2.setVisibility(View.INVISIBLE);
-            holder.textView1.setText(DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis(), DateUtils.TIME_PATTERN_WITH_SECONDS) + "\n" + getSummary(diaryDto));
-//            holder.textView1.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        } else {
-            holder.textView1.setVisibility(View.INVISIBLE);
-            holder.textView1.setText("");
-            holder.textView2.setVisibility(View.VISIBLE);
-            holder.horizontalLine1.setVisibility(View.INVISIBLE);
-            holder.horizontalLine2.setVisibility(View.VISIBLE);
-            holder.textView2.setText(DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis(), DateUtils.TIME_PATTERN_WITH_SECONDS) + "\n" + getSummary(diaryDto));
-//            holder.textView2.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        }
-
+        holder.textView1.setText(DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis(), DateUtils.TIME_PATTERN_WITH_SECONDS) + "\n" + getSummary(diaryDto));
         return row;
     }
 
@@ -134,17 +115,16 @@ public class TimelineItemAdapter extends ArrayAdapter<DiaryDto> {
     }
     
     private void setFontsTypeface(ViewHolder holder) {
-        FontUtils.setFontsTypeface(context, context.getAssets(), null, holder.textView1, holder.textView2, holder.title);
+        FontUtils.setFontsTypeface(context, context.getAssets(), null, holder.textView1, holder.title);
     }
 
     private void setFontsSize(ViewHolder holder) {
         float commonSize = CommonUtils.loadFloatPreference(context, Constants.SETTING_FONT_SIZE, holder.textView1.getTextSize());
-        FontUtils.setFontsSize(commonSize, -1, holder.textView1, holder.textView2, holder.title);
+        FontUtils.setFontsSize(commonSize, -1, holder.textView1, holder.title);
     }
 
     private static class ViewHolder {
         TextView textView1;
-        TextView textView2;
         TextView title;
         View horizontalLine1;
         View horizontalLine2;
