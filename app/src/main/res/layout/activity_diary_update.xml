@@ -101,7 +101,7 @@
                 <EditText
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
-                    android:textColor="@color/defaultText"
+                    android:textColor="@color/default_text_color"
                     android:gravity="center_vertical"
                     android:id="@+id/title"
                     android:background="@drawable/bg_card_01"
@@ -125,7 +125,7 @@
                         android:padding="10dp"
                         android:background="@drawable/bg_card_01"
                         android:hint="@string/contents_text_hint"
-                        android:textColor="@color/defaultText"
+                        android:textColor="@color/default_text_color"
                         android:textSize="@dimen/large_text_size"
                         android:id="@+id/contents"
                         android:gravity="left"

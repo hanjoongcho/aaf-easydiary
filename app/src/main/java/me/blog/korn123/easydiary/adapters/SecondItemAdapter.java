@@ -48,7 +48,7 @@ public class SecondItemAdapter extends ArrayAdapter<Map<String, String>> {
         if (position == mSecond) {
             holder.textView.setTextColor(context.getResources().getColor(R.color.colorPrimary));
         } else {
-            holder.textView.setTextColor(context.getResources().getColor(R.color.summaryText));
+            holder.textView.setTextColor(context.getResources().getColor(R.color.default_text_color));
         }
         return row;
     }

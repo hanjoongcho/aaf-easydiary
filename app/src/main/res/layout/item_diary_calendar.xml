@@ -20,7 +20,7 @@
         <TextView xmlns:android="http://schemas.android.com/apk/res/android"
             android:paddingBottom="5dp"
             android:paddingTop="5dp"
-            android:textColor="@color/defaultText"
+            android:textColor="@color/default_text_color"
             android:ellipsize="end"
             android:maxLines="1"
             android:id="@+id/text1"

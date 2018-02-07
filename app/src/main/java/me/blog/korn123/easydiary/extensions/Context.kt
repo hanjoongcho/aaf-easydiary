@@ -47,10 +47,7 @@ fun Context.updateTextColors(viewGroup: ViewGroup, tmpTextColor: Int = 0, tmpAcc
                     is MySeekBar -> it.setColors(textColor, accentColor, backgroundColor)
                     is MyButton -> it.setColors(textColor, accentColor, backgroundColor)
                     is ModalView -> it.setBackgroundColor(accentColor)
-                    is LabelLayout -> {
-                        Log.i("", "call..")
-                        it.setBackgroundColor(accentColor)
-                    }
+                    is LabelLayout -> it.setBackgroundColor(accentColor)
                     is ViewGroup -> updateTextColors(it, textColor, accentColor)
                 }
             }

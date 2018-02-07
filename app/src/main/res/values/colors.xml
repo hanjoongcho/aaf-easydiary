@@ -12,23 +12,10 @@
     <color name="color_primary_dark">@color/colorPrimaryDark</color>
     <color name="color_accent">@color/colorAccent</color>
     
-    <color name="defaultText">#4A4A4C</color>
-    <color name="summaryText">#79797c</color>
-
-    <color name="whiteText">#FFFFFF</color>
-    <color name="blackText">#000000</color>
     <color name="diaryCountText">#FF33B5E5</color>
-
     <color name="calendarBackground">#FFFFFF</color>
 
     <!--Showcase Color-->
     <color name="showCaseViewBackground">#e570A3B4</color>
     <color name="showCaseButtonBackground">#4A4A4C</color>
-
-    <!-- https://github.com/SimpleMobileTools/Simple-Commons START-->
-    <color name="pressed_item_foreground">#08000000</color>
-    <color name="activated_item_foreground">#44888888</color>
-    <color name="divider_weak">#44cccccc</color>
-    <color name="divider_strong">#88cccccc</color>
-    <color name="gradient_grey_start">#AA000000</color>
 </resources>

@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.graphics.ColorUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -64,6 +65,8 @@ import me.blog.korn123.easydiary.adapters.DiaryWeatherItemAdapter;
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
 import me.blog.korn123.easydiary.models.DiaryDto;
 import me.blog.korn123.easydiary.models.PhotoUriDto;
+
+import static me.blog.korn123.commons.constants.Constants.THUMBNAIL_BACKGROUND_ALPHA;
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -242,12 +245,10 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
     }
 
     private void initBottomContainer() {
-
         // set bottom thumbnail container
         mPrimaryColor = new BaseConfig(DiaryUpdateActivity.this).getPrimaryColor();
         GradientDrawable drawable = (GradientDrawable) mPhotoView.getBackground();
-        drawable.setColor(mPrimaryColor);
-        drawable.setAlpha(Constants.THUMBNAIL_BACKGROUND_ALPHA);
+        drawable.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, THUMBNAIL_BACKGROUND_ALPHA));
     }
 
     private void setFontsStyle() {
@@ -301,8 +302,7 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
                 imageView.setLayoutParams(layoutParams);
                 Drawable drawable = getResources().getDrawable(R.drawable.bg_card_thumbnail);
                 GradientDrawable gradient = (GradientDrawable) drawable;
-                gradient.setColor(mPrimaryColor);
-                gradient.setAlpha(Constants.THUMBNAIL_BACKGROUND_ALPHA);
+                gradient.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, THUMBNAIL_BACKGROUND_ALPHA));
                 imageView.setBackground(gradient);
                 imageView.setImageBitmap(bitmap);
                 imageView.setScaleType(ImageView.ScaleType.CENTER);
@@ -460,8 +460,7 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
                         imageView.setLayoutParams(layoutParams);
                         Drawable drawable = getResources().getDrawable(R.drawable.bg_card_thumbnail);
                         GradientDrawable gradient = (GradientDrawable) drawable;
-                        gradient.setColor(mPrimaryColor);
-                        gradient.setAlpha(Constants.THUMBNAIL_BACKGROUND_ALPHA);
+                        gradient.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, THUMBNAIL_BACKGROUND_ALPHA));
                         imageView.setBackground(gradient);
                         imageView.setImageBitmap(bitmap);
                         imageView.setScaleType(ImageView.ScaleType.CENTER);

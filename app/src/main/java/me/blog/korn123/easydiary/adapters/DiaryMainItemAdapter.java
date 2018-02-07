@@ -2,18 +2,22 @@ package me.blog.korn123.easydiary.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.TypedValue;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
+import me.blog.korn123.easydiary.extensions.ContextKt;
+import me.blog.korn123.easydiary.extensions.ContextKt.*;
+import io.github.hanjoongcho.commons.helpers.BaseConfig;
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.DateUtils;
@@ -54,10 +58,11 @@ public class DiaryMainItemAdapter extends ArrayAdapter<DiaryDto> {
             LayoutInflater inflater = ((Activity)this.context).getLayoutInflater();
             row = inflater.inflate(this.layoutResourceId, parent, false);
             holder = new ViewHolder();
-            holder.textView1 = ((TextView)row.findViewById(R.id.text1));
-            holder.textView2 = ((TextView)row.findViewById(R.id.text2));
-            holder.textView3 = ((TextView)row.findViewById(R.id.text3));
-            holder.imageView = ((ImageView) row.findViewById(R.id.weather));
+            holder.textView1 = row.findViewById(R.id.text1);
+            holder.textView2 = row.findViewById(R.id.text2);
+            holder.textView3 = row.findViewById(R.id.text3);
+            holder.imageView = row.findViewById(R.id.weather);
+            holder.item_holder = row.findViewById(R.id.item_holder);
             row.setTag(holder);
         } else {
             holder = (ViewHolder)row.getTag();
@@ -89,6 +94,9 @@ public class DiaryMainItemAdapter extends ArrayAdapter<DiaryDto> {
         holder.textView3.setText(DateUtils.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
         EasyDiaryUtils.initWeatherView(holder.imageView, diaryDto.getWeather());
 
+        GradientDrawable drawable = (GradientDrawable) holder.item_holder.getBackground();
+        drawable.setColor(new BaseConfig(context).getCustomBackgroundColor());
+        ContextKt.updateTextColors(context, holder.item_holder, 0, 0);
         return row;
     }
 
@@ -106,6 +114,6 @@ public class DiaryMainItemAdapter extends ArrayAdapter<DiaryDto> {
         TextView textView2;
         TextView textView3;
         ImageView imageView;
+        LinearLayout item_holder;
     }
-
 }
