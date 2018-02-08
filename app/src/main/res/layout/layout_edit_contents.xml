@@ -1,0 +1,68 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_holder"
+    android:orientation="vertical"
+    android:padding="@dimen/card_layout_padding"
+    android:background="@color/colorAccentWithAlpha"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="@dimen/card_layout_margin"
+        android:background="@drawable/bg_card_01"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Spinner
+            android:id="@+id/weatherSpinner"
+            android:spinnerMode="dropdown"
+            android:layout_marginLeft="5dp"
+            android:minHeight="45dp"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </Spinner>
+
+        <EditText
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:background="@drawable/bg_card_01"
+            android:textColor="@color/default_text_color"
+            android:gravity="center_vertical"
+            android:id="@+id/title"
+            android:hint="@string/guide_message"
+            android:textSize="@dimen/large_text_size"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_marginBottom="@dimen/card_layout_margin"
+        android:fillViewport="true"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dp">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <EditText
+                android:padding="10dp"
+                android:background="@drawable/bg_card_01"
+                android:textColor="@color/default_text_color"
+                android:textSize="@dimen/large_text_size"
+                android:id="@+id/contents"
+                android:hint="@string/contents_text_hint"
+                android:gravity="left"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="0dp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <include layout="@layout/layout_edit_photo_container" />
+</LinearLayout>

@@ -9,7 +9,6 @@ import android.os.Environment;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.graphics.ColorUtils;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,13 +18,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
@@ -39,7 +34,6 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.github.hanjoongcho.commons.helpers.BaseConfig;
 import io.realm.Realm;
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.constants.Path;
@@ -116,7 +110,6 @@ public class DiaryMainActivity extends EasyDiaryActivity {
             CommonUtils.saveBooleanPreference(this, Constants.INIT_DUMMY_DATA_FLAG, true);
         }
 
-        bindView();
         bindEvent();
         initShowcase();
         EasyDiaryUtils.initWorkingDirectory(Environment.getExternalStorageDirectory().getAbsolutePath() + Path.USER_CUSTOM_FONTS_DIRECTORY);
@@ -280,10 +273,6 @@ public class DiaryMainActivity extends EasyDiaryActivity {
                 .build();
         mShowcaseView.setButtonText(getString(R.string.read_diary_showcase_button_1));
         mShowcaseView.setButtonPosition(centerParams);
-    }
-
-    private void bindView() {
-        mSpeechButton = (FloatingActionButton)findViewById(R.id.speechButton);
     }
 
     private void bindEvent() {

@@ -12,11 +12,9 @@ import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -125,14 +123,11 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
-    @OnClick({R.id.speechButton, R.id.zoomIn, R.id.zoomOut, R.id.saveContents, R.id.photoView, R.id.datePicker, R.id.timePicker, R.id.secondsPicker, R.id.microphone})
+    @OnClick({R.id.zoomIn, R.id.zoomOut, R.id.saveContents, R.id.photoView, R.id.datePicker, R.id.timePicker, R.id.secondsPicker, R.id.microphone})
     public void onClick(View view) {
         float fontSize = mContents.getTextSize();
 
         switch(view.getId()) {
-            case R.id.speechButton:
-                showSpeechDialog();
-                break;
             case R.id.zoomIn:
                 CommonUtils.saveFloatPreference(DiaryUpdateActivity.this, Constants.SETTING_FONT_SIZE, fontSize + 5);
                 setFontsStyle();
@@ -487,29 +482,12 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
 //                this.overridePendingTransition(R.anim.anim_left_to_center, R.anim.anim_center_to_right);
                 super.onBackPressed();
                 break;
-//            case R.id.action_settings:
-//                Intent settingIntent = new Intent(DiaryUpdateActivity.this, SettingsActivity.class);
-//                startActivity(settingIntent);
-//                break;
-//            case R.id.toolbarToggle:
-//                if (mSubToolbar.getVisibility() == View.GONE) {
-//                    mSubToolbar.setVisibility(View.VISIBLE);
-//                } else if (mSubToolbar.getVisibility() == View.VISIBLE) {
-//                    mSubToolbar.setVisibility(View.GONE);
-//                }
-//                break;
         }
 //        return super.onOptionsItemSelected(item);
         return true;
     }
 
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.diary_common, menu);
-//        return true;
-//    }
-
     class PhotoClickListener implements View.OnClickListener {
-
         int index;
         PhotoClickListener(int index) {
             this.index = index;
@@ -536,5 +514,4 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
             );
         }
     }
-
 }

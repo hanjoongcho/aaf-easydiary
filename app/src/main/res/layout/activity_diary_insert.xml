@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -19,155 +20,9 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="50dp">
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:gravity="left|center_vertical"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent">
-                    <ImageView
-                        android:layout_marginLeft="@dimen/toolbar_icon_margin_side"
-                        android:layout_marginRight="@dimen/toolbar_icon_margin_right"
-                        android:id="@+id/zoomIn"
-                        android:src="@drawable/plus_w"
-                        style="@style/ToolBarIcon"/>
-                    <ImageView
-                        android:layout_marginRight="@dimen/toolbar_icon_margin_right"
-                        android:id="@+id/zoomOut"
-                        android:src="@drawable/minus_w"
-                        style="@style/ToolBarIcon"/>
-                    <ImageView
-                        android:layout_marginRight="@dimen/toolbar_icon_margin_right"
-                        android:id="@+id/datePicker"
-                        android:src="@drawable/calendar_4_w"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        style="@style/ToolBarIcon"/>
-                    <ImageView
-                        android:layout_marginRight="@dimen/toolbar_icon_margin_right"
-                        android:id="@+id/timePicker"
-                        android:src="@drawable/time_8_w"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        style="@style/ToolBarIcon"/>
-                    <ImageView
-                        android:layout_marginRight="@dimen/toolbar_icon_margin_right"
-                        android:id="@+id/secondsPicker"
-                        android:src="@drawable/time_w"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        style="@style/ToolBarIcon"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:gravity="right|center_vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
-                    <ImageView
-                        android:layout_marginRight="@dimen/toolbar_icon_margin_right"
-                        android:id="@+id/microphone"
-                        android:src="@drawable/microphone"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        style="@style/ToolBarIcon"/>
-                    <ImageView
-                        android:layout_marginRight="@dimen/toolbar_icon_margin_side"
-                        android:id="@+id/saveContents"
-                        android:src="@drawable/save_w"
-                        android:layout_gravity="right|center_vertical"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        style="@style/ToolBarIcon"/>
-                </LinearLayout>
-            </LinearLayout>
+            <include layout="@layout/layout_edit_toolbar_sub" />
         </android.support.design.widget.AppBarLayout>
 
-        <LinearLayout
-            android:id="@+id/main_holder"
-            android:orientation="vertical"
-            android:padding="@dimen/card_layout_padding"
-            android:background="@color/colorAccentWithAlpha"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <LinearLayout
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="@dimen/card_layout_margin"
-                android:background="@drawable/bg_card_01"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <Spinner
-                    android:layout_marginLeft="5dp"
-                    android:spinnerMode="dropdown"
-                    android:id="@+id/weatherSpinner"
-                    android:minHeight="45dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                </Spinner>
-
-                <EditText
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    android:background="@drawable/bg_card_01"
-                    android:textColor="@color/default_text_color"
-                    android:gravity="center_vertical"
-                    android:id="@+id/title"
-                    android:hint="@string/guide_message"
-                    android:textSize="@dimen/large_text_size"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <ScrollView
-                android:layout_marginBottom="@dimen/card_layout_margin"
-                android:fillViewport="true"
-                android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:layout_height="0dp">
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                    <EditText
-                        android:padding="10dp"
-                        android:background="@drawable/bg_card_01"
-                        android:textColor="@color/default_text_color"
-                        android:textSize="@dimen/large_text_size"
-                        android:id="@+id/contents"
-                        android:hint="@string/contents_text_hint"
-                        android:gravity="left"
-                        android:layout_width="match_parent"
-                        android:layout_weight="1"
-                        android:layout_height="0dp" />
-                </LinearLayout>
-            </ScrollView>
-
-            <HorizontalScrollView
-                android:layout_width="wrap_content"
-                android:layout_height="50dp">
-                <LinearLayout
-                    android:id="@+id/photoContainer"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
-                    <ImageView
-                        android:id="@+id/photoView"
-                        android:scaleType="center"
-                        android:background="@drawable/bg_card_thumbnail"
-                        android:src="@drawable/image_2_w"
-                        android:layout_width="70dp"
-                        android:layout_height="50dp" />
-                </LinearLayout>
-            </HorizontalScrollView>
-        </LinearLayout>
+        <include layout="@layout/layout_edit_contents" />
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>
