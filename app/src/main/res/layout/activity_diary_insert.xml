@@ -5,12 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -21,7 +19,6 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
-
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -90,27 +87,30 @@
         </android.support.design.widget.AppBarLayout>
 
         <LinearLayout
+            android:id="@+id/main_holder"
             android:orientation="vertical"
             android:padding="@dimen/card_layout_padding"
             android:background="@color/colorAccentWithAlpha"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
             <LinearLayout
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:gravity="center_vertical"
                 android:layout_marginBottom="@dimen/card_layout_margin"
                 android:background="@drawable/bg_card_01"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:minHeight="50dp"
                 android:layout_height="wrap_content">
-
                 <Spinner
                     android:layout_marginLeft="5dp"
                     android:spinnerMode="dropdown"
                     android:id="@+id/weatherSpinner"
+                    android:minHeight="45dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content">
                 </Spinner>
 
                 <EditText
@@ -124,7 +124,6 @@
                     android:textSize="@dimen/large_text_size"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
-
             </LinearLayout>
 
             <ScrollView
@@ -169,9 +168,6 @@
                         android:layout_height="50dp" />
                 </LinearLayout>
             </HorizontalScrollView>
-
         </LinearLayout>
-
     </LinearLayout>
-
 </android.support.design.widget.CoordinatorLayout>

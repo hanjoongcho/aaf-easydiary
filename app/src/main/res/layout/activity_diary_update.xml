@@ -85,28 +85,29 @@
             android:layout_height="match_parent">
             <LinearLayout
                 android:gravity="center_vertical"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:layout_marginBottom="@dimen/card_layout_margin"
                 android:background="@drawable/bg_card_01"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:minHeight="50dp"
                 android:layout_height="wrap_content">
                 <Spinner
                     android:layout_marginLeft="5dp"
                     android:spinnerMode="dropdown"
                     android:id="@+id/weatherSpinner"
+                    android:minHeight="45dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content">
                 </Spinner>
                 <EditText
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
                     android:textColor="@color/default_text_color"
                     android:gravity="center_vertical"
                     android:id="@+id/title"
                     android:background="@drawable/bg_card_01"
                     android:hint="@string/guide_message"
-                    android:textSize="@dimen/large_text_size"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -122,7 +123,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                     <EditText
-                        android:padding="10dp"
+                        android:padding="@dimen/card_contents_padding"
                         android:background="@drawable/bg_card_01"
                         android:hint="@string/contents_text_hint"
                         android:textColor="@color/default_text_color"
