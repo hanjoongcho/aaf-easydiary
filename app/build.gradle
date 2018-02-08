@@ -10,8 +10,8 @@ android {
         applicationId "me.blog.korn123.easydiary"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 64
-        versionName "1.4.8"
+        versionCode 65
+        versionName "1.4.8-beta"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -24,12 +24,6 @@ android {
                     def releaseFileName = "easy_diary-$versionName-release.apk"
                     println("test message: $releaseFileName")
                     output.outputFileName = releaseFileName
-//                    def date = new Date();
-//                    def formattedDate = date.format('yyyyMMddHHmmss')
-//                    new File(output.outputFile.parent, output.outputFile.name.replace("-release", "-easy_diary-" + formattedDate)
-//                            //for Debug use output.outputFile = new File(output.outputFile.parent,
-//                            //                             output.outputFile.name.replace("-debug", "-" + formattedDate)
-//                    )
                 }
             }
         }
@@ -93,11 +87,11 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 
     // https://github.com/SimpleMobileTools/Simple-Commons
-    implementation 'com.simplemobiletools:commons:3.7.8'
-//    implementation project(":commons")
+//    implementation 'com.simplemobiletools:commons:3.7.8'
+    implementation project(":commons")
     
-    implementation 'io.github.hanjoongcho:commons-android:0.1.1'
-//    implementation project(":commons-android")
+//    implementation 'io.github.hanjoongcho:commons-android:0.1.1'
+    implementation project(":commons-android")
 }
 
 repositories {

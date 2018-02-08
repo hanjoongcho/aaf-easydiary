@@ -9,6 +9,7 @@ import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.commons.constants.Constants
 import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.helper.BACKGROUND_ALPHA
 
 /**
  * Created by hanjoong on 2017-05-03.
@@ -38,7 +39,7 @@ open class EasyDiaryActivity : BaseSimpleActivity() {
 
         updateTextColors(findViewById(android.R.id.content))
         findViewById<View>(R.id.main_holder)?.let {
-            it.setBackgroundColor(ColorUtils.setAlphaComponent(BaseConfig(this).primaryColor, 50))
+            it.setBackgroundColor(ColorUtils.setAlphaComponent(BaseConfig(this).primaryColor, BACKGROUND_ALPHA))
         }
     }
 }
