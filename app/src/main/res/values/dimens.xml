@@ -10,4 +10,6 @@
 
     <dimen name="card_layout_padding">3dp</dimen>
     <dimen name="card_layout_margin">3dp</dimen>
+
+    <dimen name="card_contents_padding">15dp</dimen>
 </resources>

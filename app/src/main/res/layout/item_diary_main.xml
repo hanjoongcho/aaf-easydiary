@@ -6,14 +6,13 @@
     android:layout_height="wrap_content">
     <LinearLayout
         android:id="@+id/item_holder"
-        android:padding="10dp"
+        android:padding="@dimen/card_contents_padding"
         android:foreground="?attr/selectableItemBackground"
         android:background="@drawable/click_effect_diary_main_item_default"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
-            android:padding="5dp"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -28,7 +27,6 @@
                 android:layout_height="wrap_content">
                 <com.simplemobiletools.commons.views.MyTextView
                     android:textColor="@color/default_text_color"
-                    android:paddingTop="5dp"
                     android:paddingBottom="5dp"
                     android:id="@+id/text1"
                     android:layout_width="match_parent"
@@ -46,9 +44,9 @@
         </LinearLayout>
 
         <com.simplemobiletools.commons.views.MyTextView
+            android:layout_marginTop="@dimen/card_contents_padding"
             android:textColor="@color/default_text_color"
             android:maxLines="3"
-            android:padding="5dp"
             android:id="@+id/text2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

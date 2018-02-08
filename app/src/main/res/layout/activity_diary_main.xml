@@ -30,24 +30,20 @@
             android:layout_height="match_parent">
             <LinearLayout
                 android:background="@drawable/bg_card_01"
-                android:orientation="horizontal"
+                android:paddingLeft="@dimen/card_contents_padding"
+                android:paddingRight="@dimen/card_contents_padding"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:gravity="left|center_vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <LinearLayout
-                    android:gravity="left|center_vertical"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent">
-                    <com.simplemobiletools.commons.views.MyEditText
-                        android:maxLines="1"
-                        android:id="@+id/query"
-                        android:layout_marginLeft="@dimen/toolbar_icon_margin_side"
-                        android:layout_marginRight="@dimen/toolbar_icon_margin_side"
-                        android:gravity="center_vertical"
-                        android:hint="@string/guide_message_2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
+                <com.simplemobiletools.commons.views.MyEditText
+                    android:maxLines="1"
+                    android:id="@+id/query"
+                    android:gravity="center_vertical"
+                    android:hint="@string/guide_message_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
             <ListView

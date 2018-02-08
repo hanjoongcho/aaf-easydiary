@@ -6,18 +6,16 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:padding="10dp"
+        android:padding="@dimen/card_contents_padding"
         android:layout_marginBottom="@dimen/card_layout_margin"
         android:background="@drawable/bg_card_01"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
             <ImageView
                 android:id="@+id/weather"
                 android:layout_marginRight="10dp"
@@ -28,7 +26,6 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
                 <TextView
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
@@ -39,7 +36,6 @@
                     android:textSize="@dimen/large_text_size"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
-
                 <TextView
                     android:textColor="@color/default_text_color"
                     android:enabled="false"
@@ -48,11 +44,8 @@
                     android:textSize="@dimen/large_text_size"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
-
             </LinearLayout>
-
         </LinearLayout>
-
     </LinearLayout>
 
     <ScrollView
@@ -65,7 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <TextView
-                android:padding="10dp"
+                android:padding="@dimen/card_contents_padding"
                 android:enabled="false"
                 android:background="@drawable/bg_card_01"
                 android:textColor="@color/default_text_color"
@@ -89,8 +82,6 @@
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="match_parent">
-
         </LinearLayout>
     </HorizontalScrollView>
-
 </LinearLayout>
