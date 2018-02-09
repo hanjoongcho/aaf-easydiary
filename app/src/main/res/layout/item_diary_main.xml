@@ -8,7 +8,7 @@
         android:id="@+id/item_holder"
         android:padding="@dimen/card_contents_padding"
         android:foreground="?attr/selectableItemBackground"
-        android:background="@drawable/click_effect_diary_main_item_default"
+        android:background="@drawable/bg_card_diary"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

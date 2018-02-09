@@ -6,7 +6,7 @@
     <LinearLayout
         android:padding="@dimen/card_contents_padding"
         android:layout_marginBottom="@dimen/card_layout_margin"
-        android:background="@drawable/bg_card_01"
+        android:background="@drawable/bg_card_diary"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -57,7 +57,7 @@
             <com.simplemobiletools.commons.views.MyTextView
                 android:padding="@dimen/card_contents_padding"
                 android:enabled="false"
-                android:background="@drawable/bg_card_01"
+                android:background="@drawable/bg_card_diary"
                 android:textColor="@color/default_text_color"
                 android:textSize="@dimen/large_text_size"
                 android:id="@+id/contents"

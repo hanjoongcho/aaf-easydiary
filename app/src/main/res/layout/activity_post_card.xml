@@ -46,7 +46,7 @@
 
                             <LinearLayout
                                 android:id="@+id/contentsContainer"
-                                android:background="@drawable/bg_card_03"
+                                android:background="@drawable/bg_card_diary"
                                 android:padding="20dp"
                                 android:orientation="vertical"
                                 android:layout_width="match_parent"

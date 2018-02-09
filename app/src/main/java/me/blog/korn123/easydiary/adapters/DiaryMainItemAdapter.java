@@ -93,8 +93,6 @@ public class DiaryMainItemAdapter extends ArrayAdapter<DiaryDto> {
         holder.textView3.setText(DateUtils.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
         EasyDiaryUtils.initWeatherView(holder.imageView, diaryDto.getWeather());
 
-        GradientDrawable drawable = (GradientDrawable) holder.item_holder.getBackground();
-        drawable.setColor(new BaseConfig(context).getCustomBackgroundColor());
         ContextKt.updateTextColors(context, holder.item_holder, 0, 0);
         return row;
     }

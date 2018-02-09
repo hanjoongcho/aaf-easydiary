@@ -13,7 +13,7 @@
         android:paddingRight="5dp"
         android:gravity="center_vertical"
         android:layout_marginBottom="@dimen/card_layout_margin"
-        android:background="@drawable/bg_card_01"
+        android:background="@drawable/bg_card_diary"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -30,7 +30,7 @@
         <com.simplemobiletools.commons.views.MyEditText
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
-            android:background="@drawable/bg_card_01"
+            android:background="@drawable/bg_card_diary"
             android:textColor="@color/default_text_color"
             android:gravity="center_vertical"
             android:id="@+id/title"
@@ -52,7 +52,7 @@
             android:layout_height="match_parent">
             <com.simplemobiletools.commons.views.MyEditText
                 android:padding="10dp"
-                android:background="@drawable/bg_card_01"
+                android:background="@drawable/bg_card_diary"
                 android:textColor="@color/default_text_color"
                 android:textSize="@dimen/large_text_size"
                 android:id="@+id/contents"
