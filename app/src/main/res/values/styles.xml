@@ -55,7 +55,7 @@
     </style>
 
     <style name="SettingActivityItem">
-        <item name="android:background">@drawable/click_effect_setting_item_default</item>
+        <item name="android:background">@drawable/click_effect_diary_main_item_default</item>
         <item name="android:foreground">?attr/selectableItemBackground</item>
         <item name="android:orientation">horizontal</item>
         <item name="android:gravity">center</item>
@@ -63,6 +63,7 @@
         <item name="android:paddingRight">20dp</item>
         <item name="android:paddingLeft">20dp</item>
         <item name="android:paddingBottom">10dp</item>
+        <item name="android:layout_marginBottom">@dimen/card_layout_margin</item>
         <item name="android:textSize">@dimen/medium_text_size</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
