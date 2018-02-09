@@ -15,8 +15,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
-import me.blog.korn123.easydiary.extensions.ContextKt;
-import me.blog.korn123.easydiary.extensions.ContextKt.*;
 import io.github.hanjoongcho.commons.helpers.BaseConfig;
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.CommonUtils;
@@ -24,6 +22,7 @@ import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.commons.utils.EasyDiaryUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
+import me.blog.korn123.easydiary.extensions.ContextKt;
 import me.blog.korn123.easydiary.models.DiaryDto;
 
 /**

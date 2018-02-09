@@ -60,6 +60,7 @@ import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.commons.utils.PermissionUtils;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.adapters.DiaryWeatherItemAdapter;
+import me.blog.korn123.easydiary.extensions.ContextKt;
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
 import me.blog.korn123.easydiary.models.DiaryDto;
 import me.blog.korn123.easydiary.models.PhotoUriDto;

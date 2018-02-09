@@ -27,7 +27,7 @@
             android:layout_height="wrap_content">
         </Spinner>
 
-        <EditText
+        <com.simplemobiletools.commons.views.MyEditText
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:background="@drawable/bg_card_01"
@@ -50,7 +50,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <EditText
+            <com.simplemobiletools.commons.views.MyEditText
                 android:padding="10dp"
                 android:background="@drawable/bg_card_01"
                 android:textColor="@color/default_text_color"

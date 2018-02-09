@@ -28,8 +28,8 @@
             android:padding="@dimen/card_layout_padding"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <LinearLayout
-                android:background="@drawable/bg_card_01"
+            <me.blog.korn123.easydiary.views.DiaryCardLayout
+                android:background="@drawable/click_effect_diary_main_item_default"
                 android:paddingLeft="@dimen/card_contents_padding"
                 android:paddingRight="@dimen/card_contents_padding"
                 android:paddingTop="5dp"
@@ -44,7 +44,7 @@
                     android:hint="@string/guide_message_2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
-            </LinearLayout>
+            </me.blog.korn123.easydiary.views.DiaryCardLayout>
 
             <ListView
                 android:layout_marginTop="@dimen/card_layout_padding"

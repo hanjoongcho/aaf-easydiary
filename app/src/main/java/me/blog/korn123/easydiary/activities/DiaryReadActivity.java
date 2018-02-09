@@ -53,6 +53,7 @@ import me.blog.korn123.commons.utils.DialogUtils;
 import me.blog.korn123.commons.utils.EasyDiaryUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
+import me.blog.korn123.easydiary.extensions.ContextKt;
 import me.blog.korn123.easydiary.helper.TransitionHelper;
 import me.blog.korn123.easydiary.models.PhotoUriDto;
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
@@ -368,6 +369,7 @@ public class DiaryReadActivity extends EasyDiaryActivity {
 
         private int mSequence;
         private int mPrimaryColor = 0;
+        private ViewGroup mRootView = null;
 
         @BindView(R.id.contents)
         TextView mContents;
@@ -404,26 +406,25 @@ public class DiaryReadActivity extends EasyDiaryActivity {
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            // bind view
-            View rootView = inflater.inflate(R.layout.fragment_diary_read, container, false);
-            mContents = (TextView) rootView.findViewById(R.id.contents);
-            mTitle = (TextView) rootView.findViewById(R.id.title);
-            mDate = (TextView) rootView.findViewById(R.id.date);
-            mWeather = (ImageView) rootView.findViewById(R.id.weather);
-            mPhotoContainer = (ViewGroup) rootView.findViewById(R.id.photoContainer);
-            mHorizontalScrollView = (HorizontalScrollView) rootView.findViewById(R.id.photoContainerScrollView);
+            mRootView = (ViewGroup) inflater.inflate(R.layout.fragment_diary_read, container, false);
+            mContents = mRootView.findViewById(R.id.contents);
+            mTitle = mRootView.findViewById(R.id.title);
+            mDate = mRootView.findViewById(R.id.date);
+            mWeather = mRootView.findViewById(R.id.weather);
+            mPhotoContainer = mRootView.findViewById(R.id.photoContainer);
+            mHorizontalScrollView = mRootView.findViewById(R.id.photoContainerScrollView);
             mSequence = getArguments().getInt(Constants.DIARY_SEQUENCE);
-            return rootView;
+            return mRootView;
         }
 
         @Override
         public void onResume() {
             super.onResume();
-
             initContents();
             initBottomContainer();
             setFontsTypeface();
             setFontsSize();
+            ContextKt.updateTextColors(getContext(), mRootView, 0, 0);
         }
         
         private void initContents() {

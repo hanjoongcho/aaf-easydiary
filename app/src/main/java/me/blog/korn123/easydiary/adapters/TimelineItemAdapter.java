@@ -23,6 +23,7 @@ import me.blog.korn123.commons.utils.DateUtils;
 import me.blog.korn123.commons.utils.EasyDiaryUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
+import me.blog.korn123.easydiary.extensions.ContextKt;
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
 import me.blog.korn123.easydiary.models.DiaryDto;
 
@@ -51,13 +52,14 @@ public class TimelineItemAdapter extends ArrayAdapter<DiaryDto> {
             LayoutInflater inflater = ((Activity)this.context).getLayoutInflater();
             row = inflater.inflate(this.layoutResourceId, parent, false);
             holder = new ViewHolder();
-            holder.textView1 = (TextView) row.findViewById(R.id.text1);
-            holder.title = (TextView) row.findViewById(R.id.title);
+            holder.textView1 = row.findViewById(R.id.text1);
+            holder.title = row.findViewById(R.id.title);
             holder.horizontalLine2 = row.findViewById(R.id.horizontalLine2);
-            holder.titleContainer = (ViewGroup) row.findViewById(R.id.titleContainer);
-            holder.weather = (ImageView) row.findViewById(R.id.weather);
-            holder.circle = (ImageView) row.findViewById(R.id.circle);
+            holder.titleContainer = row.findViewById(R.id.titleContainer);
+            holder.weather = row.findViewById(R.id.weather);
+            holder.circle = row.findViewById(R.id.circle);
             holder.topLine = row.findViewById(R.id.topLine);
+            holder.item_holder = row.findViewById(R.id.item_holder);
             row.setTag(holder);
         } else {
             holder = (ViewHolder)row.getTag();
@@ -105,6 +107,7 @@ public class TimelineItemAdapter extends ArrayAdapter<DiaryDto> {
         }
 
         holder.textView1.setText(DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis(), DateUtils.TIME_PATTERN_WITH_SECONDS) + "\n" + getSummary(diaryDto));
+        ContextKt.updateTextColors(context, holder.item_holder, 0, 0);
         return row;
     }
 
@@ -130,11 +133,11 @@ public class TimelineItemAdapter extends ArrayAdapter<DiaryDto> {
     private static class ViewHolder {
         TextView textView1;
         TextView title;
-        View horizontalLine1;
         View horizontalLine2;
         ViewGroup titleContainer;
         ImageView weather;
         ImageView circle;
         TextView topLine;
+        LinearLayout item_holder;
     }
 }

@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="@dimen/card_layout_padding"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <LinearLayout
         android:padding="@dimen/card_contents_padding"
         android:layout_marginBottom="@dimen/card_layout_margin"
@@ -21,12 +19,11 @@
                 android:layout_marginRight="10dp"
                 android:layout_width="32dp"
                 android:layout_height="32dp" />
-
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <TextView
+                <com.simplemobiletools.commons.views.MyTextView
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
                     android:textColor="@color/default_text_color"
@@ -36,7 +33,7 @@
                     android:textSize="@dimen/large_text_size"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
-                <TextView
+                <com.simplemobiletools.commons.views.MyTextView
                     android:textColor="@color/default_text_color"
                     android:enabled="false"
                     android:gravity="center_vertical|right"
@@ -57,7 +54,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <TextView
+            <com.simplemobiletools.commons.views.MyTextView
                 android:padding="@dimen/card_contents_padding"
                 android:enabled="false"
                 android:background="@drawable/bg_card_01"

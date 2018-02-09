@@ -5,10 +5,13 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.util.Log
 import android.view.ViewGroup
+import com.simplemobiletools.commons.extensions.adjustAlpha
+import com.simplemobiletools.commons.extensions.applyColorFilter
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
 import com.simplemobiletools.commons.views.*
 import io.github.hanjoongcho.commons.views.ModalView
+import me.blog.korn123.easydiary.views.DiaryCardLayout
 import me.blog.korn123.easydiary.views.LabelLayout
 
 /**
@@ -42,12 +45,21 @@ fun Context.updateTextColors(viewGroup: ViewGroup, tmpTextColor: Int = 0, tmpAcc
                     is MySwitchCompat -> it.setColors(textColor, accentColor, backgroundColor)
                     is MyCompatRadioButton -> it.setColors(textColor, accentColor, backgroundColor)
                     is MyAppCompatCheckbox -> it.setColors(textColor, accentColor, backgroundColor)
-                    is MyEditText -> it.setColors(textColor, accentColor, backgroundColor)
+                    is MyEditText -> {
+                        it.setTextColor(textColor)
+                        it.setHintTextColor(textColor.adjustAlpha(0.5f))
+                        it.setLinkTextColor(accentColor)
+
+                    }
                     is MyFloatingActionButton -> it.backgroundTintList = ColorStateList.valueOf(accentColor)
                     is MySeekBar -> it.setColors(textColor, accentColor, backgroundColor)
                     is MyButton -> it.setColors(textColor, accentColor, backgroundColor)
                     is ModalView -> it.setBackgroundColor(accentColor)
                     is LabelLayout -> it.setBackgroundColor(accentColor)
+                    is DiaryCardLayout -> {
+                        it.setColors(textColor, accentColor, backgroundColor)
+                        updateTextColors(it, textColor, accentColor)
+                    }
                     is ViewGroup -> updateTextColors(it, textColor, accentColor)
                 }
             }

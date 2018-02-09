@@ -2,12 +2,12 @@ package me.blog.korn123.easydiary.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
@@ -19,7 +19,7 @@ import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.EasyDiaryUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
-import me.blog.korn123.easydiary.activities.PostCardActivity;
+import me.blog.korn123.easydiary.extensions.ContextKt;
 import me.blog.korn123.easydiary.models.DiaryDto;
 
 /**
@@ -45,8 +45,9 @@ public class DiaryCalendarItemAdapter extends ArrayAdapter<DiaryDto> {
             LayoutInflater inflater = ((Activity)this.context).getLayoutInflater();
             row = inflater.inflate(this.layoutResourceId, parent, false);
             holder = new ViewHolder();
-            holder.textView1 = ((TextView)row.findViewById(R.id.text1));
-            holder.imageView = ((ImageView) row.findViewById(R.id.weather));
+            holder.textView1 = row.findViewById(R.id.text1);
+            holder.imageView = row.findViewById(R.id.weather);
+            holder.item_holder = row.findViewById(R.id.item_holder);
             row.setTag(holder);
         } else {
             holder = (ViewHolder)row.getTag();
@@ -55,14 +56,15 @@ public class DiaryCalendarItemAdapter extends ArrayAdapter<DiaryDto> {
         setFontsTypeface(holder);
         setFontsSize(holder);
 
-        DiaryDto diaryDto = (DiaryDto)this.list.get(position);
+        DiaryDto diaryDto = list.get(position);
         if (StringUtils.isNotEmpty(diaryDto.getTitle())) {
             holder.textView1.setText(diaryDto.getTitle());
         } else {
             holder.textView1.setText(StringUtils.split(diaryDto.getContents(), "\n")[0]);
         }
-        EasyDiaryUtils.initWeatherView(holder.imageView, diaryDto.getWeather());
 
+        EasyDiaryUtils.initWeatherView(holder.imageView, diaryDto.getWeather());
+        ContextKt.updateTextColors(context, holder.item_holder, 0, 0);
         return row;
     }
 
@@ -78,5 +80,6 @@ public class DiaryCalendarItemAdapter extends ArrayAdapter<DiaryDto> {
     private static class ViewHolder {
         TextView textView1;
         ImageView imageView;
+        LinearLayout item_holder;
     }
 }
