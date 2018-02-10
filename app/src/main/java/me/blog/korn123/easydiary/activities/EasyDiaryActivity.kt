@@ -24,6 +24,7 @@ open class EasyDiaryActivity : BaseSimpleActivity() {
     }
 
     override fun onResume() {
+        isBackgroundColorFromPrimaryColor = true
         super.onResume()
         val enableLock = CommonUtils.loadBooleanPreference(this@EasyDiaryActivity, Constants.APP_LOCK_ENABLE)
         val pauseMillis = CommonUtils.loadLongPreference(this@EasyDiaryActivity, Constants.SETTING_PAUSE_MILLIS, 0)

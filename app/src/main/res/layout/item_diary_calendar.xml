@@ -1,32 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/item_holder"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <me.blog.korn123.easydiary.views.DiaryCardLayout
-        android:gravity="center_vertical"
-        android:padding="10dp"
-        android:background="@drawable/bg_card_diary"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/weather"
-            android:layout_marginRight="10dp"
-            android:layout_width="20dp"
-            android:layout_height="20dp" />
-        <com.simplemobiletools.commons.views.MyTextView
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
-            android:textColor="@color/default_text_color"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:id="@+id/text1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/large_text_size"
-            android:gravity="center_vertical" />
-    </me.blog.korn123.easydiary.views.DiaryCardLayout>
-</LinearLayout>
+    <android.support.v7.widget.CardView
+        style="@style/DiaryCard">
+        <LinearLayout
+            style="@style/linear_layout_vertical_type_b">
+            <ImageView
+                android:id="@+id/weather"
+                android:layout_marginRight="10dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
+            
+            <com.simplemobiletools.commons.views.MyTextView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:textColor="@color/default_text_color"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:id="@+id/text1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/large_text_size"
+                android:gravity="center_vertical" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</RelativeLayout>

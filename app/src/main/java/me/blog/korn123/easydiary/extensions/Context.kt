@@ -57,7 +57,7 @@ fun Context.updateTextColors(viewGroup: ViewGroup, tmpTextColor: Int = 0, tmpAcc
                     is ModalView -> it.setBackgroundColor(accentColor)
                     is LabelLayout -> it.setBackgroundColor(accentColor)
                     is CardView -> {
-                        it.setCardBackgroundColor(backgroundColor)
+                        //it.setCardBackgroundColor(backgroundColor)
                         updateTextColors(it, textColor, accentColor)
                     }
                     is ViewGroup -> updateTextColors(it, textColor, accentColor)

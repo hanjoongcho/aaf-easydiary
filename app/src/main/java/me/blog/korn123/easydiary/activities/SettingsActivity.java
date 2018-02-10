@@ -70,7 +70,7 @@ public class SettingsActivity extends EasyDiaryActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_setting);
+        setContentView(R.layout.activity_settings);
         ButterKnife.bind(this);
 
         setSupportActionBar((Toolbar)findViewById(R.id.toolbar));

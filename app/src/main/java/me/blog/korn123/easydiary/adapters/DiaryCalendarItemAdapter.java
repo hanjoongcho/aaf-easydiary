@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
@@ -80,6 +80,6 @@ public class DiaryCalendarItemAdapter extends ArrayAdapter<DiaryDto> {
     private static class ViewHolder {
         TextView textView1;
         ImageView imageView;
-        LinearLayout item_holder;
+        RelativeLayout item_holder;
     }
 }
