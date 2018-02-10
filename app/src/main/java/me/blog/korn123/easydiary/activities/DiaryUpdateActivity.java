@@ -132,10 +132,12 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
             case R.id.zoomIn:
                 CommonUtils.saveFloatPreference(DiaryUpdateActivity.this, Constants.SETTING_FONT_SIZE, fontSize + 5);
                 setFontsStyle();
+                setFontsSize();
                 break;
             case R.id.zoomOut:
                 CommonUtils.saveFloatPreference(DiaryUpdateActivity.this, Constants.SETTING_FONT_SIZE, fontSize - 5);
                 setFontsStyle();
+                setFontsSize();
                 break;
             case R.id.saveContents:
                 if (StringUtils.isEmpty(mContents.getText())) {
@@ -249,8 +251,11 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
 
     private void setFontsStyle() {
         FontUtils.setFontsTypeface(getApplicationContext(), getAssets(), null, (ViewGroup) findViewById(android.R.id.content));
-        float fontSize = CommonUtils.loadFloatPreference(this, Constants.SETTING_FONT_SIZE, -1);
         initSpinner();
+    }
+
+    private void setFontsSize() {
+        ContextKt.initTextSize(this, getMRootView(), this);
     }
 
     public void initSpinner() {

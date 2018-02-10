@@ -64,6 +64,7 @@ import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.commons.utils.PermissionUtils;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.adapters.DiaryWeatherItemAdapter;
+import me.blog.korn123.easydiary.extensions.ContextKt;
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
 import me.blog.korn123.easydiary.models.DiaryDto;
 import me.blog.korn123.easydiary.models.PhotoUriDto;
@@ -163,10 +164,12 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
             case R.id.zoomIn:
                 CommonUtils.saveFloatPreference(DiaryInsertActivity.this, Constants.SETTING_FONT_SIZE, fontSize + 5);
                 setFontsStyle();
+                setFontsSize();
                 break;
             case R.id.zoomOut:
                 CommonUtils.saveFloatPreference(DiaryInsertActivity.this, Constants.SETTING_FONT_SIZE, fontSize - 5);
                 setFontsStyle();
+                setFontsSize();
                 break;
             case R.id.saveContents:
                 if (StringUtils.isEmpty(mContents.getText())) {
@@ -259,6 +262,10 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
 
     private void setFontsStyle() {
         FontUtils.setFontsTypeface(getApplicationContext(), getAssets(), null, (ViewGroup) findViewById(android.R.id.content));
+    }
+
+    private void setFontsSize() {
+        ContextKt.initTextSize(this, getMRootView(), this);
     }
 
     public void initSpinner() {
