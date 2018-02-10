@@ -45,7 +45,6 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/medium_text_size"
             android:id="@+id/infoMessage"
             android:textStyle="bold" />
     </LinearLayout>

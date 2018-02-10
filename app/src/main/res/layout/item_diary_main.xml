@@ -23,7 +23,6 @@
                         android:id="@+id/text1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/large_text_size"
                         android:gravity="center_vertical" />
                     
                     <com.simplemobiletools.commons.views.MyTextView
@@ -31,7 +30,6 @@
                         android:id="@+id/text3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/large_text_size"
                         android:gravity="right" />
                 </LinearLayout>
             </LinearLayout>
@@ -43,7 +41,6 @@
                 android:id="@+id/text2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/large_text_size"
                 android:gravity="left" />
         </LinearLayout>
     </android.support.v7.widget.CardView>

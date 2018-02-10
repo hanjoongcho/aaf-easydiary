@@ -29,27 +29,17 @@ public class Constants {
 
     final static public int REQUEST_CODE_SPEECH_INPUT = 100;
 
-    // 일기작성화면
     final static public int PREVIOUS_ACTIVITY_CREATE = 1;
 
     final static public int WEATHER_SUNNY = 1;
-
     final static public int WEATHER_CLOUD_AND_SUN = 2;
-
     final static public int WEATHER_RAIN_DROPS = 3;
-
     final static public int WEATHER_BOLT = 4;
-
     final static public int WEATHER_SNOWING = 5;
-
     final static public int WEATHER_RAINBOW = 6;
-
     final static public int WEATHER_UMBRELLA = 7;
-
     final static public int WEATHER_STARS = 8;
-
     final static public int WEATHER_MOON = 9;
-
     final static public int WEATHER_NIGHT_RAIN = 10;
 
     final static public int SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER = 0;
@@ -59,9 +49,7 @@ public class Constants {
 
     // custom fonts supported language
     final static public String CUSTOM_FONTS_SUPPORT_LANGUAGE = "en|ko";
-
     final static public String CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT = "NanumPen.ttf";
-
     final static public String CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT = "Default";
 
     // previous screen
@@ -79,21 +67,17 @@ public class Constants {
     final static public String INIT_DUMMY_DATA_FLAG = "init_dummy_data";
 
     final static public String APP_FINISH_FLAG = "app_finish";
-
     final static public String APP_LOCK_ENABLE = "application_lock";
-
     final static public String APP_LOCK_REQUEST_PASSWORD = "lock_password";
-
     final static public String APP_LOCK_SAVED_PASSWORD = "application_lock_password";
 
     final public static String DIARY_SEQUENCE = "diary_sequence";
-
     final public static String DIARY_SEARCH_QUERY = "diary_search_query";
 
     final public static String OPEN_URL_INFO = "open_url_info";
-
     final public static String DIARY_SEARCH_QUERY_CASE_SENSITIVE = "case_sensitive";
-    
     final public static int THUMBNAIL_BACKGROUND_ALPHA = 100;
 
+    final public static int DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE = 20;
+    final public static int DEFAULT_FONT_SIZE_UN_SUPPORT_LANGUAGE = 15;
 }

@@ -5,7 +5,6 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.support.v7.widget.CardView
 import android.util.TypedValue
-import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
@@ -69,7 +68,7 @@ fun Context.updateTextColors(viewGroup: ViewGroup, tmpTextColor: Int = 0, tmpAcc
 
 fun Context.initTextSize(viewGroup: ViewGroup, context: Context) {
     val cnt = viewGroup.childCount
-    val defaultFontSize: Float = CommonUtils.dpToPixel(context, 15).toFloat()
+    val defaultFontSize: Float = CommonUtils.dpToPixel(context, Constants.DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE).toFloat()
     val settingFontSize: Float = CommonUtils.loadFloatPreference(this, Constants.SETTING_FONT_SIZE, defaultFontSize)
     (0 until cnt)
             .map { viewGroup.getChildAt(it) }
@@ -83,7 +82,7 @@ fun Context.initTextSize(viewGroup: ViewGroup, context: Context) {
 }
 
 fun Context.initTextSize(textView: TextView, context: Context) {
-    val defaultFontSize: Float = CommonUtils.dpToPixel(context, 15).toFloat()
+    val defaultFontSize: Float = CommonUtils.dpToPixel(context, Constants.DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE).toFloat()
     val settingFontSize: Float = CommonUtils.loadFloatPreference(this, Constants.SETTING_FONT_SIZE, defaultFontSize)
     textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
 }

@@ -5,13 +5,10 @@
     android:padding="10dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
         <TextView
             android:id="@+id/textView"
             android:layout_marginLeft="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/medium_text_size"
             android:gravity="center" />
-
 </LinearLayout>

@@ -81,7 +81,6 @@
                                                 android:enabled="false"
                                                 android:gravity="center_vertical"
                                                 android:id="@+id/title"
-                                                android:textSize="@dimen/large_text_size"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content" />
 
@@ -90,7 +89,6 @@
                                                 android:enabled="false"
                                                 android:gravity="center_vertical|right"
                                                 android:id="@+id/date"
-                                                android:textSize="@dimen/large_text_size"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content" />
 
@@ -104,7 +102,6 @@
                                     android:padding="10dp"
                                     android:enabled="false"
                                     android:textColor="@color/default_text_color"
-                                    android:textSize="@dimen/large_text_size"
                                     android:id="@+id/contents"
                                     android:gravity="left"
                                     android:layout_width="match_parent"

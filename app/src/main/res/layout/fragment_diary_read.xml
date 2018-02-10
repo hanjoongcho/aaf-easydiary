@@ -23,7 +23,6 @@
                     android:enabled="false"
                     android:gravity="center_vertical"
                     android:id="@+id/title"
-                    android:textSize="@dimen/large_text_size"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
                 <com.simplemobiletools.commons.views.MyTextView
@@ -31,7 +30,6 @@
                     android:enabled="false"
                     android:gravity="center_vertical|right"
                     android:id="@+id/date"
-                    android:textSize="@dimen/large_text_size"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -48,7 +46,6 @@
             <com.simplemobiletools.commons.views.MyTextView
                 android:enabled="false"
                 android:textColor="@color/default_text_color"
-                android:textSize="@dimen/large_text_size"
                 android:id="@+id/contents"
                 android:gravity="left"
                 android:layout_width="match_parent"

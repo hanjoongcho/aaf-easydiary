@@ -13,7 +13,6 @@
         android:id="@+id/companyName"
         android:gravity="left"
         android:textColor="@android:color/white"
-        android:textSize="@dimen/large_text_size"
         android:textStyle="bold" />
 
     <LinearLayout
@@ -34,7 +33,6 @@
         android:layout_weight="1"
         android:gravity="center_horizontal"
         android:textColor="@android:color/white"
-        android:textSize="@dimen/large_text_size"
         android:id="@+id/appName"
         android:textStyle="bold" />
 </LinearLayout>

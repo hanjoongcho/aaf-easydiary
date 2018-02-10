@@ -17,7 +17,6 @@
             android:layout_height="20dp" />
         <TextView
             android:layout_marginLeft="10dp"
-            android:textSize="@dimen/large_text_size"
             android:textColor="@android:color/white"
             android:id="@+id/title"
             android:layout_width="wrap_content"
@@ -74,7 +73,6 @@
                 style="@style/DiaryCardTimeline"
                 android:layout_marginRight="34dp">
                 <com.simplemobiletools.commons.views.MyTextView
-                    android:textSize="@dimen/large_text_size"
                     android:textColor="@color/default_text_color"
                     android:id="@+id/text1"
                     android:layout_width="wrap_content"

@@ -97,7 +97,6 @@
         <item name="android:paddingBottom">5dp</item>
         <item name="android:paddingLeft">10dp</item>
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:textSize">@dimen/medium_text_size</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
@@ -105,7 +104,6 @@
     <style name="SettingActivityTitle">
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/default_text_color</item>
-        <item name="android:textSize">@dimen/medium_text_size</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
@@ -113,7 +111,6 @@
     <style name="SettingActivitySummary" parent="SettingActivityTitle">
         <item name="android:textStyle">normal</item>
         <item name="android:alpha">0.7</item>
-        <item name="android:textSize">@dimen/medium_text_size</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
@@ -216,59 +213,5 @@
 
     <style name="CustomText" parent="TextAppearance.ShowcaseView.Detail.Light">
         <item name="android:textColor">#deffffff</item>
-    </style>
-
-    <!-- https://github.com/SimpleMobileTools/Simple-Commons START-->
-    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:spinnerItemStyle">@style/SpinnerItem</item>
-        <item name="spinnerDropDownItemStyle">@style/SpinnerItem.DropDownItem</item>
-        <item name="android:spinnerDropDownItemStyle">@style/SpinnerItem.DropDownItem</item>
-        <item name="buttonStyle">@style/MyTransparentButton</item>
-        <item name="android:buttonStyle">@style/MyTransparentButton</item>
-    </style>
-
-    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">@android:color/black</item>
-    </style>
-
-    <style name="MyWidgetConfigTheme" parent="@style/AppTheme.Base">
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowShowWallpaper">true</item>
-    </style>
-
-    <style name="SpinnerItem" parent="@android:style/Widget.TextView">
-        <item name="android:paddingRight">@dimen/activity_margin</item>
-    </style>
-
-    <style name="SpinnerItem.DropDownItem" parent="@android:style/Widget.TextView">
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:paddingTop">@dimen/medium_margin</item>
-        <item name="android:paddingBottom">@dimen/medium_margin</item>
-        <item name="android:paddingLeft">@dimen/activity_margin</item>
-        <item name="android:paddingRight">@dimen/activity_margin</item>
-    </style>
-
-    <style name="MyTransparentButton" parent="Widget.AppCompat.Button">
-        <item name="android:textColor">@android:color/white</item>
-        <item name="background">@drawable/transparent_button</item>
-        <item name="android:background">@drawable/transparent_button</item>
-    </style>
-
-    <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog">
-        <item name="colorAccent">@color/colorPrimary</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-    </style>
-
-    <style name="MyDialogTheme.Dark" parent="Theme.AppCompat.Dialog">
-        <item name="colorAccent">@color/colorPrimary</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:colorBackground">@color/theme_dark_background_color</item>
-    </style>
-
-    <style name="MyBorderlessBackgroundStyle">
-        <item name="android:background">?attr/selectableItemBackground</item>
     </style>
 </resources>

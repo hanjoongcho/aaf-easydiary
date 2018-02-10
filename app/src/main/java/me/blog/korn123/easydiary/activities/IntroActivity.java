@@ -19,6 +19,7 @@ import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
+import me.blog.korn123.easydiary.extensions.ContextKt;
 
 /**
  * Created by CHO HANJOONG on 2016-12-31.
@@ -52,12 +53,12 @@ public class IntroActivity extends AppCompatActivity implements Handler.Callback
 
             // Initial font size setting
             if (!CommonUtils.preferencesContains(this, Constants.SETTING_FONT_SIZE)) {
-                CommonUtils.saveFloatPreference(this, Constants.SETTING_FONT_SIZE, CommonUtils.dpToPixel(this, 15));
+                CommonUtils.saveFloatPreference(this, Constants.SETTING_FONT_SIZE, CommonUtils.dpToPixel(this, Constants.DEFAULT_FONT_SIZE_UN_SUPPORT_LANGUAGE));
             }
         } else {
             // Initial font size setting
             if (!CommonUtils.preferencesContains(this, Constants.SETTING_FONT_SIZE)) {
-                CommonUtils.saveFloatPreference(this, Constants.SETTING_FONT_SIZE, CommonUtils.dpToPixel(this, 20));
+                CommonUtils.saveFloatPreference(this, Constants.SETTING_FONT_SIZE, CommonUtils.dpToPixel(this, Constants.DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE));
             }
         }
         new Handler(this).sendEmptyMessageDelayed(START_MAIN_ACTIVITY, 500);
@@ -68,6 +69,7 @@ public class IntroActivity extends AppCompatActivity implements Handler.Callback
         super.onResume();
         mMainHolder.setBackgroundColor(ColorUtils.setAlphaComponent(new BaseConfig(this).getPrimaryColor(), 255));
         FontUtils.setFontsTypeface(this, getAssets(), null, (ViewGroup) findViewById(android.R.id.content));
+        ContextKt.initTextSize(this, (ViewGroup) findViewById(android.R.id.content), this);
     }
 
     @Override

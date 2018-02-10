@@ -5,7 +5,6 @@ import android.content.res.AssetManager;
 import android.graphics.Typeface;
 import android.os.Environment;
 import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
