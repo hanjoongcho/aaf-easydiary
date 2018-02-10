@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -14,21 +13,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/AppTheme.AppBarOverlay">
-
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
-
         </android.support.design.widget.AppBarLayout>
 
        <ScrollView
            android:id="@+id/main_holder"
            android:layout_width="match_parent"
            android:layout_height="match_parent">
-
            <LinearLayout
                android:orientation="vertical"
                android:layout_width="match_parent"
@@ -48,139 +44,157 @@
                    android:padding="@dimen/card_layout_padding"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content">
-                   <LinearLayout
+                   <android.support.v7.widget.CardView
                        android:id="@+id/pref1"
-                       android:orientation="vertical"
-                       style="@style/SettingActivityItem">
-                       <TextView
-                           android:id="@+id/prefTitle1"
-                           android:text="@string/font_setting"
-                           style="@style/SettingActivityTitle" />
-                       <TextView
-                           android:id="@+id/prefSummary1"
-                           style="@style/SettingActivitySummary" />
-                   </LinearLayout>
+                       style="@style/DiaryCardSettings">
+                       <LinearLayout
+                           style="@style/linear_layout_vertical_type_a">
+                           <com.simplemobiletools.commons.views.MyTextView
+                               android:id="@+id/prefTitle1"
+                               android:text="@string/font_setting"
+                               style="@style/SettingActivityTitle" />
+                           <com.simplemobiletools.commons.views.MyTextView
+                               android:id="@+id/prefSummary1"
+                               style="@style/SettingActivitySummary" />
+                       </LinearLayout>
+                   </android.support.v7.widget.CardView>
 
-                   <LinearLayout
+                   <android.support.v7.widget.CardView
                        android:id="@+id/primaryColor"
-                       android:orientation="vertical"
-                       style="@style/SettingActivityItem">
-                       <TextView
-                           android:id="@+id/primaryColorTitle"
-                           android:text="@string/setting_primary_color_title"
-                           style="@style/SettingActivityTitle" />
-                       <TextView
-                           android:id="@+id/setting_primary_color_title"
-                           android:text="@string/setting_primary_color_summary"
-                           style="@style/SettingActivitySummary" />
-                   </LinearLayout>
+                       style="@style/DiaryCardSettings">
+                       <LinearLayout
+                           style="@style/linear_layout_vertical_type_a">
+                           <com.simplemobiletools.commons.views.MyTextView
+                               android:id="@+id/primaryColorTitle"
+                               android:text="@string/setting_primary_color_title"
+                               style="@style/SettingActivityTitle" />
+                           <com.simplemobiletools.commons.views.MyTextView
+                               android:id="@+id/setting_primary_color_title"
+                               android:text="@string/setting_primary_color_summary"
+                               style="@style/SettingActivitySummary" />
+                       </LinearLayout>    
+                   </android.support.v7.widget.CardView>
 
-                   <LinearLayout
+                   <android.support.v7.widget.CardView
                        android:id="@+id/pref3"
-                       android:orientation="vertical"
-                       style="@style/SettingActivityItem">
-                       <TextView
-                           android:id="@+id/prefTitle3"
-                           android:text="@string/add_ttf_fonts_title"
-                           style="@style/SettingActivityTitle" />
-                       <TextView
-                           android:id="@+id/prefSummary3"
-                           android:text="@string/add_ttf_fonts_summary"
-                           style="@style/SettingActivitySummary" />
-                   </LinearLayout>
+                       style="@style/DiaryCardSettings">
+                       <LinearLayout
+                           style="@style/linear_layout_vertical_type_a">
+                           <com.simplemobiletools.commons.views.MyTextView
+                               android:id="@+id/prefTitle3"
+                               android:text="@string/add_ttf_fonts_title"
+                               style="@style/SettingActivityTitle" />
+                           <com.simplemobiletools.commons.views.MyTextView
+                               android:id="@+id/prefSummary3"
+                               android:text="@string/add_ttf_fonts_summary"
+                               style="@style/SettingActivitySummary" />
+                       </LinearLayout>
+                   </android.support.v7.widget.CardView>
 
-                   <LinearLayout
+                   <android.support.v7.widget.CardView
                        android:id="@+id/pref2"
-                       style="@style/SettingActivityItem">
+                       style="@style/DiaryCardSettings">
                        <LinearLayout
-                           android:orientation="vertical"
-                           android:layout_width="0dp"
-                           android:layout_weight="1"
-                           android:layout_height="wrap_content">
-                           <TextView
-                               android:id="@+id/prefTitle2"
-                               android:text="@string/diary_search_keyword_case_sensitive_title"
-                               style="@style/SettingActivityTitle" />
-                           <TextView
-                               android:id="@+id/prefSummary2"
-                               android:text="@string/diary_search_keyword_case_sensitive_summary"
-                               style="@style/SettingActivitySummary" />
+                           style="@style/linear_layout_vertical_type_b">
+                           <LinearLayout
+                               android:orientation="vertical"
+                               android:layout_width="0dp"
+                               android:layout_weight="1"
+                               android:layout_height="wrap_content">
+                               <com.simplemobiletools.commons.views.MyTextView
+                                   android:id="@+id/prefTitle2"
+                                   android:text="@string/diary_search_keyword_case_sensitive_title"
+                                   style="@style/SettingActivityTitle" />
+                               <com.simplemobiletools.commons.views.MyTextView
+                                   android:id="@+id/prefSummary2"
+                                   android:text="@string/diary_search_keyword_case_sensitive_summary"
+                                   style="@style/SettingActivitySummary" />
+                           </LinearLayout>
+                           <Switch
+                               android:id="@+id/pref2Switcher"
+                               android:clickable="false"
+                               android:layout_marginLeft="20dp"
+                               android:layout_width="wrap_content"
+                               android:layout_height="wrap_content" />
                        </LinearLayout>
-                       <Switch
-                           android:id="@+id/pref2Switcher"
-                           android:clickable="false"
-                           android:layout_marginLeft="20dp"
-                           android:layout_width="wrap_content"
-                           android:layout_height="wrap_content" />
-                   </LinearLayout>
+                   </android.support.v7.widget.CardView>
 
-                   <LinearLayout
+                   <android.support.v7.widget.CardView
                        android:id="@+id/pref4"
-                       style="@style/SettingActivityItem">
+                       style="@style/DiaryCardSettings">
                        <LinearLayout
-                           android:orientation="vertical"
-                           android:layout_width="0dp"
-                           android:layout_weight="1"
-                           android:layout_height="wrap_content">
-                           <TextView
-                               android:id="@+id/prefTitle4"
-                               android:text="@string/application_lock_title"
+                           style="@style/linear_layout_vertical_type_b">
+                           <LinearLayout
+                               android:orientation="vertical"
+                               android:layout_width="0dp"
+                               android:layout_weight="1"
+                               android:layout_height="wrap_content">
+                               <com.simplemobiletools.commons.views.MyTextView
+                                   android:id="@+id/prefTitle4"
+                                   android:text="@string/application_lock_title"
+                                   style="@style/SettingActivityTitle" />
+                               <com.simplemobiletools.commons.views.MyTextView
+                                   android:id="@+id/prefSummary4"
+                                   android:text="@string/application_lock_summary"
+                                   style="@style/SettingActivitySummary" />
+                           </LinearLayout>
+                           <Switch
+                               android:id="@+id/pref4Switcher"
+                               android:clickable="false"
+                               android:layout_marginLeft="20dp"
+                               android:layout_width="wrap_content"
+                               android:layout_height="wrap_content" />
+                       </LinearLayout>    
+                   </android.support.v7.widget.CardView>
+
+                   <android.support.v7.widget.CardView
+                       android:id="@+id/pref5"
+                       style="@style/DiaryCardSettings">
+                       <LinearLayout
+                           style="@style/linear_layout_vertical_type_a">
+                           <com.simplemobiletools.commons.views.MyTextView
+                               android:id="@+id/prefTitle5"
+                               android:text="@string/application_lock_password_title"
                                style="@style/SettingActivityTitle" />
-                           <TextView
-                               android:id="@+id/prefSummary4"
-                               android:text="@string/application_lock_summary"
+                           <com.simplemobiletools.commons.views.MyTextView
+                               android:id="@+id/prefSummary5"
+                               android:text="@string/add_ttf_fonts_summary"
                                style="@style/SettingActivitySummary" />
                        </LinearLayout>
-                       <Switch
-                           android:id="@+id/pref4Switcher"
-                           android:clickable="false"
-                           android:layout_marginLeft="20dp"
-                           android:layout_width="wrap_content"
-                           android:layout_height="wrap_content" />
-                   </LinearLayout>
+                   </android.support.v7.widget.CardView>
 
-                   <LinearLayout
-                       android:id="@+id/pref5"
-                       android:orientation="vertical"
-                       style="@style/SettingActivityItem">
-                       <TextView
-                           android:id="@+id/prefTitle5"
-                           android:text="@string/application_lock_password_title"
-                           style="@style/SettingActivityTitle" />
-                       <TextView
-                           android:id="@+id/prefSummary5"
-                           android:text="@string/add_ttf_fonts_summary"
-                           style="@style/SettingActivitySummary" />
-                   </LinearLayout>
-
-                   <LinearLayout
+                   <android.support.v7.widget.CardView
                        android:id="@+id/pref6"
-                       android:orientation="vertical"
-                       style="@style/SettingActivityItem">
-                       <TextView
-                           android:id="@+id/prefTitle6"
-                           android:text="@string/restore_diary"
-                           style="@style/SettingActivityTitle" />
-                       <TextView
-                           android:id="@+id/prefSummary6"
-                           android:text="@string/restore_diary_summary"
-                           style="@style/SettingActivitySummary" />
-                   </LinearLayout>
+                       style="@style/DiaryCardSettings">
+                       <LinearLayout
+                           style="@style/linear_layout_vertical_type_a">
+                           <com.simplemobiletools.commons.views.MyTextView
+                               android:id="@+id/prefTitle6"
+                               android:text="@string/restore_diary"
+                               style="@style/SettingActivityTitle" />
+                           <com.simplemobiletools.commons.views.MyTextView
+                               android:id="@+id/prefSummary6"
+                               android:text="@string/restore_diary_summary"
+                               style="@style/SettingActivitySummary" />
+                       </LinearLayout>
+                   </android.support.v7.widget.CardView>
 
-                   <LinearLayout
+                   <android.support.v7.widget.CardView
                        android:id="@+id/pref7"
-                       android:orientation="vertical"
                        android:layout_marginBottom="2dp"
-                       style="@style/SettingActivityItem">
-                       <TextView
-                           android:id="@+id/prefTitle7"
-                           android:text="@string/backup_diary"
-                           style="@style/SettingActivityTitle" />
-                       <TextView
-                           android:id="@+id/prefSummary7"
-                           android:text="@string/backup_diary_summary"
-                           style="@style/SettingActivitySummary" />
-                   </LinearLayout>
+                       style="@style/DiaryCardSettings">
+                       <LinearLayout
+                           style="@style/linear_layout_vertical_type_a">
+                           <com.simplemobiletools.commons.views.MyTextView
+                               android:id="@+id/prefTitle7"
+                               android:text="@string/backup_diary"
+                               style="@style/SettingActivityTitle" />
+                           <com.simplemobiletools.commons.views.MyTextView
+                               android:id="@+id/prefSummary7"
+                               android:text="@string/backup_diary_summary"
+                               style="@style/SettingActivitySummary" />
+                       </LinearLayout>
+                   </android.support.v7.widget.CardView>
                </LinearLayout>
 
                <me.blog.korn123.easydiary.views.LabelLayout
@@ -197,32 +211,38 @@
                    android:padding="@dimen/card_layout_padding"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content">
-                   <LinearLayout
+                   <android.support.v7.widget.CardView
                        android:id="@+id/pref8"
                        android:orientation="vertical"
-                       style="@style/SettingActivityItem">
-                       <TextView
-                           android:id="@+id/prefTitle8"
-                           android:text="@string/rate_app"
-                           style="@style/SettingActivityTitle" />
-                       <TextView
-                           android:id="@+id/prefSummary8"
-                           android:text=""
-                           style="@style/SettingActivitySummary" />
-                   </LinearLayout>
+                       style="@style/DiaryCardSettings">
+                       <LinearLayout
+                           style="@style/linear_layout_vertical_type_a">
+                           <com.simplemobiletools.commons.views.MyTextView
+                               android:id="@+id/prefTitle8"
+                               android:text="@string/rate_app"
+                               style="@style/SettingActivityTitle" />
+                           <com.simplemobiletools.commons.views.MyTextView
+                               android:id="@+id/prefSummary8"
+                               android:text=""
+                               style="@style/SettingActivitySummary" />
+                       </LinearLayout>
+                   </android.support.v7.widget.CardView>
 
-                   <LinearLayout
+                   <android.support.v7.widget.CardView
                        android:id="@+id/pref9"
                        android:layout_marginBottom="2dp"
                        android:orientation="vertical"
-                       style="@style/SettingActivityItem">
-                       <TextView
-                           android:text="Open Source Licenses"
-                           style="@style/SettingActivityTitle" />
-                       <TextView
-                           android:text="open source software notices"
-                           style="@style/SettingActivitySummary" />
-                   </LinearLayout>
+                       style="@style/DiaryCardSettings">
+                       <LinearLayout
+                           style="@style/linear_layout_vertical_type_a">
+                           <com.simplemobiletools.commons.views.MyTextView
+                               android:text="Open Source Licenses"
+                               style="@style/SettingActivityTitle" />
+                           <com.simplemobiletools.commons.views.MyTextView
+                               android:text="open source software notices"
+                               style="@style/SettingActivitySummary" />
+                       </LinearLayout>
+                   </android.support.v7.widget.CardView>
                </LinearLayout>
 
                <me.blog.korn123.easydiary.views.LabelLayout
@@ -239,55 +259,60 @@
                    android:padding="@dimen/card_layout_padding"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content">
-                   <LinearLayout
+                   <android.support.v7.widget.CardView
                        android:id="@+id/easyPhotoMap"
                        android:orientation="horizontal"
-                       style="@style/SettingActivityItem">
-                       <ImageView
-                           android:src="@drawable/ic_easyphotomap"
-                           android:layout_width="wrap_content"
-                           android:layout_height="wrap_content" />
+                       style="@style/DiaryCardSettings">
                        <LinearLayout
-                           android:orientation="vertical"
-                           android:layout_marginLeft="10dp"
-                           android:layout_weight="1"
-                           android:layout_width="0dp"
-                           android:layout_height="wrap_content">
-                           <TextView
-                               android:text="@string/easy_photo_map_title"
-                               style="@style/SettingActivityTitle" />
-                           <TextView
-                               android:text="@string/easy_photo_map_summary"
-                               style="@style/SettingActivitySummary" />
+                           style="@style/linear_layout_vertical_type_b">
+                           <ImageView
+                               android:src="@drawable/ic_easyphotomap"
+                               android:layout_width="wrap_content"
+                               android:layout_height="wrap_content" />
+                           <LinearLayout
+                               android:orientation="vertical"
+                               android:layout_marginLeft="10dp"
+                               android:layout_weight="1"
+                               android:layout_width="0dp"
+                               android:layout_height="wrap_content">
+                               <com.simplemobiletools.commons.views.MyTextView
+                                   android:text="@string/easy_photo_map_title"
+                                   style="@style/SettingActivityTitle" />
+                               <com.simplemobiletools.commons.views.MyTextView
+                                   android:text="@string/easy_photo_map_summary"
+                                   style="@style/SettingActivitySummary" />
+                           </LinearLayout>
                        </LinearLayout>
-                   </LinearLayout>
+                   </android.support.v7.widget.CardView>
 
-                   <LinearLayout
+                   <android.support.v7.widget.CardView
                        android:id="@+id/easyPassword"
                        android:layout_marginBottom="2dp"
-                       android:orientation="horizontal"
-                       style="@style/SettingActivityItem">
-                       <ImageView
-                           android:src="@drawable/ic_easypassword"
-                           android:layout_width="wrap_content"
-                           android:layout_height="wrap_content" />
+                       style="@style/DiaryCardSettings">
                        <LinearLayout
-                           android:orientation="vertical"
-                           android:layout_marginLeft="10dp"
-                           android:layout_weight="1"
-                           android:layout_width="0dp"
-                           android:layout_height="wrap_content">
-                           <TextView
-                               android:text="@string/easy_password_title"
-                               style="@style/SettingActivityTitle" />
-                           <TextView
-                               android:text="@string/easy_password_summary"
-                               style="@style/SettingActivitySummary" />
+                           style="@style/linear_layout_vertical_type_b">
+                           <ImageView
+                               android:src="@drawable/ic_easypassword"
+                               android:layout_width="wrap_content"
+                               android:layout_height="wrap_content" />
+                           <LinearLayout
+                               android:orientation="vertical"
+                               android:layout_marginLeft="10dp"
+                               android:layout_weight="1"
+                               android:layout_width="0dp"
+                               android:layout_height="wrap_content">
+                               <com.simplemobiletools.commons.views.MyTextView
+                                   android:text="@string/easy_password_title"
+                                   style="@style/SettingActivityTitle" />
+                               <com.simplemobiletools.commons.views.MyTextView
+                                   android:text="@string/easy_password_summary"
+                                   style="@style/SettingActivitySummary" />
+                           </LinearLayout>
                        </LinearLayout>
-                   </LinearLayout>
+                   </android.support.v7.widget.CardView>
                </LinearLayout>
            </LinearLayout>
        </ScrollView>
+        
     </LinearLayout>
-
 </android.support.design.widget.CoordinatorLayout>

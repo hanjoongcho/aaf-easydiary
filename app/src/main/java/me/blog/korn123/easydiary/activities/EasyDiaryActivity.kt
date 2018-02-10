@@ -1,14 +1,12 @@
 package me.blog.korn123.easydiary.activities
 
 import android.content.Intent
-import android.support.v4.graphics.ColorUtils
-import android.view.View
+import android.view.ViewGroup
 import io.github.hanjoongcho.commons.activities.BaseSimpleActivity
-import io.github.hanjoongcho.commons.helpers.BaseConfig
-import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.commons.constants.Constants
 import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.BACKGROUND_ALPHA
 
 /**
@@ -36,10 +34,9 @@ open class EasyDiaryActivity : BaseSimpleActivity() {
                 startActivity(lockDiaryIntent)
             }
         }
-
         updateTextColors(findViewById(android.R.id.content))
-        findViewById<View>(R.id.main_holder)?.let {
-            it.setBackgroundColor(ColorUtils.setAlphaComponent(BaseConfig(this).primaryColor, BACKGROUND_ALPHA))
-        }
     }
+
+    override fun getMainViewGroup(): ViewGroup? = findViewById<ViewGroup>(R.id.main_holder)
+    override fun getBackgroundAlpha(): Int = BACKGROUND_ALPHA
 }

@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.extensions
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.support.v7.widget.CardView
 import android.util.Log
 import android.view.ViewGroup
 import com.simplemobiletools.commons.extensions.adjustAlpha
@@ -38,7 +39,6 @@ fun Context.updateTextColors(viewGroup: ViewGroup, tmpTextColor: Int = 0, tmpAcc
     (0 until cnt)
             .map { viewGroup.getChildAt(it) }
             .forEach {
-                Log.i("updateTextColors", it.toString())
                 when (it) {
                     is MyTextView -> it.setColors(textColor, accentColor, backgroundColor)
                     is MyAppCompatSpinner -> it.setColors(textColor, accentColor, backgroundColor)
@@ -56,8 +56,8 @@ fun Context.updateTextColors(viewGroup: ViewGroup, tmpTextColor: Int = 0, tmpAcc
                     is MyButton -> it.setColors(textColor, accentColor, backgroundColor)
                     is ModalView -> it.setBackgroundColor(accentColor)
                     is LabelLayout -> it.setBackgroundColor(accentColor)
-                    is DiaryCardLayout -> {
-                        it.setColors(textColor, accentColor, backgroundColor)
+                    is CardView -> {
+                        it.setCardBackgroundColor(backgroundColor)
                         updateTextColors(it, textColor, accentColor)
                     }
                     is ViewGroup -> updateTextColors(it, textColor, accentColor)

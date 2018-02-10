@@ -17,7 +17,8 @@ class DiaryCardLayout : LinearLayout {
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {}
 
     fun setColors(textColor: Int, accentColor: Int, backgroundColor: Int) {
-        val drawable = background as GradientDrawable
-        drawable.setColor(backgroundColor)
+//        val drawable = background as GradientDrawable
+//        drawable.setColor(backgroundColor)
+        setBackgroundColor(backgroundColor)
     }
 }

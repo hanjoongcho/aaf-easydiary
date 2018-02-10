@@ -26,15 +26,8 @@
             android:padding="@dimen/card_layout_padding"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <me.blog.korn123.easydiary.views.DiaryCardLayout
-                android:background="@drawable/bg_card_diary"
-                android:paddingLeft="@dimen/card_contents_padding"
-                android:paddingRight="@dimen/card_contents_padding"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:gravity="left|center_vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <android.support.v7.widget.CardView
+                style="@style/SearchCard">
                 <com.simplemobiletools.commons.views.MyEditText
                     android:maxLines="1"
                     android:id="@+id/query"
@@ -42,7 +35,7 @@
                     android:hint="@string/guide_message_2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
-            </me.blog.korn123.easydiary.views.DiaryCardLayout>
+            </android.support.v7.widget.CardView>
 
             <ListView
                 android:layout_marginTop="@dimen/card_layout_padding"

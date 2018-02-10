@@ -2,20 +2,19 @@ package me.blog.korn123.easydiary.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.drawable.GradientDrawable;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
-import io.github.hanjoongcho.commons.helpers.BaseConfig;
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.DateUtils;
@@ -111,6 +110,6 @@ public class DiaryMainItemAdapter extends ArrayAdapter<DiaryDto> {
         TextView textView2;
         TextView textView3;
         ImageView imageView;
-        LinearLayout item_holder;
+        RelativeLayout item_holder;
     }
 }
