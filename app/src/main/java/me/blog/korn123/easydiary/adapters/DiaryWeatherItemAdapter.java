@@ -18,13 +18,13 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.activities.DiaryInsertActivity;
+import me.blog.korn123.easydiary.extensions.ContextKt;
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
  */
 
 public class DiaryWeatherItemAdapter extends ArrayAdapter<String> {
-
     private final Context mContext;
     private final List<String> mList;
     private final int mLayoutResourceId;
@@ -61,7 +61,6 @@ public class DiaryWeatherItemAdapter extends ArrayAdapter<String> {
         }
 
         setFontsTypeface(holder);
-        setFontsSize(holder);
         EasyDiaryUtils.initWeatherView(holder.imageView1, position, true);
 
         holder.textView1.setText(mList.get(position));
@@ -71,16 +70,12 @@ public class DiaryWeatherItemAdapter extends ArrayAdapter<String> {
             holder.imageView1.setVisibility(View.VISIBLE);
         }
 
+        ContextKt.initTextSize(mContext, holder.textView1, mContext);
         return row;
     }
 
     private void setFontsTypeface(ViewHolder holder) {
         FontUtils.setFontsTypeface(mContext, mContext.getAssets(), null, holder.textView1);
-    }
-
-    private void setFontsSize(ViewHolder holder) {
-        float commonSize = CommonUtils.loadFloatPreference(mContext, Constants.SETTING_FONT_SIZE, holder.textView1.getTextSize());
-        FontUtils.setFontsSize(commonSize, -1, holder.textView1);
     }
 
     private static class ViewHolder {

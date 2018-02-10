@@ -118,7 +118,6 @@ public class LockSettingActivity extends BaseSimpleActivity {
     private void setFontsStyle() {
         FontUtils.setFontsTypeface(getApplicationContext(), getAssets(), null, (ViewGroup) findViewById(android.R.id.content));
         float fontSize = CommonUtils.loadFloatPreference(this, Constants.SETTING_FONT_SIZE, -1);
-        if (fontSize > 0) FontUtils.setFontsSize(fontSize, (ViewGroup) findViewById(android.R.id.content));
     }
 
 }

@@ -54,7 +54,6 @@ public class DiaryCalendarItemAdapter extends ArrayAdapter<DiaryDto> {
         }
 
         setFontsTypeface(holder);
-        setFontsSize(holder);
 
         DiaryDto diaryDto = list.get(position);
         if (StringUtils.isNotEmpty(diaryDto.getTitle())) {
@@ -65,16 +64,12 @@ public class DiaryCalendarItemAdapter extends ArrayAdapter<DiaryDto> {
 
         EasyDiaryUtils.initWeatherView(holder.imageView, diaryDto.getWeather());
         ContextKt.updateTextColors(context, holder.item_holder, 0, 0);
+        ContextKt.initTextSize(context, holder.item_holder, context);
         return row;
     }
 
     private void setFontsTypeface(ViewHolder holder) {
         FontUtils.setFontsTypeface(context, context.getAssets(), null, holder.textView1);
-    }
-
-    private void setFontsSize(ViewHolder holder) {
-        float commonSize = CommonUtils.loadFloatPreference(context, Constants.SETTING_FONT_SIZE, holder.textView1.getTextSize());
-        FontUtils.setFontsSize(commonSize, -1, holder.textView1);
     }
 
     private static class ViewHolder {

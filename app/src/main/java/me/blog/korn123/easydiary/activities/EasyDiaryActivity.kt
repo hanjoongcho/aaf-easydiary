@@ -5,7 +5,9 @@ import android.view.ViewGroup
 import io.github.hanjoongcho.commons.activities.BaseSimpleActivity
 import me.blog.korn123.commons.constants.Constants
 import me.blog.korn123.commons.utils.CommonUtils
+import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.BACKGROUND_ALPHA
 
@@ -14,6 +16,10 @@ import me.blog.korn123.easydiary.helper.BACKGROUND_ALPHA
  */
 
 open class EasyDiaryActivity : BaseSimpleActivity() {
+    val mRootView: ViewGroup? by lazy {
+        findViewById<ViewGroup>(R.id.main_holder)
+    }
+    
     override fun onPause() {
         super.onPause()
         val enableLock = CommonUtils.loadBooleanPreference(this@EasyDiaryActivity, Constants.APP_LOCK_ENABLE)
@@ -36,8 +42,12 @@ open class EasyDiaryActivity : BaseSimpleActivity() {
             }
         }
         updateTextColors(findViewById(android.R.id.content))
+        mRootView?.let { 
+            initTextSize(it, this)
+        }
+        FontUtils.setFontsTypeface(applicationContext, assets, null, findViewById<ViewGroup>(android.R.id.content))
     }
 
-    override fun getMainViewGroup(): ViewGroup? = findViewById<ViewGroup>(R.id.main_holder)
+    override fun getMainViewGroup(): ViewGroup? = mRootView
     override fun getBackgroundAlpha(): Int = BACKGROUND_ALPHA
 }

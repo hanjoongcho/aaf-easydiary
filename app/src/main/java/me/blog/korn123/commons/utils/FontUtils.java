@@ -52,29 +52,29 @@ public class FontUtils {
         }
     }
 
-    public static void setFontsSize(float commonSize, float customSize, TextView... targetViews) {
-        float fontSize = customSize > 0 ? customSize : commonSize;
-        for (TextView textView : targetViews) {
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
-        }
-    }
+//    public static void setFontsSize(float commonSize, float customSize, TextView... targetViews) {
+//        float fontSize = customSize > 0 ? customSize : commonSize;
+//        for (TextView textView : targetViews) {
+//            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
+//        }
+//    }
 
-	public static void setFontsSize(float fontSize, ViewGroup rootView) {
-		setSize(rootView, fontSize);
-	}
+//	public static void setFontsSize(float fontSize, ViewGroup rootView) {
+//		setSize(rootView, fontSize);
+//	}
 
-	public static void setSize(ViewGroup viewGroup, float fontSize) {
-		for (int i = 0; i < viewGroup.getChildCount(); i++) {
-			if (viewGroup.getChildAt(i) instanceof ViewGroup) {
-				setSize((ViewGroup)viewGroup.getChildAt(i), fontSize);
-			} else {
-				if (viewGroup.getChildAt(i) instanceof TextView) {
-					TextView tv = (TextView) viewGroup.getChildAt(i);
-					tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
-				}
-			}
-		}
-	}
+//	public static void setSize(ViewGroup viewGroup, float fontSize) {
+//		for (int i = 0; i < viewGroup.getChildCount(); i++) {
+//			if (viewGroup.getChildAt(i) instanceof ViewGroup) {
+//				setSize((ViewGroup)viewGroup.getChildAt(i), fontSize);
+//			} else {
+//				if (viewGroup.getChildAt(i) instanceof TextView) {
+//					TextView tv = (TextView) viewGroup.getChildAt(i);
+//					tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
+//				}
+//			}
+//		}
+//	}
 
     public static void setFontsTypeface(Context context, AssetManager assetManager, String customFontName, TextView... targetViews) {
         Typeface typeface = StringUtils.isNotEmpty(customFontName) ? getTypeface(context, assetManager, customFontName) : getCommonTypeface(context, assetManager);
@@ -146,5 +146,4 @@ public class FontUtils {
         if (displayName == null) displayName = FilenameUtils.getBaseName(fontFileName);
         return displayName;
     }
-
 }

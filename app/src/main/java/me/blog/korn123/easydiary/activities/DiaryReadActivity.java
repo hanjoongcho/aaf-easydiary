@@ -239,8 +239,6 @@ public class DiaryReadActivity extends EasyDiaryActivity {
 
     private void setFontsStyle() {
         FontUtils.setFontsTypeface(getApplicationContext(), getAssets(), null, (ViewGroup) findViewById(android.R.id.content));
-        float fontSize = CommonUtils.loadFloatPreference(this, Constants.SETTING_FONT_SIZE, -1);
-        if (fontSize > 0) FontUtils.setFontsSize(fontSize, (ViewGroup) findViewById(android.R.id.content));
     }
 
     private int mShowcaseIndex = 1;
@@ -507,10 +505,8 @@ public class DiaryReadActivity extends EasyDiaryActivity {
         }
 
         private void setFontsSize() {
-            float fontSize = CommonUtils.loadFloatPreference(getContext(), Constants.SETTING_FONT_SIZE, -1);
-            if (fontSize > 0) FontUtils.setFontsSize(fontSize, -1, mTitle, mDate, mContents);
+            ContextKt.initTextSize(getContext(), mRootView, getContext());
         }
-
     }
 
     /**

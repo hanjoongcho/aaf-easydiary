@@ -5,3 +5,4 @@ package me.blog.korn123.easydiary.helper
  */
 
 val BACKGROUND_ALPHA = 90
+val SETTING_FONT_SIZE = "font_size";

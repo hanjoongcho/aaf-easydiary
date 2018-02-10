@@ -60,8 +60,6 @@ public class IntroActivity extends AppCompatActivity implements Handler.Callback
                 CommonUtils.saveFloatPreference(this, Constants.SETTING_FONT_SIZE, CommonUtils.dpToPixel(this, 20));
             }
         }
-
-        setFontsStyle();
         new Handler(this).sendEmptyMessageDelayed(START_MAIN_ACTIVITY, 500);
     }
 
@@ -69,6 +67,7 @@ public class IntroActivity extends AppCompatActivity implements Handler.Callback
     protected void onResume() {
         super.onResume();
         mMainHolder.setBackgroundColor(ColorUtils.setAlphaComponent(new BaseConfig(this).getPrimaryColor(), 255));
+        FontUtils.setFontsTypeface(this, getAssets(), null, (ViewGroup) findViewById(android.R.id.content));
     }
 
     @Override
@@ -84,15 +83,4 @@ public class IntroActivity extends AppCompatActivity implements Handler.Callback
         }
         return false;
     }
-
-    private void setFontsStyle() {
-        FontUtils.setFontsTypeface(getApplicationContext(), getAssets(), null, (ViewGroup) findViewById(android.R.id.content));
-        float fontSize = CommonUtils.loadFloatPreference(this, Constants.SETTING_FONT_SIZE, -1);
-        if (fontSize > 0) FontUtils.setFontsSize(fontSize, (ViewGroup) findViewById(android.R.id.content));
-    }
-
-//    private void setFontsSize() {
-//        float commonSize = CommonUtils.loadFloatPreference(IntroActivity.this, Constants.SETTING_FONT_SIZE, mAppName.getTextSize());
-//        FontUtils.setFontsSize(commonSize, -1, mAppName, mCompanyName);
-//    }
 }

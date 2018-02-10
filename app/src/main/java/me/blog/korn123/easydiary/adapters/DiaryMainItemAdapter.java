@@ -2,7 +2,6 @@ package me.blog.korn123.easydiary.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,10 +65,7 @@ public class DiaryMainItemAdapter extends ArrayAdapter<DiaryDto> {
             holder = (ViewHolder)row.getTag();
         }
 
-        setFontsTypeface(holder);
-        setFontsSize(holder);
-
-        DiaryDto diaryDto = (DiaryDto)this.list.get(position);
+        DiaryDto diaryDto = list.get(position);
         if (StringUtils.isEmpty(diaryDto.getTitle())) {
             holder.textView1.setVisibility(View.GONE);
         } else {
@@ -93,16 +89,9 @@ public class DiaryMainItemAdapter extends ArrayAdapter<DiaryDto> {
         EasyDiaryUtils.initWeatherView(holder.imageView, diaryDto.getWeather());
 
         ContextKt.updateTextColors(context, holder.item_holder, 0, 0);
-        return row;
-    }
-
-    private void setFontsTypeface(ViewHolder holder) {
+        ContextKt.initTextSize(context, holder.item_holder, context);
         FontUtils.setFontsTypeface(context, context.getAssets(), null, holder.textView1, holder.textView2, holder.textView3);
-    }
-
-    private void setFontsSize(ViewHolder holder) {
-        float commonSize = CommonUtils.loadFloatPreference(context, Constants.SETTING_FONT_SIZE, holder.textView1.getTextSize());
-        FontUtils.setFontsSize(commonSize, -1, holder.textView1, holder.textView2, holder.textView3);
+        return row;
     }
 
     private static class ViewHolder {

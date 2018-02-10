@@ -4,15 +4,18 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.support.v7.widget.CardView
-import android.util.Log
+import android.util.TypedValue
+import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.TextView
 import com.simplemobiletools.commons.extensions.adjustAlpha
-import com.simplemobiletools.commons.extensions.applyColorFilter
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
 import com.simplemobiletools.commons.views.*
 import io.github.hanjoongcho.commons.views.ModalView
-import me.blog.korn123.easydiary.views.DiaryCardLayout
+import me.blog.korn123.commons.constants.Constants
+import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.easydiary.views.LabelLayout
 
 /**
@@ -49,7 +52,6 @@ fun Context.updateTextColors(viewGroup: ViewGroup, tmpTextColor: Int = 0, tmpAcc
                         it.setTextColor(textColor)
                         it.setHintTextColor(textColor.adjustAlpha(0.5f))
                         it.setLinkTextColor(accentColor)
-
                     }
                     is MyFloatingActionButton -> it.backgroundTintList = ColorStateList.valueOf(accentColor)
                     is MySeekBar -> it.setColors(textColor, accentColor, backgroundColor)
@@ -63,4 +65,25 @@ fun Context.updateTextColors(viewGroup: ViewGroup, tmpTextColor: Int = 0, tmpAcc
                     is ViewGroup -> updateTextColors(it, textColor, accentColor)
                 }
             }
+}
+
+fun Context.initTextSize(viewGroup: ViewGroup, context: Context) {
+    val cnt = viewGroup.childCount
+    val defaultFontSize: Float = CommonUtils.dpToPixel(context, 15).toFloat()
+    val settingFontSize: Float = CommonUtils.loadFloatPreference(this, Constants.SETTING_FONT_SIZE, defaultFontSize)
+    (0 until cnt)
+            .map { viewGroup.getChildAt(it) }
+            .forEach {
+                when (it) {
+                    is TextView -> it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
+                    is EditText ->  it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
+                    is ViewGroup -> initTextSize(it, context)
+                }
+            }
+}
+
+fun Context.initTextSize(textView: TextView, context: Context) {
+    val defaultFontSize: Float = CommonUtils.dpToPixel(context, 15).toFloat()
+    val settingFontSize: Float = CommonUtils.loadFloatPreference(this, Constants.SETTING_FONT_SIZE, defaultFontSize)
+    textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
 }

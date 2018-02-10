@@ -73,7 +73,6 @@ public class TimelineItemAdapter extends ArrayAdapter<DiaryDto> {
 //        drawable.setColor(mPrimaryColor);
 
         setFontsTypeface(holder);
-        setFontsSize(holder);
 
         DiaryDto diaryDto = list.get(position);
         if (position > 0 && StringUtils.equals(diaryDto.getDateString(), list.get(position - 1).getDateString())) {
@@ -108,6 +107,7 @@ public class TimelineItemAdapter extends ArrayAdapter<DiaryDto> {
 
         holder.textView1.setText(DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis(), DateUtils.TIME_PATTERN_WITH_SECONDS) + "\n" + getSummary(diaryDto));
         ContextKt.updateTextColors(context, holder.item_holder, 0, 0);
+        ContextKt.initTextSize(context, holder.item_holder, context);
         return row;
     }
 
@@ -123,11 +123,6 @@ public class TimelineItemAdapter extends ArrayAdapter<DiaryDto> {
     
     private void setFontsTypeface(ViewHolder holder) {
         FontUtils.setFontsTypeface(context, context.getAssets(), null, holder.textView1, holder.title);
-    }
-
-    private void setFontsSize(ViewHolder holder) {
-        float commonSize = CommonUtils.loadFloatPreference(context, Constants.SETTING_FONT_SIZE, holder.textView1.getTextSize());
-        FontUtils.setFontsSize(commonSize, -1, holder.textView1, holder.title);
     }
 
     private static class ViewHolder {
