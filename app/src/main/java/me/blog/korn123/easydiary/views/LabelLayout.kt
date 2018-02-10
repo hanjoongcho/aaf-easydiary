@@ -5,10 +5,10 @@ import android.util.AttributeSet
 import android.widget.LinearLayout
 
 /**
- * Created by Administrator on 2018-02-09.
+ * Created by CHO HANJOONG on 2017-12-19.
  */
 
-class DiaryCardLayout : LinearLayout {
+class LabelLayout : LinearLayout {
     constructor(context: Context) : super(context) 
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) 
@@ -16,8 +16,6 @@ class DiaryCardLayout : LinearLayout {
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) 
 
     fun setColors(textColor: Int, accentColor: Int, backgroundColor: Int) {
-//        val drawable = background as GradientDrawable
-//        drawable.setColor(backgroundColor)
-        setBackgroundColor(backgroundColor)
+        setBackgroundColor(accentColor)
     }
 }
