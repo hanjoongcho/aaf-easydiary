@@ -4,5 +4,10 @@ package me.blog.korn123.easydiary.helper
  * Created by CHO HANJOONG on 2018-02-09.
  */
 
-val BACKGROUND_ALPHA = 90
-val SETTING_FONT_SIZE = "font_size";
+val START_MAIN_ACTIVITY = 0
+val APP_BACKGROUND_ALPHA = 90
+val INTRO_BACKGROUND_ALPHA = 255
+val SETTING_FONT_SIZE = "font_size"
+val SETTING_FONT_NAME = "font_setting"
+val CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT = "NanumPen.ttf"
+val CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT = "Default"

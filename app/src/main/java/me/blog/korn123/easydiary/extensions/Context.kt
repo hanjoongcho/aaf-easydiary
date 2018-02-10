@@ -15,6 +15,7 @@ import com.simplemobiletools.commons.views.*
 import io.github.hanjoongcho.commons.views.ModalView
 import me.blog.korn123.commons.constants.Constants
 import me.blog.korn123.commons.utils.CommonUtils
+import me.blog.korn123.easydiary.helper.Config
 import me.blog.korn123.easydiary.views.LabelLayout
 
 /**
@@ -86,3 +87,5 @@ fun Context.initTextSize(textView: TextView, context: Context) {
     val settingFontSize: Float = CommonUtils.loadFloatPreference(this, Constants.SETTING_FONT_SIZE, defaultFontSize)
     textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
 }
+
+val Context.config: Config get() = Config.newInstance(this)

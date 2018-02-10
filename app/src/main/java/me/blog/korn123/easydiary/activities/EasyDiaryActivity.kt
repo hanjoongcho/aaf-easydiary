@@ -8,7 +8,7 @@ import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.resumeLock
 import me.blog.korn123.easydiary.extensions.updateTextColors
-import me.blog.korn123.easydiary.helper.BACKGROUND_ALPHA
+import me.blog.korn123.easydiary.helper.APP_BACKGROUND_ALPHA
 
 /**
  * Created by hanjoong on 2017-05-03.
@@ -36,5 +36,5 @@ open class EasyDiaryActivity : BaseSimpleActivity() {
     }
 
     override fun getMainViewGroup(): ViewGroup? = mRootView
-    override fun getBackgroundAlpha(): Int = BACKGROUND_ALPHA
+    override fun getBackgroundAlpha(): Int = APP_BACKGROUND_ALPHA
 }

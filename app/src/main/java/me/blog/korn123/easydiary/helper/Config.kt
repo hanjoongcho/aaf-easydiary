@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.helper
 
 import android.content.Context
 import io.github.hanjoongcho.commons.helpers.BaseConfig
+import me.blog.korn123.commons.constants.Constants
 import me.blog.korn123.commons.utils.CommonUtils
 
 /**
@@ -15,4 +16,12 @@ class Config(context: Context) : BaseConfig(context) {
     companion object {
         fun newInstance(context: Context) = Config(context)
     }
+
+    var settingFontName: String
+        get() = legacyPrefs.getString(SETTING_FONT_NAME, CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT)
+        set(settingFontName) = legacyPrefs.edit().putString(SETTING_FONT_NAME, settingFontName).apply()
+
+    var settingFontSize: Float
+        get() = legacyPrefs.getFloat(SETTING_FONT_SIZE, CommonUtils.dpToPixel(context, Constants.DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE).toFloat())
+        set(settingFontSize) = legacyPrefs.edit().putFloat(SETTING_FONT_SIZE, settingFontSize).apply()
 }

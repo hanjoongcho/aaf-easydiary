@@ -5,7 +5,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import io.github.hanjoongcho.commons.activities.BaseCustomizationActivity
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.helper.BACKGROUND_ALPHA
+import me.blog.korn123.easydiary.extensions.pauseLock
+import me.blog.korn123.easydiary.extensions.resumeLock
+import me.blog.korn123.easydiary.helper.APP_BACKGROUND_ALPHA
 
 /**
  * Created by CHO HANJOONG on 2018-02-06.
@@ -22,8 +24,18 @@ class CustomizationActivity : BaseCustomizationActivity() {
         backgroundLabel.text = "${backgroundLabel.text}(다이어리 카드)"
 
     }
+
+    override fun onPause() {
+        super.onPause()
+        pauseLock()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        resumeLock()
+    }
     
     override fun getMainViewGroup(): ViewGroup? = findViewById<ViewGroup>(R.id.main_holder)
-    override fun getBackgroundAlpha(): Int = BACKGROUND_ALPHA
+    override fun getBackgroundAlpha(): Int = APP_BACKGROUND_ALPHA
 }
 
