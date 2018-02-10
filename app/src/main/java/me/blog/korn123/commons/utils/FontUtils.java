@@ -42,14 +42,14 @@ public class FontUtils {
         sTypeface = getTypeface(context, assetManager, commonFontName);
     }
 
-    public static void setToolbarTypeface(Toolbar toolbar, Context context, AssetManager assetManager) {
-        for (int i = 0; i < toolbar.getChildCount(); i++) {
-            View view = toolbar.getChildAt(i);
-            if (view instanceof  TextView) {
-                ((TextView) view).setTypeface(getCommonTypeface(context, assetManager));
-            }
-        }
-    }
+//    public static void setToolbarTypeface(Toolbar toolbar, Context context, AssetManager assetManager) {
+//        for (int i = 0; i < toolbar.getChildCount(); i++) {
+//            View view = toolbar.getChildAt(i);
+//            if (view instanceof  TextView) {
+//                ((TextView) view).setTypeface(getCommonTypeface(context, assetManager));
+//            }
+//        }
+//    }
 
 //    public static void setFontsSize(float commonSize, float customSize, TextView... targetViews) {
 //        float fontSize = customSize > 0 ? customSize : commonSize;

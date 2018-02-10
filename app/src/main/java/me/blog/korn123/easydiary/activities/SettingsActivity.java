@@ -93,37 +93,37 @@ public class SettingsActivity extends EasyDiaryActivity {
         }
     }
 
-    @OnClick({ R.id.primaryColor, R.id.pref1, R.id.pref2, R.id.pref3, R.id.pref4, R.id.pref5, R.id.pref6, R.id.pref7, R.id.pref8, R.id.pref9, R.id.easyPhotoMap, R.id.easyPassword })
+    @OnClick({ R.id.primaryColor, R.id.fontSetting, R.id.sensitiveOption, R.id.guideView, R.id.appLockSetting, R.id.lockNumberSetting, R.id.restoreSetting, R.id.backupSetting, R.id.rateAppSetting, R.id.licenseView, R.id.easyPhotoMap, R.id.easyPassword })
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.primaryColor:
                 TransitionHelper.startActivityWithTransition(SettingsActivity.this, new Intent(SettingsActivity.this, CustomizationActivity.class));
                 break;
-            case R.id.pref1:
+            case R.id.fontSetting:
                 if (PermissionUtils.checkPermission(SettingsActivity.this , Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
                     openFontSettingDialog();
                 } else {
                     PermissionUtils.confirmPermission(SettingsActivity.this, SettingsActivity.this, Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE_WITH_FONT_SETTING);
                 }
                 break;
-            case R.id.pref2:
+            case R.id.sensitiveOption:
                 pref2Switcher.toggle();
                 CommonUtils.saveBooleanPreference(SettingsActivity.this, Constants.DIARY_SEARCH_QUERY_CASE_SENSITIVE, pref2Switcher.isChecked());
                 break;
-            case R.id.pref3:
-                Intent intent = new Intent(SettingsActivity.this, WebViewActivity.class);
-                intent.putExtra(Constants.OPEN_URL_INFO, getString(R.string.add_ttf_fonts_info_url));
-                startActivity(intent);
+            case R.id.guideView:
+                Intent guideIntent = new Intent(this, WebViewActivity.class);
+                guideIntent.putExtra(WebViewActivity.OPEN_URL_INFO, getString(R.string.add_ttf_fonts_info_url));
+                startActivity(guideIntent);
                 break;
-            case R.id.pref4:
+            case R.id.appLockSetting:
                 pref4Switcher.toggle();
                 CommonUtils.saveBooleanPreference(SettingsActivity.this, Constants.APP_LOCK_ENABLE, pref4Switcher.isChecked());
                 break;
-            case R.id.pref5:
+            case R.id.lockNumberSetting:
                 Intent lockSettingIntent = new Intent(SettingsActivity.this, LockSettingActivity.class);
                 startActivityForResult(lockSettingIntent, Constants.REQUEST_CODE_LOCK_SETTING);
                 break;
-            case R.id.pref6:
+            case R.id.restoreSetting:
                 mTaskFlag = Constants.SETTING_FLAG_IMPORT_GOOGLE_DRIVE;
                 if (PermissionUtils.checkPermission(SettingsActivity.this, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
                     // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
@@ -134,7 +134,7 @@ public class SettingsActivity extends EasyDiaryActivity {
                     PermissionUtils.confirmPermission(SettingsActivity.this, SettingsActivity.this, Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE);
                 }
                 break;
-            case R.id.pref7:
+            case R.id.backupSetting:
                 mTaskFlag = Constants.SETTING_FLAG_EXPORT_GOOGLE_DRIVE;
                 if (PermissionUtils.checkPermission(SettingsActivity.this , Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
                     // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
@@ -145,13 +145,13 @@ public class SettingsActivity extends EasyDiaryActivity {
                     PermissionUtils.confirmPermission(SettingsActivity.this, SettingsActivity.this, Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE);
                 }
                 break;
-            case R.id.pref8:
+            case R.id.rateAppSetting:
                 openGooglePlayBy("me.blog.korn123.easydiary");
                 break;
-            case R.id.pref9:
-                Intent webViewIntent = new Intent(SettingsActivity.this, WebViewActivity.class);
-                webViewIntent.putExtra(Constants.OPEN_URL_INFO, "https://github.com/hanjoongcho/aaf-easydiary/blob/master/LICENSE.md");
-                startActivity(webViewIntent);
+            case R.id.licenseView:
+                Intent licenseIntent = new Intent(this, WebViewActivity.class);
+                licenseIntent.putExtra(WebViewActivity.OPEN_URL_INFO, "https://github.com/hanjoongcho/aaf-easydiary/blob/master/LICENSE.md");
+                startActivity(licenseIntent);
                 break;
             case R.id.easyPhotoMap:
                 openGooglePlayBy("me.blog.korn123.easyphotomap");

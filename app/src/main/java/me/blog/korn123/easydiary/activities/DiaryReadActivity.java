@@ -44,7 +44,6 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.BitmapUtils;
 import me.blog.korn123.commons.utils.CommonUtils;
@@ -54,10 +53,10 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.extensions.ContextKt;
-import me.blog.korn123.easydiary.helper.TransitionHelper;
-import me.blog.korn123.easydiary.models.PhotoUriDto;
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
+import me.blog.korn123.easydiary.helper.TransitionHelper;
 import me.blog.korn123.easydiary.models.DiaryDto;
+import me.blog.korn123.easydiary.models.PhotoUriDto;
 
 import static me.blog.korn123.commons.constants.Constants.THUMBNAIL_BACKGROUND_ALPHA;
 

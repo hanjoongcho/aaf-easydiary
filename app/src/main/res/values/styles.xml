@@ -47,11 +47,6 @@
         <item name="contentPaddingBottom">5dp</item>
     </style>
     
-    <style name="SearchCard" parent="DiaryCard">
-        <item name="contentPaddingTop">5dp</item>
-        <item name="contentPaddingBottom">5dp</item>
-    </style>
-    
     <!--DiaryLockActivity-->
     <style name="DiaryLockInputNum">
         <item name="android:textStyle">bold</item>

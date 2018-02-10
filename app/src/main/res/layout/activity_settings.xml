@@ -45,7 +45,7 @@
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content">
                    <android.support.v7.widget.CardView
-                       android:id="@+id/pref1"
+                       android:id="@+id/fontSetting"
                        style="@style/DiaryCardSettings">
                        <LinearLayout
                            style="@style/linear_layout_vertical_type_a">
@@ -76,7 +76,7 @@
                    </android.support.v7.widget.CardView>
 
                    <android.support.v7.widget.CardView
-                       android:id="@+id/pref3"
+                       android:id="@+id/guideView"
                        style="@style/DiaryCardSettings">
                        <LinearLayout
                            style="@style/linear_layout_vertical_type_a">
@@ -92,7 +92,7 @@
                    </android.support.v7.widget.CardView>
 
                    <android.support.v7.widget.CardView
-                       android:id="@+id/pref2"
+                       android:id="@+id/sensitiveOption"
                        style="@style/DiaryCardSettings">
                        <LinearLayout
                            style="@style/linear_layout_vertical_type_b">
@@ -120,7 +120,7 @@
                    </android.support.v7.widget.CardView>
 
                    <android.support.v7.widget.CardView
-                       android:id="@+id/pref4"
+                       android:id="@+id/appLockSetting"
                        style="@style/DiaryCardSettings">
                        <LinearLayout
                            style="@style/linear_layout_vertical_type_b">
@@ -148,7 +148,7 @@
                    </android.support.v7.widget.CardView>
 
                    <android.support.v7.widget.CardView
-                       android:id="@+id/pref5"
+                       android:id="@+id/lockNumberSetting"
                        style="@style/DiaryCardSettings">
                        <LinearLayout
                            style="@style/linear_layout_vertical_type_a">
@@ -164,7 +164,7 @@
                    </android.support.v7.widget.CardView>
 
                    <android.support.v7.widget.CardView
-                       android:id="@+id/pref6"
+                       android:id="@+id/restoreSetting"
                        style="@style/DiaryCardSettings">
                        <LinearLayout
                            style="@style/linear_layout_vertical_type_a">
@@ -180,7 +180,7 @@
                    </android.support.v7.widget.CardView>
 
                    <android.support.v7.widget.CardView
-                       android:id="@+id/pref7"
+                       android:id="@+id/backupSetting"
                        android:layout_marginBottom="2dp"
                        style="@style/DiaryCardSettings">
                        <LinearLayout
@@ -212,7 +212,7 @@
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content">
                    <android.support.v7.widget.CardView
-                       android:id="@+id/pref8"
+                       android:id="@+id/rateAppSetting"
                        android:orientation="vertical"
                        style="@style/DiaryCardSettings">
                        <LinearLayout
@@ -229,7 +229,7 @@
                    </android.support.v7.widget.CardView>
 
                    <android.support.v7.widget.CardView
-                       android:id="@+id/pref9"
+                       android:id="@+id/licenseView"
                        android:layout_marginBottom="2dp"
                        android:orientation="vertical"
                        style="@style/DiaryCardSettings">
@@ -267,6 +267,7 @@
                            style="@style/linear_layout_vertical_type_b">
                            <ImageView
                                android:src="@drawable/ic_easyphotomap"
+                               android:layout_gravity="center_vertical"
                                android:layout_width="wrap_content"
                                android:layout_height="wrap_content" />
                            <LinearLayout
@@ -293,6 +294,7 @@
                            style="@style/linear_layout_vertical_type_b">
                            <ImageView
                                android:src="@drawable/ic_easypassword"
+                               android:layout_gravity="center_vertical"
                                android:layout_width="wrap_content"
                                android:layout_height="wrap_content" />
                            <LinearLayout
