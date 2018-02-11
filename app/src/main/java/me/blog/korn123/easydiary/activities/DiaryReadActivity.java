@@ -262,23 +262,35 @@ public class DiaryReadActivity extends EasyDiaryActivity {
                         break;
                     case 2:
                         mShowcaseView.setButtonPosition(centerParams);
+                        mShowcaseView.setTarget(new ViewTarget(R.id.zoomIn, DiaryReadActivity.this));
+                        mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_5));
+                        mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_5));
+                        break;
+                    case 3:
+                        mShowcaseView.setButtonPosition(centerParams);
+                        mShowcaseView.setTarget(new ViewTarget(R.id.zoomOut, DiaryReadActivity.this));
+                        mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_6));
+                        mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_6));
+                        break;
+                    case 4:
+                        mShowcaseView.setButtonPosition(centerParams);
                         mShowcaseView.setTarget(new ViewTarget(R.id.edit, DiaryReadActivity.this));
                         mShowcaseView.setContentTitle(getString(R.string.read_diary_detail_showcase_title_2));
                         mShowcaseView.setContentText(getString(R.string.read_diary_detail_showcase_message_2));
                         break;
-                    case 3:
+                    case 5:
                         mShowcaseView.setButtonPosition(centerParams);
                         mShowcaseView.setTarget(new ViewTarget(R.id.speechOutButton, DiaryReadActivity.this));
                         mShowcaseView.setContentTitle(getString(R.string.read_diary_detail_showcase_title_3));
                         mShowcaseView.setContentText(getString(R.string.read_diary_detail_showcase_message_3));
                         break;
-                    case 4:
+                    case 6:
                         mShowcaseView.setButtonPosition(centerParams);
                         mShowcaseView.setTarget(new ViewTarget(R.id.postCard, DiaryReadActivity.this));
                         mShowcaseView.setContentTitle(getString(R.string.read_diary_detail_showcase_title_4));
                         mShowcaseView.setContentText(getString(R.string.read_diary_detail_showcase_message_4));
                         break;
-                    case 5:
+                    case 7:
                         mShowcaseView.hide();
                         break;
                 }

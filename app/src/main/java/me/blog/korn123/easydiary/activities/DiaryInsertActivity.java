@@ -99,12 +99,6 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
     @BindView(R.id.photoContainer)
     ViewGroup mPhotoContainer;
 
-    @BindView(R.id.zoomIn)
-    ImageView mZoomIn;
-
-    @BindView(R.id.zoomOut)
-    ImageView mZoomOut;
-
     @BindView(R.id.saveContents)
     ImageView mSaveContents;
 
@@ -156,21 +150,11 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
         );
     }
 
-    @OnClick({R.id.zoomIn, R.id.zoomOut, R.id.saveContents, R.id.photoView, R.id.datePicker, R.id.timePicker, R.id.secondsPicker, R.id.microphone})
+    @OnClick({R.id.saveContents, R.id.photoView, R.id.datePicker, R.id.timePicker, R.id.secondsPicker, R.id.microphone})
     public void onClick(View view) {
         float fontSize = mContents.getTextSize();
 
         switch(view.getId()) {
-            case R.id.zoomIn:
-                CommonUtils.saveFloatPreference(DiaryInsertActivity.this, Constants.SETTING_FONT_SIZE, fontSize + 5);
-                setFontsStyle();
-                setFontsSize();
-                break;
-            case R.id.zoomOut:
-                CommonUtils.saveFloatPreference(DiaryInsertActivity.this, Constants.SETTING_FONT_SIZE, fontSize - 5);
-                setFontsStyle();
-                setFontsSize();
-                break;
             case R.id.saveContents:
                 if (StringUtils.isEmpty(mContents.getText())) {
                     mContents.requestFocus();
@@ -305,38 +289,27 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
                         mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_4));
                         mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_4));
                         break;
+                    
                     case 5:
-                        mShowcaseView.setButtonPosition(centerParams);
-                        mShowcaseView.setShowcase(new ViewTarget(mZoomIn), true);
-                        mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_5));
-                        mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_5));
-                        break;
-                    case 6:
-                        mShowcaseView.setButtonPosition(centerParams);
-                        mShowcaseView.setShowcase(new ViewTarget(mZoomOut), true);
-                        mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_6));
-                        mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_6));
-                        break;
-                    case 7:
                         mShowcaseView.setButtonPosition(centerParams);
                         mShowcaseView.setShowcase(new ViewTarget(mDatePicker), true);
                         mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_7));
                         mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_7));
                         break;
-                    case 8:
+                    case 6:
                         mShowcaseView.setButtonPosition(centerParams);
                         mShowcaseView.setShowcase(new ViewTarget(mTimePicker), true);
                         mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_8));
                         mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_8));
                         break;
-                    case 9:
+                    case 7:
                         mShowcaseView.setButtonPosition(centerParams);
                         mShowcaseView.setShowcase(new ViewTarget(mSaveContents), true);
                         mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_9));
                         mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_9));
                         mShowcaseView.setButtonText(getString(R.string.create_diary_showcase_button_2));
                         break;
-                    case 10:
+                    case 8:
                         mShowcaseView.hide();
                         break;
                 }

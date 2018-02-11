@@ -1,23 +1,29 @@
 package me.blog.korn123.easydiary.activities;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.chrisbanes.photoview.PhotoView;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
+import me.blog.korn123.easydiary.extensions.ContextKt;
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
 import me.blog.korn123.easydiary.models.DiaryDto;
 import me.blog.korn123.easydiary.viewpagers.HackyViewPager;
@@ -31,6 +37,9 @@ public class PhotoViewPagerActivity extends EasyDiaryActivity {
     ViewPager mViewPager;
     private TextView mPageInfo;
     private int mPhotoCount;
+    
+    @BindView(R.id.close)
+    ImageView closeButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,6 +71,10 @@ public class PhotoViewPagerActivity extends EasyDiaryActivity {
             public void onPageScrollStateChanged(int state) {
             }
         });
+
+        Drawable closeIcon = ContextCompat.getDrawable(this, R.drawable.x_mark_3);
+        closeIcon.setColorFilter(ContextKt.getConfig(this).getPrimaryColor(), PorterDuff.Mode.SRC_IN);
+        closeButton.setImageDrawable(closeIcon);
     }
 
     @OnClick({R.id.close})
