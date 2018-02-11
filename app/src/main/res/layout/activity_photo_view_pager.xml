@@ -24,8 +24,9 @@
             android:layout_height="wrap_content" />
         <ImageView
             android:layout_marginRight="20dp"
+            android:padding="10dp"
             android:layout_alignParentRight="true"
-            android:background="?attr/selectableItemBackground"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:id="@+id/close"
             android:src="@drawable/x_mark_3"
             android:layout_width="wrap_content"

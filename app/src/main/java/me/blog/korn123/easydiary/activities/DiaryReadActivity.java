@@ -104,7 +104,7 @@ public class DiaryReadActivity extends EasyDiaryActivity {
         ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-//        getSupportActionBar().setTitle(getString(R.string.read_diary_detail_title));
+        getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Set up the ViewPager with the sections adapter.

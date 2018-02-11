@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.TextView
 import io.github.hanjoongcho.commons.activities.BaseCustomizationActivity
+import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.resumeLock
@@ -32,6 +33,7 @@ class CustomizationActivity : BaseCustomizationActivity() {
 
     override fun onResume() {
         super.onResume()
+        FontUtils.setFontsTypeface(applicationContext, assets, null, findViewById<ViewGroup>(android.R.id.content))
         resumeLock()
     }
     
