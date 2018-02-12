@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.11 (date: 2018/02/12)
+  * Fixed bug the Fast Scroll issue in Android 4.x
+
 # Changes in 1.4.10 (date: 2018/02/11)
   * Improved custom theme settings
   
