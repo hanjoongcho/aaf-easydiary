@@ -23,12 +23,10 @@
             <com.simplemobiletools.commons.views.MyEditText
                 android:id="@+id/title"
                 android:background="@android:color/transparent"
-                android:textColor="@color/default_text_color"
                 android:layout_gravity="center_vertical"
                 android:gravity="center_vertical"
                 android:hint="@string/guide_message"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                style="@style/activity_insert_diary_card" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 
@@ -45,10 +43,8 @@
                 android:id="@+id/contents"
                 android:gravity="top"
                 android:background="@android:color/transparent"
-                android:textColor="@color/default_text_color"
                 android:hint="@string/contents_text_hint"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                style="@style/activity_insert_diary_card" />
         </android.support.v7.widget.CardView>
     </ScrollView>
 

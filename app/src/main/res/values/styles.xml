@@ -46,7 +46,28 @@
         <item name="contentPaddingTop">5dp</item>
         <item name="contentPaddingBottom">5dp</item>
     </style>
-    
+
+    <!--DiaryMainActivity-->
+    <style name="item_diary_card_main">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">@dimen/diary_card_text_padding</item>
+    </style>
+
+    <!--DiaryReadActivity-->
+    <style name="fragment_diary_card">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">@dimen/diary_card_text_padding</item>
+    </style>
+
+    <!--DiaryInsertActivity-->
+    <style name="activity_insert_diary_card">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">@dimen/diary_card_text_padding</item>
+    </style>
+
     <!--DiaryLockActivity-->
     <style name="DiaryLockInputNum">
         <item name="android:textStyle">bold</item>

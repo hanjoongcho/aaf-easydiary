@@ -76,7 +76,6 @@ fun Context.initTextSize(viewGroup: ViewGroup, context: Context) {
             .forEach {
                 when (it) {
                     is TextView -> it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
-                    is EditText ->  it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
                     is ViewGroup -> initTextSize(it, context)
                 }
             }
