@@ -24,11 +24,11 @@
             android:layout_height="wrap_content" />
         <ImageView
             android:layout_marginRight="20dp"
-            android:padding="10dp"
+            android:padding="3dp"
             android:layout_alignParentRight="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:background="@drawable/ic_selector"
             android:id="@+id/close"
-            android:src="@drawable/x_mark_3"
+            android:src="@drawable/ic_cross"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </RelativeLayout>

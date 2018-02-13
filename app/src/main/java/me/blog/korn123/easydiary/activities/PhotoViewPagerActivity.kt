@@ -48,11 +48,11 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
             override fun onPageScrollStateChanged(state: Int) {}
         })
 
-        val closeIcon = ContextCompat.getDrawable(this, R.drawable.x_mark_3)
-        closeIcon?.let {
-            it.setColorFilter(this.config.primaryColor, PorterDuff.Mode.SRC_IN)
-            close.setImageDrawable(closeIcon)   
-        }
+//        val closeIcon = ContextCompat.getDrawable(this, R.drawable.x_mark_3)
+//        closeIcon?.let {
+//            it.setColorFilter(this.config.primaryColor, PorterDuff.Mode.SRC_IN)
+//            close.setImageDrawable(closeIcon)   
+//        }
 
         close.setOnClickListener { finish() }
     }

@@ -7,12 +7,13 @@
         <item name="colorAccent">@color/colorAccent</item>
         <!--<item name="actionBarStyle">@style/AppTheme.ActionBar</item>-->
     </style>
-
+    
     <!--Common-->
     <style name="ToolBarIcon">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:background">@drawable/ic_selector</item>
+        <item name="android:padding">10dp</item>
     </style>
 
     <style name="linear_layout_vertical_type_a">

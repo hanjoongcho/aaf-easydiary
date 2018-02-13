@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.activities;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -20,6 +21,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -125,8 +127,13 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
 
     @OnClick({R.id.saveContents, R.id.photoView, R.id.datePicker, R.id.timePicker, R.id.secondsPicker, R.id.microphone})
     public void onClick(View view) {
-        float fontSize = mContents.getTextSize();
-
+        // Check if no view has focus:
+        View currentView = this.getCurrentFocus();
+        if (currentView != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+        
         switch(view.getId()) {
             case R.id.saveContents:
                 if (StringUtils.isEmpty(mContents.getText())) {
@@ -185,6 +192,7 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
                 showSpeechDialog();
                 break;
         }
+//        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     @Override
