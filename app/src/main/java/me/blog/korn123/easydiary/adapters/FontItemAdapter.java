@@ -17,11 +17,8 @@ import java.util.Map;
 
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.commons.utils.CommonUtils;
-import me.blog.korn123.commons.utils.EasyDiaryUtils;
 import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.easydiary.R;
-import me.blog.korn123.easydiary.activities.SettingsActivity;
-import me.blog.korn123.easydiary.models.DiaryDto;
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -64,14 +61,8 @@ public class FontItemAdapter extends ArrayAdapter<Map<String, String>> {
         return row;
     }
 
-//    private void setFontsSize(ViewHolder holder) {
-//        float commonSize = CommonUtils.loadFloatPreference(context, Constants.SETTING_FONT_SIZE, holder.textView1.getTextSize());
-//        FontUtils.setFontsSize(commonSize, -1, holder.textView1);
-//    }
-
     private static class ViewHolder {
         TextView textView;
         ImageView imageView;
     }
-
 }

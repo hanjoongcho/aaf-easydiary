@@ -227,7 +227,7 @@ public class SettingsActivity extends EasyDiaryActivity {
         builder.setTitle(getString(R.string.font_setting));
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(this.LAYOUT_INFLATER_SERVICE);
         View fontView = inflater.inflate(R.layout.dialog_fonts, null);
-        ListView listView = (ListView) fontView.findViewById(R.id.listFont);
+        ListView listView = fontView.findViewById(R.id.listFont);
 
         String[] fontNameArray = getResources().getStringArray(R.array.pref_list_fonts_title);
         String[] fontPathArray = getResources().getStringArray(R.array.pref_list_fonts_values);

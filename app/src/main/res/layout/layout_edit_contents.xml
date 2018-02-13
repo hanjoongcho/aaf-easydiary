@@ -22,6 +22,9 @@
 
             <com.simplemobiletools.commons.views.MyEditText
                 android:id="@+id/title"
+                android:maxLines="1"
+                android:inputType="text"
+                android:imeOptions="actionNext"
                 android:background="@android:color/transparent"
                 android:layout_gravity="center_vertical"
                 android:gravity="center_vertical"
