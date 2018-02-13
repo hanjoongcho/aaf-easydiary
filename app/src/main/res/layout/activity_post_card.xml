@@ -41,7 +41,7 @@
                         android:layout_height="wrap_content">
                         <LinearLayout
                             android:id="@+id/contentsContainer"
-                            android:background="@drawable/bg_card_diary"
+                            android:background="@android:color/white"
                             android:padding="20dp"
                             android:orientation="vertical"
                             android:layout_width="match_parent"

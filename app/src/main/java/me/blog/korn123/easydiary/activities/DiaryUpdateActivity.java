@@ -121,7 +121,6 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
         initData();
         initDateTime();
         setDateTime();
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     @OnClick({R.id.saveContents, R.id.photoView, R.id.datePicker, R.id.timePicker, R.id.secondsPicker, R.id.microphone})
@@ -316,6 +315,7 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 mCurrentCursor = 1;
+                mContents.requestFocus();
                 return false;
             }
         });

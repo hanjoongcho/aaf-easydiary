@@ -4,7 +4,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <android.support.v7.widget.CardView
-        style="@style/DiaryCardSettings">
+        style="@style/DiaryCard">
         <LinearLayout
             style="@style/linear_layout_vertical_type_b">
             <ImageView
@@ -32,20 +32,22 @@
         </LinearLayout>
     </android.support.v7.widget.CardView>
 
-    <ScrollView
-        android:fillViewport="true"
-        android:layout_width="match_parent"
+    <android.support.v7.widget.CardView
+        android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_height="0dp">
-        <android.support.v7.widget.CardView
-            style="@style/DiaryCard">
+        android:layout_marginTop="@dimen/card_layout_margin"
+        style="@style/DiaryCard">
+        <ScrollView
+            android:fillViewport="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
             <com.simplemobiletools.commons.views.MyTextView
                 android:id="@+id/contents"
                 android:enabled="false"
                 android:gravity="left"
                 style="@style/fragment_diary_card"/>
-        </android.support.v7.widget.CardView>
-    </ScrollView>
+        </ScrollView>
+    </android.support.v7.widget.CardView>
 
     <HorizontalScrollView
         android:layout_marginTop="@dimen/card_layout_margin"
