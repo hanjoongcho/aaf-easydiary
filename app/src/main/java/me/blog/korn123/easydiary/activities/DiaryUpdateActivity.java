@@ -133,6 +133,7 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+        //        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         
         switch(view.getId()) {
             case R.id.saveContents:
@@ -192,7 +193,6 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
                 showSpeechDialog();
                 break;
         }
-//        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     @Override

@@ -94,6 +94,13 @@ public class PostCardActivity extends EasyDiaryActivity {
         mDate.setText(DateUtils.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
         initShowcase();
     }
+    
+    View.OnClickListener listener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            System.out.println(1);
+        }
+    };
 
     private int showcaseIndex = 1;
     ShowcaseView mShowcaseView;
