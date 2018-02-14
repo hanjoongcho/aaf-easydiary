@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
-import android.widget.ProgressBar
 import android.widget.TextView
 import me.blog.korn123.commons.constants.Constants
 import me.blog.korn123.commons.utils.CommonUtils
@@ -34,7 +33,6 @@ class FontItemAdapter(val activity: Activity, private val layoutResourceId: Int,
             holder = ViewHolder()
             holder.textView = row.findViewById(R.id.textView)
             holder.imageView = row.findViewById(R.id.checkIcon)
-            holder.typefaceLoader = row.findViewById(R.id.typefaceLoader)
             row.tag = holder
         } else {
             holder = row.tag as ViewHolder
@@ -48,15 +46,13 @@ class FontItemAdapter(val activity: Activity, private val layoutResourceId: Int,
         holder.textView?.text = StringUtils.EMPTY
 //        holder.textView?.typeface = FontUtils.getTypeface(context, context.assets, list[position]["fontName"])
         holder.position = position
-        holder.typefaceLoader?.visibility = View.VISIBLE
-//        Log.i("fontDialog", "$position")
+        Log.i("fontDialog", "$position")
         RenderTask(context, holder, position).execute()
 
         return row
     }
 
     class ViewHolder {
-        var typefaceLoader: ProgressBar? = null
         var textView: TextView? = null
         var imageView: ImageView? = null
         var position: Int = 0
@@ -64,7 +60,6 @@ class FontItemAdapter(val activity: Activity, private val layoutResourceId: Int,
 
     inner class RenderTask(val context: Context, private val holder: ViewHolder, private val position: Int) : AsyncTask<String, Void, Typeface>() {
         override fun doInBackground(vararg param: String?): Typeface? {
-//            Thread.sleep(500)
             var typeface: Typeface? = null
             if (position == holder.position) {
                 typeface = FontUtils.getTypeface(context, context.assets, list[position]["fontName"])
@@ -80,7 +75,6 @@ class FontItemAdapter(val activity: Activity, private val layoutResourceId: Int,
                     typeface = targetTypeface
                     text = list[position]["disPlayFontName"]
                 }
-                holder.typefaceLoader?.visibility = View.GONE
             }
         }
     }
