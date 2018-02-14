@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.Typeface
 import android.os.AsyncTask
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -48,6 +49,7 @@ class FontItemAdapter(val activity: Activity, private val layoutResourceId: Int,
 //        holder.textView?.typeface = FontUtils.getTypeface(context, context.assets, list[position]["fontName"])
         holder.position = position
         holder.typefaceLoader?.visibility = View.VISIBLE
+//        Log.i("fontDialog", "$position")
         RenderTask(context, holder, position).execute()
 
         return row
