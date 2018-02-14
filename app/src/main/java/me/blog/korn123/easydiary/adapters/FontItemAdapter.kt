@@ -46,7 +46,7 @@ class FontItemAdapter(val activity: Activity, private val layoutResourceId: Int,
         holder.textView?.text = StringUtils.EMPTY
 //        holder.textView?.typeface = FontUtils.getTypeface(context, context.assets, list[position]["fontName"])
         holder.position = position
-        Log.i("fontDialog", "$position")
+//        Log.i("fontDialog", "$position")
         RenderTask(context, holder, position).execute()
 
         return row
