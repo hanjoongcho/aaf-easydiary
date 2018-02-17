@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.activities;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -17,6 +18,8 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -120,10 +123,16 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
         mRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-
-        bindEvent();
+        
         initSpinner();
+        initKeypad();
         initShowcase();
+        bindEvent();
+    }
+    
+    private void initKeypad() {
+        boolean hasShot = getSharedPreferences("showcase_internal", Context.MODE_PRIVATE).getBoolean("hasShot" + Constants.SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER, false);
+        if (!hasShot) getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     @Override
@@ -146,8 +155,12 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
 
     @OnClick({R.id.saveContents, R.id.photoView, R.id.datePicker, R.id.timePicker, R.id.secondsPicker, R.id.microphone})
     public void onClick(View view) {
-        float fontSize = mContents.getTextSize();
-
+        View currentView = this.getCurrentFocus();
+        if (currentView != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+        
         switch(view.getId()) {
             case R.id.saveContents:
                 if (StringUtils.isEmpty(mContents.getText())) {
