@@ -1,0 +1,58 @@
+package me.blog.korn123.easydiary.models
+
+import io.realm.RealmList
+import io.realm.RealmObject
+import io.realm.annotations.Ignore
+import io.realm.annotations.PrimaryKey
+import me.blog.korn123.commons.utils.DateUtils
+
+/**
+ * Created by CHO HANJOONG on 2017-03-16.
+ */
+
+open class DiaryDto : RealmObject {
+    @PrimaryKey
+    var sequence: Int = 0
+
+    @Ignore
+    private val sessionId: Int = 0
+
+    var currentTimeMillis: Long = 0
+
+    var title: String? = null
+
+    var contents: String? = null
+
+    var dateString: String? = null
+
+    var weather: Int = 0
+
+    var photoUris: RealmList<PhotoUriDto> = RealmList<PhotoUriDto>()
+        set(photoUris) {
+            field.clear()
+            field.addAll(photoUris)
+        }
+
+    var fontName: String? = null
+
+    var fontSize: Float = 0.toFloat()
+
+    constructor()
+
+    constructor(sequence: Int, currentTimeMillis: Long, title: String, contents: String) {
+        this.sequence = sequence
+        this.currentTimeMillis = currentTimeMillis
+        this.title = title
+        this.contents = contents
+        this.dateString = DateUtils.timeMillisToDateTime(currentTimeMillis, DateUtils.DATE_PATTERN_DASH)
+    }
+
+    constructor(sequence: Int, currentTimeMillis: Long, title: String, contents: String, weather: Int) {
+        this.sequence = sequence
+        this.currentTimeMillis = currentTimeMillis
+        this.title = title
+        this.contents = contents
+        this.dateString = DateUtils.timeMillisToDateTime(currentTimeMillis, DateUtils.DATE_PATTERN_DASH)
+        this.weather = weather
+    }
+}

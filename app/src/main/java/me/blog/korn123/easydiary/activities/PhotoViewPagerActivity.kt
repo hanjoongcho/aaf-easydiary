@@ -1,9 +1,7 @@
 package me.blog.korn123.easydiary.activities
 
-import android.graphics.PorterDuff
 import android.net.Uri
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
 import android.view.Gravity
@@ -16,7 +14,6 @@ import me.blog.korn123.commons.constants.Constants
 import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.DiaryDto
 
@@ -67,19 +64,22 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
             //            photoView.setImageResource(sDrawables[position]);
             val uri = Uri.parse(diaryDto.photoUris[position].photoUri)
             photoView.setImageURI(uri)
-            if (photoView.drawable == null) {
-                val textView = TextView(container.context)
-                textView.gravity = Gravity.CENTER
-                val padding = CommonUtils.dpToPixel(container.context, 10, 1)
-                textView.setPadding(padding, padding, padding, padding)
-                FontUtils.setTypefaceDefault(textView)
-                textView.text = container.context.getString(R.string.photo_view_error_info)
-                container.addView(textView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-                return textView
-            } else {
-                // Now just add PhotoView to ViewPager and return it
-                container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-                return photoView
+            when (photoView.drawable == null) {
+                true -> {
+                    val textView = TextView(container.context)
+                    textView.gravity = Gravity.CENTER
+                    val padding = CommonUtils.dpToPixel(container.context, 10, 1)
+                    textView.setPadding(padding, padding, padding, padding)
+                    FontUtils.setTypefaceDefault(textView)
+                    textView.text = container.context.getString(R.string.photo_view_error_info)
+                    container.addView(textView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                    return textView    
+                }
+                false -> {
+                    // Now just add PhotoView to ViewPager and return it
+                    container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                    return photoView    
+                }
             }
         }
 
