@@ -27,11 +27,7 @@ open class DiaryDto : RealmObject {
 
     var weather: Int = 0
 
-    var photoUris: RealmList<PhotoUriDto> = RealmList<PhotoUriDto>()
-        set(photoUris) {
-            field.clear()
-            field.addAll(photoUris)
-        }
+    var photoUris: RealmList<PhotoUriDto>? = null
 
     var fontName: String? = null
 
