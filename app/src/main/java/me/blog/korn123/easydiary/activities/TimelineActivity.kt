@@ -48,7 +48,7 @@ class TimelineActivity : EasyDiaryActivity() {
 
     override fun onResume() {
         super.onResume()
-        refreshList(null)
+        refreshList(searchView.text.toString())
     }
     
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
