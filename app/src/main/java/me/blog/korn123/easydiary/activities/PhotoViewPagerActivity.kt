@@ -31,7 +31,7 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
         val intent = intent
         val sequence = intent.getIntExtra(Constants.DIARY_SEQUENCE, 0)
         val diaryDto = EasyDiaryDbHelper.readDiaryBy(sequence)
-        mPhotoCount = diaryDto.photoUris!!.size
+        mPhotoCount = diaryDto.photoUris?.size ?: 0
         pageInfo.text = "1 / $mPhotoCount"
 
         view_pager.adapter = SamplePagerAdapter(diaryDto)
@@ -56,7 +56,7 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
 
     internal class SamplePagerAdapter(var diaryDto: DiaryDto) : PagerAdapter() {
         override fun getCount(): Int {
-            return diaryDto.photoUris!!.size
+            return diaryDto.photoUris?.size ?: 0
         }
 
         override fun instantiateItem(container: ViewGroup, position: Int): View {
