@@ -18,6 +18,9 @@ import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.google.android.gms.drive.GoogleDriveDownloader;
+import com.google.android.gms.drive.GoogleDriveUploader;
+
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
@@ -38,8 +41,6 @@ import me.blog.korn123.commons.utils.FontUtils;
 import me.blog.korn123.commons.utils.PermissionUtils;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.adapters.FontItemAdapter;
-import me.blog.korn123.easydiary.googledrive.GoogleDriveDownloader;
-import me.blog.korn123.easydiary.googledrive.GoogleDriveUploader;
 import me.blog.korn123.easydiary.helper.TransitionHelper;
 
 /**

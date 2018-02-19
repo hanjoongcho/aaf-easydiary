@@ -22,7 +22,6 @@ import java.util.Map;
 
 import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.easydiary.R;
-import me.blog.korn123.easydiary.activities.DiaryInsertActivity;
 import me.blog.korn123.easydiary.adapters.SecondItemAdapter;
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
 
@@ -154,7 +153,7 @@ public class EasyDiaryUtils {
         builder.setTitle(context.getString(R.string.common_create_seconds));
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
         View secondsPicker = inflater.inflate(R.layout.dialog_seconds_picker, null);
-        ListView listView = (ListView) secondsPicker.findViewById(R.id.seconds);
+        ListView listView = secondsPicker.findViewById(R.id.seconds);
         List<Map<String, String>> listSecond = new ArrayList<>();
         for (int i = 0; i < 60; i++) {
             HashMap<String, String> map = new HashMap();
@@ -162,11 +161,10 @@ public class EasyDiaryUtils {
             map.put("value", String.valueOf(i));
             listSecond.add(map);
         }
-        ArrayAdapter<Map<String, String>> adapter = new SecondItemAdapter(context, R.layout.item_second, listSecond, second);
+        ArrayAdapter adapter = new SecondItemAdapter(context, R.layout.item_second, listSecond, second);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(itemClickListener);
         builder.setView(secondsPicker);
         return builder;
     }
-
 }
