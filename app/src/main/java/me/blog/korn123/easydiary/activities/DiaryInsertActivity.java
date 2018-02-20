@@ -83,10 +83,10 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
     private AlertDialog mAlertDialog;
     private int mPrimaryColor = 0;
 
-    @BindView(R.id.contents)
+    @BindView(R.id.diaryContents)
     EditText mContents;
 
-    @BindView(R.id.title)
+    @BindView(R.id.diaryTitle)
     EditText mTitle;
 
     @BindView(R.id.weatherSpinner)

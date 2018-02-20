@@ -21,7 +21,7 @@
             </Spinner>
 
             <com.simplemobiletools.commons.views.MyEditText
-                android:id="@+id/title"
+                android:id="@+id/diaryTitle"
                 android:background="@android:color/transparent"
                 android:layout_gravity="center_vertical"
                 android:gravity="center_vertical"
@@ -41,7 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <com.simplemobiletools.commons.views.MyEditText
-                android:id="@+id/contents"
+                android:id="@+id/diaryContents"
                 android:gravity="top"
                 android:background="@android:color/transparent"
                 android:hint="@string/contents_text_hint"

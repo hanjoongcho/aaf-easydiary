@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.os.Environment
 import android.speech.RecognizerIntent
 import android.support.v4.app.ActivityCompat
-import android.support.v7.widget.Toolbar
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
@@ -67,13 +66,15 @@ class DiaryMainActivity : EasyDiaryActivity() {
         }
 
         mCurrentTimeMillis = System.currentTimeMillis()
-        val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
-        supportActionBar!!.title = getString(R.string.read_diary_title)
+        supportActionBar?.run {
+            title = getString(R.string.read_diary_title)
+        }
 
-        mRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-        mRecognizerIntent!!.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-        mRecognizerIntent!!.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+        mRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+        }
 
         mDiaryList = EasyDiaryDbHelper.readDiary(null)
         mDiaryMainItemAdapter = DiaryMainItemAdapter(this, R.layout.item_diary_main, this.mDiaryList!!)
