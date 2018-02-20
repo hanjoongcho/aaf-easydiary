@@ -10,7 +10,7 @@ This is a diary application optimized to user experience.
 
 <a href='https://play.google.com/store/apps/details?id=me.blog.korn123.easydiary'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="258" height="98"/></a>
 
-<img src="screenshots/app_easydiary01.png" width="288" height="512">&nbsp;
+<img src="screenshots/00.jpg">&nbsp;
 <img src="screenshots/showcase_en.gif" width="288" height="512">
 
 # Support Features
@@ -31,19 +31,19 @@ This is a diary application optimized to user experience.
 ```
 # Screen Shot
 ## Write diary (voice or keypad)
-<img src="screenshots/app_easydiary02_01_en.png" width="288" height="512">&nbsp;
-<img src="screenshots/app_easydiary02_02_en.png" width="288" height="512">&nbsp;
+<img src="screenshots/01_1.jpg">&nbsp;
+<img src="screenshots/01_2.jpg">&nbsp;
 ## Search diary
-<img src="screenshots/app_easydiary03_en.png" width="288" height="512">&nbsp;
+<img src="screenshots/02.jpg">&nbsp;
 ## Read Diary
-<img src="screenshots/app_easydiary04_en.png" width="288" height="512">&nbsp;
-<img src="screenshots/app_easydiary04_02.png" width="288" height="512">&nbsp;
+<img src="screenshots/03_1.jpg">&nbsp;
+<img src="screenshots/03_2.jpg">&nbsp;
 ## Edit Diary
-<img src="screenshots/app_easydiary05_en.png" width="288" height="512">&nbsp;
+<img src="screenshots/04.jpg">&nbsp;
 ## Chart
-<img src="screenshots/app_easydiary07_en.png" width="288" height="512">&nbsp;
+<img src="screenshots/05.jpg">&nbsp;
 ## Calendar
-<img src="screenshots/app_easydiary08_en.png" width="288" height="512">&nbsp;
+<img src="screenshots/06.jpg">&nbsp;
 ## Diary Card
 <img src="screenshots/app_easydiary10_01_en.png" width="288" height="512">&nbsp;
 <img src="screenshots/app_easydiary10_02_en.png" width="288" height="512">&nbsp;
@@ -53,7 +53,9 @@ This is a diary application optimized to user experience.
 <img src="screenshots/app_easydiary10_06_en.png" width="288" height="512">&nbsp;
 <img src="screenshots/app_easydiary10_07_en.png" width="288" height="512">&nbsp;
 ## Time Line
-<img src="screenshots/app_easydiary11_01_en.png" width="288" height="512">&nbsp;
+<img src="screenshots/08_1.jpg">&nbsp;
+<img src="screenshots/08_2.jpg">&nbsp;
+<img src="screenshots/08_3.jpg">&nbsp;
 ## Advanced Settings
 <img src="screenshots/app_easydiary09_01_en.png" width="288" height="512">&nbsp;
 <img src="screenshots/app_easydiary09_03_en.png" width="288" height="512">&nbsp;
