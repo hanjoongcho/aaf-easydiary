@@ -131,7 +131,7 @@ public class BarChartActivity extends ChartBase {
         List<DiaryDto> listDiary = EasyDiaryDbHelper.readDiary(null);
         Map<Integer, Integer> map = new HashMap<>();
         for (DiaryDto diaryDto : listDiary) {
-            String writeHour = DateUtils.timeMillisToHour(diaryDto.getCurrentTimeMillis());
+            String writeHour = DateUtils.INSTANCE.timeMillisToHour(diaryDto.getCurrentTimeMillis());
             int itemNumber = hourToItemNumber(Integer.parseInt(writeHour));
             if (map.get(itemNumber) == null) {
                 map.put(itemNumber, 1);

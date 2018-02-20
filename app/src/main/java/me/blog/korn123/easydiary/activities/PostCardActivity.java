@@ -91,7 +91,7 @@ public class PostCardActivity extends EasyDiaryActivity {
         EasyDiaryUtils.initWeatherView(mWeather, diaryDto.getWeather());
         mTitle.setText(diaryDto.getTitle());
         mContents.setText(diaryDto.getContents());
-        mDate.setText(DateUtils.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
+        mDate.setText(DateUtils.INSTANCE.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
         initShowcase();
     }
     
@@ -220,21 +220,21 @@ public class PostCardActivity extends EasyDiaryActivity {
                         .show();
                 break;
             case R.id.save:
-                if (PermissionUtils.checkPermission(this, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
+                if (PermissionUtils.INSTANCE.checkPermission(this, Constants.INSTANCE.getEXTERNAL_STORAGE_PERMISSIONS())) {
                     // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
                     exportDiaryCard(true);
                 } else {
                     // API Level 23 이상이면서 권한취득 안한경우
-                    PermissionUtils.confirmPermission(this, this, Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE);
+                    PermissionUtils.INSTANCE.confirmPermission(this, this, Constants.INSTANCE.getEXTERNAL_STORAGE_PERMISSIONS(), Constants.REQUEST_CODE_EXTERNAL_STORAGE);
                 }
                 break;
             case R.id.share:
-                if (PermissionUtils.checkPermission(this, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
+                if (PermissionUtils.INSTANCE.checkPermission(this, Constants.INSTANCE.getEXTERNAL_STORAGE_PERMISSIONS())) {
                     // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
                     exportDiaryCard(false);
                 } else {
                     // API Level 23 이상이면서 권한취득 안한경우
-                    PermissionUtils.confirmPermission(this, this, Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE_WITH_SHARE_DIARY_CARD);
+                    PermissionUtils.INSTANCE.confirmPermission(this, this, Constants.INSTANCE.getEXTERNAL_STORAGE_PERMISSIONS(), Constants.REQUEST_CODE_EXTERNAL_STORAGE_WITH_SHARE_DIARY_CARD);
                 }
                 break;
         }
@@ -334,7 +334,7 @@ public class PostCardActivity extends EasyDiaryActivity {
 
     private void exportDiaryCard(final boolean showInfoDialog) {
         // draw viewGroup on UI Thread
-        final Bitmap bitmap = BitmapUtils.diaryViewGroupToBitmap(mPostContainer);
+        final Bitmap bitmap = BitmapUtils.INSTANCE.diaryViewGroupToBitmap(mPostContainer);
         progressBar.setVisibility(View.VISIBLE);
 
         // generate postcard file another thread
@@ -342,16 +342,16 @@ public class PostCardActivity extends EasyDiaryActivity {
             @Override
             public void run() {
                 try {
-                    final String diaryCardPath = Path.WORKING_DIRECTORY + mSequence + "_" + DateUtils.getCurrentDateAsString(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".jpg";
+                    final String diaryCardPath = Path.INSTANCE.getWORKING_DIRECTORY() + mSequence + "_" + DateUtils.INSTANCE.getCurrentDateAsString(DateUtils.INSTANCE.getDATE_TIME_PATTERN_WITHOUT_DELIMITER()) + ".jpg";
                     mSavedDiaryCardPath = Environment.getExternalStorageDirectory().getAbsolutePath() + diaryCardPath;
-                    EasyDiaryUtils.initWorkingDirectory(Environment.getExternalStorageDirectory().getAbsolutePath() + Path.USER_CUSTOM_FONTS_DIRECTORY);
-                    BitmapUtils.saveBitmapToFileCache(bitmap, mSavedDiaryCardPath);
+                    EasyDiaryUtils.initWorkingDirectory(Environment.getExternalStorageDirectory().getAbsolutePath() + Path.INSTANCE.getUSER_CUSTOM_FONTS_DIRECTORY());
+                    BitmapUtils.INSTANCE.saveBitmapToFileCache(bitmap, mSavedDiaryCardPath);
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
                             progressBar.setVisibility(View.GONE);
                             if (showInfoDialog) {
-                                DialogUtils.showAlertDialog(PostCardActivity.this, getString(R.string.diary_card_export_info) , diaryCardPath, new DialogInterface.OnClickListener() {
+                                DialogUtils.INSTANCE.showAlertDialog(PostCardActivity.this, getString(R.string.diary_card_export_info) , diaryCardPath, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
 
@@ -370,7 +370,7 @@ public class PostCardActivity extends EasyDiaryActivity {
                         public void run() {
                             progressBar.setVisibility(View.GONE);
                             String errorInfo = String.format("%s\n\n[ERROR: %s]", getString(R.string.diary_card_export_error_message), errorMessage);
-                            DialogUtils.showAlertDialog(PostCardActivity.this, errorInfo, new DialogInterface.OnClickListener() {
+                            DialogUtils.INSTANCE.showAlertDialog(PostCardActivity.this, errorInfo, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
 
@@ -397,21 +397,21 @@ public class PostCardActivity extends EasyDiaryActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case Constants.REQUEST_CODE_EXTERNAL_STORAGE:
-                if (PermissionUtils.checkPermission(this, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
+                if (PermissionUtils.INSTANCE.checkPermission(this, Constants.INSTANCE.getEXTERNAL_STORAGE_PERMISSIONS())) {
                     // 권한이 있는경우
                     exportDiaryCard(true);
                 } else {
                     // 권한이 없는경우
-                    DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3));
+                    DialogUtils.INSTANCE.makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3));
                 }
                 break;
             case Constants.REQUEST_CODE_EXTERNAL_STORAGE_WITH_SHARE_DIARY_CARD:
-                if (PermissionUtils.checkPermission(this, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
+                if (PermissionUtils.INSTANCE.checkPermission(this, Constants.INSTANCE.getEXTERNAL_STORAGE_PERMISSIONS())) {
                     // 권한이 있는경우
                     exportDiaryCard(false);
                 } else {
                     // 권한이 없는경우
-                    DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3));
+                    DialogUtils.INSTANCE.makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3));
                 }
                 break;
             default:

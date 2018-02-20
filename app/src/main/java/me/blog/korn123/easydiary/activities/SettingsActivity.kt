@@ -196,7 +196,7 @@ class SettingsActivity : EasyDiaryActivity() {
         listView.adapter = arrayAdapter
         listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             val fontInfo = parent.adapter.getItem(position) as HashMap<String, String>
-            CommonUtils.saveStringPreference(this@SettingsActivity, Constants.SETTING_FONT_NAME, fontInfo["fontName"])
+            CommonUtils.saveStringPreference(this@SettingsActivity, Constants.SETTING_FONT_NAME, fontInfo["fontName"]!!)
             FontUtils.setCommonTypeface(this@SettingsActivity, assets)
             initPreference()
             setFontsStyle()

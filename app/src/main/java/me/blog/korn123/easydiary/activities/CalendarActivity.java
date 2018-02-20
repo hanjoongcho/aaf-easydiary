@@ -86,7 +86,7 @@ public class CalendarActivity extends EasyDiaryActivity {
                 detailIntent.putExtra(Constants.DIARY_SEQUENCE, diaryDto.getSequence());
                 detailIntent.putExtra("title", diaryDto.getTitle());
                 detailIntent.putExtra("contents", diaryDto.getContents());
-                detailIntent.putExtra("date", DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis()));
+                detailIntent.putExtra("date", DateUtils.INSTANCE.timeMillisToDateTime(diaryDto.getCurrentTimeMillis()));
                 detailIntent.putExtra("current_time_millis", diaryDto.getCurrentTimeMillis());
                 detailIntent.putExtra("weather", diaryDto.getWeather());
                 startActivity(detailIntent);
@@ -202,7 +202,7 @@ public class CalendarActivity extends EasyDiaryActivity {
     }
 
     public void refreshList(Date date) {
-        final SimpleDateFormat formatter = new SimpleDateFormat(DateUtils.DATE_PATTERN_DASH);
+        final SimpleDateFormat formatter = new SimpleDateFormat(DateUtils.INSTANCE.getDATE_PATTERN_DASH());
 
         if (mDiaryList == null) {
             mDiaryList = EasyDiaryDbHelper.readDiaryByDateString(formatter.format(date));

@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
 import android.os.Environment;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -23,7 +21,6 @@ import me.blog.korn123.easydiary.R;
  */
 
 public class FontUtils {
-
     private static Typeface sTypeface;
 
     public static void setTypefaceDefault(TextView view) {
@@ -38,42 +35,9 @@ public class FontUtils {
     }
 
     public static void setCommonTypeface(Context context, AssetManager assetManager) {
-        String commonFontName = CommonUtils.loadStringPreference(context, Constants.SETTING_FONT_NAME, Constants.CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT);
+        String commonFontName = CommonUtils.INSTANCE.loadStringPreference(context, Constants.SETTING_FONT_NAME, Constants.CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT);
         sTypeface = getTypeface(context, assetManager, commonFontName);
     }
-
-//    public static void setToolbarTypeface(Toolbar toolbar, Context context, AssetManager assetManager) {
-//        for (int i = 0; i < toolbar.getChildCount(); i++) {
-//            View view = toolbar.getChildAt(i);
-//            if (view instanceof  TextView) {
-//                ((TextView) view).setTypeface(getCommonTypeface(context, assetManager));
-//            }
-//        }
-//    }
-
-//    public static void setFontsSize(float commonSize, float customSize, TextView... targetViews) {
-//        float fontSize = customSize > 0 ? customSize : commonSize;
-//        for (TextView textView : targetViews) {
-//            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
-//        }
-//    }
-
-//	public static void setFontsSize(float fontSize, ViewGroup rootView) {
-//		setSize(rootView, fontSize);
-//	}
-
-//	public static void setSize(ViewGroup viewGroup, float fontSize) {
-//		for (int i = 0; i < viewGroup.getChildCount(); i++) {
-//			if (viewGroup.getChildAt(i) instanceof ViewGroup) {
-//				setSize((ViewGroup)viewGroup.getChildAt(i), fontSize);
-//			} else {
-//				if (viewGroup.getChildAt(i) instanceof TextView) {
-//					TextView tv = (TextView) viewGroup.getChildAt(i);
-//					tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
-//				}
-//			}
-//		}
-//	}
 
     public static void setFontsTypeface(Context context, AssetManager assetManager, String customFontName, TextView... targetViews) {
         Typeface typeface = StringUtils.isNotEmpty(customFontName) ? getTypeface(context, assetManager, customFontName) : getCommonTypeface(context, assetManager);
@@ -103,7 +67,7 @@ public class FontUtils {
     public static Typeface getTypeface(Context context, AssetManager assetManager, String fontName) {
         Typeface typeface = null;
         String[] assetsFonts = context.getResources().getStringArray(R.array.pref_list_fonts_values);
-        String[] userFonts = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + Path.USER_CUSTOM_FONTS_DIRECTORY).list();
+        String[] userFonts = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + Path.INSTANCE.getUSER_CUSTOM_FONTS_DIRECTORY()).list();
         if (isValidTypeface(assetsFonts, fontName)) {
             if (StringUtils.equals(fontName, Constants.CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT)) {
                 typeface = Typeface.DEFAULT;
@@ -111,7 +75,7 @@ public class FontUtils {
                 typeface = Typeface.createFromAsset(assetManager, "fonts/" + fontName);
             }
         } else if (isValidTypeface(userFonts, fontName)) {
-            typeface = Typeface.createFromFile(Environment.getExternalStorageDirectory().getAbsolutePath() + Path.USER_CUSTOM_FONTS_DIRECTORY + fontName);
+            typeface = Typeface.createFromFile(Environment.getExternalStorageDirectory().getAbsolutePath() + Path.INSTANCE.getUSER_CUSTOM_FONTS_DIRECTORY() + fontName);
         } else {
             typeface = Typeface.DEFAULT;
         }

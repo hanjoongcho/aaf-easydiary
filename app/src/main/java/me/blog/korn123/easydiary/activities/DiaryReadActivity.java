@@ -58,8 +58,6 @@ import me.blog.korn123.easydiary.helper.TransitionHelper;
 import me.blog.korn123.easydiary.models.DiaryDto;
 import me.blog.korn123.easydiary.models.PhotoUriDto;
 
-import static me.blog.korn123.commons.constants.Constants.THUMBNAIL_BACKGROUND_ALPHA;
-
 /**
  * Created by CHO HANJOONG on 2017-03-16.
  */
@@ -174,12 +172,12 @@ public class DiaryReadActivity extends EasyDiaryActivity {
                 this.onBackPressed();
                 break;
             case R.id.zoomIn:
-                CommonUtils.saveFloatPreference(DiaryReadActivity.this, Constants.SETTING_FONT_SIZE, fontSize + 5);
+                CommonUtils.INSTANCE.saveFloatPreference(DiaryReadActivity.this, Constants.SETTING_FONT_SIZE, fontSize + 5);
                 setFontsStyle();
                 fragment.setFontsSize();
                 break;
             case R.id.zoomOut:
-                CommonUtils.saveFloatPreference(DiaryReadActivity.this, Constants.SETTING_FONT_SIZE, fontSize - 5);
+                CommonUtils.INSTANCE.saveFloatPreference(DiaryReadActivity.this, Constants.SETTING_FONT_SIZE, fontSize - 5);
                 setFontsStyle();
                 fragment.setFontsSize();
                 break;
@@ -196,7 +194,7 @@ public class DiaryReadActivity extends EasyDiaryActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                     }
                 };
-                DialogUtils.showAlertDialog(DiaryReadActivity.this, getString(R.string.delete_confirm), positiveListener, negativeListener);
+                DialogUtils.INSTANCE.showAlertDialog(DiaryReadActivity.this, getString(R.string.delete_confirm), positiveListener, negativeListener);
                 break;
             case R.id.edit:
                 Intent updateDiaryIntent = new Intent(DiaryReadActivity.this, DiaryUpdateActivity.class);
@@ -443,12 +441,12 @@ public class DiaryReadActivity extends EasyDiaryActivity {
             }
             mTitle.setText(diaryDto.getTitle());
             mContents.setText(diaryDto.getContents());
-            mDate.setText(DateUtils.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
+            mDate.setText(DateUtils.INSTANCE.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
             initBottomContainer();
 
             String query = getArguments().getString(Constants.DIARY_SEARCH_QUERY);
             if (StringUtils.isNotEmpty(query)) {
-                if (CommonUtils.loadBooleanPreference(getContext(), Constants.DIARY_SEARCH_QUERY_CASE_SENSITIVE)) {
+                if (CommonUtils.INSTANCE.loadBooleanPreference(getContext(), Constants.DIARY_SEARCH_QUERY_CASE_SENSITIVE)) {
                     EasyDiaryUtils.highlightString(mTitle, query);
                     EasyDiaryUtils.highlightString(mContents, query);
                 } else {
@@ -477,7 +475,7 @@ public class DiaryReadActivity extends EasyDiaryActivity {
                     Uri uri = Uri.parse(dto.getPhotoUri());
                     Bitmap bitmap = null;
                     try {
-                        bitmap = BitmapUtils.decodeUri(getContext(), uri, CommonUtils.dpToPixel(getContext(), 70, 1), CommonUtils.dpToPixel(getContext(), 65, 1), CommonUtils.dpToPixel(getContext(), 45, 1));
+                        bitmap = BitmapUtils.INSTANCE.decodeUri(getContext(), uri, CommonUtils.INSTANCE.dpToPixel(getContext(), 70, 1), CommonUtils.INSTANCE.dpToPixel(getContext(), 65, 1), CommonUtils.INSTANCE.dpToPixel(getContext(), 45, 1));
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                         bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.question_shield);
@@ -488,13 +486,13 @@ public class DiaryReadActivity extends EasyDiaryActivity {
                         bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.question_shield);
                     }
                     ImageView imageView = new ImageView(getContext());
-                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(CommonUtils.dpToPixel(getContext(), 70, 1), CommonUtils.dpToPixel(getContext(), 50, 1));
-                    layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(getContext(), 3, 1), 0);
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(CommonUtils.INSTANCE.dpToPixel(getContext(), 70, 1), CommonUtils.INSTANCE.dpToPixel(getContext(), 50, 1));
+                    layoutParams.setMargins(0, 0, CommonUtils.INSTANCE.dpToPixel(getContext(), 3, 1), 0);
                     imageView.setLayoutParams(layoutParams);
                     imageView.setBackgroundResource(R.drawable.bg_card_thumbnail);
                     Drawable drawable = getResources().getDrawable(R.drawable.bg_card_thumbnail);
                     GradientDrawable gradient = (GradientDrawable) drawable;
-                    gradient.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, THUMBNAIL_BACKGROUND_ALPHA));
+                    gradient.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, Constants.THUMBNAIL_BACKGROUND_ALPHA));
                     imageView.setBackground(gradient);
                     imageView.setImageBitmap(bitmap);
                     imageView.setScaleType(ImageView.ScaleType.CENTER);
@@ -531,7 +529,7 @@ public class DiaryReadActivity extends EasyDiaryActivity {
 
         public SectionsPagerAdapter(FragmentManager fm, String query) {
             super(fm);
-            this.mDiaryList = EasyDiaryDbHelper.readDiary(query, CommonUtils.loadBooleanPreference(getApplicationContext(), Constants.DIARY_SEARCH_QUERY_CASE_SENSITIVE));
+            this.mDiaryList = EasyDiaryDbHelper.readDiary(query, CommonUtils.INSTANCE.loadBooleanPreference(getApplicationContext(), Constants.DIARY_SEARCH_QUERY_CASE_SENSITIVE));
             for (DiaryDto diaryDto : mDiaryList) {
                 mFragmentList.add(PlaceholderFragment.newInstance(diaryDto.getSequence(), query));
             }

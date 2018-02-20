@@ -20,7 +20,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -66,8 +65,6 @@ import me.blog.korn123.easydiary.extensions.ContextKt;
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
 import me.blog.korn123.easydiary.models.DiaryDto;
 import me.blog.korn123.easydiary.models.PhotoUriDto;
-
-import static me.blog.korn123.commons.constants.Constants.THUMBNAIL_BACKGROUND_ALPHA;
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -139,7 +136,7 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
             case R.id.saveContents:
                 if (StringUtils.isEmpty(mContents.getText())) {
                     mContents.requestFocus();
-                    DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message));
+                    DialogUtils.INSTANCE.makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message));
                 } else {
                     DiaryDto diaryDto = new DiaryDto(
                             mSequence,
@@ -155,12 +152,12 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
                 }
                 break;
             case R.id.photoView:
-                if (PermissionUtils.checkPermission(this, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
+                if (PermissionUtils.INSTANCE.checkPermission(this, Constants.INSTANCE.getEXTERNAL_STORAGE_PERMISSIONS())) {
                     // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
                     callImagePicker();
                 } else {
                     // API Level 23 이상이면서 권한취득 안한경우
-                    PermissionUtils.confirmPermission(this, this, Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE);
+                    PermissionUtils.INSTANCE.confirmPermission(this, this, Constants.INSTANCE.getEXTERNAL_STORAGE_PERMISSIONS(), Constants.REQUEST_CODE_EXTERNAL_STORAGE);
                 }
                 break;
             case R.id.datePicker:
@@ -197,7 +194,7 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
 
     @Override
     public void onBackPressed() {
-        DialogUtils.showAlertDialog(DiaryUpdateActivity.this, getString(R.string.back_pressed_confirm),
+        DialogUtils.INSTANCE.showAlertDialog(DiaryUpdateActivity.this, getString(R.string.back_pressed_confirm),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -219,12 +216,12 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case Constants.REQUEST_CODE_EXTERNAL_STORAGE:
-                if (PermissionUtils.checkPermission(this, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
+                if (PermissionUtils.INSTANCE.checkPermission(this, Constants.INSTANCE.getEXTERNAL_STORAGE_PERMISSIONS())) {
                     // 권한이 있는경우
                     callImagePicker();
                 } else {
                     // 권한이 없는경우
-                    DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3));
+                    DialogUtils.INSTANCE.makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3));
                 }
                 break;
             default:
@@ -243,7 +240,7 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
         // set bottom thumbnail container
         mPrimaryColor = new BaseConfig(DiaryUpdateActivity.this).getPrimaryColor();
         GradientDrawable drawable = (GradientDrawable) mPhotoView.getBackground();
-        drawable.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, THUMBNAIL_BACKGROUND_ALPHA));
+        drawable.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, Constants.THUMBNAIL_BACKGROUND_ALPHA));
     }
 
     private void setFontsStyle() {
@@ -283,7 +280,7 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
                 Uri uri = Uri.parse(dto.getPhotoUri());
                 Bitmap bitmap = null;
                 try {
-                    bitmap = BitmapUtils.decodeUri(this, uri, CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 65, 1), CommonUtils.dpToPixel(this, 45, 1));
+                    bitmap = BitmapUtils.INSTANCE.decodeUri(this, uri, CommonUtils.INSTANCE.dpToPixel(this, 70, 1), CommonUtils.INSTANCE.dpToPixel(this, 65, 1), CommonUtils.INSTANCE.dpToPixel(this, 45, 1));
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                     bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.question_shield);
@@ -293,12 +290,12 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
                 }
 
                 ImageView imageView = new ImageView(this);
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 50, 1));
-                layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(this, 3, 1), 0);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(CommonUtils.INSTANCE.dpToPixel(this, 70, 1), CommonUtils.INSTANCE.dpToPixel(this, 50, 1));
+                layoutParams.setMargins(0, 0, CommonUtils.INSTANCE.dpToPixel(this, 3, 1), 0);
                 imageView.setLayoutParams(layoutParams);
                 Drawable drawable = getResources().getDrawable(R.drawable.bg_card_thumbnail);
                 GradientDrawable gradient = (GradientDrawable) drawable;
-                gradient.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, THUMBNAIL_BACKGROUND_ALPHA));
+                gradient.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, Constants.THUMBNAIL_BACKGROUND_ALPHA));
                 imageView.setBackground(gradient);
                 imageView.setImageBitmap(bitmap);
                 imageView.setScaleType(ImageView.ScaleType.CENTER);
@@ -358,12 +355,12 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
     };
 
     private void initDateTime() {
-        mYear = Integer.valueOf(DateUtils.timeMillisToDateTime(mCurrentTimeMillis, DateUtils.YEAR_PATTERN));
-        mMonth = Integer.valueOf(DateUtils.timeMillisToDateTime(mCurrentTimeMillis, DateUtils.MONTH_PATTERN));
-        mDayOfMonth = Integer.valueOf(DateUtils.timeMillisToDateTime(mCurrentTimeMillis, DateUtils.DAY_PATTERN));
-        mHourOfDay = Integer.valueOf(DateUtils.timeMillisToDateTime(mCurrentTimeMillis,"HH"));
-        mMinute = Integer.valueOf(DateUtils.timeMillisToDateTime(mCurrentTimeMillis,"mm"));
-        mSecond = Integer.valueOf(DateUtils.timeMillisToDateTime(mCurrentTimeMillis,"ss"));
+        mYear = Integer.valueOf(DateUtils.INSTANCE.timeMillisToDateTime(mCurrentTimeMillis, DateUtils.INSTANCE.getYEAR_PATTERN()));
+        mMonth = Integer.valueOf(DateUtils.INSTANCE.timeMillisToDateTime(mCurrentTimeMillis, DateUtils.INSTANCE.getMONTH_PATTERN()));
+        mDayOfMonth = Integer.valueOf(DateUtils.INSTANCE.timeMillisToDateTime(mCurrentTimeMillis, DateUtils.INSTANCE.getDAY_PATTERN()));
+        mHourOfDay = Integer.valueOf(DateUtils.INSTANCE.timeMillisToDateTime(mCurrentTimeMillis,"HH"));
+        mMinute = Integer.valueOf(DateUtils.INSTANCE.timeMillisToDateTime(mCurrentTimeMillis,"mm"));
+        mSecond = Integer.valueOf(DateUtils.INSTANCE.timeMillisToDateTime(mCurrentTimeMillis,"ss"));
     }
 
     private void setDateTime() {
@@ -380,7 +377,7 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
             );
             Date parsedDate = format.parse(dateTimeString);
             mCurrentTimeMillis = parsedDate.getTime();
-            getSupportActionBar().setSubtitle(DateUtils.getFullPatternDateWithTimeAndSeconds(mCurrentTimeMillis));
+            getSupportActionBar().setSubtitle(DateUtils.INSTANCE.getFullPatternDateWithTimeAndSeconds(mCurrentTimeMillis));
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -399,7 +396,7 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
         try {
             startActivityForResult(pickImageIntent, Constants.REQUEST_CODE_IMAGE_PICKER);
         } catch (ActivityNotFoundException e) {
-            DialogUtils.showAlertDialog(this, getString(R.string.gallery_intent_not_found_message), new DialogInterface.OnClickListener() {
+            DialogUtils.INSTANCE.showAlertDialog(this, getString(R.string.gallery_intent_not_found_message), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
@@ -412,7 +409,7 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
         try {
             startActivityForResult(mRecognizerIntent, REQUEST_CODE_SPEECH_INPUT);
         } catch (ActivityNotFoundException e) {
-            DialogUtils.showAlertDialog(this, getString(R.string.recognizer_intent_not_found_message), new DialogInterface.OnClickListener() {
+            DialogUtils.INSTANCE.showAlertDialog(this, getString(R.string.recognizer_intent_not_found_message), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
@@ -423,7 +420,7 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        CommonUtils.saveLongPreference(DiaryUpdateActivity.this, Constants.SETTING_PAUSE_MILLIS, System.currentTimeMillis()); // clear screen lock policy
+        CommonUtils.INSTANCE.saveLongPreference(DiaryUpdateActivity.this, Constants.SETTING_PAUSE_MILLIS, System.currentTimeMillis()); // clear screen lock policy
         switch (requestCode) {
             case REQUEST_CODE_SPEECH_INPUT:
                 if ((resultCode == RESULT_OK) && (data != null)) {
@@ -450,14 +447,14 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
                     if (resultCode == RESULT_OK && (data != null)) {
                         if (mPhotoUris == null) mPhotoUris =new RealmList<PhotoUriDto>();
                         mPhotoUris.add(new PhotoUriDto(data.getData().toString()));
-                        Bitmap bitmap = BitmapUtils.decodeUri(this, data.getData(), CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 65, 1), CommonUtils.dpToPixel(this, 45, 1));
+                        Bitmap bitmap = BitmapUtils.INSTANCE.decodeUri(this, data.getData(), CommonUtils.INSTANCE.dpToPixel(this, 70, 1), CommonUtils.INSTANCE.dpToPixel(this, 65, 1), CommonUtils.INSTANCE.dpToPixel(this, 45, 1));
                         ImageView imageView = new ImageView(this);
-                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 50, 1));
-                        layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(this, 3, 1), 0);
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(CommonUtils.INSTANCE.dpToPixel(this, 70, 1), CommonUtils.INSTANCE.dpToPixel(this, 50, 1));
+                        layoutParams.setMargins(0, 0, CommonUtils.INSTANCE.dpToPixel(this, 3, 1), 0);
                         imageView.setLayoutParams(layoutParams);
                         Drawable drawable = getResources().getDrawable(R.drawable.bg_card_thumbnail);
                         GradientDrawable gradient = (GradientDrawable) drawable;
-                        gradient.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, THUMBNAIL_BACKGROUND_ALPHA));
+                        gradient.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, Constants.THUMBNAIL_BACKGROUND_ALPHA));
                         imageView.setBackground(gradient);
                         imageView.setImageBitmap(bitmap);
                         imageView.setScaleType(ImageView.ScaleType.CENTER);
@@ -499,7 +496,7 @@ public class DiaryUpdateActivity extends EasyDiaryActivity {
         public void onClick(View v) {
             final View targetView = v;
             final int targetIndex = index;
-            DialogUtils.showAlertDialog(
+            DialogUtils.INSTANCE.showAlertDialog(
                     DiaryUpdateActivity.this,
                     getString(R.string.delete_photo_confirm_message),
                     new DialogInterface.OnClickListener() {

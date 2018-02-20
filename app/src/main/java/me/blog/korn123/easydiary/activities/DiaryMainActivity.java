@@ -105,14 +105,14 @@ public class DiaryMainActivity extends EasyDiaryActivity {
         mDiaryMainItemAdapter = new DiaryMainItemAdapter(this, R.layout.item_diary_main, this.mDiaryList);
         mDiaryListView.setAdapter(mDiaryMainItemAdapter);
 
-        if (!CommonUtils.loadBooleanPreference(this, Constants.INIT_DUMMY_DATA_FLAG)) {
+        if (!CommonUtils.INSTANCE.loadBooleanPreference(this, Constants.INIT_DUMMY_DATA_FLAG)) {
             initSampleData();
-            CommonUtils.saveBooleanPreference(this, Constants.INIT_DUMMY_DATA_FLAG, true);
+            CommonUtils.INSTANCE.saveBooleanPreference(this, Constants.INIT_DUMMY_DATA_FLAG, true);
         }
 
         bindEvent();
         initShowcase();
-        EasyDiaryUtils.initWorkingDirectory(Environment.getExternalStorageDirectory().getAbsolutePath() + Path.USER_CUSTOM_FONTS_DIRECTORY);
+        EasyDiaryUtils.initWorkingDirectory(Environment.getExternalStorageDirectory().getAbsolutePath() + Path.INSTANCE.getUSER_CUSTOM_FONTS_DIRECTORY());
     }
 
     @Override
@@ -121,11 +121,11 @@ public class DiaryMainActivity extends EasyDiaryActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         refreshList();
         
-        int previousActivity = CommonUtils.loadIntPreference(DiaryMainActivity.this, Constants.PREVIOUS_ACTIVITY, -1);
+        int previousActivity = CommonUtils.INSTANCE.loadIntPreference(DiaryMainActivity.this, Constants.PREVIOUS_ACTIVITY, -1);
         if (previousActivity == Constants.PREVIOUS_ACTIVITY_CREATE) {
             mDiaryListView.smoothScrollToPosition(0);
 //            mDiaryListView.setSelection(0);
-            CommonUtils.saveIntPreference(DiaryMainActivity.this, Constants.PREVIOUS_ACTIVITY, -1);
+            CommonUtils.INSTANCE.saveIntPreference(DiaryMainActivity.this, Constants.PREVIOUS_ACTIVITY, -1);
         }
     }
 
@@ -139,7 +139,7 @@ public class DiaryMainActivity extends EasyDiaryActivity {
                     mQuery.setText(result.get(0));
                     mQuery.setSelection(result.get(0).length());
                 }
-                CommonUtils.saveLongPreference(DiaryMainActivity.this, Constants.SETTING_PAUSE_MILLIS, System.currentTimeMillis());
+                CommonUtils.INSTANCE.saveLongPreference(DiaryMainActivity.this, Constants.SETTING_PAUSE_MILLIS, System.currentTimeMillis());
                 break;
         }
     }
@@ -295,7 +295,7 @@ public class DiaryMainActivity extends EasyDiaryActivity {
         try {
             startActivityForResult(mRecognizerIntent, Constants.REQUEST_CODE_SPEECH_INPUT);
         } catch (ActivityNotFoundException e) {
-            DialogUtils.showAlertDialog(this, getString(R.string.recognizer_intent_not_found_message), new DialogInterface.OnClickListener() {
+            DialogUtils.INSTANCE.showAlertDialog(this, getString(R.string.recognizer_intent_not_found_message), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
@@ -312,7 +312,7 @@ public class DiaryMainActivity extends EasyDiaryActivity {
 
     public void refreshList(String query) {
         mDiaryList.clear();
-        mDiaryList.addAll(EasyDiaryDbHelper.readDiary(query, CommonUtils.loadBooleanPreference(this, Constants.DIARY_SEARCH_QUERY_CASE_SENSITIVE)));
+        mDiaryList.addAll(EasyDiaryDbHelper.readDiary(query, CommonUtils.INSTANCE.loadBooleanPreference(this, Constants.DIARY_SEARCH_QUERY_CASE_SENSITIVE)));
         mDiaryMainItemAdapter.setCurrentQuery(query);
         mDiaryMainItemAdapter.notifyDataSetChanged();
     }
