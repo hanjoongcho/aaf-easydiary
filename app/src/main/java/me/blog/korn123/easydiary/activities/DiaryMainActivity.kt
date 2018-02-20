@@ -77,7 +77,9 @@ class DiaryMainActivity : EasyDiaryActivity() {
         }
 
         mDiaryList = EasyDiaryDbHelper.readDiary(null)
-        mDiaryMainItemAdapter = DiaryMainItemAdapter(this, R.layout.item_diary_main, this.mDiaryList!!)
+        mDiaryList?.let {
+            mDiaryMainItemAdapter = DiaryMainItemAdapter(this, R.layout.item_diary_main, it)
+        }
         diaryList.adapter = mDiaryMainItemAdapter
 
         if (!CommonUtils.loadBooleanPreference(this, Constants.INIT_DUMMY_DATA_FLAG)) {
@@ -245,7 +247,7 @@ class DiaryMainActivity : EasyDiaryActivity() {
             val diaryDto = adapterView.adapter.getItem(i) as DiaryDto
             val detailIntent = Intent(this@DiaryMainActivity, DiaryReadActivity::class.java)
             detailIntent.putExtra(Constants.DIARY_SEQUENCE, diaryDto.sequence)
-            detailIntent.putExtra(Constants.DIARY_SEARCH_QUERY, mDiaryMainItemAdapter!!.currentQuery)
+            detailIntent.putExtra(Constants.DIARY_SEARCH_QUERY, mDiaryMainItemAdapter?.currentQuery)
             TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, detailIntent)
         }
     }
@@ -266,10 +268,10 @@ class DiaryMainActivity : EasyDiaryActivity() {
     }
 
     fun refreshList(query: String) {
-        mDiaryList!!.clear()
-        mDiaryList!!.addAll(EasyDiaryDbHelper.readDiary(query, CommonUtils.loadBooleanPreference(this, Constants.DIARY_SEARCH_QUERY_CASE_SENSITIVE)))
-        mDiaryMainItemAdapter!!.currentQuery = query
-        mDiaryMainItemAdapter!!.notifyDataSetChanged()
+        mDiaryList?.clear()
+        mDiaryList?.addAll(EasyDiaryDbHelper.readDiary(query, CommonUtils.loadBooleanPreference(this, Constants.DIARY_SEARCH_QUERY_CASE_SENSITIVE)))
+        mDiaryMainItemAdapter?.currentQuery = query
+        mDiaryMainItemAdapter?.notifyDataSetChanged()
     }
 
     private fun initSampleData() {
