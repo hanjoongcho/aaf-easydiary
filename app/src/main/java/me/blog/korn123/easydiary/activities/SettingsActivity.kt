@@ -124,12 +124,14 @@ class SettingsActivity : EasyDiaryActivity() {
         }
     }
 
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
-            val password = data.getStringExtra(Constants.APP_LOCK_REQUEST_PASSWORD)
-            CommonUtils.saveStringPreference(applicationContext, Constants.APP_LOCK_SAVED_PASSWORD, password)
-            lockNumberSettingSummary.text = "${getString(R.string.lock_number)} $password"
+            data?.let {
+                val password = it.getStringExtra(Constants.APP_LOCK_REQUEST_PASSWORD)
+                CommonUtils.saveStringPreference(applicationContext, Constants.APP_LOCK_SAVED_PASSWORD, password)
+                lockNumberSettingSummary.text = "${getString(R.string.lock_number)} $password"
+            }
         }
         CommonUtils.saveLongPreference(applicationContext, Constants.SETTING_PAUSE_MILLIS, System.currentTimeMillis())
     }

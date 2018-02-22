@@ -17,7 +17,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <com.simplemobiletools.commons.views.MyTextView
-                    android:id="@+id/title"
+                    android:id="@+id/diaryTitle"
                     android:enabled="false"
                     android:gravity="center_vertical"
                     style="@style/fragment_diary_card"/>
@@ -42,7 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <com.simplemobiletools.commons.views.MyTextView
-                android:id="@+id/contents"
+                android:id="@+id/diaryContents"
                 android:enabled="false"
                 android:gravity="left"
                 style="@style/fragment_diary_card"/>
