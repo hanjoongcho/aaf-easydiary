@@ -81,11 +81,12 @@ class TimelineActivity : EasyDiaryActivity() {
             toolbar.visibility = View.VISIBLE
             searchViewContainer.visibility = View.GONE
             val focusView = this.currentFocus
-            if (focusView != null) {
+            focusView?.let {
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(focusView.windowToken, 0)
+                imm.hideSoftInputFromWindow(it.windowToken, 0)
                 supportActionBar?.run {
                     subtitle = searchView.text
+                    super.onResume()
                 }
             }
         })
