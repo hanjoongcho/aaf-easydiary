@@ -61,7 +61,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
     private var mShowcaseIndex = 1
 
     public override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(null)
+        super.onCreate(savedInstanceState)
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager, intent.getStringExtra(Constants.DIARY_SEARCH_QUERY))
         val startPageIndex = when(savedInstanceState == null) {
             true -> mSectionsPagerAdapter?.sequenceToPageIndex(intent.getIntExtra(Constants.DIARY_SEQUENCE, -1)) ?: -1
@@ -100,7 +100,8 @@ class DiaryReadActivity : EasyDiaryActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val fragment = mSectionsPagerAdapter?.getItem(diaryViewPager.currentItem)
+//        val fragment = mSectionsPagerAdapter?.getItem(diaryViewPager.currentItem)
+        val fragment = mSectionsPagerAdapter?.instantiateItem(diaryViewPager, diaryViewPager.currentItem)
         val fontSize = config.settingFontSize
         if (fragment is PlaceholderFragment) {
             when (item.itemId) {
