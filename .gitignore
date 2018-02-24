@@ -24,6 +24,7 @@ app/release
 .idea/misc.xml
 .idea/runConfigurations.xml
 .idea/markdown-navigator
+.idea/markdown-navigator.xml
 local.properties
 
 app/src/main/res/drawable/ic_clouds_and_sun.xml
