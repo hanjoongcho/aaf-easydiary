@@ -27,6 +27,7 @@ import me.blog.korn123.commons.utils.DialogUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
+import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.DiaryDto
@@ -114,7 +115,7 @@ class DiaryMainActivity : EasyDiaryActivity() {
                     query.setText(result[0])
                     query.setSelection(result[0].length)
                 }
-                CommonUtils.saveLongPreference(this@DiaryMainActivity, Constants.SETTING_PAUSE_MILLIS, System.currentTimeMillis())
+                config.aafPinLockPauseMillis = System.currentTimeMillis()
             }
         }
     }

@@ -16,13 +16,13 @@ fun Activity.pauseLock() {
     val enableLock = CommonUtils.loadBooleanPreference(this, Constants.APP_LOCK_ENABLE)
     if (enableLock) {
         val currentMillis = System.currentTimeMillis()
-        CommonUtils.saveLongPreference(this, Constants.SETTING_PAUSE_MILLIS, currentMillis)
+        config.aafPinLockPauseMillis = currentMillis
     }
 }
 
 fun Activity.resumeLock() {
     val enableLock = CommonUtils.loadBooleanPreference(this, Constants.APP_LOCK_ENABLE)
-    val pauseMillis = CommonUtils.loadLongPreference(this, Constants.SETTING_PAUSE_MILLIS, 0)
+    val pauseMillis = config.aafPinLockPauseMillis
     if (enableLock && pauseMillis != 0L) {
         if (System.currentTimeMillis() - pauseMillis > 1000) {
             val lockDiaryIntent = Intent(this, DiaryLockActivity::class.java)

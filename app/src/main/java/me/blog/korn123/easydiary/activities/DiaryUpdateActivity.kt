@@ -35,6 +35,7 @@ import me.blog.korn123.commons.constants.Constants
 import me.blog.korn123.commons.utils.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryWeatherItemAdapter
+import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.DiaryDto
 import me.blog.korn123.easydiary.models.PhotoUriDto
@@ -340,7 +341,7 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        CommonUtils.saveLongPreference(this@DiaryUpdateActivity, Constants.SETTING_PAUSE_MILLIS, System.currentTimeMillis()) // clear screen lock policy
+        config.aafPinLockPauseMillis = System.currentTimeMillis()
         when (requestCode) {
             REQUEST_CODE_SPEECH_INPUT -> if (resultCode == Activity.RESULT_OK && data != null) {
                 val result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)

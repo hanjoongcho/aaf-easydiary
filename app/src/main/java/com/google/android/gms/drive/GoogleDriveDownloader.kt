@@ -9,6 +9,7 @@ import android.os.Bundle
 import com.google.android.gms.common.api.ResultCallback
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
+import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import org.apache.commons.io.IOUtils
 import java.io.FileOutputStream
@@ -61,6 +62,7 @@ class GoogleDriveDownloader : GoogleDriveUtils() {
             }
         }
 
+        config.aafPinLockPauseMillis = System.currentTimeMillis()
         val context = this@GoogleDriveDownloader
         val readDiaryIntent = Intent(context, DiaryMainActivity::class.java)
         readDiaryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)

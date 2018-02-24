@@ -13,6 +13,7 @@ import me.blog.korn123.commons.constants.Constants
 import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.config
 import org.apache.commons.lang3.StringUtils
 
 /**
@@ -81,8 +82,7 @@ class DiaryLockActivity : BaseSimpleActivity() {
             Thread(Runnable {
                 Handler(Looper.getMainLooper()).post {
                     if (StringUtils.equals(CommonUtils.loadStringPreference(this@DiaryLockActivity, Constants.APP_LOCK_SAVED_PASSWORD, "0000"), password)) {
-                        val currentMillis = System.currentTimeMillis()
-                        CommonUtils.saveLongPreference(this@DiaryLockActivity, Constants.SETTING_PAUSE_MILLIS, currentMillis)
+                        config.aafPinLockPauseMillis = System.currentTimeMillis()
                         finish()
                     } else {
                         mCursorIndex = 0

@@ -26,6 +26,7 @@ import me.blog.korn123.commons.utils.PermissionUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.FontItemAdapter
+import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.openGooglePlayBy
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import org.apache.commons.io.FilenameUtils
@@ -133,7 +134,7 @@ class SettingsActivity : EasyDiaryActivity() {
                 lockNumberSettingSummary.text = "${getString(R.string.lock_number)} $password"
             }
         }
-        CommonUtils.saveLongPreference(applicationContext, Constants.SETTING_PAUSE_MILLIS, System.currentTimeMillis())
+        config.aafPinLockPauseMillis = System.currentTimeMillis()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {

@@ -91,11 +91,11 @@ dependencies {
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
 
     // https://github.com/SimpleMobileTools/Simple-Commons
-    implementation 'com.simplemobiletools:commons:3.7.8'
-//    implementation project(":commons")
+//    implementation 'com.simplemobiletools:commons:3.7.8'
+    implementation project(":commons")
     
-    implementation 'io.github.hanjoongcho:commons-android:0.1.3'
-//    implementation project(":commons-android")
+//    implementation 'io.github.hanjoongcho:commons-android:0.1.3'
+    implementation project(":commons-android")
 }
 
 repositories {

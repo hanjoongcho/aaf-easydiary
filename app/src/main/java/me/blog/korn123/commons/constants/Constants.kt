@@ -60,9 +60,6 @@ object Constants {
     // font size preference key
     const val SETTING_FONT_SIZE = "font_size"
 
-    // pause millis preference key
-    const val SETTING_PAUSE_MILLIS = "pause_millis"
-
     const val INIT_DUMMY_DATA_FLAG = "init_dummy_data"
 
     const val APP_FINISH_FLAG = "app_finish"

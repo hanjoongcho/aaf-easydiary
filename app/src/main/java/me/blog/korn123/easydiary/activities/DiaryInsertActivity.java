@@ -440,7 +440,7 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        CommonUtils.INSTANCE.saveLongPreference(DiaryInsertActivity.this, Constants.SETTING_PAUSE_MILLIS, System.currentTimeMillis()); // clear screen lock policy
+        ContextKt.getConfig(this).setAafPinLockPauseMillis(System.currentTimeMillis());
         switch (requestCode) {
             case Constants.REQUEST_CODE_SPEECH_INPUT:
                 if ((resultCode == RESULT_OK) && (data != null)) {
