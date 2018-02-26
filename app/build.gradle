@@ -10,8 +10,8 @@ android {
         applicationId "me.blog.korn123.easydiary"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 79
-        versionName "1.4.21-beta"
+        versionCode 80
+        versionName "1.4.21"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -91,11 +91,11 @@ dependencies {
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
 
     // https://github.com/SimpleMobileTools/Simple-Commons
-//    implementation 'com.simplemobiletools:commons:3.7.8'
-    implementation project(":commons")
+    implementation 'com.simplemobiletools:commons:3.7.8'
+//    implementation project(":commons")
     
-//    implementation 'io.github.hanjoongcho:commons-android:0.1.3'
-    implementation project(":commons-android")
+    implementation 'io.github.hanjoongcho:commons-android:0.1.4'
+//    implementation project(":commons-android")
 }
 
 repositories {

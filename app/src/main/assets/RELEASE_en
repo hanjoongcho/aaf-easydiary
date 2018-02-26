@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.21 (date: 2018/02/26)
+  * Fixed a bug that abnormally ended on some devices when diary browsing
+
 # Changes in 1.4.20 (date: 2018/02/23)
   * Added timeline search function
 

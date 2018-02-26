@@ -15,6 +15,7 @@ import android.speech.tts.UtteranceProgressListener
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
+import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.ColorUtils
 import android.support.v4.view.ViewPager
@@ -55,7 +56,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
      * may be best to switch to a
      * [android.support.v4.app.FragmentStatePagerAdapter].
      */
-    private var mSectionsPagerAdapter: SectionsPagerAdapter? = null
+    private lateinit var mSectionsPagerAdapter: SectionsPagerAdapter
     private var mTextToSpeech: TextToSpeech? = null
     private var mShowcaseView: ShowcaseView? = null
     private var mShowcaseIndex = 1
@@ -78,8 +79,8 @@ class DiaryReadActivity : EasyDiaryActivity() {
 
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager, diaryList, fragmentList)
         val startPageIndex = when(savedInstanceState == null) {
-            true -> mSectionsPagerAdapter?.sequenceToPageIndex(intent.getIntExtra(Constants.DIARY_SEQUENCE, -1)) ?: -1
-            false -> mSectionsPagerAdapter?.sequenceToPageIndex(savedInstanceState?.getInt(Constants.DIARY_SEQUENCE, -1) ?: -1) ?: -1
+            true -> mSectionsPagerAdapter.sequenceToPageIndex(intent.getIntExtra(Constants.DIARY_SEQUENCE, -1))
+            false -> mSectionsPagerAdapter.sequenceToPageIndex(savedInstanceState?.getInt(Constants.DIARY_SEQUENCE, -1) ?: -1)
         }
 
         setupViewPager()
@@ -98,7 +99,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
-        val fragment = mSectionsPagerAdapter?.instantiateItem(diaryViewPager, diaryViewPager.currentItem)
+        val fragment = mSectionsPagerAdapter.instantiateItem(diaryViewPager, diaryViewPager.currentItem)
         if (fragment is PlaceholderFragment) {
             outState?.putInt(Constants.DIARY_SEQUENCE, fragment.getSequence())
         }
@@ -107,7 +108,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 //        val fragment = mSectionsPagerAdapter?.getItem(diaryViewPager.currentItem)
-        val fragment = mSectionsPagerAdapter?.instantiateItem(diaryViewPager, diaryViewPager.currentItem)
+        val fragment = mSectionsPagerAdapter.instantiateItem(diaryViewPager, diaryViewPager.currentItem)
         val fontSize = config.settingFontSize
         if (fragment is PlaceholderFragment) {
             when (item.itemId) {
@@ -161,8 +162,8 @@ class DiaryReadActivity : EasyDiaryActivity() {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
             override fun onPageSelected(position: Int) {
-                val fragment = mSectionsPagerAdapter?.instantiateItem(diaryViewPager, diaryViewPager.currentItem)
-                fragment?.let {
+                val fragment = mSectionsPagerAdapter.instantiateItem(diaryViewPager, diaryViewPager.currentItem)
+                fragment.let {
 //                    it.setFontsTypeface()
 //                    it.setFontsSize()
                 }
@@ -426,7 +427,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
             fm: FragmentManager,
             private val diaryList: ArrayList<DiaryDto>,
             private val fragmentList: ArrayList<PlaceholderFragment>
-    ) : FragmentPagerAdapter(fm) {
+    ) : FragmentStatePagerAdapter(fm) {
 
         override fun getItem(position: Int): Fragment {
             // getItem is called to instantiate the fragment for the given page.
