@@ -22,7 +22,6 @@ import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
-import butterknife.ButterKnife
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.simplemobiletools.commons.helpers.BaseConfig
@@ -40,6 +39,7 @@ import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
 import java.io.FileNotFoundException
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -62,18 +62,24 @@ class DiaryReadActivity : EasyDiaryActivity() {
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager, intent.getStringExtra(Constants.DIARY_SEARCH_QUERY))
-        val startPageIndex = when(savedInstanceState == null) {
-            true -> mSectionsPagerAdapter?.sequenceToPageIndex(intent.getIntExtra(Constants.DIARY_SEQUENCE, -1)) ?: -1
-            false -> mSectionsPagerAdapter?.sequenceToPageIndex(savedInstanceState?.getInt(Constants.DIARY_SEQUENCE, -1) ?: -1) ?: -1
-        }
-
         setContentView(R.layout.activity_diary_read)
-        ButterKnife.bind(this)
         setSupportActionBar(toolbar)
         supportActionBar?.run {
             title = ""
             setDisplayHomeAsUpEnabled(true)
+        }
+
+        val query = intent.getStringExtra(Constants.DIARY_SEARCH_QUERY);
+        val diaryList: ArrayList<DiaryDto> = EasyDiaryDbHelper.readDiary(query, CommonUtils.loadBooleanPreference(applicationContext, Constants.DIARY_SEARCH_QUERY_CASE_SENSITIVE))
+        val fragmentList = arrayListOf<PlaceholderFragment>()
+        diaryList.map {
+            fragmentList.add(PlaceholderFragment.newInstance(it.sequence, query))
+        }
+
+        mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager, diaryList, fragmentList)
+        val startPageIndex = when(savedInstanceState == null) {
+            true -> mSectionsPagerAdapter?.sequenceToPageIndex(intent.getIntExtra(Constants.DIARY_SEQUENCE, -1)) ?: -1
+            false -> mSectionsPagerAdapter?.sequenceToPageIndex(savedInstanceState?.getInt(Constants.DIARY_SEQUENCE, -1) ?: -1) ?: -1
         }
 
         setupViewPager()
@@ -416,28 +422,23 @@ class DiaryReadActivity : EasyDiaryActivity() {
      * A [FragmentPagerAdapter] that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    inner class SectionsPagerAdapter(fm: FragmentManager, query: String) : FragmentPagerAdapter(fm) {
-        private val mDiaryList: List<DiaryDto>
-        private val mFragmentList = ArrayList<PlaceholderFragment>()
-
-        init {
-            mDiaryList = EasyDiaryDbHelper.readDiary(query, CommonUtils.loadBooleanPreference(applicationContext, Constants.DIARY_SEARCH_QUERY_CASE_SENSITIVE))
-            mDiaryList?.map {
-                mFragmentList.add(PlaceholderFragment.newInstance(it.sequence, query))
-            }
-        }
+    inner class SectionsPagerAdapter(
+            fm: FragmentManager,
+            private val diaryList: ArrayList<DiaryDto>,
+            private val fragmentList: ArrayList<PlaceholderFragment>
+    ) : FragmentPagerAdapter(fm) {
 
         override fun getItem(position: Int): Fragment {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return mFragmentList[position]
+            return fragmentList[position]
         }
 
         fun sequenceToPageIndex(sequence: Int): Int {
             var pageIndex = 0
             if (sequence > -1) {
-                for (i in mDiaryList.indices) {
-                    if (mDiaryList[i].sequence == sequence) {
+                for (i in diaryList.indices) {
+                    if (diaryList[i].sequence == sequence) {
                         pageIndex = i
                         break
                     }
@@ -447,7 +448,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
         }
 
         override fun getCount(): Int {
-            return mFragmentList.size
+            return fragmentList.size
         }
     }
 }
