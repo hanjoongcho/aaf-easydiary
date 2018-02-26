@@ -77,7 +77,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
         }
 
         setupViewPager()
-        Handler().post { diaryViewPager.setCurrentItem(startPageIndex, false) }
+        if (startPageIndex > 0) Handler().post { diaryViewPager.setCurrentItem(startPageIndex, false) }
         initShowcase()
     }
 
@@ -92,7 +92,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
-        val fragment = mSectionsPagerAdapter?.getItem(diaryViewPager.currentItem)
+        val fragment = mSectionsPagerAdapter?.instantiateItem(diaryViewPager, diaryViewPager.currentItem)
         if (fragment is PlaceholderFragment) {
             outState?.putInt(Constants.DIARY_SEQUENCE, fragment.getSequence())
         }
@@ -155,7 +155,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
             override fun onPageSelected(position: Int) {
-                val fragment = mSectionsPagerAdapter?.getItem(diaryViewPager.currentItem)
+                val fragment = mSectionsPagerAdapter?.instantiateItem(diaryViewPager, diaryViewPager.currentItem)
                 fragment?.let {
 //                    it.setFontsTypeface()
 //                    it.setFontsSize()
@@ -447,11 +447,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
         }
 
         override fun getCount(): Int {
-            return mDiaryList.size
-        }
-
-        override fun getPageTitle(position: Int): CharSequence? {
-            return null
+            return mFragmentList.size
         }
     }
 }
