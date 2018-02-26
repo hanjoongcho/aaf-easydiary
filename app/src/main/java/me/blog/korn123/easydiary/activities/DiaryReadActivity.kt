@@ -72,12 +72,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
 
         val query = intent.getStringExtra(Constants.DIARY_SEARCH_QUERY);
         val diaryList: ArrayList<DiaryDto> = EasyDiaryDbHelper.readDiary(query, CommonUtils.loadBooleanPreference(applicationContext, Constants.DIARY_SEARCH_QUERY_CASE_SENSITIVE))
-        val fragmentList = arrayListOf<PlaceholderFragment>()
-        diaryList.map {
-            fragmentList.add(PlaceholderFragment.newInstance(it.sequence, query))
-        }
-
-        mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager, diaryList, fragmentList)
+        mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager, diaryList, query)
         val startPageIndex = when(savedInstanceState == null) {
             true -> mSectionsPagerAdapter.sequenceToPageIndex(intent.getIntExtra(Constants.DIARY_SEQUENCE, -1))
             false -> mSectionsPagerAdapter.sequenceToPageIndex(savedInstanceState?.getInt(Constants.DIARY_SEQUENCE, -1) ?: -1)
@@ -426,13 +421,13 @@ class DiaryReadActivity : EasyDiaryActivity() {
     inner class SectionsPagerAdapter(
             fm: FragmentManager,
             private val diaryList: ArrayList<DiaryDto>,
-            private val fragmentList: ArrayList<PlaceholderFragment>
+            private val query: String
     ) : FragmentStatePagerAdapter(fm) {
 
         override fun getItem(position: Int): Fragment {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return fragmentList[position]
+            return PlaceholderFragment.newInstance(diaryList[position].sequence, query)
         }
 
         fun sequenceToPageIndex(sequence: Int): Int {
@@ -449,7 +444,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
         }
 
         override fun getCount(): Int {
-            return fragmentList.size
+            return diaryList.size
         }
     }
 }
