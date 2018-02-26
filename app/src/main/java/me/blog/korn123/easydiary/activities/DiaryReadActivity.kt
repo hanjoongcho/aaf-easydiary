@@ -70,7 +70,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-        val query = intent.getStringExtra(Constants.DIARY_SEARCH_QUERY);
+        val query = intent.getStringExtra(Constants.DIARY_SEARCH_QUERY)
         val diaryList: ArrayList<DiaryDto> = EasyDiaryDbHelper.readDiary(query, CommonUtils.loadBooleanPreference(applicationContext, Constants.DIARY_SEARCH_QUERY_CASE_SENSITIVE))
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager, diaryList, query)
         val startPageIndex = when(savedInstanceState == null) {
@@ -403,7 +403,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
              * Returns a new instance of this fragment for the given section
              * number.
              */
-            fun newInstance(sequence: Int, query: String): PlaceholderFragment {
+            fun newInstance(sequence: Int, query: String?): PlaceholderFragment {
                 val fragment = PlaceholderFragment()
                 val args = Bundle()
                 args.putInt(Constants.DIARY_SEQUENCE, sequence)
@@ -421,7 +421,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
     inner class SectionsPagerAdapter(
             fm: FragmentManager,
             private val diaryList: ArrayList<DiaryDto>,
-            private val query: String
+            private val query: String?
     ) : FragmentStatePagerAdapter(fm) {
 
         override fun getItem(position: Int): Fragment {
