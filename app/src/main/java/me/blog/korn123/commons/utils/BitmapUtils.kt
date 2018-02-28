@@ -8,12 +8,9 @@ import android.net.Uri
 import android.view.SurfaceView
 import android.view.View
 import android.view.ViewGroup
-
-import java.io.File
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.OutputStream
+import org.apache.commons.io.FileUtils
+import org.apache.commons.io.IOUtils
+import java.io.*
 
 /**
  * Created by hanjoong on 2017-06-08.
@@ -44,6 +41,34 @@ object BitmapUtils {
         o2.outWidth = fixedWidth
         o2.outHeight = fixedHeight
         val tempBitmap = BitmapFactory.decodeStream(c.contentResolver.openInputStream(uri), null, o2)
+        return Bitmap.createScaledBitmap(tempBitmap, fixedWidth, fixedHeight, false)
+    }
+
+    @Throws(FileNotFoundException::class, SecurityException::class)
+    fun decodeFile(c: Context, path: String, requiredSize: Int, fixedWidth: Int, fixedHeight: Int): Bitmap {
+        val o = BitmapFactory.Options()
+        o.inJustDecodeBounds = true
+        var inputStream: InputStream = FileUtils.openInputStream(File(path))
+        BitmapFactory.decodeStream(inputStream, null, o)
+        IOUtils.closeQuietly(inputStream)
+        var width_tmp = o.outWidth
+        var height_tmp = o.outHeight
+        var scale = 1
+
+        while (true) {
+            if (width_tmp / 2 < requiredSize || height_tmp / 2 < requiredSize)
+                break
+            width_tmp /= 2
+            height_tmp /= 2
+            scale *= 2
+        }
+
+        inputStream = FileUtils.openInputStream(File(path))
+        val o2 = BitmapFactory.Options()
+        o2.inSampleSize = scale
+        o2.outWidth = fixedWidth
+        o2.outHeight = fixedHeight
+        val tempBitmap = BitmapFactory.decodeStream(inputStream, null, o2)
         return Bitmap.createScaledBitmap(tempBitmap, fixedWidth, fixedHeight, false)
     }
 

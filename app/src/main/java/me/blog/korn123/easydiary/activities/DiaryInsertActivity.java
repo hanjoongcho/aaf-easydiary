@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.speech.RecognizerIntent;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v7.app.AlertDialog;
@@ -34,9 +35,13 @@ import android.widget.TimePicker;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.simplemobiletools.commons.helpers.BaseConfig;
+import com.zxy.tiny.Tiny;
+import com.zxy.tiny.callback.FileCallback;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -47,12 +52,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.RealmList;
 import me.blog.korn123.commons.constants.Constants;
+import me.blog.korn123.commons.constants.Path;
 import me.blog.korn123.commons.utils.BitmapUtils;
 import me.blog.korn123.commons.utils.CommonUtils;
 import me.blog.korn123.commons.utils.DateUtils;
@@ -464,35 +471,44 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
                 break;
             case Constants.REQUEST_CODE_IMAGE_PICKER:
 //                String path = CommonUtils.uriToPath(getContentResolver(), data.getData());
-                try {
-                    if (resultCode == RESULT_OK && (data != null)) {
-                        if (mPhotoUris == null) mPhotoUris = new RealmList<>();
-                        mPhotoUris.add(new PhotoUriDto(data.getData().toString()));
-                        Bitmap bitmap = BitmapUtils.INSTANCE.decodeUri(this, data.getData(), CommonUtils.INSTANCE.dpToPixel(this, 70, 1), CommonUtils.INSTANCE.dpToPixel(this, 65, 1), CommonUtils.INSTANCE.dpToPixel(this, 45, 1));
-                        ImageView imageView = new ImageView(this);
-                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(CommonUtils.INSTANCE.dpToPixel(this, 70, 1), CommonUtils.INSTANCE.dpToPixel(this, 50, 1));
-                        layoutParams.setMargins(0, 0, CommonUtils.INSTANCE.dpToPixel(this, 3, 1), 0);
-                        imageView.setLayoutParams(layoutParams);
-                        Drawable drawable = getResources().getDrawable(R.drawable.bg_card_thumbnail);
-                        GradientDrawable gradient = (GradientDrawable) drawable;
-                        gradient.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, Constants.THUMBNAIL_BACKGROUND_ALPHA));
-                        imageView.setBackground(gradient);
-                        imageView.setImageBitmap(bitmap);
-                        imageView.setScaleType(ImageView.ScaleType.CENTER);
-//                    imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                        final int currentIndex = mPhotoUris.size() - 1;
-                        imageView.setOnClickListener(new PhotoClickListener(currentIndex));
-                        mPhotoContainer.addView(imageView, mPhotoContainer.getChildCount() - 1);
-                        mPhotoContainer.postDelayed(new Runnable() {
-                            public void run() {
-                                ((HorizontalScrollView)mPhotoContainer.getParent()).fullScroll(HorizontalScrollView.FOCUS_RIGHT);
-                            }
-                        }, 100L);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
 
+                if (resultCode == RESULT_OK && (data != null)) {
+                    if (mPhotoUris == null) mPhotoUris = new RealmList<>();
+                    String photoName = Environment.getExternalStorageDirectory().getAbsolutePath() + Path.INSTANCE.getDIARY_PHOTO_DIRECTORY() + UUID.randomUUID().toString() + ".JPG";
+                    mPhotoUris.add(new PhotoUriDto(photoName));
+
+                    Tiny.FileCompressOptions options = new Tiny.FileCompressOptions();
+                    options.outfile = photoName;
+                    Tiny.getInstance().source(data.getData()).asFile().withOptions(options).compress(new FileCallback() {
+                        @Override
+                        public void callback(boolean isSuccess, String outfile, Throwable t) {
+                            try {
+                                Bitmap bitmap = BitmapUtils.INSTANCE.decodeFile(getApplicationContext(), outfile, CommonUtils.INSTANCE.dpToPixel(getApplicationContext(), 70, 1), CommonUtils.INSTANCE.dpToPixel(getApplicationContext(), 65, 1), CommonUtils.INSTANCE.dpToPixel(getApplicationContext(), 45, 1));
+                                ImageView imageView = new ImageView(getApplicationContext());
+                                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(CommonUtils.INSTANCE.dpToPixel(getApplicationContext(), 70, 1), CommonUtils.INSTANCE.dpToPixel(getApplicationContext(), 50, 1));
+                                layoutParams.setMargins(0, 0, CommonUtils.INSTANCE.dpToPixel(getApplicationContext(), 3, 1), 0);
+                                imageView.setLayoutParams(layoutParams);
+                                Drawable drawable = getResources().getDrawable(R.drawable.bg_card_thumbnail);
+                                GradientDrawable gradient = (GradientDrawable) drawable;
+                                gradient.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, Constants.THUMBNAIL_BACKGROUND_ALPHA));
+                                imageView.setBackground(gradient);
+                                imageView.setImageBitmap(bitmap);
+                                imageView.setScaleType(ImageView.ScaleType.CENTER);
+//                    imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                                final int currentIndex = mPhotoUris.size() - 1;
+                                imageView.setOnClickListener(new PhotoClickListener(currentIndex));
+                                mPhotoContainer.addView(imageView, mPhotoContainer.getChildCount() - 1);
+                                mPhotoContainer.postDelayed(new Runnable() {
+                                    public void run() {
+                                        ((HorizontalScrollView)mPhotoContainer.getParent()).fullScroll(HorizontalScrollView.FOCUS_RIGHT);
+                                    }
+                                }, 100L);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
                 break;
             default:
                 break;

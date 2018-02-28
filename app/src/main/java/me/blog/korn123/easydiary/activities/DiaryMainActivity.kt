@@ -91,6 +91,7 @@ class DiaryMainActivity : EasyDiaryActivity() {
         bindEvent()
         initShowcase()
         EasyDiaryUtils.initWorkingDirectory(Environment.getExternalStorageDirectory().absolutePath + Path.USER_CUSTOM_FONTS_DIRECTORY)
+        EasyDiaryUtils.initWorkingDirectory(Environment.getExternalStorageDirectory().absolutePath + Path.DIARY_PHOTO_DIRECTORY)
     }
 
     override fun onResume() {

@@ -14,6 +14,9 @@ android {
         versionName "1.4.23"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+//        ndk {
+//            abiFilters 'armeabi','x86'//or armeabi-v7a、arm64-v8a、x86
+//        }
     }
     buildTypes {
         release {
@@ -86,6 +89,8 @@ dependencies {
     // Alex Curran
     implementation 'com.github.amlcurran.showcaseview:library:5.4.3'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+
+    implementation 'com.zxy.android:tiny:0.1.0'
 
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
