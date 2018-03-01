@@ -4,13 +4,16 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.DialogInterface
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
 import android.speech.RecognizerIntent
 import android.support.v4.app.ActivityCompat
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
 import android.widget.AdapterView
 import android.widget.RelativeLayout
@@ -28,7 +31,9 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.FILE_URI_PREFIX
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
@@ -92,12 +97,34 @@ class DiaryMainActivity : EasyDiaryActivity() {
         initShowcase()
         EasyDiaryUtils.initWorkingDirectory(Environment.getExternalStorageDirectory().absolutePath + Path.USER_CUSTOM_FONTS_DIRECTORY)
         EasyDiaryUtils.initWorkingDirectory(Environment.getExternalStorageDirectory().absolutePath + Path.DIARY_PHOTO_DIRECTORY)
+        
+        Thread(Runnable {
+            val listPhotoUri = EasyDiaryDbHelper.selectPhotoUriAll()
+            for ((index, dto) in listPhotoUri.withIndex()) {
+//                Log.i("PHOTO-URI", dto.photoUri)
+                if (dto.isContentUri()) {
+                    val photoPath = Environment.getExternalStorageDirectory().absolutePath + Path.DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
+                    CommonUtils.uriToFile(this, Uri.parse(dto.photoUri), photoPath)
+                    EasyDiaryDbHelper.getRealmInstance().beginTransaction()
+                    dto.photoUri = FILE_URI_PREFIX + photoPath
+                    EasyDiaryDbHelper.getRealmInstance().commitTransaction()
+                    runOnUiThread({
+                        progressInfo.text = "Converting... ($index/${listPhotoUri.size})"
+                    })
+                }
+            }
+            runOnUiThread({
+                progressDialog.visibility = View.GONE
+                modalContainer.visibility = View.GONE
+            })
+        }).start()
     }
 
     override fun onResume() {
         super.onResume()
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
         refreshList()
+        initTextSize(progressDialog, this)
 
         val previousActivity = CommonUtils.loadIntPreference(this@DiaryMainActivity, Constants.PREVIOUS_ACTIVITY, -1)
         if (previousActivity == Constants.PREVIOUS_ACTIVITY_CREATE) {
@@ -155,7 +182,7 @@ class DiaryMainActivity : EasyDiaryActivity() {
     }
 
     override fun onBackPressed() {
-        ActivityCompat.finishAffinity(this@DiaryMainActivity)
+        if (progressDialog.visibility == View.GONE) ActivityCompat.finishAffinity(this@DiaryMainActivity)
     }
 
     @OnClick(R.id.insertDiaryButton)
@@ -252,6 +279,8 @@ class DiaryMainActivity : EasyDiaryActivity() {
             detailIntent.putExtra(Constants.DIARY_SEARCH_QUERY, mDiaryMainItemAdapter?.currentQuery)
             TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, detailIntent)
         }
+
+        modalContainer.setOnTouchListener({ _, _ -> true })
     }
 
     private fun showSpeechDialog() {

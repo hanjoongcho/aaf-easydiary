@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
 import android.support.v7.app.AlertDialog
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,7 @@ import io.github.hanjoongcho.commons.helpers.BaseConfig
 import kotlinx.android.synthetic.main.activity_settings.*
 import me.blog.korn123.commons.constants.Constants
 import me.blog.korn123.commons.constants.Path
+import me.blog.korn123.commons.constants.Path.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.DialogUtils
 import me.blog.korn123.commons.utils.FontUtils
@@ -28,6 +30,8 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.FontItemAdapter
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.openGooglePlayBy
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.FILE_URI_PREFIX
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import org.apache.commons.io.FilenameUtils
 import java.io.File
@@ -107,8 +111,7 @@ class SettingsActivity : EasyDiaryActivity() {
                 mTaskFlag = Constants.SETTING_FLAG_EXPORT_GOOGLE_DRIVE
                 if (PermissionUtils.checkPermission(this@SettingsActivity, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
                     // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
-                    val uploadIntent = Intent(this@SettingsActivity, GoogleDriveUploader::class.java)
-                    startActivity(uploadIntent)
+                    openUploadIntent()
                 } else {
                     // API Level 23 이상이면서 권한취득 안한경우
                     PermissionUtils.confirmPermission(this@SettingsActivity, this@SettingsActivity, Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE)
@@ -144,8 +147,7 @@ class SettingsActivity : EasyDiaryActivity() {
                 // 권한이 있는경우
                 if (mTaskFlag == Constants.SETTING_FLAG_EXPORT_GOOGLE_DRIVE) {
                     //                            FileUtils.copyFile(new File(EasyDiaryDbHelper.getRealmInstance().getPath()), new File(Path.WORKING_DIRECTORY + Path.DIARY_DB_NAME));
-                    val uploadIntent = Intent(applicationContext, GoogleDriveUploader::class.java)
-                    startActivity(uploadIntent)
+                    openUploadIntent()
                 } else if (mTaskFlag == Constants.SETTING_FLAG_IMPORT_GOOGLE_DRIVE) {
                     val downloadIntent = Intent(applicationContext, GoogleDriveDownloader::class.java)
                     startActivity(downloadIntent)
@@ -162,6 +164,17 @@ class SettingsActivity : EasyDiaryActivity() {
             else -> {
             }
         }
+    }
+    
+    private fun openUploadIntent() {
+        // delete unused compressed photo file 
+        File(Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY).listFiles()?.map {
+//            Log.i("PHOTO-URI", "${it.absolutePath} | ${EasyDiaryDbHelper.countPhotoUriBy(FILE_URI_PREFIX + it.absolutePath)}")
+            if (EasyDiaryDbHelper.countPhotoUriBy(FILE_URI_PREFIX + it.absolutePath) == 0) it.delete()
+        }
+        
+        val uploadIntent = Intent(applicationContext, GoogleDriveUploader::class.java)
+        startActivity(uploadIntent)
     }
 
     private fun openFontSettingDialog() {

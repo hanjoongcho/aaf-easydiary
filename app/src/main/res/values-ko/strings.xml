@@ -110,7 +110,8 @@
     <string name="read_diary_showcase_message_6">전체기간 동안의 일기작성 현황을 차트로 볼 수 있습니다.</string>
     <string name="read_diary_showcase_message_7">고급설정을 이용하여 폰트변경, 잠금번호설정, 다이어리 백업 및 복구 작업을 할 수 있습니다.</string>
     <string name="read_diary_showcase_message_8">목록내의 다이어리카드를 클릭하면 해당 다이어리를 볼 수 있습니다.</string>
-
+    <string name="diary_photo_migration_message">이지다이어리의 사진첨부 방식이 변경되어 기존 링크정보를 이지다이어리 폴더에 압축하여 저장합니다.\n작업이 완료될때까지 잠시 기다려 주시기 바랍니다.</string>
+    
     <!--DiaryReadActivity-->
     <string name="read_diary_detail_title">다이어리 열람</string>
     <string name="delete_confirm">삭제 하시겠습니까?</string>

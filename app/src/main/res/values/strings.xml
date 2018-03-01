@@ -110,7 +110,8 @@
     <string name="read_diary_showcase_message_6">You can view charts of diary entries for the entire period.</string>
     <string name="read_diary_showcase_message_7">You can use advanced settings to change fonts, set lock number, backup and restore diary.</string>
     <string name="read_diary_showcase_message_8">Click the diary card in the list to view the diary.</string>
-
+    <string name="diary_photo_migration_message">The image attachment method of the EasyDiary is changed so that the existing link information is compressed and stored in the EasyDiary folder.\nPlease wait for the operation to finish.</string>
+    
     <!--DiaryReadActivity-->
     <string name="read_diary_detail_title">Read Diary</string>
     <string name="delete_confirm">Are you sure you want to delete?</string>

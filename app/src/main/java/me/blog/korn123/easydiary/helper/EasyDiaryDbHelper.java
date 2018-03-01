@@ -11,6 +11,7 @@ import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import me.blog.korn123.easydiary.models.DiaryDto;
+import me.blog.korn123.easydiary.models.PhotoUriDto;
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -95,6 +96,18 @@ public class EasyDiaryDbHelper {
         List<DiaryDto> list = new ArrayList<>();
         list.addAll(results.subList(0, results.size()));
         return list;
+    }
+    
+    public static List<PhotoUriDto> selectPhotoUriAll() {
+        RealmResults<PhotoUriDto> results = getRealmInstance().where(PhotoUriDto.class).findAllSorted("photoUri", Sort.ASCENDING);
+        List<PhotoUriDto> list = new ArrayList<>();
+        list.addAll(results.subList(0, results.size()));
+        return list;
+    }
+
+    public static int countPhotoUriBy(String uriString) {
+        Long count = getRealmInstance().where(PhotoUriDto.class).equalTo("photoUri", uriString).count();
+        return count.intValue();
     }
 
     public static int countDiaryBy(String dateString) {

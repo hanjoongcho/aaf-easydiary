@@ -110,7 +110,8 @@
     <string name="read_diary_showcase_message_6">全期間の日記作成状況をグラフで見ることができます.</string>
     <string name="read_diary_showcase_message_7">詳細設定を使用して、フォントの変更、ロック番号の設定、ダイアリーのバックアップおよびリカバリ操作を行うことができます.</string>
     <string name="read_diary_showcase_message_8">リスト内のダイアリーカードをクリックすると、その日記を見ることができます.</string>
-
+    <string name="diary_photo_migration_message">イージーダイアリーの写真付き方式が変更され、既存のリンク情報をでダイアリーフォルダに圧縮して保存します。\n作業が完了するまでしばらくお待ちください。</string>
+    
     <!--DiaryReadActivity-->
     <string name="read_diary_detail_title">ダイアリーを読む</string>
     <string name="delete_confirm">削除しますか?</string>

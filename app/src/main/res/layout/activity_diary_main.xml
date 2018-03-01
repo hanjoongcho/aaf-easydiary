@@ -50,7 +50,7 @@
             </ListView>
         </LinearLayout>
     </LinearLayout>
-
+    
     <com.simplemobiletools.commons.views.MyFloatingActionButton
         android:id="@+id/insertDiaryButton"
         android:layout_width="wrap_content"
@@ -58,4 +58,38 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/edit" />
+    
+    <LinearLayout
+        android:id="@+id/modalContainer"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:alpha="0.3"
+        android:background="?attr/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/progressDialog"
+        android:padding="20dp"
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.simplemobiletools.commons.views.MyTextView
+            android:text="@string/diary_photo_migration_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <ProgressBar
+            android:layout_marginTop="10dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
+        <com.simplemobiletools.commons.views.MyTextView
+            android:id="@+id/progressInfo"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>
