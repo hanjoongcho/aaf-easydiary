@@ -143,9 +143,11 @@
     <string name="application_lock_summary">When the lock setting is enabled, the application is locked with the set password.</string>
     <string name="application_lock_password_title">Set lock number</string>
     <string name="restore_diary">Recover Diary</string>
-    <string name="restore_diary_summary">Recover all content using data backed up to Google Drive.\nIn the case of an attached photo, only the link information exists. Therefore, on a device that does not have an original photo, only the content except the attached photo is restored.\nRecovery features, including original photos, will be available in the future.</string>
+    <string name="restore_diary_summary">Recover all content using data backed up to Google Drive.</string>
+    <string name="restore_photo">다이어리 첨부사진 복구하기</string>
+    <string name="restore_photo_summary">다이어리에 첨부된 사진이 존재하는 경우 해당사진을 복구합니다.</string>
     <string name="backup_diary">Backup diary</string>
-    <string name="backup_diary_summary">Back up all your content to Google Drive.\nIn the case of an attached photo, only the link information is backed up. Therefore, only the contents except the attached photo will be restored on devices that do not have the original photo.\nBackup features including original photos will be available in the future.</string>
+    <string name="backup_diary_summary">Back up all your content to Google Drive.</string>
     <string name="font_setting">Font setting</string>
     <string name="add_ttf_fonts_title">Add TTF font</string>
     <string name="add_ttf_fonts_summary">Add your own TTF fonts to the Easy Diary.\nIf the fonts are added, you can use the added fonts with the built-in fonts.</string>

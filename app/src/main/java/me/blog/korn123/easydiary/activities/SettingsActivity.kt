@@ -70,7 +70,7 @@ class SettingsActivity : EasyDiaryActivity() {
         }
     }
 
-    @OnClick(R.id.primaryColor, R.id.fontSetting, R.id.sensitiveOption, R.id.guideView, R.id.appLockSetting, R.id.lockNumberSetting, R.id.restoreSetting, R.id.backupSetting, R.id.rateAppSetting, R.id.licenseView, R.id.easyPhotoMap, R.id.easyPassword)
+    @OnClick(R.id.primaryColor, R.id.fontSetting, R.id.sensitiveOption, R.id.addTtfFontSetting, R.id.appLockSetting, R.id.lockNumberSetting, R.id.restoreSetting, R.id.backupSetting, R.id.rateAppSetting, R.id.licenseView, R.id.easyPhotoMap, R.id.easyPassword, R.id.restorePhotoSetting)
     fun onClick(view: View) {
         when (view.id) {
             R.id.primaryColor -> TransitionHelper.startActivityWithTransition(this@SettingsActivity, Intent(this@SettingsActivity, CustomizationActivity::class.java))
@@ -83,10 +83,8 @@ class SettingsActivity : EasyDiaryActivity() {
                 sensitiveOptionSwitcher.toggle()
                 CommonUtils.saveBooleanPreference(this@SettingsActivity, Constants.DIARY_SEARCH_QUERY_CASE_SENSITIVE, sensitiveOptionSwitcher.isChecked)
             }
-            R.id.guideView -> {
-                val guideIntent = Intent(this, WebViewActivity::class.java)
-                guideIntent.putExtra(BaseWebViewActivity.OPEN_URL_INFO, getString(R.string.add_ttf_fonts_info_url))
-                startActivity(guideIntent)
+            R.id.addTtfFontSetting -> {
+                openGuideView()
             }
             R.id.appLockSetting -> {
                 appLockSettingSwitcher.toggle()
@@ -106,6 +104,9 @@ class SettingsActivity : EasyDiaryActivity() {
                     // API Level 23 이상이면서 권한취득 안한경우
                     PermissionUtils.confirmPermission(this@SettingsActivity, this@SettingsActivity, Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE)
                 }
+            }
+            R.id.restorePhotoSetting -> {
+                openGuideView()
             }
             R.id.backupSetting -> {
                 mTaskFlag = Constants.SETTING_FLAG_EXPORT_GOOGLE_DRIVE
@@ -128,6 +129,12 @@ class SettingsActivity : EasyDiaryActivity() {
         }
     }
 
+    private fun openGuideView() {
+        val guideIntent = Intent(this, WebViewActivity::class.java)
+        guideIntent.putExtra(BaseWebViewActivity.OPEN_URL_INFO, getString(R.string.add_ttf_fonts_info_url))
+        startActivity(guideIntent)
+    }
+    
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {

@@ -143,9 +143,11 @@
     <string name="application_lock_summary">ロックの設定が有効な場合、設定されたパスワードでアプリケーションがロックされます.</string>
     <string name="application_lock_password_title">ロック番号の設定</string>
     <string name="restore_diary">ダイアリー回復する</string>
-    <string name="restore_diary_summary">Googleのドライブにバックアップされたデータを利用して、すべてのコンテンツを回復します.\n添付写真の場合は、リンク情報のみが存在するので、元の写真が存在しないデバイスでは、添付の写真を除くコンテンツのみ復元されます.\n元の写真を含む回復機能は、今後提供する予定です.</string>
+    <string name="restore_diary_summary">Googleのドライブにバックアップされたデータを利用して、すべてのコンテンツを回復します.</string>
+    <string name="restore_photo">다이어리 첨부사진 복구하기</string>
+    <string name="restore_photo_summary">다이어리에 첨부된 사진이 존재하는 경우 해당사진을 복구합니다.</string>
     <string name="backup_diary">ダイアリーバックアップする</string>
-    <string name="backup_diary_summary">すべてのコンテンツをGoogleのドライブにバックアップします.\n添付写真の場合は、リンク情報のみのバックアップがされるため、元の写真が存在しないデバイスでは、添付の写真を除くコンテンツのみ復元されます.\n元の写真を含むバックアップ機能は、今後提供する予定です.</string>
+    <string name="backup_diary_summary">すべてのコンテンツをGoogleのドライブにバックアップします.</string>
     <string name="font_setting">フォントの設定</string>
     <string name="add_ttf_fonts_title">TTF フォントを追加</string>
     <string name="add_ttf_fonts_summary">ユーザーが所有しているTTFフォントをでダイアリーに追加して使用します.\nフォントが追加されると、組み込みのフォントと一緒にユーザーが追加したフォントを使用することができます.</string>
