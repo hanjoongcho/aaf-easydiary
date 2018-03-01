@@ -5,6 +5,16 @@ import android.content.Context
 import android.net.Uri
 import android.preference.PreferenceManager
 import android.util.TypedValue
+import android.provider.OpenableColumns
+import android.util.Log
+import org.apache.commons.io.FileUtils
+import org.apache.commons.io.IOUtils
+import java.io.*
+import java.util.*
+import android.provider.ContactsContract.CommonDataKinds.StructuredName.SUFFIX
+
+
+
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -106,5 +116,16 @@ object CommonUtils {
         }
         cursor.close()
         return path
+    }
+
+    @Throws(IOException::class)
+    fun uriToFile(context: Context, uri: Uri): File {
+        val tempFile = File.createTempFile("TEMP_PHOTO", "AAF").apply { deleteOnExit() }
+        val inputStream = context.contentResolver.openInputStream(uri)
+        val outputStream = FileOutputStream(tempFile)
+        IOUtils.copy(inputStream, outputStream)
+        IOUtils.closeQuietly(inputStream)
+        IOUtils.closeQuietly(outputStream)
+        return tempFile
     }
 }
