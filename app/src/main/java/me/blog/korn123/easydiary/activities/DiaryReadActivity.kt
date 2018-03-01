@@ -3,10 +3,7 @@ package me.blog.korn123.easydiary.activities
 import android.annotation.TargetApi
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.drawable.GradientDrawable
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -38,7 +35,6 @@ import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
-import java.io.FileNotFoundException
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -348,17 +344,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                     if (photoContainer.childCount > 0) photoContainer.removeAllViews()
                     context?.let { appContext ->
                         diaryDto.photoUris?.map {
-                            val uri = Uri.parse(it.photoUri)
-                            val bitmap: Bitmap? = try {
-                                BitmapUtils.decodeUri(appContext, uri, CommonUtils.dpToPixel(appContext, 70, 1), CommonUtils.dpToPixel(appContext, 65, 1), CommonUtils.dpToPixel(appContext, 45, 1))
-                            } catch (e: FileNotFoundException) {
-                                e.printStackTrace()
-                                BitmapFactory.decodeResource(resources, R.drawable.question_shield)
-                            } catch (se: SecurityException) {
-                                se.printStackTrace()
-                                BitmapFactory.decodeResource(resources, R.drawable.question_shield)
-                            }
-
+                            val bitmap = CommonUtils.photoUriToDownSamplingBitmap(appContext, it)
                             val imageView = ImageView(context)
                             val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(appContext, 70, 1), CommonUtils.dpToPixel(appContext, 50, 1))
                             layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(appContext, 3, 1), 0)

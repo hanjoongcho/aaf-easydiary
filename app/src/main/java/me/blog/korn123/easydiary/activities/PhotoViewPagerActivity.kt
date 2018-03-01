@@ -1,6 +1,5 @@
 package me.blog.korn123.easydiary.activities
 
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
@@ -62,9 +61,8 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
         override fun instantiateItem(container: ViewGroup, position: Int): View {
             val photoView = PhotoView(container.context)
             //            photoView.setImageResource(sDrawables[position]);
-            val uri = Uri.parse(diaryDto.photoUris!![position].photoUri)
-            photoView.setImageURI(uri)
-            when (photoView.drawable == null) {
+            val bitmap = CommonUtils.photoUriToBitmap(container.context, diaryDto.photoUris!![position])
+            when (bitmap == null) {
                 true -> {
                     val textView = TextView(container.context)
                     textView.gravity = Gravity.CENTER
@@ -77,6 +75,7 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
                 }
                 false -> {
                     // Now just add PhotoView to ViewPager and return it
+                    photoView.setImageBitmap(bitmap)
                     container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
                     return photoView    
                 }

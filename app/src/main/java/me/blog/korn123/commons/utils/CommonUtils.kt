@@ -2,6 +2,8 @@ package me.blog.korn123.commons.utils
 
 import android.content.ContentResolver
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.preference.PreferenceManager
 import android.util.TypedValue
@@ -12,8 +14,11 @@ import org.apache.commons.io.IOUtils
 import java.io.*
 import java.util.*
 import android.provider.ContactsContract.CommonDataKinds.StructuredName.SUFFIX
-
-
+import id.zelory.compressor.Compressor
+import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.models.PhotoUriDto
+import org.apache.commons.io.FilenameUtils
+import java.security.spec.ECField
 
 
 /**
@@ -119,13 +124,59 @@ object CommonUtils {
     }
 
     @Throws(IOException::class)
-    fun uriToFile(context: Context, uri: Uri): File {
-        val tempFile = File.createTempFile("TEMP_PHOTO", "AAF").apply { deleteOnExit() }
-        val inputStream = context.contentResolver.openInputStream(uri)
-        val outputStream = FileOutputStream(tempFile)
-        IOUtils.copy(inputStream, outputStream)
-        IOUtils.closeQuietly(inputStream)
-        IOUtils.closeQuietly(outputStream)
-        return tempFile
+    fun uriToFile(context: Context, uri: Uri, photoPath: String): Boolean {
+        var result = false
+        try {
+            val tempFile = File.createTempFile("TEMP_PHOTO", "AAF").apply { deleteOnExit() }
+            val inputStream = context.contentResolver.openInputStream(uri)
+            val outputStream = FileOutputStream(tempFile)
+            IOUtils.copy(inputStream, outputStream)
+            IOUtils.closeQuietly(inputStream)
+            IOUtils.closeQuietly(outputStream)
+
+            val compressedFile = Compressor(context).setQuality(70).compressToFile(tempFile)
+            FileUtils.copyFile(compressedFile, File(photoPath))
+            result = true
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return result
+    }
+    
+    fun photoUriToDownSamplingBitmap(context: Context, photoUriDto: PhotoUriDto): Bitmap {
+        val bitmap: Bitmap = try {
+            when (photoUriDto.isContentUri()) {
+                true -> {
+                    BitmapUtils.decodeUri(context, Uri.parse(photoUriDto.photoUri), CommonUtils.dpToPixel(context, 70, 1), CommonUtils.dpToPixel(context, 65, 1), CommonUtils.dpToPixel(context, 45, 1))
+                }
+                false -> {
+                    BitmapUtils.decodeFile(context, photoUriDto.getFilePath(), CommonUtils.dpToPixel(context, 70, 1), CommonUtils.dpToPixel(context, 65, 1), CommonUtils.dpToPixel(context, 45, 1))
+                }
+            }
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+            BitmapFactory.decodeResource(context.resources, R.drawable.question_shield)
+        } catch (se: SecurityException) {
+            se.printStackTrace()
+            BitmapFactory.decodeResource(context.resources, R.drawable.question_shield)
+        }
+        return bitmap
+    }
+
+    fun photoUriToBitmap(context: Context, photoUriDto: PhotoUriDto): Bitmap? {
+        val bitmap: Bitmap? = try {
+            when (photoUriDto.isContentUri()) {
+                true -> {
+                    BitmapFactory.decodeStream(context.contentResolver.openInputStream(Uri.parse(photoUriDto.photoUri)))
+                }
+                false -> {
+                    BitmapFactory.decodeFile(photoUriDto.getFilePath())
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+           null
+        }
+        return bitmap
     }
 }

@@ -7,15 +7,12 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.drawable.GradientDrawable
-import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.speech.RecognizerIntent
 import android.support.v4.graphics.ColorUtils
 import android.support.v7.app.AlertDialog
-import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -32,15 +29,16 @@ import kotlinx.android.synthetic.main.layout_edit_contents.*
 import kotlinx.android.synthetic.main.layout_edit_photo_container.*
 import kotlinx.android.synthetic.main.activity_diary_update.*
 import me.blog.korn123.commons.constants.Constants
+import me.blog.korn123.commons.constants.Path
 import me.blog.korn123.commons.utils.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryWeatherItemAdapter
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.FILE_URI_PREFIX
 import me.blog.korn123.easydiary.models.DiaryDto
 import me.blog.korn123.easydiary.models.PhotoUriDto
 import org.apache.commons.lang3.StringUtils
-import java.io.FileNotFoundException
 import java.io.IOException
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -238,19 +236,8 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
         }
 
         mPhotoUris?.let {
-            for ((index, dto ) in it.withIndex()) {
-                val uri = Uri.parse(dto.photoUri)
-                var bitmap: Bitmap?
-                try {
-                    bitmap = BitmapUtils.decodeUri(this, uri, CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 65, 1), CommonUtils.dpToPixel(this, 45, 1))
-                } catch (e: FileNotFoundException) {
-                    e.printStackTrace()
-                    bitmap = BitmapFactory.decodeResource(resources, R.drawable.question_shield)
-                } catch (se: SecurityException) {
-                    se.printStackTrace()
-                    bitmap = BitmapFactory.decodeResource(resources, R.drawable.question_shield)
-                }
-
+            for ((index, dto) in it.withIndex()) {
+                val bitmap = CommonUtils.photoUriToDownSamplingBitmap(this, dto)
                 val imageView = ImageView(this)
                 val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 50, 1))
                 layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(this, 3, 1), 0)
@@ -364,8 +351,10 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
             Constants.REQUEST_CODE_IMAGE_PICKER -> try {
                 if (resultCode == Activity.RESULT_OK && data != null) {
                     if (mPhotoUris == null) mPhotoUris = RealmList()
-                    mPhotoUris?.add(PhotoUriDto(data.data.toString()))
-                    val bitmap = BitmapUtils.decodeUri(this, data.data, CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 65, 1), CommonUtils.dpToPixel(this, 45, 1))
+                    val photoPath = Environment.getExternalStorageDirectory().absolutePath + Path.DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
+                    CommonUtils.uriToFile(this, data.data, photoPath)
+                    mPhotoUris?.add(PhotoUriDto(FILE_URI_PREFIX + photoPath))
+                    val bitmap = BitmapUtils.decodeFile(this, photoPath, CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 65, 1), CommonUtils.dpToPixel(this, 45, 1))
                     val imageView = ImageView(this)
                     val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 50, 1))
                     layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(this, 3, 1), 0)

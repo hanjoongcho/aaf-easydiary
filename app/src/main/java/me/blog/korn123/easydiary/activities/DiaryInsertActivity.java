@@ -69,6 +69,7 @@ import me.blog.korn123.commons.utils.PermissionUtils;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.adapters.DiaryWeatherItemAdapter;
 import me.blog.korn123.easydiary.extensions.ContextKt;
+import me.blog.korn123.easydiary.helper.ConstantsKt;
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
 import me.blog.korn123.easydiary.models.DiaryDto;
 import me.blog.korn123.easydiary.models.PhotoUriDto;
@@ -472,11 +473,10 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
                 if (resultCode == RESULT_OK && (data != null)) {
                     if (mPhotoUris == null) mPhotoUris = new RealmList<>();
                     String photoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + Path.INSTANCE.getDIARY_PHOTO_DIRECTORY() + UUID.randomUUID().toString();
-                    mPhotoUris.add(new PhotoUriDto(data.getData().toString()));
-                    mPhotoUris.add(new PhotoUriDto(photoPath));
+//                    mPhotoUris.add(new PhotoUriDto(data.getData().toString()));
                     try {
-                        File compressedFile = new Compressor(this).compressToFile(CommonUtils.INSTANCE.uriToFile(this, data.getData()));
-                        FileUtils.copyFile(compressedFile, new File(FilenameUtils.getFullPath(photoPath) + FilenameUtils.getBaseName(photoPath)));
+                        CommonUtils.INSTANCE.uriToFile(this, data.getData(), photoPath);
+                        mPhotoUris.add(new PhotoUriDto(ConstantsKt.FILE_URI_PREFIX + photoPath));
                         Bitmap bitmap = BitmapUtils.INSTANCE.decodeFile(getApplicationContext(), photoPath, CommonUtils.INSTANCE.dpToPixel(getApplicationContext(), 70, 1), CommonUtils.INSTANCE.dpToPixel(getApplicationContext(), 65, 1), CommonUtils.INSTANCE.dpToPixel(getApplicationContext(), 45, 1));
                         ImageView imageView = new ImageView(getApplicationContext());
                         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(CommonUtils.INSTANCE.dpToPixel(getApplicationContext(), 70, 1), CommonUtils.INSTANCE.dpToPixel(getApplicationContext(), 50, 1));
