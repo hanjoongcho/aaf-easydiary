@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
 import android.support.v7.app.AlertDialog
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,7 +50,7 @@ class SettingsActivity : EasyDiaryActivity() {
 
         setSupportActionBar(toolbar)
         supportActionBar?.run {
-            setTitle(R.string.setting_title)
+            setTitle(R.string.settings)
             setDisplayHomeAsUpEnabled(true)
         }
     }
