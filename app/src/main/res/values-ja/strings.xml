@@ -144,8 +144,8 @@
     <string name="application_lock_password_title">ロック番号の設定</string>
     <string name="restore_diary">ダイアリー回復する</string>
     <string name="restore_diary_summary">Googleのドライブにバックアップされたデータを利用して、すべてのコンテンツを回復します.</string>
-    <string name="restore_photo">다이어리 첨부사진 복구하기</string>
-    <string name="restore_photo_summary">다이어리에 첨부된 사진이 존재하는 경우 해당사진을 복구합니다.</string>
+    <string name="restore_photo">ダイアリー添付写真の回復する</string>
+    <string name="restore_photo_summary">ダイアリーに添付された写真が存在する場合は、その写真を回復します。</string>
     <string name="backup_diary">ダイアリーバックアップする</string>
     <string name="backup_diary_summary">すべてのコンテンツをGoogleのドライブにバックアップします.</string>
     <string name="font_setting">フォントの設定</string>
