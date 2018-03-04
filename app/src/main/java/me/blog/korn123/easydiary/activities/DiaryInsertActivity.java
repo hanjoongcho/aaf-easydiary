@@ -403,7 +403,7 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
             );
             Date parsedDate = format.parse(dateTimeString);
             mCurrentTimeMillis = parsedDate.getTime();
-            getSupportActionBar().setSubtitle(DateUtils.INSTANCE.getFullPatternDateWithTimeAndSeconds(mCurrentTimeMillis));
+            getSupportActionBar().setSubtitle(DateUtils.INSTANCE.getFullPatternDateWithTimeAndSeconds(mCurrentTimeMillis, Locale.getDefault()));
         } catch (ParseException e) {
             e.printStackTrace();
         }
