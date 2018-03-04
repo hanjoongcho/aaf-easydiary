@@ -363,12 +363,12 @@ public class DiaryInsertActivity extends EasyDiaryActivity {
 
     private DatePickerDialog mDatePickerDialog;
     private TimePickerDialog mTimePickerDialog;
-    private int mYear = Integer.valueOf(DateUtils.INSTANCE.getCurrentDateAsString(DateUtils.INSTANCE.getYEAR_PATTERN()));
-    private int mMonth = Integer.valueOf(DateUtils.INSTANCE.getCurrentDateAsString(DateUtils.INSTANCE.getMONTH_PATTERN()));
-    private int mDayOfMonth = Integer.valueOf(DateUtils.INSTANCE.getCurrentDateAsString(DateUtils.INSTANCE.getDAY_PATTERN()));
-    private int mHourOfDay = Integer.valueOf(DateUtils.INSTANCE.getCurrentDateAsString("HH"));
-    private int mMinute = Integer.valueOf(DateUtils.INSTANCE.getCurrentDateAsString("mm"));
-    private int mSecond = Integer.valueOf(DateUtils.INSTANCE.getCurrentDateAsString("ss"));
+    private int mYear = Integer.valueOf(DateUtils.INSTANCE.getCurrentDateTime(DateUtils.INSTANCE.getYEAR_PATTERN()));
+    private int mMonth = Integer.valueOf(DateUtils.INSTANCE.getCurrentDateTime(DateUtils.INSTANCE.getMONTH_PATTERN()));
+    private int mDayOfMonth = Integer.valueOf(DateUtils.INSTANCE.getCurrentDateTime(DateUtils.INSTANCE.getDAY_PATTERN()));
+    private int mHourOfDay = Integer.valueOf(DateUtils.INSTANCE.getCurrentDateTime("HH"));
+    private int mMinute = Integer.valueOf(DateUtils.INSTANCE.getCurrentDateTime("mm"));
+    private int mSecond = Integer.valueOf(DateUtils.INSTANCE.getCurrentDateTime("ss"));
 
     DatePickerDialog.OnDateSetListener mStartDateListener = new DatePickerDialog.OnDateSetListener() {
         @Override

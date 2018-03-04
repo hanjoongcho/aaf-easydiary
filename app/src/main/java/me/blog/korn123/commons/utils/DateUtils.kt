@@ -27,11 +27,6 @@ object DateUtils {
     val TIME_HMS_PATTERN = "HHmmss"
     val TIME_HMS_PATTERN_COLONE = "HH:mm:ss"
 
-    fun getCurrentDateAsString(pattern: String): String {
-        val df = SimpleDateFormat(pattern)
-        return df.format(Date())
-    }
-
     fun getFullPatternDate(timeMillis: Long): String {
         val date = Date(timeMillis)
         val dateFormat = SimpleDateFormat.getDateInstance(SimpleDateFormat.FULL, Locale.getDefault())
@@ -57,16 +52,10 @@ object DateUtils {
         val dateFormat = SimpleDateFormat(pattern)
         return dateFormat.format(date)
     }
-
+    
     fun timeMillisToDateTime(timeMillis: Long, pattern: String): String {
         val date = Date(timeMillis)
         val dateFormat = SimpleDateFormat(pattern)
-        return dateFormat.format(date)
-    }
-
-    fun timeMillisToHour(timeMillis: Long): String {
-        val date = Date(timeMillis)
-        val dateFormat = SimpleDateFormat("HH")
         return dateFormat.format(date)
     }
 }

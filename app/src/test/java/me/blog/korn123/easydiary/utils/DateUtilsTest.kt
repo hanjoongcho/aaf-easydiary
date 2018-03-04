@@ -21,7 +21,7 @@ class DateUtilsTest {
 
     @Test
     fun timeMillisToHour() {
-        Assert.assertEquals("16", DateUtils.timeMillisToHour(TIME_MILLIS))
+        Assert.assertEquals("16", DateUtils.timeMillisToDateTime(TIME_MILLIS, "HH"))
     }
 
 //    @Test
