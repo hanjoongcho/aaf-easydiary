@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.26 (date: 2018/03/05)
+  * Fixed a bug that caused some device using Android 4.x to abnormally ended
+  
 # Changes in 1.4.25 (date: 2018/03/02)
   * Change the way manage attached photos in the Diary
   
