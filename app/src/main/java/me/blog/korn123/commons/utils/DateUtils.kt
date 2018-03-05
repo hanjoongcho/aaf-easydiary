@@ -1,7 +1,5 @@
 package me.blog.korn123.commons.utils
 
-import org.joda.time.DateTime
-import org.joda.time.format.DateTimeFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -29,56 +27,7 @@ object DateUtils {
     val TIME_HMS_PATTERN = "HHmmss"
     val TIME_HMS_PATTERN_COLONE = "HH:mm:ss"
 
-    val currentDateAsString: String
-        get() = getCurrentDateAsString("yyyy-MM-dd")
-
-    val currentDateTime: String
-        get() = getCurrentDateTime("yyyy-MM-dd HH:mm:ss")
-
-    fun getCurrentDateAsString(pattern: String): String {
-        val df = SimpleDateFormat(pattern)
-        return df.format(Date())
-    }
-
-    @JvmStatic
-    fun main(args: Array<String>) {
-        println(currentDateTime)
-    }
-
-    fun getCurrentDateTime(pattern: String): String {
-        val dt = DateTime()
-        val fmt = DateTimeFormat.forPattern(pattern)
-        return fmt.print(dt)
-    }
-
-    fun getDateTime(currentTimeMillis: Long): String {
-        val dt = DateTime(currentTimeMillis)
-        val fmt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
-        return fmt.print(dt)
-    }
-
-    fun timeMillisToDateTime(timeMillis: Long, pattern: String): String {
-        val dt = DateTime(timeMillis)
-        val fmt = DateTimeFormat.forPattern(pattern)
-        return fmt.print(dt)
-    }
-
-    fun timeMillisToDateTime(timeMillis: Long): String {
-        val dt = DateTime(timeMillis)
-        val fmt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
-        return fmt.print(dt)
-    }
-
-    fun timeMillisToHour(timeMillis: Long): String {
-        val dt = DateTime(timeMillis)
-        val fmt = DateTimeFormat.forPattern("HH")
-        return fmt.print(dt)
-    }
-
     fun getFullPatternDate(timeMillis: Long): String {
-        //        DateTime dt = new DateTime(timeMillis);
-        //        DateTimeFormatter fmt = DateTimeFormat.forPattern(DateTimeFormat.patternForStyle("LL", Locale.getDefault()));
-        //        return fmt.print(dt);
         val date = Date(timeMillis)
         val dateFormat = SimpleDateFormat.getDateInstance(SimpleDateFormat.FULL, Locale.getDefault())
         return dateFormat.format(date)
@@ -90,11 +39,23 @@ object DateUtils {
         val hourFormat = SimpleDateFormat(TIME_PATTERN)
         return String.format("%s %s", dateFormat.format(date), hourFormat.format(date))
     }
-
-    fun getFullPatternDateWithTimeAndSeconds(timeMillis: Long): String {
+    
+    fun getFullPatternDateWithTimeAndSeconds(timeMillis: Long, locale: Locale = Locale.getDefault()): String {
         val date = Date(timeMillis)
-        val dateFormat = SimpleDateFormat.getDateInstance(SimpleDateFormat.FULL, Locale.getDefault())
+        val dateFormat = SimpleDateFormat.getDateInstance(SimpleDateFormat.FULL, locale)
         val hourFormat = SimpleDateFormat(TIME_PATTERN_WITH_SECONDS)
         return String.format("%s %s", dateFormat.format(date), hourFormat.format(date))
+    }
+
+    fun getCurrentDateTime(pattern: String): String {
+        val date = Date()
+        val dateFormat = SimpleDateFormat(pattern)
+        return dateFormat.format(date)
+    }
+    
+    fun timeMillisToDateTime(timeMillis: Long, pattern: String): String {
+        val date = Date(timeMillis)
+        val dateFormat = SimpleDateFormat(pattern)
+        return dateFormat.format(date)
     }
 }

@@ -342,7 +342,7 @@ public class PostCardActivity extends EasyDiaryActivity {
             @Override
             public void run() {
                 try {
-                    final String diaryCardPath = Path.INSTANCE.getWORKING_DIRECTORY() + mSequence + "_" + DateUtils.INSTANCE.getCurrentDateAsString(DateUtils.INSTANCE.getDATE_TIME_PATTERN_WITHOUT_DELIMITER()) + ".jpg";
+                    final String diaryCardPath = Path.INSTANCE.getWORKING_DIRECTORY() + mSequence + "_" + DateUtils.INSTANCE.getCurrentDateTime(DateUtils.INSTANCE.getDATE_TIME_PATTERN_WITHOUT_DELIMITER()) + ".jpg";
                     mSavedDiaryCardPath = Environment.getExternalStorageDirectory().getAbsolutePath() + diaryCardPath;
                     EasyDiaryUtils.initWorkingDirectory(Environment.getExternalStorageDirectory().getAbsolutePath() + Path.INSTANCE.getUSER_CUSTOM_FONTS_DIRECTORY());
                     BitmapUtils.INSTANCE.saveBitmapToFileCache(bitmap, mSavedDiaryCardPath);

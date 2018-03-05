@@ -86,7 +86,7 @@ public class CalendarActivity extends EasyDiaryActivity {
                 detailIntent.putExtra(Constants.DIARY_SEQUENCE, diaryDto.getSequence());
                 detailIntent.putExtra("title", diaryDto.getTitle());
                 detailIntent.putExtra("contents", diaryDto.getContents());
-                detailIntent.putExtra("date", DateUtils.INSTANCE.timeMillisToDateTime(diaryDto.getCurrentTimeMillis()));
+                detailIntent.putExtra("date", DateUtils.INSTANCE.timeMillisToDateTime(diaryDto.getCurrentTimeMillis(), "yyyy-MM-dd HH:mm:ss"));
                 detailIntent.putExtra("current_time_millis", diaryDto.getCurrentTimeMillis());
                 detailIntent.putExtra("weather", diaryDto.getWeather());
                 startActivity(detailIntent);
