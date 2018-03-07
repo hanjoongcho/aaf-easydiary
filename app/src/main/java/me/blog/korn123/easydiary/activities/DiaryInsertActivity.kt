@@ -11,6 +11,7 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Environment
 import android.speech.RecognizerIntent
+import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.ColorUtils
 import android.support.v7.app.AlertDialog
 import android.view.MenuItem
@@ -19,8 +20,6 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
-import butterknife.ButterKnife
-import butterknife.OnClick
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.simplemobiletools.commons.helpers.BaseConfig
@@ -37,6 +36,7 @@ import me.blog.korn123.easydiary.adapters.DiaryWeatherItemAdapter
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.FILE_URI_PREFIX
+import me.blog.korn123.easydiary.helper.LIST_URI_STRING
 import me.blog.korn123.easydiary.models.DiaryDto
 import me.blog.korn123.easydiary.models.PhotoUriDto
 import org.apache.commons.lang3.StringUtils
@@ -54,9 +54,9 @@ class DiaryInsertActivity : EasyDiaryActivity() {
     private lateinit var mTimePickerDialog: TimePickerDialog
     private lateinit var mSecondsPickerDialog: AlertDialog
     private lateinit var mShowcaseView: ShowcaseView
+    private lateinit var mPhotoUris: RealmList<PhotoUriDto>
     private var mCurrentTimeMillis: Long = 0
     private var mCurrentCursor = 0
-    private var mPhotoUris: RealmList<PhotoUriDto>? = null
     private val mRemoveIndexes = ArrayList<Int>()
     private var mShowcaseIndex = 2
     private var mPrimaryColor = 0
@@ -70,22 +70,20 @@ class DiaryInsertActivity : EasyDiaryActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_diary_insert)
-        ButterKnife.bind(this)
-        
         setSupportActionBar(toolbar)
         supportActionBar?.run {
             title = getString(R.string.create_diary_title)
             setDisplayHomeAsUpEnabled(true)
         }
-        setDateTime()
-
+        
         setupRecognizer()
         setupDialog()
         setupShowcase()
-        
-        initSpinner()
-        initKeypad()
-        bindEvent()
+        setupSpinner()
+        setupKeypad()
+        initDateTime()
+        initEvent()
+        initContents(savedInstanceState)
     }
 
     override fun onResume() {
@@ -99,6 +97,13 @@ class DiaryInsertActivity : EasyDiaryActivity() {
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
+        outState?.let {
+            val listUriString = arrayListOf<String>()
+            mPhotoUris.map { model ->
+                listUriString.add(model.photoUri!!)
+            }
+            it.putStringArrayList(LIST_URI_STRING, listUriString)
+        }
         super.onSaveInstanceState(outState)
     }
     
@@ -147,25 +152,24 @@ class DiaryInsertActivity : EasyDiaryActivity() {
                 }
             }
             Constants.REQUEST_CODE_IMAGE_PICKER -> if (resultCode == Activity.RESULT_OK && data != null) {
-                if (mPhotoUris == null) mPhotoUris = RealmList()
                 val photoPath = Environment.getExternalStorageDirectory().absolutePath + Path.DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
                 //                    mPhotoUris.add(new PhotoUriDto(data.getData().toString()));
                 try {
                     CommonUtils.uriToFile(this, data.data!!, photoPath)
-                    mPhotoUris!!.add(PhotoUriDto(FILE_URI_PREFIX + photoPath))
+                    mPhotoUris.add(PhotoUriDto(FILE_URI_PREFIX + photoPath))
                     val bitmap = BitmapUtils.decodeFile(applicationContext, photoPath, CommonUtils.dpToPixel(applicationContext, 70, 1), CommonUtils.dpToPixel(applicationContext, 65, 1), CommonUtils.dpToPixel(applicationContext, 45, 1))
                     val imageView = ImageView(applicationContext)
                     val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(applicationContext, 70, 1), CommonUtils.dpToPixel(applicationContext, 50, 1))
                     layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(applicationContext, 3, 1), 0)
                     imageView.layoutParams = layoutParams
-                    val drawable = resources.getDrawable(R.drawable.bg_card_thumbnail)
+                    val drawable = ContextCompat.getDrawable(this, R.drawable.bg_card_thumbnail)
                     val gradient = drawable as GradientDrawable
                     gradient.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, Constants.THUMBNAIL_BACKGROUND_ALPHA))
                     imageView.background = gradient
                     imageView.setImageBitmap(bitmap)
                     imageView.scaleType = ImageView.ScaleType.CENTER
                     //                    imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                    val currentIndex = mPhotoUris!!.size - 1
+                    val currentIndex = mPhotoUris.size - 1
                     imageView.setOnClickListener(PhotoClickListener(currentIndex))
                     photoContainer.addView(imageView, photoContainer.childCount - 1)
                     photoContainer.postDelayed({ (photoContainer.parent as HorizontalScrollView).fullScroll(HorizontalScrollView.FOCUS_RIGHT) }, 100L)
@@ -269,33 +273,97 @@ class DiaryInsertActivity : EasyDiaryActivity() {
         mShowcaseView.setButtonPosition(centerParams)
     }
 
-    private fun initSpinner() {
+    private fun setupSpinner() {
         val weatherArr = resources.getStringArray(R.array.weather_item_array)
         val arrayAdapter = DiaryWeatherItemAdapter(this@DiaryInsertActivity, R.layout.item_weather, Arrays.asList(*weatherArr))
         weatherSpinner.adapter = arrayAdapter
     }
-    
-    private fun initKeypad() {
+
+    private fun setupKeypad() {
         val hasShot = getSharedPreferences("showcase_internal", Context.MODE_PRIVATE).getBoolean("hasShot" + Constants.SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER, false)
         if (!hasShot) window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+    }
+
+    private fun initDateTime() {
+        try {
+            val format = SimpleDateFormat("yyyyMMddHHmmss")
+            val dateTimeString = String.format(
+                    "%d%s%s%s%s%s",
+                    mYear,
+                    StringUtils.leftPad(mMonth.toString(), 2, "0"),
+                    StringUtils.leftPad(mDayOfMonth.toString(), 2, "0"),
+                    StringUtils.leftPad(mHourOfDay.toString(), 2, "0"),
+                    StringUtils.leftPad(mMinute.toString(), 2, "0"),
+                    StringUtils.leftPad(mSecond.toString(), 2, "0")
+            )
+            val parsedDate = format.parse(dateTimeString)
+            mCurrentTimeMillis = parsedDate.time
+            supportActionBar?.run {
+                subtitle = DateUtils.getFullPatternDateWithTimeAndSeconds(mCurrentTimeMillis, Locale.getDefault())
+            }
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun initEvent() {
+        saveContents.setOnClickListener(mOnClickListener)
+        photoView.setOnClickListener(mOnClickListener)
+        datePicker.setOnClickListener(mOnClickListener)
+        timePicker.setOnClickListener(mOnClickListener)
+        secondsPicker.setOnClickListener(mOnClickListener)
+        microphone.setOnClickListener(mOnClickListener)
+
+        diaryTitle.setOnTouchListener { _, _ ->
+            mCurrentCursor = 0
+            false
+        }
+        diaryContents.setOnTouchListener { _, _ ->
+            mCurrentCursor = 1
+            false
+        }
+    }
+    
+    private fun initContents(savedInstanceState: Bundle?) {
+        mPhotoUris = RealmList()
+        savedInstanceState?.let {
+            it.getStringArrayList(LIST_URI_STRING)?.map { uriString ->
+                mPhotoUris.add(PhotoUriDto(uriString))
+            }
+
+            for ((index, dto) in mPhotoUris.withIndex()) {
+                val bitmap = CommonUtils.photoUriToDownSamplingBitmap(this, dto)
+                val imageView = ImageView(this)
+                val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 50, 1))
+                layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(this, 3, 1), 0)
+                imageView.layoutParams = layoutParams
+                val drawable = ContextCompat.getDrawable(this, R.drawable.bg_card_thumbnail)
+                val gradient = drawable as GradientDrawable
+                gradient.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, Constants.THUMBNAIL_BACKGROUND_ALPHA))
+                imageView.background = gradient
+                imageView.setImageBitmap(bitmap)
+                imageView.scaleType = ImageView.ScaleType.CENTER
+                imageView.setOnClickListener(PhotoClickListener(index))
+                photoContainer.addView(imageView, photoContainer.childCount - 1)
+            }
+        }
     }
     
     private var mStartDateListener: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
         mYear = year
         mMonth = month + 1
         mDayOfMonth = dayOfMonth
-        setDateTime()
+        initDateTime()
     }
 
     private var mTimeSetListener: TimePickerDialog.OnTimeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
         mHourOfDay = hourOfDay
         mMinute = minute
-        setDateTime()
+        initDateTime()
     }
 
-    @OnClick(R.id.saveContents, R.id.photoView, R.id.datePicker, R.id.timePicker, R.id.secondsPicker, R.id.microphone)
-    fun onClick(view: View) {
-        val currentView = this.currentFocus
+    private val mOnClickListener = View.OnClickListener { view ->
+        val currentView = this@DiaryInsertActivity.currentFocus
         if (currentView != null) {
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(view.windowToken, 0)
@@ -319,12 +387,12 @@ class DiaryInsertActivity : EasyDiaryActivity() {
                 CommonUtils.saveIntPreference(this@DiaryInsertActivity, Constants.PREVIOUS_ACTIVITY, Constants.PREVIOUS_ACTIVITY_CREATE)
                 finish()
             }
-            R.id.photoView -> if (PermissionUtils.checkPermission(this, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
+            R.id.photoView -> if (PermissionUtils.checkPermission(this@DiaryInsertActivity, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
                 // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
                 callImagePicker()
             } else {
                 // API Level 23 이상이면서 권한취득 안한경우
-                PermissionUtils.confirmPermission(this, this, Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE)
+                PermissionUtils.confirmPermission(this@DiaryInsertActivity, this@DiaryInsertActivity, Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE)
             }
             R.id.datePicker -> {
                 mDatePickerDialog.show()
@@ -336,7 +404,7 @@ class DiaryInsertActivity : EasyDiaryActivity() {
                 val itemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
                     val itemMap = parent.adapter.getItem(position) as HashMap<String, String>
                     mSecond = Integer.valueOf(itemMap["value"])!!
-                    setDateTime()
+                    initDateTime()
                     mSecondsPickerDialog.cancel()
                 }
                 val builder = EasyDiaryUtils.createSecondsPickerBuilder(this@DiaryInsertActivity, itemClickListener, mSecond)
@@ -351,46 +419,10 @@ class DiaryInsertActivity : EasyDiaryActivity() {
         FontUtils.setFontsTypeface(applicationContext, assets, null, findViewById<View>(android.R.id.content) as ViewGroup)
     }
 
-    private fun bindEvent() {
-
-        diaryTitle.setOnTouchListener { view, motionEvent ->
-            mCurrentCursor = 0
-            false
-        }
-
-        diaryContents.setOnTouchListener { view, motionEvent ->
-            mCurrentCursor = 1
-            false
-        }
-    }
-
-    private fun setDateTime() {
-        try {
-            val format = SimpleDateFormat("yyyyMMddHHmmss")
-            val dateTimeString = String.format(
-                    "%d%s%s%s%s%s",
-                    mYear,
-                    StringUtils.leftPad(mMonth.toString(), 2, "0"),
-                    StringUtils.leftPad(mDayOfMonth.toString(), 2, "0"),
-                    StringUtils.leftPad(mHourOfDay.toString(), 2, "0"),
-                    StringUtils.leftPad(mMinute.toString(), 2, "0"),
-                    StringUtils.leftPad(mSecond.toString(), 2, "0")
-            )
-            val parsedDate = format.parse(dateTimeString)
-            mCurrentTimeMillis = parsedDate.time
-            supportActionBar?.run {
-                subtitle = DateUtils.getFullPatternDateWithTimeAndSeconds(mCurrentTimeMillis, Locale.getDefault())
-            }
-        } catch (e: ParseException) {
-            e.printStackTrace()
-        }
-
-    }
-
     private fun applyRemoveIndex() {
         Collections.sort(mRemoveIndexes, Collections.reverseOrder())
         for (index in mRemoveIndexes) {
-            mPhotoUris!!.removeAt(index)
+            mPhotoUris.removeAt(index)
         }
         mRemoveIndexes.clear()
     }
