@@ -10,8 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ListView
-import butterknife.ButterKnife
-import butterknife.OnClick
 import com.google.android.gms.drive.GoogleDriveDownloader
 import com.google.android.gms.drive.GoogleDriveUploader
 import io.github.hanjoongcho.commons.activities.BaseWebViewActivity
@@ -43,34 +41,7 @@ import java.util.*
 class SettingsActivity : EasyDiaryActivity() {
     private var mAlertDialog: AlertDialog? = null
 
-    public override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
-        ButterKnife.bind(this)
-
-        setSupportActionBar(toolbar)
-        supportActionBar?.run {
-            setTitle(R.string.settings)
-            setDisplayHomeAsUpEnabled(true)
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        initPreference()
-        setFontsStyle()
-
-        if (BaseConfig(this).isThemeChanged) {
-            BaseConfig(this).isThemeChanged = false
-            val readDiaryIntent = Intent(this, DiaryMainActivity::class.java)
-            readDiaryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(readDiaryIntent)
-            this.overridePendingTransition(0, 0)
-        }
-    }
-
-    @OnClick(R.id.primaryColor, R.id.fontSetting, R.id.sensitiveOption, R.id.addTtfFontSetting, R.id.appLockSetting, R.id.lockNumberSetting, R.id.restoreSetting, R.id.backupSetting, R.id.rateAppSetting, R.id.licenseView, R.id.easyPhotoMap, R.id.easyPassword, R.id.restorePhotoSetting)
-    fun onClick(view: View) {
+    private val mOnClickListener = View.OnClickListener { view ->
         when (view.id) {
             R.id.primaryColor -> TransitionHelper.startActivityWithTransition(this@SettingsActivity, Intent(this@SettingsActivity, CustomizationActivity::class.java))
             R.id.fontSetting -> if (PermissionUtils.checkPermission(this@SettingsActivity, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
@@ -125,6 +96,48 @@ class SettingsActivity : EasyDiaryActivity() {
             }
             R.id.easyPhotoMap -> openGooglePlayBy("me.blog.korn123.easyphotomap")
             R.id.easyPassword -> openGooglePlayBy("io.github.hanjoongcho.easypassword")
+        }
+    }
+    
+    public override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_settings)
+        setSupportActionBar(toolbar)
+        supportActionBar?.run {
+            setTitle(R.string.settings)
+            setDisplayHomeAsUpEnabled(true)
+        }
+
+        bindEvent()
+    }
+
+    private fun bindEvent() {
+        primaryColor.setOnClickListener(mOnClickListener)
+        fontSetting.setOnClickListener(mOnClickListener)
+        sensitiveOption.setOnClickListener(mOnClickListener)
+        addTtfFontSetting.setOnClickListener(mOnClickListener)
+        appLockSetting.setOnClickListener(mOnClickListener)
+        lockNumberSetting.setOnClickListener(mOnClickListener)
+        restoreSetting.setOnClickListener(mOnClickListener)
+        backupSetting.setOnClickListener(mOnClickListener)
+        rateAppSetting.setOnClickListener(mOnClickListener)
+        licenseView.setOnClickListener(mOnClickListener)
+        easyPhotoMap.setOnClickListener(mOnClickListener)
+        easyPassword.setOnClickListener(mOnClickListener)
+        restorePhotoSetting.setOnClickListener(mOnClickListener)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        initPreference()
+        setFontsStyle()
+
+        if (BaseConfig(this).isThemeChanged) {
+            BaseConfig(this).isThemeChanged = false
+            val readDiaryIntent = Intent(this, DiaryMainActivity::class.java)
+            readDiaryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(readDiaryIntent)
+            this.overridePendingTransition(0, 0)
         }
     }
 

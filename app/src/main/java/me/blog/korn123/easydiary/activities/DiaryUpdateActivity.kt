@@ -21,13 +21,12 @@ import android.widget.AdapterView
 import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.LinearLayout
-import butterknife.ButterKnife
-import butterknife.OnClick
 import com.simplemobiletools.commons.helpers.BaseConfig
 import io.realm.RealmList
+import kotlinx.android.synthetic.main.activity_diary_update.*
 import kotlinx.android.synthetic.main.layout_edit_contents.*
 import kotlinx.android.synthetic.main.layout_edit_photo_container.*
-import kotlinx.android.synthetic.main.activity_diary_update.*
+import kotlinx.android.synthetic.main.layout_edit_toolbar_sub.*
 import me.blog.korn123.commons.constants.Constants
 import me.blog.korn123.commons.constants.Path
 import me.blog.korn123.commons.utils.*
@@ -86,7 +85,6 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_diary_update)
-        ButterKnife.bind(this)
 
         setSupportActionBar(toolbar)
         supportActionBar?.run {
@@ -106,8 +104,7 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
         setDateTime()
     }
 
-    @OnClick(R.id.saveContents, R.id.photoView, R.id.datePicker, R.id.timePicker, R.id.secondsPicker, R.id.microphone)
-    fun onClick(view: View) {
+    private val mOnClickListener = View.OnClickListener { view ->
         // Check if no view has focus:
         val currentView = this.currentFocus
         if (currentView != null) {
@@ -165,6 +162,11 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
             }
             R.id.microphone -> showSpeechDialog()
         }
+    }
+    
+   
+    fun onClick(view: View) {
+        
     }
 
     override fun onBackPressed() {
@@ -257,6 +259,13 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
     }
 
     private fun bindEvent() {
+        saveContents.setOnClickListener(mOnClickListener)
+        photoView.setOnClickListener(mOnClickListener)
+        datePicker.setOnClickListener(mOnClickListener)
+        timePicker.setOnClickListener(mOnClickListener)
+        secondsPicker.setOnClickListener(mOnClickListener)
+        microphone.setOnClickListener(mOnClickListener)
+        
         diaryTitle.setOnTouchListener { view, motionEvent ->
             mCurrentCursor = 0
             false

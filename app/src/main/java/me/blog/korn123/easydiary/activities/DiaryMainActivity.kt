@@ -8,17 +8,13 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import android.os.Handler
 import android.speech.RecognizerIntent
 import android.support.v4.app.ActivityCompat
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.*
 import android.widget.AdapterView
 import android.widget.RelativeLayout
-import butterknife.ButterKnife
-import butterknife.OnClick
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import io.realm.Realm
@@ -59,7 +55,6 @@ class DiaryMainActivity : EasyDiaryActivity() {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_diary_main)
-        ButterKnife.bind(this)
 
         // android marshmallow minor version bug workaround
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
@@ -185,18 +180,6 @@ class DiaryMainActivity : EasyDiaryActivity() {
         if (progressDialog.visibility == View.GONE) ActivityCompat.finishAffinity(this@DiaryMainActivity)
     }
 
-    @OnClick(R.id.insertDiaryButton)
-    internal fun onClick(view: View) {
-        when (view.id) {
-            R.id.insertDiaryButton -> {
-                val createDiary = Intent(this@DiaryMainActivity, DiaryInsertActivity::class.java)
-                //                startActivity(createDiary);
-                //                DiaryMainActivity.this.overridePendingTransition(R.anim.anim_right_to_center, R.anim.anim_center_to_left);
-                TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, createDiary)
-            }
-        }
-    }
-
     private fun initShowcase() {
         val margin = ((resources.displayMetrics.density * 12) as Number).toInt()
 
@@ -281,6 +264,13 @@ class DiaryMainActivity : EasyDiaryActivity() {
         }
 
         modalContainer.setOnTouchListener({ _, _ -> true })
+
+        insertDiaryButton.setOnClickListener({ _ ->
+            val createDiary = Intent(this@DiaryMainActivity, DiaryInsertActivity::class.java)
+            //                startActivity(createDiary);
+            //                DiaryMainActivity.this.overridePendingTransition(R.anim.anim_right_to_center, R.anim.anim_center_to_left);
+            TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, createDiary)
+        })
     }
 
     private fun showSpeechDialog() {

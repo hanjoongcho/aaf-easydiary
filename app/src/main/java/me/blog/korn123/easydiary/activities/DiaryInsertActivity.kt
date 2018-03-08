@@ -67,6 +67,59 @@ class DiaryInsertActivity : EasyDiaryActivity() {
     private var mMinute = Integer.valueOf(DateUtils.getCurrentDateTime("mm"))
     private var mSecond = Integer.valueOf(DateUtils.getCurrentDateTime("ss"))
 
+    private val mOnClickListener = View.OnClickListener { view ->
+        val currentView = this@DiaryInsertActivity.currentFocus
+        if (currentView != null) {
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+
+        when (view.id) {
+            R.id.saveContents -> if (StringUtils.isEmpty(diaryContents.text)) {
+                diaryContents.requestFocus()
+                DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
+            } else {
+                val diaryDto = DiaryDto(
+                        -1,
+                        mCurrentTimeMillis,
+                        this@DiaryInsertActivity.diaryTitle.text.toString(),
+                        this@DiaryInsertActivity.diaryContents.text.toString(),
+                        weatherSpinner.selectedItemPosition
+                )
+                applyRemoveIndex()
+                diaryDto.photoUris = mPhotoUris
+                EasyDiaryDbHelper.insertDiary(diaryDto)
+                CommonUtils.saveIntPreference(this@DiaryInsertActivity, Constants.PREVIOUS_ACTIVITY, Constants.PREVIOUS_ACTIVITY_CREATE)
+                finish()
+            }
+            R.id.photoView -> if (PermissionUtils.checkPermission(this@DiaryInsertActivity, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
+                // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
+                callImagePicker()
+            } else {
+                // API Level 23 이상이면서 권한취득 안한경우
+                PermissionUtils.confirmPermission(this@DiaryInsertActivity, this@DiaryInsertActivity, Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE)
+            }
+            R.id.datePicker -> {
+                mDatePickerDialog.show()
+            }
+            R.id.timePicker -> {
+                mTimePickerDialog.show()
+            }
+            R.id.secondsPicker -> {
+                val itemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+                    val itemMap = parent.adapter.getItem(position) as HashMap<String, String>
+                    mSecond = Integer.valueOf(itemMap["value"])!!
+                    initDateTime()
+                    mSecondsPickerDialog.cancel()
+                }
+                val builder = EasyDiaryUtils.createSecondsPickerBuilder(this@DiaryInsertActivity, itemClickListener, mSecond)
+                mSecondsPickerDialog = builder.create()
+                mSecondsPickerDialog.show()
+            }
+            R.id.microphone -> showSpeechDialog()
+        }
+    }
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_diary_insert)
@@ -82,8 +135,8 @@ class DiaryInsertActivity : EasyDiaryActivity() {
         setupSpinner()
         setupKeypad()
         initDateTime()
-        initEvent()
         initContents(savedInstanceState)
+        bindEvent()
     }
 
     override fun onResume() {
@@ -306,7 +359,7 @@ class DiaryInsertActivity : EasyDiaryActivity() {
         }
     }
 
-    private fun initEvent() {
+    private fun bindEvent() {
         saveContents.setOnClickListener(mOnClickListener)
         photoView.setOnClickListener(mOnClickListener)
         datePicker.setOnClickListener(mOnClickListener)
@@ -360,59 +413,6 @@ class DiaryInsertActivity : EasyDiaryActivity() {
         mHourOfDay = hourOfDay
         mMinute = minute
         initDateTime()
-    }
-
-    private val mOnClickListener = View.OnClickListener { view ->
-        val currentView = this@DiaryInsertActivity.currentFocus
-        if (currentView != null) {
-            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(view.windowToken, 0)
-        }
-
-        when (view.id) {
-            R.id.saveContents -> if (StringUtils.isEmpty(diaryContents.text)) {
-                diaryContents.requestFocus()
-                DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
-            } else {
-                val diaryDto = DiaryDto(
-                        -1,
-                        mCurrentTimeMillis,
-                        this@DiaryInsertActivity.diaryTitle.text.toString(),
-                        this@DiaryInsertActivity.diaryContents.text.toString(),
-                        weatherSpinner.selectedItemPosition
-                )
-                applyRemoveIndex()
-                diaryDto.photoUris = mPhotoUris
-                EasyDiaryDbHelper.insertDiary(diaryDto)
-                CommonUtils.saveIntPreference(this@DiaryInsertActivity, Constants.PREVIOUS_ACTIVITY, Constants.PREVIOUS_ACTIVITY_CREATE)
-                finish()
-            }
-            R.id.photoView -> if (PermissionUtils.checkPermission(this@DiaryInsertActivity, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
-                // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
-                callImagePicker()
-            } else {
-                // API Level 23 이상이면서 권한취득 안한경우
-                PermissionUtils.confirmPermission(this@DiaryInsertActivity, this@DiaryInsertActivity, Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE)
-            }
-            R.id.datePicker -> {
-                mDatePickerDialog.show()
-            }
-            R.id.timePicker -> {
-                mTimePickerDialog.show()
-            }
-            R.id.secondsPicker -> {
-                val itemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-                    val itemMap = parent.adapter.getItem(position) as HashMap<String, String>
-                    mSecond = Integer.valueOf(itemMap["value"])!!
-                    initDateTime()
-                    mSecondsPickerDialog.cancel()
-                }
-                val builder = EasyDiaryUtils.createSecondsPickerBuilder(this@DiaryInsertActivity, itemClickListener, mSecond)
-                mSecondsPickerDialog = builder.create()
-                mSecondsPickerDialog.show()
-            }
-            R.id.microphone -> showSpeechDialog()
-        }
     }
 
     private fun setFontsStyle() {

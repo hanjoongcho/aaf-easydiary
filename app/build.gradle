@@ -63,10 +63,6 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.0'
     implementation group: 'commons-io', name: 'commons-io', version: '2.4'
 
-    // Jake Wharton
-    implementation 'com.jakewharton:butterknife:8.8.1'
-    kapt 'com.jakewharton:butterknife-compiler:8.8.1'
-
     // Philipp Jahoda
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.1'
 
