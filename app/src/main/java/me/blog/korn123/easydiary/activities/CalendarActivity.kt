@@ -13,7 +13,7 @@ import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryCalendarItemAdapter
-import me.blog.korn123.easydiary.fragments.CaldroidCustomFragment
+import me.blog.korn123.easydiary.fragments.CalendarFragment
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.DiaryDto
@@ -65,7 +65,7 @@ class CalendarActivity : EasyDiaryActivity() {
         // //////////////////////////////////////////////////////////////////////
         // **** This is to show customized fragment. If you want customized
         // version, uncomment below line ****
-        calendarFragment = CaldroidCustomFragment()
+        calendarFragment = CalendarFragment()
 
         // Setup arguments
 

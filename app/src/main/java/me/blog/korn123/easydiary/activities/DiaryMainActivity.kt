@@ -20,12 +20,12 @@ import com.github.amlcurran.showcaseview.targets.ViewTarget
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_diary_main.*
 import me.blog.korn123.commons.utils.CommonUtils
-import me.blog.korn123.commons.utils.DialogUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
@@ -79,9 +79,9 @@ class DiaryMainActivity : EasyDiaryActivity() {
         }
         diaryList.adapter = mDiaryMainItemAdapter
 
-        if (!CommonUtils.loadBooleanPreference(this, INIT_DUMMY_DATA_FLAG)) {
+        if (!config.isInitDummyData) {
             initSampleData()
-            CommonUtils.saveBooleanPreference(this, INIT_DUMMY_DATA_FLAG, true)
+            config.isInitDummyData = true
         }
 
         bindEvent()
@@ -96,9 +96,9 @@ class DiaryMainActivity : EasyDiaryActivity() {
                 if (dto.isContentUri()) {
                     val photoPath = Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
                     CommonUtils.uriToFile(this, Uri.parse(dto.photoUri), photoPath)
-                    EasyDiaryDbHelper.getRealmInstance().beginTransaction()
+                    EasyDiaryDbHelper.getInstance().beginTransaction()
                     dto.photoUri = FILE_URI_PREFIX + photoPath
-                    EasyDiaryDbHelper.getRealmInstance().commitTransaction()
+                    EasyDiaryDbHelper.getInstance().commitTransaction()
                     runOnUiThread({
                         progressInfo.text = "Converting... ($index/${listPhotoUri.size})"
                     })
@@ -117,11 +117,11 @@ class DiaryMainActivity : EasyDiaryActivity() {
         refreshList()
         initTextSize(progressDialog, this)
         
-        val previousActivity = CommonUtils.loadIntPreference(this@DiaryMainActivity, PREVIOUS_ACTIVITY, -1)
+        val previousActivity = config.previousActivity
         if (previousActivity == PREVIOUS_ACTIVITY_CREATE) {
             diaryList.smoothScrollToPosition(0)
             //            mDiaryListView.setSelection(0);
-            CommonUtils.saveIntPreference(this@DiaryMainActivity, PREVIOUS_ACTIVITY, -1)
+            config.previousActivity = -1
         }
     }
 
@@ -273,7 +273,7 @@ class DiaryMainActivity : EasyDiaryActivity() {
         try {
             startActivityForResult(mRecognizerIntent, REQUEST_CODE_SPEECH_INPUT)
         } catch (e: ActivityNotFoundException) {
-            DialogUtils.showAlertDialog(this, getString(R.string.recognizer_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
+            showAlertDialog(getString(R.string.recognizer_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
         }
 
     }
@@ -286,7 +286,7 @@ class DiaryMainActivity : EasyDiaryActivity() {
 
     fun refreshList(query: String) {
         mDiaryList?.clear()
-        mDiaryList?.addAll(EasyDiaryDbHelper.readDiary(query, CommonUtils.loadBooleanPreference(this, DIARY_SEARCH_QUERY_CASE_SENSITIVE)))
+        mDiaryList?.addAll(EasyDiaryDbHelper.readDiary(query, config.diarySearchQueryCaseSensitive))
         mDiaryMainItemAdapter?.currentQuery = query
         mDiaryMainItemAdapter?.notifyDataSetChanged()
     }

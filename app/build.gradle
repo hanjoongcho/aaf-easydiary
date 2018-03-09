@@ -69,9 +69,6 @@ dependencies {
     // Roomorama
     implementation group: 'com.roomorama', name: 'caldroid', version: '3.0.1'
 
-    // com.darwinsys
-    implementation 'com.darwinsys:hirondelle-date4j:1.5.1'
-
     // Chris Banes
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'
 

@@ -102,7 +102,6 @@ class BarChartActivity : ChartBase() {
     }
 
     private fun setData(count: Int, range: Float) {
-
         val listDiary = EasyDiaryDbHelper.readDiary(null)
         val map = hashMapOf<Int, Int>()
         listDiary?.map { diaryDto ->

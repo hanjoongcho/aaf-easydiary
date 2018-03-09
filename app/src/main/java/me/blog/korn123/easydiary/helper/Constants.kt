@@ -45,6 +45,7 @@ const val SETTING_FLAG_IMPORT_GOOGLE_DRIVE = 2
 
 const val REQUEST_CODE_SPEECH_INPUT = 100
 
+const val PREVIOUS_ACTIVITY = "previous_activity"
 const val PREVIOUS_ACTIVITY_CREATE = 1
 
 const val WEATHER_SUNNY = 1
@@ -63,13 +64,13 @@ const val SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER = 1
 const val SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_NUMBER = 2
 const val SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER = 3
 
-const val PREVIOUS_ACTIVITY = "previous_activity"
 const val INIT_DUMMY_DATA_FLAG = "init_dummy_data"
 
 const val APP_FINISH_FLAG = "app_finish"
 const val APP_LOCK_ENABLE = "application_lock"
 const val APP_LOCK_REQUEST_PASSWORD = "lock_password"
 const val APP_LOCK_SAVED_PASSWORD = "application_lock_password"
+const val APP_LOCK_DEFAULT_PASSWORD = "0000"
 
 const val DIARY_SEQUENCE = "diary_sequence"
 const val DIARY_SEARCH_QUERY = "diary_search_query"

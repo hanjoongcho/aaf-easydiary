@@ -16,6 +16,7 @@ import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.TimelineItemAdapter
+import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.DIARY_SEARCH_QUERY
 import me.blog.korn123.easydiary.helper.DIARY_SEARCH_QUERY_CASE_SENSITIVE
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
@@ -110,7 +111,7 @@ class TimelineActivity : EasyDiaryActivity() {
     
     private fun refreshList(query: String?) {
         mDiaryList?.clear()
-        mDiaryList?.addAll(EasyDiaryDbHelper.readDiary(query, CommonUtils.loadBooleanPreference(this, DIARY_SEARCH_QUERY_CASE_SENSITIVE)))
+        mDiaryList?.addAll(EasyDiaryDbHelper.readDiary(query, config.diarySearchQueryCaseSensitive))
         Collections.reverse(mDiaryList)
         mTimelineItemAdapter?.notifyDataSetChanged()
     }

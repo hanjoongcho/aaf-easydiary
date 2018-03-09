@@ -54,7 +54,7 @@ class GoogleDriveDownloader : GoogleDriveUtils() {
         if (result.status.isSuccess) {
             try {
                 val driveContents = result.driveContents.inputStream
-                val outputStream = FileOutputStream(EasyDiaryDbHelper.getRealmInstance().getPath())
+                val outputStream = FileOutputStream(EasyDiaryDbHelper.getInstance().path)
                 IOUtils.copy(driveContents, outputStream)
                 IOUtils.closeQuietly(outputStream)
             } catch (e: Exception) {

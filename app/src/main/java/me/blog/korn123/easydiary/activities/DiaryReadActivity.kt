@@ -29,6 +29,7 @@ import me.blog.korn123.commons.utils.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
@@ -64,7 +65,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
         }
 
         val query = intent.getStringExtra(DIARY_SEARCH_QUERY)
-        val diaryList: ArrayList<DiaryDto> = EasyDiaryDbHelper.readDiary(query, CommonUtils.loadBooleanPreference(applicationContext, DIARY_SEARCH_QUERY_CASE_SENSITIVE))
+        val diaryList: ArrayList<DiaryDto> = EasyDiaryDbHelper.readDiary(query, config.diarySearchQueryCaseSensitive)
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager, diaryList, query)
         val startPageIndex = when(savedInstanceState == null) {
             true -> mSectionsPagerAdapter.sequenceToPageIndex(intent.getIntExtra(DIARY_SEQUENCE, -1))
@@ -105,11 +106,11 @@ class DiaryReadActivity : EasyDiaryActivity() {
                     //                this.overridePendingTransition(R.anim.anim_left_to_center, R.anim.anim_center_to_right);
                     this.onBackPressed()
                 R.id.zoomIn -> {
-                    CommonUtils.saveFloatPreference(this@DiaryReadActivity, SETTING_FONT_SIZE, fontSize + 5)
+                    config.settingFontSize = fontSize + 5
                     fragment.setFontsSize()
                 }
                 R.id.zoomOut -> {
-                    CommonUtils.saveFloatPreference(this@DiaryReadActivity, SETTING_FONT_SIZE, fontSize - 5)
+                    config.settingFontSize = fontSize - 5
                     fragment.setFontsSize()
                 }
                 R.id.delete -> {
@@ -118,7 +119,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                         finish()
                     }
                     val negativeListener = DialogInterface.OnClickListener { dialogInterface, i -> }
-                    DialogUtils.showAlertDialog(this@DiaryReadActivity, getString(R.string.delete_confirm), positiveListener, negativeListener)
+                    showAlertDialog(getString(R.string.delete_confirm), positiveListener, negativeListener)
                 }
                 R.id.edit -> {
                     val updateDiaryIntent = Intent(this@DiaryReadActivity, DiaryUpdateActivity::class.java)

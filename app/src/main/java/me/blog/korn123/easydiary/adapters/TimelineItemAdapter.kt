@@ -43,7 +43,7 @@ class TimelineItemAdapter(
             holder.weather = row.findViewById(R.id.weather)
             holder.circle = row.findViewById(R.id.circle)
             holder.topLine = row.findViewById(R.id.topLine)
-            holder.item_holder = row.findViewById(R.id.item_holder) as ViewGroup
+            holder.item_holder = row.findViewById<ViewGroup>(R.id.item_holder) 
             row.tag = holder
         } else {
             holder = row.tag as ViewHolder
@@ -71,7 +71,7 @@ class TimelineItemAdapter(
             // 현재 날짜의 목록을 조회
             val mDiaryList = EasyDiaryDbHelper.readDiaryByDateString(diaryDto.dateString)
             var initWeather = false
-            if (mDiaryList.size > 0) {
+            if (mDiaryList.isNotEmpty()) {
                 for (temp in mDiaryList) {
                     if (temp.weather > 0) {
                         initWeather = true

@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.File;
 
 import me.blog.korn123.easydiary.R;
+import me.blog.korn123.easydiary.extensions.ContextKt;
 
 import static me.blog.korn123.easydiary.helper.ConstantsKt.CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT;
 import static me.blog.korn123.easydiary.helper.ConstantsKt.CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT;
@@ -38,7 +39,7 @@ public class FontUtils {
     }
 
     public static void setCommonTypeface(Context context, AssetManager assetManager) {
-        String commonFontName = CommonUtils.INSTANCE.loadStringPreference(context, SETTING_FONT_NAME, CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT);
+        String commonFontName = ContextKt.getConfig(context).getSettingFontName();
         sTypeface = getTypeface(context, assetManager, commonFontName);
     }
 

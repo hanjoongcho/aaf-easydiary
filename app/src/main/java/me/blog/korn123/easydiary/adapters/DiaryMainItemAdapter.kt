@@ -12,6 +12,7 @@ import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.DIARY_SEARCH_QUERY_CASE_SENSITIVE
@@ -57,7 +58,7 @@ class DiaryMainItemAdapter(
 
         // highlight current query
         if (StringUtils.isNotEmpty(currentQuery)) {
-            if (CommonUtils.loadBooleanPreference(context, DIARY_SEARCH_QUERY_CASE_SENSITIVE)) {
+            if (context.config.diarySearchQueryCaseSensitive) {
                 EasyDiaryUtils.highlightString(holder.textView1, currentQuery)
                 EasyDiaryUtils.highlightString(holder.textView2, currentQuery)
             } else {

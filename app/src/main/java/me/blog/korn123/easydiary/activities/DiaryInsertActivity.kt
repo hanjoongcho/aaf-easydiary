@@ -31,7 +31,7 @@ import kotlinx.android.synthetic.main.layout_edit_toolbar_sub.*
 import me.blog.korn123.commons.utils.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryWeatherItemAdapter
-import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import me.blog.korn123.easydiary.models.PhotoUriDto
@@ -73,7 +73,7 @@ class DiaryInsertActivity : EasyDiaryActivity() {
         when (view.id) {
             R.id.saveContents -> if (StringUtils.isEmpty(diaryContents.text)) {
                 diaryContents.requestFocus()
-                DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
+                makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
             } else {
                 val diaryDto = DiaryDto(
                         -1,
@@ -85,15 +85,15 @@ class DiaryInsertActivity : EasyDiaryActivity() {
                 applyRemoveIndex()
                 diaryDto.photoUris = mPhotoUris
                 EasyDiaryDbHelper.insertDiary(diaryDto)
-                CommonUtils.saveIntPreference(this@DiaryInsertActivity, PREVIOUS_ACTIVITY, PREVIOUS_ACTIVITY_CREATE)
+                config.previousActivity = PREVIOUS_ACTIVITY_CREATE
                 finish()
             }
-            R.id.photoView -> if (PermissionUtils.checkPermission(this@DiaryInsertActivity, EXTERNAL_STORAGE_PERMISSIONS)) {
+            R.id.photoView -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                 // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
                 callImagePicker()
             } else {
                 // API Level 23 이상이면서 권한취득 안한경우
-                PermissionUtils.confirmPermission(this@DiaryInsertActivity, this@DiaryInsertActivity, EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
+                confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
             }
             R.id.datePicker -> {
                 mDatePickerDialog.show()
@@ -157,7 +157,7 @@ class DiaryInsertActivity : EasyDiaryActivity() {
     }
     
     override fun onBackPressed() {
-        DialogUtils.showAlertDialog(this@DiaryInsertActivity, getString(R.string.back_pressed_confirm),
+        showAlertDialog(getString(R.string.back_pressed_confirm),
                 DialogInterface.OnClickListener { dialogInterface, i -> super@DiaryInsertActivity.onBackPressed() },
                 DialogInterface.OnClickListener { dialogInterface, i -> }
         )
@@ -166,12 +166,12 @@ class DiaryInsertActivity : EasyDiaryActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            REQUEST_CODE_EXTERNAL_STORAGE -> if (PermissionUtils.checkPermission(this, EXTERNAL_STORAGE_PERMISSIONS)) {
+            REQUEST_CODE_EXTERNAL_STORAGE -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                 // 권한이 있는경우
                 callImagePicker()
             } else {
                 // 권한이 없는경우
-                DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3))
+                makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3))
             }
             else -> {
             }
@@ -429,7 +429,7 @@ class DiaryInsertActivity : EasyDiaryActivity() {
         try {
             startActivityForResult(pickImageIntent, REQUEST_CODE_IMAGE_PICKER)
         } catch (e: ActivityNotFoundException) {
-            DialogUtils.showAlertDialog(this, getString(R.string.gallery_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
+            showAlertDialog(getString(R.string.gallery_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
         }
 
     }
@@ -438,7 +438,7 @@ class DiaryInsertActivity : EasyDiaryActivity() {
         try {
             startActivityForResult(mRecognizerIntent, REQUEST_CODE_SPEECH_INPUT)
         } catch (e: ActivityNotFoundException) {
-            DialogUtils.showAlertDialog(this, getString(R.string.recognizer_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
+            showAlertDialog(getString(R.string.recognizer_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
         }
 
     }
@@ -446,8 +446,7 @@ class DiaryInsertActivity : EasyDiaryActivity() {
     internal inner class PhotoClickListener(var index: Int) : View.OnClickListener {
         override fun onClick(v: View) {
             val targetIndex = index
-            DialogUtils.showAlertDialog(
-                    this@DiaryInsertActivity,
+            showAlertDialog(
                     getString(R.string.delete_photo_confirm_message),
                     DialogInterface.OnClickListener { dialog, which ->
                         mRemoveIndexes.add(targetIndex)

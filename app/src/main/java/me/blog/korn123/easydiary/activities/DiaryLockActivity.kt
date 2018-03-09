@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import io.github.hanjoongcho.commons.activities.BaseSimpleActivity
+import io.github.hanjoongcho.commons.extensions.baseConfig
 import kotlinx.android.synthetic.main.activity_lock_setting.*
 import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.FontUtils
@@ -82,7 +83,7 @@ class DiaryLockActivity : BaseSimpleActivity() {
         if (mCursorIndex == 3) {
             Thread(Runnable {
                 Handler(Looper.getMainLooper()).post {
-                    if (StringUtils.equals(CommonUtils.loadStringPreference(this@DiaryLockActivity, APP_LOCK_SAVED_PASSWORD, "0000"), password)) {
+                    if (StringUtils.equals(config.aafPinLockSavedPassword, password)) {
                         config.aafPinLockPauseMillis = System.currentTimeMillis()
                         finish()
                     } else {

@@ -14,6 +14,7 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.preferencesContains
 import me.blog.korn123.easydiary.helper.*
 import java.util.*
 
@@ -31,17 +32,17 @@ class IntroActivity : AppCompatActivity(), Handler.Callback {
         if (!Locale.getDefault().language.matches(CUSTOM_FONTS_SUPPORT_LANGUAGE.toRegex())) {
 
             // Initial font typeface setting
-            if (!CommonUtils.preferencesContains(this, SETTING_FONT_NAME)) {
+            if (!preferencesContains(SETTING_FONT_NAME)) {
                 config.settingFontName = CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT
             }
 
             // Initial font size setting
-            if (!CommonUtils.preferencesContains(this, SETTING_FONT_SIZE)) {
+            if (!preferencesContains(SETTING_FONT_SIZE)) {
                 config.settingFontSize = CommonUtils.dpToPixel(this, DEFAULT_FONT_SIZE_UN_SUPPORT_LANGUAGE).toFloat()
             }
         } else {
             // Initial font size setting
-            if (!CommonUtils.preferencesContains(this, SETTING_FONT_SIZE)) {
+            if (!preferencesContains(SETTING_FONT_SIZE)) {
                 config.settingFontSize = CommonUtils.dpToPixel(this, DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE).toFloat()
             }
         }

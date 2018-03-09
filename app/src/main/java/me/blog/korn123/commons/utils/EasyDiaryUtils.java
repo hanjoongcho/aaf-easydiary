@@ -40,7 +40,6 @@ import static me.blog.korn123.easydiary.helper.ConstantsKt.WEATHER_NIGHT_RAIN;
  */
 
 public class EasyDiaryUtils {
-
     public static void initWeatherView(ImageView imageView, int weatherFlag) {
         initWeatherView(imageView, weatherFlag, false);
     }
@@ -96,12 +95,12 @@ public class EasyDiaryUtils {
     }
 
     public static String getEasyDiaryMimeType() {
-        String easyDiaryMimeType = "text/aaf_v" + EasyDiaryDbHelper.getRealmInstance().getVersion();
+        String easyDiaryMimeType = "text/aaf_v" + EasyDiaryDbHelper.INSTANCE.getInstance().getVersion();
         return  easyDiaryMimeType;
     }
 
     public static String[] getEasyDiaryMimeTypeAll() {
-        int currentVersion = (int)EasyDiaryDbHelper.getRealmInstance().getVersion();
+        int currentVersion = (int) EasyDiaryDbHelper.INSTANCE.getInstance().getVersion();
         String[] easyDiaryMimeType = new String[currentVersion];
         for (int i = 0; i < currentVersion; i++) {
             easyDiaryMimeType[i] = "text/aaf_v" + (i + 1);

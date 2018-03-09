@@ -21,6 +21,10 @@ import com.github.amlcurran.showcaseview.targets.ViewTarget
 import kotlinx.android.synthetic.main.activity_post_card.*
 import me.blog.korn123.commons.utils.*
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.checkPermission
+import me.blog.korn123.easydiary.extensions.confirmPermission
+import me.blog.korn123.easydiary.extensions.makeSnackBar
+import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.helper.*
 import java.io.File
 
@@ -64,19 +68,19 @@ class PostCardActivity : EasyDiaryActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            REQUEST_CODE_EXTERNAL_STORAGE -> if (PermissionUtils.checkPermission(this, EXTERNAL_STORAGE_PERMISSIONS)) {
+            REQUEST_CODE_EXTERNAL_STORAGE -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                 // 권한이 있는경우
                 exportDiaryCard(true)
             } else {
                 // 권한이 없는경우
-                DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3))
+                makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3))
             }
-            REQUEST_CODE_EXTERNAL_STORAGE_WITH_SHARE_DIARY_CARD -> if (PermissionUtils.checkPermission(this, EXTERNAL_STORAGE_PERMISSIONS)) {
+            REQUEST_CODE_EXTERNAL_STORAGE_WITH_SHARE_DIARY_CARD -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                 // 권한이 있는경우
                 exportDiaryCard(false)
             } else {
                 // 권한이 없는경우
-                DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3))
+                makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3))
             }
             else -> {
             }
@@ -137,19 +141,19 @@ class PostCardActivity : EasyDiaryActivity() {
                     //                        .setColorEditTextColor(ContextCompat.getColor(PostCardActivity.this, android.R.color.holo_blue_bright))
                     .build()
                     .show()
-            R.id.save -> if (PermissionUtils.checkPermission(this, EXTERNAL_STORAGE_PERMISSIONS)) {
+            R.id.save -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                 // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
                 exportDiaryCard(true)
             } else {
                 // API Level 23 이상이면서 권한취득 안한경우
-                PermissionUtils.confirmPermission(this, this, EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
+                confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
             }
-            R.id.share -> if (PermissionUtils.checkPermission(this, EXTERNAL_STORAGE_PERMISSIONS)) {
+            R.id.share -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                 // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
                 exportDiaryCard(false)
             } else {
                 // API Level 23 이상이면서 권한취득 안한경우
-                PermissionUtils.confirmPermission(this, this, EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_SHARE_DIARY_CARD)
+                confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_SHARE_DIARY_CARD)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -221,7 +225,7 @@ class PostCardActivity : EasyDiaryActivity() {
                 Handler(Looper.getMainLooper()).post {
                     progressBar.visibility = View.GONE
                     if (showInfoDialog) {
-                        DialogUtils.showAlertDialog(this@PostCardActivity, getString(R.string.diary_card_export_info), diaryCardPath, DialogInterface.OnClickListener { dialog, which -> })
+                        showAlertDialog(getString(R.string.diary_card_export_info), diaryCardPath, DialogInterface.OnClickListener { dialog, which -> })
                     } else {
                         shareDiary()
                     }
@@ -232,7 +236,7 @@ class PostCardActivity : EasyDiaryActivity() {
                 Handler(Looper.getMainLooper()).post {
                     progressBar.visibility = View.GONE
                     val errorInfo = String.format("%s\n\n[ERROR: %s]", getString(R.string.diary_card_export_error_message), errorMessage)
-                    DialogUtils.showAlertDialog(this@PostCardActivity, errorInfo, DialogInterface.OnClickListener { dialog, which -> })
+                    showAlertDialog(errorInfo, DialogInterface.OnClickListener { dialog, which -> })
                 }
             }
         }).start()

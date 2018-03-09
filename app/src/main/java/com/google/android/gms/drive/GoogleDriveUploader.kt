@@ -25,7 +25,7 @@ class GoogleDriveUploader : GoogleDriveUtils() {
     private val driveContentsCallback: ResultCallback<DriveApi.DriveContentsResult> = ResultCallback { result ->
         val driveContents = result.driveContents
         val outputStream = driveContents.outputStream
-        val backupFile = File(EasyDiaryDbHelper.getRealmInstance().getPath())
+        val backupFile = File(EasyDiaryDbHelper.getInstance().path)
         try {
             FileUtils.copyFile(backupFile, outputStream)
         } catch (e: IOException) {
