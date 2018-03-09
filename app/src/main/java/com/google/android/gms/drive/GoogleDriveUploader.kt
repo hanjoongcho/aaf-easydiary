@@ -34,7 +34,7 @@ class GoogleDriveUploader : GoogleDriveUtils() {
 
         val metadataChangeSet = MetadataChangeSet.Builder()
                 .setTitle(DIARY_DB_NAME + "_" + me.blog.korn123.commons.utils.DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"))
-                .setMimeType(EasyDiaryUtils.getEasyDiaryMimeType()).build()
+                .setMimeType(EasyDiaryUtils.easyDiaryMimeType).build()
         val intentSender = Drive.DriveApi
                 .newCreateFileActivityBuilder()
                 .setInitialMetadata(metadataChangeSet)

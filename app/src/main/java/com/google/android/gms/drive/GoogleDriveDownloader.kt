@@ -30,7 +30,7 @@ class GoogleDriveDownloader : GoogleDriveUtils() {
 
         val intentSender = Drive.DriveApi
                 .newOpenFileActivityBuilder()
-                .setMimeType(EasyDiaryUtils.getEasyDiaryMimeTypeAll())
+                .setMimeType(EasyDiaryUtils.easyDiaryMimeTypeAll)
                 .build(getGoogleApiClient())
 
         try {

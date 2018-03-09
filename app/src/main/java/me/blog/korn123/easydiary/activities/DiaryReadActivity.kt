@@ -314,17 +314,18 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 date.text = DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis)
                 initBottomContainer()
 
-                val query = arguments?.getString(DIARY_SEARCH_QUERY)
-                if (StringUtils.isNotEmpty(query)) {
-                    context?.config?.run {
-                        if (diarySearchQueryCaseSensitive) {
-                            EasyDiaryUtils.highlightString(diaryTitle, query)
-                            EasyDiaryUtils.highlightString(diaryContents, query)
-                        } else {
-                            EasyDiaryUtils.highlightStringIgnoreCase(diaryTitle, query)
-                            EasyDiaryUtils.highlightStringIgnoreCase(diaryContents, query)
+                arguments?.getString(DIARY_SEARCH_QUERY)?.let { query ->
+                    if (StringUtils.isNotEmpty(query)) {
+                        context?.config?.run {
+                            if (diarySearchQueryCaseSensitive) {
+                                EasyDiaryUtils.highlightString(diaryTitle, query)
+                                EasyDiaryUtils.highlightString(diaryContents, query)
+                            } else {
+                                EasyDiaryUtils.highlightStringIgnoreCase(diaryTitle, query)
+                                EasyDiaryUtils.highlightStringIgnoreCase(diaryContents, query)
+                            }
                         }
-                    }
+                    }    
                 }
 
                 val weatherFlag = diaryDto.weather
@@ -371,7 +372,9 @@ class DiaryReadActivity : EasyDiaryActivity() {
         }
 
         fun setFontsTypeface() {
-            FontUtils.setFontsTypeface(context, activity?.assets, null, diaryTitle, date, diaryContents)
+            activity?.let { it ->
+                FontUtils.setFontsTypeface(it, it.assets, "", diaryTitle, date, diaryContents)    
+            }
         }
 
         fun setFontsSize() {
