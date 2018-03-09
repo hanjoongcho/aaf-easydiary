@@ -2,7 +2,6 @@ package me.blog.korn123.easydiary.helper
 
 import android.content.Context
 import io.github.hanjoongcho.commons.helpers.BaseConfig
-import me.blog.korn123.commons.constants.Constants
 import me.blog.korn123.commons.utils.CommonUtils
 
 /**
@@ -21,13 +20,27 @@ class Config(context: Context) : BaseConfig(context) {
         get() = legacyPrefs.getString(SETTING_FONT_NAME, CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT)
         set(settingFontName) = legacyPrefs.edit().putString(SETTING_FONT_NAME, settingFontName).apply()
 
+    var aafPinLockSavedPassword: String
+        get() = legacyPrefs.getString(APP_LOCK_SAVED_PASSWORD, APP_LOCK_DEFAULT_PASSWORD)
+        set(aafPinLockSavedPassword) = legacyPrefs.edit().putString(APP_LOCK_SAVED_PASSWORD, aafPinLockSavedPassword).apply()
+
+    var previousActivity: Int
+        get() = legacyPrefs.getInt(PREVIOUS_ACTIVITY, -1)
+        set(previousActivity) = legacyPrefs.edit().putInt(PREVIOUS_ACTIVITY, previousActivity).apply()
+    
     var settingFontSize: Float
-        get() = legacyPrefs.getFloat(SETTING_FONT_SIZE, CommonUtils.dpToPixel(context, Constants.DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE).toFloat())
+        get() = legacyPrefs.getFloat(SETTING_FONT_SIZE, CommonUtils.dpToPixel(context, DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE).toFloat())
         set(settingFontSize) = legacyPrefs.edit().putFloat(SETTING_FONT_SIZE, settingFontSize).apply()
 
     var diarySearchQueryCaseSensitive: Boolean
         get() = legacyPrefs.getBoolean(DIARY_SEARCH_QUERY_CASE_SENSITIVE, false)
         set(diarySearchQueryCaseSensitive) = legacyPrefs.edit().putBoolean(DIARY_SEARCH_QUERY_CASE_SENSITIVE, diarySearchQueryCaseSensitive).apply()
-            
-    
+
+    var aafPinLockEnable: Boolean
+        get() = legacyPrefs.getBoolean(APP_LOCK_ENABLE, false)
+        set(aafPinLockEnable) = legacyPrefs.edit().putBoolean(APP_LOCK_ENABLE, aafPinLockEnable).apply()
+
+    var isInitDummyData: Boolean
+        get() = legacyPrefs.getBoolean(INIT_DUMMY_DATA_FLAG, false)
+        set(isInitDummyData) = legacyPrefs.edit().putBoolean(INIT_DUMMY_DATA_FLAG, isInitDummyData).apply()
 }

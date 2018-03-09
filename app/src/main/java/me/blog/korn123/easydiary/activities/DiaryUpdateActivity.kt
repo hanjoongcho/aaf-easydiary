@@ -21,21 +21,17 @@ import android.widget.AdapterView
 import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.LinearLayout
-import butterknife.ButterKnife
-import butterknife.OnClick
 import com.simplemobiletools.commons.helpers.BaseConfig
 import io.realm.RealmList
+import kotlinx.android.synthetic.main.activity_diary_update.*
 import kotlinx.android.synthetic.main.layout_edit_contents.*
 import kotlinx.android.synthetic.main.layout_edit_photo_container.*
-import kotlinx.android.synthetic.main.activity_diary_update.*
-import me.blog.korn123.commons.constants.Constants
-import me.blog.korn123.commons.constants.Path
+import kotlinx.android.synthetic.main.layout_edit_toolbar_sub.*
 import me.blog.korn123.commons.utils.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryWeatherItemAdapter
-import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
-import me.blog.korn123.easydiary.helper.FILE_URI_PREFIX
+import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import me.blog.korn123.easydiary.models.PhotoUriDto
 import org.apache.commons.lang3.StringUtils
@@ -86,7 +82,6 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_diary_update)
-        ButterKnife.bind(this)
 
         setSupportActionBar(toolbar)
         supportActionBar?.run {
@@ -106,8 +101,7 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
         setDateTime()
     }
 
-    @OnClick(R.id.saveContents, R.id.photoView, R.id.datePicker, R.id.timePicker, R.id.secondsPicker, R.id.microphone)
-    fun onClick(view: View) {
+    private val mOnClickListener = View.OnClickListener { view ->
         // Check if no view has focus:
         val currentView = this.currentFocus
         if (currentView != null) {
@@ -119,7 +113,7 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
         when (view.id) {
             R.id.saveContents -> if (StringUtils.isEmpty(diaryContents.text)) {
                 diaryContents.requestFocus()
-                DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
+                makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
             } else {
                 val diaryDto = DiaryDto(
                         mSequence,
@@ -133,12 +127,12 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
                 EasyDiaryDbHelper.updateDiary(diaryDto)
                 finish()
             }
-            R.id.photoView -> if (PermissionUtils.checkPermission(this, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
+            R.id.photoView -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                 // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
                 callImagePicker()
             } else {
                 // API Level 23 이상이면서 권한취득 안한경우
-                PermissionUtils.confirmPermission(this, this, Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE)
+                confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
             }
             R.id.datePicker -> {
                 if (mDatePickerDialog == null) {
@@ -168,7 +162,7 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
     }
 
     override fun onBackPressed() {
-        DialogUtils.showAlertDialog(this@DiaryUpdateActivity, getString(R.string.back_pressed_confirm),
+        showAlertDialog(getString(R.string.back_pressed_confirm),
                 DialogInterface.OnClickListener { dialogInterface, i ->
                     //                        finish();
                     super@DiaryUpdateActivity.onBackPressed()
@@ -180,12 +174,12 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            Constants.REQUEST_CODE_EXTERNAL_STORAGE -> if (PermissionUtils.checkPermission(this, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
+            REQUEST_CODE_EXTERNAL_STORAGE -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                 // 권한이 있는경우
                 callImagePicker()
             } else {
                 // 권한이 없는경우
-                DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3))
+                makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3))
             }
             else -> {
             }
@@ -202,7 +196,7 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
         // set bottom thumbnail container
         mPrimaryColor = BaseConfig(this@DiaryUpdateActivity).primaryColor
         val drawable = photoView.background as GradientDrawable
-        drawable.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, Constants.THUMBNAIL_BACKGROUND_ALPHA))
+        drawable.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, THUMBNAIL_BACKGROUND_ALPHA))
     }
 
     private fun setFontsStyle() {
@@ -219,7 +213,7 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
 
     fun initData() {
         val intent = intent
-        mSequence = intent.getIntExtra(Constants.DIARY_SEQUENCE, 0)
+        mSequence = intent.getIntExtra(DIARY_SEQUENCE, 0)
         val diaryDto = EasyDiaryDbHelper.readDiaryBy(mSequence)
         mWeather = diaryDto.weather
 
@@ -244,7 +238,7 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
                 imageView.layoutParams = layoutParams
                 val drawable = resources.getDrawable(R.drawable.bg_card_thumbnail)
                 val gradient = drawable as GradientDrawable
-                gradient.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, Constants.THUMBNAIL_BACKGROUND_ALPHA))
+                gradient.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, THUMBNAIL_BACKGROUND_ALPHA))
                 imageView.background = gradient
                 imageView.setImageBitmap(bitmap)
                 imageView.scaleType = ImageView.ScaleType.CENTER
@@ -257,6 +251,13 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
     }
 
     private fun bindEvent() {
+        saveContents.setOnClickListener(mOnClickListener)
+        photoView.setOnClickListener(mOnClickListener)
+        datePicker.setOnClickListener(mOnClickListener)
+        timePicker.setOnClickListener(mOnClickListener)
+        secondsPicker.setOnClickListener(mOnClickListener)
+        microphone.setOnClickListener(mOnClickListener)
+        
         diaryTitle.setOnTouchListener { view, motionEvent ->
             mCurrentCursor = 0
             false
@@ -310,9 +311,9 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
     private fun callImagePicker() {
         val pickImageIntent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         try {
-            startActivityForResult(pickImageIntent, Constants.REQUEST_CODE_IMAGE_PICKER)
+            startActivityForResult(pickImageIntent, REQUEST_CODE_IMAGE_PICKER)
         } catch (e: ActivityNotFoundException) {
-            DialogUtils.showAlertDialog(this, getString(R.string.gallery_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
+            showAlertDialog(getString(R.string.gallery_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
         }
 
     }
@@ -321,7 +322,7 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
         try {
             startActivityForResult(mRecognizerIntent, REQUEST_CODE_SPEECH_INPUT)
         } catch (e: ActivityNotFoundException) {
-            DialogUtils.showAlertDialog(this, getString(R.string.recognizer_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
+            showAlertDialog(getString(R.string.recognizer_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
         }
 
     }
@@ -348,10 +349,10 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
                     diaryContents.setSelection(cursorPosition)
                 }
             }
-            Constants.REQUEST_CODE_IMAGE_PICKER -> try {
+            REQUEST_CODE_IMAGE_PICKER -> try {
                 if (resultCode == Activity.RESULT_OK && data != null) {
                     if (mPhotoUris == null) mPhotoUris = RealmList()
-                    val photoPath = Environment.getExternalStorageDirectory().absolutePath + Path.DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
+                    val photoPath = Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
                     CommonUtils.uriToFile(this, data.data, photoPath)
                     mPhotoUris?.add(PhotoUriDto(FILE_URI_PREFIX + photoPath))
                     val bitmap = BitmapUtils.decodeFile(this, photoPath, CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 65, 1), CommonUtils.dpToPixel(this, 45, 1))
@@ -361,7 +362,7 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
                     imageView.layoutParams = layoutParams
                     val drawable = resources.getDrawable(R.drawable.bg_card_thumbnail)
                     val gradient = drawable as GradientDrawable
-                    gradient.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, Constants.THUMBNAIL_BACKGROUND_ALPHA))
+                    gradient.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, THUMBNAIL_BACKGROUND_ALPHA))
                     imageView.background = gradient
                     imageView.setImageBitmap(bitmap)
                     imageView.scaleType = ImageView.ScaleType.CENTER
@@ -392,8 +393,7 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
 
         override fun onClick(v: View) {
             val targetIndex = index
-            DialogUtils.showAlertDialog(
-                    this@DiaryUpdateActivity,
+            showAlertDialog(
                     getString(R.string.delete_photo_confirm_message),
                     DialogInterface.OnClickListener { dialog, which ->
                         mRemoveIndexes.add(targetIndex)

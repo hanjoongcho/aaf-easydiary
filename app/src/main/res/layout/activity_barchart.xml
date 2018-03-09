@@ -33,7 +33,7 @@
 
             <com.github.mikephil.charting.charts.BarChart
                 android:background="@drawable/bg_card_diary"
-                android:id="@+id/chart1"
+                android:id="@+id/barChart"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 

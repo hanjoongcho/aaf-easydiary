@@ -9,15 +9,13 @@ import android.support.v7.app.AppCompatActivity
 import android.view.ViewGroup
 import io.github.hanjoongcho.commons.helpers.BaseConfig
 import kotlinx.android.synthetic.main.activity_intro.*
-import me.blog.korn123.commons.constants.Constants
 import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
-import me.blog.korn123.easydiary.helper.CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT
-import me.blog.korn123.easydiary.helper.INTRO_BACKGROUND_ALPHA
-import me.blog.korn123.easydiary.helper.START_MAIN_ACTIVITY
+import me.blog.korn123.easydiary.extensions.preferencesContains
+import me.blog.korn123.easydiary.helper.*
 import java.util.*
 
 /**
@@ -31,21 +29,21 @@ class IntroActivity : AppCompatActivity(), Handler.Callback {
         setContentView(R.layout.activity_intro)
 
         // determine device language
-        if (!Locale.getDefault().language.matches(Constants.CUSTOM_FONTS_SUPPORT_LANGUAGE.toRegex())) {
+        if (!Locale.getDefault().language.matches(CUSTOM_FONTS_SUPPORT_LANGUAGE.toRegex())) {
 
             // Initial font typeface setting
-            if (!CommonUtils.preferencesContains(this, Constants.SETTING_FONT_NAME)) {
+            if (!preferencesContains(SETTING_FONT_NAME)) {
                 config.settingFontName = CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT
             }
 
             // Initial font size setting
-            if (!CommonUtils.preferencesContains(this, Constants.SETTING_FONT_SIZE)) {
-                config.settingFontSize = CommonUtils.dpToPixel(this, Constants.DEFAULT_FONT_SIZE_UN_SUPPORT_LANGUAGE).toFloat()
+            if (!preferencesContains(SETTING_FONT_SIZE)) {
+                config.settingFontSize = CommonUtils.dpToPixel(this, DEFAULT_FONT_SIZE_UN_SUPPORT_LANGUAGE).toFloat()
             }
         } else {
             // Initial font size setting
-            if (!CommonUtils.preferencesContains(this, Constants.SETTING_FONT_SIZE)) {
-                config.settingFontSize = CommonUtils.dpToPixel(this, Constants.DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE).toFloat()
+            if (!preferencesContains(SETTING_FONT_SIZE)) {
+                config.settingFontSize = CommonUtils.dpToPixel(this, DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE).toFloat()
             }
         }
         Handler(this).sendEmptyMessageDelayed(START_MAIN_ACTIVITY, 500)

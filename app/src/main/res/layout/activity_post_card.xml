@@ -71,7 +71,7 @@
                                             android:textColor="@color/default_text_color"
                                             android:enabled="false"
                                             android:gravity="center_vertical"
-                                            android:id="@+id/title"
+                                            android:id="@+id/diaryTitle"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content" />
 

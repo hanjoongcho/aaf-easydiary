@@ -5,16 +5,17 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.Typeface
 import android.os.AsyncTask
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
-import me.blog.korn123.commons.constants.Constants
 import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.helper.CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT
+import me.blog.korn123.easydiary.helper.SETTING_FONT_NAME
 import org.apache.commons.lang3.StringUtils
 
 /**
@@ -38,7 +39,7 @@ class FontItemAdapter(val activity: Activity, private val layoutResourceId: Int,
             holder = row.tag as ViewHolder
         }
 
-        if (StringUtils.equals(CommonUtils.loadStringPreference(context, Constants.SETTING_FONT_NAME, Constants.CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT), list[position]["fontName"])) {
+        if (StringUtils.equals(context.config.settingFontName, list[position]["fontName"])) {
             holder.imageView?.setImageBitmap(BitmapFactory.decodeResource(context.resources, R.drawable.check_mark))
         } else {
             holder.imageView?.setImageBitmap(BitmapFactory.decodeResource(context.resources, R.drawable.check_mark_off))

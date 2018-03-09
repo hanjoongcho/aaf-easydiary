@@ -10,28 +10,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ListView
-import butterknife.ButterKnife
-import butterknife.OnClick
 import com.google.android.gms.drive.GoogleDriveDownloader
 import com.google.android.gms.drive.GoogleDriveUploader
 import io.github.hanjoongcho.commons.activities.BaseWebViewActivity
 import io.github.hanjoongcho.commons.helpers.BaseConfig
 import kotlinx.android.synthetic.main.activity_settings.*
-import me.blog.korn123.commons.constants.Constants
-import me.blog.korn123.commons.constants.Path
-import me.blog.korn123.commons.constants.Path.DIARY_PHOTO_DIRECTORY
 import me.blog.korn123.commons.utils.CommonUtils
-import me.blog.korn123.commons.utils.DialogUtils
 import me.blog.korn123.commons.utils.FontUtils
-import me.blog.korn123.commons.utils.PermissionUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.FontItemAdapter
-import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.openGooglePlayBy
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
-import me.blog.korn123.easydiary.helper.FILE_URI_PREFIX
-import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.helper.*
 import org.apache.commons.io.FilenameUtils
 import java.io.File
 import java.util.*
@@ -43,16 +33,90 @@ import java.util.*
 class SettingsActivity : EasyDiaryActivity() {
     private var mAlertDialog: AlertDialog? = null
 
+    private val mOnClickListener = View.OnClickListener { view ->
+        when (view.id) {
+            R.id.primaryColor -> TransitionHelper.startActivityWithTransition(this@SettingsActivity, Intent(this@SettingsActivity, CustomizationActivity::class.java))
+            R.id.fontSetting -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                openFontSettingDialog()
+            } else {
+                confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_FONT_SETTING)
+            }
+            R.id.sensitiveOption -> {
+                sensitiveOptionSwitcher.toggle()
+                config.diarySearchQueryCaseSensitive = sensitiveOptionSwitcher.isChecked
+            }
+            R.id.addTtfFontSetting -> {
+                openGuideView()
+            }
+            R.id.appLockSetting -> {
+                appLockSettingSwitcher.toggle()
+                config.aafPinLockEnable = appLockSettingSwitcher.isChecked
+            }
+            R.id.lockNumberSetting -> {
+                val lockSettingIntent = Intent(this@SettingsActivity, LockSettingActivity::class.java)
+                startActivityForResult(lockSettingIntent, REQUEST_CODE_LOCK_SETTING)
+            }
+            R.id.restoreSetting -> {
+                mTaskFlag = SETTING_FLAG_IMPORT_GOOGLE_DRIVE
+                if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                    // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
+                    val downloadIntent = Intent(this@SettingsActivity, GoogleDriveDownloader::class.java)
+                    startActivity(downloadIntent)
+                } else {
+                    // API Level 23 이상이면서 권한취득 안한경우
+                    confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
+                }
+            }
+            R.id.restorePhotoSetting -> {
+                openGuideView()
+            }
+            R.id.backupSetting -> {
+                mTaskFlag = SETTING_FLAG_EXPORT_GOOGLE_DRIVE
+                if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                    // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
+                    openUploadIntent()
+                } else {
+                    // API Level 23 이상이면서 권한취득 안한경우
+                    confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
+                }
+            }
+            R.id.rateAppSetting -> openGooglePlayBy("me.blog.korn123.easydiary")
+            R.id.licenseView -> {
+                val licenseIntent = Intent(this, WebViewActivity::class.java)
+                licenseIntent.putExtra(BaseWebViewActivity.OPEN_URL_INFO, "https://github.com/hanjoongcho/aaf-easydiary/blob/master/LICENSE.md")
+                startActivity(licenseIntent)
+            }
+            R.id.easyPhotoMap -> openGooglePlayBy("me.blog.korn123.easyphotomap")
+            R.id.easyPassword -> openGooglePlayBy("io.github.hanjoongcho.easypassword")
+        }
+    }
+    
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-        ButterKnife.bind(this)
-
         setSupportActionBar(toolbar)
         supportActionBar?.run {
             setTitle(R.string.settings)
             setDisplayHomeAsUpEnabled(true)
         }
+
+        bindEvent()
+    }
+
+    private fun bindEvent() {
+        primaryColor.setOnClickListener(mOnClickListener)
+        fontSetting.setOnClickListener(mOnClickListener)
+        sensitiveOption.setOnClickListener(mOnClickListener)
+        addTtfFontSetting.setOnClickListener(mOnClickListener)
+        appLockSetting.setOnClickListener(mOnClickListener)
+        lockNumberSetting.setOnClickListener(mOnClickListener)
+        restoreSetting.setOnClickListener(mOnClickListener)
+        backupSetting.setOnClickListener(mOnClickListener)
+        rateAppSetting.setOnClickListener(mOnClickListener)
+        licenseView.setOnClickListener(mOnClickListener)
+        easyPhotoMap.setOnClickListener(mOnClickListener)
+        easyPassword.setOnClickListener(mOnClickListener)
+        restorePhotoSetting.setOnClickListener(mOnClickListener)
     }
 
     override fun onResume() {
@@ -69,65 +133,6 @@ class SettingsActivity : EasyDiaryActivity() {
         }
     }
 
-    @OnClick(R.id.primaryColor, R.id.fontSetting, R.id.sensitiveOption, R.id.addTtfFontSetting, R.id.appLockSetting, R.id.lockNumberSetting, R.id.restoreSetting, R.id.backupSetting, R.id.rateAppSetting, R.id.licenseView, R.id.easyPhotoMap, R.id.easyPassword, R.id.restorePhotoSetting)
-    fun onClick(view: View) {
-        when (view.id) {
-            R.id.primaryColor -> TransitionHelper.startActivityWithTransition(this@SettingsActivity, Intent(this@SettingsActivity, CustomizationActivity::class.java))
-            R.id.fontSetting -> if (PermissionUtils.checkPermission(this@SettingsActivity, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
-                openFontSettingDialog()
-            } else {
-                PermissionUtils.confirmPermission(this@SettingsActivity, this@SettingsActivity, Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE_WITH_FONT_SETTING)
-            }
-            R.id.sensitiveOption -> {
-                sensitiveOptionSwitcher.toggle()
-                CommonUtils.saveBooleanPreference(this@SettingsActivity, Constants.DIARY_SEARCH_QUERY_CASE_SENSITIVE, sensitiveOptionSwitcher.isChecked)
-            }
-            R.id.addTtfFontSetting -> {
-                openGuideView()
-            }
-            R.id.appLockSetting -> {
-                appLockSettingSwitcher.toggle()
-                CommonUtils.saveBooleanPreference(this@SettingsActivity, Constants.APP_LOCK_ENABLE, appLockSettingSwitcher.isChecked)
-            }
-            R.id.lockNumberSetting -> {
-                val lockSettingIntent = Intent(this@SettingsActivity, LockSettingActivity::class.java)
-                startActivityForResult(lockSettingIntent, Constants.REQUEST_CODE_LOCK_SETTING)
-            }
-            R.id.restoreSetting -> {
-                mTaskFlag = Constants.SETTING_FLAG_IMPORT_GOOGLE_DRIVE
-                if (PermissionUtils.checkPermission(this@SettingsActivity, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
-                    // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
-                    val downloadIntent = Intent(this@SettingsActivity, GoogleDriveDownloader::class.java)
-                    startActivity(downloadIntent)
-                } else {
-                    // API Level 23 이상이면서 권한취득 안한경우
-                    PermissionUtils.confirmPermission(this@SettingsActivity, this@SettingsActivity, Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE)
-                }
-            }
-            R.id.restorePhotoSetting -> {
-                openGuideView()
-            }
-            R.id.backupSetting -> {
-                mTaskFlag = Constants.SETTING_FLAG_EXPORT_GOOGLE_DRIVE
-                if (PermissionUtils.checkPermission(this@SettingsActivity, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
-                    // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
-                    openUploadIntent()
-                } else {
-                    // API Level 23 이상이면서 권한취득 안한경우
-                    PermissionUtils.confirmPermission(this@SettingsActivity, this@SettingsActivity, Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE)
-                }
-            }
-            R.id.rateAppSetting -> openGooglePlayBy("me.blog.korn123.easydiary")
-            R.id.licenseView -> {
-                val licenseIntent = Intent(this, WebViewActivity::class.java)
-                licenseIntent.putExtra(BaseWebViewActivity.OPEN_URL_INFO, "https://github.com/hanjoongcho/aaf-easydiary/blob/master/LICENSE.md")
-                startActivity(licenseIntent)
-            }
-            R.id.easyPhotoMap -> openGooglePlayBy("me.blog.korn123.easyphotomap")
-            R.id.easyPassword -> openGooglePlayBy("io.github.hanjoongcho.easypassword")
-        }
-    }
-
     private fun openGuideView() {
         val guideIntent = Intent(this, WebViewActivity::class.java)
         guideIntent.putExtra(BaseWebViewActivity.OPEN_URL_INFO, getString(R.string.add_ttf_fonts_info_url))
@@ -138,8 +143,8 @@ class SettingsActivity : EasyDiaryActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             data?.let {
-                val password = it.getStringExtra(Constants.APP_LOCK_REQUEST_PASSWORD)
-                CommonUtils.saveStringPreference(applicationContext, Constants.APP_LOCK_SAVED_PASSWORD, password)
+                val password = it.getStringExtra(APP_LOCK_REQUEST_PASSWORD)
+                config.aafPinLockSavedPassword = password
                 lockNumberSettingSummary.text = "${getString(R.string.lock_number)} $password"
             }
         }
@@ -149,23 +154,23 @@ class SettingsActivity : EasyDiaryActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            Constants.REQUEST_CODE_EXTERNAL_STORAGE -> if (PermissionUtils.checkPermission(applicationContext, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
+            REQUEST_CODE_EXTERNAL_STORAGE -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                 // 권한이 있는경우
-                if (mTaskFlag == Constants.SETTING_FLAG_EXPORT_GOOGLE_DRIVE) {
+                if (mTaskFlag == SETTING_FLAG_EXPORT_GOOGLE_DRIVE) {
                     //                            FileUtils.copyFile(new File(EasyDiaryDbHelper.getRealmInstance().getPath()), new File(Path.WORKING_DIRECTORY + Path.DIARY_DB_NAME));
                     openUploadIntent()
-                } else if (mTaskFlag == Constants.SETTING_FLAG_IMPORT_GOOGLE_DRIVE) {
+                } else if (mTaskFlag == SETTING_FLAG_IMPORT_GOOGLE_DRIVE) {
                     val downloadIntent = Intent(applicationContext, GoogleDriveDownloader::class.java)
                     startActivity(downloadIntent)
                 }
             } else {
                 // 권한이 없는경우
-                DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3))
+                makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3))
             }
-            Constants.REQUEST_CODE_EXTERNAL_STORAGE_WITH_FONT_SETTING -> if (PermissionUtils.checkPermission(applicationContext, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
+            REQUEST_CODE_EXTERNAL_STORAGE_WITH_FONT_SETTING -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                 openFontSettingDialog()
             } else {
-                DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3))
+                makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3))
             }
             else -> {
             }
@@ -201,7 +206,7 @@ class SettingsActivity : EasyDiaryActivity() {
             listFont.add(map)
         }
 
-        val fontDir = File(Environment.getExternalStorageDirectory().absolutePath + Path.USER_CUSTOM_FONTS_DIRECTORY)
+        val fontDir = File(Environment.getExternalStorageDirectory().absolutePath + USER_CUSTOM_FONTS_DIRECTORY)
         fontDir.list()?.let {
             for (fontName in it) {
                 if (FilenameUtils.getExtension(fontName).equals("ttf", ignoreCase = true)) {
@@ -218,10 +223,12 @@ class SettingsActivity : EasyDiaryActivity() {
         listView.adapter = arrayAdapter
         listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             val fontInfo = parent.adapter.getItem(position) as HashMap<String, String>
-            CommonUtils.saveStringPreference(this@SettingsActivity, Constants.SETTING_FONT_NAME, fontInfo["fontName"]!!)
-            FontUtils.setCommonTypeface(this@SettingsActivity, assets)
-            initPreference()
-            setFontsStyle()
+            fontInfo["fontName"]?.let { 
+                config.settingFontName = it
+                FontUtils.setCommonTypeface(this@SettingsActivity, assets)
+                initPreference()
+                setFontsStyle()
+            }
             mAlertDialog?.cancel()
         }
 
@@ -235,10 +242,10 @@ class SettingsActivity : EasyDiaryActivity() {
     }
 
     private fun initPreference() {
-        fontSettingSummary.text = FontUtils.fontFileNameToDisplayName(applicationContext, CommonUtils.loadStringPreference(this@SettingsActivity, Constants.SETTING_FONT_NAME, Constants.CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT))
-        sensitiveOptionSwitcher.isChecked = CommonUtils.loadBooleanPreference(this@SettingsActivity, Constants.DIARY_SEARCH_QUERY_CASE_SENSITIVE)
-        appLockSettingSwitcher.isChecked = CommonUtils.loadBooleanPreference(this@SettingsActivity, Constants.APP_LOCK_ENABLE)
-        lockNumberSettingSummary.text = "${getString(R.string.lock_number)} ${CommonUtils.loadStringPreference(this@SettingsActivity, Constants.APP_LOCK_SAVED_PASSWORD, "0000")}"
+        fontSettingSummary.text = FontUtils.fontFileNameToDisplayName(applicationContext, config.settingFontName)
+        sensitiveOptionSwitcher.isChecked = config.diarySearchQueryCaseSensitive
+        appLockSettingSwitcher.isChecked = config.aafPinLockEnable
+        lockNumberSettingSummary.text = "${getString(R.string.lock_number)} ${config.aafPinLockSavedPassword}"
         rateAppSettingSummary.text = String.format("Easy Diary v %s", BuildConfig.VERSION_NAME)
     }
 

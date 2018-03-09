@@ -8,12 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import io.github.hanjoongcho.commons.activities.BaseSimpleActivity
+import io.github.hanjoongcho.commons.extensions.baseConfig
 import kotlinx.android.synthetic.main.activity_lock_setting.*
-import me.blog.korn123.commons.constants.Constants
 import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.helper.APP_FINISH_FLAG
+import me.blog.korn123.easydiary.helper.APP_LOCK_SAVED_PASSWORD
 import org.apache.commons.lang3.StringUtils
 
 /**
@@ -58,7 +60,7 @@ class DiaryLockActivity : BaseSimpleActivity() {
         //        super.onBackPressed();
         val readDiaryIntent = Intent(this@DiaryLockActivity, DiaryMainActivity::class.java)
         readDiaryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-        readDiaryIntent.putExtra(Constants.APP_FINISH_FLAG, true)
+        readDiaryIntent.putExtra(APP_FINISH_FLAG, true)
         startActivity(readDiaryIntent)
         finish()
     }
@@ -81,7 +83,7 @@ class DiaryLockActivity : BaseSimpleActivity() {
         if (mCursorIndex == 3) {
             Thread(Runnable {
                 Handler(Looper.getMainLooper()).post {
-                    if (StringUtils.equals(CommonUtils.loadStringPreference(this@DiaryLockActivity, Constants.APP_LOCK_SAVED_PASSWORD, "0000"), password)) {
+                    if (StringUtils.equals(config.aafPinLockSavedPassword, password)) {
                         config.aafPinLockPauseMillis = System.currentTimeMillis()
                         finish()
                     } else {

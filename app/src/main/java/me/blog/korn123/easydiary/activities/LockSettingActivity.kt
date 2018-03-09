@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import io.github.hanjoongcho.commons.activities.BaseSimpleActivity
 import kotlinx.android.synthetic.main.activity_lock_setting.*
-import me.blog.korn123.commons.constants.Constants
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.helper.APP_LOCK_REQUEST_PASSWORD
 
 /**
  * Created by hanjoong on 2017-05-03.
@@ -70,7 +70,7 @@ class LockSettingActivity : BaseSimpleActivity() {
             for (tv in mPasswordView) {
                 fullPassword += tv?.text
             }
-            intent.putExtra(Constants.APP_LOCK_REQUEST_PASSWORD, fullPassword)
+            intent.putExtra(APP_LOCK_REQUEST_PASSWORD, fullPassword)
             setResult(Activity.RESULT_OK, intent)
             finish()
         } else {
