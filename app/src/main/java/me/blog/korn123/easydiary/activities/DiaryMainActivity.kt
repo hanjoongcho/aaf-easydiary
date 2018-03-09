@@ -19,8 +19,6 @@ import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_diary_main.*
-import me.blog.korn123.commons.constants.Constants
-import me.blog.korn123.commons.constants.Path
 import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.DialogUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
@@ -28,9 +26,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
-import me.blog.korn123.easydiary.helper.FILE_URI_PREFIX
-import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
 import java.util.*
@@ -62,7 +58,7 @@ class DiaryMainActivity : EasyDiaryActivity() {
         }
 
         // application finish 확인
-        if (intent.getBooleanExtra(Constants.APP_FINISH_FLAG, false)) {
+        if (intent.getBooleanExtra(APP_FINISH_FLAG, false)) {
             finish()
         }
 
@@ -83,22 +79,22 @@ class DiaryMainActivity : EasyDiaryActivity() {
         }
         diaryList.adapter = mDiaryMainItemAdapter
 
-        if (!CommonUtils.loadBooleanPreference(this, Constants.INIT_DUMMY_DATA_FLAG)) {
+        if (!CommonUtils.loadBooleanPreference(this, INIT_DUMMY_DATA_FLAG)) {
             initSampleData()
-            CommonUtils.saveBooleanPreference(this, Constants.INIT_DUMMY_DATA_FLAG, true)
+            CommonUtils.saveBooleanPreference(this, INIT_DUMMY_DATA_FLAG, true)
         }
 
         bindEvent()
         initShowcase()
-        EasyDiaryUtils.initWorkingDirectory(Environment.getExternalStorageDirectory().absolutePath + Path.USER_CUSTOM_FONTS_DIRECTORY)
-        EasyDiaryUtils.initWorkingDirectory(Environment.getExternalStorageDirectory().absolutePath + Path.DIARY_PHOTO_DIRECTORY)
+        EasyDiaryUtils.initWorkingDirectory(Environment.getExternalStorageDirectory().absolutePath + USER_CUSTOM_FONTS_DIRECTORY)
+        EasyDiaryUtils.initWorkingDirectory(Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY)
         
         Thread(Runnable {
             val listPhotoUri = EasyDiaryDbHelper.selectPhotoUriAll()
             for ((index, dto) in listPhotoUri.withIndex()) {
 //                Log.i("PHOTO-URI", dto.photoUri)
                 if (dto.isContentUri()) {
-                    val photoPath = Environment.getExternalStorageDirectory().absolutePath + Path.DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
+                    val photoPath = Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
                     CommonUtils.uriToFile(this, Uri.parse(dto.photoUri), photoPath)
                     EasyDiaryDbHelper.getRealmInstance().beginTransaction()
                     dto.photoUri = FILE_URI_PREFIX + photoPath
@@ -120,19 +116,19 @@ class DiaryMainActivity : EasyDiaryActivity() {
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
         refreshList()
         initTextSize(progressDialog, this)
-
-        val previousActivity = CommonUtils.loadIntPreference(this@DiaryMainActivity, Constants.PREVIOUS_ACTIVITY, -1)
-        if (previousActivity == Constants.PREVIOUS_ACTIVITY_CREATE) {
+        
+        val previousActivity = CommonUtils.loadIntPreference(this@DiaryMainActivity, PREVIOUS_ACTIVITY, -1)
+        if (previousActivity == PREVIOUS_ACTIVITY_CREATE) {
             diaryList.smoothScrollToPosition(0)
             //            mDiaryListView.setSelection(0);
-            CommonUtils.saveIntPreference(this@DiaryMainActivity, Constants.PREVIOUS_ACTIVITY, -1)
+            CommonUtils.saveIntPreference(this@DiaryMainActivity, PREVIOUS_ACTIVITY, -1)
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            Constants.REQUEST_CODE_SPEECH_INPUT -> {
+            REQUEST_CODE_SPEECH_INPUT -> {
                 if (resultCode == Activity.RESULT_OK && data != null) {
                     val result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                     query.setText(result[0])
@@ -237,7 +233,7 @@ class DiaryMainActivity : EasyDiaryActivity() {
                 .setContentTitle(getString(R.string.read_diary_showcase_title_1))
                 .setContentText(getString(R.string.read_diary_showcase_message_1))
                 .setStyle(R.style.ShowcaseTheme)
-                .singleShot(Constants.SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER.toLong())
+                .singleShot(SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER.toLong())
                 .setOnClickListener(showcaseViewOnClickListener)
                 .build()
         mShowcaseView?.setButtonText(getString(R.string.read_diary_showcase_button_1))
@@ -258,8 +254,8 @@ class DiaryMainActivity : EasyDiaryActivity() {
         diaryList.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
             val diaryDto = adapterView.adapter.getItem(i) as DiaryDto
             val detailIntent = Intent(this@DiaryMainActivity, DiaryReadActivity::class.java)
-            detailIntent.putExtra(Constants.DIARY_SEQUENCE, diaryDto.sequence)
-            detailIntent.putExtra(Constants.DIARY_SEARCH_QUERY, mDiaryMainItemAdapter?.currentQuery)
+            detailIntent.putExtra(DIARY_SEQUENCE, diaryDto.sequence)
+            detailIntent.putExtra(DIARY_SEARCH_QUERY, mDiaryMainItemAdapter?.currentQuery)
             TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, detailIntent)
         }
 
@@ -275,7 +271,7 @@ class DiaryMainActivity : EasyDiaryActivity() {
 
     private fun showSpeechDialog() {
         try {
-            startActivityForResult(mRecognizerIntent, Constants.REQUEST_CODE_SPEECH_INPUT)
+            startActivityForResult(mRecognizerIntent, REQUEST_CODE_SPEECH_INPUT)
         } catch (e: ActivityNotFoundException) {
             DialogUtils.showAlertDialog(this, getString(R.string.recognizer_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
         }
@@ -290,7 +286,7 @@ class DiaryMainActivity : EasyDiaryActivity() {
 
     fun refreshList(query: String) {
         mDiaryList?.clear()
-        mDiaryList?.addAll(EasyDiaryDbHelper.readDiary(query, CommonUtils.loadBooleanPreference(this, Constants.DIARY_SEARCH_QUERY_CASE_SENSITIVE)))
+        mDiaryList?.addAll(EasyDiaryDbHelper.readDiary(query, CommonUtils.loadBooleanPreference(this, DIARY_SEARCH_QUERY_CASE_SENSITIVE)))
         mDiaryMainItemAdapter?.currentQuery = query
         mDiaryMainItemAdapter?.notifyDataSetChanged()
     }

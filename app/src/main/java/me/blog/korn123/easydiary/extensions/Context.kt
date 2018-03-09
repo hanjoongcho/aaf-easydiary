@@ -6,16 +6,16 @@ import android.graphics.Color
 import android.support.v7.widget.CardView
 import android.util.TypedValue
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.TextView
 import com.simplemobiletools.commons.extensions.adjustAlpha
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
 import com.simplemobiletools.commons.views.*
 import io.github.hanjoongcho.commons.views.ModalView
-import me.blog.korn123.commons.constants.Constants
 import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.easydiary.helper.Config
+import me.blog.korn123.easydiary.helper.DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE
+import me.blog.korn123.easydiary.helper.SETTING_FONT_SIZE
 import me.blog.korn123.easydiary.views.LabelLayout
 
 /**
@@ -69,8 +69,8 @@ fun Context.updateTextColors(viewGroup: ViewGroup, tmpTextColor: Int = 0, tmpAcc
 
 fun Context.initTextSize(viewGroup: ViewGroup, context: Context) {
     val cnt = viewGroup.childCount
-    val defaultFontSize: Float = CommonUtils.dpToPixel(context, Constants.DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE).toFloat()
-    val settingFontSize: Float = CommonUtils.loadFloatPreference(this, Constants.SETTING_FONT_SIZE, defaultFontSize)
+    val defaultFontSize: Float = CommonUtils.dpToPixel(context, DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE).toFloat()
+    val settingFontSize: Float = CommonUtils.loadFloatPreference(this, SETTING_FONT_SIZE, defaultFontSize)
     (0 until cnt)
             .map { viewGroup.getChildAt(it) }
             .forEach {
@@ -82,8 +82,8 @@ fun Context.initTextSize(viewGroup: ViewGroup, context: Context) {
 }
 
 fun Context.initTextSize(textView: TextView, context: Context) {
-    val defaultFontSize: Float = CommonUtils.dpToPixel(context, Constants.DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE).toFloat()
-    val settingFontSize: Float = CommonUtils.loadFloatPreference(this, Constants.SETTING_FONT_SIZE, defaultFontSize)
+    val defaultFontSize: Float = CommonUtils.dpToPixel(context, DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE).toFloat()
+    val settingFontSize: Float = CommonUtils.loadFloatPreference(this, SETTING_FONT_SIZE, defaultFontSize)
     textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
 }
 

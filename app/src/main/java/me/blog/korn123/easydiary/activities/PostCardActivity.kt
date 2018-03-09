@@ -19,11 +19,9 @@ import com.flask.colorpicker.builder.ColorPickerDialogBuilder
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import kotlinx.android.synthetic.main.activity_post_card.*
-import me.blog.korn123.commons.constants.Constants
-import me.blog.korn123.commons.constants.Path
 import me.blog.korn123.commons.utils.*
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.*
 import java.io.File
 
 /**
@@ -48,7 +46,7 @@ class PostCardActivity : EasyDiaryActivity() {
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_cross)    
         }
-        mSequence = intent.getIntExtra(Constants.DIARY_SEQUENCE, 0)
+        mSequence = intent.getIntExtra(DIARY_SEQUENCE, 0)
         val diaryDto = EasyDiaryDbHelper.readDiaryBy(mSequence)
         EasyDiaryUtils.initWeatherView(weather, diaryDto.weather)
         diaryTitle.text = diaryDto.title
@@ -66,14 +64,14 @@ class PostCardActivity : EasyDiaryActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            Constants.REQUEST_CODE_EXTERNAL_STORAGE -> if (PermissionUtils.checkPermission(this, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
+            REQUEST_CODE_EXTERNAL_STORAGE -> if (PermissionUtils.checkPermission(this, EXTERNAL_STORAGE_PERMISSIONS)) {
                 // 권한이 있는경우
                 exportDiaryCard(true)
             } else {
                 // 권한이 없는경우
                 DialogUtils.makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3))
             }
-            Constants.REQUEST_CODE_EXTERNAL_STORAGE_WITH_SHARE_DIARY_CARD -> if (PermissionUtils.checkPermission(this, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
+            REQUEST_CODE_EXTERNAL_STORAGE_WITH_SHARE_DIARY_CARD -> if (PermissionUtils.checkPermission(this, EXTERNAL_STORAGE_PERMISSIONS)) {
                 // 권한이 있는경우
                 exportDiaryCard(false)
             } else {
@@ -87,11 +85,11 @@ class PostCardActivity : EasyDiaryActivity() {
     
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
-            Constants.REQUEST_CODE_BACKGROUND_COLOR_PICKER -> if (resultCode == Activity.RESULT_OK && data != null) {
+            REQUEST_CODE_BACKGROUND_COLOR_PICKER -> if (resultCode == Activity.RESULT_OK && data != null) {
                 val hexStringColor = "#" + data.getStringExtra("color")
                 contentsContainer.setBackgroundColor(Color.parseColor(hexStringColor))
             }
-            Constants.REQUEST_CODE_TEXT_COLOR_PICKER -> if (resultCode == Activity.RESULT_OK && data != null) {
+            REQUEST_CODE_TEXT_COLOR_PICKER -> if (resultCode == Activity.RESULT_OK && data != null) {
                 val hexStringColor = "#" + data.getStringExtra("color")
                 diaryTitle.setTextColor(Color.parseColor(hexStringColor))
                 date.setTextColor(Color.parseColor(hexStringColor))
@@ -139,19 +137,19 @@ class PostCardActivity : EasyDiaryActivity() {
                     //                        .setColorEditTextColor(ContextCompat.getColor(PostCardActivity.this, android.R.color.holo_blue_bright))
                     .build()
                     .show()
-            R.id.save -> if (PermissionUtils.checkPermission(this, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
+            R.id.save -> if (PermissionUtils.checkPermission(this, EXTERNAL_STORAGE_PERMISSIONS)) {
                 // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
                 exportDiaryCard(true)
             } else {
                 // API Level 23 이상이면서 권한취득 안한경우
-                PermissionUtils.confirmPermission(this, this, Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE)
+                PermissionUtils.confirmPermission(this, this, EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
             }
-            R.id.share -> if (PermissionUtils.checkPermission(this, Constants.EXTERNAL_STORAGE_PERMISSIONS)) {
+            R.id.share -> if (PermissionUtils.checkPermission(this, EXTERNAL_STORAGE_PERMISSIONS)) {
                 // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
                 exportDiaryCard(false)
             } else {
                 // API Level 23 이상이면서 권한취득 안한경우
-                PermissionUtils.confirmPermission(this, this, Constants.EXTERNAL_STORAGE_PERMISSIONS, Constants.REQUEST_CODE_EXTERNAL_STORAGE_WITH_SHARE_DIARY_CARD)
+                PermissionUtils.confirmPermission(this, this, EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_SHARE_DIARY_CARD)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -201,7 +199,7 @@ class PostCardActivity : EasyDiaryActivity() {
                 .setContentTitle(getString(R.string.post_card_showcase_title_0))
                 .setContentText(getString(R.string.post_card_showcase_message_0))
                 .setStyle(R.style.ShowcaseTheme)
-                .singleShot(Constants.SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER.toLong())
+                .singleShot(SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER.toLong())
                 .setOnClickListener(showcaseViewOnClickListener)
                 .build()
         mShowcaseView.setButtonText(getString(R.string.post_card_showcase_button_1))
@@ -216,9 +214,9 @@ class PostCardActivity : EasyDiaryActivity() {
         // generate postcard file another thread
         Thread(Runnable {
             try {
-                val diaryCardPath = Path.WORKING_DIRECTORY + mSequence + "_" + DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".jpg"
+                val diaryCardPath = WORKING_DIRECTORY + mSequence + "_" + DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".jpg"
                 mSavedDiaryCardPath = Environment.getExternalStorageDirectory().absolutePath + diaryCardPath
-                EasyDiaryUtils.initWorkingDirectory(Environment.getExternalStorageDirectory().absolutePath + Path.USER_CUSTOM_FONTS_DIRECTORY)
+                EasyDiaryUtils.initWorkingDirectory(Environment.getExternalStorageDirectory().absolutePath + USER_CUSTOM_FONTS_DIRECTORY)
                 BitmapUtils.saveBitmapToFileCache(bitmap, mSavedDiaryCardPath)
                 Handler(Looper.getMainLooper()).post {
                     progressBar.visibility = View.GONE

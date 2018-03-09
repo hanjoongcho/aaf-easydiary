@@ -20,10 +20,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import me.blog.korn123.commons.constants.Constants;
 import me.blog.korn123.easydiary.R;
 import me.blog.korn123.easydiary.adapters.SecondItemAdapter;
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper;
+
+import static me.blog.korn123.easydiary.helper.ConstantsKt.WEATHER_BOLT;
+import static me.blog.korn123.easydiary.helper.ConstantsKt.WEATHER_CLOUD_AND_SUN;
+import static me.blog.korn123.easydiary.helper.ConstantsKt.WEATHER_MOON;
+import static me.blog.korn123.easydiary.helper.ConstantsKt.WEATHER_RAINBOW;
+import static me.blog.korn123.easydiary.helper.ConstantsKt.WEATHER_RAIN_DROPS;
+import static me.blog.korn123.easydiary.helper.ConstantsKt.WEATHER_SNOWING;
+import static me.blog.korn123.easydiary.helper.ConstantsKt.WEATHER_STARS;
+import static me.blog.korn123.easydiary.helper.ConstantsKt.WEATHER_SUNNY;
+import static me.blog.korn123.easydiary.helper.ConstantsKt.WEATHER_UMBRELLA;
+import static me.blog.korn123.easydiary.helper.ConstantsKt.WEATHER_NIGHT_RAIN;
 
 /**
  * Created by hanjoong on 2017-04-30.
@@ -52,34 +62,34 @@ public class EasyDiaryUtils {
             case 0:
                 imageView.setImageResource(0);
                 break;
-            case Constants.WEATHER_SUNNY:
+            case WEATHER_SUNNY:
                 imageView.setImageResource(R.drawable.ic_sunny);
                 break;
-            case Constants.WEATHER_CLOUD_AND_SUN:
+            case WEATHER_CLOUD_AND_SUN:
                 imageView.setImageResource(R.drawable.ic_clouds_and_sun);
                 break;
-            case Constants.WEATHER_RAIN_DROPS:
+            case WEATHER_RAIN_DROPS:
                 imageView.setImageResource(R.drawable.ic_raindrops);
                 break;
-            case Constants.WEATHER_BOLT:
+            case WEATHER_BOLT:
                 imageView.setImageResource(R.drawable.ic_bolt);
                 break;
-            case Constants.WEATHER_SNOWING:
+            case WEATHER_SNOWING:
                 imageView.setImageResource(R.drawable.ic_snowing);
                 break;
-            case Constants.WEATHER_RAINBOW:
+            case WEATHER_RAINBOW:
                 imageView.setImageResource(R.drawable.ic_rainbow);
                 break;
-            case Constants.WEATHER_UMBRELLA:
+            case WEATHER_UMBRELLA:
                 imageView.setImageResource(R.drawable.ic_umbrella_1);
                 break;
-            case Constants.WEATHER_STARS:
+            case WEATHER_STARS:
                 imageView.setImageResource(R.drawable.ic_stars_2);
                 break;
-            case Constants.WEATHER_MOON:
+            case WEATHER_MOON:
                 imageView.setImageResource(R.drawable.ic_moon_9);
                 break;
-            case Constants.WEATHER_NIGHT_RAIN:
+            case WEATHER_NIGHT_RAIN:
                 imageView.setImageResource(R.drawable.ic_night_rain);
                 break;
         }

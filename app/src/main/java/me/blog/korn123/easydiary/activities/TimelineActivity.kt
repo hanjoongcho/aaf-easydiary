@@ -12,11 +12,13 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import kotlinx.android.synthetic.main.activity_timeline_diary.*
-import me.blog.korn123.commons.constants.Constants
 import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.TimelineItemAdapter
+import me.blog.korn123.easydiary.helper.DIARY_SEARCH_QUERY
+import me.blog.korn123.easydiary.helper.DIARY_SEARCH_QUERY_CASE_SENSITIVE
+import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.DiaryDto
 import java.util.*
@@ -76,8 +78,8 @@ class TimelineActivity : EasyDiaryActivity() {
         timelineList.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
             val diaryDto = adapterView.adapter.getItem(i) as DiaryDto
             val detailIntent = Intent(this@TimelineActivity, DiaryReadActivity::class.java)
-            detailIntent.putExtra(Constants.DIARY_SEQUENCE, diaryDto.sequence)
-            detailIntent.putExtra(Constants.DIARY_SEARCH_QUERY, searchView.text.toString())
+            detailIntent.putExtra(DIARY_SEQUENCE, diaryDto.sequence)
+            detailIntent.putExtra(DIARY_SEARCH_QUERY, searchView.text.toString())
             startActivity(detailIntent)
         }
 
@@ -108,7 +110,7 @@ class TimelineActivity : EasyDiaryActivity() {
     
     private fun refreshList(query: String?) {
         mDiaryList?.clear()
-        mDiaryList?.addAll(EasyDiaryDbHelper.readDiary(query, CommonUtils.loadBooleanPreference(this, Constants.DIARY_SEARCH_QUERY_CASE_SENSITIVE)))
+        mDiaryList?.addAll(EasyDiaryDbHelper.readDiary(query, CommonUtils.loadBooleanPreference(this, DIARY_SEARCH_QUERY_CASE_SENSITIVE)))
         Collections.reverse(mDiaryList)
         mTimelineItemAdapter?.notifyDataSetChanged()
     }

@@ -4,16 +4,16 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
-import me.blog.korn123.commons.constants.Constants
 import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.easydiary.activities.DiaryLockActivity
+import me.blog.korn123.easydiary.helper.APP_LOCK_ENABLE
 
 /**
  * Created by CHO HANJOONG on 2018-02-10.
  */
 
 fun Activity.pauseLock() {
-    val enableLock = CommonUtils.loadBooleanPreference(this, Constants.APP_LOCK_ENABLE)
+    val enableLock = CommonUtils.loadBooleanPreference(this, APP_LOCK_ENABLE)
     if (enableLock) {
         val currentMillis = System.currentTimeMillis()
         config.aafPinLockPauseMillis = currentMillis
@@ -21,7 +21,7 @@ fun Activity.pauseLock() {
 }
 
 fun Activity.resumeLock() {
-    val enableLock = CommonUtils.loadBooleanPreference(this, Constants.APP_LOCK_ENABLE)
+    val enableLock = CommonUtils.loadBooleanPreference(this, APP_LOCK_ENABLE)
     val pauseMillis = config.aafPinLockPauseMillis
     if (enableLock && pauseMillis != 0L) {
         if (System.currentTimeMillis() - pauseMillis > 1000) {

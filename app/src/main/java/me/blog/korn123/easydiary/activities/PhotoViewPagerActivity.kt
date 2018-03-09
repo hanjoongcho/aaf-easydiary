@@ -9,10 +9,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.github.chrisbanes.photoview.PhotoView
 import kotlinx.android.synthetic.main.activity_photo_view_pager.*
-import me.blog.korn123.commons.constants.Constants
 import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.DiaryDto
 
@@ -28,7 +28,7 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
         setContentView(R.layout.activity_photo_view_pager)
 
         val intent = intent
-        val sequence = intent.getIntExtra(Constants.DIARY_SEQUENCE, 0)
+        val sequence = intent.getIntExtra(DIARY_SEQUENCE, 0)
         val diaryDto = EasyDiaryDbHelper.readDiaryBy(sequence)
         mPhotoCount = diaryDto.photoUris?.size ?: 0
         pageInfo.text = "1 / $mPhotoCount"

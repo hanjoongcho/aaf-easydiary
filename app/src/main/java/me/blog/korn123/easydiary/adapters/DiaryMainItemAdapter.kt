@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
-import me.blog.korn123.commons.constants.Constants
 import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
@@ -15,6 +14,7 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.updateTextColors
+import me.blog.korn123.easydiary.helper.DIARY_SEARCH_QUERY_CASE_SENSITIVE
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
 
@@ -57,7 +57,7 @@ class DiaryMainItemAdapter(
 
         // highlight current query
         if (StringUtils.isNotEmpty(currentQuery)) {
-            if (CommonUtils.loadBooleanPreference(context, Constants.DIARY_SEARCH_QUERY_CASE_SENSITIVE)) {
+            if (CommonUtils.loadBooleanPreference(context, DIARY_SEARCH_QUERY_CASE_SENSITIVE)) {
                 EasyDiaryUtils.highlightString(holder.textView1, currentQuery)
                 EasyDiaryUtils.highlightString(holder.textView2, currentQuery)
             } else {

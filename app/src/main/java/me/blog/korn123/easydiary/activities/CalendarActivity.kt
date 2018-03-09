@@ -9,12 +9,12 @@ import android.widget.ArrayAdapter
 import com.roomorama.caldroid.CaldroidFragment
 import com.roomorama.caldroid.CaldroidListener
 import kotlinx.android.synthetic.main.activity_calendar.*
-import me.blog.korn123.commons.constants.Constants
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryCalendarItemAdapter
 import me.blog.korn123.easydiary.fragments.CaldroidCustomFragment
+import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.DiaryDto
 import java.text.SimpleDateFormat
@@ -49,7 +49,7 @@ class CalendarActivity : EasyDiaryActivity() {
         selectedList.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
             val diaryDto = adapterView.adapter.getItem(i) as DiaryDto
             val detailIntent = Intent(this@CalendarActivity, DiaryReadActivity::class.java)
-            detailIntent.putExtra(Constants.DIARY_SEQUENCE, diaryDto.sequence)
+            detailIntent.putExtra(DIARY_SEQUENCE, diaryDto.sequence)
             detailIntent.putExtra("title", diaryDto.title)
             detailIntent.putExtra("contents", diaryDto.contents)
             detailIntent.putExtra("date", DateUtils.timeMillisToDateTime(diaryDto.currentTimeMillis, "yyyy-MM-dd HH:mm:ss"))

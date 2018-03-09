@@ -25,18 +25,15 @@ import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.simplemobiletools.commons.helpers.BaseConfig
 import kotlinx.android.synthetic.main.activity_diary_read.*
 import kotlinx.android.synthetic.main.fragment_diary_read.*
-import me.blog.korn123.commons.constants.Constants
 import me.blog.korn123.commons.utils.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.updateTextColors
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
-import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -66,12 +63,12 @@ class DiaryReadActivity : EasyDiaryActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-        val query = intent.getStringExtra(Constants.DIARY_SEARCH_QUERY)
-        val diaryList: ArrayList<DiaryDto> = EasyDiaryDbHelper.readDiary(query, CommonUtils.loadBooleanPreference(applicationContext, Constants.DIARY_SEARCH_QUERY_CASE_SENSITIVE))
+        val query = intent.getStringExtra(DIARY_SEARCH_QUERY)
+        val diaryList: ArrayList<DiaryDto> = EasyDiaryDbHelper.readDiary(query, CommonUtils.loadBooleanPreference(applicationContext, DIARY_SEARCH_QUERY_CASE_SENSITIVE))
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager, diaryList, query)
         val startPageIndex = when(savedInstanceState == null) {
-            true -> mSectionsPagerAdapter.sequenceToPageIndex(intent.getIntExtra(Constants.DIARY_SEQUENCE, -1))
-            false -> mSectionsPagerAdapter.sequenceToPageIndex(savedInstanceState?.getInt(Constants.DIARY_SEQUENCE, -1) ?: -1)
+            true -> mSectionsPagerAdapter.sequenceToPageIndex(intent.getIntExtra(DIARY_SEQUENCE, -1))
+            false -> mSectionsPagerAdapter.sequenceToPageIndex(savedInstanceState?.getInt(DIARY_SEQUENCE, -1) ?: -1)
         }
 
         setupViewPager()
@@ -92,7 +89,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
     override fun onSaveInstanceState(outState: Bundle?) {
         val fragment = mSectionsPagerAdapter.instantiateItem(diaryViewPager, diaryViewPager.currentItem)
         if (fragment is PlaceholderFragment) {
-            outState?.putInt(Constants.DIARY_SEQUENCE, fragment.getSequence())
+            outState?.putInt(DIARY_SEQUENCE, fragment.getSequence())
         }
         super.onSaveInstanceState(outState)
     }
@@ -108,11 +105,11 @@ class DiaryReadActivity : EasyDiaryActivity() {
                     //                this.overridePendingTransition(R.anim.anim_left_to_center, R.anim.anim_center_to_right);
                     this.onBackPressed()
                 R.id.zoomIn -> {
-                    CommonUtils.saveFloatPreference(this@DiaryReadActivity, Constants.SETTING_FONT_SIZE, fontSize + 5)
+                    CommonUtils.saveFloatPreference(this@DiaryReadActivity, SETTING_FONT_SIZE, fontSize + 5)
                     fragment.setFontsSize()
                 }
                 R.id.zoomOut -> {
-                    CommonUtils.saveFloatPreference(this@DiaryReadActivity, Constants.SETTING_FONT_SIZE, fontSize - 5)
+                    CommonUtils.saveFloatPreference(this@DiaryReadActivity, SETTING_FONT_SIZE, fontSize - 5)
                     fragment.setFontsSize()
                 }
                 R.id.delete -> {
@@ -125,14 +122,14 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 }
                 R.id.edit -> {
                     val updateDiaryIntent = Intent(this@DiaryReadActivity, DiaryUpdateActivity::class.java)
-                    updateDiaryIntent.putExtra(Constants.DIARY_SEQUENCE, fragment.getSequence())
+                    updateDiaryIntent.putExtra(DIARY_SEQUENCE, fragment.getSequence())
                     //                startActivity(updateDiaryIntent);
                     TransitionHelper.startActivityWithTransition(this@DiaryReadActivity, updateDiaryIntent)
                 }
                 R.id.speechOutButton -> textToSpeech(fragment.getDiaryContents())
                 R.id.postCard -> {
                     val postCardIntent = Intent(this@DiaryReadActivity, PostCardActivity::class.java)
-                    postCardIntent.putExtra(Constants.DIARY_SEQUENCE, fragment.getSequence())
+                    postCardIntent.putExtra(DIARY_SEQUENCE, fragment.getSequence())
                     //                startActivityForResult(postCardIntent, Constants.REQUEST_CODE_BACKGROUND_COLOR_PICKER);
                     TransitionHelper.startActivityWithTransition(this@DiaryReadActivity, postCardIntent)
                 }
@@ -222,7 +219,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 .setContentTitle(getString(R.string.read_diary_detail_showcase_title_0))
                 .setContentText(getString(R.string.read_diary_detail_showcase_message_0))
                 .setStyle(R.style.ShowcaseTheme)
-                .singleShot(Constants.SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_NUMBER.toLong())
+                .singleShot(SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_NUMBER.toLong())
                 .setOnClickListener(showcaseViewOnClickListener)
                 .build()
         mShowcaseView?.run {
@@ -302,7 +299,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
             setFontsSize()
         }
 
-        fun getSequence() = arguments?.getInt(Constants.DIARY_SEQUENCE) ?: -1
+        fun getSequence() = arguments?.getInt(DIARY_SEQUENCE) ?: -1
         
         fun getDiaryContents(): String = diaryContents.text.toString() 
         
@@ -316,7 +313,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 date.text = DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis)
                 initBottomContainer()
 
-                val query = arguments?.getString(Constants.DIARY_SEARCH_QUERY)
+                val query = arguments?.getString(DIARY_SEARCH_QUERY)
                 if (StringUtils.isNotEmpty(query)) {
                     context?.config?.run {
                         if (diarySearchQueryCaseSensitive) {
@@ -337,7 +334,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                     photoContainerScrollView.visibility = View.VISIBLE
                     val onClickListener = View.OnClickListener {
                         val photoViewPager = Intent(context, PhotoViewPagerActivity::class.java)
-                        photoViewPager.putExtra(Constants.DIARY_SEQUENCE, getSequence())
+                        photoViewPager.putExtra(DIARY_SEQUENCE, getSequence())
                         startActivity(photoViewPager)
                     }
 
@@ -352,7 +349,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
 //                        imageView.setBackgroundResource(R.drawable.bg_card_thumbnail)
                             val drawable = ContextCompat.getDrawable(appContext, R.drawable.bg_card_thumbnail)
                             val gradient = drawable as GradientDrawable
-                            gradient.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, Constants.THUMBNAIL_BACKGROUND_ALPHA))
+                            gradient.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, THUMBNAIL_BACKGROUND_ALPHA))
                             imageView.background = gradient
                             imageView.setImageBitmap(bitmap)
                             imageView.scaleType = ImageView.ScaleType.CENTER
@@ -392,8 +389,8 @@ class DiaryReadActivity : EasyDiaryActivity() {
             fun newInstance(sequence: Int, query: String?): PlaceholderFragment {
                 val fragment = PlaceholderFragment()
                 val args = Bundle()
-                args.putInt(Constants.DIARY_SEQUENCE, sequence)
-                args.putString(Constants.DIARY_SEARCH_QUERY, query)
+                args.putInt(DIARY_SEQUENCE, sequence)
+                args.putString(DIARY_SEARCH_QUERY, query)
                 fragment.arguments = args
                 return fragment
             }

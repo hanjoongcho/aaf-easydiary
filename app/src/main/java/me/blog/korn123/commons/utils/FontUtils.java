@@ -12,9 +12,12 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 
-import me.blog.korn123.commons.constants.Constants;
-import me.blog.korn123.commons.constants.Path;
 import me.blog.korn123.easydiary.R;
+
+import static me.blog.korn123.easydiary.helper.ConstantsKt.CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT;
+import static me.blog.korn123.easydiary.helper.ConstantsKt.CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT;
+import static me.blog.korn123.easydiary.helper.ConstantsKt.SETTING_FONT_NAME;
+import static me.blog.korn123.easydiary.helper.ConstantsKt.USER_CUSTOM_FONTS_DIRECTORY;
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -35,7 +38,7 @@ public class FontUtils {
     }
 
     public static void setCommonTypeface(Context context, AssetManager assetManager) {
-        String commonFontName = CommonUtils.INSTANCE.loadStringPreference(context, Constants.SETTING_FONT_NAME, Constants.CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT);
+        String commonFontName = CommonUtils.INSTANCE.loadStringPreference(context, SETTING_FONT_NAME, CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT);
         sTypeface = getTypeface(context, assetManager, commonFontName);
     }
 
@@ -67,15 +70,15 @@ public class FontUtils {
     public static Typeface getTypeface(Context context, AssetManager assetManager, String fontName) {
         Typeface typeface = null;
         String[] assetsFonts = context.getResources().getStringArray(R.array.pref_list_fonts_values);
-        String[] userFonts = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + Path.INSTANCE.getUSER_CUSTOM_FONTS_DIRECTORY()).list();
+        String[] userFonts = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + USER_CUSTOM_FONTS_DIRECTORY).list();
         if (isValidTypeface(assetsFonts, fontName)) {
-            if (StringUtils.equals(fontName, Constants.CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT)) {
+            if (StringUtils.equals(fontName, CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT)) {
                 typeface = Typeface.DEFAULT;
             } else {
                 typeface = Typeface.createFromAsset(assetManager, "fonts/" + fontName);
             }
         } else if (isValidTypeface(userFonts, fontName)) {
-            typeface = Typeface.createFromFile(Environment.getExternalStorageDirectory().getAbsolutePath() + Path.INSTANCE.getUSER_CUSTOM_FONTS_DIRECTORY() + fontName);
+            typeface = Typeface.createFromFile(Environment.getExternalStorageDirectory().getAbsolutePath() + USER_CUSTOM_FONTS_DIRECTORY + fontName);
         } else {
             typeface = Typeface.DEFAULT;
         }
