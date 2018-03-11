@@ -1,51 +1,7 @@
 <resources>
     <string name="app_name">이지 다이어리</string>
-
-    <!-- https://github.com/SimpleMobileTools/Simple-Commons START -->
-    <string name="ok">확인</string>
-    <string name="cancel">취소</string>
-    <string name="simple_commons">Simple Commons</string>
-    <string name="value_copied_to_clipboard">Value copied to clipboard</string>
-
-    <!-- Color customization -->
-    <string name="background_color">배경 색상</string>
-    <string name="text_color">텍스트 색상</string>
-    <string name="primary_color">주요 색상(테마)</string>
-    <string name="restore_defaults">기본설정으로 변경</string>
-    <string name="theme">테마</string>
-    <string name="changing_color_description">Changing a color will make it switch to Custom theme</string>
-    <string name="save">저장</string>
-    <string name="discard">취소</string>
-    <string name="undo_changes">변경사항 되돌리기</string>
-    <string name="undo_changes_confirmation">변경된 사항을  되돌리겠습니까?</string>
-    <string name="save_before_closing">변경사항을 저장하지 않았습니다. 종료전에 저장 하시겠습니까?</string>
-    <string name="apply_to_all_apps">심플 시리즈 애플리케이션에 일괄적용</string>
-
-    <!-- Themes -->
-    <string name="light_theme">Light</string>
-    <string name="dark_theme">Dark</string>
-    <string name="solarized">Solarized</string>
-    <string name="dark_red">Dark red</string>
-    <string name="custom">Custom</string>
-    <string name="shared">Shared</string>
-
-    <!-- Settings -->
-    <string name="settings">설정</string>
-    <string name="customize_colors">앱 테마 및 색상 설정</string>
-    <string name="use_english_language">영어 사용</string>
-    <string name="show_hidden_items">숨김항목 활성화</string>
-    <string name="font_size">폰트 크기</string>
-    <string name="small">작게</string>
-    <string name="medium">중간</string>
-    <string name="large">크게</string>
-    <string name="extra_large">아주 크게</string>
-    <string name="password_protect_hidden_items">숨김파일 보기 암호설정</string>
-    <string name="password_protect_whole_app">애플리케이션 전체에서 암호를 이용한 보호기능 사용</string>
-    <string name="keep_last_modified">파일 복사/이동/변경 시 이전파일을 보관</string>
-    <string name="show_info_bubble">스크롤바 드래그 시 항목별 툴팁 활성화</string>
-    <!-- https://github.com/SimpleMobileTools/Simple-Commons END -->
     
-    <!--Common-->
+    <!--Commons-->
     <string name="common_create_seconds">Creation Seconds</string>
 
     <!--DiaryInsertActivity-->
@@ -111,7 +67,7 @@
     <string name="read_diary_showcase_message_7">고급설정을 이용하여 폰트변경, 잠금번호설정, 다이어리 백업 및 복구 작업을 할 수 있습니다.</string>
     <string name="read_diary_showcase_message_8">목록내의 다이어리카드를 클릭하면 해당 다이어리를 볼 수 있습니다.</string>
     <string name="diary_photo_migration_message">이지다이어리의 사진첨부 방식이 변경되어 기존 링크정보를 이지다이어리 폴더에 압축하여 저장합니다.\n작업이 완료될때까지 잠시 기다려 주시기 바랍니다.</string>
-    
+
     <!--DiaryReadActivity-->
     <string name="read_diary_detail_title">다이어리 열람</string>
     <string name="delete_confirm">삭제 하시겠습니까?</string>
@@ -135,7 +91,6 @@
     <string name="back_pressed_confirm">\'확인\' 버튼을 누르시면 현재 다이어리를 저장하지 않고 이전 화면으로 이동합니다.</string>
 
     <!--SettingsActivity-->
-    <string name="setting_title">환경설정</string>
     <string name="lock_number">설정된 잠금번호:</string>
     <string name="rate_app">앱 평가하기</string>
     <string name="guide_message_3">요청작업에 대한 권한이 충분하지 않습니다.</string>
@@ -162,7 +117,7 @@
     <string name="easy_photo_map_summary">이지 포토맵은 사진에 포함된 위치정보를 이용하여 사진이 촬영된 위치를 지도 위에 표시해주는 포토맵 애플리케이션입니다.</string>
     <string name="easy_password_title">이지 패스워드</string>
     <string name="easy_password_summary">이지 패스워드는 로그인, 문서보안, 도어락, 자물쇠, 신용카드, 계좌관리등에 사용하는 비밀번호를 사용자가 설정한 하나의 잠금번호를 이용하여 관리 할 수 있도록 도와주는 애플리케이션입니다.</string>
-    
+
     <!--CalendarActivity-->
     <string name="calendar_title">캘린더</string>
     <string name="guide_message_4">해당일에 작성된 일기가 없습니다.</string>
@@ -221,32 +176,4 @@
 
     <!--diary_read.xml-->
     <string name="menu_delete">삭제</string>
-    
-    <!--Array-->
-    <string-array name="weather_item_array">
-        <item>날씨선택</item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-    </string-array>
-
-    <string-array name="pref_list_fonts_title">
-        <item>나눔손글씨 펜</item>
-        <item>나눔손글씨 붓</item>
-        <item>동그라미재단L</item>
-        <item>디바이스 설정폰트</item>
-    </string-array>
-    <string-array name="pref_list_fonts_values">
-        <item>NanumPen.ttf</item>
-        <item>NanumBrush.ttf</item>
-        <item>TheCircleL.ttf</item>
-        <item>Default</item>
-    </string-array>
 </resources>

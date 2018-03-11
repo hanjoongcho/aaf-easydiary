@@ -1,51 +1,7 @@
 <resources>
     <string name="app_name">Easy Diary</string>
-
-    <!-- https://github.com/SimpleMobileTools/Simple-Commons START -->
-    <string name="ok">OK</string>
-    <string name="cancel">Cancel</string>
-    <string name="simple_commons">Simple Commons</string>
-    <string name="value_copied_to_clipboard">Value copied to clipboard</string>
-
-    <!-- Color customization -->
-    <string name="background_color">Background color</string>
-    <string name="text_color">Text color</string>
-    <string name="primary_color">Primary color</string>
-    <string name="restore_defaults">Restore defaults</string>
-    <string name="theme">Theme</string>
-    <string name="changing_color_description">Changing a color will make it switch to Custom theme</string>
-    <string name="save">Save</string>
-    <string name="discard">Discard</string>
-    <string name="undo_changes">Undo changes</string>
-    <string name="undo_changes_confirmation">Are you sure you want to undo your changes?</string>
-    <string name="save_before_closing">You have unsaved changes. Save before exit?</string>
-    <string name="apply_to_all_apps">Apply colors to all Simple Apps</string>
-
-    <!-- Themes -->
-    <string name="light_theme">Light</string>
-    <string name="dark_theme">Dark</string>
-    <string name="solarized">Solarized</string>
-    <string name="dark_red">Dark red</string>
-    <string name="custom">Custom</string>
-    <string name="shared">Shared</string>
     
-    <!-- Settings -->
-    <string name="settings">Settings</string>
-    <string name="customize_colors">Customize colors</string>
-    <string name="use_english_language">Use English language</string>
-    <string name="show_hidden_items">Show hidden items</string>
-    <string name="font_size">Font size</string>
-    <string name="small">Small</string>
-    <string name="medium">Medium</string>
-    <string name="large">Large</string>
-    <string name="extra_large">Extra large</string>
-    <string name="password_protect_hidden_items">Password protect hidden item visibility</string>
-    <string name="password_protect_whole_app">Password protect the whole application</string>
-    <string name="keep_last_modified">Keep old last-modified value at file copy/move/rename</string>
-    <string name="show_info_bubble">Show an info bubble at scrolling items by scrollbar dragging</string>
-    <!-- https://github.com/SimpleMobileTools/Simple-Commons END -->
-    
-    <!--Common-->
+    <!--Commons-->
     <string name="common_create_seconds">Creation Seconds</string>
 
     <!--DiaryInsertActivity-->
@@ -135,7 +91,6 @@
     <string name="back_pressed_confirm">Click the \'OK\' button to go to the previous screen without saving the current diary.</string>
 
     <!--SettingsActivity-->
-    <string name="setting_title">Preferences</string>
     <string name="lock_number">Lock Number:</string>
     <string name="rate_app">Rate App</string>
     <string name="guide_message_3">Insufficient permission for the request feature.</string>
@@ -221,26 +176,4 @@
 
     <!--diary_read.xml-->
     <string name="menu_delete">Delete</string>
-    
-    <!--Array-->
-    <string-array name="weather_item_array">
-        <item>Weather</item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-    </string-array>
-
-    <string-array name="pref_list_fonts_title">
-        <item>Device setting font</item>
-    </string-array>
-    <string-array name="pref_list_fonts_values">
-        <item>Default</item>
-    </string-array>
 </resources>

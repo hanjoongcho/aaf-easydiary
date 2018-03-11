@@ -1,21 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--App Color-->
-    <color name="colorPrimaryDark">#05868C</color>
-    <color name="colorPrimary">#07ABB3</color>
-    <color name="colorPrimaryWithAlpha">#8007ABB3</color>
-    <color name="colorAccent">@color/colorPrimary</color>
-    <color name="colorAccentWithAlpha">#1007ABB3</color>
     <color name="appBackground">@android:color/white</color>
-
-    <color name="color_primary">@color/colorPrimary</color>
-    <color name="color_primary_dark">@color/colorPrimaryDark</color>
-    <color name="color_accent">@color/colorAccent</color>
-    
+    <color name="calendarBackground">@android:color/white</color>
     <color name="diaryCountText">#FF33B5E5</color>
-    <color name="calendarBackground">#FFFFFF</color>
 
     <!--Showcase Color-->
-    <color name="showCaseViewBackground">#e570A3B4</color>
-    <color name="showCaseButtonBackground">#4A4A4C</color>
+    <color name="showCaseViewBackground">#E570A3B4</color>
 </resources>

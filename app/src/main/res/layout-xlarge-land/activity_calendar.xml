@@ -28,7 +28,6 @@
         <LinearLayout
             android:orientation="horizontal"
             android:padding="@dimen/card_layout_padding"
-            android:background="@color/colorAccentWithAlpha"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
