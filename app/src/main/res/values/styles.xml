@@ -1,31 +1,55 @@
 <resources>
-    <!-- Base application theme. -->
+    <!--App Theme-->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <!--<item name="actionBarStyle">@style/AppTheme.ActionBar</item>-->
     </style>
-    
-    <!--Common-->
+    <style name="AppTheme.ActionBar" parent="@style/Widget.AppCompat.ActionBar.Solid">
+        <item name="titleTextStyle">@style/AppTheme.ActionBar.TitleTextStyle</item>
+    </style>
+    <style name="AppTheme.ActionBar.TitleTextStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <!--<item name="android:typeface">normal</item>-->
+        <item name="android:textStyle">italic</item>
+    </style>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="colorAccent">@color/white</item>
+    </style>
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:fastScrollThumbDrawable">@drawable/ic_fast_scroll</item>
+        <item name="android:fastScrollTrackDrawable">@null</item>
+    </style>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:actionButtonStyle">@style/MyActionButtonStyle</item>
+    </style>
+    <style name="AppTheme.FullScreen">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+    <style name="AppFullScreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
     <style name="ToolBarIcon">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/ic_selector</item>
         <item name="android:padding">10dp</item>
     </style>
-
     <style name="linear_layout_vertical_type_a">
         <item name="android:orientation">vertical</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
-
     <style name="linear_layout_vertical_type_b" parent="linear_layout_vertical_type_a">
         <item name="android:orientation">horizontal</item>
     </style>
-    
     <style name="DiaryCard">
         <item name="contentPadding">@dimen/card_contents_padding</item>
         <item name="cardCornerRadius">@dimen/card_radius</item>
@@ -34,42 +58,31 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:foreground">?attr/selectableItemBackground</item>    
     </style>
-
     <style name="DiaryCardTimeline" parent="DiaryCard">
         <item name="android:layout_width">wrap_content</item>
     </style>
-
     <style name="DiaryCardSettings" parent="DiaryCard">
         <item name="android:layout_marginBottom">@dimen/card_layout_margin</item>
     </style>
-
     <style name="EditTitleCard" parent="DiaryCard">
         <item name="contentPaddingTop">5dp</item>
         <item name="contentPaddingBottom">5dp</item>
     </style>
-
-    <!--DiaryMainActivity-->
     <style name="item_diary_card_main">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">@dimen/diary_card_text_padding</item>
     </style>
-
-    <!--DiaryReadActivity-->
     <style name="fragment_diary_card">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">@dimen/diary_card_text_padding</item>
     </style>
-
-    <!--DiaryInsertActivity-->
     <style name="activity_insert_diary_card">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">@dimen/diary_card_text_padding</item>
     </style>
-
-    <!--DiaryLockActivity-->
     <style name="DiaryLockInputNum">
         <item name="android:textStyle">bold</item>
         <item name="android:gravity">center</item>
@@ -79,7 +92,6 @@
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">50dp</item>
     </style>
-
     <style name="DiaryLockKeypadGroup">
         <item name="android:paddingLeft">10dp</item>
         <item name="android:paddingRight">10dp</item>
@@ -89,7 +101,6 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
-
     <style name="DiaryLockKeypad">
         <item name="android:textStyle">bold</item>
         <item name="android:layout_marginRight">5dp</item>
@@ -99,15 +110,12 @@
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">50dp</item>
     </style>
-
-    <!--SettingActivity Style-->
     <style name="SettingActivityDivider">
         <item name="android:background">?attr/colorPrimary</item>
         <item name="android:alpha">0.1</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
     </style>
-
     <style name="SettingActivityCategory">
         <item name="android:paddingTop">5dp</item>
         <item name="android:paddingRight">10dp</item>
@@ -117,64 +125,23 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
-
     <style name="SettingActivityTitle">
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/default_text_color</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
-
     <style name="SettingActivitySummary" parent="SettingActivityTitle">
         <item name="android:textStyle">normal</item>
         <item name="android:alpha">0.7</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
-
-    <style name="AppTheme.ActionBar" parent="@style/Widget.AppCompat.ActionBar.Solid">
-        <item name="titleTextStyle">@style/AppTheme.ActionBar.TitleTextStyle</item>
-    </style>
-
-    <style name="AppTheme.ActionBar.TitleTextStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <!--<item name="android:typeface">normal</item>-->
-        <item name="android:textStyle">italic</item>
-    </style>
-
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-        <item name="colorAccent">@color/white</item>
-    </style>
-
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:fastScrollThumbDrawable">@drawable/ic_fast_scroll</item>
-        <item name="android:fastScrollTrackDrawable">@null</item>
-    </style>
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
-        <item name="android:actionButtonStyle">@style/MyActionButtonStyle</item>
-    </style>
-
-    <style name="AppTheme.FullScreen">
-        <item name="windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowContentOverlay">@null</item>
-    </style>
-
-    <style name="AppFullScreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowActionBar">false</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowContentOverlay">@null</item>
-    </style>
-    
     <style name="MyActionButtonStyle"  parent="@android:style/Widget.ActionButton">
         <item name="android:drawablePadding">0dp</item>
     </style>
 
-    <!--Override Caldroid theme-->
+    <!--Caldroid theme-->
     <style name="CaldroidDefaultGridView">
         <item name="android:adjustViewBounds">true</item>
         <item name="android:gravity">center_horizontal</item>
@@ -184,29 +151,24 @@
         <item name="android:padding">1dp</item>
         <item name="android:verticalSpacing">1dp</item>
     </style>
-
     <style name="CaldroidDefaultCalendarViewLayout">
         <item name="android:padding">5dp</item>
         <item name="android:background">@drawable/bg_card_diary</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
     </style>
-
     <style name="CaldroidDefaultArrowButton">
         <item name="android:layout_width">42dp</item>
         <item name="android:layout_height">42dp</item>
     </style>
-
     <style name="CaldroidDefaultLeftButton" parent="CaldroidDefaultArrowButton">
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:background">@drawable/arrow_94_b</item>
     </style>
-
     <style name="CaldroidDefaultRightButton" parent="CaldroidDefaultArrowButton">
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:background">@drawable/arrow_3_b</item>
     </style>
-
     <style name="CaldroidDefaultMonthNameLand">
         <item name="android:textColor">@android:color/black</item>
         <item name="android:layout_width">0dp</item>
@@ -220,17 +182,14 @@
     <!--Showcase theme-->
     <style name="ShowcaseTheme" parent="ShowcaseView">
         <item name="sv_backgroundColor">@color/showCaseViewBackground</item>
-        <item name="sv_buttonBackgroundColor">@color/showCaseButtonBackground</item>
         <item name="sv_titleTextAppearance">@style/CustomTitle</item>
         <item name="sv_detailTextAppearance">@style/CustomText</item>
     </style>
-
     <style name="CustomTitle" parent="TextAppearance.ShowcaseView.Title.Light">
-        <item name="android:textColor">#ffffffff</item>
+        <item name="android:textColor">#FFFFFFFF</item>
         <item name="android:textStyle">bold</item>
     </style>
-
     <style name="CustomText" parent="TextAppearance.ShowcaseView.Detail.Light">
-        <item name="android:textColor">#deffffff</item>
+        <item name="android:textColor">#DEFFFFFF</item>
     </style>
 </resources>

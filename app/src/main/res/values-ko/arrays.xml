@@ -1,0 +1,28 @@
+<resources>
+    <string-array name="weather_item_array">
+        <item>날씨선택</item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+    </string-array>
+
+    <string-array name="pref_list_fonts_title">
+        <item>나눔손글씨 펜</item>
+        <item>나눔손글씨 붓</item>
+        <item>동그라미재단L</item>
+        <item>디바이스 설정폰트</item>
+    </string-array>
+    <string-array name="pref_list_fonts_values">
+        <item>NanumPen.ttf</item>
+        <item>NanumBrush.ttf</item>
+        <item>TheCircleL.ttf</item>
+        <item>Default</item>
+    </string-array>
+</resources>
