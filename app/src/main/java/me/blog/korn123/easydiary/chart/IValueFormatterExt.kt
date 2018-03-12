@@ -11,7 +11,7 @@ import me.blog.korn123.easydiary.activities.BarChartActivity
  * Created by CHO HANJOONG on 2017-03-23.
  */
 
-class IValueFormatterExt(internal var barChartActivity: BarChartActivity) : IValueFormatter {
+class IValueFormatterExt(private var barChartActivity: BarChartActivity) : IValueFormatter {
 
     /**
      * Called when a value (from labels inside the chart) is formatted
