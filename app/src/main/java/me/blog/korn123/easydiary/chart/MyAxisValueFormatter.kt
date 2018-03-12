@@ -8,7 +8,7 @@ import java.text.DecimalFormat
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.BarChartActivity
 
-class MyAxisValueFormatter(internal var barChartActivity: BarChartActivity) : IAxisValueFormatter {
+class MyAxisValueFormatter(private var barChartActivity: BarChartActivity) : IAxisValueFormatter {
     private val mFormat: DecimalFormat = DecimalFormat("###,###,###,##0")
 
     override fun getFormattedValue(value: Float, axis: AxisBase): String {
