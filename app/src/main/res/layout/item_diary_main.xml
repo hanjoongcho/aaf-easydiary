@@ -36,6 +36,8 @@
                 android:maxLines="3"
                 android:gravity="left"
                 style="@style/item_diary_card_main"/>
+            
+            <include layout="@layout/layout_edit_photo_container" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </RelativeLayout>    
