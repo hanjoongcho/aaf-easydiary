@@ -1,9 +1,11 @@
 package me.blog.korn123.commons.utils
 
+import android.app.Activity
 import android.content.ContentResolver
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Point
 import android.net.Uri
 import android.util.TypedValue
 import id.zelory.compressor.Compressor
@@ -72,8 +74,8 @@ object CommonUtils {
     fun photoUriToDownSamplingBitmap(
             context: Context,
             photoUriDto: PhotoUriDto,
-            requiredSize: Int = 70,
-            fixedWidth: Int = 65,
+            requiredSize: Int = 50,
+            fixedWidth: Int = 45,
             fixedHeight: Int = 45
     ): Bitmap = try {
             when (photoUriDto.isContentUri()) {
@@ -108,5 +110,12 @@ object CommonUtils {
            null
         }
         return bitmap
+    }
+
+    fun getDefaultDisplay(activity: Activity): Point {
+        val display = activity.windowManager.defaultDisplay
+        val size = Point()
+        display.getSize(size)
+        return size
     }
 }

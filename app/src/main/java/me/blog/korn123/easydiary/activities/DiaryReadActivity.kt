@@ -345,7 +345,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                         diaryDto.photoUris?.map {
                             val bitmap = CommonUtils.photoUriToDownSamplingBitmap(appContext, it)
                             val imageView = ImageView(context)
-                            val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(appContext, 70, 1), CommonUtils.dpToPixel(appContext, 50, 1))
+                            val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(appContext, 50, 1), CommonUtils.dpToPixel(appContext, 50, 1))
                             layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(appContext, 3, 1), 0)
                             imageView.layoutParams = layoutParams
 //                        imageView.setBackgroundResource(R.drawable.bg_card_thumbnail)

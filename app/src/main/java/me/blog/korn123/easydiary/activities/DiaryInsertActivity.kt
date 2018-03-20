@@ -206,9 +206,9 @@ class DiaryInsertActivity : EasyDiaryActivity() {
                 try {
                     CommonUtils.uriToFile(this, data.data!!, photoPath)
                     mPhotoUris.add(PhotoUriDto(FILE_URI_PREFIX + photoPath))
-                    val bitmap = BitmapUtils.decodeFile(applicationContext, photoPath, CommonUtils.dpToPixel(applicationContext, 70, 1), CommonUtils.dpToPixel(applicationContext, 65, 1), CommonUtils.dpToPixel(applicationContext, 45, 1))
+                    val bitmap = BitmapUtils.decodeFile(applicationContext, photoPath, CommonUtils.dpToPixel(applicationContext, 50, 1), CommonUtils.dpToPixel(applicationContext, 45, 1), CommonUtils.dpToPixel(applicationContext, 45, 1))
                     val imageView = ImageView(applicationContext)
-                    val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(applicationContext, 70, 1), CommonUtils.dpToPixel(applicationContext, 50, 1))
+                    val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(applicationContext, 50, 1), CommonUtils.dpToPixel(applicationContext, 50, 1))
                     layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(applicationContext, 3, 1), 0)
                     imageView.layoutParams = layoutParams
                     val drawable = ContextCompat.getDrawable(this, R.drawable.bg_card_thumbnail)
@@ -383,7 +383,7 @@ class DiaryInsertActivity : EasyDiaryActivity() {
             for ((index, dto) in mPhotoUris.withIndex()) {
                 val bitmap = CommonUtils.photoUriToDownSamplingBitmap(this, dto)
                 val imageView = ImageView(this)
-                val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(this, 70, 1), CommonUtils.dpToPixel(this, 50, 1))
+                val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(this, 50, 1), CommonUtils.dpToPixel(this, 50, 1))
                 layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(this, 3, 1), 0)
                 imageView.layoutParams = layoutParams
                 val drawable = ContextCompat.getDrawable(this, R.drawable.bg_card_thumbnail)
