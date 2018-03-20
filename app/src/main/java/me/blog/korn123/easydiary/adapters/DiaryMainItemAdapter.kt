@@ -116,7 +116,7 @@ class DiaryMainItemAdapter(
                 }
             } else {
                 activity.runOnUiThread {
-                    holder.photoContainer.visibility = View.VISIBLE
+                    holder.photoContainer.visibility = View.GONE
                 }
             }
         }
