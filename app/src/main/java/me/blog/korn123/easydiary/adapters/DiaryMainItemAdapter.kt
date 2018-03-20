@@ -42,7 +42,6 @@ class DiaryMainItemAdapter(
             holder.textView3 = row.findViewById(R.id.text3)
             holder.imageView = row.findViewById(R.id.weather)
             holder.item_holder = row.findViewById(R.id.item_holder)
-            holder.photoContainerScrollView = row.findViewById(R.id.photoContainerScrollView)
             holder.photoContainer = row.findViewById(R.id.photoContainer)
             row.tag = holder
         } else {
@@ -80,13 +79,13 @@ class DiaryMainItemAdapter(
         FontUtils.setFontsTypeface(context, context.assets, null, holder.textView1, holder.textView2, holder.textView3)
 
         if (diaryDto.photoUris?.size ?: 0 > 0) {
-            holder.photoContainerScrollView.visibility = View.VISIBLE
+            holder.photoContainer.visibility = View.VISIBLE
             if (holder.photoContainer.childCount > 0) holder.photoContainer.removeAllViews()
             context?.let { appContext ->
                 diaryDto.photoUris?.map {
-                    val bitmap = CommonUtils.photoUriToDownSamplingBitmap(appContext, it)
+                    val bitmap = CommonUtils.photoUriToDownSamplingBitmap(appContext, it, 70, 30, 30)
                     val imageView = ImageView(context)
-                    val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(appContext, 70, 1), CommonUtils.dpToPixel(appContext, 50, 1))
+                    val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(appContext, 33, 1), CommonUtils.dpToPixel(appContext, 33, 1))
                     layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(appContext, 3, 1), 0)
                     imageView.layoutParams = layoutParams
 //                        imageView.setBackgroundResource(R.drawable.bg_card_thumbnail)
@@ -100,14 +99,13 @@ class DiaryMainItemAdapter(
                 }
             }
         } else {
-            holder.photoContainerScrollView.visibility = View.GONE
+            holder.photoContainer.visibility = View.GONE
         }
         
         return row
     }
 
     private class ViewHolder {
-        lateinit var photoContainerScrollView: HorizontalScrollView
         lateinit var photoContainer: LinearLayout
         var textView1: TextView? = null
         var textView2: TextView? = null

@@ -69,14 +69,19 @@ object CommonUtils {
         return result
     }
     
-    fun photoUriToDownSamplingBitmap(context: Context, photoUriDto: PhotoUriDto): Bitmap {
-        val bitmap: Bitmap = try {
+    fun photoUriToDownSamplingBitmap(
+            context: Context,
+            photoUriDto: PhotoUriDto,
+            requiredSize: Int = 70,
+            fixedWidth: Int = 65,
+            fixedHeight: Int = 45
+    ): Bitmap = try {
             when (photoUriDto.isContentUri()) {
                 true -> {
-                    BitmapUtils.decodeUri(context, Uri.parse(photoUriDto.photoUri), CommonUtils.dpToPixel(context, 70, 1), CommonUtils.dpToPixel(context, 65, 1), CommonUtils.dpToPixel(context, 45, 1))
+                    BitmapUtils.decodeUri(context, Uri.parse(photoUriDto.photoUri), CommonUtils.dpToPixel(context, requiredSize, 1), CommonUtils.dpToPixel(context, fixedWidth, 1), CommonUtils.dpToPixel(context, fixedHeight, 1))
                 }
                 false -> {
-                    BitmapUtils.decodeFile(context, photoUriDto.getFilePath(), CommonUtils.dpToPixel(context, 70, 1), CommonUtils.dpToPixel(context, 65, 1), CommonUtils.dpToPixel(context, 45, 1))
+                    BitmapUtils.decodeFile(context, photoUriDto.getFilePath(), CommonUtils.dpToPixel(context, requiredSize, 1), CommonUtils.dpToPixel(context, fixedWidth, 1), CommonUtils.dpToPixel(context, fixedHeight, 1))
                 }
             }
         } catch (e: FileNotFoundException) {
@@ -86,8 +91,7 @@ object CommonUtils {
             se.printStackTrace()
             BitmapFactory.decodeResource(context.resources, R.drawable.question_shield)
         }
-        return bitmap
-    }
+    
 
     fun photoUriToBitmap(context: Context, photoUriDto: PhotoUriDto): Bitmap? {
         val bitmap: Bitmap? = try {
