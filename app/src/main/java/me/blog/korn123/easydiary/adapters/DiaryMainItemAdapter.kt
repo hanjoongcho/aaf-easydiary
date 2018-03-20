@@ -1,12 +1,12 @@
 package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
-import android.content.Context
+import android.graphics.drawable.GradientDrawable
+import android.support.v4.content.ContextCompat
+import android.support.v4.graphics.ColorUtils
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
@@ -15,7 +15,8 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.updateTextColors
-import me.blog.korn123.easydiary.helper.DIARY_SEARCH_QUERY_CASE_SENSITIVE
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
 
@@ -24,24 +25,24 @@ import org.apache.commons.lang3.StringUtils
  */
 
 class DiaryMainItemAdapter(
-        context: Context,
+        private val activity: Activity,
         private val layoutResourceId: Int,
         private val list: List<DiaryDto>
-) : ArrayAdapter<DiaryDto>(context, layoutResourceId, list) {
+) : ArrayAdapter<DiaryDto>(activity, layoutResourceId, list) {
     var currentQuery: String? = null
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
         var row = convertView
-        var holder: ViewHolder? = null
+        val holder: ViewHolder 
         if (row == null) {
-            val inflater = (this.context as Activity).layoutInflater
-            row = inflater.inflate(this.layoutResourceId, parent, false)
+            row = activity.layoutInflater.inflate(this.layoutResourceId, parent, false)
             holder = ViewHolder()
             holder.textView1 = row.findViewById(R.id.text1)
             holder.textView2 = row.findViewById(R.id.text2)
             holder.textView3 = row.findViewById(R.id.text3)
             holder.imageView = row.findViewById(R.id.weather)
             holder.item_holder = row.findViewById(R.id.item_holder)
+            holder.photoContainer = row.findViewById(R.id.photoContainer)
             row.tag = holder
         } else {
             holder = row.tag as ViewHolder
@@ -76,14 +77,58 @@ class DiaryMainItemAdapter(
         }
 
         FontUtils.setFontsTypeface(context, context.assets, null, holder.textView1, holder.textView2, holder.textView3)
+        holder.attachPhotoLoader?.interrupt()
+        val attachPhotoLoader = AttachPhotoLoader(activity, diaryDto.sequence, holder)
+        holder.attachPhotoLoader = attachPhotoLoader
+        attachPhotoLoader.start()
         return row
+    }
+    
+    private class AttachPhotoLoader(val activity: Activity, val sequence: Int, val holder: ViewHolder) : Thread() {
+        override fun run() {
+            super.run()
+            val diaryDto: DiaryDto = EasyDiaryDbHelper.readDiaryBy(sequence)
+            if (diaryDto.photoUris?.size ?: 0 > 0) {
+                activity.runOnUiThread {
+                    holder.photoContainer.visibility = View.VISIBLE
+                    if (holder.photoContainer.childCount > 0) holder.photoContainer.removeAllViews()
+                }
+
+                val maxPhotos = CommonUtils.getDefaultDisplay(activity).x / CommonUtils.dpToPixel(activity, 40, 1)
+                
+                diaryDto.photoUris?.map {
+                    val bitmap = CommonUtils.photoUriToDownSamplingBitmap(activity, it, 30, 25, 25)
+                    val imageView = ImageView(activity)
+                    val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(activity, 28, 1), CommonUtils.dpToPixel(activity, 28, 1))
+                    layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(activity, 3, 1), 0)
+                    imageView.layoutParams = layoutParams
+//                        imageView.setBackgroundResource(R.drawable.bg_card_thumbnail)
+                    val drawable = ContextCompat.getDrawable(activity, R.drawable.bg_card_thumbnail)
+                    val gradient = drawable as GradientDrawable
+                    gradient.setColor(ColorUtils.setAlphaComponent(activity.config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA))
+                    imageView.background = gradient
+                    imageView.setImageBitmap(bitmap)
+                    imageView.scaleType = ImageView.ScaleType.CENTER
+                    activity.runOnUiThread {
+                        if (holder.photoContainer.childCount >= maxPhotos) return@runOnUiThread
+                        holder.photoContainer.addView(imageView)
+                    }
+                }
+            } else {
+                activity.runOnUiThread {
+                    holder.photoContainer.visibility = View.GONE
+                }
+            }
+        }
     }
 
     private class ViewHolder {
-        internal var textView1: TextView? = null
-        internal var textView2: TextView? = null
-        internal var textView3: TextView? = null
-        internal var imageView: ImageView? = null
-        internal var item_holder: ViewGroup? = null
+        lateinit var photoContainer: LinearLayout
+        var textView1: TextView? = null
+        var textView2: TextView? = null
+        var textView3: TextView? = null
+        var imageView: ImageView? = null
+        var item_holder: ViewGroup? = null
+        var attachPhotoLoader: AttachPhotoLoader? = null
     }
 }

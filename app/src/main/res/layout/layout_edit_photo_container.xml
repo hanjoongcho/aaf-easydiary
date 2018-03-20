@@ -1,7 +1,8 @@
 <HorizontalScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="50dp">
+    android:layout_height="50dp"
+    android:id="@+id/photoContainerScrollView">
     <LinearLayout
         android:id="@+id/photoContainer"
         android:gravity="center"
@@ -13,7 +14,7 @@
             android:scaleType="center"
             android:background="@drawable/bg_card_thumbnail"
             android:src="@drawable/image_2_w"
-            android:layout_width="70dp"
+            android:layout_width="50dp"
             android:layout_height="50dp" />
     </LinearLayout>
 </HorizontalScrollView>
