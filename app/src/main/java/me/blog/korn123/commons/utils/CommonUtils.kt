@@ -16,7 +16,6 @@ import org.apache.commons.io.IOUtils
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
-import java.io.IOException
 
 
 /**
@@ -83,7 +82,11 @@ object CommonUtils {
                     BitmapUtils.decodeUri(context, Uri.parse(photoUriDto.photoUri), CommonUtils.dpToPixel(context, requiredSize, 1), CommonUtils.dpToPixel(context, fixedWidth, 1), CommonUtils.dpToPixel(context, fixedHeight, 1))
                 }
                 false -> {
-                    BitmapUtils.decodeFile(context, photoUriDto.getFilePath(), CommonUtils.dpToPixel(context, requiredSize, 1), CommonUtils.dpToPixel(context, fixedWidth, 1), CommonUtils.dpToPixel(context, fixedHeight, 1))
+                    when (fixedWidth == fixedHeight) {
+                        true -> BitmapUtils.decodeFileCropCenter(photoUriDto.getFilePath(), CommonUtils.dpToPixel(context, requiredSize, 1), CommonUtils.dpToPixel(context, fixedWidth, 1))
+                        false -> BitmapUtils.decodeFile(context, photoUriDto.getFilePath(), CommonUtils.dpToPixel(context, requiredSize, 1), CommonUtils.dpToPixel(context, fixedWidth, 1), CommonUtils.dpToPixel(context, fixedHeight, 1))
+                    }
+                    
                 }
             }
         } catch (e: FileNotFoundException) {
