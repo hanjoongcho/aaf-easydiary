@@ -86,7 +86,6 @@ class DiaryMainItemAdapter(
             }
             false -> holder.photoContainer.visibility = View.GONE
         } 
-        
         FontUtils.setFontsTypeface(context, context.assets, null, holder.textView1, holder.textView2, holder.textView3)
         holder.attachPhotoLoader?.interrupt()
         val attachPhotoLoader = AttachPhotoLoader(activity, diaryDto.sequence, holder)
@@ -98,14 +97,10 @@ class DiaryMainItemAdapter(
     private class AttachPhotoLoader(val activity: Activity, val sequence: Int, val holder: ViewHolder) : Thread() {
         override fun run() {
             super.run()
+            val photoViews = mutableListOf<ImageView>()
             val diaryDto: DiaryDto = EasyDiaryDbHelper.readDiaryBy(sequence)
             if (diaryDto.photoUris?.size ?: 0 > 0) {
-                activity.runOnUiThread {
-                    if (holder.photoViews.childCount > 0) holder.photoViews.removeAllViews()
-                }
-
                 val maxPhotos = CommonUtils.getDefaultDisplay(activity).x / CommonUtils.dpToPixel(activity, 40, 1)
-                
                 diaryDto.photoUris?.map {
                     val bitmap = CommonUtils.photoUriToDownSamplingBitmap(activity, it, 30, 25, 25)
                     val imageView = ImageView(activity)
@@ -119,15 +114,19 @@ class DiaryMainItemAdapter(
                     imageView.background = gradient
                     imageView.setImageBitmap(bitmap)
                     imageView.scaleType = ImageView.ScaleType.CENTER
-                    activity.runOnUiThread {
-                        if (holder.photoViews.childCount >= maxPhotos) return@runOnUiThread
-                        holder.photoViews.addView(imageView)
-                    }
+                    if (photoViews.size >= maxPhotos) return@map 
+                    photoViews.add(imageView)
                 }
 
-                activity.runOnUiThread {
-                    holder.photoViews.visibility = View.VISIBLE
-                    holder.photoProgressBar.visibility = View.GONE
+                if (!isInterrupted) {
+                    activity.runOnUiThread {
+                        holder.photoViews.removeAllViews()
+                        photoViews.map {
+                            holder.photoViews.addView(it)
+                        }
+                        holder.photoViews.visibility = View.VISIBLE
+                        holder.photoProgressBar.visibility = View.GONE
+                    }
                 }
             } 
         }
