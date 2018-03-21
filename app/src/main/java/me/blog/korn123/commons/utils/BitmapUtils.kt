@@ -72,6 +72,66 @@ object BitmapUtils {
         return Bitmap.createScaledBitmap(tempBitmap, fixedWidth, fixedHeight, false)
     }
 
+    fun decodeFileCropCenter(path: String, requiredSize: Int, fixedWidthHeight: Int): Bitmap {
+        val options = BitmapFactory.Options()
+        options.inJustDecodeBounds = true
+        var inputStream: InputStream = FileUtils.openInputStream(File(path))
+        BitmapFactory.decodeStream(inputStream, null, options)
+        IOUtils.closeQuietly(inputStream)
+        var tempWidth = options.outWidth
+        var tempHeight = options.outHeight
+        var scale = 1
+
+        while (true) {
+            if (tempWidth / 2 < requiredSize || tempHeight / 2 < requiredSize)
+                break
+            tempWidth /= 2
+            tempHeight /= 2
+            scale *= 2
+        }
+
+        inputStream = FileUtils.openInputStream(File(path))
+        options.inJustDecodeBounds = false
+        options.inSampleSize = if (scale > 1) scale / 2 else scale
+        val tempBitmap = BitmapFactory.decodeStream(inputStream, null, options)
+        var downSampling = when (tempBitmap.width > tempBitmap.height) {
+            true -> {
+                val ratio: Float = fixedWidthHeight * 1.0F / tempBitmap.height 
+                Bitmap.createScaledBitmap(tempBitmap, (tempBitmap.width * ratio).toInt(), (tempBitmap.height * ratio).toInt(), false) 
+            }
+            false -> {
+                val ratio: Float = fixedWidthHeight * 1.0F / tempBitmap.width 
+                Bitmap.createScaledBitmap(tempBitmap, (tempBitmap.width * ratio).toInt(), (tempBitmap.height * ratio).toInt(), false)
+            }
+        }
+        return cropCenterBitmap(downSampling)
+    }
+
+    fun cropCenterBitmap(srcBmp: Bitmap): Bitmap {
+        val dstBmp: Bitmap
+        if (srcBmp.width >= srcBmp.height){
+
+            dstBmp = Bitmap.createBitmap(
+                    srcBmp,
+                    srcBmp.width / 2 - srcBmp.height / 2,
+                    0,
+                    srcBmp.height,
+                    srcBmp.height
+            );
+
+        }else{
+
+            dstBmp = Bitmap.createBitmap(
+                    srcBmp,
+                    0,
+                    srcBmp.height / 2 - srcBmp.width / 2,
+                    srcBmp.width,
+                    srcBmp.width
+            )
+        }
+        return dstBmp
+    }
+
     fun saveBitmapToFileCache(bitmap: Bitmap, strFilePath: String) {
         val fileCacheItem = File(strFilePath)
         var out: OutputStream? = null

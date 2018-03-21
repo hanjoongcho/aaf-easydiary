@@ -37,13 +37,31 @@
                 android:gravity="left"
                 style="@style/item_diary_card_main"/>
 
-            <LinearLayout
+            <FrameLayout
                 android:id="@+id/photoContainer"
-                android:layout_gravity="right"
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            </LinearLayout>
+                android:layout_width="match_parent"
+                android:layout_height="28dp">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ProgressBar
+                        android:id="@+id/photoProgressBar"
+                        android:layout_alignParentRight="true"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp" />    
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:id="@+id/photoViews"
+                        android:layout_alignParentRight="true"
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+                    </LinearLayout>
+                </RelativeLayout>    
+            </FrameLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </RelativeLayout>    

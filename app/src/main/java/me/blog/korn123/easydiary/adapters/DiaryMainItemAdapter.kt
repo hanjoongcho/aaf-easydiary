@@ -43,6 +43,8 @@ class DiaryMainItemAdapter(
             holder.imageView = row.findViewById(R.id.weather)
             holder.item_holder = row.findViewById(R.id.item_holder)
             holder.photoContainer = row.findViewById(R.id.photoContainer)
+            holder.photoViews = row.findViewById(R.id.photoViews)
+            holder.photoProgressBar = row.findViewById(R.id.photoProgressBar)
             row.tag = holder
         } else {
             holder = row.tag as ViewHolder
@@ -76,6 +78,15 @@ class DiaryMainItemAdapter(
             context.initTextSize(it, context)
         }
 
+        when (diaryDto.photoUris?.size ?: 0 > 0) {
+            true -> {
+                holder.photoViews.visibility = View.GONE
+                holder.photoContainer.visibility = View.VISIBLE
+                holder.photoProgressBar.visibility = View.VISIBLE
+            }
+            false -> holder.photoContainer.visibility = View.GONE
+        } 
+        
         FontUtils.setFontsTypeface(context, context.assets, null, holder.textView1, holder.textView2, holder.textView3)
         holder.attachPhotoLoader?.interrupt()
         val attachPhotoLoader = AttachPhotoLoader(activity, diaryDto.sequence, holder)
@@ -90,8 +101,7 @@ class DiaryMainItemAdapter(
             val diaryDto: DiaryDto = EasyDiaryDbHelper.readDiaryBy(sequence)
             if (diaryDto.photoUris?.size ?: 0 > 0) {
                 activity.runOnUiThread {
-                    holder.photoContainer.visibility = View.VISIBLE
-                    if (holder.photoContainer.childCount > 0) holder.photoContainer.removeAllViews()
+                    if (holder.photoViews.childCount > 0) holder.photoViews.removeAllViews()
                 }
 
                 val maxPhotos = CommonUtils.getDefaultDisplay(activity).x / CommonUtils.dpToPixel(activity, 40, 1)
@@ -110,20 +120,23 @@ class DiaryMainItemAdapter(
                     imageView.setImageBitmap(bitmap)
                     imageView.scaleType = ImageView.ScaleType.CENTER
                     activity.runOnUiThread {
-                        if (holder.photoContainer.childCount >= maxPhotos) return@runOnUiThread
-                        holder.photoContainer.addView(imageView)
+                        if (holder.photoViews.childCount >= maxPhotos) return@runOnUiThread
+                        holder.photoViews.addView(imageView)
                     }
                 }
-            } else {
+
                 activity.runOnUiThread {
-                    holder.photoContainer.visibility = View.GONE
+                    holder.photoViews.visibility = View.VISIBLE
+                    holder.photoProgressBar.visibility = View.GONE
                 }
-            }
+            } 
         }
     }
 
     private class ViewHolder {
-        lateinit var photoContainer: LinearLayout
+        lateinit var photoContainer: FrameLayout
+        lateinit var photoViews: LinearLayout
+        lateinit var photoProgressBar: ProgressBar
         var textView1: TextView? = null
         var textView2: TextView? = null
         var textView3: TextView? = null
