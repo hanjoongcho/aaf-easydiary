@@ -79,12 +79,12 @@ object CommonUtils {
     ): Bitmap = try {
             when (photoUriDto.isContentUri()) {
                 true -> {
-                    BitmapUtils.decodeUri(context, Uri.parse(photoUriDto.photoUri), CommonUtils.dpToPixel(context, requiredSize, 1), CommonUtils.dpToPixel(context, fixedWidth, 1), CommonUtils.dpToPixel(context, fixedHeight, 1))
+                    BitmapUtils.decodeFile(context, Uri.parse(photoUriDto.photoUri), CommonUtils.dpToPixel(context, fixedWidth, 1), CommonUtils.dpToPixel(context, fixedHeight, 1))
                 }
                 false -> {
                     when (fixedWidth == fixedHeight) {
-                        true -> BitmapUtils.decodeFileCropCenter(photoUriDto.getFilePath(), CommonUtils.dpToPixel(context, requiredSize, 1), CommonUtils.dpToPixel(context, fixedWidth, 1))
-                        false -> BitmapUtils.decodeFile(context, photoUriDto.getFilePath(), CommonUtils.dpToPixel(context, requiredSize, 1), CommonUtils.dpToPixel(context, fixedWidth, 1), CommonUtils.dpToPixel(context, fixedHeight, 1))
+                        true -> BitmapUtils.decodeFileCropCenter(photoUriDto.getFilePath(), CommonUtils.dpToPixel(context, fixedWidth, 1))
+                        false -> BitmapUtils.decodeFile(photoUriDto.getFilePath(), CommonUtils.dpToPixel(context, fixedWidth, 1), CommonUtils.dpToPixel(context, fixedHeight, 1))
                     }
                     
                 }
