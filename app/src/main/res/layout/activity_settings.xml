@@ -28,14 +28,14 @@
                android:orientation="vertical"
                android:layout_width="match_parent"
                android:layout_height="match_parent">
-               <me.blog.korn123.easydiary.views.LabelLayout
+               <io.github.hanjoongcho.commons.views.LabelLayout
                    android:layout_marginTop="5dp"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content">
                    <TextView
                        android:text="Application Setting"
                        style="@style/SettingActivityCategory" />
-               </me.blog.korn123.easydiary.views.LabelLayout>
+               </io.github.hanjoongcho.commons.views.LabelLayout>
 
                <LinearLayout
                    android:orientation="vertical"
@@ -44,7 +44,7 @@
                    android:layout_height="wrap_content">
                    <android.support.v7.widget.CardView
                        android:id="@+id/fontSetting"
-                       style="@style/DiaryCardSettings">
+                       style="@style/AppCard.Settings">
                        <LinearLayout
                            style="@style/linear_layout_vertical_type_a">
                            <com.simplemobiletools.commons.views.MyTextView
@@ -59,7 +59,7 @@
 
                    <android.support.v7.widget.CardView
                        android:id="@+id/primaryColor"
-                       style="@style/DiaryCardSettings">
+                       style="@style/AppCard.Settings">
                        <LinearLayout
                            style="@style/linear_layout_vertical_type_a">
                            <com.simplemobiletools.commons.views.MyTextView
@@ -75,7 +75,7 @@
 
                    <android.support.v7.widget.CardView
                        android:id="@+id/addTtfFontSetting"
-                       style="@style/DiaryCardSettings">
+                       style="@style/AppCard.Settings">
                        <LinearLayout
                            style="@style/linear_layout_vertical_type_a">
                            <com.simplemobiletools.commons.views.MyTextView
@@ -91,7 +91,7 @@
 
                    <android.support.v7.widget.CardView
                        android:id="@+id/sensitiveOption"
-                       style="@style/DiaryCardSettings">
+                       style="@style/AppCard.Settings">
                        <LinearLayout
                            style="@style/linear_layout_vertical_type_b">
                            <LinearLayout
@@ -119,7 +119,7 @@
 
                    <android.support.v7.widget.CardView
                        android:id="@+id/appLockSetting"
-                       style="@style/DiaryCardSettings">
+                       style="@style/AppCard.Settings">
                        <LinearLayout
                            style="@style/linear_layout_vertical_type_b">
                            <LinearLayout
@@ -147,7 +147,7 @@
 
                    <android.support.v7.widget.CardView
                        android:id="@+id/lockNumberSetting"
-                       style="@style/DiaryCardSettings">
+                       style="@style/AppCard.Settings">
                        <LinearLayout
                            style="@style/linear_layout_vertical_type_a">
                            <com.simplemobiletools.commons.views.MyTextView
@@ -164,7 +164,7 @@
                    <android.support.v7.widget.CardView
                        android:id="@+id/backupSetting"
                        android:layout_marginBottom="2dp"
-                       style="@style/DiaryCardSettings">
+                       style="@style/AppCard.Settings">
                        <LinearLayout
                            style="@style/linear_layout_vertical_type_a">
                            <com.simplemobiletools.commons.views.MyTextView
@@ -180,7 +180,7 @@
                    
                    <android.support.v7.widget.CardView
                        android:id="@+id/restoreSetting"
-                       style="@style/DiaryCardSettings">
+                       style="@style/AppCard.Settings">
                        <LinearLayout
                            style="@style/linear_layout_vertical_type_a">
                            <com.simplemobiletools.commons.views.MyTextView
@@ -196,7 +196,7 @@
 
                    <android.support.v7.widget.CardView
                        android:id="@+id/restorePhotoSetting"
-                       style="@style/DiaryCardSettings">
+                       style="@style/AppCard.Settings">
                        <LinearLayout
                            style="@style/linear_layout_vertical_type_a">
                            <com.simplemobiletools.commons.views.MyTextView
@@ -209,14 +209,14 @@
                    </android.support.v7.widget.CardView>
                </LinearLayout>
 
-               <me.blog.korn123.easydiary.views.LabelLayout
+               <io.github.hanjoongcho.commons.views.LabelLayout
                    android:background="?attr/colorPrimary"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content">
                    <TextView
                        android:text="Application Information"
                        style="@style/SettingActivityCategory" />
-               </me.blog.korn123.easydiary.views.LabelLayout>
+               </io.github.hanjoongcho.commons.views.LabelLayout>
 
                <LinearLayout
                    android:orientation="vertical"
@@ -226,11 +226,10 @@
                    <android.support.v7.widget.CardView
                        android:id="@+id/rateAppSetting"
                        android:orientation="vertical"
-                       style="@style/DiaryCardSettings">
+                       style="@style/AppCard.Settings">
                        <LinearLayout
                            style="@style/linear_layout_vertical_type_a">
                            <com.simplemobiletools.commons.views.MyTextView
-                               android:id="@+id/prefTitle8"
                                android:text="@string/rate_app"
                                style="@style/SettingActivityTitle" />
                            <com.simplemobiletools.commons.views.MyTextView
@@ -241,9 +240,25 @@
                    </android.support.v7.widget.CardView>
 
                    <android.support.v7.widget.CardView
+                       android:id="@+id/invite"
+                       android:layout_marginBottom="2dp"
+                       android:orientation="vertical"
+                       style="@style/AppCard.Settings">
+                       <LinearLayout
+                           style="@style/linear_layout_vertical_type_a">
+                           <com.simplemobiletools.commons.views.MyTextView
+                               android:text="@string/invite_friends"
+                               style="@style/SettingActivityTitle" />
+                           <com.simplemobiletools.commons.views.MyTextView
+                               android:id="@+id/inviteSummary"
+                               style="@style/SettingActivitySummary" />
+                       </LinearLayout>
+                   </android.support.v7.widget.CardView>
+                   
+                   <android.support.v7.widget.CardView
                        android:id="@+id/licenseView"
                        android:orientation="vertical"
-                       style="@style/DiaryCardSettings">
+                       style="@style/AppCard.Settings">
                        <LinearLayout
                            style="@style/linear_layout_vertical_type_a">
                            <com.simplemobiletools.commons.views.MyTextView
@@ -254,32 +269,16 @@
                                style="@style/SettingActivitySummary" />
                        </LinearLayout>
                    </android.support.v7.widget.CardView>
-
-                   <android.support.v7.widget.CardView
-                       android:id="@+id/invite"
-                       android:layout_marginBottom="2dp"
-                       android:orientation="vertical"
-                       style="@style/DiaryCardSettings">
-                       <LinearLayout
-                           style="@style/linear_layout_vertical_type_a">
-                           <com.simplemobiletools.commons.views.MyTextView
-                               android:text="invite_friends"
-                               style="@style/SettingActivityTitle" />
-                           <com.simplemobiletools.commons.views.MyTextView
-                               android:text="invite_friends_summary"
-                               style="@style/SettingActivitySummary" />
-                       </LinearLayout>
-                   </android.support.v7.widget.CardView>
                </LinearLayout>
 
-               <me.blog.korn123.easydiary.views.LabelLayout
+               <io.github.hanjoongcho.commons.views.LabelLayout
                    android:background="?attr/colorPrimary"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content">
                    <TextView
                        android:text="AAF Easy Series"
                        style="@style/SettingActivityCategory" />
-               </me.blog.korn123.easydiary.views.LabelLayout>
+               </io.github.hanjoongcho.commons.views.LabelLayout>
 
                <LinearLayout
                    android:orientation="vertical"
@@ -289,7 +288,7 @@
                    <android.support.v7.widget.CardView
                        android:id="@+id/easyPhotoMap"
                        android:orientation="horizontal"
-                       style="@style/DiaryCardSettings">
+                       style="@style/AppCard.Settings">
                        <LinearLayout
                            style="@style/linear_layout_vertical_type_b">
                            <ImageView
@@ -316,7 +315,7 @@
                    <android.support.v7.widget.CardView
                        android:id="@+id/easyPassword"
                        android:layout_marginBottom="2dp"
-                       style="@style/DiaryCardSettings">
+                       style="@style/AppCard.Settings">
                        <LinearLayout
                            style="@style/linear_layout_vertical_type_b">
                            <ImageView

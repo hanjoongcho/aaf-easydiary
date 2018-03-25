@@ -15,7 +15,6 @@ import com.google.android.gms.drive.GoogleDriveUploader
 import io.github.hanjoongcho.commons.activities.BaseWebViewActivity
 import io.github.hanjoongcho.commons.helpers.BaseConfig
 import kotlinx.android.synthetic.main.activity_settings.*
-import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
@@ -135,6 +134,7 @@ class SettingsActivity : EasyDiaryActivity() {
     }
 
     private fun setupInvite() {
+        inviteSummary.text = String.format(getString(R.string.invite_friends_summary), getString(R.string.app_name))
         invite.setOnClickListener {
             val text = String.format(getString(io.github.hanjoongcho.commons.R.string.share_text), getString(R.string.app_name), getStoreUrl())
             Intent().apply {

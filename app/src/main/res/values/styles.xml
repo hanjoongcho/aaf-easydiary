@@ -61,9 +61,6 @@
     <style name="DiaryCardTimeline" parent="DiaryCard">
         <item name="android:layout_width">wrap_content</item>
     </style>
-    <style name="DiaryCardSettings" parent="DiaryCard">
-        <item name="android:layout_marginBottom">@dimen/card_layout_margin</item>
-    </style>
     <style name="EditTitleCard" parent="DiaryCard">
         <item name="contentPaddingTop">5dp</item>
         <item name="contentPaddingBottom">5dp</item>
