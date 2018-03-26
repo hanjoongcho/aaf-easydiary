@@ -2,10 +2,8 @@ package me.blog.korn123.easydiary.activities
 
 import android.os.Bundle
 import android.view.ViewGroup
-import android.widget.RelativeLayout
 import android.widget.TextView
 import io.github.hanjoongcho.commons.activities.BaseCustomizationActivity
-import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.pauseLock
@@ -24,13 +22,6 @@ class CustomizationActivity : BaseCustomizationActivity() {
         super.onCreate(savedInstanceState)
         isBackgroundColorFromPrimaryColor = true
         val backgroundLabel: TextView = findViewById<TextView>(R.id.customization_background_color_label)
-        
-        // FIXME elegance
-        backgroundLabel.text = "${backgroundLabel.text}(다이어리 카드)"
-        findViewById<RelativeLayout>(R.id.main_holder)?.let {
-            val padding = CommonUtils.dpToPixel(this, 3)
-            it.setPadding(padding, padding, padding, padding)
-        }
     }
 
     override fun onPause() {
