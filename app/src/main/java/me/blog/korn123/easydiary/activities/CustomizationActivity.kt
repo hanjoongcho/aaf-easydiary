@@ -22,8 +22,6 @@ class CustomizationActivity : BaseCustomizationActivity() {
         super.onCreate(savedInstanceState)
         isBackgroundColorFromPrimaryColor = true
         val backgroundLabel: TextView = findViewById<TextView>(R.id.customization_background_color_label)
-        backgroundLabel.text = "${backgroundLabel.text}(다이어리 카드)"
-
     }
 
     override fun onPause() {

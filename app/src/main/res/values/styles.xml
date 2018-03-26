@@ -1,4 +1,5 @@
 <resources>
+    <!--App theme-->
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -13,14 +14,15 @@
         <item name="contentPaddingTop">5dp</item>
         <item name="contentPaddingBottom">5dp</item>
     </style>
-    
-    <style name="ToolBarIcon">
+
+    <!--App View Style-->
+    <style name="image_view_custom_toolbar_icon">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/ic_selector</item>
         <item name="android:padding">10dp</item>
     </style>
-    <style name="DiaryLockInputNum">
+    <style name="text_view_lock_number_input">
         <item name="android:textStyle">bold</item>
         <item name="android:gravity">center</item>
         <item name="android:background">@drawable/bg_card_diary</item>
@@ -29,7 +31,7 @@
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">50dp</item>
     </style>
-    <style name="DiaryLockKeypadGroup">
+    <style name="layout_lock_number_container">
         <item name="android:paddingLeft">10dp</item>
         <item name="android:paddingRight">10dp</item>
         <item name="android:paddingBottom">5dp</item>
@@ -38,7 +40,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
-    <style name="DiaryLockKeypad">
+    <style name="text_view_lock_number_button">
         <item name="android:textStyle">bold</item>
         <item name="android:layout_marginRight">5dp</item>
         <item name="android:gravity">center</item>
@@ -47,17 +49,17 @@
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">50dp</item>
     </style>
-    <style name="item_diary_card_main">
+    <style name="text_view_diary_main_item_inner_contents">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">@dimen/diary_card_text_padding</item>
     </style>
-    <style name="fragment_diary_card">
+    <style name="text_view_diary_read_fragment_inner_contents">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">@dimen/diary_card_text_padding</item>
     </style>
-    <style name="activity_insert_diary_card">
+    <style name="edit_text_diary_edit_inner_contents">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">@dimen/diary_card_text_padding</item>
