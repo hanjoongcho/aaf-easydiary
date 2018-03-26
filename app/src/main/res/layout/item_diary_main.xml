@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <android.support.v7.widget.CardView
-        style="@style/DiaryCard">
+        style="@style/AppCard">
         <LinearLayout
-            style="@style/linear_layout_vertical_type_a">
+            style="@style/LinearLayoutVertical">
             <LinearLayout
-                style="@style/linear_layout_vertical_type_b">
+                style="@style/LinearLayoutHorizontal">
                 <ImageView
                     android:id="@+id/weather"
                     android:layout_marginRight="10dp"
@@ -17,7 +17,7 @@
                     android:layout_height="32dp" />
                 
                 <LinearLayout
-                    style="@style/linear_layout_vertical_type_a">
+                    style="@style/LinearLayoutVertical">
                     <com.simplemobiletools.commons.views.MyTextView
                         android:id="@+id/text1"
                         android:gravity="center_vertical"
