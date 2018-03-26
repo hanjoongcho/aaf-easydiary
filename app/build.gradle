@@ -88,7 +88,7 @@ dependencies {
     implementation 'com.simplemobiletools:commons:3.7.8'
 //    implementation project(":commons")
     
-    implementation 'io.github.hanjoongcho:commons-android:0.1.7'
+    implementation 'io.github.hanjoongcho:commons-android:0.2.0'
 //    implementation project(":commons-android")
 }
 
