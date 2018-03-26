@@ -18,12 +18,11 @@ import com.simplemobiletools.commons.extensions.adjustAlpha
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
 import com.simplemobiletools.commons.views.*
+import io.github.hanjoongcho.commons.views.LabelLayout
 import io.github.hanjoongcho.commons.views.ModalView
 import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.easydiary.helper.Config
 import me.blog.korn123.easydiary.helper.DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE
-import me.blog.korn123.easydiary.helper.SETTING_FONT_SIZE
-import me.blog.korn123.easydiary.views.LabelLayout
 
 /**
  * Created by CHO HANJOONG on 2018-02-06.

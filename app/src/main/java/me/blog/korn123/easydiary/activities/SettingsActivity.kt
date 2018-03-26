@@ -15,7 +15,6 @@ import com.google.android.gms.drive.GoogleDriveUploader
 import io.github.hanjoongcho.commons.activities.BaseWebViewActivity
 import io.github.hanjoongcho.commons.helpers.BaseConfig
 import kotlinx.android.synthetic.main.activity_settings.*
-import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
@@ -123,13 +122,28 @@ class SettingsActivity : EasyDiaryActivity() {
         super.onResume()
         initPreference()
         setFontsStyle()
-
+        setupInvite()
+        
         if (BaseConfig(this).isThemeChanged) {
             BaseConfig(this).isThemeChanged = false
             val readDiaryIntent = Intent(this, DiaryMainActivity::class.java)
             readDiaryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(readDiaryIntent)
             this.overridePendingTransition(0, 0)
+        }
+    }
+
+    private fun setupInvite() {
+        inviteSummary.text = String.format(getString(R.string.invite_friends_summary), getString(R.string.app_name))
+        invite.setOnClickListener {
+            val text = String.format(getString(io.github.hanjoongcho.commons.R.string.share_text), getString(R.string.app_name), getStoreUrl())
+            Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
+                putExtra(Intent.EXTRA_TEXT, text)
+                type = "text/plain"
+                startActivity(Intent.createChooser(this, getString(io.github.hanjoongcho.commons.R.string.invite_via)))
+            }
         }
     }
 
@@ -248,6 +262,8 @@ class SettingsActivity : EasyDiaryActivity() {
         lockNumberSettingSummary.text = "${getString(R.string.lock_number)} ${config.aafPinLockSavedPassword}"
         rateAppSettingSummary.text = String.format("Easy Diary v %s", BuildConfig.VERSION_NAME)
     }
+
+    private fun getStoreUrl() = "https://play.google.com/store/apps/details?id=$packageName"
 
     companion object {
         private var mTaskFlag = 0

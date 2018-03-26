@@ -206,7 +206,7 @@ class DiaryInsertActivity : EasyDiaryActivity() {
                 try {
                     CommonUtils.uriToFile(this, data.data!!, photoPath)
                     mPhotoUris.add(PhotoUriDto(FILE_URI_PREFIX + photoPath))
-                    val bitmap = BitmapUtils.decodeFile(applicationContext, photoPath, CommonUtils.dpToPixel(applicationContext, 50, 1), CommonUtils.dpToPixel(applicationContext, 45, 1), CommonUtils.dpToPixel(applicationContext, 45, 1))
+                    val bitmap = BitmapUtils.decodeFile(photoPath, CommonUtils.dpToPixel(applicationContext, 45, 1), CommonUtils.dpToPixel(applicationContext, 45, 1))
                     val imageView = ImageView(applicationContext)
                     val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(applicationContext, 50, 1), CommonUtils.dpToPixel(applicationContext, 50, 1))
                     layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(applicationContext, 3, 1), 0)

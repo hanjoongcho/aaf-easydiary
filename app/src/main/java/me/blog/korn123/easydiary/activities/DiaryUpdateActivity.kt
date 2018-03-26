@@ -355,7 +355,7 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
                     val photoPath = Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
                     CommonUtils.uriToFile(this, data.data, photoPath)
                     mPhotoUris?.add(PhotoUriDto(FILE_URI_PREFIX + photoPath))
-                    val bitmap = BitmapUtils.decodeFile(this, photoPath, CommonUtils.dpToPixel(this, 50, 1), CommonUtils.dpToPixel(this, 45, 1), CommonUtils.dpToPixel(this, 45, 1))
+                    val bitmap = BitmapUtils.decodeFile(photoPath, CommonUtils.dpToPixel(this, 45, 1), CommonUtils.dpToPixel(this, 45, 1))
                     val imageView = ImageView(this)
                     val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(this, 50, 1), CommonUtils.dpToPixel(this, 50, 1))
                     layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(this, 3, 1), 0)
