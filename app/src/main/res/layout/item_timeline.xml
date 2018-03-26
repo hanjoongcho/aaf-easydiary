@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <me.blog.korn123.easydiary.views.LabelLayout
+    <io.github.hanjoongcho.commons.views.LabelLayout
         android:gravity="center"
         android:id="@+id/titleContainer"
         android:orientation="horizontal"
@@ -21,7 +21,7 @@
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-    </me.blog.korn123.easydiary.views.LabelLayout>
+    </io.github.hanjoongcho.commons.views.LabelLayout>
 
     <LinearLayout
         android:orientation="vertical"
@@ -70,7 +70,7 @@
                     android:layout_height="10dp" />
             </FrameLayout>
             <android.support.v7.widget.CardView
-                style="@style/DiaryCardTimeline"
+                style="@style/AppCard.Timeline"
                 android:layout_marginRight="34dp">
                 <com.simplemobiletools.commons.views.MyTextView
                     android:textColor="@color/default_text_color"

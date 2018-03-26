@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <android.support.v7.widget.CardView
-        style="@style/DiaryCard">
+        style="@style/AppCard">
         <LinearLayout
-            style="@style/linear_layout_vertical_type_b">
+            style="@style/LinearLayoutHorizontal">
             <ImageView
                 android:id="@+id/weather"
                 android:layout_marginRight="10dp"

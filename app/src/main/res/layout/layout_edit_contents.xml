@@ -6,9 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <android.support.v7.widget.CardView
-        style="@style/EditTitleCard">
+        style="@style/AppCard.EditTitle">
         <LinearLayout
-            style="@style/linear_layout_vertical_type_b">
+            style="@style/LinearLayoutHorizontal">
             <Spinner
                 android:id="@+id/weatherSpinner"
                 android:spinnerMode="dropdown"
@@ -35,7 +35,7 @@
         android:layout_weight="1"
         android:layout_marginTop="@dimen/card_layout_margin"
         android:layout_marginBottom="@dimen/card_layout_margin"
-        style="@style/DiaryCard">
+        style="@style/AppCard">
         <ScrollView
             android:fillViewport="true"
             android:layout_width="match_parent"
