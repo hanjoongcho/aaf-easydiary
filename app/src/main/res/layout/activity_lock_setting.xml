@@ -16,17 +16,17 @@
         android:layout_height="0dp">
         <TextView
             android:id="@+id/pass1"
-            style="@style/DiaryLockInputNum" />
+            style="@style/text_view_lock_number_input" />
         <TextView
             android:id="@+id/pass2"
-            style="@style/DiaryLockInputNum" />
+            style="@style/text_view_lock_number_input" />
         <TextView
             android:id="@+id/pass3"
-            style="@style/DiaryLockInputNum" />
+            style="@style/text_view_lock_number_input" />
         <TextView
             android:id="@+id/pass4"
             android:layout_marginRight="0dp"
-            style="@style/DiaryLockInputNum" />
+            style="@style/text_view_lock_number_input" />
     </LinearLayout>
 
     <LinearLayout
@@ -57,66 +57,66 @@
         android:layout_weight="2"
         android:layout_height="0dp">
         <LinearLayout
-            style="@style/DiaryLockKeypadGroup">
+            style="@style/layout_lock_number_container">
             <TextView
-                style="@style/DiaryLockKeypad"
+                style="@style/text_view_lock_number_button"
                 android:id="@+id/num1"
                 android:text="1" />
             <TextView
-                style="@style/DiaryLockKeypad"
+                style="@style/text_view_lock_number_button"
                 android:id="@+id/num2"
                 android:text="2" />
             <TextView
-                style="@style/DiaryLockKeypad"
+                style="@style/text_view_lock_number_button"
                 android:layout_marginRight="0dp"
                 android:id="@+id/num3"
                 android:text="3"/>
         </LinearLayout>
 
         <LinearLayout
-            style="@style/DiaryLockKeypadGroup">
+            style="@style/layout_lock_number_container">
             <TextView
-                style="@style/DiaryLockKeypad"
+                style="@style/text_view_lock_number_button"
                 android:id="@+id/num4"
                 android:text="4" />
             <TextView
-                style="@style/DiaryLockKeypad"
+                style="@style/text_view_lock_number_button"
                 android:id="@+id/num5"
                 android:text="5" />
             <TextView
-                style="@style/DiaryLockKeypad"
+                style="@style/text_view_lock_number_button"
                 android:layout_marginRight="0dp"
                 android:id="@+id/num6"
                 android:text="6" />
         </LinearLayout>
 
         <LinearLayout
-            style="@style/DiaryLockKeypadGroup">
+            style="@style/layout_lock_number_container">
             <TextView
-                style="@style/DiaryLockKeypad"
+                style="@style/text_view_lock_number_button"
                 android:id="@+id/num7"
                 android:text="7" />
             <TextView
-                style="@style/DiaryLockKeypad"
+                style="@style/text_view_lock_number_button"
                 android:id="@+id/num8"
                 android:text="8" />
             <TextView
-                style="@style/DiaryLockKeypad"
+                style="@style/text_view_lock_number_button"
                 android:layout_marginRight="0dp"
                 android:id="@+id/num9"
                 android:text="9" />
         </LinearLayout>
 
         <LinearLayout
-            style="@style/DiaryLockKeypadGroup">
+            style="@style/layout_lock_number_container">
             <TextView
-                style="@style/DiaryLockKeypad" />
+                style="@style/text_view_lock_number_button" />
             <TextView
-                style="@style/DiaryLockKeypad"
+                style="@style/text_view_lock_number_button"
                 android:id="@+id/num0"
                 android:text="0" />
             <TextView
-                style="@style/DiaryLockKeypad"
+                style="@style/text_view_lock_number_button"
                 android:layout_marginRight="0dp"/>
         </LinearLayout>
     </LinearLayout>

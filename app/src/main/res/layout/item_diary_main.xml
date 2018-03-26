@@ -21,12 +21,12 @@
                     <com.simplemobiletools.commons.views.MyTextView
                         android:id="@+id/text1"
                         android:gravity="center_vertical"
-                        style="@style/item_diary_card_main"/>
+                        style="@style/text_view_diary_main_item_inner_contents"/>
                     
                     <com.simplemobiletools.commons.views.MyTextView
                         android:id="@+id/text3"
                         android:gravity="right"
-                        style="@style/item_diary_card_main"/>
+                        style="@style/text_view_diary_main_item_inner_contents"/>
                 </LinearLayout>
             </LinearLayout>
     
@@ -35,7 +35,7 @@
                 android:layout_marginTop="@dimen/card_contents_padding"
                 android:maxLines="3"
                 android:gravity="left"
-                style="@style/item_diary_card_main"/>
+                style="@style/text_view_diary_main_item_inner_contents"/>
 
             <FrameLayout
                 android:id="@+id/photoContainer"
