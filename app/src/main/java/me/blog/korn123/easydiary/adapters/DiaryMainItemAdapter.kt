@@ -82,7 +82,7 @@ class DiaryMainItemAdapter(
 
         when (diaryDto.photoUris?.size ?: 0 > 0) {
             true -> {
-                holder.photoViews.visibility = View.GONE
+//                holder.photoViews.visibility = View.GONE
                 holder.photoContainer.visibility = View.VISIBLE
                 holder.photoProgressBar.visibility = View.VISIBLE
             }
