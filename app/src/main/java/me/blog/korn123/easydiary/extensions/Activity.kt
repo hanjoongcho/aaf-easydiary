@@ -4,13 +4,10 @@ import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.support.v4.app.ActivityCompat
-import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.easydiary.activities.DiaryLockActivity
-import me.blog.korn123.easydiary.helper.APP_LOCK_ENABLE
 
 /**
  * Created by CHO HANJOONG on 2018-02-10.

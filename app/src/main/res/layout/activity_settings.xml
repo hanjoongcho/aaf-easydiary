@@ -30,6 +30,7 @@
                 android:layout_height="match_parent">
                 <io.github.hanjoongcho.commons.views.LabelLayout
                     android:layout_marginTop="5dp"
+                    android:background="?attr/colorPrimary"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView

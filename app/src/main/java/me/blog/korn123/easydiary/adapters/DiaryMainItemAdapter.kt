@@ -7,6 +7,8 @@ import android.support.v4.graphics.ColorUtils
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import io.github.hanjoongcho.commons.extensions.updateAppViews
+import io.github.hanjoongcho.commons.extensions.updateTextColors
 import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
@@ -14,7 +16,6 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
-import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
 import me.blog.korn123.easydiary.models.DiaryDto
@@ -75,6 +76,7 @@ class DiaryMainItemAdapter(
 
         holder.item_holder?.let {
             context.updateTextColors(it, 0, 0)
+            context.updateAppViews(it)
             context.initTextSize(it, context)
         }
 

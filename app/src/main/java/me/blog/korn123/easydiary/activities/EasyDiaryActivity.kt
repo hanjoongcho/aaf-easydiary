@@ -2,12 +2,13 @@ package me.blog.korn123.easydiary.activities
 
 import android.view.ViewGroup
 import io.github.hanjoongcho.commons.activities.BaseSimpleActivity
+import io.github.hanjoongcho.commons.extensions.updateAppViews
+import io.github.hanjoongcho.commons.extensions.updateTextColors
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.resumeLock
-import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.APP_BACKGROUND_ALPHA
 
 /**
@@ -28,9 +29,11 @@ open class EasyDiaryActivity : BaseSimpleActivity() {
         isBackgroundColorFromPrimaryColor = true
         super.onResume()
         resumeLock()
-        updateTextColors(findViewById(android.R.id.content))
+        
         mRootView?.let { 
             initTextSize(it, this)
+            updateTextColors(it)
+            updateAppViews(it)
         }
         FontUtils.setFontsTypeface(applicationContext, assets, null, findViewById<ViewGroup>(android.R.id.content))
     }
