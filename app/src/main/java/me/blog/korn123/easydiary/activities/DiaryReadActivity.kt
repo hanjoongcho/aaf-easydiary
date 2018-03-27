@@ -23,14 +23,18 @@ import android.widget.RelativeLayout
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.simplemobiletools.commons.helpers.BaseConfig
+import io.github.hanjoongcho.commons.extensions.updateAppViews
+import io.github.hanjoongcho.commons.extensions.updateTextColors
 import kotlinx.android.synthetic.main.activity_diary_read.*
 import kotlinx.android.synthetic.main.fragment_diary_read.*
-import me.blog.korn123.commons.utils.*
+import me.blog.korn123.commons.utils.CommonUtils
+import me.blog.korn123.commons.utils.DateUtils
+import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.showAlertDialog
-import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
@@ -293,6 +297,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
             super.onResume()
             mRootView?.let {
                 context?.updateTextColors(it,0,0)
+                context?.updateAppViews(it)
             }
             initContents()
             initBottomContainer()

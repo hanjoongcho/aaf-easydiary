@@ -8,11 +8,12 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import io.github.hanjoongcho.commons.extensions.updateAppViews
+import io.github.hanjoongcho.commons.extensions.updateTextColors
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.initTextSize
-import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
 
@@ -53,6 +54,7 @@ class DiaryCalendarItemAdapter(
         EasyDiaryUtils.initWeatherView(holder.imageView, diaryDto.weather)
         holder.item_holder?.let {
             context.updateTextColors(it, 0, 0)
+            context.updateAppViews(it)
             context.initTextSize(it, context)
         }
         return row
