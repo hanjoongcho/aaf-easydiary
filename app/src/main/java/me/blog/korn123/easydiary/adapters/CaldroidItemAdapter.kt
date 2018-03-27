@@ -10,7 +10,9 @@ import android.widget.TextView
 import com.roomorama.caldroid.CaldroidFragment
 import com.roomorama.caldroid.CaldroidGridAdapter
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 
 class CaldroidItemAdapter(
@@ -31,6 +33,12 @@ class CaldroidItemAdapter(
             cellView = inflater.inflate(R.layout.fragment_custom_cell, null)
         }
 
+        if (cellView is ViewGroup) {
+//            context?.updateTextColors(cellView)
+            context?.initTextSize(cellView, context)
+            FontUtils.setFontsTypeface(context, context.assets, null, cellView)
+        }
+        
         val topPadding = cellView?.paddingTop ?: 0
         val leftPadding = cellView?.paddingLeft ?: 0
         val bottomPadding = cellView?.paddingBottom ?: 0

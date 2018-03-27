@@ -5,36 +5,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/AppTheme.AppBarOverlay">
-
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
-
         </android.support.design.widget.AppBarLayout>
 
         <LinearLayout
+            android:id="@+id/main_holder"
             android:orientation="horizontal"
             android:padding="@dimen/card_layout_padding"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
             <ScrollView
                 android:layout_width="0dp"
                 android:layout_weight="6"
                 android:layout_height="wrap_content">
+                
                 <LinearLayout
                     android:id="@+id/calendar1"
                     android:layout_width="match_parent"
@@ -48,7 +45,6 @@
                 android:layout_width="0dp"
                 android:layout_weight="4"
                 android:layout_height="match_parent">
-
                 <ListView
                     android:layout_marginLeft="@dimen/card_layout_margin"
                     android:dividerHeight="@dimen/card_layout_padding"
@@ -57,11 +53,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                 </ListView>
+                
                 <LinearLayout
                     android:gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-
                     <TextView
                         android:id="@+id/emptyInfo"
                         android:text="@string/guide_message_4"
@@ -69,15 +65,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
                     </TextView>
-
                 </LinearLayout>
-
             </LinearLayout>
-
-
-
         </LinearLayout>
-
     </LinearLayout>
-
 </android.support.design.widget.CoordinatorLayout>
