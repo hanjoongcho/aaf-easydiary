@@ -15,6 +15,7 @@ import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.chart.*
+import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import java.util.*
 
@@ -94,11 +95,6 @@ class BarChartActivity : ChartBase() {
         barChart.marker = mv // Set the marker to the chart
 
         setData(6, 20f)
-        setFontsStyle()
-    }
-
-    private fun setFontsStyle() {
-        FontUtils.setFontsTypeface(applicationContext, assets, null, findViewById<ViewGroup>(android.R.id.content))
     }
 
     private fun setData(count: Int, range: Float) {
