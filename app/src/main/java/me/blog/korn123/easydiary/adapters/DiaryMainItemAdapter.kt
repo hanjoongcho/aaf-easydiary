@@ -98,7 +98,8 @@ class DiaryMainItemAdapter(
         override fun run() {
             super.run()
             val photoViews = mutableListOf<ImageView>()
-            val diaryDto: DiaryDto = EasyDiaryDbHelper.readDiaryBy(sequence)
+            val realmInstance = EasyDiaryDbHelper.getInstance()
+            val diaryDto: DiaryDto = EasyDiaryDbHelper.readDiaryBy(realmInstance, sequence)
             if (diaryDto.photoUris?.size ?: 0 > 0) {
                 val maxPhotos = CommonUtils.getDefaultDisplay(activity).x / CommonUtils.dpToPixel(activity, 40, 1)
                 diaryDto.photoUris?.map {
@@ -128,6 +129,7 @@ class DiaryMainItemAdapter(
                     }
                 }
             }
+            realmInstance.close()
         }
     }
 

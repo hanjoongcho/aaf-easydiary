@@ -64,7 +64,11 @@ object EasyDiaryDbHelper {
     }
 
     fun readDiaryBy(sequence: Int): DiaryDto {
-        return Realm.getInstance(mDiaryConfig).where(DiaryDto::class.java).equalTo("sequence", sequence).findFirst()
+        return readDiaryBy(Realm.getInstance(mDiaryConfig), sequence)
+    }
+
+    fun readDiaryBy(realmInstance: Realm, sequence: Int): DiaryDto {
+        return realmInstance.where(DiaryDto::class.java).equalTo("sequence", sequence).findFirst()
     }
 
     fun readDiaryByDateString(dateString: String?): List<DiaryDto> {
