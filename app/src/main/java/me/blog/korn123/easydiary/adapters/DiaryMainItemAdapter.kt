@@ -1,7 +1,6 @@
 package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
-import android.graphics.Bitmap
 import android.graphics.drawable.GradientDrawable
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.ColorUtils
@@ -35,7 +34,7 @@ class DiaryMainItemAdapter(
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
         var row = convertView
-        val holder: ViewHolder 
+        val holder: ViewHolder
         if (row == null) {
             row = activity.layoutInflater.inflate(this.layoutResourceId, parent, false)
             holder = ViewHolder()
@@ -46,23 +45,6 @@ class DiaryMainItemAdapter(
             holder.item_holder = row.findViewById(R.id.item_holder)
             holder.photoContainer = row.findViewById(R.id.photoContainer)
             holder.photoViews = row.findViewById(R.id.photoViews)
-            holder.photoProgressBar = row.findViewById(R.id.photoProgressBar)
-
-            val maxPhotos = CommonUtils.getDefaultDisplay(activity).x / CommonUtils.dpToPixel(activity, 40, 1)
-            repeat(maxPhotos) { 
-                val imageView = ImageView(activity)
-                val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(activity, 28, 1), CommonUtils.dpToPixel(activity, 28, 1))
-                layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(activity, 3, 1), 0)
-                imageView.layoutParams = layoutParams
-                val drawable = ContextCompat.getDrawable(activity, R.drawable.bg_card_thumbnail)
-                val gradient = drawable as GradientDrawable
-                gradient.setColor(ColorUtils.setAlphaComponent(activity.config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA))
-                imageView.background = gradient
-                imageView.scaleType = ImageView.ScaleType.CENTER
-
-                holder.photoViews.addView(imageView)
-            }
-            
             row.tag = holder
         } else {
             holder = row.tag as ViewHolder
@@ -97,22 +79,13 @@ class DiaryMainItemAdapter(
             context.initTextSize(it, context)
         }
 
-        val photoCount = diaryDto.photoUris?.size ?: 0
-        when (photoCount > 0) {
+        when (diaryDto.photoUris?.size ?: 0 > 0) {
             true -> {
 //                holder.photoViews.visibility = View.GONE
                 holder.photoContainer.visibility = View.VISIBLE
-                repeat(CommonUtils.getDefaultDisplay(activity).x / CommonUtils.dpToPixel(activity, 40, 1)) { index ->
-                    when (index < photoCount) {
-                        true -> holder.photoViews.getChildAt(index).visibility = View.VISIBLE
-                        false -> holder.photoViews.getChildAt(index).visibility = View.GONE
-                                
-                    }
-                }
-//                holder.photoProgressBar.visibility = View.VISIBLE
             }
             false -> holder.photoContainer.visibility = View.GONE
-        } 
+        }
         FontUtils.setFontsTypeface(context, context.assets, null, holder.textView1, holder.textView2, holder.textView3)
         holder.attachPhotoLoader?.interrupt()
         val attachPhotoLoader = AttachPhotoLoader(activity, diaryDto.sequence, holder)
@@ -120,39 +93,47 @@ class DiaryMainItemAdapter(
         attachPhotoLoader.start()
         return row
     }
-    
+
     private class AttachPhotoLoader(val activity: Activity, val sequence: Int, val holder: ViewHolder) : Thread() {
         override fun run() {
             super.run()
-            val listBitmap = mutableListOf<Bitmap>()
+            val photoViews = mutableListOf<ImageView>()
             val diaryDto: DiaryDto = EasyDiaryDbHelper.readDiaryBy(sequence)
             if (diaryDto.photoUris?.size ?: 0 > 0) {
                 val maxPhotos = CommonUtils.getDefaultDisplay(activity).x / CommonUtils.dpToPixel(activity, 40, 1)
                 diaryDto.photoUris?.map {
                     val bitmap = CommonUtils.photoUriToDownSamplingBitmap(activity, it, 30, 25, 25)
-                    if (listBitmap.size >= maxPhotos) return@map
-                    listBitmap.add(bitmap)
+                    val imageView = ImageView(activity)
+                    val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(activity, 28, 1), CommonUtils.dpToPixel(activity, 28, 1))
+                    layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(activity, 3, 1), 0)
+                    imageView.layoutParams = layoutParams
+//                        imageView.setBackgroundResource(R.drawable.bg_card_thumbnail)
+                    val drawable = ContextCompat.getDrawable(activity, R.drawable.bg_card_thumbnail)
+                    val gradient = drawable as GradientDrawable
+                    gradient.setColor(ColorUtils.setAlphaComponent(activity.config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA))
+                    imageView.background = gradient
+                    imageView.setImageBitmap(bitmap)
+                    imageView.scaleType = ImageView.ScaleType.CENTER
+                    if (photoViews.size >= maxPhotos) return@map
+                    photoViews.add(imageView)
                 }
 
                 if (!isInterrupted) {
                     activity.runOnUiThread {
-                        for ((index, bitmap) in listBitmap.withIndex()) {
-                            val imageView: ImageView = holder.photoViews.getChildAt(index) as ImageView
-                            imageView.setImageBitmap(bitmap)
-//                            imageView.visibility = View.VISIBLE
+                        holder.photoViews.removeAllViews()
+                        photoViews.map {
+                            holder.photoViews.addView(it)
                         }
-//                        holder.photoViews.visibility = View.VISIBLE
-//                        holder.photoProgressBar.visibility = View.GONE
+                        holder.photoViews.visibility = View.VISIBLE
                     }
                 }
-            } 
+            }
         }
     }
 
     private class ViewHolder {
         lateinit var photoContainer: FrameLayout
         lateinit var photoViews: LinearLayout
-        lateinit var photoProgressBar: ProgressBar
         var textView1: TextView? = null
         var textView2: TextView? = null
         var textView3: TextView? = null
