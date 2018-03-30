@@ -18,13 +18,11 @@
                 android:layout_height="wrap_content">
                 <com.simplemobiletools.commons.views.MyTextView
                     android:id="@+id/diaryTitle"
-                    android:enabled="false"
                     android:gravity="center_vertical"
                     style="@style/text_view_diary_read_fragment_inner_contents"/>
 
                 <com.simplemobiletools.commons.views.MyTextView
                     android:textColor="@color/default_text_color"
-                    android:enabled="false"
                     android:gravity="center_vertical|right"
                     android:id="@+id/date"
                     style="@style/text_view_diary_read_fragment_inner_contents"/>
@@ -43,7 +41,6 @@
             android:layout_height="match_parent">
             <com.simplemobiletools.commons.views.MyTextView
                 android:id="@+id/diaryContents"
-                android:enabled="false"
                 android:gravity="left"
                 style="@style/text_view_diary_read_fragment_inner_contents"/>
         </ScrollView>
