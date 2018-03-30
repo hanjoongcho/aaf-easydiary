@@ -44,15 +44,6 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                    <ProgressBar
-                        android:id="@+id/photoProgressBar"
-                        android:layout_alignParentRight="true"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp" />    
-                </RelativeLayout>
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
                     <LinearLayout
                         android:id="@+id/photoViews"
                         android:layout_alignParentRight="true"

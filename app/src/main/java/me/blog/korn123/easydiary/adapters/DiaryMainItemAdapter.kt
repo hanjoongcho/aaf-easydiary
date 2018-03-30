@@ -34,7 +34,7 @@ class DiaryMainItemAdapter(
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
         var row = convertView
-        val holder: ViewHolder 
+        val holder: ViewHolder
         if (row == null) {
             row = activity.layoutInflater.inflate(this.layoutResourceId, parent, false)
             holder = ViewHolder()
@@ -45,7 +45,6 @@ class DiaryMainItemAdapter(
             holder.item_holder = row.findViewById(R.id.item_holder)
             holder.photoContainer = row.findViewById(R.id.photoContainer)
             holder.photoViews = row.findViewById(R.id.photoViews)
-            holder.photoProgressBar = row.findViewById(R.id.photoProgressBar)
             row.tag = holder
         } else {
             holder = row.tag as ViewHolder
@@ -84,10 +83,9 @@ class DiaryMainItemAdapter(
             true -> {
 //                holder.photoViews.visibility = View.GONE
                 holder.photoContainer.visibility = View.VISIBLE
-                holder.photoProgressBar.visibility = View.VISIBLE
             }
             false -> holder.photoContainer.visibility = View.GONE
-        } 
+        }
         FontUtils.setFontsTypeface(context, context.assets, null, holder.textView1, holder.textView2, holder.textView3)
         holder.attachPhotoLoader?.interrupt()
         val attachPhotoLoader = AttachPhotoLoader(activity, diaryDto.sequence, holder)
@@ -95,12 +93,13 @@ class DiaryMainItemAdapter(
         attachPhotoLoader.start()
         return row
     }
-    
+
     private class AttachPhotoLoader(val activity: Activity, val sequence: Int, val holder: ViewHolder) : Thread() {
         override fun run() {
             super.run()
             val photoViews = mutableListOf<ImageView>()
-            val diaryDto: DiaryDto = EasyDiaryDbHelper.readDiaryBy(sequence)
+            val realmInstance = EasyDiaryDbHelper.getInstance()
+            val diaryDto: DiaryDto = EasyDiaryDbHelper.readDiaryBy(realmInstance, sequence)
             if (diaryDto.photoUris?.size ?: 0 > 0) {
                 val maxPhotos = CommonUtils.getDefaultDisplay(activity).x / CommonUtils.dpToPixel(activity, 40, 1)
                 diaryDto.photoUris?.map {
@@ -116,7 +115,7 @@ class DiaryMainItemAdapter(
                     imageView.background = gradient
                     imageView.setImageBitmap(bitmap)
                     imageView.scaleType = ImageView.ScaleType.CENTER
-                    if (photoViews.size >= maxPhotos) return@map 
+                    if (photoViews.size >= maxPhotos) return@map
                     photoViews.add(imageView)
                 }
 
@@ -127,17 +126,16 @@ class DiaryMainItemAdapter(
                             holder.photoViews.addView(it)
                         }
                         holder.photoViews.visibility = View.VISIBLE
-                        holder.photoProgressBar.visibility = View.GONE
                     }
                 }
-            } 
+            }
+            realmInstance.close()
         }
     }
 
     private class ViewHolder {
         lateinit var photoContainer: FrameLayout
         lateinit var photoViews: LinearLayout
-        lateinit var photoProgressBar: ProgressBar
         var textView1: TextView? = null
         var textView2: TextView? = null
         var textView3: TextView? = null

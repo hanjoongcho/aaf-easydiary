@@ -58,6 +58,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">@dimen/diary_card_text_padding</item>
+        <item name="android:textIsSelectable">true</item>
     </style>
     <style name="edit_text_diary_edit_inner_contents">
         <item name="android:layout_width">match_parent</item>
