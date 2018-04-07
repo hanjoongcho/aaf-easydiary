@@ -2,6 +2,7 @@
 ## [README of Korean(한국어)][README_ko.md]
 
 [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/unicodeveloper/awesome-opensource-apps)
+[![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
 [![License][licensesvg]][LICENSE.md]
 
 <img src="screenshots/ic_launcher.png" >
