@@ -25,6 +25,7 @@ import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.simplemobiletools.commons.helpers.BaseConfig
 import io.github.hanjoongcho.commons.extensions.updateAppViews
 import io.github.hanjoongcho.commons.extensions.updateTextColors
+import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_diary_read.*
 import kotlinx.android.synthetic.main.fragment_diary_read.*
 import me.blog.korn123.commons.utils.CommonUtils
@@ -287,7 +288,13 @@ class DiaryReadActivity : EasyDiaryActivity() {
     class PlaceholderFragment : Fragment() {
         private var mPrimaryColor = 0
         private var mRootView: ViewGroup? = null
+        private lateinit var realmInstance: Realm
 
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            realmInstance = EasyDiaryDbHelper.getInstance()
+        }
+        
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
             mRootView = inflater.inflate(R.layout.fragment_diary_read, container, false) as ViewGroup
             return mRootView
@@ -305,68 +312,72 @@ class DiaryReadActivity : EasyDiaryActivity() {
             setFontsSize()
         }
 
+        override fun onDestroy() {
+            super.onDestroy()
+            realmInstance.close()
+        }
+
         fun getSequence() = arguments?.getInt(DIARY_SEQUENCE) ?: -1
         
         fun getDiaryContents(): String = diaryContents.text.toString() 
         
         private fun initContents() {
-            EasyDiaryDbHelper.readDiaryBy(getSequence())?.let { diaryDto ->
-                if (StringUtils.isEmpty(diaryDto.title)) {
-                    diaryTitle.visibility = View.GONE
-                }
-                diaryTitle.text = diaryDto.title
-                diaryContents.text = diaryDto.contents
-                date.text = DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis)
-                initBottomContainer()
+            val diaryDto = EasyDiaryDbHelper.readDiaryBy(realmInstance, getSequence())
+            if (StringUtils.isEmpty(diaryDto.title)) {
+                diaryTitle.visibility = View.GONE
+            }
+            diaryTitle.text = diaryDto.title
+            diaryContents.text = diaryDto.contents
+            date.text = DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis)
+            initBottomContainer()
 
-                arguments?.getString(DIARY_SEARCH_QUERY)?.let { query ->
-                    if (StringUtils.isNotEmpty(query)) {
-                        context?.config?.run {
-                            if (diarySearchQueryCaseSensitive) {
-                                EasyDiaryUtils.highlightString(diaryTitle, query)
-                                EasyDiaryUtils.highlightString(diaryContents, query)
-                            } else {
-                                EasyDiaryUtils.highlightStringIgnoreCase(diaryTitle, query)
-                                EasyDiaryUtils.highlightStringIgnoreCase(diaryContents, query)
-                            }
+            arguments?.getString(DIARY_SEARCH_QUERY)?.let { query ->
+                if (StringUtils.isNotEmpty(query)) {
+                    context?.config?.run {
+                        if (diarySearchQueryCaseSensitive) {
+                            EasyDiaryUtils.highlightString(diaryTitle, query)
+                            EasyDiaryUtils.highlightString(diaryContents, query)
+                        } else {
+                            EasyDiaryUtils.highlightStringIgnoreCase(diaryTitle, query)
+                            EasyDiaryUtils.highlightStringIgnoreCase(diaryContents, query)
                         }
-                    }    
+                    }
+                }    
+            }
+
+            val weatherFlag = diaryDto.weather
+            EasyDiaryUtils.initWeatherView(weather, weatherFlag)
+
+            // TODO fixme elegance
+            if (diaryDto.photoUris?.size ?: 0 > 0) {
+                photoContainerScrollView.visibility = View.VISIBLE
+                val onClickListener = View.OnClickListener {
+                    val photoViewPager = Intent(context, PhotoViewPagerActivity::class.java)
+                    photoViewPager.putExtra(DIARY_SEQUENCE, getSequence())
+                    startActivity(photoViewPager)
                 }
 
-                val weatherFlag = diaryDto.weather
-                EasyDiaryUtils.initWeatherView(weather, weatherFlag)
-
-                // TODO fixme elegance
-                if (diaryDto.photoUris?.size ?: 0 > 0) {
-                    photoContainerScrollView.visibility = View.VISIBLE
-                    val onClickListener = View.OnClickListener {
-                        val photoViewPager = Intent(context, PhotoViewPagerActivity::class.java)
-                        photoViewPager.putExtra(DIARY_SEQUENCE, getSequence())
-                        startActivity(photoViewPager)
-                    }
-
-                    if (photoContainer.childCount > 0) photoContainer.removeAllViews()
-                    context?.let { appContext ->
-                        diaryDto.photoUris?.map {
-                            val bitmap = CommonUtils.photoUriToDownSamplingBitmap(appContext, it)
-                            val imageView = ImageView(context)
-                            val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(appContext, 50, 1), CommonUtils.dpToPixel(appContext, 50, 1))
-                            layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(appContext, 3, 1), 0)
-                            imageView.layoutParams = layoutParams
+                if (photoContainer.childCount > 0) photoContainer.removeAllViews()
+                context?.let { appContext ->
+                    diaryDto.photoUris?.map {
+                        val bitmap = CommonUtils.photoUriToDownSamplingBitmap(appContext, it)
+                        val imageView = ImageView(context)
+                        val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(appContext, 50, 1), CommonUtils.dpToPixel(appContext, 50, 1))
+                        layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(appContext, 3, 1), 0)
+                        imageView.layoutParams = layoutParams
 //                        imageView.setBackgroundResource(R.drawable.bg_card_thumbnail)
-                            val drawable = ContextCompat.getDrawable(appContext, R.drawable.bg_card_thumbnail)
-                            val gradient = drawable as GradientDrawable
-                            gradient.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, THUMBNAIL_BACKGROUND_ALPHA))
-                            imageView.background = gradient
-                            imageView.setImageBitmap(bitmap)
-                            imageView.scaleType = ImageView.ScaleType.CENTER
-                            photoContainer.addView(imageView)
-                            imageView.setOnClickListener(onClickListener)
-                        }
+                        val drawable = ContextCompat.getDrawable(appContext, R.drawable.bg_card_thumbnail)
+                        val gradient = drawable as GradientDrawable
+                        gradient.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, THUMBNAIL_BACKGROUND_ALPHA))
+                        imageView.background = gradient
+                        imageView.setImageBitmap(bitmap)
+                        imageView.scaleType = ImageView.ScaleType.CENTER
+                        photoContainer.addView(imageView)
+                        imageView.setOnClickListener(onClickListener)
                     }
-                } else {
-                    photoContainerScrollView.visibility = View.GONE
                 }
+            } else {
+                photoContainerScrollView.visibility = View.GONE
             }
         }
 
