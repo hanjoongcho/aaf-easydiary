@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import me.blog.korn123.commons.utils.CommonUtils
+import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.helper.Config
 import me.blog.korn123.easydiary.helper.DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE
 
@@ -57,12 +58,10 @@ fun Context.makeSnackBar(view: View, message: String) {
 
 fun Context.showAlertDialog(message: String, positiveListener: DialogInterface.OnClickListener, negativeListener: DialogInterface.OnClickListener) {
     val builder = AlertDialog.Builder(this)
-    //        builder.setIcon(R.drawable.ic_launcher);
-    //        builder.setTitle("일기삭제");
     builder.setMessage(message)
     builder.setCancelable(true)
-    builder.setNegativeButton("취소", negativeListener)
-    builder.setPositiveButton("확인", positiveListener)
+    builder.setNegativeButton(getString(R.string.cancel), negativeListener)
+    builder.setPositiveButton(getString(R.string.ok), positiveListener)
     val alert = builder.create()
     alert.show()
 }
@@ -71,7 +70,7 @@ fun Context.showAlertDialog(message: String, positiveListener: DialogInterface.O
     val builder = AlertDialog.Builder(this)
     builder.setMessage(message)
     builder.setCancelable(true)
-    builder.setPositiveButton("확인", positiveListener)
+    builder.setPositiveButton(getString(R.string.ok), positiveListener)
     val alert = builder.create()
     alert.show()
 }
@@ -82,7 +81,7 @@ fun Context.showAlertDialog(title: String, message: String, positiveListener: Di
     //        builder.setIcon(R.drawable.book);
     builder.setMessage(message)
     builder.setCancelable(true)
-    builder.setPositiveButton("확인", positiveListener)
+    builder.setPositiveButton(getString(R.string.ok), positiveListener)
     val alert = builder.create()
     alert.show()
 }
