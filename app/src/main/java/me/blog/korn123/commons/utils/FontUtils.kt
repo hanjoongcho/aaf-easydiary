@@ -33,6 +33,7 @@ object FontUtils {
                 if (viewGroup.getChildAt(i) is TextView) {
                     val tv = viewGroup.getChildAt(i) as TextView
                     tv.typeface = typeface
+                    tv.setLineSpacing(0F, 1.5F)
                 }
             }
         }
@@ -72,6 +73,7 @@ object FontUtils {
         for (textView in targetViews) {
             textView?.let {
                 it.typeface = typeface  
+                it.setLineSpacing(0F, 1.5F)
             }        
         }
     }
