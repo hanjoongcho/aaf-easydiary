@@ -105,7 +105,7 @@ class TimelineItemAdapter(
     }
 
     private fun setFontsTypeface(holder: ViewHolder) {
-        FontUtils.setFontsTypeface(context, context.assets, null, holder.textView1, holder.title)
+        FontUtils.setFontsTypeface(context, context.assets, null, holder.item_holder)
     }
 
     private class ViewHolder {

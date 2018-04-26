@@ -82,13 +82,13 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_diary_update)
-
         setSupportActionBar(toolbar)
         supportActionBar?.run {
             title = getString(R.string.update_diary_title)
             setDisplayHomeAsUpEnabled(true)
         }
-
+        mCustomLineSpacing = false
+        
         mRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
             putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
             putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
@@ -189,7 +189,7 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
     override fun onResume() {
         super.onResume()
         initBottomContainer()
-        setFontsStyle()
+        initSpinner()
     }
 
     private fun initBottomContainer() {
@@ -197,11 +197,6 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
         mPrimaryColor = BaseConfig(this@DiaryUpdateActivity).primaryColor
         val drawable = photoView.background as GradientDrawable
         drawable.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, THUMBNAIL_BACKGROUND_ALPHA))
-    }
-
-    private fun setFontsStyle() {
-        FontUtils.setFontsTypeface(applicationContext, assets, null, findViewById<View>(android.R.id.content) as ViewGroup)
-        initSpinner()
     }
 
     fun initSpinner() {

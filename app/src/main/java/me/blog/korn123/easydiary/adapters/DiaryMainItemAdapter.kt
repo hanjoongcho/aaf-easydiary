@@ -86,7 +86,7 @@ class DiaryMainItemAdapter(
             }
             false -> holder.photoContainer.visibility = View.GONE
         }
-        FontUtils.setFontsTypeface(context, context.assets, null, holder.textView1, holder.textView2, holder.textView3)
+        FontUtils.setFontsTypeface(context, context.assets, null, holder.item_holder)
         holder.attachPhotoLoader?.interrupt()
         val attachPhotoLoader = AttachPhotoLoader(activity, diaryDto.sequence, holder)
         holder.attachPhotoLoader = attachPhotoLoader

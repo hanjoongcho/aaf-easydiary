@@ -287,7 +287,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
      */
     class PlaceholderFragment : Fragment() {
         private var mPrimaryColor = 0
-        private var mRootView: ViewGroup? = null
+        private lateinit var mRootView: ViewGroup
         private lateinit var realmInstance: Realm
 
         override fun onCreate(savedInstanceState: Bundle?) {
@@ -389,15 +389,13 @@ class DiaryReadActivity : EasyDiaryActivity() {
 
         fun setFontsTypeface() {
             activity?.let { it ->
-                FontUtils.setFontsTypeface(it, it.assets, "", diaryTitle, date, diaryContents)    
+                FontUtils.setFontsTypeface(it, it.assets, "", mRootView)    
             }
         }
 
         fun setFontsSize() {
             context?.let {
-                mRootView?.let { rootView ->
-                    it.initTextSize(rootView, it)
-                }
+                it.initTextSize(mRootView, it)
             }
         }
 
