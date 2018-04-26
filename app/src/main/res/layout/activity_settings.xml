@@ -58,6 +58,26 @@
                     </android.support.v7.widget.CardView>
 
                     <android.support.v7.widget.CardView
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="@string/font_line_spacing"
+                                style="@style/SettingsTitle" />
+                            <com.xw.repo.BubbleSeekBar
+                                android:id="@+id/fontLineSpacing"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="8dp"
+                                android:layout_marginTop="8dp"/>
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:id="@+id/fontLineSpacingSummary"
+                                android:text="@string/font_line_spacing_summary"
+                                style="@style/SettingsSummary" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
                         android:id="@+id/primaryColor"
                         style="@style/AppCard.Settings">
                         <LinearLayout
