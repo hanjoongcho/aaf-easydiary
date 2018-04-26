@@ -124,6 +124,7 @@ class DiaryInsertActivity : EasyDiaryActivity() {
             title = getString(R.string.create_diary_title)
             setDisplayHomeAsUpEnabled(true)
         }
+        mCustomLineSpacing = false
         
         setupRecognizer()
         setupDialog()
@@ -142,7 +143,6 @@ class DiaryInsertActivity : EasyDiaryActivity() {
         mPrimaryColor = BaseConfig(this@DiaryInsertActivity).primaryColor
         val drawable = photoView.background as GradientDrawable
         drawable.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, THUMBNAIL_BACKGROUND_ALPHA))
-        setFontsStyle()
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -409,10 +409,6 @@ class DiaryInsertActivity : EasyDiaryActivity() {
         mHourOfDay = hourOfDay
         mMinute = minute
         initDateTime()
-    }
-
-    private fun setFontsStyle() {
-        FontUtils.setFontsTypeface(applicationContext, assets, null, findViewById<View>(android.R.id.content) as ViewGroup)
     }
 
     private fun applyRemoveIndex() {

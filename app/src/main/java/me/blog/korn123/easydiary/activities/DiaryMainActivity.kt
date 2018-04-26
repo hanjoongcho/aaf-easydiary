@@ -21,6 +21,7 @@ import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_diary_main.*
 import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
 import me.blog.korn123.easydiary.extensions.config
@@ -61,7 +62,7 @@ class DiaryMainActivity : EasyDiaryActivity() {
         if (intent.getBooleanExtra(APP_FINISH_FLAG, false)) {
             finish()
         }
-
+        
         mCurrentTimeMillis = System.currentTimeMillis()
         setSupportActionBar(toolbar)
         supportActionBar?.run {

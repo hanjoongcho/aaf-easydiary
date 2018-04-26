@@ -4,9 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
@@ -39,12 +37,13 @@ class DiaryWeatherItemAdapter(
             holder = ViewHolder()
             holder.textView1 = row.findViewById<View>(R.id.text1) as TextView
             holder.imageView1 = row.findViewById<View>(R.id.imageView1) as ImageView
+            holder.item_holder = row.findViewById(R.id.item_holder)
             row.tag = holder
         } else {
             holder = row.tag as ViewHolder
         }
 
-        FontUtils.setFontsTypeface(context, context.assets, null, holder.textView1)
+        FontUtils.setFontsTypeface(context, context.assets, null, holder.item_holder)
         EasyDiaryUtils.initWeatherView(holder.imageView1, position, true)
         holder.textView1?.let {
             it.text = mList[position]
@@ -65,5 +64,6 @@ class DiaryWeatherItemAdapter(
     private class ViewHolder {
         internal var textView1: TextView? = null
         internal var imageView1: ImageView? = null
+        internal var item_holder: LinearLayout? = null
     }
 }

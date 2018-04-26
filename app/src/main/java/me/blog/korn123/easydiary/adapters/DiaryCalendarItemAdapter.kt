@@ -61,7 +61,7 @@ class DiaryCalendarItemAdapter(
     }
 
     private fun setFontsTypeface(holder: ViewHolder) {
-        FontUtils.setFontsTypeface(context, context.assets, null, holder.textView1)
+        FontUtils.setFontsTypeface(context, context.assets, null, holder.item_holder)
     }
 
     private class ViewHolder {

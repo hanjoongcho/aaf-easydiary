@@ -16,6 +16,7 @@ import me.blog.korn123.easydiary.helper.APP_BACKGROUND_ALPHA
  */
 
 open class EasyDiaryActivity : BaseSimpleActivity() {
+    var mCustomLineSpacing = true
     val mRootView: ViewGroup? by lazy {
         findViewById<ViewGroup>(R.id.main_holder)
     }
@@ -35,7 +36,7 @@ open class EasyDiaryActivity : BaseSimpleActivity() {
             updateTextColors(it)
             updateAppViews(it)
         }
-        FontUtils.setFontsTypeface(applicationContext, assets, null, findViewById<ViewGroup>(android.R.id.content))
+        FontUtils.setFontsTypeface(applicationContext, assets, null, findViewById<ViewGroup>(android.R.id.content), mCustomLineSpacing)
     }
 
     override fun getMainViewGroup(): ViewGroup? = mRootView
