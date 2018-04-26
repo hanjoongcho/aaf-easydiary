@@ -21,6 +21,8 @@ const val DIARY_SEARCH_QUERY_CASE_SENSITIVE = "case_sensitive"
 const val CONTENT_URI_PREFIX = "content:/"
 const val FILE_URI_PREFIX = "file:/"
 const val LIST_URI_STRING = "listUriString"
+const val LINE_SPACING_SCALE_FACTOR = "line_spacing_scale_factor"
+const val LINE_SPACING_SCALE_DEFAULT = 1.0F
 
 const val WORKING_DIRECTORY = "/AAFactory/EasyDiary/"
 const val DIARY_PHOTO_DIRECTORY = "/AAFactory/EasyDiary/Photos/"

@@ -73,8 +73,8 @@ object FontUtils {
         for (textView in targetViews) {
             textView?.let {
                 it.typeface = typeface  
-                it.setLineSpacing(0F, 1.5F)
-            }        
+                it.setLineSpacing(0F, context.config.lineSpacingScaleFactor)
+            }
         }
     }
 

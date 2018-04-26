@@ -131,14 +131,17 @@ class SettingsActivity : EasyDiaryActivity() {
                 .autoAdjustSectionMark()
                 .build()
 
+
         val bubbleSeekBarListener = object : BubbleSeekBar.OnProgressChangedListener {
             override fun onProgressChanged(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float, fromUser: Boolean) {
                 Log.i("progress", "$progress $progressFloat")
+                config.lineSpacingScaleFactor = progressFloat
             }
             override fun getProgressOnActionUp(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float) {}
             override fun getProgressOnFinally(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float, fromUser: Boolean) {}
         }
         fontLineSpacing.setOnProgressChangedListener(bubbleSeekBarListener)
+        fontLineSpacing.setProgress(config.lineSpacingScaleFactor)
     }
 
     override fun onResume() {
