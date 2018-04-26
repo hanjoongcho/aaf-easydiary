@@ -21,7 +21,6 @@ import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_diary_main.*
 import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
 import me.blog.korn123.easydiary.extensions.config
