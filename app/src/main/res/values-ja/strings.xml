@@ -117,8 +117,8 @@
     <string name="easy_photo_map_summary">Easy Photo Map is a photomap application that displays the location of the photo on the map using the location information included in the photo.</string>
     <string name="easy_password_title">Easy Password</string>
     <string name="easy_password_summary">Easy Password is an application that helps you manage passwords used for login, document security, door lock, lock, credit card, account management, etc. by using one pattern lock set by the user.</string>
-    <string name="font_line_spacing">폰트 줄간격</string>
-    <string name="font_line_spacing_summary">설정된 비율에 맞춰 폰트의 줄간격을 변경합니다.</string>
+    <string name="font_line_spacing">フォント、行間隔</string>
+    <string name="font_line_spacing_summary">設定された割合に合わせてフォントの行間を変更します。</string>
 
     <!--CalendarActivity-->
     <string name="calendar_title">カレンダー</string>

@@ -120,11 +120,11 @@ class SettingsActivity : EasyDiaryActivity() {
         restorePhotoSetting.setOnClickListener(mOnClickListener)
 
         fontLineSpacing.configBuilder
-                .min(0.1F)
-                .max(2.0F)
-                .progress(0F)
+                .min(0.2F)
+                .max(1.8F)
+                .progress(config.lineSpacingScaleFactor)
                 .floatType()
-                .sectionCount(10)
+                .sectionCount(16)
                 .sectionTextInterval(2)
                 .showSectionText()
                 .sectionTextPosition(BubbleSeekBar.TextPosition.BELOW_SECTION_MARK)
@@ -136,12 +136,13 @@ class SettingsActivity : EasyDiaryActivity() {
             override fun onProgressChanged(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float, fromUser: Boolean) {
                 Log.i("progress", "$progress $progressFloat")
                 config.lineSpacingScaleFactor = progressFloat
+                setFontsStyle()
+                Log.i("progress", "${config.lineSpacingScaleFactor}")
             }
             override fun getProgressOnActionUp(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float) {}
             override fun getProgressOnFinally(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float, fromUser: Boolean) {}
         }
         fontLineSpacing.setOnProgressChangedListener(bubbleSeekBarListener)
-        fontLineSpacing.setProgress(config.lineSpacingScaleFactor)
     }
 
     override fun onResume() {

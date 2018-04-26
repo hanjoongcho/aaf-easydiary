@@ -25,15 +25,15 @@ import me.blog.korn123.easydiary.helper.USER_CUSTOM_FONTS_DIRECTORY
 object FontUtils {
     private var sTypeface: Typeface? = null
 
-    private fun setTypeface(viewGroup: ViewGroup, typeface: Typeface?) {
+    private fun setTypeface(context: Context, viewGroup: ViewGroup, typeface: Typeface?) {
         for (i in 0 until viewGroup.childCount) {
             if (viewGroup.getChildAt(i) is ViewGroup) {
-                setTypeface(viewGroup.getChildAt(i) as ViewGroup, typeface)
+                setTypeface(context, viewGroup.getChildAt(i) as ViewGroup, typeface)
             } else {
                 if (viewGroup.getChildAt(i) is TextView) {
                     val tv = viewGroup.getChildAt(i) as TextView
                     tv.typeface = typeface
-                    tv.setLineSpacing(0F, 1.5F)
+                    tv.setLineSpacing(0F, context.config.lineSpacingScaleFactor)
                 }
             }
         }
@@ -80,7 +80,7 @@ object FontUtils {
 
     fun setFontsTypeface(context: Context, assetManager: AssetManager, customFontName: String?, rootView: ViewGroup) {
         val typeface = if (StringUtils.isNotEmpty(customFontName)) getTypeface(context, assetManager, customFontName) else getCommonTypeface(context, assetManager)
-        setTypeface(rootView, typeface)
+        setTypeface(context, rootView, typeface)
     }
 
     fun getTypeface(context: Context, assetManager: AssetManager, fontName: String?): Typeface? {
