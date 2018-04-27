@@ -66,6 +66,8 @@
                                 style="@style/SettingsTitle" />
                             <com.xw.repo.BubbleSeekBar
                                 android:id="@+id/fontLineSpacing"
+                                app:bsb_track_color="?attr/colorPrimary"
+                                app:bsb_second_track_color="?attr/colorAccent"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="8dp"
