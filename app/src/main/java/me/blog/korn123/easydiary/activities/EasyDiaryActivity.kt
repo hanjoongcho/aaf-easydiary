@@ -1,9 +1,9 @@
 package me.blog.korn123.easydiary.activities
 
 import android.view.ViewGroup
-import io.github.hanjoongcho.commons.activities.BaseSimpleActivity
-import io.github.hanjoongcho.commons.extensions.updateAppViews
-import io.github.hanjoongcho.commons.extensions.updateTextColors
+import io.github.aafactory.commons.activities.BaseSimpleActivity
+import io.github.aafactory.commons.extensions.updateAppViews
+import io.github.aafactory.commons.extensions.updateTextColors
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.initTextSize

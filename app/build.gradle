@@ -16,6 +16,7 @@ android {
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
     }
+    
     buildTypes {
         release {
             minifyEnabled true
@@ -28,6 +29,10 @@ android {
                 }
             }
         }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/commons_release.kotlin_module'
     }
 }
 
@@ -54,7 +59,7 @@ dependencies {
     implementation "com.android.support:design:${supportLibVersion}"
     implementation "com.android.support:support-v4:${supportLibVersion}"
     implementation "com.android.support:support-vector-drawable:${supportLibVersion}"
-    implementation 'com.google.android.gms:play-services-drive:11.6.0'
+    implementation 'com.google.android.gms:play-services-drive:11.8.0'
 
     // kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -89,9 +94,9 @@ dependencies {
     // https://github.com/SimpleMobileTools/Simple-Commons
     implementation 'com.simplemobiletools:commons:3.7.8'
 //    implementation project(":commons")
-    
-    implementation 'io.github.hanjoongcho:commons-android:0.3.0'
-//    implementation project(":commons-android")
+
+    implementation 'io.github.aafactory:commons:0.1.1'
+//    implementation project(":aafactory-commons")
 }
 
 repositories {

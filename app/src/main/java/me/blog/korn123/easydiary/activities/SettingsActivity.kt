@@ -14,8 +14,8 @@ import android.widget.ListView
 import com.google.android.gms.drive.GoogleDriveDownloader
 import com.google.android.gms.drive.GoogleDriveUploader
 import com.xw.repo.BubbleSeekBar
-import io.github.hanjoongcho.commons.activities.BaseWebViewActivity
-import io.github.hanjoongcho.commons.helpers.BaseConfig
+import io.github.aafactory.commons.activities.BaseWebViewActivity
+import io.github.aafactory.commons.helpers.BaseConfig
 import kotlinx.android.synthetic.main.activity_settings.*
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
@@ -163,13 +163,13 @@ class SettingsActivity : EasyDiaryActivity() {
     private fun setupInvite() {
         inviteSummary.text = String.format(getString(R.string.invite_friends_summary), getString(R.string.app_name))
         invite.setOnClickListener {
-            val text = String.format(getString(io.github.hanjoongcho.commons.R.string.share_text), getString(R.string.app_name), getStoreUrl())
+            val text = String.format(getString(io.github.aafactory.commons.R.string.share_text), getString(R.string.app_name), getStoreUrl())
             Intent().apply {
                 action = Intent.ACTION_SEND
                 putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
                 putExtra(Intent.EXTRA_TEXT, text)
                 type = "text/plain"
-                startActivity(Intent.createChooser(this, getString(io.github.hanjoongcho.commons.R.string.invite_via)))
+                startActivity(Intent.createChooser(this, getString(io.github.aafactory.commons.R.string.invite_via)))
             }
         }
     }
