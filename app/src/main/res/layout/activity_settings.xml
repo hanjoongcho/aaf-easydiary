@@ -28,7 +28,7 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <io.github.hanjoongcho.commons.views.LabelLayout
+                <io.github.aafactory.commons.views.LabelLayout
                     android:layout_marginTop="5dp"
                     android:background="?attr/colorPrimary"
                     android:layout_width="match_parent"
@@ -36,7 +36,7 @@
                     <TextView
                         android:text="Application Setting"
                         style="@style/SettingsCategory" />
-                </io.github.hanjoongcho.commons.views.LabelLayout>
+                </io.github.aafactory.commons.views.LabelLayout>
 
                 <LinearLayout
                     android:orientation="vertical"
@@ -219,14 +219,14 @@
                     </android.support.v7.widget.CardView>
                 </LinearLayout>
 
-                <io.github.hanjoongcho.commons.views.LabelLayout
+                <io.github.aafactory.commons.views.LabelLayout
                     android:background="?attr/colorPrimary"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
                         android:text="Application Information"
                         style="@style/SettingsCategory" />
-                </io.github.hanjoongcho.commons.views.LabelLayout>
+                </io.github.aafactory.commons.views.LabelLayout>
 
                 <LinearLayout
                     android:orientation="vertical"
@@ -280,14 +280,14 @@
                     </android.support.v7.widget.CardView>
                 </LinearLayout>
 
-                <io.github.hanjoongcho.commons.views.LabelLayout
+                <io.github.aafactory.commons.views.LabelLayout
                     android:background="?attr/colorPrimary"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
                         android:text="AAF Easy Series"
                         style="@style/SettingsCategory" />
-                </io.github.hanjoongcho.commons.views.LabelLayout>
+                </io.github.aafactory.commons.views.LabelLayout>
 
                 <LinearLayout
                     android:orientation="vertical"
