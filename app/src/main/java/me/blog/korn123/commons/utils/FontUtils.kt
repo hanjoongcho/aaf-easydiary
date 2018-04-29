@@ -6,17 +6,13 @@ import android.graphics.Typeface
 import android.os.Environment
 import android.view.ViewGroup
 import android.widget.TextView
-
-import org.apache.commons.io.FilenameUtils
-import org.apache.commons.lang3.StringUtils
-
-import java.io.File
-
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.extensions.*
-
+import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT
 import me.blog.korn123.easydiary.helper.USER_CUSTOM_FONTS_DIRECTORY
+import org.apache.commons.io.FilenameUtils
+import org.apache.commons.lang3.StringUtils
+import java.io.File
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -25,14 +21,15 @@ import me.blog.korn123.easydiary.helper.USER_CUSTOM_FONTS_DIRECTORY
 object FontUtils {
     private var sTypeface: Typeface? = null
 
-    private fun setTypeface(viewGroup: ViewGroup, typeface: Typeface?) {
+    private fun setTypeface(context: Context, viewGroup: ViewGroup, typeface: Typeface?, customLineSpacing: Boolean) {
         for (i in 0 until viewGroup.childCount) {
-            if (viewGroup.getChildAt(i) is ViewGroup) {
-                setTypeface(viewGroup.getChildAt(i) as ViewGroup, typeface)
-            } else {
-                if (viewGroup.getChildAt(i) is TextView) {
-                    val tv = viewGroup.getChildAt(i) as TextView
-                    tv.typeface = typeface
+            val targetView = viewGroup.getChildAt(i)
+            if (targetView is ViewGroup) {
+                setTypeface(context, targetView, typeface, customLineSpacing)
+            } else if (targetView is TextView) {
+                targetView.typeface = typeface
+                if (customLineSpacing) {
+                    targetView.setLineSpacing(0F, context.config.lineSpacingScaleFactor)
                 }
             }
         }
@@ -67,18 +64,25 @@ object FontUtils {
         sTypeface = getTypeface(context, assetManager, commonFontName)
     }
 
-    fun setFontsTypeface(context: Context, assetManager: AssetManager, customFontName: String?, vararg targetViews: TextView?) {
-        val typeface = if (StringUtils.isNotEmpty(customFontName)) getTypeface(context, assetManager, customFontName) else getCommonTypeface(context, assetManager)
-        for (textView in targetViews) {
-            textView?.let {
-                it.typeface = typeface  
-            }        
-        }
+//    fun setFontsTypeface(context: Context, assetManager: AssetManager, customFontName: String?, vararg targetViews: TextView?) {
+//        val typeface = if (StringUtils.isNotEmpty(customFontName)) getTypeface(context, assetManager, customFontName) else getCommonTypeface(context, assetManager)
+//        for (textView in targetViews) {
+//            textView?.let {
+//                it.typeface = typeface  
+//                it.setLineSpacing(0F, context.config.lineSpacingScaleFactor)
+//            }
+//        }
+//    }
+
+    fun setFontsTypeface(context: Context, assetManager: AssetManager, customFontName: String?, rootView: ViewGroup?) {
+        setFontsTypeface(context, assetManager, customFontName, rootView, true)
     }
 
-    fun setFontsTypeface(context: Context, assetManager: AssetManager, customFontName: String?, rootView: ViewGroup) {
+    fun setFontsTypeface(context: Context, assetManager: AssetManager, customFontName: String?, rootView: ViewGroup?, customLineSpacing: Boolean) {
         val typeface = if (StringUtils.isNotEmpty(customFontName)) getTypeface(context, assetManager, customFontName) else getCommonTypeface(context, assetManager)
-        setTypeface(rootView, typeface)
+        rootView?.let {
+            setTypeface(context, it, typeface, customLineSpacing)
+        }
     }
 
     fun getTypeface(context: Context, assetManager: AssetManager, fontName: String?): Typeface? {

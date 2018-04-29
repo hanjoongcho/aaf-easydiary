@@ -7,8 +7,8 @@ import android.support.v4.graphics.ColorUtils
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import io.github.hanjoongcho.commons.extensions.updateAppViews
-import io.github.hanjoongcho.commons.extensions.updateTextColors
+import io.github.aafactory.commons.extensions.updateAppViews
+import io.github.aafactory.commons.extensions.updateTextColors
 import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
@@ -86,7 +86,7 @@ class DiaryMainItemAdapter(
             }
             false -> holder.photoContainer.visibility = View.GONE
         }
-        FontUtils.setFontsTypeface(context, context.assets, null, holder.textView1, holder.textView2, holder.textView3)
+        FontUtils.setFontsTypeface(context, context.assets, null, holder.item_holder)
         holder.attachPhotoLoader?.interrupt()
         val attachPhotoLoader = AttachPhotoLoader(activity, diaryDto.sequence, holder)
         holder.attachPhotoLoader = attachPhotoLoader

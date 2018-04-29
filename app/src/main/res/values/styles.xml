@@ -14,7 +14,14 @@
         <item name="contentPaddingTop">5dp</item>
         <item name="contentPaddingBottom">5dp</item>
     </style>
-
+    <style name="SettingsTitle">
+        <item name="android:layout_marginBottom">@dimen/card_layout_margin</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/default_text_color</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    
     <!--App View Style-->
     <style name="image_view_custom_toolbar_icon">
         <item name="android:layout_width">wrap_content</item>

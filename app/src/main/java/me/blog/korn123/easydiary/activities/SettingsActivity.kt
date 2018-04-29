@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
 import android.support.v7.app.AlertDialog
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +13,9 @@ import android.widget.AdapterView
 import android.widget.ListView
 import com.google.android.gms.drive.GoogleDriveDownloader
 import com.google.android.gms.drive.GoogleDriveUploader
-import io.github.hanjoongcho.commons.activities.BaseWebViewActivity
-import io.github.hanjoongcho.commons.helpers.BaseConfig
+import com.xw.repo.BubbleSeekBar
+import io.github.aafactory.commons.activities.BaseWebViewActivity
+import io.github.aafactory.commons.helpers.BaseConfig
 import kotlinx.android.synthetic.main.activity_settings.*
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
@@ -116,6 +118,31 @@ class SettingsActivity : EasyDiaryActivity() {
         easyPhotoMap.setOnClickListener(mOnClickListener)
         easyPassword.setOnClickListener(mOnClickListener)
         restorePhotoSetting.setOnClickListener(mOnClickListener)
+
+        fontLineSpacing.configBuilder
+                .min(0.2F)
+                .max(1.8F)
+                .progress(config.lineSpacingScaleFactor)
+                .floatType()
+                .sectionCount(16)
+                .sectionTextInterval(2)
+                .showSectionText()
+                .sectionTextPosition(BubbleSeekBar.TextPosition.BELOW_SECTION_MARK)
+                .autoAdjustSectionMark()
+                .build()
+
+
+        val bubbleSeekBarListener = object : BubbleSeekBar.OnProgressChangedListener {
+            override fun onProgressChanged(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float, fromUser: Boolean) {
+                Log.i("progress", "$progress $progressFloat")
+                config.lineSpacingScaleFactor = progressFloat
+                setFontsStyle()
+                Log.i("progress", "${config.lineSpacingScaleFactor}")
+            }
+            override fun getProgressOnActionUp(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float) {}
+            override fun getProgressOnFinally(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float, fromUser: Boolean) {}
+        }
+        fontLineSpacing.setOnProgressChangedListener(bubbleSeekBarListener)
     }
 
     override fun onResume() {
@@ -136,13 +163,13 @@ class SettingsActivity : EasyDiaryActivity() {
     private fun setupInvite() {
         inviteSummary.text = String.format(getString(R.string.invite_friends_summary), getString(R.string.app_name))
         invite.setOnClickListener {
-            val text = String.format(getString(io.github.hanjoongcho.commons.R.string.share_text), getString(R.string.app_name), getStoreUrl())
+            val text = String.format(getString(io.github.aafactory.commons.R.string.share_text), getString(R.string.app_name), getStoreUrl())
             Intent().apply {
                 action = Intent.ACTION_SEND
                 putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
                 putExtra(Intent.EXTRA_TEXT, text)
                 type = "text/plain"
-                startActivity(Intent.createChooser(this, getString(io.github.hanjoongcho.commons.R.string.invite_via)))
+                startActivity(Intent.createChooser(this, getString(io.github.aafactory.commons.R.string.invite_via)))
             }
         }
     }

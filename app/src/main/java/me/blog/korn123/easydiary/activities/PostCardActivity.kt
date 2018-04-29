@@ -4,11 +4,11 @@ import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
 import android.os.Looper
+import android.support.v4.content.FileProvider
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -19,7 +19,10 @@ import com.flask.colorpicker.builder.ColorPickerDialogBuilder
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import kotlinx.android.synthetic.main.activity_post_card.*
-import me.blog.korn123.commons.utils.*
+import me.blog.korn123.commons.utils.BitmapUtils
+import me.blog.korn123.commons.utils.DateUtils
+import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.confirmPermission
@@ -60,11 +63,6 @@ class PostCardActivity : EasyDiaryActivity() {
         initShowcase()
     }
 
-    override fun onResume() {
-        super.onResume()
-        setFontsStyle()
-    }
-    
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
@@ -246,12 +244,8 @@ class PostCardActivity : EasyDiaryActivity() {
         val file = File(mSavedDiaryCardPath)
         val shareIntent = Intent()
         shareIntent.action = Intent.ACTION_SEND
-        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file))
+        shareIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this@PostCardActivity, "$packageName.provider", file))
         shareIntent.type = "image/jpeg"
         startActivity(Intent.createChooser(shareIntent, getString(R.string.diary_card_share_info)))
-    }
-
-    private fun setFontsStyle() {
-        FontUtils.setFontsTypeface(applicationContext, assets, null, findViewById<View>(android.R.id.content) as ViewGroup)
     }
 }

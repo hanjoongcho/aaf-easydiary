@@ -117,7 +117,9 @@
     <string name="easy_photo_map_summary">Easy Photo Map is a photomap application that displays the location of the photo on the map using the location information included in the photo.</string>
     <string name="easy_password_title">Easy Password</string>
     <string name="easy_password_summary">Easy Password is an application that helps you manage passwords used for login, document security, door lock, lock, credit card, account management, etc. by using one pattern lock set by the user.</string>
-    
+    <string name="font_line_spacing">Font line spacing</string>
+    <string name="font_line_spacing_summary">Change the line spacing of the font to the set ratio.</string>
+
     <!--CalendarActivity-->
     <string name="calendar_title">Calendar</string>
     <string name="guide_message_4">There is no diary created on that day.</string>

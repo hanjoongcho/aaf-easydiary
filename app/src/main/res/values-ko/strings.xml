@@ -117,6 +117,8 @@
     <string name="easy_photo_map_summary">이지 포토맵은 사진에 포함된 위치정보를 이용하여 사진이 촬영된 위치를 지도 위에 표시해주는 포토맵 애플리케이션입니다.</string>
     <string name="easy_password_title">이지 패스워드</string>
     <string name="easy_password_summary">이지 패스워드는 로그인, 문서보안, 도어락, 자물쇠, 신용카드, 계좌관리등에 사용하는 비밀번호를 사용자가 설정한 하나의 잠금번호를 이용하여 관리 할 수 있도록 도와주는 애플리케이션입니다.</string>
+    <string name="font_line_spacing">폰트 줄간격</string>
+    <string name="font_line_spacing_summary">설정된 비율에 맞춰 폰트의 줄간격을 변경합니다.</string>
 
     <!--CalendarActivity-->
     <string name="calendar_title">캘린더</string>

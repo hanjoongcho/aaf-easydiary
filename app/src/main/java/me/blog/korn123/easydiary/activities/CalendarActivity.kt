@@ -39,7 +39,6 @@ class CalendarActivity : EasyDiaryActivity() {
             setDisplayHomeAsUpEnabled(true)    
         }
         
-        setFontsStyle()
         mCurrentDate = Calendar.getInstance().time
         val cal = Calendar.getInstance()
         val currentDate = cal.time
@@ -156,10 +155,6 @@ class CalendarActivity : EasyDiaryActivity() {
         // TODO Auto-generated method stub
         super.onSaveInstanceState(outState)
         calendarFragment.saveStatesToKey(outState!!, "CALDROID_SAVED_STATE")
-    }
-
-    private fun setFontsStyle() {
-        FontUtils.setFontsTypeface(applicationContext, assets, null, findViewById<ViewGroup>(android.R.id.content))
     }
 
     fun refreshList(date: Date) {

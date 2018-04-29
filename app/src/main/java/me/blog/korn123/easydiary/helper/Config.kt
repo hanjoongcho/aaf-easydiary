@@ -1,7 +1,7 @@
 package me.blog.korn123.easydiary.helper
 
 import android.content.Context
-import io.github.hanjoongcho.commons.helpers.BaseConfig
+import io.github.aafactory.commons.helpers.BaseConfig
 import me.blog.korn123.commons.utils.CommonUtils
 
 /**
@@ -43,4 +43,8 @@ class Config(context: Context) : BaseConfig(context) {
     var isInitDummyData: Boolean
         get() = legacyPrefs.getBoolean(INIT_DUMMY_DATA_FLAG, false)
         set(isInitDummyData) = legacyPrefs.edit().putBoolean(INIT_DUMMY_DATA_FLAG, isInitDummyData).apply()
+
+    var lineSpacingScaleFactor: Float
+        get() = legacyPrefs.getFloat(LINE_SPACING_SCALE_FACTOR, LINE_SPACING_SCALE_DEFAULT)
+        set(lineSpacingScaleFactor) = legacyPrefs.edit().putFloat(LINE_SPACING_SCALE_FACTOR, lineSpacingScaleFactor).apply()
 }

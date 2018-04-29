@@ -1,7 +1,6 @@
 package me.blog.korn123.easydiary.activities
 
 import android.os.Bundle
-import android.view.ViewGroup
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
@@ -12,10 +11,8 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import com.github.mikephil.charting.utils.ColorTemplate
 import kotlinx.android.synthetic.main.activity_barchart.*
 import me.blog.korn123.commons.utils.DateUtils
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.chart.*
-import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import java.util.*
 

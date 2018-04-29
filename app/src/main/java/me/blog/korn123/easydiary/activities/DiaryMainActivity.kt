@@ -61,7 +61,7 @@ class DiaryMainActivity : EasyDiaryActivity() {
         if (intent.getBooleanExtra(APP_FINISH_FLAG, false)) {
             finish()
         }
-
+        
         mCurrentTimeMillis = System.currentTimeMillis()
         setSupportActionBar(toolbar)
         supportActionBar?.run {

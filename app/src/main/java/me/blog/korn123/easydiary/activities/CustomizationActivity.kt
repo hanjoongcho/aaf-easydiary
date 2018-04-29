@@ -3,7 +3,7 @@ package me.blog.korn123.easydiary.activities
 import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.TextView
-import io.github.hanjoongcho.commons.activities.BaseCustomizationActivity
+import io.github.aafactory.commons.activities.BaseCustomizationActivity
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.pauseLock
