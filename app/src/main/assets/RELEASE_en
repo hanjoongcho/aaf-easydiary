@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.37 (date: 2018/04/29)
+  * Added ability to set diary content line spacing
+  
 # Changes in 1.4.36 (date: 2018/03/31)
   * Added diary text copy function
 
