@@ -60,7 +60,8 @@ dependencies {
     implementation "com.android.support:support-v4:${supportLibVersion}"
     implementation "com.android.support:support-vector-drawable:${supportLibVersion}"
     implementation 'com.google.android.gms:play-services-drive:11.8.0'
-
+    implementation 'com.google.android:flexbox:1.0.0'
+    
     // kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"

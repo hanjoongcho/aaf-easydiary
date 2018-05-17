@@ -163,6 +163,11 @@ class DiaryMainActivity : EasyDiaryActivity() {
                 TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, calendarIntent)
             }
             R.id.microphone -> showSpeechDialog()
+            R.id.postCard -> {
+                val postCardViewer = Intent(this@DiaryMainActivity, PostCardViewerActivity::class.java)
+                //                startActivity(calendarIntent);
+                TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, postCardViewer)
+            }
         }
         return super.onOptionsItemSelected(item)
     }
