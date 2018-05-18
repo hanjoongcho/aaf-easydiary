@@ -18,6 +18,4 @@ limitations under the License.
     android:id="@+id/imageview"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:scaleType="centerCrop"
-    android:layout_margin="1dp"
     android:contentDescription="description..."/>
