@@ -5,8 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:ignore="RtlHardcoded">
+    android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -19,8 +18,9 @@
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            app:expandedTitleMarginBottom="30dp"
+            app:expandedTitleMarginBottom="45dp"
             app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleTextAppearance="@style/CollapsingTextAppearance.Inverse"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ImageView

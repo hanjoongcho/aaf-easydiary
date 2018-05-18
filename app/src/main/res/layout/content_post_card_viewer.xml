@@ -30,5 +30,15 @@ limitations under the License.
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
+    <TextView
+        android:id="@+id/infoMessage"
+        android:visibility="gone"
+        android:text="There are no saved Postcards."
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </android.support.v7.widget.CardView>
+
 
