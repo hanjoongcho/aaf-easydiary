@@ -175,6 +175,7 @@
     <string name="menu_calendar">캘린더</string>
     <string name="menu_chart">차트</string>
     <string name="menu_timeline">타임라인</string>
+    <string name="post_card">다이어리 포스트카드</string>
 
     <!--diary_read.xml-->
     <string name="menu_delete">삭제</string>

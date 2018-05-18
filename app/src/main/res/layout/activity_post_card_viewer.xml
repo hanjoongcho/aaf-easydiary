@@ -20,7 +20,6 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             app:expandedTitleMarginBottom="30dp"
-            app:expandedTitleTextAppearance="@style/CollapsingTextAppearance.Inverse"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 

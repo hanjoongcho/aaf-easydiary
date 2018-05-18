@@ -2,16 +2,15 @@ package me.blog.korn123.easydiary.activities
 
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
-import android.view.View
-import android.view.ViewGroup
 import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
-import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.adapters.PostcardAdapter
 import kotlinx.android.synthetic.main.activity_post_card_viewer.*
 import me.blog.korn123.commons.utils.FontUtils
+import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.adapters.PostcardAdapter
+import me.blog.korn123.easydiary.extensions.config
 
 /**
  * Created by CHO HANJOONG on 2018-05-18.
@@ -23,6 +22,10 @@ class PostCardViewerActivity : EasyDiaryActivity() {
         setContentView(R.layout.activity_post_card_viewer)
         toolbar.setNavigationOnClickListener { onBackPressed() }
 //        setSupportActionBar(toolbar)
+        FontUtils.getTypeface(this, assets, config.settingFontName)?.let {
+            toolbar_layout.setCollapsedTitleTypeface(it)
+            toolbar_layout.setExpandedTitleTypeface(it)
+        }
 
         val flexboxLayoutManager = FlexboxLayoutManager(this).apply {
             flexWrap = FlexWrap.WRAP

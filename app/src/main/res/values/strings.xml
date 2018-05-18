@@ -175,7 +175,7 @@
     <string name="menu_calendar">Calendar</string>
     <string name="menu_chart">Chart</string>
     <string name="menu_timeline">Timeline</string>
-    <string name="post_card">PostCard</string>
+    <string name="post_card">Diary Postcard</string>
 
     <!--diary_read.xml-->
     <string name="menu_delete">Delete</string>
