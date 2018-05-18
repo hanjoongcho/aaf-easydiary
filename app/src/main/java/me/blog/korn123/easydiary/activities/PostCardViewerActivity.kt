@@ -57,6 +57,10 @@ class PostCardViewerActivity : EasyDiaryActivity() {
                     }
             )
         }
-//        if (listPostcard.isEmpty()) infoMessage.visibility = View.VISIBLE
+        if (listPostcard.isEmpty()) {
+            infoMessage.visibility = View.VISIBLE
+            recyclerViewHolder.visibility = View.GONE
+            app_bar.setExpanded(false)
+        }
     }
 }
