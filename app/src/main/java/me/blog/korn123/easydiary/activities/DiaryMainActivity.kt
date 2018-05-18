@@ -23,9 +23,7 @@ import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
-import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.initTextSize
-import me.blog.korn123.easydiary.extensions.showAlertDialog
+import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
@@ -125,6 +123,18 @@ class DiaryMainActivity : EasyDiaryActivity() {
         }
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            REQUEST_CODE_EXTERNAL_STORAGE -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                openPostcardViewer()
+            } else {
+                makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3))
+            }
+            else -> {}
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
@@ -164,9 +174,12 @@ class DiaryMainActivity : EasyDiaryActivity() {
             }
             R.id.microphone -> showSpeechDialog()
             R.id.postCard -> {
-                val postCardViewer = Intent(this@DiaryMainActivity, PostCardViewerActivity::class.java)
-                //                startActivity(calendarIntent);
-                TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, postCardViewer)
+                when (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                    true -> openPostcardViewer()
+                    false -> {
+                        confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
+                    }
+                }
             }
         }
         return super.onOptionsItemSelected(item)
@@ -179,6 +192,11 @@ class DiaryMainActivity : EasyDiaryActivity() {
 
     override fun onBackPressed() {
         if (progressDialog.visibility == View.GONE) ActivityCompat.finishAffinity(this@DiaryMainActivity)
+    }
+
+    private fun openPostcardViewer() {
+        val postCardViewer = Intent(this@DiaryMainActivity, PostCardViewerActivity::class.java)
+        TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, postCardViewer)
     }
 
     private fun initShowcase() {
