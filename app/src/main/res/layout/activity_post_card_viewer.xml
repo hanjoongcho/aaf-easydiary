@@ -19,7 +19,7 @@
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            app:expandedTitleMarginBottom="20dp"
+            app:expandedTitleMarginBottom="30dp"
             app:expandedTitleTextAppearance="@style/CollapsingTextAppearance.Inverse"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
@@ -38,8 +38,9 @@
                 app:title="Postcard Viewer"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="parallax"
-                app:popupTheme="@style/AppTheme.PopupOverlay"/>
+                android:background="@null"
+                app:layout_collapseMode="pin"
+                style="@style/ToolBarWithNavigationBack" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
