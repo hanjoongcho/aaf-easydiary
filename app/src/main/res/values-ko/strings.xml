@@ -165,6 +165,8 @@
     <!--TimelineActivity-->
     <string name="timeline_title">타임라인</string>
 
+    <string name="postcard_viewer_title">다이어리 포스트카드</string>
+    
     <!--GoogleDriveUtils-->
     <string name="google_drive_connect_message">Google Drive 연동중...</string>
 

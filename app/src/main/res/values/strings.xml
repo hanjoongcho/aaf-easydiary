@@ -165,6 +165,8 @@
     <!--TimelineActivity-->
     <string name="timeline_title">Timeline</string>
 
+    <string name="postcard_viewer_title">Diary Postcard</string>
+    
     <!--GoogleDriveUtils-->
     <string name="google_drive_connect_message">Google Drive in sync...</string>
 

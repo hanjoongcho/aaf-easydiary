@@ -16,6 +16,7 @@ limitations under the License.
 <ImageView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/imageview"
+    android:foreground="?attr/selectableItemBackgroundBorderless"
     android:layout_marginBottom="5dp"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"

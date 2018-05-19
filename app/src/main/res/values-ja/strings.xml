@@ -165,9 +165,11 @@
     <!--TimelineActivity-->
     <string name="timeline_title">タイムライン</string>
 
+    <string name="postcard_viewer_title">日記郵便はがき</string>
+    
     <!--GoogleDriveUtils-->
     <string name="google_drive_connect_message">Googleドライブの同期...</string>
-
+    
     <!--CaldroidItemAdapter-->
     <string name="diary_count"></string>
 
