@@ -37,18 +37,18 @@ internal class PostcardViewHolder(itemView: View, val activity: Activity) : Recy
 
     internal fun bindTo(file: File) {
         val point =  CommonUtils.getDefaultDisplay(activity)
-        val targetX = Math.floor((point.x - CommonUtils.dpToPixelFloatValue(imageView.context, 30)) / 2.0)
+        val targetX = Math.floor((point.x - CommonUtils.dpToPixelFloatValue(imageView.context, 6)) / 2.0)
         imageView.layoutParams.width = targetX.toInt()
         imageView.layoutParams.height = targetX.toInt()
         //        imageView.setImageBitmap(BitmapUtils.decodeFileMaxWidthHeight(file.path, 500))
         Glide.with(imageView.context)
                 .load(file)
-                .apply(RequestOptions()./*placeholder(R.drawable.ic_aaf_photos).*/fitCenter())
+                .apply(RequestOptions()./*placeholder(R.drawable.ic_aaf_photos).*/centerCrop())
                 .into(imageView)
 
-        val lp = imageView.layoutParams
-        if (lp is FlexboxLayoutManager.LayoutParams) {
-            lp.flexGrow = 1f
-        }
+//        val lp = imageView.layoutParams
+//        if (lp is FlexboxLayoutManager.LayoutParams) {
+//            lp.flexGrow = 1f
+//        }
     }
 }

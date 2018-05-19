@@ -5,10 +5,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.view.View
 import android.widget.AdapterView
-import com.google.android.flexbox.AlignItems
-import com.google.android.flexbox.FlexDirection
-import com.google.android.flexbox.FlexWrap
-import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.flexbox.*
 import kotlinx.android.synthetic.main.activity_post_card_viewer.*
 import kotlinx.android.synthetic.main.content_post_card_viewer.*
 import me.blog.korn123.commons.utils.FontUtils
@@ -38,7 +35,8 @@ class PostCardViewerActivity : EasyDiaryActivity() {
         val flexboxLayoutManager = FlexboxLayoutManager(this).apply {
             flexWrap = FlexWrap.WRAP
             flexDirection = FlexDirection.ROW
-            alignItems = AlignItems.CENTER
+//            alignItems = AlignItems.FLEX_START
+            justifyContent = JustifyContent.FLEX_START 
         }
 
         val listPostcard = File(Environment.getExternalStorageDirectory().absolutePath + WORKING_DIRECTORY)
