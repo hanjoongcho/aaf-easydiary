@@ -6,12 +6,10 @@ import android.os.Bundle
 import android.os.Environment
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import kotlinx.android.synthetic.main.activity_post_card_viewer.*
 import kotlinx.android.synthetic.main.content_post_card_viewer.*
-import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.PostcardAdapter
@@ -42,7 +40,7 @@ class PostCardViewerActivity : EasyDiaryActivity() {
 //            flexDirection = FlexDirection.ROW
 ////            alignItems = AlignItems.FLEX_START
 //            justifyContent = JustifyContent.FLEX_START 
-//        }o
+//        }
         
         val spacesItemDecoration = SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding))
         val gridLayoutManager = GridLayoutManager(this, 2)
@@ -74,20 +72,14 @@ class PostCardViewerActivity : EasyDiaryActivity() {
     }
 
     internal class SpacesItemDecoration(private val space: Int) : RecyclerView.ItemDecoration() {
-        override fun getItemOffsets(outRect: Rect, view: View,
-                                    parent: RecyclerView, state: RecyclerView.State) {
+        override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
             val position = parent.getChildAdapterPosition(view)
-//            outRect.set(0, 0, 0, 0)
-            Log.i("===>", "$position/${position % 2}/${outRect.right}")
             when (position % 2) {
                 0 -> {
                     outRect.right = space
                 }
                 else -> outRect.right = 0
             }
-//            outRect.left = space
-//            outRect.right = space
-//            outRect.bottom = space
             
             when (position < 2) {
                 true -> outRect.top = 0 

@@ -54,7 +54,7 @@
         <TextView
             android:id="@+id/infoMessage"
             android:visibility="gone"
-            android:text="There are no saved Postcards."
+            android:text="@string/postcard_viewer_no_cards_saved"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
