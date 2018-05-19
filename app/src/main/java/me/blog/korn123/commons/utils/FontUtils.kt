@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.AssetManager
 import android.graphics.Typeface
 import android.os.Environment
+import android.util.Log
 import android.view.ViewGroup
 import android.widget.TextView
 import me.blog.korn123.easydiary.R
@@ -27,6 +28,7 @@ object FontUtils {
             if (targetView is ViewGroup) {
                 setTypeface(context, targetView, typeface, customLineSpacing)
             } else if (targetView is TextView) {
+                Log.i("fontInfo", targetView.text.toString())
                 targetView.typeface = typeface
                 if (customLineSpacing) {
                     targetView.setLineSpacing(0F, context.config.lineSpacingScaleFactor)

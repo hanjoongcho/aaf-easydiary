@@ -165,9 +165,12 @@
     <!--TimelineActivity-->
     <string name="timeline_title">タイムライン</string>
 
+    <string name="postcard_viewer_title">日記郵便はがき</string>
+    <string name="postcard_viewer_no_cards_saved">保存されたダイアリーポストカードがありません。</string>
+    
     <!--GoogleDriveUtils-->
     <string name="google_drive_connect_message">Googleドライブの同期...</string>
-
+    
     <!--CaldroidItemAdapter-->
     <string name="diary_count"></string>
 
@@ -175,6 +178,7 @@
     <string name="menu_calendar">カレンダー</string>
     <string name="menu_chart">チャート</string>
     <string name="menu_timeline">タイムライン</string>
+    <string name="post_card">日記郵便はがき</string>
 
     <!--diary_read.xml-->
     <string name="menu_delete">削除</string>
