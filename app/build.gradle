@@ -5,7 +5,6 @@ apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion "27.0.1"
     defaultConfig {
         applicationId "me.blog.korn123.easydiary"
         minSdkVersion 16
@@ -37,7 +36,7 @@ android {
 }
 
 ext {
-    supportLibVersion = "27.0.2"
+    supportLibVersion = "27.1.1"
     espressoVersion = "2.2.2"
     androidTestVersion = "0.5"
     hamcrestVersion = "1.3"
@@ -60,7 +59,8 @@ dependencies {
     implementation "com.android.support:support-v4:${supportLibVersion}"
     implementation "com.android.support:support-vector-drawable:${supportLibVersion}"
     implementation 'com.google.android.gms:play-services-drive:11.8.0'
-
+    implementation 'com.google.android:flexbox:1.0.0'
+    
     // kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
@@ -87,6 +87,7 @@ dependencies {
     implementation 'id.zelory:compressor:2.1.0'
 
     implementation 'com.xw.repo:bubbleseekbar:3.17'
+    implementation 'com.github.bumptech.glide:glide:4.5.0'
 
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"

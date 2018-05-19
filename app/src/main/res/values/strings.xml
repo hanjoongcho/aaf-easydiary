@@ -165,6 +165,8 @@
     <!--TimelineActivity-->
     <string name="timeline_title">Timeline</string>
 
+    <string name="postcard_viewer_title">Diary Postcard</string>
+    
     <!--GoogleDriveUtils-->
     <string name="google_drive_connect_message">Google Drive in sync...</string>
 
@@ -175,6 +177,7 @@
     <string name="menu_calendar">Calendar</string>
     <string name="menu_chart">Chart</string>
     <string name="menu_timeline">Timeline</string>
+    <string name="post_card">Diary Postcard</string>
 
     <!--diary_read.xml-->
     <string name="menu_delete">Delete</string>

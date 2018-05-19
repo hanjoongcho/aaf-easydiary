@@ -31,4 +31,9 @@
         android:orderInCategory="100"
         android:title="@string/settings"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/postCard"
+        android:orderInCategory="1"
+        android:title="@string/post_card"
+        app:showAsAction="never" />
 </menu>

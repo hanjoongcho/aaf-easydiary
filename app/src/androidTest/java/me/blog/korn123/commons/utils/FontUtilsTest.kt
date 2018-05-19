@@ -25,13 +25,11 @@ class FontUtilsTest {
     }
 
     companion object {
-
-        private var sContext: Context? = null
+        private lateinit var sContext: Context
 
         @BeforeClass
         fun init() {
             sContext = InstrumentationRegistry.getTargetContext()
         }
     }
-
 }
