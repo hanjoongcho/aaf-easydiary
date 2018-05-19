@@ -45,7 +45,7 @@ class PostCardViewerActivity : EasyDiaryActivity() {
 //        }o
         
         val spacesItemDecoration = SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding))
-        val gridLayoutManager = GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false)
+        val gridLayoutManager = GridLayoutManager(this, 2)
 
         val listPostcard = File(Environment.getExternalStorageDirectory().absolutePath + WORKING_DIRECTORY)
                 .listFiles()
@@ -63,7 +63,7 @@ class PostCardViewerActivity : EasyDiaryActivity() {
                         TransitionHelper.startActivityWithTransition(this@PostCardViewerActivity, intent)
                     }
             )
-            setHasFixedSize(true)
+//            setHasFixedSize(true)
 //            clipToPadding = false
         }
         if (listPostcard.isEmpty()) {
@@ -77,21 +77,22 @@ class PostCardViewerActivity : EasyDiaryActivity() {
         override fun getItemOffsets(outRect: Rect, view: View,
                                     parent: RecyclerView, state: RecyclerView.State) {
             val position = parent.getChildAdapterPosition(view)
-//            when (position % 2) {
-//                0 -> {
-//                    Log.i("===>", "$position/${position % 2}")
-//                    outRect.right = space
-//                }
-//                else -> outRect.right = 0
-//            }
+//            outRect.set(0, 0, 0, 0)
+            Log.i("===>", "$position/${position % 2}/${outRect.right}")
+            when (position % 2) {
+                0 -> {
+                    outRect.right = space
+                }
+                else -> outRect.right = 0
+            }
 //            outRect.left = space
 //            outRect.right = space
 //            outRect.bottom = space
-            outRect.top = space
-            // Add top margin only for the first item to avoid double space between items
-            if (position < 2) {
-                outRect.top = 0
-            } 
+            
+            when (position < 2) {
+                true -> outRect.top = 0 
+                false -> outRect.top = space 
+            }
         }
     }
 }
