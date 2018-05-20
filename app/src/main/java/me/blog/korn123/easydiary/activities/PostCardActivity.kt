@@ -22,7 +22,6 @@ import kotlinx.android.synthetic.main.activity_post_card.*
 import me.blog.korn123.commons.utils.BitmapUtils
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.confirmPermission
@@ -67,17 +66,13 @@ class PostCardActivity : EasyDiaryActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             REQUEST_CODE_EXTERNAL_STORAGE -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                // 권한이 있는경우
                 exportDiaryCard(true)
             } else {
-                // 권한이 없는경우
                 makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3))
             }
             REQUEST_CODE_EXTERNAL_STORAGE_WITH_SHARE_DIARY_CARD -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                // 권한이 있는경우
                 exportDiaryCard(false)
             } else {
-                // 권한이 없는경우
                 makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3))
             }
             else -> {
@@ -140,17 +135,13 @@ class PostCardActivity : EasyDiaryActivity() {
                     .build()
                     .show()
             R.id.save -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
                 exportDiaryCard(true)
             } else {
-                // API Level 23 이상이면서 권한취득 안한경우
                 confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
             }
             R.id.share -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
                 exportDiaryCard(false)
             } else {
-                // API Level 23 이상이면서 권한취득 안한경우
                 confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_SHARE_DIARY_CARD)
             }
         }
