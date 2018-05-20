@@ -2,7 +2,7 @@ package me.blog.korn123.easydiary.helper
 
 import android.content.Context
 import io.github.aafactory.commons.helpers.BaseConfig
-import me.blog.korn123.commons.utils.CommonUtils
+import io.github.aafactory.commons.utils.CommonUtils
 
 /**
  * Created by CHO HANJOONG on 2017-12-24.

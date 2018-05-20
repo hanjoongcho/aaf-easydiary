@@ -8,6 +8,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.AdapterView
+import io.github.aafactory.commons.utils.ColorUtils
 import kotlinx.android.synthetic.main.activity_post_card_viewer.*
 import kotlinx.android.synthetic.main.content_post_card_viewer.*
 import me.blog.korn123.commons.utils.FontUtils
@@ -69,7 +70,11 @@ class PostCardViewerActivity : EasyDiaryActivity() {
             recyclerView.visibility = View.GONE
             app_bar.setExpanded(false)
         }
+
+        toolbarImage.setColorFilter(ColorUtils.adjustAlpha(config.primaryColor, 0.5F))
     }
+
+    
 
     internal class SpacesItemDecoration(private val space: Int) : RecyclerView.ItemDecoration() {
         override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {

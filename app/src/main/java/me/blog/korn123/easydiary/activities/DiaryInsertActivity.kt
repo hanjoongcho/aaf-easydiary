@@ -23,12 +23,15 @@ import android.widget.*
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.simplemobiletools.commons.helpers.BaseConfig
+import io.github.aafactory.commons.utils.BitmapUtils
+import io.github.aafactory.commons.utils.CommonUtils
+import io.github.aafactory.commons.utils.DateUtils
 import io.realm.RealmList
 import kotlinx.android.synthetic.main.activity_diary_insert.*
 import kotlinx.android.synthetic.main.layout_edit_contents.*
 import kotlinx.android.synthetic.main.layout_edit_photo_container.*
 import kotlinx.android.synthetic.main.layout_edit_toolbar_sub.*
-import me.blog.korn123.commons.utils.*
+import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryWeatherItemAdapter
 import me.blog.korn123.easydiary.extensions.*
@@ -381,7 +384,7 @@ class DiaryInsertActivity : EasyDiaryActivity() {
             }
 
             for ((index, dto) in mPhotoUris.withIndex()) {
-                val bitmap = CommonUtils.photoUriToDownSamplingBitmap(this, dto)
+                val bitmap = EasyDiaryUtils.photoUriToDownSamplingBitmap(this, dto)
                 val imageView = ImageView(this)
                 val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(this, 50, 1), CommonUtils.dpToPixel(this, 50, 1))
                 layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(this, 3, 1), 0)

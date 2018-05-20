@@ -66,16 +66,6 @@ object FontUtils {
         sTypeface = getTypeface(context, assetManager, commonFontName)
     }
 
-//    fun setFontsTypeface(context: Context, assetManager: AssetManager, customFontName: String?, vararg targetViews: TextView?) {
-//        val typeface = if (StringUtils.isNotEmpty(customFontName)) getTypeface(context, assetManager, customFontName) else getCommonTypeface(context, assetManager)
-//        for (textView in targetViews) {
-//            textView?.let {
-//                it.typeface = typeface  
-//                it.setLineSpacing(0F, context.config.lineSpacingScaleFactor)
-//            }
-//        }
-//    }
-
     fun setFontsTypeface(context: Context, assetManager: AssetManager, customFontName: String?, rootView: ViewGroup?) {
         setFontsTypeface(context, assetManager, customFontName, rootView, true)
     }

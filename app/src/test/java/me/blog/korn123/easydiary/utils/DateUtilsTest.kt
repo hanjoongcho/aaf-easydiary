@@ -1,6 +1,6 @@
 package me.blog.korn123.easydiary.utils
 
-import me.blog.korn123.commons.utils.DateUtils
+import io.github.aafactory.commons.utils.DateUtils
 import org.junit.Assert
 import org.junit.Test
 import java.util.*

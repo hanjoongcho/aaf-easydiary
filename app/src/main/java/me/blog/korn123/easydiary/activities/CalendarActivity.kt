@@ -3,14 +3,12 @@ package me.blog.korn123.easydiary.activities
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.roomorama.caldroid.CaldroidFragment
 import com.roomorama.caldroid.CaldroidListener
+import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_calendar.*
-import me.blog.korn123.commons.utils.DateUtils
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryCalendarItemAdapter
 import me.blog.korn123.easydiary.fragments.CalendarFragment
