@@ -9,8 +9,8 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import com.github.mikephil.charting.utils.ColorTemplate
+import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_barchart.*
-import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.chart.*
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper

@@ -10,12 +10,9 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
-import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.helper.CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT
-import me.blog.korn123.easydiary.helper.SETTING_FONT_NAME
 import org.apache.commons.lang3.StringUtils
 
 /**

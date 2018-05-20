@@ -25,11 +25,11 @@ import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.simplemobiletools.commons.helpers.BaseConfig
 import io.github.aafactory.commons.extensions.updateAppViews
 import io.github.aafactory.commons.extensions.updateTextColors
+import io.github.aafactory.commons.utils.CommonUtils
+import io.github.aafactory.commons.utils.DateUtils
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_diary_read.*
 import kotlinx.android.synthetic.main.fragment_diary_read.*
-import me.blog.korn123.commons.utils.CommonUtils
-import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
@@ -360,7 +360,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 if (photoContainer.childCount > 0) photoContainer.removeAllViews()
                 context?.let { appContext ->
                     diaryDto.photoUris?.map {
-                        val bitmap = CommonUtils.photoUriToDownSamplingBitmap(appContext, it)
+                        val bitmap = EasyDiaryUtils.photoUriToDownSamplingBitmap(appContext, it)
                         val imageView = ImageView(context)
                         val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(appContext, 50, 1), CommonUtils.dpToPixel(appContext, 50, 1))
                         layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(appContext, 3, 1), 0)

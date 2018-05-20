@@ -15,19 +15,21 @@ import android.support.v4.graphics.ColorUtils
 import android.support.v7.app.AlertDialog
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.LinearLayout
 import com.simplemobiletools.commons.helpers.BaseConfig
+import io.github.aafactory.commons.utils.BitmapUtils
+import io.github.aafactory.commons.utils.CommonUtils
+import io.github.aafactory.commons.utils.DateUtils
 import io.realm.RealmList
 import kotlinx.android.synthetic.main.activity_diary_update.*
 import kotlinx.android.synthetic.main.layout_edit_contents.*
 import kotlinx.android.synthetic.main.layout_edit_photo_container.*
 import kotlinx.android.synthetic.main.layout_edit_toolbar_sub.*
-import me.blog.korn123.commons.utils.*
+import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryWeatherItemAdapter
 import me.blog.korn123.easydiary.extensions.*
@@ -226,7 +228,7 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
 
         mPhotoUris?.let {
             for ((index, dto) in it.withIndex()) {
-                val bitmap = CommonUtils.photoUriToDownSamplingBitmap(this, dto)
+                val bitmap = EasyDiaryUtils.photoUriToDownSamplingBitmap(this, dto)
                 val imageView = ImageView(this)
                 val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(this, 50, 1), CommonUtils.dpToPixel(this, 50, 1))
                 layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(this, 3, 1), 0)

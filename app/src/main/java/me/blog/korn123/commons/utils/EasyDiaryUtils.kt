@@ -1,7 +1,10 @@
 package me.blog.korn123.commons.utils
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.net.Uri
 import android.support.v7.app.AlertDialog
 import android.text.SpannableString
 import android.text.Spanned
@@ -12,10 +15,14 @@ import android.widget.AdapterView
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
+import io.github.aafactory.commons.utils.BitmapUtils
+import io.github.aafactory.commons.utils.CommonUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.SecondItemAdapter
 import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.models.PhotoUriDto
 import java.io.File
+import java.io.FileNotFoundException
 import java.util.*
 
 /**
@@ -139,5 +146,49 @@ object EasyDiaryUtils {
         listView.onItemClickListener = itemClickListener
         builder.setView(secondsPicker)
         return builder
+    }
+
+    fun photoUriToDownSamplingBitmap(
+            context: Context,
+            photoUriDto: PhotoUriDto,
+            requiredSize: Int = 50,
+            fixedWidth: Int = 45,
+            fixedHeight: Int = 45
+    ): Bitmap = try {
+        when (photoUriDto.isContentUri()) {
+            true -> {
+                BitmapUtils.decodeFile(context, Uri.parse(photoUriDto.photoUri), CommonUtils.dpToPixel(context, fixedWidth, 1), CommonUtils.dpToPixel(context, fixedHeight, 1))
+            }
+            false -> {
+                when (fixedWidth == fixedHeight) {
+                    true -> BitmapUtils.decodeFileCropCenter(photoUriDto.getFilePath(), CommonUtils.dpToPixel(context, fixedWidth, 1))
+                    false -> BitmapUtils.decodeFile(photoUriDto.getFilePath(), CommonUtils.dpToPixel(context, fixedWidth, 1), CommonUtils.dpToPixel(context, fixedHeight, 1))
+                }
+
+            }
+        }
+    } catch (e: FileNotFoundException) {
+        e.printStackTrace()
+        BitmapFactory.decodeResource(context.resources, R.drawable.question_shield)
+    } catch (se: SecurityException) {
+        se.printStackTrace()
+        BitmapFactory.decodeResource(context.resources, R.drawable.question_shield)
+    }
+
+    fun photoUriToBitmap(context: Context, photoUriDto: PhotoUriDto): Bitmap? {
+        val bitmap: Bitmap? = try {
+            when (photoUriDto.isContentUri()) {
+                true -> {
+                    BitmapFactory.decodeStream(context.contentResolver.openInputStream(Uri.parse(photoUriDto.photoUri)))
+                }
+                false -> {
+                    BitmapFactory.decodeFile(photoUriDto.getFilePath())
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+        return bitmap
     }
 }

@@ -9,8 +9,8 @@ import android.view.ViewGroup
 import android.widget.*
 import io.github.aafactory.commons.extensions.updateAppViews
 import io.github.aafactory.commons.extensions.updateTextColors
-import me.blog.korn123.commons.utils.CommonUtils
-import me.blog.korn123.commons.utils.DateUtils
+import io.github.aafactory.commons.utils.CommonUtils
+import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
@@ -103,7 +103,7 @@ class DiaryMainItemAdapter(
             if (diaryDto.photoUris?.size ?: 0 > 0) {
                 val maxPhotos = CommonUtils.getDefaultDisplay(activity).x / CommonUtils.dpToPixel(activity, 40, 1)
                 diaryDto.photoUris?.map {
-                    val bitmap = CommonUtils.photoUriToDownSamplingBitmap(activity, it, 30, 25, 25)
+                    val bitmap = EasyDiaryUtils.photoUriToDownSamplingBitmap(activity, it, 30, 25, 25)
                     val imageView = ImageView(activity)
                     val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(activity, 28, 1), CommonUtils.dpToPixel(activity, 28, 1))
                     layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(activity, 3, 1), 0)

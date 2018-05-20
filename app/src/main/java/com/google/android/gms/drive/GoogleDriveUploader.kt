@@ -3,6 +3,7 @@ package com.google.android.gms.drive
 import android.content.IntentSender
 import android.os.Bundle
 import com.google.android.gms.common.api.ResultCallback
+import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.helper.DIARY_DB_NAME
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
@@ -33,7 +34,7 @@ class GoogleDriveUploader : GoogleDriveUtils() {
         }
 
         val metadataChangeSet = MetadataChangeSet.Builder()
-                .setTitle(DIARY_DB_NAME + "_" + me.blog.korn123.commons.utils.DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"))
+                .setTitle(DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"))
                 .setMimeType(EasyDiaryUtils.easyDiaryMimeType).build()
         val intentSender = Drive.DriveApi
                 .newCreateFileActivityBuilder()

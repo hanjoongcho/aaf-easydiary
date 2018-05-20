@@ -8,8 +8,8 @@ import android.support.v4.graphics.ColorUtils
 import android.support.v7.app.AppCompatActivity
 import android.view.ViewGroup
 import io.github.aafactory.commons.helpers.BaseConfig
+import io.github.aafactory.commons.utils.CommonUtils
 import kotlinx.android.synthetic.main.activity_intro.*
-import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config

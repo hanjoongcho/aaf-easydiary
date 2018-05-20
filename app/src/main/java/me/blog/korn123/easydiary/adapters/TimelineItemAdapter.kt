@@ -10,7 +10,7 @@ import android.widget.TextView
 import io.github.aafactory.commons.extensions.updateAppViews
 import io.github.aafactory.commons.extensions.updateTextColors
 import io.github.aafactory.commons.helpers.BaseConfig
-import me.blog.korn123.commons.utils.DateUtils
+import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
