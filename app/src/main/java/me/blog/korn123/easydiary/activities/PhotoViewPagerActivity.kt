@@ -8,8 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.github.chrisbanes.photoview.PhotoView
+import io.github.aafactory.commons.utils.CommonUtils
 import kotlinx.android.synthetic.main.activity_photo_view_pager.*
-import me.blog.korn123.commons.utils.CommonUtils
+import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
@@ -61,7 +62,7 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
         override fun instantiateItem(container: ViewGroup, position: Int): View {
             val photoView = PhotoView(container.context)
             //            photoView.setImageResource(sDrawables[position]);
-            val bitmap = CommonUtils.photoUriToBitmap(container.context, diaryDto.photoUris!![position])
+            val bitmap = EasyDiaryUtils.photoUriToBitmap(container.context, diaryDto.photoUris!![position])
             when (bitmap == null) {
                 true -> {
                     val textView = TextView(container.context)

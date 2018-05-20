@@ -1,8 +1,8 @@
 package me.blog.korn123.easydiary.helper
 
+import io.github.aafactory.commons.utils.DateUtils
 import io.realm.DynamicRealm
 import io.realm.RealmMigration
-import me.blog.korn123.commons.utils.DateUtils
 
 /**
  * Created by hanjoong on 2017-03-25.

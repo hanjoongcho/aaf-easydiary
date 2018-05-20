@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
-import me.blog.korn123.commons.utils.CommonUtils
+import io.github.aafactory.commons.utils.CommonUtils
 import me.blog.korn123.easydiary.R
 import java.io.File
 

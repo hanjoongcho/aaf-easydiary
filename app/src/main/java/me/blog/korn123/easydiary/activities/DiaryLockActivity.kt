@@ -8,14 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import io.github.aafactory.commons.activities.BaseSimpleActivity
-import io.github.aafactory.commons.extensions.baseConfig
 import kotlinx.android.synthetic.main.activity_lock_setting.*
-import me.blog.korn123.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.APP_FINISH_FLAG
-import me.blog.korn123.easydiary.helper.APP_LOCK_SAVED_PASSWORD
 import org.apache.commons.lang3.StringUtils
 
 /**

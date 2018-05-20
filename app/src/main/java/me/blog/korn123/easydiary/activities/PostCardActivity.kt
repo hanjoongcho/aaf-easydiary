@@ -18,9 +18,9 @@ import com.flask.colorpicker.ColorPickerView
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
+import io.github.aafactory.commons.utils.BitmapUtils
+import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_post_card.*
-import me.blog.korn123.commons.utils.BitmapUtils
-import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.checkPermission

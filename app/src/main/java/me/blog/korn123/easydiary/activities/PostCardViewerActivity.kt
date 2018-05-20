@@ -8,9 +8,9 @@ import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.AdapterView
+import io.github.aafactory.commons.utils.ColorUtils
 import kotlinx.android.synthetic.main.activity_post_card_viewer.*
 import kotlinx.android.synthetic.main.content_post_card_viewer.*
-import me.blog.korn123.commons.utils.ColorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.PostcardAdapter
