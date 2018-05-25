@@ -207,7 +207,7 @@ class PostCardActivity : EasyDiaryActivity() {
         // generate postcard file another thread
         Thread(Runnable {
             try {
-                val diaryCardPath = WORKING_DIRECTORY + mSequence + "_" + DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".jpg"
+                val diaryCardPath = DIARY_POSTCARD_DIRECTORY + mSequence + "_" + DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".jpg"
                 mSavedDiaryCardPath = Environment.getExternalStorageDirectory().absolutePath + diaryCardPath
                 EasyDiaryUtils.initWorkingDirectory(Environment.getExternalStorageDirectory().absolutePath + USER_CUSTOM_FONTS_DIRECTORY)
                 BitmapUtils.saveBitmapToFileCache(bitmap, mSavedDiaryCardPath)
