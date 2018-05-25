@@ -12,6 +12,7 @@ import android.speech.RecognizerIntent
 import android.support.v4.app.ActivityCompat
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
 import android.widget.AdapterView
 import android.widget.RelativeLayout
@@ -26,7 +27,9 @@ import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
+import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.StringUtils
+import java.io.File
 import java.util.*
 
 /**
@@ -86,27 +89,8 @@ class DiaryMainActivity : EasyDiaryActivity() {
         initShowcase()
         EasyDiaryUtils.initWorkingDirectory(Environment.getExternalStorageDirectory().absolutePath + USER_CUSTOM_FONTS_DIRECTORY)
         EasyDiaryUtils.initWorkingDirectory(Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY)
-        
-        Thread(Runnable {
-            val listPhotoUri = EasyDiaryDbHelper.selectPhotoUriAll()
-            for ((index, dto) in listPhotoUri.withIndex()) {
-//                Log.i("PHOTO-URI", dto.photoUri)
-                if (dto.isContentUri()) {
-                    val photoPath = Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
-                    CommonUtils.uriToFile(this, Uri.parse(dto.photoUri), photoPath)
-                    EasyDiaryDbHelper.getInstance().beginTransaction()
-                    dto.photoUri = FILE_URI_PREFIX + photoPath
-                    EasyDiaryDbHelper.getInstance().commitTransaction()
-                    runOnUiThread({
-                        progressInfo.text = "Converting... ($index/${listPhotoUri.size})"
-                    })
-                }
-            }
-            runOnUiThread({
-                progressDialog.visibility = View.GONE
-                modalContainer.visibility = View.GONE
-            })
-        }).start()
+        EasyDiaryUtils.initWorkingDirectory(Environment.getExternalStorageDirectory().absolutePath + DIARY_POSTCARD_DIRECTORY)
+        migrateData()
     }
 
     override fun onResume() {
@@ -199,6 +183,36 @@ class DiaryMainActivity : EasyDiaryActivity() {
         TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, postCardViewer)
     }
 
+    private fun migrateData() {
+        Thread(Runnable {
+            val listPhotoUri = EasyDiaryDbHelper.selectPhotoUriAll()
+            for ((index, dto) in listPhotoUri.withIndex()) {
+//                Log.i("PHOTO-URI", dto.photoUri)
+                if (dto.isContentUri()) {
+                    val photoPath = Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
+                    CommonUtils.uriToFile(this, Uri.parse(dto.photoUri), photoPath)
+                    EasyDiaryDbHelper.getInstance().beginTransaction()
+                    dto.photoUri = FILE_URI_PREFIX + photoPath
+                    EasyDiaryDbHelper.getInstance().commitTransaction()
+                    runOnUiThread({
+                        progressInfo.text = "Converting... ($index/${listPhotoUri.size})"
+                    })
+                }
+            }
+
+            File(Environment.getExternalStorageDirectory().absolutePath + WORKING_DIRECTORY).listFiles()?.let {
+                it.forEach { file ->
+                    if (file.extension.equals("jpg", true)) FileUtils.moveFileToDirectory(file, File(Environment.getExternalStorageDirectory().absolutePath + DIARY_POSTCARD_DIRECTORY), true)
+                }
+            }
+
+            runOnUiThread({
+                progressDialog.visibility = View.GONE
+                modalContainer.visibility = View.GONE
+            })
+        }).start()
+    }
+    
     private fun initShowcase() {
         val margin = ((resources.displayMetrics.density * 12) as Number).toInt()
 

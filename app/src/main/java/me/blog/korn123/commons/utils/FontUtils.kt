@@ -28,7 +28,7 @@ object FontUtils {
             if (targetView is ViewGroup) {
                 setTypeface(context, targetView, typeface, customLineSpacing)
             } else if (targetView is TextView) {
-                Log.i("fontInfo", targetView.text.toString())
+//                Log.i("fontInfo", targetView.text.toString())
                 targetView.typeface = typeface
                 if (customLineSpacing) {
                     targetView.setLineSpacing(0F, context.config.lineSpacingScaleFactor)

@@ -26,6 +26,7 @@ const val LINE_SPACING_SCALE_DEFAULT = 1.0F
 
 const val WORKING_DIRECTORY = "/AAFactory/EasyDiary/"
 const val DIARY_PHOTO_DIRECTORY = "/AAFactory/EasyDiary/Photos/"
+const val DIARY_POSTCARD_DIRECTORY = "/AAFactory/EasyDiary/Postcards/"
 const val USER_CUSTOM_FONTS_DIRECTORY = "/AAFactory/EasyDiary/Fonts/"
 const val DIARY_DB_NAME = "diary.realm"
 
