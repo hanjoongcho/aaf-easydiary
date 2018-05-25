@@ -14,8 +14,8 @@ import io.github.aafactory.commons.utils.CommonUtils
 import kotlinx.android.synthetic.main.activity_photo_view_pager.*
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.helper.DIARY_POSTCARD_DIRECTORY
 import me.blog.korn123.easydiary.helper.POSTCARD_SEQUENCE
-import me.blog.korn123.easydiary.helper.WORKING_DIRECTORY
 import java.io.File
 
 /**
@@ -32,7 +32,7 @@ class PostcardViewPagerActivity : EasyDiaryActivity() {
         val intent = intent
         val sequence = intent.getIntExtra(POSTCARD_SEQUENCE, 0)
 
-        val listPostcard = File(Environment.getExternalStorageDirectory().absolutePath + WORKING_DIRECTORY)
+        val listPostcard = File(Environment.getExternalStorageDirectory().absolutePath + DIARY_POSTCARD_DIRECTORY)
                 .listFiles()
                 .filter { it.extension.equals("jpg", true)}
                 .sortedDescending()
