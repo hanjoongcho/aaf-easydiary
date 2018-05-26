@@ -231,7 +231,9 @@ class PostCardActivity : EasyDiaryActivity() {
                 Handler(Looper.getMainLooper()).post {
                     progressBar.visibility = View.GONE
                     if (showInfoDialog) {
-                        showAlertDialog(getString(R.string.diary_card_export_info), diaryCardPath, DialogInterface.OnClickListener { dialog, which -> })
+//                        showAlertDialog(getString(R.string.diary_card_export_info), diaryCardPath, DialogInterface.OnClickListener { dialog, which -> })
+                        val postCardViewer = Intent(this@PostCardActivity, PostCardViewerActivity::class.java)
+                        TransitionHelper.startActivityWithTransition(this@PostCardActivity, postCardViewer)
                     } else {
                         shareDiary()
                     }
