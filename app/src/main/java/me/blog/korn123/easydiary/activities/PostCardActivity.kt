@@ -38,8 +38,8 @@ class PostCardActivity : EasyDiaryActivity() {
     lateinit var mShowcaseView: ShowcaseView
     lateinit var mSavedDiaryCardPath: String
     private var mSequence: Int = 0
-    private var mBgColor = -0x1
-    private var mTextColor = -0xb5b5b4
+    private var mBgColor = POSTCARD_BG_COLOR_VALUE
+    private var mTextColor = POSTCARD_TEXT_COLOR_VALUE
     private var showcaseIndex = 1
 
     public override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,8 +58,17 @@ class PostCardActivity : EasyDiaryActivity() {
         diaryTitle.text = diaryDto.title
         contents.text = diaryDto.contents
         date.text = DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis)
-        
         initShowcase()
+        savedInstanceState?.let {
+            setBackgroundColor(it.getInt(POSTCARD_BG_COLOR, POSTCARD_BG_COLOR_VALUE))
+            setTextColor(it.getInt(POSTCARD_TEXT_COLOR, POSTCARD_TEXT_COLOR_VALUE))
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        outState?.putInt(POSTCARD_BG_COLOR, mBgColor)
+        outState?.putInt(POSTCARD_TEXT_COLOR, mTextColor)
+        super.onSaveInstanceState(outState)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -109,8 +118,7 @@ class PostCardActivity : EasyDiaryActivity() {
                     .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
                     .density(12)
                     .setPositiveButton("ok") { dialog, selectedColor, allColors ->
-                        mBgColor = selectedColor
-                        contentsContainer.setBackgroundColor(mBgColor)
+                        setBackgroundColor(selectedColor)
                     }
                     .setNegativeButton("cancel") { dialog, which -> }
                     //						.showColorEdit(true)
@@ -124,10 +132,7 @@ class PostCardActivity : EasyDiaryActivity() {
                     .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
                     .density(12)
                     .setPositiveButton("ok") { dialog, selectedColor, allColors ->
-                        mTextColor = selectedColor
-                        diaryTitle.setTextColor(mTextColor)
-                        date.setTextColor(mTextColor)
-                        contents.setTextColor(mTextColor)
+                        setTextColor(selectedColor)
                     }
                     .setNegativeButton("cancel") { dialog, which -> }
                     //						.showColorEdit(true)
@@ -146,6 +151,18 @@ class PostCardActivity : EasyDiaryActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+    
+    private fun setBackgroundColor(selectedColor: Int) {
+        mBgColor = selectedColor
+        contentsContainer.setBackgroundColor(mBgColor)
+    }
+    
+    private fun setTextColor(selectedColor: Int) {
+        mTextColor = selectedColor
+        diaryTitle.setTextColor(mTextColor)
+        date.setTextColor(mTextColor)
+        contents.setTextColor(mTextColor)
     }
     
     private fun initShowcase() {

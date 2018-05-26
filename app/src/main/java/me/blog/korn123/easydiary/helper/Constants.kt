@@ -84,3 +84,8 @@ const val THUMBNAIL_BACKGROUND_ALPHA = 100
 
 const val DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE = 20
 const val DEFAULT_FONT_SIZE_UN_SUPPORT_LANGUAGE = 15
+
+const val POSTCARD_BG_COLOR = "postcard_bg_color"
+const val POSTCARD_TEXT_COLOR = "postcard_text_color"
+const val POSTCARD_BG_COLOR_VALUE = -0x1
+const val POSTCARD_TEXT_COLOR_VALUE = -0xb5b5b4
