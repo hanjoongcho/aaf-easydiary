@@ -15,9 +15,9 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.PostcardAdapter
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.helper.DIARY_POSTCARD_DIRECTORY
 import me.blog.korn123.easydiary.helper.POSTCARD_SEQUENCE
 import me.blog.korn123.easydiary.helper.TransitionHelper
-import me.blog.korn123.easydiary.helper.WORKING_DIRECTORY
 import java.io.File
 
 
@@ -46,7 +46,7 @@ class PostCardViewerActivity : EasyDiaryActivity() {
         val spacesItemDecoration = SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding))
         val gridLayoutManager = GridLayoutManager(this, 2)
 
-        val listPostcard = File(Environment.getExternalStorageDirectory().absolutePath + WORKING_DIRECTORY)
+        val listPostcard = File(Environment.getExternalStorageDirectory().absolutePath + DIARY_POSTCARD_DIRECTORY)
                 .listFiles()
                 .filter { it.extension.equals("jpg", true)}
                 .sortedDescending()

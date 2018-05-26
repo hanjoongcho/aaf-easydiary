@@ -26,6 +26,7 @@ const val LINE_SPACING_SCALE_DEFAULT = 1.0F
 
 const val WORKING_DIRECTORY = "/AAFactory/EasyDiary/"
 const val DIARY_PHOTO_DIRECTORY = "/AAFactory/EasyDiary/Photos/"
+const val DIARY_POSTCARD_DIRECTORY = "/AAFactory/EasyDiary/Postcards/"
 const val USER_CUSTOM_FONTS_DIRECTORY = "/AAFactory/EasyDiary/Fonts/"
 const val DIARY_DB_NAME = "diary.realm"
 
@@ -83,3 +84,8 @@ const val THUMBNAIL_BACKGROUND_ALPHA = 100
 
 const val DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE = 20
 const val DEFAULT_FONT_SIZE_UN_SUPPORT_LANGUAGE = 15
+
+const val POSTCARD_BG_COLOR = "postcard_bg_color"
+const val POSTCARD_TEXT_COLOR = "postcard_text_color"
+const val POSTCARD_BG_COLOR_VALUE = -0x1
+const val POSTCARD_TEXT_COLOR_VALUE = -0xb5b5b4
