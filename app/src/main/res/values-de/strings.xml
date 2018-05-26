@@ -87,7 +87,7 @@
     <string name="font_setting">Schrift-Einstellungen</string>
     <string name="add_ttf_fonts_title">TTF-Schrift hinzufügen</string>
     <string name="add_ttf_fonts_summary">Füge deine eigene TTF-Schriften dem Easy Diary hinzu. Wenn die Schriften hinzugefügt wurden, kannst du sie zusammen mit den mitgelieferten Schriften verwenden.</string>
-    <string name="add_ttf_fonts_info_url">https://github.com/hanjoongcho/aaf-easydiary/blob/master/MANUAL.md</string>
+    <string name="add_ttf_fonts_info_url">https://github.com/hanjoongcho/aaf-easydiary/blob/master/MANUAL_de.md</string>
     <string name="diary_search_keyword_case_sensitive_title">Groß-/Kleinschreibung beachten</string>
     <string name="diary_search_keyword_case_sensitive_summary">Wenn diese Option aktiviert ist, wird Groß- und Kleinschreibung unterschieden.</string>
     <string name="setting_primary_color_title">Theme</string>
