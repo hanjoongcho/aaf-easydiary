@@ -30,10 +30,15 @@ fun Context.initTextSize(viewGroup: ViewGroup, context: Context) {
     val defaultFontSize: Float = CommonUtils.dpToPixel(context, DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE).toFloat()
     val settingFontSize: Float = config.settingFontSize
     (0 until cnt)
-            .map { viewGroup.getChildAt(it) }
+            .map { index -> viewGroup.getChildAt(index) }
             .forEach {
                 when (it) {
-                    is TextView -> it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
+                    is TextView -> { 
+                        when (it.id) {
+                            R.id.diaryCount -> it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize * 0.7F)
+                            else -> it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
+                        }
+                    }
                     is ViewGroup -> initTextSize(it, context)
                 }
             }
