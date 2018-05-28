@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Easy Diary</string>
     <string name="common_create_seconds">Sekunden</string>
@@ -34,6 +33,14 @@
     <string name="input_mode_a">Sprachmodus</string>
     <string name="input_mode_c">Tastaturmodus</string>
     <string name="recognizer_intent_not_found_message">Das Spracherkennungs-Modul ist nicht installiert oder ist deaktiviert.</string>
+    <string name="sample_diary_title_1">Sei gefährlich und nicht vorsichtig.</string>
+    <string name="sample_diary_title_2">Ich wiederhole, was ich weiß, wenn ich spreche.</string>
+    <string name="sample_diary_title_3">Je mehr schlechte Nachrichten wir hören, desto mehr sollten wir glücklich sein.</string>
+    <string name="sample_diary_title_4">Fülle nennt Komfort, Einschränkung fordert Kreativität.</string>
+    <string name="sample_diary_1">Wenn du auf dein Leben zurückblickst, wirst du sicherlich wissen, dass du es beschädigt hast, weil du zu vorsichtig bist und nicht in Gefahr bist. Sei gefährlich. Sei gefährlich und nicht vorsichtig. - 그랜트 가돈, ‘10배의 법칙’에서</string>
+    <string name="sample_diary_2">Wenn du sprichst, wiederholst du, was du weißt. Aber wenn du zuhörst, wirst du etwas Neues lernen. - Der Dalai Lama</string>
+    <string name="sample_diary_3">Es sind die schlechten Nachrichten, die Sie am meisten als Anführer hören müssen. Die guten Nachrichten sind morgen gut, aber die schlechten Nachrichten werden morgen schlechter sein. Deshalb ist es sicher, immer schwierige Fragen zu stellen und die Wahrheit zu sagen, auch wenn die Fakten herzzerreißend sind. - Eric Schmidt, Vorsitzender von Google, sagt: \"Wie funktioniert Google?\"</string>
+    <string name="sample_diary_4">Beschränkungen haben keine Kreativität, aber Kreativität wird ausgeübt, um Beschränkungen zu überwinden. Jede großartige Arbeit oder kreative Lösung war eine Menge Zeitbeschränkungen, physische Einschränkungen und Ressourcenbeschränkungen. Was auch immer es ist, Kreativität wird in einer schwierigen und eingeschränkten Umgebung geboren. - 김봉진 대표, ‘배민다움’에서</string>
     <string name="guide_message_2">Tippe oder sage den Suchbegriff.</string>
     <string name="read_diary_showcase_button_1">Weiter</string>
     <string name="read_diary_showcase_button_2">Schließen</string>
@@ -141,13 +148,16 @@
     <string name="postcard_viewer_title">Tagebuch-Postkarten</string>
     <string name="postcard_viewer_no_cards_saved">Keine gespeicherten Postkarten vorhanden.</string>
     <string name="google_drive_connect_message">Synchronisiere mit Google Drive ...</string>
-    <string name="sample_diary_title_1">Sei gefährlich und nicht vorsichtig.</string>
-    <string name="sample_diary_title_2">Ich wiederhole, was ich weiß, wenn ich spreche.</string>
-    <string name="sample_diary_title_3">Je mehr schlechte Nachrichten wir hören, desto mehr sollten wir glücklich sein.</string>
-    <string name="sample_diary_title_4">Fülle nennt Komfort, Einschränkung fordert Kreativität.</string>
-    <string name="sample_diary_1">Wenn du auf dein Leben zurückblickst, wirst du sicherlich wissen, dass du es beschädigt hast, weil du zu vorsichtig bist und nicht in Gefahr bist. Sei gefährlich. Sei gefährlich und nicht vorsichtig. - 그랜트 가돈, ‘10배의 법칙’에서</string>
-    <string name="sample_diary_2">Wenn du sprichst, wiederholst du, was du weißt. Aber wenn du zuhörst, wirst du etwas Neues lernen. - Der Dalai Lama</string>
-    <string name="sample_diary_3">Es sind die schlechten Nachrichten, die Sie am meisten als Anführer hören müssen. Die guten Nachrichten sind morgen gut, aber die schlechten Nachrichten werden morgen schlechter sein. Deshalb ist es sicher, immer schwierige Fragen zu stellen und die Wahrheit zu sagen, auch wenn die Fakten herzzerreißend sind. - Eric Schmidt, Vorsitzender von Google, sagt: \"Wie funktioniert Google?\"</string>
-    <string name="sample_diary_4">Beschränkungen haben keine Kreativität, aber Kreativität wird ausgeübt, um Beschränkungen zu überwinden. Jede großartige Arbeit oder kreative Lösung war eine Menge Zeitbeschränkungen, physische Einschränkungen und Ressourcenbeschränkungen. Was auch immer es ist, Kreativität wird in einer schwierigen und eingeschränkten Umgebung geboren. - 김봉진 대표, ‘배민다움’에서</string>
     <string name="diary_count"></string>
+
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <!--  Resources added since version 1.4.41 here.                                                      -->
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <string name="preferences_category_settings">App-Einstellungen</string>
+    <string name="preferences_category_information">App-Informationen</string>
+    <string name="preferences_information_licenses">Open-Source-Lizenzen</string>
+    <string name="preferences_information_licenses_summary">Hinweise zur Open-Source-Software</string>
+    <string name="preferences_category_aaf">AAF Easy-Serie</string>
+    <string name="invite_friends">Freunde einladen</string>
+    <string name="invite_friends_summary">Teile die %s-App mit deinen Freunden.</string>
 </resources>
