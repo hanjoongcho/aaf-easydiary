@@ -182,4 +182,6 @@
 
     <!--diary_read.xml-->
     <string name="menu_delete">削除</string>
+    <string name="invite_friends">友達を招待</string>
+    <string name="invite_friends_summary">%sアプリケーションを友達に共有します。</string>
 </resources>
