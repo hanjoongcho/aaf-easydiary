@@ -1,10 +1,6 @@
 <resources>
     <string name="app_name">이지 다이어리</string>
-    
-    <!--Commons-->
     <string name="common_create_seconds">Creation Seconds</string>
-
-    <!--DiaryInsertActivity-->
     <string name="create_diary_title">다이어리 쓰기</string>
     <string name="write_date">작성일</string>
     <string name="request_title_message">제목을 입력하세요.</string>
@@ -33,8 +29,6 @@
     <string name="create_diary_showcase_message_7">다이어리 작성날짜를 선택합니다. 지난일자의 다이어리 작성을 원할경우 날짜를 변경할 수 있습니다.</string>
     <string name="create_diary_showcase_message_8">다이어리 작성시간을 선택합니다. 지난시간의 다이어리 작성을 원할경우 시간을 변경할 수 있습니다.</string>
     <string name="create_diary_showcase_message_9">작성이 완료된 다이어리를 저장합니다.</string>
-
-    <!--DiaryMainActivity-->
     <string name="read_diary_title">검색</string>
     <string name="input_mode_a">스피치 모드</string>
     <string name="input_mode_c">키패드 모드</string>
@@ -67,8 +61,6 @@
     <string name="read_diary_showcase_message_7">고급설정을 이용하여 폰트변경, 잠금번호설정, 다이어리 백업 및 복구 작업을 할 수 있습니다.</string>
     <string name="read_diary_showcase_message_8">목록내의 다이어리카드를 클릭하면 해당 다이어리를 볼 수 있습니다.</string>
     <string name="diary_photo_migration_message">이지다이어리의 사진첨부 방식이 변경되어 기존 링크정보를 이지다이어리 폴더에 압축하여 저장합니다.\n작업이 완료될때까지 잠시 기다려 주시기 바랍니다.</string>
-
-    <!--DiaryReadActivity-->
     <string name="read_diary_detail_title">다이어리 열람</string>
     <string name="delete_confirm">삭제 하시겠습니까?</string>
     <string name="read_diary_detail_showcase_button_1">다음</string>
@@ -85,12 +77,8 @@
     <string name="read_diary_detail_showcase_message_3">다이어리 본문을 구글 TTS 기능을 이용하여 음성으로 들을 수 있습니다.</string>
     <string name="read_diary_detail_showcase_message_4">다이어리를 이용하여 포스트카드를 만들고 다른 사람과 공유 할 수 있습니다.</string>
     <string name="read_diary_detail_showcase_message_5">현재 열람중인 다이어리를 삭제하고 검색화면으로 이동 할 수 있습니다.</string>
-
-    <!--DiaryUpdateActivity-->
     <string name="update_diary_title">다이어리 수정</string>
     <string name="back_pressed_confirm">\'확인\' 버튼을 누르시면 현재 다이어리를 저장하지 않고 이전 화면으로 이동합니다.</string>
-
-    <!--SettingsActivity-->
     <string name="lock_number">설정된 잠금번호:</string>
     <string name="rate_app">앱 평가하기</string>
     <string name="guide_message_3">요청작업에 대한 권한이 충분하지 않습니다.</string>
@@ -119,12 +107,8 @@
     <string name="easy_password_summary">이지 패스워드는 로그인, 문서보안, 도어락, 자물쇠, 신용카드, 계좌관리등에 사용하는 비밀번호를 사용자가 설정한 하나의 잠금번호를 이용하여 관리 할 수 있도록 도와주는 애플리케이션입니다.</string>
     <string name="font_line_spacing">폰트 줄간격</string>
     <string name="font_line_spacing_summary">설정된 비율에 맞춰 폰트의 줄간격을 변경합니다.</string>
-
-    <!--CalendarActivity-->
     <string name="calendar_title">캘린더</string>
     <string name="guide_message_4">해당일에 작성된 일기가 없습니다.</string>
-
-    <!--BarChartActivity-->
     <string name="bar_chart_title">차트</string>
     <string name="bar_chart_status">시간대별 일기작성 현황</string>
     <string name="range_a">0시~3시</string>
@@ -136,14 +120,8 @@
     <string name="range_g">1시~24시</string>
     <string name="write_time">작성시간</string>
     <string name="write_count">작성건수</string>
-
-    <!--LockDiaryActivity-->
     <string name="unlock_guide_message">잠금번호를 입력하세요</string>
-
-    <!--PhotoViewPagerActivity-->
     <string name="photo_view_error_info">사진을 찾을 수 없습니다.\n갤러리에서 첨부한 사진이 삭제되었거나 위치가 변경되었을 수 있습니다.</string>
-
-    <!--PostCardActivity-->
     <string name="diary_card_export_info">다이어리카드 저장경로</string>
     <string name="diary_card_share_info">다이어리카드 공유</string>
     <string name="diary_card_export_error_message">다이어리카드 생성중 오류가 발생되었습니다. 다시 시도해 주세요.</string>
@@ -161,27 +139,25 @@
     <string name="post_card_showcase_message_3">만들어진 포스트카드는 이미지 파일로 저장 할 수 있습니다.</string>
     <string name="post_card_showcase_message_4">만들어진 포스트카드는 친구들과 공유 할 수 있습니다. 이메일, 문자, 메신저등을 이용해 포스트카드를 공유해 보세요.</string>
     <string name="post_card_showcase_message_5">포스트카드 편집화면을 종료하고 이전 화면으로 돌아갑니다.</string>
-
-    <!--TimelineActivity-->
     <string name="timeline_title">타임라인</string>
-
     <string name="postcard_viewer_title">다이어리 포스트카드</string>
     <string name="postcard_viewer_no_cards_saved">저장된 다이어리 포스트카드가 없습니다.</string>
-    
-    <!--GoogleDriveUtils-->
     <string name="google_drive_connect_message">Google Drive 연동중...</string>
-
-    <!--CaldroidItemAdapter-->
     <string name="diary_count">건</string>
-
-    <!--diary_main.xml-->
     <string name="menu_calendar">캘린더</string>
     <string name="menu_chart">차트</string>
     <string name="menu_timeline">타임라인</string>
     <string name="post_card">다이어리 포스트카드</string>
-
-    <!--diary_read.xml-->
     <string name="menu_delete">삭제</string>
+
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <!--  Resources added since version 1.4.41 here.                                                      -->
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <string name="preferences_category_settings">애플리케이션 설정</string>
+    <string name="preferences_category_information">애플리케이션 정보</string>
+    <string name="preferences_information_licenses">오픈소스 라이선스</string>
+    <string name="preferences_information_licenses_summary">오픈소스 소프트웨어 라이선스를 공지합니다.</string>
+    <string name="preferences_category_aaf">AAF Easy Series</string>
     <string name="invite_friends">친구에게 공유</string>
     <string name="invite_friends_summary">%s 애플리케이션을 친구에게 공유합니다.</string>
 </resources>

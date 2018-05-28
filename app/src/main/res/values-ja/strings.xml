@@ -1,10 +1,6 @@
 <resources>
     <string name="app_name">イージー ダイアリー</string>
-
-    <!--Commons-->
     <string name="common_create_seconds">Creation Seconds</string>
-
-    <!--DiaryInsertActivity-->
     <string name="create_diary_title">ダイアリーを書く</string>
     <string name="write_date">作成日</string>
     <string name="request_title_message">タイトルを入力してください.</string>
@@ -33,8 +29,6 @@
     <string name="create_diary_showcase_message_7">ダイアリーの作成日付を選択します. 過去の日付の日記を作成したい場合、日付を変更することができます.</string>
     <string name="create_diary_showcase_message_8">ダイアリーの作成時間を選択します. 最後の時間のダイアリーの作成を希望する場合は、時間を変更することができます.</string>
     <string name="create_diary_showcase_message_9">作成が完了したダイアリーを保存します.</string>
-
-    <!--DiaryMainActivity-->
     <string name="read_diary_title">検索</string>
     <string name="input_mode_a">スピーチモード</string>
     <string name="input_mode_c">キーパッドモード</string>
@@ -67,8 +61,6 @@
     <string name="read_diary_showcase_message_7">詳細設定を使用して、フォントの変更、ロック番号の設定、ダイアリーのバックアップおよびリカバリ操作を行うことができます.</string>
     <string name="read_diary_showcase_message_8">リスト内のダイアリーカードをクリックすると、その日記を見ることができます.</string>
     <string name="diary_photo_migration_message">イージーダイアリーの写真付き方式が変更され、既存のリンク情報をでダイアリーフォルダに圧縮して保存します。\n作業が完了するまでしばらくお待ちください。</string>
-    
-    <!--DiaryReadActivity-->
     <string name="read_diary_detail_title">ダイアリーを読む</string>
     <string name="delete_confirm">削除しますか?</string>
     <string name="read_diary_detail_showcase_button_1">次の</string>
@@ -85,12 +77,8 @@
     <string name="read_diary_detail_showcase_message_3">ダイアリー本文をグーグルTTS機能を利用して音声で聞くことができます.</string>
     <string name="read_diary_detail_showcase_message_4">ダイアリーを利用して、ポストカードを作成し、他の人と共有することができます.</string>
     <string name="read_diary_detail_showcase_message_5">現在閲覧中のダイアリーを削除して、検索画面に移動することができます.</string>
-
-    <!--DiaryUpdateActivity-->
     <string name="update_diary_title">ダイアリー修正</string>
     <string name="back_pressed_confirm">\'確認\'ボタンを押すと、現在のダイアリーを保存せずに前の画面に移動します。</string>
-
-    <!--SettingsActivity-->
     <string name="lock_number">設定されたロック番号:</string>
     <string name="rate_app">アプリを評価する</string>
     <string name="guide_message_3">リクエスト操作の権限がありません.</string>
@@ -119,12 +107,8 @@
     <string name="easy_password_summary">Easy Password is an application that helps you manage passwords used for login, document security, door lock, lock, credit card, account management, etc. by using one pattern lock set by the user.</string>
     <string name="font_line_spacing">フォント、行間隔</string>
     <string name="font_line_spacing_summary">設定された割合に合わせてフォントの行間を変更します。</string>
-
-    <!--CalendarActivity-->
     <string name="calendar_title">カレンダー</string>
     <string name="guide_message_4">その日に作成された日記はありません.</string>
-
-    <!--BarChartActivity-->
     <string name="bar_chart_title">チャート</string>
     <string name="bar_chart_status">時間帯別の日記を作成ステータス</string>
     <string name="range_a">0H~3H</string>
@@ -136,14 +120,8 @@
     <string name="range_g">1H~24H</string>
     <string name="write_time">作成時間</string>
     <string name="write_count">作成件数</string>
-
-    <!--LockDiaryActivity-->
     <string name="unlock_guide_message">ロック番号を入力してください</string>
-
-    <!--PhotoViewPagerActivity-->
     <string name="photo_view_error_info">写真を見つけることができませんでした.\nギャラリーから添付した画像が削除されたかの場所が変更されたことがあります.</string>
-
-    <!--PostCardActivity-->
     <string name="diary_card_export_info">ダイアリーカード保存パス</string>
     <string name="diary_card_share_info">ダイアリーカード共有</string>
     <string name="diary_card_export_error_message">ダイアリーカードの作成中にエラーが発生しました. もう一度お試しください.</string>
@@ -161,27 +139,25 @@
     <string name="post_card_showcase_message_3">作成されたポストカードは、画像ファイルとして保存することができます.</string>
     <string name="post_card_showcase_message_4">作成されたポストカードは、友人と共有することができます. 電子メール、SMS、メッセンジャーなどを利用してポストカードを共有できます.</string>
     <string name="post_card_showcase_message_5">ポストカードの編集画面を終了して、前の画面に戻ります.</string>
-
-    <!--TimelineActivity-->
     <string name="timeline_title">タイムライン</string>
-
     <string name="postcard_viewer_title">日記郵便はがき</string>
     <string name="postcard_viewer_no_cards_saved">保存されたダイアリーポストカードがありません。</string>
-    
-    <!--GoogleDriveUtils-->
     <string name="google_drive_connect_message">Googleドライブの同期...</string>
-    
-    <!--CaldroidItemAdapter-->
     <string name="diary_count"></string>
-
-    <!--diary_main.xml-->
     <string name="menu_calendar">カレンダー</string>
     <string name="menu_chart">チャート</string>
     <string name="menu_timeline">タイムライン</string>
     <string name="post_card">日記郵便はがき</string>
-
-    <!--diary_read.xml-->
     <string name="menu_delete">削除</string>
+
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <!--  Resources added since version 1.4.41 here.                                                      -->
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <string name="preferences_category_settings">アプリケーションの設定</string>
+    <string name="preferences_category_information">アプリケーション情報</string>
+    <string name="preferences_information_licenses">オープンソースライセンス</string>
+    <string name="preferences_information_licenses_summary">オープンソース・ソフトウェアのお知らせ</string>
+    <string name="preferences_category_aaf">AAF Easy Series</string>
     <string name="invite_friends">友達を招待</string>
     <string name="invite_friends_summary">%sアプリケーションを友達に共有します。</string>
 </resources>
