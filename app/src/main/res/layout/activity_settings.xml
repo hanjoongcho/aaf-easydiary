@@ -34,7 +34,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
-                        android:text="Application Setting"
+                        android:text="@string/preferences_category_settings"
                         style="@style/SettingsCategory" />
                 </io.github.aafactory.commons.views.LabelLayout>
 
@@ -224,7 +224,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
-                        android:text="Application Information"
+                        android:text="@string/preferences_category_information"
                         style="@style/SettingsCategory" />
                 </io.github.aafactory.commons.views.LabelLayout>
 
@@ -255,9 +255,10 @@
                         style="@style/AppCard.Settings">
                         <LinearLayout
                             style="@style/LinearLayoutVertical">
+
                             <com.simplemobiletools.commons.views.MyTextView
-                                android:text="@string/invite_friends"
-                                style="@style/SettingsTitle" />
+                                style="@style/SettingsTitle"
+                                android:text="@string/invite_friends" />
                             <com.simplemobiletools.commons.views.MyTextView
                                 android:id="@+id/inviteSummary"
                                 style="@style/SettingsSummary" />
@@ -271,10 +272,10 @@
                         <LinearLayout
                             style="@style/LinearLayoutVertical">
                             <com.simplemobiletools.commons.views.MyTextView
-                                android:text="Open Source Licenses"
+                                android:text="@string/preferences_information_licenses"
                                 style="@style/SettingsTitle" />
                             <com.simplemobiletools.commons.views.MyTextView
-                                android:text="open source software notices"
+                                android:text="@string/preferences_information_licenses_summary"
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
@@ -285,7 +286,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
-                        android:text="AAF Easy Series"
+                        android:text="@string/preferences_category_aaf"
                         style="@style/SettingsCategory" />
                 </io.github.aafactory.commons.views.LabelLayout>
 

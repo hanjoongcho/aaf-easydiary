@@ -182,4 +182,6 @@
 
     <!--diary_read.xml-->
     <string name="menu_delete">삭제</string>
+    <string name="invite_friends">친구에게 공유</string>
+    <string name="invite_friends_summary">%s 애플리케이션을 친구에게 공유합니다.</string>
 </resources>

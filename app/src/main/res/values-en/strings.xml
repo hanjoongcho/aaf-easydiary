@@ -182,4 +182,11 @@
 
     <!--diary_read.xml-->
     <string name="menu_delete">Delete</string>
+    <string name="preferences_category_settings">Application Settings</string>
+    <string name="preferences_category_information">Application Information</string>
+    <string name="preferences_information_licenses">Open Source Licenses</string>
+    <string name="preferences_information_licenses_summary">Open source software notices</string>
+    <string name="preferences_category_aaf">AAF Easy Series</string>
+    <string name="invite_friends">Invite friends</string>
+    <string name="invite_friends_summary">Share the %s application with your friends.</string>
 </resources>

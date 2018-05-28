@@ -231,7 +231,7 @@ class SettingsActivity : EasyDiaryActivity() {
 
     private fun openFontSettingDialog() {
         val builder = AlertDialog.Builder(this@SettingsActivity)
-        builder.setNegativeButton("CANCEL", null)
+        builder.setNegativeButton(getString(android.R.string.cancel), null)
         builder.setTitle(getString(R.string.font_setting))
         val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val fontView = inflater.inflate(R.layout.dialog_fonts, null)

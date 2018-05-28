@@ -2,7 +2,7 @@
 
     <PreferenceCategory
         android:layout="@layout/preference_category"
-        android:title="Application Setting">
+        android:title="@string/preferences_category_settings">
         <ListPreference
             android:key="font_setting"
             android:title="@string/font_setting"
@@ -43,7 +43,7 @@
 
     <PreferenceCategory
         android:layout="@layout/preference_category"
-        android:title="Application Information">
+        android:title="@string/preferences_category_information">
         <Preference
             android:key="aaf_app_version"
             android:title=""
@@ -51,8 +51,8 @@
         </Preference>
         <Preference
             android:key="open_source_licenses"
-            android:title="Open Source Licenses"
-            android:summary="open source software notices">
+            android:title="@string/preferences_information_licenses"
+            android:summary="@string/preferences_information_licenses_summary">
         </Preference>
     </PreferenceCategory>
 

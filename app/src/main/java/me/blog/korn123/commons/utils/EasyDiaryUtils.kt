@@ -139,7 +139,7 @@ object EasyDiaryUtils {
 
     fun createSecondsPickerBuilder(context: Context, itemClickListener: AdapterView.OnItemClickListener, second: Int): AlertDialog.Builder {
         val builder = AlertDialog.Builder(context)
-        builder.setNegativeButton("CANCEL", null)
+        builder.setNegativeButton(context.getString(android.R.string.cancel), null)
         builder.setTitle(context.getString(R.string.common_create_seconds))
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val secondsPicker = inflater.inflate(R.layout.dialog_seconds_picker, null)
