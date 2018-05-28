@@ -149,4 +149,5 @@
     <string name="sample_diary_2">Wenn du sprichst, wiederholst du, was du weißt. Aber wenn du zuhörst, wirst du etwas Neues lernen. - Der Dalai Lama</string>
     <string name="sample_diary_3">Es sind die schlechten Nachrichten, die Sie am meisten als Anführer hören müssen. Die guten Nachrichten sind morgen gut, aber die schlechten Nachrichten werden morgen schlechter sein. Deshalb ist es sicher, immer schwierige Fragen zu stellen und die Wahrheit zu sagen, auch wenn die Fakten herzzerreißend sind. - Eric Schmidt, Vorsitzender von Google, sagt: \"Wie funktioniert Google?\"</string>
     <string name="sample_diary_4">Beschränkungen haben keine Kreativität, aber Kreativität wird ausgeübt, um Beschränkungen zu überwinden. Jede großartige Arbeit oder kreative Lösung war eine Menge Zeitbeschränkungen, physische Einschränkungen und Ressourcenbeschränkungen. Was auch immer es ist, Kreativität wird in einer schwierigen und eingeschränkten Umgebung geboren. - 김봉진 대표, ‘배민다움’에서</string>
+    <string name="diary_count"></string>
 </resources>
