@@ -92,10 +92,8 @@ class DiaryInsertActivity : EasyDiaryActivity() {
                 finish()
             }
             R.id.photoView -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
                 callImagePicker()
             } else {
-                // API Level 23 이상이면서 권한취득 안한경우
                 confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
             }
             R.id.datePicker -> {
@@ -108,7 +106,7 @@ class DiaryInsertActivity : EasyDiaryActivity() {
                 val itemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
                     val itemMap = parent.adapter.getItem(position) as HashMap<String, String>
                     mSecond = Integer.valueOf(itemMap["value"])!!
-                    initDateTime()
+                    setDateTime()
                     mSecondsPickerDialog.cancel()
                 }
                 val builder = EasyDiaryUtils.createSecondsPickerBuilder(this@DiaryInsertActivity, itemClickListener, mSecond)
@@ -134,8 +132,8 @@ class DiaryInsertActivity : EasyDiaryActivity() {
         setupShowcase()
         setupSpinner()
         setupKeypad()
-        initDateTime()
-        initContents(savedInstanceState)
+        restoreContents(savedInstanceState)
+        setDateTime()
         bindEvent()
     }
 
@@ -155,6 +153,12 @@ class DiaryInsertActivity : EasyDiaryActivity() {
                 listUriString.add(model.photoUri)
             }
             it.putStringArrayList(LIST_URI_STRING, listUriString)
+            it.putInt(SELECTED_YEAR, mYear)
+            it.putInt(SELECTED_MONTH, mMonth)
+            it.putInt(SELECTED_DAY, mDayOfMonth)
+            it.putInt(SELECTED_HOUR, mHourOfDay)
+            it.putInt(SELECTED_MINUTE, mMinute)
+            it.putInt(SELECTED_SECOND, mSecond)
         }
         super.onSaveInstanceState(outState)
     }
@@ -170,10 +174,8 @@ class DiaryInsertActivity : EasyDiaryActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             REQUEST_CODE_EXTERNAL_STORAGE -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                // 권한이 있는경우
                 callImagePicker()
             } else {
-                // 권한이 없는경우
                 makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3))
             }
             else -> {
@@ -336,7 +338,7 @@ class DiaryInsertActivity : EasyDiaryActivity() {
         if (!hasShot) window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
     }
 
-    private fun initDateTime() {
+    private fun setDateTime() {
         try {
             val format = SimpleDateFormat("yyyyMMddHHmmss")
             val dateTimeString = String.format(
@@ -376,13 +378,19 @@ class DiaryInsertActivity : EasyDiaryActivity() {
         }
     }
     
-    private fun initContents(savedInstanceState: Bundle?) {
+    private fun restoreContents(savedInstanceState: Bundle?) {
         mPhotoUris = RealmList()
         savedInstanceState?.let {
             it.getStringArrayList(LIST_URI_STRING)?.map { uriString ->
                 mPhotoUris.add(PhotoUriDto(uriString))
             }
-
+            mYear = it.getInt(SELECTED_YEAR, mYear)
+            mMonth = it.getInt(SELECTED_MONTH, mMonth)
+            mDayOfMonth = it.getInt(SELECTED_DAY, mDayOfMonth)
+            mHourOfDay = it.getInt(SELECTED_HOUR, mHourOfDay)
+            mMinute = it.getInt(SELECTED_MINUTE, mMinute)
+            mSecond = it.getInt(SELECTED_SECOND, mSecond)
+            
             for ((index, dto) in mPhotoUris.withIndex()) {
                 val bitmap = EasyDiaryUtils.photoUriToDownSamplingBitmap(this, dto)
                 val imageView = ImageView(this)
@@ -405,13 +413,13 @@ class DiaryInsertActivity : EasyDiaryActivity() {
         mYear = year
         mMonth = month + 1
         mDayOfMonth = dayOfMonth
-        initDateTime()
+        setDateTime()
     }
 
     private var mTimeSetListener: TimePickerDialog.OnTimeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
         mHourOfDay = hourOfDay
         mMinute = minute
-        initDateTime()
+        setDateTime()
     }
 
     private fun applyRemoveIndex() {

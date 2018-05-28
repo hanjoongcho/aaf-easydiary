@@ -226,7 +226,7 @@ class PostCardActivity : EasyDiaryActivity() {
             try {
                 val diaryCardPath = DIARY_POSTCARD_DIRECTORY + mSequence + "_" + DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".jpg"
                 mSavedDiaryCardPath = Environment.getExternalStorageDirectory().absolutePath + diaryCardPath
-                EasyDiaryUtils.initWorkingDirectory(Environment.getExternalStorageDirectory().absolutePath + USER_CUSTOM_FONTS_DIRECTORY)
+                EasyDiaryUtils.initWorkingDirectory(this@PostCardActivity)
                 BitmapUtils.saveBitmapToFileCache(bitmap, mSavedDiaryCardPath)
                 Handler(Looper.getMainLooper()).post {
                     progressBar.visibility = View.GONE

@@ -45,7 +45,7 @@ class CaldroidItemAdapter(
         val rightPadding = cellView?.paddingRight ?: 0
 
         val tv1 = cellView?.findViewById<TextView>(R.id.tv1)
-        val tv2 = cellView?.findViewById<TextView>(R.id.tv2)
+        val tv2 = cellView?.findViewById<TextView>(R.id.diaryCount)
         val imageView1 = cellView?.findViewById<ImageView>(R.id.weather)
 
         tv1?.setTextColor(Color.BLACK)

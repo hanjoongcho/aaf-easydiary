@@ -90,24 +90,23 @@ Thanks for someone help me to translate this app.
 
 Currently supported languages are listed below:   
 
-* Korean [strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-ko/strings.xml)   
-```
-  * Translation contributor list
-    - Hanjoong Cho (native speaker)
-```
+> Korean Translation contributor   
+* hanjoongcho (https://github.com/hanjoongcho)  
+[strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-ko/strings.xml)  
+[MANUAL_ko.md](https://github.com/hanjoongcho/aaf-easydiary/blob/master/MANUAL_ko.md)  
 
-* English [strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-en/strings.xml)   
-```
-  * Translation contributor list 
-    - Google translation robot 
-```
+> English Translation contributor 
+* Google translation robot  
+[strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-en/strings.xml)  
 
-* Japanese [strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-ja/strings.xml)   
-```
-  * Translation contributor list 
-    - Google translation robot 
-```
+> Japanese Translation contributor  
+* Google translation robot  
+[strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-ja/strings.xml)  
 
+> German Translation contributor
+* fulmeek (https://github.com/fulmeek)  
+[strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-de/strings.xml)  
+[MANUAL_de.md](https://github.com/hanjoongcho/aaf-easydiary/blob/master/MANUAL_de.md)  
 
 # License
 [LICENSE][LICENSE.md]

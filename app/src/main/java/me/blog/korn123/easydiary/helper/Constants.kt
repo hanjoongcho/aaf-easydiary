@@ -20,7 +20,6 @@ const val CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT = "Default"
 const val DIARY_SEARCH_QUERY_CASE_SENSITIVE = "case_sensitive"
 const val CONTENT_URI_PREFIX = "content:/"
 const val FILE_URI_PREFIX = "file:/"
-const val LIST_URI_STRING = "listUriString"
 const val LINE_SPACING_SCALE_FACTOR = "line_spacing_scale_factor"
 const val LINE_SPACING_SCALE_DEFAULT = 1.0F
 
@@ -89,3 +88,12 @@ const val POSTCARD_BG_COLOR = "postcard_bg_color"
 const val POSTCARD_TEXT_COLOR = "postcard_text_color"
 const val POSTCARD_BG_COLOR_VALUE = -0x1
 const val POSTCARD_TEXT_COLOR_VALUE = -0xb5b5b4
+
+// Save Instance State
+const val LIST_URI_STRING = "list_uri_string"
+const val SELECTED_YEAR = "selected_year"
+const val SELECTED_MONTH = "selected_month"
+const val SELECTED_DAY = "selected_day"
+const val SELECTED_HOUR = "selected_hour"
+const val SELECTED_MINUTE = "selected_minute"
+const val SELECTED_SECOND = "selected_second"
