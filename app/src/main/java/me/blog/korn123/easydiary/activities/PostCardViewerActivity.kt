@@ -11,6 +11,7 @@ import android.widget.AdapterView
 import io.github.aafactory.commons.utils.ColorUtils
 import kotlinx.android.synthetic.main.activity_post_card_viewer.*
 import kotlinx.android.synthetic.main.content_post_card_viewer.*
+import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.PostcardAdapter
@@ -46,6 +47,7 @@ class PostCardViewerActivity : EasyDiaryActivity() {
         val spacesItemDecoration = SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding))
         val gridLayoutManager = GridLayoutManager(this, 2)
 
+        EasyDiaryUtils.initWorkingDirectory(this@PostCardViewerActivity)
         val listPostcard = File(Environment.getExternalStorageDirectory().absolutePath + DIARY_POSTCARD_DIRECTORY)
                 .listFiles()
                 .filter { it.extension.equals("jpg", true)}
@@ -73,8 +75,6 @@ class PostCardViewerActivity : EasyDiaryActivity() {
 
         toolbarImage.setColorFilter(ColorUtils.adjustAlpha(config.primaryColor, 0.5F))
     }
-
-    
 
     internal class SpacesItemDecoration(private val space: Int) : RecyclerView.ItemDecoration() {
         override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
