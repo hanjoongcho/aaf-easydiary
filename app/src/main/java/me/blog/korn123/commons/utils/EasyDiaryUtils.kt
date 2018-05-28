@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.Uri
+import android.os.Environment
 import android.support.v7.app.AlertDialog
 import android.text.SpannableString
 import android.text.Spanned
@@ -19,6 +20,7 @@ import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.CommonUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.SecondItemAdapter
+import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.PhotoUriDto
 import java.io.File
@@ -43,7 +45,15 @@ object EasyDiaryUtils {
             return easyDiaryMimeType
         }
 
-    fun initWorkingDirectory(path: String) {
+    fun initWorkingDirectory(context: Context) {
+        if (context.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+            makeDirectory(Environment.getExternalStorageDirectory().absolutePath + USER_CUSTOM_FONTS_DIRECTORY)
+            makeDirectory(Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY)
+            makeDirectory(Environment.getExternalStorageDirectory().absolutePath + DIARY_POSTCARD_DIRECTORY)    
+        }
+    }
+    
+    private fun makeDirectory(path: String) {
         val workingDirectory = File(path)
         if (!workingDirectory.exists()) workingDirectory.mkdirs()
     }

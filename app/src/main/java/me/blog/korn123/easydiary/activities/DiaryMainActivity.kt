@@ -87,9 +87,7 @@ class DiaryMainActivity : EasyDiaryActivity() {
 
         bindEvent()
         initShowcase()
-        EasyDiaryUtils.initWorkingDirectory(Environment.getExternalStorageDirectory().absolutePath + USER_CUSTOM_FONTS_DIRECTORY)
-        EasyDiaryUtils.initWorkingDirectory(Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY)
-        EasyDiaryUtils.initWorkingDirectory(Environment.getExternalStorageDirectory().absolutePath + DIARY_POSTCARD_DIRECTORY)
+        EasyDiaryUtils.initWorkingDirectory(this@DiaryMainActivity)
         migrateData()
     }
 
