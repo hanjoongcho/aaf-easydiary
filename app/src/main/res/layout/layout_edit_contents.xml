@@ -22,11 +22,12 @@
 
             <com.simplemobiletools.commons.views.MyEditText
                 android:id="@+id/diaryTitle"
-                android:background="@android:color/transparent"
+                style="@style/edit_text_diary_edit_inner_contents"
                 android:layout_gravity="center_vertical"
+                android:background="@android:color/transparent"
                 android:gravity="center_vertical"
                 android:hint="@string/guide_message"
-                style="@style/edit_text_diary_edit_inner_contents" />
+                android:inputType="text|textCapSentences|textAutoCorrect|textAutoComplete" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
     
@@ -40,12 +41,14 @@
             android:fillViewport="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <com.simplemobiletools.commons.views.MyEditText
                 android:id="@+id/diaryContents"
-                android:gravity="top"
+                style="@style/edit_text_diary_edit_inner_contents"
                 android:background="@android:color/transparent"
+                android:gravity="top"
                 android:hint="@string/contents_text_hint"
-                style="@style/edit_text_diary_edit_inner_contents" />
+                android:inputType="text|textCapSentences|textAutoCorrect|textAutoComplete|textMultiLine|textLongMessage" />
         </ScrollView>
     </android.support.v7.widget.CardView>
     
