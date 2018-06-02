@@ -14,6 +14,7 @@ import android.speech.RecognizerIntent
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.ColorUtils
 import android.support.v7.app.AlertDialog
+import android.text.format.DateFormat
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -258,7 +259,7 @@ class DiaryInsertActivity : EasyDiaryActivity() {
     
     private fun setupDialog() {
         mDatePickerDialog = DatePickerDialog(this, mStartDateListener, mYear, mMonth - 1, mDayOfMonth)
-        mTimePickerDialog = TimePickerDialog(this, mTimeSetListener, mHourOfDay, mMinute, false)
+        mTimePickerDialog = TimePickerDialog(this, mTimeSetListener, mHourOfDay, mMinute, DateFormat.is24HourFormat(this))
     }
 
     private fun setupShowcase() {

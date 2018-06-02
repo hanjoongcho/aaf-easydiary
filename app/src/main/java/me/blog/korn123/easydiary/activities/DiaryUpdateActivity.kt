@@ -13,6 +13,7 @@ import android.os.Environment
 import android.speech.RecognizerIntent
 import android.support.v4.graphics.ColorUtils
 import android.support.v7.app.AlertDialog
+import android.text.format.DateFormat
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -144,7 +145,7 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
             }
             R.id.timePicker -> {
                 if (mTimePickerDialog == null) {
-                    mTimePickerDialog = TimePickerDialog(this, mTimeSetListener, mHourOfDay, mMinute, false)
+                    mTimePickerDialog = TimePickerDialog(this, mTimeSetListener, mHourOfDay, mMinute, DateFormat.is24HourFormat(this))
                 }
                 mTimePickerDialog?.show()
             }
