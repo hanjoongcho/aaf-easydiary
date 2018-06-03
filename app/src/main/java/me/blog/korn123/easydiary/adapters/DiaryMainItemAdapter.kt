@@ -7,6 +7,8 @@ import android.support.v4.graphics.ColorUtils
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.bumptech.glide.Glide
+import com.bumptech.glide.Priority
 import io.github.aafactory.commons.extensions.updateAppViews
 import io.github.aafactory.commons.extensions.updateTextColors
 import io.github.aafactory.commons.utils.CommonUtils
@@ -20,6 +22,10 @@ import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
+
+
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -87,10 +93,33 @@ class DiaryMainItemAdapter(
             false -> holder.photoContainer.visibility = View.GONE
         }
         FontUtils.setFontsTypeface(context, context.assets, null, holder.item_holder)
-        holder.attachPhotoLoader?.interrupt()
-        val attachPhotoLoader = AttachPhotoLoader(activity, diaryDto.sequence, holder)
-        holder.attachPhotoLoader = attachPhotoLoader
-        attachPhotoLoader.start()
+        holder.photoViews.removeAllViews()
+        if (diaryDto.photoUris?.size ?: 0 > 0) {
+            val maxPhotos = CommonUtils.getDefaultDisplay(activity).x / CommonUtils.dpToPixel(activity, 40, 1)
+            diaryDto.photoUris?.map {
+                val path = it.getFilePath()
+                val imageView = ImageView(activity)
+                val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(activity, 28, 1), CommonUtils.dpToPixel(activity, 28, 1))
+                layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(activity, 3, 1), 0)
+                imageView.layoutParams = layoutParams
+                val drawable = ContextCompat.getDrawable(activity, R.drawable.bg_card_thumbnail)
+                val gradient = drawable as GradientDrawable
+                gradient.setColor(ColorUtils.setAlphaComponent(activity.config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA))
+                imageView.background = gradient
+                imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+                val padding = (CommonUtils.dpToPixel(activity, 1, 1) * 1.5).toInt()
+                imageView.setPadding(padding, padding, padding, padding)
+                val options = RequestOptions()
+                        .centerCrop()
+                        .error(R.drawable.question_shield)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .priority(Priority.HIGH)
+                Glide.with(context).load(path).apply(options).into(imageView)
+                if (holder.photoViews.childCount >= maxPhotos) return@map
+                holder.photoViews.addView(imageView)
+            }
+        }
+        
         return row
     }
 

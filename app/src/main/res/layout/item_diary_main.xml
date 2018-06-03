@@ -40,7 +40,8 @@
             <FrameLayout
                 android:id="@+id/photoContainer"
                 android:layout_width="match_parent"
-                android:layout_height="28dp">
+                android:layout_height="28dp"
+                android:layout_marginTop="@dimen/card_contents_padding">
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
