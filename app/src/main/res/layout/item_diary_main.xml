@@ -37,23 +37,19 @@
                 android:gravity="left"
                 style="@style/text_view_diary_main_item_inner_contents"/>
 
-            <FrameLayout
+            <RelativeLayout
                 android:id="@+id/photoContainer"
+                android:layout_marginTop="@dimen/card_contents_padding"
                 android:layout_width="match_parent"
-                android:layout_height="28dp"
-                android:layout_marginTop="@dimen/card_contents_padding">
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <LinearLayout
-                        android:id="@+id/photoViews"
-                        android:layout_alignParentRight="true"
-                        android:orientation="horizontal"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent">
-                    </LinearLayout>
-                </RelativeLayout>    
-            </FrameLayout>
+                android:layout_height="28dp">
+                <LinearLayout
+                    android:id="@+id/photoViews"
+                    android:layout_alignParentRight="true"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+                </LinearLayout>
+            </RelativeLayout>    
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </RelativeLayout>    

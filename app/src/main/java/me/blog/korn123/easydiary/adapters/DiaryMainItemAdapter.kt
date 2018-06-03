@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import io.github.aafactory.commons.extensions.updateAppViews
 import io.github.aafactory.commons.extensions.updateTextColors
 import io.github.aafactory.commons.utils.CommonUtils
@@ -18,13 +20,9 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
-
 
 
 /**
@@ -49,8 +47,8 @@ class DiaryMainItemAdapter(
             holder.textView3 = row.findViewById(R.id.text3)
             holder.imageView = row.findViewById(R.id.weather)
             holder.item_holder = row.findViewById(R.id.item_holder)
-            holder.photoContainer = row.findViewById(R.id.photoContainer)
             holder.photoViews = row.findViewById(R.id.photoViews)
+            holder.photoContainer = row.findViewById(R.id.photoContainer)
             row.tag = holder
         } else {
             holder = row.tag as ViewHolder
@@ -87,7 +85,6 @@ class DiaryMainItemAdapter(
 
         when (diaryDto.photoUris?.size ?: 0 > 0) {
             true -> {
-//                holder.photoViews.visibility = View.GONE
                 holder.photoContainer.visibility = View.VISIBLE
             }
             false -> holder.photoContainer.visibility = View.GONE
@@ -110,7 +107,7 @@ class DiaryMainItemAdapter(
                 val padding = (CommonUtils.dpToPixel(activity, 1, 1) * 1.5).toInt()
                 imageView.setPadding(padding, padding, padding, padding)
                 val options = RequestOptions()
-                        .centerCrop()
+//                        .centerCrop()
                         .error(R.drawable.question_shield)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .priority(Priority.HIGH)
@@ -123,53 +120,13 @@ class DiaryMainItemAdapter(
         return row
     }
 
-    private class AttachPhotoLoader(val activity: Activity, val sequence: Int, val holder: ViewHolder) : Thread() {
-        override fun run() {
-            super.run()
-            val photoViews = mutableListOf<ImageView>()
-            val realmInstance = EasyDiaryDbHelper.getInstance()
-            val diaryDto: DiaryDto = EasyDiaryDbHelper.readDiaryBy(realmInstance, sequence)
-            if (diaryDto.photoUris?.size ?: 0 > 0) {
-                val maxPhotos = CommonUtils.getDefaultDisplay(activity).x / CommonUtils.dpToPixel(activity, 40, 1)
-                diaryDto.photoUris?.map {
-                    val bitmap = EasyDiaryUtils.photoUriToDownSamplingBitmap(activity, it, 30, 25, 25)
-                    val imageView = ImageView(activity)
-                    val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(activity, 28, 1), CommonUtils.dpToPixel(activity, 28, 1))
-                    layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(activity, 3, 1), 0)
-                    imageView.layoutParams = layoutParams
-//                        imageView.setBackgroundResource(R.drawable.bg_card_thumbnail)
-                    val drawable = ContextCompat.getDrawable(activity, R.drawable.bg_card_thumbnail)
-                    val gradient = drawable as GradientDrawable
-                    gradient.setColor(ColorUtils.setAlphaComponent(activity.config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA))
-                    imageView.background = gradient
-                    imageView.setImageBitmap(bitmap)
-                    imageView.scaleType = ImageView.ScaleType.CENTER
-                    if (photoViews.size >= maxPhotos) return@map
-                    photoViews.add(imageView)
-                }
-
-                if (!isInterrupted) {
-                    activity.runOnUiThread {
-                        holder.photoViews.removeAllViews()
-                        photoViews.map {
-                            holder.photoViews.addView(it)
-                        }
-                        holder.photoViews.visibility = View.VISIBLE
-                    }
-                }
-            }
-            realmInstance.close()
-        }
-    }
-
     private class ViewHolder {
-        lateinit var photoContainer: FrameLayout
+        lateinit var photoContainer: RelativeLayout
         lateinit var photoViews: LinearLayout
         var textView1: TextView? = null
         var textView2: TextView? = null
         var textView3: TextView? = null
         var imageView: ImageView? = null
         var item_holder: ViewGroup? = null
-        var attachPhotoLoader: AttachPhotoLoader? = null
     }
 }

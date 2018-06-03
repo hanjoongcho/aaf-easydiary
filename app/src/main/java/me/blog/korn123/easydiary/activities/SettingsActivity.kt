@@ -240,6 +240,7 @@ class SettingsActivity : EasyDiaryActivity() {
         val fontNameArray = resources.getStringArray(R.array.pref_list_fonts_title)
         val fontPathArray = resources.getStringArray(R.array.pref_list_fonts_values)
         val listFont = ArrayList<Map<String, String>>()
+        var selectedIndex = 0
         for (i in fontNameArray.indices) {
             val map = HashMap<String, String>()
             map.put("disPlayFontName", fontNameArray[i])
@@ -258,8 +259,11 @@ class SettingsActivity : EasyDiaryActivity() {
                 }
             }
         }
-
-
+        
+        listFont.mapIndexed { index, map ->
+            if (config.settingFontName == map["fontName"]) selectedIndex = index
+        } 
+        
         val arrayAdapter = FontItemAdapter(this@SettingsActivity, R.layout.item_font, listFont)
         listView.adapter = arrayAdapter
         listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
@@ -276,6 +280,7 @@ class SettingsActivity : EasyDiaryActivity() {
         builder.setView(fontView)
         mAlertDialog = builder.create()
         mAlertDialog?.show()
+        listView.setSelection(selectedIndex)
     }
 
     private fun setFontsStyle() {
