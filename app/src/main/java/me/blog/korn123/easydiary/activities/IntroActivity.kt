@@ -38,12 +38,12 @@ class IntroActivity : AppCompatActivity(), Handler.Callback {
 
             // Initial font size setting
             if (!preferencesContains(SETTING_FONT_SIZE)) {
-                config.settingFontSize = CommonUtils.dpToPixel(this, DEFAULT_FONT_SIZE_UN_SUPPORT_LANGUAGE).toFloat()
+                config.settingFontSize = CommonUtils.dpToPixelFloatValue(this, DEFAULT_FONT_SIZE_UN_SUPPORT_LANGUAGE.toFloat())
             }
         } else {
             // Initial font size setting
             if (!preferencesContains(SETTING_FONT_SIZE)) {
-                config.settingFontSize = CommonUtils.dpToPixel(this, DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE).toFloat()
+                config.settingFontSize = CommonUtils.dpToPixelFloatValue(this, DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE.toFloat())
             }
         }
         Handler(this).sendEmptyMessageDelayed(START_MAIN_ACTIVITY, 500)

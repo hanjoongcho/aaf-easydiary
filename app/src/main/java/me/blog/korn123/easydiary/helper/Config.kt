@@ -29,7 +29,7 @@ class Config(context: Context) : BaseConfig(context) {
         set(previousActivity) = legacyPrefs.edit().putInt(PREVIOUS_ACTIVITY, previousActivity).apply()
     
     var settingFontSize: Float
-        get() = legacyPrefs.getFloat(SETTING_FONT_SIZE, CommonUtils.dpToPixel(context, DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE).toFloat())
+        get() = legacyPrefs.getFloat(SETTING_FONT_SIZE, CommonUtils.dpToPixelFloatValue(context, DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE.toFloat()))
         set(settingFontSize) = legacyPrefs.edit().putFloat(SETTING_FONT_SIZE, settingFontSize).apply()
 
     var diarySearchQueryCaseSensitive: Boolean

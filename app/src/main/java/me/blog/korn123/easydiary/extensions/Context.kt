@@ -27,7 +27,7 @@ val Context.config: Config get() = Config.newInstance(this)
 
 fun Context.initTextSize(viewGroup: ViewGroup, context: Context) {
     val cnt = viewGroup.childCount
-    val defaultFontSize: Float = CommonUtils.dpToPixel(context, DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE).toFloat()
+    val defaultFontSize: Float = CommonUtils.dpToPixelFloatValue(context, DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE.toFloat())
     val settingFontSize: Float = config.settingFontSize
     (0 until cnt)
             .map { index -> viewGroup.getChildAt(index) }
@@ -45,7 +45,7 @@ fun Context.initTextSize(viewGroup: ViewGroup, context: Context) {
 }
 
 fun Context.initTextSize(textView: TextView, context: Context) {
-    val defaultFontSize: Float = CommonUtils.dpToPixel(context, DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE).toFloat()
+    val defaultFontSize: Float = CommonUtils.dpToPixelFloatValue(context, DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE.toFloat())
     val settingFontSize: Float = config.settingFontSize
     textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
 }

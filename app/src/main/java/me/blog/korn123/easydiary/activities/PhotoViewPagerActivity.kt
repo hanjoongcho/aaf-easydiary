@@ -67,7 +67,7 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
                 true -> {
                     val textView = TextView(container.context)
                     textView.gravity = Gravity.CENTER
-                    val padding = CommonUtils.dpToPixel(container.context, 10, 1)
+                    val padding = CommonUtils.dpToPixel(container.context, 10F)
                     textView.setPadding(padding, padding, padding, padding)
                     FontUtils.setTypefaceDefault(textView)
                     textView.text = container.context.getString(R.string.photo_view_error_info)

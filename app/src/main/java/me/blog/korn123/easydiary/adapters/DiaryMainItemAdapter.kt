@@ -13,6 +13,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import io.github.aafactory.commons.extensions.updateAppViews
 import io.github.aafactory.commons.extensions.updateTextColors
+import io.github.aafactory.commons.utils.CALCULATION
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
@@ -92,19 +93,19 @@ class DiaryMainItemAdapter(
         FontUtils.setFontsTypeface(context, context.assets, null, holder.item_holder)
         holder.photoViews.removeAllViews()
         if (diaryDto.photoUris?.size ?: 0 > 0) {
-            val maxPhotos = CommonUtils.getDefaultDisplay(activity).x / CommonUtils.dpToPixel(activity, 40, 1)
+            val maxPhotos = CommonUtils.getDefaultDisplay(activity).x / CommonUtils.dpToPixel(activity, 40F)
             diaryDto.photoUris?.map {
                 val path = it.getFilePath()
                 val imageView = ImageView(activity)
-                val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(activity, 28, 1), CommonUtils.dpToPixel(activity, 28, 1))
-                layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(activity, 3, 1), 0)
+                val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(activity, 28F), CommonUtils.dpToPixel(activity, 28F))
+                layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(activity, 3F), 0)
                 imageView.layoutParams = layoutParams
                 val drawable = ContextCompat.getDrawable(activity, R.drawable.bg_card_thumbnail)
                 val gradient = drawable as GradientDrawable
                 gradient.setColor(ColorUtils.setAlphaComponent(activity.config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA))
                 imageView.background = gradient
                 imageView.scaleType = ImageView.ScaleType.CENTER_CROP
-                val padding = (CommonUtils.dpToPixel(activity, 1, 1) * 1.5).toInt()
+                val padding = (CommonUtils.dpToPixel(activity, 1.5F, CALCULATION.FLOOR))
                 imageView.setPadding(padding, padding, padding, padding)
                 val options = RequestOptions()
 //                        .centerCrop()

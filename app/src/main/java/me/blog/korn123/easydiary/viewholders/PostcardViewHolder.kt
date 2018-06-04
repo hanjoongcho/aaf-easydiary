@@ -15,7 +15,7 @@ internal class PostcardViewHolder(itemView: View, val activity: Activity) : Recy
 
     internal fun bindTo(file: File) {
         val point =  CommonUtils.getDefaultDisplay(activity)
-        val targetX = Math.floor((point.x - CommonUtils.dpToPixelFloatValue(imageView.context, 9)) / 2.0)
+        val targetX = Math.floor((point.x - CommonUtils.dpToPixelFloatValue(imageView.context, 9F)) / 2.0)
         imageView.layoutParams.height = targetX.toInt()
         Glide.with(imageView.context)
                 .load(file)

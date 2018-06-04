@@ -17,6 +17,7 @@ import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
 import io.github.aafactory.commons.utils.BitmapUtils
+import io.github.aafactory.commons.utils.CALCULATION
 import io.github.aafactory.commons.utils.CommonUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.SecondItemAdapter
@@ -167,12 +168,12 @@ object EasyDiaryUtils {
     ): Bitmap = try {
         when (photoUriDto.isContentUri()) {
             true -> {
-                BitmapUtils.decodeFile(context, Uri.parse(photoUriDto.photoUri), CommonUtils.dpToPixel(context, fixedWidth, 1), CommonUtils.dpToPixel(context, fixedHeight, 1))
+                BitmapUtils.decodeFile(context, Uri.parse(photoUriDto.photoUri), CommonUtils.dpToPixel(context, fixedWidth.toFloat(), CALCULATION.FLOOR), CommonUtils.dpToPixel(context, fixedHeight.toFloat(), CALCULATION.FLOOR))
             }
             false -> {
                 when (fixedWidth == fixedHeight) {
-                    true -> BitmapUtils.decodeFileCropCenter(photoUriDto.getFilePath(), CommonUtils.dpToPixel(context, fixedWidth, 1))
-                    false -> BitmapUtils.decodeFile(photoUriDto.getFilePath(), CommonUtils.dpToPixel(context, fixedWidth, 1), CommonUtils.dpToPixel(context, fixedHeight, 1))
+                    true -> BitmapUtils.decodeFileCropCenter(photoUriDto.getFilePath(), CommonUtils.dpToPixel(context, fixedWidth.toFloat(), CALCULATION.FLOOR))
+                    false -> BitmapUtils.decodeFile(photoUriDto.getFilePath(), CommonUtils.dpToPixel(context, fixedWidth.toFloat(), CALCULATION.FLOOR), CommonUtils.dpToPixel(context, fixedHeight.toFloat(), CALCULATION.FLOOR))
                 }
 
             }

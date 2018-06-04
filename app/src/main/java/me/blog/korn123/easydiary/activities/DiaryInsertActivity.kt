@@ -212,10 +212,10 @@ class DiaryInsertActivity : EasyDiaryActivity() {
                 try {
                     CommonUtils.uriToFile(this, data.data!!, photoPath)
                     mPhotoUris.add(PhotoUriDto(FILE_URI_PREFIX + photoPath))
-                    val bitmap = BitmapUtils.decodeFile(photoPath, CommonUtils.dpToPixel(applicationContext, 45, 1), CommonUtils.dpToPixel(applicationContext, 45, 1))
+                    val bitmap = BitmapUtils.decodeFile(photoPath, CommonUtils.dpToPixel(applicationContext, 45F), CommonUtils.dpToPixel(applicationContext, 45F))
                     val imageView = ImageView(applicationContext)
-                    val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(applicationContext, 50, 1), CommonUtils.dpToPixel(applicationContext, 50, 1))
-                    layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(applicationContext, 3, 1), 0)
+                    val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(applicationContext, 50F), CommonUtils.dpToPixel(applicationContext, 50F))
+                    layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(applicationContext, 3F), 0)
                     imageView.layoutParams = layoutParams
                     val drawable = ContextCompat.getDrawable(this, R.drawable.bg_card_thumbnail)
                     val gradient = drawable as GradientDrawable
@@ -395,8 +395,8 @@ class DiaryInsertActivity : EasyDiaryActivity() {
             for ((index, dto) in mPhotoUris.withIndex()) {
                 val bitmap = EasyDiaryUtils.photoUriToDownSamplingBitmap(this, dto)
                 val imageView = ImageView(this)
-                val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(this, 50, 1), CommonUtils.dpToPixel(this, 50, 1))
-                layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(this, 3, 1), 0)
+                val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(this, 50F), CommonUtils.dpToPixel(this, 50F))
+                layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(this, 3F), 0)
                 imageView.layoutParams = layoutParams
                 val drawable = ContextCompat.getDrawable(this, R.drawable.bg_card_thumbnail)
                 val gradient = drawable as GradientDrawable
