@@ -166,11 +166,8 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
 
     override fun onBackPressed() {
         showAlertDialog(getString(R.string.back_pressed_confirm),
-                DialogInterface.OnClickListener { dialogInterface, i ->
-                    //                        finish();
-                    super@DiaryUpdateActivity.onBackPressed()
-                },
-                DialogInterface.OnClickListener { dialogInterface, i -> }
+                DialogInterface.OnClickListener { _, _ -> super@DiaryUpdateActivity.onBackPressed() },
+                null
         )
     }
 
@@ -379,11 +376,11 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home ->
-                //                finish();
-                //                this.overridePendingTransition(R.anim.anim_left_to_center, R.anim.anim_center_to_right);
-                super.onBackPressed()
+                showAlertDialog(getString(R.string.back_pressed_confirm),
+                        DialogInterface.OnClickListener { _, _ -> super@DiaryUpdateActivity.onBackPressed() },
+                        null
+                )
         }
-        //        return super.onOptionsItemSelected(item);
         return true
     }
 
