@@ -166,8 +166,8 @@ class DiaryInsertActivity : EasyDiaryActivity() {
     
     override fun onBackPressed() {
         showAlertDialog(getString(R.string.back_pressed_confirm),
-                DialogInterface.OnClickListener { dialogInterface, i -> super@DiaryInsertActivity.onBackPressed() },
-                DialogInterface.OnClickListener { dialogInterface, i -> }
+                DialogInterface.OnClickListener { _, _ -> super@DiaryInsertActivity.onBackPressed() },
+                null
         )
     }
 
@@ -242,13 +242,14 @@ class DiaryInsertActivity : EasyDiaryActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home ->
-                //                finish();
-                //                this.overridePendingTransition(R.anim.anim_left_to_center, R.anim.anim_center_to_right);
-                super.onBackPressed()
+            android.R.id.home -> {
+                showAlertDialog(getString(R.string.back_pressed_confirm),
+                        DialogInterface.OnClickListener { _, _ -> super@DiaryInsertActivity.onBackPressed() },
+                        null
+                )
+            }
         }
         return true
-        //        return super.onOptionsItemSelected(item);
     }
     
     private fun setupRecognizer() {

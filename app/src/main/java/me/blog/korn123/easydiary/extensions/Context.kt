@@ -61,7 +61,7 @@ fun Context.makeSnackBar(view: View, message: String) {
     Snackbar.make(view, message, Snackbar.LENGTH_SHORT).setAction("Action", null).show()
 }
 
-fun Context.showAlertDialog(message: String, positiveListener: DialogInterface.OnClickListener, negativeListener: DialogInterface.OnClickListener) {
+fun Context.showAlertDialog(message: String, positiveListener: DialogInterface.OnClickListener, negativeListener: DialogInterface.OnClickListener?) {
     val builder = AlertDialog.Builder(this)
     builder.setMessage(message)
     builder.setCancelable(true)
