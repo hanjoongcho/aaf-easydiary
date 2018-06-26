@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.42 (date: 2018/06/27)
+  * User Experience (UX) Optimization
+  
 # Changes in 1.4.41 (date: 2018/05/28)
   * Fixed a bug that abnormally terminated in Postcard browse mode when there is no working directory
   
