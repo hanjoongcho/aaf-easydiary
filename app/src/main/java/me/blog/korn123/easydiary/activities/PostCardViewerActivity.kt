@@ -19,6 +19,7 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.DIARY_POSTCARD_DIRECTORY
 import me.blog.korn123.easydiary.helper.POSTCARD_SEQUENCE
 import me.blog.korn123.easydiary.helper.TransitionHelper
+import org.apache.commons.io.FileUtils
 import java.io.File
 
 
@@ -27,6 +28,10 @@ import java.io.File
  */
 
 class PostCardViewerActivity : EasyDiaryActivity() {
+    private val TAG = this::class.java.simpleName
+    private var mListPostcard: ArrayList<PostCardViewerActivity.PostCard> = arrayListOf() 
+    private lateinit var mPostcardAdapter: PostcardAdapter 
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post_card_viewer)
@@ -48,34 +53,51 @@ class PostCardViewerActivity : EasyDiaryActivity() {
         val gridLayoutManager = GridLayoutManager(this, 2)
 
         EasyDiaryUtils.initWorkingDirectory(this@PostCardViewerActivity)
+        mPostcardAdapter = PostcardAdapter(
+                this@PostCardViewerActivity,
+                mListPostcard,
+                AdapterView.OnItemClickListener { _, _, position, _ ->
+                    val intent = Intent(this@PostCardViewerActivity, PostcardViewPagerActivity::class.java)
+                    intent.putExtra(POSTCARD_SEQUENCE, position)
+                    TransitionHelper.startActivityWithTransition(this@PostCardViewerActivity, intent)
+                }
+        )
+        
+        recyclerView.apply {
+            layoutManager = gridLayoutManager
+            addItemDecoration(spacesItemDecoration)
+            adapter = mPostcardAdapter
+//            setHasFixedSize(true)
+//            clipToPadding = false
+        }
+
+        initPostCard()
+        toolbarImage.setColorFilter(ColorUtils.adjustAlpha(config.primaryColor, 0.5F))
+        deletePostCard.setOnClickListener {
+            mListPostcard.forEachIndexed { _, item ->
+                if (item.isItemChecked) FileUtils.forceDelete(item.file)
+            }
+            initPostCard()
+        }
+    }
+
+    private fun initPostCard() {
         val listPostcard = File(Environment.getExternalStorageDirectory().absolutePath + DIARY_POSTCARD_DIRECTORY)
                 .listFiles()
                 .filter { it.extension.equals("jpg", true)}
                 .sortedDescending()
-        recyclerView.apply {
-            layoutManager = gridLayoutManager
-            addItemDecoration(spacesItemDecoration)
-            adapter = PostcardAdapter(
-                    this@PostCardViewerActivity,
-                    listPostcard,
-                    AdapterView.OnItemClickListener { _, _, position, _ ->
-                        val intent = Intent(this@PostCardViewerActivity, PostcardViewPagerActivity::class.java)
-                        intent.putExtra(POSTCARD_SEQUENCE, position)
-                        TransitionHelper.startActivityWithTransition(this@PostCardViewerActivity, intent)
-                    }
-            )
-//            setHasFixedSize(true)
-//            clipToPadding = false
-        }
-        if (listPostcard.isEmpty()) {
+                .map { file -> PostCard(file, false) }
+
+        mListPostcard.clear()
+        mListPostcard.addAll(listPostcard)
+        mPostcardAdapter.notifyDataSetChanged()
+        if (mListPostcard.isEmpty()) {
             infoMessage.visibility = View.VISIBLE
             recyclerView.visibility = View.GONE
             app_bar.setExpanded(false)
         }
-
-        toolbarImage.setColorFilter(ColorUtils.adjustAlpha(config.primaryColor, 0.5F))
     }
-
+    
     internal class SpacesItemDecoration(private val space: Int) : RecyclerView.ItemDecoration() {
         override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
             val position = parent.getChildAdapterPosition(view)
@@ -92,4 +114,6 @@ class PostCardViewerActivity : EasyDiaryActivity() {
             }
         }
     }
+    
+    data class PostCard(val file: File, var isItemChecked: Boolean)
 }
