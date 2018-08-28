@@ -198,9 +198,11 @@ class DiaryMainActivity : EasyDiaryActivity() {
                 }
             }
 
-            File(Environment.getExternalStorageDirectory().absolutePath + WORKING_DIRECTORY).listFiles()?.let {
-                it.forEach { file ->
-                    if (file.extension.equals("jpg", true)) FileUtils.moveFileToDirectory(file, File(Environment.getExternalStorageDirectory().absolutePath + DIARY_POSTCARD_DIRECTORY), true)
+            if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                File(Environment.getExternalStorageDirectory().absolutePath + WORKING_DIRECTORY).listFiles()?.let {
+                    it.forEach { file ->
+                        if (file.extension.equals("jpg", true)) FileUtils.moveFileToDirectory(file, File(Environment.getExternalStorageDirectory().absolutePath + DIARY_POSTCARD_DIRECTORY), true)
+                    }
                 }
             }
 
