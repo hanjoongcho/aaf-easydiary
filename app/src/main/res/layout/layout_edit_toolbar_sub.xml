@@ -33,6 +33,7 @@
         <ImageView
             android:layout_marginRight="@dimen/toolbar_icon_margin_right"
             android:id="@+id/microphone"
+            android:contentDescription="@string/speech_to_text"
             android:src="@drawable/microphone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

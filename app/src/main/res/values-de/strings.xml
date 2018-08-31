@@ -160,4 +160,10 @@
     <string name="preferences_category_aaf">AAF Easy-Serie</string>
     <string name="invite_friends">Freunde einladen</string>
     <string name="invite_friends_summary">Teile die %s-App mit deinen Freunden.</string>
+
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <!--  Resources added since version 1.4.47 here.                                                      -->
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <string name="speech_to_text">Voice input</string>
+    <string name="write_diary">Write a diary</string>
 </resources>

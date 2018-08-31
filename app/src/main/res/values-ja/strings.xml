@@ -160,4 +160,10 @@
     <string name="preferences_category_aaf">AAF Easy Series</string>
     <string name="invite_friends">友達を招待</string>
     <string name="invite_friends_summary">%sアプリケーションを友達に共有します。</string>
+
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <!--  Resources added since version 1.4.47 here.                                                      -->
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <string name="speech_to_text">音声入力</string>
+    <string name="write_diary">日記を書く</string>
 </resources>
