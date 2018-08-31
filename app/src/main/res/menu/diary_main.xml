@@ -17,7 +17,7 @@
         android:icon="@drawable/microphone"
         android:id="@+id/microphone"
         android:orderInCategory="100"
-        android:title=""
+        android:title="@string/speech_to_text"
         app:showAsAction="always" />
     <item
         android:icon="@drawable/combo"
