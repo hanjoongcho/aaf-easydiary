@@ -62,7 +62,7 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
         override fun instantiateItem(container: ViewGroup, position: Int): View {
             val photoView = PhotoView(container.context)
             //            photoView.setImageResource(sDrawables[position]);
-            val bitmap = EasyDiaryUtils.photoUriToBitmap(container.context, diaryDto.photoUris!![position])
+            val bitmap = EasyDiaryUtils.photoUriToBitmap(container.context, diaryDto.photoUris!![position]!!)
             when (bitmap == null) {
                 true -> {
                     val textView = TextView(container.context)
