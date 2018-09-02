@@ -166,4 +166,8 @@
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <string name="speech_to_text">Voice input</string>
     <string name="write_diary">Write a diary</string>
+    <string name="date_picker">Select date</string>
+    <string name="time_picker">Select time</string>
+    <string name="seconds_picker">Select seconds</string>
+    <string name="save_diary">Save diary</string>
 </resources>

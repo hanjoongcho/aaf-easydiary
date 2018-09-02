@@ -166,4 +166,8 @@
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <string name="speech_to_text">音声入力</string>
     <string name="write_diary">日記を書く</string>
+    <string name="date_picker">日付を選択</string>
+    <string name="time_picker">時間を選択</string>
+    <string name="seconds_picker">選択秒数</string>
+    <string name="save_diary">日記を保存する</string>
 </resources>

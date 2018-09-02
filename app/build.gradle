@@ -48,11 +48,11 @@ dependencies {
     
     // google
     implementation 'com.android.support:multidex:1.0.1'
-    implementation "com.android.support:appcompat-v7:${SUPPORT_LIB_VERSION}"
-    implementation "com.android.support:cardview-v7:${SUPPORT_LIB_VERSION}"
-    implementation "com.android.support:design:${SUPPORT_LIB_VERSION}"
-    implementation "com.android.support:support-v4:${SUPPORT_LIB_VERSION}"
-    implementation "com.android.support:support-vector-drawable:${SUPPORT_LIB_VERSION}"
+    implementation "com.android.support:appcompat-v7:$versions.supportLib"
+    implementation "com.android.support:cardview-v7:$versions.supportLib"
+    implementation "com.android.support:design:$versions.supportLib"
+    implementation "com.android.support:support-v4:$versions.supportLib"
+    implementation "com.android.support:support-vector-drawable:$versions.supportLib"
     implementation 'com.google.android.gms:play-services-drive:11.8.0'
     implementation 'com.google.android:flexbox:1.0.0'
     

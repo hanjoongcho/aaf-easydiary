@@ -12,6 +12,7 @@
         <ImageView
             android:layout_marginRight="@dimen/toolbar_icon_margin_right"
             android:id="@+id/datePicker"
+            android:contentDescription="@string/date_picker"
             android:src="@drawable/calendar_4_w"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -19,6 +20,7 @@
         <ImageView
             android:layout_marginRight="@dimen/toolbar_icon_margin_right"
             android:id="@+id/timePicker"
+            android:contentDescription="@string/time_picker"
             android:src="@drawable/time_8_w"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -26,6 +28,7 @@
         <ImageView
             android:layout_marginRight="@dimen/toolbar_icon_margin_right"
             android:id="@+id/secondsPicker"
+            android:contentDescription="@string/seconds_picker"
             android:src="@drawable/time_w"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -41,6 +44,7 @@
         <ImageView
             android:layout_marginRight="@dimen/toolbar_icon_margin_side"
             android:id="@+id/saveContents"
+            android:contentDescription="@string/save_diary"
             android:src="@drawable/save_w"
             android:layout_gravity="right|center_vertical"
             android:layout_width="wrap_content"
