@@ -166,4 +166,8 @@
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <string name="speech_to_text">음성입력</string>
     <string name="write_diary">일기쓰기</string>
+    <string name="date_picker">날짜선택</string>
+    <string name="time_picker">시간선택</string>
+    <string name="seconds_picker">초선택</string>
+    <string name="save_diary">일기저장</string>
 </resources>

@@ -1,16 +1,20 @@
+apply from: '../dependencies.gradle'
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'realm-android'
 
 android {
-    compileSdkVersion COMPILE_SDK_VERSION
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildTools
+    
     defaultConfig {
         applicationId "me.blog.korn123.easydiary"
         minSdkVersion MIN_SDK_VERSION
-        targetSdkVersion TARGET_SDK_VERSION
-        versionCode 111
-        versionName "1.4.48"
+        targetSdkVersion versions.compileSdk
+        versionCode versions.publishVersionCode
+        versionName versions.publishVersion
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -44,17 +48,17 @@ dependencies {
     
     // google
     implementation 'com.android.support:multidex:1.0.1'
-    implementation "com.android.support:appcompat-v7:${SUPPORT_LIB_VERSION}"
-    implementation "com.android.support:cardview-v7:${SUPPORT_LIB_VERSION}"
-    implementation "com.android.support:design:${SUPPORT_LIB_VERSION}"
-    implementation "com.android.support:support-v4:${SUPPORT_LIB_VERSION}"
-    implementation "com.android.support:support-vector-drawable:${SUPPORT_LIB_VERSION}"
+    implementation "com.android.support:appcompat-v7:$versions.supportLib"
+    implementation "com.android.support:cardview-v7:$versions.supportLib"
+    implementation "com.android.support:design:$versions.supportLib"
+    implementation "com.android.support:support-v4:$versions.supportLib"
+    implementation "com.android.support:support-vector-drawable:$versions.supportLib"
     implementation 'com.google.android.gms:play-services-drive:11.8.0'
     implementation 'com.google.android:flexbox:1.0.0'
     
     // kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$KOTLIN_VERSION"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$KOTLIN_VERSION"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:" + versions.kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:" + versions.kotlin
 
     // apache commons
     implementation 'org.apache.commons:commons-lang3:3.0'

@@ -27,7 +27,9 @@ object EasyDiaryDbHelper {
             var sequence = 1
             if (realm.where(DiaryDto::class.java).count() > 0L) {
                 val number = realm.where(DiaryDto::class.java).max("sequence")
-                sequence = number.toInt() + 1
+                number?.let {
+                    sequence = it.toInt().plus(1)
+                }
             }
             val diaryDto = DiaryDto(sequence, currentTimeMillis, title, contents)
             realm.insert(diaryDto)
@@ -39,7 +41,9 @@ object EasyDiaryDbHelper {
             var sequence = 1
             if (realm.where(DiaryDto::class.java).count() > 0L) {
                 val number = realm.where(DiaryDto::class.java).max("sequence")
-                sequence = number.toInt() + 1
+                number?.let {
+                    sequence = it.toInt().plus(1)
+                }
             }
             diaryDto.sequence = sequence
             realm.insert(diaryDto)
@@ -68,7 +72,7 @@ object EasyDiaryDbHelper {
     }
 
     fun readDiaryBy(realmInstance: Realm, sequence: Int): DiaryDto {
-        return realmInstance.where(DiaryDto::class.java).equalTo("sequence", sequence).findFirst()
+        return realmInstance.where(DiaryDto::class.java).equalTo("sequence", sequence).findFirst()!!
     }
 
     fun readDiaryByDateString(dateString: String?): List<DiaryDto> {

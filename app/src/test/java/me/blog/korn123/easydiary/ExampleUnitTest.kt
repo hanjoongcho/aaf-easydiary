@@ -13,6 +13,7 @@ class ExampleUnitTest {
     @Test
     @Throws(Exception::class)
     fun addition_isCorrect() {
-        assertEquals(4, (2 + 2).toLong())
+        val num: Int = 2
+        assertEquals(4, num.plus(2))
     }
 }
