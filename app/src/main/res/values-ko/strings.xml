@@ -170,4 +170,10 @@
     <string name="time_picker">시간선택</string>
     <string name="seconds_picker">초선택</string>
     <string name="save_diary">일기저장</string>
+    <string name="photo_registration">사진 등록</string>
+    <string name="zoom_in">확대</string>
+    <string name="zoom_out">축소</string>
+    <string name="edit_diary">일기 수정</string>
+    <string name="text_to_speech">다이어리 스피치</string>
+    <string name="diary_postcard">다이어리 포스트카드</string>
 </resources>

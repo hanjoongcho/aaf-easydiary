@@ -11,6 +11,7 @@
         android:layout_height="match_parent">
         <ImageView
             android:id="@+id/photoView"
+            android:contentDescription="@string/photo_registration"
             android:scaleType="center"
             android:background="@drawable/bg_card_thumbnail"
             android:src="@drawable/image_2_w"

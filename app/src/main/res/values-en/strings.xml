@@ -170,4 +170,10 @@
     <string name="time_picker">Select time</string>
     <string name="seconds_picker">Select seconds</string>
     <string name="save_diary">Save diary</string>
+    <string name="photo_registration">Photo registration</string>
+    <string name="zoom_in">Zoom In</string>
+    <string name="zoom_out">Zoom Out</string>
+    <string name="edit_diary">Edit diary</string>
+    <string name="text_to_speech">Diary to speech</string>
+    <string name="diary_postcard">Diary Postcard</string>
 </resources>
