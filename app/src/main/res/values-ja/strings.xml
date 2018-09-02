@@ -170,4 +170,10 @@
     <string name="time_picker">時間を選択</string>
     <string name="seconds_picker">選択秒数</string>
     <string name="save_diary">日記を保存する</string>
+    <string name="photo_registration">写真の登録</string>
+    <string name="zoom_in">ズームイン</string>
+    <string name="zoom_out">Zoom Out</string>
+    <string name="edit_diary">ズームアウトする</string>
+    <string name="text_to_speech">ダイアリーからスピーチ</string>
+    <string name="diary_postcard">日記郵便はがき</string>
 </resources>

@@ -5,31 +5,31 @@
         android:id="@+id/zoomIn"
         android:icon="@drawable/plus_w"
         android:orderInCategory="100"
-        android:title=""
+        android:title="@string/zoom_in"
         app:showAsAction="always" />
     <item
         android:id="@+id/zoomOut"
         android:icon="@drawable/minus_w"
         android:orderInCategory="100"
-        android:title=""
+        android:title="@string/zoom_out"
         app:showAsAction="always" />
     <item
         android:id="@+id/edit"
         android:icon="@drawable/save_as_w"
         android:orderInCategory="100"
-        android:title=""
+        android:title="@string/edit_diary"
         app:showAsAction="always" />
     <item
         android:id="@+id/speechOutButton"
         android:icon="@drawable/assistant_w"
         android:orderInCategory="100"
-        android:title=""
+        android:title="@string/text_to_speech"
         app:showAsAction="always" />
     <item
         android:id="@+id/postCard"
         android:icon="@drawable/picture_w"
         android:orderInCategory="100"
-        android:title=""
+        android:title="@string/diary_postcard"
         app:showAsAction="always" />
     <item
         android:id="@+id/delete"
