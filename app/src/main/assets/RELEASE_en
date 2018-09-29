@@ -4,6 +4,10 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.51 (date: 2018/09/29)
+  * AAF common module update
+  * Change app packaging environment to Android 9 Pie
+  
 # Changes in 1.4.47 (date: 2018/08/29)
   * Added post card deletion function
   
