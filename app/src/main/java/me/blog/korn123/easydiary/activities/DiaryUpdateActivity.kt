@@ -190,6 +190,10 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
         super.onResume()
         initBottomContainer()
         initSpinner()
+
+        val thumbnailSize = config.settingThumbnailSize
+        val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(applicationContext, thumbnailSize), CommonUtils.dpToPixel(applicationContext, thumbnailSize))
+        photoView.layoutParams = layoutParams
     }
 
     private fun initBottomContainer() {
@@ -225,10 +229,11 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
         }
 
         mPhotoUris?.let {
+            val thumbnailSize = config.settingThumbnailSize
             for ((index, dto) in it.withIndex()) {
-                val bitmap = EasyDiaryUtils.photoUriToDownSamplingBitmap(this, dto)
+                val bitmap = EasyDiaryUtils.photoUriToDownSamplingBitmap(this, dto, 0, thumbnailSize.toInt() - 5, thumbnailSize.toInt() - 5)
                 val imageView = ImageView(this)
-                val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(this, 50F), CommonUtils.dpToPixel(this, 50F))
+                val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(this, thumbnailSize), CommonUtils.dpToPixel(this, thumbnailSize))
                 layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(this, 3F), 0)
                 imageView.layoutParams = layoutParams
                 val drawable = resources.getDrawable(R.drawable.bg_card_thumbnail)
@@ -350,9 +355,10 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
                     val photoPath = Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
                     CommonUtils.uriToFile(this, data.data, photoPath)
                     mPhotoUris?.add(PhotoUriDto(FILE_URI_PREFIX + photoPath))
-                    val bitmap = BitmapUtils.decodeFile(photoPath, CommonUtils.dpToPixel(this, 45F), CommonUtils.dpToPixel(this, 45F))
+                    val thumbnailSize = config.settingThumbnailSize
+                    val bitmap = BitmapUtils.decodeFile(photoPath, CommonUtils.dpToPixel(this, thumbnailSize - 5), CommonUtils.dpToPixel(this, thumbnailSize - 5))
                     val imageView = ImageView(this)
-                    val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(this, 50F), CommonUtils.dpToPixel(this, 50F))
+                    val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(this, thumbnailSize), CommonUtils.dpToPixel(this, thumbnailSize))
                     layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(this, 3F), 0)
                     imageView.layoutParams = layoutParams
                     val drawable = resources.getDrawable(R.drawable.bg_card_thumbnail)

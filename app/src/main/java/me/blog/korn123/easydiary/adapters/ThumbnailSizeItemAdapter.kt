@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
-import org.apache.commons.lang3.StringUtils
 
 
 class ThumbnailSizeItemAdapter(val activity: Activity, private val layoutResourceId: Int, private val list: List<Map<String, String>>

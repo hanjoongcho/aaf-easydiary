@@ -145,6 +145,10 @@ class DiaryInsertActivity : EasyDiaryActivity() {
         mPrimaryColor = BaseConfig(this@DiaryInsertActivity).primaryColor
         val drawable = photoView.background as GradientDrawable
         drawable.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, THUMBNAIL_BACKGROUND_ALPHA))
+        
+        val thumbnailSize = config.settingThumbnailSize
+        val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(applicationContext, thumbnailSize), CommonUtils.dpToPixel(applicationContext, thumbnailSize))
+        photoView.layoutParams = layoutParams
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -212,9 +216,10 @@ class DiaryInsertActivity : EasyDiaryActivity() {
                 try {
                     CommonUtils.uriToFile(this, data.data!!, photoPath)
                     mPhotoUris.add(PhotoUriDto(FILE_URI_PREFIX + photoPath))
-                    val bitmap = BitmapUtils.decodeFile(photoPath, CommonUtils.dpToPixel(applicationContext, 45F), CommonUtils.dpToPixel(applicationContext, 45F))
+                    val thumbnailSize = config.settingThumbnailSize
+                    val bitmap = BitmapUtils.decodeFile(photoPath, CommonUtils.dpToPixel(applicationContext, thumbnailSize - 5), CommonUtils.dpToPixel(applicationContext, thumbnailSize - 5))
                     val imageView = ImageView(applicationContext)
-                    val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(applicationContext, 50F), CommonUtils.dpToPixel(applicationContext, 50F))
+                    val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(applicationContext, thumbnailSize), CommonUtils.dpToPixel(applicationContext, thumbnailSize))
                     layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(applicationContext, 3F), 0)
                     imageView.layoutParams = layoutParams
                     val drawable = ContextCompat.getDrawable(this, R.drawable.bg_card_thumbnail)
