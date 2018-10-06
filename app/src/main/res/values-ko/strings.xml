@@ -176,5 +176,6 @@
     <string name="edit_diary">일기 수정</string>
     <string name="text_to_speech">다이어리 스피치</string>
     <string name="diary_postcard">다이어리 포스트카드</string>
-    <string name="thumbnail_setting_title">Thumbnail Size</string>
+    <string name="thumbnail_setting_title">Thumbnail size</string>
+    <string name="thumbnail_setting_summary">Sets the thumbnail size of the photo attached to the diary.</string>
 </resources>

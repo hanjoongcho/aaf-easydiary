@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
-import io.github.aafactory.commons.utils.CommonUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import org.apache.commons.lang3.StringUtils
@@ -31,13 +30,12 @@ class ThumbnailSizeItemAdapter(val activity: Activity, private val layoutResourc
         }
 
         val size = list[position]["size"] ?: "0"
-        if (context.config.settingThumbnailSize == CommonUtils.dpToPixelFloatValue(context, size.toFloat())) {
+        if (context.config.settingThumbnailSize == size.toFloat()) {
             holder.imageView?.setImageBitmap(BitmapFactory.decodeResource(context.resources, R.drawable.check_mark))
         } else {
             holder.imageView?.setImageBitmap(BitmapFactory.decodeResource(context.resources, R.drawable.check_mark_off))
         }
-        holder.textView?.text = StringUtils.EMPTY
-        holder.position = position
+        holder.textView?.text = list[position]["optionTitle"]
 
         return row
     }
@@ -45,6 +43,5 @@ class ThumbnailSizeItemAdapter(val activity: Activity, private val layoutResourc
     class ViewHolder {
         var textView: TextView? = null
         var imageView: ImageView? = null
-        var position: Int = 0
     }
 }

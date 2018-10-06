@@ -16,7 +16,6 @@ import com.google.android.gms.drive.GoogleDriveUploader
 import com.xw.repo.BubbleSeekBar
 import io.github.aafactory.commons.activities.BaseWebViewActivity
 import io.github.aafactory.commons.helpers.BaseConfig
-import io.github.aafactory.commons.utils.CommonUtils
 import kotlinx.android.synthetic.main.activity_settings.*
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
@@ -112,6 +111,7 @@ class SettingsActivity : EasyDiaryActivity() {
     private fun bindEvent() {
         primaryColor.setOnClickListener(mOnClickListener)
         fontSetting.setOnClickListener(mOnClickListener)
+        thumbnailSetting.setOnClickListener(mOnClickListener)
         sensitiveOption.setOnClickListener(mOnClickListener)
         addTtfFontSetting.setOnClickListener(mOnClickListener)
         appLockSetting.setOnClickListener(mOnClickListener)
@@ -244,13 +244,13 @@ class SettingsActivity : EasyDiaryActivity() {
 
         var selectedIndex = 0
         val listThumbnailSize = ArrayList<Map<String, String>>()
-        listThumbnailSize.add(mapOf("optionTitle" to "50dp x 50dp", "size" to "50"))
-        listThumbnailSize.add(mapOf("optionTitle" to "60dp x 60dp", "size" to "60"))
-        listThumbnailSize.add(mapOf("optionTitle" to "70dp x 70dp", "size" to "70"))
+        for (i in 40..200 step 10) {
+            listThumbnailSize.add(mapOf("optionTitle" to "${i}dp x ${i}dp", "size" to "$i"))
+        }
         
         listThumbnailSize.mapIndexed { index, map ->
             val size = map["size"] ?: "0"
-            if (config.settingThumbnailSize == CommonUtils.dpToPixelFloatValue(applicationContext, size.toFloat())) selectedIndex = index
+            if (config.settingThumbnailSize == size.toFloat()) selectedIndex = index
         }
         
         val arrayAdapter = ThumbnailSizeItemAdapter(this@SettingsActivity, R.layout.item_font, listThumbnailSize)
