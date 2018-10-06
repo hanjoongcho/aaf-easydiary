@@ -13,7 +13,8 @@ const val START_MAIN_ACTIVITY = 0
 const val APP_BACKGROUND_ALPHA = 90
 const val INTRO_BACKGROUND_ALPHA = 255
 const val SETTING_FONT_SIZE = "font_size"
-const val SETTING_FONT_NAME = "font_setting"
+const val SETTING_FONT_NAME = "font_setting" 
+const val SETTING_THUMBNAIL_SIZE = "thumbnail_size" 
 const val CUSTOM_FONTS_SUPPORT_LANGUAGE = "en|ko" // custom fonts supported language
 const val CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT = "NanumPen.ttf"
 const val CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT = "Default"
@@ -83,6 +84,7 @@ const val THUMBNAIL_BACKGROUND_ALPHA = 100
 
 const val DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE = 20
 const val DEFAULT_FONT_SIZE_UN_SUPPORT_LANGUAGE = 15
+const val DEFAULT_THUMBNAIL_SIZE_DP = 50 
 
 const val POSTCARD_BG_COLOR = "postcard_bg_color"
 const val POSTCARD_TEXT_COLOR = "postcard_text_color"

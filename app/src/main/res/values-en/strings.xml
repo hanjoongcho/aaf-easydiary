@@ -176,4 +176,5 @@
     <string name="edit_diary">Edit diary</string>
     <string name="text_to_speech">Diary to speech</string>
     <string name="diary_postcard">Diary Postcard</string>
+    <string name="thumbnail_setting_title">Thumbnail Size</string>
 </resources>

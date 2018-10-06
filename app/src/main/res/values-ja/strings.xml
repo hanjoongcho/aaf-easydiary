@@ -176,4 +176,5 @@
     <string name="edit_diary">ズームアウトする</string>
     <string name="text_to_speech">ダイアリーからスピーチ</string>
     <string name="diary_postcard">日記郵便はがき</string>
+    <string name="thumbnail_setting_title">Thumbnail Size</string>
 </resources>

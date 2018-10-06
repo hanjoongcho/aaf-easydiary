@@ -47,4 +47,8 @@ class Config(context: Context) : BaseConfig(context) {
     var lineSpacingScaleFactor: Float
         get() = legacyPrefs.getFloat(LINE_SPACING_SCALE_FACTOR, LINE_SPACING_SCALE_DEFAULT)
         set(lineSpacingScaleFactor) = legacyPrefs.edit().putFloat(LINE_SPACING_SCALE_FACTOR, lineSpacingScaleFactor).apply()
+
+    var settingThumbnailSize: Float
+        get() = prefs.getFloat(SETTING_THUMBNAIL_SIZE, CommonUtils.dpToPixelFloatValue(context, DEFAULT_THUMBNAIL_SIZE_DP.toFloat()))
+        set(settingThumbnailSize) = prefs.edit().putFloat(SETTING_THUMBNAIL_SIZE, settingThumbnailSize).apply()
 }
