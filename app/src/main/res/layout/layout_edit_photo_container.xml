@@ -2,6 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/card_layout_margin"
     android:id="@+id/photoContainerScrollView">
     <LinearLayout
         android:id="@+id/photoContainer"

@@ -178,4 +178,6 @@
     <string name="diary_postcard">다이어리 포스트카드</string>
     <string name="thumbnail_setting_title">섬네일 이미지 크기 설정</string>
     <string name="thumbnail_setting_summary">다이어리에 첨부된 사진의 섬네일 이미지 크기를 설정합니다. 설정된 크기는 다이어리 작성, 수정 화면에만 적용되며 검색 화면에는 적용되지 않습니다.</string>
+    <string name="collpase_attached_photo">첨부사진 접기</string>
+    <string name="expand_attached_photo">첨부사진 펼치기</string>
 </resources>

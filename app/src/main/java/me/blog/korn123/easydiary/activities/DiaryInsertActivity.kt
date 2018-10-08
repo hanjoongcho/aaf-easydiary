@@ -15,10 +15,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.ColorUtils
 import android.support.v7.app.AlertDialog
 import android.text.format.DateFormat
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import com.github.amlcurran.showcaseview.ShowcaseView
@@ -245,6 +242,11 @@ class DiaryInsertActivity : EasyDiaryActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.diary_edit, menu)
+        return true
+    }
+    
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
@@ -253,6 +255,8 @@ class DiaryInsertActivity : EasyDiaryActivity() {
                         null
                 )
             }
+            R.id.fold -> photoContainerScrollView.visibility = View.GONE
+            R.id.expand -> photoContainerScrollView.visibility = View.VISIBLE
         }
         return true
     }
