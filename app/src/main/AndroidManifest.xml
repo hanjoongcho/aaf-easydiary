@@ -25,8 +25,8 @@
         <activity android:name="me.blog.korn123.easydiary.activities.DiaryReadActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name="me.blog.korn123.easydiary.activities.DiaryUpdateActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.DiaryMainActivity" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="com.google.android.gms.drive.GoogleDriveUploader" />
-        <activity android:name="com.google.android.gms.drive.GoogleDriveDownloader" />
+        <activity android:name="com.google.android.gms.drive.GoogleDriveUploader" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="com.google.android.gms.drive.GoogleDriveDownloader" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.BarChartActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.CalendarActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.DiaryLockActivity" android:theme="@style/AppTheme.NoActionBar" />
