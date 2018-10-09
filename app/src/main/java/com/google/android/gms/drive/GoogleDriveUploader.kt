@@ -74,6 +74,7 @@ class GoogleDriveUploader : BaseDriveActivity() {
                 data?.let {
                     val driveId = it.getParcelableExtra<DriveId>(OpenFileActivityOptions.EXTRA_RESPONSE_DRIVE_ID)
 //                    showMessage(getString(io.github.aafactory.commons.R.string.file_created, "File created with ID: $driveId"))
+                    showMessage(getString(com.simplemobiletools.commons.R.string.file_saved))
                 }
             }
             finish()
