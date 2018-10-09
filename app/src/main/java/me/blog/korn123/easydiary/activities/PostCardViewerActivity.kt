@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.activities
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
@@ -16,6 +17,7 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.PostcardAdapter
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.helper.DIARY_POSTCARD_DIRECTORY
 import me.blog.korn123.easydiary.helper.POSTCARD_SEQUENCE
 import me.blog.korn123.easydiary.helper.TransitionHelper
@@ -74,10 +76,15 @@ class PostCardViewerActivity : EasyDiaryActivity() {
         initPostCard()
         toolbarImage.setColorFilter(ColorUtils.adjustAlpha(config.primaryColor, 0.5F))
         deletePostCard.setOnClickListener {
-            mListPostcard.forEachIndexed { _, item ->
-                if (item.isItemChecked) FileUtils.forceDelete(item.file)
-            }
-            initPostCard()
+            showAlertDialog(getString(R.string.delete_confirm),
+                    DialogInterface.OnClickListener { _, _ ->
+                        mListPostcard.forEachIndexed { _, item ->
+                            if (item.isItemChecked) FileUtils.forceDelete(item.file)
+                        }
+                        initPostCard()
+                    },
+                    null
+            )
         }
     }
 

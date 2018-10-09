@@ -1,5 +1,6 @@
 package com.google.android.gms.drive
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.IntentSender
 import android.util.Log
@@ -10,6 +11,8 @@ import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import org.apache.commons.io.FileUtils
 import java.io.File
 import java.io.IOException
+import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.showAlertDialog
 
 /**
  * Created by Administrator on 2017-11-21.
@@ -67,17 +70,20 @@ class GoogleDriveUploader : BaseDriveActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_CODE_CREATE_FILE) {
+            var message: String? = null
             if (resultCode != RESULT_OK) {
-                Log.e(TAG, "Unable to create file")
-                showMessage(getString(io.github.aafactory.commons.R.string.file_create_error))
+                message = getString(R.string.file_create_error)
             } else {
                 data?.let {
                     val driveId = it.getParcelableExtra<DriveId>(OpenFileActivityOptions.EXTRA_RESPONSE_DRIVE_ID)
 //                    showMessage(getString(io.github.aafactory.commons.R.string.file_created, "File created with ID: $driveId"))
-                    showMessage(getString(com.simplemobiletools.commons.R.string.file_saved))
+                    message = getString(R.string.file_saved)
                 }
             }
-            finish()
+
+            message?.let {
+                showAlertDialog(it, DialogInterface.OnClickListener { _, _ -> finish() }, false)
+            }
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
