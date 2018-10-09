@@ -21,6 +21,7 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.FontItemAdapter
+import me.blog.korn123.easydiary.adapters.ThumbnailSizeItemAdapter
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import org.apache.commons.io.FilenameUtils
@@ -41,6 +42,9 @@ class SettingsActivity : EasyDiaryActivity() {
                 openFontSettingDialog()
             } else {
                 confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_FONT_SETTING)
+            }
+            R.id.thumbnailSetting -> {
+                openThumbnailSettingDialog()
             }
             R.id.sensitiveOption -> {
                 sensitiveOptionSwitcher.toggle()
@@ -107,6 +111,7 @@ class SettingsActivity : EasyDiaryActivity() {
     private fun bindEvent() {
         primaryColor.setOnClickListener(mOnClickListener)
         fontSetting.setOnClickListener(mOnClickListener)
+        thumbnailSetting.setOnClickListener(mOnClickListener)
         sensitiveOption.setOnClickListener(mOnClickListener)
         addTtfFontSetting.setOnClickListener(mOnClickListener)
         appLockSetting.setOnClickListener(mOnClickListener)
@@ -229,6 +234,41 @@ class SettingsActivity : EasyDiaryActivity() {
         startActivity(uploadIntent)
     }
 
+    private fun openThumbnailSettingDialog() {
+        val builder = AlertDialog.Builder(this@SettingsActivity)
+        builder.setNegativeButton(getString(android.R.string.cancel), null)
+        builder.setTitle(getString(R.string.thumbnail_setting_title))
+        val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val containerView = inflater.inflate(R.layout.dialog_thumbnail, null)
+        val listView = containerView.findViewById<ListView>(R.id.listView)
+
+        var selectedIndex = 0
+        val listThumbnailSize = ArrayList<Map<String, String>>()
+        for (i in 40..200 step 10) {
+            listThumbnailSize.add(mapOf("optionTitle" to "${i}dp x ${i}dp", "size" to "$i"))
+        }
+        
+        listThumbnailSize.mapIndexed { index, map ->
+            val size = map["size"] ?: "0"
+            if (config.settingThumbnailSize == size.toFloat()) selectedIndex = index
+        }
+        
+        val arrayAdapter = ThumbnailSizeItemAdapter(this@SettingsActivity, R.layout.item_font, listThumbnailSize)
+        listView.adapter = arrayAdapter
+        listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+            val fontInfo = parent.adapter.getItem(position) as HashMap<String, String>
+            fontInfo["size"]?.let {
+                config.settingThumbnailSize = it.toFloat()
+            }
+            mAlertDialog?.cancel()
+        }
+
+        builder.setView(containerView)
+        mAlertDialog = builder.create()
+        mAlertDialog?.show()
+        listView.setSelection(selectedIndex)
+    }
+    
     private fun openFontSettingDialog() {
         val builder = AlertDialog.Builder(this@SettingsActivity)
         builder.setNegativeButton(getString(android.R.string.cancel), null)

@@ -1,8 +1,9 @@
 package com.google.android.gms.drive
 
+import android.content.DialogInterface
+import android.content.Intent
 import android.content.IntentSender
-import android.os.Bundle
-import com.google.android.gms.common.api.ResultCallback
+import android.util.Log
 import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.helper.DIARY_DB_NAME
@@ -10,42 +11,85 @@ import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import org.apache.commons.io.FileUtils
 import java.io.File
 import java.io.IOException
+import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.showAlertDialog
 
 /**
  * Created by Administrator on 2017-11-21.
  */
 
-class GoogleDriveUploader : GoogleDriveUtils() {
+class GoogleDriveUploader : BaseDriveActivity() {
 
-    override fun onConnected(connectionHint: Bundle?) {
-        super.onConnected(connectionHint)
-        Drive.DriveApi.newDriveContents(getGoogleApiClient())
-                .setResultCallback(driveContentsCallback)
+    override fun onDriveClientReady() {
+        createFileWithIntent()
     }
 
-    private val driveContentsCallback: ResultCallback<DriveApi.DriveContentsResult> = ResultCallback { result ->
-        val driveContents = result.driveContents
-        val outputStream = driveContents.outputStream
-        val backupFile = File(EasyDiaryDbHelper.getInstance().path)
-        try {
-            FileUtils.copyFile(backupFile, outputStream)
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
+    private fun createFileWithIntent() {
+        // [START drive_android_create_file_with_intent]
+        val createContentsTask = driveResourceClient?.createContents()
+        createContentsTask?.let {
+            it.continueWithTask { task ->
+                val contents = task.result
+                val outputStream = contents.outputStream
+                val backupFile = File(EasyDiaryDbHelper.getInstance().path)
+                try {
+                    FileUtils.copyFile(backupFile, outputStream)
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
 
-        val metadataChangeSet = MetadataChangeSet.Builder()
-                .setTitle(DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"))
-                .setMimeType(EasyDiaryUtils.easyDiaryMimeType).build()
-        val intentSender = Drive.DriveApi
-                .newCreateFileActivityBuilder()
-                .setInitialMetadata(metadataChangeSet)
-                .setInitialDriveContents(result.driveContents)
-                .build(getGoogleApiClient())
-        try {
-            startIntentSenderForResult(
-                    intentSender, REQUEST_CODE_GOOGLE_DRIVE_UPLOAD, null, 0, 0, 0)
-        } catch (e: IntentSender.SendIntentException) {
-            e.printStackTrace()
+                val changeSet = MetadataChangeSet.Builder()
+                        .setTitle(DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"))
+                        .setMimeType(EasyDiaryUtils.easyDiaryMimeType)
+                        .setStarred(true)
+                        .build()
+
+                val createOptions = CreateFileActivityOptions.Builder()
+                        .setInitialDriveContents(contents)
+                        .setInitialMetadata(changeSet)
+                        .build()
+                driveClient?.newCreateFileActivityIntentSender(createOptions)
+            }.addOnSuccessListener(this) { intentSender ->
+
+                try {
+                    startIntentSenderForResult(
+                            intentSender, REQUEST_CODE_CREATE_FILE, null, 0, 0, 0)
+                } catch (e: IntentSender.SendIntentException) {
+                    Log.e(TAG, "Unable to create file", e)
+                    showMessage(getString(io.github.aafactory.commons.R.string.file_create_error))
+                    finish()
+                }
+            }.addOnFailureListener(this) { e ->
+                Log.e(TAG, "Unable to create file", e)
+                showMessage(getString(io.github.aafactory.commons.R.string.file_create_error))
+                finish()
+            }
         }
+        // [END drive_android_create_file_with_intent]
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_CODE_CREATE_FILE) {
+            var message: String? = null
+            if (resultCode != RESULT_OK) {
+                message = getString(R.string.file_create_error)
+            } else {
+                data?.let {
+                    val driveId = it.getParcelableExtra<DriveId>(OpenFileActivityOptions.EXTRA_RESPONSE_DRIVE_ID)
+//                    showMessage(getString(io.github.aafactory.commons.R.string.file_created, "File created with ID: $driveId"))
+                    message = getString(R.string.file_saved)
+                }
+            }
+
+            message?.let {
+                showAlertDialog(it, DialogInterface.OnClickListener { _, _ -> finish() }, false)
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    companion object {
+        private const val TAG = "GoogleDriveUploader"
+        private const val REQUEST_CODE_CREATE_FILE = 2
     }
 }
