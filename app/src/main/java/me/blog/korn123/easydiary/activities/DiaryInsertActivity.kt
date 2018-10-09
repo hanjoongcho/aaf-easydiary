@@ -401,16 +401,17 @@ class DiaryInsertActivity : EasyDiaryActivity() {
             mHourOfDay = it.getInt(SELECTED_HOUR, mHourOfDay)
             mMinute = it.getInt(SELECTED_MINUTE, mMinute)
             mSecond = it.getInt(SELECTED_SECOND, mSecond)
+            val thumbnailSize = config.settingThumbnailSize
             
             for ((index, dto) in mPhotoUris.withIndex()) {
-                val bitmap = EasyDiaryUtils.photoUriToDownSamplingBitmap(this, dto)
+                val bitmap = EasyDiaryUtils.photoUriToDownSamplingBitmap(this, dto, 0, thumbnailSize.toInt() - 5, thumbnailSize.toInt() - 5)
                 val imageView = ImageView(this)
-                val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(this, 50F), CommonUtils.dpToPixel(this, 50F))
+                val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(this, thumbnailSize), CommonUtils.dpToPixel(this, thumbnailSize))
                 layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(this, 3F), 0)
                 imageView.layoutParams = layoutParams
                 val drawable = ContextCompat.getDrawable(this, R.drawable.bg_card_thumbnail)
                 val gradient = drawable as GradientDrawable
-                gradient.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, THUMBNAIL_BACKGROUND_ALPHA))
+                gradient.setColor(ColorUtils.setAlphaComponent(BaseConfig(this@DiaryInsertActivity).primaryColor, THUMBNAIL_BACKGROUND_ALPHA))
                 imageView.background = gradient
                 imageView.setImageBitmap(bitmap)
                 imageView.scaleType = ImageView.ScaleType.CENTER
