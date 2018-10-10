@@ -355,13 +355,8 @@ class DiaryMainActivity : EasyDiaryActivity() {
 
     private fun checkWhatsNewDialog() {
         arrayListOf<Release>().apply {
-            add(Release(26, R.string.release_26))
-            add(Release(28, R.string.release_28))
-            add(Release(29, R.string.release_29))
-            add(Release(34, R.string.release_34))
-            add(Release(35, R.string.release_35))
-            add(Release(105, R.string.release_105))
-            checkWhatsNew(this, BuildConfig.VERSION_CODE)
+            add(Release(103, R.string.release_103))
+            checkWhatsNew(this, BuildConfig.VERSION_CODE - 2) 
         }
     }
 }

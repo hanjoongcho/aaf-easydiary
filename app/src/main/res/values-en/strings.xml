@@ -162,6 +162,13 @@
     <string name="invite_friends_summary">Share the %s application with your friends.</string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <!--  Release notes here.                                                      -->
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <string name="release_103">
+       * Fixed a bug that abnormally terminated in Postcard browse mode when there is no working directory
+    </string>
+    
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <string name="speech_to_text">Voice input</string>
