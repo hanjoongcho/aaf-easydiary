@@ -12,16 +12,17 @@ import android.speech.RecognizerIntent
 import android.support.v4.app.ActivityCompat
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.*
 import android.widget.AdapterView
 import android.widget.RelativeLayout
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
+import com.simplemobiletools.commons.models.Release
 import io.github.aafactory.commons.utils.CommonUtils
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_diary_main.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
 import me.blog.korn123.easydiary.extensions.*
@@ -89,6 +90,7 @@ class DiaryMainActivity : EasyDiaryActivity() {
         initShowcase()
         EasyDiaryUtils.initWorkingDirectory(this@DiaryMainActivity)
         migrateData()
+        checkWhatsNewDialog()
     }
 
     override fun onResume() {
@@ -349,5 +351,17 @@ class DiaryMainActivity : EasyDiaryActivity() {
                 this.mCurrentTimeMillis - 4000000L, getString(R.string.sample_diary_title_4), getString(R.string.sample_diary_4),
                 4
         ))
+    }
+
+    private fun checkWhatsNewDialog() {
+        arrayListOf<Release>().apply {
+            add(Release(26, R.string.release_26))
+            add(Release(28, R.string.release_28))
+            add(Release(29, R.string.release_29))
+            add(Release(34, R.string.release_34))
+            add(Release(35, R.string.release_35))
+            add(Release(105, R.string.release_105))
+            checkWhatsNew(this, BuildConfig.VERSION_CODE)
+        }
     }
 }

@@ -7,6 +7,10 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.support.v4.app.ActivityCompat
+import com.simplemobiletools.commons.dialogs.WhatsNewDialog
+import com.simplemobiletools.commons.extensions.baseConfig
+import com.simplemobiletools.commons.models.Release
+import io.github.aafactory.commons.activities.BaseSimpleActivity
 import me.blog.korn123.easydiary.activities.DiaryLockActivity
 
 /**
@@ -62,4 +66,20 @@ fun Activity.confirmPermission(permissions: Array<String>, requestCode: Int) {
     } else {
         ActivityCompat.requestPermissions(this, permissions, requestCode)
     }
+}
+
+fun BaseSimpleActivity.checkWhatsNew(releases: List<Release>, currVersion: Int) {
+    if (baseConfig.lastVersion == 0) {
+        baseConfig.lastVersion = currVersion
+        return
+    }
+
+    val newReleases = arrayListOf<Release>()
+    releases.filterTo(newReleases) { it.id > baseConfig.lastVersion }
+
+    if (newReleases.isNotEmpty() && !baseConfig.avoidWhatsNew) {
+        WhatsNewDialog(this, newReleases)
+    }
+
+    baseConfig.lastVersion = currVersion
 }

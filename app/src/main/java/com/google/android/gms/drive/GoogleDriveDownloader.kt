@@ -3,13 +3,16 @@ package com.google.android.gms.drive
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.util.Log
 import com.google.android.gms.drive.events.OpenFileCallback
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.R
 import org.apache.commons.io.IOUtils
 import java.io.FileOutputStream
 
@@ -25,8 +28,7 @@ class GoogleDriveDownloader : BaseDriveActivity() {
                 retrieveContents(driveId.asDriveFile())
             }.addOnFailureListener(this) { e ->
                 Log.e(TAG, "No folder selected", e)
-                showMessage(getString(io.github.aafactory.commons.R.string.folder_not_selected))
-                finish()
+                showAlertDialog(getString(R.string.folder_not_selected), DialogInterface.OnClickListener { _, _ -> finish() }, false)
             }
         }
     }
