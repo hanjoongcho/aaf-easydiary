@@ -201,4 +201,6 @@
     <string name="thumbnail_setting_summary">日記に添付された写真のサムネイルサイズを設定します。設定されたサイズは、検索画面ではなく、日記の作成および変更画面にのみ適用されます。</string>
     <string name="collpase_attached_photo">添付写真を折りたたむ</string>
     <string name="expand_attached_photo">添付写真を拡大</string>
+    <string name="release_notes_title">Release Notes</string>
+    <string name="release_notes_summary">Check for new features by release version.</string>
 </resources>

@@ -17,12 +17,10 @@ import android.widget.AdapterView
 import android.widget.RelativeLayout
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
-import com.simplemobiletools.commons.models.Release
 import io.github.aafactory.commons.utils.CommonUtils
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_diary_main.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
 import me.blog.korn123.easydiary.extensions.*
@@ -351,15 +349,5 @@ class DiaryMainActivity : EasyDiaryActivity() {
                 this.mCurrentTimeMillis - 4000000L, getString(R.string.sample_diary_title_4), getString(R.string.sample_diary_4),
                 4
         ))
-    }
-
-    private fun checkWhatsNewDialog() {
-        arrayListOf<Release>().apply {
-            add(Release(114, R.string.release_114))
-            add(Release(110, R.string.release_110))
-            add(Release(105, R.string.release_105))
-            add(Release(103, R.string.release_103))
-            checkWhatsNew(this, BuildConfig.VERSION_CODE) 
-        }
     }
 }

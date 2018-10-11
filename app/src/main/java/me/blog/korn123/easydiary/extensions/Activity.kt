@@ -68,18 +68,25 @@ fun Activity.confirmPermission(permissions: Array<String>, requestCode: Int) {
     }
 }
 
-fun BaseSimpleActivity.checkWhatsNew(releases: List<Release>, currVersion: Int) {
-    if (baseConfig.lastVersion == 0) {
-        baseConfig.lastVersion = currVersion
-        return
+fun BaseSimpleActivity.checkWhatsNew(releases: List<Release>, currVersion: Int, applyFilter: Boolean = true) {
+    when (applyFilter) {
+        true -> {
+            if (baseConfig.lastVersion == 0) {
+                baseConfig.lastVersion = currVersion
+                return
+            }
+
+            val newReleases = arrayListOf<Release>()
+            releases.filterTo(newReleases) { it.id > baseConfig.lastVersion }
+
+            if (newReleases.isNotEmpty() && !baseConfig.avoidWhatsNew) {
+                WhatsNewDialog(this, newReleases)
+            }
+
+            baseConfig.lastVersion = currVersion
+        }
+        false -> {
+            WhatsNewDialog(this, releases)
+        }
     }
-
-    val newReleases = arrayListOf<Release>()
-    releases.filterTo(newReleases) { it.id > baseConfig.lastVersion }
-
-    if (newReleases.isNotEmpty() && !baseConfig.avoidWhatsNew) {
-        WhatsNewDialog(this, newReleases)
-    }
-
-    baseConfig.lastVersion = currVersion
 }
