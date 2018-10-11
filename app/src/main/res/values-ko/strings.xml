@@ -165,7 +165,21 @@
     <!--  Release notes here.                                                      -->
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <string name="release_103">
-       * 작업용 디렉토리가 없는경우 \'포스트카드\' 열람모드에서 비정상 종료되던 버그수정
+        v1.4.41 / 2018.05.28\n
+        Fixed a bug that abnormally terminated in Postcard browse mode when there is no working directory
+    </string>
+    <string name="release_105">
+        v1.4.42 / 2018.06.27\n
+        User Experience (UX) Optimization
+    </string>
+    <string name="release_110">
+        v1.4.47 / 2018.08.29\n
+        Added post card deletion function
+    </string>
+    <string name="release_114">
+        v1.4.51 / 2018.09.29\n
+        AAF common module update\n
+        Change app packaging environment to Android 9 Pie
     </string>
     
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->

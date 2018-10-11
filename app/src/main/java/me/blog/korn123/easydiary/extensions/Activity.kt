@@ -7,11 +7,11 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.support.v4.app.ActivityCompat
-import com.simplemobiletools.commons.dialogs.WhatsNewDialog
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
 import io.github.aafactory.commons.activities.BaseSimpleActivity
 import me.blog.korn123.easydiary.activities.DiaryLockActivity
+import me.blog.korn123.easydiary.dialogs.WhatsNewDialog
 
 /**
  * Created by CHO HANJOONG on 2018-02-10.
