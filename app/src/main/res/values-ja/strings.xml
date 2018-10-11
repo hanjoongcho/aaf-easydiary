@@ -166,20 +166,20 @@
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <string name="release_103">
         v1.4.41 / 2018.05.28\n
-        Fixed a bug that abnormally terminated in Postcard browse mode when there is no working directory
+        作業用ディレクトリが存在しない場合は、「ポストカード」の閲覧モードで異常終了していたバグを修正
     </string>
     <string name="release_105">
         v1.4.42 / 2018.06.27\n
-        User Experience (UX) Optimization
+        ユーザーの経験（UX）を最適化
     </string>
     <string name="release_110">
         v1.4.47 / 2018.08.29\n
-        Added post card deletion function
+        ポストカードの削除機能を追加
     </string>
     <string name="release_114">
         v1.4.51 / 2018.09.29\n
-        AAF common module update\n
-        Change app packaging environment to Android 9 Pie
+        AAF共通モジュールの更新\n
+        Android 9 Pieにアプリのパッケージ環境を変更する
     </string>
     
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
