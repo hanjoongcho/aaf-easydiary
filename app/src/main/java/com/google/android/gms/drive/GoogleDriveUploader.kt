@@ -6,13 +6,14 @@ import android.content.IntentSender
 import android.util.Log
 import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.pauseLock
+import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.helper.DIARY_DB_NAME
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import org.apache.commons.io.FileUtils
 import java.io.File
 import java.io.IOException
-import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.extensions.showAlertDialog
 
 /**
  * Created by Administrator on 2017-11-21.
@@ -50,7 +51,6 @@ class GoogleDriveUploader : BaseDriveActivity() {
                         .build()
                 driveClient?.newCreateFileActivityIntentSender(createOptions)
             }.addOnSuccessListener(this) { intentSender ->
-
                 try {
                     startIntentSenderForResult(
                             intentSender, REQUEST_CODE_CREATE_FILE, null, 0, 0, 0)
@@ -82,7 +82,10 @@ class GoogleDriveUploader : BaseDriveActivity() {
             }
 
             message?.let {
-                showAlertDialog(it, DialogInterface.OnClickListener { _, _ -> finish() }, false)
+                showAlertDialog(it, DialogInterface.OnClickListener { _, _ ->
+                    pauseLock()
+                    finish()
+                }, false)
             }
         }
         super.onActivityResult(requestCode, resultCode, data)

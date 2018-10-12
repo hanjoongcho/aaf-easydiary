@@ -13,6 +13,7 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.pauseLock
 import org.apache.commons.io.IOUtils
 import java.io.FileOutputStream
 
@@ -28,7 +29,10 @@ class GoogleDriveDownloader : BaseDriveActivity() {
                 retrieveContents(driveId.asDriveFile())
             }.addOnFailureListener(this) { e ->
                 Log.e(TAG, "No folder selected", e)
-                showAlertDialog(getString(R.string.folder_not_selected), DialogInterface.OnClickListener { _, _ -> finish() }, false)
+                showAlertDialog(getString(R.string.folder_not_selected), DialogInterface.OnClickListener { _, _ ->
+                    pauseLock()
+                    finish()
+                }, false)
             }
         }
     }
