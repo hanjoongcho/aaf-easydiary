@@ -181,6 +181,10 @@
         AAF common module update\n
         Change app packaging environment to Android 9 Pie
     </string>
+    <string name="release_116">
+        v1.4.53 / 2018.10.13\n
+        Added preview photo size setting function
+    </string>
     
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
