@@ -281,6 +281,21 @@
                     </android.support.v7.widget.CardView>
 
                     <android.support.v7.widget.CardView
+                        android:id="@+id/releaseNotes"
+                        android:orientation="vertical"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="@string/release_notes_title"
+                                style="@style/SettingsTitle" />
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="@string/release_notes_summary"
+                                style="@style/SettingsSummary" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+                    
+                    <android.support.v7.widget.CardView
                         android:id="@+id/licenseView"
                         android:orientation="vertical"
                         style="@style/AppCard.Settings">

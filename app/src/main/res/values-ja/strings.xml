@@ -162,6 +162,27 @@
     <string name="invite_friends_summary">%sアプリケーションを友達に共有します。</string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <!--  Release notes here.                                                      -->
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <string name="release_103">
+        v1.4.41 / 2018.05.28\n
+        作業用ディレクトリが存在しない場合は、「ポストカード」の閲覧モードで異常終了していたバグを修正
+    </string>
+    <string name="release_105">
+        v1.4.42 / 2018.06.27\n
+        ユーザーの経験（UX）を最適化
+    </string>
+    <string name="release_110">
+        v1.4.47 / 2018.08.29\n
+        ポストカードの削除機能を追加
+    </string>
+    <string name="release_114">
+        v1.4.51 / 2018.09.29\n
+        AAF共通モジュールの更新\n
+        Android 9 Pieにアプリのパッケージ環境を変更する
+    </string>
+    
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <string name="speech_to_text">音声入力</string>
@@ -180,4 +201,6 @@
     <string name="thumbnail_setting_summary">日記に添付された写真のサムネイルサイズを設定します。設定されたサイズは、検索画面ではなく、日記の作成および変更画面にのみ適用されます。</string>
     <string name="collpase_attached_photo">添付写真を折りたたむ</string>
     <string name="expand_attached_photo">添付写真を拡大</string>
+    <string name="release_notes_title">リリースノート</string>
+    <string name="release_notes_summary">バージョン別に新機能を確認してください。</string>
 </resources>

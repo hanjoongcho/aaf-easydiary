@@ -12,7 +12,6 @@ import android.speech.RecognizerIntent
 import android.support.v4.app.ActivityCompat
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.*
 import android.widget.AdapterView
 import android.widget.RelativeLayout
@@ -89,6 +88,7 @@ class DiaryMainActivity : EasyDiaryActivity() {
         initShowcase()
         EasyDiaryUtils.initWorkingDirectory(this@DiaryMainActivity)
         migrateData()
+        checkWhatsNewDialog()
     }
 
     override fun onResume() {

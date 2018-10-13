@@ -69,7 +69,7 @@ dependencies {
     implementation "commons-io:commons-io:2.6"
     implementation "org.apache.commons:commons-lang3:3.7"
 
-    implementation 'com.simplemobiletools:commons:3.7.8'
+    implementation 'com.simplemobiletools:commons:3.17.19'
 //    implementation project(":commons")
     implementation 'io.github.aafactory:commons:0.9.1'
 //    implementation project(":aafactory-commons")

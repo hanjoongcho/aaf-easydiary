@@ -93,6 +93,7 @@ class SettingsActivity : EasyDiaryActivity() {
             }
             R.id.easyPhotoMap -> openGooglePlayBy("me.blog.korn123.easyphotomap")
             R.id.easyPassword -> openGooglePlayBy("io.github.hanjoongcho.easypassword")
+            R.id.releaseNotes -> checkWhatsNewDialog(false)
         }
     }
     
@@ -123,6 +124,7 @@ class SettingsActivity : EasyDiaryActivity() {
         easyPhotoMap.setOnClickListener(mOnClickListener)
         easyPassword.setOnClickListener(mOnClickListener)
         restorePhotoSetting.setOnClickListener(mOnClickListener)
+        releaseNotes.setOnClickListener(mOnClickListener)
 
         fontLineSpacing.configBuilder
                 .min(0.2F)

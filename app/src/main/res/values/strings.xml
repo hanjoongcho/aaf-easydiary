@@ -162,6 +162,27 @@
     <string name="invite_friends_summary">Share the %s application with your friends.</string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <!--  Release notes here.                                                      -->
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <string name="release_103">
+        v1.4.41 / 2018.05.28\n
+        Fixed a bug that abnormally terminated in Postcard browse mode when there is no working directory
+    </string>
+    <string name="release_105">
+        v1.4.42 / 2018.06.27\n
+        User Experience (UX) Optimization
+    </string>
+    <string name="release_110">
+        v1.4.47 / 2018.08.29\n
+        Added post card deletion function
+    </string>
+    <string name="release_114">
+        v1.4.51 / 2018.09.29\n
+        AAF common module update\n
+        Change app packaging environment to Android 9 Pie
+    </string>
+
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <string name="speech_to_text">Voice input</string>
@@ -180,4 +201,6 @@
     <string name="thumbnail_setting_summary">Sets the thumbnail size of the photo attached to the diary. The set size only applies to the diary creation and modification screen, not to the search screen.</string>
     <string name="collpase_attached_photo">Collapse attached photo</string>
     <string name="expand_attached_photo">Expand attached photo</string>
+    <string name="release_notes_title">Release Notes</string>
+    <string name="release_notes_summary">Check for new features by release version.</string>
 </resources>
