@@ -17,6 +17,9 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.ColorUtils
 import android.support.v4.view.ViewPager
 import android.view.*
+import android.view.animation.Animation
+import android.view.animation.LinearInterpolator
+import android.view.animation.RotateAnimation
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
@@ -300,6 +303,33 @@ class DiaryReadActivity : EasyDiaryActivity() {
             return mRootView
         }
 
+        override fun onActivityCreated(savedInstanceState: Bundle?) {
+            super.onActivityCreated(savedInstanceState)
+            togglePhoto.setOnClickListener {
+                when (photoContainerScrollView.visibility) {
+                    View.VISIBLE -> {
+                        photoContainerScrollView.visibility = View.GONE
+                        togglePhoto.setImageDrawable(ContextCompat.getDrawable(context!!, R.drawable.expand))  
+                    }
+                    View.GONE -> {
+                        photoContainerScrollView.visibility = View.VISIBLE
+                        togglePhoto.setImageDrawable(ContextCompat.getDrawable(context!!, R.drawable.collapse))
+                    }
+                }
+//                val rotateAnimation = RotateAnimation(
+//                        0f, 180f,
+//                        Animation.RELATIVE_TO_SELF, 0.5f,
+//                        Animation.RELATIVE_TO_SELF, 0.5f
+//
+//                
+//                )
+//                rotateAnimation.interpolator = LinearInterpolator()
+//                rotateAnimation.duration = 300
+//                rotateAnimation.repeatCount = 0
+//                togglePhoto.startAnimation(rotateAnimation)
+            }
+        }
+
         override fun onResume() {
             super.onResume()
             mRootView?.let {
@@ -350,6 +380,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
 
             // TODO fixme elegance
             if (diaryDto.photoUris?.size ?: 0 > 0) {
+                bottomToolbar.visibility = View.VISIBLE
                 photoContainerScrollView.visibility = View.VISIBLE
                 val onClickListener = View.OnClickListener {
                     val photoViewPager = Intent(context, PhotoViewPagerActivity::class.java)
@@ -371,6 +402,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                         val drawable = ContextCompat.getDrawable(appContext, R.drawable.bg_card_thumbnail)
                         val gradient = drawable as GradientDrawable
                         gradient.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, THUMBNAIL_BACKGROUND_ALPHA))
+//                        gradient.setColor(ColorUtils.setAlphaComponent(ContextCompat.getColor(appContext, android.R.color.white), THUMBNAIL_BACKGROUND_ALPHA))
                         imageView.background = gradient
                         imageView.setImageBitmap(bitmap)
                         imageView.scaleType = ImageView.ScaleType.CENTER
@@ -379,6 +411,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                     }
                 }
             } else {
+                bottomToolbar.visibility = View.GONE
                 photoContainerScrollView.visibility = View.GONE
             }
         }
