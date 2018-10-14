@@ -402,11 +402,6 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
 
         }
     }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.diary_edit, menu)
-        return true
-    }
     
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
@@ -415,8 +410,6 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
                         DialogInterface.OnClickListener { _, _ -> super@DiaryUpdateActivity.onBackPressed() },
                         null
                 )
-            R.id.fold -> photoContainerScrollView.visibility = View.GONE
-            R.id.expand -> photoContainerScrollView.visibility = View.VISIBLE
         }
         return true
     }
