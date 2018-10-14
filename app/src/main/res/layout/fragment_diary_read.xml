@@ -57,9 +57,7 @@
     
     <HorizontalScrollView
         android:id="@+id/photoContainerScrollView"
-        android:layout_marginTop="@dimen/card_layout_margin"
-        android:layout_marginBottom="@dimen/card_layout_margin"
-        android:layout_marginLeft="@dimen/card_layout_margin"
+        android:layout_margin="@dimen/card_layout_margin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <LinearLayout
