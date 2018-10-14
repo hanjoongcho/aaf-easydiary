@@ -383,12 +383,12 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 if (photoContainer.childCount > 0) photoContainer.removeAllViews()
                 context?.let { appContext ->
                     val thumbnailSize = appContext.config.settingThumbnailSize
-                    diaryDto.photoUris?.map {
-                        
-                        val bitmap = EasyDiaryUtils.photoUriToDownSamplingBitmap(appContext, it, 0, thumbnailSize.toInt() - 5, thumbnailSize.toInt() - 5)
+                    diaryDto.photoUris?.forEachIndexed { index, item ->
+                        val bitmap = EasyDiaryUtils.photoUriToDownSamplingBitmap(appContext, item, 0, thumbnailSize.toInt() - 5, thumbnailSize.toInt() - 5)
                         val imageView = ImageView(context)
                         val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(appContext, thumbnailSize), CommonUtils.dpToPixel(appContext, thumbnailSize))
-                        layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(appContext, 3F), 0)
+                        val marginLeft = if (index == 0)  0 else CommonUtils.dpToPixel(appContext, 3F)
+                        layoutParams.setMargins(marginLeft, 0, 0, 0)
                         imageView.layoutParams = layoutParams
 //                        imageView.setBackgroundResource(R.drawable.bg_card_thumbnail)
                         val drawable = ContextCompat.getDrawable(appContext, R.drawable.bg_card_thumbnail)
