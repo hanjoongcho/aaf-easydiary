@@ -11,6 +11,7 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Environment
 import android.speech.RecognizerIntent
+import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.ColorUtils
 import android.support.v7.app.AlertDialog
 import android.text.format.DateFormat
@@ -28,6 +29,7 @@ import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import io.realm.RealmList
 import kotlinx.android.synthetic.main.activity_diary_update.*
+import kotlinx.android.synthetic.main.layout_bottom_toolbar.*
 import kotlinx.android.synthetic.main.layout_edit_contents.*
 import kotlinx.android.synthetic.main.layout_edit_photo_container.*
 import kotlinx.android.synthetic.main.layout_edit_toolbar_sub.*
@@ -97,10 +99,11 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
             putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
             putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
         }
-
+        
         bindEvent()
         initBottomContainer()
         initData()
+        initBottomToolbar()
         initDateTime()
         setDateTime()
     }
@@ -204,14 +207,18 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
         drawable.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, THUMBNAIL_BACKGROUND_ALPHA))
     }
 
-    fun initSpinner() {
+    private fun initBottomToolbar() {
+        bottomTitle.text = String.format(getString(R.string.attached_photo_count), photoContainer.childCount -1)
+    }
+    
+    private fun initSpinner() {
         val weatherArr = resources.getStringArray(R.array.weather_item_array)
         val arrayAdapter = DiaryWeatherItemAdapter(this@DiaryUpdateActivity, R.layout.item_weather, Arrays.asList(*weatherArr))
         weatherSpinner.adapter = arrayAdapter
         weatherSpinner.setSelection(mWeather)
     }
 
-    fun initData() {
+    private fun initData() {
         val intent = intent
         mSequence = intent.getIntExtra(DIARY_SEQUENCE, 0)
         val diaryDto = EasyDiaryDbHelper.readDiaryBy(mSequence)
@@ -268,6 +275,21 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
             mCurrentCursor = 1
             diaryContents.requestFocus()
             false
+        }
+
+        bottomToolbar.setOnClickListener {
+            applicationContext?.let { context ->
+                when (photoContainerScrollView.visibility) {
+                    View.VISIBLE -> {
+                        photoContainerScrollView.visibility = View.GONE
+                        togglePhoto.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.expand))
+                    }
+                    View.GONE -> {
+                        photoContainerScrollView.visibility = View.VISIBLE
+                        togglePhoto.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.collapse))
+                    }
+                }
+            }
         }
     }
 
@@ -371,6 +393,7 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
                     val currentIndex = (mPhotoUris?.size ?: 0) - 1
                     imageView.setOnClickListener(PhotoClickListener(currentIndex))
                     photoContainer.addView(imageView, photoContainer.childCount - 1)
+                    initBottomToolbar()
                     photoContainer.postDelayed({ (photoContainer.parent as HorizontalScrollView).fullScroll(HorizontalScrollView.FOCUS_RIGHT) }, 100L)
                 }
             } catch (e: IOException) {

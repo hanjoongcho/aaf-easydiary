@@ -53,35 +53,7 @@
         </ScrollView>
     </android.support.v7.widget.CardView>
 
-    <io.github.aafactory.commons.views.LabelLayout
-        android:id="@+id/bottomToolbar"
-        android:foreground="?attr/selectableItemBackground"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:background="?attr/colorPrimary"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="첨부된 사진 2장"
-            style="@style/SettingsCategory"
-            />
-
-        <LinearLayout
-            android:gravity="right"
-            android:padding="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/togglePhoto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
-                android:rotation="180"
-                android:src="@drawable/collapse" />
-        </LinearLayout>
-    </io.github.aafactory.commons.views.LabelLayout>
+    <include layout="@layout/layout_bottom_toolbar" />
     
     <HorizontalScrollView
         android:id="@+id/photoContainerScrollView"

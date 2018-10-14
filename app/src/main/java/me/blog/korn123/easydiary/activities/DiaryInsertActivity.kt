@@ -26,6 +26,7 @@ import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import io.realm.RealmList
 import kotlinx.android.synthetic.main.activity_diary_insert.*
+import kotlinx.android.synthetic.main.layout_bottom_toolbar.*
 import kotlinx.android.synthetic.main.layout_edit_contents.*
 import kotlinx.android.synthetic.main.layout_edit_photo_container.*
 import kotlinx.android.synthetic.main.layout_edit_toolbar_sub.*
@@ -131,6 +132,7 @@ class DiaryInsertActivity : EasyDiaryActivity() {
         setupSpinner()
         setupKeypad()
         restoreContents(savedInstanceState)
+        initBottomToolbar()
         setDateTime()
         bindEvent()
     }
@@ -229,9 +231,8 @@ class DiaryInsertActivity : EasyDiaryActivity() {
                     val currentIndex = mPhotoUris.size - 1
                     imageView.setOnClickListener(PhotoClickListener(currentIndex))
                     photoContainer.addView(imageView, photoContainer.childCount - 1)
+                    initBottomToolbar()
                     photoContainer.postDelayed({ (photoContainer.parent as HorizontalScrollView).fullScroll(HorizontalScrollView.FOCUS_RIGHT) }, 100L)
-
-
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -387,6 +388,21 @@ class DiaryInsertActivity : EasyDiaryActivity() {
             mCurrentCursor = 1
             false
         }
+
+        bottomToolbar.setOnClickListener {
+            applicationContext?.let { context ->
+                when (photoContainerScrollView.visibility) {
+                    View.VISIBLE -> {
+                        photoContainerScrollView.visibility = View.GONE
+                        togglePhoto.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.expand))
+                    }
+                    View.GONE -> {
+                        photoContainerScrollView.visibility = View.VISIBLE
+                        togglePhoto.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.collapse))
+                    }
+                }
+            }
+        }
     }
     
     private fun restoreContents(savedInstanceState: Bundle?) {
@@ -461,7 +477,11 @@ class DiaryInsertActivity : EasyDiaryActivity() {
         }
 
     }
-    
+
+    private fun initBottomToolbar() {
+        bottomTitle.text = String.format(getString(R.string.attached_photo_count), photoContainer.childCount -1)
+    }
+
     internal inner class PhotoClickListener(var index: Int) : View.OnClickListener {
         override fun onClick(v: View) {
             val targetIndex = index
@@ -470,6 +490,7 @@ class DiaryInsertActivity : EasyDiaryActivity() {
                     DialogInterface.OnClickListener { dialog, which ->
                         mRemoveIndexes.add(targetIndex)
                         photoContainer.removeView(v)
+                        initBottomToolbar()
                     },
                     DialogInterface.OnClickListener { dialog, which -> }
             )

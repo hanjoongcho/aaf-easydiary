@@ -17,9 +17,6 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.ColorUtils
 import android.support.v4.view.ViewPager
 import android.view.*
-import android.view.animation.Animation
-import android.view.animation.LinearInterpolator
-import android.view.animation.RotateAnimation
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
@@ -33,6 +30,7 @@ import io.github.aafactory.commons.utils.DateUtils
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_diary_read.*
 import kotlinx.android.synthetic.main.fragment_diary_read.*
+import kotlinx.android.synthetic.main.layout_bottom_toolbar.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
@@ -305,28 +303,20 @@ class DiaryReadActivity : EasyDiaryActivity() {
 
         override fun onActivityCreated(savedInstanceState: Bundle?) {
             super.onActivityCreated(savedInstanceState)
-            togglePhoto.setOnClickListener {
-                when (photoContainerScrollView.visibility) {
-                    View.VISIBLE -> {
-                        photoContainerScrollView.visibility = View.GONE
-                        togglePhoto.setImageDrawable(ContextCompat.getDrawable(context!!, R.drawable.expand))  
-                    }
-                    View.GONE -> {
-                        photoContainerScrollView.visibility = View.VISIBLE
-                        togglePhoto.setImageDrawable(ContextCompat.getDrawable(context!!, R.drawable.collapse))
-                    }
+
+            bottomToolbar.setOnClickListener {
+                context?.let { context ->
+                    when (photoContainerScrollView.visibility) {
+                        View.VISIBLE -> {
+                            photoContainerScrollView.visibility = View.GONE
+                            togglePhoto.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.expand))
+                        }
+                        View.GONE -> {
+                            photoContainerScrollView.visibility = View.VISIBLE
+                            togglePhoto.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.collapse))
+                        }
+                    }    
                 }
-//                val rotateAnimation = RotateAnimation(
-//                        0f, 180f,
-//                        Animation.RELATIVE_TO_SELF, 0.5f,
-//                        Animation.RELATIVE_TO_SELF, 0.5f
-//
-//                
-//                )
-//                rotateAnimation.interpolator = LinearInterpolator()
-//                rotateAnimation.duration = 300
-//                rotateAnimation.repeatCount = 0
-//                togglePhoto.startAnimation(rotateAnimation)
             }
         }
 
@@ -379,7 +369,9 @@ class DiaryReadActivity : EasyDiaryActivity() {
             EasyDiaryUtils.initWeatherView(weather, weatherFlag)
 
             // TODO fixme elegance
-            if (diaryDto.photoUris?.size ?: 0 > 0) {
+            val photoCount = diaryDto.photoUris?.size ?: 0 
+            if (photoCount > 0) {
+                bottomTitle.text = String.format(getString(R.string.attached_photo_count), photoCount)
                 bottomToolbar.visibility = View.VISIBLE
                 photoContainerScrollView.visibility = View.VISIBLE
                 val onClickListener = View.OnClickListener {
