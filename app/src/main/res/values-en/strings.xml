@@ -184,6 +184,7 @@
     <string name="release_116">
         v1.4.53 / 2018.10.13\n
         Added preview photo size setting function
+        Added preview photo toggle function(fold or unfold)
     </string>
     
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->

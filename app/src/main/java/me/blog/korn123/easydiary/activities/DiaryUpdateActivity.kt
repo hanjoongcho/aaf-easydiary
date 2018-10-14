@@ -430,6 +430,7 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
                     DialogInterface.OnClickListener { dialog, which ->
                         mRemoveIndexes.add(targetIndex)
                         photoContainer.removeView(v)
+                        initBottomToolbar()
                     },
                     DialogInterface.OnClickListener { dialog, which -> }
             )
