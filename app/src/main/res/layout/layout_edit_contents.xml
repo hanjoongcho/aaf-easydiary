@@ -2,10 +2,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main_holder"
     android:orientation="vertical"
-    android:padding="@dimen/card_layout_padding"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <android.support.v7.widget.CardView
+        android:layout_marginTop="@dimen/card_layout_margin"
+        android:layout_marginLeft="@dimen/card_layout_margin"
+        android:layout_marginRight="@dimen/card_layout_margin"
         style="@style/AppCard.EditTitle">
         <LinearLayout
             style="@style/LinearLayoutHorizontal">
@@ -35,6 +37,9 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_marginTop="@dimen/card_layout_margin"
+        android:layout_marginBottom="@dimen/card_layout_margin"
+        android:layout_marginLeft="@dimen/card_layout_margin"
+        android:layout_marginRight="@dimen/card_layout_margin"
         style="@style/AppCard">
         <ScrollView
             android:fillViewport="true"
@@ -50,6 +55,7 @@
                 android:inputType="text|textCapSentences|textAutoCorrect|textAutoComplete|textMultiLine|textLongMessage" />
         </ScrollView>
     </android.support.v7.widget.CardView>
-    
+
+    <include layout="@layout/layout_bottom_toolbar" />
     <include layout="@layout/layout_edit_photo_container" />
 </LinearLayout>

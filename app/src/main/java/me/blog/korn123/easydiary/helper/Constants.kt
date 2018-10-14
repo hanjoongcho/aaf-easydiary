@@ -80,7 +80,7 @@ const val DIARY_SEARCH_QUERY = "diary_search_query"
 const val POSTCARD_SEQUENCE = "postcard_sequence"
 
 const val OPEN_URL_INFO = "open_url_info"
-const val THUMBNAIL_BACKGROUND_ALPHA = 100
+const val THUMBNAIL_BACKGROUND_ALPHA = 170
 
 const val DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE = 20
 const val DEFAULT_FONT_SIZE_UN_SUPPORT_LANGUAGE = 15
