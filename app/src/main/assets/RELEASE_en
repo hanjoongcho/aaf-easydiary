@@ -4,6 +4,10 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.53 (date: 2018/10/13)
+  * Added preview photo size setting function
+  * Added preview photo toggle function(fold or unfold)
+
 # Changes in 1.4.51 (date: 2018/09/29)
   * AAF common module update
   * Change app packaging environment to Android 9 Pie
