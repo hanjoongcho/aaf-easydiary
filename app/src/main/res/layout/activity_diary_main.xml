@@ -29,17 +29,27 @@
             <android.support.v7.widget.CardView
                 app:cardElevation="3dp"
                 style="@style/AppCard">
-
                 <com.simplemobiletools.commons.views.MyEditText
                     android:id="@+id/query"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
                     android:gravity="center_vertical"
+                    android:layout_gravity="center_vertical"
                     android:hint="@string/guide_message_2"
                     android:inputType="text|textAutoCorrect|textAutoComplete"
                     android:imeOptions="actionDone"
                     android:maxLines="1" />
+
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:id="@+id/clearQuery"
+                    android:text="X"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    />
             </android.support.v7.widget.CardView>
 
             <ListView

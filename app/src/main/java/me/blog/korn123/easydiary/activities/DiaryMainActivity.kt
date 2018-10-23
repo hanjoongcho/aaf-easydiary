@@ -288,6 +288,8 @@ class DiaryMainActivity : EasyDiaryActivity() {
             override fun afterTextChanged(editable: Editable) {}
         })
 
+        clearQuery.setOnClickListener { _ -> query.setText(null) }
+
         diaryList.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
             val diaryDto = adapterView.adapter.getItem(i) as DiaryDto
             val detailIntent = Intent(this@DiaryMainActivity, DiaryReadActivity::class.java)
