@@ -2,8 +2,8 @@
 buildscript {
     apply from: './dependencies.gradle'
     repositories {
-        jcenter()
         google()
+        jcenter()
     }
     
     dependencies {
@@ -18,9 +18,9 @@ buildscript {
 
 allprojects {
     repositories {
-        jcenter()
         maven { url "https://jitpack.io" }
         google()
+        jcenter()
     }
 }
 
