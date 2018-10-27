@@ -25,6 +25,8 @@ class GoogleDriveUploader : BaseDriveActivity() {
         createFileWithIntent()
     }
 
+    override fun addListener() {}
+    
     private fun createFileWithIntent() {
         // [START drive_android_create_file_with_intent]
         val createContentsTask = driveResourceClient?.createContents()
