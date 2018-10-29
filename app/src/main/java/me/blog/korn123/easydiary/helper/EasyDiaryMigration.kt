@@ -62,6 +62,11 @@ class EasyDiaryMigration : RealmMigration {
                 it.addField("fontSize", Float::class.javaPrimitiveType)
                 currentVersion++
             }
+            
+            if (currentVersion == 6L) {
+                it.addField("isAllDay", Boolean::class.javaPrimitiveType)
+                currentVersion++
+            }
 
             //        // During a migration, a DynamicRealm is exposed. A DynamicRealm is an untyped variant of a normal Realm, but
             //        // with the same object creation and query capabilities.

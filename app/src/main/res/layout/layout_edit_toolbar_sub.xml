@@ -4,6 +4,18 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="50dp">
+    <CheckBox
+        android:id="@+id/allDay"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/toolbar_icon_margin_side"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:text="@string/all_day"
+        android:textColor="@android:color/white"
+        android:layout_gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
     <LinearLayout
         android:orientation="horizontal"
         android:gravity="right|center_vertical"

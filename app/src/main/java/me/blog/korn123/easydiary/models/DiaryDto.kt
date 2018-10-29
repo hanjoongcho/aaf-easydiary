@@ -32,6 +32,8 @@ open class DiaryDto : RealmObject {
     var fontName: String? = null
 
     var fontSize: Float = 0.toFloat()
+    
+    var isAllDay: Boolean = false
 
     constructor()
 
@@ -43,12 +45,13 @@ open class DiaryDto : RealmObject {
         this.dateString = DateUtils.timeMillisToDateTime(currentTimeMillis, DateUtils.DATE_PATTERN_DASH)
     }
 
-    constructor(sequence: Int, currentTimeMillis: Long, title: String, contents: String, weather: Int) {
+    constructor(sequence: Int, currentTimeMillis: Long, title: String, contents: String, weather: Int, isAllDay: Boolean = false) {
         this.sequence = sequence
         this.currentTimeMillis = currentTimeMillis
         this.title = title
         this.contents = contents
         this.dateString = DateUtils.timeMillisToDateTime(currentTimeMillis, DateUtils.DATE_PATTERN_DASH)
         this.weather = weather
+        this.isAllDay = isAllDay
     }
 }

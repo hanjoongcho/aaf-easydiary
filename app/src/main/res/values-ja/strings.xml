@@ -209,4 +209,5 @@
     <string name="release_notes_title">リリースノート</string>
     <string name="release_notes_summary">バージョン別に新機能を確認してください。</string>
     <string name="attached_photo_count">添付の写真%d枚</string>
+    <string name="all_day">All Day</string>
 </resources>

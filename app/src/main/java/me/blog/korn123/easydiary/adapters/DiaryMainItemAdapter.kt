@@ -24,6 +24,7 @@ import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
+import java.util.*
 
 
 /**
@@ -75,7 +76,10 @@ class DiaryMainItemAdapter(
             }
 
         }
-        holder.textView3?.text = DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis)
+        holder.textView3?.text = when (diaryDto.isAllDay) {
+            true -> DateUtils.getFullPatternDate(diaryDto.currentTimeMillis)
+            false -> DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis)
+        } 
         EasyDiaryUtils.initWeatherView(holder.imageView, diaryDto.weather)
 
         holder.item_holder?.let {

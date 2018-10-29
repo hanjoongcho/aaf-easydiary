@@ -348,7 +348,10 @@ class DiaryReadActivity : EasyDiaryActivity() {
             }
             diaryTitle.text = diaryDto.title
             diaryContents.text = diaryDto.contents
-            date.text = DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis)
+            date.text = when (diaryDto.isAllDay) {
+                true -> DateUtils.getFullPatternDate(diaryDto.currentTimeMillis)
+                false -> DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis)
+            }
             initBottomContainer()
 
             arguments?.getString(DIARY_SEARCH_QUERY)?.let { query ->

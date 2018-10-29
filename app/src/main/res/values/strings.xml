@@ -209,4 +209,5 @@
     <string name="release_notes_title">Release Notes</string>
     <string name="release_notes_summary">Check for new features by release version.</string>
     <string name="attached_photo_count">%d Attached Photos</string>
+    <string name="all_day">All Day</string>
 </resources>

@@ -53,12 +53,12 @@ object EasyDiaryDbHelper {
     fun readDiary(query: String?, isSensitive: Boolean = false): ArrayList<DiaryDto> {
         val mRealmInstance = Realm.getInstance(mDiaryConfig)
         val results: RealmResults<DiaryDto> = when (StringUtils.isEmpty(query)) {
-            true -> mRealmInstance.where(DiaryDto::class.java).findAllSorted("currentTimeMillis", Sort.DESCENDING)
+            true -> mRealmInstance.where(DiaryDto::class.java).findAllSorted(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
             false -> {
                 if (isSensitive) {
-                    mRealmInstance.where(DiaryDto::class.java).beginGroup().contains("contents", query).or().contains("title", query).endGroup().findAllSorted("currentTimeMillis", Sort.DESCENDING)
+                    mRealmInstance.where(DiaryDto::class.java).beginGroup().contains("contents", query).or().contains("title", query).endGroup().findAllSorted(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
                 } else {
-                    mRealmInstance.where(DiaryDto::class.java).beginGroup().contains("contents", query, Case.INSENSITIVE).or().contains("title", query, Case.INSENSITIVE).endGroup().findAllSorted("currentTimeMillis", Sort.DESCENDING)
+                    mRealmInstance.where(DiaryDto::class.java).beginGroup().contains("contents", query, Case.INSENSITIVE).or().contains("title", query, Case.INSENSITIVE).endGroup().findAllSorted(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
                 }    
             }
         }
