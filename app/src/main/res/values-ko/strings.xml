@@ -209,5 +209,5 @@
     <string name="release_notes_title">릴리즈 노트</string>
     <string name="release_notes_summary">버전별 새로운 기능을 확인합니다.</string>
     <string name="attached_photo_count">첨부된 사진 %d장</string>
-    <string name="all_day">All Day</string>
+    <string name="all_day">하루 종일</string>
 </resources>
