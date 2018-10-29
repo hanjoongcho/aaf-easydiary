@@ -90,7 +90,10 @@ class TimelineItemAdapter(
             }
         }
 
-        holder.textView1?.text = "${DateUtils.timeMillisToDateTime(diaryDto.currentTimeMillis, DateUtils.TIME_PATTERN_WITH_SECONDS)}\n${getSummary(diaryDto)}"
+        holder.textView1?.text = when (diaryDto.isAllDay) {
+            true -> "${context.resources.getString(R.string.all_day)}\n${getSummary(diaryDto)}"
+            false -> "${DateUtils.timeMillisToDateTime(diaryDto.currentTimeMillis, DateUtils.TIME_PATTERN_WITH_SECONDS)}\n${getSummary(diaryDto)}"
+        }
         holder.item_holder?.let {
             context.updateTextColors(it, 0, 0)
             context.updateAppViews(it)
