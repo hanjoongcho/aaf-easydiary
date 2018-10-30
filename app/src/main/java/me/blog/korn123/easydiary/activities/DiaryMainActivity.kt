@@ -88,7 +88,7 @@ class DiaryMainActivity : EasyDiaryActivity() {
         initShowcase()
         EasyDiaryUtils.initWorkingDirectory(this@DiaryMainActivity)
         migrateData()
-        checkWhatsNewDialog()
+        if (savedInstanceState == null) checkWhatsNewDialog()
     }
 
     override fun onResume() {
