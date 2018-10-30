@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Typeface
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -18,6 +19,10 @@ import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
+import android.text.style.UnderlineSpan
+import android.text.SpannableString
+import android.text.style.StyleSpan
+
 
 /**
  * Created by hanjoong on 2017-07-16.
@@ -91,8 +96,8 @@ class TimelineItemAdapter(
         }
 
         holder.textView1?.text = when (diaryDto.isAllDay) {
-            true -> "${context.resources.getString(R.string.all_day)}\n${getSummary(diaryDto)}"
-            false -> "${DateUtils.timeMillisToDateTime(diaryDto.currentTimeMillis, DateUtils.TIME_PATTERN_WITH_SECONDS)}\n${getSummary(diaryDto)}"
+            true -> applyBoldToDate(context.resources.getString(R.string.all_day), getSummary(diaryDto) ?: "")
+            false -> applyBoldToDate(DateUtils.timeMillisToDateTime(diaryDto.currentTimeMillis, DateUtils.TIME_PATTERN_WITH_SECONDS), getSummary(diaryDto)!!) 
         }
         holder.item_holder?.let {
             context.updateTextColors(it, 0, 0)
@@ -102,6 +107,12 @@ class TimelineItemAdapter(
         return row
     }
 
+    private fun applyBoldToDate(dateString: String, summary: String): SpannableString {
+        val spannableString = SpannableString("$dateString\n$summary")
+        spannableString.setSpan(StyleSpan(Typeface.BOLD), 0, dateString.length, 0)
+        return spannableString
+    }
+    
     private fun getSummary(diaryDto: DiaryDto): String? = when (StringUtils.isNotEmpty(diaryDto.title)) {
         true -> diaryDto.title
         false -> StringUtils.abbreviate(diaryDto.contents, 10)

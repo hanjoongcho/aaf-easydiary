@@ -4,12 +4,14 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Environment
 import android.support.v7.app.AlertDialog
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.BackgroundColorSpan
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.AdapterView
@@ -83,6 +85,14 @@ object EasyDiaryUtils {
         }
     }
 
+    fun boldString(textView: TextView?) {
+        textView?.let { tv ->
+            val spannableString = SpannableString(tv.text)
+            spannableString.setSpan(StyleSpan(Typeface.BOLD), 0, tv.text.length, 0)
+            tv.text = spannableString
+        }
+    }
+    
     fun highlightString(textView: TextView?, input: String?) {
         textView?.let { tv ->
             input?.let { targetString ->

@@ -76,6 +76,8 @@ class DiaryMainItemAdapter(
             }
 
         }
+        EasyDiaryUtils.boldString(holder.textView1)
+        
         holder.textView3?.text = when (diaryDto.isAllDay) {
             true -> DateUtils.getFullPatternDate(diaryDto.currentTimeMillis)
             false -> DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis)
