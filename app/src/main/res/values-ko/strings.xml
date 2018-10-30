@@ -186,6 +186,10 @@
         프리뷰 사진크기 설정기능 추가\n
         프리뷰 사진 토글기능(접거나 펴기) 추가 
     </string>
+    <string name="release_117">
+        v1.4.54 / 2018.10.30\n
+        다이어리 작성시간 표기방법 개선\n
+    </string>
     
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -209,4 +213,5 @@
     <string name="release_notes_title">릴리즈 노트</string>
     <string name="release_notes_summary">버전별 새로운 기능을 확인합니다.</string>
     <string name="attached_photo_count">첨부된 사진 %d장</string>
+    <string name="all_day">하루 종일</string>
 </resources>

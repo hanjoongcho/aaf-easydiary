@@ -82,7 +82,8 @@ class DiaryInsertActivity : EasyDiaryActivity() {
                         mCurrentTimeMillis,
                         this@DiaryInsertActivity.diaryTitle.text.toString(),
                         this@DiaryInsertActivity.diaryContents.text.toString(),
-                        weatherSpinner.selectedItemPosition
+                        weatherSpinner.selectedItemPosition,
+                        allDay.isChecked
                 )
                 applyRemoveIndex()
                 diaryDto.photoUris = mPhotoUris
@@ -358,7 +359,10 @@ class DiaryInsertActivity : EasyDiaryActivity() {
             val parsedDate = format.parse(dateTimeString)
             mCurrentTimeMillis = parsedDate.time
             supportActionBar?.run {
-                subtitle = DateUtils.getFullPatternDateWithTimeAndSeconds(mCurrentTimeMillis, Locale.getDefault())
+                subtitle = when (allDay.isChecked) {
+                    true -> DateUtils.getFullPatternDate(mCurrentTimeMillis)
+                    false -> DateUtils.getFullPatternDateWithTimeAndSeconds(mCurrentTimeMillis, Locale.getDefault())
+                }
             }
         } catch (e: ParseException) {
             e.printStackTrace()
@@ -396,6 +400,27 @@ class DiaryInsertActivity : EasyDiaryActivity() {
                 }
             }
         }
+
+        allDay.setOnClickListener { view ->
+            toggleTimePickerTool()
+        }
+    }
+
+    private fun toggleTimePickerTool() {
+        when (allDay.isChecked) {
+            true -> {
+                timePicker.visibility = View.GONE
+                secondsPicker.visibility = View.GONE
+                mHourOfDay = 0
+                mMinute = 0
+                mSecond = 0
+            }
+            false -> {
+                timePicker.visibility = View.VISIBLE
+                secondsPicker.visibility = View.VISIBLE
+            }
+        }
+        setDateTime()
     }
     
     private fun restoreContents(savedInstanceState: Bundle?) {

@@ -7,6 +7,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.util.Log
 import com.google.android.gms.drive.events.OpenFileCallback
+import com.google.android.gms.tasks.Task
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.extensions.config
@@ -18,13 +19,17 @@ import org.apache.commons.io.IOUtils
 import java.io.FileOutputStream
 
 class GoogleDriveDownloader : BaseDriveActivity() {
-
+    
     override fun onDriveClientReady() {
         val openOptions = OpenFileActivityOptions.Builder()
                 .setActivityTitle(getString(io.github.aafactory.commons.R.string.select_file))
                 .setMimeType(EasyDiaryUtils.easyDiaryMimeTypeAll.asList())
                 .build()
-        pickItem(openOptions)?.let {
+        pickItem(openOptions)
+    }
+
+    override fun addListener() {
+        mTask?.let {
             it.addOnSuccessListener(this) { driveId ->
                 retrieveContents(driveId.asDriveFile())
             }.addOnFailureListener(this) { e ->

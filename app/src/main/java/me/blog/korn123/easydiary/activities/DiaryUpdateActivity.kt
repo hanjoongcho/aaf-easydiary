@@ -19,10 +19,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.AdapterView
-import android.widget.HorizontalScrollView
-import android.widget.ImageView
-import android.widget.LinearLayout
+import android.widget.*
 import com.simplemobiletools.commons.helpers.BaseConfig
 import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.CommonUtils
@@ -129,6 +126,7 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
                         diaryContents.text.toString()
                 )
                 diaryDto.weather = weatherSpinner.selectedItemPosition
+                diaryDto.isAllDay = allDay.isChecked
                 applyRemoveIndex()
                 diaryDto.photoUris = mPhotoUris
                 EasyDiaryDbHelper.updateDiary(diaryDto)
@@ -223,6 +221,10 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
         mSequence = intent.getIntExtra(DIARY_SEQUENCE, 0)
         val diaryDto = EasyDiaryDbHelper.readDiaryBy(mSequence)
         mWeather = diaryDto.weather
+        if (diaryDto.isAllDay) {
+            allDay.isChecked = true
+            toggleTimePickerTool()
+        }
 
         diaryTitle.setText(diaryDto.title)
         //        getSupportActionBar().setSubtitle(DateUtils.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
@@ -291,6 +293,27 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
                 }
             }
         }
+
+        allDay.setOnClickListener { _ ->
+            toggleTimePickerTool()
+        }
+    }
+    
+    private fun toggleTimePickerTool() {
+        when (allDay.isChecked) {
+            true -> {
+                timePicker.visibility = View.GONE
+                secondsPicker.visibility = View.GONE
+                mHourOfDay = 0
+                mMinute = 0
+                mSecond = 0
+            }
+            false -> {
+                timePicker.visibility = View.VISIBLE
+                secondsPicker.visibility = View.VISIBLE
+            }
+        }
+        setDateTime()
     }
 
     private fun initDateTime() {
@@ -316,11 +339,15 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
             )
             val parsedDate = format.parse(dateTimeString)
             mCurrentTimeMillis = parsedDate.time
-            supportActionBar?.subtitle = DateUtils.getFullPatternDateWithTimeAndSeconds(mCurrentTimeMillis)
+            supportActionBar?.run { 
+                subtitle = when (allDay.isChecked) {
+                    true -> DateUtils.getFullPatternDate(mCurrentTimeMillis)
+                    false -> DateUtils.getFullPatternDateWithTimeAndSeconds(mCurrentTimeMillis, Locale.getDefault())
+                }
+            }
         } catch (e: ParseException) {
             e.printStackTrace()
         }
-
     }
 
     private fun applyRemoveIndex() {

@@ -1,7 +1,7 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="toolbar_icon_margin_right">5dp</dimen>
-    <dimen name="toolbar_icon_margin_side">10dp</dimen>
+    <dimen name="toolbar_icon_margin_right">10dp</dimen>
+    <dimen name="toolbar_icon_margin_side">15dp</dimen>
     <dimen name="diary_card_text_padding">2dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
 </resources>
