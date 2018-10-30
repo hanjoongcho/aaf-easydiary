@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.54 (date: 2018/10/30)
+  * Improving the time expression of diary writing
+  
 # Changes in 1.4.53 (date: 2018/10/13)
   * Added preview photo size setting function
   * Added preview photo toggle function(fold or unfold)
