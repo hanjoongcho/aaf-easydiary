@@ -48,7 +48,7 @@ class DiaryCalendarItemAdapter(
         if (StringUtils.isNotEmpty(diaryDto.title)) {
             holder.textView1?.text = diaryDto.title
         } else {
-            holder.textView1?.text = StringUtils.split(diaryDto.contents, "\n")[0]
+            holder.textView1?.text = StringUtils.abbreviate(diaryDto.contents, 10)
         }
 
         EasyDiaryUtils.initWeatherView(holder.imageView, diaryDto.weather)
