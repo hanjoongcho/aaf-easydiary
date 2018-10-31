@@ -347,7 +347,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 diaryTitle.visibility = View.GONE
             }
             diaryTitle.text = diaryDto.title
-            EasyDiaryUtils.boldString(diaryTitle)
+            EasyDiaryUtils.boldString(context!!, diaryTitle)
             diaryContents.text = diaryDto.contents
             date.text = when (diaryDto.isAllDay) {
                 true -> DateUtils.getFullPatternDate(diaryDto.currentTimeMillis)

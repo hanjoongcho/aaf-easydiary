@@ -186,9 +186,10 @@
         プレビュー写真サイズ設定機能を追加\n
         プレビュー写真のトグル機能を追加(折りたたみまたは展開)
     </string>
-    <string name="release_117">
-        v1.4.54 / 2018.10.30\n
+    <string name="release_118">
+        v1.4.55 / 2018.11.01\n
         日記の時間表現を改善する\n
+        日記のタイトルとタイムラインの時刻情報に太字の設定機能を追加
     </string>
     
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -214,4 +215,6 @@
     <string name="release_notes_summary">バージョン別に新機能を確認してください。</string>
     <string name="attached_photo_count">添付の写真%d枚</string>
     <string name="all_day">一日中</string>
+    <string name="bold_style_option_title">太字の設定</string>
+    <string name="bold_style_option_summary">日記のタイトルとタイムラインの時間を太字で表示するように設定します。</string>
 </resources>

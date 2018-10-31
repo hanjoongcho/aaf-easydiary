@@ -80,20 +80,19 @@
                     </android.support.v7.widget.CardView>
 
                     <android.support.v7.widget.CardView
-                        android:id="@+id/thumbnailSetting"
+                        android:id="@+id/addTtfFontSetting"
                         style="@style/AppCard.Settings">
                         <LinearLayout
                             style="@style/LinearLayoutVertical">
                             <com.simplemobiletools.commons.views.MyTextView
-                                android:text="@string/thumbnail_setting_title"
+                                android:text="@string/add_ttf_fonts_title"
                                 style="@style/SettingsTitle" />
                             <com.simplemobiletools.commons.views.MyTextView
-                                android:id="@+id/thumbnailSettingSummary"
-                                android:text="@string/thumbnail_setting_summary"
+                                android:text="@string/add_ttf_fonts_summary"
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
-                    
+
                     <android.support.v7.widget.CardView
                         android:id="@+id/primaryColor"
                         style="@style/AppCard.Settings">
@@ -109,21 +108,48 @@
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
-
+                    
                     <android.support.v7.widget.CardView
-                        android:id="@+id/addTtfFontSetting"
+                        android:id="@+id/thumbnailSetting"
                         style="@style/AppCard.Settings">
                         <LinearLayout
                             style="@style/LinearLayoutVertical">
                             <com.simplemobiletools.commons.views.MyTextView
-                                android:text="@string/add_ttf_fonts_title"
+                                android:text="@string/thumbnail_setting_title"
                                 style="@style/SettingsTitle" />
                             <com.simplemobiletools.commons.views.MyTextView
-                                android:text="@string/add_ttf_fonts_summary"
+                                android:id="@+id/thumbnailSettingSummary"
+                                android:text="@string/thumbnail_setting_summary"
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
 
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/boldStyleOption"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutHorizontal">
+                            <LinearLayout
+                                android:orientation="vertical"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content">
+                                <com.simplemobiletools.commons.views.MyTextView
+                                    android:text="@string/bold_style_option_title"
+                                    style="@style/SettingsTitle" />
+                                <com.simplemobiletools.commons.views.MyTextView
+                                    android:text="@string/bold_style_option_summary"
+                                    style="@style/SettingsSummary" />
+                            </LinearLayout>
+                            <Switch
+                                android:id="@+id/boldStyleOptionSwitcher"
+                                android:clickable="false"
+                                android:layout_marginLeft="20dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+                    
                     <android.support.v7.widget.CardView
                         android:id="@+id/sensitiveOption"
                         style="@style/AppCard.Settings">

@@ -94,6 +94,10 @@ class SettingsActivity : EasyDiaryActivity() {
             R.id.easyPhotoMap -> openGooglePlayBy("me.blog.korn123.easyphotomap")
             R.id.easyPassword -> openGooglePlayBy("io.github.hanjoongcho.easypassword")
             R.id.releaseNotes -> checkWhatsNewDialog(false)
+            R.id.boldStyleOption -> {
+                boldStyleOptionSwitcher.toggle()
+                config.boldStyleEnable = boldStyleOptionSwitcher.isChecked
+            }
         }
     }
     
@@ -125,7 +129,8 @@ class SettingsActivity : EasyDiaryActivity() {
         easyPassword.setOnClickListener(mOnClickListener)
         restorePhotoSetting.setOnClickListener(mOnClickListener)
         releaseNotes.setOnClickListener(mOnClickListener)
-
+        boldStyleOption.setOnClickListener(mOnClickListener)
+        
         fontLineSpacing.configBuilder
                 .min(0.2F)
                 .max(1.8F)
@@ -335,6 +340,7 @@ class SettingsActivity : EasyDiaryActivity() {
         appLockSettingSwitcher.isChecked = config.aafPinLockEnable
         lockNumberSettingSummary.text = "${getString(R.string.lock_number)} ${config.aafPinLockSavedPassword}"
         rateAppSettingSummary.text = String.format("Easy Diary v %s", BuildConfig.VERSION_NAME)
+        boldStyleOptionSwitcher.isChecked = config.boldStyleEnable
     }
 
     private fun getStoreUrl() = "https://play.google.com/store/apps/details?id=$packageName"

@@ -24,6 +24,7 @@ import io.github.aafactory.commons.utils.CommonUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.SecondItemAdapter
 import me.blog.korn123.easydiary.extensions.checkPermission
+import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.PhotoUriDto
 import java.io.File
@@ -85,11 +86,13 @@ object EasyDiaryUtils {
         }
     }
 
-    fun boldString(textView: TextView?) {
-        textView?.let { tv ->
-            val spannableString = SpannableString(tv.text)
-            spannableString.setSpan(StyleSpan(Typeface.BOLD), 0, tv.text.length, 0)
-            tv.text = spannableString
+    fun boldString(context: Context, textView: TextView?) {
+        if (context.config.boldStyleEnable) {
+            textView?.let { tv ->
+                val spannableString = SpannableString(tv.text)
+                spannableString.setSpan(StyleSpan(Typeface.BOLD), 0, tv.text.length, 0)
+                tv.text = spannableString
+            }
         }
     }
     
