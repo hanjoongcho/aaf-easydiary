@@ -186,9 +186,10 @@
         Added preview photo size setting function\n
         Added preview photo toggle function(fold or unfold)
     </string>
-    <string name="release_117">
-        v1.4.54 / 2018.10.30\n
-        Improving the time expression of diary writing
+    <string name="release_118">
+        v1.4.55 / 2018.11.01\n
+        Improving the time expression of diary writing\n
+        Boldface setting function added to diary title and timeline time information
     </string>
     
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -214,4 +215,6 @@
     <string name="release_notes_summary">Check for new features by release version.</string>
     <string name="attached_photo_count">%d Attached Photos</string>
     <string name="all_day">All day</string>
+    <string name="bold_style_option_title">Boldface configuration</string>
+    <string name="bold_style_option_summary">Set the diary title and timeline time to be displayed in bold.</string>
 </resources>

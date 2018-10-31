@@ -58,6 +58,8 @@ class PostCardActivity : EasyDiaryActivity() {
         diaryTitle.text = diaryDto.title
         contents.text = diaryDto.contents
         date.text = DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis)
+        EasyDiaryUtils.boldString(applicationContext, diaryTitle)
+        
         initShowcase()
         savedInstanceState?.let {
             setBackgroundColor(it.getInt(POSTCARD_BG_COLOR, POSTCARD_BG_COLOR_VALUE))

@@ -22,6 +22,7 @@ import org.apache.commons.lang3.StringUtils
 import android.text.style.UnderlineSpan
 import android.text.SpannableString
 import android.text.style.StyleSpan
+import me.blog.korn123.easydiary.extensions.config
 
 
 /**
@@ -109,7 +110,7 @@ class TimelineItemAdapter(
 
     private fun applyBoldToDate(dateString: String, summary: String): SpannableString {
         val spannableString = SpannableString("$dateString\n$summary")
-        spannableString.setSpan(StyleSpan(Typeface.BOLD), 0, dateString.length, 0)
+        if (context.config.boldStyleEnable) spannableString.setSpan(StyleSpan(Typeface.BOLD), 0, dateString.length, 0)
         return spannableString
     }
     
