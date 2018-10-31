@@ -4,8 +4,9 @@
 
 ---------------------------------------------------
 
-# Changes in 1.4.54 (date: 2018/10/30)
+# Changes in 1.4.55 (date: 2018/11/01)
   * Improving the time expression of diary writing
+  * Boldface setting function added to diary title and timeline time information
   
 # Changes in 1.4.53 (date: 2018/10/13)
   * Added preview photo size setting function
