@@ -525,7 +525,7 @@ class DiaryInsertActivity : EasyDiaryActivity() {
             theme.resolveAttribute(R.attr.colorPrimaryDark, colorPrimaryDark, true)
             theme.resolveAttribute(R.attr.colorPrimary, colorPrimary, true)
             PickPhotoView.Builder(this@DiaryInsertActivity)
-                    .setPickPhotoSize(9)
+                    .setPickPhotoSize(15)
                     .setShowCamera(true)
                     .setSpanCount(4)
                     .setLightStatusBar(false)
