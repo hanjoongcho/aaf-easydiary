@@ -516,26 +516,32 @@ class DiaryInsertActivity : EasyDiaryActivity() {
     }
 
     private fun callImagePicker() {
-//        val pickImageIntent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        //                pickIntent.setType("image/*");
-        try {
-//            startActivityForResult(pickImageIntent, REQUEST_CODE_IMAGE_PICKER)
-            var colorPrimaryDark: TypedValue  = TypedValue()
-            var colorPrimary: TypedValue  = TypedValue()
-            theme.resolveAttribute(R.attr.colorPrimaryDark, colorPrimaryDark, true)
-            theme.resolveAttribute(R.attr.colorPrimary, colorPrimary, true)
-            PickPhotoView.Builder(this@DiaryInsertActivity)
-                    .setPickPhotoSize(15)
-                    .setShowCamera(true)
-                    .setSpanCount(4)
-                    .setLightStatusBar(false)
-                    .setStatusBarColor(colorPrimaryDark.resourceId)
-                    .setToolbarColor(colorPrimary.resourceId)
-                    .setToolbarTextColor(R.color.white)
-                    .setSelectIconColor(colorPrimary.resourceId)
-                    .start()
-        } catch (e: ActivityNotFoundException) {
-            showAlertDialog(getString(R.string.gallery_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
+        when (config.multiPickerEnable) {
+            true -> {
+                var colorPrimaryDark: TypedValue  = TypedValue()
+                var colorPrimary: TypedValue  = TypedValue()
+                theme.resolveAttribute(R.attr.colorPrimaryDark, colorPrimaryDark, true)
+                theme.resolveAttribute(R.attr.colorPrimary, colorPrimary, true)
+                PickPhotoView.Builder(this@DiaryInsertActivity)
+                        .setPickPhotoSize(15)
+                        .setShowCamera(false)
+                        .setSpanCount(4)
+                        .setLightStatusBar(false)
+                        .setStatusBarColor(colorPrimaryDark.resourceId)
+                        .setToolbarColor(colorPrimary.resourceId)
+                        .setToolbarTextColor(R.color.white)
+                        .setSelectIconColor(colorPrimary.resourceId)
+                        .start()
+            }
+            false -> {
+                val pickImageIntent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                //                pickIntent.setType("image/*");
+                try {
+                    startActivityForResult(pickImageIntent, REQUEST_CODE_IMAGE_PICKER)
+                } catch (e: ActivityNotFoundException) {
+                    showAlertDialog(getString(R.string.gallery_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
+                }
+            }
         }
     }
 

@@ -125,6 +125,32 @@
                     </android.support.v7.widget.CardView>
 
                     <android.support.v7.widget.CardView
+                        android:id="@+id/multiPickerOption"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutHorizontal">
+                            <LinearLayout
+                                android:orientation="vertical"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content">
+                                <com.simplemobiletools.commons.views.MyTextView
+                                    android:text="@string/multi_picker_option_title"
+                                    style="@style/SettingsTitle" />
+                                <com.simplemobiletools.commons.views.MyTextView
+                                    android:text="@string/multi_picker_option_summary"
+                                    style="@style/SettingsSummary" />
+                            </LinearLayout>
+                            <Switch
+                                android:id="@+id/multiPickerOptionSwitcher"
+                                android:clickable="false"
+                                android:layout_marginLeft="20dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+                    
+                    <android.support.v7.widget.CardView
                         android:id="@+id/boldStyleOption"
                         style="@style/AppCard.Settings">
                         <LinearLayout

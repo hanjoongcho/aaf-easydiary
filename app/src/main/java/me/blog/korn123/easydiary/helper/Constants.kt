@@ -16,6 +16,7 @@ const val SETTING_FONT_SIZE = "font_size"
 const val SETTING_FONT_NAME = "font_setting" 
 const val SETTING_THUMBNAIL_SIZE = "thumbnail_size" 
 const val SETTING_BOLD_STYLE = "setting_bold_style" 
+const val SETTING_MULTIPLE_PICKER = "setting_multiple_picker" 
 const val CUSTOM_FONTS_SUPPORT_LANGUAGE = "en|ko" // custom fonts supported language
 const val CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT = "NanumPen.ttf"
 const val CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT = "Default"

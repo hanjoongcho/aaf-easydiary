@@ -55,4 +55,8 @@ class Config(context: Context) : BaseConfig(context) {
     var boldStyleEnable: Boolean
         get() = prefs.getBoolean(SETTING_BOLD_STYLE, false)
         set(boldStyleEnable) = prefs.edit().putBoolean(SETTING_BOLD_STYLE, boldStyleEnable).apply()
+    
+    var multiPickerEnable: Boolean
+        get() = prefs.getBoolean(SETTING_MULTIPLE_PICKER, false)
+        set(multiPickerEnable) = prefs.edit().putBoolean(SETTING_MULTIPLE_PICKER, multiPickerEnable).apply()
 }
