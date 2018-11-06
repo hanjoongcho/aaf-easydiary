@@ -15,12 +15,17 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.ColorUtils
 import android.support.v7.app.AlertDialog
 import android.text.format.DateFormat
+import android.util.Log
+import android.util.TypedValue
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
+import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.helpers.BaseConfig
+import com.werb.pickphotoview.PickPhotoView
+import com.werb.pickphotoview.util.PickConfig
 import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
@@ -37,7 +42,10 @@ import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import me.blog.korn123.easydiary.models.PhotoUriDto
+import org.apache.commons.io.FileUtils
+import org.apache.commons.io.IOUtils
 import org.apache.commons.lang3.StringUtils
+import java.io.File
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -238,6 +246,37 @@ class DiaryInsertActivity : EasyDiaryActivity() {
                     e.printStackTrace()
                 }
 
+            }
+            PickConfig.PICK_PHOTO_DATA -> {
+                data?.let {
+                    val selectPaths = it.getSerializableExtra(PickConfig.INTENT_IMG_LIST_SELECT) as ArrayList<String>
+                    selectPaths.map { item ->
+                        val photoPath = Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
+                        try {
+                            FileUtils.copyFile(File(item), File(photoPath))
+                            mPhotoUris.add(PhotoUriDto(FILE_URI_PREFIX + photoPath))
+                            val thumbnailSize = config.settingThumbnailSize
+                            val bitmap = BitmapUtils.decodeFile(photoPath, CommonUtils.dpToPixel(applicationContext, thumbnailSize - 5), CommonUtils.dpToPixel(applicationContext, thumbnailSize - 5))
+                            val imageView = ImageView(applicationContext)
+                            val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(applicationContext, thumbnailSize), CommonUtils.dpToPixel(applicationContext, thumbnailSize))
+                            layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(applicationContext, 3F), 0)
+                            imageView.layoutParams = layoutParams
+                            val drawable = ContextCompat.getDrawable(this, R.drawable.bg_card_thumbnail)
+                            val gradient = drawable as GradientDrawable
+                            gradient.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, THUMBNAIL_BACKGROUND_ALPHA))
+                            imageView.background = gradient
+                            imageView.setImageBitmap(bitmap)
+                            imageView.scaleType = ImageView.ScaleType.CENTER
+                            val currentIndex = mPhotoUris.size - 1
+                            imageView.setOnClickListener(PhotoClickListener(currentIndex))
+                            photoContainer.addView(imageView, photoContainer.childCount - 1)
+                            initBottomToolbar()
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+                    photoContainer.postDelayed({ (photoContainer.parent as HorizontalScrollView).fullScroll(HorizontalScrollView.FOCUS_RIGHT) }, 100L)
+                }
             }
             else -> {
             }
@@ -477,14 +516,27 @@ class DiaryInsertActivity : EasyDiaryActivity() {
     }
 
     private fun callImagePicker() {
-        val pickImageIntent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+//        val pickImageIntent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         //                pickIntent.setType("image/*");
         try {
-            startActivityForResult(pickImageIntent, REQUEST_CODE_IMAGE_PICKER)
+//            startActivityForResult(pickImageIntent, REQUEST_CODE_IMAGE_PICKER)
+            var colorPrimaryDark: TypedValue  = TypedValue()
+            var colorPrimary: TypedValue  = TypedValue()
+            theme.resolveAttribute(R.attr.colorPrimaryDark, colorPrimaryDark, true)
+            theme.resolveAttribute(R.attr.colorPrimary, colorPrimary, true)
+            PickPhotoView.Builder(this@DiaryInsertActivity)
+                    .setPickPhotoSize(9)
+                    .setShowCamera(true)
+                    .setSpanCount(4)
+                    .setLightStatusBar(false)
+                    .setStatusBarColor(colorPrimaryDark.resourceId)
+                    .setToolbarColor(colorPrimary.resourceId)
+                    .setToolbarTextColor(R.color.white)
+                    .setSelectIconColor(colorPrimary.resourceId)
+                    .start()
         } catch (e: ActivityNotFoundException) {
             showAlertDialog(getString(R.string.gallery_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
         }
-
     }
 
     private fun showSpeechDialog() {
