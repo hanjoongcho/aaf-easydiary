@@ -191,6 +191,10 @@
         Improving the time expression of diary writing\n
         Boldface setting function added to diary title and timeline time information
     </string>
+    <string name="release_119">
+        v1.4.56 / 2018.11.07\n
+        Added multi-picker setting function to attach multiple pictures at one time
+    </string>
     
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
