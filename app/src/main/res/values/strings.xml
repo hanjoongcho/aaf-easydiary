@@ -217,6 +217,6 @@
     <string name="all_day">All day</string>
     <string name="bold_style_option_title">Boldface configuration</string>
     <string name="bold_style_option_summary">Set the diary title and timeline time to be displayed in bold.</string>
-    <string name="multi_picker_option_title">Multiple photo picker setting</string>
-    <string name="multi_picker_option_summary">When attaching a diary photo, I use the multi-photo picker provided in the Easy Diary without using the gallery app. When Multi Photo Picker is enabled, you can attach multiple photos at once.</string>
+    <string name="multi_picker_option_title">Multi picker setting</string>
+    <string name="multi_picker_option_summary">When attaching a diary photo, I use the multi-picker provided in the diary without using the gallery app. When Multi-picker is enabled, you can attach multiple pictures at once.</string>
 </resources>

@@ -18,6 +18,7 @@ import android.widget.AdapterView
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
+import id.zelory.compressor.Compressor
 import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.CALCULATION
 import io.github.aafactory.commons.utils.CommonUtils
@@ -27,6 +28,7 @@ import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.PhotoUriDto
+import org.apache.commons.io.FileUtils
 import java.io.File
 import java.io.FileNotFoundException
 import java.util.*
@@ -214,5 +216,10 @@ object EasyDiaryUtils {
             null
         }
         return bitmap
+    }
+    
+    fun downSamplingImage(context: Context, srcFile: File, destFile: File) {
+        val compressedFile = Compressor(context).setQuality(70).compressToFile(srcFile)
+        FileUtils.copyFile(compressedFile, destFile)
     }
 }

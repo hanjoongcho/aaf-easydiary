@@ -253,7 +253,7 @@ class DiaryInsertActivity : EasyDiaryActivity() {
                     selectPaths.map { item ->
                         val photoPath = Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
                         try {
-                            FileUtils.copyFile(File(item), File(photoPath))
+                            EasyDiaryUtils.downSamplingImage(this, File(item), File(photoPath))
                             mPhotoUris.add(PhotoUriDto(FILE_URI_PREFIX + photoPath))
                             val thumbnailSize = config.settingThumbnailSize
                             val bitmap = BitmapUtils.decodeFile(photoPath, CommonUtils.dpToPixel(applicationContext, thumbnailSize - 5), CommonUtils.dpToPixel(applicationContext, thumbnailSize - 5))
