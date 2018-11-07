@@ -141,7 +141,6 @@
                                 <Switch
                                     android:id="@+id/multiPickerOptionSwitcher"
                                     android:clickable="false"
-                                    android:layout_marginRight="0dp"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content" />
                             </LinearLayout>
@@ -223,7 +222,6 @@
                                 <Switch
                                     android:id="@+id/appLockSettingSwitcher"
                                     android:clickable="false"
-                                    android:layout_marginLeft="20dp"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content" />
                             </LinearLayout>
