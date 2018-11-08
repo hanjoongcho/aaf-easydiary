@@ -146,7 +146,6 @@
                             </LinearLayout>
                             <com.simplemobiletools.commons.views.MyTextView
                                 android:text="@string/multi_picker_option_summary"
-                                android:layout_marginTop="@dimen/settings_summary_margin_top"
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
@@ -173,7 +172,6 @@
                             </LinearLayout>
                             <com.simplemobiletools.commons.views.MyTextView
                                 android:text="@string/bold_style_option_summary"
-                                android:layout_marginTop="@dimen/settings_summary_margin_top"
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
@@ -200,7 +198,6 @@
                             </LinearLayout>
                             <com.simplemobiletools.commons.views.MyTextView
                                 android:text="@string/diary_search_keyword_case_sensitive_summary"
-                                android:layout_marginTop="@dimen/settings_summary_margin_top"
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
