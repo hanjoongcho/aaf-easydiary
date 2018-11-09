@@ -16,11 +16,13 @@ import android.support.v4.graphics.ColorUtils
 import android.support.v7.app.AlertDialog
 import android.text.format.DateFormat
 import android.util.TypedValue
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.HorizontalScrollView
+import android.widget.ImageView
+import android.widget.LinearLayout
 import com.simplemobiletools.commons.helpers.BaseConfig
 import com.werb.pickphotoview.PickPhotoView
 import com.werb.pickphotoview.util.PickConfig
@@ -40,7 +42,6 @@ import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import me.blog.korn123.easydiary.models.PhotoUriDto
-import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.StringUtils
 import java.io.File
 import java.io.IOException
@@ -454,32 +455,41 @@ class DiaryUpdateActivity : EasyDiaryActivity() {
             PickConfig.PICK_PHOTO_DATA -> {
                 data?.let {
                     val selectPaths = it.getSerializableExtra(PickConfig.INTENT_IMG_LIST_SELECT) as ArrayList<String>
-                    selectPaths.map { item ->
-                        val photoPath = Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
-                        try {
-                            EasyDiaryUtils.downSamplingImage(this, File(item), File(photoPath))
-                            mPhotoUris.add(PhotoUriDto(FILE_URI_PREFIX + photoPath))
-                            val thumbnailSize = config.settingThumbnailSize
-                            val bitmap = BitmapUtils.decodeFile(photoPath, CommonUtils.dpToPixel(applicationContext, thumbnailSize - 5), CommonUtils.dpToPixel(applicationContext, thumbnailSize - 5))
-                            val imageView = ImageView(applicationContext)
-                            val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(applicationContext, thumbnailSize), CommonUtils.dpToPixel(applicationContext, thumbnailSize))
-                            layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(applicationContext, 3F), 0)
-                            imageView.layoutParams = layoutParams
-                            val drawable = ContextCompat.getDrawable(this, R.drawable.bg_card_thumbnail)
-                            val gradient = drawable as GradientDrawable
-                            gradient.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, THUMBNAIL_BACKGROUND_ALPHA))
-                            imageView.background = gradient
-                            imageView.setImageBitmap(bitmap)
-                            imageView.scaleType = ImageView.ScaleType.CENTER
-                            val currentIndex = mPhotoUris.size - 1
-                            imageView.setOnClickListener(PhotoClickListener(currentIndex))
-                            photoContainer.addView(imageView, photoContainer.childCount - 1)
-                            initBottomToolbar()
-                        } catch (e: Exception) {
-                            e.printStackTrace()
+                    photoProgress.visibility = View.VISIBLE
+                    Thread(Runnable {
+                        selectPaths.map { item ->
+                            val photoPath = Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
+                            try {
+                                EasyDiaryUtils.downSamplingImage(this, File(item), File(photoPath))
+                                mPhotoUris.add(PhotoUriDto(FILE_URI_PREFIX + photoPath))
+                                val thumbnailSize = config.settingThumbnailSize
+                                val bitmap = BitmapUtils.decodeFile(photoPath, CommonUtils.dpToPixel(applicationContext, thumbnailSize - 5), CommonUtils.dpToPixel(applicationContext, thumbnailSize - 5))
+                                val imageView = ImageView(applicationContext)
+                                val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(applicationContext, thumbnailSize), CommonUtils.dpToPixel(applicationContext, thumbnailSize))
+                                layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(applicationContext, 3F), 0)
+                                imageView.layoutParams = layoutParams
+                                val drawable = ContextCompat.getDrawable(this, R.drawable.bg_card_thumbnail)
+                                val gradient = drawable as GradientDrawable
+                                gradient.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, THUMBNAIL_BACKGROUND_ALPHA))
+                                imageView.background = gradient
+                                imageView.setImageBitmap(bitmap)
+                                imageView.scaleType = ImageView.ScaleType.CENTER
+                                val currentIndex = mPhotoUris.size - 1
+                                imageView.setOnClickListener(PhotoClickListener(currentIndex))
+                                runOnUiThread {
+                                    photoContainer.addView(imageView, photoContainer.childCount - 1)
+                                    initBottomToolbar()
+
+                                }
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
                         }
-                    }
-                    photoContainer.postDelayed({ (photoContainer.parent as HorizontalScrollView).fullScroll(HorizontalScrollView.FOCUS_RIGHT) }, 100L)
+                        runOnUiThread {
+                            photoContainer.postDelayed({ (photoContainer.parent as HorizontalScrollView).fullScroll(HorizontalScrollView.FOCUS_RIGHT) }, 100L)
+                            photoProgress.visibility = View.GONE
+                        }
+                    }).start()
                 }
             }
         }
