@@ -1,34 +1,196 @@
 package me.blog.korn123.easydiary.activities
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
+import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.drawable.GradientDrawable
 import android.os.Environment
+import android.provider.MediaStore
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.ColorUtils
+import android.support.v7.app.AlertDialog
+import android.text.format.DateFormat
+import android.util.TypedValue
+import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.AdapterView
 import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.LinearLayout
+import com.werb.pickphotoview.PickPhotoView
 import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.CommonUtils
+import io.github.aafactory.commons.utils.DateUtils
 import io.realm.RealmList
 import kotlinx.android.synthetic.main.layout_bottom_toolbar.*
 import kotlinx.android.synthetic.main.layout_edit_photo_container.*
+import kotlinx.android.synthetic.main.layout_edit_toolbar_sub.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.confirmPermission
 import me.blog.korn123.easydiary.extensions.showAlertDialog
-import me.blog.korn123.easydiary.helper.DIARY_PHOTO_DIRECTORY
-import me.blog.korn123.easydiary.helper.FILE_URI_PREFIX
-import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
+import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.PhotoUriDto
+import org.apache.commons.lang3.StringUtils
 import java.io.File
+import java.text.ParseException
+import java.text.SimpleDateFormat
 import java.util.*
 
 abstract class EditActivity : EasyDiaryActivity() {
+    protected lateinit var mRecognizerIntent: Intent
     protected lateinit var mPhotoUris: RealmList<PhotoUriDto>
+    protected lateinit var mDatePickerDialog: DatePickerDialog
+    protected lateinit var mTimePickerDialog: TimePickerDialog
+    protected lateinit var mSecondsPickerDialog: AlertDialog
     protected var mPrimaryColor = 0
     protected val mRemoveIndexes = ArrayList<Int>()
+    protected var mCurrentTimeMillis: Long = 0
+    protected var mYear = Integer.valueOf(DateUtils.getCurrentDateTime(DateUtils.YEAR_PATTERN))
+    protected var mMonth = Integer.valueOf(DateUtils.getCurrentDateTime(DateUtils.MONTH_PATTERN))
+    protected var mDayOfMonth = Integer.valueOf(DateUtils.getCurrentDateTime(DateUtils.DAY_PATTERN))
+    protected var mHourOfDay = Integer.valueOf(DateUtils.getCurrentDateTime("HH"))
+    protected var mMinute = Integer.valueOf(DateUtils.getCurrentDateTime("mm"))
+    protected var mSecond = Integer.valueOf(DateUtils.getCurrentDateTime("ss"))
+    
+    internal val mEditListener = View.OnClickListener { view ->
+        val currentView = this.currentFocus
+        if (currentView != null) {
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+
+        when (view.id) {
+            R.id.photoView -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                callImagePicker()
+            } else {
+                confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
+            }
+            R.id.datePicker -> {
+                mDatePickerDialog.show()
+            }
+            R.id.timePicker -> {
+                mTimePickerDialog.show()
+            }
+            R.id.secondsPicker -> {
+                val itemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+                    val itemMap = parent.adapter.getItem(position) as HashMap<String, String>
+                    mSecond = Integer.valueOf(itemMap["value"])!!
+                    setDateTime()
+                    mSecondsPickerDialog.cancel()
+                }
+                val builder = EasyDiaryUtils.createSecondsPickerBuilder(this, itemClickListener, mSecond)
+                mSecondsPickerDialog = builder.create()
+                mSecondsPickerDialog.show()
+            }
+            R.id.microphone -> showSpeechDialog()
+        }
+    }
+
+    protected var mStartDateListener: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+        mYear = year
+        mMonth = month + 1
+        mDayOfMonth = dayOfMonth
+        setDateTime()
+    }
+
+    protected var mTimeSetListener: TimePickerDialog.OnTimeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+        mHourOfDay = hourOfDay
+        mMinute = minute
+        setDateTime()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home ->
+                showAlertDialog(getString(R.string.back_pressed_confirm),
+                        DialogInterface.OnClickListener { _, _ -> super.onBackPressed() },
+                        null
+                )
+        }
+        return true
+    }
+
+    override fun onBackPressed() {
+        showAlertDialog(getString(R.string.back_pressed_confirm),
+                DialogInterface.OnClickListener { _, _ -> super.onBackPressed() },
+                null
+        )
+    }
+
+    protected fun setupDialog() {
+        mDatePickerDialog = DatePickerDialog(this, mStartDateListener, mYear, mMonth - 1, mDayOfMonth)
+        mTimePickerDialog = TimePickerDialog(this, mTimeSetListener, mHourOfDay, mMinute, DateFormat.is24HourFormat(this))
+    }
+    
+    protected fun showSpeechDialog() {
+        try {
+            startActivityForResult(mRecognizerIntent, REQUEST_CODE_SPEECH_INPUT)
+        } catch (e: ActivityNotFoundException) {
+            showAlertDialog(getString(R.string.recognizer_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
+        }
+    }
+    
+    protected fun setDateTime() {
+        try {
+            val format = SimpleDateFormat("yyyyMMddHHmmss")
+            val dateTimeString = String.format(
+                    "%d%s%s%s%s%s",
+                    mYear,
+                    StringUtils.leftPad(mMonth.toString(), 2, "0"),
+                    StringUtils.leftPad(mDayOfMonth.toString(), 2, "0"),
+                    StringUtils.leftPad(mHourOfDay.toString(), 2, "0"),
+                    StringUtils.leftPad(mMinute.toString(), 2, "0"),
+                    StringUtils.leftPad(mSecond.toString(), 2, "0")
+            )
+            val parsedDate = format.parse(dateTimeString)
+            mCurrentTimeMillis = parsedDate.time
+            supportActionBar?.run {
+                subtitle = when (allDay.isChecked) {
+                    true -> DateUtils.getFullPatternDate(mCurrentTimeMillis)
+                    false -> DateUtils.getFullPatternDateWithTimeAndSeconds(mCurrentTimeMillis, Locale.getDefault())
+                }
+            }
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+    }
+    
+    protected fun callImagePicker() {
+        when (config.multiPickerEnable) {
+            true -> {
+                var colorPrimaryDark: TypedValue = TypedValue()
+                var colorPrimary: TypedValue = TypedValue()
+                theme.resolveAttribute(R.attr.colorPrimaryDark, colorPrimaryDark, true)
+                theme.resolveAttribute(R.attr.colorPrimary, colorPrimary, true)
+                PickPhotoView.Builder(this)
+                        .setPickPhotoSize(15)
+                        .setShowCamera(false)
+                        .setSpanCount(4)
+                        .setLightStatusBar(false)
+                        .setStatusBarColor(colorPrimaryDark.resourceId)
+                        .setToolbarColor(colorPrimary.resourceId)
+                        .setToolbarTextColor(R.color.white)
+                        .setSelectIconColor(colorPrimary.resourceId)
+                        .start()
+            }
+            false -> {
+                val pickImageIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                //                pickIntent.setType("image/*");
+                try {
+                    startActivityForResult(pickImageIntent, REQUEST_CODE_IMAGE_PICKER)
+                } catch (e: ActivityNotFoundException) {
+                    showAlertDialog(getString(R.string.gallery_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
+                }
+            }
+        }
+    }
     
     fun attachPhotos(selectPaths: ArrayList<String>) {
         setVisiblePhotoProgress(true)

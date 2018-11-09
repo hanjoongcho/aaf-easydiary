@@ -1,11 +1,7 @@
 package me.blog.korn123.easydiary.activities
 
 import android.app.Activity
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
-import android.content.ActivityNotFoundException
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
@@ -13,18 +9,12 @@ import android.os.Environment
 import android.speech.RecognizerIntent
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.ColorUtils
-import android.support.v7.app.AlertDialog
-import android.text.format.DateFormat
-import android.util.TypedValue
-import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.AdapterView
 import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.LinearLayout
 import com.simplemobiletools.commons.helpers.BaseConfig
-import com.werb.pickphotoview.PickPhotoView
 import com.werb.pickphotoview.util.PickConfig
 import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.CommonUtils
@@ -38,14 +28,14 @@ import kotlinx.android.synthetic.main.layout_edit_toolbar_sub.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryWeatherItemAdapter
-import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.extensions.checkPermission
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import me.blog.korn123.easydiary.models.PhotoUriDto
 import org.apache.commons.lang3.StringUtils
 import java.io.IOException
-import java.text.ParseException
-import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -54,35 +44,9 @@ import java.util.*
  */
 
 class DiaryUpdateActivity : EditActivity() {
-
-    private val REQUEST_CODE_SPEECH_INPUT = 100
-    private var mRecognizerIntent: Intent? = null
-    private var mCurrentTimeMillis: Long = 0
     private var mSequence: Int = 0
     private var mWeather: Int = 0
     private var mCurrentCursor = 1
-    private var mAlertDialog: AlertDialog? = null
-    private var mDatePickerDialog: DatePickerDialog? = null
-    private var mTimePickerDialog: TimePickerDialog? = null
-    private var mYear: Int = 0
-    private var mMonth: Int = 0
-    private var mDayOfMonth: Int = 0
-    private var mHourOfDay: Int = 0
-    private var mMinute: Int = 0
-    private var mSecond: Int = 0
-
-    private var mStartDateListener: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-        mYear = year
-        mMonth = month + 1
-        mDayOfMonth = dayOfMonth
-        setDateTime()
-    }
-
-    private var mTimeSetListener: TimePickerDialog.OnTimeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-        mHourOfDay = hourOfDay
-        mMinute = minute
-        setDateTime()
-    }
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,6 +68,7 @@ class DiaryUpdateActivity : EditActivity() {
         initData()
         initBottomToolbar()
         initDateTime()
+        setupDialog()
         setDateTime()
     }
 
@@ -134,45 +99,7 @@ class DiaryUpdateActivity : EditActivity() {
                 EasyDiaryDbHelper.updateDiary(diaryDto)
                 finish()
             }
-            R.id.photoView -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
-                callImagePicker()
-            } else {
-                // API Level 23 이상이면서 권한취득 안한경우
-                confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
-            }
-            R.id.datePicker -> {
-                if (mDatePickerDialog == null) {
-                    mDatePickerDialog = DatePickerDialog(this, mStartDateListener, mYear, mMonth - 1, mDayOfMonth)
-                }
-                mDatePickerDialog?.show()
-            }
-            R.id.timePicker -> {
-                if (mTimePickerDialog == null) {
-                    mTimePickerDialog = TimePickerDialog(this, mTimeSetListener, mHourOfDay, mMinute, DateFormat.is24HourFormat(this))
-                }
-                mTimePickerDialog?.show()
-            }
-            R.id.secondsPicker -> {
-                val itemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-                    val itemMap = parent.adapter.getItem(position) as HashMap<String, String>
-                    mSecond = Integer.valueOf(itemMap["value"])
-                    setDateTime()
-                    mAlertDialog?.cancel()
-                }
-                val builder = EasyDiaryUtils.createSecondsPickerBuilder(this@DiaryUpdateActivity, itemClickListener, mSecond)
-                mAlertDialog = builder.create()
-                mAlertDialog?.show()
-            }
-            R.id.microphone -> showSpeechDialog()
         }
-    }
-
-    override fun onBackPressed() {
-        showAlertDialog(getString(R.string.back_pressed_confirm),
-                DialogInterface.OnClickListener { _, _ -> super@DiaryUpdateActivity.onBackPressed() },
-                null
-        )
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -267,11 +194,11 @@ class DiaryUpdateActivity : EditActivity() {
 
     private fun bindEvent() {
         saveContents.setOnClickListener(mOnClickListener)
-        photoView.setOnClickListener(mOnClickListener)
-        datePicker.setOnClickListener(mOnClickListener)
-        timePicker.setOnClickListener(mOnClickListener)
-        secondsPicker.setOnClickListener(mOnClickListener)
-        microphone.setOnClickListener(mOnClickListener)
+        photoView.setOnClickListener(mEditListener)
+        datePicker.setOnClickListener(mEditListener)
+        timePicker.setOnClickListener(mEditListener)
+        secondsPicker.setOnClickListener(mEditListener)
+        microphone.setOnClickListener(mEditListener)
         
         diaryTitle.setOnTouchListener { view, motionEvent ->
             mCurrentCursor = 0
@@ -330,76 +257,12 @@ class DiaryUpdateActivity : EditActivity() {
         mSecond = Integer.valueOf(DateUtils.timeMillisToDateTime(mCurrentTimeMillis, "ss"))
     }
 
-    private fun setDateTime() {
-        try {
-            val format = SimpleDateFormat("yyyyMMddHHmmss")
-            val dateTimeString = String.format(
-                    "%d%s%s%s%s%s",
-                    mYear,
-                    StringUtils.leftPad(mMonth.toString(), 2, "0"),
-                    StringUtils.leftPad(mDayOfMonth.toString(), 2, "0"),
-                    StringUtils.leftPad(mHourOfDay.toString(), 2, "0"),
-                    StringUtils.leftPad(mMinute.toString(), 2, "0"),
-                    StringUtils.leftPad(mSecond.toString(), 2, "0")
-            )
-            val parsedDate = format.parse(dateTimeString)
-            mCurrentTimeMillis = parsedDate.time
-            supportActionBar?.run { 
-                subtitle = when (allDay.isChecked) {
-                    true -> DateUtils.getFullPatternDate(mCurrentTimeMillis)
-                    false -> DateUtils.getFullPatternDateWithTimeAndSeconds(mCurrentTimeMillis, Locale.getDefault())
-                }
-            }
-        } catch (e: ParseException) {
-            e.printStackTrace()
-        }
-    }
-
     private fun applyRemoveIndex() {
         Collections.sort(mRemoveIndexes, Collections.reverseOrder())
         for (index in mRemoveIndexes) {
             mPhotoUris?.removeAt(index)
         }
         mRemoveIndexes.clear()
-    }
-
-    private fun callImagePicker() {
-        when (config.multiPickerEnable) {
-            true -> {
-                var colorPrimaryDark: TypedValue  = TypedValue()
-                var colorPrimary: TypedValue  = TypedValue()
-                theme.resolveAttribute(R.attr.colorPrimaryDark, colorPrimaryDark, true)
-                theme.resolveAttribute(R.attr.colorPrimary, colorPrimary, true)
-                PickPhotoView.Builder(this@DiaryUpdateActivity)
-                        .setPickPhotoSize(15)
-                        .setShowCamera(false)
-                        .setSpanCount(4)
-                        .setLightStatusBar(false)
-                        .setStatusBarColor(colorPrimaryDark.resourceId)
-                        .setToolbarColor(colorPrimary.resourceId)
-                        .setToolbarTextColor(R.color.white)
-                        .setSelectIconColor(colorPrimary.resourceId)
-                        .start()
-            }
-            false -> {
-                val pickImageIntent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                //                pickIntent.setType("image/*");
-                try {
-                    startActivityForResult(pickImageIntent, REQUEST_CODE_IMAGE_PICKER)
-                } catch (e: ActivityNotFoundException) {
-                    showAlertDialog(getString(R.string.gallery_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
-                }
-            }
-        }
-    }
-
-    private fun showSpeechDialog() {
-        try {
-            startActivityForResult(mRecognizerIntent, REQUEST_CODE_SPEECH_INPUT)
-        } catch (e: ActivityNotFoundException) {
-            showAlertDialog(getString(R.string.recognizer_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
-        }
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -458,16 +321,5 @@ class DiaryUpdateActivity : EditActivity() {
                 }
             }
         }
-    }
-    
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home ->
-                showAlertDialog(getString(R.string.back_pressed_confirm),
-                        DialogInterface.OnClickListener { _, _ -> super@DiaryUpdateActivity.onBackPressed() },
-                        null
-                )
-        }
-        return true
     }
 }

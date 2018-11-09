@@ -1,11 +1,7 @@
 package me.blog.korn123.easydiary.activities
 
 import android.app.Activity
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
-import android.content.ActivityNotFoundException
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
@@ -13,23 +9,20 @@ import android.os.Environment
 import android.speech.RecognizerIntent
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.ColorUtils
-import android.support.v7.app.AlertDialog
-import android.text.format.DateFormat
-import android.util.TypedValue
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.HorizontalScrollView
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.simplemobiletools.commons.helpers.BaseConfig
-import com.werb.pickphotoview.PickPhotoView
 import com.werb.pickphotoview.util.PickConfig
 import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.CommonUtils
-import io.github.aafactory.commons.utils.DateUtils
 import io.realm.RealmList
 import kotlinx.android.synthetic.main.activity_diary_insert.*
 import kotlinx.android.synthetic.main.layout_bottom_toolbar.*
@@ -39,13 +32,13 @@ import kotlinx.android.synthetic.main.layout_edit_toolbar_sub.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryWeatherItemAdapter
-import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.extensions.checkPermission
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import me.blog.korn123.easydiary.models.PhotoUriDto
 import org.apache.commons.lang3.StringUtils
-import java.text.ParseException
-import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -53,20 +46,9 @@ import java.util.*
  */
 
 class DiaryInsertActivity : EditActivity() {
-    private lateinit var mRecognizerIntent: Intent
-    private lateinit var mDatePickerDialog: DatePickerDialog
-    private lateinit var mTimePickerDialog: TimePickerDialog
-    private lateinit var mSecondsPickerDialog: AlertDialog
     private lateinit var mShowcaseView: ShowcaseView
-    private var mCurrentTimeMillis: Long = 0
     private var mCurrentCursor = 0
     private var mShowcaseIndex = 2
-    private var mYear = Integer.valueOf(DateUtils.getCurrentDateTime(DateUtils.YEAR_PATTERN))
-    private var mMonth = Integer.valueOf(DateUtils.getCurrentDateTime(DateUtils.MONTH_PATTERN))
-    private var mDayOfMonth = Integer.valueOf(DateUtils.getCurrentDateTime(DateUtils.DAY_PATTERN))
-    private var mHourOfDay = Integer.valueOf(DateUtils.getCurrentDateTime("HH"))
-    private var mMinute = Integer.valueOf(DateUtils.getCurrentDateTime("mm"))
-    private var mSecond = Integer.valueOf(DateUtils.getCurrentDateTime("ss"))
 
     private val mOnClickListener = View.OnClickListener { view ->
         val currentView = this@DiaryInsertActivity.currentFocus
@@ -75,48 +57,23 @@ class DiaryInsertActivity : EditActivity() {
             imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
 
-        when (view.id) {
-            R.id.saveContents -> if (StringUtils.isEmpty(diaryContents.text)) {
-                diaryContents.requestFocus()
-                makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
-            } else {
-                val diaryDto = DiaryDto(
-                        -1,
-                        mCurrentTimeMillis,
-                        this@DiaryInsertActivity.diaryTitle.text.toString(),
-                        this@DiaryInsertActivity.diaryContents.text.toString(),
-                        weatherSpinner.selectedItemPosition,
-                        allDay.isChecked
-                )
-                applyRemoveIndex()
-                diaryDto.photoUris = mPhotoUris
-                EasyDiaryDbHelper.insertDiary(diaryDto)
-                config.previousActivity = PREVIOUS_ACTIVITY_CREATE
-                finish()
-            }
-            R.id.photoView -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                callImagePicker()
-            } else {
-                confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
-            }
-            R.id.datePicker -> {
-                mDatePickerDialog.show()
-            }
-            R.id.timePicker -> {
-                mTimePickerDialog.show()
-            }
-            R.id.secondsPicker -> {
-                val itemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-                    val itemMap = parent.adapter.getItem(position) as HashMap<String, String>
-                    mSecond = Integer.valueOf(itemMap["value"])!!
-                    setDateTime()
-                    mSecondsPickerDialog.cancel()
-                }
-                val builder = EasyDiaryUtils.createSecondsPickerBuilder(this@DiaryInsertActivity, itemClickListener, mSecond)
-                mSecondsPickerDialog = builder.create()
-                mSecondsPickerDialog.show()
-            }
-            R.id.microphone -> showSpeechDialog()
+        if (StringUtils.isEmpty(diaryContents.text)) {
+            diaryContents.requestFocus()
+            makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
+        } else {
+            val diaryDto = DiaryDto(
+                    -1,
+                    mCurrentTimeMillis,
+                    this@DiaryInsertActivity.diaryTitle.text.toString(),
+                    this@DiaryInsertActivity.diaryContents.text.toString(),
+                    weatherSpinner.selectedItemPosition,
+                    allDay.isChecked
+            )
+            applyRemoveIndex()
+            diaryDto.photoUris = mPhotoUris
+            EasyDiaryDbHelper.insertDiary(diaryDto)
+            config.previousActivity = PREVIOUS_ACTIVITY_CREATE
+            finish()
         }
     }
     
@@ -169,13 +126,6 @@ class DiaryInsertActivity : EditActivity() {
             it.putInt(SELECTED_SECOND, mSecond)
         }
         super.onSaveInstanceState(outState)
-    }
-    
-    override fun onBackPressed() {
-        showAlertDialog(getString(R.string.back_pressed_confirm),
-                DialogInterface.OnClickListener { _, _ -> super@DiaryInsertActivity.onBackPressed() },
-                null
-        )
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -253,18 +203,6 @@ class DiaryInsertActivity : EditActivity() {
         }
     }
     
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                showAlertDialog(getString(R.string.back_pressed_confirm),
-                        DialogInterface.OnClickListener { _, _ -> super@DiaryInsertActivity.onBackPressed() },
-                        null
-                )
-            }
-        }
-        return true
-    }
-    
     override fun setVisiblePhotoProgress(isVisible: Boolean) {
         when (isVisible) {
             true -> photoProgress.visibility = View.VISIBLE
@@ -276,11 +214,6 @@ class DiaryInsertActivity : EditActivity() {
         mRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
         mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
-    }
-    
-    private fun setupDialog() {
-        mDatePickerDialog = DatePickerDialog(this, mStartDateListener, mYear, mMonth - 1, mDayOfMonth)
-        mTimePickerDialog = TimePickerDialog(this, mTimeSetListener, mHourOfDay, mMinute, DateFormat.is24HourFormat(this))
     }
 
     private fun setupShowcase() {
@@ -360,38 +293,13 @@ class DiaryInsertActivity : EditActivity() {
         if (!hasShot) window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
     }
 
-    private fun setDateTime() {
-        try {
-            val format = SimpleDateFormat("yyyyMMddHHmmss")
-            val dateTimeString = String.format(
-                    "%d%s%s%s%s%s",
-                    mYear,
-                    StringUtils.leftPad(mMonth.toString(), 2, "0"),
-                    StringUtils.leftPad(mDayOfMonth.toString(), 2, "0"),
-                    StringUtils.leftPad(mHourOfDay.toString(), 2, "0"),
-                    StringUtils.leftPad(mMinute.toString(), 2, "0"),
-                    StringUtils.leftPad(mSecond.toString(), 2, "0")
-            )
-            val parsedDate = format.parse(dateTimeString)
-            mCurrentTimeMillis = parsedDate.time
-            supportActionBar?.run {
-                subtitle = when (allDay.isChecked) {
-                    true -> DateUtils.getFullPatternDate(mCurrentTimeMillis)
-                    false -> DateUtils.getFullPatternDateWithTimeAndSeconds(mCurrentTimeMillis, Locale.getDefault())
-                }
-            }
-        } catch (e: ParseException) {
-            e.printStackTrace()
-        }
-    }
-
     private fun bindEvent() {
         saveContents.setOnClickListener(mOnClickListener)
-        photoView.setOnClickListener(mOnClickListener)
-        datePicker.setOnClickListener(mOnClickListener)
-        timePicker.setOnClickListener(mOnClickListener)
-        secondsPicker.setOnClickListener(mOnClickListener)
-        microphone.setOnClickListener(mOnClickListener)
+        photoView.setOnClickListener(mEditListener)
+        datePicker.setOnClickListener(mEditListener)
+        timePicker.setOnClickListener(mEditListener)
+        secondsPicker.setOnClickListener(mEditListener)
+        microphone.setOnClickListener(mEditListener)
 
         diaryTitle.setOnTouchListener { _, _ ->
             mCurrentCursor = 0
@@ -470,19 +378,6 @@ class DiaryInsertActivity : EditActivity() {
             }
         }
     }
-    
-    private var mStartDateListener: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-        mYear = year
-        mMonth = month + 1
-        mDayOfMonth = dayOfMonth
-        setDateTime()
-    }
-
-    private var mTimeSetListener: TimePickerDialog.OnTimeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-        mHourOfDay = hourOfDay
-        mMinute = minute
-        setDateTime()
-    }
 
     private fun applyRemoveIndex() {
         Collections.sort(mRemoveIndexes, Collections.reverseOrder())
@@ -490,43 +385,5 @@ class DiaryInsertActivity : EditActivity() {
             mPhotoUris.removeAt(index)
         }
         mRemoveIndexes.clear()
-    }
-
-    private fun callImagePicker() {
-        when (config.multiPickerEnable) {
-            true -> {
-                var colorPrimaryDark: TypedValue  = TypedValue()
-                var colorPrimary: TypedValue  = TypedValue()
-                theme.resolveAttribute(R.attr.colorPrimaryDark, colorPrimaryDark, true)
-                theme.resolveAttribute(R.attr.colorPrimary, colorPrimary, true)
-                PickPhotoView.Builder(this@DiaryInsertActivity)
-                        .setPickPhotoSize(15)
-                        .setShowCamera(false)
-                        .setSpanCount(4)
-                        .setLightStatusBar(false)
-                        .setStatusBarColor(colorPrimaryDark.resourceId)
-                        .setToolbarColor(colorPrimary.resourceId)
-                        .setToolbarTextColor(R.color.white)
-                        .setSelectIconColor(colorPrimary.resourceId)
-                        .start()
-            }
-            false -> {
-                val pickImageIntent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                //                pickIntent.setType("image/*");
-                try {
-                    startActivityForResult(pickImageIntent, REQUEST_CODE_IMAGE_PICKER)
-                } catch (e: ActivityNotFoundException) {
-                    showAlertDialog(getString(R.string.gallery_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
-                }
-            }
-        }
-    }
-
-    private fun showSpeechDialog() {
-        try {
-            startActivityForResult(mRecognizerIntent, REQUEST_CODE_SPEECH_INPUT)
-        } catch (e: ActivityNotFoundException) {
-            showAlertDialog(getString(R.string.recognizer_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
-        }
     }
 }
