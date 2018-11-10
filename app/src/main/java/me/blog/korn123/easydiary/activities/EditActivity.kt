@@ -51,7 +51,6 @@ abstract class EditActivity : EasyDiaryActivity() {
     protected lateinit var mDatePickerDialog: DatePickerDialog
     protected lateinit var mTimePickerDialog: TimePickerDialog
     protected lateinit var mSecondsPickerDialog: AlertDialog
-    protected var mPrimaryColor = 0
     protected val mRemoveIndexes = ArrayList<Int>()
     protected var mCurrentTimeMillis: Long = 0
     protected var mYear = Integer.valueOf(DateUtils.getCurrentDateTime(DateUtils.YEAR_PATTERN))
@@ -124,9 +123,8 @@ abstract class EditActivity : EasyDiaryActivity() {
 
     protected fun initBottomContainer() {
         // set bottom thumbnail container
-        mPrimaryColor = BaseConfig(this).primaryColor
         val drawable = photoView.background as GradientDrawable
-        drawable.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, THUMBNAIL_BACKGROUND_ALPHA))
+        drawable.setColor(ColorUtils.setAlphaComponent(config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA))
     }
 
     protected fun setupRecognizer() {
@@ -228,7 +226,7 @@ abstract class EditActivity : EasyDiaryActivity() {
                     imageView.layoutParams = layoutParams
                     val drawable = ContextCompat.getDrawable(this, R.drawable.bg_card_thumbnail)
                     val gradient = drawable as GradientDrawable
-                    gradient.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, THUMBNAIL_BACKGROUND_ALPHA))
+                    gradient.setColor(ColorUtils.setAlphaComponent(config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA))
                     imageView.background = gradient
                     imageView.setImageBitmap(bitmap)
                     imageView.scaleType = ImageView.ScaleType.CENTER

@@ -164,7 +164,7 @@ class DiaryUpdateActivity : EditActivity() {
                 imageView.layoutParams = layoutParams
                 val drawable = resources.getDrawable(R.drawable.bg_card_thumbnail)
                 val gradient = drawable as GradientDrawable
-                gradient.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, THUMBNAIL_BACKGROUND_ALPHA))
+                gradient.setColor(ColorUtils.setAlphaComponent(config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA))
                 imageView.background = gradient
                 imageView.setImageBitmap(bitmap)
                 imageView.scaleType = ImageView.ScaleType.CENTER
@@ -285,7 +285,7 @@ class DiaryUpdateActivity : EditActivity() {
                     imageView.layoutParams = layoutParams
                     val drawable = resources.getDrawable(R.drawable.bg_card_thumbnail)
                     val gradient = drawable as GradientDrawable
-                    gradient.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, THUMBNAIL_BACKGROUND_ALPHA))
+                    gradient.setColor(ColorUtils.setAlphaComponent(config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA))
                     imageView.background = gradient
                     imageView.setImageBitmap(bitmap)
                     imageView.scaleType = ImageView.ScaleType.CENTER
