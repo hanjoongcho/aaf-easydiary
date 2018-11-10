@@ -84,8 +84,8 @@ class DiaryInsertActivity : EditActivity() {
         mCustomLineSpacing = false
         
         setupRecognizer()
-        setupDialog()
         setupShowcase()
+        setupDialog()
         
         setupSpinner()
         setupKeypad()

@@ -83,10 +83,9 @@ class DiaryUpdateActivity : EditActivity() {
         mCustomLineSpacing = false
 
         setupRecognizer()
+        initData()
         initDateTime()
         setupDialog()
-        
-        initData()
         
         initBottomToolbar()
         setDateTime()
