@@ -48,38 +48,8 @@ class DiaryUpdateActivity : EditActivity() {
     private var mWeather: Int = 0
     private var mCurrentCursor = 1
 
-    public override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_diary_update)
-        setSupportActionBar(toolbar)
-        supportActionBar?.run {
-            title = getString(R.string.update_diary_title)
-            setDisplayHomeAsUpEnabled(true)
-        }
-        mCustomLineSpacing = false
-        
-        mRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
-            putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-            putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
-        }
-        
-        bindEvent()
-        initBottomContainer()
-        initData()
-        initBottomToolbar()
-        initDateTime()
-        setupDialog()
-        setDateTime()
-    }
-
     private val mOnClickListener = View.OnClickListener { view ->
-        // Check if no view has focus:
-        val currentView = this.currentFocus
-        if (currentView != null) {
-            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(view.windowToken, 0)
-        }
-        //        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        hideSoftInputFromWindow()
 
         when (view.id) {
             R.id.saveContents -> if (StringUtils.isEmpty(diaryContents.text)) {
@@ -100,6 +70,27 @@ class DiaryUpdateActivity : EditActivity() {
                 finish()
             }
         }
+    }
+    
+    public override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_diary_update)
+        setSupportActionBar(toolbar)
+        supportActionBar?.run {
+            title = getString(R.string.update_diary_title)
+            setDisplayHomeAsUpEnabled(true)
+        }
+        mCustomLineSpacing = false
+
+        setupRecognizer()
+        initDateTime()
+        setupDialog()
+        
+        initData()
+        
+        initBottomToolbar()
+        setDateTime()
+        bindEvent()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -134,12 +125,7 @@ class DiaryUpdateActivity : EditActivity() {
         }
     }
     
-    private fun initBottomContainer() {
-        // set bottom thumbnail container
-        mPrimaryColor = BaseConfig(this@DiaryUpdateActivity).primaryColor
-        val drawable = photoView.background as GradientDrawable
-        drawable.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, THUMBNAIL_BACKGROUND_ALPHA))
-    }
+    
     
     private fun initSpinner() {
         val weatherArr = resources.getStringArray(R.array.weather_item_array)

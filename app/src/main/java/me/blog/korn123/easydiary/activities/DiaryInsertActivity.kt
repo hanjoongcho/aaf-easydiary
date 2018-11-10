@@ -51,11 +51,7 @@ class DiaryInsertActivity : EditActivity() {
     private var mShowcaseIndex = 2
 
     private val mOnClickListener = View.OnClickListener { view ->
-        val currentView = this@DiaryInsertActivity.currentFocus
-        if (currentView != null) {
-            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(view.windowToken, 0)
-        }
+        hideSoftInputFromWindow()
 
         if (StringUtils.isEmpty(diaryContents.text)) {
             diaryContents.requestFocus()
@@ -90,9 +86,11 @@ class DiaryInsertActivity : EditActivity() {
         setupRecognizer()
         setupDialog()
         setupShowcase()
+        
         setupSpinner()
         setupKeypad()
         restoreContents(savedInstanceState)
+        
         initBottomToolbar()
         setDateTime()
         bindEvent()
@@ -100,11 +98,7 @@ class DiaryInsertActivity : EditActivity() {
 
     override fun onResume() {
         super.onResume()
-
-        // set bottom thumbnail container
-        mPrimaryColor = BaseConfig(this@DiaryInsertActivity).primaryColor
-        val drawable = photoView.background as GradientDrawable
-        drawable.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, THUMBNAIL_BACKGROUND_ALPHA))
+        initBottomContainer()
         
         val thumbnailSize = config.settingThumbnailSize
         val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(applicationContext, thumbnailSize), CommonUtils.dpToPixel(applicationContext, thumbnailSize))
@@ -210,12 +204,6 @@ class DiaryInsertActivity : EditActivity() {
         }
     }
     
-    private fun setupRecognizer() {
-        mRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-        mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-        mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
-    }
-
     private fun setupShowcase() {
         val margin = ((resources.displayMetrics.density * 12) as Number).toInt()
 

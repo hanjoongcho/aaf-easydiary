@@ -9,6 +9,7 @@ import android.content.Intent
 import android.graphics.drawable.GradientDrawable
 import android.os.Environment
 import android.provider.MediaStore
+import android.speech.RecognizerIntent
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.ColorUtils
 import android.support.v7.app.AlertDialog
@@ -21,6 +22,7 @@ import android.widget.AdapterView
 import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.LinearLayout
+import com.simplemobiletools.commons.helpers.BaseConfig
 import com.werb.pickphotoview.PickPhotoView
 import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.CommonUtils
@@ -60,11 +62,7 @@ abstract class EditActivity : EasyDiaryActivity() {
     protected var mSecond = Integer.valueOf(DateUtils.getCurrentDateTime("ss"))
     
     internal val mEditListener = View.OnClickListener { view ->
-        val currentView = this.currentFocus
-        if (currentView != null) {
-            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(view.windowToken, 0)
-        }
+        hideSoftInputFromWindow()
 
         when (view.id) {
             R.id.photoView -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
@@ -122,6 +120,21 @@ abstract class EditActivity : EasyDiaryActivity() {
                 DialogInterface.OnClickListener { _, _ -> super.onBackPressed() },
                 null
         )
+    }
+    
+    protected fun setupRecognizer() {
+        mRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+        }
+    }
+    
+    protected fun hideSoftInputFromWindow() {
+        val currentView = this.currentFocus
+        if (currentView != null) {
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(currentView.windowToken, 0)
+        }
     }
 
     protected fun setupDialog() {
