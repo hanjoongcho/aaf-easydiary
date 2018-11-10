@@ -125,8 +125,6 @@ class DiaryUpdateActivity : EditActivity() {
         }
     }
     
-    
-    
     private fun initSpinner() {
         val weatherArr = resources.getStringArray(R.array.weather_item_array)
         val arrayAdapter = DiaryWeatherItemAdapter(this@DiaryUpdateActivity, R.layout.item_weather, Arrays.asList(*weatherArr))

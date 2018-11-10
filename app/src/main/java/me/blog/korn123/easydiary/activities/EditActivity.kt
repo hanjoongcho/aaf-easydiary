@@ -121,7 +121,14 @@ abstract class EditActivity : EasyDiaryActivity() {
                 null
         )
     }
-    
+
+    protected fun initBottomContainer() {
+        // set bottom thumbnail container
+        mPrimaryColor = BaseConfig(this).primaryColor
+        val drawable = photoView.background as GradientDrawable
+        drawable.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, THUMBNAIL_BACKGROUND_ALPHA))
+    }
+
     protected fun setupRecognizer() {
         mRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
             putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
