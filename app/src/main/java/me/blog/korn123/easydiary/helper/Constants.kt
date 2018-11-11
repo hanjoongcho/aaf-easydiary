@@ -16,6 +16,7 @@ const val SETTING_FONT_SIZE = "font_size"
 const val SETTING_FONT_NAME = "font_setting" 
 const val SETTING_THUMBNAIL_SIZE = "thumbnail_size" 
 const val SETTING_BOLD_STYLE = "setting_bold_style" 
+const val SETTING_MULTIPLE_PICKER = "setting_multiple_picker" 
 const val CUSTOM_FONTS_SUPPORT_LANGUAGE = "en|ko" // custom fonts supported language
 const val CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT = "NanumPen.ttf"
 const val CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT = "Default"
@@ -78,6 +79,7 @@ const val APP_LOCK_DEFAULT_PASSWORD = "0000"
 
 const val DIARY_SEQUENCE = "diary_sequence"
 const val DIARY_SEARCH_QUERY = "diary_search_query"
+const val DIARY_ATTACH_PHOTO_INDEX = "diary_attach_photo_index"
 const val POSTCARD_SEQUENCE = "postcard_sequence"
 
 const val OPEN_URL_INFO = "open_url_info"

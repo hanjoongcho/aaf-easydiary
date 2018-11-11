@@ -33,7 +33,11 @@ android {
             }
         }
     }
-
+    
+    androidExtensions {
+        experimental = true
+    }
+    
     packagingOptions {
         exclude 'META-INF/commons_release.kotlin_module'
         exclude 'META-INF/rxjava.properties'
@@ -71,7 +75,7 @@ dependencies {
 
     implementation 'com.simplemobiletools:commons:3.17.19'
 //    implementation project(":commons")
-    implementation 'io.github.aafactory:commons:0.9.2'
+    implementation 'io.github.aafactory:commons:0.9.3'
 //    implementation project(":aafactory-commons")
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.1'
     implementation group: 'com.roomorama', name: 'caldroid', version: '3.0.1'
@@ -80,7 +84,8 @@ dependencies {
     implementation 'com.github.amlcurran.showcaseview:library:5.4.3'
     implementation 'id.zelory:compressor:2.1.0'
     implementation 'com.xw.repo:bubbleseekbar:3.17'
-    implementation 'com.github.bumptech.glide:glide:4.6.1'
+    implementation 'com.github.bumptech.glide:glide:4.5.0'
+    implementation 'com.werb.pickphotoview:pickphotoview:0.4.6'
 
     // debug, release
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$LEAK_CANARY_VERSION"

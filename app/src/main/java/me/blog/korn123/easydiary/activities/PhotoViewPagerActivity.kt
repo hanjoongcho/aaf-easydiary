@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.activities
 
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
 import android.view.Gravity
@@ -13,6 +14,7 @@ import kotlinx.android.synthetic.main.activity_photo_view_pager.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.helper.DIARY_ATTACH_PHOTO_INDEX
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.DiaryDto
@@ -30,6 +32,7 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
 
         val intent = intent
         val sequence = intent.getIntExtra(DIARY_SEQUENCE, 0)
+        val photoIndex = intent.getIntExtra(DIARY_ATTACH_PHOTO_INDEX, 0)
         val diaryDto = EasyDiaryDbHelper.readDiaryBy(sequence)
         mPhotoCount = diaryDto.photoUris?.size ?: 0
         pageInfo.text = "1 / $mPhotoCount"
@@ -51,6 +54,7 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
 //            close.setImageDrawable(closeIcon)   
 //        }
 
+        if (photoIndex > 0) Handler().post{ view_pager.setCurrentItem(photoIndex, false) }
         close.setOnClickListener { finish() }
     }
 

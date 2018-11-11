@@ -191,6 +191,10 @@
         Improving the time expression of diary writing\n
         Boldface setting function added to diary title and timeline time information
     </string>
+    <string name="release_119">
+        v1.4.56 / 2018.11.12\n
+        Added multi-picker setting function to attach multiple pictures at one time
+    </string>
     
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -217,4 +221,6 @@
     <string name="all_day">All day</string>
     <string name="bold_style_option_title">Boldface configuration</string>
     <string name="bold_style_option_summary">Set the diary title and timeline time to be displayed in bold.</string>
+    <string name="multi_picker_option_title">Multi picker setting</string>
+    <string name="multi_picker_option_summary">When attaching a diary photo, I use the multi-picker provided in the diary without using the gallery app. When Multi-picker is enabled, you can attach multiple pictures at once.</string>
 </resources>

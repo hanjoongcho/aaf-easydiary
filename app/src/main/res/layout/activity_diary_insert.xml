@@ -20,9 +20,21 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
+            
             <include layout="@layout/layout_edit_toolbar_sub" />
         </android.support.design.widget.AppBarLayout>
-
-        <include layout="@layout/layout_edit_contents" />
+        
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <include layout="@layout/layout_edit_contents" />   
+            
+            <ProgressBar
+                android:id="@+id/photoProgress"
+                android:visibility="gone"
+                android:layout_gravity="center"
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
+        </FrameLayout>
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

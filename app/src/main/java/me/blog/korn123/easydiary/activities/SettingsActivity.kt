@@ -98,6 +98,10 @@ class SettingsActivity : EasyDiaryActivity() {
                 boldStyleOptionSwitcher.toggle()
                 config.boldStyleEnable = boldStyleOptionSwitcher.isChecked
             }
+            R.id.multiPickerOption -> {
+                multiPickerOptionSwitcher.toggle()
+                config.multiPickerEnable = multiPickerOptionSwitcher.isChecked
+            }
         }
     }
     
@@ -130,6 +134,7 @@ class SettingsActivity : EasyDiaryActivity() {
         restorePhotoSetting.setOnClickListener(mOnClickListener)
         releaseNotes.setOnClickListener(mOnClickListener)
         boldStyleOption.setOnClickListener(mOnClickListener)
+        multiPickerOption.setOnClickListener(mOnClickListener)
         
         fontLineSpacing.configBuilder
                 .min(0.2F)
@@ -341,6 +346,7 @@ class SettingsActivity : EasyDiaryActivity() {
         lockNumberSettingSummary.text = "${getString(R.string.lock_number)} ${config.aafPinLockSavedPassword}"
         rateAppSettingSummary.text = String.format("Easy Diary v %s", BuildConfig.VERSION_NAME)
         boldStyleOptionSwitcher.isChecked = config.boldStyleEnable
+        multiPickerOptionSwitcher.isChecked = config.multiPickerEnable
     }
 
     private fun getStoreUrl() = "https://play.google.com/store/apps/details?id=$packageName"

@@ -191,6 +191,10 @@
         日記の時間表現を改善する\n
         日記のタイトルとタイムラインの時刻情報に太字の設定機能を追加
     </string>
+    <string name="release_119">
+        v1.4.56 / 2018.11.12\n
+        一度に複数の画像を添付するマルチピッカー設定機能を追加
+    </string>
     
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -217,4 +221,6 @@
     <string name="all_day">一日中</string>
     <string name="bold_style_option_title">太字の設定</string>
     <string name="bold_style_option_summary">日記のタイトルとタイムラインの時間を太字で表示するように設定します。</string>
+    <string name="multi_picker_option_title">マルチピッカー設定</string>
+    <string name="multi_picker_option_summary">日記の写真を付けるときは、ギャラリーアプリを使わずに「簡単日記」に用意されているマルチピッカーを使います。 マルチピッカーを有効にすると、一度に複数の画像を添付できます。</string>
 </resources>
