@@ -378,11 +378,6 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 bottomTitle.text = String.format(getString(R.string.attached_photo_count), photoCount)
                 bottomToolbar.visibility = View.VISIBLE
                 photoContainerScrollView.visibility = View.VISIBLE
-                val onClickListener = View.OnClickListener {
-                    val photoViewPager = Intent(context, PhotoViewPagerActivity::class.java)
-                    photoViewPager.putExtra(DIARY_SEQUENCE, getSequence())
-                    startActivity(photoViewPager)
-                }
 
                 if (photoContainer.childCount > 0) photoContainer.removeAllViews()
                 context?.let { appContext ->
@@ -403,7 +398,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                         imageView.setImageBitmap(bitmap)
                         imageView.scaleType = ImageView.ScaleType.CENTER
                         photoContainer.addView(imageView)
-                        imageView.setOnClickListener(onClickListener)
+                        imageView.setOnClickListener(PhotoClickListener(getSequence(), index))
                     }
                 }
             } else {
@@ -442,6 +437,15 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 args.putString(DIARY_SEARCH_QUERY, query)
                 fragment.arguments = args
                 return fragment
+            }
+        }
+
+        inner class PhotoClickListener(var diarySequence: Int, var index: Int) : View.OnClickListener {
+            override fun onClick(v: View) {
+                val photoViewPager = Intent(context, PhotoViewPagerActivity::class.java)
+                photoViewPager.putExtra(DIARY_SEQUENCE, diarySequence)
+                photoViewPager.putExtra(DIARY_ATTACH_PHOTO_INDEX, index)
+                startActivity(photoViewPager)
             }
         }
     }
