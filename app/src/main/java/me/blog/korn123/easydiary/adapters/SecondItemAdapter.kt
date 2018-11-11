@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.config
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -37,13 +38,13 @@ class SecondItemAdapter(
         holder.textView?.text = list[position]["label"]
         if (position == mSecond) {
             holder.textView?.run {
-                setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
+                setTextColor(context.config.primaryColor)
                 setTypeface(typeface, Typeface.BOLD)
             }
         } else {
             holder.textView?.run {
                 setTextColor(ContextCompat.getColor(context, R.color.default_text_color))
-                setTypeface(typeface, Typeface.NORMAL)
+                setTypeface(null, Typeface.NORMAL)
             }
         }
         return row
