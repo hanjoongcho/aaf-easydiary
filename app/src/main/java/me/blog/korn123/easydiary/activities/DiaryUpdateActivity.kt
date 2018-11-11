@@ -83,11 +83,10 @@ class DiaryUpdateActivity : EditActivity() {
         mCustomLineSpacing = false
 
         setupRecognizer()
+        setupSpinner()
         initData()
         initDateTime()
         setupDialog()
-        setupSpinner()
-        initSpinner()
         setupPhotoView()
         initBottomToolbar()
         setDateTime()
@@ -246,23 +245,6 @@ class DiaryUpdateActivity : EditActivity() {
             toggleTimePickerTool()
         }
     }
-    
-    private fun toggleTimePickerTool() {
-        when (allDay.isChecked) {
-            true -> {
-                timePicker.visibility = View.GONE
-                secondsPicker.visibility = View.GONE
-                mHourOfDay = 0
-                mMinute = 0
-                mSecond = 0
-            }
-            false -> {
-                timePicker.visibility = View.VISIBLE
-                secondsPicker.visibility = View.VISIBLE
-            }
-        }
-        setDateTime()
-    }
 
     private fun initDateTime() {
         mYear = Integer.valueOf(DateUtils.timeMillisToDateTime(mCurrentTimeMillis, DateUtils.YEAR_PATTERN))
@@ -271,13 +253,5 @@ class DiaryUpdateActivity : EditActivity() {
         mHourOfDay = Integer.valueOf(DateUtils.timeMillisToDateTime(mCurrentTimeMillis, "HH"))
         mMinute = Integer.valueOf(DateUtils.timeMillisToDateTime(mCurrentTimeMillis, "mm"))
         mSecond = Integer.valueOf(DateUtils.timeMillisToDateTime(mCurrentTimeMillis, "ss"))
-    }
-
-    private fun applyRemoveIndex() {
-        Collections.sort(mRemoveIndexes, Collections.reverseOrder())
-        for (index in mRemoveIndexes) {
-            mPhotoUris?.removeAt(index)
-        }
-        mRemoveIndexes.clear()
     }
 }

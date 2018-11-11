@@ -133,6 +133,31 @@ abstract class EditActivity : EasyDiaryActivity() {
         }
     }
 
+    protected fun applyRemoveIndex() {
+        Collections.sort(mRemoveIndexes, Collections.reverseOrder())
+        for (index in mRemoveIndexes) {
+            mPhotoUris.removeAt(index)
+        }
+        mRemoveIndexes.clear()
+    }
+    
+    protected fun toggleTimePickerTool() {
+        when (allDay.isChecked) {
+            true -> {
+                timePicker.visibility = View.GONE
+                secondsPicker.visibility = View.GONE
+                mHourOfDay = 0
+                mMinute = 0
+                mSecond = 0
+            }
+            false -> {
+                timePicker.visibility = View.VISIBLE
+                secondsPicker.visibility = View.VISIBLE
+            }
+        }
+        setDateTime()
+    }
+    
     protected fun setupPhotoView() {
         val thumbnailSize = config.settingThumbnailSize
         val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(applicationContext, thumbnailSize), CommonUtils.dpToPixel(applicationContext, thumbnailSize))

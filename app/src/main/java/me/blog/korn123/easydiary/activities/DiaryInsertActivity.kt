@@ -84,9 +84,9 @@ class DiaryInsertActivity : EditActivity() {
         mCustomLineSpacing = false
         
         setupRecognizer()
+        setupSpinner()
         setupShowcase()
         setupDialog()
-        setupSpinner()
         setupPhotoView()
         initBottomToolbar()
         setDateTime()
@@ -290,23 +290,6 @@ class DiaryInsertActivity : EditActivity() {
             toggleTimePickerTool()
         }
     }
-
-    private fun toggleTimePickerTool() {
-        when (allDay.isChecked) {
-            true -> {
-                timePicker.visibility = View.GONE
-                secondsPicker.visibility = View.GONE
-                mHourOfDay = 0
-                mMinute = 0
-                mSecond = 0
-            }
-            false -> {
-                timePicker.visibility = View.VISIBLE
-                secondsPicker.visibility = View.VISIBLE
-            }
-        }
-        setDateTime()
-    }
     
     private fun restoreContents(savedInstanceState: Bundle?) {
         mPhotoUris = RealmList()
@@ -338,13 +321,5 @@ class DiaryInsertActivity : EditActivity() {
                 photoContainer.addView(imageView, photoContainer.childCount - 1)
             }
         }
-    }
-
-    private fun applyRemoveIndex() {
-        Collections.sort(mRemoveIndexes, Collections.reverseOrder())
-        for (index in mRemoveIndexes) {
-            mPhotoUris.removeAt(index)
-        }
-        mRemoveIndexes.clear()
     }
 }
