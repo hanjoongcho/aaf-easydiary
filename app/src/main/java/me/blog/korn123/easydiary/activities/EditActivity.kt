@@ -29,14 +29,13 @@ import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import io.realm.RealmList
 import kotlinx.android.synthetic.main.layout_bottom_toolbar.*
+import kotlinx.android.synthetic.main.layout_edit_contents.*
 import kotlinx.android.synthetic.main.layout_edit_photo_container.*
 import kotlinx.android.synthetic.main.layout_edit_toolbar_sub.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.extensions.checkPermission
-import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.confirmPermission
-import me.blog.korn123.easydiary.extensions.showAlertDialog
+import me.blog.korn123.easydiary.adapters.DiaryWeatherItemAdapter
+import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.PhotoUriDto
 import org.apache.commons.lang3.StringUtils
@@ -121,6 +120,31 @@ abstract class EditActivity : EasyDiaryActivity() {
         )
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            REQUEST_CODE_EXTERNAL_STORAGE -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                callImagePicker()
+            } else {
+                makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3))
+            }
+            else -> {
+            }
+        }
+    }
+
+    protected fun setupPhotoView() {
+        val thumbnailSize = config.settingThumbnailSize
+        val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(applicationContext, thumbnailSize), CommonUtils.dpToPixel(applicationContext, thumbnailSize))
+        photoView.layoutParams = layoutParams
+    }
+
+    protected fun setupSpinner() {
+        val weatherArr = resources.getStringArray(R.array.weather_item_array)
+        val arrayAdapter = DiaryWeatherItemAdapter(this, R.layout.item_weather, Arrays.asList(*weatherArr))
+        weatherSpinner.adapter = arrayAdapter
+    }
+    
     protected fun initBottomContainer() {
         // set bottom thumbnail container
         val drawable = photoView.background as GradientDrawable

@@ -86,35 +86,71 @@ class DiaryUpdateActivity : EditActivity() {
         initData()
         initDateTime()
         setupDialog()
-        
+        setupSpinner()
+        initSpinner()
+        setupPhotoView()
         initBottomToolbar()
         setDateTime()
         bindEvent()
+        initBottomContainer()
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        config.aafPinLockPauseMillis = System.currentTimeMillis()
         when (requestCode) {
-            REQUEST_CODE_EXTERNAL_STORAGE -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                // 권한이 있는경우
-                callImagePicker()
-            } else {
-                // 권한이 없는경우
-                makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3))
+            REQUEST_CODE_SPEECH_INPUT -> if (resultCode == Activity.RESULT_OK && data != null) {
+                val result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                if (mCurrentCursor == 0) { // edit title
+                    val title = diaryTitle.text.toString()
+                    val sb = StringBuilder(title)
+                    sb.insert(diaryTitle.selectionStart, result[0])
+                    val cursorPosition = diaryTitle.selectionStart + result[0].length
+                    diaryTitle.setText(sb.toString())
+                    diaryTitle.setSelection(cursorPosition)
+                } else {                   // edit contents
+                    val contents = diaryContents.text.toString()
+                    val sb = StringBuilder(contents)
+                    sb.insert(diaryContents.selectionStart, result[0])
+                    val cursorPosition = diaryContents.selectionStart + result[0].length
+                    diaryContents.setText(sb.toString())
+                    diaryContents.setSelection(cursorPosition)
+                }
             }
-            else -> {
+            REQUEST_CODE_IMAGE_PICKER -> try {
+                if (resultCode == Activity.RESULT_OK && data != null) {
+                    if (mPhotoUris == null) mPhotoUris = RealmList()
+                    val photoPath = Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
+                    CommonUtils.uriToFile(this, data.data, photoPath)
+                    mPhotoUris?.add(PhotoUriDto(FILE_URI_PREFIX + photoPath))
+                    val thumbnailSize = config.settingThumbnailSize
+                    val bitmap = BitmapUtils.decodeFile(photoPath, CommonUtils.dpToPixel(this, thumbnailSize - 5), CommonUtils.dpToPixel(this, thumbnailSize - 5))
+                    val imageView = ImageView(this)
+                    val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(this, thumbnailSize), CommonUtils.dpToPixel(this, thumbnailSize))
+                    layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(this, 3F), 0)
+                    imageView.layoutParams = layoutParams
+                    val drawable = resources.getDrawable(R.drawable.bg_card_thumbnail)
+                    val gradient = drawable as GradientDrawable
+                    gradient.setColor(ColorUtils.setAlphaComponent(config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA))
+                    imageView.background = gradient
+                    imageView.setImageBitmap(bitmap)
+                    imageView.scaleType = ImageView.ScaleType.CENTER
+                    val currentIndex = (mPhotoUris?.size ?: 0) - 1
+                    imageView.setOnClickListener(PhotoClickListener(currentIndex))
+                    photoContainer.addView(imageView, photoContainer.childCount - 1)
+                    initBottomToolbar()
+                    photoContainer.postDelayed({ (photoContainer.parent as HorizontalScrollView).fullScroll(HorizontalScrollView.FOCUS_RIGHT) }, 100L)
+                }
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+            PickConfig.PICK_PHOTO_DATA -> {
+                data?.let {
+                    val selectPaths = it.getSerializableExtra(PickConfig.INTENT_IMG_LIST_SELECT) as ArrayList<String>
+                    attachPhotos(selectPaths)
+                }
             }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        initBottomContainer()
-        initSpinner()
-
-        val thumbnailSize = config.settingThumbnailSize
-        val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(applicationContext, thumbnailSize), CommonUtils.dpToPixel(applicationContext, thumbnailSize))
-        photoView.layoutParams = layoutParams
     }
 
     override fun setVisiblePhotoProgress(isVisible: Boolean) {
@@ -125,9 +161,6 @@ class DiaryUpdateActivity : EditActivity() {
     }
     
     private fun initSpinner() {
-        val weatherArr = resources.getStringArray(R.array.weather_item_array)
-        val arrayAdapter = DiaryWeatherItemAdapter(this@DiaryUpdateActivity, R.layout.item_weather, Arrays.asList(*weatherArr))
-        weatherSpinner.adapter = arrayAdapter
         weatherSpinner.setSelection(mWeather)
     }
 
@@ -246,63 +279,5 @@ class DiaryUpdateActivity : EditActivity() {
             mPhotoUris?.removeAt(index)
         }
         mRemoveIndexes.clear()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        config.aafPinLockPauseMillis = System.currentTimeMillis()
-        when (requestCode) {
-            REQUEST_CODE_SPEECH_INPUT -> if (resultCode == Activity.RESULT_OK && data != null) {
-                val result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-                if (mCurrentCursor == 0) { // edit title
-                    val title = diaryTitle.text.toString()
-                    val sb = StringBuilder(title)
-                    sb.insert(diaryTitle.selectionStart, result[0])
-                    val cursorPosition = diaryTitle.selectionStart + result[0].length
-                    diaryTitle.setText(sb.toString())
-                    diaryTitle.setSelection(cursorPosition)
-                } else {                   // edit contents
-                    val contents = diaryContents.text.toString()
-                    val sb = StringBuilder(contents)
-                    sb.insert(diaryContents.selectionStart, result[0])
-                    val cursorPosition = diaryContents.selectionStart + result[0].length
-                    diaryContents.setText(sb.toString())
-                    diaryContents.setSelection(cursorPosition)
-                }
-            }
-            REQUEST_CODE_IMAGE_PICKER -> try {
-                if (resultCode == Activity.RESULT_OK && data != null) {
-                    if (mPhotoUris == null) mPhotoUris = RealmList()
-                    val photoPath = Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
-                    CommonUtils.uriToFile(this, data.data, photoPath)
-                    mPhotoUris?.add(PhotoUriDto(FILE_URI_PREFIX + photoPath))
-                    val thumbnailSize = config.settingThumbnailSize
-                    val bitmap = BitmapUtils.decodeFile(photoPath, CommonUtils.dpToPixel(this, thumbnailSize - 5), CommonUtils.dpToPixel(this, thumbnailSize - 5))
-                    val imageView = ImageView(this)
-                    val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(this, thumbnailSize), CommonUtils.dpToPixel(this, thumbnailSize))
-                    layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(this, 3F), 0)
-                    imageView.layoutParams = layoutParams
-                    val drawable = resources.getDrawable(R.drawable.bg_card_thumbnail)
-                    val gradient = drawable as GradientDrawable
-                    gradient.setColor(ColorUtils.setAlphaComponent(config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA))
-                    imageView.background = gradient
-                    imageView.setImageBitmap(bitmap)
-                    imageView.scaleType = ImageView.ScaleType.CENTER
-                    val currentIndex = (mPhotoUris?.size ?: 0) - 1
-                    imageView.setOnClickListener(PhotoClickListener(currentIndex))
-                    photoContainer.addView(imageView, photoContainer.childCount - 1)
-                    initBottomToolbar()
-                    photoContainer.postDelayed({ (photoContainer.parent as HorizontalScrollView).fullScroll(HorizontalScrollView.FOCUS_RIGHT) }, 100L)
-                }
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-            PickConfig.PICK_PHOTO_DATA -> {
-                data?.let {
-                    val selectPaths = it.getSerializableExtra(PickConfig.INTENT_IMG_LIST_SELECT) as ArrayList<String>
-                    attachPhotos(selectPaths)
-                }
-            }
-        }
     }
 }

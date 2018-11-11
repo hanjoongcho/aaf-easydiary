@@ -86,23 +86,15 @@ class DiaryInsertActivity : EditActivity() {
         setupRecognizer()
         setupShowcase()
         setupDialog()
-        
         setupSpinner()
-        setupKeypad()
-        restoreContents(savedInstanceState)
-        
+        setupPhotoView()
         initBottomToolbar()
         setDateTime()
         bindEvent()
-    }
-
-    override fun onResume() {
-        super.onResume()
         initBottomContainer()
         
-        val thumbnailSize = config.settingThumbnailSize
-        val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(applicationContext, thumbnailSize), CommonUtils.dpToPixel(applicationContext, thumbnailSize))
-        photoView.layoutParams = layoutParams
+        setupKeypad()
+        restoreContents(savedInstanceState)
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -120,19 +112,6 @@ class DiaryInsertActivity : EditActivity() {
             it.putInt(SELECTED_SECOND, mSecond)
         }
         super.onSaveInstanceState(outState)
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            REQUEST_CODE_EXTERNAL_STORAGE -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                callImagePicker()
-            } else {
-                makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3))
-            }
-            else -> {
-            }
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -268,12 +247,6 @@ class DiaryInsertActivity : EditActivity() {
                 .build()
         mShowcaseView.setButtonText(getString(R.string.create_diary_showcase_button_1))
         mShowcaseView.setButtonPosition(centerParams)
-    }
-
-    private fun setupSpinner() {
-        val weatherArr = resources.getStringArray(R.array.weather_item_array)
-        val arrayAdapter = DiaryWeatherItemAdapter(this@DiaryInsertActivity, R.layout.item_weather, Arrays.asList(*weatherArr))
-        weatherSpinner.adapter = arrayAdapter
     }
 
     private fun setupKeypad() {
