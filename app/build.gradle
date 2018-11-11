@@ -75,7 +75,7 @@ dependencies {
 
     implementation 'com.simplemobiletools:commons:3.17.19'
 //    implementation project(":commons")
-    implementation 'io.github.aafactory:commons:0.9.2'
+    implementation 'io.github.aafactory:commons:0.9.3'
 //    implementation project(":aafactory-commons")
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.1'
     implementation group: 'com.roomorama', name: 'caldroid', version: '3.0.1'
