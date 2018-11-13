@@ -242,7 +242,22 @@
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
+                </LinearLayout>
 
+                <io.github.aafactory.commons.views.LabelLayout
+                    android:background="?attr/colorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:text="@string/preferences_category_backup_restore"
+                        style="@style/SettingsCategory" />
+                </io.github.aafactory.commons.views.LabelLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:padding="@dimen/card_layout_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
                     <android.support.v7.widget.CardView
                         android:id="@+id/backupSetting"
                         style="@style/AppCard.Settings">
@@ -256,7 +271,7 @@
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
-
+    
                     <android.support.v7.widget.CardView
                         android:id="@+id/restoreSetting"
                         style="@style/AppCard.Settings">
@@ -272,6 +287,20 @@
                     </android.support.v7.widget.CardView>
 
                     <android.support.v7.widget.CardView
+                        android:id="@+id/backupAttachPhoto"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="@string/backup_attach_photo_title"
+                                style="@style/SettingsTitle" />
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="@string/backup_attach_photo_summary"
+                                style="@style/SettingsSummary" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+                    
+                    <android.support.v7.widget.CardView
                         android:id="@+id/restorePhotoSetting"
                         style="@style/AppCard.Settings">
                         <LinearLayout
@@ -284,8 +313,8 @@
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
-                </LinearLayout>
-
+                </LinearLayout>   
+                
                 <io.github.aafactory.commons.views.LabelLayout
                     android:background="?attr/colorPrimary"
                     android:layout_width="match_parent"
