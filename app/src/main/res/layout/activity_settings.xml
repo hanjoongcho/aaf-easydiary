@@ -299,6 +299,20 @@
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/recoverAttachPhoto"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="@string/recover_attach_photo_title"
+                                style="@style/SettingsTitle" />
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="@string/recover_attach_photo_summary"
+                                style="@style/SettingsSummary" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
                     
                     <android.support.v7.widget.CardView
                         android:id="@+id/restorePhotoSetting"
