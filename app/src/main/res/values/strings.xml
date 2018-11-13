@@ -223,4 +223,7 @@
     <string name="bold_style_option_summary">Set the diary title and timeline time to be displayed in bold.</string>
     <string name="multi_picker_option_title">Multi picker setting</string>
     <string name="multi_picker_option_summary">When attaching a diary photo, I use the multi-picker provided in the diary without using the gallery app. When Multi-picker is enabled, you can attach multiple pictures at once.</string>
+    <string name="preferences_category_backup_restore">Application Backup and Restore</string>
+    <string name="backup_attach_photo_title">다이어리 백업하기(구글 드라이드)</string>
+    <string name="backup_attach_photo_summary">첨부 사진을 구글 드라이브에 백업합니다.</string>
 </resources>

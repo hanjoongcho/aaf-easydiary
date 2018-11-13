@@ -237,10 +237,10 @@ class SettingsActivity : EasyDiaryActivity() {
     
     private fun openUploadIntent() {
         // delete unused compressed photo file 
-        File(Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY).listFiles()?.map {
+//        File(Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY).listFiles()?.map {
 //            Log.i("PHOTO-URI", "${it.absolutePath} | ${EasyDiaryDbHelper.countPhotoUriBy(FILE_URI_PREFIX + it.absolutePath)}")
-            if (EasyDiaryDbHelper.countPhotoUriBy(FILE_URI_PREFIX + it.absolutePath) == 0) it.delete()
-        }
+//            if (EasyDiaryDbHelper.countPhotoUriBy(FILE_URI_PREFIX + it.absolutePath) == 0) it.delete()
+//        }
         
         val uploadIntent = Intent(applicationContext, GoogleDriveUploader::class.java)
         startActivity(uploadIntent)
