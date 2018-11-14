@@ -87,8 +87,8 @@
     <string name="application_lock_password_title">ロック番号の設定</string>
     <string name="restore_diary">ダイアリー回復する</string>
     <string name="restore_diary_summary">Googleのドライブにバックアップされたデータを利用して、すべてのコンテンツを回復します.</string>
-    <string name="restore_photo">ダイアリー添付写真の回復する</string>
-    <string name="restore_photo_summary">ダイアリーに添付された写真が存在する場合は、その写真を回復します。</string>
+    <string name="restore_photo">ダイアリー添付写真の回復する(手動)</string>
+    <string name="restore_photo_summary">ユーザーは日記に添付された写真を直接復元します。</string>
     <string name="backup_diary">ダイアリーバックアップする</string>
     <string name="backup_diary_summary">すべてのコンテンツをGoogleのドライブにバックアップします.</string>
     <string name="font_setting">フォントの設定</string>
@@ -207,7 +207,7 @@
     <string name="save_diary">日記を保存する</string>
     <string name="photo_registration">写真の登録</string>
     <string name="zoom_in">ズームイン</string>
-    <string name="zoom_out">Zoom Out</string>
+    <string name="zoom_out">ズームアウトする</string>
     <string name="edit_diary">ズームアウトする</string>
     <string name="text_to_speech">ダイアリーからスピーチ</string>
     <string name="diary_postcard">日記郵便はがき</string>
@@ -224,8 +224,8 @@
     <string name="multi_picker_option_title">マルチピッカー設定</string>
     <string name="multi_picker_option_summary">日記の写真を付けるときは、ギャラリーアプリを使わずに「簡単日記」に用意されているマルチピッカーを使います。 マルチピッカーを有効にすると、一度に複数の画像を添付できます。</string>
     <string name="preferences_category_backup_restore">アプリケーションのバックアップとリストア</string>
-    <string name="backup_attach_photo_title">다이어리 첨부사진 백업하기(Beta)</string>
-    <string name="backup_attach_photo_summary">첨부 사진을 구글 드라이브에 백업합니다. 해당 기능은 베타서비스 기능으로 일부 기기에서 동작하지 않을수도 있습니다.</string>
-    <string name="recover_attach_photo_title">다이어리 첨부사진 복구하기(Beta)</string>
-    <string name="recover_attach_photo_summary">구글 드라이브에 백업된 첨부사진을 복구합니다. 해당 기능은 베타서비스 기능으로 일부 기기에서 동작하지 않을수도 있습니다.</string>
+    <string name="backup_attach_photo_title">ダイアリー添付写真のバックアップ(Beta)</string>
+    <string name="backup_attach_photo_summary">添付した写真をGoogleドライブにバックアップします。 この機能は、一部のデバイスではベータ版のため動作しないことがあります。</string>
+    <string name="recover_attach_photo_title">ダイアリー添付写真の回復する(Beta)</string>
+    <string name="recover_attach_photo_summary">Googleのドライブにバックアップされた添付画像を回復します。この機能は、ベータサービス機能で、一部の機器では動作しないかももあります。</string>
 </resources>

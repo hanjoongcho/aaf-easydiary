@@ -88,7 +88,7 @@
     <string name="restore_diary">다이어리 복구하기</string>
     <string name="restore_diary_summary">구글 드라이브에 백업된 데이터를 이용하여 모든 콘텐츠를 복구합니다.</string>
     <string name="restore_photo">다이어리 첨부사진 복구하기(수동)</string>
-    <string name="restore_photo_summary">다이어리에 첨부된 사진이 존재하는 경우 해당사진을 복구합니다.</string>
+    <string name="restore_photo_summary">다이어리에 첨부된 사진을 사용자가 직접 복구합니다.</string>
     <string name="backup_diary">다이어리 백업하기</string>
     <string name="backup_diary_summary">모든 콘텐츠를 구글 드라이브에 백업합니다.</string>
     <string name="font_setting">폰트설정</string>
@@ -195,7 +195,7 @@
         v1.4.57 / 2018.11.12\n
         한 번에 여러 장의 사진을 첨부할 수 있도록 멀티피커 설정기능 추가
     </string>
-    
+
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -225,7 +225,7 @@
     <string name="multi_picker_option_summary">다이어리 사진 첨부시 갤러리앱을 이용하지 않고 이지 다이어리에서 제공하는 멀티피커를 사용합니다. 멀티피커 사용이 설정되면 한번에 여러장의 사진을 첨부할 수 있습니다.</string>
     <string name="preferences_category_backup_restore">애플리케이션 백업 및 복구</string>
     <string name="backup_attach_photo_title">다이어리 첨부사진 백업하기(Beta)</string>
-    <string name="backup_attach_photo_summary">첨부 사진을 구글 드라이브에 백업합니다. 해당 기능은 베타서비스 기능으로 일부 기기에서 동작하지 않을수도 있습니다.</string>
+    <string name="backup_attach_photo_summary">첨부 사진을 구글 드라이브에 백업합니다. 다이어리에 첨부된 모든 사진을 사용자가 지정한 구글 드라이브 폴더에 업로드하며 이미 업로드된 파일은 추가로 업로드하지 않습니다. 해당 기능은 베타서비스 기능으로 일부 기기에서 동작하지 않을 수도 있습니다.</string>
     <string name="recover_attach_photo_title">다이어리 첨부사진 복구하기(Beta)</string>
-    <string name="recover_attach_photo_summary">구글 드라이브에 백업된 첨부사진을 복구합니다. 해당 기능은 베타서비스 기능으로 일부 기기에서 동작하지 않을수도 있습니다.</string>
+    <string name="recover_attach_photo_summary">구글 드라이브에 백업된 첨부사진을 복구합니다. 다이어리에 첨부된 모든 사진을 사용자가 지정한 구글 드라이브 폴더에서 다운로드하며 기기에 존재하는 파일은 추가로 다운로드하지 않습니다. 해당 기능은 베타서비스 기능으로 일부 기기에서 동작하지 않을 수도 있습니다.</string>
 </resources>

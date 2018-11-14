@@ -87,8 +87,8 @@
     <string name="application_lock_password_title">Set lock number</string>
     <string name="restore_diary">Recover diary</string>
     <string name="restore_diary_summary">Recover all content using data backed up to Google Drive.</string>
-    <string name="restore_photo">Recover diary photos</string>
-    <string name="restore_photo_summary">If there is a photo attached to the diary, recover the photo.</string>
+    <string name="restore_photo">Recover diary photos(Manual)</string>
+    <string name="restore_photo_summary">Users directly recover photos attached to the diary.</string>
     <string name="backup_diary">Backup diary</string>
     <string name="backup_diary_summary">Back up all your content to Google Drive.</string>
     <string name="font_setting">Font setting</string>
@@ -224,8 +224,8 @@
     <string name="multi_picker_option_title">Multi picker setting</string>
     <string name="multi_picker_option_summary">When attaching a diary photo, I use the multi-picker provided in the diary without using the gallery app. When Multi-picker is enabled, you can attach multiple pictures at once.</string>
     <string name="preferences_category_backup_restore">Application Backup and Restore</string>
-    <string name="backup_attach_photo_title">다이어리 첨부사진 백업하기(Beta)</string>
-    <string name="backup_attach_photo_summary">첨부 사진을 구글 드라이브에 백업합니다. 해당 기능은 베타서비스 기능으로 일부 기기에서 동작하지 않을수도 있습니다.</string>
-    <string name="recover_attach_photo_title">다이어리 첨부사진 복구하기(Beta)</string>
-    <string name="recover_attach_photo_summary">구글 드라이브에 백업된 첨부사진을 복구합니다. 해당 기능은 베타서비스 기능으로 일부 기기에서 동작하지 않을수도 있습니다.</string>
+    <string name="backup_attach_photo_title">Backup attached photos(Beta)</string>
+    <string name="backup_attach_photo_summary">Backup your attached photos to Google Drive. This feature may not work on some devices due to beta service.</string>
+    <string name="recover_attach_photo_title">Recover attached photos(Beta)</string>
+    <string name="recover_attach_photo_summary">Recover attached photos backed up to Google Drive. This feature may not work on some devices due to beta service.</string>
 </resources>
