@@ -24,7 +24,6 @@ class RecoverPhotoActivity : BaseDriveActivity() {
     private var currentCount: Int = 0
     private var remoteDriveFileCount = 0
     private var duplicateFileCount = 0
-    private var targetFileCount = 0
     private val targetIndexes = arrayListOf<Int>()
     private lateinit var notificationBuilder: NotificationCompat.Builder
     private lateinit var notificationManager: NotificationManager
@@ -132,16 +131,16 @@ class RecoverPhotoActivity : BaseDriveActivity() {
         notificationBuilder.setStyle(NotificationCompat.InboxStyle()
                 .addLine("Number of recover files: $remoteDriveFileCount")
                 .addLine("Number of exist files: $duplicateFileCount")
-                .addLine("Number of files to download: $targetFileCount"))
-        if (targetFileCount == 0) {
+                .addLine("Number of files to download: ${targetIndexes.size}"))
+        if (targetIndexes.size == 0) {
             notificationBuilder.setContentTitle("All recovery target files already exist.")
             notificationManager.notify(1, notificationBuilder.build())
         } else {
-            notificationBuilder.setContentTitle("${++currentCount}/${targetFileCount}")
-            notificationBuilder.setProgress(targetFileCount, currentCount, false)
+            notificationBuilder.setContentTitle("Downloading files... ${++currentCount}/${targetIndexes.size}")
+            notificationBuilder.setProgress(targetIndexes.size, currentCount, false)
             notificationManager.notify(1, notificationBuilder.build())
         }
-        if (currentCount == targetFileCount) finish()
+        if (currentCount == targetIndexes.size) finish()
     }
 
     companion object {
