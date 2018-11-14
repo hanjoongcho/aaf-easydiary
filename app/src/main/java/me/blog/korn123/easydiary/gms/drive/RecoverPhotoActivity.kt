@@ -14,14 +14,17 @@ import com.google.android.gms.drive.events.OpenFileCallback
 import com.google.android.gms.drive.query.Filters
 import com.google.android.gms.drive.query.Query
 import com.google.android.gms.drive.query.SearchableField
+import com.simplemobiletools.commons.extensions.getFileCount
 import me.blog.korn123.easydiary.R
 import org.apache.commons.io.FileUtils
 import java.io.File
 import java.io.IOException
 
 class RecoverPhotoActivity : BaseDriveActivity() {
-    private var totalCount: Int = 0
     private var currentCount: Int = 0
+    private var remoteDriveFileCount = 0
+    private var duplicateFileCount = 0
+    private val targetIndexes = arrayListOf<Int>()
     private lateinit var notificationBuilder: NotificationCompat.Builder
     private lateinit var notificationManager: NotificationManager
 
@@ -73,21 +76,21 @@ class RecoverPhotoActivity : BaseDriveActivity() {
                         .setWhen(System.currentTimeMillis())
                         .setSmallIcon(R.drawable.google_drive)
                         .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
-                        .setTicker("Hearty365")
                         .setPriority(Notification.PRIORITY_MAX) // this is deprecated in API 26 but you can still use for below 26. check below update for 26 API
-                        .setContentTitle("Default notification")
-                        .setContentText("Downloading stored file from Google Drive.")
-                        .setContentInfo("Info")
                         .setOnlyAlertOnce(true)
                 notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                notificationManager.notify(1, notificationBuilder.build())
-                totalCount = metadataBuffer.count
-                currentCount = 0
-                metadataBuffer.forEachIndexed { _, metadata ->
-                    Log.i(TAG, metadata.title)
-                    val photoPath = "${Environment.getExternalStorageDirectory().absolutePath}$AAF_EASY_DIARY_PHOTO_DIRECTORY"
-                    retrieveContents(metadata.driveId.asDriveFile(), "$photoPath${metadata.title}")
+                val photoPath = "${Environment.getExternalStorageDirectory().absolutePath}$AAF_EASY_DIARY_PHOTO_DIRECTORY"
+                metadataBuffer.forEachIndexed { index, metadata ->
+                    if (!File("$photoPath${metadata.title}").exists()) targetIndexes.add(index)
                 }
+
+                remoteDriveFileCount = metadataBuffer.count
+                duplicateFileCount = remoteDriveFileCount - targetIndexes.size
+                targetIndexes.map { metaDataIndex -> 
+                    retrieveContents(metadataBuffer[metaDataIndex].driveId.asDriveFile(), "$photoPath${metadataBuffer[metaDataIndex].title}")
+                }
+                
+                if (targetIndexes.size == 0) updateNotification()
             }.addOnFailureListener(this) { e ->
                 Log.e(TAG, "Error retrieving files", e)
                 finish()
@@ -125,10 +128,19 @@ class RecoverPhotoActivity : BaseDriveActivity() {
     }
 
     private fun updateNotification() {
-        notificationBuilder.setContentTitle("${++currentCount}/$totalCount")
-        notificationBuilder.setProgress(totalCount, currentCount, false)
-        notificationManager.notify(1, notificationBuilder.build())
-        if (currentCount == totalCount) finish()
+        notificationBuilder.setStyle(NotificationCompat.InboxStyle()
+                .addLine("Number of recover files: $remoteDriveFileCount")
+                .addLine("Number of exist files: $duplicateFileCount")
+                .addLine("Number of files to download: ${targetIndexes.size}"))
+        if (targetIndexes.size == 0) {
+            notificationBuilder.setContentTitle("All recovery target files already exist.")
+            notificationManager.notify(1, notificationBuilder.build())
+        } else {
+            notificationBuilder.setContentTitle("Downloading files... ${++currentCount}/${targetIndexes.size}")
+            notificationBuilder.setProgress(targetIndexes.size, currentCount, false)
+            notificationManager.notify(1, notificationBuilder.build())
+        }
+        if (currentCount == targetIndexes.size) finish()
     }
 
     companion object {
