@@ -74,8 +74,8 @@ class BackupPhotoActivity : BaseDriveActivity() {
         notificationBuilder.setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
-                .setSmallIcon(android.R.drawable.ic_input_get)
-//                .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
+                .setSmallIcon(R.drawable.google_drive)
+                .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
                 .setPriority(Notification.PRIORITY_MAX) // this is deprecated in API 26 but you can still use for below 26. check below update for 26 API
                 .setContentText("Uploading files to Google Drive.")
                 .setOnlyAlertOnce(true)

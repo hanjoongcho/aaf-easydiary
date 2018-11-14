@@ -71,8 +71,8 @@ class RecoverPhotoActivity : BaseDriveActivity() {
                 notificationBuilder.setAutoCancel(true)
                         .setDefaults(Notification.DEFAULT_ALL)
                         .setWhen(System.currentTimeMillis())
-                        .setSmallIcon(android.R.drawable.ic_input_get)
-                        .setLargeIcon(BitmapFactory.decodeResource(resources, android.R.drawable.ic_input_get))
+                        .setSmallIcon(R.drawable.google_drive)
+                        .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
                         .setTicker("Hearty365")
                         .setPriority(Notification.PRIORITY_MAX) // this is deprecated in API 26 but you can still use for below 26. check below update for 26 API
                         .setContentTitle("Default notification")
