@@ -66,20 +66,16 @@ class SettingsActivity : EasyDiaryActivity() {
             R.id.restoreSetting -> {
                 mTaskFlag = SETTING_FLAG_IMPORT_GOOGLE_DRIVE
                 if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
                     openDownloadIntent()
-                } else {
-                    // API Level 23 이상이면서 권한취득 안한경우
+                } else { // Permission has already been granted
                     confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
                 }
             }
             R.id.backupSetting -> {
                 mTaskFlag = SETTING_FLAG_EXPORT_GOOGLE_DRIVE
                 if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
                     openUploadIntent()
-                } else {
-                    // API Level 23 이상이면서 권한취득 안한경우
+                } else { // Permission has already been granted
                     confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
                 }
             }
