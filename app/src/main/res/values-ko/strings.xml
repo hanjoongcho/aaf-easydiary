@@ -88,7 +88,7 @@
     <string name="restore_diary">다이어리 복구하기</string>
     <string name="restore_diary_summary">구글 드라이브에 백업된 데이터를 이용하여 모든 콘텐츠를 복구합니다.</string>
     <string name="restore_photo">다이어리 첨부사진 복구하기(수동)</string>
-    <string name="restore_photo_summary">다이어리에 첨부된 사진이 존재하는 경우 해당사진을 복구합니다.</string>
+    <string name="restore_photo_summary">다이어리에 첨부된 사진을 사용자가 직접 복구합니다.</string>
     <string name="backup_diary">다이어리 백업하기</string>
     <string name="backup_diary_summary">모든 콘텐츠를 구글 드라이브에 백업합니다.</string>
     <string name="font_setting">폰트설정</string>
@@ -195,7 +195,7 @@
         v1.4.57 / 2018.11.12\n
         한 번에 여러 장의 사진을 첨부할 수 있도록 멀티피커 설정기능 추가
     </string>
-    
+
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
