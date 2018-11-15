@@ -3,7 +3,9 @@ package me.blog.korn123.easydiary.gms.drive
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Environment
@@ -15,6 +17,7 @@ import com.google.android.gms.drive.query.Filters
 import com.google.android.gms.drive.query.Query
 import com.google.android.gms.drive.query.SearchableField
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_NAME
@@ -69,6 +72,7 @@ class RecoverPhotoActivity : BaseDriveActivity() {
         // END drive_android_query_children]
         queryTask?.let {
             it.addOnSuccessListener(this) { metadataBuffer ->
+                val mainIntent = Intent(this, DiaryMainActivity::class.java)
                 notificationBuilder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
                 notificationBuilder.setAutoCancel(true)
                         .setDefaults(Notification.DEFAULT_ALL)
@@ -78,6 +82,9 @@ class RecoverPhotoActivity : BaseDriveActivity() {
                         .setPriority(Notification.PRIORITY_MAX) // this is deprecated in API 26 but you can still use for below 26. check below update for 26 API
                         .setOnlyAlertOnce(true)
                         .setContentTitle(getString(R.string.recover_attach_photo_title))
+                        .addAction(R.drawable.cloud_upload, getString(R.string.ok), PendingIntent.getActivity(
+                                this, 0, mainIntent, PendingIntent.FLAG_UPDATE_CURRENT
+                        ))
                 notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 val photoPath = "${Environment.getExternalStorageDirectory().absolutePath}$AAF_EASY_DIARY_PHOTO_DIRECTORY"
                 metadataBuffer.forEachIndexed { index, metadata ->
