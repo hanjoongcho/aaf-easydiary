@@ -26,6 +26,7 @@ import com.google.android.gms.drive.*
 import com.google.android.gms.drive.query.Filters
 import com.google.android.gms.drive.query.Query
 import com.google.android.gms.drive.query.SearchableField
+import com.simplemobiletools.commons.extensions.getFileCount
 import me.blog.korn123.easydiary.R
 import org.apache.commons.io.FileUtils
 import java.io.File
@@ -35,6 +36,9 @@ class BackupPhotoActivity : BaseDriveActivity() {
     private lateinit var notificationBuilder: NotificationCompat.Builder
     private lateinit var notificationManager: NotificationManager
     private var totalCount: Int = 0
+    private var localDeviceFileCount = 0
+    private var duplicateFileCount = 0
+    private val targetIndexes = arrayListOf<Int>()
     private var currentCount: Int = 0
     private var uploadedFilenames = arrayListOf<String>()
     private var newFiles = arrayListOf<File>()
@@ -97,32 +101,26 @@ class BackupPhotoActivity : BaseDriveActivity() {
 
     private fun uploadDiaryPhoto(file: File) {
         driveResourceClient?.let {
-            it.createContents()
-                    .continueWithTask<DriveFile> { task ->
-                        val contents = task.result
-                        val outputStream = contents.outputStream
-                        FileUtils.copyFile(file, outputStream)
+            it.createContents().continueWithTask<DriveFile> { task ->
+                val contents = task.result
+                val outputStream = contents.outputStream
+                FileUtils.copyFile(file, outputStream)
 //            OutputStreamWriter(outputStream).use { writer -> writer.write("Hello World!") }
-                        val changeSet = MetadataChangeSet.Builder()
-                                .setTitle(file.name)
-                                .setMimeType(AAF_EASY_DIARY_PHOTO)
-                                .setStarred(true)
-                                .build()
-                        it.createFile(driveId.asDriveFolder(), changeSet, contents)
-                    }
-                    .addOnSuccessListener(this) { driveFile ->
-                        //            showMessage(getString(R.string.file_created, driveFile.getDriveId().encodeToString()))
-                        notificationBuilder.setContentTitle("${++currentCount}/$totalCount")
-                        notificationBuilder.setProgress(totalCount, currentCount, false)
-                        notificationManager.notify(1, notificationBuilder.build())
-                        if (currentCount == totalCount) finish()
-                    }
-                    .addOnFailureListener(this) { e ->
-                        Log.e(TAG, "Unable to create file", e)
-                        showMessage(getString(R.string.file_create_error))
-                    }
+                val changeSet = MetadataChangeSet.Builder()
+                        .setTitle(file.name)
+                        .setMimeType(AAF_EASY_DIARY_PHOTO)
+                        .setStarred(true)
+                        .build()
+                it.createFile(driveId.asDriveFolder(), changeSet, contents)
+            }.addOnSuccessListener(this) { _ ->
+                updateNotification()
+            }.addOnFailureListener(this) { e ->
+                Log.e(TAG, "Unable to create file", e)
+                showMessage(getString(R.string.file_create_error))
+            }
         }
     }
+
     private fun listFilesInFolder() {
         val query = Query.Builder()
                 .addFilter(Filters.eq(SearchableField.MIME_TYPE, AAF_EASY_DIARY_PHOTO))
@@ -130,14 +128,61 @@ class BackupPhotoActivity : BaseDriveActivity() {
         val queryTask = driveResourceClient?.queryChildren(driveId.asDriveFolder(), query)
         queryTask?.let {
             it.addOnSuccessListener { metadataBuffer ->
-                metadataBuffer.forEachIndexed { index, metadata ->
-                    metadata?.let {
-                        uploadedFilenames.add(it.title)
-                    }
+                val channelId = "M_CH_ID"
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    // Create the NotificationChannel
+                    val name = "CHANNEL_NAME"
+                    val descriptionText = "CHANNEL_DESCRIPTION"
+                    val importance = NotificationManager.IMPORTANCE_DEFAULT
+                    val mChannel = NotificationChannel(channelId, name, importance)
+                    mChannel.description = descriptionText
+                    // Register the channel with the system; you can't change the importance
+                    // or other notification behaviors after this
+                    val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+                    notificationManager.createNotificationChannel(mChannel)
                 }
-                createFileInFolder()
+
+                notificationBuilder = NotificationCompat.Builder(applicationContext, channelId)
+                notificationBuilder.setAutoCancel(true)
+                        .setDefaults(Notification.DEFAULT_ALL)
+                        .setWhen(System.currentTimeMillis())
+                        .setSmallIcon(R.drawable.google_drive)
+                        .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
+                        .setPriority(Notification.PRIORITY_MAX) // this is deprecated in API 26 but you can still use for below 26. check below update for 26 API
+                        .setOnlyAlertOnce(true)
+                notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+                val photoPath = "${Environment.getExternalStorageDirectory().absolutePath}$AAF_EASY_DIARY_PHOTO_DIRECTORY"
+                localDeviceFileCount = File(photoPath).getFileCount(true)
+                metadataBuffer.forEachIndexed { index, metadata ->
+                    if (!File("$photoPath${metadata.title}").exists()) targetIndexes.add(index)
+                }
+
+                targetIndexes.map { metaDataIndex ->
+                    uploadDiaryPhoto(File("$photoPath${metadataBuffer[metaDataIndex].title}"))
+                }
+
+                if (targetIndexes.size == 0) updateNotification()
             }
         }
+    }
+
+    private fun updateNotification() {
+        notificationBuilder.setStyle(NotificationCompat.InboxStyle()
+                .addLine("Number of backup files: $localDeviceFileCount")
+                .addLine("Number of exist files: $duplicateFileCount")
+                .addLine("Number of files to upload: ${targetIndexes.size}"))
+
+        if (targetIndexes.size == 0) {
+            notificationBuilder.setContentTitle("All backup target files already exist.")
+            notificationManager.notify(1, notificationBuilder.build())
+        } else {
+            notificationBuilder.setContentTitle("Downloading files... ${++currentCount}/${targetIndexes.size}")
+            notificationBuilder.setProgress(targetIndexes.size, currentCount, false)
+            notificationManager.notify(1, notificationBuilder.build())
+        }
+
+        if (currentCount == targetIndexes.size) finish()
     }
 
     companion object {

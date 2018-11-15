@@ -26,7 +26,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             applicationVariants.all { variant ->
                 variant.outputs.each { output ->
-                    def releaseFileName = "easy_diary-$versionName-release.apk"
+                    def releaseFileName = "easy_diary-${new Date().format('yyyyMMddHHmmss')}-beta.apk"
                     println("test message: $releaseFileName")
                     output.outputFileName = releaseFileName
                 }
