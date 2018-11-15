@@ -232,4 +232,15 @@
     <string name="backup_attach_photo_summary">添付した写真をGoogleドライブにバックアップします。 この機能は、一部のデバイスではベータ版のため動作しないことがあります。</string>
     <string name="recover_attach_photo_title">ダイアリー添付写真の回復する(Beta)</string>
     <string name="recover_attach_photo_summary">Googleのドライブにバックアップされた添付画像を回復します。この機能は、ベータサービス機能で、一部の機器では動作しないかももあります。</string>
+    <string name="notification_msg_device_file_count">バックアップファイルの数</string>
+    <string name="notification_msg_google_drive_file_count">回復ファイルの数</string>
+    <string name="notification_msg_duplicate_file_count">存在するファイルの数</string>
+    <string name="notification_msg_upload_file_count">アップロードするファイルの数</string>
+    <string name="notification_msg_download_file_count">ダウンロードするファイルの数</string>
+    <string name="notification_msg_upload_progress">アップロード中…</string>
+    <string name="notification_msg_download_progress">ダウンロード…</string>
+    <string name="notification_msg_upload_complete">アップロードの完了</string>
+    <string name="notification_msg_download_complete">ダウンロード完了</string>
+    <string name="notification_msg_download_invalid">すべての回復先ファイルがすでに存在しています。</string>
+    <string name="notification_msg_upload_invalid">すべてのバックアップ対象ファイルはすでに存在します。</string>
 </resources>

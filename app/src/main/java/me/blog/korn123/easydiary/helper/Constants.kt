@@ -104,3 +104,7 @@ const val SELECTED_DAY = "selected_day"
 const val SELECTED_HOUR = "selected_hour"
 const val SELECTED_MINUTE = "selected_minute"
 const val SELECTED_SECOND = "selected_second"
+
+const val NOTIFICATION_CHANNEL_ID = "easy_diary_channel_id"
+const val NOTIFICATION_CHANNEL_NAME = "Easy-Diary notification channel"
+const val NOTIFICATION_CHANNEL_DESCRIPTION = "This channel is used for 'Easy-Diary' data backup and recovery operations."
