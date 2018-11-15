@@ -73,7 +73,7 @@ class RecoverPhotoActivity : BaseDriveActivity() {
                 notificationBuilder.setAutoCancel(true)
                         .setDefaults(Notification.DEFAULT_ALL)
                         .setWhen(System.currentTimeMillis())
-                        .setSmallIcon(R.drawable.google_drive)
+                        .setSmallIcon(R.drawable.cloud_download)
                         .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
                         .setPriority(Notification.PRIORITY_MAX) // this is deprecated in API 26 but you can still use for below 26. check below update for 26 API
                         .setOnlyAlertOnce(true)
@@ -133,6 +133,7 @@ class RecoverPhotoActivity : BaseDriveActivity() {
                 .addLine("${getString(R.string.notification_msg_download_file_count)}: ${targetIndexes.size}"))
         if (targetIndexes.size == 0) {
             notificationBuilder.setContentTitle(getString(R.string.notification_msg_download_invalid))
+            notificationBuilder.setContentText(getString(R.string.notification_msg_download_invalid))
             notificationManager.notify(1, notificationBuilder.build())
         } else {
             currentCount++
