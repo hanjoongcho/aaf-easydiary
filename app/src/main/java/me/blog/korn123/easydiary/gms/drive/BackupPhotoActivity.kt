@@ -38,7 +38,7 @@ class BackupPhotoActivity : BaseDriveActivity() {
     private var totalCount: Int = 0
     private var localDeviceFileCount = 0
     private var duplicateFileCount = 0
-    private val targetIndexes = arrayListOf<Int>()
+    private val targetFilenames = mutableListOf<String>()
     private var currentCount: Int = 0
     private var uploadedFilenames = arrayListOf<String>()
     private var newFiles = arrayListOf<File>()
@@ -153,16 +153,23 @@ class BackupPhotoActivity : BaseDriveActivity() {
                 notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
                 val photoPath = "${Environment.getExternalStorageDirectory().absolutePath}$AAF_EASY_DIARY_PHOTO_DIRECTORY"
+                val titles = mutableListOf<String>()
+                metadataBuffer.forEachIndexed { _, metadata ->
+                    titles.add(metadata.title)
+                }
+
+                File(photoPath).listFiles().forEachIndexed {index, file ->
+                    if (!titles.contains(file.name)) targetFilenames.add(file.name)
+                }
+
                 localDeviceFileCount = File(photoPath).getFileCount(true)
-                metadataBuffer.forEachIndexed { index, metadata ->
-                    if (!File("$photoPath${metadata.title}").exists()) targetIndexes.add(index)
+                duplicateFileCount = localDeviceFileCount - targetFilenames.size
+
+                targetFilenames.map { filename ->
+                    uploadDiaryPhoto(File("$photoPath$filename"))
                 }
 
-                targetIndexes.map { metaDataIndex ->
-                    uploadDiaryPhoto(File("$photoPath${metadataBuffer[metaDataIndex].title}"))
-                }
-
-                if (targetIndexes.size == 0) updateNotification()
+                if (targetFilenames.size == 0) updateNotification()
             }
         }
     }
@@ -171,18 +178,18 @@ class BackupPhotoActivity : BaseDriveActivity() {
         notificationBuilder.setStyle(NotificationCompat.InboxStyle()
                 .addLine("Number of backup files: $localDeviceFileCount")
                 .addLine("Number of exist files: $duplicateFileCount")
-                .addLine("Number of files to upload: ${targetIndexes.size}"))
+                .addLine("Number of files to upload: ${targetFilenames.size}"))
 
-        if (targetIndexes.size == 0) {
+        if (targetFilenames.size == 0) {
             notificationBuilder.setContentTitle("All backup target files already exist.")
             notificationManager.notify(1, notificationBuilder.build())
         } else {
-            notificationBuilder.setContentTitle("Downloading files... ${++currentCount}/${targetIndexes.size}")
-            notificationBuilder.setProgress(targetIndexes.size, currentCount, false)
+            notificationBuilder.setContentTitle("Uploading... ${++currentCount}/${targetFilenames.size}")
+            notificationBuilder.setProgress(targetFilenames.size, currentCount, false)
             notificationManager.notify(1, notificationBuilder.build())
         }
 
-        if (currentCount == targetIndexes.size) finish()
+        if (currentCount == targetFilenames.size) finish()
     }
 
     companion object {

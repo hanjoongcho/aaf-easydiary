@@ -136,7 +136,7 @@ class RecoverPhotoActivity : BaseDriveActivity() {
             notificationBuilder.setContentTitle("All recovery target files already exist.")
             notificationManager.notify(1, notificationBuilder.build())
         } else {
-            notificationBuilder.setContentTitle("Downloading files... ${++currentCount}/${targetIndexes.size}")
+            notificationBuilder.setContentTitle("Downloading... ${++currentCount}/${targetIndexes.size}")
             notificationBuilder.setProgress(targetIndexes.size, currentCount, false)
             notificationManager.notify(1, notificationBuilder.build())
         }
