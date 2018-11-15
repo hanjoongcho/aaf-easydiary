@@ -11,8 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ListView
-import com.google.android.gms.drive.GoogleDriveDownloader
-import com.google.android.gms.drive.GoogleDriveUploader
+import me.blog.korn123.easydiary.gms.drive.BackupDiaryActivity
 import com.xw.repo.BubbleSeekBar
 import io.github.aafactory.commons.activities.BaseWebViewActivity
 import io.github.aafactory.commons.helpers.BaseConfig
@@ -24,6 +23,7 @@ import me.blog.korn123.easydiary.adapters.FontItemAdapter
 import me.blog.korn123.easydiary.adapters.ThumbnailSizeItemAdapter
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.gms.drive.BackupPhotoActivity
+import me.blog.korn123.easydiary.gms.drive.RecoverDiaryActivity
 import me.blog.korn123.easydiary.gms.drive.RecoverPhotoActivity
 import me.blog.korn123.easydiary.helper.*
 import org.apache.commons.io.FilenameUtils
@@ -253,7 +253,7 @@ class SettingsActivity : EasyDiaryActivity() {
 //            if (EasyDiaryDbHelper.countPhotoUriBy(FILE_URI_PREFIX + it.absolutePath) == 0) it.delete()
 //        }
         
-        val uploadIntent = Intent(applicationContext, GoogleDriveUploader::class.java)
+        val uploadIntent = Intent(applicationContext, BackupDiaryActivity::class.java)
         startActivity(uploadIntent)
     }
 
@@ -261,7 +261,7 @@ class SettingsActivity : EasyDiaryActivity() {
 
     private fun openRecoverIntent() = startActivity(Intent(applicationContext, RecoverPhotoActivity::class.java))
 
-    private fun openDownloadIntent() = startActivity(Intent(applicationContext, GoogleDriveDownloader::class.java))
+    private fun openDownloadIntent() = startActivity(Intent(applicationContext, RecoverDiaryActivity::class.java))
 
     private fun openThumbnailSettingDialog() {
         val builder = AlertDialog.Builder(this@SettingsActivity)
