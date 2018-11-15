@@ -14,8 +14,10 @@ import com.google.android.gms.drive.events.OpenFileCallback
 import com.google.android.gms.drive.query.Filters
 import com.google.android.gms.drive.query.Query
 import com.google.android.gms.drive.query.SearchableField
-import com.simplemobiletools.commons.extensions.getFileCount
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
+import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
+import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_NAME
 import org.apache.commons.io.FileUtils
 import java.io.File
 import java.io.IOException
@@ -48,14 +50,11 @@ class RecoverPhotoActivity : BaseDriveActivity() {
      * it retrieves results for the first page.
      */
     private fun listFilesInFolder(folder: DriveFolder) {
-        val channelId = "M_CH_ID"
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Create the NotificationChannel
-            val name = "CHANNEL_NAME"
-            val descriptionText = "CHANNEL_DESCRIPTION"
             val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val mChannel = NotificationChannel(channelId, name, importance)
-            mChannel.description = descriptionText
+            val mChannel = NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, importance)
+            mChannel.description = NOTIFICATION_CHANNEL_DESCRIPTION
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
             val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
@@ -70,7 +69,7 @@ class RecoverPhotoActivity : BaseDriveActivity() {
         // END drive_android_query_children]
         queryTask?.let {
             it.addOnSuccessListener(this) { metadataBuffer ->
-                notificationBuilder = NotificationCompat.Builder(applicationContext, channelId)
+                notificationBuilder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
                 notificationBuilder.setAutoCancel(true)
                         .setDefaults(Notification.DEFAULT_ALL)
                         .setWhen(System.currentTimeMillis())
@@ -129,14 +128,16 @@ class RecoverPhotoActivity : BaseDriveActivity() {
 
     private fun updateNotification() {
         notificationBuilder.setStyle(NotificationCompat.InboxStyle()
-                .addLine("Number of recover files: $remoteDriveFileCount")
-                .addLine("Number of exist files: $duplicateFileCount")
-                .addLine("Number of files to download: ${targetIndexes.size}"))
+                .addLine("${getString(R.string.notification_msg_google_drive_file_count)}: $remoteDriveFileCount")
+                .addLine("${getString(R.string.notification_msg_duplicate_file_count)}: $duplicateFileCount")
+                .addLine("${getString(R.string.notification_msg_download_file_count)}: ${targetIndexes.size}"))
         if (targetIndexes.size == 0) {
-            notificationBuilder.setContentTitle("All recovery target files already exist.")
+            notificationBuilder.setContentTitle(getString(R.string.notification_msg_download_invalid))
             notificationManager.notify(1, notificationBuilder.build())
         } else {
-            notificationBuilder.setContentTitle("Downloading... ${++currentCount}/${targetIndexes.size}")
+            currentCount++
+            val message = if (currentCount < targetIndexes.size) getString(R.string.notification_msg_download_progress) else getString(R.string.notification_msg_download_complete)
+            notificationBuilder.setContentTitle("$message  $currentCount/${targetIndexes.size}")
             notificationBuilder.setProgress(targetIndexes.size, currentCount, false)
             notificationManager.notify(1, notificationBuilder.build())
         }
