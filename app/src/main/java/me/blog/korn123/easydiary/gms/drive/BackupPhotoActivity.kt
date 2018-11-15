@@ -108,6 +108,7 @@ class BackupPhotoActivity : BaseDriveActivity() {
                         .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
                         .setPriority(Notification.PRIORITY_MAX) // this is deprecated in API 26 but you can still use for below 26. check below update for 26 API
                         .setOnlyAlertOnce(true)
+                        .setContentTitle(getString(R.string.backup_attach_photo_title))
                 notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
                 val photoPath = "${Environment.getExternalStorageDirectory().absolutePath}$AAF_EASY_DIARY_PHOTO_DIRECTORY"
@@ -139,7 +140,7 @@ class BackupPhotoActivity : BaseDriveActivity() {
                 .addLine("${getString(R.string.notification_msg_upload_file_count)}: ${targetFilenames.size}"))
 
         if (targetFilenames.size == 0) {
-            notificationBuilder.setContentTitle(getString(R.string.notification_msg_upload_invalid))
+            notificationBuilder.setContentText(getString(R.string.notification_msg_upload_invalid))
             notificationManager.notify(1, notificationBuilder.build())
         } else {
             currentCount++

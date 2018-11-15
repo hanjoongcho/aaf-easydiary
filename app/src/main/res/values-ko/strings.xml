@@ -233,14 +233,14 @@
     <string name="recover_attach_photo_title">다이어리 첨부사진 복구하기(Beta)</string>
     <string name="recover_attach_photo_summary">다이어리에 첨부된 모든 사진을 사용자가 지정한 구글 드라이브 폴더에서 다운로드 합니다. 해당 기능은 베타서비스 기능으로 일부 기기에서 동작하지 않을 수도 있습니다.</string>
     <string name="notification_msg_device_file_count">백업대상 파일</string>
-    <string name="notification_msg_google_drive_file_count">복구대상 파일</string>
-    <string name="notification_msg_duplicate_file_count">중복 파일</string>
     <string name="notification_msg_upload_file_count">업로드 대상 파일</string>
-    <string name="notification_msg_download_file_count">다운로드 대상 파일</string>
-    <string name="notification_msg_upload_progress">파일 업로드 진행중…</string>
-    <string name="notification_msg_download_progress">파일 다운로드 진행중…</string>
-    <string name="notification_msg_upload_complete">파일 업로드 완료</string>
-    <string name="notification_msg_download_complete">파일 다운로드 완료</string>
-    <string name="notification_msg_download_invalid">복구 대상 파일이 디바이스에 모두 존재합니다.</string>
     <string name="notification_msg_upload_invalid">백업 대상 파일이 드라이브에 모두 존재합니다.</string>
+    <string name="notification_msg_upload_progress">파일 업로드 진행중…</string>
+    <string name="notification_msg_upload_complete">파일 업로드 완료</string>
+    <string name="notification_msg_google_drive_file_count">복구대상 파일</string>
+    <string name="notification_msg_download_file_count">다운로드 대상 파일</string>
+    <string name="notification_msg_download_invalid">복구 대상 파일이 디바이스에 모두 존재합니다.</string>
+    <string name="notification_msg_download_progress">파일 다운로드 진행중…</string>
+    <string name="notification_msg_download_complete">파일 다운로드 완료</string>
+    <string name="notification_msg_duplicate_file_count">중복 파일</string>
 </resources>
