@@ -1,6 +1,9 @@
 -keep class com.simplemobiletools.** { *; }
 -dontwarn com.simplemobiletools.**
 
+-keep class com.werb.** { *; }
+-dontwarn com.werb.**
+
 -keepattributes Signature
 -keepattributes Annotation
 -keep class okhttp3.** { *; }
