@@ -235,11 +235,13 @@
     <string name="notification_msg_device_file_count">백업대상 파일</string>
     <string name="notification_msg_upload_file_count">업로드 대상 파일</string>
     <string name="notification_msg_upload_invalid">백업 대상 파일이 드라이브에 모두 존재합니다.</string>
+    <string name="notification_msg_upload_empty">백업 대상 파일이 존재하지 않습니다.</string>
     <string name="notification_msg_upload_progress">파일 업로드 진행중…</string>
     <string name="notification_msg_upload_complete">파일 업로드 완료</string>
     <string name="notification_msg_google_drive_file_count">복구대상 파일</string>
     <string name="notification_msg_download_file_count">다운로드 대상 파일</string>
     <string name="notification_msg_download_invalid">복구 대상 파일이 디바이스에 모두 존재합니다.</string>
+    <string name="notification_msg_download_empty">복구 대상 파일이 존재하지 않습니다.</string>
     <string name="notification_msg_download_progress">파일 다운로드 진행중…</string>
     <string name="notification_msg_download_complete">파일 다운로드 완료</string>
     <string name="notification_msg_duplicate_file_count">중복 파일</string>

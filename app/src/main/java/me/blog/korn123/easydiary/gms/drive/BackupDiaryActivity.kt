@@ -20,7 +20,6 @@ import java.io.IOException
  */
 
 class BackupDiaryActivity : BaseDriveActivity() {
-
     override fun onDriveClientReady() {
         createFileWithIntent()
     }
@@ -40,6 +39,8 @@ class BackupDiaryActivity : BaseDriveActivity() {
             }
         }
     }
+
+    override fun showDialog() {}
     
     private fun createFileWithIntent() {
         // [START drive_android_create_file_with_intent]

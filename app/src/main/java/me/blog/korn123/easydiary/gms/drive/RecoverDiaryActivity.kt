@@ -45,6 +45,8 @@ class RecoverDiaryActivity : BaseDriveActivity() {
         }
     }
 
+    override fun showDialog() {}
+    
     private fun retrieveContents(file: DriveFile) {
         // [START drive_android_read_with_progress_listener]
         val openCallback = object : OpenFileCallback() {

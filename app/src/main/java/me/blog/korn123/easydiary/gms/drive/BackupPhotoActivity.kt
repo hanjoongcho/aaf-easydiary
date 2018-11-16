@@ -17,6 +17,7 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.DialogInterface
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Environment
@@ -28,6 +29,7 @@ import com.google.android.gms.drive.query.Query
 import com.google.android.gms.drive.query.SearchableField
 import com.simplemobiletools.commons.extensions.getFileCount
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_NAME
@@ -60,6 +62,14 @@ class BackupPhotoActivity : BaseDriveActivity() {
         }
     }
 
+    override fun showDialog() {
+        showAlertDialog(
+                getString(R.string.backup_attach_photo_title),
+                getString(R.string.notification_msg_upload_empty),
+                DialogInterface.OnClickListener { _, _ ->  finish() }
+        )
+    }
+
     private fun uploadDiaryPhoto(file: File) {
         driveResourceClient?.let {
             it.createContents().continueWithTask<DriveFile> { task ->
@@ -89,46 +99,54 @@ class BackupPhotoActivity : BaseDriveActivity() {
         val queryTask = driveResourceClient?.queryChildren(driveId.asDriveFolder(), query)
         queryTask?.let {
             it.addOnSuccessListener { metadataBuffer ->
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    // Create the NotificationChannel
-                    val importance = NotificationManager.IMPORTANCE_DEFAULT
-                    val mChannel = NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, importance)
-                    mChannel.description = NOTIFICATION_CHANNEL_DESCRIPTION
-                    // Register the channel with the system; you can't change the importance
-                    // or other notification behaviors after this
-                    val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-                    notificationManager.createNotificationChannel(mChannel)
-                }
-
-                notificationBuilder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
-                notificationBuilder.setAutoCancel(true)
-                        .setDefaults(Notification.DEFAULT_ALL)
-                        .setWhen(System.currentTimeMillis())
-                        .setSmallIcon(R.drawable.cloud_upload)
-                        .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
-                        .setPriority(Notification.PRIORITY_MAX) // this is deprecated in API 26 but you can still use for below 26. check below update for 26 API
-                        .setOnlyAlertOnce(true)
-                        .setContentTitle(getString(R.string.backup_attach_photo_title))
-                notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
                 val photoPath = "${Environment.getExternalStorageDirectory().absolutePath}$AAF_EASY_DIARY_PHOTO_DIRECTORY"
-                val titles = mutableListOf<String>()
-                metadataBuffer.forEachIndexed { _, metadata ->
-                    titles.add(metadata.title)
+                when (File(photoPath).listFiles().isEmpty()) {
+                    true -> {
+                        visibleDialog = true
+                        showDialog()
+                    }
+                    false -> {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            // Create the NotificationChannel
+                            val importance = NotificationManager.IMPORTANCE_DEFAULT
+                            val mChannel = NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, importance)
+                            mChannel.description = NOTIFICATION_CHANNEL_DESCRIPTION
+                            // Register the channel with the system; you can't change the importance
+                            // or other notification behaviors after this
+                            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+                            notificationManager.createNotificationChannel(mChannel)
+                        }
+
+                        notificationBuilder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
+                        notificationBuilder.setAutoCancel(true)
+                                .setDefaults(Notification.DEFAULT_ALL)
+                                .setWhen(System.currentTimeMillis())
+                                .setSmallIcon(R.drawable.cloud_upload)
+                                .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
+                                .setPriority(Notification.PRIORITY_MAX) // this is deprecated in API 26 but you can still use for below 26. check below update for 26 API
+                                .setOnlyAlertOnce(true)
+                                .setContentTitle(getString(R.string.backup_attach_photo_title))
+                        notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+                        val titles = mutableListOf<String>()
+                        metadataBuffer.forEachIndexed { _, metadata ->
+                            titles.add(metadata.title)
+                        }
+
+                        File(photoPath).listFiles().forEachIndexed {_, file ->
+                            if (!titles.contains(file.name)) targetFilenames.add(file.name)
+                        }
+
+                        localDeviceFileCount = File(photoPath).getFileCount(true)
+                        duplicateFileCount = localDeviceFileCount - targetFilenames.size
+
+                        targetFilenames.map { filename ->
+                            uploadDiaryPhoto(File("$photoPath$filename"))
+                        }
+
+                        if (targetFilenames.size == 0) updateNotification()
+                    }
                 }
-
-                File(photoPath).listFiles().forEachIndexed {index, file ->
-                    if (!titles.contains(file.name)) targetFilenames.add(file.name)
-                }
-
-                localDeviceFileCount = File(photoPath).getFileCount(true)
-                duplicateFileCount = localDeviceFileCount - targetFilenames.size
-
-                targetFilenames.map { filename ->
-                    uploadDiaryPhoto(File("$photoPath$filename"))
-                }
-
-                if (targetFilenames.size == 0) updateNotification()
             }
         }
     }

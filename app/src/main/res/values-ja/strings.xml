@@ -235,11 +235,13 @@
     <string name="notification_msg_device_file_count">バックアップファイルの数</string>
     <string name="notification_msg_upload_file_count">アップロードするファイルの数</string>
     <string name="notification_msg_upload_invalid">すべてのバックアップ対象ファイルはすでに存在します。</string>
+    <string name="notification_msg_upload_empty">백업 대상 파일이 존재하지 않습니다.</string>
     <string name="notification_msg_upload_progress">アップロード中…</string>
     <string name="notification_msg_upload_complete">アップロードの完了</string>
     <string name="notification_msg_google_drive_file_count">回復ファイルの数</string>
     <string name="notification_msg_download_file_count">ダウンロードするファイルの数</string>
     <string name="notification_msg_download_invalid">すべての回復先ファイルがすでに存在しています。</string>
+    <string name="notification_msg_download_empty">복구 대상 파일이 존재하지 않습니다.</string>
     <string name="notification_msg_download_progress">ダウンロード…</string>
     <string name="notification_msg_download_complete">ダウンロード完了</string>
     <string name="notification_msg_duplicate_file_count">存在するファイルの数</string>

@@ -31,7 +31,6 @@ class RecoverPhotoActivity : BaseDriveActivity() {
     private var currentCount: Int = 0
     private var remoteDriveFileCount = 0
     private var duplicateFileCount = 0
-    private var showInfoDialog = false
     private val targetIndexes = arrayListOf<Int>()
     private lateinit var notificationBuilder: NotificationCompat.Builder
     private lateinit var notificationManager: NotificationManager
@@ -49,6 +48,14 @@ class RecoverPhotoActivity : BaseDriveActivity() {
                 finish()
             }
         }
+    }
+
+    override fun showDialog() {
+        showAlertDialog(
+                getString(R.string.recover_attach_photo_title),
+                getString(R.string.notification_msg_download_empty),
+                DialogInterface.OnClickListener { _, _ ->  finish() }
+        )
     }
 
     /**
@@ -77,12 +84,8 @@ class RecoverPhotoActivity : BaseDriveActivity() {
             it.addOnSuccessListener(this) { metadataBuffer ->
                 when (metadataBuffer.count == 0) {
                     true -> {
-                        showInfoDialog = true
-                        showAlertDialog(
-                                getString(R.string.recover_attach_photo_title),
-                                getString(R.string.notification_msg_download_invalid),
-                                DialogInterface.OnClickListener { _, _ ->  finish() }
-                        )
+                        visibleDialog = true
+                        showDialog()
                     }
                     false -> {
                         val mainIntent = Intent(this, DiaryMainActivity::class.java)
