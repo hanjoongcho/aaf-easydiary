@@ -199,7 +199,7 @@
         v1.4.58 / 2018.xx.xx\n
         Added attached photos backup and recovery function using Google Drive
     </string>
-    
+
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -235,13 +235,13 @@
     <string name="notification_msg_device_file_count">Number of backup files</string>
     <string name="notification_msg_upload_file_count">Number of files to upload</string>
     <string name="notification_msg_upload_invalid">All backup target files already exist.</string>
-    <string name="notification_msg_upload_empty">백업 대상 파일이 존재하지 않습니다.</string>
+    <string name="notification_msg_upload_empty">The file to be backed up does not exist.</string>
     <string name="notification_msg_upload_progress">Uploading…</string>
     <string name="notification_msg_upload_complete">Upload Complete</string>
     <string name="notification_msg_google_drive_file_count">Number of recover files</string>
     <string name="notification_msg_download_file_count">Number of files to download</string>
     <string name="notification_msg_download_invalid">All recovery target files already exist.</string>
-    <string name="notification_msg_download_empty">복구 대상 파일이 존재하지 않습니다.</string>
+    <string name="notification_msg_download_empty">The file to be recovered does not exist.</string>
     <string name="notification_msg_download_progress">Downloading…</string>
     <string name="notification_msg_download_complete">Download Complete</string>
     <string name="notification_msg_duplicate_file_count">Number of exist files</string>
