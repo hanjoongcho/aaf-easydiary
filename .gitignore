@@ -12,21 +12,16 @@
 .idea/gradle.xml
 .idea/markdown-exported-files.xml
 .idea/markdown-navigator/
-
-
-*.iml
-.gradle
-build
-app/build
-app/*.apk
-app/*.iml
-app/release
+.idea/caches/
 .idea/misc.xml
 .idea/runConfigurations.xml
 .idea/markdown-navigator
 .idea/markdown-navigator.xml
-local.properties
 
+app/build
+app/*.apk
+app/*.iml
+app/release
 app/src/main/res/drawable/ic_clouds_and_sun.xml
 app/src/main/res/drawable/ic_umbrella_1.xml
 app/src/main/res/drawable/ic_sunny.xml
@@ -37,3 +32,8 @@ app/src/main/res/drawable/ic_rainbow.xml
 app/src/main/res/drawable/ic_night_rain.xml
 app/src/main/res/drawable/ic_moon_9.xml
 app/src/main/res/drawable/ic_bolt.xml
+
+*.iml
+.gradle
+build
+local.properties
