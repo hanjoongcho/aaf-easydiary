@@ -83,9 +83,8 @@ fun Context.showAlertDialog(message: String, positiveListener: DialogInterface.O
 fun Context.showAlertDialog(title: String, message: String, positiveListener: DialogInterface.OnClickListener) {
     val builder = AlertDialog.Builder(this)
     builder.setTitle(title)
-    //        builder.setIcon(R.drawable.book);
     builder.setMessage(message)
-    builder.setCancelable(true)
+    builder.setCancelable(false)
     builder.setPositiveButton(getString(R.string.ok), positiveListener)
     val alert = builder.create()
     alert.show()

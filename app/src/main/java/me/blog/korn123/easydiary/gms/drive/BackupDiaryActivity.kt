@@ -1,6 +1,9 @@
-package com.google.android.gms.drive
+package me.blog.korn123.easydiary.gms.drive
 
 import android.content.DialogInterface
+import com.google.android.gms.drive.BaseDriveActivity
+import com.google.android.gms.drive.CreateFileActivityOptions
+import com.google.android.gms.drive.MetadataChangeSet
 import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
@@ -16,8 +19,7 @@ import java.io.IOException
  * Created by Administrator on 2017-11-21.
  */
 
-class GoogleDriveUploader : BaseDriveActivity() {
-
+class BackupDiaryActivity : BaseDriveActivity() {
     override fun onDriveClientReady() {
         createFileWithIntent()
     }
@@ -37,6 +39,8 @@ class GoogleDriveUploader : BaseDriveActivity() {
             }
         }
     }
+
+    override fun showDialog() {}
     
     private fun createFileWithIntent() {
         // [START drive_android_create_file_with_intent]
@@ -66,6 +70,6 @@ class GoogleDriveUploader : BaseDriveActivity() {
     }
 
     companion object {
-        private const val TAG = "GoogleDriveUploader"
+        private const val TAG = "BackupDiaryActivity"
     }
 }

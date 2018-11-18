@@ -11,8 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ListView
-import com.google.android.gms.drive.GoogleDriveDownloader
-import com.google.android.gms.drive.GoogleDriveUploader
+import me.blog.korn123.easydiary.gms.drive.BackupDiaryActivity
 import com.xw.repo.BubbleSeekBar
 import io.github.aafactory.commons.activities.BaseWebViewActivity
 import io.github.aafactory.commons.helpers.BaseConfig
@@ -23,6 +22,9 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.FontItemAdapter
 import me.blog.korn123.easydiary.adapters.ThumbnailSizeItemAdapter
 import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.gms.drive.BackupPhotoActivity
+import me.blog.korn123.easydiary.gms.drive.RecoverDiaryActivity
+import me.blog.korn123.easydiary.gms.drive.RecoverPhotoActivity
 import me.blog.korn123.easydiary.helper.*
 import org.apache.commons.io.FilenameUtils
 import java.io.File
@@ -64,26 +66,35 @@ class SettingsActivity : EasyDiaryActivity() {
             R.id.restoreSetting -> {
                 mTaskFlag = SETTING_FLAG_IMPORT_GOOGLE_DRIVE
                 if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
-                    val downloadIntent = Intent(this@SettingsActivity, GoogleDriveDownloader::class.java)
-                    startActivity(downloadIntent)
-                } else {
-                    // API Level 23 이상이면서 권한취득 안한경우
+                    openDownloadIntent()
+                } else { // Permission has already been granted
                     confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
                 }
-            }
-            R.id.restorePhotoSetting -> {
-                openGuideView()
             }
             R.id.backupSetting -> {
                 mTaskFlag = SETTING_FLAG_EXPORT_GOOGLE_DRIVE
                 if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    // API Level 22 이하이거나 API Level 23 이상이면서 권한취득 한경우
                     openUploadIntent()
-                } else {
-                    // API Level 23 이상이면서 권한취득 안한경우
+                } else { // Permission has already been granted
                     confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
                 }
+            }
+            R.id.backupAttachPhoto -> {
+                mTaskFlag = SETTING_FLAG_EXPORT_PHOTO_GOOGLE_DRIVE
+                when (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                    true -> openBackupIntent()
+                    false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
+                }
+            }
+            R.id.recoverAttachPhoto -> {
+                mTaskFlag = SETTING_FLAG_IMPORT_PHOTO_GOOGLE_DRIVE
+                when (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                    true -> openRecoverIntent()
+                    false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
+                }
+            }
+            R.id.restorePhotoSetting -> {
+                openGuideView()
             }
             R.id.rateAppSetting -> openGooglePlayBy("me.blog.korn123.easydiary")
             R.id.licenseView -> {
@@ -135,7 +146,9 @@ class SettingsActivity : EasyDiaryActivity() {
         releaseNotes.setOnClickListener(mOnClickListener)
         boldStyleOption.setOnClickListener(mOnClickListener)
         multiPickerOption.setOnClickListener(mOnClickListener)
-        
+        backupAttachPhoto.setOnClickListener(mOnClickListener)
+        recoverAttachPhoto.setOnClickListener(mOnClickListener)
+
         fontLineSpacing.configBuilder
                 .min(0.2F)
                 .max(1.8F)
@@ -213,13 +226,11 @@ class SettingsActivity : EasyDiaryActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             REQUEST_CODE_EXTERNAL_STORAGE -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                // 권한이 있는경우
-                if (mTaskFlag == SETTING_FLAG_EXPORT_GOOGLE_DRIVE) {
-                    //                            FileUtils.copyFile(new File(EasyDiaryDbHelper.getRealmInstance().getPath()), new File(Path.WORKING_DIRECTORY + Path.DIARY_DB_NAME));
-                    openUploadIntent()
-                } else if (mTaskFlag == SETTING_FLAG_IMPORT_GOOGLE_DRIVE) {
-                    val downloadIntent = Intent(applicationContext, GoogleDriveDownloader::class.java)
-                    startActivity(downloadIntent)
+                when (mTaskFlag) {
+                    SETTING_FLAG_EXPORT_GOOGLE_DRIVE -> openUploadIntent()
+                    SETTING_FLAG_IMPORT_GOOGLE_DRIVE -> openDownloadIntent()
+                    SETTING_FLAG_EXPORT_PHOTO_GOOGLE_DRIVE -> openBackupIntent()
+                    SETTING_FLAG_IMPORT_PHOTO_GOOGLE_DRIVE -> openRecoverIntent()
                 }
             } else {
                 // 권한이 없는경우
@@ -237,14 +248,20 @@ class SettingsActivity : EasyDiaryActivity() {
     
     private fun openUploadIntent() {
         // delete unused compressed photo file 
-        File(Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY).listFiles()?.map {
+//        File(Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY).listFiles()?.map {
 //            Log.i("PHOTO-URI", "${it.absolutePath} | ${EasyDiaryDbHelper.countPhotoUriBy(FILE_URI_PREFIX + it.absolutePath)}")
-            if (EasyDiaryDbHelper.countPhotoUriBy(FILE_URI_PREFIX + it.absolutePath) == 0) it.delete()
-        }
+//            if (EasyDiaryDbHelper.countPhotoUriBy(FILE_URI_PREFIX + it.absolutePath) == 0) it.delete()
+//        }
         
-        val uploadIntent = Intent(applicationContext, GoogleDriveUploader::class.java)
+        val uploadIntent = Intent(applicationContext, BackupDiaryActivity::class.java)
         startActivity(uploadIntent)
     }
+
+    private fun openBackupIntent() = startActivity(Intent(applicationContext, BackupPhotoActivity::class.java))
+
+    private fun openRecoverIntent() = startActivity(Intent(applicationContext, RecoverPhotoActivity::class.java))
+
+    private fun openDownloadIntent() = startActivity(Intent(applicationContext, RecoverDiaryActivity::class.java))
 
     private fun openThumbnailSettingDialog() {
         val builder = AlertDialog.Builder(this@SettingsActivity)

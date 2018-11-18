@@ -26,7 +26,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             applicationVariants.all { variant ->
                 variant.outputs.each { output ->
-                    def releaseFileName = "easy_diary-$versionName-release.apk"
+                    def releaseFileName = "easy_diary-${new Date().format('yyyyMMddHHmmss')}-beta.apk"
                     println("test message: $releaseFileName")
                     output.outputFileName = releaseFileName
                 }
@@ -75,7 +75,7 @@ dependencies {
 
     implementation 'com.simplemobiletools:commons:3.17.19'
 //    implementation project(":commons")
-    implementation 'io.github.aafactory:commons:0.9.3'
+    implementation 'io.github.aafactory:commons:0.9.4'
 //    implementation project(":aafactory-commons")
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.1'
     implementation group: 'com.roomorama', name: 'caldroid', version: '3.0.1'

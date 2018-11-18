@@ -87,8 +87,8 @@
     <string name="application_lock_password_title">ロック番号の設定</string>
     <string name="restore_diary">ダイアリー回復する</string>
     <string name="restore_diary_summary">Googleのドライブにバックアップされたデータを利用して、すべてのコンテンツを回復します.</string>
-    <string name="restore_photo">ダイアリー添付写真の回復する</string>
-    <string name="restore_photo_summary">ダイアリーに添付された写真が存在する場合は、その写真を回復します。</string>
+    <string name="restore_photo">ダイアリー添付写真の回復する(手動)</string>
+    <string name="restore_photo_summary">ユーザーは日記に添付された写真を直接復元します。</string>
     <string name="backup_diary">ダイアリーバックアップする</string>
     <string name="backup_diary_summary">すべてのコンテンツをGoogleのドライブにバックアップします.</string>
     <string name="font_setting">フォントの設定</string>
@@ -195,6 +195,10 @@
         v1.4.57 / 2018.11.12\n
         一度に複数の画像を添付するマルチピッカー設定機能を追加
     </string>
+    <string name="release_121">
+        v1.4.58 / 2018.11.18\n
+        Googleのドライブを使用した添付写真のバックアップと復元機能を追加
+    </string>
     
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -207,13 +211,13 @@
     <string name="save_diary">日記を保存する</string>
     <string name="photo_registration">写真の登録</string>
     <string name="zoom_in">ズームイン</string>
-    <string name="zoom_out">Zoom Out</string>
+    <string name="zoom_out">ズームアウトする</string>
     <string name="edit_diary">ズームアウトする</string>
     <string name="text_to_speech">ダイアリーからスピーチ</string>
     <string name="diary_postcard">日記郵便はがき</string>
     <string name="thumbnail_setting_title">サムネイルのサイズ</string>
     <string name="thumbnail_setting_summary">日記に添付された写真のサムネイルサイズを設定します。設定されたサイズは、検索画面ではなく、日記の作成および変更画面にのみ適用されます。</string>
-    <string name="collpase_attached_photo">添付写真を折りたたむ</string>
+    <string name="collapse_attached_photo">添付写真を折りたたむ</string>
     <string name="expand_attached_photo">添付写真を拡大</string>
     <string name="release_notes_title">リリースノート</string>
     <string name="release_notes_summary">バージョン別に新機能を確認してください。</string>
@@ -223,4 +227,22 @@
     <string name="bold_style_option_summary">日記のタイトルとタイムラインの時間を太字で表示するように設定します。</string>
     <string name="multi_picker_option_title">マルチピッカー設定</string>
     <string name="multi_picker_option_summary">日記の写真を付けるときは、ギャラリーアプリを使わずに「簡単日記」に用意されているマルチピッカーを使います。 マルチピッカーを有効にすると、一度に複数の画像を添付できます。</string>
+    <string name="preferences_category_backup_restore">アプリケーションのバックアップとリストア</string>
+    <string name="backup_attach_photo_title">ダイアリー添付写真のバックアップ(Beta)</string>
+    <string name="backup_attach_photo_summary">添付した写真をGoogleドライブにバックアップします。 この機能は、一部のデバイスではベータ版のため動作しないことがあります。</string>
+    <string name="recover_attach_photo_title">ダイアリー添付写真の回復する(Beta)</string>
+    <string name="recover_attach_photo_summary">Googleのドライブにバックアップされた添付画像を回復します。この機能は、ベータサービス機能で、一部の機器では動作しないかももあります。</string>
+    <string name="notification_msg_device_file_count">バックアップファイルの数</string>
+    <string name="notification_msg_upload_file_count">アップロードするファイルの数</string>
+    <string name="notification_msg_upload_invalid">すべてのバックアップ対象ファイルはすでに存在します。</string>
+    <string name="notification_msg_upload_empty">バックアップ先のファイルが存在しません。</string>
+    <string name="notification_msg_upload_progress">アップロード中…</string>
+    <string name="notification_msg_upload_complete">アップロードの完了</string>
+    <string name="notification_msg_google_drive_file_count">回復ファイルの数</string>
+    <string name="notification_msg_download_file_count">ダウンロードするファイルの数</string>
+    <string name="notification_msg_download_invalid">すべての回復先ファイルがすでに存在しています。</string>
+    <string name="notification_msg_download_empty">回復対象のファイルが存在しません。</string>
+    <string name="notification_msg_download_progress">ダウンロード…</string>
+    <string name="notification_msg_download_complete">ダウンロード完了</string>
+    <string name="notification_msg_duplicate_file_count">存在するファイルの数</string>
 </resources>
