@@ -65,17 +65,6 @@ class RecoverPhotoActivity : BaseDriveActivity() {
      * it retrieves results for the first page.
      */
     private fun listFilesInFolder(folder: DriveFolder) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // Create the NotificationChannel
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val mChannel = NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, importance)
-            mChannel.description = NOTIFICATION_CHANNEL_DESCRIPTION
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(mChannel)
-        }
-
         val query = Query.Builder()
                 .addFilter(Filters.eq(SearchableField.MIME_TYPE, AAF_EASY_DIARY_PHOTO))
                 .build()
@@ -90,6 +79,16 @@ class RecoverPhotoActivity : BaseDriveActivity() {
                         showDialog()
                     }
                     false -> {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            // Create the NotificationChannel
+                            val importance = NotificationManager.IMPORTANCE_DEFAULT
+                            val mChannel = NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, importance)
+                            mChannel.description = NOTIFICATION_CHANNEL_DESCRIPTION
+                            // Register the channel with the system; you can't change the importance
+                            // or other notification behaviors after this
+                            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+                            notificationManager.createNotificationChannel(mChannel)
+                        }
                         val dismissIntent = Intent(this, NotificationService::class.java).apply {
                             action = NotificationService.ACTION_DISMISS
                         }

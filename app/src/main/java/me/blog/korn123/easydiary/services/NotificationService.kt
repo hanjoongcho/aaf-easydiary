@@ -6,7 +6,7 @@ import android.support.v4.app.NotificationManagerCompat
 import me.blog.korn123.easydiary.helper.NOTIFICATION_ID
 
 
-class NotificationService(name: String) : IntentService(name) {
+class NotificationService(name: String = "EasyDiaryNotificationService") : IntentService(name) {
 
     override fun onHandleIntent(intent: Intent?) {
         if (intent != null) {
