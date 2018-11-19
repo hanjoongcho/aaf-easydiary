@@ -16,8 +16,10 @@ package me.blog.korn123.easydiary.gms.drive
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Environment
@@ -29,10 +31,13 @@ import com.google.android.gms.drive.query.Query
 import com.google.android.gms.drive.query.SearchableField
 import com.simplemobiletools.commons.extensions.getFileCount
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_NAME
+import me.blog.korn123.easydiary.helper.NOTIFICATION_ID
+import me.blog.korn123.easydiary.services.NotificationService
 import org.apache.commons.io.FileUtils
 import java.io.File
 
@@ -116,7 +121,12 @@ class BackupPhotoActivity : BaseDriveActivity() {
                             val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
                             notificationManager.createNotificationChannel(mChannel)
                         }
-
+                        val dismissIntent = Intent(this, NotificationService::class.java).apply {
+                            action = NotificationService.ACTION_DISMISS
+                        }
+                        val diaryMainIntent = Intent(this, DiaryMainActivity::class.java).apply {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        }
                         notificationBuilder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
                         notificationBuilder.setAutoCancel(true)
                                 .setDefaults(Notification.DEFAULT_ALL)
@@ -126,6 +136,8 @@ class BackupPhotoActivity : BaseDriveActivity() {
                                 .setPriority(Notification.PRIORITY_MAX) // this is deprecated in API 26 but you can still use for below 26. check below update for 26 API
                                 .setOnlyAlertOnce(true)
                                 .setContentTitle(getString(R.string.backup_attach_photo_title))
+                                .setContentIntent(PendingIntent.getActivity(this, 0, diaryMainIntent, PendingIntent.FLAG_UPDATE_CURRENT))
+                                .addAction(R.drawable.cloud_upload, getString(R.string.dismiss), PendingIntent.getService(this, 0, dismissIntent, 0))
                         notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
                         val titles = mutableListOf<String>()
@@ -159,13 +171,13 @@ class BackupPhotoActivity : BaseDriveActivity() {
 
         if (targetFilenames.size == 0) {
             notificationBuilder.setContentText(getString(R.string.notification_msg_upload_invalid))
-            notificationManager.notify(1, notificationBuilder.build())
+            notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
         } else {
             currentCount++
             val message = if (currentCount < targetFilenames.size) getString(R.string.notification_msg_upload_progress) else getString(R.string.notification_msg_upload_complete)
             notificationBuilder.setContentTitle("$message  $currentCount/${targetFilenames.size}")
             notificationBuilder.setProgress(targetFilenames.size, currentCount, false)
-            notificationManager.notify(1, notificationBuilder.build())
+            notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
         }
 
         if (currentCount == targetFilenames.size) finish()

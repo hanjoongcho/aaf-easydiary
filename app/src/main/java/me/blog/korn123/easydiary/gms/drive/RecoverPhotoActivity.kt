@@ -23,6 +23,8 @@ import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_NAME
+import me.blog.korn123.easydiary.helper.NOTIFICATION_ID
+import me.blog.korn123.easydiary.services.NotificationService
 import org.apache.commons.io.FileUtils
 import java.io.File
 import java.io.IOException
@@ -63,17 +65,6 @@ class RecoverPhotoActivity : BaseDriveActivity() {
      * it retrieves results for the first page.
      */
     private fun listFilesInFolder(folder: DriveFolder) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // Create the NotificationChannel
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val mChannel = NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, importance)
-            mChannel.description = NOTIFICATION_CHANNEL_DESCRIPTION
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(mChannel)
-        }
-
         val query = Query.Builder()
                 .addFilter(Filters.eq(SearchableField.MIME_TYPE, AAF_EASY_DIARY_PHOTO))
                 .build()
@@ -88,7 +79,22 @@ class RecoverPhotoActivity : BaseDriveActivity() {
                         showDialog()
                     }
                     false -> {
-                        val mainIntent = Intent(this, DiaryMainActivity::class.java)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            // Create the NotificationChannel
+                            val importance = NotificationManager.IMPORTANCE_DEFAULT
+                            val mChannel = NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, importance)
+                            mChannel.description = NOTIFICATION_CHANNEL_DESCRIPTION
+                            // Register the channel with the system; you can't change the importance
+                            // or other notification behaviors after this
+                            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+                            notificationManager.createNotificationChannel(mChannel)
+                        }
+                        val dismissIntent = Intent(this, NotificationService::class.java).apply {
+                            action = NotificationService.ACTION_DISMISS
+                        }
+                        val diaryMainIntent = Intent(this, DiaryMainActivity::class.java).apply {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        }
                         notificationBuilder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
                         notificationBuilder.setAutoCancel(true)
                                 .setDefaults(Notification.DEFAULT_ALL)
@@ -98,9 +104,8 @@ class RecoverPhotoActivity : BaseDriveActivity() {
                                 .setPriority(Notification.PRIORITY_MAX) // this is deprecated in API 26 but you can still use for below 26. check below update for 26 API
                                 .setOnlyAlertOnce(true)
                                 .setContentTitle(getString(R.string.recover_attach_photo_title))
-                                .addAction(R.drawable.cloud_download, getString(R.string.ok), PendingIntent.getActivity(
-                                        this, 0, mainIntent, PendingIntent.FLAG_UPDATE_CURRENT
-                                ))
+                                .setContentIntent(PendingIntent.getActivity(this, 0, diaryMainIntent, PendingIntent.FLAG_UPDATE_CURRENT))
+                                .addAction(R.drawable.cloud_download, getString(R.string.dismiss), PendingIntent.getService(this, 0, dismissIntent, 0))
                         notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                         val photoPath = "${Environment.getExternalStorageDirectory().absolutePath}$AAF_EASY_DIARY_PHOTO_DIRECTORY"
                         metadataBuffer.forEachIndexed { index, metadata ->
@@ -159,13 +164,13 @@ class RecoverPhotoActivity : BaseDriveActivity() {
                 .addLine("${getString(R.string.notification_msg_download_file_count)}: ${targetIndexes.size}"))
         if (targetIndexes.size == 0) {
             notificationBuilder.setContentText(getString(R.string.notification_msg_download_invalid))
-            notificationManager.notify(1, notificationBuilder.build())
+            notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
         } else {
             currentCount++
             val message = if (currentCount < targetIndexes.size) getString(R.string.notification_msg_download_progress) else getString(R.string.notification_msg_download_complete)
             notificationBuilder.setContentTitle("$message  $currentCount/${targetIndexes.size}")
             notificationBuilder.setProgress(targetIndexes.size, currentCount, false)
-            notificationManager.notify(1, notificationBuilder.build())
+            notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
         }
         if (currentCount == targetIndexes.size) finish()
     }
