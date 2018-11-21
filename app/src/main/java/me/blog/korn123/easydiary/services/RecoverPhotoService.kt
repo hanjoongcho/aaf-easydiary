@@ -18,6 +18,7 @@ import com.google.android.gms.drive.query.Filters
 import com.google.android.gms.drive.query.Query
 import com.google.android.gms.drive.query.SearchableField
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.helper.*
 import org.apache.commons.io.FileUtils
 import java.io.File
@@ -54,18 +55,14 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
             val notificationManager = getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(mChannel)
         }
-//        val diaryMainIntent = Intent(this, DiaryMainActivity::class.java).apply {
-//            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//        }
         notificationBuilder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
         notificationBuilder
-                .setOngoing(false)
+                .setOngoing(true)
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.cloud_download)
                 .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
                 .setOnlyAlertOnce(true)
                 .setContentTitle(getString(R.string.recover_attach_photo_title))
-//                .setContentIntent(PendingIntent.getActivity(this, 0, diaryMainIntent, PendingIntent.FLAG_UPDATE_CURRENT))
                 .addAction(
                         R.drawable.cloud_download,
                         getString(R.string.dismiss),
@@ -73,7 +70,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
                             action = NotificationService.ACTION_DISMISS
                         }, 0)
                 )
-        startForeground(NOTIFICATION_ID, notificationBuilder.build())
+        startForeground(NOTIFICATION_FOREGROUND_ID, notificationBuilder.build())
 
         intent?.let {
             recoverPhoto(DriveId.decodeFromString(it.getStringExtra(NOTIFICATION_DRIVE_ID)).asDriveFolder())
@@ -141,44 +138,47 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
                 .addLine("${getString(R.string.notification_msg_duplicate_file_count)}: $duplicateFileCount")
                 .addLine("${getString(R.string.notification_msg_download_file_count)}: ${targetIndexes.size}"))
         if (targetIndexes.size == 0) {
-            notificationBuilder.setOngoing(false)
-            notificationBuilder.addAction(
-                    R.drawable.cloud_download,
-                    getString(R.string.dismiss),
-                    PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
-                        action = NotificationService.ACTION_DISMISS
-                    }, 0)
-            )
-            notificationBuilder.setContentText(getString(R.string.notification_msg_download_invalid))
-            notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
-            mInProcessJob = false
-            stopForeground(true)
+            launchCompleteNotification(getString(R.string.notification_msg_download_invalid))
         } else {
             currentCount++
-            var message: String? = null
             when (currentCount < targetIndexes.size) {
                 true -> {
-                    message = getString(R.string.notification_msg_download_progress)
+                    notificationBuilder.setContentTitle("${getString(R.string.notification_msg_download_progress)}  $currentCount/${targetIndexes.size}")
+                    notificationBuilder.setProgress(targetIndexes.size, currentCount, false)
+                    notificationManager.notify(NOTIFICATION_FOREGROUND_ID, notificationBuilder.build())
                 }
                 false -> {
-                    notificationBuilder.setOngoing(false)
-                    notificationBuilder.addAction(
-                            R.drawable.cloud_download,
-                            getString(R.string.dismiss),
-                            PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
-                                action = NotificationService.ACTION_DISMISS
-                            }, 0)
-                    )
-                    message = getString(R.string.notification_msg_download_complete)
-                    mInProcessJob = false
-                    stopForeground(true)
+                    launchCompleteNotification(getString(R.string.notification_msg_download_complete))
                 }
             }
-            notificationBuilder.setContentTitle("$message  $currentCount/${targetIndexes.size}")
-            notificationBuilder.setProgress(targetIndexes.size, currentCount, false)
-            notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
         }
-
 //        if (currentCount == targetIndexes.size) finish()
+    }
+    
+    private fun launchCompleteNotification(contentText: String) {
+        val notificationBuilder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
+        notificationBuilder
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(R.drawable.cloud_download)
+                .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
+                .setOnlyAlertOnce(true)
+                .setAutoCancel(true)
+                .setContentTitle(getString(R.string.recover_attach_photo_title))
+                .setContentText(contentText)
+                .setContentIntent(
+                        PendingIntent.getActivity(this, 0, Intent(this, DiaryMainActivity::class.java).apply {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        }, PendingIntent.FLAG_UPDATE_CURRENT)
+                )
+                .addAction(
+                        R.drawable.cloud_download,
+                        getString(R.string.dismiss),
+                        PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
+                            action = NotificationService.ACTION_DISMISS
+                        }, 0)
+                )
+        notificationManager.notify(NOTIFICATION_COMPLETE_ID, notificationBuilder.build())
+        mInProcessJob = false
+        stopForeground(true)
     }
 }

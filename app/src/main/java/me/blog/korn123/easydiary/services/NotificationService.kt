@@ -3,7 +3,7 @@ package me.blog.korn123.easydiary.services
 import android.app.IntentService
 import android.content.Intent
 import android.support.v4.app.NotificationManagerCompat
-import me.blog.korn123.easydiary.helper.NOTIFICATION_ID
+import me.blog.korn123.easydiary.helper.NOTIFICATION_COMPLETE_ID
 
 
 class NotificationService(name: String = "EasyDiaryNotificationService") : IntentService(name) {
@@ -21,7 +21,7 @@ class NotificationService(name: String = "EasyDiaryNotificationService") : Inten
 
     private fun handleActionDismiss() {
         val notificationManagerCompat = NotificationManagerCompat.from(applicationContext)
-        notificationManagerCompat.cancel(NOTIFICATION_ID)
+        notificationManagerCompat.cancel(NOTIFICATION_COMPLETE_ID)
     }
 
     private fun handleActionSnooze() {}
