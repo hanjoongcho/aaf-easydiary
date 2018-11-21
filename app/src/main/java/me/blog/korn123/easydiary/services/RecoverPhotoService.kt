@@ -57,19 +57,12 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
         }
         notificationBuilder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
         notificationBuilder
-                .setOngoing(true)
+                .setOngoing(false)
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.cloud_download)
                 .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
                 .setOnlyAlertOnce(true)
                 .setContentTitle(getString(R.string.recover_attach_photo_title))
-                .addAction(
-                        R.drawable.cloud_download,
-                        getString(R.string.dismiss),
-                        PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
-                            action = NotificationService.ACTION_DISMISS
-                        }, 0)
-                )
         startForeground(NOTIFICATION_FOREGROUND_ID, notificationBuilder.build())
 
         intent?.let {
@@ -162,6 +155,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
                 .setSmallIcon(R.drawable.cloud_download)
                 .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
                 .setOnlyAlertOnce(true)
+                .setOngoing(true)
                 .setAutoCancel(true)
                 .setContentTitle(getString(R.string.recover_attach_photo_title))
                 .setContentText(contentText)
