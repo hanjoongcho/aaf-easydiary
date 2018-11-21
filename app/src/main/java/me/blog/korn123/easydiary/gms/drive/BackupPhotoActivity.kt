@@ -36,7 +36,7 @@ import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_NAME
-import me.blog.korn123.easydiary.helper.NOTIFICATION_ID
+import me.blog.korn123.easydiary.helper.NOTIFICATION_COMPLETE_ID
 import me.blog.korn123.easydiary.services.NotificationService
 import org.apache.commons.io.FileUtils
 import java.io.File
@@ -171,13 +171,13 @@ class BackupPhotoActivity : BaseDriveActivity() {
 
         if (targetFilenames.size == 0) {
             notificationBuilder.setContentText(getString(R.string.notification_msg_upload_invalid))
-            notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
+            notificationManager.notify(NOTIFICATION_COMPLETE_ID, notificationBuilder.build())
         } else {
             currentCount++
             val message = if (currentCount < targetFilenames.size) getString(R.string.notification_msg_upload_progress) else getString(R.string.notification_msg_upload_complete)
             notificationBuilder.setContentTitle("$message  $currentCount/${targetFilenames.size}")
             notificationBuilder.setProgress(targetFilenames.size, currentCount, false)
-            notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
+            notificationManager.notify(NOTIFICATION_COMPLETE_ID, notificationBuilder.build())
         }
 
         if (currentCount == targetFilenames.size) finish()
