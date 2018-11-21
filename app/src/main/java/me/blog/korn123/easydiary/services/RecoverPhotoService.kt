@@ -34,18 +34,15 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
     private var mInProcessJob = true
     private val targetIndexes = arrayListOf<Int>()
 
-    override fun onHandleIntent(intent: Intent?) {
-        currentCount = 0
-        remoteDriveFileCount = 0
-        duplicateFileCount = 0
-        mInProcessJob = true
-        targetIndexes.clear()
-
+    override fun onCreate() {
+        super.onCreate()
         GoogleSignIn.getLastSignedInAccount(this)?.let {
             driveResourceClient = Drive.getDriveResourceClient(this, it)
         }
+        notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationBuilder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && notificationManager.getNotificationChannel(NOTIFICATION_CHANNEL_ID) == null) {
             // Create the NotificationChannel
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val mChannel = NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, importance)
@@ -55,7 +52,11 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
             val notificationManager = getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(mChannel)
         }
-        notificationBuilder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
+    }
+    
+    override fun onHandleIntent(intent: Intent?) {
+        mInProcessJob = true
+        notificationManager.cancel(NOTIFICATION_COMPLETE_ID)
         notificationBuilder
                 .setOngoing(false)
                 .setWhen(System.currentTimeMillis())
@@ -81,7 +82,6 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
                 .build()
         val queryTask = driveResourceClient?.queryChildren(folder, query)
         queryTask?.addOnSuccessListener { metadataBuffer ->
-            notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             val photoPath = "${Environment.getExternalStorageDirectory().absolutePath}$AAF_EASY_DIARY_PHOTO_DIRECTORY"
             metadataBuffer.forEachIndexed { index, metadata ->
                 if (!File("$photoPath${metadata.title}").exists()) targetIndexes.add(index)
@@ -173,6 +173,10 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
                 )
         notificationManager.notify(NOTIFICATION_COMPLETE_ID, notificationBuilder.build())
         mInProcessJob = false
+        currentCount = 0
+        remoteDriveFileCount = 0
+        duplicateFileCount = 0
+        targetIndexes.clear()
         stopForeground(true)
     }
 }
