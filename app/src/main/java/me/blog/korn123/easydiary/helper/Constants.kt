@@ -109,3 +109,5 @@ const val NOTIFICATION_ID: Int = 1001
 const val NOTIFICATION_CHANNEL_ID = "easy_diary_channel_id"
 const val NOTIFICATION_CHANNEL_NAME = "Easy-Diary notification channel"
 const val NOTIFICATION_CHANNEL_DESCRIPTION = "This channel is used for 'Easy-Diary' data backup and recovery operations."
+
+const val NOTIFICATION_DRIVE_ID = "notification_drive_id"
