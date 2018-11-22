@@ -50,6 +50,7 @@
         </provider>
         <service android:name=".services.NotificationService" />
         <service android:name=".services.RecoverPhotoService" />
+        <service android:name=".services.BackupPhotoService" />
     </application>
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
