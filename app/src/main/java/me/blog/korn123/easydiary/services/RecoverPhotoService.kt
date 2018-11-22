@@ -9,8 +9,10 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Environment
+import android.os.Handler
 import android.support.v4.app.NotificationCompat
 import android.support.v7.app.AppCompatActivity
+import android.widget.Toast
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.drive.*
 import com.google.android.gms.drive.events.OpenFileCallback
@@ -35,6 +37,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
     private val targetIndexes = arrayListOf<Int>()
 
     override fun onCreate() {
+        Handler().post { Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show() }
         super.onCreate()
         GoogleSignIn.getLastSignedInAccount(this)?.let {
             driveResourceClient = Drive.getDriveResourceClient(this, it)
@@ -53,8 +56,14 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
             notificationManager.createNotificationChannel(mChannel)
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Handler().post { Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show() }
+    }
     
     override fun onHandleIntent(intent: Intent?) {
+        Handler().post { Toast.makeText(this, "onHandleIntent", Toast.LENGTH_SHORT).show() }
         mInProcessJob = true
         notificationManager.cancel(NOTIFICATION_COMPLETE_ID)
         notificationBuilder
@@ -189,6 +198,6 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
         remoteDriveFileCount = 0
         duplicateFileCount = 0
         targetIndexes.clear()
-        stopForeground(true)
+//        stopForeground(true)
     }
 }
