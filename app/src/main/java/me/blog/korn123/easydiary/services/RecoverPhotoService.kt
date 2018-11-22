@@ -126,18 +126,18 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
     }
 
     private fun updateNotification() {
-        notificationBuilder.setStyle(NotificationCompat.InboxStyle()
-                .addLine("${getString(R.string.notification_msg_google_drive_file_count)}: $remoteDriveFileCount")
-                .addLine("${getString(R.string.notification_msg_duplicate_file_count)}: $duplicateFileCount")
-                .addLine("${getString(R.string.notification_msg_download_file_count)}: ${targetIndexes.size}"))
         if (targetIndexes.size == 0) {
             launchCompleteNotification(getString(R.string.notification_msg_download_invalid))
         } else {
             currentCount++
             when (currentCount < targetIndexes.size) {
                 true -> {
-                    notificationBuilder.setContentTitle("${getString(R.string.notification_msg_download_progress)}  $currentCount/${targetIndexes.size}")
-                    notificationBuilder.setProgress(targetIndexes.size, currentCount, false)
+                    notificationBuilder.setStyle(NotificationCompat.InboxStyle()
+                            .addLine("${getString(R.string.notification_msg_google_drive_file_count)}: $remoteDriveFileCount")
+                            .addLine("${getString(R.string.notification_msg_duplicate_file_count)}: $duplicateFileCount")
+                            .addLine("${getString(R.string.notification_msg_download_file_count)}: ${targetIndexes.size}"))
+                            .setContentTitle("${getString(R.string.notification_msg_download_progress)}  $currentCount/${targetIndexes.size}")
+                            .setProgress(targetIndexes.size, currentCount, false)
                     notificationManager.notify(NOTIFICATION_FOREGROUND_ID, notificationBuilder.build())
                 }
                 false -> {
@@ -149,8 +149,13 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
     }
     
     private fun launchCompleteNotification(contentText: String) {
-        val notificationBuilder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
-        notificationBuilder
+        val resultNotificationBuilder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
+        resultNotificationBuilder
+                .setStyle(NotificationCompat.InboxStyle()
+                        .addLine("${getString(R.string.notification_msg_google_drive_file_count)}: $remoteDriveFileCount")
+                        .addLine("${getString(R.string.notification_msg_duplicate_file_count)}: $duplicateFileCount")
+                        .addLine("${getString(R.string.notification_msg_download_file_count)}: ${targetIndexes.size}")
+                )
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.cloud_download)
                 .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
@@ -171,7 +176,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
                             action = NotificationService.ACTION_DISMISS
                         }, 0)
                 )
-        notificationManager.notify(NOTIFICATION_COMPLETE_ID, notificationBuilder.build())
+        notificationManager.notify(NOTIFICATION_COMPLETE_ID, resultNotificationBuilder.build())
         mInProcessJob = false
         currentCount = 0
         remoteDriveFileCount = 0
