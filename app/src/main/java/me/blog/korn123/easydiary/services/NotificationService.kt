@@ -9,12 +9,11 @@ import me.blog.korn123.easydiary.helper.NOTIFICATION_COMPLETE_ID
 class NotificationService(name: String = "EasyDiaryNotificationService") : IntentService(name) {
 
     override fun onHandleIntent(intent: Intent?) {
-        if (intent != null) {
-            val action = intent.action
-            if (ACTION_DISMISS == action) {
-                handleActionDismiss()
-            } else if (ACTION_SNOOZE == action) {
-                handleActionSnooze()
+        intent?.let {
+            when (it.action) {
+                ACTION_DISMISS -> handleActionDismiss()
+                ACTION_SNOOZE -> handleActionSnooze()
+                ACTION_CANCEL -> handleActionCancel()
             }
         }
     }
@@ -26,8 +25,14 @@ class NotificationService(name: String = "EasyDiaryNotificationService") : Inten
 
     private fun handleActionSnooze() {}
 
+    private fun handleActionCancel() {
+        val recoverPhotoService = Intent(this, RecoverPhotoService::class.java)
+        stopService(recoverPhotoService)
+    }
+
     companion object {
         const val ACTION_DISMISS = "me.blog.korn123.easydiary.services.action.DISMISS";
         const val ACTION_SNOOZE = "me.blog.korn123.easydiary.services.action.SNOOZE";
+        const val ACTION_CANCEL = "me.blog.korn123.easydiary.services.action.CANCEL";
     }
 }

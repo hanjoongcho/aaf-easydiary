@@ -64,6 +64,13 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
                 .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
                 .setOnlyAlertOnce(true)
                 .setContentTitle(getString(R.string.recover_attach_photo_title))
+//                .addAction(
+//                        R.drawable.cloud_download,
+//                        getString(R.string.cancel),
+//                        PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
+//                            action = NotificationService.ACTION_CANCEL
+//                        }, 0)
+//                )
         startForeground(NOTIFICATION_FOREGROUND_ID, notificationBuilder.build())
 
         intent?.let {
