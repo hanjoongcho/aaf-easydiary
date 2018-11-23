@@ -195,8 +195,8 @@
         v1.4.57 / 2018.11.12\n
         Added multi-picker setting function to attach multiple pictures at one time
     </string>
-    <string name="release_122">
-        v1.4.59 / 2018.11.19\n
+    <string name="release_123">
+        v1.4.60 / 2018.11.24\n
         Added attached photos backup and recovery function using Google Drive
     </string>
 
@@ -238,11 +238,15 @@
     <string name="notification_msg_upload_empty">The file to be backed up does not exist.</string>
     <string name="notification_msg_upload_progress">Uploading…</string>
     <string name="notification_msg_upload_complete">Upload Complete</string>
+    <string name="notification_msg_upload_success">Upload Success</string>
+    <string name="notification_msg_upload_fail">Upload Fail</string>
     <string name="notification_msg_google_drive_file_count">Number of recover files</string>
     <string name="notification_msg_download_file_count">Number of files to download</string>
     <string name="notification_msg_download_invalid">All recovery target files already exist.</string>
     <string name="notification_msg_download_empty">The file to be recovered does not exist.</string>
     <string name="notification_msg_download_progress">Downloading…</string>
     <string name="notification_msg_download_complete">Download Complete</string>
+    <string name="notification_msg_download_success">Download Success</string>
+    <string name="notification_msg_download_fail">Download Fail</string>
     <string name="notification_msg_duplicate_file_count">Number of exist files</string>
 </resources>
