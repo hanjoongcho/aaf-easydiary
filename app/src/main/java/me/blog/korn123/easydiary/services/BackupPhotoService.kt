@@ -40,7 +40,7 @@ class BackupPhotoService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onCreate() {
-        Handler().post { Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show() }
+//        Handler().post { Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show() }
         GoogleSignIn.getLastSignedInAccount(this)?.let {
             driveResourceClient = Drive.getDriveResourceClient(this, it)
         }
@@ -60,7 +60,7 @@ class BackupPhotoService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Handler().post { Toast.makeText(this, "onStartCommand", Toast.LENGTH_SHORT).show() }
+//        Handler().post { Toast.makeText(this, "onStartCommand", Toast.LENGTH_SHORT).show() }
 
         intent?.let {
             mDriveFolder = DriveId.decodeFromString(it.getStringExtra(NOTIFICATION_DRIVE_ID)).asDriveFolder()
@@ -72,7 +72,7 @@ class BackupPhotoService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         mInProcessJob = false
-        Handler().post { Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show() }
+//        Handler().post { Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show() }
     }
     
     private fun backupPhoto() {
@@ -86,7 +86,7 @@ class BackupPhotoService : Service() {
                 .build()
         val queryTask = driveResourceClient?.queryChildren(mDriveFolder, query)
         queryTask?.addOnSuccessListener { metadataBuffer ->
-            Handler().post { Toast.makeText(this, "metadataBuffer: ${metadataBuffer.count}", Toast.LENGTH_SHORT).show() }
+//            Handler().post { Toast.makeText(this, "metadataBuffer: ${metadataBuffer.count}", Toast.LENGTH_SHORT).show() }
 
             notificationBuilder.setAutoCancel(true)
                     .setDefaults(Notification.DEFAULT_ALL)

@@ -41,7 +41,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
     private val photoPath = "${Environment.getExternalStorageDirectory().absolutePath}$AAF_EASY_DIARY_PHOTO_DIRECTORY"
     
     override fun onCreate() {
-        Handler().post { Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show() }
+//        Handler().post { Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show() }
         super.onCreate()
         GoogleSignIn.getLastSignedInAccount(this)?.let {
             driveResourceClient = Drive.getDriveResourceClient(this, it)
@@ -64,11 +64,11 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
     override fun onDestroy() {
         super.onDestroy()
         mInProcessJob = false
-        Handler().post { Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show() }
+//        Handler().post { Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show() }
     }
     
     override fun onHandleIntent(intent: Intent?) {
-        Handler().post { Toast.makeText(this, "onHandleIntent", Toast.LENGTH_SHORT).show() }
+//        Handler().post { Toast.makeText(this, "onHandleIntent", Toast.LENGTH_SHORT).show() }
         mInProcessJob = true
         notificationManager.cancel(NOTIFICATION_COMPLETE_ID)
         notificationBuilder
