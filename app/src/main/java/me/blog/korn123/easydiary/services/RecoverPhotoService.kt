@@ -94,7 +94,12 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
 
     private fun recoverPhoto(folder: DriveFolder) {
         val query = Query.Builder()
-                .addFilter(Filters.eq(SearchableField.MIME_TYPE, AAF_EASY_DIARY_PHOTO))
+                .addFilter(
+                        Filters.and(
+                                Filters.eq(SearchableField.MIME_TYPE, AAF_EASY_DIARY_PHOTO),
+                                Filters.eq(SearchableField.TRASHED, false)
+                        )
+                )
                 .build()
         val queryTask = driveResourceClient?.queryChildren(folder, query)
         queryTask?.addOnSuccessListener { metadataBuffer ->
