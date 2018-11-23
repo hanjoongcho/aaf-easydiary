@@ -74,6 +74,8 @@ class BackupPhotoService : Service() {
                 .build()
         val queryTask = driveResourceClient?.queryChildren(folder, query)
         queryTask?.addOnSuccessListener { metadataBuffer ->
+            Handler().post { Toast.makeText(this, "metadataBuffer: ${metadataBuffer.count}", Toast.LENGTH_SHORT).show() }
+
             val photoPath = "${Environment.getExternalStorageDirectory().absolutePath}$AAF_EASY_DIARY_PHOTO_DIRECTORY"
             notificationBuilder.setAutoCancel(true)
                     .setDefaults(Notification.DEFAULT_ALL)
@@ -185,5 +187,6 @@ class BackupPhotoService : Service() {
         duplicateFileCount = 0
         currentCount = 0
         targetFilenames.clear()
+        stopForeground(true)
     }
 }
