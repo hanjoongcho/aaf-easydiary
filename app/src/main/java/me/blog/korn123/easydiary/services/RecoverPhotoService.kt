@@ -146,20 +146,15 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
             launchCompleteNotification(getString(R.string.notification_msg_download_invalid))
         } else {
             currentCount++
-            when (currentCount < targetIndexes.size) {
-                true -> {
-                    notificationBuilder.setStyle(NotificationCompat.InboxStyle()
-                            .addLine("${getString(R.string.notification_msg_google_drive_file_count)}: $remoteDriveFileCount")
-                            .addLine("${getString(R.string.notification_msg_duplicate_file_count)}: $duplicateFileCount")
-                            .addLine("${getString(R.string.notification_msg_download_file_count)}: ${targetIndexes.size}"))
-                            .setContentTitle("${getString(R.string.notification_msg_download_progress)}  $currentCount/${targetIndexes.size}")
-                            .setProgress(targetIndexes.size, currentCount, false)
-                    notificationManager.notify(NOTIFICATION_FOREGROUND_ID, notificationBuilder.build())
-                }
-                false -> {
-                    launchCompleteNotification(getString(R.string.notification_msg_download_complete))
-                }
-            }
+            notificationBuilder.setStyle(NotificationCompat.InboxStyle()
+                    .addLine("${getString(R.string.notification_msg_google_drive_file_count)}: $remoteDriveFileCount")
+                    .addLine("${getString(R.string.notification_msg_duplicate_file_count)}: $duplicateFileCount")
+                    .addLine("${getString(R.string.notification_msg_download_file_count)}: ${targetIndexes.size}"))
+                    .setContentTitle("${getString(R.string.notification_msg_download_progress)}  $currentCount/${targetIndexes.size}")
+                    .setProgress(targetIndexes.size, currentCount, false)
+            notificationManager.notify(NOTIFICATION_FOREGROUND_ID, notificationBuilder.build())
+
+            if (currentCount == targetIndexes.size) launchCompleteNotification(getString(R.string.notification_msg_download_complete))
         }
 //        if (currentCount == targetIndexes.size) finish()
     }

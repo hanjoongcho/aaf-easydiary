@@ -32,6 +32,7 @@ import com.google.android.gms.drive.query.SearchableField
 import com.simplemobiletools.commons.extensions.getFileCount
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
+import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.services.BackupPhotoService
@@ -72,6 +73,11 @@ class BackupPhotoActivity : BaseDriveActivity() {
                 getString(R.string.notification_msg_upload_empty),
                 DialogInterface.OnClickListener { _, _ ->  finish() }
         )
+    }
+
+    override fun onPause() {
+        super.onPause()
+        pauseLock()
     }
 
     private fun listFilesInFolder() {

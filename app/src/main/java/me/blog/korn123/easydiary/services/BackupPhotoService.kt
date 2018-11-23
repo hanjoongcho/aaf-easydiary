@@ -29,9 +29,9 @@ class BackupPhotoService : Service() {
     private var driveResourceClient: DriveResourceClient? = null
     private var localDeviceFileCount = 0
     private var duplicateFileCount = 0
-    private val targetFilenames = mutableListOf<String>()
     private var currentCount: Int = 0
-    
+    private val targetFilenames = mutableListOf<String>()
+
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onCreate() {
@@ -75,24 +75,21 @@ class BackupPhotoService : Service() {
         val queryTask = driveResourceClient?.queryChildren(folder, query)
         queryTask?.addOnSuccessListener { metadataBuffer ->
             val photoPath = "${Environment.getExternalStorageDirectory().absolutePath}$AAF_EASY_DIARY_PHOTO_DIRECTORY"
-            val dismissIntent = Intent(this, NotificationService::class.java).apply {
-                action = NotificationService.ACTION_DISMISS
-            }
-            val diaryMainIntent = Intent(this, DiaryMainActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            }
-            notificationBuilder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
             notificationBuilder.setAutoCancel(true)
                     .setDefaults(Notification.DEFAULT_ALL)
                     .setWhen(System.currentTimeMillis())
                     .setSmallIcon(R.drawable.cloud_upload)
                     .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
-                    .setPriority(Notification.PRIORITY_MAX) // this is deprecated in API 26 but you can still use for below 26. check below update for 26 API
                     .setOnlyAlertOnce(true)
                     .setContentTitle(getString(R.string.backup_attach_photo_title))
-                    .setContentIntent(PendingIntent.getActivity(this, 0, diaryMainIntent, PendingIntent.FLAG_UPDATE_CURRENT))
-                    .addAction(R.drawable.cloud_upload, getString(R.string.dismiss), PendingIntent.getService(this, 0, dismissIntent, 0))
-            notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+//                    .addAction(
+//                        R.drawable.cloud_upload,
+//                        getString(R.string.cancel),
+//                        PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
+//                            action = NotificationService.ACTION_CANCEL
+//                        }, 0)
+//                    )
+            startForeground(NOTIFICATION_FOREGROUND_ID, notificationBuilder.build())
 
             val titles = mutableListOf<String>()
             metadataBuffer.forEachIndexed { _, metadata ->
@@ -137,22 +134,56 @@ class BackupPhotoService : Service() {
     }
 
     private fun updateNotification() {
-        notificationBuilder.setStyle(NotificationCompat.InboxStyle()
-                .addLine("${getString(R.string.notification_msg_device_file_count)}: $localDeviceFileCount")
-                .addLine("${getString(R.string.notification_msg_duplicate_file_count)}: $duplicateFileCount")
-                .addLine("${getString(R.string.notification_msg_upload_file_count)}: ${targetFilenames.size}"))
-
         if (targetFilenames.size == 0) {
-            notificationBuilder.setContentText(getString(R.string.notification_msg_upload_invalid))
-            notificationManager.notify(NOTIFICATION_COMPLETE_ID, notificationBuilder.build())
+            launchCompleteNotification(getString(R.string.notification_msg_upload_invalid))
         } else {
             currentCount++
-            val message = if (currentCount < targetFilenames.size) getString(R.string.notification_msg_upload_progress) else getString(R.string.notification_msg_upload_complete)
-            notificationBuilder.setContentTitle("$message  $currentCount/${targetFilenames.size}")
-            notificationBuilder.setProgress(targetFilenames.size, currentCount, false)
-            notificationManager.notify(NOTIFICATION_COMPLETE_ID, notificationBuilder.build())
-        }
+            notificationBuilder
+                    .setStyle(NotificationCompat.InboxStyle()
+                            .addLine("${getString(R.string.notification_msg_device_file_count)}: $localDeviceFileCount")
+                            .addLine("${getString(R.string.notification_msg_duplicate_file_count)}: $duplicateFileCount")
+                            .addLine("${getString(R.string.notification_msg_upload_file_count)}: ${targetFilenames.size}")
+                    )
+                    .setContentTitle("${getString(R.string.notification_msg_upload_progress)}  $currentCount/${targetFilenames.size}")
+                    .setProgress(targetFilenames.size, currentCount, false)
+            notificationManager.notify(NOTIFICATION_FOREGROUND_ID, notificationBuilder.build())
 
-        if (currentCount == targetFilenames.size) stopSelf()
+            if (currentCount == targetFilenames.size) launchCompleteNotification(getString(R.string.notification_msg_upload_complete))
+        }
+//        if (currentCount == targetFilenames.size) stopSelf()
+    }
+
+    private fun launchCompleteNotification(contentText: String) {
+        val resultNotificationBuilder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
+        resultNotificationBuilder
+                .setStyle(NotificationCompat.InboxStyle()
+                        .addLine("${getString(R.string.notification_msg_device_file_count)}: $localDeviceFileCount")
+                        .addLine("${getString(R.string.notification_msg_duplicate_file_count)}: $duplicateFileCount")
+                        .addLine("${getString(R.string.notification_msg_upload_file_count)}: ${targetFilenames.size}")
+                )
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(R.drawable.cloud_upload)
+                .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
+                .setOngoing(true)
+                .setAutoCancel(true)
+                .setContentTitle(getString(R.string.backup_attach_photo_title))
+                .setContentText(contentText)
+                .setContentIntent(
+                        PendingIntent.getActivity(this, 0, Intent(this, DiaryMainActivity::class.java).apply {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        }, PendingIntent.FLAG_UPDATE_CURRENT)
+                )
+                .addAction(
+                        R.drawable.cloud_upload,
+                        getString(R.string.dismiss),
+                        PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
+                            action = NotificationService.ACTION_DISMISS
+                        }, 0)
+                )
+        notificationManager.notify(NOTIFICATION_COMPLETE_ID, resultNotificationBuilder.build())
+        localDeviceFileCount = 0
+        duplicateFileCount = 0
+        currentCount = 0
+        targetFilenames.clear()
     }
 }
