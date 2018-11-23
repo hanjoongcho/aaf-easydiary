@@ -244,5 +244,7 @@
     <string name="notification_msg_download_empty">복구 대상 파일이 존재하지 않습니다.</string>
     <string name="notification_msg_download_progress">파일 다운로드 진행중…</string>
     <string name="notification_msg_download_complete">파일 다운로드 완료</string>
+    <string name="notification_msg_download_success">다운로드 성공</string>
+    <string name="notification_msg_download_fail">다운로드 실패</string>
     <string name="notification_msg_duplicate_file_count">중복 파일</string>
 </resources>

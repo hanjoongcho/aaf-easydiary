@@ -244,5 +244,7 @@
     <string name="notification_msg_download_empty">回復対象のファイルが存在しません。</string>
     <string name="notification_msg_download_progress">ダウンロード…</string>
     <string name="notification_msg_download_complete">ダウンロード完了</string>
+    <string name="notification_msg_download_success">Download Success</string>
+    <string name="notification_msg_download_fail">Download Fail</string>
     <string name="notification_msg_duplicate_file_count">存在するファイルの数</string>
 </resources>
