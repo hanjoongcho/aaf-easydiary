@@ -82,7 +82,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
                         R.drawable.cloud_download,
                         getString(R.string.cancel),
                         PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
-                            action = NotificationService.ACTION_CANCEL
+                            action = NotificationService.ACTION_RECOVER_CANCEL
                         }, 0)
                 )
         startForeground(NOTIFICATION_FOREGROUND_ID, notificationBuilder.build())

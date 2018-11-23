@@ -26,12 +26,16 @@ import java.io.File
 class BackupPhotoService : Service() {
     private lateinit var notificationBuilder: NotificationCompat.Builder
     private lateinit var notificationManager: NotificationManager
+    private lateinit var mDriveFolder: DriveFolder
     private var driveResourceClient: DriveResourceClient? = null
     private var localDeviceFileCount = 0
     private var duplicateFileCount = 0
     private var successCount = 0
     private var failCount = 0
+    private var targetFilenamesCursor = 0
+    private var mInProcessJob = true
     private val targetFilenames = mutableListOf<String>()
+    private val photoPath = "${Environment.getExternalStorageDirectory().absolutePath}$AAF_EASY_DIARY_PHOTO_DIRECTORY"
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -59,17 +63,19 @@ class BackupPhotoService : Service() {
         Handler().post { Toast.makeText(this, "onStartCommand", Toast.LENGTH_SHORT).show() }
 
         intent?.let {
-            backupPhoto(DriveId.decodeFromString(it.getStringExtra(NOTIFICATION_DRIVE_ID)).asDriveFolder())
+            mDriveFolder = DriveId.decodeFromString(it.getStringExtra(NOTIFICATION_DRIVE_ID)).asDriveFolder()
+            backupPhoto()
         }
         return super.onStartCommand(intent, flags, startId)
     }
     
     override fun onDestroy() {
         super.onDestroy()
+        mInProcessJob = false
         Handler().post { Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show() }
     }
     
-    private fun backupPhoto(folder: DriveFolder) {
+    private fun backupPhoto() {
         val query = Query.Builder()
                 .addFilter(
                         Filters.and(
@@ -78,11 +84,10 @@ class BackupPhotoService : Service() {
                         )
                 )
                 .build()
-        val queryTask = driveResourceClient?.queryChildren(folder, query)
+        val queryTask = driveResourceClient?.queryChildren(mDriveFolder, query)
         queryTask?.addOnSuccessListener { metadataBuffer ->
             Handler().post { Toast.makeText(this, "metadataBuffer: ${metadataBuffer.count}", Toast.LENGTH_SHORT).show() }
 
-            val photoPath = "${Environment.getExternalStorageDirectory().absolutePath}$AAF_EASY_DIARY_PHOTO_DIRECTORY"
             notificationBuilder.setAutoCancel(true)
                     .setDefaults(Notification.DEFAULT_ALL)
                     .setWhen(System.currentTimeMillis())
@@ -90,13 +95,13 @@ class BackupPhotoService : Service() {
                     .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
                     .setOnlyAlertOnce(true)
                     .setContentTitle(getString(R.string.backup_attach_photo_title))
-//                    .addAction(
-//                        R.drawable.cloud_upload,
-//                        getString(R.string.cancel),
-//                        PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
-//                            action = NotificationService.ACTION_CANCEL
-//                        }, 0)
-//                    )
+                    .addAction(
+                        R.drawable.cloud_upload,
+                        getString(R.string.cancel),
+                        PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
+                            action = NotificationService.ACTION_BACKUP_CANCEL
+                        }, 0)
+                    )
             startForeground(NOTIFICATION_FOREGROUND_ID, notificationBuilder.build())
 
             val titles = mutableListOf<String>()
@@ -111,11 +116,12 @@ class BackupPhotoService : Service() {
             localDeviceFileCount = File(photoPath).getFileCount(true)
             duplicateFileCount = localDeviceFileCount - targetFilenames.size
 
-            targetFilenames.map { filename ->
-                uploadDiaryPhoto(File("$photoPath$filename"), folder)
+            when (targetFilenames.size) {
+                0 -> updateNotification()
+                else -> {
+                    uploadDiaryPhoto(File("$photoPath${targetFilenames[targetFilenamesCursor++]}"), mDriveFolder)
+                }
             }
-
-            if (targetFilenames.size == 0) updateNotification()
         }
     }
 
@@ -156,7 +162,14 @@ class BackupPhotoService : Service() {
                     .setProgress(targetFilenames.size, successCount + failCount, false)
             notificationManager.notify(NOTIFICATION_FOREGROUND_ID, notificationBuilder.build())
 
-            if (successCount + failCount == targetFilenames.size) launchCompleteNotification(getString(R.string.notification_msg_upload_complete))
+            if (successCount + failCount < targetFilenames.size) {
+                when (mInProcessJob) {
+                    true -> uploadDiaryPhoto(File("$photoPath${targetFilenames[targetFilenamesCursor++]}"), mDriveFolder)
+                    false -> notificationManager.cancel(NOTIFICATION_FOREGROUND_ID)
+                }
+            } else {
+                launchCompleteNotification(getString(R.string.notification_msg_upload_complete))
+            }
         }
 //        if (currentCount == targetFilenames.size) stopSelf()
     }
@@ -195,6 +208,7 @@ class BackupPhotoService : Service() {
         successCount = 0
         failCount = 0
         targetFilenames.clear()
-        stopForeground(true)
+//        stopForeground(true)
+        stopSelf()
     }
 }

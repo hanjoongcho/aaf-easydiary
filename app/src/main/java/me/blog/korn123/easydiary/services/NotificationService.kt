@@ -13,7 +13,8 @@ class NotificationService(name: String = "EasyDiaryNotificationService") : Inten
             when (it.action) {
                 ACTION_DISMISS -> handleActionDismiss()
                 ACTION_SNOOZE -> handleActionSnooze()
-                ACTION_CANCEL -> handleActionCancel()
+                ACTION_RECOVER_CANCEL -> handleActionRecoverCancel()
+                ACTION_BACKUP_CANCEL -> handleActionBackupCancel()
             }
         }
     }
@@ -25,14 +26,20 @@ class NotificationService(name: String = "EasyDiaryNotificationService") : Inten
 
     private fun handleActionSnooze() {}
 
-    private fun handleActionCancel() {
+    private fun handleActionRecoverCancel() {
         val recoverPhotoService = Intent(this, RecoverPhotoService::class.java)
         stopService(recoverPhotoService)
     }
 
+    private fun handleActionBackupCancel() {
+        val recoverPhotoService = Intent(this, BackupPhotoService::class.java)
+        stopService(recoverPhotoService)
+    }
+    
     companion object {
-        const val ACTION_DISMISS = "me.blog.korn123.easydiary.services.action.DISMISS";
-        const val ACTION_SNOOZE = "me.blog.korn123.easydiary.services.action.SNOOZE";
-        const val ACTION_CANCEL = "me.blog.korn123.easydiary.services.action.CANCEL";
+        const val ACTION_DISMISS = "me.blog.korn123.easydiary.services.action.ACTION_DISMISS"
+        const val ACTION_SNOOZE = "me.blog.korn123.easydiary.services.ACTION_SNOOZE"
+        const val ACTION_BACKUP_CANCEL = "me.blog.korn123.easydiary.services.ACTION_BACKUP_CANCEL"
+        const val ACTION_RECOVER_CANCEL = "me.blog.korn123.easydiary.services.ACTION_RECOVER_CANCEL"
     }
 }
