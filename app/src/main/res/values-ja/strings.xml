@@ -238,6 +238,8 @@
     <string name="notification_msg_upload_empty">バックアップ先のファイルが存在しません。</string>
     <string name="notification_msg_upload_progress">アップロード中…</string>
     <string name="notification_msg_upload_complete">アップロードの完了</string>
+    <string name="notification_msg_upload_success">Upload Success</string>
+    <string name="notification_msg_upload_fail">Upload Fail</string>
     <string name="notification_msg_google_drive_file_count">回復ファイルの数</string>
     <string name="notification_msg_download_file_count">ダウンロードするファイルの数</string>
     <string name="notification_msg_download_invalid">すべての回復先ファイルがすでに存在しています。</string>

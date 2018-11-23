@@ -29,7 +29,8 @@ class BackupPhotoService : Service() {
     private var driveResourceClient: DriveResourceClient? = null
     private var localDeviceFileCount = 0
     private var duplicateFileCount = 0
-    private var currentCount: Int = 0
+    private var successCount = 0
+    private var failCount = 0
     private val targetFilenames = mutableListOf<String>()
 
     override fun onBind(intent: Intent?): IBinder? = null
@@ -124,7 +125,6 @@ class BackupPhotoService : Service() {
                 val contents = task.result
                 val outputStream = contents.outputStream
                 FileUtils.copyFile(file, outputStream)
-//            OutputStreamWriter(outputStream).use { writer -> writer.write("Hello World!") }
                 val changeSet = MetadataChangeSet.Builder()
                         .setTitle(file.name)
                         .setMimeType(AAF_EASY_DIARY_PHOTO)
@@ -132,10 +132,11 @@ class BackupPhotoService : Service() {
                         .build()
                 it.createFile(folder, changeSet, contents)
             }.addOnSuccessListener { _ ->
+                successCount++
                 updateNotification()
             }.addOnFailureListener { e ->
-//                Log.e(BackupPhotoActivity.TAG, "Unable to create file", e)
-//                showMessage(getString(R.string.file_create_error))
+                failCount++
+                updateNotification()
             }
         }
     }
@@ -144,18 +145,18 @@ class BackupPhotoService : Service() {
         if (targetFilenames.size == 0) {
             launchCompleteNotification(getString(R.string.notification_msg_upload_invalid))
         } else {
-            currentCount++
             notificationBuilder
                     .setStyle(NotificationCompat.InboxStyle()
                             .addLine("${getString(R.string.notification_msg_device_file_count)}: $localDeviceFileCount")
                             .addLine("${getString(R.string.notification_msg_duplicate_file_count)}: $duplicateFileCount")
-                            .addLine("${getString(R.string.notification_msg_upload_file_count)}: ${targetFilenames.size}")
+                            .addLine("${getString(R.string.notification_msg_upload_success)}: $successCount")
+                            .addLine("${getString(R.string.notification_msg_upload_fail)}: $failCount")
                     )
-                    .setContentTitle("${getString(R.string.notification_msg_upload_progress)}  $currentCount/${targetFilenames.size}")
-                    .setProgress(targetFilenames.size, currentCount, false)
+                    .setContentTitle("${getString(R.string.notification_msg_upload_progress)}  ${successCount + failCount}/${targetFilenames.size}")
+                    .setProgress(targetFilenames.size, successCount + failCount, false)
             notificationManager.notify(NOTIFICATION_FOREGROUND_ID, notificationBuilder.build())
 
-            if (currentCount == targetFilenames.size) launchCompleteNotification(getString(R.string.notification_msg_upload_complete))
+            if (successCount + failCount == targetFilenames.size) launchCompleteNotification(getString(R.string.notification_msg_upload_complete))
         }
 //        if (currentCount == targetFilenames.size) stopSelf()
     }
@@ -166,7 +167,8 @@ class BackupPhotoService : Service() {
                 .setStyle(NotificationCompat.InboxStyle()
                         .addLine("${getString(R.string.notification_msg_device_file_count)}: $localDeviceFileCount")
                         .addLine("${getString(R.string.notification_msg_duplicate_file_count)}: $duplicateFileCount")
-                        .addLine("${getString(R.string.notification_msg_upload_file_count)}: ${targetFilenames.size}")
+                        .addLine("${getString(R.string.notification_msg_upload_success)}: $successCount")
+                        .addLine("${getString(R.string.notification_msg_upload_fail)}: $failCount")
                 )
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.cloud_upload)
@@ -190,7 +192,8 @@ class BackupPhotoService : Service() {
         notificationManager.notify(NOTIFICATION_COMPLETE_ID, resultNotificationBuilder.build())
         localDeviceFileCount = 0
         duplicateFileCount = 0
-        currentCount = 0
+        successCount = 0
+        failCount = 0
         targetFilenames.clear()
         stopForeground(true)
     }

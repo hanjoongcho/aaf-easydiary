@@ -37,7 +37,6 @@ import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.services.BackupPhotoService
 import me.blog.korn123.easydiary.services.NotificationService
-import me.blog.korn123.easydiary.services.RecoverPhotoService
 import org.apache.commons.io.FileUtils
 import java.io.File
 

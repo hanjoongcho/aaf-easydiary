@@ -140,10 +140,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
             }
         }
 
-        when (File(destFilePath).exists()) {
-            true -> updateNotification()
-            false -> driveResourceClient?.openFile(file, DriveFile.MODE_READ_ONLY, openCallback)
-        }
+        driveResourceClient?.openFile(file, DriveFile.MODE_READ_ONLY, openCallback)
     }
 
     private fun updateNotification() {
