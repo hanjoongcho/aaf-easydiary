@@ -211,6 +211,6 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
         successCount = 0
         failCount = 0
         targetIndexes.clear()
-//        stopForeground(true)
+        stopSelf()
     }
 }
