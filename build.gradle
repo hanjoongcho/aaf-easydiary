@@ -11,7 +11,7 @@ buildscript {
         // in the individual module build.gradle files
         classpath "com.android.tools.build:gradle:$versions.gradlePlugin" 
 //        classpath "io.realm:realm-gradle-plugin:4.2.0"
-        classpath "io.realm:realm-gradle-plugin:3.0.0"
+        classpath "io.realm:realm-gradle-plugin:5.7.1"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"  
     }
 }

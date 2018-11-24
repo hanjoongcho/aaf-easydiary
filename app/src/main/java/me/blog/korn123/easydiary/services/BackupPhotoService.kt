@@ -177,6 +177,7 @@ class BackupPhotoService : Service() {
     private fun launchCompleteNotification(contentText: String) {
         val resultNotificationBuilder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
         resultNotificationBuilder
+                .setDefaults(Notification.DEFAULT_ALL)
                 .setStyle(NotificationCompat.InboxStyle()
                         .addLine("${getString(R.string.notification_msg_device_file_count)}: $localDeviceFileCount")
                         .addLine("${getString(R.string.notification_msg_duplicate_file_count)}: $duplicateFileCount")
@@ -186,7 +187,7 @@ class BackupPhotoService : Service() {
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.cloud_upload)
                 .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
-                .setOngoing(true)
+                .setOngoing(false)
                 .setAutoCancel(true)
                 .setContentTitle(getString(R.string.backup_attach_photo_title))
                 .setContentText(contentText)

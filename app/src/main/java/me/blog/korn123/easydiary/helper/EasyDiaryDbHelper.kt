@@ -53,12 +53,12 @@ object EasyDiaryDbHelper {
     fun readDiary(query: String?, isSensitive: Boolean = false): ArrayList<DiaryDto> {
         val mRealmInstance = Realm.getInstance(mDiaryConfig)
         val results: RealmResults<DiaryDto> = when (StringUtils.isEmpty(query)) {
-            true -> mRealmInstance.where(DiaryDto::class.java).findAllSorted(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
+            true -> mRealmInstance.where(DiaryDto::class.java).findAll().sort(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
             false -> {
                 if (isSensitive) {
-                    mRealmInstance.where(DiaryDto::class.java).beginGroup().contains("contents", query).or().contains("title", query).endGroup().findAllSorted(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
+                    mRealmInstance.where(DiaryDto::class.java).beginGroup().contains("contents", query).or().contains("title", query).endGroup().findAll().sort(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
                 } else {
-                    mRealmInstance.where(DiaryDto::class.java).beginGroup().contains("contents", query, Case.INSENSITIVE).or().contains("title", query, Case.INSENSITIVE).endGroup().findAllSorted(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
+                    mRealmInstance.where(DiaryDto::class.java).beginGroup().contains("contents", query, Case.INSENSITIVE).or().contains("title", query, Case.INSENSITIVE).endGroup().findAll().sort(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
                 }    
             }
         }
@@ -76,14 +76,14 @@ object EasyDiaryDbHelper {
     }
 
     fun readDiaryByDateString(dateString: String?): List<DiaryDto> {
-        val results: RealmResults<DiaryDto> = Realm.getInstance(mDiaryConfig).where(DiaryDto::class.java).equalTo("dateString", dateString).findAllSorted("sequence", Sort.DESCENDING)
+        val results: RealmResults<DiaryDto> = Realm.getInstance(mDiaryConfig).where(DiaryDto::class.java).equalTo("dateString", dateString).findAll().sort("sequence", Sort.DESCENDING)
         val list = ArrayList<DiaryDto>()
         list.addAll(results.subList(0, results.size))
         return list
     }
 
     fun selectPhotoUriAll(): List<PhotoUriDto> {
-        val results = Realm.getInstance(mDiaryConfig).where(PhotoUriDto::class.java).findAllSorted("photoUri", Sort.ASCENDING)
+        val results = Realm.getInstance(mDiaryConfig).where(PhotoUriDto::class.java).findAll().sort("photoUri", Sort.ASCENDING)
         val list = ArrayList<PhotoUriDto>()
         list.addAll(results.subList(0, results.size))
         return list

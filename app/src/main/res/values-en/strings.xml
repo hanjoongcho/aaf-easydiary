@@ -195,9 +195,9 @@
         v1.4.57 / 2018.11.12\n
         Added multi-picker setting function to attach multiple pictures at one time
     </string>
-    <string name="release_123">
-        v1.4.60 / 2018.11.24\n
-        Added attached photos backup and recovery function using Google Drive
+    <string name="release_124">
+        v1.4.61 / 2018.11.24\n
+        Googleのドライブを使用した添付写真のバックアップと復元機能を追加
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->

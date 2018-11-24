@@ -1,18 +1,13 @@
 package me.blog.korn123.easydiary.services
 
-import android.app.IntentService
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Environment
-import android.os.Handler
 import android.support.v4.app.NotificationCompat
 import android.support.v7.app.AppCompatActivity
-import android.widget.Toast
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.drive.*
 import com.google.android.gms.drive.events.OpenFileCallback
@@ -72,7 +67,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
         mInProcessJob = true
         notificationManager.cancel(NOTIFICATION_COMPLETE_ID)
         notificationBuilder
-                .setOngoing(false)
+                .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.cloud_download)
                 .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
@@ -182,6 +177,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
     private fun launchCompleteNotification(contentText: String) {
         val resultNotificationBuilder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
         resultNotificationBuilder
+                .setDefaults(Notification.DEFAULT_ALL)
                 .setStyle(NotificationCompat.InboxStyle()
                         .addLine("${getString(R.string.notification_msg_google_drive_file_count)}: $remoteDriveFileCount")
                         .addLine("${getString(R.string.notification_msg_duplicate_file_count)}: $duplicateFileCount")
@@ -192,7 +188,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
                 .setSmallIcon(R.drawable.cloud_download)
                 .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
                 .setOnlyAlertOnce(true)
-                .setOngoing(true)
+                .setOngoing(false)
                 .setAutoCancel(true)
                 .setContentTitle(getString(R.string.recover_attach_photo_title))
                 .setContentText(contentText)
