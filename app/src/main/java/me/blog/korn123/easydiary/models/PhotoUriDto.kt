@@ -12,7 +12,7 @@ import org.apache.commons.lang3.StringUtils
  */
 
 open class PhotoUriDto : RealmObject {
-    lateinit var photoUri: String
+    var photoUri: String? = null
 
     constructor() 
 

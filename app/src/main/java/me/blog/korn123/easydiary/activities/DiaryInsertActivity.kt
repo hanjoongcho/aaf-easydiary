@@ -101,7 +101,7 @@ class DiaryInsertActivity : EditActivity() {
         outState?.let {
             val listUriString = arrayListOf<String>()
             mPhotoUris.map { model ->
-                listUriString.add(model.photoUri)
+                listUriString.add(model.photoUri ?: "")
             }
             it.putStringArrayList(LIST_URI_STRING, listUriString)
             it.putInt(SELECTED_YEAR, mYear)
