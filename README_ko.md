@@ -80,7 +80,7 @@ Step4. 프로젝트에서 사용하는 10개의 svg파일을 안드로이드 스
 Step5. 구글드라이브 사용을 위해 'aaf-easydiary'의 패키지이름과 SHA-1 서명인증서 지문을 등록합니다.(https://console.developers.google.com/)
 Step6. 안드로이드 스튜디오에서 'aaf-easydiary' 프로젝트를 빌드합니다.
 ```
-[Flaticon 사이트에서 svg images 다운받기](https://www.flaticon.com/packs/weather-set-2)
+[Flaticon 사이트에서 'weather-set-2' svg images 다운받기](https://www.flaticon.com/packs/weather-set-2)
 
 # 라이선스
 [LICENSE][LICENSE.md]

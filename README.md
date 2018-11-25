@@ -83,7 +83,7 @@ Step4. Import 10 svg files for your project from your Android studio.
 Step5. Register your package name and SHA-1 signature certificate fingerprint for Google Drive use.(https://console.developers.google.com/)
 Step6. Build 'aaf-easydiary' project with android studio.
 ```
-[Download miniman svg images from Flaticon](https://www.flaticon.com/packs/weather-set-2)
+[Download 'weather-set-2' svg images from Flaticon](https://www.flaticon.com/packs/weather-set-2)
 
 # Translation
 Thanks for someone help me to translate this app.   
