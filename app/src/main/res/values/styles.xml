@@ -52,6 +52,7 @@
         <item name="android:layout_marginRight">5dp</item>
         <item name="android:gravity">center</item>
         <item name="android:background">@drawable/bg_card_diary</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
         <item name="android:layout_weight">1</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">50dp</item>
