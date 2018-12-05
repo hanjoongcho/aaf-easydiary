@@ -16,6 +16,7 @@ import com.xw.repo.BubbleSeekBar
 import io.github.aafactory.commons.activities.BaseWebViewActivity
 import io.github.aafactory.commons.helpers.BaseConfig
 import kotlinx.android.synthetic.main.activity_settings.*
+import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
@@ -299,6 +300,7 @@ class SettingsActivity : EasyDiaryActivity() {
     }
     
     private fun openFontSettingDialog() {
+        EasyDiaryUtils.initWorkingDirectory(this@SettingsActivity)
         val builder = AlertDialog.Builder(this@SettingsActivity)
         builder.setNegativeButton(getString(android.R.string.cancel), null)
         builder.setTitle(getString(R.string.font_setting))
