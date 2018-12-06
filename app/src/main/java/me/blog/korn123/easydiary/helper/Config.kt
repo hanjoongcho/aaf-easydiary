@@ -59,4 +59,8 @@ class Config(context: Context) : BaseConfig(context) {
     var multiPickerEnable: Boolean
         get() = prefs.getBoolean(SETTING_MULTIPLE_PICKER, false)
         set(multiPickerEnable) = prefs.edit().putBoolean(SETTING_MULTIPLE_PICKER, multiPickerEnable).apply()
+
+    var fingerprintLockEnable: Boolean
+        get() = prefs.getBoolean(SETTING_FINGERPRINT_LOCK, false)
+        set(fingerprintLockEnable) = prefs.edit().putBoolean(SETTING_FINGERPRINT_LOCK, fingerprintLockEnable).apply()
 }

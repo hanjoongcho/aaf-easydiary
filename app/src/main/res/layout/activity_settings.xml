@@ -201,7 +201,22 @@
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
+                </LinearLayout>
 
+                <io.github.aafactory.commons.views.LabelLayout
+                    android:background="?attr/colorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:text="@string/preferences_category_lock"
+                        style="@style/SettingsCategory" />
+                </io.github.aafactory.commons.views.LabelLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:padding="@dimen/card_layout_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
                     <android.support.v7.widget.CardView
                         android:id="@+id/appLockSetting"
                         style="@style/AppCard.Settings">
@@ -242,8 +257,34 @@
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
-                </LinearLayout>
 
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/fingerprint"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <com.simplemobiletools.commons.views.MyTextView
+                                    android:text="@string/fingerprint_lock_title"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    style="@style/SettingsTitle" />
+                                <Switch
+                                    android:id="@+id/fingerprintSwitcher"
+                                    android:clickable="false"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                            </LinearLayout>
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="@string/fingerprint_lock_summary"
+                                style="@style/SettingsSummary" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+                </LinearLayout>
+                
                 <io.github.aafactory.commons.views.LabelLayout
                     android:background="?attr/colorPrimary"
                     android:layout_width="match_parent"

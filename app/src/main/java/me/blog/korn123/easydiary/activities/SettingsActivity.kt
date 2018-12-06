@@ -114,6 +114,10 @@ class SettingsActivity : EasyDiaryActivity() {
                 multiPickerOptionSwitcher.toggle()
                 config.multiPickerEnable = multiPickerOptionSwitcher.isChecked
             }
+            R.id.fingerprint -> {
+                fingerprintSwitcher.toggle()
+                config.fingerprintLockEnable = fingerprintSwitcher.isChecked
+            }   
         }
     }
     
@@ -149,6 +153,7 @@ class SettingsActivity : EasyDiaryActivity() {
         multiPickerOption.setOnClickListener(mOnClickListener)
         backupAttachPhoto.setOnClickListener(mOnClickListener)
         recoverAttachPhoto.setOnClickListener(mOnClickListener)
+        fingerprint.setOnClickListener(mOnClickListener)
 
         fontLineSpacing.configBuilder
                 .min(0.2F)
@@ -366,6 +371,7 @@ class SettingsActivity : EasyDiaryActivity() {
         rateAppSettingSummary.text = String.format("Easy Diary v %s", BuildConfig.VERSION_NAME)
         boldStyleOptionSwitcher.isChecked = config.boldStyleEnable
         multiPickerOptionSwitcher.isChecked = config.multiPickerEnable
+        fingerprintSwitcher.isChecked = config.fingerprintLockEnable
     }
 
     private fun getStoreUrl() = "https://play.google.com/store/apps/details?id=$packageName"
