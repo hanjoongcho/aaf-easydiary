@@ -17,6 +17,7 @@ import io.github.aafactory.commons.activities.BaseSimpleActivity
 import kotlinx.android.synthetic.main.activity_fingerprint.*
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.makeSnackBar
 import java.io.IOException
 import java.security.*
 import java.security.cert.CertificateException
@@ -36,87 +37,70 @@ class FingerprintActivity : BaseSimpleActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_fingerprint)
 
-        try {
-            mKeyStore = KeyStore.getInstance("AndroidKeyStore")
-        } catch (e: KeyStoreException) {
-            throw RuntimeException("Failed to get an instance of KeyStore", e)
-        }
-
-        try {
-            mKeyGenerator = KeyGenerator
-                    .getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
-        } catch (e: NoSuchAlgorithmException) {
-            throw RuntimeException("Failed to get an instance of KeyGenerator", e)
-        } catch (e: NoSuchProviderException) {
-            throw RuntimeException("Failed to get an instance of KeyGenerator", e)
-        }
-
-        val defaultCipher: Cipher
-        val cipherNotInvalidated: Cipher
-        try {
-            defaultCipher = Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/"
-                    + KeyProperties.BLOCK_MODE_CBC + "/"
-                    + KeyProperties.ENCRYPTION_PADDING_PKCS7)
-            cipherNotInvalidated = Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/"
-                    + KeyProperties.BLOCK_MODE_CBC + "/"
-                    + KeyProperties.ENCRYPTION_PADDING_PKCS7)
-        } catch (e: NoSuchAlgorithmException) {
-            throw RuntimeException("Failed to get an instance of Cipher", e)
-        } catch (e: NoSuchPaddingException) {
-            throw RuntimeException("Failed to get an instance of Cipher", e)
-        }
-
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
-            val keyguardManager = getSystemService(KeyguardManager::class.java)
-            mFingerprintManager = getSystemService(FingerprintManager::class.java)
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                purchaseButtonNotInvalidated.setEnabled(true)
-//                purchaseButtonNotInvalidated.setOnClickListener(
-//                        PurchaseButtonClickListener(cipherNotInvalidated,
-//                                KEY_NAME_NOT_INVALIDATED))
-            } else {
-                // Hide the purchase button which uses a non-invalidated key
-                // if the app doesn't work on Android N preview
-//                purchaseButtonNotInvalidated.setVisibility(View.GONE)
-//                findViewById<View>(R.id.purchase_button_not_invalidated_description).visibility = View.GONE
+            // 01. KeyStore 인스턴스 생성
+            try {
+                mKeyStore = KeyStore.getInstance("AndroidKeyStore")
+            } catch (e: KeyStoreException) {
+                makeSnackBar("Failed to get an instance of KeyStore")
             }
 
+            // 02. KeyGenerator 인스턴스 초기화
+            try {
+                mKeyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
+            } catch (e: Exception) {
+                makeSnackBar("Failed to get an instance of KeyGenerator")
+            }
+
+            // 03. Cipher 인스턴스 초기화
+            var defaultCipher: Cipher? = null
+            try {
+                defaultCipher = Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/"
+                        + KeyProperties.BLOCK_MODE_CBC + "/"
+                        + KeyProperties.ENCRYPTION_PADDING_PKCS7)
+            } catch (e: NoSuchAlgorithmException) {
+                makeSnackBar("Failed to get an instance of Cipher")
+            } catch (e: NoSuchPaddingException) {
+                makeSnackBar("Failed to get an instance of Cipher")
+            }
+            
+            // 04. KeyguardManager service 초기화
+            val keyguardManager = getSystemService(KeyguardManager::class.java)
+
+            // 05. FingerprintManager service 초기화
+            mFingerprintManager = getSystemService(FingerprintManager::class.java)
+
+            // 06. screen lock 설정여부 확인
             if (!keyguardManager.isKeyguardSecure) {
                 // Show a message that the user hasn't set up a fingerprint or lock screen.
-                Toast.makeText(this,
-                        "Secure lock screen hasn't set up.\n" + "Go to 'Settings -> Security -> Fingerprint' to set up a fingerprint",
-                        Toast.LENGTH_LONG).show()
-//                purchaseButton.setEnabled(false)
-//                purchaseButtonNotInvalidated.setEnabled(false)
+                makeSnackBar("Secure lock screen hasn't set up.\n" + "Go to 'Settings -> Security -> Fingerprint' to set up a fingerprint")
                 return
             }
 
+            // 07. fingerprint 등록여부 확인
             // Now the protection level of USE_FINGERPRINT permission is normal instead of dangerous.
             // See http://developer.android.com/reference/android/Manifest.permission.html#USE_FINGERPRINT
             // The line below prevents the false positive inspection from Android Studio
             // noinspection ResourceType
             if (!mFingerprintManager.hasEnrolledFingerprints()) {
-//                purchaseButton.setEnabled(false)
                 // This happens when no fingerprints are registered.
-                Toast.makeText(this,
-                        "Go to 'Settings -> Security -> Fingerprint' and register at least one" + " fingerprint",
-                        Toast.LENGTH_LONG).show()
+                makeSnackBar("Go to 'Settings -> Security -> Fingerprint' and register at least one" + " fingerprint")
                 return
             }
+            
+            // 08. KeyGenerator를 이용하여 key 생성
             createKey(DEFAULT_KEY_NAME, true)
-//            createKey(KEY_NAME_NOT_INVALIDATED, false)
-//            purchaseButton.setEnabled(true)
-//            purchaseButton.setOnClickListener(
-//                    PurchaseButtonClickListener(defaultCipher, DEFAULT_KEY_NAME))
 
-            // fingerprint 인증시작
+            // 09. Cipher & CryptoObject 초기화
             // Set up the crypto object for later. The object will be authenticated by use
             // of the fingerprint.
-            if (initCipher(defaultCipher, DEFAULT_KEY_NAME)) {
-                mCryptoObject = FingerprintManager.CryptoObject(defaultCipher)
-            } else {
+            defaultCipher?.let {
+                if (initCipher(it, DEFAULT_KEY_NAME)) {
+                    mCryptoObject = FingerprintManager.CryptoObject(it)
+                } else {
 
+                }    
             }
         }
     }
@@ -127,6 +111,7 @@ class FingerprintActivity : BaseSimpleActivity() {
         FontUtils.setFontsTypeface(applicationContext, assets, null, container)
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            // 10. 지문인식 시작
             startListening(mCryptoObject)
         }
     }
@@ -140,6 +125,7 @@ class FingerprintActivity : BaseSimpleActivity() {
 
     @RequiresApi(Build.VERSION_CODES.M)
     fun startListening(cryptoObject: FingerprintManager.CryptoObject) {
+        // 11. fingerprint 센서 상태 및 권한 확인
         if (!isFingerprintAuthAvailable()) {
             return
         }
@@ -147,6 +133,7 @@ class FingerprintActivity : BaseSimpleActivity() {
 //        mSelfCancelled = false
         // The line below prevents the false positive inspection from Android Studio
 
+        // 12. fingerprint authentication callback 등록
         mFingerprintManager
                 .authenticate(cryptoObject, mCancellationSignal, 0 /* flags */, object : FingerprintManager.AuthenticationCallback() {
                     override fun onAuthenticationSucceeded(result: FingerprintManager.AuthenticationResult?) {

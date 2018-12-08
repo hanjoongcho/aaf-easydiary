@@ -6,6 +6,7 @@ import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
+import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
@@ -89,4 +90,10 @@ fun BaseSimpleActivity.checkWhatsNew(releases: List<Release>, currVersion: Int, 
             WhatsNewDialog(this, releases)
         }
     }
+}
+
+fun Activity.makeSnackBar(message: String) {
+    Snackbar
+            .make(findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT)
+            .setAction("Action", null).show()
 }
