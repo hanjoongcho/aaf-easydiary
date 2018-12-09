@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.activity_lock_setting.*
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.helper.APP_FINISH_FLAG
 import org.apache.commons.lang3.StringUtils
 
@@ -81,7 +82,7 @@ class DiaryLockActivity : BaseSimpleActivity() {
             Thread(Runnable {
                 Handler(Looper.getMainLooper()).post {
                     if (StringUtils.equals(config.aafPinLockSavedPassword, password)) {
-                        config.aafPinLockPauseMillis = System.currentTimeMillis()
+                        pauseLock()
                         finish()
                     } else {
                         mCursorIndex = 0

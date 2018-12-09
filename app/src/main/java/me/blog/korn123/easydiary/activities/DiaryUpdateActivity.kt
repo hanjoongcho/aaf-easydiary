@@ -31,6 +31,7 @@ import me.blog.korn123.easydiary.adapters.DiaryWeatherItemAdapter
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.makeSnackBar
+import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import me.blog.korn123.easydiary.models.PhotoUriDto
@@ -96,7 +97,7 @@ class DiaryUpdateActivity : EditActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        config.aafPinLockPauseMillis = System.currentTimeMillis()
+        pauseLock()
         when (requestCode) {
             REQUEST_CODE_SPEECH_INPUT -> if (resultCode == Activity.RESULT_OK && data != null) {
                 val result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)

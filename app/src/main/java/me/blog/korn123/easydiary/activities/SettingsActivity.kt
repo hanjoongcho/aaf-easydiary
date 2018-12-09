@@ -237,7 +237,7 @@ class SettingsActivity : EasyDiaryActivity() {
                 lockNumberSettingSummary.text = "${getString(R.string.lock_number)} $password"
             }
         }
-        config.aafPinLockPauseMillis = System.currentTimeMillis()
+        pauseLock()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
