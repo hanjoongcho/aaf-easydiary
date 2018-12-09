@@ -1,7 +1,7 @@
 package me.blog.korn123.easydiary.activities
 
-import android.annotation.TargetApi
 import android.app.KeyguardManager
+import android.content.DialogInterface
 import android.hardware.fingerprint.FingerprintManager
 import android.os.Build
 import android.os.Bundle
@@ -10,14 +10,13 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.KeyProperties
 import android.support.annotation.RequiresApi
-import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import io.github.aafactory.commons.activities.BaseSimpleActivity
 import kotlinx.android.synthetic.main.activity_fingerprint.*
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.makeSnackBar
+import me.blog.korn123.easydiary.extensions.showAlertDialog
 import java.io.IOException
 import java.security.*
 import java.security.cert.CertificateException
@@ -32,11 +31,16 @@ class FingerprintActivity : BaseSimpleActivity() {
     private lateinit var mFingerprintManager: FingerprintManager
     private lateinit var mCryptoObject: FingerprintManager.CryptoObject
     private lateinit var mCancellationSignal: CancellationSignal
+    private var activityMode: String? = null
     
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_fingerprint)
-
+        activityMode = intent.getStringExtra(LAUNCHING_MODE)
+        if (activityMode != ACTIVITY_SETTING && activityMode != ACTIVITY_UNLOCK) {
+            showAlertDialog("Launching flag is empty.", DialogInterface.OnClickListener { _, _ -> finish() })
+        }
+        
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
 
             // 01. KeyStore 인스턴스 생성
@@ -254,5 +258,8 @@ class FingerprintActivity : BaseSimpleActivity() {
     
     companion object {
         const val DEFAULT_KEY_NAME = "default_key"
+        const val LAUNCHING_MODE = "launching_mode"
+        const val ACTIVITY_SETTING = "activity_setting"
+        const val ACTIVITY_UNLOCK = "activity_unlock"
     }
 }

@@ -117,7 +117,9 @@ class SettingsActivity : EasyDiaryActivity() {
             R.id.fingerprint -> {
                 fingerprintSwitcher.toggle()
                 config.fingerprintLockEnable = fingerprintSwitcher.isChecked
-                startActivity(Intent(this, FingerprintActivity::class.java))
+                startActivity(Intent(this, FingerprintActivity::class.java).apply {
+                    putExtra(FingerprintActivity.LAUNCHING_MODE, FingerprintActivity.ACTIVITY_SETTING)
+                })
             }   
         }
     }
