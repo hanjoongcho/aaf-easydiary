@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.activities
 
 import android.app.Activity
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
@@ -115,11 +116,19 @@ class SettingsActivity : EasyDiaryActivity() {
                 config.multiPickerEnable = multiPickerOptionSwitcher.isChecked
             }
             R.id.fingerprint -> {
-                fingerprintSwitcher.toggle()
-                config.fingerprintLockEnable = fingerprintSwitcher.isChecked
-                startActivity(Intent(this, FingerprintActivity::class.java).apply {
-                    putExtra(FingerprintActivity.LAUNCHING_MODE, FingerprintActivity.ACTIVITY_SETTING)
-                })
+                when (config.fingerprintLockEnable) {
+                    true -> {
+                        showAlertDialog("잠금 설정이 해제되었습니다.", DialogInterface.OnClickListener { _, _ ->
+                            fingerprintSwitcher.isChecked = false
+                            config.fingerprintLockEnable = false
+                        })
+                    }
+                    false -> {
+                        startActivity(Intent(this, FingerprintActivity::class.java).apply {
+                            putExtra(FingerprintActivity.LAUNCHING_MODE, FingerprintActivity.ACTIVITY_SETTING)
+                        })
+                    }
+                }
             }   
         }
     }

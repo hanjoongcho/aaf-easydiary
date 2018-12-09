@@ -12,6 +12,7 @@ import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
 import io.github.aafactory.commons.activities.BaseSimpleActivity
 import me.blog.korn123.easydiary.activities.DiaryLockActivity
+import me.blog.korn123.easydiary.activities.FingerprintActivity
 import me.blog.korn123.easydiary.dialogs.WhatsNewDialog
 
 /**
@@ -19,18 +20,22 @@ import me.blog.korn123.easydiary.dialogs.WhatsNewDialog
  */
 
 fun Activity.pauseLock() {
-    if (config.aafPinLockEnable) {
-        val currentMillis = System.currentTimeMillis()
-        config.aafPinLockPauseMillis = currentMillis
+    if (config.aafPinLockEnable || config.fingerprintLockEnable) {
+        config.aafPinLockPauseMillis = System.currentTimeMillis()
     }
 }
 
 fun Activity.resumeLock() {
-    val pauseMillis = config.aafPinLockPauseMillis
-    if (config.aafPinLockEnable && pauseMillis != 0L) {
-        if (System.currentTimeMillis() - pauseMillis > 1000) {
-            val lockDiaryIntent = Intent(this, DiaryLockActivity::class.java)
-            startActivity(lockDiaryIntent)
+    if (config.aafPinLockPauseMillis > 0L && System.currentTimeMillis() - config.aafPinLockPauseMillis > 1000) {
+        when {
+            config.fingerprintLockEnable -> {
+                startActivity(Intent(this, FingerprintActivity::class.java).apply {
+                    putExtra(FingerprintActivity.LAUNCHING_MODE, FingerprintActivity.ACTIVITY_UNLOCK)
+                })
+            }
+            config.aafPinLockEnable -> {
+                startActivity(Intent(this, DiaryLockActivity::class.java))
+            }
         }
     }
 }

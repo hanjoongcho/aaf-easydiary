@@ -10,12 +10,15 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.KeyProperties
 import android.support.annotation.RequiresApi
+import android.support.v4.app.ActivityCompat
 import android.view.ViewGroup
 import io.github.aafactory.commons.activities.BaseSimpleActivity
 import kotlinx.android.synthetic.main.activity_fingerprint.*
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.makeSnackBar
+import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import java.io.IOException
 import java.security.*
@@ -127,6 +130,11 @@ class FingerprintActivity : BaseSimpleActivity() {
     
     override fun getMainViewGroup(): ViewGroup? = container
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        ActivityCompat.finishAffinity(this)
+    }
+    
     @RequiresApi(Build.VERSION_CODES.M)
     fun startListening(cryptoObject: FingerprintManager.CryptoObject) {
         // 11. fingerprint 센서 상태 및 권한 확인
@@ -142,7 +150,17 @@ class FingerprintActivity : BaseSimpleActivity() {
                 .authenticate(cryptoObject, mCancellationSignal, 0 /* flags */, object : FingerprintManager.AuthenticationCallback() {
                     override fun onAuthenticationSucceeded(result: FingerprintManager.AuthenticationResult?) {
                         super.onAuthenticationSucceeded(result)
-                        guideMessage.text = "onAuthenticationSucceeded"
+                        
+                        when (activityMode) {
+                            ACTIVITY_SETTING -> {
+                                config.fingerprintLockEnable = true
+                                showAlertDialog("잠금 설정이 완료되었습니다.", DialogInterface.OnClickListener { _, _ -> finish() })
+                            }
+                            ACTIVITY_UNLOCK-> {
+                                pauseLock()
+                                finish()
+                            }
+                        }
                     }
 
                     override fun onAuthenticationError(errorCode: Int, errString: CharSequence?) {
