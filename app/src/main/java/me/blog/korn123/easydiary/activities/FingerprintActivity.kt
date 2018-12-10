@@ -154,7 +154,7 @@ class FingerprintActivity : BaseSimpleActivity() {
                         when (activityMode) {
                             ACTIVITY_SETTING -> {
                                 config.fingerprintLockEnable = true
-                                showAlertDialog("잠금 설정이 완료되었습니다.", DialogInterface.OnClickListener { _, _ -> finish() })
+                                showAlertDialog(getString(R.string.fingerprint_setting_complete), DialogInterface.OnClickListener { _, _ -> finish() })
                             }
                             ACTIVITY_UNLOCK-> {
                                 pauseLock()
