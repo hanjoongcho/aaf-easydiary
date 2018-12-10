@@ -12,7 +12,7 @@ import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
 import io.github.aafactory.commons.activities.BaseSimpleActivity
 import me.blog.korn123.easydiary.activities.DiaryLockActivity
-import me.blog.korn123.easydiary.activities.FingerprintActivity
+import me.blog.korn123.easydiary.activities.FingerprintLockActivity
 import me.blog.korn123.easydiary.dialogs.WhatsNewDialog
 
 /**
@@ -29,8 +29,8 @@ fun Activity.resumeLock() {
     if (config.aafPinLockPauseMillis > 0L && System.currentTimeMillis() - config.aafPinLockPauseMillis > 1000) {
         when {
             config.fingerprintLockEnable -> {
-                startActivity(Intent(this, FingerprintActivity::class.java).apply {
-                    putExtra(FingerprintActivity.LAUNCHING_MODE, FingerprintActivity.ACTIVITY_UNLOCK)
+                startActivity(Intent(this, FingerprintLockActivity::class.java).apply {
+                    putExtra(FingerprintLockActivity.LAUNCHING_MODE, FingerprintLockActivity.ACTIVITY_UNLOCK)
                 })
             }
             config.aafPinLockEnable -> {

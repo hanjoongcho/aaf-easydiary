@@ -58,10 +58,6 @@ class SettingsActivity : EasyDiaryActivity() {
             R.id.addTtfFontSetting -> {
                 openGuideView()
             }
-            R.id.appLockSetting -> {
-                appLockSettingSwitcher.toggle()
-                config.aafPinLockEnable = appLockSettingSwitcher.isChecked
-            }
             R.id.lockNumberSetting -> {
                 val lockSettingIntent = Intent(this@SettingsActivity, LockSettingActivity::class.java)
                 startActivityForResult(lockSettingIntent, REQUEST_CODE_LOCK_SETTING)
@@ -116,6 +112,19 @@ class SettingsActivity : EasyDiaryActivity() {
                 multiPickerOptionSwitcher.toggle()
                 config.multiPickerEnable = multiPickerOptionSwitcher.isChecked
             }
+            R.id.appLockSetting -> {
+                when (config.aafPinLockEnable) {
+                    true -> {
+                        appLockSettingSwitcher.isChecked = false
+                        config.aafPinLockEnable = false
+                    }
+                    false -> {
+                        startActivity(Intent(this, PinLockActivity::class.java).apply {
+                            putExtra(FingerprintLockActivity.LAUNCHING_MODE, PinLockActivity.ACTIVITY_SETTING)
+                        })
+                    }
+                }
+            }
             R.id.fingerprint -> {
                 if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
                     when (config.fingerprintLockEnable) {
@@ -126,8 +135,8 @@ class SettingsActivity : EasyDiaryActivity() {
                             })
                         }
                         false -> {
-                            startActivity(Intent(this, FingerprintActivity::class.java).apply {
-                                putExtra(FingerprintActivity.LAUNCHING_MODE, FingerprintActivity.ACTIVITY_SETTING)
+                            startActivity(Intent(this, FingerprintLockActivity::class.java).apply {
+                                putExtra(FingerprintLockActivity.LAUNCHING_MODE, FingerprintLockActivity.ACTIVITY_SETTING)
                             })
                         }
                     }    
