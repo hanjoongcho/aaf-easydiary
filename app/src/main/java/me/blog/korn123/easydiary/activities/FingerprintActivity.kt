@@ -115,8 +115,9 @@ class FingerprintActivity : BaseSimpleActivity() {
     override fun onResume() {
         isBackgroundColorFromPrimaryColor = true
         super.onResume()
+        guideMessage.text = getString(R.string.place_finger)
         FontUtils.setFontsTypeface(applicationContext, assets, null, container)
-
+        
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
             // 10. 지문인식 시작
             startListening(mCryptoObject)
@@ -154,7 +155,10 @@ class FingerprintActivity : BaseSimpleActivity() {
                         when (activityMode) {
                             ACTIVITY_SETTING -> {
                                 config.fingerprintLockEnable = true
-                                showAlertDialog(getString(R.string.fingerprint_setting_complete), DialogInterface.OnClickListener { _, _ -> finish() })
+                                showAlertDialog(getString(R.string.fingerprint_setting_complete), DialogInterface.OnClickListener { _, _ ->
+                                    pauseLock()
+                                    finish() 
+                                })
                             }
                             ACTIVITY_UNLOCK-> {
                                 pauseLock()

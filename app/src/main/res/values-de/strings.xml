@@ -252,5 +252,7 @@
     <string name="preferences_category_lock">애플리케이션 잠금설정</string>
     <string name="fingerprint_lock_title">지문인식 잠금(Beta)</string>
     <string name="fingerprint_lock_summary">디바이스가 지문인식 기능을 지원하고 등록된 지문이 있는경우 등록된 지문으로 애플리케이션을 잠금니다.</string>
+    <string name="fingerprint_not_available">디바이스에 설치된 운영시스템이 지문인식 기능을 지원하지 않습니다.</string>
     <string name="fingerprint_setting_complete">잠금 설정이 완료되었습니다.</string>
+    <string name="fingerprint_setting_release">잠금 설정이 해제되었습니다.</string>
 </resources>
