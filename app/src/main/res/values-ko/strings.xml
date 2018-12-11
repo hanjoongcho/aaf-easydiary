@@ -257,4 +257,5 @@
     <string name="fingerprint_setting_release">잠금 설정이 해제되었습니다.</string>
     <string name="pinnumber_lock_title">핀번호 잠금설정</string>
     <string name="pinnumber_lock_summary">핀번호를 설정하여 애플리케이션을 잠금니다.</string>
+    <string name="diary_creation_time_disable_message">시간정보 없음</string>
 </resources>
