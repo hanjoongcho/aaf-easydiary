@@ -227,7 +227,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
                                 <com.simplemobiletools.commons.views.MyTextView
-                                    android:text="@string/pinnumber_lock_title"
+                                    android:text="@string/pin_number_lock_title"
                                     android:layout_width="0dp"
                                     android:layout_weight="1"
                                     style="@style/SettingsTitle" />
@@ -238,7 +238,7 @@
                                     android:layout_height="wrap_content" />
                             </LinearLayout>
                             <com.simplemobiletools.commons.views.MyTextView
-                                android:text="@string/pinnumber_lock_summary"
+                                android:text="@string/pin_number_lock_summary"
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
