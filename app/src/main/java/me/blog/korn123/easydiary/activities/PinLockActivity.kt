@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.activities
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -10,16 +11,20 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.pauseLock
+import me.blog.korn123.easydiary.extensions.showAlertDialog
 
 
 class PinLockActivity : BaseSimpleActivity() {
+    private var mPassword = arrayOfNulls<String>(4)
     private var mPasswordView = arrayOfNulls<TextView>(4)
     private var mCursorIndex = 0
+    private var activityMode: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lock_setting)
-
+        activityMode = intent.getStringExtra(LAUNCHING_MODE)
+        
         mPasswordView[0] = pass1
         mPasswordView[1] = pass2
         mPasswordView[2] = pass3
@@ -46,32 +51,53 @@ class PinLockActivity : BaseSimpleActivity() {
     override fun getMainViewGroup(): ViewGroup? = container
     
     private val keyPadClickListener: View.OnClickListener = View.OnClickListener { view ->
-        var password = ""
-
-        when (view?.id) {
-            R.id.num0 -> password = "0"
-            R.id.num1 -> password = "1"
-            R.id.num2 -> password = "2"
-            R.id.num3 -> password = "3"
-            R.id.num4 -> password = "4"
-            R.id.num5 -> password = "5"
-            R.id.num6 -> password = "6"
-            R.id.num7 -> password = "7"
-            R.id.num8 -> password = "8"
-            R.id.num9 -> password = "9"
+        val inputPass = when (view?.id) {
+            R.id.num0 -> "0"
+            R.id.num1 -> "1"
+            R.id.num2 -> "2"
+            R.id.num3 -> "3"
+            R.id.num4 -> "4"
+            R.id.num5 -> "5"
+            R.id.num6 -> "6"
+            R.id.num7 -> "7"
+            R.id.num8 -> "8"
+            R.id.num9 -> "9"
+            else -> ""
         }
-
-        mPasswordView[mCursorIndex]?.setText(password)
+        mPassword[mCursorIndex] = inputPass
+        val displayPass = if (activityMode == ACTIVITY_SETTING) inputPass else "-"
+        mPasswordView[mCursorIndex]?.text = displayPass
+        
         if (mCursorIndex == 3) {
             var fullPassword = ""
-            for (tv in mPasswordView) {
-                fullPassword += tv?.text
+            mPassword.map {
+                fullPassword += it
             }
 
-            config.aafPinLockEnable = true
-            config.aafPinLockSavedPassword = fullPassword
-            pauseLock()
-            finish()
+            when (activityMode) {
+                ACTIVITY_SETTING -> {
+                    config.aafPinLockEnable = true
+                    config.aafPinLockSavedPassword = fullPassword
+                    showAlertDialog(getString(R.string.pin_number_setting_complete), DialogInterface.OnClickListener { _, _ ->
+                        pauseLock()
+                        finish()
+                    })
+                }
+                ACTIVITY_UNLOCK -> {
+                    when (config.aafPinLockSavedPassword == fullPassword) {
+                        true -> {
+                            pauseLock()
+                            finish()
+                        }
+                        false -> {
+                            mCursorIndex = 0
+                            mPasswordView.map { 
+                                it?.text = null
+                            }
+                        }
+                    }
+                }
+            }
         } else {
             mCursorIndex++
         }

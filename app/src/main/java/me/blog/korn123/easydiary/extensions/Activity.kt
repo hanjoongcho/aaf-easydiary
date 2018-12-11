@@ -13,6 +13,7 @@ import com.simplemobiletools.commons.models.Release
 import io.github.aafactory.commons.activities.BaseSimpleActivity
 import me.blog.korn123.easydiary.activities.DiaryLockActivity
 import me.blog.korn123.easydiary.activities.FingerprintLockActivity
+import me.blog.korn123.easydiary.activities.PinLockActivity
 import me.blog.korn123.easydiary.dialogs.WhatsNewDialog
 
 /**
@@ -34,7 +35,9 @@ fun Activity.resumeLock() {
                 })
             }
             config.aafPinLockEnable -> {
-                startActivity(Intent(this, DiaryLockActivity::class.java))
+                startActivity(Intent(this, PinLockActivity::class.java).apply {
+                    putExtra(PinLockActivity.LAUNCHING_MODE, PinLockActivity.ACTIVITY_UNLOCK)
+                })
             }
         }
     }
