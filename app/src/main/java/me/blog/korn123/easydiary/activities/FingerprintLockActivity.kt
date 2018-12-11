@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.activities
 
+import android.annotation.TargetApi
 import android.app.KeyguardManager
 import android.content.DialogInterface
 import android.hardware.fingerprint.FingerprintManager
@@ -33,7 +34,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
     private lateinit var mKeyGenerator: KeyGenerator
     private lateinit var mFingerprintManager: FingerprintManager
     private lateinit var mCryptoObject: FingerprintManager.CryptoObject
-    private lateinit var mCancellationSignal: CancellationSignal
+    private var mCancellationSignal: CancellationSignal? = null
     private var activityMode: String? = null
     
     public override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,8 +44,15 @@ class FingerprintLockActivity : BaseSimpleActivity() {
         if (activityMode != ACTIVITY_SETTING && activityMode != ACTIVITY_UNLOCK) {
             showAlertDialog("Launching flag is empty.", DialogInterface.OnClickListener { _, _ -> finish() })
         }
-        
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+    }
+
+    override fun onResume() {
+        isBackgroundColorFromPrimaryColor = true
+        super.onResume()
+        guideMessage.text = getString(R.string.place_finger)
+        FontUtils.setFontsTypeface(applicationContext, assets, null, container)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
             // 01. KeyStore 인스턴스 생성
             try {
@@ -71,7 +79,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
             } catch (e: NoSuchPaddingException) {
                 makeSnackBar("Failed to get an instance of Cipher")
             }
-            
+
             // 04. KeyguardManager service 초기화
             val keyguardManager = getSystemService(KeyguardManager::class.java)
 
@@ -81,7 +89,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
             // 06. screen lock 설정여부 확인
             if (!keyguardManager.isKeyguardSecure) {
                 // Show a message that the user hasn't set up a fingerprint or lock screen.
-                makeSnackBar("Secure lock screen hasn't set up.\n" + "Go to 'Settings -> Security -> Fingerprint' to set up a fingerprint")
+                guideMessage.text = "Secure lock screen hasn't set up.\nGo to 'Settings -> Security -> Fingerprint' to set up a fingerprint" 
                 return
             }
 
@@ -92,10 +100,10 @@ class FingerprintLockActivity : BaseSimpleActivity() {
             // noinspection ResourceType
             if (!mFingerprintManager.hasEnrolledFingerprints()) {
                 // This happens when no fingerprints are registered.
-                makeSnackBar("Go to 'Settings -> Security -> Fingerprint' and register at least one" + " fingerprint")
+                guideMessage.text = "Go to 'Settings -> Security -> Fingerprint' and register at least one" + " fingerprint"
                 return
             }
-            
+
             // 08. KeyGenerator를 이용하여 key 생성
             createKey(DEFAULT_KEY_NAME, true)
 
@@ -107,18 +115,9 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                     mCryptoObject = FingerprintManager.CryptoObject(it)
                 } else {
 
-                }    
+                }
             }
-        }
-    }
 
-    override fun onResume() {
-        isBackgroundColorFromPrimaryColor = true
-        super.onResume()
-        guideMessage.text = getString(R.string.place_finger)
-        FontUtils.setFontsTypeface(applicationContext, assets, null, container)
-        
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
             // 10. 지문인식 시작
             startListening(mCryptoObject)
         }
@@ -126,7 +125,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
 
     override fun onPause() {
         super.onPause()
-        mCancellationSignal.cancel()
+        mCancellationSignal?.cancel()
     }
     
     override fun getMainViewGroup(): ViewGroup? = container

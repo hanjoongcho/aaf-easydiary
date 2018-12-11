@@ -122,7 +122,7 @@ class SettingsActivity : EasyDiaryActivity() {
                 }
             }
             R.id.fingerprint -> {
-                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     when (config.fingerprintLockEnable) {
                         true -> {
                             fingerprintSwitcher.isChecked = false
