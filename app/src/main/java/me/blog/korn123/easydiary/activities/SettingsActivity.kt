@@ -1,7 +1,6 @@
 package me.blog.korn123.easydiary.activities
 
 import android.app.Activity
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -13,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ListView
-import me.blog.korn123.easydiary.gms.drive.BackupDiaryActivity
 import com.xw.repo.BubbleSeekBar
 import io.github.aafactory.commons.activities.BaseWebViewActivity
 import io.github.aafactory.commons.helpers.BaseConfig
@@ -25,6 +23,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.FontItemAdapter
 import me.blog.korn123.easydiary.adapters.ThumbnailSizeItemAdapter
 import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.gms.drive.BackupDiaryActivity
 import me.blog.korn123.easydiary.gms.drive.BackupPhotoActivity
 import me.blog.korn123.easydiary.gms.drive.RecoverDiaryActivity
 import me.blog.korn123.easydiary.gms.drive.RecoverPhotoActivity
@@ -57,10 +56,6 @@ class SettingsActivity : EasyDiaryActivity() {
             }
             R.id.addTtfFontSetting -> {
                 openGuideView()
-            }
-            R.id.lockNumberSetting -> {
-                val lockSettingIntent = Intent(this@SettingsActivity, LockSettingActivity::class.java)
-                startActivityForResult(lockSettingIntent, REQUEST_CODE_LOCK_SETTING)
             }
             R.id.restoreSetting -> {
                 mTaskFlag = SETTING_FLAG_IMPORT_GOOGLE_DRIVE
@@ -166,7 +161,6 @@ class SettingsActivity : EasyDiaryActivity() {
         sensitiveOption.setOnClickListener(mOnClickListener)
         addTtfFontSetting.setOnClickListener(mOnClickListener)
         appLockSetting.setOnClickListener(mOnClickListener)
-        lockNumberSetting.setOnClickListener(mOnClickListener)
         restoreSetting.setOnClickListener(mOnClickListener)
         backupSetting.setOnClickListener(mOnClickListener)
         rateAppSetting.setOnClickListener(mOnClickListener)
@@ -240,18 +234,6 @@ class SettingsActivity : EasyDiaryActivity() {
         val guideIntent = Intent(this, WebViewActivity::class.java)
         guideIntent.putExtra(BaseWebViewActivity.OPEN_URL_INFO, getString(R.string.add_ttf_fonts_info_url))
         startActivity(guideIntent)
-    }
-    
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            data?.let {
-                val password = it.getStringExtra(APP_LOCK_REQUEST_PASSWORD)
-                config.aafPinLockSavedPassword = password
-                lockNumberSettingSummary.text = "${getString(R.string.lock_number)} $password"
-            }
-        }
-        pauseLock()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -393,7 +375,6 @@ class SettingsActivity : EasyDiaryActivity() {
         fontSettingSummary.text = FontUtils.fontFileNameToDisplayName(applicationContext, config.settingFontName)
         sensitiveOptionSwitcher.isChecked = config.diarySearchQueryCaseSensitive
         appLockSettingSwitcher.isChecked = config.aafPinLockEnable
-        lockNumberSettingSummary.text = "${getString(R.string.lock_number)} ${config.aafPinLockSavedPassword}"
         rateAppSettingSummary.text = String.format("Easy Diary v %s", BuildConfig.VERSION_NAME)
         boldStyleOptionSwitcher.isChecked = config.boldStyleEnable
         multiPickerOptionSwitcher.isChecked = config.multiPickerEnable
