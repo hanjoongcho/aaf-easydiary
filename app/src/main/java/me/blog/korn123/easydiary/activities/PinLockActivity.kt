@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import io.github.aafactory.commons.activities.BaseSimpleActivity
-import kotlinx.android.synthetic.main.activity_lock_setting.*
+import kotlinx.android.synthetic.main.activity_pin_lock.*
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
@@ -23,7 +23,7 @@ class PinLockActivity : BaseSimpleActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_lock_setting)
+        setContentView(R.layout.activity_pin_lock)
         activityMode = intent.getStringExtra(LAUNCHING_MODE)
         
         mPasswordView[0] = pass1

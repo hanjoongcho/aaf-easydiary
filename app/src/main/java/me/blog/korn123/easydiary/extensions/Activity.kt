@@ -11,7 +11,6 @@ import android.support.v4.app.ActivityCompat
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
 import io.github.aafactory.commons.activities.BaseSimpleActivity
-import me.blog.korn123.easydiary.activities.DiaryLockActivity
 import me.blog.korn123.easydiary.activities.FingerprintLockActivity
 import me.blog.korn123.easydiary.activities.PinLockActivity
 import me.blog.korn123.easydiary.dialogs.WhatsNewDialog

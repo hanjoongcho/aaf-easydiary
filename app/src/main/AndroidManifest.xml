@@ -31,8 +31,6 @@
         <activity android:name=".gms.drive.RecoverPhotoActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.BarChartActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.CalendarActivity" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.DiaryLockActivity" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.LockSettingActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.PhotoViewPagerActivity" android:theme="@style/AppTheme.NoActionBar" android:hardwareAccelerated="false" />
         <activity android:name=".activities.PostCardActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.TimelineActivity" android:theme="@style/AppTheme.NoActionBar" />
