@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.activities
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -49,6 +50,11 @@ class PinLockActivity : BaseSimpleActivity() {
     }
 
     override fun getMainViewGroup(): ViewGroup? = container
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        ActivityCompat.finishAffinity(this)
+    }
     
     private val keyPadClickListener: View.OnClickListener = View.OnClickListener { view ->
         val inputPass = when (view?.id) {
@@ -76,12 +82,12 @@ class PinLockActivity : BaseSimpleActivity() {
 
             when (activityMode) {
                 ACTIVITY_SETTING -> {
-                    config.aafPinLockEnable = true
-                    config.aafPinLockSavedPassword = fullPassword
                     showAlertDialog(getString(R.string.pin_number_setting_complete), DialogInterface.OnClickListener { _, _ ->
+                        config.aafPinLockEnable = true
+                        config.aafPinLockSavedPassword = fullPassword
                         pauseLock()
                         finish()
-                    })
+                    }, false)
                 }
                 ACTIVITY_UNLOCK -> {
                     when (config.aafPinLockSavedPassword == fullPassword) {

@@ -154,11 +154,11 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                         
                         when (activityMode) {
                             ACTIVITY_SETTING -> {
-                                config.fingerprintLockEnable = true
                                 showAlertDialog(getString(R.string.fingerprint_setting_complete), DialogInterface.OnClickListener { _, _ ->
+                                    config.fingerprintLockEnable = true
                                     pauseLock()
                                     finish() 
-                                })
+                                }, false)
                             }
                             ACTIVITY_UNLOCK-> {
                                 pauseLock()
