@@ -12,6 +12,7 @@ import android.security.keystore.KeyProperties
 import android.support.annotation.RequiresApi
 import android.support.v4.app.ActivityCompat
 import android.util.Base64
+import android.util.Log
 import android.view.ViewGroup
 import io.github.aafactory.commons.activities.BaseSimpleActivity
 import kotlinx.android.synthetic.main.activity_fingerprint.*
@@ -25,6 +26,8 @@ import java.io.IOException
 import java.security.*
 import java.security.cert.CertificateException
 import javax.crypto.*
+import javax.crypto.spec.IvParameterSpec
+
 
 class FingerprintLockActivity : BaseSimpleActivity() {
     private lateinit var mKeyStore: KeyStore
@@ -103,13 +106,13 @@ class FingerprintLockActivity : BaseSimpleActivity() {
             }
 
             // 08. KeyGenerator를 이용하여 key 생성
-            createKey(DEFAULT_KEY_NAME, true)
+            if (activityMode == ACTIVITY_SETTING) createKey(KEY_NAME, true)
 
             // 09. Cipher & CryptoObject 초기화
             // Set up the crypto object for later. The object will be authenticated by use
             // of the fingerprint.
             defaultCipher?.let {
-                if (initCipher(it, DEFAULT_KEY_NAME)) {
+                if (initCipher(it, KEY_NAME)) {
                     mCryptoObject = FingerprintManager.CryptoObject(it)
                 } else {
 
@@ -159,7 +162,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                                 }, false)
                             }
                             ACTIVITY_UNLOCK-> {
-                                tryEncrypt(mCryptoObject.cipher)
+                                tryDecrypt(mCryptoObject.cipher)
                                 pauseLock()
                                 finish()
                             }
@@ -257,7 +260,14 @@ class FingerprintLockActivity : BaseSimpleActivity() {
         try {
             mKeyStore.load(null)
             val key = mKeyStore.getKey(keyName, null) as SecretKey
-            cipher.init(Cipher.ENCRYPT_MODE, key)
+            when (activityMode) {
+                ACTIVITY_SETTING -> cipher.init(Cipher.ENCRYPT_MODE, key)
+                ACTIVITY_UNLOCK -> {
+                    val iv = Base64.decode(config.fingerprintEncryptDataIV, Base64.DEFAULT)
+                    val ivParams = IvParameterSpec(iv)
+                    cipher.init(Cipher.DECRYPT_MODE, key, ivParams)
+                }
+            }
             return true
         } catch (e: KeyPermanentlyInvalidatedException) {
             return false
@@ -282,24 +292,28 @@ class FingerprintLockActivity : BaseSimpleActivity() {
      * only works if the user has just authenticated via fingerprint.
      */
     private fun tryEncrypt(cipher: Cipher) {
-        var encryptMessage: String? 
         try {
-            val encrypted = cipher.doFinal(SECRET_MESSAGE.toByteArray())
-            encryptMessage = showConfirmation(encrypted)
+            val encrypted = cipher.doFinal(DUMMY_ENCRYPT_DATA.toByteArray())
+            val ivParams = cipher.parameters.getParameterSpec(IvParameterSpec::class.java)
+            val iv = Base64.encodeToString(ivParams.iv, Base64.DEFAULT)
+            config.fingerprintEncryptData = Base64.encodeToString(encrypted, Base64.DEFAULT)
+            config.fingerprintEncryptDataIV = iv
         } catch (e: BadPaddingException) {
-            encryptMessage = "Failed to encrypt the data with the generated key.${e.message}"
+            e.printStackTrace()
         } catch (e: IllegalBlockSizeException) {
-            encryptMessage = "Failed to encrypt the data with the generated key.${e.message}"
+            e.printStackTrace()
         }
-        guideMessage.text = encryptMessage
     }
-
-    // Show confirmation, if fingerprint was used show crypto information.
-    private fun showConfirmation(encrypted: ByteArray?): String = encrypted?.let { Base64.encodeToString(it, 0 /* flags */) } ?: ""
+    
+    private fun tryDecrypt(cipher: Cipher) {
+        val encodedData = Base64.decode(config.fingerprintEncryptData, Base64.DEFAULT)
+        val decodedData = cipher.doFinal(encodedData)
+        Log.i(TAG, "decode dummy data: ${String(decodedData)}, origin dummy data: $DUMMY_ENCRYPT_DATA")
+    }
     
     companion object {
-        const val DEFAULT_KEY_NAME = "default_key"
-        const val SECRET_MESSAGE   = "Very secret message";
+        const val KEY_NAME = "me.blog.korn123"
+        const val DUMMY_ENCRYPT_DATA = "aaf-easydiary"
         const val LAUNCHING_MODE   = "launching_mode"
         const val ACTIVITY_SETTING = "activity_setting"
         const val ACTIVITY_UNLOCK  = "activity_unlock"

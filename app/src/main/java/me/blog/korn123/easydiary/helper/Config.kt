@@ -63,4 +63,12 @@ class Config(context: Context) : BaseConfig(context) {
     var fingerprintLockEnable: Boolean
         get() = prefs.getBoolean(SETTING_FINGERPRINT_LOCK, false)
         set(fingerprintLockEnable) = prefs.edit().putBoolean(SETTING_FINGERPRINT_LOCK, fingerprintLockEnable).apply()
+
+    var fingerprintEncryptData: String
+        get() = prefs.getString(FINGERPRINT_ENCRYPT_DATA, "")
+        set(fingerprintEncryptData) = prefs.edit().putString(FINGERPRINT_ENCRYPT_DATA, fingerprintEncryptData).apply()
+
+    var fingerprintEncryptDataIV: String
+        get() = prefs.getString(FINGERPRINT_ENCRYPT_DATA_IV, "")
+        set(fingerprintEncryptDataIV) = prefs.edit().putString(FINGERPRINT_ENCRYPT_DATA_IV, fingerprintEncryptDataIV).apply()
 }
