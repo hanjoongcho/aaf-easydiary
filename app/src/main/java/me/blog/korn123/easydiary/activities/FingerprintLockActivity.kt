@@ -1,6 +1,5 @@
 package me.blog.korn123.easydiary.activities
 
-import android.annotation.TargetApi
 import android.app.KeyguardManager
 import android.content.DialogInterface
 import android.hardware.fingerprint.FingerprintManager
@@ -12,6 +11,7 @@ import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.KeyProperties
 import android.support.annotation.RequiresApi
 import android.support.v4.app.ActivityCompat
+import android.util.Base64
 import android.view.ViewGroup
 import io.github.aafactory.commons.activities.BaseSimpleActivity
 import kotlinx.android.synthetic.main.activity_fingerprint.*
@@ -24,10 +24,7 @@ import me.blog.korn123.easydiary.extensions.showAlertDialog
 import java.io.IOException
 import java.security.*
 import java.security.cert.CertificateException
-import javax.crypto.Cipher
-import javax.crypto.KeyGenerator
-import javax.crypto.NoSuchPaddingException
-import javax.crypto.SecretKey
+import javax.crypto.*
 
 class FingerprintLockActivity : BaseSimpleActivity() {
     private lateinit var mKeyStore: KeyStore
@@ -36,6 +33,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
     private lateinit var mCryptoObject: FingerprintManager.CryptoObject
     private var mCancellationSignal: CancellationSignal? = null
     private var activityMode: String? = null
+    private val TAG = FingerprintLockActivity::class.java.simpleName
     
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -153,6 +151,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                         
                         when (activityMode) {
                             ACTIVITY_SETTING -> {
+                                tryEncrypt(mCryptoObject.cipher)
                                 showAlertDialog(getString(R.string.fingerprint_setting_complete), DialogInterface.OnClickListener { _, _ ->
                                     config.fingerprintLockEnable = true
                                     pauseLock()
@@ -160,6 +159,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                                 }, false)
                             }
                             ACTIVITY_UNLOCK-> {
+                                tryEncrypt(mCryptoObject.cipher)
                                 pauseLock()
                                 finish()
                             }
@@ -276,11 +276,32 @@ class FingerprintLockActivity : BaseSimpleActivity() {
         }
 
     }
+
+    /**
+     * Tries to encrypt some data with the generated key in [.createKey] which is
+     * only works if the user has just authenticated via fingerprint.
+     */
+    private fun tryEncrypt(cipher: Cipher) {
+        var encryptMessage: String? 
+        try {
+            val encrypted = cipher.doFinal(SECRET_MESSAGE.toByteArray())
+            encryptMessage = showConfirmation(encrypted)
+        } catch (e: BadPaddingException) {
+            encryptMessage = "Failed to encrypt the data with the generated key.${e.message}"
+        } catch (e: IllegalBlockSizeException) {
+            encryptMessage = "Failed to encrypt the data with the generated key.${e.message}"
+        }
+        guideMessage.text = encryptMessage
+    }
+
+    // Show confirmation, if fingerprint was used show crypto information.
+    private fun showConfirmation(encrypted: ByteArray?): String = encrypted?.let { Base64.encodeToString(it, 0 /* flags */) } ?: ""
     
     companion object {
         const val DEFAULT_KEY_NAME = "default_key"
-        const val LAUNCHING_MODE = "launching_mode"
+        const val SECRET_MESSAGE   = "Very secret message";
+        const val LAUNCHING_MODE   = "launching_mode"
         const val ACTIVITY_SETTING = "activity_setting"
-        const val ACTIVITY_UNLOCK = "activity_unlock"
+        const val ACTIVITY_UNLOCK  = "activity_unlock"
     }
 }
