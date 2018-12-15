@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.64 (date: 2018/12/16)
+  * Added lock function using fingerprint sensor
+  
 # Changes in 1.4.63 (date: 2018/11/25)
   * Added attached photos backup and recovery function using Google Drive
   
