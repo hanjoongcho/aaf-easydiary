@@ -319,12 +319,12 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                 ++config.fingerprintAuthenticationFailCount
             }
         }
-
-        if (!isValid) guideMessage.text = "Current fail count is ${config.fingerprintAuthenticationFailCount} ($errorMessage)"
             
         if (config.fingerprintAuthenticationFailCount > 9) {
             config.fingerprintLockEnable = false
             this.onBackPressed()
+        } else {
+            if (!isValid) guideMessage.text = "Current fail count is ${config.fingerprintAuthenticationFailCount} ($errorMessage)"    
         }
     }
     
