@@ -13,6 +13,7 @@ import android.support.annotation.RequiresApi
 import android.support.v4.app.ActivityCompat
 import android.util.Base64
 import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import io.github.aafactory.commons.activities.BaseSimpleActivity
 import kotlinx.android.synthetic.main.activity_fingerprint.*
@@ -36,6 +37,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
     private lateinit var mCryptoObject: FingerprintManager.CryptoObject
     private var mCancellationSignal: CancellationSignal? = null
     private var activityMode: String? = null
+    private var mActivityPause = false
     private val TAG = FingerprintLockActivity::class.java.simpleName
     
     public override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,9 +47,12 @@ class FingerprintLockActivity : BaseSimpleActivity() {
         if (activityMode != ACTIVITY_SETTING && activityMode != ACTIVITY_UNLOCK) {
             showAlertDialog("Launching flag is empty.", DialogInterface.OnClickListener { _, _ -> finish() })
         }
+
+        forceFinish.setOnClickListener { onBackPressed() }
     }
 
     override fun onResume() {
+        mActivityPause = false
         isBackgroundColorFromPrimaryColor = true
         super.onResume()
         guideMessage.text = getString(R.string.place_finger)
@@ -126,6 +131,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
 
     override fun onPause() {
         super.onPause()
+        mActivityPause = true
         mCancellationSignal?.cancel()
     }
     
@@ -151,7 +157,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                 .authenticate(cryptoObject, mCancellationSignal, 0 /* flags */, object : FingerprintManager.AuthenticationCallback() {
                     override fun onAuthenticationSucceeded(result: FingerprintManager.AuthenticationResult?) {
                         super.onAuthenticationSucceeded(result)
-                        updateAuthenticationFailCount(true)
+                        config.fingerprintAuthenticationFailCount = 0
                         
                         when (activityMode) {
                             ACTIVITY_SETTING -> {
@@ -172,17 +178,18 @@ class FingerprintLockActivity : BaseSimpleActivity() {
 
                     override fun onAuthenticationError(errorCode: Int, errString: CharSequence?) {
                         super.onAuthenticationError(errorCode, errString)
-                        updateAuthenticationFailCount(false, "onAuthenticationError")
+                        config.fingerprintAuthenticationFailCount = ++config.fingerprintAuthenticationFailCount
+                        updateErrorMessage(errString.toString(), true)
                     }
 
                     override fun onAuthenticationHelp(helpCode: Int, helpString: CharSequence?) {
                         super.onAuthenticationHelp(helpCode, helpString)
-                        updateAuthenticationFailCount(false, "onAuthenticationHelp")
+                        updateErrorMessage(helpString.toString())
                     }
 
                     override fun onAuthenticationFailed() {
                         super.onAuthenticationFailed()
-                        updateAuthenticationFailCount(false, "onAuthenticationFailed")
+                        updateErrorMessage("onAuthenticationFailed")
                     }
                 }, null)
     }
@@ -312,19 +319,10 @@ class FingerprintLockActivity : BaseSimpleActivity() {
         Log.i(TAG, "decode dummy data: ${String(decodedData)}, origin dummy data: $DUMMY_ENCRYPT_DATA")
     }
     
-    private fun updateAuthenticationFailCount(isValid: Boolean, errorMessage: String = "") {
-        config.fingerprintAuthenticationFailCount = when (isValid) {
-            true -> 0
-            false -> {
-                ++config.fingerprintAuthenticationFailCount
-            }
-        }
-            
-        if (config.fingerprintAuthenticationFailCount > 9) {
-            config.fingerprintLockEnable = false
-            this.onBackPressed()
-        } else {
-            if (!isValid) guideMessage.text = "Current fail count is ${config.fingerprintAuthenticationFailCount} ($errorMessage)"    
+    private fun updateErrorMessage(errorMessage: String, showForceFinishButton: Boolean = false) {
+        guideMessage.text = errorMessage
+        if (showForceFinishButton) {
+            forceFinish.visibility = View.VISIBLE
         }
     }
     
