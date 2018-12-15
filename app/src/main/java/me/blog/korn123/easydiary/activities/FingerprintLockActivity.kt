@@ -2,6 +2,8 @@ package me.blog.korn123.easydiary.activities
 
 import android.app.KeyguardManager
 import android.content.DialogInterface
+import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.hardware.fingerprint.FingerprintManager
 import android.os.Build
 import android.os.Bundle
@@ -13,16 +15,12 @@ import android.support.annotation.RequiresApi
 import android.support.v4.app.ActivityCompat
 import android.util.Base64
 import android.util.Log
-import android.view.View
 import android.view.ViewGroup
 import io.github.aafactory.commons.activities.BaseSimpleActivity
 import kotlinx.android.synthetic.main.activity_fingerprint.*
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.makeSnackBar
-import me.blog.korn123.easydiary.extensions.pauseLock
-import me.blog.korn123.easydiary.extensions.showAlertDialog
+import me.blog.korn123.easydiary.extensions.*
 import java.io.IOException
 import java.security.*
 import java.security.cert.CertificateException
@@ -48,7 +46,12 @@ class FingerprintLockActivity : BaseSimpleActivity() {
             showAlertDialog("Launching flag is empty.", DialogInterface.OnClickListener { _, _ -> finish() })
         }
 
-        forceFinish.setOnClickListener { onBackPressed() }
+        changePinLock.setOnClickListener {
+            startActivity(Intent(this, PinLockActivity::class.java).apply {
+                putExtra(PinLockActivity.LAUNCHING_MODE, PinLockActivity.ACTIVITY_UNLOCK)
+            })
+            finish()
+        }
     }
 
     override fun onResume() {
@@ -162,6 +165,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                         when (activityMode) {
                             ACTIVITY_SETTING -> {
                                 tryEncrypt(mCryptoObject.cipher)
+                                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
                                 showAlertDialog(getString(R.string.fingerprint_setting_complete), DialogInterface.OnClickListener { _, _ ->
                                     config.fingerprintLockEnable = true
                                     pauseLock()
@@ -179,7 +183,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                     override fun onAuthenticationError(errorCode: Int, errString: CharSequence?) {
                         super.onAuthenticationError(errorCode, errString)
                         config.fingerprintAuthenticationFailCount = ++config.fingerprintAuthenticationFailCount
-                        updateErrorMessage(errString.toString(), true)
+                        updateErrorMessage(errString.toString())
                     }
 
                     override fun onAuthenticationHelp(helpCode: Int, helpString: CharSequence?) {
@@ -319,11 +323,8 @@ class FingerprintLockActivity : BaseSimpleActivity() {
         Log.i(TAG, "decode dummy data: ${String(decodedData)}, origin dummy data: $DUMMY_ENCRYPT_DATA")
     }
     
-    private fun updateErrorMessage(errorMessage: String, showForceFinishButton: Boolean = false) {
+    private fun updateErrorMessage(errorMessage: String) {
         guideMessage.text = errorMessage
-        if (showForceFinishButton) {
-            forceFinish.visibility = View.VISIBLE
-        }
     }
     
     companion object {

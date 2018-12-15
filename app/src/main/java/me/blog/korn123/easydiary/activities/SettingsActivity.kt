@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.activities
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -130,9 +131,16 @@ class SettingsActivity : EasyDiaryActivity() {
                             showAlertDialog(getString(R.string.fingerprint_setting_release), null)
                         }
                         false -> {
-                            startActivity(Intent(this, FingerprintLockActivity::class.java).apply {
-                                putExtra(FingerprintLockActivity.LAUNCHING_MODE, FingerprintLockActivity.ACTIVITY_SETTING)
-                            })
+                            when (config.aafPinLockEnable) {
+                                true -> {
+                                    startActivity(Intent(this, FingerprintLockActivity::class.java).apply {
+                                        putExtra(FingerprintLockActivity.LAUNCHING_MODE, FingerprintLockActivity.ACTIVITY_SETTING)
+                                    })        
+                                }
+                                false -> {
+                                    showAlertDialog(getString(R.string.fingerprint_lock_need_pin_number_setting), null)
+                                }
+                            }
                         }
                     }    
                 } else {
