@@ -193,11 +193,14 @@ object EasyDiaryUtils {
 
             }
         }
-    } catch (e: FileNotFoundException) {
-        e.printStackTrace()
+    } catch (fe: FileNotFoundException) {
+        fe.printStackTrace()
         BitmapFactory.decodeResource(context.resources, R.drawable.question_shield)
     } catch (se: SecurityException) {
         se.printStackTrace()
+        BitmapFactory.decodeResource(context.resources, R.drawable.question_shield)
+    } catch (e: Exception) {
+        e.printStackTrace()
         BitmapFactory.decodeResource(context.resources, R.drawable.question_shield)
     }
 

@@ -199,6 +199,10 @@
         v1.4.63 / 2018.11.25\n
         Googleのドライブを使用した添付写真のバックアップと復元機能を追加
     </string>
+    <string name="release_127">
+        v1.4.64 / 2018.12.16\n
+       指紋センサーを利用したロック機能を追加
+    </string>
     
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -249,4 +253,17 @@
     <string name="notification_msg_download_success">ダウンロード成功</string>
     <string name="notification_msg_download_fail">ダウンロード失敗</string>
     <string name="notification_msg_duplicate_file_count">存在するファイルの数</string>
+    <string name="preferences_category_lock">アプリケーションロックの設定</string>
+    <string name="fingerprint_lock_title">指紋ロック(Beta)</string>
+    <string name="fingerprint_lock_summary">デバイスが指紋認識機能をサポートし、登録された指紋がある場合、登録された指紋でアプリケーションをロックします。</string>
+    <string name="fingerprint_not_available">デバイスにインストール済みのオペレーティングシステムが、指紋認識機能をサポートしていません。</string>
+    <string name="fingerprint_setting_complete">指紋ロックの設定が完了しました。</string>
+    <string name="fingerprint_setting_release">指紋ロックの設定が解除されました。</string>
+    <string name="fingerprint_lock_need_pin_number_setting">指紋ロックを利用するには、ピン番号を最初に設定する必要があります。</string>
+    <string name="pin_number_lock_title">ピン番号ロックの設定</string>
+    <string name="pin_number_lock_summary">ピン番号を設定して、アプリケーションをロックします。</string>
+    <string name="pin_number_setting_complete">ピン番号ロックの設定が完了しました。</string>
+    <string name="pin_number_setting_release">ピン番号ロックの設定が解除されました。</string>
+    <string name="pin_number_release_need_fingerprint_disable">ピン番号ロックの設定を解除するには、指紋ロックの設定を解除する必要があります。</string>
+    <string name="diary_creation_time_disable_message">時間情報なし</string>
 </resources>

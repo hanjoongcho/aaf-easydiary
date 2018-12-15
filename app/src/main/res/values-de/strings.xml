@@ -199,6 +199,10 @@
         v1.4.63 / 2018.11.25\n
         Added attached photos backup and recovery function using Google Drive
     </string>
+    <string name="release_127">
+        v1.4.64 / 2018.12.16\n
+        Added lock function using fingerprint sensor
+    </string>
     
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -249,4 +253,17 @@
     <string name="notification_msg_download_success">Download Success</string>
     <string name="notification_msg_download_fail">Download Fail</string>
     <string name="notification_msg_duplicate_file_count">Number of exist files</string>
+    <string name="preferences_category_lock">Application lock setting</string>
+    <string name="fingerprint_lock_title">Fingerprint lock(Beta)</string>
+    <string name="fingerprint_lock_summary">If the device supports fingerprint recognition and has a registered fingerprint, lock the application with the registered fingerprint.</string>
+    <string name="fingerprint_not_available">The operating system installed on the device does not support fingerprint recognition.</string>
+    <string name="fingerprint_setting_complete">Fingerprint lock setting is completed.</string>
+    <string name="fingerprint_setting_release">Fingerprint lock is off.</string>
+    <string name="fingerprint_lock_need_pin_number_setting">To use fingerprint lockout, you must first set the pin number.</string>
+    <string name="pin_number_lock_title">Pin number lock setting</string>
+    <string name="pin_number_lock_summary">Set the pin number to lock the application.</string>
+    <string name="pin_number_setting_complete">Pin number lock setting is completed.</string>
+    <string name="pin_number_setting_release">Pin number lock is unlocked.</string>
+    <string name="pin_number_release_need_fingerprint_disable">To unlock pin number lock, you need to turn off fingerprint lock.</string>
+    <string name="diary_creation_time_disable_message">No time information</string>
 </resources>

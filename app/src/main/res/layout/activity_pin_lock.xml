@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:background="@color/colorPrimary"
     android:orientation="vertical"
@@ -12,19 +14,22 @@
         android:gravity="top|center_horizontal"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_weight="1"
-        android:layout_height="0dp">
+        android:layout_height="wrap_content">
         <TextView
             android:id="@+id/pass1"
+            tools:text="0"
             style="@style/text_view_lock_number_input" />
         <TextView
             android:id="@+id/pass2"
+            tools:text="0"
             style="@style/text_view_lock_number_input" />
         <TextView
             android:id="@+id/pass3"
+            tools:text="0"
             style="@style/text_view_lock_number_input" />
         <TextView
             android:id="@+id/pass4"
+            tools:text="0"
             android:layout_marginRight="0dp"
             style="@style/text_view_lock_number_input" />
     </LinearLayout>
@@ -33,7 +38,8 @@
         android:orientation="horizontal"
         android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        android:layout_weight="1">
         <ImageView
             android:src="@drawable/intro"
             android:layout_width="60dp"
@@ -54,8 +60,7 @@
         android:layout_marginBottom="20dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_weight="2"
-        android:layout_height="0dp">
+        android:layout_height="wrap_content">
         <LinearLayout
             style="@style/layout_lock_number_container">
             <TextView
@@ -75,19 +80,23 @@
 
         <LinearLayout
             style="@style/layout_lock_number_container">
+
             <TextView
-                style="@style/text_view_lock_number_button"
                 android:id="@+id/num4"
-                android:text="4" />
-            <TextView
                 style="@style/text_view_lock_number_button"
+                android:text="4"/>
+
+            <TextView
                 android:id="@+id/num5"
-                android:text="5" />
-            <TextView
                 style="@style/text_view_lock_number_button"
-                android:layout_marginRight="0dp"
+                android:text="5"/>
+
+            <TextView
                 android:id="@+id/num6"
-                android:text="6" />
+                style="@style/text_view_lock_number_button"
+                android:layout_height="match_parent"
+                android:layout_marginRight="0dp"
+                android:text="6"/>
         </LinearLayout>
 
         <LinearLayout

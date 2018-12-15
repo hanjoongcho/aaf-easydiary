@@ -219,10 +219,8 @@ abstract class EditActivity : EasyDiaryActivity() {
             val parsedDate = format.parse(dateTimeString)
             mCurrentTimeMillis = parsedDate.time
             supportActionBar?.run {
-                subtitle = when (allDay.isChecked) {
-                    true -> DateUtils.getFullPatternDate(mCurrentTimeMillis)
-                    false -> DateUtils.getFullPatternDateWithTimeAndSeconds(mCurrentTimeMillis, Locale.getDefault())
-                }
+                title = DateUtils.getFullPatternDate(mCurrentTimeMillis)
+                subtitle = if (allDay.isChecked) "No time information" else DateUtils.timeMillisToDateTime(mCurrentTimeMillis, DateUtils.TIME_PATTERN_WITH_SECONDS)
             }
         } catch (e: ParseException) {
             e.printStackTrace()

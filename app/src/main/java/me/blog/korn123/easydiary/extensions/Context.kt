@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.extensions
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
@@ -71,7 +72,7 @@ fun Context.showAlertDialog(message: String, positiveListener: DialogInterface.O
     alert.show()
 }
 
-fun Context.showAlertDialog(message: String, positiveListener: DialogInterface.OnClickListener, cancelable: Boolean = true) {
+fun Context.showAlertDialog(message: String, positiveListener: DialogInterface.OnClickListener?, cancelable: Boolean = true) {
     val builder = AlertDialog.Builder(this)
     builder.setMessage(message)
     builder.setCancelable(cancelable)

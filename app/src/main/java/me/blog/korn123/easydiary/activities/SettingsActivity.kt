@@ -1,7 +1,7 @@
 package me.blog.korn123.easydiary.activities
 
-import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.support.v7.app.AlertDialog
@@ -11,17 +11,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ListView
-import me.blog.korn123.easydiary.gms.drive.BackupDiaryActivity
 import com.xw.repo.BubbleSeekBar
 import io.github.aafactory.commons.activities.BaseWebViewActivity
 import io.github.aafactory.commons.helpers.BaseConfig
 import kotlinx.android.synthetic.main.activity_settings.*
+import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.FontItemAdapter
 import me.blog.korn123.easydiary.adapters.ThumbnailSizeItemAdapter
 import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.gms.drive.BackupDiaryActivity
 import me.blog.korn123.easydiary.gms.drive.BackupPhotoActivity
 import me.blog.korn123.easydiary.gms.drive.RecoverDiaryActivity
 import me.blog.korn123.easydiary.gms.drive.RecoverPhotoActivity
@@ -54,14 +55,6 @@ class SettingsActivity : EasyDiaryActivity() {
             }
             R.id.addTtfFontSetting -> {
                 openGuideView()
-            }
-            R.id.appLockSetting -> {
-                appLockSettingSwitcher.toggle()
-                config.aafPinLockEnable = appLockSettingSwitcher.isChecked
-            }
-            R.id.lockNumberSetting -> {
-                val lockSettingIntent = Intent(this@SettingsActivity, LockSettingActivity::class.java)
-                startActivityForResult(lockSettingIntent, REQUEST_CODE_LOCK_SETTING)
             }
             R.id.restoreSetting -> {
                 mTaskFlag = SETTING_FLAG_IMPORT_GOOGLE_DRIVE
@@ -113,6 +106,49 @@ class SettingsActivity : EasyDiaryActivity() {
                 multiPickerOptionSwitcher.toggle()
                 config.multiPickerEnable = multiPickerOptionSwitcher.isChecked
             }
+            R.id.appLockSetting -> {
+                when (config.aafPinLockEnable) {
+                    true -> {
+                        if (config.fingerprintLockEnable) {
+                            showAlertDialog(getString(R.string.pin_number_release_need_fingerprint_disable), null)
+                        } else {
+                            appLockSettingSwitcher.isChecked = false
+                            config.aafPinLockEnable = false
+                            showAlertDialog(getString(R.string.pin_number_setting_release), null)    
+                        }
+                    }
+                    false -> {
+                        startActivity(Intent(this, PinLockActivity::class.java).apply {
+                            putExtra(FingerprintLockActivity.LAUNCHING_MODE, PinLockActivity.ACTIVITY_SETTING)
+                        })
+                    }
+                }
+            }
+            R.id.fingerprint -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    when (config.fingerprintLockEnable) {
+                        true -> {
+                            fingerprintSwitcher.isChecked = false
+                            config.fingerprintLockEnable = false
+                            showAlertDialog(getString(R.string.fingerprint_setting_release), null)
+                        }
+                        false -> {
+                            when (config.aafPinLockEnable) {
+                                true -> {
+                                    startActivity(Intent(this, FingerprintLockActivity::class.java).apply {
+                                        putExtra(FingerprintLockActivity.LAUNCHING_MODE, FingerprintLockActivity.ACTIVITY_SETTING)
+                                    })        
+                                }
+                                false -> {
+                                    showAlertDialog(getString(R.string.fingerprint_lock_need_pin_number_setting), null)
+                                }
+                            }
+                        }
+                    }    
+                } else {
+                    showAlertDialog(getString(R.string.fingerprint_not_available), null)
+                }
+            }   
         }
     }
     
@@ -135,7 +171,6 @@ class SettingsActivity : EasyDiaryActivity() {
         sensitiveOption.setOnClickListener(mOnClickListener)
         addTtfFontSetting.setOnClickListener(mOnClickListener)
         appLockSetting.setOnClickListener(mOnClickListener)
-        lockNumberSetting.setOnClickListener(mOnClickListener)
         restoreSetting.setOnClickListener(mOnClickListener)
         backupSetting.setOnClickListener(mOnClickListener)
         rateAppSetting.setOnClickListener(mOnClickListener)
@@ -148,6 +183,7 @@ class SettingsActivity : EasyDiaryActivity() {
         multiPickerOption.setOnClickListener(mOnClickListener)
         backupAttachPhoto.setOnClickListener(mOnClickListener)
         recoverAttachPhoto.setOnClickListener(mOnClickListener)
+        fingerprint.setOnClickListener(mOnClickListener)
 
         fontLineSpacing.configBuilder
                 .min(0.2F)
@@ -208,18 +244,6 @@ class SettingsActivity : EasyDiaryActivity() {
         val guideIntent = Intent(this, WebViewActivity::class.java)
         guideIntent.putExtra(BaseWebViewActivity.OPEN_URL_INFO, getString(R.string.add_ttf_fonts_info_url))
         startActivity(guideIntent)
-    }
-    
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            data?.let {
-                val password = it.getStringExtra(APP_LOCK_REQUEST_PASSWORD)
-                config.aafPinLockSavedPassword = password
-                lockNumberSettingSummary.text = "${getString(R.string.lock_number)} $password"
-            }
-        }
-        config.aafPinLockPauseMillis = System.currentTimeMillis()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -299,6 +323,7 @@ class SettingsActivity : EasyDiaryActivity() {
     }
     
     private fun openFontSettingDialog() {
+        EasyDiaryUtils.initWorkingDirectory(this@SettingsActivity)
         val builder = AlertDialog.Builder(this@SettingsActivity)
         builder.setNegativeButton(getString(android.R.string.cancel), null)
         builder.setTitle(getString(R.string.font_setting))
@@ -360,10 +385,10 @@ class SettingsActivity : EasyDiaryActivity() {
         fontSettingSummary.text = FontUtils.fontFileNameToDisplayName(applicationContext, config.settingFontName)
         sensitiveOptionSwitcher.isChecked = config.diarySearchQueryCaseSensitive
         appLockSettingSwitcher.isChecked = config.aafPinLockEnable
-        lockNumberSettingSummary.text = "${getString(R.string.lock_number)} ${config.aafPinLockSavedPassword}"
         rateAppSettingSummary.text = String.format("Easy Diary v %s", BuildConfig.VERSION_NAME)
         boldStyleOptionSwitcher.isChecked = config.boldStyleEnable
         multiPickerOptionSwitcher.isChecked = config.multiPickerEnable
+        fingerprintSwitcher.isChecked = config.fingerprintLockEnable
     }
 
     private fun getStoreUrl() = "https://play.google.com/store/apps/details?id=$packageName"

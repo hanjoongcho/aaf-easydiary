@@ -199,6 +199,10 @@
         v1.4.63 / 2018.11.25\n
         구글드라이브를 이용한 첨부사진 백업 및 복구기능 추가
     </string>
+    <string name="release_127">
+        v1.4.64 / 2018.12.16\n
+        지문인식 센서를 이용한 잠금기능 추가
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -249,4 +253,17 @@
     <string name="notification_msg_download_success">다운로드 성공</string>
     <string name="notification_msg_download_fail">다운로드 실패</string>
     <string name="notification_msg_duplicate_file_count">중복 파일</string>
+    <string name="preferences_category_lock">애플리케이션 잠금설정</string>
+    <string name="fingerprint_lock_title">지문인식 잠금(Beta)</string>
+    <string name="fingerprint_lock_summary">디바이스가 지문인식 기능을 지원하고 등록된 지문이 있는경우 등록된 지문으로 애플리케이션을 잠금니다.</string>
+    <string name="fingerprint_not_available">디바이스에 설치된 운영시스템이 지문인식 기능을 지원하지 않습니다.</string>
+    <string name="fingerprint_setting_complete">지문인식 잠금 설정이 완료되었습니다.</string>
+    <string name="fingerprint_setting_release">지문인식 잠금설정이 해제되었습니다.</string>
+    <string name="fingerprint_lock_need_pin_number_setting">지문인식 잠금을 이용하려면 핀번호를 먼저 설정해야 합니다.</string>
+    <string name="pin_number_lock_title">핀번호 잠금설정</string>
+    <string name="pin_number_lock_summary">핀번호를 설정하여 애플리케이션을 잠금니다.</string>
+    <string name="pin_number_setting_complete">핀번호 잠금 설정이 완료되었습니다.</string>
+    <string name="pin_number_setting_release">핀번호 잠금설정이 해제되었습니다.</string>
+    <string name="pin_number_release_need_fingerprint_disable">핀번호 잠금설정을 해제하려면 지문인식 잠금설정을 해제해야 합니다.</string>
+    <string name="diary_creation_time_disable_message">시간정보 없음</string>
 </resources>

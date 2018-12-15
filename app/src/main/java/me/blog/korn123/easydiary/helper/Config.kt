@@ -59,4 +59,21 @@ class Config(context: Context) : BaseConfig(context) {
     var multiPickerEnable: Boolean
         get() = prefs.getBoolean(SETTING_MULTIPLE_PICKER, false)
         set(multiPickerEnable) = prefs.edit().putBoolean(SETTING_MULTIPLE_PICKER, multiPickerEnable).apply()
+
+    var fingerprintLockEnable: Boolean
+        get() = prefs.getBoolean(SETTING_FINGERPRINT_LOCK, false)
+        set(fingerprintLockEnable) = prefs.edit().putBoolean(SETTING_FINGERPRINT_LOCK, fingerprintLockEnable).apply()
+
+    var fingerprintEncryptData: String
+        get() = prefs.getString(FINGERPRINT_ENCRYPT_DATA, "")
+        set(fingerprintEncryptData) = prefs.edit().putString(FINGERPRINT_ENCRYPT_DATA, fingerprintEncryptData).apply()
+
+    var fingerprintEncryptDataIV: String
+        get() = prefs.getString(FINGERPRINT_ENCRYPT_DATA_IV, "")
+        set(fingerprintEncryptDataIV) = prefs.edit().putString(FINGERPRINT_ENCRYPT_DATA_IV, fingerprintEncryptDataIV).apply()
+
+    var fingerprintAuthenticationFailCount: Int
+        get() = prefs.getInt(FINGERPRINT_AUTHENTICATION_FAIL_COUNT, 0)
+        set(fingerprintAuthenticationFailCount) = prefs.edit().putInt(FINGERPRINT_AUTHENTICATION_FAIL_COUNT, fingerprintAuthenticationFailCount).apply()
+    
 }

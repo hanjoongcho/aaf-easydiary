@@ -126,7 +126,7 @@ class DiaryMainActivity : EasyDiaryActivity() {
                     query.setText(result[0])
                     query.setSelection(result[0].length)
                 }
-                config.aafPinLockPauseMillis = System.currentTimeMillis()
+                pauseLock()
             }
         }
     }

@@ -62,7 +62,7 @@ class RecoverDiaryActivity : BaseDriveActivity() {
                     e.printStackTrace()
                 }
 
-                config.aafPinLockPauseMillis = System.currentTimeMillis()
+                pauseLock()
                 val context = this@RecoverDiaryActivity
                 val readDiaryIntent = Intent(context, DiaryMainActivity::class.java)
                 readDiaryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
