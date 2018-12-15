@@ -71,4 +71,9 @@ class Config(context: Context) : BaseConfig(context) {
     var fingerprintEncryptDataIV: String
         get() = prefs.getString(FINGERPRINT_ENCRYPT_DATA_IV, "")
         set(fingerprintEncryptDataIV) = prefs.edit().putString(FINGERPRINT_ENCRYPT_DATA_IV, fingerprintEncryptDataIV).apply()
+
+    var fingerprintAuthenticationFailCount: Int
+        get() = prefs.getInt(FINGERPRINT_AUTHENTICATION_FAIL_COUNT, 0)
+        set(fingerprintAuthenticationFailCount) = prefs.edit().putInt(FINGERPRINT_AUTHENTICATION_FAIL_COUNT, fingerprintAuthenticationFailCount).apply()
+    
 }

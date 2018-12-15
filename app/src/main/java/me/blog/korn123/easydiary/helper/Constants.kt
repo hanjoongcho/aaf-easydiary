@@ -20,6 +20,8 @@ const val SETTING_MULTIPLE_PICKER = "setting_multiple_picker"
 const val SETTING_FINGERPRINT_LOCK = "setting_fingerprint_lock"
 const val FINGERPRINT_ENCRYPT_DATA = "fingerprint_encrypt_data"
 const val FINGERPRINT_ENCRYPT_DATA_IV = "fingerprint_encrypt_data_iv"
+const val FINGERPRINT_AUTHENTICATION_FAIL_COUNT = "fingerprint_authentication_fail_count"
+
 const val CUSTOM_FONTS_SUPPORT_LANGUAGE = "en|ko" // custom fonts supported language
 const val CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT = "NanumPen.ttf"
 const val CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT = "Default"
