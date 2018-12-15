@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.activities
 
 import android.content.DialogInterface
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.view.View
@@ -82,6 +83,7 @@ class PinLockActivity : BaseSimpleActivity() {
 
             when (activityMode) {
                 ACTIVITY_SETTING -> {
+                    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
                     showAlertDialog(getString(R.string.pin_number_setting_complete), DialogInterface.OnClickListener { _, _ ->
                         config.aafPinLockEnable = true
                         config.aafPinLockSavedPassword = fullPassword

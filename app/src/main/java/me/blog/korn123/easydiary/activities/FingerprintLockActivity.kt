@@ -193,7 +193,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
 
                     override fun onAuthenticationFailed() {
                         super.onAuthenticationFailed()
-                        updateErrorMessage("onAuthenticationFailed")
+                        updateErrorMessage("Authentication request failed. Please try again.")
                     }
                 }, null)
     }
