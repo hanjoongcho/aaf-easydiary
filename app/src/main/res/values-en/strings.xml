@@ -199,6 +199,10 @@
         v1.4.63 / 2018.11.25\n
         Added attached photos backup and recovery function using Google Drive
     </string>
+    <string name="release_127">
+        v1.4.64 / 2018.12.16\n
+        Added lock function using fingerprint sensor
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -249,17 +253,17 @@
     <string name="notification_msg_download_success">Download Success</string>
     <string name="notification_msg_download_fail">Download Fail</string>
     <string name="notification_msg_duplicate_file_count">Number of exist files</string>
-    <string name="preferences_category_lock">애플리케이션 잠금설정</string>
-    <string name="fingerprint_lock_title">지문인식 잠금(Beta)</string>
-    <string name="fingerprint_lock_summary">디바이스가 지문인식 기능을 지원하고 등록된 지문이 있는경우 등록된 지문으로 애플리케이션을 잠금니다.</string>
-    <string name="fingerprint_not_available">디바이스에 설치된 운영시스템이 지문인식 기능을 지원하지 않습니다.</string>
-    <string name="fingerprint_setting_complete">지문인식 잠금 설정이 완료되었습니다.</string>
-    <string name="fingerprint_setting_release">지문인식 잠금설정이 해제되었습니다.</string>
-    <string name="fingerprint_lock_need_pin_number_setting">지문인식 잠금을 이용하려면 핀번호를 먼저 설정해야 합니다.</string>
-    <string name="pin_number_lock_title">핀번호 잠금설정</string>
-    <string name="pin_number_lock_summary">핀번호를 설정하여 애플리케이션을 잠금니다.</string>
-    <string name="pin_number_setting_complete">핀번호 잠금 설정이 완료되었습니다.</string>
-    <string name="pin_number_setting_release">핀번호 잠금설정이 해제되었습니다.</string>
-    <string name="pin_number_release_need_fingerprint_disable">핀번호 잠금설정을 해제하려면 지문인식 잠금설정을 해제해야 합니다.</string>
+    <string name="preferences_category_lock">Application lock setting</string>
+    <string name="fingerprint_lock_title">Fingerprint lock(Beta)</string>
+    <string name="fingerprint_lock_summary">If the device supports fingerprint recognition and has a registered fingerprint, lock the application with the registered fingerprint.</string>
+    <string name="fingerprint_not_available">The operating system installed on the device does not support fingerprint recognition.</string>
+    <string name="fingerprint_setting_complete">Fingerprint lock setting is completed.</string>
+    <string name="fingerprint_setting_release">Fingerprint lock is off.</string>
+    <string name="fingerprint_lock_need_pin_number_setting">To use fingerprint lockout, you must first set the pin number.</string>
+    <string name="pin_number_lock_title">Pin number lock setting</string>
+    <string name="pin_number_lock_summary">Set the pin number to lock the application.</string>
+    <string name="pin_number_setting_complete">Pin number lock setting is completed.</string>
+    <string name="pin_number_setting_release">Pin number lock is unlocked.</string>
+    <string name="pin_number_release_need_fingerprint_disable">To unlock pin number lock, you need to turn off fingerprint lock.</string>
     <string name="diary_creation_time_disable_message">No time information</string>
 </resources>
