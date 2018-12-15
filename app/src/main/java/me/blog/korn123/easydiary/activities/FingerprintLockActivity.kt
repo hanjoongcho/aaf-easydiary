@@ -15,6 +15,7 @@ import android.support.annotation.RequiresApi
 import android.support.v4.app.ActivityCompat
 import android.util.Base64
 import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import io.github.aafactory.commons.activities.BaseSimpleActivity
 import kotlinx.android.synthetic.main.activity_fingerprint.*
@@ -60,7 +61,8 @@ class FingerprintLockActivity : BaseSimpleActivity() {
         super.onResume()
         guideMessage.text = getString(R.string.place_finger)
         FontUtils.setFontsTypeface(applicationContext, assets, null, container)
-
+        changePinLock.visibility = if (activityMode == ACTIVITY_SETTING) View.GONE else View.VISIBLE
+        
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
             // 01. KeyStore 인스턴스 생성

@@ -111,9 +111,13 @@ class SettingsActivity : EasyDiaryActivity() {
             R.id.appLockSetting -> {
                 when (config.aafPinLockEnable) {
                     true -> {
-                        appLockSettingSwitcher.isChecked = false
-                        config.aafPinLockEnable = false
-                        showAlertDialog(getString(R.string.pin_number_setting_release), null)
+                        if (config.fingerprintLockEnable) {
+                            showAlertDialog(getString(R.string.pin_number_release_need_fingerprint_disable), null)
+                        } else {
+                            appLockSettingSwitcher.isChecked = false
+                            config.aafPinLockEnable = false
+                            showAlertDialog(getString(R.string.pin_number_setting_release), null)    
+                        }
                     }
                     false -> {
                         startActivity(Intent(this, PinLockActivity::class.java).apply {
