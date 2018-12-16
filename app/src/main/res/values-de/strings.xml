@@ -259,13 +259,13 @@
     <string name="fingerprint_not_available">The operating system installed on the device does not support fingerprint recognition.</string>
     <string name="fingerprint_setting_complete">Fingerprint lock setting is completed.</string>
     <string name="fingerprint_setting_release">Fingerprint lock is off.</string>
-    <string name="fingerprint_lock_need_pin_number_setting">To use fingerprint lockout, you must first set the pin number.</string>
-    <string name="pin_number_lock_title">Pin number lock setting</string>
-    <string name="pin_number_lock_summary">Set the pin number to lock the application.</string>
-    <string name="pin_number_setting_complete">Pin number lock setting is completed.</string>
-    <string name="pin_number_setting_release">Pin number lock is unlocked.</string>
-    <string name="pin_number_release_need_fingerprint_disable">To unlock pin number lock, you need to turn off fingerprint lock.</string>
-    <string name="pin_number_verification_fail">Pin verification failed.</string>
-    <string name="change_pin_lock_mode">Changing to pin lock mode</string>
+    <string name="fingerprint_lock_need_pin_setting">To use fingerprint lockout, you must first set the pin number.</string>
+    <string name="pin_lock_title">PIN lock setting</string>
+    <string name="pin_lock_summary">Set the PIN to lock the application.</string>
+    <string name="pin_setting_complete">PIN setting is completed.</string>
+    <string name="pin_setting_release">PIN lock disabled.</string>
+    <string name="pin_release_need_fingerprint_disable">To disable PIN lock, you need to turn off fingerprint lock.</string>
+    <string name="pin_verification_fail">PIN verification failed.</string>
+    <string name="change_pin_lock_mode">Changing to PIN lock mode</string>
     <string name="diary_creation_time_disable_message">No time information</string>
 </resources>

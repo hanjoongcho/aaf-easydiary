@@ -110,11 +110,11 @@ class SettingsActivity : EasyDiaryActivity() {
                 when (config.aafPinLockEnable) {
                     true -> {
                         if (config.fingerprintLockEnable) {
-                            showAlertDialog(getString(R.string.pin_number_release_need_fingerprint_disable), null)
+                            showAlertDialog(getString(R.string.pin_release_need_fingerprint_disable), null)
                         } else {
                             appLockSettingSwitcher.isChecked = false
                             config.aafPinLockEnable = false
-                            showAlertDialog(getString(R.string.pin_number_setting_release), null)    
+                            showAlertDialog(getString(R.string.pin_setting_release), null)    
                         }
                     }
                     false -> {
@@ -140,7 +140,7 @@ class SettingsActivity : EasyDiaryActivity() {
                                     })        
                                 }
                                 false -> {
-                                    showAlertDialog(getString(R.string.fingerprint_lock_need_pin_number_setting), null)
+                                    showAlertDialog(getString(R.string.fingerprint_lock_need_pin_setting), null)
                                 }
                             }
                         }

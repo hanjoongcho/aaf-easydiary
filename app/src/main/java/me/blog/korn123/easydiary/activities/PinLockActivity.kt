@@ -85,7 +85,7 @@ class PinLockActivity : BaseSimpleActivity() {
             when (activityMode) {
                 ACTIVITY_SETTING -> {
                     setScreenOrientationSensor(true)
-                    showAlertDialog(getString(R.string.pin_number_setting_complete), DialogInterface.OnClickListener { _, _ ->
+                    showAlertDialog(getString(R.string.pin_setting_complete), DialogInterface.OnClickListener { _, _ ->
                         config.aafPinLockEnable = true
                         config.aafPinLockSavedPassword = fullPassword
                         pauseLock()
@@ -104,7 +104,7 @@ class PinLockActivity : BaseSimpleActivity() {
 //                                it?.text = null
 //                            }
                             setScreenOrientationSensor(true)
-                            showAlertDialog(getString(R.string.pin_number_verification_fail), DialogInterface.OnClickListener { _, _ ->
+                            showAlertDialog(getString(R.string.pin_verification_fail), DialogInterface.OnClickListener { _, _ ->
                                 finish()
                             }, false)
                         }
