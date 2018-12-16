@@ -259,7 +259,7 @@
     <string name="fingerprint_not_available">The operating system installed on the device does not support fingerprint recognition.</string>
     <string name="fingerprint_setting_complete">Fingerprint lock setting is completed.</string>
     <string name="fingerprint_setting_release">Fingerprint lock is off.</string>
-    <string name="fingerprint_lock_need_pin_setting">To use fingerprint lockout, you must first set the pin number.</string>
+    <string name="fingerprint_lock_need_pin_setting">To use fingerprint lock, you need to set PIN first.</string>
     <string name="pin_lock_title">PIN lock setting</string>
     <string name="pin_lock_summary">Set the PIN to lock the application.</string>
     <string name="pin_setting_complete">PIN setting is completed.</string>

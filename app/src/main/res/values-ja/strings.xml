@@ -259,7 +259,7 @@
     <string name="fingerprint_not_available">デバイスにインストール済みのオペレーティングシステムが、指紋認識機能をサポートしていません。</string>
     <string name="fingerprint_setting_complete">指紋ロックの設定が完了しました。</string>
     <string name="fingerprint_setting_release">指紋ロックの設定が解除されました。</string>
-    <string name="fingerprint_lock_need_pin_setting">指紋ロックを利用するには、ピン番号を最初に設定する必要があります。</string>
+    <string name="fingerprint_lock_need_pin_setting">指紋認証を使用するには、まずPINを設定する必要があります。</string>
     <string name="pin_lock_title">PINロック設定</string>
     <string name="pin_lock_summary">アプリケーションをロックするためのPINを設定します。</string>
     <string name="pin_setting_complete">PINの設定が完了しました。</string>

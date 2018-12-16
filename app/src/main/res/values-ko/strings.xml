@@ -259,12 +259,12 @@
     <string name="fingerprint_not_available">디바이스에 설치된 운영시스템이 지문인식 기능을 지원하지 않습니다.</string>
     <string name="fingerprint_setting_complete">지문인식 잠금 설정이 완료되었습니다.</string>
     <string name="fingerprint_setting_release">지문인식 잠금설정이 해제되었습니다.</string>
-    <string name="fingerprint_lock_need_pin_setting">지문인식 잠금을 이용하려면 핀번호를 먼저 설정해야 합니다.</string>
+    <string name="fingerprint_lock_need_pin_setting">지문인식 잠금을 이용하려면 PIN 설정을 먼저해야 합니다.</string>
     <string name="pin_lock_title">PIN 잠금설정</string>
     <string name="pin_lock_summary">PIN을 설정하여 애플리케이션을 잠금니다.</string>
     <string name="pin_setting_complete">PIN 잠금설정이 완료되었습니다.</string>
     <string name="pin_setting_release">PIN 잠금설정이 해제되었습니다.</string>
-    <string name="pin_release_need_fingerprint_disable">핀번호 잠금설정을 해제하려면 지문인식 잠금설정을 해제해야 합니다.</string>
+    <string name="pin_release_need_fingerprint_disable">PIN 잠금설정을 해제하려면 지문인식 잠금설정을 해제해야 합니다.</string>
     <string name="pin_verification_fail">PIN 검증에 실패했습니다.</string>
     <string name="change_pin_lock_mode">PIN 잠금모드로 변경</string>
     <string name="diary_creation_time_disable_message">시간정보 없음</string>
