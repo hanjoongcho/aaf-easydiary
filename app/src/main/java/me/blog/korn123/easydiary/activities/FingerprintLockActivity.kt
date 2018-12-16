@@ -167,7 +167,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                         when (activityMode) {
                             ACTIVITY_SETTING -> {
                                 tryEncrypt(mCryptoObject.cipher)
-                                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
+                                setScreenOrientationSensor(true)
                                 showAlertDialog(getString(R.string.fingerprint_setting_complete), DialogInterface.OnClickListener { _, _ ->
                                     config.fingerprintLockEnable = true
                                     pauseLock()

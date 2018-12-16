@@ -265,5 +265,7 @@
     <string name="pin_number_setting_complete">ピン番号ロックの設定が完了しました。</string>
     <string name="pin_number_setting_release">ピン番号ロックの設定が解除されました。</string>
     <string name="pin_number_release_need_fingerprint_disable">ピン番号ロックの設定を解除するには、指紋ロックの設定を解除する必要があります。</string>
+    <string name="pin_number_verification_fail">Pin verification failed.</string>
+    <string name="change_pin_lock_mode">Changing to pin lock mode</string>
     <string name="diary_creation_time_disable_message">時間情報なし</string>
 </resources>

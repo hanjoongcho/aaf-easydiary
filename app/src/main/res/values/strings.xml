@@ -265,5 +265,7 @@
     <string name="pin_number_setting_complete">Pin number lock setting is completed.</string>
     <string name="pin_number_setting_release">Pin number lock is unlocked.</string>
     <string name="pin_number_release_need_fingerprint_disable">To unlock pin number lock, you need to turn off fingerprint lock.</string>
+    <string name="pin_number_verification_fail">Pin verification failed.</string>
+    <string name="change_pin_lock_mode">Changing to pin lock mode</string>
     <string name="diary_creation_time_disable_message">No time information</string>
 </resources>

@@ -265,5 +265,7 @@
     <string name="pin_number_setting_complete">핀번호 잠금 설정이 완료되었습니다.</string>
     <string name="pin_number_setting_release">핀번호 잠금설정이 해제되었습니다.</string>
     <string name="pin_number_release_need_fingerprint_disable">핀번호 잠금설정을 해제하려면 지문인식 잠금설정을 해제해야 합니다.</string>
+    <string name="pin_number_verification_fail">PIN 검증에 실패했습니다.</string>
+    <string name="change_pin_lock_mode">PIN 잠금모드로 변경</string>
     <string name="diary_creation_time_disable_message">시간정보 없음</string>
 </resources>

@@ -5,6 +5,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
@@ -103,4 +104,11 @@ fun Activity.makeSnackBar(message: String) {
     Snackbar
             .make(findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT)
             .setAction("Action", null).show()
+}
+
+fun Activity.setScreenOrientationSensor(disableSensor: Boolean) {
+    requestedOrientation = when (disableSensor) {
+        true -> ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
+        false -> ActivityInfo.SCREEN_ORIENTATION_SENSOR
+    }
 }
