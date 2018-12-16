@@ -105,7 +105,7 @@ class PinLockActivity : BaseSimpleActivity() {
 //                            }
                             setScreenOrientationSensor(true)
                             showAlertDialog(getString(R.string.pin_verification_fail), DialogInterface.OnClickListener { _, _ ->
-                                finish()
+                                onBackPressed()
                             }, false)
                         }
                     }

@@ -260,12 +260,12 @@
     <string name="fingerprint_setting_complete">指紋ロックの設定が完了しました。</string>
     <string name="fingerprint_setting_release">指紋ロックの設定が解除されました。</string>
     <string name="fingerprint_lock_need_pin_setting">指紋ロックを利用するには、ピン番号を最初に設定する必要があります。</string>
-    <string name="pin_lock_title">PIN lock setting</string>
-    <string name="pin_lock_summary">Set the PIN to lock the application.</string>
-    <string name="pin_setting_complete">PIN setting is completed.</string>
-    <string name="pin_setting_release">PIN lock disabled.</string>
-    <string name="pin_release_need_fingerprint_disable">To disable PIN lock, you need to turn off fingerprint lock.</string>
-    <string name="pin_verification_fail">PIN verification failed.</string>
-    <string name="change_pin_lock_mode">Changing to PIN lock mode</string>
-    <string name="diary_creation_time_disable_message">No time information</string>
+    <string name="pin_lock_title">PINロック設定</string>
+    <string name="pin_lock_summary">アプリケーションをロックするためのPINを設定します。</string>
+    <string name="pin_setting_complete">PINの設定が完了しました。</string>
+    <string name="pin_setting_release">PINロックが無効です。</string>
+    <string name="pin_release_need_fingerprint_disable">PINロックを無効にするには、指紋のロックを解除する必要があります。</string>
+    <string name="pin_verification_fail">PINの確認に失敗しました。</string>
+    <string name="change_pin_lock_mode">PINロックモードに切り替える</string>
+    <string name="diary_creation_time_disable_message">時間情報なし</string>
 </resources>
