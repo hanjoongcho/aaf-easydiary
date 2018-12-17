@@ -79,12 +79,8 @@
     <string name="read_diary_detail_showcase_message_5">Du kannst den aktuellen Eintrag löschen und zur Suchansicht wechseln.</string>
     <string name="update_diary_title">Eintrag bearbeiten</string>
     <string name="back_pressed_confirm">Klicke auf OK, um zur vorherigen Ansicht zu wechseln ohne zu speichern.</string>
-    <string name="lock_number">Sperrcode:</string>
     <string name="rate_app">App bewerten</string>
     <string name="guide_message_3">Fehlende Berechtigung für das angeforderte Feature.</string>
-    <string name="application_lock_title">App sperren</string>
-    <string name="application_lock_summary">Wenn die Sperre aktiviert ist, ist die Anwendung mit dem gesetzten Sperrcode gesichert.</string>
-    <string name="application_lock_password_title">Sperrcode setzen</string>
     <string name="restore_diary">Tagebuch wiederherstellen</string>
     <string name="restore_diary_summary">Alle Inhalte, die auf Google Drive gesichert sind, wiederherstellen.</string>
     <string name="restore_photo">Tagebuch-Fotos wiederherstellen</string>
@@ -265,6 +261,8 @@
     <string name="pin_setting_complete">PIN setting is completed.</string>
     <string name="pin_setting_release">PIN lock disabled.</string>
     <string name="pin_release_need_fingerprint_disable">To disable PIN lock, you need to turn off fingerprint lock.</string>
+    <string name="pin_setting_guide_message">Please enter a number to use as a PIN.</string>
+    <string name="pin_unlock_guide_message">Please enter the PIN.</string>
     <string name="pin_verification_fail">PIN verification failed.</string>
     <string name="change_pin_lock_mode">Changing to PIN lock mode</string>
     <string name="diary_creation_time_disable_message">No time information</string>

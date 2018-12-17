@@ -75,5 +75,4 @@ class Config(context: Context) : BaseConfig(context) {
     var fingerprintAuthenticationFailCount: Int
         get() = prefs.getInt(FINGERPRINT_AUTHENTICATION_FAIL_COUNT, 0)
         set(fingerprintAuthenticationFailCount) = prefs.edit().putInt(FINGERPRINT_AUTHENTICATION_FAIL_COUNT, fingerprintAuthenticationFailCount).apply()
-    
 }

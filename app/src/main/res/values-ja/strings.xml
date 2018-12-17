@@ -79,12 +79,8 @@
     <string name="read_diary_detail_showcase_message_5">現在閲覧中のダイアリーを削除して、検索画面に移動することができます.</string>
     <string name="update_diary_title">ダイアリー修正</string>
     <string name="back_pressed_confirm">\'確認\'ボタンを押すと、現在のダイアリーを保存せずに前の画面に移動します。</string>
-    <string name="lock_number">設定されたロック番号:</string>
     <string name="rate_app">アプリを評価する</string>
     <string name="guide_message_3">リクエスト操作の権限がありません.</string>
-    <string name="application_lock_title">アプリロック設定</string>
-    <string name="application_lock_summary">ロックの設定が有効な場合、設定されたパスワードでアプリケーションがロックされます.</string>
-    <string name="application_lock_password_title">ロック番号の設定</string>
     <string name="restore_diary">ダイアリー回復する</string>
     <string name="restore_diary_summary">Googleのドライブにバックアップされたデータを利用して、すべてのコンテンツを回復します.</string>
     <string name="restore_photo">ダイアリー添付写真の回復する(手動)</string>
@@ -265,6 +261,8 @@
     <string name="pin_setting_complete">PINの設定が完了しました。</string>
     <string name="pin_setting_release">PINロックが無効です。</string>
     <string name="pin_release_need_fingerprint_disable">PINロックを無効にするには、指紋のロックを解除する必要があります。</string>
+    <string name="pin_setting_guide_message">PINとして使用する番号を入力してください.</string>
+    <string name="pin_unlock_guide_message">PINを入力してください。</string>
     <string name="pin_verification_fail">PINの確認に失敗しました。</string>
     <string name="change_pin_lock_mode">PINロックモードに切り替える</string>
     <string name="diary_creation_time_disable_message">時間情報なし</string>

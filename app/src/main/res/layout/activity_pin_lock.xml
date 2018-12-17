@@ -45,14 +45,14 @@
             android:layout_width="60dp"
             android:layout_height="60dp" />
         <TextView
+            android:id="@+id/infoMessage"
             android:padding="10dp"
-            android:text="@string/unlock_guide_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textColor="@android:color/white"
-            android:id="@+id/infoMessage"
-            android:textStyle="bold" />
+            android:textStyle="bold" 
+            tools:text="@string/pin_unlock_guide_message"/>
     </LinearLayout>
 
     <LinearLayout
