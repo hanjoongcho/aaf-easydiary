@@ -53,82 +53,83 @@ class FingerprintLockActivity : BaseSimpleActivity() {
     }
 
     override fun onResume() {
-        if (mSettingComplete) return
-        
         isBackgroundColorFromPrimaryColor = true
         super.onResume()
-        guideMessage.text = getString(R.string.place_finger)
-        FontUtils.setFontsTypeface(applicationContext, assets, null, container)
-        changePinLock.visibility = if (mActivityMode == ACTIVITY_SETTING) View.GONE else View.VISIBLE
         
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (!mSettingComplete) {
+            guideMessage.text = getString(R.string.place_finger)
+            FontUtils.setFontsTypeface(applicationContext, assets, null, container)
+            changePinLock.visibility = if (mActivityMode == ACTIVITY_SETTING) View.GONE else View.VISIBLE
 
-            // 01. KeyStore 인스턴스 생성
-            try {
-                mKeyStore = KeyStore.getInstance("AndroidKeyStore")
-            } catch (e: KeyStoreException) {
-                makeSnackBar("Failed to get an instance of KeyStore")
-            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
-            // 02. KeyGenerator 인스턴스 초기화
-            try {
-                mKeyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
-            } catch (e: Exception) {
-                makeSnackBar("Failed to get an instance of KeyGenerator")
-            }
-
-            // 03. Cipher 인스턴스 초기화
-            var defaultCipher: Cipher? = null
-            try {
-                defaultCipher = Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/"
-                        + KeyProperties.BLOCK_MODE_CBC + "/"
-                        + KeyProperties.ENCRYPTION_PADDING_PKCS7)
-            } catch (e: NoSuchAlgorithmException) {
-                makeSnackBar("Failed to get an instance of Cipher")
-            } catch (e: NoSuchPaddingException) {
-                makeSnackBar("Failed to get an instance of Cipher")
-            }
-
-            // 04. KeyguardManager service 초기화
-            val keyguardManager = getSystemService(KeyguardManager::class.java)
-
-            // 05. FingerprintManager service 초기화
-            mFingerprintManager = getSystemService(FingerprintManager::class.java)
-
-            // 06. screen lock 설정여부 확인
-            if (!keyguardManager.isKeyguardSecure) {
-                // Show a message that the user hasn't set up a fingerprint or lock screen.
-                guideMessage.text = "Secure lock screen hasn't set up.\nGo to 'Settings -> Security -> Fingerprint' to set up a fingerprint" 
-                return
-            }
-
-            // 07. fingerprint 등록여부 확인
-            // Now the protection level of USE_FINGERPRINT permission is normal instead of dangerous.
-            // See http://developer.android.com/reference/android/Manifest.permission.html#USE_FINGERPRINT
-            // The line below prevents the false positive inspection from Android Studio
-            // noinspection ResourceType
-            if (!mFingerprintManager.hasEnrolledFingerprints()) {
-                // This happens when no fingerprints are registered.
-                guideMessage.text = "Go to 'Settings -> Security -> Fingerprint' and register at least one" + " fingerprint"
-                return
-            }
-
-            // 08. KeyGenerator를 이용하여 key 생성
-            if (mActivityMode == ACTIVITY_SETTING) createKey(KEY_NAME, true)
-
-            // 09. Cipher & CryptoObject 초기화
-            // Set up the crypto object for later. The object will be authenticated by use
-            // of the fingerprint.
-            defaultCipher?.let {
-                if (initCipher(it, KEY_NAME)) {
-                    mCryptoObject = FingerprintManager.CryptoObject(it)
-                } else {
-
+                // 01. KeyStore 인스턴스 생성
+                try {
+                    mKeyStore = KeyStore.getInstance("AndroidKeyStore")
+                } catch (e: KeyStoreException) {
+                    makeSnackBar("Failed to get an instance of KeyStore")
                 }
-            }
 
-            // 10. 지문인식 시작
-            startListening(mCryptoObject)
+                // 02. KeyGenerator 인스턴스 초기화
+                try {
+                    mKeyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
+                } catch (e: Exception) {
+                    makeSnackBar("Failed to get an instance of KeyGenerator")
+                }
+
+                // 03. Cipher 인스턴스 초기화
+                var defaultCipher: Cipher? = null
+                try {
+                    defaultCipher = Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/"
+                            + KeyProperties.BLOCK_MODE_CBC + "/"
+                            + KeyProperties.ENCRYPTION_PADDING_PKCS7)
+                } catch (e: NoSuchAlgorithmException) {
+                    makeSnackBar("Failed to get an instance of Cipher")
+                } catch (e: NoSuchPaddingException) {
+                    makeSnackBar("Failed to get an instance of Cipher")
+                }
+
+                // 04. KeyguardManager service 초기화
+                val keyguardManager = getSystemService(KeyguardManager::class.java)
+
+                // 05. FingerprintManager service 초기화
+                mFingerprintManager = getSystemService(FingerprintManager::class.java)
+
+                // 06. screen lock 설정여부 확인
+                if (!keyguardManager.isKeyguardSecure) {
+                    // Show a message that the user hasn't set up a fingerprint or lock screen.
+                    guideMessage.text = "Secure lock screen hasn't set up.\nGo to 'Settings -> Security -> Fingerprint' to set up a fingerprint"
+                    return
+                }
+
+                // 07. fingerprint 등록여부 확인
+                // Now the protection level of USE_FINGERPRINT permission is normal instead of dangerous.
+                // See http://developer.android.com/reference/android/Manifest.permission.html#USE_FINGERPRINT
+                // The line below prevents the false positive inspection from Android Studio
+                // noinspection ResourceType
+                if (!mFingerprintManager.hasEnrolledFingerprints()) {
+                    // This happens when no fingerprints are registered.
+                    guideMessage.text = "Go to 'Settings -> Security -> Fingerprint' and register at least one" + " fingerprint"
+                    return
+                }
+
+                // 08. KeyGenerator를 이용하여 key 생성
+                if (mActivityMode == ACTIVITY_SETTING) createKey(KEY_NAME, true)
+
+                // 09. Cipher & CryptoObject 초기화
+                // Set up the crypto object for later. The object will be authenticated by use
+                // of the fingerprint.
+                defaultCipher?.let {
+                    if (initCipher(it, KEY_NAME)) {
+                        mCryptoObject = FingerprintManager.CryptoObject(it)
+                    } else {
+
+                    }
+                }
+
+                // 10. 지문인식 시작
+                startListening(mCryptoObject)
+            }
         }
     }
 
