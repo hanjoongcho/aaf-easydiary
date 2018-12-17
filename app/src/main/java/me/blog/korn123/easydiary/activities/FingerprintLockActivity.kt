@@ -3,7 +3,6 @@ package me.blog.korn123.easydiary.activities
 import android.app.KeyguardManager
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.pm.ActivityInfo
 import android.hardware.fingerprint.FingerprintManager
 import android.os.Build
 import android.os.Bundle
@@ -36,17 +35,14 @@ class FingerprintLockActivity : BaseSimpleActivity() {
     private lateinit var mFingerprintManager: FingerprintManager
     private lateinit var mCryptoObject: FingerprintManager.CryptoObject
     private var mCancellationSignal: CancellationSignal? = null
-    private var activityMode: String? = null
-    private var mActivityPause = false
+    private var mActivityMode: String? = null
+    private var mSettingComplete = false
     private val TAG = FingerprintLockActivity::class.java.simpleName
     
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_fingerprint)
-        activityMode = intent.getStringExtra(LAUNCHING_MODE)
-        if (activityMode != ACTIVITY_SETTING && activityMode != ACTIVITY_UNLOCK) {
-            showAlertDialog("Launching flag is empty.", DialogInterface.OnClickListener { _, _ -> finish() })
-        }
+        mActivityMode = intent.getStringExtra(LAUNCHING_MODE)
 
         changePinLock.setOnClickListener {
             startActivity(Intent(this, PinLockActivity::class.java).apply {
@@ -57,12 +53,13 @@ class FingerprintLockActivity : BaseSimpleActivity() {
     }
 
     override fun onResume() {
-        mActivityPause = false
+        if (mSettingComplete) return
+        
         isBackgroundColorFromPrimaryColor = true
         super.onResume()
         guideMessage.text = getString(R.string.place_finger)
         FontUtils.setFontsTypeface(applicationContext, assets, null, container)
-        changePinLock.visibility = if (activityMode == ACTIVITY_SETTING) View.GONE else View.VISIBLE
+        changePinLock.visibility = if (mActivityMode == ACTIVITY_SETTING) View.GONE else View.VISIBLE
         
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
@@ -117,7 +114,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
             }
 
             // 08. KeyGenerator를 이용하여 key 생성
-            if (activityMode == ACTIVITY_SETTING) createKey(KEY_NAME, true)
+            if (mActivityMode == ACTIVITY_SETTING) createKey(KEY_NAME, true)
 
             // 09. Cipher & CryptoObject 초기화
             // Set up the crypto object for later. The object will be authenticated by use
@@ -137,7 +134,6 @@ class FingerprintLockActivity : BaseSimpleActivity() {
 
     override fun onPause() {
         super.onPause()
-        mActivityPause = true
         mCancellationSignal?.cancel()
     }
     
@@ -165,10 +161,11 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                         super.onAuthenticationSucceeded(result)
                         config.fingerprintAuthenticationFailCount = 0
                         
-                        when (activityMode) {
+                        when (mActivityMode) {
                             ACTIVITY_SETTING -> {
                                 tryEncrypt(mCryptoObject.cipher)
                                 setScreenOrientationSensor(true)
+                                mSettingComplete = true
                                 showAlertDialog(getString(R.string.fingerprint_setting_complete), DialogInterface.OnClickListener { _, _ ->
                                     config.fingerprintLockEnable = true
                                     pauseLock()
@@ -275,7 +272,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
         try {
             mKeyStore.load(null)
             val key = mKeyStore.getKey(keyName, null) as SecretKey
-            when (activityMode) {
+            when (mActivityMode) {
                 ACTIVITY_SETTING -> cipher.init(Cipher.ENCRYPT_MODE, key)
                 ACTIVITY_UNLOCK -> {
                     val iv = Base64.decode(config.fingerprintEncryptDataIV, Base64.DEFAULT)
