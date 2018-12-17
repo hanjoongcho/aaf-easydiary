@@ -17,6 +17,7 @@ import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import io.github.aafactory.commons.activities.BaseSimpleActivity
 import kotlinx.android.synthetic.main.activity_fingerprint.*
 import me.blog.korn123.commons.utils.FontUtils
@@ -314,8 +315,10 @@ class FingerprintLockActivity : BaseSimpleActivity() {
             config.fingerprintEncryptDataIV = iv
         } catch (e: BadPaddingException) {
             e.printStackTrace()
+            Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
         } catch (e: IllegalBlockSizeException) {
             e.printStackTrace()
+            Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
         }
     }
     
