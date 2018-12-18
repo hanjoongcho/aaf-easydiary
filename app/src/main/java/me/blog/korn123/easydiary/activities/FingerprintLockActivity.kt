@@ -122,13 +122,13 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                 defaultCipher?.let {
                     if (initCipher(it, KEY_NAME)) {
                         mCryptoObject = FingerprintManager.CryptoObject(it)
+                        
+                        // 10. 지문인식 시작
+                        startListening(mCryptoObject)
                     } else {
-
+                        
                     }
                 }
-
-                // 10. 지문인식 시작
-                startListening(mCryptoObject)
             }
         }
     }
@@ -174,9 +174,10 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                                 }, false)
                             }
                             ACTIVITY_UNLOCK-> {
-                                tryDecrypt(mCryptoObject.cipher)
-                                pauseLock()
-                                finish()
+                                if (tryDecrypt(mCryptoObject.cipher)) {
+                                    pauseLock()
+                                    finish()    
+                                }
                             }
                         }
                     }
@@ -283,6 +284,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
             }
             return true
         } catch (e: KeyPermanentlyInvalidatedException) {
+            updateErrorMessage(e.message ?: "KeyPermanentlyInvalidatedException")
             return false
         } catch (e: KeyStoreException) {
             throw RuntimeException("Failed to init Cipher", e)
@@ -320,10 +322,17 @@ class FingerprintLockActivity : BaseSimpleActivity() {
         }
     }
     
-    private fun tryDecrypt(cipher: Cipher) {
-        val encodedData = Base64.decode(config.fingerprintEncryptData, Base64.DEFAULT)
-        val decodedData = cipher.doFinal(encodedData)
-        Log.i(TAG, "decode dummy data: ${String(decodedData)}, origin dummy data: $DUMMY_ENCRYPT_DATA")
+    private fun tryDecrypt(cipher: Cipher): Boolean {
+        var result = true
+        try {
+            val encodedData = Base64.decode(config.fingerprintEncryptData, Base64.DEFAULT)
+            val decodedData = cipher.doFinal(encodedData)
+            Log.i(TAG, "decode dummy data: ${String(decodedData)}, origin dummy data: $DUMMY_ENCRYPT_DATA")    
+        } catch (e: Exception) {
+            updateErrorMessage(e.message ?: "The fingerprint authentication information of the device has changed and the previously set authentication information can not be used.")
+            result = false
+        }
+        return result
     }
     
     private fun updateErrorMessage(errorMessage: String) {
