@@ -23,6 +23,8 @@ import me.blog.korn123.easydiary.dialogs.WhatsNewDialog
 
 fun Activity.pauseLock() {
     if (config.aafPinLockEnable || config.fingerprintLockEnable) {
+        // FIXME remove test code
+        Toast.makeText(this, "pauseLock", Toast.LENGTH_LONG).show()
         config.aafPinLockPauseMillis = System.currentTimeMillis()
     }
 }
