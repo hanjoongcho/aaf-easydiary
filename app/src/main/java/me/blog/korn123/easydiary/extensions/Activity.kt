@@ -9,6 +9,7 @@ import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
+import android.widget.Toast
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
 import io.github.aafactory.commons.activities.BaseSimpleActivity
@@ -28,6 +29,9 @@ fun Activity.pauseLock() {
 
 fun Activity.resumeLock() {
     if (config.aafPinLockPauseMillis > 0L && System.currentTimeMillis() - config.aafPinLockPauseMillis > 1000) {
+        
+        // FIXME remove test code
+        Toast.makeText(this, "${(System.currentTimeMillis() - config.aafPinLockPauseMillis) / 1000}", Toast.LENGTH_LONG).show()
         when {
             config.fingerprintLockEnable -> {
                 startActivity(Intent(this, FingerprintLockActivity::class.java).apply {
