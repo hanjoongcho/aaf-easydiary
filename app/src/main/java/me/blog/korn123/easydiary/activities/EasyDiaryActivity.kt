@@ -23,6 +23,11 @@ open class EasyDiaryActivity : BaseSimpleActivity() {
     val mRootView: ViewGroup? by lazy {
         findViewById<ViewGroup>(R.id.main_holder)
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        pauseLock()
+    }
     
     override fun onPause() {
         super.onPause()
