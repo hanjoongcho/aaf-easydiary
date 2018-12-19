@@ -195,8 +195,8 @@
         v1.4.63 / 2018.11.25\n
         Added attached photos backup and recovery function using Google Drive
     </string>
-    <string name="release_127">
-        v1.4.64 / 2018.12.19\n
+    <string name="release_128">
+        v1.4.65 / 2018.12.19\n
         Added lock function using fingerprint sensor
     </string>
 
