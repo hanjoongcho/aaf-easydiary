@@ -25,7 +25,7 @@ fun Activity.pauseLock() {
     if (config.aafPinLockEnable || config.fingerprintLockEnable) {
         
         // FIXME remove test code
-        Toast.makeText(this, "${this::class.java.simpleName}", Toast.LENGTH_LONG).show()
+//        Toast.makeText(this, "${this::class.java.simpleName}", Toast.LENGTH_LONG).show()
         config.aafPinLockPauseMillis = System.currentTimeMillis()
     }
 }
@@ -34,7 +34,7 @@ fun Activity.resumeLock() {
     if (config.aafPinLockPauseMillis > 0L && System.currentTimeMillis() - config.aafPinLockPauseMillis > 1000) {
         
         // FIXME remove test code
-        Toast.makeText(this, "${(System.currentTimeMillis() - config.aafPinLockPauseMillis) / 1000}", Toast.LENGTH_LONG).show()
+//        Toast.makeText(this, "${(System.currentTimeMillis() - config.aafPinLockPauseMillis) / 1000}", Toast.LENGTH_LONG).show()
         when {
             config.fingerprintLockEnable -> {
                 startActivity(Intent(this, FingerprintLockActivity::class.java).apply {
