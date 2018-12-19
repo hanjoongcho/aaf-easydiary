@@ -34,7 +34,7 @@
         <TextView
             android:id="@+id/changePinLock"
             android:padding="10dp"
-            android:text="Change to PIN lock mode"
+            android:text="@string/change_pin_lock_mode"
             android:background="?attr/selectableItemBackground"
             android:textColor="@color/white"
             android:layout_width="wrap_content"

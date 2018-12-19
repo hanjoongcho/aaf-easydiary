@@ -8,6 +8,7 @@ import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.pauseLock
+import me.blog.korn123.easydiary.extensions.setScreenOrientationSensor
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.helper.DIARY_DB_NAME
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
@@ -27,11 +28,13 @@ class BackupDiaryActivity : BaseDriveActivity() {
     override fun addListener() {
         mTask?.let {
             it.addOnSuccessListener(this) { driveId ->
+                setScreenOrientationSensor(true)
                 showAlertDialog(getString(io.github.aafactory.commons.R.string.file_saved), DialogInterface.OnClickListener { _, _ ->
                     pauseLock()
                     finish()
                 }, false)
             }.addOnFailureListener(this) { e ->
+                setScreenOrientationSensor(true)
                 showAlertDialog(getString(R.string.folder_not_selected), DialogInterface.OnClickListener { _, _ ->
                     pauseLock()
                     finish()

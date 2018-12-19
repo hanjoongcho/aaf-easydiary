@@ -1,7 +1,6 @@
 package me.blog.korn123.easydiary.activities
 
 import android.content.DialogInterface
-import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.view.View
@@ -13,6 +12,7 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.pauseLock
+import me.blog.korn123.easydiary.extensions.setScreenOrientationSensor
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 
 
@@ -48,6 +48,7 @@ class PinLockActivity : BaseSimpleActivity() {
         isBackgroundColorFromPrimaryColor = true
         super.onResume()
         FontUtils.setFontsTypeface(applicationContext, assets, null, container)
+        infoMessage.text = if (activityMode == ACTIVITY_SETTING) getString(R.string.pin_setting_guide_message) else getString(R.string.pin_unlock_guide_message) 
     }
 
     override fun getMainViewGroup(): ViewGroup? = container
@@ -83,8 +84,8 @@ class PinLockActivity : BaseSimpleActivity() {
 
             when (activityMode) {
                 ACTIVITY_SETTING -> {
-                    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
-                    showAlertDialog(getString(R.string.pin_number_setting_complete), DialogInterface.OnClickListener { _, _ ->
+                    setScreenOrientationSensor(true)
+                    showAlertDialog(getString(R.string.pin_setting_complete), DialogInterface.OnClickListener { _, _ ->
                         config.aafPinLockEnable = true
                         config.aafPinLockSavedPassword = fullPassword
                         pauseLock()
@@ -98,10 +99,14 @@ class PinLockActivity : BaseSimpleActivity() {
                             finish()
                         }
                         false -> {
-                            mCursorIndex = 0
-                            mPasswordView.map { 
-                                it?.text = null
-                            }
+//                            mCursorIndex = 0
+//                            mPasswordView.map { 
+//                                it?.text = null
+//                            }
+                            setScreenOrientationSensor(true)
+                            showAlertDialog(getString(R.string.pin_verification_fail), DialogInterface.OnClickListener { _, _ ->
+                                onBackPressed()
+                            }, false)
                         }
                     }
                 }

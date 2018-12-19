@@ -79,12 +79,8 @@
     <string name="read_diary_detail_showcase_message_5">現在閲覧中のダイアリーを削除して、検索画面に移動することができます.</string>
     <string name="update_diary_title">ダイアリー修正</string>
     <string name="back_pressed_confirm">\'確認\'ボタンを押すと、現在のダイアリーを保存せずに前の画面に移動します。</string>
-    <string name="lock_number">設定されたロック番号:</string>
     <string name="rate_app">アプリを評価する</string>
     <string name="guide_message_3">リクエスト操作の権限がありません.</string>
-    <string name="application_lock_title">アプリロック設定</string>
-    <string name="application_lock_summary">ロックの設定が有効な場合、設定されたパスワードでアプリケーションがロックされます.</string>
-    <string name="application_lock_password_title">ロック番号の設定</string>
     <string name="restore_diary">ダイアリー回復する</string>
     <string name="restore_diary_summary">Googleのドライブにバックアップされたデータを利用して、すべてのコンテンツを回復します.</string>
     <string name="restore_photo">ダイアリー添付写真の回復する(手動)</string>
@@ -200,7 +196,7 @@
         Googleのドライブを使用した添付写真のバックアップと復元機能を追加
     </string>
     <string name="release_127">
-        v1.4.64 / 2018.12.16\n
+        v1.4.64 / 2018.12.19\n
        指紋センサーを利用したロック機能を追加
     </string>
     
@@ -259,11 +255,17 @@
     <string name="fingerprint_not_available">デバイスにインストール済みのオペレーティングシステムが、指紋認識機能をサポートしていません。</string>
     <string name="fingerprint_setting_complete">指紋ロックの設定が完了しました。</string>
     <string name="fingerprint_setting_release">指紋ロックの設定が解除されました。</string>
-    <string name="fingerprint_lock_need_pin_number_setting">指紋ロックを利用するには、ピン番号を最初に設定する必要があります。</string>
-    <string name="pin_number_lock_title">ピン番号ロックの設定</string>
-    <string name="pin_number_lock_summary">ピン番号を設定して、アプリケーションをロックします。</string>
-    <string name="pin_number_setting_complete">ピン番号ロックの設定が完了しました。</string>
-    <string name="pin_number_setting_release">ピン番号ロックの設定が解除されました。</string>
-    <string name="pin_number_release_need_fingerprint_disable">ピン番号ロックの設定を解除するには、指紋ロックの設定を解除する必要があります。</string>
+    <string name="fingerprint_lock_need_pin_setting">指紋認証を使用するには、まずPINを設定する必要があります。</string>
+    <string name="fingerprint_authentication_fail_try_again">指紋認証に失敗しました。 もう一度お試しください。</string>
+    <string name="fingerprint_authentication_info_changed">The fingerprint authentication information of the device has changed and the previously set authentication information can not be used.</string>
+    <string name="pin_lock_title">PINロック設定</string>
+    <string name="pin_lock_summary">アプリケーションをロックするためのPINを設定します。</string>
+    <string name="pin_setting_complete">PINの設定が完了しました。</string>
+    <string name="pin_setting_release">PINロックが無効です。</string>
+    <string name="pin_release_need_fingerprint_disable">PINロックを無効にするには、指紋のロックを解除する必要があります。</string>
+    <string name="pin_setting_guide_message">PINとして使用する番号を入力してください.</string>
+    <string name="pin_unlock_guide_message">PINを入力してください。</string>
+    <string name="pin_verification_fail">PINの確認に失敗しました。</string>
+    <string name="change_pin_lock_mode">PINロックモードに切り替える</string>
     <string name="diary_creation_time_disable_message">時間情報なし</string>
 </resources>

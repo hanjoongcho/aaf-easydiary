@@ -79,12 +79,8 @@
     <string name="read_diary_detail_showcase_message_5">You can delete the current diary and go to the search screen.</string>
     <string name="update_diary_title">Edit Diary</string>
     <string name="back_pressed_confirm">Click the \'OK\' button to go to the previous screen without saving the current diary.</string>
-    <string name="lock_number">Lock Number:</string>
     <string name="rate_app">Rate App</string>
     <string name="guide_message_3">Insufficient permission for the request feature.</string>
-    <string name="application_lock_title">Lock apps</string>
-    <string name="application_lock_summary">When the lock setting is enabled, the application is locked with the set password.</string>
-    <string name="application_lock_password_title">Set lock number</string>
     <string name="restore_diary">Recover diary</string>
     <string name="restore_diary_summary">Recover all content using data backed up to Google Drive.</string>
     <string name="restore_photo">Recover diary photos(Manual)</string>
@@ -200,7 +196,7 @@
         Added attached photos backup and recovery function using Google Drive
     </string>
     <string name="release_127">
-        v1.4.64 / 2018.12.16\n
+        v1.4.64 / 2018.12.19\n
         Added lock function using fingerprint sensor
     </string>
 
@@ -259,11 +255,17 @@
     <string name="fingerprint_not_available">The operating system installed on the device does not support fingerprint recognition.</string>
     <string name="fingerprint_setting_complete">Fingerprint lock setting is completed.</string>
     <string name="fingerprint_setting_release">Fingerprint lock is off.</string>
-    <string name="fingerprint_lock_need_pin_number_setting">To use fingerprint lockout, you must first set the pin number.</string>
-    <string name="pin_number_lock_title">Pin number lock setting</string>
-    <string name="pin_number_lock_summary">Set the pin number to lock the application.</string>
-    <string name="pin_number_setting_complete">Pin number lock setting is completed.</string>
-    <string name="pin_number_setting_release">Pin number lock is unlocked.</string>
-    <string name="pin_number_release_need_fingerprint_disable">To unlock pin number lock, you need to turn off fingerprint lock.</string>
+    <string name="fingerprint_lock_need_pin_setting">To use fingerprint lock, you need to set PIN first.</string>
+    <string name="fingerprint_authentication_fail_try_again">Fingerprint authentication failed. please try again.</string>
+    <string name="fingerprint_authentication_info_changed">The fingerprint authentication information of the device has changed and the previously set authentication information can not be used.</string>
+    <string name="pin_lock_title">PIN lock setting</string>
+    <string name="pin_lock_summary">Set the PIN to lock the application.</string>
+    <string name="pin_setting_complete">PIN setting is completed.</string>
+    <string name="pin_setting_release">PIN lock disabled.</string>
+    <string name="pin_release_need_fingerprint_disable">To disable PIN lock, you need to turn off fingerprint lock.</string>
+    <string name="pin_setting_guide_message">Please enter a number to use as a PIN.</string>
+    <string name="pin_unlock_guide_message">Please enter the PIN.</string>
+    <string name="pin_verification_fail">PIN verification failed.</string>
+    <string name="change_pin_lock_mode">Changing to PIN lock mode</string>
     <string name="diary_creation_time_disable_message">No time information</string>
 </resources>

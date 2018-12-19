@@ -5,9 +5,11 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
+import android.widget.Toast
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
 import io.github.aafactory.commons.activities.BaseSimpleActivity
@@ -21,12 +23,18 @@ import me.blog.korn123.easydiary.dialogs.WhatsNewDialog
 
 fun Activity.pauseLock() {
     if (config.aafPinLockEnable || config.fingerprintLockEnable) {
+        
+        // FIXME remove test code
+//        Toast.makeText(this, "${this::class.java.simpleName}", Toast.LENGTH_LONG).show()
         config.aafPinLockPauseMillis = System.currentTimeMillis()
     }
 }
 
 fun Activity.resumeLock() {
     if (config.aafPinLockPauseMillis > 0L && System.currentTimeMillis() - config.aafPinLockPauseMillis > 1000) {
+        
+        // FIXME remove test code
+//        Toast.makeText(this, "${(System.currentTimeMillis() - config.aafPinLockPauseMillis) / 1000}", Toast.LENGTH_LONG).show()
         when {
             config.fingerprintLockEnable -> {
                 startActivity(Intent(this, FingerprintLockActivity::class.java).apply {
@@ -103,4 +111,11 @@ fun Activity.makeSnackBar(message: String) {
     Snackbar
             .make(findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT)
             .setAction("Action", null).show()
+}
+
+fun Activity.setScreenOrientationSensor(disableSensor: Boolean) {
+    requestedOrientation = when (disableSensor) {
+        true -> ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
+        false -> ActivityInfo.SCREEN_ORIENTATION_SENSOR
+    }
 }

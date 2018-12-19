@@ -18,6 +18,7 @@ import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.pauseLock
+import me.blog.korn123.easydiary.extensions.setScreenOrientationSensor
 import org.apache.commons.io.IOUtils
 import java.io.FileOutputStream
 
@@ -36,7 +37,7 @@ class RecoverDiaryActivity : BaseDriveActivity() {
             it.addOnSuccessListener(this) { driveId ->
                 retrieveContents(driveId.asDriveFile())
             }.addOnFailureListener(this) { e ->
-                Log.e(TAG, "No folder selected", e)
+                setScreenOrientationSensor(true)
                 showAlertDialog(getString(R.string.folder_not_selected), DialogInterface.OnClickListener { _, _ ->
                     pauseLock()
                     finish()
