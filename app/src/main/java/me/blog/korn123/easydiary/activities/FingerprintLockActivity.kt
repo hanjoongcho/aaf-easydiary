@@ -195,7 +195,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
 
                     override fun onAuthenticationFailed() {
                         super.onAuthenticationFailed()
-                        updateErrorMessage("Authentication request failed. Please try again.")
+                        updateErrorMessage(getString(R.string.fingerprint_authentication_fail_try_again))
                     }
                 }, null)
     }
@@ -329,7 +329,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
             val decodedData = cipher.doFinal(encodedData)
             Log.i(TAG, "decode dummy data: ${String(decodedData)}, origin dummy data: $DUMMY_ENCRYPT_DATA")    
         } catch (e: Exception) {
-            updateErrorMessage(e.message ?: "The fingerprint authentication information of the device has changed and the previously set authentication information can not be used.")
+            updateErrorMessage(getString(R.string.fingerprint_authentication_info_changed))
             result = false
         }
         return result

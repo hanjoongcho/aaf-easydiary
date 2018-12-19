@@ -256,6 +256,8 @@
     <string name="fingerprint_setting_complete">指紋ロックの設定が完了しました。</string>
     <string name="fingerprint_setting_release">指紋ロックの設定が解除されました。</string>
     <string name="fingerprint_lock_need_pin_setting">指紋認証を使用するには、まずPINを設定する必要があります。</string>
+    <string name="fingerprint_authentication_fail_try_again">指紋認証に失敗しました。 もう一度お試しください。</string>
+    <string name="fingerprint_authentication_info_changed">The fingerprint authentication information of the device has changed and the previously set authentication information can not be used.</string>
     <string name="pin_lock_title">PINロック設定</string>
     <string name="pin_lock_summary">アプリケーションをロックするためのPINを設定します。</string>
     <string name="pin_setting_complete">PINの設定が完了しました。</string>

@@ -256,6 +256,8 @@
     <string name="fingerprint_setting_complete">지문인식 잠금 설정이 완료되었습니다.</string>
     <string name="fingerprint_setting_release">지문인식 잠금설정이 해제되었습니다.</string>
     <string name="fingerprint_lock_need_pin_setting">지문인식 잠금을 이용하려면 PIN 설정을 먼저해야 합니다.</string>
+    <string name="fingerprint_authentication_fail_try_again">지문인증에 실패했습니다. 다시 시도해 주세요.</string>
+    <string name="fingerprint_authentication_info_changed">디바이스의 지문 인증 정보가 변경되어 이전에 설정된 인증 정보를 사용할 수 없습니다. 핀을 이용하여 잠금 해제 후 지문인식 잠금설정을 다시 진행하세요.</string>
     <string name="pin_lock_title">핀 잠금설정</string>
     <string name="pin_lock_summary">핀을 설정하여 애플리케이션을 잠금니다.</string>
     <string name="pin_setting_complete">핀 잠금설정이 완료되었습니다.</string>
