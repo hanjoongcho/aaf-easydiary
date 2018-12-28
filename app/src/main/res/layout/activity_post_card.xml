@@ -31,13 +31,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <LinearLayout
+                    android:id="@+id/photoContainer"
+                    android:visibility="gone"
                     android:background="@drawable/bg_tile"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <LinearLayout
                         android:id="@+id/photoGridContainer"
-                        android:padding="10dp"
                         android:background="@android:color/white"
+                        android:padding="5dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <android.support.v7.widget.RecyclerView

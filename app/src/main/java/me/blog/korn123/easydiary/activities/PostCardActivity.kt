@@ -77,6 +77,7 @@ class PostCardActivity : EasyDiaryActivity() {
         }
 
         diaryDto.photoUris?.let {
+            if (it.size > 0) photoContainer.visibility = View.VISIBLE
             mPhotoAdapter = PhotoAdapter(this, it)
             
             photoGrid.run { 
@@ -87,7 +88,7 @@ class PostCardActivity : EasyDiaryActivity() {
                 }
                 adapter = mPhotoAdapter
             }
-        }
+        }  
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -245,7 +246,11 @@ class PostCardActivity : EasyDiaryActivity() {
 
     private fun exportDiaryCard(showInfoDialog: Boolean) {
         // draw viewGroup on UI Thread
-        val bitmap = diaryViewGroupToBitmap(postContainer)
+        val bitmap = when (photoContainer.visibility == View.VISIBLE) {
+            true -> diaryViewGroupToBitmap(postContainer, true)
+            false -> diaryViewGroupToBitmap(postContainer, false)
+        } 
+                
         progressBar.visibility = View.VISIBLE
 
         // generate postcard file another thread
@@ -286,19 +291,28 @@ class PostCardActivity : EasyDiaryActivity() {
         startActivity(Intent.createChooser(shareIntent, getString(R.string.diary_card_share_info)))
     }
 
-    private fun diaryViewGroupToBitmap(viewGroup: ViewGroup): Bitmap {
+    private fun diaryViewGroupToBitmap(viewGroup: ViewGroup, mergeBitmap: Boolean): Bitmap {
         val gridView = viewGroup.getChildAt(0) as ViewGroup
         val scrollView = viewGroup.getChildAt(1) as ViewGroup
 
         val gridViewBitmap = Bitmap.createBitmap(gridView.width, gridView.height, Bitmap.Config.ARGB_8888)
         val gridViewCanvas = Canvas(gridViewBitmap)
         gridView.draw(gridViewCanvas)
-        
+
         val scrollViewBitmap = Bitmap.createBitmap(scrollView.width, scrollView.getChildAt(0).height, Bitmap.Config.ARGB_8888)
         val scrollViewCanvas = Canvas(scrollViewBitmap)
         scrollView.draw(scrollViewCanvas)
         
-        return mergeBitmap(gridViewBitmap, scrollViewBitmap)
+        var bitmap = when (mergeBitmap) {
+            true -> {
+                mergeBitmap(gridViewBitmap, scrollViewBitmap)        
+            }
+            false -> {
+                scrollViewBitmap
+            }
+        }
+        
+        return bitmap
     }
 
     private fun mergeBitmap(first: Bitmap, second: Bitmap): Bitmap {

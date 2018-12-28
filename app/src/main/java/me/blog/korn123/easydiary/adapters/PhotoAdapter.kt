@@ -22,7 +22,7 @@ class PhotoAdapter(
 
     override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
         photoUris[position]?.let {
-            holder.bindTo(it.getFilePath())
+            holder.bindTo(it.getFilePath(), position)
         }
     }
 
