@@ -22,6 +22,10 @@ import com.flask.colorpicker.ColorPickerView
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
+import com.google.android.flexbox.AlignItems
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
 import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_post_card.*
@@ -74,10 +78,13 @@ class PostCardActivity : EasyDiaryActivity() {
 
         diaryDto.photoUris?.let {
             mPhotoAdapter = PhotoAdapter(this, it)
-
-            val gridLayoutManager = GridLayoutManager(this, 2)
-            photoGrid.apply {
-                layoutManager = gridLayoutManager
+            
+            photoGrid.run { 
+                layoutManager = FlexboxLayoutManager(this@PostCardActivity).apply {
+                    flexWrap = FlexWrap.WRAP
+                    flexDirection = FlexDirection.ROW
+                    alignItems = AlignItems.STRETCH
+                }
                 adapter = mPhotoAdapter
             }
         }
