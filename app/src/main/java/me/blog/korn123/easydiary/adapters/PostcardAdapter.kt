@@ -10,7 +10,6 @@ import android.widget.CheckBox
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.PostCardViewerActivity
 import me.blog.korn123.easydiary.viewholders.PostcardViewHolder
-import java.io.File
 
 internal class PostcardAdapter(
         val activity: Activity,

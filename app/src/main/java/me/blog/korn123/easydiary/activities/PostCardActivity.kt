@@ -3,12 +3,15 @@ package me.blog.korn123.easydiary.activities
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.support.v4.content.FileProvider
+import android.support.v7.widget.GridLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -23,6 +26,7 @@ import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_post_card.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.adapters.PhotoAdapter
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.confirmPermission
 import me.blog.korn123.easydiary.extensions.makeSnackBar
@@ -37,6 +41,7 @@ import java.io.File
 class PostCardActivity : EasyDiaryActivity() {
     lateinit var mShowcaseView: ShowcaseView
     lateinit var mSavedDiaryCardPath: String
+    lateinit var mPhotoAdapter: PhotoAdapter
     private var mSequence: Int = 0
     private var mBgColor = POSTCARD_BG_COLOR_VALUE
     private var mTextColor = POSTCARD_TEXT_COLOR_VALUE
@@ -64,6 +69,16 @@ class PostCardActivity : EasyDiaryActivity() {
         savedInstanceState?.let {
             setBackgroundColor(it.getInt(POSTCARD_BG_COLOR, POSTCARD_BG_COLOR_VALUE))
             setTextColor(it.getInt(POSTCARD_TEXT_COLOR, POSTCARD_TEXT_COLOR_VALUE))
+        }
+
+        diaryDto.photoUris?.let {
+            mPhotoAdapter = PhotoAdapter(this, it)
+
+            val gridLayoutManager = GridLayoutManager(this, 2)
+            photoGrid.apply {
+                layoutManager = gridLayoutManager
+                adapter = mPhotoAdapter
+            }
         }
     }
 
@@ -220,13 +235,13 @@ class PostCardActivity : EasyDiaryActivity() {
 
     private fun exportDiaryCard(showInfoDialog: Boolean) {
         // draw viewGroup on UI Thread
-        val bitmap = BitmapUtils.diaryViewGroupToBitmap(postContainer)
+        val bitmap = diaryViewGroupToBitmap(postContainer)
         progressBar.visibility = View.VISIBLE
 
         // generate postcard file another thread
         Thread(Runnable {
             try {
-                val diaryCardPath = DIARY_POSTCARD_DIRECTORY + mSequence + "_" + DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".jpg"
+                val diaryCardPath = "$DIARY_POSTCARD_DIRECTORY${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}_$mSequence.jpg"
                 mSavedDiaryCardPath = Environment.getExternalStorageDirectory().absolutePath + diaryCardPath
                 EasyDiaryUtils.initWorkingDirectory(this@PostCardActivity)
                 BitmapUtils.saveBitmapToFileCache(bitmap, mSavedDiaryCardPath)
@@ -260,4 +275,18 @@ class PostCardActivity : EasyDiaryActivity() {
         shareIntent.type = "image/jpeg"
         startActivity(Intent.createChooser(shareIntent, getString(R.string.diary_card_share_info)))
     }
+
+    private fun diaryViewGroupToBitmap(viewGroup: ViewGroup): Bitmap {
+//        val scrollView = view.getChildAt(0) as ViewGroup
+//        val bitmap = Bitmap.createBitmap(scrollView.width, scrollView.getChildAt(0).height, Bitmap.Config.ARGB_8888)
+//        val canvas = Canvas(bitmap)
+//        scrollView.draw(canvas)
+
+        val scrollView = viewGroup.getChildAt(1) as ViewGroup
+        val bitmap = Bitmap.createBitmap(viewGroup.width, viewGroup.getChildAt(0).height + scrollView.getChildAt(0).height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        viewGroup.draw(canvas)
+        return bitmap
+    }
+    
 }
