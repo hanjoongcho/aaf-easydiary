@@ -119,6 +119,7 @@ class PostCardActivity : EasyDiaryActivity() {
             REQUEST_CODE_BACKGROUND_COLOR_PICKER -> if (resultCode == Activity.RESULT_OK && data != null) {
                 val hexStringColor = "#" + data.getStringExtra("color")
                 contentsContainer.setBackgroundColor(Color.parseColor(hexStringColor))
+                photoGridContainer.setBackgroundColor(Color.parseColor(hexStringColor))
             }
             REQUEST_CODE_TEXT_COLOR_PICKER -> if (resultCode == Activity.RESULT_OK && data != null) {
                 val hexStringColor = "#" + data.getStringExtra("color")
@@ -181,6 +182,7 @@ class PostCardActivity : EasyDiaryActivity() {
     private fun setBackgroundColor(selectedColor: Int) {
         mBgColor = selectedColor
         contentsContainer.setBackgroundColor(mBgColor)
+        photoGridContainer.setBackgroundColor(mBgColor)
     }
     
     private fun setTextColor(selectedColor: Int) {

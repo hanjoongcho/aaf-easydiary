@@ -30,11 +30,23 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/photoGrid"
+                <LinearLayout
+                    android:background="@drawable/bg_tile"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                </android.support.v7.widget.RecyclerView>
+                    <LinearLayout
+                        android:id="@+id/photoGridContainer"
+                        android:padding="10dp"
+                        android:background="@android:color/white"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/photoGrid"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                        </android.support.v7.widget.RecyclerView>    
+                    </LinearLayout>
+                </LinearLayout>
                 
                 <ScrollView
                     android:fillViewport="true"
