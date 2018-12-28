@@ -294,25 +294,21 @@ class PostCardActivity : EasyDiaryActivity() {
     private fun diaryViewGroupToBitmap(viewGroup: ViewGroup, mergeBitmap: Boolean): Bitmap {
         val gridView = viewGroup.getChildAt(0) as ViewGroup
         val scrollView = viewGroup.getChildAt(1) as ViewGroup
-
-        val gridViewBitmap = Bitmap.createBitmap(gridView.width, gridView.height, Bitmap.Config.ARGB_8888)
-        val gridViewCanvas = Canvas(gridViewBitmap)
-        gridView.draw(gridViewCanvas)
-
         val scrollViewBitmap = Bitmap.createBitmap(scrollView.width, scrollView.getChildAt(0).height, Bitmap.Config.ARGB_8888)
         val scrollViewCanvas = Canvas(scrollViewBitmap)
         scrollView.draw(scrollViewCanvas)
         
-        var bitmap = when (mergeBitmap) {
+        return when (mergeBitmap) {
             true -> {
-                mergeBitmap(gridViewBitmap, scrollViewBitmap)        
+                val gridViewBitmap = Bitmap.createBitmap(gridView.width, gridView.height, Bitmap.Config.ARGB_8888)
+                val gridViewCanvas = Canvas(gridViewBitmap)
+                gridView.draw(gridViewCanvas)
+                mergeBitmap(gridViewBitmap, scrollViewBitmap)
             }
             false -> {
                 scrollViewBitmap
             }
         }
-        
-        return bitmap
     }
 
     private fun mergeBitmap(first: Bitmap, second: Bitmap): Bitmap {
