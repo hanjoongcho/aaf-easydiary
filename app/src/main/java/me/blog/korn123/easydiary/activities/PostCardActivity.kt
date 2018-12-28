@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Matrix
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
@@ -277,16 +278,25 @@ class PostCardActivity : EasyDiaryActivity() {
     }
 
     private fun diaryViewGroupToBitmap(viewGroup: ViewGroup): Bitmap {
-//        val scrollView = view.getChildAt(0) as ViewGroup
-//        val bitmap = Bitmap.createBitmap(scrollView.width, scrollView.getChildAt(0).height, Bitmap.Config.ARGB_8888)
-//        val canvas = Canvas(bitmap)
-//        scrollView.draw(canvas)
-
+        val gridView = viewGroup.getChildAt(0) as ViewGroup
         val scrollView = viewGroup.getChildAt(1) as ViewGroup
-        val bitmap = Bitmap.createBitmap(viewGroup.width, viewGroup.getChildAt(0).height + scrollView.getChildAt(0).height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        viewGroup.draw(canvas)
-        return bitmap
+
+        val gridViewBitmap = Bitmap.createBitmap(gridView.width, gridView.height, Bitmap.Config.ARGB_8888)
+        val gridViewCanvas = Canvas(gridViewBitmap)
+        gridView.draw(gridViewCanvas)
+        
+        val scrollViewBitmap = Bitmap.createBitmap(scrollView.width, scrollView.getChildAt(0).height, Bitmap.Config.ARGB_8888)
+        val scrollViewCanvas = Canvas(scrollViewBitmap)
+        scrollView.draw(scrollViewCanvas)
+        
+        return mergeBitmap(gridViewBitmap, scrollViewBitmap)
     }
-    
+
+    private fun mergeBitmap(first: Bitmap, second: Bitmap): Bitmap {
+        val bmOverlay = Bitmap.createBitmap(second.width, first.height + second.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bmOverlay)
+        canvas.drawBitmap(first, Matrix(), null)
+        canvas.drawBitmap(second, 0f, first.height.toFloat(), null)
+        return bmOverlay
+    }
 }
