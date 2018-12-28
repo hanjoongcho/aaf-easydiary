@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import io.github.aafactory.commons.utils.CommonUtils
 import me.blog.korn123.easydiary.R
@@ -20,12 +19,14 @@ class PhotoViewHolder(
     
     internal fun bindTo(photoPath: String, position: Int) {
         val point =  CommonUtils.getDefaultDisplay(activity)
-        val size = Math.floor((point.x - CommonUtils.dpToPixelFloatValue(imageView.context, 10f)).toDouble()).toInt() 
+        val size = point.x 
+        var roundCornerDpUnit = 5F 
                 
         when (itemCount) {
             1 -> {
                 imageView.layoutParams.width = size
-                imageView.layoutParams.height = size        
+                imageView.layoutParams.height = size
+                
             }
             else -> {
                 if (position < 1) {
@@ -37,13 +38,12 @@ class PhotoViewHolder(
                 }
             }
         }
-        
-        
+
         Glide.with(imageView.context)
                 .load(photoPath)
 //                .apply(RequestOptions().placeholder(R.drawable.ic_aaf_photos).fitCenter())
                 .apply(RequestOptions().transforms(CenterCrop()))
-//                .apply(RequestOptions().transforms(CenterCrop(), RoundedCorners(CommonUtils.dpToPixel(imageView.context, 5F))))
+//                .apply(RequestOptions().transforms(CenterCrop(), RoundedCorners(CommonUtils.dpToPixel(imageView.context, roundCornerDpUnit))))
                 .into(imageView)
     }
 }

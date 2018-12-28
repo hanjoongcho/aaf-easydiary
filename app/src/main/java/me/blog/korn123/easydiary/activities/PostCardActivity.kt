@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.activities
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -12,7 +13,6 @@ import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.support.v4.content.FileProvider
-import android.support.v7.widget.GridLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -77,18 +77,20 @@ class PostCardActivity : EasyDiaryActivity() {
         }
 
         diaryDto.photoUris?.let {
-            if (it.size > 0) photoContainer.visibility = View.VISIBLE
-            mPhotoAdapter = PhotoAdapter(this, it)
-            
-            photoGrid.run { 
-                layoutManager = FlexboxLayoutManager(this@PostCardActivity).apply {
-                    flexWrap = FlexWrap.WRAP
-                    flexDirection = FlexDirection.ROW
-                    alignItems = AlignItems.STRETCH
+            if (resources.configuration.orientation == ORIENTATION_PORTRAIT && it.size > 0) {
+                photoContainer.visibility = View.VISIBLE
+                mPhotoAdapter = PhotoAdapter(this, it)
+
+                photoGrid.run {
+                    layoutManager = FlexboxLayoutManager(this@PostCardActivity).apply {
+                        flexWrap = FlexWrap.WRAP
+                        flexDirection = FlexDirection.ROW
+                        alignItems = AlignItems.STRETCH
+                    }
+                    adapter = mPhotoAdapter
                 }
-                adapter = mPhotoAdapter
             }
-        }  
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
