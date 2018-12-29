@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
+import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -29,8 +30,13 @@ class PhotoAdapter(
 
     override fun getItemCount() = photoUris.size
     
-    fun getFlexDirection(): Int = when (itemCount) {
-        3 -> FlexDirection.COLUMN
-        else -> FlexDirection.ROW
+    fun getFlexDirection(): Int = when (activity.resources.configuration.orientation == ORIENTATION_PORTRAIT) {
+        true -> {
+            when (itemCount) {
+                3 -> FlexDirection.COLUMN
+                else -> FlexDirection.ROW    
+            }
+        }
+        false -> FlexDirection.COLUMN
     }
 }

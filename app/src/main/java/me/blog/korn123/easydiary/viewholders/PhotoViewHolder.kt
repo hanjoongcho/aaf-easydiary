@@ -9,6 +9,8 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.request.RequestOptions
 import io.github.aafactory.commons.utils.CommonUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.actionBarHeight
+import me.blog.korn123.easydiary.extensions.statusBarHeight
 
 class PhotoViewHolder(
         itemView: View, 
@@ -19,8 +21,8 @@ class PhotoViewHolder(
     
     internal fun bindTo(photoPath: String, position: Int) {
         val point =  CommonUtils.getDefaultDisplay(activity)
-        val size = point.x 
-        var roundCornerDpUnit = 5F 
+        val height = point.y - activity.actionBarHeight() - activity.statusBarHeight()
+        val size = if (point.x > point.y) height else point.x
                 
         when (itemCount) {
             1 -> {
@@ -53,5 +55,14 @@ class PhotoViewHolder(
                 .apply(RequestOptions().transforms(CenterCrop()))
 //                .apply(RequestOptions().transforms(CenterCrop(), RoundedCorners(CommonUtils.dpToPixel(imageView.context, roundCornerDpUnit))))
                 .into(imageView)
+    }
+
+    fun getStatusBarHeight(): Int {
+        var result = 0
+        val resourceId = activity.resources.getIdentifier("status_bar_height", "dimen", "android")
+        if (resourceId > 0) {
+            result = activity.resources.getDimensionPixelSize(resourceId)
+        }
+        return result
     }
 }

@@ -23,7 +23,6 @@ import com.flask.colorpicker.builder.ColorPickerDialogBuilder
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.google.android.flexbox.AlignItems
-import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import io.github.aafactory.commons.utils.BitmapUtils
@@ -33,10 +32,7 @@ import kotlinx.android.synthetic.main.activity_post_card.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.PhotoAdapter
-import me.blog.korn123.easydiary.extensions.checkPermission
-import me.blog.korn123.easydiary.extensions.confirmPermission
-import me.blog.korn123.easydiary.extensions.makeSnackBar
-import me.blog.korn123.easydiary.extensions.showAlertDialog
+import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import java.io.File
 
@@ -78,7 +74,7 @@ class PostCardActivity : EasyDiaryActivity() {
         }
 
         diaryDto.photoUris?.let {
-            if (resources.configuration.orientation == ORIENTATION_PORTRAIT && it.size > 0) {
+            if (/*resources.configuration.orientation == ORIENTATION_PORTRAIT && */it.size > 0) {
                 photoContainer.visibility = View.VISIBLE
                 mPhotoAdapter = PhotoAdapter(this, it)
 
@@ -89,12 +85,24 @@ class PostCardActivity : EasyDiaryActivity() {
                         alignItems = AlignItems.STRETCH
                     }
                     adapter = mPhotoAdapter
-                    when (it.size) {
-                        1, 3, 4, 5, 6 -> layoutParams.height = CommonUtils.getDefaultDisplay(this@PostCardActivity).x
-                        2 -> layoutParams.height = CommonUtils.getDefaultDisplay(this@PostCardActivity).x / 2
-                        else -> layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-                    }
                     
+                    when (resources.configuration.orientation == ORIENTATION_PORTRAIT) {
+                        true -> {
+                            when (it.size) {
+                                1, 3, 4, 5, 6 -> layoutParams.height = CommonUtils.getDefaultDisplay(this@PostCardActivity).x
+                                2 -> layoutParams.height = CommonUtils.getDefaultDisplay(this@PostCardActivity).x / 2
+                                else -> layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                            }        
+                        }
+                        false -> {
+                            val height = CommonUtils.getDefaultDisplay(this@PostCardActivity).y - actionBarHeight() - statusBarHeight()
+                            when (it.size) {
+                                1, 3, 4, 5, 6 -> layoutParams.width = height
+                                2 -> layoutParams.width = height / 2
+                                else -> layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT
+                            }
+                        }
+                    }
                 }
             }
         }
