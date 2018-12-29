@@ -89,7 +89,11 @@ class PostCardActivity : EasyDiaryActivity() {
                         alignItems = AlignItems.STRETCH
                     }
                     adapter = mPhotoAdapter
-                    layoutParams.height = CommonUtils.getDefaultDisplay(this@PostCardActivity).x
+                    when (it.size == 2) {
+                        true -> layoutParams.height = CommonUtils.getDefaultDisplay(this@PostCardActivity).x / 2
+                        false -> layoutParams.height = CommonUtils.getDefaultDisplay(this@PostCardActivity).x
+                    }
+                    
                 }
             }
         }
