@@ -4,6 +4,7 @@ import android.app.Activity
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.google.android.flexbox.FlexDirection
 import io.realm.RealmList
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.models.PhotoUriDto
@@ -27,4 +28,9 @@ class PhotoAdapter(
     }
 
     override fun getItemCount() = photoUris.size
+    
+    fun getFlexDirection(): Int = when (itemCount) {
+        3 -> FlexDirection.COLUMN
+        else -> FlexDirection.ROW
+    }
 }

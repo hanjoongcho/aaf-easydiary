@@ -27,6 +27,7 @@ import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import io.github.aafactory.commons.utils.BitmapUtils
+import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_post_card.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
@@ -84,10 +85,11 @@ class PostCardActivity : EasyDiaryActivity() {
                 photoGrid.run {
                     layoutManager = FlexboxLayoutManager(this@PostCardActivity).apply {
                         flexWrap = FlexWrap.WRAP
-                        flexDirection = FlexDirection.ROW
+                        flexDirection = mPhotoAdapter.getFlexDirection()
                         alignItems = AlignItems.STRETCH
                     }
                     adapter = mPhotoAdapter
+                    layoutParams.height = CommonUtils.getDefaultDisplay(this@PostCardActivity).x
                 }
             }
         }

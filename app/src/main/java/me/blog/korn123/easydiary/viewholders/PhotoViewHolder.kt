@@ -28,6 +28,15 @@ class PhotoViewHolder(
                 imageView.layoutParams.height = size
                 
             }
+            3-> {
+                if (position < 1) {
+                    imageView.layoutParams.width = (size * 0.8).toInt() 
+                    imageView.layoutParams.height = size
+                } else {
+                    imageView.layoutParams.width = (size * 0.2).toInt()
+                    imageView.layoutParams.height = (size * 0.2).toInt()
+                }
+            }
             else -> {
                 if (position < 1) {
                     imageView.layoutParams.width = size
