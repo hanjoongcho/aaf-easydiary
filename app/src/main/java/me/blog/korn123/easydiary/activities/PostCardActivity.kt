@@ -64,7 +64,11 @@ class PostCardActivity : EasyDiaryActivity() {
         EasyDiaryUtils.initWeatherView(weather, diaryDto.weather)
         diaryTitle.text = diaryDto.title
         contents.text = diaryDto.contents
-        date.text = DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis)
+        date.text = when (diaryDto.isAllDay) {
+            true -> DateUtils.getFullPatternDate(diaryDto.currentTimeMillis)
+            false -> DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis)
+        }
+        
         EasyDiaryUtils.boldString(applicationContext, diaryTitle)
         
         initShowcase()
