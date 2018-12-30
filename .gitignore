@@ -1,3 +1,5 @@
+.idea/
+
 app/build
 app/*.apk
 app/*.iml
