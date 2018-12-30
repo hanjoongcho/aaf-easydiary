@@ -329,10 +329,21 @@ class PostCardActivity : EasyDiaryActivity() {
     }
 
     private fun mergeBitmap(first: Bitmap, second: Bitmap): Bitmap {
-        val bmOverlay = Bitmap.createBitmap(second.width, first.height + second.height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bmOverlay)
-        canvas.drawBitmap(first, Matrix(), null)
-        canvas.drawBitmap(second, 0f, first.height.toFloat(), null)
-        return bmOverlay
+        val bitmap: Bitmap
+        val canvas: Canvas
+        if (resources.configuration.orientation == ORIENTATION_PORTRAIT) {
+            bitmap = Bitmap.createBitmap(second.width, first.height + second.height, Bitmap.Config.ARGB_8888)
+            canvas = Canvas(bitmap)
+            canvas.drawColor(Color.WHITE)
+            canvas.drawBitmap(first, Matrix(), null)
+            canvas.drawBitmap(second, 0f, first.height.toFloat(), null)
+        } else {
+            bitmap = Bitmap.createBitmap(first.width + second.width, second.height, Bitmap.Config.ARGB_8888)
+            canvas = Canvas(bitmap)
+            canvas.drawColor(Color.WHITE)
+            canvas.drawBitmap(first, Matrix(), null)
+            canvas.drawBitmap(second, first.width.toFloat(), 0f, null)    
+        }
+        return bitmap
     }
 }
