@@ -242,13 +242,7 @@ class PostCardActivity : EasyDiaryActivity() {
                     mShowcaseView.setContentTitle(getString(R.string.post_card_showcase_title_3))
                     mShowcaseView.setContentText(getString(R.string.post_card_showcase_message_3))
                 }
-                4 -> {
-                    mShowcaseView.setButtonPosition(centerParams)
-                    mShowcaseView.setTarget(ViewTarget(R.id.share, this@PostCardActivity))
-                    mShowcaseView.setContentTitle(getString(R.string.post_card_showcase_title_4))
-                    mShowcaseView.setContentText(getString(R.string.post_card_showcase_message_4))
-                }
-                5 -> mShowcaseView.hide()
+                4 -> mShowcaseView.hide()
             }
             showcaseIndex++
         }
