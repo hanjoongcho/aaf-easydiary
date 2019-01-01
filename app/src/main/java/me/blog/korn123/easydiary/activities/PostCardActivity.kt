@@ -3,7 +3,11 @@ package me.blog.korn123.easydiary.activities
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.res.Configuration.ORIENTATION_PORTRAIT
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Matrix
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
@@ -18,15 +22,17 @@ import com.flask.colorpicker.ColorPickerView
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
+import com.google.android.flexbox.AlignItems
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
 import io.github.aafactory.commons.utils.BitmapUtils
+import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_post_card.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.extensions.checkPermission
-import me.blog.korn123.easydiary.extensions.confirmPermission
-import me.blog.korn123.easydiary.extensions.makeSnackBar
-import me.blog.korn123.easydiary.extensions.showAlertDialog
+import me.blog.korn123.easydiary.adapters.PhotoAdapter
+import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import java.io.File
 
@@ -37,6 +43,7 @@ import java.io.File
 class PostCardActivity : EasyDiaryActivity() {
     lateinit var mShowcaseView: ShowcaseView
     lateinit var mSavedDiaryCardPath: String
+    lateinit var mPhotoAdapter: PhotoAdapter
     private var mSequence: Int = 0
     private var mBgColor = POSTCARD_BG_COLOR_VALUE
     private var mTextColor = POSTCARD_TEXT_COLOR_VALUE
@@ -57,13 +64,51 @@ class PostCardActivity : EasyDiaryActivity() {
         EasyDiaryUtils.initWeatherView(weather, diaryDto.weather)
         diaryTitle.text = diaryDto.title
         contents.text = diaryDto.contents
-        date.text = DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis)
+        date.text = when (diaryDto.isAllDay) {
+            true -> DateUtils.getFullPatternDate(diaryDto.currentTimeMillis)
+            false -> DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis)
+        }
+        
         EasyDiaryUtils.boldString(applicationContext, diaryTitle)
         
         initShowcase()
         savedInstanceState?.let {
             setBackgroundColor(it.getInt(POSTCARD_BG_COLOR, POSTCARD_BG_COLOR_VALUE))
             setTextColor(it.getInt(POSTCARD_TEXT_COLOR, POSTCARD_TEXT_COLOR_VALUE))
+        }
+
+        diaryDto.photoUris?.let {
+            if (/*resources.configuration.orientation == ORIENTATION_PORTRAIT && */it.size > 0) {
+                photoContainer.visibility = View.VISIBLE
+                mPhotoAdapter = PhotoAdapter(this, it)
+
+                photoGrid.run {
+                    layoutManager = FlexboxLayoutManager(this@PostCardActivity).apply {
+                        flexWrap = FlexWrap.WRAP
+                        flexDirection = mPhotoAdapter.getFlexDirection()
+                        alignItems = AlignItems.STRETCH
+                    }
+                    adapter = mPhotoAdapter
+                    
+                    when (resources.configuration.orientation == ORIENTATION_PORTRAIT) {
+                        true -> {
+                            when (it.size) {
+                                1, 3, 4, 5, 6 -> layoutParams.height = CommonUtils.getDefaultDisplay(this@PostCardActivity).x
+                                2 -> layoutParams.height = CommonUtils.getDefaultDisplay(this@PostCardActivity).x / 2
+                                else -> layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                            }        
+                        }
+                        false -> {
+                            val height = CommonUtils.getDefaultDisplay(this@PostCardActivity).y - actionBarHeight() - statusBarHeight()
+                            when (it.size) {
+                                1, 3, 4, 5, 6 -> layoutParams.width = height
+                                2 -> layoutParams.width = height / 2
+                                else -> layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -96,6 +141,7 @@ class PostCardActivity : EasyDiaryActivity() {
             REQUEST_CODE_BACKGROUND_COLOR_PICKER -> if (resultCode == Activity.RESULT_OK && data != null) {
                 val hexStringColor = "#" + data.getStringExtra("color")
                 contentsContainer.setBackgroundColor(Color.parseColor(hexStringColor))
+                photoGridContainer.setBackgroundColor(Color.parseColor(hexStringColor))
             }
             REQUEST_CODE_TEXT_COLOR_PICKER -> if (resultCode == Activity.RESULT_OK && data != null) {
                 val hexStringColor = "#" + data.getStringExtra("color")
@@ -158,6 +204,7 @@ class PostCardActivity : EasyDiaryActivity() {
     private fun setBackgroundColor(selectedColor: Int) {
         mBgColor = selectedColor
         contentsContainer.setBackgroundColor(mBgColor)
+        photoGridContainer.setBackgroundColor(mBgColor)
     }
     
     private fun setTextColor(selectedColor: Int) {
@@ -220,13 +267,17 @@ class PostCardActivity : EasyDiaryActivity() {
 
     private fun exportDiaryCard(showInfoDialog: Boolean) {
         // draw viewGroup on UI Thread
-        val bitmap = BitmapUtils.diaryViewGroupToBitmap(postContainer)
+        val bitmap = when (photoContainer.visibility == View.VISIBLE) {
+            true -> diaryViewGroupToBitmap(postContainer, true)
+            false -> diaryViewGroupToBitmap(postContainer, false)
+        } 
+                
         progressBar.visibility = View.VISIBLE
 
         // generate postcard file another thread
         Thread(Runnable {
             try {
-                val diaryCardPath = DIARY_POSTCARD_DIRECTORY + mSequence + "_" + DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".jpg"
+                val diaryCardPath = "$DIARY_POSTCARD_DIRECTORY${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}_$mSequence.jpg"
                 mSavedDiaryCardPath = Environment.getExternalStorageDirectory().absolutePath + diaryCardPath
                 EasyDiaryUtils.initWorkingDirectory(this@PostCardActivity)
                 BitmapUtils.saveBitmapToFileCache(bitmap, mSavedDiaryCardPath)
@@ -259,5 +310,44 @@ class PostCardActivity : EasyDiaryActivity() {
         shareIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this@PostCardActivity, "$packageName.provider", file))
         shareIntent.type = "image/jpeg"
         startActivity(Intent.createChooser(shareIntent, getString(R.string.diary_card_share_info)))
+    }
+
+    private fun diaryViewGroupToBitmap(viewGroup: ViewGroup, mergeBitmap: Boolean): Bitmap {
+        val gridView = viewGroup.getChildAt(0) as ViewGroup
+        val scrollView = viewGroup.getChildAt(1) as ViewGroup
+        val scrollViewBitmap = Bitmap.createBitmap(scrollView.width, scrollView.getChildAt(0).height, Bitmap.Config.ARGB_8888)
+        val scrollViewCanvas = Canvas(scrollViewBitmap)
+        scrollView.draw(scrollViewCanvas)
+        
+        return when (mergeBitmap) {
+            true -> {
+                val gridViewBitmap = Bitmap.createBitmap(gridView.width, gridView.height, Bitmap.Config.ARGB_8888)
+                val gridViewCanvas = Canvas(gridViewBitmap)
+                gridView.draw(gridViewCanvas)
+                mergeBitmap(gridViewBitmap, scrollViewBitmap)
+            }
+            false -> {
+                scrollViewBitmap
+            }
+        }
+    }
+
+    private fun mergeBitmap(first: Bitmap, second: Bitmap): Bitmap {
+        val bitmap: Bitmap
+        val canvas: Canvas
+        if (resources.configuration.orientation == ORIENTATION_PORTRAIT) {
+            bitmap = Bitmap.createBitmap(second.width, first.height + second.height, Bitmap.Config.ARGB_8888)
+            canvas = Canvas(bitmap)
+            canvas.drawColor(Color.WHITE)
+            canvas.drawBitmap(first, Matrix(), null)
+            canvas.drawBitmap(second, 0f, first.height.toFloat(), null)
+        } else {
+            bitmap = Bitmap.createBitmap(first.width + second.width, second.height, Bitmap.Config.ARGB_8888)
+            canvas = Canvas(bitmap)
+            canvas.drawColor(Color.WHITE)
+            canvas.drawBitmap(first, Matrix(), null)
+            canvas.drawBitmap(second, first.width.toFloat(), 0f, null)    
+        }
+        return bitmap
     }
 }

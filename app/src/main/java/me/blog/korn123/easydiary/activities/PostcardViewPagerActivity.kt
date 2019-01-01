@@ -1,13 +1,13 @@
 package me.blog.korn123.easydiary.activities
 
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Environment
+import android.support.v4.content.FileProvider
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
-import android.view.Gravity
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.TextView
 import com.github.chrisbanes.photoview.PhotoView
 import io.github.aafactory.commons.utils.CommonUtils
@@ -24,27 +24,34 @@ import java.io.File
 
 class PostcardViewPagerActivity : EasyDiaryActivity() {
     private var mPostcardCount: Int = 0
+    private lateinit var mListPostcard: List<File>
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_photo_view_pager)
+        setSupportActionBar(toolbar)
 
         val intent = intent
         val sequence = intent.getIntExtra(POSTCARD_SEQUENCE, 0)
 
-        val listPostcard = File(Environment.getExternalStorageDirectory().absolutePath + DIARY_POSTCARD_DIRECTORY)
+        mListPostcard = File(Environment.getExternalStorageDirectory().absolutePath + DIARY_POSTCARD_DIRECTORY)
                 .listFiles()
                 .filter { it.extension.equals("jpg", true)}
                 .sortedDescending()
-        mPostcardCount = listPostcard.size
-        pageInfo.text = "1 / $mPostcardCount"
+        mPostcardCount = mListPostcard.size
 
-        view_pager.adapter = PostcardPagerAdapter(listPostcard)
+        supportActionBar?.run {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_cross)
+            title = "1 / $mPostcardCount"
+        }
+
+        view_pager.adapter = PostcardPagerAdapter(mListPostcard)
         view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
             override fun onPageSelected(position: Int) {
-                pageInfo.text = "${position + 1} / $mPostcardCount"
+                toolbar.title = "${position + 1} / $mPostcardCount"
             }
 
             override fun onPageScrollStateChanged(state: Int) {}
@@ -57,7 +64,27 @@ class PostcardViewPagerActivity : EasyDiaryActivity() {
 //        }
 
         view_pager.setCurrentItem(sequence, false)
-        close.setOnClickListener { finish() }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.diary_post_card_view_pager, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.share -> shareDiary()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun shareDiary() {
+        val file = mListPostcard[view_pager.currentItem]
+        val shareIntent = Intent()
+        shareIntent.action = Intent.ACTION_SEND
+        shareIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this@PostcardViewPagerActivity, "$packageName.provider", file))
+        shareIntent.type = "image/jpeg"
+        startActivity(Intent.createChooser(shareIntent, getString(R.string.diary_card_share_info)))
     }
 
     internal class PostcardPagerAdapter(var listPostcard: List<File>) : PagerAdapter() {

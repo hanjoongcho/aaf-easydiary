@@ -19,10 +19,4 @@
         android:orderInCategory="100"
         android:title=""
         app:showAsAction="always" />
-    <item
-        android:id="@+id/share"
-        android:icon="@drawable/sharethis_w"
-        android:orderInCategory="100"
-        android:title=""
-        app:showAsAction="always" />
 </menu>

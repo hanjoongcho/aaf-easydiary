@@ -29,20 +29,26 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_photo_view_pager)
+        setSupportActionBar(toolbar)
 
         val intent = intent
         val sequence = intent.getIntExtra(DIARY_SEQUENCE, 0)
         val photoIndex = intent.getIntExtra(DIARY_ATTACH_PHOTO_INDEX, 0)
         val diaryDto = EasyDiaryDbHelper.readDiaryBy(sequence)
         mPhotoCount = diaryDto.photoUris?.size ?: 0
-        pageInfo.text = "1 / $mPhotoCount"
+
+        supportActionBar?.run {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_cross)
+            title = "1 / $mPhotoCount"
+        }
 
         view_pager.adapter = SamplePagerAdapter(diaryDto)
         view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
             override fun onPageSelected(position: Int) {
-                pageInfo.text = "${position + 1} / $mPhotoCount" 
+                toolbar.title = "${position + 1} / $mPhotoCount"
             }
 
             override fun onPageScrollStateChanged(state: Int) {}
@@ -55,7 +61,6 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
 //        }
 
         if (photoIndex > 0) Handler().post{ view_pager.setCurrentItem(photoIndex, false) }
-        close.setOnClickListener { finish() }
     }
 
     internal class SamplePagerAdapter(var diaryDto: DiaryDto) : PagerAdapter() {

@@ -9,7 +9,7 @@ import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
-import android.widget.Toast
+import android.util.TypedValue
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
 import io.github.aafactory.commons.activities.BaseSimpleActivity
@@ -118,4 +118,22 @@ fun Activity.setScreenOrientationSensor(disableSensor: Boolean) {
         true -> ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
         false -> ActivityInfo.SCREEN_ORIENTATION_SENSOR
     }
+}
+
+fun Activity.actionBarHeight(): Int {
+    val typedValue = TypedValue()
+    var actionBarHeight = 0
+    if (theme.resolveAttribute(android.R.attr.actionBarSize, typedValue, true)){
+        actionBarHeight = TypedValue.complexToDimensionPixelSize(typedValue.data, resources.displayMetrics)
+    }
+    return actionBarHeight
+}
+
+fun Activity.statusBarHeight(): Int {
+    var statusBarHeight = 0
+    val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
+    if (resourceId > 0) {
+        statusBarHeight = resources.getDimensionPixelSize(resourceId)
+    }
+    return statusBarHeight
 }

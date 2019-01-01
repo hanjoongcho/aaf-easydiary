@@ -12,12 +12,12 @@ import me.blog.korn123.easydiary.BuildConfig
 class EasyDiaryApplication : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
-        if (BuildConfig.DEBUG) {
-            if (LeakCanary.isInAnalyzerProcess(this)) {
-                return
-            }
-            LeakCanary.install(this)
-        }
+//        if (BuildConfig.DEBUG) {
+//            if (LeakCanary.isInAnalyzerProcess(this)) {
+//                return
+//            }
+//            LeakCanary.install(this)
+//        }
         Realm.init(this)
     }
 }

@@ -199,6 +199,10 @@
         v1.4.65 / 2018.12.19\n
         Added lock function using fingerprint sensor
     </string>
+    <string name="release_129">
+        v1.4.66 / 2019.01.01\n
+        Improved the ability to view attached photos on the postcard screen
+    </string>
     
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
