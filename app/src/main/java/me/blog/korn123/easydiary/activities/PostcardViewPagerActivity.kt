@@ -28,6 +28,7 @@ class PostcardViewPagerActivity : EasyDiaryActivity() {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_photo_view_pager)
+        setSupportActionBar(toolbar)
 
         val intent = intent
         val sequence = intent.getIntExtra(POSTCARD_SEQUENCE, 0)
@@ -37,14 +38,19 @@ class PostcardViewPagerActivity : EasyDiaryActivity() {
                 .filter { it.extension.equals("jpg", true)}
                 .sortedDescending()
         mPostcardCount = listPostcard.size
-        pageInfo.text = "1 / $mPostcardCount"
+
+        supportActionBar?.run {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_cross)
+            title = "1 / $mPostcardCount"
+        }
 
         view_pager.adapter = PostcardPagerAdapter(listPostcard)
         view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
             override fun onPageSelected(position: Int) {
-                pageInfo.text = "${position + 1} / $mPostcardCount"
+                toolbar.title = "${position + 1} / $mPostcardCount"
             }
 
             override fun onPageScrollStateChanged(state: Int) {}
@@ -57,7 +63,6 @@ class PostcardViewPagerActivity : EasyDiaryActivity() {
 //        }
 
         view_pager.setCurrentItem(sequence, false)
-        close.setOnClickListener { finish() }
     }
 
     internal class PostcardPagerAdapter(var listPostcard: List<File>) : PagerAdapter() {
