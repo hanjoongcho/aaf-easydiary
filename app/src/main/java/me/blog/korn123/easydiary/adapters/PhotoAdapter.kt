@@ -33,7 +33,7 @@ class PhotoAdapter(
     fun getFlexDirection(): Int = when (activity.resources.configuration.orientation == ORIENTATION_PORTRAIT) {
         true -> {
             when (itemCount) {
-                3 -> FlexDirection.COLUMN
+                3, 5, 6 -> FlexDirection.COLUMN
                 else -> FlexDirection.ROW    
             }
         }
