@@ -4,9 +4,12 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.66 (date: 2019/01/01)
+  * Improved the ability to view attached photos on the postcard screen
+
 # Changes in 1.4.65 (date: 2018/12/19)
   * Added lock function using fingerprint sensor
-  
+
 # Changes in 1.4.63 (date: 2018/11/25)
   * Added attached photos backup and recovery function using Google Drive
   
