@@ -26,6 +26,21 @@ import me.blog.korn123.easydiary.helper.DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE
 
 val Context.config: Config get() = Config.newInstance(this)
 
+fun Context.updateTextSize(viewGroup: ViewGroup, context: Context, addSize: Int) {
+    val cnt = viewGroup.childCount
+    val settingFontSize: Float = config.settingFontSize + addSize
+    (0 until cnt)
+            .map { index -> viewGroup.getChildAt(index) }
+            .forEach {
+                when (it) {
+                    is TextView -> {
+                        it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
+                    }
+                    is ViewGroup -> updateTextSize(it, context, addSize)
+                }
+            }
+}
+
 fun Context.initTextSize(viewGroup: ViewGroup, context: Context) {
     val cnt = viewGroup.childCount
     val defaultFontSize: Float = CommonUtils.dpToPixelFloatValue(context, DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE.toFloat())

@@ -22,6 +22,31 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
         </android.support.design.widget.AppBarLayout>
 
+        <LinearLayout
+            android:id="@+id/seekBarContainer"
+            android:padding="5dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/decreaseFont"
+                android:src="@drawable/decrease_font"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <SeekBar
+                android:id="@+id/fontSizeSeekBar"
+                android:max="40"
+                android:progress="20"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="20dp" />
+            <ImageView
+                android:id="@+id/increaseFont"
+                android:src="@drawable/increase_font"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
         <FrameLayout
             android:id="@+id/main_holder"
             android:layout_width="match_parent"

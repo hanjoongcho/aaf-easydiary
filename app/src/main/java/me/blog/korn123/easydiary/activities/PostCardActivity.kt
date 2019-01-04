@@ -4,20 +4,19 @@ import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.Configuration.ORIENTATION_PORTRAIT
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Matrix
+import android.graphics.*
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
 import android.os.Looper
+import android.support.v4.content.ContextCompat
 import android.support.v4.content.FileProvider
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
+import android.widget.SeekBar
 import com.flask.colorpicker.ColorPickerView
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder
 import com.github.amlcurran.showcaseview.ShowcaseView
@@ -48,6 +47,7 @@ class PostCardActivity : EasyDiaryActivity() {
     private var mBgColor = POSTCARD_BG_COLOR_VALUE
     private var mTextColor = POSTCARD_TEXT_COLOR_VALUE
     private var showcaseIndex = 1
+    private var mAddFontSize = 0
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,12 +110,43 @@ class PostCardActivity : EasyDiaryActivity() {
                 }
             }
         }
+
+        fontSizeSeekBar?.let {
+            ContextCompat.getDrawable(this, R.drawable.increase_font)?.apply {
+                setColorFilter(config.primaryColor, PorterDuff.Mode.SRC_IN)
+                increaseFont.setImageDrawable(this)
+            }
+
+            ContextCompat.getDrawable(this, R.drawable.decrease_font)?.apply {
+                setColorFilter(config.primaryColor, PorterDuff.Mode.SRC_IN)
+                decreaseFont.setImageDrawable(this)
+            }
+
+            it.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                    mAddFontSize = progress - 20
+                    updateTextSize(postContainer, this@PostCardActivity, mAddFontSize)
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                }
+
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                }
+
+            })
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
         outState?.putInt(POSTCARD_BG_COLOR, mBgColor)
         outState?.putInt(POSTCARD_TEXT_COLOR, mTextColor)
         super.onSaveInstanceState(outState)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateTextSize(postContainer, this@PostCardActivity, mAddFontSize)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
