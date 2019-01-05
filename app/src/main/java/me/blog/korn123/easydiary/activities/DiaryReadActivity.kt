@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.activities
 import android.annotation.TargetApi
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle

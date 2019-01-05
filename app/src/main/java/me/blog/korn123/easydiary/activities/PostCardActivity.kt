@@ -29,6 +29,7 @@ import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_post_card.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.commons.utils.EasyDiaryUtils.changeDrawableIconColor
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.PhotoAdapter
 import me.blog.korn123.easydiary.extensions.*
@@ -112,16 +113,6 @@ class PostCardActivity : EasyDiaryActivity() {
         }
 
         fontSizeSeekBar?.let {
-            ContextCompat.getDrawable(this, R.drawable.increase_font)?.apply {
-                setColorFilter(config.primaryColor, PorterDuff.Mode.SRC_IN)
-                increaseFont.setImageDrawable(this)
-            }
-
-            ContextCompat.getDrawable(this, R.drawable.decrease_font)?.apply {
-                setColorFilter(config.primaryColor, PorterDuff.Mode.SRC_IN)
-                decreaseFont.setImageDrawable(this)
-            }
-
             it.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                     mAddFontSize = progress - 20

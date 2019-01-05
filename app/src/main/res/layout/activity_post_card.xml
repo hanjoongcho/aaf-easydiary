@@ -25,6 +25,7 @@
         <LinearLayout
             android:id="@+id/seekBarContainer"
             android:padding="5dp"
+            android:background="?attr/colorPrimary"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -35,6 +36,8 @@
                 android:layout_height="wrap_content" />
             <SeekBar
                 android:id="@+id/fontSizeSeekBar"
+                android:thumbTint="@color/white"
+                android:progressTint="@color/white"
                 android:max="40"
                 android:progress="20"
                 android:layout_weight="1"
