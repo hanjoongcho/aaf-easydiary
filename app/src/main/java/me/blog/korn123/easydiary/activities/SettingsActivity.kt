@@ -95,8 +95,6 @@ class SettingsActivity : EasyDiaryActivity() {
                 licenseIntent.putExtra(BaseWebViewActivity.OPEN_URL_INFO, "https://github.com/hanjoongcho/aaf-easydiary/blob/master/LICENSE.md")
                 startActivity(licenseIntent)
             }
-            R.id.easyPhotoMap -> openGooglePlayBy("me.blog.korn123.easyphotomap")
-            R.id.easyPassword -> openGooglePlayBy("io.github.hanjoongcho.easypassword")
             R.id.releaseNotes -> checkWhatsNewDialog(false)
             R.id.boldStyleOption -> {
                 boldStyleOptionSwitcher.toggle()
@@ -175,8 +173,6 @@ class SettingsActivity : EasyDiaryActivity() {
         backupSetting.setOnClickListener(mOnClickListener)
         rateAppSetting.setOnClickListener(mOnClickListener)
         licenseView.setOnClickListener(mOnClickListener)
-        easyPhotoMap.setOnClickListener(mOnClickListener)
-        easyPassword.setOnClickListener(mOnClickListener)
         restorePhotoSetting.setOnClickListener(mOnClickListener)
         releaseNotes.setOnClickListener(mOnClickListener)
         boldStyleOption.setOnClickListener(mOnClickListener)

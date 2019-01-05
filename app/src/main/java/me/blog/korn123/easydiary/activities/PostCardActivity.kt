@@ -4,12 +4,14 @@ import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.Configuration.ORIENTATION_PORTRAIT
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Matrix
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
 import android.os.Looper
-import android.support.v4.content.ContextCompat
 import android.support.v4.content.FileProvider
 import android.view.Menu
 import android.view.MenuItem
@@ -29,7 +31,6 @@ import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_post_card.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.commons.utils.EasyDiaryUtils.changeDrawableIconColor
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.PhotoAdapter
 import me.blog.korn123.easydiary.extensions.*
@@ -114,22 +115,20 @@ class PostCardActivity : EasyDiaryActivity() {
             }
         }
 
-        fontSizeSeekBar?.let {
-            it.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                    mAddFontSize = progress - 20
-                    updateTextSize(postContainer, this@PostCardActivity, mAddFontSize)
-                    toolbar.title = "${seekBarContainer.height}"
-                }
+        fontSizeSeekBar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                mAddFontSize = progress - 20
+                updateTextSize(postContainer, this@PostCardActivity, mAddFontSize)
+//                toolbar.title = "$mAddFontSize"
+            }
 
-                override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+            }
 
-                override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                }
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            }
 
-            })
-        }
+        })
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
