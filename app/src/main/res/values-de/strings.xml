@@ -272,4 +272,6 @@
     <string name="pin_verification_fail">PIN verification failed.</string>
     <string name="change_pin_lock_mode">Changing to PIN lock mode</string>
     <string name="diary_creation_time_disable_message">No time information</string>
+    <string name="enable_card_view_policy_title">Optimize card view design</string>
+    <string name="enable_card_view_policy_summary">Optimize the card view design for device.</string>
 </resources>

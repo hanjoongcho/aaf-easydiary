@@ -8,10 +8,12 @@ import android.content.pm.PackageManager
 import android.preference.PreferenceManager
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
+import android.support.v7.widget.CardView
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.simplemobiletools.commons.extensions.baseConfig
 import io.github.aafactory.commons.utils.CommonUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.helper.Config
@@ -25,6 +27,26 @@ import me.blog.korn123.easydiary.helper.DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE
  */
 
 val Context.config: Config get() = Config.newInstance(this)
+
+fun Context.updateCardViewPolicy(viewGroup: ViewGroup) {
+    val cnt = viewGroup.childCount
+    (0 until cnt)
+            .map { viewGroup.getChildAt(it) }
+            .forEach {
+                when (it) {
+                    is CardView -> {
+                        if (config.enableCardViewPolicy) {
+                            it.useCompatPadding = true
+                            it.cardElevation = CommonUtils.dpToPixelFloatValue(this, 2F)
+                        } else {
+                            it.useCompatPadding = false
+                            it.cardElevation = 0F
+                        }
+                    }
+                    is ViewGroup -> updateCardViewPolicy(it)
+                }
+            }
+}
 
 fun Context.updateTextSize(viewGroup: ViewGroup, context: Context, addSize: Int) {
     val cnt = viewGroup.childCount

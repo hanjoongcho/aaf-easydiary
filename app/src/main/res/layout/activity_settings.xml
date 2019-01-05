@@ -108,7 +108,7 @@
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
-                    
+
                     <android.support.v7.widget.CardView
                         android:id="@+id/thumbnailSetting"
                         style="@style/AppCard.Settings">
@@ -120,6 +120,32 @@
                             <com.simplemobiletools.commons.views.MyTextView
                                 android:id="@+id/thumbnailSettingSummary"
                                 android:text="@string/thumbnail_setting_summary"
+                                style="@style/SettingsSummary" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/enableCardViewPolicy"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <com.simplemobiletools.commons.views.MyTextView
+                                    android:text="@string/enable_card_view_policy_title"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    style="@style/SettingsTitle" />
+                                <Switch
+                                    android:id="@+id/enableCardViewPolicySwitcher"
+                                    android:clickable="false"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                            </LinearLayout>
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="@string/enable_card_view_policy_summary"
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
                     </android.support.v7.widget.CardView>

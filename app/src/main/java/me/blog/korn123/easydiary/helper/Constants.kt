@@ -21,6 +21,7 @@ const val SETTING_FINGERPRINT_LOCK = "setting_fingerprint_lock"
 const val FINGERPRINT_ENCRYPT_DATA = "fingerprint_encrypt_data"
 const val FINGERPRINT_ENCRYPT_DATA_IV = "fingerprint_encrypt_data_iv"
 const val FINGERPRINT_AUTHENTICATION_FAIL_COUNT = "fingerprint_authentication_fail_count"
+const val ENABLE_CARD_VIEW_POLICY = "enable_card_view_policy"
 
 const val CUSTOM_FONTS_SUPPORT_LANGUAGE = "en|ko" // custom fonts supported language
 const val CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT = "NanumPen.ttf"

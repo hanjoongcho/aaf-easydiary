@@ -146,7 +146,12 @@ class SettingsActivity : EasyDiaryActivity() {
                 } else {
                     showAlertDialog(getString(R.string.fingerprint_not_available), null)
                 }
-            }   
+            }
+            R.id.enableCardViewPolicy -> {
+                enableCardViewPolicySwitcher.toggle()
+                config.enableCardViewPolicy = enableCardViewPolicySwitcher.isChecked
+                updateCardViewPolicy(main_holder)
+            }
         }
     }
     
@@ -180,6 +185,7 @@ class SettingsActivity : EasyDiaryActivity() {
         backupAttachPhoto.setOnClickListener(mOnClickListener)
         recoverAttachPhoto.setOnClickListener(mOnClickListener)
         fingerprint.setOnClickListener(mOnClickListener)
+        enableCardViewPolicy.setOnClickListener(mOnClickListener)
 
         fontLineSpacing.configBuilder
                 .min(0.2F)
@@ -385,6 +391,7 @@ class SettingsActivity : EasyDiaryActivity() {
         boldStyleOptionSwitcher.isChecked = config.boldStyleEnable
         multiPickerOptionSwitcher.isChecked = config.multiPickerEnable
         fingerprintSwitcher.isChecked = config.fingerprintLockEnable
+        enableCardViewPolicySwitcher.isChecked = config.enableCardViewPolicy
     }
 
     private fun getStoreUrl() = "https://play.google.com/store/apps/details?id=$packageName"

@@ -272,4 +272,6 @@
     <string name="pin_verification_fail">PIN 검증에 실패했습니다.</string>
     <string name="change_pin_lock_mode">PIN 잠금모드로 변경</string>
     <string name="diary_creation_time_disable_message">시간정보 없음</string>
+    <string name="enable_card_view_policy_title">카드뷰 디자인 최적화</string>
+    <string name="enable_card_view_policy_summary">카드뷰 디자인을 디바이스에 맞춰 최적화합니다.</string>
 </resources>
