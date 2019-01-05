@@ -78,33 +78,35 @@ class PostCardActivity : EasyDiaryActivity() {
             setTextColor(it.getInt(POSTCARD_TEXT_COLOR, POSTCARD_TEXT_COLOR_VALUE))
         }
 
-        diaryDto.photoUris?.let {
-            if (/*resources.configuration.orientation == ORIENTATION_PORTRAIT && */it.size > 0) {
-                photoContainer.visibility = View.VISIBLE
-                mPhotoAdapter = PhotoAdapter(this, it)
+        Handler().post {
+            diaryDto.photoUris?.let {
+                if (/*resources.configuration.orientation == ORIENTATION_PORTRAIT && */it.size > 0) {
+                    photoContainer.visibility = View.VISIBLE
+                    mPhotoAdapter = PhotoAdapter(this, it)
 
-                photoGrid.run {
-                    layoutManager = FlexboxLayoutManager(this@PostCardActivity).apply {
-                        flexWrap = FlexWrap.WRAP
-                        flexDirection = mPhotoAdapter.getFlexDirection()
-                        alignItems = AlignItems.STRETCH
-                    }
-                    adapter = mPhotoAdapter
-                    
-                    when (resources.configuration.orientation == ORIENTATION_PORTRAIT) {
-                        true -> {
-                            when (it.size) {
-                                1, 3, 4, 5, 6 -> layoutParams.height = CommonUtils.getDefaultDisplay(this@PostCardActivity).x
-                                2 -> layoutParams.height = CommonUtils.getDefaultDisplay(this@PostCardActivity).x / 2
-                                else -> layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-                            }        
+                    photoGrid.run {
+                        layoutManager = FlexboxLayoutManager(this@PostCardActivity).apply {
+                            flexWrap = FlexWrap.WRAP
+                            flexDirection = mPhotoAdapter.getFlexDirection()
+                            alignItems = AlignItems.STRETCH
                         }
-                        false -> {
-                            val height = CommonUtils.getDefaultDisplay(this@PostCardActivity).y - actionBarHeight() - statusBarHeight()
-                            when (it.size) {
-                                1, 3, 4, 5, 6 -> layoutParams.width = height
-                                2 -> layoutParams.width = height / 2
-                                else -> layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT
+                        adapter = mPhotoAdapter
+
+                        when (resources.configuration.orientation == ORIENTATION_PORTRAIT) {
+                            true -> {
+                                when (it.size) {
+                                    1, 3, 4, 5, 6 -> layoutParams.height = CommonUtils.getDefaultDisplay(this@PostCardActivity).x
+                                    2 -> layoutParams.height = CommonUtils.getDefaultDisplay(this@PostCardActivity).x / 2
+                                    else -> layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                                }
+                            }
+                            false -> {
+                                val height = CommonUtils.getDefaultDisplay(this@PostCardActivity).y - actionBarHeight() - statusBarHeight() - seekBarContainer.height
+                                when (it.size) {
+                                    1, 3, 4, 5, 6 -> layoutParams.width = height
+                                    2 -> layoutParams.width = height / 2
+                                    else -> layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT
+                                }
                             }
                         }
                     }
@@ -117,6 +119,7 @@ class PostCardActivity : EasyDiaryActivity() {
                 override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                     mAddFontSize = progress - 20
                     updateTextSize(postContainer, this@PostCardActivity, mAddFontSize)
+                    toolbar.title = "${seekBarContainer.height}"
                 }
 
                 override fun onStartTrackingTouch(seekBar: SeekBar?) {
