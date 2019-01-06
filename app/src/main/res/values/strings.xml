@@ -203,6 +203,11 @@
         v1.4.67 / 2019.01.01\n
         Improved the ability to view attached photos on the postcard screen
     </string>
+    <string name="release_131">
+        v1.4.68 / 2019.01.06\n
+        Solved security considerations for some items that are reported with low confidence in Sophos vaccine(Notification listener, Trigger installation)\n
+        Add Postcard font size adjustment function
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
