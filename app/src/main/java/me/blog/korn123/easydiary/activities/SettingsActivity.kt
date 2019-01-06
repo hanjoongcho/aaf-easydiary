@@ -95,8 +95,6 @@ class SettingsActivity : EasyDiaryActivity() {
                 licenseIntent.putExtra(BaseWebViewActivity.OPEN_URL_INFO, "https://github.com/hanjoongcho/aaf-easydiary/blob/master/LICENSE.md")
                 startActivity(licenseIntent)
             }
-            R.id.easyPhotoMap -> openGooglePlayBy("me.blog.korn123.easyphotomap")
-            R.id.easyPassword -> openGooglePlayBy("io.github.hanjoongcho.easypassword")
             R.id.releaseNotes -> checkWhatsNewDialog(false)
             R.id.boldStyleOption -> {
                 boldStyleOptionSwitcher.toggle()
@@ -148,7 +146,12 @@ class SettingsActivity : EasyDiaryActivity() {
                 } else {
                     showAlertDialog(getString(R.string.fingerprint_not_available), null)
                 }
-            }   
+            }
+            R.id.enableCardViewPolicy -> {
+                enableCardViewPolicySwitcher.toggle()
+                config.enableCardViewPolicy = enableCardViewPolicySwitcher.isChecked
+                updateCardViewPolicy(main_holder)
+            }
         }
     }
     
@@ -175,8 +178,6 @@ class SettingsActivity : EasyDiaryActivity() {
         backupSetting.setOnClickListener(mOnClickListener)
         rateAppSetting.setOnClickListener(mOnClickListener)
         licenseView.setOnClickListener(mOnClickListener)
-        easyPhotoMap.setOnClickListener(mOnClickListener)
-        easyPassword.setOnClickListener(mOnClickListener)
         restorePhotoSetting.setOnClickListener(mOnClickListener)
         releaseNotes.setOnClickListener(mOnClickListener)
         boldStyleOption.setOnClickListener(mOnClickListener)
@@ -184,6 +185,7 @@ class SettingsActivity : EasyDiaryActivity() {
         backupAttachPhoto.setOnClickListener(mOnClickListener)
         recoverAttachPhoto.setOnClickListener(mOnClickListener)
         fingerprint.setOnClickListener(mOnClickListener)
+        enableCardViewPolicy.setOnClickListener(mOnClickListener)
 
         fontLineSpacing.configBuilder
                 .min(0.2F)
@@ -389,6 +391,7 @@ class SettingsActivity : EasyDiaryActivity() {
         boldStyleOptionSwitcher.isChecked = config.boldStyleEnable
         multiPickerOptionSwitcher.isChecked = config.multiPickerEnable
         fingerprintSwitcher.isChecked = config.fingerprintLockEnable
+        enableCardViewPolicySwitcher.isChecked = config.enableCardViewPolicy
     }
 
     private fun getStoreUrl() = "https://play.google.com/store/apps/details?id=$packageName"

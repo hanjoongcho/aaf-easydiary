@@ -8,10 +8,7 @@ import io.github.aafactory.commons.extensions.updateTextColors
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.extensions.checkWhatsNew
-import me.blog.korn123.easydiary.extensions.initTextSize
-import me.blog.korn123.easydiary.extensions.pauseLock
-import me.blog.korn123.easydiary.extensions.resumeLock
+import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.APP_BACKGROUND_ALPHA
 
 /**
@@ -43,6 +40,7 @@ open class EasyDiaryActivity : BaseSimpleActivity() {
             initTextSize(it, this)
             updateTextColors(it)
             updateAppViews(it)
+            updateCardViewPolicy(it)
         }
         FontUtils.setFontsTypeface(applicationContext, assets, null, findViewById<ViewGroup>(android.R.id.content), mCustomLineSpacing)
     }
@@ -52,6 +50,7 @@ open class EasyDiaryActivity : BaseSimpleActivity() {
 
     fun checkWhatsNewDialog(applyFilter: Boolean = true) {
         arrayListOf<Release>().apply {
+            add(Release(131, R.string.release_131))
             add(Release(130, R.string.release_130))
             add(Release(128, R.string.release_128))
             add(Release(126, R.string.release_126))

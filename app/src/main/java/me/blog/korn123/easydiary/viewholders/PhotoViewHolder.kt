@@ -8,6 +8,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.request.RequestOptions
 import io.github.aafactory.commons.utils.CommonUtils
+import kotlinx.android.synthetic.main.activity_post_card.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.actionBarHeight
 import me.blog.korn123.easydiary.extensions.statusBarHeight
@@ -21,7 +22,7 @@ class PhotoViewHolder(
     
     internal fun bindTo(photoPath: String, position: Int) {
         val point =  CommonUtils.getDefaultDisplay(activity)
-        val height = point.y - activity.actionBarHeight() - activity.statusBarHeight()
+        val height = point.y - activity.actionBarHeight() - activity.statusBarHeight() - activity.seekBarContainer.height
         val size = if (point.x > point.y) height else point.x
                 
         when (itemCount) {

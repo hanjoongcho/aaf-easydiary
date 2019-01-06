@@ -64,7 +64,9 @@ dependencies {
     
     // google
     implementation "com.google.android.gms:play-services-drive:$versions.gms"
+    implementation "com.google.android.gms:play-services-auth:$versions.gms"
     implementation 'com.google.android:flexbox:1.0.0'
+    implementation "com.google.code.gson:gson:2.8.5"
 
     // jetbrains
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
@@ -72,10 +74,7 @@ dependencies {
     // apache commons
     implementation "commons-io:commons-io:2.6"
     implementation "org.apache.commons:commons-lang3:3.7"
-
-    implementation 'com.simplemobiletools:commons:3.17.19'
-//    implementation project(":commons")
-    implementation 'io.github.aafactory:commons:0.9.4'
+    implementation 'io.github.aafactory:commons:0.9.6'
 //    implementation project(":aafactory-commons")
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.1'
     implementation group: 'com.roomorama', name: 'caldroid', version: '3.0.1'

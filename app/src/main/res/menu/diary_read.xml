@@ -2,16 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/zoomIn"
-        android:icon="@drawable/plus_w"
-        android:orderInCategory="100"
-        android:title="@string/zoom_in"
-        app:showAsAction="always" />
-    <item
         android:id="@+id/zoomOut"
-        android:icon="@drawable/minus_w"
+        android:icon="@drawable/decrease_font"
         android:orderInCategory="100"
         android:title="@string/zoom_out"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/zoomIn"
+        android:icon="@drawable/increase_font"
+        android:orderInCategory="100"
+        android:title="@string/zoom_in"
         app:showAsAction="always" />
     <item
         android:id="@+id/edit"

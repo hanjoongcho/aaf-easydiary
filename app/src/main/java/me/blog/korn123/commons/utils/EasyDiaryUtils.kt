@@ -1,12 +1,10 @@
 package me.blog.korn123.commons.utils
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Color
-import android.graphics.Typeface
+import android.graphics.*
 import android.net.Uri
 import android.os.Environment
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.text.SpannableString
 import android.text.Spanned
@@ -22,6 +20,7 @@ import id.zelory.compressor.Compressor
 import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.CALCULATION
 import io.github.aafactory.commons.utils.CommonUtils
+import kotlinx.android.synthetic.main.activity_post_card.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.SecondItemAdapter
 import me.blog.korn123.easydiary.extensions.checkPermission
@@ -224,5 +223,12 @@ object EasyDiaryUtils {
     fun downSamplingImage(context: Context, srcFile: File, destFile: File) {
         val compressedFile = Compressor(context).setQuality(70).compressToFile(srcFile)
         FileUtils.copyFile(compressedFile, destFile)
+    }
+
+    fun changeDrawableIconColor(context: Context, color: Int, resourceId: Int) {
+        ContextCompat.getDrawable(context, resourceId)?.apply {
+            setColorFilter(color, PorterDuff.Mode.SRC_IN)
+//            increaseFont.setImageDrawable(this)
+        }
     }
 }

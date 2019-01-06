@@ -75,4 +75,8 @@ class Config(context: Context) : BaseConfig(context) {
     var fingerprintAuthenticationFailCount: Int
         get() = prefs.getInt(FINGERPRINT_AUTHENTICATION_FAIL_COUNT, 0)
         set(fingerprintAuthenticationFailCount) = prefs.edit().putInt(FINGERPRINT_AUTHENTICATION_FAIL_COUNT, fingerprintAuthenticationFailCount).apply()
+
+    var enableCardViewPolicy: Boolean
+        get() = prefs.getBoolean(ENABLE_CARD_VIEW_POLICY, false)
+        set(enableCardViewPolicy) = prefs.edit().putBoolean(ENABLE_CARD_VIEW_POLICY, enableCardViewPolicy).apply()
 }

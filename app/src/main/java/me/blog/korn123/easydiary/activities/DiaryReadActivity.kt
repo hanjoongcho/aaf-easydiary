@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.activities
 import android.annotation.TargetApi
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
@@ -37,6 +38,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.showAlertDialog
+import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
@@ -322,14 +324,18 @@ class DiaryReadActivity : EasyDiaryActivity() {
 
         override fun onResume() {
             super.onResume()
-            mRootView?.let {
-                context?.updateTextColors(it,0,0)
-                context?.updateAppViews(it)
+            mRootView.let {
+                context?.run {
+                    updateTextColors(it,0,0)
+                    updateAppViews(it)
+                    updateCardViewPolicy(it)
+                }
             }
             initContents()
             initBottomContainer()
             setFontsTypeface()
             setFontsSize()
+
         }
 
         override fun onDestroy() {

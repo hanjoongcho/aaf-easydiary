@@ -203,6 +203,11 @@
         v1.4.67 / 2019.01.01\n
         Improved the ability to view attached photos on the postcard screen
     </string>
+    <string name="release_131">
+        v1.4.68 / 2019.01.06\n
+        Solved security considerations for some items that are reported with low confidence in Sophos vaccine(Notification listener, Trigger installation)\n
+        Add Postcard font size adjustment function
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -272,4 +277,6 @@
     <string name="pin_verification_fail">PIN verification failed.</string>
     <string name="change_pin_lock_mode">Changing to PIN lock mode</string>
     <string name="diary_creation_time_disable_message">No time information</string>
+    <string name="enable_card_view_policy_title">Optimize card view design</string>
+    <string name="enable_card_view_policy_summary">Optimize the card view design for device.</string>
 </resources>

@@ -203,6 +203,11 @@
         v1.4.67 / 2019.01.01\n
         はがき画面に添付写真を表示する機能を改善しました
     </string>
+    <string name="release_131">
+        v1.4.68 / 2019.01.06\n
+        ソフォスのワクチンに対する信頼性が低いと報告されているいくつかの項目に関するセキュリティ上の考慮事項の解決(Notification listener, Trigger installation)\n
+        はがきフォントサイズ調整機能追加
+    </string>
     
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -272,4 +277,6 @@
     <string name="pin_verification_fail">PINの確認に失敗しました。</string>
     <string name="change_pin_lock_mode">PINロックモードに切り替える</string>
     <string name="diary_creation_time_disable_message">時間情報なし</string>
+    <string name="enable_card_view_policy_title">カードビューの設計を最適化</string>
+    <string name="enable_card_view_policy_summary">カードビューのデザインをデバイスに合わせて最適化されます。</string>
 </resources>

@@ -203,6 +203,11 @@
         v1.4.67 / 2019.01.01\n
         포스트카드 화면에서 첨부된 사진을 볼 수 있도록 기능 개선
     </string>
+    <string name="release_131">
+        v1.4.68 / 2019.01.06\n
+        소포스 백신에서 낮은 신뢰도로 리포팅되는 일부 항목에 대한 보안 고려사항을 해결(Notification listener, Trigger installation)\n
+        포스트카드 폰트크기 변경기능 추가
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -272,4 +277,6 @@
     <string name="pin_verification_fail">PIN 검증에 실패했습니다.</string>
     <string name="change_pin_lock_mode">PIN 잠금모드로 변경</string>
     <string name="diary_creation_time_disable_message">시간정보 없음</string>
+    <string name="enable_card_view_policy_title">카드뷰 디자인 최적화</string>
+    <string name="enable_card_view_policy_summary">카드뷰 디자인을 디바이스에 맞춰 최적화합니다.</string>
 </resources>

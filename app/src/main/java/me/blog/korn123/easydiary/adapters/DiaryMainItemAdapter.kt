@@ -4,6 +4,7 @@ import android.app.Activity
 import android.graphics.drawable.GradientDrawable
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.ColorUtils
+import android.support.v7.widget.CardView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
@@ -21,6 +22,7 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
 import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
@@ -123,7 +125,18 @@ class DiaryMainItemAdapter(
                 holder.photoViews.addView(imageView)
             }
         }
-        
+
+        val cardView = holder.item_holder?.getChildAt(0)
+        if (cardView is CardView) {
+            if (activity.config.enableCardViewPolicy) {
+                cardView.useCompatPadding = true
+                cardView.cardElevation = CommonUtils.dpToPixelFloatValue(activity, 2F)
+            } else {
+                cardView.useCompatPadding = false
+                cardView.cardElevation = 0F
+            }
+        }
+
         return row
     }
 
