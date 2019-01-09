@@ -288,7 +288,8 @@ class DiaryMainActivity : EasyDiaryActivity() {
             override fun afterTextChanged(editable: Editable) {}
         })
 
-        clearQuery.setOnClickListener { _ -> query.setText(null) }
+//        clearQuery.setOnClickListener { _ -> query.setText(null) }
+        clearQuery.setOnClickListener { _ -> startActivity(Intent(this, FlexibleToolbarActivity::class.java)) }
 
         diaryList.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
             val diaryDto = adapterView.adapter.getItem(i) as DiaryDto

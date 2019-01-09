@@ -1,0 +1,27 @@
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+        
+        <com.github.ksoichiro.android.observablescrollview.ObservableListView
+            android:layout_marginTop="?attr/actionBarSize"
+            android:fastScrollAlwaysVisible="false"
+            android:fastScrollEnabled="true"
+            android:dividerHeight="@dimen/card_layout_margin"
+            android:divider="@null"
+            android:id="@+id/diaryList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </com.github.ksoichiro.android.observablescrollview.ObservableListView>
+    </FrameLayout>
+
