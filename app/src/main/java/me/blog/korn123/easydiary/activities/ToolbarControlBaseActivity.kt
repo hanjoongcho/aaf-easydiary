@@ -17,19 +17,16 @@
 package me.blog.korn123.easydiary.activities
 
 import android.os.Bundle
-import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
-import android.widget.LinearLayout
-
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks
 import com.github.ksoichiro.android.observablescrollview.ScrollState
 import com.github.ksoichiro.android.observablescrollview.Scrollable
 import com.nineoldandroids.animation.ValueAnimator
 import com.nineoldandroids.view.ViewHelper
 import kotlinx.android.synthetic.main.activity_flexible_toolbar.*
-import me.blog.korn123.easydiary.R
+
 
 abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(), ObservableScrollViewCallbacks {
 
@@ -42,7 +39,7 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
         setSupportActionBar(toolbar)
 
         mScrollable = createScrollable()
-        mScrollable!!.setScrollViewCallbacks(this)
+        mScrollable?.setScrollViewCallbacks(this)
     }
 
     protected abstract fun createScrollable(): S
@@ -67,36 +64,34 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
     protected abstract fun getLayoutResId(): Int
 
     private fun toolbarIsShown(): Boolean {
-        return ViewHelper.getTranslationY(searchCard).toInt() == 0
+        return ViewHelper.getTranslationY(toolbar).toInt() == 0
     }
 
     private fun toolbarIsHidden(): Boolean {
-        return ViewHelper.getTranslationY(searchCard).toInt() == -searchCard!!.height
+        return ViewHelper.getTranslationY(toolbar).toInt() == -toolbar.height
     }
 
     private fun showToolbar() {
-        moveToolbar(searchCard.height.toFloat())
+        moveToolbar(0F)
     }
 
     private fun hideToolbar() {
-        moveToolbar((-searchCard!!.height).toFloat())
+        moveToolbar(-toolbar.height.toFloat())
     }
 
     private fun moveToolbar(toTranslationY: Float) {
-        if (ViewHelper.getTranslationY(searchCard) === toTranslationY) {
+        if (ViewHelper.getTranslationY(toolbar) == toTranslationY) {
             return
         }
-        val animator = ValueAnimator.ofFloat(ViewHelper.getTranslationY(searchCard), toTranslationY).setDuration(200)
-        animator.addUpdateListener(object : ValueAnimator.AnimatorUpdateListener {
-            override fun onAnimationUpdate(animation: ValueAnimator) {
-                val translationY = animation.getAnimatedValue() as Float
-                ViewHelper.setTranslationY(searchCard, translationY)
-                ViewHelper.setTranslationY(mScrollable as View?, translationY)
-                val lp = (mScrollable as View).layoutParams as LinearLayout.LayoutParams
-                lp.height = (-translationY).toInt() + getScreenHeight() - lp.topMargin
-                (mScrollable as View).requestLayout()
-            }
-        })
+        val animator = ValueAnimator.ofFloat(ViewHelper.getTranslationY(toolbar), toTranslationY).setDuration(100)
+        animator.addUpdateListener { animation ->
+            val translationY = animation.animatedValue as Float
+            ViewHelper.setTranslationY(toolbar, translationY)
+            ViewHelper.setTranslationY(contentsContainer as View?, translationY)
+            val lp = (contentsContainer as View).layoutParams as FrameLayout.LayoutParams
+            lp.height = (-translationY).toInt() + getScreenHeight()
+            (contentsContainer as View).requestLayout()
+        }
         animator.start()
     }
 

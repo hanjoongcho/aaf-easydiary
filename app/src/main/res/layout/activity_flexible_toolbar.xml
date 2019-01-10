@@ -15,6 +15,7 @@
         app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     <LinearLayout
+        android:id="@+id/contentsContainer"
         android:layout_marginTop="?attr/actionBarSize"
         android:orientation="vertical"
         android:layout_width="match_parent"
