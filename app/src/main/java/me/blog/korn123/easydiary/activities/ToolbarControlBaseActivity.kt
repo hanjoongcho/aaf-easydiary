@@ -64,11 +64,11 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
     protected abstract fun getLayoutResId(): Int
 
     private fun toolbarIsShown(): Boolean {
-        return ViewHelper.getTranslationY(toolbar).toInt() == 0
+        return ViewHelper.getTranslationY(appBar).toInt() == 0
     }
 
     private fun toolbarIsHidden(): Boolean {
-        return ViewHelper.getTranslationY(toolbar).toInt() == -toolbar.height
+        return ViewHelper.getTranslationY(appBar).toInt() == -appBar.height
     }
 
     private fun showToolbar() {
@@ -76,17 +76,17 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
     }
 
     private fun hideToolbar() {
-        moveToolbar(-toolbar.height.toFloat())
+        moveToolbar(-appBar.height.toFloat())
     }
 
     private fun moveToolbar(toTranslationY: Float) {
-        if (ViewHelper.getTranslationY(toolbar) == toTranslationY) {
+        if (ViewHelper.getTranslationY(appBar) == toTranslationY) {
             return
         }
-        val animator = ValueAnimator.ofFloat(ViewHelper.getTranslationY(toolbar), toTranslationY).setDuration(100)
+        val animator = ValueAnimator.ofFloat(ViewHelper.getTranslationY(appBar), toTranslationY).setDuration(200)
         animator.addUpdateListener { animation ->
             val translationY = animation.animatedValue as Float
-            ViewHelper.setTranslationY(toolbar, translationY)
+            ViewHelper.setTranslationY(appBar, translationY)
             ViewHelper.setTranslationY(contentsContainer as View?, translationY)
             val lp = (contentsContainer as View).layoutParams as FrameLayout.LayoutParams
             lp.height = (-translationY).toInt() + getScreenHeight()
