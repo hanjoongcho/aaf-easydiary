@@ -20,8 +20,9 @@
     </android.support.design.widget.AppBarLayout>
 
     <LinearLayout
-        android:id="@+id/contentsContainer"
+        android:id="@+id/main_holder"
         android:layout_marginTop="?attr/actionBarSize"
+        android:padding="@dimen/card_layout_padding"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
