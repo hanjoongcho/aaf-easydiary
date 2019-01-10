@@ -2,9 +2,9 @@ package me.blog.korn123.easydiary.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.WindowManager
 import android.widget.AbsListView
-import android.widget.ArrayAdapter
-import android.widget.ListView
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.ksoichiro.android.observablescrollview.ObservableListView
 import kotlinx.android.synthetic.main.activity_flexible_toolbar.*
@@ -58,6 +58,16 @@ class FlexibleToolbarActivity : ToolbarControlBaseActivity<ObservableListView>()
             mDiaryMainItemAdapter = DiaryMainItemAdapter(this, R.layout.item_diary_main, it)
         }
         diaryList.adapter = mDiaryMainItemAdapter
+    }
+
+    override fun onResume() {
+        super.onResume()
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.diary_main, menu)
+        return true
     }
     
 //    protected fun setDummyData(listView: ListView, num: Int) {

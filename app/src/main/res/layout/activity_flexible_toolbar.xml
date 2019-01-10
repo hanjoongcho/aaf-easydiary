@@ -54,6 +54,7 @@
         </android.support.v7.widget.CardView>
 
         <com.github.ksoichiro.android.observablescrollview.ObservableListView
+            android:layout_marginTop="@dimen/card_layout_padding"
             android:fastScrollAlwaysVisible="false"
             android:fastScrollEnabled="true"
             android:dividerHeight="@dimen/card_layout_margin"
