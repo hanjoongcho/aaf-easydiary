@@ -299,7 +299,7 @@ class DiaryMainActivity : EasyDiaryActivity() {
             TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, detailIntent)
         }
 
-        modalContainer.setOnTouchListener({ _, _ -> true })
+        modalContainer.setOnTouchListener { _, _ -> true }
 
         insertDiaryButton.setOnClickListener({ _ ->
             val createDiary = Intent(this@DiaryMainActivity, DiaryInsertActivity::class.java)
