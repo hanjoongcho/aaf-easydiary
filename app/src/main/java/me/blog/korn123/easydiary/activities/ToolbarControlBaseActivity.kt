@@ -25,7 +25,10 @@ import com.github.ksoichiro.android.observablescrollview.ScrollState
 import com.github.ksoichiro.android.observablescrollview.Scrollable
 import com.nineoldandroids.animation.ValueAnimator
 import com.nineoldandroids.view.ViewHelper
+import io.github.aafactory.commons.utils.CommonUtils
 import kotlinx.android.synthetic.main.activity_flexible_toolbar.*
+import me.blog.korn123.easydiary.extensions.actionBarHeight
+import me.blog.korn123.easydiary.extensions.statusBarHeight
 
 
 abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(), ObservableScrollViewCallbacks {
@@ -50,13 +53,15 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
 
     override fun onUpOrCancelMotionEvent(scrollState: ScrollState) {
         Log.e("DEBUG", "onUpOrCancelMotionEvent: $scrollState")
-        if (scrollState == ScrollState.UP) {
-            if (toolbarIsShown()) {
-                hideToolbar()
-            }
-        } else if (scrollState == ScrollState.DOWN) {
-            if (toolbarIsHidden()) {
-                showToolbar()
+        if (!keypadIsShown()) {
+            if (scrollState == ScrollState.UP) {
+                if (toolbarIsShown()) {
+                    hideToolbar()
+                }
+            } else if (scrollState == ScrollState.DOWN) {
+                if (toolbarIsHidden()) {
+                    showToolbar()
+                }
             }
         }
     }
@@ -95,7 +100,19 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
         animator.start()
     }
 
-    protected fun getScreenHeight(): Int {
+    private fun getScreenHeight(): Int {
         return findViewById<View>(android.R.id.content).height
+    }
+
+    private fun keypadIsShown(): Boolean {
+        var isShow = false
+        val rootView = findViewById<View>(android.R.id.content)
+        val heightDiff = rootView.rootView.height - rootView.height
+        if (heightDiff > CommonUtils.dpToPixel(this, 200F)) {
+            isShow = true
+        }
+        Log.i("keypadIsShown", "$heightDiff, ${CommonUtils.dpToPixel(this, 200F)}")
+
+        return isShow
     }
 }
