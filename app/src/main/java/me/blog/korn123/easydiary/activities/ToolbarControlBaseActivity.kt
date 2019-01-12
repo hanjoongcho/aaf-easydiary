@@ -26,9 +26,7 @@ import com.github.ksoichiro.android.observablescrollview.Scrollable
 import com.nineoldandroids.animation.ValueAnimator
 import com.nineoldandroids.view.ViewHelper
 import io.github.aafactory.commons.utils.CommonUtils
-import kotlinx.android.synthetic.main.activity_flexible_toolbar.*
-import me.blog.korn123.easydiary.extensions.actionBarHeight
-import me.blog.korn123.easydiary.extensions.statusBarHeight
+import kotlinx.android.synthetic.main.activity_diary_main.*
 
 
 abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(), ObservableScrollViewCallbacks {

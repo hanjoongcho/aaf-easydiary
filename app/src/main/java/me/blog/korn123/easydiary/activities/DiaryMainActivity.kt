@@ -13,10 +13,12 @@ import android.support.v4.app.ActivityCompat
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
+import android.widget.AbsListView
 import android.widget.AdapterView
 import android.widget.RelativeLayout
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
+import com.github.ksoichiro.android.observablescrollview.ObservableListView
 import io.github.aafactory.commons.utils.CommonUtils
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_diary_main.*
@@ -35,7 +37,7 @@ import java.util.*
  * Created by CHO HANJOONG on 2017-03-16.
  */
 
-class DiaryMainActivity : EasyDiaryActivity() {
+class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     private var mRecognizerIntent: Intent? = null
 
     private var mCurrentTimeMillis: Long = 0
@@ -48,9 +50,24 @@ class DiaryMainActivity : EasyDiaryActivity() {
 
     private var mShowcaseView: ShowcaseView? = null
 
+    override fun getLayoutResId(): Int {
+        return R.layout.activity_diary_main
+    }
+
+    override fun createScrollable(): ObservableListView {
+        // ObservableListView uses setOnScrollListener, but it still works.
+        diaryListView.setOnScrollListener(object : AbsListView.OnScrollListener {
+            override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
+            }
+
+            override fun onScroll(view: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
+            }
+        })
+        return diaryListView
+    }
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_diary_main)
 
         // android marshmallow minor version bug workaround
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
@@ -77,7 +94,7 @@ class DiaryMainActivity : EasyDiaryActivity() {
         mDiaryList?.let {
             mDiaryMainItemAdapter = DiaryMainItemAdapter(this, R.layout.item_diary_main, it)
         }
-        diaryList.adapter = mDiaryMainItemAdapter
+        diaryListView.adapter = mDiaryMainItemAdapter
 
         if (!config.isInitDummyData) {
             initSampleData()
@@ -101,7 +118,7 @@ class DiaryMainActivity : EasyDiaryActivity() {
         
         val previousActivity = config.previousActivity
         if (previousActivity == PREVIOUS_ACTIVITY_CREATE) {
-            diaryList.smoothScrollToPosition(0)
+            diaryListView.smoothScrollToPosition(0)
             //            mDiaryListView.setSelection(0);
             config.previousActivity = -1
         }
@@ -238,7 +255,7 @@ class DiaryMainActivity : EasyDiaryActivity() {
                     }
                     1 -> {
                         setButtonPosition(centerParams)
-                        setShowcase(ViewTarget(diaryList), true)
+                        setShowcase(ViewTarget(diaryListView), true)
                         setContentTitle(getString(R.string.read_diary_showcase_title_8))
                         setContentText(getString(R.string.read_diary_showcase_message_8))
                     }
@@ -290,10 +307,9 @@ class DiaryMainActivity : EasyDiaryActivity() {
             override fun afterTextChanged(editable: Editable) {}
         })
 
-//        clearQuery.setOnClickListener { _ -> query.setText(null) }
-        clearQuery.setOnClickListener { _ -> startActivity(Intent(this, FlexibleToolbarActivity::class.java)) }
+        clearQuery.setOnClickListener { _ -> query.setText(null) }
 
-        diaryList.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
+        diaryListView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
             val diaryDto = adapterView.adapter.getItem(i) as DiaryDto
             val detailIntent = Intent(this@DiaryMainActivity, DiaryReadActivity::class.java)
             detailIntent.putExtra(DIARY_SEQUENCE, diaryDto.sequence)
