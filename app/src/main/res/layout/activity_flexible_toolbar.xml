@@ -42,15 +42,14 @@
                 android:imeOptions="actionDone"
                 android:maxLines="1" />
 
-            <com.simplemobiletools.commons.views.MyTextView
+            <ImageView
                 android:id="@+id/clearQuery"
-                android:text="X"
+                android:src="@drawable/delete_2"
                 android:layout_gravity="right|center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:padding="3dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
         </android.support.v7.widget.CardView>
 
         <com.github.ksoichiro.android.observablescrollview.ObservableListView

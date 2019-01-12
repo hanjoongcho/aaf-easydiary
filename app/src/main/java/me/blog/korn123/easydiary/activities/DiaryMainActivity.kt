@@ -84,6 +84,8 @@ class DiaryMainActivity : EasyDiaryActivity() {
             config.isInitDummyData = true
         }
 
+        EasyDiaryUtils.changeDrawableIconColor(this, config.textColor, R.drawable.delete_2)
+
         bindEvent()
         initShowcase()
         EasyDiaryUtils.initWorkingDirectory(this@DiaryMainActivity)
