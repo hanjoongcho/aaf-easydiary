@@ -94,7 +94,7 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
             ViewHelper.setTranslationY(appBar, translationY)
             ViewHelper.setTranslationY(main_holder as View?, translationY)
             val lp = (main_holder as View).layoutParams as FrameLayout.LayoutParams
-            lp.height = (-translationY).toInt() + getScreenHeight()
+            lp.height = (-translationY).toInt() + getScreenHeight() - lp.topMargin
             (main_holder as View).requestLayout()
         }
         animator.start()

@@ -21,6 +21,7 @@
 
     <LinearLayout
         android:id="@+id/main_holder"
+        android:padding="@dimen/card_layout_padding"
         android:layout_marginTop="?attr/actionBarSize"
         android:orientation="vertical"
         android:layout_width="match_parent"
