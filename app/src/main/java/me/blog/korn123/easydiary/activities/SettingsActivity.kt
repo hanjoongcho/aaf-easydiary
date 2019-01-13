@@ -152,6 +152,14 @@ class SettingsActivity : EasyDiaryActivity() {
                 config.enableCardViewPolicy = enableCardViewPolicySwitcher.isChecked
                 updateCardViewPolicy(main_holder)
             }
+            R.id.decreaseFont -> {
+                config.settingFontSize = config.settingFontSize - 5
+                initTextSize(main_holder, this)
+            }
+            R.id.increaseFont -> {
+                config.settingFontSize = config.settingFontSize + 5
+                initTextSize(main_holder, this)
+            }
         }
     }
     
@@ -165,6 +173,8 @@ class SettingsActivity : EasyDiaryActivity() {
         }
 
         bindEvent()
+        EasyDiaryUtils.changeDrawableIconColor(this, config.textColor, R.drawable.increase_font)
+        EasyDiaryUtils.changeDrawableIconColor(this, config.textColor, R.drawable.decrease_font)
     }
 
     private fun bindEvent() {
@@ -186,6 +196,8 @@ class SettingsActivity : EasyDiaryActivity() {
         recoverAttachPhoto.setOnClickListener(mOnClickListener)
         fingerprint.setOnClickListener(mOnClickListener)
         enableCardViewPolicy.setOnClickListener(mOnClickListener)
+        decreaseFont.setOnClickListener(mOnClickListener)
+        increaseFont.setOnClickListener(mOnClickListener)
 
         fontLineSpacing.configBuilder
                 .min(0.2F)

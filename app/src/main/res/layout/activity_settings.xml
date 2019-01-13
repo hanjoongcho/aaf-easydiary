@@ -80,6 +80,42 @@
                     </android.support.v7.widget.CardView>
 
                     <android.support.v7.widget.CardView
+                        android:id="@+id/fontSize"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="Font size"
+                                style="@style/SettingsTitle" />
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <ImageView
+                                    android:id="@+id/decreaseFont"
+                                    android:src="@drawable/decrease_font"
+                                    android:padding="3dp"
+                                    android:background="?attr/selectableItemBackgroundBorderless"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                                <com.simplemobiletools.commons.views.MyTextView
+                                    android:gravity="center"
+                                    android:width="0dp"
+                                    android:layout_weight="1"
+                                    android:text="abcdefgABCDEFG"
+                                    style="@style/SettingsSummary" />
+                                <ImageView
+                                    android:id="@+id/increaseFont"
+                                    android:src="@drawable/increase_font"
+                                    android:padding="3dp"
+                                    android:background="?attr/selectableItemBackgroundBorderless"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
                         android:id="@+id/addTtfFontSetting"
                         style="@style/AppCard.Settings">
                         <LinearLayout
