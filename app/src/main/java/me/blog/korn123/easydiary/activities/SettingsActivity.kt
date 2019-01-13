@@ -173,8 +173,8 @@ class SettingsActivity : EasyDiaryActivity() {
         }
 
         bindEvent()
-        EasyDiaryUtils.changeDrawableIconColor(this, config.textColor, R.drawable.increase_font)
-        EasyDiaryUtils.changeDrawableIconColor(this, config.textColor, R.drawable.decrease_font)
+        EasyDiaryUtils.changeDrawableIconColor(this, config.primaryColor, R.drawable.minus_6)
+        EasyDiaryUtils.changeDrawableIconColor(this, config.primaryColor, R.drawable.plus_6)
     }
 
     private fun bindEvent() {

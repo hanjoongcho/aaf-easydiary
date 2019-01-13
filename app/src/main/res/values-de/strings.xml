@@ -279,4 +279,6 @@
     <string name="diary_creation_time_disable_message">No time information</string>
     <string name="enable_card_view_policy_title">Optimize card view design</string>
     <string name="enable_card_view_policy_summary">Optimize the card view design for device.</string>
+    <string name="font_size_title">폰트크기 설정</string>
+    <string name="font_size_summary">폰트의 크기를 줄이거나 확대합니다.</string>
 </resources>
