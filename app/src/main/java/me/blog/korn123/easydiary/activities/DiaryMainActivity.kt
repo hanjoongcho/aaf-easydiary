@@ -101,7 +101,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             config.isInitDummyData = true
         }
 
-        EasyDiaryUtils.changeDrawableIconColor(this, config.textColor, R.drawable.delete_2)
+        EasyDiaryUtils.changeDrawableIconColor(this, config.textColor, R.drawable.delete)
 
         bindEvent()
         initShowcase()

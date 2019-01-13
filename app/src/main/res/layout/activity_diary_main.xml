@@ -44,7 +44,7 @@
 
             <ImageView
                 android:id="@+id/clearQuery"
-                android:src="@drawable/delete_2"
+                android:src="@drawable/delete"
                 android:layout_gravity="right|center_vertical"
                 android:padding="3dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
