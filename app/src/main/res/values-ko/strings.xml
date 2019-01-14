@@ -208,6 +208,10 @@
         소포스 백신에서 낮은 신뢰도로 리포팅되는 일부 항목에 대한 보안 고려사항을 해결(Notification listener, Trigger installation)\n
         포스트카드 폰트크기 변경기능 추가
     </string>
+    <string name="release_132">
+        v1.4.69 / 2019.01.15\n
+        사용자경험(UX) 최적화
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
