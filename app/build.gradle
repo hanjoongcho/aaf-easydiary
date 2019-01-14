@@ -18,6 +18,9 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
+
+        renderscriptTargetApi 18
+        renderscriptSupportModeEnabled true
     }
     
     buildTypes {
@@ -87,6 +90,7 @@ dependencies {
     implementation 'com.werb.pickphotoview:pickphotoview:0.4.6'
     implementation 'com.github.ksoichiro:android-observablescrollview:1.5.2'
     implementation 'com.nineoldandroids:library:2.4.0'
+    implementation 'com.qhutch.elevationimageview:elevationimageview:2.3'
 
     // debug, release
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$LEAK_CANARY_VERSION"
