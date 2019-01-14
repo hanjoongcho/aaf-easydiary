@@ -6,6 +6,7 @@ import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.net.Uri
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
@@ -16,6 +17,9 @@ import io.github.aafactory.commons.activities.BaseSimpleActivity
 import me.blog.korn123.easydiary.activities.FingerprintLockActivity
 import me.blog.korn123.easydiary.activities.PinLockActivity
 import me.blog.korn123.easydiary.dialogs.WhatsNewDialog
+import android.view.Display
+
+
 
 /**
  * Created by CHO HANJOONG on 2018-02-10.
@@ -113,10 +117,18 @@ fun Activity.makeSnackBar(message: String) {
             .setAction("Action", null).show()
 }
 
-fun Activity.setScreenOrientationSensor(disableSensor: Boolean) {
-    requestedOrientation = when (disableSensor) {
-        true -> ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
-        false -> ActivityInfo.SCREEN_ORIENTATION_SENSOR
+//fun Activity.setScreenOrientationSensor(disableSensor: Boolean) {
+//    requestedOrientation = when (disableSensor) {
+//        true -> ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
+//        false -> ActivityInfo.SCREEN_ORIENTATION_SENSOR
+//    }
+//}
+
+fun Activity.holdCurrentOrientation() {
+    val orientation = resources.configuration.orientation
+    when (orientation) {
+        Configuration.ORIENTATION_PORTRAIT -> requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        Configuration.ORIENTATION_LANDSCAPE -> requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
     }
 }
 
