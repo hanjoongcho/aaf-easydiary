@@ -11,8 +11,8 @@ import kotlinx.android.synthetic.main.activity_pin_lock.*
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.holdCurrentOrientation
 import me.blog.korn123.easydiary.extensions.pauseLock
-import me.blog.korn123.easydiary.extensions.setScreenOrientationSensor
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 
 
@@ -84,7 +84,7 @@ class PinLockActivity : BaseSimpleActivity() {
 
             when (activityMode) {
                 ACTIVITY_SETTING -> {
-                    setScreenOrientationSensor(true)
+                    holdCurrentOrientation()
                     showAlertDialog(getString(R.string.pin_setting_complete), DialogInterface.OnClickListener { _, _ ->
                         config.aafPinLockEnable = true
                         config.aafPinLockSavedPassword = fullPassword
@@ -103,7 +103,7 @@ class PinLockActivity : BaseSimpleActivity() {
 //                            mPasswordView.map { 
 //                                it?.text = null
 //                            }
-                            setScreenOrientationSensor(true)
+                            holdCurrentOrientation()
                             showAlertDialog(getString(R.string.pin_verification_fail), DialogInterface.OnClickListener { _, _ ->
                                 onBackPressed()
                             }, false)

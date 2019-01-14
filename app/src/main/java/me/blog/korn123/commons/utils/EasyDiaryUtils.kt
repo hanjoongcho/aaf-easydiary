@@ -228,7 +228,6 @@ object EasyDiaryUtils {
     fun changeDrawableIconColor(context: Context, color: Int, resourceId: Int) {
         ContextCompat.getDrawable(context, resourceId)?.apply {
             setColorFilter(color, PorterDuff.Mode.SRC_IN)
-//            increaseFont.setImageDrawable(this)
         }
     }
 }

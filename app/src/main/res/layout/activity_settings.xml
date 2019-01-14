@@ -80,6 +80,46 @@
                     </android.support.v7.widget.CardView>
 
                     <android.support.v7.widget.CardView
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="@string/font_size_title"
+                                style="@style/SettingsTitle" />
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <com.simplemobiletools.commons.views.MyTextView
+                                    android:paddingRight="6dp"
+                                    android:width="0dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/font_size_summary"
+                                    style="@style/SettingsSummary" />
+
+                                <com.qhutch.elevationimageview.ElevationImageView
+                                    android:id="@+id/decreaseFont"
+                                    android:src="@drawable/minus_6"
+                                    app:compatEvelation="5dp"
+                                    android:layout_marginRight="6dp"
+                                    android:padding="3dp"
+                                    android:background="?attr/selectableItemBackgroundBorderless"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+
+                                <com.qhutch.elevationimageview.ElevationImageView
+                                    android:id="@+id/increaseFont"
+                                    android:src="@drawable/plus_6"
+                                    app:compatEvelation="5dp"
+                                    android:padding="3dp"
+                                    android:background="?attr/selectableItemBackgroundBorderless"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
                         android:id="@+id/addTtfFontSetting"
                         style="@style/AppCard.Settings">
                         <LinearLayout

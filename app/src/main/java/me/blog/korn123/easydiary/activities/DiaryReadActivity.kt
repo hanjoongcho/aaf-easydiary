@@ -113,14 +113,6 @@ class DiaryReadActivity : EasyDiaryActivity() {
                     //                finish();
                     //                this.overridePendingTransition(R.anim.anim_left_to_center, R.anim.anim_center_to_right);
                     this.onBackPressed()
-                R.id.zoomIn -> {
-                    config.settingFontSize = fontSize + 5
-                    fragment.setFontsSize()
-                }
-                R.id.zoomOut -> {
-                    config.settingFontSize = fontSize - 5
-                    fragment.setFontsSize()
-                }
                 R.id.delete -> {
                     val positiveListener = DialogInterface.OnClickListener { dialogInterface, i ->
                         EasyDiaryDbHelper.deleteDiary(fragment.getSequence())
@@ -189,35 +181,23 @@ class DiaryReadActivity : EasyDiaryActivity() {
                     }
                     2 -> {
                         setButtonPosition(centerParams)
-                        setTarget(ViewTarget(R.id.zoomIn, this@DiaryReadActivity))
-                        setContentTitle(getString(R.string.create_diary_showcase_title_5))
-                        setContentText(getString(R.string.create_diary_showcase_message_5))
-                    }
-                    3 -> {
-                        setButtonPosition(centerParams)
-                        setTarget(ViewTarget(R.id.zoomOut, this@DiaryReadActivity))
-                        setContentTitle(getString(R.string.create_diary_showcase_title_6))
-                        setContentText(getString(R.string.create_diary_showcase_message_6))
-                    }
-                    4 -> {
-                        setButtonPosition(centerParams)
                         setTarget(ViewTarget(R.id.edit, this@DiaryReadActivity))
                         setContentTitle(getString(R.string.read_diary_detail_showcase_title_2))
                         setContentText(getString(R.string.read_diary_detail_showcase_message_2))
                     }
-                    5 -> {
+                    3 -> {
                         setButtonPosition(centerParams)
                         setTarget(ViewTarget(R.id.speechOutButton, this@DiaryReadActivity))
                         setContentTitle(getString(R.string.read_diary_detail_showcase_title_3))
                         setContentText(getString(R.string.read_diary_detail_showcase_message_3))
                     }
-                    6 -> {
+                    4 -> {
                         setButtonPosition(centerParams)
                         setTarget(ViewTarget(R.id.postCard, this@DiaryReadActivity))
                         setContentTitle(getString(R.string.read_diary_detail_showcase_title_4))
                         setContentText(getString(R.string.read_diary_detail_showcase_message_4))
                     }
-                    7 -> hide()
+                    5 -> hide()
                 }
             }
             mShowcaseIndex++
