@@ -4,8 +4,8 @@
 -keep class com.werb.** { *; }
 -dontwarn com.werb.**
 
--keep class com.qhutch.elevationimageview.** { *; }
--dontwarn com.qhutch.elevationimageview.**
+-keep class android.support.v8.renderscript.** { *; }
+-dontwarn android.support.v8.renderscript.**
 
 -keepattributes Signature
 -keepattributes Annotation
