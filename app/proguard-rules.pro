@@ -4,6 +4,9 @@
 -keep class com.werb.** { *; }
 -dontwarn com.werb.**
 
+-keep class com.qhutch.elevationimageview.** { *; }
+-dontwarn com.qhutch.elevationimageview.**
+
 -keepattributes Signature
 -keepattributes Annotation
 -keep class okhttp3.** { *; }
