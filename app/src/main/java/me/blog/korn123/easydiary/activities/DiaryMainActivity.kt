@@ -74,7 +74,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             Realm.init(this)
         }
 
-        // application finish 확인
+        // application finish 확인insertDiaryButton
         if (intent.getBooleanExtra(APP_FINISH_FLAG, false)) {
             finish()
         }

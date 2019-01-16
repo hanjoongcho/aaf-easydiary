@@ -19,6 +19,7 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.DIARY_SEARCH_QUERY
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.DiaryDto
 import java.util.*
 
@@ -48,6 +49,10 @@ class TimelineActivity : EasyDiaryActivity() {
         }
 
         setupTimelineSearch()
+        insertDiaryButton.setOnClickListener { _ ->
+            val createDiary = Intent(this@TimelineActivity, DiaryInsertActivity::class.java)
+            TransitionHelper.startActivityWithTransition(this@TimelineActivity, createDiary)
+        }
     }
 
     override fun onResume() {
