@@ -29,7 +29,7 @@ import java.util.*
 
 class TimelineActivity : EasyDiaryActivity() {
     private var mTimelineItemAdapter: TimelineItemAdapter? = null
-    private var mDiaryList: ArrayList<DiaryDto>? = null
+    private var mDiaryList: ArrayList<DiaryDto> = arrayListOf()
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,13 +40,8 @@ class TimelineActivity : EasyDiaryActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-        mDiaryList = EasyDiaryDbHelper.readDiary(null)
-        mDiaryList?.let {
-            Collections.reverse(it)
-            mTimelineItemAdapter = TimelineItemAdapter(this, R.layout.item_timeline, it)
-            timelineList.adapter = mTimelineItemAdapter
-            timelineList.setSelection(it.size - 1)
-        }
+        mTimelineItemAdapter = TimelineItemAdapter(this, R.layout.item_timeline, mDiaryList)
+        timelineList.adapter = mTimelineItemAdapter
 
         setupTimelineSearch()
         insertDiaryButton.setOnClickListener { _ ->
@@ -87,7 +82,7 @@ class TimelineActivity : EasyDiaryActivity() {
             startActivity(detailIntent)
         }
 
-        toggleToolBar.setOnClickListener({
+        toggleToolBar.setOnClickListener {
             toolbar.visibility = View.VISIBLE
             searchViewContainer.visibility = View.GONE
             val focusView = this.currentFocus
@@ -99,7 +94,7 @@ class TimelineActivity : EasyDiaryActivity() {
                     FontUtils.setFontsTypeface(applicationContext, assets, null, findViewById<ViewGroup>(android.R.id.content))
                 }
             }
-        })
+        }
 
         searchView.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {}
@@ -113,9 +108,12 @@ class TimelineActivity : EasyDiaryActivity() {
     }
     
     private fun refreshList(query: String?) {
-        mDiaryList?.clear()
-        mDiaryList?.addAll(EasyDiaryDbHelper.readDiary(query, config.diarySearchQueryCaseSensitive))
-        Collections.reverse(mDiaryList)
+        mDiaryList.run {
+            clear()
+            addAll(EasyDiaryDbHelper.readDiary(query, config.diarySearchQueryCaseSensitive))
+            reverse()
+        }
         mTimelineItemAdapter?.notifyDataSetChanged()
+        if (mDiaryList.size > 0) timelineList.setSelection(mDiaryList.size - 1)
     }
 }
