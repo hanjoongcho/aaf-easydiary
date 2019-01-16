@@ -4,8 +4,10 @@
 
 ---------------------------------------------------
 
-# Changes in 1.4.69 (date: 2019/01/15)
+# Changes in 1.4.69 (date: 2019/01/16)
   * User Experience (UX) Optimization
+  * Fixed an error that screen transition is not normal in Android 9 Pie version
+  * Add timeline diary creation button
 
 # Changes in 1.4.68 (date: 2019/01/06)
   * Solved security considerations for some items that are reported with low confidence in Sophos vaccine
