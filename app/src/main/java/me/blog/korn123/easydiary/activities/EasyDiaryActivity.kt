@@ -24,6 +24,7 @@ open class EasyDiaryActivity : BaseSimpleActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         pauseLock()
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }
     
     override fun onPause() {
