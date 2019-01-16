@@ -262,6 +262,7 @@ class SettingsActivity : EasyDiaryActivity() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        pauseLock()
         when (requestCode) {
             REQUEST_CODE_EXTERNAL_STORAGE -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                 when (mTaskFlag) {

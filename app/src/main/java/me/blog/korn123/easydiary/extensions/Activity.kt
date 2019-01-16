@@ -14,11 +14,10 @@ import android.util.TypedValue
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
 import io.github.aafactory.commons.activities.BaseSimpleActivity
+import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.FingerprintLockActivity
 import me.blog.korn123.easydiary.activities.PinLockActivity
 import me.blog.korn123.easydiary.dialogs.WhatsNewDialog
-import android.view.Display
-
 
 
 /**
@@ -148,4 +147,9 @@ fun Activity.statusBarHeight(): Int {
         statusBarHeight = resources.getDimensionPixelSize(resourceId)
     }
     return statusBarHeight
+}
+
+fun Activity.startActivityWithTransition(intent: Intent) {
+    startActivity(intent)
+    overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
 }
