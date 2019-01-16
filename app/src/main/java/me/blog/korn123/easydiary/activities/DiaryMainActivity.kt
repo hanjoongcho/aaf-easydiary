@@ -118,8 +118,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         
         val previousActivity = config.previousActivity
         if (previousActivity == PREVIOUS_ACTIVITY_CREATE) {
-            diaryListView.smoothScrollToPosition(0)
-            //            mDiaryListView.setSelection(0);
+//            diaryListView.smoothScrollToPosition(0)
+            diaryListView.setSelection(0)
             config.previousActivity = -1
         }
     }

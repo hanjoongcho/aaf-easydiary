@@ -3,12 +3,12 @@ package me.blog.korn123.easydiary.activities
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import kotlinx.android.synthetic.main.activity_timeline_diary.*
@@ -16,10 +16,7 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.TimelineItemAdapter
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.helper.DIARY_SEARCH_QUERY
-import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
-import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import java.util.*
 
@@ -30,6 +27,7 @@ import java.util.*
 class TimelineActivity : EasyDiaryActivity() {
     private var mTimelineItemAdapter: TimelineItemAdapter? = null
     private var mDiaryList: ArrayList<DiaryDto> = arrayListOf()
+    private var mReverseSelection = false
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +40,7 @@ class TimelineActivity : EasyDiaryActivity() {
 
         mTimelineItemAdapter = TimelineItemAdapter(this, R.layout.item_timeline, mDiaryList)
         timelineList.adapter = mTimelineItemAdapter
-
+        
         setupTimelineSearch()
         insertDiaryButton.setOnClickListener { _ ->
             val createDiary = Intent(this@TimelineActivity, DiaryInsertActivity::class.java)
@@ -53,6 +51,17 @@ class TimelineActivity : EasyDiaryActivity() {
     override fun onResume() {
         super.onResume()
         refreshList(searchView.text.toString())
+        
+        when {
+            config.previousActivity == PREVIOUS_ACTIVITY_CREATE -> {
+                moveListViewScrollToBottom()
+                config.previousActivity = -1
+            }
+            !mReverseSelection && mDiaryList.size > 0 -> {
+                moveListViewScrollToBottom()
+                mReverseSelection = true
+            }
+        }
     }
     
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -83,17 +92,16 @@ class TimelineActivity : EasyDiaryActivity() {
         }
 
         toggleToolBar.setOnClickListener {
-            toolbar.visibility = View.VISIBLE
-            searchViewContainer.visibility = View.GONE
-            val focusView = this.currentFocus
-            focusView?.let {
+            this.currentFocus?.let {focusView ->
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(it.windowToken, 0)
+                imm.hideSoftInputFromWindow(focusView.windowToken, 0)
                 supportActionBar?.run {
                     subtitle = searchView.text
-                    FontUtils.setFontsTypeface(applicationContext, assets, null, findViewById<ViewGroup>(android.R.id.content))
+                    FontUtils.setFontsTypeface(applicationContext, assets, null, findViewById(android.R.id.content))
                 }
             }
+            toolbar.visibility = View.VISIBLE
+            searchViewContainer.visibility = View.GONE
         }
 
         searchView.addTextChangedListener(object : TextWatcher {
@@ -103,17 +111,21 @@ class TimelineActivity : EasyDiaryActivity() {
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 refreshList(p0.toString())
+                moveListViewScrollToBottom()
             }
         })
     }
     
-    private fun refreshList(query: String?) {
+    private fun refreshList(query: String? = null) {
         mDiaryList.run {
             clear()
             addAll(EasyDiaryDbHelper.readDiary(query, config.diarySearchQueryCaseSensitive))
             reverse()
         }
         mTimelineItemAdapter?.notifyDataSetChanged()
-        if (mDiaryList.size > 0) timelineList.setSelection(mDiaryList.size - 1)
+    }
+    
+    private fun moveListViewScrollToBottom() {
+        Handler().post { timelineList.setSelection(mDiaryList.size - 1) }
     }
 }
