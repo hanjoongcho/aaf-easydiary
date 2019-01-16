@@ -4,6 +4,9 @@
 -keep class com.werb.** { *; }
 -dontwarn com.werb.**
 
+-keep class android.support.v8.renderscript.** { *; }
+-dontwarn android.support.v8.renderscript.**
+
 -keepattributes Signature
 -keepattributes Annotation
 -keep class okhttp3.** { *; }
