@@ -211,6 +211,7 @@
     <string name="release_132">
         v1.4.69 / 2019.01.16\n
         User Experience (UX) Optimization\n
+        Fixed an error that screen transition is not normal in Android 9 Pie version\n
         Add timeline diary creation button
     </string>
 
