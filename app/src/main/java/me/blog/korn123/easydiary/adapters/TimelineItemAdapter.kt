@@ -114,9 +114,19 @@ class TimelineItemAdapter(
         return spannableString
     }
     
-    private fun getSummary(diaryDto: DiaryDto): String? = when (StringUtils.isNotEmpty(diaryDto.title)) {
-        true -> diaryDto.title
-        false -> StringUtils.abbreviate(diaryDto.contents, 10)
+    private fun getSummary(diaryDto: DiaryDto): String? = when (context.config.boldStyleEnable) {
+        true -> {
+            when (StringUtils.isNotEmpty(diaryDto.title)) {
+                true -> diaryDto.title
+                false -> StringUtils.abbreviate(diaryDto.contents, 10)
+            }
+        }
+        false -> {
+            when (StringUtils.isNotEmpty(diaryDto.title)) {
+                true -> "${diaryDto.title}\n${diaryDto.contents}"
+                false -> "${diaryDto.contents}" 
+            }
+        }
     }
 
     private fun setFontsTypeface(holder: ViewHolder) {

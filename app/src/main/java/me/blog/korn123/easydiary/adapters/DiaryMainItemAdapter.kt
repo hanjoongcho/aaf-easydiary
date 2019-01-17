@@ -22,11 +22,9 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
-import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
 import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
-import java.util.*
 
 
 /**
@@ -135,6 +133,11 @@ class DiaryMainItemAdapter(
                 cardView.useCompatPadding = false
                 cardView.cardElevation = 0F
             }
+        }
+
+        holder.textView2?.maxLines = when (activity.config.boldStyleEnable) {
+            true -> 3
+            false -> Integer.MAX_VALUE
         }
 
         return row
