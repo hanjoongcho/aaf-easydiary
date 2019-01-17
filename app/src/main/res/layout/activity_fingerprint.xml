@@ -35,7 +35,7 @@
             android:id="@+id/changePinLock"
             android:padding="10dp"
             android:text="@string/change_pin_lock_mode"
-            android:background="?attr/selectableItemBackground"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:textColor="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

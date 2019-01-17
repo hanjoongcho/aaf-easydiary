@@ -14,6 +14,7 @@ import me.blog.korn123.easydiary.adapters.DiaryCalendarItemAdapter
 import me.blog.korn123.easydiary.fragments.CalendarFragment
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.DiaryDto
 import java.text.SimpleDateFormat
 import java.util.*
@@ -52,7 +53,7 @@ class CalendarActivity : EasyDiaryActivity() {
             detailIntent.putExtra("date", DateUtils.timeMillisToDateTime(diaryDto.currentTimeMillis, "yyyy-MM-dd HH:mm:ss"))
             detailIntent.putExtra("current_time_millis", diaryDto.currentTimeMillis)
             detailIntent.putExtra("weather", diaryDto.weather)
-            startActivity(detailIntent)
+            TransitionHelper.startActivityWithTransition(this@CalendarActivity, detailIntent)
         }
 
         // Setup caldroid fragment
