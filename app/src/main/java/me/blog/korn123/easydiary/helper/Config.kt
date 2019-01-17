@@ -79,4 +79,8 @@ class Config(context: Context) : BaseConfig(context) {
     var enableCardViewPolicy: Boolean
         get() = prefs.getBoolean(ENABLE_CARD_VIEW_POLICY, false)
         set(enableCardViewPolicy) = prefs.edit().putBoolean(ENABLE_CARD_VIEW_POLICY, enableCardViewPolicy).apply()
+    
+    var enableContentsSummary: Boolean
+        get() = prefs.getBoolean(SETTING_CONTENTS_SUMMARY, true)
+        set(enableContentsSummary) = prefs.edit().putBoolean(SETTING_CONTENTS_SUMMARY, enableContentsSummary).apply()
 }

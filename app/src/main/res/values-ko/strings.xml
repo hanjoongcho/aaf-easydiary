@@ -287,4 +287,6 @@
     <string name="enable_card_view_policy_summary">카드뷰 디자인을 디바이스에 맞춰 최적화합니다.</string>
     <string name="font_size_title">폰트크기 설정</string>
     <string name="font_size_summary">폰트의 크기를 줄이거나 확대합니다.</string>
+    <string name="contents_summary_title">다이어리 콘텐츠 요약</string>
+    <string name="contents_summary_description">캘린더, 타임라인, 검색 화면 등에서 제공하는 다이어리의 내용을 요약하여 표현합니다.</string>
 </resources>

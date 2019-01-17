@@ -135,7 +135,7 @@ class DiaryMainItemAdapter(
             }
         }
 
-        holder.textView2?.maxLines = when (activity.config.boldStyleEnable) {
+        holder.textView2?.maxLines = when (activity.config.enableContentsSummary) {
             true -> 3
             false -> Integer.MAX_VALUE
         }
