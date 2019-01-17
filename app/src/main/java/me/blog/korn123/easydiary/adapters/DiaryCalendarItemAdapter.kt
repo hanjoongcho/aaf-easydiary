@@ -13,6 +13,7 @@ import io.github.aafactory.commons.extensions.updateTextColors
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
@@ -45,11 +46,25 @@ class DiaryCalendarItemAdapter(
         setFontsTypeface(holder)
 
         val diaryDto = list[position]
-        if (StringUtils.isNotEmpty(diaryDto.title)) {
-            holder.textView1?.text = diaryDto.title
-        } else {
-            holder.textView1?.text = StringUtils.abbreviate(diaryDto.contents, 10)
+        holder.textView1?.run {
+            when (context.config.enableContentsSummary) {
+                true -> {
+                    text = when (StringUtils.isNotEmpty(diaryDto.title)) {
+                        true -> diaryDto.title
+                        false -> StringUtils.abbreviate(diaryDto.contents, 10)
+                    }
+                    maxLines = 1
+                }
+                false -> {
+                    text = when (StringUtils.isNotEmpty(diaryDto.title)) {
+                        true -> "${diaryDto.title}\n${diaryDto.contents}"
+                        false -> "${diaryDto.contents}"
+                    }
+                    maxLines = Integer.MAX_VALUE
+                }
+            }
         }
+
 
         EasyDiaryUtils.initWeatherView(holder.imageView, diaryDto.weather)
         holder.item_holder?.let {
