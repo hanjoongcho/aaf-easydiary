@@ -88,7 +88,7 @@ class TimelineActivity : EasyDiaryActivity() {
             val detailIntent = Intent(this@TimelineActivity, DiaryReadActivity::class.java)
             detailIntent.putExtra(DIARY_SEQUENCE, diaryDto.sequence)
             detailIntent.putExtra(DIARY_SEARCH_QUERY, searchView.text.toString())
-            startActivity(detailIntent)
+            TransitionHelper.startActivityWithTransition(this@TimelineActivity, detailIntent)
         }
 
         toggleToolBar.setOnClickListener {

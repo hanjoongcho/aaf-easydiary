@@ -214,6 +214,10 @@
         Fixed an error that screen transition is not normal in Android 9 Pie version\n
         Add timeline diary creation button
     </string>
+    <string name="release_133">
+        v1.4.70 / 2019.01.18\n
+        Added option to view summary of diary content
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -285,6 +289,8 @@
     <string name="diary_creation_time_disable_message">No time information</string>
     <string name="enable_card_view_policy_title">Optimize card view design</string>
     <string name="enable_card_view_policy_summary">Optimize the card view design for device.</string>
-    <string name="font_size_title">폰트크기 설정</string>
-    <string name="font_size_summary">폰트의 크기를 줄이거나 확대합니다.</string>
+    <string name="font_size_title">Set font size</string>
+    <string name="font_size_summary">Reduce or enlarge font size.</string>
+    <string name="contents_summary_title">Diary content summary</string>
+    <string name="contents_summary_description">Summarize the contents of the diary provided in the calendar, timeline, search screen, and so on.</string>
 </resources>

@@ -160,6 +160,10 @@ class SettingsActivity : EasyDiaryActivity() {
                 config.settingFontSize = config.settingFontSize + 5
                 initTextSize(main_holder, this)
             }
+            R.id.contentsSummary -> {
+                contentsSummarySwitcher.toggle()
+                config.enableContentsSummary = contentsSummarySwitcher.isChecked 
+            }
         }
     }
     
@@ -198,6 +202,7 @@ class SettingsActivity : EasyDiaryActivity() {
         enableCardViewPolicy.setOnClickListener(mOnClickListener)
         decreaseFont.setOnClickListener(mOnClickListener)
         increaseFont.setOnClickListener(mOnClickListener)
+        contentsSummary.setOnClickListener(mOnClickListener)
 
         fontLineSpacing.configBuilder
                 .min(0.2F)
@@ -405,6 +410,7 @@ class SettingsActivity : EasyDiaryActivity() {
         multiPickerOptionSwitcher.isChecked = config.multiPickerEnable
         fingerprintSwitcher.isChecked = config.fingerprintLockEnable
         enableCardViewPolicySwitcher.isChecked = config.enableCardViewPolicy
+        contentsSummarySwitcher.isChecked = config.enableContentsSummary
     }
 
     private fun getStoreUrl() = "https://play.google.com/store/apps/details?id=$packageName"

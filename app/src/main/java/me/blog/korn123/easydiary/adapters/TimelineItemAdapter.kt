@@ -3,6 +3,8 @@ package me.blog.korn123.easydiary.adapters
 import android.app.Activity
 import android.content.Context
 import android.graphics.Typeface
+import android.text.SpannableString
+import android.text.style.StyleSpan
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -15,14 +17,11 @@ import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
-import android.text.style.UnderlineSpan
-import android.text.SpannableString
-import android.text.style.StyleSpan
-import me.blog.korn123.easydiary.extensions.config
 
 
 /**
@@ -114,9 +113,19 @@ class TimelineItemAdapter(
         return spannableString
     }
     
-    private fun getSummary(diaryDto: DiaryDto): String? = when (StringUtils.isNotEmpty(diaryDto.title)) {
-        true -> diaryDto.title
-        false -> StringUtils.abbreviate(diaryDto.contents, 10)
+    private fun getSummary(diaryDto: DiaryDto): String? = when (context.config.enableContentsSummary) {
+        true -> {
+            when (StringUtils.isNotEmpty(diaryDto.title)) {
+                true -> diaryDto.title
+                false -> StringUtils.abbreviate(diaryDto.contents, 10)
+            }
+        }
+        false -> {
+            when (StringUtils.isNotEmpty(diaryDto.title)) {
+                true -> "${diaryDto.title}\n${diaryDto.contents}"
+                false -> "${diaryDto.contents}" 
+            }
+        }
     }
 
     private fun setFontsTypeface(holder: ViewHolder) {
