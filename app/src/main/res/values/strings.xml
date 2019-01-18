@@ -214,6 +214,10 @@
         Fixed an error that screen transition is not normal in Android 9 Pie version\n
         Add timeline diary creation button
     </string>
+    <string name="release_133">
+        v1.4.70 / 2019.01.18\n
+        Added option to view summary of diary content
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
