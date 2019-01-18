@@ -285,8 +285,8 @@
     <string name="diary_creation_time_disable_message">時間情報なし</string>
     <string name="enable_card_view_policy_title">カードビューの設計を最適化</string>
     <string name="enable_card_view_policy_summary">カードビューのデザインをデバイスに合わせて最適化されます。</string>
-    <string name="font_size_title">폰트크기 설정</string>
-    <string name="font_size_summary">폰트의 크기를 줄이거나 확대합니다.</string>
-    <string name="contents_summary_title">다이어리 콘텐츠 요약</string>
-    <string name="contents_summary_description">캘린더, 타임라인, 검색 화면 등에서 제공하는 다이어리의 내용을 요약하여 표현합니다.</string>
+    <string name="font_size_title">フォントサイズの設定</string>
+    <string name="font_size_summary">フォントのサイズを減らすか、または拡大します。</string>
+    <string name="contents_summary_title">ダイアリーはコンテンツの要約</string>
+    <string name="contents_summary_description">カレンダー、タイムライン、検索画面などで提供されるダイアリーの内容を要約して表現します。</string>
 </resources>
