@@ -116,7 +116,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 R.id.delete -> {
                     val positiveListener = DialogInterface.OnClickListener { dialogInterface, i ->
                         EasyDiaryDbHelper.deleteDiary(fragment.getSequence())
-                        finish()
+                        TransitionHelper.finishActivityWithTransition(this@DiaryReadActivity)
                     }
                     val negativeListener = DialogInterface.OnClickListener { dialogInterface, i -> }
                     showAlertDialog(getString(R.string.delete_confirm), positiveListener, negativeListener)
@@ -431,7 +431,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 val photoViewPager = Intent(context, PhotoViewPagerActivity::class.java)
                 photoViewPager.putExtra(DIARY_SEQUENCE, diarySequence)
                 photoViewPager.putExtra(DIARY_ATTACH_PHOTO_INDEX, index)
-                startActivity(photoViewPager)
+                TransitionHelper.startActivityWithTransition(activity, photoViewPager, TransitionHelper.BOTTOM_TO_TOP)
             }
         }
     }

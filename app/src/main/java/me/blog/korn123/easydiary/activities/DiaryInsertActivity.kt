@@ -12,7 +12,6 @@ import android.support.v4.graphics.ColorUtils
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
 import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -31,8 +30,6 @@ import kotlinx.android.synthetic.main.layout_edit_photo_container.*
 import kotlinx.android.synthetic.main.layout_edit_toolbar_sub.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.adapters.DiaryWeatherItemAdapter
-import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.pauseLock
@@ -70,7 +67,7 @@ class DiaryInsertActivity : EditActivity() {
             diaryDto.photoUris = mPhotoUris
             EasyDiaryDbHelper.insertDiary(diaryDto)
             config.previousActivity = PREVIOUS_ACTIVITY_CREATE
-            finish()
+            TransitionHelper.finishActivityWithTransition(this)
         }
     }
     

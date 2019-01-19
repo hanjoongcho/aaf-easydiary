@@ -5,6 +5,7 @@ import android.os.Handler
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
 import android.view.Gravity
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -17,6 +18,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.helper.DIARY_ATTACH_PHOTO_INDEX
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.DiaryDto
 
 /**
@@ -61,6 +63,13 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
 //        }
 
         if (photoIndex > 0) Handler().post{ view_pager.setCurrentItem(photoIndex, false) }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> TransitionHelper.finishActivityWithTransition(this, TransitionHelper.TOP_TO_BOTTOM)
+        }
+        return true
     }
 
     internal class SamplePagerAdapter(var diaryDto: DiaryDto) : PagerAdapter() {

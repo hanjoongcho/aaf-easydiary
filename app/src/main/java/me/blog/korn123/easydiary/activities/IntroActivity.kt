@@ -59,7 +59,7 @@ class IntroActivity : AppCompatActivity(), Handler.Callback {
     override fun handleMessage(message: Message): Boolean {
         when (message.what) {
             START_MAIN_ACTIVITY -> {
-                startActivity(Intent(this, DiaryMainActivity::class.java))
+                TransitionHelper.startActivityWithTransition(this, Intent(this, DiaryMainActivity::class.java))
                 finish()
             }
             else -> {}

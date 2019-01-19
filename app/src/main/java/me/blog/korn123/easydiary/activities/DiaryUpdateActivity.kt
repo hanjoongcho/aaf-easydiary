@@ -68,7 +68,7 @@ class DiaryUpdateActivity : EditActivity() {
                 applyRemoveIndex()
                 diaryDto.photoUris = mPhotoUris
                 EasyDiaryDbHelper.updateDiary(diaryDto)
-                finish()
+                TransitionHelper.finishActivityWithTransition(this)
             }
         }
     }
