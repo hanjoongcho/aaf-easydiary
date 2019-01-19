@@ -233,11 +233,14 @@ class DiaryUpdateActivity : EditActivity() {
                     View.VISIBLE -> {
                         photoContainerScrollView.visibility = View.GONE
                         togglePhoto.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.expand))
+                        supportActionBar?.hide()
                     }
                     View.GONE -> {
                         photoContainerScrollView.visibility = View.VISIBLE
                         togglePhoto.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.collapse))
+                        supportActionBar?.show()
                     }
+                    else -> {}
                 }
             }
         }
