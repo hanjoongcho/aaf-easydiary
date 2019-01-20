@@ -21,7 +21,7 @@
         </activity>
         <activity android:name=".activities.SettingsActivity" android:label="" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.CustomizationActivity" android:label="@string/customize_colors" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.WebViewActivity" android:label="Licenses" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.WebViewActivity" />
         <activity android:name="me.blog.korn123.easydiary.activities.DiaryInsertActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name="me.blog.korn123.easydiary.activities.DiaryReadActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name="me.blog.korn123.easydiary.activities.DiaryUpdateActivity" android:theme="@style/AppTheme.NoActionBar" />

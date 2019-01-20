@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.activities
 
+import android.view.WindowManager
 import android.webkit.WebView
 import io.github.aafactory.commons.activities.BaseWebViewActivity
 import me.blog.korn123.easydiary.R
@@ -20,5 +21,6 @@ class WebViewActivity : BaseWebViewActivity() {
         super.onResume()
         resumeLock()
         findViewById<WebView>(R.id.webView).settings.javaScriptEnabled = true
+        window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
     }
 }
