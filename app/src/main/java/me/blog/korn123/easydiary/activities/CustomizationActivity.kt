@@ -42,13 +42,6 @@ class CustomizationActivity : BaseCustomizationActivity() {
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> this.onBackPressed()
-        }
-        return true
-    }
-
     override fun getMainViewGroup(): ViewGroup? = findViewById<ViewGroup>(R.id.main_holder)
     override fun getBackgroundAlpha(): Int = APP_BACKGROUND_ALPHA
 }
