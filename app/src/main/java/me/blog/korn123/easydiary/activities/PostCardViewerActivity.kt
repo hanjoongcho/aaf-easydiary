@@ -76,15 +76,24 @@ class PostCardViewerActivity : EasyDiaryActivity() {
         initPostCard()
         toolbarImage.setColorFilter(ColorUtils.adjustAlpha(config.primaryColor, 0.5F))
         deletePostCard.setOnClickListener {
-            showAlertDialog(getString(R.string.delete_confirm),
-                    DialogInterface.OnClickListener { _, _ ->
-                        mListPostcard.forEachIndexed { _, item ->
-                            if (item.isItemChecked) FileUtils.forceDelete(item.file)
-                        }
-                        initPostCard()
-                    },
-                    null
-            )
+            val selectedItems = arrayListOf<PostCardViewerActivity.PostCard>()
+            mListPostcard.forEachIndexed { _, item ->
+                if (item.isItemChecked) selectedItems.add(item)
+            }
+            
+            when (selectedItems.size) {
+                0 -> showAlertDialog("No post card selected.", null)
+                else -> {
+                    showAlertDialog(getString(R.string.delete_confirm),
+                            DialogInterface.OnClickListener { _, _ ->
+                                selectedItems.forEachIndexed { _, item ->
+                                    FileUtils.forceDelete(item.file)
+                                }
+                                initPostCard()
+                            }
+                    )
+                }
+            }
         }
     }
 
