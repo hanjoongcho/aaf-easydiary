@@ -1,3 +1,5 @@
+-keep class me.blog.korn123.easydiary.** { *; }
+
 -keep class com.simplemobiletools.** { *; }
 -dontwarn com.simplemobiletools.**
 
