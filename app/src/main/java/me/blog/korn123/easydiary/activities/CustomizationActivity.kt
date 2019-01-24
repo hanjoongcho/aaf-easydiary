@@ -10,7 +10,6 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.resumeLock
 import me.blog.korn123.easydiary.helper.APP_BACKGROUND_ALPHA
-import me.blog.korn123.easydiary.helper.TransitionHelper
 
 /**
  * Created by CHO HANJOONG on 2018-02-06.
@@ -43,12 +42,11 @@ class CustomizationActivity : BaseCustomizationActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> this.onBackPressed()
-        }
+        super.onOptionsItemSelected(item)
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         return true
     }
-
+    
     override fun getMainViewGroup(): ViewGroup? = findViewById<ViewGroup>(R.id.main_holder)
     override fun getBackgroundAlpha(): Int = APP_BACKGROUND_ALPHA
 }
