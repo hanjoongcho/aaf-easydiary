@@ -5,7 +5,7 @@
 ---------------------------------------------------
 
 # Changes in 1.4.71 (date: 2019/01/26)
-  * Added option to view summary of diary content
+  * Fixed an error that the application terminated abnormally when changing device fingerprint information
 
 # Changes in 1.4.70 (date: 2019/01/25)
   * Added option to view summary of diary content
