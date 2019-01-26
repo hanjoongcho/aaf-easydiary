@@ -283,23 +283,24 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                 }
             }
             return true
-        } catch (e: KeyPermanentlyInvalidatedException) {
-            updateErrorMessage(e.message ?: "KeyPermanentlyInvalidatedException")
-            return false
-        } catch (e: KeyStoreException) {
-            throw RuntimeException("Failed to init Cipher", e)
-        } catch (e: CertificateException) {
-            throw RuntimeException("Failed to init Cipher", e)
-        } catch (e: UnrecoverableKeyException) {
-            throw RuntimeException("Failed to init Cipher", e)
-        } catch (e: IOException) {
-            throw RuntimeException("Failed to init Cipher", e)
-        } catch (e: NoSuchAlgorithmException) {
-            throw RuntimeException("Failed to init Cipher", e)
-        } catch (e: InvalidKeyException) {
-            throw RuntimeException("Failed to init Cipher", e)
+//        } catch (e: KeyPermanentlyInvalidatedException) {
+//            updateErrorMessage(e.message ?: "KeyPermanentlyInvalidatedException")
+//        } catch (e: KeyStoreException) {
+//            updateErrorMessage(e.message ?: "KeyStoreException")
+//        } catch (e: CertificateException) {
+//            updateErrorMessage(e.message ?: "CertificateException")
+//        } catch (e: UnrecoverableKeyException) {
+//            updateErrorMessage(e.message ?: "UnrecoverableKeyException")
+//        } catch (e: IOException) {
+//            updateErrorMessage(e.message ?: "IOException")
+//        } catch (e: NoSuchAlgorithmException) {
+//            updateErrorMessage(e.message ?: "NoSuchAlgorithmException")
+//        } catch (e: InvalidKeyException) {
+//            updateErrorMessage(e.message ?: "InvalidKeyException")
+        } catch (e: Exception) {
+            updateErrorMessage(getString(R.string.init_cipher_error_guide_message))
         }
-
+        return false
     }
 
     /**
