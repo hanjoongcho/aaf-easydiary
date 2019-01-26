@@ -218,6 +218,10 @@
         v1.4.70 / 2019.01.25\n
         다이어리 콘텐츠 요약 보기 옵션 추가
     </string>
+    <string name="release_134">
+        v1.4.71 / 2019.01.26\n
+        디바이스 지문정보 변경 시 애플리케이션 비정상 종료되는 오류 수정
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -293,4 +297,5 @@
     <string name="font_size_summary">폰트의 크기를 줄이거나 확대합니다.</string>
     <string name="contents_summary_title">다이어리 콘텐츠 요약</string>
     <string name="contents_summary_description">캘린더, 타임라인, 검색 화면 등에서 제공하는 다이어리의 내용을 요약하여 표현합니다.</string>
+    <string name="init_cipher_error_guide_message">디바이스의 지문정보가 변경되었습니다. 핀 잠금 모드로 변경하여 잠금을 해제하시고 지문인식 잠금을 해제 후 다시 설정하여 사용하세요.</string>
 </resources>

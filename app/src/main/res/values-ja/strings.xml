@@ -218,6 +218,10 @@
         v1.4.70 / 2019.01.25\n
         日記の内容の概要を表示するオプションを追加しました
     </string>
+    <string name="release_134">
+        v1.4.71 / 2019.01.26\n
+        デバイス指紋情報の変更時に、アプリケーションの異常終了するエラーを修正
+    </string>
     
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -293,4 +297,5 @@
     <string name="font_size_summary">フォントのサイズを減らすか、または拡大します。</string>
     <string name="contents_summary_title">ダイアリーはコンテンツの要約</string>
     <string name="contents_summary_description">カレンダー、タイムライン、検索画面などで提供されるダイアリーの内容を要約して表現します。</string>
+    <string name="init_cipher_error_guide_message">デバイスの指紋情報が変更されました。ピンロックモードに変更してロックを解除し、指紋のロックを解除した後、再設定して使用します。</string>
 </resources>
