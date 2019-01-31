@@ -24,6 +24,7 @@ android {
         applicationId "me.blog.korn123.easydiary"
         minSdkVersion MIN_SDK_VERSION
         targetSdkVersion versions.compileSdk
+        versionCode versions.publishVersionCode
         versionName versions.publishVersion
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true

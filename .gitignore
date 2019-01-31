@@ -1,5 +1,7 @@
 .idea/
 
+app/gms
+app/foss
 app/build
 app/*.apk
 app/*.iml
