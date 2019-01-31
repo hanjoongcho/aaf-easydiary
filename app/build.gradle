@@ -36,6 +36,7 @@ android {
     productFlavors {
         gms {
             dimension "release"
+            versionName "${versions.publishVersion}_gms"
             signingConfig signingConfigs.config
         }
         foss {
@@ -104,7 +105,7 @@ dependencies {
     implementation 'commons-io:commons-io:2.6'
     implementation 'org.apache.commons:commons-lang3:3.7'
     gmsImplementation 'io.github.aafactory:commons:0.9.6'
-    fossImplementation 'io.github.aafactory:commons:0.9.6'
+    fossImplementation 'io.github.aafactory:commons-foss:0.9.6'
 //    implementation project(":aafactory-commons")
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.1'
     implementation 'com.roomorama:caldroid:3.0.1'
