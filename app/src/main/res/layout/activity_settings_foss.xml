@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+        </android.support.design.widget.AppBarLayout>
+        
+        <ScrollView
+            android:id="@+id/main_holder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <io.github.aafactory.commons.views.LabelLayout
+                    android:layout_marginTop="5dp"
+                    android:background="?attr/colorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:text="@string/preferences_category_settings"
+                        style="@style/SettingsCategory" />
+                </io.github.aafactory.commons.views.LabelLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:padding="@dimen/card_layout_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/fontSetting"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="@string/font_setting"
+                                style="@style/SettingsTitle" />
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:id="@+id/fontSettingSummary"
+                                style="@style/SettingsSummary" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="@string/font_line_spacing"
+                                style="@style/SettingsTitle" />
+                            <com.xw.repo.BubbleSeekBar
+                                android:id="@+id/fontLineSpacing"
+                                app:bsb_track_color="?attr/colorPrimary"
+                                app:bsb_second_track_color="?attr/colorAccent"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="8dp"
+                                android:layout_marginTop="8dp"/>
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:id="@+id/fontLineSpacingSummary"
+                                android:text="@string/font_line_spacing_summary"
+                                style="@style/SettingsSummary" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="@string/font_size_title"
+                                style="@style/SettingsTitle" />
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <com.simplemobiletools.commons.views.MyTextView
+                                    android:paddingRight="6dp"
+                                    android:width="0dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/font_size_summary"
+                                    style="@style/SettingsSummary" />
+
+                                <com.qhutch.elevationimageview.ElevationImageView
+                                    android:id="@+id/decreaseFont"
+                                    android:src="@drawable/minus_6"
+                                    app:compatEvelation="5dp"
+                                    android:layout_marginRight="6dp"
+                                    android:padding="3dp"
+                                    android:background="?attr/selectableItemBackgroundBorderless"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+
+                                <com.qhutch.elevationimageview.ElevationImageView
+                                    android:id="@+id/increaseFont"
+                                    android:src="@drawable/plus_6"
+                                    app:compatEvelation="5dp"
+                                    android:padding="3dp"
+                                    android:background="?attr/selectableItemBackgroundBorderless"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/addTtfFontSetting"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="@string/add_ttf_fonts_title"
+                                style="@style/SettingsTitle" />
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="@string/add_ttf_fonts_summary"
+                                style="@style/SettingsSummary" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/primaryColor"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:id="@+id/primaryColorTitle"
+                                android:text="@string/setting_primary_color_title"
+                                style="@style/SettingsTitle" />
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:id="@+id/setting_primary_color_title"
+                                android:text="@string/setting_primary_color_summary"
+                                style="@style/SettingsSummary" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/thumbnailSetting"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="@string/thumbnail_setting_title"
+                                style="@style/SettingsTitle" />
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:id="@+id/thumbnailSettingSummary"
+                                android:text="@string/thumbnail_setting_summary"
+                                style="@style/SettingsSummary" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/contentsSummary"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <com.simplemobiletools.commons.views.MyTextView
+                                    android:text="@string/contents_summary_title"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    style="@style/SettingsTitle" />
+                                <Switch
+                                    android:id="@+id/contentsSummarySwitcher"
+                                    android:clickable="false"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                            </LinearLayout>
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="@string/contents_summary_description"
+                                style="@style/SettingsSummary" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+                    
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/enableCardViewPolicy"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <com.simplemobiletools.commons.views.MyTextView
+                                    android:text="@string/enable_card_view_policy_title"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    style="@style/SettingsTitle" />
+                                <Switch
+                                    android:id="@+id/enableCardViewPolicySwitcher"
+                                    android:clickable="false"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                            </LinearLayout>
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="@string/enable_card_view_policy_summary"
+                                style="@style/SettingsSummary" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/multiPickerOption"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <com.simplemobiletools.commons.views.MyTextView
+                                    android:text="@string/multi_picker_option_title"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    style="@style/SettingsTitle" />
+                                <Switch
+                                    android:id="@+id/multiPickerOptionSwitcher"
+                                    android:clickable="false"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                            </LinearLayout>
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="@string/multi_picker_option_summary"
+                                style="@style/SettingsSummary" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+                    
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/boldStyleOption"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <com.simplemobiletools.commons.views.MyTextView
+                                    android:text="@string/bold_style_option_title"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    style="@style/SettingsTitle" />
+                                <Switch
+                                    android:id="@+id/boldStyleOptionSwitcher"
+                                    android:clickable="false"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                            </LinearLayout>
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="@string/bold_style_option_summary"
+                                style="@style/SettingsSummary" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+                    
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/sensitiveOption"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <com.simplemobiletools.commons.views.MyTextView
+                                    android:text="@string/diary_search_keyword_case_sensitive_title"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    style="@style/SettingsTitle" />
+                                <Switch
+                                    android:id="@+id/sensitiveOptionSwitcher"
+                                    android:clickable="false"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                            </LinearLayout>
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="@string/diary_search_keyword_case_sensitive_summary"
+                                style="@style/SettingsSummary" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+                </LinearLayout>
+
+                <io.github.aafactory.commons.views.LabelLayout
+                    android:background="?attr/colorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:text="@string/preferences_category_lock"
+                        style="@style/SettingsCategory" />
+                </io.github.aafactory.commons.views.LabelLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:padding="@dimen/card_layout_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/appLockSetting"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <com.simplemobiletools.commons.views.MyTextView
+                                    android:text="@string/pin_lock_title"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    style="@style/SettingsTitle" />
+                                <Switch
+                                    android:id="@+id/appLockSettingSwitcher"
+                                    android:clickable="false"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                            </LinearLayout>
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="@string/pin_lock_summary"
+                                style="@style/SettingsSummary" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/fingerprint"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <com.simplemobiletools.commons.views.MyTextView
+                                    android:text="@string/fingerprint_lock_title"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    style="@style/SettingsTitle" />
+                                <Switch
+                                    android:id="@+id/fingerprintSwitcher"
+                                    android:clickable="false"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                            </LinearLayout>
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="@string/fingerprint_lock_summary"
+                                style="@style/SettingsSummary" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+                </LinearLayout>
+                
+                <io.github.aafactory.commons.views.LabelLayout
+                    android:background="?attr/colorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:text="@string/preferences_category_information"
+                        style="@style/SettingsCategory" />
+                </io.github.aafactory.commons.views.LabelLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:padding="@dimen/card_layout_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/rateAppSetting"
+                        android:orientation="vertical"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="@string/rate_app"
+                                style="@style/SettingsTitle" />
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:id="@+id/rateAppSettingSummary"
+                                android:text=""
+                                style="@style/SettingsSummary" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/invite"
+                        android:orientation="vertical"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+
+                            <com.simplemobiletools.commons.views.MyTextView
+                                style="@style/SettingsTitle"
+                                android:text="@string/invite_friends" />
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:id="@+id/inviteSummary"
+                                style="@style/SettingsSummary" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/releaseNotes"
+                        android:orientation="vertical"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="@string/release_notes_title"
+                                style="@style/SettingsTitle" />
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="@string/release_notes_summary"
+                                style="@style/SettingsSummary" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+                    
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/licenseView"
+                        android:orientation="vertical"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="@string/preferences_information_licenses"
+                                style="@style/SettingsTitle" />
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="@string/preferences_information_licenses_summary"
+                                style="@style/SettingsSummary" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>
