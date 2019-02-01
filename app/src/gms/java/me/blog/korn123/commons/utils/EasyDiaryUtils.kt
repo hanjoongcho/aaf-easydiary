@@ -62,7 +62,7 @@ object EasyDiaryUtils {
         if (!workingDirectory.exists()) workingDirectory.mkdirs()
     }
 
-    fun initWeatherView(imageView: ImageView?, weatherFlag: Int, isShowEmptyWeatherView: Boolean = false) {
+    fun initWeatherView(context: Context, imageView: ImageView?, weatherFlag: Int, isShowEmptyWeatherView: Boolean = false) {
         imageView?.run { 
             if (!isShowEmptyWeatherView && weatherFlag < 1) {
                 visibility = View.GONE

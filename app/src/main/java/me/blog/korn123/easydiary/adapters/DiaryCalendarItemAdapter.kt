@@ -66,7 +66,7 @@ class DiaryCalendarItemAdapter(
         }
 
 
-        EasyDiaryUtils.initWeatherView(holder.imageView, diaryDto.weather)
+        EasyDiaryUtils.initWeatherView(context, holder.imageView, diaryDto.weather)
         holder.item_holder?.let {
             context.updateTextColors(it, 0, 0)
             context.updateAppViews(it)

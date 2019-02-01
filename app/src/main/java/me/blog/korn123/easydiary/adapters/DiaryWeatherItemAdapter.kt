@@ -44,7 +44,7 @@ class DiaryWeatherItemAdapter(
         }
 
         FontUtils.setFontsTypeface(context, context.assets, null, holder.item_holder)
-        EasyDiaryUtils.initWeatherView(holder.imageView1, position, true)
+        EasyDiaryUtils.initWeatherView(context, holder.imageView1, position, true)
         holder.textView1?.let {
             it.text = mList[position]
             context.initTextSize(it, context)

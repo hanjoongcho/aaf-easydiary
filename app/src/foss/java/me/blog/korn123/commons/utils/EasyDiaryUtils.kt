@@ -62,7 +62,13 @@ object EasyDiaryUtils {
         if (!workingDirectory.exists()) workingDirectory.mkdirs()
     }
 
-    fun initWeatherView(imageView: ImageView?, weatherFlag: Int, isShowEmptyWeatherView: Boolean = false) {
+    fun initWeatherView(context: Context, imageView: ImageView?, weatherFlag: Int, isShowEmptyWeatherView: Boolean = false) {
+        changeDrawableIconColor(context, context.config.textColor, R.drawable.ic_sunny)
+        changeDrawableIconColor(context, context.config.textColor, R.drawable.ic_clouds_and_sun)
+        changeDrawableIconColor(context, context.config.textColor, R.drawable.ic_raindrops)
+        changeDrawableIconColor(context, context.config.textColor, R.drawable.ic_bolt)
+        changeDrawableIconColor(context, context.config.textColor, R.drawable.ic_snowing)
+        
         imageView?.run { 
             if (!isShowEmptyWeatherView && weatherFlag < 1) {
                 visibility = View.GONE
