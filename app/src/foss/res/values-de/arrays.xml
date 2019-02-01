@@ -1,0 +1,17 @@
+<resources>
+    <string-array name="weather_item_array">
+        <item>Wetter</item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+    </string-array>
+
+    <string-array name="pref_list_fonts_title">
+        <item>Standard</item>
+    </string-array>
+    <string-array name="pref_list_fonts_values">
+        <item>Default</item>
+    </string-array>
+</resources>
