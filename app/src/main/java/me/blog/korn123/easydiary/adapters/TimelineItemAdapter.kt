@@ -81,7 +81,7 @@ class TimelineItemAdapter(
                 for (temp in mDiaryList) {
                     if (temp.weather > 0) {
                         initWeather = true
-                        EasyDiaryUtils.initWeatherView(context, holder.weather, temp.weather)
+                        EasyDiaryUtils.initWeatherView(context, holder.weather, temp.weather, false, true)
                         break
                     }
                 }

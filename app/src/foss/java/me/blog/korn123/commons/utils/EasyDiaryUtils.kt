@@ -62,12 +62,16 @@ object EasyDiaryUtils {
         if (!workingDirectory.exists()) workingDirectory.mkdirs()
     }
 
-    fun initWeatherView(context: Context, imageView: ImageView?, weatherFlag: Int, isShowEmptyWeatherView: Boolean = false) {
-        changeDrawableIconColor(context, context.config.textColor, R.drawable.ic_sunny)
-        changeDrawableIconColor(context, context.config.textColor, R.drawable.ic_clouds_and_sun)
-        changeDrawableIconColor(context, context.config.textColor, R.drawable.ic_raindrops)
-        changeDrawableIconColor(context, context.config.textColor, R.drawable.ic_bolt)
-        changeDrawableIconColor(context, context.config.textColor, R.drawable.ic_snowing)
+    fun initWeatherView(context: Context, imageView: ImageView?, weatherFlag: Int, isShowEmptyWeatherView: Boolean = false, applyWhiteFilter: Boolean = false) {
+        val filterColor = when (applyWhiteFilter) {
+            true -> ContextCompat.getColor(context, android.R.color.white)
+            false -> context.config.textColor
+        }
+        changeDrawableIconColor(context, filterColor, R.drawable.ic_sunny)
+        changeDrawableIconColor(context, filterColor, R.drawable.ic_clouds_and_sun)
+        changeDrawableIconColor(context, filterColor, R.drawable.ic_raindrops)
+        changeDrawableIconColor(context, filterColor, R.drawable.ic_bolt)
+        changeDrawableIconColor(context, filterColor, R.drawable.ic_snowing)
         
         imageView?.run { 
             if (!isShowEmptyWeatherView && weatherFlag < 1) {
