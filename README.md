@@ -10,7 +10,8 @@
 This is a diary application optimized to user experience.
 
 <a href='https://play.google.com/store/apps/details?id=me.blog.korn123.easydiary'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="258" height="98"/></a>
-
+<a href='https://f-droid.org/en/packages/me.blog.korn123.easydiary'><img alt='Get it on F-Droid' src='screenshots/fdroid.png' height="98"/></a>
+     
 <img src="screenshots/00.jpg">&nbsp;
 <img src="screenshots/showcase_en.gif" width="288" height="512">
 
