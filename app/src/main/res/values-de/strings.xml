@@ -222,6 +222,10 @@
         v1.4.71 / 2019.01.26\n
         Fixed an error that the application terminated abnormally when changing device fingerprint information
     </string>
+    <string name="release_136">
+        v1.4.73 / 2019.02.08\n
+        Improved the ability to correct input digits when PIN is set and unlocked
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->

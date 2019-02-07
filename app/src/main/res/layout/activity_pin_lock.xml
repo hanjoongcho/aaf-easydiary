@@ -126,6 +126,8 @@
                 android:text="0" />
             <TextView
                 style="@style/text_view_lock_number_button"
+                android:id="@+id/delete"
+                android:text="←"
                 android:layout_marginRight="0dp"/>
         </LinearLayout>
     </LinearLayout>
