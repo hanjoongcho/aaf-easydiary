@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.73 (date: 2019/02/11)
+  * Improved the ability to correct input digits when PIN is set and unlocked
+
 # Changes in 1.4.71 (date: 2019/01/26)
   * Fixed an error that the application terminated abnormally when changing device fingerprint information
 
