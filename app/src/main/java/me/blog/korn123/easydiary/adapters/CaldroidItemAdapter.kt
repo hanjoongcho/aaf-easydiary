@@ -113,7 +113,7 @@ class CaldroidItemAdapter(
             for (diaryDto in mDiaryList) {
                 if (diaryDto.weather > 0) {
                     initWeather = true
-                    EasyDiaryUtils.initWeatherView(imageView1, diaryDto.weather)
+                    EasyDiaryUtils.initWeatherView(context, imageView1, diaryDto.weather)
                     break
                 }
             }

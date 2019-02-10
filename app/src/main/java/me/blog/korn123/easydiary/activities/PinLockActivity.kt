@@ -42,6 +42,7 @@ class PinLockActivity : BaseSimpleActivity() {
         num7.setOnClickListener(keyPadClickListener)
         num8.setOnClickListener(keyPadClickListener)
         num9.setOnClickListener(keyPadClickListener)
+        delete.setOnClickListener(keyPadClickListener)
     }
 
     override fun onResume() {
@@ -70,49 +71,56 @@ class PinLockActivity : BaseSimpleActivity() {
             R.id.num7 -> "7"
             R.id.num8 -> "8"
             R.id.num9 -> "9"
+            R.id.delete -> "delete"
             else -> ""
         }
-        mPassword[mCursorIndex] = inputPass
-        val displayPass = if (activityMode == ACTIVITY_SETTING) inputPass else "-"
-        mPasswordView[mCursorIndex]?.text = displayPass
-        
-        if (mCursorIndex == 3) {
-            var fullPassword = ""
-            mPassword.map {
-                fullPassword += it
-            }
 
-            when (activityMode) {
-                ACTIVITY_SETTING -> {
-                    holdCurrentOrientation()
-                    showAlertDialog(getString(R.string.pin_setting_complete), DialogInterface.OnClickListener { _, _ ->
-                        config.aafPinLockEnable = true
-                        config.aafPinLockSavedPassword = fullPassword
-                        pauseLock()
-                        finish()
-                    }, false)
-                }
-                ACTIVITY_UNLOCK -> {
-                    when (config.aafPinLockSavedPassword == fullPassword) {
-                        true -> {
-                            pauseLock()
-                            finish()
-                        }
-                        false -> {
-//                            mCursorIndex = 0
-//                            mPasswordView.map { 
-//                                it?.text = null
-//                            }
+        when (inputPass) {
+            "delete" -> {
+                if (mCursorIndex > 0) mCursorIndex--
+                mPasswordView[mCursorIndex]?.text = ""
+                return@OnClickListener
+            }
+            else -> {
+                mPassword[mCursorIndex] = inputPass
+                val displayPass = if (activityMode == ACTIVITY_SETTING) inputPass else "-"
+                mPasswordView[mCursorIndex]?.text = displayPass
+
+                if (mCursorIndex == 3) {
+                    var fullPassword = ""
+                    mPassword.map {
+                        fullPassword += it
+                    }
+
+                    when (activityMode) {
+                        ACTIVITY_SETTING -> {
                             holdCurrentOrientation()
-                            showAlertDialog(getString(R.string.pin_verification_fail), DialogInterface.OnClickListener { _, _ ->
-                                onBackPressed()
+                            showAlertDialog(getString(R.string.pin_setting_complete), DialogInterface.OnClickListener { _, _ ->
+                                config.aafPinLockEnable = true
+                                config.aafPinLockSavedPassword = fullPassword
+                                pauseLock()
+                                finish()
                             }, false)
                         }
+                        ACTIVITY_UNLOCK -> {
+                            when (config.aafPinLockSavedPassword == fullPassword) {
+                                true -> {
+                                    pauseLock()
+                                    finish()
+                                }
+                                false -> {
+                                    holdCurrentOrientation()
+                                    showAlertDialog(getString(R.string.pin_verification_fail), DialogInterface.OnClickListener { _, _ ->
+                                        onBackPressed()
+                                    }, false)
+                                }
+                            }
+                        }
                     }
+                } else {
+                    mCursorIndex++
                 }
             }
-        } else {
-            mCursorIndex++
         }
     }
 

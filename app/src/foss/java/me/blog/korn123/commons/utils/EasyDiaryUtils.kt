@@ -20,7 +20,6 @@ import id.zelory.compressor.Compressor
 import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.CALCULATION
 import io.github.aafactory.commons.utils.CommonUtils
-import kotlinx.android.synthetic.main.activity_post_card.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.SecondItemAdapter
 import me.blog.korn123.easydiary.extensions.checkPermission
@@ -63,7 +62,17 @@ object EasyDiaryUtils {
         if (!workingDirectory.exists()) workingDirectory.mkdirs()
     }
 
-    fun initWeatherView(imageView: ImageView?, weatherFlag: Int, isShowEmptyWeatherView: Boolean = false) {
+    fun initWeatherView(context: Context, imageView: ImageView?, weatherFlag: Int, isShowEmptyWeatherView: Boolean = false, applyWhiteFilter: Boolean = false) {
+        val filterColor = when (applyWhiteFilter) {
+            true -> ContextCompat.getColor(context, android.R.color.white)
+            false -> context.config.textColor
+        }
+        changeDrawableIconColor(context, filterColor, R.drawable.ic_sunny)
+        changeDrawableIconColor(context, filterColor, R.drawable.ic_clouds_and_sun)
+        changeDrawableIconColor(context, filterColor, R.drawable.ic_raindrops)
+        changeDrawableIconColor(context, filterColor, R.drawable.ic_bolt)
+        changeDrawableIconColor(context, filterColor, R.drawable.ic_snowing)
+        
         imageView?.run { 
             if (!isShowEmptyWeatherView && weatherFlag < 1) {
                 visibility = View.GONE
@@ -78,11 +87,6 @@ object EasyDiaryUtils {
                 WEATHER_RAIN_DROPS -> setImageResource(R.drawable.ic_raindrops)
                 WEATHER_BOLT -> setImageResource(R.drawable.ic_bolt)
                 WEATHER_SNOWING -> setImageResource(R.drawable.ic_snowing)
-                WEATHER_RAINBOW -> setImageResource(R.drawable.ic_rainbow)
-                WEATHER_UMBRELLA -> setImageResource(R.drawable.ic_umbrella_1)
-                WEATHER_STARS -> setImageResource(R.drawable.ic_stars_2)
-                WEATHER_MOON -> setImageResource(R.drawable.ic_moon_9)
-                WEATHER_NIGHT_RAIN -> setImageResource(R.drawable.ic_night_rain)
             }    
         }
     }

@@ -10,7 +10,8 @@
 This is a diary application optimized to user experience.
 
 <a href='https://play.google.com/store/apps/details?id=me.blog.korn123.easydiary'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="258" height="98"/></a>
-
+<a href='https://f-droid.org/en/packages/me.blog.korn123.easydiary'><img alt='Get it on F-Droid' src='screenshots/fdroid.png' height="98"/></a>
+     
 <img src="screenshots/00.jpg">&nbsp;
 <img src="screenshots/showcase_en.gif" width="288" height="512">
 
@@ -26,7 +27,7 @@ This is a diary application optimized to user experience.
 08. Time Line
 09. Advanced Settings
      - Font Setting
-     - Lock Setting
+     - Lock Setting(PIN or Fingerprint)
      - Theme Setting
      - Backup and Recovery
 ```
@@ -64,12 +65,15 @@ This is a diary application optimized to user experience.
 <img src="screenshots/app_easydiary06_en.png" width="288" height="512">&nbsp;
 
 # How to build
+## GMS Flavor
+To build the gms flavor build, you need to add your Google Mobile Service settings and download the weather icons from Flaticon and import them directly.
 ```
 Step1. Fork or download 'aaf-easydiary' project.
 Step2. Import 'aaf-easydiary' project into android studio.
 Step3. Use below link download svg images from Flaticon.
 Step4. Import 10 svg files for your project from your Android studio.
-       Project rightclick > New > Vector Asset... You can import from the menu and the resource names are:
+       Project rightclick > New > Vector Asset...(Res Directory is gms)
+       You can import from the menu and the resource names are:
        clouds-and-sun.svg -> ic_clouds_and_sun.xml
        umbrella-1.svg     -> ic_umbrella_1.xml
        sunny.svg          -> ic_sunny.xml
@@ -82,8 +86,20 @@ Step4. Import 10 svg files for your project from your Android studio.
        bolt.svg           -> ic_bolt.xml
 Step5. Register your package name and SHA-1 signature certificate fingerprint for Google Drive use.(https://console.developers.google.com/)
 Step6. Build 'aaf-easydiary' project with android studio.
+       a. Build > Select Build Variant
+       b. Select 'gmsRelease' from the Build Variant setting and run
 ```
 [Download 'weather-set-2' svg images from Flaticon](https://www.flaticon.com/packs/weather-set-2)
+
+## FOSS Flavor
+For the foss flavor build, no further action is required. However, because we do not use Google Mobile Service, we can not use the backup function with Google Drive, and we will use simpler weather icons than weather icons provided by gms flavor.
+```
+Step1. Fork or download 'aaf-easydiary' project.
+Step2. Import 'aaf-easydiary' project into android studio.
+Step3. Build 'aaf-easydiary' project with android studio.
+       a. Build > Select Build Variant
+       b. Select 'fossRelease' from the Build Variant setting and run
+```
 
 # Translation
 Thanks for someone help me to translate this app.   

@@ -356,7 +356,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
             }
 
             val weatherFlag = diaryDto.weather
-            EasyDiaryUtils.initWeatherView(weather, weatherFlag)
+            EasyDiaryUtils.initWeatherView(context!!, weather, weatherFlag)
 
             // TODO fixme elegance
             val photoCount = diaryDto.photoUris?.size ?: 0 
