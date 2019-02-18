@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Typeface
 import android.text.SpannableString
 import android.text.style.StyleSpan
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -117,7 +118,8 @@ class TimelineItemAdapter(
         true -> {
             when (StringUtils.isNotEmpty(diaryDto.title)) {
                 true -> diaryDto.title
-                false -> StringUtils.abbreviate(diaryDto.contents, 10)
+//                false -> StringUtils.abbreviate(diaryDto.contents, 10)
+                false -> diaryDto.contents?.let { it.split("\n")[0] }  ?: StringUtils.abbreviate(diaryDto.contents, 10)
             }
         }
         false -> {
