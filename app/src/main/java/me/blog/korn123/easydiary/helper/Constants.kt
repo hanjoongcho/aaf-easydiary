@@ -102,6 +102,7 @@ const val POSTCARD_BG_COLOR = "postcard_bg_color"
 const val POSTCARD_TEXT_COLOR = "postcard_text_color"
 const val POSTCARD_BG_COLOR_VALUE = -0x1
 const val POSTCARD_TEXT_COLOR_VALUE = -0xb5b5b4
+const val POSTCARD_CROP_MODE = "postcard_crop_mode"
 
 // Save Instance State
 const val LIST_URI_STRING = "list_uri_string"

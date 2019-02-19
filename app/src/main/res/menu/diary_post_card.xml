@@ -2,6 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/cropCenter"
+        android:icon="@drawable/plus_6"
+        android:orderInCategory="100"
+        android:title=""
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/fitCenter"
+        android:icon="@drawable/minus_6"
+        android:orderInCategory="100"
+        android:title=""
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/textColor"
         android:icon="@drawable/edit_6_w"
         android:orderInCategory="100"

@@ -83,4 +83,9 @@ class Config(context: Context) : BaseConfig(context) {
     var enableContentsSummary: Boolean
         get() = prefs.getBoolean(SETTING_CONTENTS_SUMMARY, true)
         set(enableContentsSummary) = prefs.edit().putBoolean(SETTING_CONTENTS_SUMMARY, enableContentsSummary).apply()
+
+    var postCardCropMode: Int
+        get() = prefs.getInt(POSTCARD_CROP_MODE, 0)
+        set(postCardCropMode) = prefs.edit().putInt(POSTCARD_CROP_MODE, postCardCropMode).apply()
+
 }
