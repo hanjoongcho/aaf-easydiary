@@ -23,7 +23,7 @@ class PhotoViewHolder(
 ) : RecyclerView.ViewHolder(itemView) {
     private val imageView: ImageView = itemView.findViewById(R.id.photo)
     
-    internal fun bindTo(photoPath: String, position: Int) {
+    internal fun bindTo(photoPath: String, position: Int, glideOption: Int = GLIDE_CROP_CENTER) {
         val point =  CommonUtils.getDefaultDisplay(activity)
         val height = point.y - activity.actionBarHeight() - activity.statusBarHeight() - activity.seekBarContainer.height
         val size = if (point.x > point.y) height else point.x
@@ -53,9 +53,10 @@ class PhotoViewHolder(
             }
         }
 
-        val bitmapTransformation: BitmapTransformation = when (activity.config.postCardCropMode) {
-            0 -> CenterCrop()
-            else -> FitCenter()
+        val bitmapTransformation: BitmapTransformation = when (glideOption) {
+            GLIDE_CROP_CENTER -> CenterCrop()
+            GLIDE_FIT_CENTER -> FitCenter()
+            else -> CenterCrop()
         }
 
         Glide.with(imageView.context)
@@ -73,5 +74,10 @@ class PhotoViewHolder(
             result = activity.resources.getDimensionPixelSize(resourceId)
         }
         return result
+    }
+
+    companion object {
+        const val GLIDE_CROP_CENTER = 0
+        const val GLIDE_FIT_CENTER = 1
     }
 }

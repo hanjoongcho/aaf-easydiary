@@ -220,14 +220,6 @@ class PostCardActivity : EasyDiaryActivity() {
             } else {
                 confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_SHARE_DIARY_CARD)
             }
-            R.id.cropCenter -> {
-                config.postCardCropMode = 0
-                mPhotoAdapter.notifyDataSetChanged()
-            }
-            R.id.fitCenter -> {
-                config.postCardCropMode = 1
-                mPhotoAdapter.notifyDataSetChanged()
-            }
         }
         return super.onOptionsItemSelected(item)
     }

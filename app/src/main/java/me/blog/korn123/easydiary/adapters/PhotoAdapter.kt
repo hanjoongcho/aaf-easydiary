@@ -15,6 +15,7 @@ class PhotoAdapter(
         val activity: Activity,
         val photoUris: RealmList<PhotoUriDto>
 ) : RecyclerView.Adapter<PhotoViewHolder>() {
+    private val glideOptionMap = hashMapOf<Int, Int>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -23,8 +24,16 @@ class PhotoAdapter(
     }
 
     override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
-        photoUris[position]?.let {
-            holder.bindTo(it.getFilePath(), position)
+        photoUris[position]?.let { photoUri ->
+            holder.itemView.setOnClickListener { _ ->
+                when (glideOptionMap[position]) {
+                    null -> glideOptionMap[position] = 1
+                    else -> glideOptionMap[position] = glideOptionMap[position]?.plus(1) ?: 0
+                }
+                holder.bindTo(photoUri.getFilePath(), position, glideOptionMap[position]?.rem(2) ?: 0)
+            }
+
+            holder.bindTo(photoUri.getFilePath(), position)
         }
     }
 
