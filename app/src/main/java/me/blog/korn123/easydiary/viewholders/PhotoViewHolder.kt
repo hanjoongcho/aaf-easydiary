@@ -10,8 +10,8 @@ import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.RequestOptions.bitmapTransform
 import io.github.aafactory.commons.utils.CommonUtils
-import jp.wasabeef.glide.transformations.CropCircleTransformation
-import jp.wasabeef.glide.transformations.CropTransformation
+import jp.wasabeef.glide.transformations.*
+import jp.wasabeef.glide.transformations.gpu.ToonFilterTransformation
 import kotlinx.android.synthetic.main.activity_post_card.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.actionBarHeight
@@ -60,15 +60,41 @@ class PhotoViewHolder(
                     .load(photoPath)
                     .apply(RequestOptions().transforms(CenterCrop()))
                     .into(imageView)
+            GLIDE_CROP_TOP -> Glide
+                    .with(imageView.context)
+                    .load(photoPath)
+                    .apply(bitmapTransform(CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.TOP)))
+                    .into(imageView)
+            GLIDE_CROP_BOTTOM -> Glide
+                    .with(imageView.context)
+                    .load(photoPath)
+                    .apply(bitmapTransform(CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.BOTTOM)))
+                    .into(imageView)
+            GLIDE_CROP_CIRCLE -> Glide
+                    .with(imageView.context)
+                    .load(photoPath)
+                    .apply(bitmapTransform(CropCircleTransformation()))
+                    .into(imageView)
             GLIDE_FIT_CENTER -> Glide
                     .with(imageView.context)
                     .load(photoPath)
                     .apply(RequestOptions().transforms(FitCenter()))
                     .into(imageView)
-            else -> Glide
+            GLIDE_GRAY_SCALE -> Glide
                     .with(imageView.context)
                     .load(photoPath)
-                    .apply(bitmapTransform(CropCircleTransformation()))
+                    .apply(bitmapTransform(GrayscaleTransformation()))
+                    .into(imageView)
+            GLIDE_ROUND_CORNERS -> Glide
+                    .with(imageView.context)
+                    .load(photoPath)
+                    .apply(bitmapTransform(RoundedCornersTransformation(45, 0,
+                            RoundedCornersTransformation.CornerType.ALL)))
+                    .into(imageView)
+            GLIDE_CARTOON -> Glide
+                    .with(imageView.context)
+                    .load(photoPath)
+                    .apply(bitmapTransform(ToonFilterTransformation()))
                     .into(imageView)
 
         }
@@ -92,6 +118,12 @@ class PhotoViewHolder(
 
     companion object {
         const val GLIDE_CROP_CENTER = 0
-        const val GLIDE_FIT_CENTER = 1
+        const val GLIDE_CROP_TOP = 1
+        const val GLIDE_CROP_BOTTOM = 2
+        const val GLIDE_CROP_CIRCLE = 3
+        const val GLIDE_FIT_CENTER = 4
+        const val GLIDE_ROUND_CORNERS = 5
+        const val GLIDE_CARTOON = 6
+        const val GLIDE_GRAY_SCALE = 7
     }
 }
