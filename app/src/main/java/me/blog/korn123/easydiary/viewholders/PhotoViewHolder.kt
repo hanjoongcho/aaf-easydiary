@@ -5,15 +5,16 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.RequestOptions.bitmapTransform
 import io.github.aafactory.commons.utils.CommonUtils
+import jp.wasabeef.glide.transformations.CropCircleTransformation
+import jp.wasabeef.glide.transformations.CropTransformation
 import kotlinx.android.synthetic.main.activity_post_card.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.actionBarHeight
-import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.statusBarHeight
 
 class PhotoViewHolder(
@@ -53,18 +54,31 @@ class PhotoViewHolder(
             }
         }
 
-        val bitmapTransformation: BitmapTransformation = when (glideOption) {
-            GLIDE_CROP_CENTER -> CenterCrop()
-            GLIDE_FIT_CENTER -> FitCenter()
-            else -> CenterCrop()
+        when (glideOption) {
+            GLIDE_CROP_CENTER -> Glide
+                    .with(imageView.context)
+                    .load(photoPath)
+                    .apply(RequestOptions().transforms(CenterCrop()))
+                    .into(imageView)
+            GLIDE_FIT_CENTER -> Glide
+                    .with(imageView.context)
+                    .load(photoPath)
+                    .apply(RequestOptions().transforms(FitCenter()))
+                    .into(imageView)
+            else -> Glide
+                    .with(imageView.context)
+                    .load(photoPath)
+                    .apply(bitmapTransform(CropCircleTransformation()))
+                    .into(imageView)
+
         }
 
-        Glide.with(imageView.context)
-                .load(photoPath)
-//                .apply(RequestOptions().placeholder(R.drawable.ic_aaf_photos).fitCenter())
-                .apply(RequestOptions().transforms(bitmapTransformation))
-//                .apply(RequestOptions().transforms(CenterCrop(), RoundedCorners(CommonUtils.dpToPixel(imageView.context, roundCornerDpUnit))))
-                .into(imageView)
+//        Glide.with(imageView.context)
+//                .load(photoPath)
+////                .apply(RequestOptions().placeholder(R.drawable.ic_aaf_photos).fitCenter())
+//                .apply(RequestOptions().transforms(bitmapTransformation))
+////                .apply(RequestOptions().transforms(CenterCrop(), RoundedCorners(CommonUtils.dpToPixel(imageView.context, roundCornerDpUnit))))
+//                .into(imageView)
     }
 
     fun getStatusBarHeight(): Int {

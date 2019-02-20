@@ -30,7 +30,7 @@ class PhotoAdapter(
                     null -> glideOptionMap[position] = 1
                     else -> glideOptionMap[position] = glideOptionMap[position]?.plus(1) ?: 0
                 }
-                holder.bindTo(photoUri.getFilePath(), position, glideOptionMap[position]?.rem(2) ?: 0)
+                holder.bindTo(photoUri.getFilePath(), position, glideOptionMap[position]?.rem(3) ?: 0)
             }
 
             holder.bindTo(photoUri.getFilePath(), position)

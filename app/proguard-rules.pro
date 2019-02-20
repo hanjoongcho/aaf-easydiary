@@ -20,3 +20,5 @@
 -dontwarn retrofit2.Platform$Java8
 -dontwarn java.lang.management.**
 -dontwarn junit.**
+
+-keep class jp.wasabeef.glide.** { *; }
