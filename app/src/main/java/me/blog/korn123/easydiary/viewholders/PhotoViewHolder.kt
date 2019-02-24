@@ -1,14 +1,17 @@
 package me.blog.korn123.easydiary.viewholders
 
 import android.app.Activity
+import android.graphics.Bitmap
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.RequestOptions.bitmapTransform
+import com.bumptech.glide.request.RequestOptions.overrideOf
 import io.github.aafactory.commons.utils.CommonUtils
 import jp.wasabeef.glide.transformations.*
 import jp.wasabeef.glide.transformations.gpu.ToonFilterTransformation
@@ -58,7 +61,7 @@ class PhotoViewHolder(
             GLIDE_CROP_CENTER -> Glide
                     .with(imageView.context)
                     .load(photoPath)
-                    .apply(RequestOptions().transforms(CenterCrop()))
+                    .apply(bitmapTransform(CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.CENTER)))
                     .into(imageView)
             GLIDE_CROP_TOP -> Glide
                     .with(imageView.context)
@@ -70,33 +73,54 @@ class PhotoViewHolder(
                     .load(photoPath)
                     .apply(bitmapTransform(CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.BOTTOM)))
                     .into(imageView)
-            GLIDE_CROP_CIRCLE -> Glide
+            GLIDE_CROP_CENTER_GRAY_SCALE -> Glide
                     .with(imageView.context)
                     .load(photoPath)
-                    .apply(bitmapTransform(CropCircleTransformation()))
+                    .apply(bitmapTransform(MultiTransformation<Bitmap>(
+                            CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.CENTER),
+                            GrayscaleTransformation()
+                    )))
                     .into(imageView)
-            GLIDE_FIT_CENTER -> Glide
+            GLIDE_CROP_TOP_GRAY_SCALE -> Glide
                     .with(imageView.context)
                     .load(photoPath)
-                    .apply(RequestOptions().transforms(FitCenter()))
+                    .apply(bitmapTransform(MultiTransformation<Bitmap>(
+                            CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.TOP),
+                            GrayscaleTransformation()
+                    )))
                     .into(imageView)
-            GLIDE_GRAY_SCALE -> Glide
+            GLIDE_CROP_BOTTOM_GRAY_SCALE -> Glide
                     .with(imageView.context)
                     .load(photoPath)
-                    .apply(bitmapTransform(GrayscaleTransformation()))
+                    .apply(bitmapTransform(MultiTransformation<Bitmap>(
+                            CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.BOTTOM),
+                            GrayscaleTransformation()
+                    )))
                     .into(imageView)
-            GLIDE_ROUND_CORNERS -> Glide
+            GLIDE_CROP_CENTER_CARTOON -> Glide
                     .with(imageView.context)
                     .load(photoPath)
-                    .apply(bitmapTransform(RoundedCornersTransformation(45, 0,
-                            RoundedCornersTransformation.CornerType.ALL)))
+                    .apply(bitmapTransform(MultiTransformation<Bitmap>(
+                            CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.CENTER),
+                            ToonFilterTransformation()
+                    )))
                     .into(imageView)
-            GLIDE_CARTOON -> Glide
+            GLIDE_CROP_TOP_CARTOON -> Glide
                     .with(imageView.context)
                     .load(photoPath)
-                    .apply(bitmapTransform(ToonFilterTransformation()))
+                    .apply(bitmapTransform(MultiTransformation<Bitmap>(
+                            CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.TOP),
+                            ToonFilterTransformation()
+                    )))
                     .into(imageView)
-
+            GLIDE_CROP_BOTTOM_CARTOON -> Glide
+                    .with(imageView.context)
+                    .load(photoPath)
+                    .apply(bitmapTransform(MultiTransformation<Bitmap>(
+                            CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.BOTTOM),
+                            ToonFilterTransformation()
+                    )))
+                    .into(imageView)
         }
 
 //        Glide.with(imageView.context)
@@ -117,13 +141,14 @@ class PhotoViewHolder(
     }
 
     companion object {
-        const val GLIDE_CROP_CENTER = 0
-        const val GLIDE_CROP_TOP = 1
+        const val GLIDE_CROP_TOP = 0
+        const val GLIDE_CROP_CENTER = 1
         const val GLIDE_CROP_BOTTOM = 2
-        const val GLIDE_CROP_CIRCLE = 3
-        const val GLIDE_FIT_CENTER = 4
-        const val GLIDE_ROUND_CORNERS = 5
-        const val GLIDE_CARTOON = 6
-        const val GLIDE_GRAY_SCALE = 7
+        const val GLIDE_CROP_TOP_GRAY_SCALE = 3
+        const val GLIDE_CROP_CENTER_GRAY_SCALE = 4
+        const val GLIDE_CROP_BOTTOM_GRAY_SCALE = 5
+        const val GLIDE_CROP_TOP_CARTOON = 6
+        const val GLIDE_CROP_CENTER_CARTOON = 7
+        const val GLIDE_CROP_BOTTOM_CARTOON = 8
     }
 }
