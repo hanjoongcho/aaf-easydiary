@@ -27,7 +27,7 @@ class PhotoViewHolder(
 ) : RecyclerView.ViewHolder(itemView) {
     private val imageView: ImageView = itemView.findViewById(R.id.photo)
     
-    internal fun bindTo(photoPath: String, position: Int, glideOption: Int = GLIDE_CROP_CENTER) {
+    internal fun bindTo(photoPath: String, position: Int, glideOption: Int = GLIDE_CROP_TOP) {
         val point =  CommonUtils.getDefaultDisplay(activity)
         val height = point.y - activity.actionBarHeight() - activity.statusBarHeight() - activity.seekBarContainer.height
         val size = if (point.x > point.y) height else point.x
@@ -58,34 +58,34 @@ class PhotoViewHolder(
         }
 
         when (glideOption) {
-            GLIDE_CROP_CENTER -> Glide
-                    .with(imageView.context)
-                    .load(photoPath)
-                    .apply(bitmapTransform(CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.CENTER)))
-                    .into(imageView)
             GLIDE_CROP_TOP -> Glide
                     .with(imageView.context)
                     .load(photoPath)
                     .apply(bitmapTransform(CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.TOP)))
+                    .into(imageView)
+            GLIDE_CROP_CENTER -> Glide
+                    .with(imageView.context)
+                    .load(photoPath)
+                    .apply(bitmapTransform(CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.CENTER)))
                     .into(imageView)
             GLIDE_CROP_BOTTOM -> Glide
                     .with(imageView.context)
                     .load(photoPath)
                     .apply(bitmapTransform(CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.BOTTOM)))
                     .into(imageView)
-            GLIDE_CROP_CENTER_GRAY_SCALE -> Glide
-                    .with(imageView.context)
-                    .load(photoPath)
-                    .apply(bitmapTransform(MultiTransformation<Bitmap>(
-                            CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.CENTER),
-                            GrayscaleTransformation()
-                    )))
-                    .into(imageView)
             GLIDE_CROP_TOP_GRAY_SCALE -> Glide
                     .with(imageView.context)
                     .load(photoPath)
                     .apply(bitmapTransform(MultiTransformation<Bitmap>(
                             CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.TOP),
+                            GrayscaleTransformation()
+                    )))
+                    .into(imageView)
+            GLIDE_CROP_CENTER_GRAY_SCALE -> Glide
+                    .with(imageView.context)
+                    .load(photoPath)
+                    .apply(bitmapTransform(MultiTransformation<Bitmap>(
+                            CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.CENTER),
                             GrayscaleTransformation()
                     )))
                     .into(imageView)
@@ -97,19 +97,19 @@ class PhotoViewHolder(
                             GrayscaleTransformation()
                     )))
                     .into(imageView)
-            GLIDE_CROP_CENTER_CARTOON -> Glide
-                    .with(imageView.context)
-                    .load(photoPath)
-                    .apply(bitmapTransform(MultiTransformation<Bitmap>(
-                            CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.CENTER),
-                            ToonFilterTransformation()
-                    )))
-                    .into(imageView)
             GLIDE_CROP_TOP_CARTOON -> Glide
                     .with(imageView.context)
                     .load(photoPath)
                     .apply(bitmapTransform(MultiTransformation<Bitmap>(
                             CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.TOP),
+                            ToonFilterTransformation()
+                    )))
+                    .into(imageView)
+            GLIDE_CROP_CENTER_CARTOON -> Glide
+                    .with(imageView.context)
+                    .load(photoPath)
+                    .apply(bitmapTransform(MultiTransformation<Bitmap>(
+                            CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.CENTER),
                             ToonFilterTransformation()
                     )))
                     .into(imageView)
