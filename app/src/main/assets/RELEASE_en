@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.74 (date: 2019/02/28)
+  * Improved the ability to apply filters to postcard images
+
 # Changes in 1.4.73 (date: 2019/02/11)
   * Improved the ability to correct input digits when PIN is set and unlocked
 

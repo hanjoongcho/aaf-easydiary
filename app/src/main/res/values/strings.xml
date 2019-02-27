@@ -226,6 +226,10 @@
         v1.4.73 / 2019.02.11\n
         Improved the ability to correct input digits when PIN is set and unlocked
     </string>
+    <string name="release_137">
+        v1.4.74 / 2019.02.28\n
+        Improved the ability to apply filters to postcard images
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
