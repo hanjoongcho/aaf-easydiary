@@ -123,8 +123,6 @@ dependencies {
     implementation 'jp.wasabeef:glide-transformations:4.0.0'
     implementation "jp.co.cyberagent.android:gpuimage:2.0.3"
     implementation group: 'org.apache.poi', name: 'poi', version: '3.9'
-    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '3.9'
-
 
     // debug, release
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$LEAK_CANARY_VERSION"

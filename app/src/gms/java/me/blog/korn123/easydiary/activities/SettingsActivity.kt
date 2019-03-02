@@ -1,7 +1,9 @@
 package me.blog.korn123.easydiary.activities
 
 import android.content.Intent
-import android.os.*
+import android.os.Build
+import android.os.Bundle
+import android.os.Environment
 import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.view.LayoutInflater
@@ -28,14 +30,11 @@ import me.blog.korn123.easydiary.gms.drive.RecoverDiaryActivity
 import me.blog.korn123.easydiary.gms.drive.RecoverPhotoActivity
 import me.blog.korn123.easydiary.helper.*
 import org.apache.commons.io.FilenameUtils
-import org.apache.commons.io.IOUtils
+import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.ss.usermodel.Workbook
-import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import java.io.File
-import java.util.*
-import org.apache.poi.ss.usermodel.Sheet
-import org.apache.poi.ss.usermodel.Cell
 import java.io.FileOutputStream
+import java.util.*
 
 
 /**
@@ -107,7 +106,7 @@ class SettingsActivity : EasyDiaryActivity() {
 
                 Thread(Runnable {
                     val diaryList = EasyDiaryDbHelper.readDiary(null)
-                    var wb: Workbook = XSSFWorkbook()
+                    var wb: Workbook = HSSFWorkbook()
                     val sheet = wb.createSheet("new sheet")
                     diaryList.forEachIndexed { index, diaryDto ->
                         val row = sheet.createRow(index)
@@ -119,7 +118,7 @@ class SettingsActivity : EasyDiaryActivity() {
                             progressInfo.text = "${index.plus(1)}/${diaryList.size}"
                         }
                     }
-                    val outputStream = FileOutputStream("${Environment.getExternalStorageDirectory().absolutePath}${WORKING_DIRECTORY}aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}.xlsx")
+                    val outputStream = FileOutputStream("${Environment.getExternalStorageDirectory().absolutePath}${WORKING_DIRECTORY}aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}.xls")
                     wb.write(outputStream)
                     alert.cancel()
 
