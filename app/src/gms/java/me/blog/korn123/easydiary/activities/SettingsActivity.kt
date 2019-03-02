@@ -1,9 +1,7 @@
 package me.blog.korn123.easydiary.activities
 
 import android.content.Intent
-import android.os.Build
-import android.os.Bundle
-import android.os.Environment
+import android.os.*
 import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,9 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ListView
+import android.widget.TextView
 import com.xw.repo.BubbleSeekBar
 import io.github.aafactory.commons.activities.BaseWebViewActivity
 import io.github.aafactory.commons.helpers.BaseConfig
+import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_settings.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
@@ -28,8 +28,15 @@ import me.blog.korn123.easydiary.gms.drive.RecoverDiaryActivity
 import me.blog.korn123.easydiary.gms.drive.RecoverPhotoActivity
 import me.blog.korn123.easydiary.helper.*
 import org.apache.commons.io.FilenameUtils
+import org.apache.commons.io.IOUtils
+import org.apache.poi.ss.usermodel.Workbook
+import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import java.io.File
 import java.util.*
+import org.apache.poi.ss.usermodel.Sheet
+import org.apache.poi.ss.usermodel.Cell
+import java.io.FileOutputStream
+
 
 /**
  * Created by CHO HANJOONG on 2017-11-04.
@@ -85,6 +92,38 @@ class SettingsActivity : EasyDiaryActivity() {
                     true -> openRecoverIntent()
                     false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
                 }
+            }
+            R.id.exportExcel -> {
+                val builder = android.app.AlertDialog.Builder(this)
+                builder.setTitle("Export excel")
+                builder.setCancelable(false)
+                val alert = builder.create()
+                val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                val containerView = inflater.inflate(R.layout.dialog_export_progress_excel, null)
+                val progressInfo = containerView.findViewById<TextView>(R.id.progressInfo)
+                progressInfo.text = "내보내기 준비중..."
+                alert.setView(containerView)
+                alert.show()
+
+                Thread(Runnable {
+                    val diaryList = EasyDiaryDbHelper.readDiary(null)
+                    var wb: Workbook = XSSFWorkbook()
+                    val sheet = wb.createSheet("new sheet")
+                    diaryList.forEachIndexed { index, diaryDto ->
+                        val row = sheet.createRow(index)
+                        val title = row.createCell(0)
+                        val body = row.createCell(1)
+                        title.setCellValue(diaryDto.title)
+                        body.setCellValue(diaryDto.contents)
+                        runOnUiThread {
+                            progressInfo.text = "${index.plus(1)}/${diaryList.size}"
+                        }
+                    }
+                    val outputStream = FileOutputStream("${Environment.getExternalStorageDirectory().absolutePath}${WORKING_DIRECTORY}aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}.xlsx")
+                    wb.write(outputStream)
+                    alert.cancel()
+
+                }).start()
             }
             R.id.restorePhotoSetting -> {
                 openGuideView()
@@ -203,6 +242,7 @@ class SettingsActivity : EasyDiaryActivity() {
         decreaseFont.setOnClickListener(mOnClickListener)
         increaseFont.setOnClickListener(mOnClickListener)
         contentsSummary.setOnClickListener(mOnClickListener)
+        exportExcel.setOnClickListener(mOnClickListener)
 
         fontLineSpacing.configBuilder
                 .min(0.2F)

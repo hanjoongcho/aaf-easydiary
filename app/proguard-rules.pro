@@ -22,3 +22,24 @@
 -dontwarn junit.**
 
 -keep class jp.wasabeef.glide.** { *; }
+
+-keep class org.w3c.dom.** { *; }
+-keep class org.xml.sax.** { *; }
+-keep class org.dom4j.** { *; }
+-keep class javax.xml.** { *; }
+-keep class org.apache.poi.** { *; }
+-keep class org.apache.xmlbeans.** { *; }
+-keep class org.openxmlformats.** { *; }
+-keep class schemasMicrosoftComOfficeExcel.** { *; }
+-keep class schemasMicrosoftComOfficeOffice.** { *; }
+-keep class schemasMicrosoftComVml.** { *; }
+-dontwarn org.w3c.dom.**
+-dontwarn org.xml.sax.**
+-dontwarn org.dom4j.**
+-dontwarn javax.xml.**
+-dontwarn org.apache.poi.**
+-dontwarn org.apache.xmlbeans.**
+-dontwarn org.openxmlformats.**
+-dontwarn schemasMicrosoftComOfficeExcel.**
+-dontwarn schemasMicrosoftComOfficeOffice.**
+-dontwarn schemasMicrosoftComVml.**

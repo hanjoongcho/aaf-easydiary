@@ -306,4 +306,6 @@
     <string name="contents_summary_title">ダイアリーはコンテンツの要約</string>
     <string name="contents_summary_description">カレンダー、タイムライン、検索画面などで提供されるダイアリーの内容を要約して表現します。</string>
     <string name="init_cipher_error_guide_message">デバイスの指紋情報が変更されました。ピンロックモードに変更してロックを解除し、指紋のロックを解除した後、再設定して使用します。</string>
+    <string name="export_excel_title">엑셀파일로 내보내기</string>
+    <string name="export_excel_description">모든 콘텐츠를 엑셀파일로 저장합니다.</string>
 </resources>

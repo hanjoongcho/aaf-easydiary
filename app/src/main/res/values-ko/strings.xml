@@ -306,4 +306,6 @@
     <string name="contents_summary_title">다이어리 콘텐츠 요약</string>
     <string name="contents_summary_description">캘린더, 타임라인, 검색 화면 등에서 제공하는 다이어리의 내용을 요약하여 표현합니다.</string>
     <string name="init_cipher_error_guide_message">디바이스의 지문정보가 변경되었습니다. 핀 잠금 모드로 변경하여 잠금을 해제하시고 지문인식 잠금을 해제 후 다시 설정하여 사용하세요.</string>
+    <string name="export_excel_title">엑셀파일로 내보내기</string>
+    <string name="export_excel_description">모든 콘텐츠를 엑셀파일로 저장합니다.</string>
 </resources>
