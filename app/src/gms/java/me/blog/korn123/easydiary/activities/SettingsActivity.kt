@@ -35,6 +35,9 @@ import org.apache.poi.ss.usermodel.Workbook
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
+import org.apache.poi.ss.usermodel.CellStyle
+
+
 
 
 /**
@@ -108,16 +111,26 @@ class SettingsActivity : EasyDiaryActivity() {
                     val diaryList = EasyDiaryDbHelper.readDiary(null)
                     var wb: Workbook = HSSFWorkbook()
                     val sheet = wb.createSheet("new sheet")
+                    val cs = wb.createCellStyle()
+                    cs.wrapText = true
                     diaryList.forEachIndexed { index, diaryDto ->
                         val row = sheet.createRow(index)
-                        val title = row.createCell(0)
-                        val body = row.createCell(1)
+                        val sequence = row.createCell(0)
+                        val date = row.createCell(1)
+                        val title = row.createCell(2)
+                        val body = row.createCell(3)
+                        sequence.setCellValue(diaryDto.sequence.toDouble())
+                        date.setCellValue(DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis))
                         title.setCellValue(diaryDto.title)
                         body.setCellValue(diaryDto.contents)
+                        body.cellStyle = cs
                         runOnUiThread {
                             progressInfo.text = "${index.plus(1)}/${diaryList.size}"
                         }
                     }
+                    // FIXME
+                    // https://poi.apache.org/apidocs/dev/org/apache/poi/ss/usermodel/Sheet.html#setColumnWidth-int-int-
+                    sheet.setColumnWidth(3, 256 * 30)
                     val outputStream = FileOutputStream("${Environment.getExternalStorageDirectory().absolutePath}${WORKING_DIRECTORY}aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}.xls")
                     wb.write(outputStream)
                     alert.cancel()
