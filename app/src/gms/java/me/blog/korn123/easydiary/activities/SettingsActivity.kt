@@ -36,8 +36,8 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.*
 import org.apache.poi.ss.usermodel.CellStyle
-
-
+import org.apache.poi.ss.usermodel.FillPatternType
+import org.apache.poi.ss.usermodel.IndexedColors
 
 
 /**
@@ -46,7 +46,7 @@ import org.apache.poi.ss.usermodel.CellStyle
 
 class SettingsActivity : EasyDiaryActivity() {
     private var mAlertDialog: AlertDialog? = null
-
+    private var mTaskFlag = 0
     private val mOnClickListener = View.OnClickListener { view ->
         when (view.id) {
             R.id.primaryColor -> TransitionHelper.startActivityWithTransition(this@SettingsActivity, Intent(this@SettingsActivity, CustomizationActivity::class.java))
@@ -111,10 +111,39 @@ class SettingsActivity : EasyDiaryActivity() {
                     val diaryList = EasyDiaryDbHelper.readDiary(null)
                     var wb: Workbook = HSSFWorkbook()
                     val sheet = wb.createSheet("new sheet")
-                    val cs = wb.createCellStyle()
-                    cs.wrapText = true
+
+                    val contentsStyle = wb.createCellStyle().apply {
+                        wrapText = true
+                    }
+
+                    var headerFont = wb.createFont().apply {
+                        color = IndexedColors.WHITE.index
+                    }
+                    var headerStyle = wb.createCellStyle().apply {
+                        fillForegroundColor = IndexedColors.BLUE.index
+                        fillPattern = CellStyle.SOLID_FOREGROUND
+                        setFont(headerFont)
+                    }
+
+                    val headerRow = sheet.createRow(0)
+                    headerRow.createCell(SEQ).setCellValue("SEQ")
+                    headerRow.createCell(WRITE_DATE).setCellValue("WRITE DATE")
+                    headerRow.createCell(TITLE).setCellValue("TITLE")
+                    headerRow.createCell(CONTENTS).setCellValue("CONTENTS")
+                    headerRow.getCell(SEQ).cellStyle = headerStyle
+                    headerRow.getCell(WRITE_DATE).cellStyle = headerStyle
+                    headerRow.getCell(TITLE).cellStyle = headerStyle
+                    headerRow.getCell(CONTENTS).cellStyle = headerStyle
+
+                    // FIXME:
+                    // https://poi.apache.org/apidocs/dev/org/apache/poi/ss/usermodel/Sheet.html#setColumnWidth-int-int-
+                    sheet.setColumnWidth(SEQ, 256 * 5)
+                    sheet.setColumnWidth(WRITE_DATE, 256 * 30)
+                    sheet.setColumnWidth(TITLE, 256 * 30)
+                    sheet.setColumnWidth(CONTENTS, 256 * 50)
+
                     diaryList.forEachIndexed { index, diaryDto ->
-                        val row = sheet.createRow(index)
+                        val row = sheet.createRow(index + 1)
                         val sequence = row.createCell(0)
                         val date = row.createCell(1)
                         val title = row.createCell(2)
@@ -123,14 +152,11 @@ class SettingsActivity : EasyDiaryActivity() {
                         date.setCellValue(DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis))
                         title.setCellValue(diaryDto.title)
                         body.setCellValue(diaryDto.contents)
-                        body.cellStyle = cs
+                        body.cellStyle = contentsStyle
                         runOnUiThread {
                             progressInfo.text = "${index.plus(1)}/${diaryList.size}"
                         }
                     }
-                    // FIXME
-                    // https://poi.apache.org/apidocs/dev/org/apache/poi/ss/usermodel/Sheet.html#setColumnWidth-int-int-
-                    sheet.setColumnWidth(3, 256 * 30)
                     val outputStream = FileOutputStream("${Environment.getExternalStorageDirectory().absolutePath}${WORKING_DIRECTORY}aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}.xls")
                     wb.write(outputStream)
                     alert.cancel()
@@ -468,6 +494,9 @@ class SettingsActivity : EasyDiaryActivity() {
     private fun getStoreUrl() = "https://play.google.com/store/apps/details?id=$packageName"
 
     companion object {
-        private var mTaskFlag = 0
+        const val SEQ = 0
+        const val WRITE_DATE = 1
+        const val TITLE = 2
+        const val CONTENTS = 3
     }
 }
