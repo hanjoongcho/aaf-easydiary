@@ -4,12 +4,14 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
 import com.xw.repo.BubbleSeekBar
@@ -98,11 +100,13 @@ class SettingsActivity : EasyDiaryActivity() {
             R.id.exportExcel -> {
                 val builder = android.app.AlertDialog.Builder(this)
                 builder.setTitle("Export excel")
+                builder.setIcon(ContextCompat.getDrawable(this, R.drawable.excel_3))
                 builder.setCancelable(false)
                 val alert = builder.create()
                 val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
                 val containerView = inflater.inflate(R.layout.dialog_export_progress_excel, null)
                 val progressInfo = containerView.findViewById<TextView>(R.id.progressInfo)
+                var confirmButton = containerView.findViewById<Button>(R.id.confirm)
                 progressInfo.text = "내보내기 준비중..."
                 alert.setView(containerView)
                 alert.show()
@@ -141,7 +145,7 @@ class SettingsActivity : EasyDiaryActivity() {
                     sheet.setColumnWidth(WRITE_DATE, 256 * 30)
                     sheet.setColumnWidth(TITLE, 256 * 30)
                     sheet.setColumnWidth(CONTENTS, 256 * 50)
-
+                    val exportFilePath = "${Environment.getExternalStorageDirectory().absolutePath}${WORKING_DIRECTORY}aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}.xls"
                     diaryList.forEachIndexed { index, diaryDto ->
                         val row = sheet.createRow(index + 1)
                         val sequence = row.createCell(0)
@@ -154,13 +158,15 @@ class SettingsActivity : EasyDiaryActivity() {
                         body.setCellValue(diaryDto.contents)
                         body.cellStyle = contentsStyle
                         runOnUiThread {
-                            progressInfo.text = "${index.plus(1)}/${diaryList.size}"
+                            progressInfo.text = "Export xls file to ${exportFilePath} (${index.plus(1)}/${diaryList.size})"
                         }
                     }
-                    val outputStream = FileOutputStream("${Environment.getExternalStorageDirectory().absolutePath}${WORKING_DIRECTORY}aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}.xls")
+                    val outputStream = FileOutputStream(exportFilePath)
                     wb.write(outputStream)
-                    alert.cancel()
-
+                    runOnUiThread {
+                        confirmButton.visibility = View.VISIBLE
+                        confirmButton.setOnClickListener { alert.cancel() }
+                    }
                 }).start()
             }
             R.id.restorePhotoSetting -> {
