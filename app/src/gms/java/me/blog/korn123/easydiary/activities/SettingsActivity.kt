@@ -116,7 +116,7 @@ class SettingsActivity : EasyDiaryActivity() {
                     var wb: Workbook = HSSFWorkbook()
                     val sheet = wb.createSheet("new sheet")
 
-                    val contentsStyle = wb.createCellStyle().apply {
+                    val wrapStyle = wb.createCellStyle().apply {
                         wrapText = true
                     }
 
@@ -130,14 +130,20 @@ class SettingsActivity : EasyDiaryActivity() {
                     }
 
                     val headerRow = sheet.createRow(0)
+                    headerRow.height = 256 * 3
                     headerRow.createCell(SEQ).setCellValue("SEQ")
                     headerRow.createCell(WRITE_DATE).setCellValue("WRITE DATE")
                     headerRow.createCell(TITLE).setCellValue("TITLE")
                     headerRow.createCell(CONTENTS).setCellValue("CONTENTS")
+                    headerRow.createCell(ATTACH_PHOTO_NAME).setCellValue("PHOTO_NAME")
+                    headerRow.createCell(ATTACH_PHOTO_SIZE).setCellValue("PHOTO_SIZE")
                     headerRow.getCell(SEQ).cellStyle = headerStyle
                     headerRow.getCell(WRITE_DATE).cellStyle = headerStyle
                     headerRow.getCell(TITLE).cellStyle = headerStyle
                     headerRow.getCell(CONTENTS).cellStyle = headerStyle
+                    headerRow.getCell(ATTACH_PHOTO_NAME).cellStyle = headerStyle
+                    headerRow.getCell(ATTACH_PHOTO_SIZE).cellStyle = headerStyle
+
 
                     // FIXME:
                     // https://poi.apache.org/apidocs/dev/org/apache/poi/ss/usermodel/Sheet.html#setColumnWidth-int-int-
@@ -145,18 +151,34 @@ class SettingsActivity : EasyDiaryActivity() {
                     sheet.setColumnWidth(WRITE_DATE, 256 * 30)
                     sheet.setColumnWidth(TITLE, 256 * 30)
                     sheet.setColumnWidth(CONTENTS, 256 * 50)
+                    sheet.setColumnWidth(ATTACH_PHOTO_NAME, 256 * 80)
+                    sheet.setColumnWidth(ATTACH_PHOTO_SIZE, 256 * 15)
                     val exportFilePath = "${Environment.getExternalStorageDirectory().absolutePath}${WORKING_DIRECTORY}aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}.xls"
                     diaryList.forEachIndexed { index, diaryDto ->
                         val row = sheet.createRow(index + 1)
-                        val sequence = row.createCell(0)
-                        val date = row.createCell(1)
-                        val title = row.createCell(2)
-                        val body = row.createCell(3)
+                        val sequence = row.createCell(SEQ)
+                        val date = row.createCell(WRITE_DATE)
+                        val title = row.createCell(TITLE)
+                        val body = row.createCell(CONTENTS)
+                        val attachPhotoNames = row.createCell(ATTACH_PHOTO_NAME)
+                        val attachPhotoSizes = row.createCell(ATTACH_PHOTO_SIZE)
+                        var photoNames = StringBuffer()
+                        var photoSizes = StringBuffer()
                         sequence.setCellValue(diaryDto.sequence.toDouble())
                         date.setCellValue(DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis))
                         title.setCellValue(diaryDto.title)
                         body.setCellValue(diaryDto.contents)
-                        body.cellStyle = contentsStyle
+                        body.cellStyle = wrapStyle
+
+                        diaryDto.photoUris?.map {
+                            photoNames.append("${it.getFilePath()}\n")
+                            photoSizes.append("${File(it.getFilePath()).length() / 1024}\n")
+                        }
+                        attachPhotoNames.setCellValue(photoNames.toString())
+                        attachPhotoNames.cellStyle = wrapStyle
+                        attachPhotoSizes.setCellValue(photoSizes.toString())
+                        attachPhotoSizes.cellStyle = wrapStyle
+
                         runOnUiThread {
                             progressInfo.text = "Export xls file to ${exportFilePath} (${index.plus(1)}/${diaryList.size})"
                         }
@@ -504,5 +526,7 @@ class SettingsActivity : EasyDiaryActivity() {
         const val WRITE_DATE = 1
         const val TITLE = 2
         const val CONTENTS = 3
+        const val ATTACH_PHOTO_NAME = 4
+        const val ATTACH_PHOTO_SIZE = 5
     }
 }
