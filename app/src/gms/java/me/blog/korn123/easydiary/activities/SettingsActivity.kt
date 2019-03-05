@@ -33,13 +33,10 @@ import me.blog.korn123.easydiary.gms.drive.RecoverPhotoActivity
 import me.blog.korn123.easydiary.helper.*
 import org.apache.commons.io.FilenameUtils
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
-import org.apache.poi.ss.usermodel.Workbook
+import org.apache.poi.ss.usermodel.*
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
-import org.apache.poi.ss.usermodel.CellStyle
-import org.apache.poi.ss.usermodel.FillPatternType
-import org.apache.poi.ss.usermodel.IndexedColors
 
 
 /**
@@ -99,7 +96,7 @@ class SettingsActivity : EasyDiaryActivity() {
             }
             R.id.exportExcel -> {
                 val builder = android.app.AlertDialog.Builder(this)
-                builder.setTitle("Export excel")
+                builder.setTitle(getString(R.string.export_excel_title))
                 builder.setIcon(ContextCompat.getDrawable(this, R.drawable.excel_3))
                 builder.setCancelable(false)
                 val alert = builder.create()
@@ -107,39 +104,43 @@ class SettingsActivity : EasyDiaryActivity() {
                 val containerView = inflater.inflate(R.layout.dialog_export_progress_excel, null)
                 val progressInfo = containerView.findViewById<TextView>(R.id.progressInfo)
                 var confirmButton = containerView.findViewById<Button>(R.id.confirm)
-                progressInfo.text = "내보내기 준비중..."
+                progressInfo.text = "Preparing to export..."
                 alert.setView(containerView)
                 alert.show()
 
                 Thread(Runnable {
                     val diaryList = EasyDiaryDbHelper.readDiary(null)
-                    var wb: Workbook = HSSFWorkbook()
+                    val wb: Workbook = HSSFWorkbook()
                     val sheet = wb.createSheet("new sheet")
 
-                    val wrapStyle = wb.createCellStyle().apply {
-                        wrapText = true
-                    }
-
-                    var headerFont = wb.createFont().apply {
+                    val headerFont = wb.createFont().apply {
                         color = IndexedColors.WHITE.index
                     }
-                    var headerStyle = wb.createCellStyle().apply {
+                    val headerStyle = wb.createCellStyle().apply {
+                        wrapText = true
                         fillForegroundColor = IndexedColors.BLUE.index
                         fillPattern = CellStyle.SOLID_FOREGROUND
+                        alignment = CellStyle.ALIGN_CENTER
+                        verticalAlignment = CellStyle.VERTICAL_CENTER
                         setFont(headerFont)
+                    }
+                    val bodyStyle = wb.createCellStyle().apply {
+                        wrapText = true
+                        verticalAlignment = CellStyle.VERTICAL_TOP
                     }
 
                     val headerRow = sheet.createRow(0)
                     headerRow.height = 256 * 3
-                    headerRow.createCell(SEQ).setCellValue("SEQ")
-                    headerRow.createCell(WRITE_DATE).setCellValue("WRITE DATE")
-                    headerRow.createCell(TITLE).setCellValue("TITLE")
-                    headerRow.createCell(CONTENTS).setCellValue("CONTENTS")
-                    headerRow.createCell(ATTACH_PHOTO_NAME).setCellValue("PHOTO_NAME")
-                    headerRow.createCell(ATTACH_PHOTO_SIZE).setCellValue("PHOTO_SIZE")
-                    headerRow.createCell(WRITE_TIME_MILLIS).setCellValue("WRITE_TIME_MILLIS")
-                    headerRow.createCell(WEATHER).setCellValue("WEATHER")
-                    headerRow.createCell(IS_ALL_DAY).setCellValue("IS_ALL_DAY")
+                    headerRow.createCell(SEQ).setCellValue(getString(R.string.export_excel_header_seq))
+                    headerRow.createCell(WRITE_DATE).setCellValue(getString(R.string.export_excel_header_write_date))
+                    headerRow.createCell(TITLE).setCellValue(getString(R.string.export_excel_header_title))
+                    headerRow.createCell(CONTENTS).setCellValue(getString(R.string.export_excel_header_contents))
+                    headerRow.createCell(ATTACH_PHOTO_NAME).setCellValue(getString(R.string.export_excel_header_attach_photo_path))
+                    headerRow.createCell(ATTACH_PHOTO_SIZE).setCellValue(getString(R.string.export_excel_header_attach_photo_size))
+                    headerRow.createCell(WRITE_TIME_MILLIS).setCellValue(getString(R.string.export_excel_header_write_time_millis))
+                    headerRow.createCell(WEATHER).setCellValue(getString(R.string.export_excel_header_weather))
+                    headerRow.createCell(IS_ALL_DAY).setCellValue(getString(R.string.export_excel_header_is_all_day))
+
                     headerRow.getCell(SEQ).cellStyle = headerStyle
                     headerRow.getCell(WRITE_DATE).cellStyle = headerStyle
                     headerRow.getCell(TITLE).cellStyle = headerStyle
@@ -152,14 +153,14 @@ class SettingsActivity : EasyDiaryActivity() {
 
                     // FIXME:
                     // https://poi.apache.org/apidocs/dev/org/apache/poi/ss/usermodel/Sheet.html#setColumnWidth-int-int-
-                    sheet.setColumnWidth(SEQ, 256 * 5)
+                    sheet.setColumnWidth(SEQ, 256 * 10)
                     sheet.setColumnWidth(WRITE_DATE, 256 * 30)
                     sheet.setColumnWidth(TITLE, 256 * 30)
                     sheet.setColumnWidth(CONTENTS, 256 * 50)
                     sheet.setColumnWidth(ATTACH_PHOTO_NAME, 256 * 80)
                     sheet.setColumnWidth(ATTACH_PHOTO_SIZE, 256 * 15)
-                    sheet.setColumnWidth(WRITE_TIME_MILLIS, 256 * 30)
-                    sheet.setColumnWidth(WEATHER, 256 * 30)
+                    sheet.setColumnWidth(WRITE_TIME_MILLIS, 256 * 60)
+                    sheet.setColumnWidth(WEATHER, 256 * 10)
                     sheet.setColumnWidth(IS_ALL_DAY, 256 * 30)
                     val exportFilePath = "${Environment.getExternalStorageDirectory().absolutePath}${WORKING_DIRECTORY}aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}.xls"
                     diaryList.forEachIndexed { index, diaryDto ->
@@ -167,50 +168,49 @@ class SettingsActivity : EasyDiaryActivity() {
                         val photoNames = StringBuffer()
                         val photoSizes = StringBuffer()
                         diaryDto.photoUris?.map {
-                            photoNames.append("${it.getFilePath()}\n")
+                            photoNames.append("$DIARY_PHOTO_DIRECTORY${FilenameUtils.getName(it.getFilePath())}\n")
                             photoSizes.append("${File(it.getFilePath()).length() / 1024}\n")
                         }
-                        
-                        row.createCell(SEQ).apply {
-                            setCellValue(diaryDto.sequence.toDouble())
-                        }
-                        row.createCell(WRITE_DATE).apply {
-                            setCellValue(DateUtils.getFullPatternDateWithTimeAndSeconds(diaryDto.currentTimeMillis))
-                        }
-                        row.createCell(TITLE).apply {
-                            setCellValue(diaryDto.title)
-                        }
-                        row.createCell(CONTENTS).apply {
-                            setCellValue(diaryDto.contents)
-                            cellStyle = wrapStyle
-                        }
-                        row.createCell(ATTACH_PHOTO_NAME).apply {
-                            setCellValue(photoNames.toString())
-                            cellStyle = wrapStyle
-                        }
-                        row.createCell(ATTACH_PHOTO_SIZE).apply {
-                            setCellValue(photoSizes.toString())
-                            cellStyle = wrapStyle
-                        }
-                        row.createCell(WRITE_TIME_MILLIS).apply {
-                            setCellValue(diaryDto.currentTimeMillis.toDouble())
-                            cellStyle = wrapStyle
-                        }
-                        row.createCell(WEATHER).apply {
-                            setCellValue(diaryDto.weather.toDouble())
-                            cellStyle = wrapStyle
-                        }
-                        row.createCell(IS_ALL_DAY).apply {
-                            setCellValue(diaryDto.isAllDay)
-                            cellStyle = wrapStyle
-                        }
+
+                        val sequence = row.createCell(SEQ).apply {cellStyle = bodyStyle}
+                        val writeDate = row.createCell(WRITE_DATE).apply {cellStyle = bodyStyle}
+                        val title = row.createCell(TITLE).apply {cellStyle = bodyStyle}
+                        val contents = row.createCell(CONTENTS).apply {cellStyle = bodyStyle}
+                        val attachPhotoNames = row.createCell(ATTACH_PHOTO_NAME).apply {cellStyle = bodyStyle}
+                        val attachPhotoSizes = row.createCell(ATTACH_PHOTO_SIZE).apply {cellStyle = bodyStyle}
+                        val writeTimeMillis = row.createCell(WRITE_TIME_MILLIS).apply {cellStyle = bodyStyle}
+                        val weather = row.createCell(WEATHER).apply {cellStyle = bodyStyle}
+                        val isAllDay = row.createCell(IS_ALL_DAY).apply {cellStyle = bodyStyle}
+
+                        sequence.setCellValue(diaryDto.sequence.toDouble())
+                        writeDate.setCellValue(DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis))
+                        title.setCellValue(diaryDto.title)
+                        contents.setCellValue(diaryDto.contents)
+                        attachPhotoNames.setCellValue(photoNames.toString())
+                        attachPhotoSizes.setCellValue(photoSizes.toString())
+                        writeTimeMillis.setCellValue(diaryDto.currentTimeMillis.toDouble())
+                        isAllDay.setCellValue(diaryDto.isAllDay)
+                        weather.setCellValue(when(diaryDto.weather) {
+                            WEATHER_SUNNY -> getString(R.string.weather_sunny)
+                            WEATHER_CLOUD_AND_SUN -> getString(R.string.weather_cloud_and_sun)
+                            WEATHER_RAIN_DROPS -> getString(R.string.weather_rain_drops)
+                            WEATHER_BOLT -> getString(R.string.weather_bolt)
+                            WEATHER_SNOWING -> getString(R.string.weather_snowing)
+                            WEATHER_RAINBOW -> getString(R.string.weather_rainbow)
+                            WEATHER_UMBRELLA -> getString(R.string.weather_umbrella)
+                            WEATHER_STARS -> getString(R.string.weather_stars)
+                            WEATHER_MOON -> getString(R.string.weather_moon)
+                            WEATHER_NIGHT_RAIN -> getString(R.string.weather_night_rain)
+                            else -> ""
+                        })
 
                         runOnUiThread {
-                            progressInfo.text = "Export xls file to ${exportFilePath} (${index.plus(1)}/${diaryList.size})"
+                            progressInfo.text = "${index.plus(1)} / ${diaryList.size}\n${getString(R.string.export_excel_xls_location)}: $exportFilePath"
                         }
                     }
                     val outputStream = FileOutputStream(exportFilePath)
                     wb.write(outputStream)
+                    outputStream.close()
                     runOnUiThread {
                         confirmButton.visibility = View.VISIBLE
                         confirmButton.setOnClickListener { alert.cancel() }
@@ -554,8 +554,8 @@ class SettingsActivity : EasyDiaryActivity() {
         const val CONTENTS = 3
         const val ATTACH_PHOTO_NAME = 4
         const val ATTACH_PHOTO_SIZE = 5
-        const val WRITE_TIME_MILLIS = 6
-        const val WEATHER = 7
-        const val IS_ALL_DAY = 8
+        const val WEATHER = 6
+        const val IS_ALL_DAY = 7
+        const val WRITE_TIME_MILLIS = 8
     }
 }

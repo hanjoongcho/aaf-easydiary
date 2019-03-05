@@ -227,8 +227,9 @@
         Improved the ability to correct input digits when PIN is set and unlocked
     </string>
     <string name="release_137">
-        v1.4.74 / 2019.02.28\n
-        Improved the ability to apply filters to postcard images
+        v1.4.74 / 2019.03.06\n
+        Improved the ability to apply filters to postcard images\n
+        Added ability to export diary to Excel file
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -306,6 +307,26 @@
     <string name="contents_summary_title">Diary content summary</string>
     <string name="contents_summary_description">Summarize the contents of the diary provided in the calendar, timeline, search screen, and so on.</string>
     <string name="init_cipher_error_guide_message">The fingerprint information of the device has been changed. Change the PIN lock mode to unlock, then unlock the fingerprint lock and set it again.</string>
-    <string name="export_excel_title">엑셀파일로 내보내기</string>
-    <string name="export_excel_description">모든 콘텐츠를 엑셀파일로 저장합니다.</string>
+    <string name="export_excel_title">Export excel</string>
+    <string name="export_excel_description">Save all content as an Excel file.</string>
+    <string name="export_excel_xls_location">Location</string>
+    <string name="export_excel_header_seq">Sequence</string>
+    <string name="export_excel_header_write_date">Write date</string>
+    <string name="export_excel_header_title">Diary title</string>
+    <string name="export_excel_header_contents">Diary contents</string>
+    <string name="export_excel_header_attach_photo_path">Attached photo path</string>
+    <string name="export_excel_header_attach_photo_size">Attached photo size</string>
+    <string name="export_excel_header_write_time_millis">Write date\n(Since January 1st 1970 in milliseconds.)</string>
+    <string name="export_excel_header_weather">Weather</string>
+    <string name="export_excel_header_is_all_day">AllDay</string>
+    <string name="weather_sunny">Sunny</string>
+    <string name="weather_cloud_and_sun">Cloud and Sun</string>
+    <string name="weather_rain_drops">Rain drops</string>
+    <string name="weather_bolt">Bolt</string>
+    <string name="weather_snowing">Snowing</string>
+    <string name="weather_rainbow">Rainbow</string>
+    <string name="weather_umbrella">Umbrella</string>
+    <string name="weather_stars">Stars</string>
+    <string name="weather_moon">Moon</string>
+    <string name="weather_night_rain">Night rain</string>
 </resources>
