@@ -75,7 +75,7 @@ Step3. Setting storeFile and storePassword in local.properties file
        storeFile=your signing key location
        storePassword=your password
        ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-       +++++++ example +++++++++++++++++++++++++++++++++++
+       +++++++ example ++++++++++++++++++++++++++++++++++++++++++++
        storeFile=C:/dev/android/app-signing.jks
        storePassword=sjdiSDAss3!@#
        ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -95,7 +95,8 @@ Step5. Import 10 svg files for your project from your Android studio.
        night-rain.svg     -> ic_night_rain.xml
        moon-9.svg         -> ic_moon_9.xml
        bolt.svg           -> ic_bolt.xml
-Step6. Register your package name and SHA-1 signature certificate fingerprint for Google Drive use.(https://console.developers.google.com/)
+Step6. Register your package name and SHA-1 signature certificate fingerprint for Google Drive use:
+       https://console.developers.google.com/
 Step7. Build 'aaf-easydiary' project with android studio.
        a. Build > Select Build Variant
        b. Select 'gmsRelease' from the Build Variant setting and run
@@ -112,7 +113,7 @@ Step3. Setting storeFile and storePassword in local.properties file
        storeFile=your signing key location
        storePassword=your password
        ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-       +++++++ example +++++++++++++++++++++++++++++++++++
+       +++++++ example ++++++++++++++++++++++++++++++++++++++++++++
        storeFile=C:/dev/android/app-signing.jks
        storePassword=sjdiSDAss3!@#
        ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
