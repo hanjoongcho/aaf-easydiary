@@ -70,8 +70,19 @@ To build the gms flavor build, you need to add your Google Mobile Service settin
 ```
 Step1. Fork or download 'aaf-easydiary' project.
 Step2. Import 'aaf-easydiary' project into android studio.
-Step3. Use below link download svg images from Flaticon.
-Step4. Import 10 svg files for your project from your Android studio.
+Step3. Setting storeFile and storePassword in local.properties file
+       +++++++ local.properties +++++++++++++++++++++++++++++++++++
+       storeFile=your signing key location
+       storePassword=your password
+       ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+       +++++++ example +++++++++++++++++++++++++++++++++++
+       storeFile=C:/dev/android/app-signing.jks
+       storePassword=sjdiSDAss3!@#
+       ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+       If you do not have the signing key, you can create it by referring to the link below:
+       https://developer.android.com/studio/publish/app-signing#generate-key
+Step4. Use below link download svg images from Flaticon.
+Step5. Import 10 svg files for your project from your Android studio.
        Project rightclick > New > Vector Asset...(Res Directory is gms)
        You can import from the menu and the resource names are:
        clouds-and-sun.svg -> ic_clouds_and_sun.xml
@@ -84,8 +95,8 @@ Step4. Import 10 svg files for your project from your Android studio.
        night-rain.svg     -> ic_night_rain.xml
        moon-9.svg         -> ic_moon_9.xml
        bolt.svg           -> ic_bolt.xml
-Step5. Register your package name and SHA-1 signature certificate fingerprint for Google Drive use.(https://console.developers.google.com/)
-Step6. Build 'aaf-easydiary' project with android studio.
+Step6. Register your package name and SHA-1 signature certificate fingerprint for Google Drive use.(https://console.developers.google.com/)
+Step7. Build 'aaf-easydiary' project with android studio.
        a. Build > Select Build Variant
        b. Select 'gmsRelease' from the Build Variant setting and run
 ```
@@ -96,7 +107,18 @@ For the foss flavor build, no further action is required. However, because we do
 ```
 Step1. Fork or download 'aaf-easydiary' project.
 Step2. Import 'aaf-easydiary' project into android studio.
-Step3. Build 'aaf-easydiary' project with android studio.
+Step3. Setting storeFile and storePassword in local.properties file
+       +++++++ local.properties +++++++++++++++++++++++++++++++++++
+       storeFile=your signing key location
+       storePassword=your password
+       ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+       +++++++ example +++++++++++++++++++++++++++++++++++
+       storeFile=C:/dev/android/app-signing.jks
+       storePassword=sjdiSDAss3!@#
+       ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+       If you do not have the signing key, you can create it by referring to the link below:
+       https://developer.android.com/studio/publish/app-signing#generate-key
+Step4. Build 'aaf-easydiary' project with android studio.
        a. Build > Select Build Variant
        b. Select 'fossRelease' from the Build Variant setting and run
 ```
