@@ -147,6 +147,9 @@ Currently supported languages are listed below:
 [strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-de/strings.xml)  
 [MANUAL_de.md](https://github.com/hanjoongcho/aaf-easydiary/blob/master/MANUAL_de.md)  
 
+# Contributing
+[Contributing](Contributing.md)
+
 # License
 [LICENSE][LICENSE.md]
 
