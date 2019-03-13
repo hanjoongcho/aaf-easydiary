@@ -1,5 +1,5 @@
 # Easy Diary Privacy policy
-
+<img src="app/src/main/res/mipmap-xxhdpi/ic_launcher.png">   
 
 
 ## Privacy Policy
