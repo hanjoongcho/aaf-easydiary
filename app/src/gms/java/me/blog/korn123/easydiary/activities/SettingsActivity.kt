@@ -162,7 +162,7 @@ class SettingsActivity : EasyDiaryActivity() {
                     sheet.setColumnWidth(WRITE_TIME_MILLIS, 256 * 60)
                     sheet.setColumnWidth(WEATHER, 256 * 10)
                     sheet.setColumnWidth(IS_ALL_DAY, 256 * 30)
-                    val exportFilePath = "${Environment.getExternalStorageDirectory().absolutePath}${WORKING_DIRECTORY}aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}.xls"
+                    val exportFileName = "aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}"
                     diaryList.forEachIndexed { index, diaryDto ->
                         val row = sheet.createRow(index + 1)
                         val photoNames = StringBuffer()
@@ -205,10 +205,11 @@ class SettingsActivity : EasyDiaryActivity() {
                         })
 
                         runOnUiThread {
-                            progressInfo.text = "${index.plus(1)} / ${diaryList.size}\n${getString(R.string.export_excel_xls_location)}: $exportFilePath"
+                            progressInfo.text = "${index.plus(1)} / ${diaryList.size}\n${getString(R.string.export_excel_xls_location)}: ${WORKING_DIRECTORY + exportFileName}.xls"
                         }
                     }
-                    val outputStream = FileOutputStream(exportFilePath)
+                    
+                    val outputStream = FileOutputStream("${Environment.getExternalStorageDirectory().absolutePath + WORKING_DIRECTORY + exportFileName}.xls")
                     wb.write(outputStream)
                     outputStream.close()
                     runOnUiThread {
