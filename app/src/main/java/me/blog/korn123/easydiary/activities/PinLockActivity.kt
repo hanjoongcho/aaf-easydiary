@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.activities
 
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.view.View
@@ -43,6 +44,15 @@ class PinLockActivity : BaseSimpleActivity() {
         num8.setOnClickListener(keyPadClickListener)
         num9.setOnClickListener(keyPadClickListener)
         delete.setOnClickListener(keyPadClickListener)
+        if (config.fingerprintLockEnable) {
+            changeFingerprintLock.visibility = View.VISIBLE
+            changeFingerprintLock.setOnClickListener {
+                startActivity(Intent(this, FingerprintLockActivity::class.java).apply {
+                    putExtra(FingerprintLockActivity.LAUNCHING_MODE, FingerprintLockActivity.ACTIVITY_UNLOCK)
+                })
+                finish()
+            }
+        }
     }
 
     override fun onResume() {

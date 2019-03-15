@@ -128,8 +128,18 @@
 
             <LinearLayout
                 style="@style/layout_lock_number_container">
-                <TextView
-                    style="@style/text_view_lock_number_button" />
+                <LinearLayout
+                    android:padding="5dp"
+                    style="@style/text_view_lock_number_button">
+                    <ImageView
+                        tools:visibility="visible"
+                        android:id="@+id/changeFingerprintLock"
+                        android:visibility="gone"
+                        android:src="@drawable/ic_fingerprint"
+                        android:tint="@color/pinLockText"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"/>
+                </LinearLayout>
                 <TextView
                     style="@style/text_view_lock_number_button"
                     android:id="@+id/num0"

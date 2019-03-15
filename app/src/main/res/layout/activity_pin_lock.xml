@@ -2,6 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/container"
     android:background="@color/colorPrimary"
     android:orientation="vertical"
@@ -34,26 +35,35 @@
             style="@style/text_view_lock_number_input" />
     </LinearLayout>
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:gravity="center"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-        <ImageView
-            android:src="@drawable/intro"
-            android:layout_width="60dp"
-            android:layout_height="60dp" />
-        <TextView
-            android:id="@+id/infoMessage"
-            android:padding="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_height="0dp">
+        <LinearLayout
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             android:gravity="center"
-            android:textColor="@android:color/white"
-            android:textStyle="bold" 
-            tools:text="@string/pin_unlock_guide_message"/>
-    </LinearLayout>
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/launcherIcon"
+                android:src="@drawable/intro"
+                android:layout_width="60dp"
+                android:layout_height="60dp" />
+            <TextView
+                android:id="@+id/infoMessage"
+                android:padding="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                tools:text="@string/pin_unlock_guide_message"/>
+        </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 
     <LinearLayout
         android:gravity="bottom"
@@ -118,8 +128,18 @@
 
         <LinearLayout
             style="@style/layout_lock_number_container">
-            <TextView
-                style="@style/text_view_lock_number_button" />
+            <LinearLayout
+                android:padding="5dp"
+                style="@style/text_view_lock_number_button">
+                <ImageView
+                    tools:visibility="visible"
+                    android:id="@+id/changeFingerprintLock"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_fingerprint"
+                    android:tint="@color/pinLockText"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+            </LinearLayout>
             <TextView
                 style="@style/text_view_lock_number_button"
                 android:id="@+id/num0"
