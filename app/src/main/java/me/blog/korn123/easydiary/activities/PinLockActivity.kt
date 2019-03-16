@@ -45,7 +45,7 @@ class PinLockActivity : BaseSimpleActivity() {
         num9.setOnClickListener(keyPadClickListener)
         delete.setOnClickListener(keyPadClickListener)
         if (config.fingerprintLockEnable) {
-            changeFingerprintLock.visibility = View.VISIBLE
+            fingerprint.visibility = View.VISIBLE
             changeFingerprintLock.setOnClickListener {
                 startActivity(Intent(this, FingerprintLockActivity::class.java).apply {
                     putExtra(FingerprintLockActivity.LAUNCHING_MODE, FingerprintLockActivity.ACTIVITY_UNLOCK)
