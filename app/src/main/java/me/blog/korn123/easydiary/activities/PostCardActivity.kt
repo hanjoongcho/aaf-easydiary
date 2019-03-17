@@ -65,8 +65,8 @@ class PostCardActivity : EasyDiaryActivity() {
         val diaryDto = EasyDiaryDbHelper.readDiaryBy(mSequence)
         EasyDiaryUtils.initWeatherView(this, weather, diaryDto.weather)
         when (diaryDto.title.isNullOrEmpty()) {
-            true -> diaryTitle.text = diaryDto.title
-            false -> diaryTitle.visibility = View.GONE
+            true -> diaryTitle.visibility = View.GONE
+            false -> diaryTitle.text = diaryDto.title
         }
         contents.text = diaryDto.contents
         date.text = when (diaryDto.isAllDay) {
