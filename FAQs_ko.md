@@ -1,35 +1,57 @@
 # Easy Diary FAQs
 
-This is the list of Frequently asked questions for Easy Diary. It is intended to serve as a self-service utility document. This is to aid new users or already existing users of Easy Diary. This document may be updated from time to time to suit any new changes to the software as new developments or changes will be implemented.
+이 문서는 이지 다이어리 사용자들이 자주 묻는 질문 목록을 정리한 문서입니다.  
+이지 다이어리를 이용하는 새로운 사용자나 기존 사용자가 애플리케이션의 사용법을 스스로 익힐 수 있도록 가이드 하기 위해 작성되었으며, 기능이 추가되거나 변경되는 경우 새로운 변경 사항에 맞게 수시로 업데이트될 수 있습니다.
 
 ---
 
-## What is a Diary?
+## 일기란 무엇인가요?
 
-- A diary is a private place where you write down your feelings, thoughts and opinions, as well as record events and discuss experiences.
+- 다이어리는 자신의 감정, 생각, 의견을 적는 것은 물론, 사건을 기록하고 경험을 토론하는 사적인 공간입니다.
 
 ---
 
-## What is Easy Diary?
+## 이지 다이어리의 장점은 무엇인가요?
 
-- Easy Diary is a diary application that is optimized to give you the best user experience. The application is design with many amazing features that you won't find on a regular diary app. 
+- 이지 다이어리는 최고의 사용자 경험을 제공하도록 최적화된 다이어리 애플리케이션이며, 일반적인 다이어리 애플리케이션에서 제공하지 않는 유용한 기능을 많이 제공하고 있습니다.
 
-The features/functions of the app include;
+이지 다이어리에서 제공하는 기능:  
+✍ 다이어리 작성&편집  
+키패드 및 음성인식 기능을 이용하여 콘텐츠를 작성하거나 편집할 수 있습니다.
 
+🔍 다이어리 검색  
+저장된 콘텐츠를 빠르게 검색할 수 있습니다. 검색된 키워드와 일치하는 단어는 하이라이트 하게 표현되어 한눈에 알아볼 수 있습니다. 
 
-- Write a diary (voice or keypad)
-- Search diary
-- Read Diary
-- Edit Diary
-- Chart
-- Calendar
-- Diary Card
-- Time Line
-- Advanced Settings
-     - Font Setting
-     - Lock Setting(PIN or Fingerprint)
-     - Theme Setting
-     - Backup and Recovery
+📅 캘린더  
+저장된 콘텐츠는 캘린더를 이용해서 일별로 확인할 수 있습니다.
+
+🕒 타임라인  
+저장된 콘텐츠는 작성된 시간에 맞춰 타임라인 형태로 확인할 수 있습니다. 
+
+🃏 다이어리 포스트카드  
+저장된 콘텐츠(첨부사진 포함)를 이용하여 다이어리 포스트카드를 만들고 친구에서 공유할 수 있습니다.
+기념일이나 명절 인사를 포스트카드로 이쁘게 만들어서 공유해보세요.
+
+🔒 일기장 잠금  
+PIN(개인식별넘버)이나 지문인식 기능을 이용해서 애플리케이션을 잠그거나 해제할 수 있습니다.
+
+🎨 애플리케이션 테마 설정  
+171가지 색상의 테마를 설정할 수 있고 컬러 피커를 이용해서 텍스트와 텍스트 배경 컬러를 사용자 취향에 맞춰 변경할 수 있습니다.
+
+🔤 폰트 설정  
+이지 다이어리(Easy Diary)에서 기본으로 제공하는 폰트는 '나눔손글씨 펜', '나눔손글씨 붓', '동그라미재단L' 그리고 디바이스에서 설정된 폰트입니다.
+이외에도 사용자가 보유하고 있는 TTF 폰트가 있다면 이지 다이어리 폰트 디렉터리에 추가해서 사용하실 수 있습니다.
+
+📊 차트보기  
+시간대별 일기 작성 현황은 바형태의 차트로 한눈에 볼 수 있습니다.
+그리 유용한 기능은 아니지만 빼기도 그래서 그냥 제공하고 있습니다.
+
+💾 백업 및 복구  
+첨부사진을 포함한 모든 콘텐츠는 사용자 개인 계정의 구글드라이브를 이용해서 백업하고 복구할 수 있습니다.
+백업 데이터는 사용자가 구글드라이브에서 별도로 공유설정을 진행하지 않는 한 외부로 공개되지 않습니다.
+
+📁 엑셀파일로 내보내기  
+작성된 일기는 Excel파일로 내보낼 수 있습니다.
 
 ---
 
