@@ -64,7 +64,10 @@ class PostCardActivity : EasyDiaryActivity() {
         mSequence = intent.getIntExtra(DIARY_SEQUENCE, 0)
         val diaryDto = EasyDiaryDbHelper.readDiaryBy(mSequence)
         EasyDiaryUtils.initWeatherView(this, weather, diaryDto.weather)
-        diaryTitle.text = diaryDto.title
+        when (diaryDto.title.isNullOrEmpty()) {
+            true -> diaryTitle.text = diaryDto.title
+            false -> diaryTitle.visibility = View.GONE
+        }
         contents.text = diaryDto.contents
         date.text = when (diaryDto.isAllDay) {
             true -> DateUtils.getFullPatternDate(diaryDto.currentTimeMillis)
