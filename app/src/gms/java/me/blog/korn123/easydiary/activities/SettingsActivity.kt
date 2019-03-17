@@ -296,6 +296,16 @@ class SettingsActivity : EasyDiaryActivity() {
                 contentsSummarySwitcher.toggle()
                 config.enableContentsSummary = contentsSummarySwitcher.isChecked 
             }
+            R.id.faq -> {
+                startActivity(Intent(this, WebViewActivity::class.java).apply {
+                    putExtra(BaseWebViewActivity.OPEN_URL_INFO, getString(R.string.faq_url))
+                })
+            }
+            R.id.privacyPolicy -> {
+                startActivity(Intent(this, WebViewActivity::class.java).apply {
+                    putExtra(BaseWebViewActivity.OPEN_URL_INFO, getString(R.string.privacy_policy_url))
+                })
+            }
         }
     }
     
@@ -336,6 +346,8 @@ class SettingsActivity : EasyDiaryActivity() {
         increaseFont.setOnClickListener(mOnClickListener)
         contentsSummary.setOnClickListener(mOnClickListener)
         exportExcel.setOnClickListener(mOnClickListener)
+        faq.setOnClickListener(mOnClickListener)
+        privacyPolicy.setOnClickListener(mOnClickListener)
 
         fontLineSpacing.configBuilder
                 .min(0.2F)

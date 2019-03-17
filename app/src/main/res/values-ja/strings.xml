@@ -334,4 +334,10 @@
     <string name="weather_stars">星</string>
     <string name="weather_moon">月</string>
     <string name="weather_night_rain">夜の雨</string>
+    <string name="faq_title">よくある質問</string>
+    <string name="faq_description">イージーダイアリーのユーザーがよくある質問とそれに対する回答内容を確認することができます。</string>
+    <string name="faq_url">https://github.com/hanjoongcho/aaf-easydiary/blob/master/FAQs.md</string>
+    <string name="privacy_policy_title">個人情報保護方針</string>
+    <string name="privacy_policy_description">イージーダイアリー個人情報保護方針です。</string>
+    <string name="privacy_policy_url">https://github.com/hanjoongcho/aaf-easydiary/blob/master/Privacy.md</string>
 </resources>

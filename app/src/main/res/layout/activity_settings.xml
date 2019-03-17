@@ -497,13 +497,42 @@
                         style="@style/AppCard.Settings">
                         <LinearLayout
                             style="@style/LinearLayoutVertical">
-
                             <com.simplemobiletools.commons.views.MyTextView
                                 style="@style/SettingsTitle"
                                 android:text="@string/invite_friends" />
                             <com.simplemobiletools.commons.views.MyTextView
                                 android:id="@+id/inviteSummary"
                                 style="@style/SettingsSummary" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/faq"
+                        android:orientation="vertical"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                style="@style/SettingsTitle"
+                                android:text="@string/faq_title" />
+                            <com.simplemobiletools.commons.views.MyTextView
+                                style="@style/SettingsSummary"
+                                android:text="@string/faq_description" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/privacyPolicy"
+                        android:orientation="vertical"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                style="@style/SettingsTitle"
+                                android:text="@string/privacy_policy_title" />
+                            <com.simplemobiletools.commons.views.MyTextView
+                                style="@style/SettingsSummary"
+                                android:text="@string/privacy_policy_description" />
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
 
