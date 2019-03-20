@@ -339,5 +339,5 @@
     <string name="faq_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/FAQs_ko.md</string>
     <string name="privacy_policy_title">개인정보 보호정책</string>
     <string name="privacy_policy_description">이지 다이어리 개인정보 보호정책입니다.</string>
-    <string name="privacy_policy_url">https://github.com/hanjoongcho/aaf-easydiary/blob/master/Privacy_ko.md</string>
+    <string name="privacy_policy_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/Privacy_ko.md</string>
 </resources>

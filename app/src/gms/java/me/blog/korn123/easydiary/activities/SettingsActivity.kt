@@ -303,8 +303,9 @@ class SettingsActivity : EasyDiaryActivity() {
                 })
             }
             R.id.privacyPolicy -> {
-                startActivity(Intent(this, WebViewActivity::class.java).apply {
-                    putExtra(BaseWebViewActivity.OPEN_URL_INFO, getString(R.string.privacy_policy_url))
+                startActivity(Intent(this, MarkDownViewActivity::class.java).apply {
+                    putExtra(MarkDownViewActivity.OPEN_URL_INFO, getString(R.string.privacy_policy_url))
+                    putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, getString(R.string.privacy_policy_title))
                 })
             }
         }
