@@ -23,8 +23,10 @@ This permission can be revoked when it is not needed, this is privy to only devi
 
 Easy Diary has some other capabilities, which are functions the software can remotely effect on its own. They include;
 
-- **have full network access**: The app is capable of creating network sockets and can use customized network protocols. This capability does not require the software to send data to the internet.
-- **use fingerprint hardware**: This is the capability of the app to use your fingerprint hardware for authentication
+📌 **have full network access**:  
+The app is capable of creating network sockets and can use customized network protocols. This capability does not require the software to send data to the internet.  
+📌 **use fingerprint hardware**:  
+This is the capability of the app to use your fingerprint hardware for authentication
 
 ---
 
