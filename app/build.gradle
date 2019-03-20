@@ -123,6 +123,7 @@ dependencies {
     implementation 'jp.wasabeef:glide-transformations:4.0.0'
     implementation "jp.co.cyberagent.android:gpuimage:2.0.3"
     implementation group: 'org.apache.poi', name: 'poi', version: '3.9'
+    implementation 'com.github.tiagohm.MarkdownView:library:0.19.0'
 
     // debug, release
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$LEAK_CANARY_VERSION"

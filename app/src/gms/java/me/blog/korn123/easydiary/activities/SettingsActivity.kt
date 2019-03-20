@@ -297,8 +297,9 @@ class SettingsActivity : EasyDiaryActivity() {
                 config.enableContentsSummary = contentsSummarySwitcher.isChecked 
             }
             R.id.faq -> {
-                startActivity(Intent(this, WebViewActivity::class.java).apply {
-                    putExtra(BaseWebViewActivity.OPEN_URL_INFO, getString(R.string.faq_url))
+                TransitionHelper.startActivityWithTransition(this, Intent(this, MarkDownViewActivity::class.java).apply {
+                    putExtra(MarkDownViewActivity.OPEN_URL_INFO, getString(R.string.faq_url))
+                    putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, getString(R.string.faq_title))
                 })
             }
             R.id.privacyPolicy -> {

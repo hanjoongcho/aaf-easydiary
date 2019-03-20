@@ -23,3 +23,7 @@
 
 -keep class org.apache.poi.** { *; }
 -dontwarn org.apache.poi.**
+
+-dontwarn java.awt.**
+-dontwarn javax.swing.**
+-dontwarn javax.imageio.**
