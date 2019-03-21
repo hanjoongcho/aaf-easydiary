@@ -1,7 +1,7 @@
 ### 이지 다이어리 사용자 가이드
 
 #### 🔖 목차
-01. [TTF 폰트추가](#ttf-폰트추가)  
+01. [TTF 폰트추가](#☑️_ttf-폰트추가)  
 02. [다이어리 첨부사진 복구](#다이어리-첨부사진-복구)
 
 #### ☑️ TTF 폰트추가
@@ -49,8 +49,7 @@ __04. 첨부사진 복구 확인__
 
 * 복구전  
 <img src="https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/screenshots/manual_02_01.png" width="284" height="537">  
-<br>
-
+  
 * 복구후
 <img src="https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/screenshots/manual_02_02.png" width="284" height="537">
 
