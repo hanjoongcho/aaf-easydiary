@@ -50,6 +50,7 @@ __04. 첨부사진 복구 확인__
 * 복구전  
 <img src="https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/screenshots/manual_02_01.png" width="284" height="537">  
 <br>
+
 * 복구후
 <img src="https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/screenshots/manual_02_02.png" width="284" height="537">
 
