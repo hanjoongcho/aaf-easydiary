@@ -5,6 +5,7 @@
 따라서 AAF의 애플리케이션은 사용자의 데이터 및 개인정보를 저장하기 위해 별도의 서버를 운영하지 않으며, 불필요하게 사용자의 개인정보를 취급하지도 않습니다. 만약 사용중인 애플리케이션에 대한 백업 및 복구를 사용자가 원하는경우 사용자의 동의하에 Google의 OAuth인증을 통하여 사용자 개인의 Google Drive에 애플리케이션 데이터를 저장하고 이후 백업 요청 시 사용합니다.  
 백업 데이터는 사용자가 Google Drive에서 별도로 공유설정을 진행하지 않는한 외부로 공개되지 않습니다.
 
+---
 
 #### ☑️ 개인정보 보호정책
 This privacy policy document is to clearly state, and provide information on what, how, and why personal data or information is collected, used, and disclosed, when this software is utilized, and the choices you have associated with that data. 
