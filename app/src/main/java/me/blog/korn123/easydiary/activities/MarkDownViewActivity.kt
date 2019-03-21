@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.activities
 
 import android.os.Bundle
+import br.tiagohm.markdownview.css.InternalStyleSheet
 import kotlinx.android.synthetic.main.activity_markdown_view.*
 import me.blog.korn123.easydiary.R
 import br.tiagohm.markdownview.css.styles.Github
@@ -16,8 +17,9 @@ class MarkDownViewActivity : EasyDiaryActivity() {
         }
 
         markdownView.loadMarkdownFromUrl(intent.getStringExtra(OPEN_URL_INFO))
-        markdownView.addStyleSheet(Github().apply {
+        markdownView.addStyleSheet(Github()/*InternalStyleSheet()*/.apply {
             removeRule(".scrollup")
+            addRule("body", "padding: 0px");
         })
     }
 

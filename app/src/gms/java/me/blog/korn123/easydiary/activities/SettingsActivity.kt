@@ -62,7 +62,7 @@ class SettingsActivity : EasyDiaryActivity() {
                 config.diarySearchQueryCaseSensitive = sensitiveOptionSwitcher.isChecked
             }
             R.id.addTtfFontSetting -> {
-                openGuideView()
+                openGuideView(getString(R.string.add_ttf_fonts_title))
             }
             R.id.restoreSetting -> {
                 mTaskFlag = SETTING_FLAG_IMPORT_GOOGLE_DRIVE
@@ -219,13 +219,14 @@ class SettingsActivity : EasyDiaryActivity() {
                 }).start()
             }
             R.id.restorePhotoSetting -> {
-                openGuideView()
+                openGuideView(getString(R.string.restore_photo))
             }
             R.id.rateAppSetting -> openGooglePlayBy("me.blog.korn123.easydiary")
             R.id.licenseView -> {
-                val licenseIntent = Intent(this, WebViewActivity::class.java)
-                licenseIntent.putExtra(BaseWebViewActivity.OPEN_URL_INFO, "https://github.com/hanjoongcho/aaf-easydiary/blob/master/LICENSE.md")
-                startActivity(licenseIntent)
+                TransitionHelper.startActivityWithTransition(this, Intent(this, MarkDownViewActivity::class.java).apply {
+                    putExtra(MarkDownViewActivity.OPEN_URL_INFO, "https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/LICENSE.md")
+                    putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, getString(R.string.preferences_information_licenses))
+                })
             }
             R.id.releaseNotes -> checkWhatsNewDialog(false)
             R.id.boldStyleOption -> {
@@ -303,7 +304,7 @@ class SettingsActivity : EasyDiaryActivity() {
                 })
             }
             R.id.privacyPolicy -> {
-                startActivity(Intent(this, MarkDownViewActivity::class.java).apply {
+                TransitionHelper.startActivityWithTransition(this, Intent(this, MarkDownViewActivity::class.java).apply {
                     putExtra(MarkDownViewActivity.OPEN_URL_INFO, getString(R.string.privacy_policy_url))
                     putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, getString(R.string.privacy_policy_title))
                 })
@@ -406,10 +407,11 @@ class SettingsActivity : EasyDiaryActivity() {
         }
     }
 
-    private fun openGuideView() {
-        val guideIntent = Intent(this, WebViewActivity::class.java)
-        guideIntent.putExtra(BaseWebViewActivity.OPEN_URL_INFO, getString(R.string.add_ttf_fonts_info_url))
-        startActivity(guideIntent)
+    private fun openGuideView(title: String) {
+        TransitionHelper.startActivityWithTransition(this, Intent(this, MarkDownViewActivity::class.java).apply {
+            putExtra(MarkDownViewActivity.OPEN_URL_INFO, getString(R.string.add_ttf_fonts_info_url))
+            putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, title)
+        })
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {

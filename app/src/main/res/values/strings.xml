@@ -90,7 +90,7 @@
     <string name="font_setting">Font setting</string>
     <string name="add_ttf_fonts_title">Add TTF font</string>
     <string name="add_ttf_fonts_summary">Add your own TTF fonts to the Easy Diary.\nIf the fonts are added, you can use the added fonts with the built-in fonts.</string>
-    <string name="add_ttf_fonts_info_url">https://github.com/hanjoongcho/aaf-easydiary/blob/master/MANUAL.md</string>
+    <string name="add_ttf_fonts_info_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/MANUAL.md</string>
     <string name="diary_search_keyword_case_sensitive_title">Case sensitive</string>
     <string name="diary_search_keyword_case_sensitive_summary">When the option is activated, it checks whether the diary matches case.</string>
     <string name="setting_primary_color_title">Theme</string>
