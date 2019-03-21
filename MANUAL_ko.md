@@ -47,7 +47,7 @@ __03. 복구대상 디바이스에 사진관리 디렉토리 복사__
 __04. 첨부사진 복구 확인__  
 첨부사진 복구가 완료되면 첨부사진을 정상적으로 열람할 수 있습니다.  
 
-* 복구전
+* 복구전  
 <img src="https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/screenshots/manual_02_01.png" width="284" height="537"><br /><br />
 
 * 복구후
