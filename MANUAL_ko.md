@@ -48,8 +48,8 @@ __04. 첨부사진 복구 확인__
 첨부사진 복구가 완료되면 첨부사진을 정상적으로 열람할 수 있습니다.  
 
 * 복구전  
-<img src="https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/screenshots/manual_02_01.png" width="284" height="537"><br /><br />
-
+<img src="https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/screenshots/manual_02_01.png" width="284" height="537">  
+<br>
 * 복구후
 <img src="https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/screenshots/manual_02_02.png" width="284" height="537">
 
