@@ -1,10 +1,10 @@
 ### Easy Diary User Guide
 
 #### 🔖 Table of Contents
-01. [Add TTF font](#add-ttf-font)  
-02. [Diary attached photo recovery](#diary-attached-photo-recovery)
+01. [Add TTF font](#user-content-️-add-ttf-font)  
+02. [Diary attached photo recovery](#user-content-️-diary-attached-photo-recovery)
 
-## Add TTF font
+#### ☑️ Add TTF font
 When the device language setting is set to Korean or English, the available fonts in this diary are the three fonts provided in the diary and the fonts set in the device.  
 To use the fonts you own in the diary, simply copy the TTF fonts to the specified location as follows.  
 
@@ -25,7 +25,7 @@ __04. Check additional fonts__
 When a TTF file is added to the font directory, the font is added to the font settings list.  
 <img src="https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/screenshots/app_easydiary12_04_en.png" width="288" height="512">
 
-## Diary attached photo recovery
+#### ☑️ Diary attached photo recovery
 Easy Diary only supports backup and recovery of content except attachments in backup and recovery operations.  
 If the user wants to back up and recover the attached photo, the operation must be done manually.  
 Backup and recovery of all diary content including attachments will be available in the future.     
