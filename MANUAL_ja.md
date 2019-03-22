@@ -10,7 +10,7 @@
 
 #### 01. 組み込みリストを確認
 <pre>
-<img src="screenshots/app_easydiary12_01_ja.png" width="288" height="512">
+<img src="https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/screenshots/app_easydiary12_01_ja.png" width="288" height="512">
 </pre>
 
 #### 02. フォントディレクトリを確認
@@ -19,21 +19,21 @@ TTFフォントファイルがデバイスにある場合は、デバイスに�
 スクリーンショットで使用されるエクスプローラは、'Simple File Manager' エクスプローラです.  
 TTFフォントファイルがPCにある場合は、PCで使用可能なエクスプローラを利用します.  
 
-<img src="screenshots/app_easydiary12_02_ja.png" width="288" height="512">
+<img src="https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/screenshots/app_easydiary12_02_ja.png" width="288" height="512">
 </pre>
 
 #### 03. フォントディレクトリにTTFフォントファイルをコピーする
 <pre>
 イージーダイアリーのフォントディレクトリは '/AAFactory/EasyDiary/Fonts/' です.  
 
-<img src="screenshots/app_easydiary12_03_ja.png" width="288" height="512">
+<img src="https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/screenshots/app_easydiary12_03_ja.png" width="288" height="512">
 </pre>
 
 #### 04. 追加フォントを確認
 <pre>
 フォントディレクトリにTTFファイルが追加されると、フォントの設定のリストに対応するフォントが追加されます.
   
-<img src="screenshots/app_easydiary12_04_ja.png" width="288" height="512">
+<img src="https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/screenshots/app_easydiary12_04_ja.png" width="288" height="512">
 </pre>
 
 ## ダイアリー添付写真の回復
@@ -66,8 +66,8 @@ TTFフォントファイルがPCにある場合は、PCで使用可能なエク�
 添付写真の修復が完了したら、添付の写真を閲覧することができます。
 
 * 復元前
-<img src="screenshots/manual_02_01.png" width="284" height="537">
+<img src="https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/screenshots/manual_02_01.png" width="284" height="537">
 
 * 復元後
-<img src="screenshots/manual_02_02.png" width="284" height="537">
+<img src="https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/screenshots/manual_02_02.png" width="284" height="537">
 </pre>
