@@ -1,10 +1,12 @@
 package me.blog.korn123.easydiary.activities
 
 import android.os.Bundle
-import br.tiagohm.markdownview.css.InternalStyleSheet
+import android.view.View
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import br.tiagohm.markdownview.css.styles.Github
 import kotlinx.android.synthetic.main.activity_markdown_view.*
 import me.blog.korn123.easydiary.R
-import br.tiagohm.markdownview.css.styles.Github
 
 class MarkDownViewActivity : EasyDiaryActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,6 +16,7 @@ class MarkDownViewActivity : EasyDiaryActivity() {
         supportActionBar?.run {
             title = intent.getStringExtra(OPEN_URL_DESCRIPTION)
             setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_cross)
         }
 
         markdownView.loadMarkdownFromUrl(intent.getStringExtra(OPEN_URL_INFO))
@@ -21,6 +24,12 @@ class MarkDownViewActivity : EasyDiaryActivity() {
             removeRule(".scrollup")
             addRule("body", "padding: 0px");
         })
+
+        markdownView.webViewClient =  object : WebViewClient() {
+            override fun onPageFinished(view: WebView, url: String) {
+                progressBar.visibility = View.GONE
+            }
+        }
     }
 
     companion object {

@@ -4,6 +4,10 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.75 (date: 2019/03/22)
+  * Add application-specific information pages, including FAQs and privacy policies
+  * Improved pin and fingerprint unlock toggle
+  
 # Changes in 1.4.74 (date: 2019/03/06)
   * Improved the ability to apply filters to postcard images
   * Added ability to export diary to Excel file
