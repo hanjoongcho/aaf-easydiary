@@ -1,8 +1,8 @@
 ### Easy Diary User Guide
 
 #### 🔖 Table of Contents
-📌 [Add TTF font](#add-ttf-font)  
-📌 [Diary attached photo recovery](#diary-attached-photo-recovery)
+01. [Add TTF font](#add-ttf-font)  
+02. [Diary attached photo recovery](#diary-attached-photo-recovery)
 
 ## Add TTF font
 When the device language setting is set to Korean or English, the available fonts in this diary are the three fonts provided in the diary and the fonts set in the device.  
