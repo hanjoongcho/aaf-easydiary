@@ -46,14 +46,16 @@ This is a diary application optimized to user experience.
 <img src="screenshots/05.jpg">&nbsp;
 ## Calendar
 <img src="screenshots/06.jpg">&nbsp;
+
 ## Diary Card
-<img src="screenshots/app_easydiary10_01_en.png" width="288" height="512">&nbsp;
-<img src="screenshots/app_easydiary10_02_en.png" width="288" height="512">&nbsp;
-<img src="screenshots/app_easydiary10_03.png" width="288" height="512">&nbsp;
-<img src="screenshots/app_easydiary10_04.png" width="288" height="512">&nbsp;
-<img src="screenshots/app_easydiary10_05_en.png" width="288" height="512">&nbsp;
-<img src="screenshots/app_easydiary10_06_en.png" width="288" height="512">&nbsp;
-<img src="screenshots/app_easydiary10_07_en.png" width="288" height="512">&nbsp;
+<img src="screenshots/app_easydiary10_01_en.png" width="288" height="512">
+<img src="screenshots/app_easydiary10_02_en.png" width="288" height="512">
+<img src="screenshots/app_easydiary10_03.png" width="288" height="512">
+<img src="screenshots/app_easydiary10_04.png" width="288" height="512">
+<img src="screenshots/app_easydiary10_05_en.png" width="288" height="512">
+<img src="screenshots/app_easydiary10_06_en.png" width="288" height="512">
+<img src="screenshots/app_easydiary10_07_en.png" width="288" height="512">
+
 ## Time Line
 <img src="screenshots/08_1.jpg">&nbsp;
 <img src="screenshots/08_2.jpg">&nbsp;
