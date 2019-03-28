@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
 import android.content.Context
+import android.support.v7.widget.CardView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -10,6 +11,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import io.github.aafactory.commons.extensions.updateAppViews
 import io.github.aafactory.commons.extensions.updateTextColors
+import io.github.aafactory.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
@@ -65,13 +67,24 @@ class DiaryCalendarItemAdapter(
             }
         }
 
-
         EasyDiaryUtils.initWeatherView(context, holder.imageView, diaryDto.weather)
         holder.item_holder?.let {
             context.updateTextColors(it, 0, 0)
             context.updateAppViews(it)
             context.initTextSize(it, context)
         }
+
+        val cardView = holder.item_holder?.getChildAt(0)
+        if (cardView is CardView) {
+            if (context.config.enableCardViewPolicy) {
+                cardView.useCompatPadding = true
+                cardView.cardElevation = CommonUtils.dpToPixelFloatValue(context, 2F)
+            } else {
+                cardView.useCompatPadding = false
+                cardView.cardElevation = 0F
+            }
+        }
+
         return row
     }
 

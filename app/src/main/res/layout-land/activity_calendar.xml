@@ -31,13 +31,17 @@
                 android:layout_width="0dp"
                 android:layout_weight="6"
                 android:layout_height="wrap_content">
-                
-                <LinearLayout
-                    android:id="@+id/calendar1"
+                <android.support.v7.widget.CardView
+                    android:id="@+id/calendarCard"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                </LinearLayout>
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:id="@+id/calendar1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
             </ScrollView>
 
             <LinearLayout

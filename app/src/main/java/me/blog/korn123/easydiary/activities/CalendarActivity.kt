@@ -7,10 +7,12 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.roomorama.caldroid.CaldroidFragment
 import com.roomorama.caldroid.CaldroidListener
+import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_calendar.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryCalendarItemAdapter
+import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.fragments.CalendarFragment
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
@@ -36,6 +38,14 @@ class CalendarActivity : EasyDiaryActivity() {
         supportActionBar?.run {
             title = getString(R.string.calendar_title)
             setDisplayHomeAsUpEnabled(true)    
+        }
+
+        if (config.enableCardViewPolicy) {
+            calendarCard.useCompatPadding = true
+            calendarCard.cardElevation = CommonUtils.dpToPixelFloatValue(this, 2F)
+        } else {
+            calendarCard.useCompatPadding = false
+            calendarCard.cardElevation = 0F
         }
         
         mCurrentDate = Calendar.getInstance().time
