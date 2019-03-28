@@ -78,7 +78,7 @@ The developer reserves the right to make modifications to the policy statement a
       
 #### ☑️ 문의 및 개선요청 
 
-For further inquiries, regarding this privacy policy, you can contact the developer via email. Send an email to hanjoongcho@gmail.com. The developer can also be contacted by opening an [issue](https://github.com/hanjoongcho/aaf-easydiary/issues/new) on the repository.
+개인 정보 보호 정책과 관련된 추가 문의 사항은 이메일(hanjoongcho@gmail.com)을 이용하여 개발자에게 문의하시기 바랍니다.  
+Github 코드 저장소에 [이슈](https://github.com/hanjoongcho/aaf-easydiary/issues/new)를 등록하는 방법으로도 개발자에게 피드백을 받으실 수도 있습니다.  
 
-You can also check out the developer's profile [here](https://github.com/hanjoongcho).
-
+개발자에 대한 프로파일은 [여기](https://github.com/hanjoongcho)서 확인하실 수 있습니다.
