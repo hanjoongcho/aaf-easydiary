@@ -1,4 +1,4 @@
-### Easy Diary Privacy policy
+### 이지 다이어리 개인정보 보호정책 [(English)](https://github.com/hanjoongcho/aaf-easydiary/blob/master/Privacy.md)
 <img src="https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/app/src/main/res/mipmap-xxhdpi/ic_launcher.png"></br>
 이지 다이어리를 개발하고 배포하는 Awesome Application Factory(이하"AAF")는 영리를 목적으로 하는 법인 또는 개인 사업자가 아닙니다.  
 오프소스 라이브러리를 매쉬업하여 사용자가 광고없이 무료로 편리한 애프리케이션을 사용 할 수 있도록 애플리케이션을 개발하고 배포하는 것을 목적으로 합니다.  
