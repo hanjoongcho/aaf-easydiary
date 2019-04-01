@@ -35,19 +35,19 @@ This is the capability of the app to use your fingerprint hardware for authentic
 
 #### ☑️ 수집하는 데이터의 종류
 
-__Personal Data__
+__개인정보__  
+개발자는 소프트웨어를 사용하는 동안 개인을 식별할 수 있는 데이터를 수집하지 않습니다.
 
-The developer doesn't collect personally identifiable data while the software is being utilized.
+__네트워크 데이터의 사용__  
+이지 다이어리는 기본적으로 데이터를 사용하지 않지만 다음의 경우에는 데이터를 사용합니다.  
+1. 사용자가 구글 드라이브를 이용하여 백업 또는 복구 기능을 실행하는 경우  
+2. 사용자가 다이어리 포스트카드를 공유하는 경우  
+3. 사용자가 매뉴얼, 자주 묻는 질문, 개인정보 보호정책등을 열람하는 경우  
 
-__Usage Data__
-
-No usage data
-
-__Use of Data__
-    
-With the enablement of the storage permission, the software and not the developer has the power to  
-📌 Read the contents of your SD card  
-📌 Modify or delete the contents of your SD card.  
+__디바이스 데이터의 이용__  
+저장소 접근 권한이 활성화되면 개발자가 아닌 소프트웨어가 다음과 같은 권한을 갖게 됩니다.  
+1. SD 카드의 내용 읽기  
+2. SD 카드의 내용 수정 또는 삭제  
 
 ---
 
