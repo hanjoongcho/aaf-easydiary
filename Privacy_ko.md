@@ -68,15 +68,15 @@ __디바이스 데이터의 이용__
 
 ---
 
-#### ☑️ Links To Other Sites
+#### ☑️ 다른 사이트 링크
 
 이 소프트웨어는 사용자가 백업 및 복구 기능 사용을 위해 구글 드라이브 접근 기능을 부여하는 경우를 제외하고 독립적으로 동작하며 다른 서비스 제공 업체에 대한 링크는 없습니다.  
  
 ---
 
-#### ☑️ Changes To This Privacy Policy
-
-The developer reserves the right to make modifications to the policy statement at any time without any notice. This privacy policy may be updated from time to time as the functionalities of the software are further developed and improved and may likely contain disparities that will nullify this current policy. Endeavour to check this document occasionally for any of such changes.
+#### ☑️ 이 개인정보 보호정책의 변경  
+개발자는 사전 통보없이 언제든지 이 문서를 수정할 권리를 보유합니다.  
+이 개인정보 보호정책은 소프트웨어의 기능이 추가로 개발되고 개선 될 때 수시로 업데이트 될 수 있으며 현재 정책을 무효화 할 수있는 불균형을 포함 할 수 있습니다. 이러한 변경 사항이있을 때마다 이 문서를 확인하기 위해 노력하십시오.
 
 ---
       
