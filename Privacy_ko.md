@@ -7,10 +7,12 @@
 
 ---
 
-#### ☑️ 개인정보 보호정책
-This privacy policy document is to clearly state, and provide information on what, how, and why personal data or information is collected, used, and disclosed, when this software is utilized, and the choices you have associated with that data. 
+#### ☑️ 개인정보 보호정책  
+이 개인 정보 취급 방침 문서는 개인 정보 또는 데이터가 수집, 사용 및 공개된 때, 이 소프트웨어를 사용할 때 무엇을 어떻게, 왜, 그리고 왜 공개했는지 사용자에게 관련된 사항을 명확히 진술하고 제공하려는 목적으로 작성되었습니다.  
 
-The objective of this policy document is to provide an open environment between developer and users of this software by openly stating what information the developer collects or not. By utilizing this software, it means you accept all the terms and conditions of the developer peculiar to only Easy Diary software. This Policy applies to this software only, and the developer would not be held responsible for the content or privacy practices on any third party app not operated by the developer to which this software links or that links to this software, therefore it is advisable to read up the privacy policies of third party services that may be linked to this software. 
+이 정책 문서의 목적은 공개적으로 개발자가 수집하는 정보를 명시하여 개발자와 소프트웨어 사용자 간에 공개 환경을 제공하는 것입니다.  
+이 소프트웨어를 사용하는 것은 이지 다이어리의 모든 이용 약관에 동의한다는 의미입니다. 이 정책은 이 소프트웨어에만 적용되며 개발자는 이 소프트웨어가 링크되거나 개발자가 운영하지 않는 제3자 앱의 콘텐츠 또는 개인 정보 보호 관행에 대해 책임을 지지 않습니다.  
+그러므로 이 소프트웨어에 연결될 수 있는 제3자 서비스의 개인 정보 보호 정책을 읽는 것이 좋습니다.  
 
 ---
 
