@@ -57,20 +57,20 @@ __디바이스 데이터의 이용__
 
 #### ☑️ 데이터 보안
 
-The security of your data is important, but remember that no method of transmission over the Internet, or method of electronic storage is 100% secure therefore the developer doesn't guarantee its absolute security. 
+데이터의 보안은 중요하지만 인터넷을 통한 전송 방법이나 전자 저장 방법이 100 % 안전하지 않으므로 개발자는 절대적인 보안을 보장하지 않습니다.
 
 ---
 
 
-#### ☑️ Children's Privacy
+#### ☑️ 어린이 개인정보 보호
 
-This software is intended for general use and has no restrictions on utilization by children except otherwise stated in a law governing that locale. 
+이 소프트웨어는 일반적인 용도로 사용되며 해당 지역을 규제하는 법률에 달리 명시된 경우를 제외하고는 어린이의 사용에 대한 제한이 없습니다.
 
 ---
 
 #### ☑️ Links To Other Sites
 
-Easy Diary does not contain links to any other service provider. The software works independently on its own.
+이 소프트웨어는 사용자가 백업 및 복구 기능 사용을 위해 구글 드라이브 접근 기능을 부여하는 경우를 제외하고 독립적으로 동작하며 다른 서비스 제공 업체에 대한 링크는 없습니다.  
  
 ---
 
