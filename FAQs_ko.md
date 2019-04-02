@@ -55,30 +55,30 @@ PIN(개인식별넘버)이나 지문인식 기능을 이용해서 애플리케�
 
 ---
 
-#### ☑️ Do I have to sign up or register before using Easy Diary?
+#### ☑️ 이지 다이어리를 사용하기 전에 가입하거나 등록해야합니까?
 
-- Easy Diary doesn't require any registration or sign up process before users can make use of it. Download, and start writing, or recording whatever you wish of your daily activities.
-
----
-
-#### ☑️ Easy Diary comes preloaded with diary entries, why?
-
-- Yes, the app comes with preloaded entries. This is so that you can get a feel of how your own entries would look like on the app. 
+- 이지 다이어리는 가입이나 로그인 절차 없이 설치 후 바로 사용하실 수 있습니다. 아직 설치하지 않으셨다면 지금 바로 설치하시고 일상생활을 마음대로 기록해 보세요.
 
 ---
 
-#### ☑️ Can I delete these preloaded entries?
+#### ☑️ 이지 다이어리에는 미리 작성된 샘플 다이어리가 저장되어 있습니다. 그 이유가 뭔가요?
 
-- Yes, you are free to delete the preloaded entries. You can also edit the entries if you wish.
+- 샘플 다이어리는 사용자가 다이어리를 작성했을 때 그 항목이 어떠한 형태로 보이는지 사용자에게 미리 보여주기 위해 제공됩니다.
 
 ---
 
-#### ☑️ How can I delete them?
+#### ☑️ 샘플 다이어리를 지울 수 있나요?
 
-To delete a preloaded entry or any other entry you created;
-- Open the entry
-- Click on the 3 dots button at the top right of the app
-- Click delete
+- 네. 샘플 다이어리는 삭제하거나 원하는 경우 항목을 편집할 수도 있습니다.
+
+---
+
+#### ☑️ 샘플 다이어리를 지우는 방법이 뭔가요??
+
+샘플 또는 작성된 다이어리 항목을 삭제하려면 아래 순서에 따라 진행하시면 됩니다.
+1. 대상 다이어리 항목 열기
+2. 앱의 오른쪽 상단에있는 3 개의 점 단추 클릭하기
+3. 삭제 클릭하기
 
 ---
 
