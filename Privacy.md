@@ -1,4 +1,4 @@
-# Easy Diary Privacy policy
+# Easy Diary Privacy policy [(한국어)](https://github.com/hanjoongcho/aaf-easydiary/blob/master/Privacy_ko.md)
 <img src="app/src/main/res/mipmap-xxhdpi/ic_launcher.png">   
 
 
