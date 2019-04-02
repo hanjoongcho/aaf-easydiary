@@ -14,22 +14,24 @@ The objective of this policy document is to provide an open environment between 
 
 ---
 
-#### ☑️ 정보의 수집 및 사용
-For better and enhanced utilization, the software is designed to request provision of certain personally identifiable information which is the enablement of several permissions for it to work properly on the device on which the software's services is intended.
-  
-Easy Diary requires only the enablement of storage permission.
+#### ☑️ 정보의 수집 및 사용  
+이지 다이어리는 보다 향상된 기능 제공을 위해 소프트웨어가 정상적으로 동작이 가능하도록 권한 요청 및 개인식별정보를 사용할 수 있도록 설계되었습니다.  
+이지 다이어리는 사용자 편의 기능 제공을 위해 다음의 Dangerous Permissions을 필요로 합니다.   
+Dangerous Permissions은 사용자가 승인하는 경우만 부여됩니다.  
 
-The information that may be collected with the enablement of this permission is stored locally on the device and the developer has no access to that information.
+이지 다이어리는 Dangerous Permissions중 유일하게 저장소 접근권한만을 요청합니다.  
+이 사용 권한을 사용하여 수집할 수 있는 정보는 사용자 디바이스에 저장되며 개발자는 해당 정보에 액세스할 수 없습니다.  
+이 권한은 필요하지 않은 경우 취소할 수 있습니다.이 권한은 Android 6.0을 실행하는 장치에만 적용됩니다.  
+이 권한은 Android 6.0 미만의 장치의 경우 Normal Permissions으로 분류되어 애플리케이션 설치 시 자동으로 권한을 부여받습니다.  
 
-This permission can be revoked when it is not needed, this is privy to only devices running Android 6.0 upward. 
+이지 다이어리는 사용자 편의기능 제공을 위해 다음의 Normal Permissions을 필요로 합니다.  
+Normal Permissions는 사용자의 추가 승인없이 애플리케이션이 설치되면 자동으로 부여됩니다.  
 
+📌 **완전한 네트워크 액세스:**  
+이 앱은 네트워크 소켓을 만들 수 있으며 맞춤 네트워크 프로토콜을 사용할 수 있습니다. 네트워크를 이용한 데이터 송수신이 필요한 경우 이 기능을 사용하면 인터넷에 데이터를 전송하지 않아도됩니다.  
 
-Easy Diary has some other capabilities, which are functions the software can remotely effect on its own. They include;
-
-📌 **have full network access**:  
-The app is capable of creating network sockets and can use customized network protocols. This capability does not require the software to send data to the internet.  
-📌 **use fingerprint hardware**:  
-This is the capability of the app to use your fingerprint hardware for authentication
+📌 **지문 하드웨어 사용:**  
+인증을 위해 지문 하드웨어를 사용하는 앱의 기능으로 안드로이드 운영시스템으로부터 사용자 등록지문의 검증결과만 취득하여 사용하며 사용자의 지문정보를 별도로 취득하지는 않습니다.  
 
 ---
 
