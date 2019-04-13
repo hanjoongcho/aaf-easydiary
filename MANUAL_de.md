@@ -10,7 +10,7 @@ Um die im Tagebuch enthaltenen Schriften zu verwenden, kopiere einfach die TTF-S
 
 #### 01. Finde die eingebaute Liste
 <pre>
-<img src="screenshots/app_easydiary12_01_en.png" width="288" height="512">
+<img src="https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/screenshots/app_easydiary12_01_en.png" width="288" height="512">
 </pre>
 
 #### 02. Finde den Schriften-Ordner
@@ -19,21 +19,21 @@ Wenn die TTF-Schriftdatei auf dem Ger채t ist, verwende den Dateimanager des Ger�
 Der verwendete Dateimanager auf dem Screenshot ist der 'Simple File Manager'.
 Wenn die TTF-Schriftdatei auf deinem PC ist, verwende den Dateimanager des PCs.
 
-<img src="screenshots/app_easydiary12_02_en.png" width="288" height="512">
+<img src="https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/screenshots/app_easydiary12_02_en.png" width="288" height="512">
 </pre>
 
 #### 03. Kopiere die TTF-Schrift in den Schriften-Ordner
 <pre>
 Der Schriften-Ordner des Easy Diarys ist '/AAFactory/EasyDiary/Fonts/'.
 
-<img src="screenshots/app_easydiary12_03_en.png" width="288" height="512">
+<img src="https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/screenshots/app_easydiary12_03_en.png" width="288" height="512">
 </pre>
 
 #### 04. Finde zus채tzliche Schriften
 <pre>
 Wenn eine TTF-Schrift dem Schriften-Ordner hinzugef체gt wurde, erscheint sie in den Schriften-Einstellungen.  
 
-<img src="screenshots/app_easydiary12_04_en.png" width="288" height="512">
+<img src="https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/screenshots/app_easydiary12_04_en.png" width="288" height="512">
 </pre>
 
 ## Wiederherstellung angeh채ngter Fotos
@@ -66,8 +66,8 @@ Foto-Ordner von Easy Diary: /AAFactory/EasyDiary/Photos/
 Nachdem die angeh채ngten Fotos wiederhergestellt wurden, kannst du sie normal sehen.
 
 * Vor der Wiederherstellung
-<img src="screenshots/manual_02_01.png" width="284" height="537">
+<img src="https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/screenshots/manual_02_01.png" width="284" height="537">
 
 * Nach der Wiederherstellung
-<img src="screenshots/manual_02_02.png" width="284" height="537">
+<img src="https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/screenshots/manual_02_02.png" width="284" height="537">
 </pre>

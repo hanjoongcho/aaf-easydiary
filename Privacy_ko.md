@@ -1,4 +1,4 @@
-### Easy Diary Privacy policy
+### 이지 다이어리 개인정보 보호정책 [(English)](https://github.com/hanjoongcho/aaf-easydiary/blob/master/Privacy.md)
 <img src="https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/app/src/main/res/mipmap-xxhdpi/ic_launcher.png"></br>
 이지 다이어리를 개발하고 배포하는 Awesome Application Factory(이하"AAF")는 영리를 목적으로 하는 법인 또는 개인 사업자가 아닙니다.  
 오프소스 라이브러리를 매쉬업하여 사용자가 광고없이 무료로 편리한 애프리케이션을 사용 할 수 있도록 애플리케이션을 개발하고 배포하는 것을 목적으로 합니다.  
@@ -7,78 +7,81 @@
 
 ---
 
-#### ☑️ 개인정보 보호정책
-This privacy policy document is to clearly state, and provide information on what, how, and why personal data or information is collected, used, and disclosed, when this software is utilized, and the choices you have associated with that data. 
+#### ☑️ 개인정보 보호정책  
+이 개인 정보 취급 방침 문서는 개인 정보 또는 데이터가 수집, 사용 및 공개된 때, 이 소프트웨어를 사용할 때 무엇을 어떻게, 왜, 그리고 왜 공개했는지 사용자에게 관련된 사항을 명확히 진술하고 제공하려는 목적으로 작성되었습니다.  
 
-The objective of this policy document is to provide an open environment between developer and users of this software by openly stating what information the developer collects or not. By utilizing this software, it means you accept all the terms and conditions of the developer peculiar to only Easy Diary software. This Policy applies to this software only, and the developer would not be held responsible for the content or privacy practices on any third party app not operated by the developer to which this software links or that links to this software, therefore it is advisable to read up the privacy policies of third party services that may be linked to this software. 
+이 정책 문서의 목적은 공개적으로 개발자가 수집하는 정보를 명시하여 개발자와 소프트웨어 사용자 간에 공개 환경을 제공하는 것입니다.  
+이 소프트웨어를 사용하는 것은 이지 다이어리의 모든 이용 약관에 동의한다는 의미입니다. 이 정책은 이 소프트웨어에만 적용되며 개발자는 이 소프트웨어가 링크되거나 개발자가 운영하지 않는 제3자 앱의 콘텐츠 또는 개인 정보 보호 관행에 대해 책임을 지지 않습니다.  
+그러므로 이 소프트웨어에 연결될 수 있는 제3자 서비스의 개인 정보 보호 정책을 읽는 것이 좋습니다.  
 
 ---
 
-#### ☑️ 정보의 수집 및 사용
-For better and enhanced utilization, the software is designed to request provision of certain personally identifiable information which is the enablement of several permissions for it to work properly on the device on which the software's services is intended.
-  
-Easy Diary requires only the enablement of storage permission.
+#### ☑️ 정보의 수집 및 사용  
+이지 다이어리는 보다 향상된 기능 제공을 위해 소프트웨어가 정상적으로 동작이 가능하도록 권한 요청 및 개인식별정보를 사용할 수 있도록 설계되었습니다.  
+이지 다이어리는 사용자 편의 기능 제공을 위해 다음의 Dangerous Permissions을 필요로 합니다.   
+Dangerous Permissions은 사용자가 승인하는 경우만 부여됩니다.  
 
-The information that may be collected with the enablement of this permission is stored locally on the device and the developer has no access to that information.
+이지 다이어리는 Dangerous Permissions중 유일하게 저장소 접근권한만을 요청합니다.  
+이 사용 권한을 사용하여 수집할 수 있는 정보는 사용자 디바이스에 저장되며 개발자는 해당 정보에 액세스할 수 없습니다.  
+이 권한은 필요하지 않은 경우 취소할 수 있습니다.이 권한은 Android 6.0을 실행하는 장치에만 적용됩니다.  
+이 권한은 Android 6.0 미만의 장치의 경우 Normal Permissions으로 분류되어 애플리케이션 설치 시 자동으로 권한을 부여받습니다.  
 
-This permission can be revoked when it is not needed, this is privy to only devices running Android 6.0 upward. 
+이지 다이어리는 사용자 편의기능 제공을 위해 다음의 Normal Permissions을 필요로 합니다.  
+Normal Permissions는 사용자의 추가 승인없이 애플리케이션이 설치되면 자동으로 부여됩니다.  
 
+📌 **완전한 네트워크 액세스:**  
+이 앱은 네트워크 소켓을 만들 수 있으며 맞춤 네트워크 프로토콜을 사용할 수 있습니다. 네트워크를 이용한 데이터 송수신이 필요한 경우 이 기능을 사용하면 인터넷에 데이터를 전송하지 않아도됩니다.  
 
-Easy Diary has some other capabilities, which are functions the software can remotely effect on its own. They include;
-
-📌 **have full network access**:  
-The app is capable of creating network sockets and can use customized network protocols. This capability does not require the software to send data to the internet.  
-📌 **use fingerprint hardware**:  
-This is the capability of the app to use your fingerprint hardware for authentication
+📌 **지문 하드웨어 사용:**  
+인증을 위해 지문 하드웨어를 사용하는 앱의 기능으로 안드로이드 운영시스템으로부터 사용자 등록지문의 검증결과만 취득하여 사용하며 사용자의 지문정보를 별도로 취득하지는 않습니다.  
 
 ---
 
 #### ☑️ 수집하는 데이터의 종류
 
-__Personal Data__
+__개인정보__  
+개발자는 소프트웨어를 사용하는 동안 개인을 식별할 수 있는 데이터를 수집하지 않습니다.
 
-The developer doesn't collect personally identifiable data while the software is being utilized.
+__네트워크 데이터의 사용__  
+이지 다이어리는 기본적으로 데이터를 사용하지 않지만 다음의 경우에는 데이터를 사용합니다.  
+1. 사용자가 구글 드라이브를 이용하여 백업 또는 복구 기능을 실행하는 경우  
+2. 사용자가 다이어리 포스트카드를 공유하는 경우  
+3. 사용자가 매뉴얼, 자주 묻는 질문, 개인정보 보호정책등을 열람하는 경우  
 
-__Usage Data__
-
-No usage data
-
-__Use of Data__
-    
-With the enablement of the storage permission, the software and not the developer has the power to  
-📌 Read the contents of your SD card  
-📌 Modify or delete the contents of your SD card.  
+__디바이스 데이터의 이용__  
+저장소 접근 권한이 활성화되면 개발자가 아닌 소프트웨어가 다음과 같은 권한을 갖게 됩니다.  
+1. SD 카드의 내용 읽기  
+2. SD 카드의 내용 수정 또는 삭제  
 
 ---
 
 #### ☑️ 데이터 보안
 
-The security of your data is important, but remember that no method of transmission over the Internet, or method of electronic storage is 100% secure therefore the developer doesn't guarantee its absolute security. 
+데이터의 보안은 중요하지만 인터넷을 통한 전송 방법이나 전자 저장 방법이 100 % 안전하지 않으므로 개발자는 절대적인 보안을 보장하지 않습니다.
 
 ---
 
 
-#### ☑️ Children's Privacy
+#### ☑️ 어린이 개인정보 보호
 
-This software is intended for general use and has no restrictions on utilization by children except otherwise stated in a law governing that locale. 
+이 소프트웨어는 일반적인 용도로 사용되며 해당 지역을 규제하는 법률에 달리 명시된 경우를 제외하고는 어린이의 사용에 대한 제한이 없습니다.
 
 ---
 
-#### ☑️ Links To Other Sites
+#### ☑️ 다른 사이트 링크
 
-Easy Diary does not contain links to any other service provider. The software works independently on its own.
+이 소프트웨어는 사용자가 백업 및 복구 기능 사용을 위해 구글 드라이브 접근 기능을 부여하는 경우를 제외하고 독립적으로 동작하며 다른 서비스 제공 업체에 대한 링크는 없습니다.  
  
 ---
 
-#### ☑️ Changes To This Privacy Policy
-
-The developer reserves the right to make modifications to the policy statement at any time without any notice. This privacy policy may be updated from time to time as the functionalities of the software are further developed and improved and may likely contain disparities that will nullify this current policy. Endeavour to check this document occasionally for any of such changes.
+#### ☑️ 이 개인정보 보호정책의 변경  
+개발자는 사전 통보없이 언제든지 이 문서를 수정할 권리를 보유합니다.  
+이 개인정보 보호정책은 소프트웨어의 기능이 추가로 개발되고 개선 될 때 수시로 업데이트 될 수 있으며 현재 정책을 무효화 할 수있는 불균형을 포함 할 수 있습니다. 이러한 변경 사항이있을 때마다 이 문서를 확인하기 위해 노력하십시오.
 
 ---
       
 #### ☑️ 문의 및 개선요청 
 
-For further inquiries, regarding this privacy policy, you can contact the developer via email. Send an email to hanjoongcho@gmail.com. The developer can also be contacted by opening an [issue](https://github.com/hanjoongcho/aaf-easydiary/issues/new) on the repository.
+개인 정보 보호 정책과 관련된 추가 문의 사항은 이메일(hanjoongcho@gmail.com)을 이용하여 개발자에게 문의하시기 바랍니다. Github 코드 저장소에 [이슈](https://github.com/hanjoongcho/aaf-easydiary/issues/new)를 등록하는 방법으로도 개발자에게 피드백을 받으실 수도 있습니다.  
 
-You can also check out the developer's profile [here](https://github.com/hanjoongcho).
-
+개발자에 대한 프로파일은 [여기](https://github.com/hanjoongcho)서 확인하실 수 있습니다.

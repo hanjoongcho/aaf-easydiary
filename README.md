@@ -33,36 +33,62 @@ This is a diary application optimized to user experience.
 ```
 # Screen Shot
 ## Write diary (voice or keypad)
-<img src="screenshots/01_1.jpg">&nbsp;
-<img src="screenshots/01_2.jpg">&nbsp;
+<p align="left">
+<img src="screenshots/01_1.jpg">
+<img src="screenshots/01_2.jpg">
+</p>
+
 ## Search diary
-<img src="screenshots/02.jpg">&nbsp;
+<p align="left">
+<img src="screenshots/02.jpg">
+</p>
+
 ## Read Diary
-<img src="screenshots/03_1.jpg">&nbsp;
-<img src="screenshots/03_2.jpg">&nbsp;
+<p align="left">
+<img src="screenshots/03_1.jpg">
+<img src="screenshots/03_2.jpg">
+</p>
+
 ## Edit Diary
-<img src="screenshots/04.jpg">&nbsp;
+<p align="left">
+<img src="screenshots/04.jpg">
+</p>
+
 ## Chart
-<img src="screenshots/05.jpg">&nbsp;
+<p align="left">
+<img src="screenshots/05.jpg">
+</p>
+
 ## Calendar
-<img src="screenshots/06.jpg">&nbsp;
+<p align="left">
+<img src="screenshots/06.jpg">
+</p>
+
 ## Diary Card
-<img src="screenshots/app_easydiary10_01_en.png" width="288" height="512">&nbsp;
-<img src="screenshots/app_easydiary10_02_en.png" width="288" height="512">&nbsp;
-<img src="screenshots/app_easydiary10_03.png" width="288" height="512">&nbsp;
-<img src="screenshots/app_easydiary10_04.png" width="288" height="512">&nbsp;
-<img src="screenshots/app_easydiary10_05_en.png" width="288" height="512">&nbsp;
-<img src="screenshots/app_easydiary10_06_en.png" width="288" height="512">&nbsp;
-<img src="screenshots/app_easydiary10_07_en.png" width="288" height="512">&nbsp;
+<p align="left">
+<img src="screenshots/app_easydiary10_01_en.png" width="288" height="512">
+<img src="screenshots/app_easydiary10_02_en.png" width="288" height="512">
+<img src="screenshots/app_easydiary10_03.png" width="288" height="512">
+<img src="screenshots/app_easydiary10_04.png" width="288" height="512">
+<img src="screenshots/app_easydiary10_05_en.png" width="288" height="512">
+<img src="screenshots/app_easydiary10_06_en.png" width="288" height="512">
+<img src="screenshots/app_easydiary10_07_en.png" width="288" height="512">
+</p>
+
 ## Time Line
-<img src="screenshots/08_1.jpg">&nbsp;
-<img src="screenshots/08_2.jpg">&nbsp;
-<img src="screenshots/08_3.jpg">&nbsp;
+<p align="left">
+<img src="screenshots/08_1.jpg">
+<img src="screenshots/08_2.jpg">
+<img src="screenshots/08_3.jpg">
+</p>
+
 ## Advanced Settings
-<img src="screenshots/app_easydiary09_01_en.png" width="288" height="512">&nbsp;
-<img src="screenshots/app_easydiary09_03_en.png" width="288" height="512">&nbsp;
-<img src="screenshots/app_easydiary09_02_en.png" width="288" height="512">&nbsp;
-<img src="screenshots/app_easydiary06_en.png" width="288" height="512">&nbsp;
+<p align="left">
+<img src="screenshots/app_easydiary09_01_en.png" width="288" height="512">
+<img src="screenshots/app_easydiary09_03_en.png" width="288" height="512">
+<img src="screenshots/app_easydiary09_02_en.png" width="288" height="512">
+<img src="screenshots/app_easydiary06_en.png" width="288" height="512">
+</p>
 
 # How to build
 ## GMS Flavor
