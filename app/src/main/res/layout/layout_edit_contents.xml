@@ -11,16 +11,12 @@
         style="@style/AppCard.EditTitle">
         <LinearLayout
             style="@style/LinearLayoutHorizontal">
-            <Spinner
-                android:id="@+id/weatherSpinner"
-                android:spinnerMode="dropdown"
-                android:layout_marginLeft="5dp"
+            <TextView
+                android:id="@+id/feelingSymbolButton"
+                android:text="Feeling"
                 android:minHeight="45dp"
-                android:layout_gravity="center_vertical"
-                android:gravity="center"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            </Spinner>
+                android:layout_height="wrap_content" />
 
             <com.simplemobiletools.commons.views.MyEditText
                 android:id="@+id/diaryTitle"

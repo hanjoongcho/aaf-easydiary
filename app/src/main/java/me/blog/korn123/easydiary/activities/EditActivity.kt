@@ -15,13 +15,11 @@ import android.support.v4.graphics.ColorUtils
 import android.support.v7.app.AlertDialog
 import android.text.format.DateFormat
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.AdapterView
-import android.widget.HorizontalScrollView
-import android.widget.ImageView
-import android.widget.LinearLayout
+import android.widget.*
 import com.simplemobiletools.commons.helpers.BaseConfig
 import com.werb.pickphotoview.PickPhotoView
 import io.github.aafactory.commons.utils.BitmapUtils
@@ -164,10 +162,24 @@ abstract class EditActivity : EasyDiaryActivity() {
         photoView.layoutParams = layoutParams
     }
 
-    protected fun setupSpinner() {
+//    protected fun setupSpinner() {
+//        val weatherArr = resources.getStringArray(R.array.weather_item_array)
+//        val arrayAdapter = DiaryWeatherItemAdapter(this, R.layout.item_weather, Arrays.asList(*weatherArr))
+//        weatherSpinner.adapter = arrayAdapter
+//    }
+
+    protected fun openFeelingSymbolDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setNegativeButton(getString(android.R.string.cancel), null)
+        builder.setTitle(getString(R.string.font_setting))
+        val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val symbolDialog = inflater.inflate(R.layout.dialog_feeling, null)
         val weatherArr = resources.getStringArray(R.array.weather_item_array)
         val arrayAdapter = DiaryWeatherItemAdapter(this, R.layout.item_weather, Arrays.asList(*weatherArr))
-        weatherSpinner.adapter = arrayAdapter
+        val gridView = symbolDialog.findViewById<GridView>(R.id.feelingSymbols)
+        gridView.adapter = arrayAdapter
+        builder.setView(symbolDialog)
+        builder.show()
     }
     
     protected fun initBottomContainer() {
