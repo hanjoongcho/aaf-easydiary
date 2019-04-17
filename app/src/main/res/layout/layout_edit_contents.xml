@@ -13,8 +13,11 @@
             style="@style/LinearLayoutHorizontal">
             <TextView
                 android:id="@+id/feelingSymbolButton"
-                android:text="Feeling"
+                android:text="다이어리 심볼 ▼"
                 android:minHeight="45dp"
+                android:layout_marginRight="5dp"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 

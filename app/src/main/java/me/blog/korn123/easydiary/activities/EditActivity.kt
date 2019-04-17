@@ -171,7 +171,7 @@ abstract class EditActivity : EasyDiaryActivity() {
     protected fun openFeelingSymbolDialog() {
         val builder = AlertDialog.Builder(this)
         builder.setNegativeButton(getString(android.R.string.cancel), null)
-        builder.setTitle(getString(R.string.font_setting))
+        builder.setMessage("현재 날씨나 기분을 선택하세요.")
         val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val symbolDialog = inflater.inflate(R.layout.dialog_feeling, null)
         val weatherArr = resources.getStringArray(R.array.weather_item_array)
