@@ -11,15 +11,32 @@
         style="@style/AppCard.EditTitle">
         <LinearLayout
             style="@style/LinearLayoutHorizontal">
-            <TextView
+            <LinearLayout
                 android:id="@+id/feelingSymbolButton"
-                android:text="다이어리 심볼 ▼"
-                android:minHeight="45dp"
-                android:layout_marginRight="5dp"
                 android:gravity="center"
+                android:orientation="horizontal"
+                android:minHeight="45dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/symbol"
+                    android:visibility="gone"
+                    android:layout_marginRight="5dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp" />
+                <TextView
+                    android:id="@+id/symbolText"
+                    android:text="다이어리 심볼"
+                    android:layout_marginRight="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />    
+                <TextView
+                    android:text="▼"
+                    android:layout_marginRight="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />    
+            </LinearLayout>
 
             <com.simplemobiletools.commons.views.MyEditText
                 android:id="@+id/diaryTitle"

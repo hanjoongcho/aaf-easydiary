@@ -56,6 +56,7 @@ abstract class EditActivity : EasyDiaryActivity() {
     protected var mHourOfDay = Integer.valueOf(DateUtils.getCurrentDateTime("HH"))
     protected var mMinute = Integer.valueOf(DateUtils.getCurrentDateTime("mm"))
     protected var mSecond = Integer.valueOf(DateUtils.getCurrentDateTime("ss"))
+    protected var mSelectedItemPosition = 0
     
     internal val mEditListener = View.OnClickListener { view ->
         hideSoftInputFromWindow()
@@ -170,6 +171,7 @@ abstract class EditActivity : EasyDiaryActivity() {
 
     protected fun openFeelingSymbolDialog() {
         val builder = AlertDialog.Builder(this)
+        var dialog: AlertDialog? = null
         builder.setNegativeButton(getString(android.R.string.cancel), null)
         builder.setMessage("현재 날씨나 기분을 선택하세요.")
         val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -178,8 +180,22 @@ abstract class EditActivity : EasyDiaryActivity() {
         val arrayAdapter = DiaryWeatherItemAdapter(this, R.layout.item_weather, Arrays.asList(*weatherArr))
         val gridView = symbolDialog.findViewById<GridView>(R.id.feelingSymbols)
         gridView.adapter = arrayAdapter
+        gridView.setOnItemClickListener { parent, view, position, id ->
+            selectFeelingSymbol(position)
+            dialog?.dismiss()
+        }
         builder.setView(symbolDialog)
-        builder.show()
+        dialog = builder.create()
+        dialog?.show()
+    }
+    
+    protected fun selectFeelingSymbol(index: Int) {
+        mSelectedItemPosition = index
+        when (mSelectedItemPosition == 0) {
+            true -> symbolText.visibility = View.VISIBLE
+            false -> symbolText.visibility = View.GONE
+        }
+        EasyDiaryUtils.initWeatherView(this, symbol, mSelectedItemPosition, false)
     }
     
     protected fun initBottomContainer() {

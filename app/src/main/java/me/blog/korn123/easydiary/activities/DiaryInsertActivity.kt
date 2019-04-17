@@ -55,19 +55,19 @@ class DiaryInsertActivity : EditActivity() {
             diaryContents.requestFocus()
             makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
         } else {
-//            val diaryDto = DiaryDto(
-//                    -1,
-//                    mCurrentTimeMillis,
-//                    this@DiaryInsertActivity.diaryTitle.text.toString(),
-//                    this@DiaryInsertActivity.diaryContents.text.toString(),
-//                    weatherSpinner.selectedItemPosition,
-//                    allDay.isChecked
-//            )
-//            applyRemoveIndex()
-//            diaryDto.photoUris = mPhotoUris
-//            EasyDiaryDbHelper.insertDiary(diaryDto)
-//            config.previousActivity = PREVIOUS_ACTIVITY_CREATE
-//            TransitionHelper.finishActivityWithTransition(this)
+            val diaryDto = DiaryDto(
+                    -1,
+                    mCurrentTimeMillis,
+                    this@DiaryInsertActivity.diaryTitle.text.toString(),
+                    this@DiaryInsertActivity.diaryContents.text.toString(),
+                    mSelectedItemPosition,
+                    allDay.isChecked
+            )
+            applyRemoveIndex()
+            diaryDto.photoUris = mPhotoUris
+            EasyDiaryDbHelper.insertDiary(diaryDto)
+            config.previousActivity = PREVIOUS_ACTIVITY_CREATE
+            TransitionHelper.finishActivityWithTransition(this)
         }
     }
     
@@ -290,6 +290,8 @@ class DiaryInsertActivity : EditActivity() {
         allDay.setOnClickListener { view ->
             toggleTimePickerTool()
         }
+
+        feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog() }
     }
     
     private fun restoreContents(savedInstanceState: Bundle?) {

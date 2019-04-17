@@ -63,7 +63,7 @@ class DiaryUpdateActivity : EditActivity() {
                         diaryTitle.text.toString(),
                         diaryContents.text.toString()
                 )
-//                diaryDto.weather = weatherSpinner.selectedItemPosition
+                diaryDto.weather = mSelectedItemPosition
                 diaryDto.isAllDay = allDay.isChecked
                 applyRemoveIndex()
                 diaryDto.photoUris = mPhotoUris
@@ -206,6 +206,7 @@ class DiaryUpdateActivity : EditActivity() {
         }
 
 //        initSpinner()
+        selectFeelingSymbol(mWeather)
     }
 
     private fun bindEvent() {
