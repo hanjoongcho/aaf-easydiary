@@ -173,7 +173,7 @@ abstract class EditActivity : EasyDiaryActivity() {
         val builder = AlertDialog.Builder(this)
         var dialog: AlertDialog? = null
         builder.setNegativeButton(getString(android.R.string.cancel), null)
-        builder.setMessage("현재 날씨나 기분을 선택하세요.")
+        builder.setMessage("현재 날씨 또는 다이어리의 내용과 어울리는 심볼을 선택하세요.")
         val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val symbolDialog = inflater.inflate(R.layout.dialog_feeling, null)
         val weatherArr = resources.getStringArray(R.array.weather_item_array)

@@ -11,6 +11,17 @@
         <item></item>
         <item></item>
         <item></item>
+        
+        <item>001-chest</item>
+        <item>002-ball</item>
+        <item>003-meeting</item>
+        <item>004-more</item>
+        <item>005-connection</item>
+        <item>006-energy</item>
+        <item>007-party</item>
+        <item>008-full battery</item>
+        <item>009-lung</item>
+        <item>010-rope</item>
     </string-array>
 
     <string-array name="pref_list_fonts_title">

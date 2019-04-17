@@ -82,6 +82,17 @@ object EasyDiaryUtils {
                 WEATHER_STARS -> setImageResource(R.drawable.ic_stars_2)
                 WEATHER_MOON -> setImageResource(R.drawable.ic_moon_9)
                 WEATHER_NIGHT_RAIN -> setImageResource(R.drawable.ic_night_rain)
+                ACTIVITY_CHEST -> setImageResource(R.drawable.ic_001_chest)
+                ACTIVITY_BALL -> setImageResource(R.drawable.ic_002_ball)
+                ACTIVITY_MEETING -> setImageResource(R.drawable.ic_003_meeting)
+                ACTIVITY_MORE -> setImageResource(R.drawable.ic_004_more)
+                ACTIVITY_CONNECTION -> setImageResource(R.drawable.ic_005_connection)
+                ACTIVITY_ENERGY -> setImageResource(R.drawable.ic_006_energy)
+                ACTIVITY_PARTY -> setImageResource(R.drawable.ic_007_party)
+                ACTIVITY_FULL_BATTERY -> setImageResource(R.drawable.ic_008_full_battery)
+                ACTIVITY_LUNG -> setImageResource(R.drawable.ic_009_lung)
+                ACTIVITY_ROPE -> setImageResource(R.drawable.ic_010_rope)
+                
             }    
         }
     }
