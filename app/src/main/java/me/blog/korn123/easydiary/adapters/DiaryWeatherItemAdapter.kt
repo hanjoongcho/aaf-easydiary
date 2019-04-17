@@ -47,7 +47,7 @@ class DiaryWeatherItemAdapter(
         EasyDiaryUtils.initWeatherView(context, holder.imageView1, position, true)
         holder.textView1?.let {
             it.text = mList[position]
-            context.initTextSize(it, context)
+//            context.initTextSize(it, context)
         }
 
         holder.imageView1?.let {

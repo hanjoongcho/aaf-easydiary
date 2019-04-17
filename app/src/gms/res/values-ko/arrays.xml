@@ -1,17 +1,17 @@
 <resources>
     <string-array name="weather_item_array">
         <item>선택안함</item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-
+        <item>WEATHER_SUNNY</item>
+        <item>WEATHER_CLOUD_AND_SUN</item>
+        <item>WEATHER_RAIN_DROPS</item>
+        <item>WEATHER_BOLT</item>
+        <item>WEATHER_SNOWING</item>
+        <item>WEATHER_RAINBOW</item>
+        <item>WEATHER_UMBRELLA</item>
+        <item>WEATHER_STARS</item>
+        <item>WEATHER_MOON</item>
+        <item>WEATHER_NIGHT_RAIN</item>
+        
         <item>001-chest</item>
         <item>002-ball</item>
         <item>003-meeting</item>
