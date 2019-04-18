@@ -18,6 +18,7 @@ app/src/main/res/drawable/ic_rainbow.xml
 app/src/main/res/drawable/ic_night_rain.xml
 app/src/main/res/drawable/ic_moon_9.xml
 app/src/main/res/drawable/ic_bolt.xml
+app/src/main/res/drawable/ic_0*
 
 app/src/gms/res/drawable/ic_clouds_and_sun.xml
 app/src/gms/res/drawable/ic_umbrella_1.xml
@@ -29,6 +30,5 @@ app/src/gms/res/drawable/ic_rainbow.xml
 app/src/gms/res/drawable/ic_night_rain.xml
 app/src/gms/res/drawable/ic_moon_9.xml
 app/src/gms/res/drawable/ic_bolt.xml
-
-app/src/main/res/drawable/ic_0*
+app/src/gms/res/drawable/ic_0*
 

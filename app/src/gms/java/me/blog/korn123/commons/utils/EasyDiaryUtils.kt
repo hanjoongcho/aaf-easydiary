@@ -82,6 +82,7 @@ object EasyDiaryUtils {
                 WEATHER_STARS -> setImageResource(R.drawable.ic_stars_2)
                 WEATHER_MOON -> setImageResource(R.drawable.ic_moon_9)
                 WEATHER_NIGHT_RAIN -> setImageResource(R.drawable.ic_night_rain)
+
                 ACTIVITY_CHEST -> setImageResource(R.drawable.ic_001_chest)
                 ACTIVITY_BALL -> setImageResource(R.drawable.ic_002_ball)
                 ACTIVITY_MEETING -> setImageResource(R.drawable.ic_003_meeting)
@@ -92,7 +93,18 @@ object EasyDiaryUtils {
                 ACTIVITY_FULL_BATTERY -> setImageResource(R.drawable.ic_008_full_battery)
                 ACTIVITY_LUNG -> setImageResource(R.drawable.ic_009_lung)
                 ACTIVITY_ROPE -> setImageResource(R.drawable.ic_010_rope)
-                
+
+                ACTIVITY_ALARM -> setImageResource(R.drawable.ic_011_alarm)
+                ACTIVITY_TIMER -> setImageResource(R.drawable.ic_012_timer)
+                ACTIVITY_CLOTHES -> setImageResource(R.drawable.ic_013_clothes)
+                ACTIVITY_PUNCHING -> setImageResource(R.drawable.ic_014_punching_bag)
+                ACTIVITY_CAMPING -> setImageResource(R.drawable.ic_015_camping)
+                ACTIVITY_STATIONARY_BIKE -> setImageResource(R.drawable.ic_016_stationary_bike)
+                ACTIVITY_STEPS -> setImageResource(R.drawable.ic_017_steps)
+                ACTIVITY_STAIRS -> setImageResource(R.drawable.ic_018_stairs)
+                ACTIVITY_HEALTH_FOODS -> setImageResource(R.drawable.ic_019_healthy_food)
+                ACTIVITY_ENERGY_DRINK-> setImageResource(R.drawable.ic_020_energy_drink)
+
             }    
         }
     }

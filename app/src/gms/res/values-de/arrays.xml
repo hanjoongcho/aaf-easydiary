@@ -1,27 +1,37 @@
 <resources>
     <string-array name="weather_item_array">
         <item>선택안함</item>
-        <item>WEATHER_SUNNY</item>
-        <item>WEATHER_CLOUD_AND_SUN</item>
-        <item>WEATHER_RAIN_DROPS</item>
-        <item>WEATHER_BOLT</item>
-        <item>WEATHER_SNOWING</item>
-        <item>WEATHER_RAINBOW</item>
-        <item>WEATHER_UMBRELLA</item>
-        <item>WEATHER_STARS</item>
-        <item>WEATHER_MOON</item>
-        <item>WEATHER_NIGHT_RAIN</item>
+        <item>Sunny</item>
+        <item>Cloud and Sun</item>
+        <item>RAIN Drops</item>
+        <item>BOLT</item>
+        <item>Snowing</item>
+        <item>Rainbow</item>
+        <item>Umbrella</item>
+        <item>Start</item>
+        <item>Moon</item>
+        <item>Night Rain</item>
 
-        <item>001-chest</item>
-        <item>002-ball</item>
-        <item>003-meeting</item>
-        <item>004-more</item>
-        <item>005-connection</item>
-        <item>006-energy</item>
-        <item>007-party</item>
-        <item>008-full battery</item>
-        <item>009-lung</item>
-        <item>010-rope</item>
+        <item>Chest</item>
+        <item>Ball</item>
+        <item>Meeting</item>
+        <item>More</item>
+        <item>Connection</item>
+        <item>Energy</item>
+        <item>Party</item>
+        <item>Full Battery</item>
+        <item>Lung</item>
+        <item>Rope</item>
+        <item>Alarm</item>
+        <item>Timer</item>
+        <item>Clothes</item>
+        <item>Punching</item>
+        <item>Camping</item>
+        <item>Stationary Bike</item>
+        <item>Steps</item>
+        <item>Stairs</item>
+        <item>Health Foods</item>
+        <item>Energy Drink</item>
     </string-array>
 
     <string-array name="pref_list_fonts_title">
