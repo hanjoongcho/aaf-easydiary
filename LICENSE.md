@@ -683,6 +683,7 @@ limitations under the License.
 ```
 
 ### icons
+Icon made by [Smashicons](https://www.flaticon.com/authors/smashicons) from www.flaticon.com  
 https://www.flaticon.com/packs/weather-set-2  
 Published by Smashicons  2 years ago  
 License: Flaticon Basic License  
