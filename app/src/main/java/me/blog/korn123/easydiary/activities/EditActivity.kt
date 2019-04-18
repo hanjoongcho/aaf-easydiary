@@ -177,7 +177,8 @@ abstract class EditActivity : EasyDiaryActivity() {
         val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val symbolDialog = inflater.inflate(R.layout.dialog_feeling, null)
         val weatherArr = resources.getStringArray(R.array.weather_item_array)
-        val arrayAdapter = DiaryWeatherItemAdapter(this, R.layout.item_weather, Arrays.asList(*weatherArr))
+        val activityArr = resources.getStringArray(R.array.activity_item_array)
+        val arrayAdapter = DiaryWeatherItemAdapter(this, R.layout.item_weather, Arrays.asList(*weatherArr, *activityArr))
         val gridView = symbolDialog.findViewById<GridView>(R.id.feelingSymbols)
         gridView.adapter = arrayAdapter
         gridView.setOnItemClickListener { parent, view, position, id ->

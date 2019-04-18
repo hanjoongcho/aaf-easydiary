@@ -8,10 +8,12 @@
         <item>Snowing</item>
         <item>Rainbow</item>
         <item>Umbrella</item>
-        <item>Start</item>
+        <item>Stars</item>
         <item>Moon</item>
         <item>Night Rain</item>
-        
+    </string-array>
+
+    <string-array name="activity_item_array">
         <item>Chest</item>
         <item>Ball</item>
         <item>Meeting</item>
@@ -32,6 +34,16 @@
         <item>Stairs</item>
         <item>Health Foods</item>
         <item>Energy Drink</item>
+        <item>Dumbbell</item>
+        <item>vacuum</item>
+        <item>Lawn Mower</item>
+        <item>Water Can</item>
+        <item>Broom</item>
+        <item>Water</item>
+        <item>Microphone</item>
+        <item>Dumnnell2</item>
+        <item>Skatin</item>
+        <item>Treadmill</item>
     </string-array>
 
     <string-array name="pref_list_fonts_title">

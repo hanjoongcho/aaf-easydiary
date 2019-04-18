@@ -105,7 +105,17 @@ object EasyDiaryUtils {
                 ACTIVITY_HEALTH_FOODS -> setImageResource(R.drawable.ic_019_healthy_food)
                 ACTIVITY_ENERGY_DRINK-> setImageResource(R.drawable.ic_020_energy_drink)
 
-            }    
+                ACTIVITY_DUMBBELL -> setImageResource(R.drawable.ic_021_dumbbell)
+                ACTIVITY_VACUUM -> setImageResource(R.drawable.ic_022_vacuum)
+                ACTIVITY_LAWN_MOWER -> setImageResource(R.drawable.ic_023_lawn_mower)
+                ACTIVITY_WATERING_CAN -> setImageResource(R.drawable.ic_024_watering_can)
+                ACTIVITY_BROOM -> setImageResource(R.drawable.ic_025_broom)
+                ACTIVITY_WATER -> setImageResource(R.drawable.ic_026_water)
+                ACTIVITY_MICROPHONE -> setImageResource(R.drawable.ic_027_microphone)
+                ACTIVITY_DUMBBELL2 -> setImageResource(R.drawable.ic_028_dumbbell)
+                ACTIVITY_SKATING -> setImageResource(R.drawable.ic_029_skating)
+                ACTIVITY_TREADMILL -> setImageResource(R.drawable.ic_030_treadmill)
+            }
         }
     }
 
