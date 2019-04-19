@@ -35,6 +35,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryWeatherItemAdapter
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.models.DiarySymbol
 import me.blog.korn123.easydiary.models.PhotoUriDto
 import org.apache.commons.lang3.StringUtils
 import java.io.File
@@ -176,14 +177,18 @@ abstract class EditActivity : EasyDiaryActivity() {
         builder.setMessage("현재 날씨 또는 다이어리의 내용과 어울리는 심볼을 선택하세요.")
         val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val symbolDialog = inflater.inflate(R.layout.dialog_feeling, null)
+        val symbolList = arrayListOf<DiarySymbol>()
         val weatherArr = resources.getStringArray(R.array.weather_item_array)
         val activityArr = resources.getStringArray(R.array.activity_item_array)
-        val mergedItems = Arrays.asList(*weatherArr, *activityArr)
-        val arrayAdapter = DiaryWeatherItemAdapter(this, R.layout.item_weather, Arrays.asList(*weatherArr, *activityArr))
+        weatherArr.map { item -> symbolList.add(DiarySymbol(item))}
+        activityArr.map { item -> symbolList.add(DiarySymbol(item))}
+
+        val arrayAdapter = DiaryWeatherItemAdapter(this, R.layout.item_weather, symbolList)
         val gridView = symbolDialog.findViewById<GridView>(R.id.feelingSymbols)
         gridView.adapter = arrayAdapter
         gridView.setOnItemClickListener { parent, view, position, id ->
-            selectFeelingSymbol(position)
+            val diarySymbol = parent.adapter.getItem(position) as DiarySymbol
+            selectFeelingSymbol(diarySymbol.sequence)
             dialog?.dismiss()
         }
         builder.setView(symbolDialog)
