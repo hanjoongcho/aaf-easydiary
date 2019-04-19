@@ -1,49 +1,49 @@
 <resources>
     <string-array name="weather_item_array">
-        <item>선택안함</item>
-        <item>Sunny</item>
-        <item>Cloud and Sun</item>
-        <item>RAIN Drops</item>
-        <item>BOLT</item>
-        <item>Snowing</item>
-        <item>Rainbow</item>
-        <item>Umbrella</item>
-        <item>Stars</item>
-        <item>Moon</item>
-        <item>Night Rain</item>
+        <item>0|선택안함|0</item>
+        <item>1|Sunny|1</item>
+        <item>2|Cloud and Sun|2</item>
+        <item>3|RAIN Drops|3</item>
+        <item>4|BOLT|4</item>
+        <item>5|Snowing|5</item>
+        <item>6|Rainbow|6</item>
+        <item>7|Umbrella|7</item>
+        <item>8|Stars|8</item>
+        <item>9|Moon|9</item>
+        <item>10|Night Rain|10</item>
     </string-array>
 
     <string-array name="activity_item_array">
-        <item>Chest</item>
-        <item>Ball</item>
-        <item>Meeting</item>
-        <item>More</item>
-        <item>Connection</item>
-        <item>Energy</item>
-        <item>Party</item>
-        <item>Full Battery</item>
-        <item>Lung</item>
-        <item>Rope</item>
-        <item>Alarm</item>
-        <item>Timer</item>
-        <item>Clothes</item>
-        <item>Punching</item>
-        <item>Camping</item>
-        <item>Stationary Bike</item>
-        <item>Steps</item>
-        <item>Stairs</item>
-        <item>Health Foods</item>
-        <item>Energy Drink</item>
-        <item>Dumbbell</item>
-        <item>vacuum</item>
-        <item>Lawn Mower</item>
-        <item>Water Can</item>
-        <item>Broom</item>
-        <item>Water</item>
-        <item>Microphone</item>
-        <item>Dumnnell2</item>
-        <item>Skatin</item>
-        <item>Treadmill</item>
+        <item>11|Chest|11</item>
+        <item>12|Ball|12</item>
+        <item>13|Meeting|13</item>
+        <item>14|More|14</item>
+        <item>15|Connection|15</item>
+        <item>16|Energy|16</item>
+        <item>17|Party|17</item>
+        <item>18|Full Battery|18</item>
+        <item>19|Lung|19</item>
+        <item>20|Rope|20</item>
+        <item>21|Alarm|21</item>
+        <item>22|Timer|22</item>
+        <item>23|Clothes|23</item>
+        <item>24|Punching|24</item>
+        <item>25|Camping|25</item>
+        <item>26|Stationary Bike|26</item>
+        <item>27|Steps|27</item>
+        <item>28|Stairs|28</item>
+        <item>29|Health Foods|29</item>
+        <item>30|Energy Drink|30</item>
+        <item>31|Dumbbell|31</item>
+        <item>32|vacuum|32</item>
+        <item>33|Lawn Mower|33</item>
+        <item>34|Water Can|34</item>
+        <item>35|Broom|35</item>
+        <item>36|Water|36</item>
+        <item>37|Microphone|37</item>
+        <item>38|Dumbbell2|38</item>
+        <item>39|Skating|39</item>
+        <item>40|Treadmill|40</item>
     </string-array>
 
     <string-array name="pref_list_fonts_title">
