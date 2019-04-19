@@ -5,6 +5,8 @@ import android.support.test.InstrumentationRegistry
 import android.text.SpannedString
 import android.text.style.BackgroundColorSpan
 import android.widget.TextView
+import kotlinx.android.synthetic.main.item_timeline.view.*
+import me.blog.korn123.easydiary.R
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.BeforeClass
@@ -37,6 +39,18 @@ class EasyDiaryUtilsTest {
         val backgroundSpans = spannedString.getSpans(0, spannedString.length, BackgroundColorSpan::class.java)
         assertTrue(backgroundSpans.size == 2)
     }
+    
+    @Test
+    fun test_03() {
+        sContext?.let {
+            it.resources.getStringArray(R.array.weather_item_array)
+        }
+        // TODO         
+        assertTrue(true)
+    }
+    
+    
+    
 
     companion object {
 
