@@ -51,7 +51,7 @@ class EasyDiaryUtilsTest {
             weatherArr.map { item -> symbolList.add(DiarySymbol(item))}
             activityArr.map { item -> symbolList.add(DiarySymbol(item))}
         }
-        symbolList.map { symbol ->  Log.i("AAF-t", symbol.sequence + "," + symbol.description)}
+        symbolList.map { symbol ->  Log.i("AAF-t", "${symbol.sequence}" + "," + symbol.description)}
         assertTrue(symbolList.size == 40)
     }
 

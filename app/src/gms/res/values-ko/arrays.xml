@@ -1,48 +1,49 @@
 <resources>
     <string-array name="weather_item_array">
-        <item>0|선택안함|0</item>
-        <item>1|Sunny|1</item>
-        <item>2|Cloud and Sun|2</item>
-        <item>3|RAIN Drops|3</item>
-        <item>4|BOLT|4</item>
-        <item>5|Snowing|5</item>
-        <item>6|Rainbow|6</item>
-        <item>7|Umbrella|7</item>
-        <item>8|Stars|8</item>
-        <item>9|Moon|9</item>
-        <item>10|Night Rain|10</item>
+        <item>0|선택안함</item>
+        <item>1|Sunny</item>
+        <item>2|Cloud and Sun</item>
+        <item>3|RAIN Drops</item>
+        <item>4|BOLT</item>
+        <item>5|Snowing</item>
+        <item>6|Rainbow</item>
+        <item>7|Umbrella</item>
+        <item>8|Stars</item>
+        <item>9|Moon</item>
+        <item>10|Night Rain</item>
     </string-array>
 
     <string-array name="daily_item_array">
-        <item>41|Working|11</item>
-        <item>42|Wallet|12</item>
-        <item>43|Vitamins|13</item>
-        <item>44|Game Pad|14</item>
-        <item>45|Shirt|15</item>
+        <item>41|Working</item>
+        <item>42|Wallet</item>
+        <item>43|Vitamins</item>
+        <item>44|Game Pad</item>
+        <item>45|Shirt</item>
+        <item>46|Garbage</item>
+        <item>47|Tie</item>
+        <item>48|Ticket</item>
+        <item>49|Like</item>
+        <item>50|Study</item>
+        <item>51|Sleep</item>
+        <item>52|Shopping Cart</item>
+        <item>53|Repair</item>
+        <item>54|List</item>
+        <item>55|Pet</item>
+        <item>56|Fatherhood</item>
+        <item>57|Coffee</item>
+        <item>58|Eat</item>
     </string-array>
 
     <string-array name="activity_item_array">
-        <item>11|Chest|11</item>
-        <item>12|Ball|12</item>
         <item>13|Meeting|13</item>
-        <item>14|More|14</item>
-        <item>15|Connection|15</item>
-        <item>16|Energy|16</item>
         <item>17|Party|17</item>
-        <item>18|Full Battery|18</item>
-        <item>19|Lung|19</item>
-        <item>20|Rope|20</item>
         <item>21|Alarm|21</item>
-        <item>22|Timer|22</item>
         <item>23|Clothes|23</item>
-        <item>24|Punching|24</item>
         <item>25|Camping|25</item>
         <item>26|Stationary Bike|26</item>
-        <item>27|Steps|27</item>
         <item>28|Stairs|28</item>
         <item>29|Health Foods|29</item>
         <item>30|Energy Drink|30</item>
-        <item>31|Dumbbell|31</item>
         <item>32|vacuum|32</item>
         <item>33|Lawn Mower|33</item>
         <item>34|Water Can|34</item>

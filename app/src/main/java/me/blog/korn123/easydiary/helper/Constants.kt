@@ -109,8 +109,19 @@ const val DAILY_WALLET = 42
 const val DAILY_VITAMINS = 43
 const val DAILY_GAME_PAD = 44
 const val DAILY_SHIRT = 45
-
-
+const val DAILY_GARBAGE = 46
+const val DAILY_TIE = 47
+const val DAILY_TICKET = 48
+const val DAILY_LIKE = 49
+const val DAILY_STUDY = 50
+const val DAILY_SLEEP = 51
+const val DAILY_SHOPPING_CART = 52
+const val DAILY_REPAIR = 53
+const val DAILY_LIST = 54
+const val DAILY_PET = 55
+const val DAILY_FATHERHOOD = 56
+const val DAILY_COFFEE = 57
+const val DAILY_EAT = 58
 
 const val SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER = 0
 const val SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER = 1

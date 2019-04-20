@@ -178,10 +178,9 @@ abstract class EditActivity : EasyDiaryActivity() {
         val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val symbolDialog = inflater.inflate(R.layout.dialog_feeling, null)
         val symbolList = arrayListOf<DiarySymbol>()
-        val weatherArr = resources.getStringArray(R.array.weather_item_array)
-        val activityArr = resources.getStringArray(R.array.activity_item_array)
-        weatherArr.map { item -> symbolList.add(DiarySymbol(item))}
-        activityArr.map { item -> symbolList.add(DiarySymbol(item))}
+        resources.getStringArray(R.array.weather_item_array).map { item -> symbolList.add(DiarySymbol(item))}
+        resources.getStringArray(R.array.daily_item_array).map { item -> symbolList.add(DiarySymbol(item))}
+        resources.getStringArray(R.array.activity_item_array).map { item -> symbolList.add(DiarySymbol(item))}
 
         val arrayAdapter = DiaryWeatherItemAdapter(this, R.layout.item_weather, symbolList)
         val gridView = symbolDialog.findViewById<GridView>(R.id.feelingSymbols)
