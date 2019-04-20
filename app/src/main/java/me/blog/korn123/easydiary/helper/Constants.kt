@@ -103,16 +103,12 @@ const val ACTIVITY_MICROPHONE = 37
 const val ACTIVITY_DUMBBELL2 = 38
 const val ACTIVITY_SKATING = 39
 const val ACTIVITY_TREADMILL = 40
-const val ACTIVITY_WEIGHT_SCALE = 41
-const val ACTIVITY_HEART_RATE = 42
-const val ACTIVITY_HAPPY = 43
-const val ACTIVITY_SMART_WATCH = 44
-const val ACTIVITY_DISTANCE = 45
-const val ACTIVITY_MUSCLE = 46
-const val ACTIVITY_SCHEDULE = 47
-const val ACTIVITY_TO_DO_LIST = 48
-const val ACTIVITY_WAIST = 49
-const val ACTIVITY_SHOES = 50
+
+const val DAILY_WORKING = 41
+const val DAILY_WALLET = 42
+const val DAILY_VITAMINS = 43
+const val DAILY_GAME_PAD = 44
+const val DAILY_SHIRT = 45
 
 
 

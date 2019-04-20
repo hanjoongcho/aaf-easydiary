@@ -115,6 +115,12 @@ object EasyDiaryUtils {
                 ACTIVITY_DUMBBELL2 -> setImageResource(R.drawable.ic_028_dumbbell)
                 ACTIVITY_SKATING -> setImageResource(R.drawable.ic_029_skating)
                 ACTIVITY_TREADMILL -> setImageResource(R.drawable.ic_030_treadmill)
+
+                DAILY_GAME_PAD -> setImageResource(R.drawable.ic_005_gamepad)
+                DAILY_SHIRT -> setImageResource(R.drawable.ic_008_shirt)
+                DAILY_VITAMINS -> setImageResource(R.drawable.ic_004_vitamins)
+                DAILY_WALLET -> setImageResource(R.drawable.ic_003_wallet)
+                DAILY_WORKING -> setImageResource(R.drawable.ic_001_working)
             }
         }
     }

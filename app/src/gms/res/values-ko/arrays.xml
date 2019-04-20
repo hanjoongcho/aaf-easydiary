@@ -13,8 +13,15 @@
         <item>10|Night Rain|10</item>
     </string-array>
 
+    <string-array name="daily_item_array">
+        <item>41|Working|11</item>
+        <item>42|Wallet|12</item>
+        <item>43|Vitamins|13</item>
+        <item>44|Game Pad|14</item>
+        <item>45|Shirt|15</item>
+    </string-array>
+
     <string-array name="activity_item_array">
-        <item>40|Treadmill|40</item>
         <item>11|Chest|11</item>
         <item>12|Ball|12</item>
         <item>13|Meeting|13</item>
@@ -44,6 +51,7 @@
         <item>37|Microphone|37</item>
         <item>38|Dumbbell2|38</item>
         <item>39|Skating|39</item>
+        <item>40|Treadmill|40</item>
     </string-array>
 
     <string-array name="pref_list_fonts_title">
