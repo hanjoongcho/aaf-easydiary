@@ -130,7 +130,8 @@ Step7. Build 'aaf-easydiary' project with android studio.
 [Download 'weather-set-2' svg images from Flaticon](https://www.flaticon.com/packs/weather-set-2)
 
 ## FOSS Flavor
-For the foss flavor build, no further action is required. However, because we do not use Google Mobile Service, we can not use the backup function with Google Drive, and we will use simpler weather icons than weather icons provided by gms flavor.
+For the foss flavor build, no further action is required. However, because we do not use Google Mobile Service, we can not use the backup function with Google Drive, and we will use simpler weather icons than weather icons provided by gms flavor.  
+※ Since we are developing the GMS Flavor package first, the merging of the latest features may be delayed in the FOSS Flavor package.
 ```
 Step1. Fork or download 'aaf-easydiary' project.
 Step2. Import 'aaf-easydiary' project into android studio.
