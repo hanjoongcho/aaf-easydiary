@@ -4,7 +4,7 @@
     android:layout_height="wrap_content">
     <GridView
         android:id="@+id/feelingSymbols"
-        android:numColumns="3"
+        android:numColumns="4"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:divider="@null"
