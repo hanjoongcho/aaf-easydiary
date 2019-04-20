@@ -32,19 +32,10 @@
         <item>56|Fatherhood</item>
         <item>57|Coffee</item>
         <item>58|Eat</item>
+        <item>59|Laughing</item>
     </string-array>
 
     <string-array name="activity_item_array">
-        <item>13|Meeting|13</item>
-        <item>21|Alarm|21</item>
-        <item>25|Camping|25</item>
-        <item>26|Stationary Bike|26</item>
-        <item>29|Health Foods|29</item>
-        <item>30|Energy Drink|30</item>
-        <item>35|Broom|35</item>
-        <item>37|Microphone|37</item>
-        <item>39|Skating|39</item>
-        <item>40|Treadmill|40</item>
     </string-array>
 
     <string-array name="pref_list_fonts_title">

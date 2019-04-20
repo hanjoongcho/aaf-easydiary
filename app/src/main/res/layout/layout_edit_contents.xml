@@ -27,7 +27,7 @@
                     android:layout_height="@dimen/diary_symbol_height" />
                 <TextView
                     android:id="@+id/symbolText"
-                    android:text="다이어리 심볼"
+                    android:text="@string/diary_symbol"
                     android:layout_marginRight="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />    

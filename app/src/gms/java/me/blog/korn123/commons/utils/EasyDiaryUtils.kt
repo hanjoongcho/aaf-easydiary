@@ -83,17 +83,6 @@ object EasyDiaryUtils {
                 WEATHER_MOON -> setImageResource(R.drawable.ic_moon_9)
                 WEATHER_NIGHT_RAIN -> setImageResource(R.drawable.ic_night_rain)
 
-                ACTIVITY_MEETING -> setImageResource(R.drawable.ic_003_meeting)
-                ACTIVITY_ALARM -> setImageResource(R.drawable.ic_011_alarm)
-                ACTIVITY_CAMPING -> setImageResource(R.drawable.ic_015_camping)
-                ACTIVITY_STATIONARY_BIKE -> setImageResource(R.drawable.ic_016_stationary_bike)
-                ACTIVITY_HEALTH_FOODS -> setImageResource(R.drawable.ic_019_healthy_food)
-                ACTIVITY_ENERGY_DRINK-> setImageResource(R.drawable.ic_020_energy_drink)
-                ACTIVITY_BROOM -> setImageResource(R.drawable.ic_025_broom)
-                ACTIVITY_MICROPHONE -> setImageResource(R.drawable.ic_027_microphone)
-                ACTIVITY_SKATING -> setImageResource(R.drawable.ic_029_skating)
-                ACTIVITY_TREADMILL -> setImageResource(R.drawable.ic_030_treadmill)
-
                 DAILY_GAME_PAD -> setImageResource(R.drawable.ic_005_gamepad)
                 DAILY_SHIRT -> setImageResource(R.drawable.ic_008_shirt)
                 DAILY_VITAMINS -> setImageResource(R.drawable.ic_004_vitamins)
@@ -112,6 +101,8 @@ object EasyDiaryUtils {
                 DAILY_FATHERHOOD -> setImageResource(R.drawable.ic_052_fatherhood)
                 DAILY_COFFEE -> setImageResource(R.drawable.ic_050_coffee)
                 DAILY_EAT -> setImageResource(R.drawable.ic_044_eat)
+
+                EMOJI_LAUGHING -> setImageResource(R.drawable.ic_laughing)
             }
         }
     }

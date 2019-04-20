@@ -340,4 +340,6 @@
     <string name="privacy_policy_title">개인정보 보호정책</string>
     <string name="privacy_policy_description">이지 다이어리 개인정보 보호정책입니다.</string>
     <string name="privacy_policy_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/Privacy_ko.md</string>
+    <string name="diary_symbol">다이어리 심볼</string>
+    <string name="diary_symbol_guide_message">현재 날씨 또는 다이어리의 내용과 어울리는 심볼을 선택하세요.</string>
 </resources>
