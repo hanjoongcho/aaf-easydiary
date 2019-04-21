@@ -102,7 +102,6 @@ object EasyDiaryUtils {
                 DAILY_COFFEE -> setImageResource(R.drawable.ic_050_coffee)
                 DAILY_EAT -> setImageResource(R.drawable.ic_044_eat)
 
-                EMOJI_LAUGHING -> setImageResource(R.drawable.ic_laughing)
                 else -> setImageResource(0)
             }
         }
