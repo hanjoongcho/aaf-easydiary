@@ -40,6 +40,11 @@ android {
             versionName "${versions.publishVersion}_gms"
             signingConfig signingConfigs.config
         }
+        gmsp {
+            dimension "release"
+            versionName "${versions.publishVersion}_gms_production"
+            signingConfig signingConfigs.config
+        }
         foss {
             dimension "release"
             versionName "${versions.publishVersion}_foss"
@@ -49,6 +54,9 @@ android {
     sourceSets {
         gms {
             manifest.srcFile 'src/gms/AndroidManifest.xml'
+        }
+        gmsp {
+            manifest.srcFile 'src/gmsp/AndroidManifest.xml'
         }
         foss {
             manifest.srcFile 'src/foss/AndroidManifest.xml'
@@ -98,6 +106,8 @@ dependencies {
     // google
     gmsImplementation "com.google.android.gms:play-services-drive:$versions.gms"
     gmsImplementation "com.google.android.gms:play-services-auth:$versions.gms"
+    gmspImplementation "com.google.android.gms:play-services-drive:$versions.gms"
+    gmspImplementation "com.google.android.gms:play-services-auth:$versions.gms"
     implementation 'com.google.android:flexbox:1.0.0'
     implementation 'com.google.code.gson:gson:2.8.5'
     // jetbrains
@@ -106,6 +116,7 @@ dependencies {
     implementation 'commons-io:commons-io:2.6'
     implementation 'org.apache.commons:commons-lang3:3.7'
     gmsImplementation 'io.github.aafactory:commons:0.9.6'
+    gmspImplementation 'io.github.aafactory:commons:0.9.6'
     fossImplementation 'io.github.aafactory:commons-foss:0.9.6'
 //    implementation project(":aafactory-commons")
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.1'

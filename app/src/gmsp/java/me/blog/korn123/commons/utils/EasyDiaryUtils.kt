@@ -82,6 +82,27 @@ object EasyDiaryUtils {
                 WEATHER_STARS -> setImageResource(R.drawable.ic_stars_2)
                 WEATHER_MOON -> setImageResource(R.drawable.ic_moon_9)
                 WEATHER_NIGHT_RAIN -> setImageResource(R.drawable.ic_night_rain)
+
+                DAILY_GAME_PAD -> setImageResource(R.drawable.ic_005_gamepad)
+                DAILY_SHIRT -> setImageResource(R.drawable.ic_008_shirt)
+                DAILY_VITAMINS -> setImageResource(R.drawable.ic_004_vitamins)
+                DAILY_WALLET -> setImageResource(R.drawable.ic_003_wallet)
+                DAILY_WORKING -> setImageResource(R.drawable.ic_001_working)
+                DAILY_GARBAGE -> setImageResource(R.drawable.ic_009_garbage)
+                DAILY_TIE -> setImageResource(R.drawable.ic_014_tie)
+                DAILY_TICKET -> setImageResource(R.drawable.ic_015_ticket)
+                DAILY_LIKE -> setImageResource(R.drawable.ic_016_like)
+                DAILY_STUDY -> setImageResource(R.drawable.ic_018_study)
+                DAILY_SLEEP -> setImageResource(R.drawable.ic_023_sleep)
+                DAILY_SHOPPING_CART -> setImageResource(R.drawable.ic_024_shopping_cart)
+                DAILY_REPAIR -> setImageResource(R.drawable.ic_028_repair)
+                DAILY_LIST -> setImageResource(R.drawable.ic_029_list)
+                DAILY_PET -> setImageResource(R.drawable.ic_032_pet)
+                DAILY_FATHERHOOD -> setImageResource(R.drawable.ic_052_fatherhood)
+                DAILY_COFFEE -> setImageResource(R.drawable.ic_050_coffee)
+                DAILY_EAT -> setImageResource(R.drawable.ic_044_eat)
+
+                EMOJI_LAUGHING -> setImageResource(R.drawable.ic_laughing)
                 else -> setImageResource(0)
             }
         }

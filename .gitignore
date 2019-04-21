@@ -8,17 +8,6 @@ app/build
 app/*.apk
 app/*.iml
 app/release
-app/src/main/res/drawable/ic_clouds_and_sun.xml
-app/src/main/res/drawable/ic_umbrella_1.xml
-app/src/main/res/drawable/ic_sunny.xml
-app/src/main/res/drawable/ic_stars_2.xml
-app/src/main/res/drawable/ic_snowing.xml
-app/src/main/res/drawable/ic_raindrops.xml
-app/src/main/res/drawable/ic_rainbow.xml
-app/src/main/res/drawable/ic_night_rain.xml
-app/src/main/res/drawable/ic_moon_9.xml
-app/src/main/res/drawable/ic_bolt.xml
-app/src/main/res/drawable/ic_0*
 
 app/src/gms/res/drawable/ic_clouds_and_sun.xml
 app/src/gms/res/drawable/ic_umbrella_1.xml
@@ -30,7 +19,17 @@ app/src/gms/res/drawable/ic_rainbow.xml
 app/src/gms/res/drawable/ic_night_rain.xml
 app/src/gms/res/drawable/ic_moon_9.xml
 app/src/gms/res/drawable/ic_bolt.xml
-app/src/gms/res/drawable/ic_0*
 
-app/src/gms/res/drawable/ic_laughing.xml
+app/src/gmsp/res/drawable/ic_clouds_and_sun.xml
+app/src/gmsp/res/drawable/ic_umbrella_1.xml
+app/src/gmsp/res/drawable/ic_sunny.xml
+app/src/gmsp/res/drawable/ic_stars_2.xml
+app/src/gmsp/res/drawable/ic_snowing.xml
+app/src/gmsp/res/drawable/ic_raindrops.xml
+app/src/gmsp/res/drawable/ic_rainbow.xml
+app/src/gmsp/res/drawable/ic_night_rain.xml
+app/src/gmsp/res/drawable/ic_moon_9.xml
+app/src/gmsp/res/drawable/ic_bolt.xml
+app/src/gmsp/res/drawable/ic_0*
+app/src/gmsp/res/drawable/ic_laughing.xml
 
