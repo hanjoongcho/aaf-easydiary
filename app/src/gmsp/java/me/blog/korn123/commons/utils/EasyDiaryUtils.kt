@@ -102,6 +102,17 @@ object EasyDiaryUtils {
                 DAILY_COFFEE -> setImageResource(R.drawable.ic_050_coffee)
                 DAILY_EAT -> setImageResource(R.drawable.ic_044_eat)
 
+                EMOJI_HAPPY -> setImageResource(R.drawable.ic_001_happy)
+                EMOJI_LAUGHING -> setImageResource(R.drawable.ic_002_laughing)
+                EMOJI_CRYING -> setImageResource(R.drawable.ic_003_crying)
+                EMOJI_ANGRY -> setImageResource(R.drawable.ic_004_angry)
+                EMOJI_TONGUE -> setImageResource(R.drawable.ic_005_tongue)
+                EMOJI_ANGRY_1 -> setImageResource(R.drawable.ic_006_angry_1)
+                EMOJI_WINK -> setImageResource(R.drawable.ic_007_wink)
+                EMOJI_DISAPPOINTED -> setImageResource(R.drawable.ic_008_disappointed)
+                EMOJI_SAD -> setImageResource(R.drawable.ic_009_sad)
+                EMOJI_EMBARRASSED -> setImageResource(R.drawable.ic_010_embarrassed)
+
                 else -> setImageResource(0)
             }
         }

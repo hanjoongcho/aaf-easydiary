@@ -37,6 +37,19 @@
     <string-array name="activity_item_array">
     </string-array>
 
+    <string-array name="emoji_item_array">
+        <item>61|Happy</item>
+        <item>62|Laughing</item>
+        <item>63|Crying</item>
+        <item>64|Angry</item>
+        <item>65|Tongue</item>
+        <item>66|Angry</item>
+        <item>67|Wink</item>
+        <item>68|Disappointed</item>
+        <item>69|Sad</item>
+        <item>70|Embarrassed</item>
+    </string-array>
+
     <string-array name="pref_list_fonts_title">
         <item>デバイスの設定フォント</item>
     </string-array>
