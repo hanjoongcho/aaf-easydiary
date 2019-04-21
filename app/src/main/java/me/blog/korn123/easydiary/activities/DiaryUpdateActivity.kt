@@ -63,7 +63,7 @@ class DiaryUpdateActivity : EditActivity() {
                         diaryTitle.text.toString(),
                         diaryContents.text.toString()
                 )
-                diaryDto.weather = weatherSpinner.selectedItemPosition
+                diaryDto.weather = mSelectedItemPosition
                 diaryDto.isAllDay = allDay.isChecked
                 applyRemoveIndex()
                 diaryDto.photoUris = mPhotoUris
@@ -84,7 +84,7 @@ class DiaryUpdateActivity : EditActivity() {
         mCustomLineSpacing = false
 
         setupRecognizer()
-        setupSpinner()
+//        setupSpinner()
         initData()
         initDateTime()
         setupDialog()
@@ -160,9 +160,9 @@ class DiaryUpdateActivity : EditActivity() {
         }
     }
     
-    private fun initSpinner() {
-        weatherSpinner.setSelection(mWeather)
-    }
+//    private fun initSpinner() {
+//        weatherSpinner.setSelection(mWeather)
+//    }
 
     private fun initData() {
         val intent = intent
@@ -205,7 +205,8 @@ class DiaryUpdateActivity : EditActivity() {
             }
         }
 
-        initSpinner()
+//        initSpinner()
+        selectFeelingSymbol(mWeather)
     }
 
     private fun bindEvent() {
@@ -248,6 +249,8 @@ class DiaryUpdateActivity : EditActivity() {
         allDay.setOnClickListener { _ ->
             toggleTimePickerTool()
         }
+
+        feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog() }
     }
 
     private fun initDateTime() {

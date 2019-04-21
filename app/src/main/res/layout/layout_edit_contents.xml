@@ -11,16 +11,34 @@
         style="@style/AppCard.EditTitle">
         <LinearLayout
             style="@style/LinearLayoutHorizontal">
-            <Spinner
-                android:id="@+id/weatherSpinner"
-                android:spinnerMode="dropdown"
-                android:layout_marginLeft="5dp"
-                android:minHeight="45dp"
-                android:layout_gravity="center_vertical"
+            <LinearLayout
+                android:id="@+id/feelingSymbolButton"
                 android:gravity="center"
+                android:orientation="horizontal"
+                android:minHeight="45dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
-            </Spinner>
+                <ImageView
+                    android:id="@+id/symbol"
+                    android:visibility="gone"
+                    android:layout_marginRight="10dp"
+                    android:layout_width="@dimen/diary_symbol_width"
+                    android:layout_height="@dimen/diary_symbol_height" />
+                <TextView
+                    android:id="@+id/symbolText"
+                    android:text="@string/diary_symbol"
+                    android:layout_marginRight="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />    
+                <TextView
+                    android:id="@+id/symbolTextArrow"
+                    android:text="▼"
+                    android:textSize="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />    
+            </LinearLayout>
 
             <com.simplemobiletools.commons.views.MyEditText
                 android:id="@+id/diaryTitle"

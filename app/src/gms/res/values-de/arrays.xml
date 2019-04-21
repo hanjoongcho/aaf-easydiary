@@ -1,16 +1,22 @@
 <resources>
     <string-array name="weather_item_array">
-        <item>Wetter</item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
+        <item>0|선택안함</item>
+        <item>1|Sunny</item>
+        <item>2|Cloud and Sun</item>
+        <item>3|RAIN Drops</item>
+        <item>4|BOLT</item>
+        <item>5|Snowing</item>
+        <item>6|Rainbow</item>
+        <item>7|Umbrella</item>
+        <item>8|Stars</item>
+        <item>9|Moon</item>
+        <item>10|Night Rain</item>
+    </string-array>
+
+    <string-array name="daily_item_array">
+    </string-array>
+
+    <string-array name="activity_item_array">
     </string-array>
 
     <string-array name="pref_list_fonts_title">

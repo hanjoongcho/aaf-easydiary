@@ -15,13 +15,11 @@ import android.support.v4.graphics.ColorUtils
 import android.support.v7.app.AlertDialog
 import android.text.format.DateFormat
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.AdapterView
-import android.widget.HorizontalScrollView
-import android.widget.ImageView
-import android.widget.LinearLayout
+import android.widget.*
 import com.simplemobiletools.commons.helpers.BaseConfig
 import com.werb.pickphotoview.PickPhotoView
 import io.github.aafactory.commons.utils.BitmapUtils
@@ -33,10 +31,12 @@ import kotlinx.android.synthetic.main.layout_edit_contents.*
 import kotlinx.android.synthetic.main.layout_edit_photo_container.*
 import kotlinx.android.synthetic.main.layout_edit_toolbar_sub.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryWeatherItemAdapter
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.models.DiarySymbol
 import me.blog.korn123.easydiary.models.PhotoUriDto
 import org.apache.commons.lang3.StringUtils
 import java.io.File
@@ -58,6 +58,7 @@ abstract class EditActivity : EasyDiaryActivity() {
     protected var mHourOfDay = Integer.valueOf(DateUtils.getCurrentDateTime("HH"))
     protected var mMinute = Integer.valueOf(DateUtils.getCurrentDateTime("mm"))
     protected var mSecond = Integer.valueOf(DateUtils.getCurrentDateTime("ss"))
+    protected var mSelectedItemPosition = 0
     
     internal val mEditListener = View.OnClickListener { view ->
         hideSoftInputFromWindow()
@@ -164,10 +165,44 @@ abstract class EditActivity : EasyDiaryActivity() {
         photoView.layoutParams = layoutParams
     }
 
-    protected fun setupSpinner() {
-        val weatherArr = resources.getStringArray(R.array.weather_item_array)
-        val arrayAdapter = DiaryWeatherItemAdapter(this, R.layout.item_weather, Arrays.asList(*weatherArr))
-        weatherSpinner.adapter = arrayAdapter
+//    protected fun setupSpinner() {
+//        val weatherArr = resources.getStringArray(R.array.weather_item_array)
+//        val arrayAdapter = DiaryWeatherItemAdapter(this, R.layout.item_weather, Arrays.asList(*weatherArr))
+//        weatherSpinner.adapter = arrayAdapter
+//    }
+
+    protected fun openFeelingSymbolDialog() {
+        val builder = AlertDialog.Builder(this)
+        var dialog: AlertDialog? = null
+        builder.setNegativeButton(getString(android.R.string.cancel), null)
+        builder.setMessage(getString(R.string.diary_symbol_guide_message))
+        val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val symbolDialog = inflater.inflate(R.layout.dialog_feeling, null)
+        val symbolList = arrayListOf<DiarySymbol>()
+        resources.getStringArray(R.array.weather_item_array).map { item -> symbolList.add(DiarySymbol(item))}
+        resources.getStringArray(R.array.daily_item_array).map { item -> symbolList.add(DiarySymbol(item))}
+        resources.getStringArray(R.array.activity_item_array).map { item -> symbolList.add(DiarySymbol(item))}
+
+        val arrayAdapter = DiaryWeatherItemAdapter(this, R.layout.item_weather, symbolList)
+        val gridView = symbolDialog.findViewById<GridView>(R.id.feelingSymbols)
+        gridView.adapter = arrayAdapter
+        gridView.setOnItemClickListener { parent, view, position, id ->
+            val diarySymbol = parent.adapter.getItem(position) as DiarySymbol
+            selectFeelingSymbol(diarySymbol.sequence)
+            dialog?.dismiss()
+        }
+        builder.setView(symbolDialog)
+        dialog = builder.create()
+        dialog?.show()
+    }
+    
+    protected fun selectFeelingSymbol(index: Int) {
+        mSelectedItemPosition = index
+        when (mSelectedItemPosition == 0) {
+            true -> symbolText.visibility = View.VISIBLE
+            false -> symbolText.visibility = View.GONE
+        }
+        EasyDiaryUtils.initWeatherView(this, symbol, mSelectedItemPosition, false)
     }
     
     protected fun initBottomContainer() {

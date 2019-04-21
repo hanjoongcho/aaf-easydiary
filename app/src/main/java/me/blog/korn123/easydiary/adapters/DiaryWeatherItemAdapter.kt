@@ -4,11 +4,14 @@ import android.app.Activity
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.models.DiarySymbol
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -17,8 +20,8 @@ import me.blog.korn123.easydiary.extensions.initTextSize
 class DiaryWeatherItemAdapter(
         context: Context,
         private val mLayoutResourceId: Int,
-        private val mList: List<String>
-) : ArrayAdapter<String>(context, mLayoutResourceId, mList) {
+        private val mList: List<DiarySymbol>
+) : ArrayAdapter<DiarySymbol>(context, mLayoutResourceId, mList) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
         return initRow(position, convertView, parent)
@@ -44,10 +47,10 @@ class DiaryWeatherItemAdapter(
         }
 
         FontUtils.setFontsTypeface(context, context.assets, null, holder.item_holder)
-        EasyDiaryUtils.initWeatherView(context, holder.imageView1, position, true)
+        EasyDiaryUtils.initWeatherView(context, holder.imageView1, mList[position].sequence, true)
         holder.textView1?.let {
-            it.text = mList[position]
-            context.initTextSize(it, context)
+            it.text = mList[position].description
+//            context.initTextSize(it, context)
         }
 
         holder.imageView1?.let {

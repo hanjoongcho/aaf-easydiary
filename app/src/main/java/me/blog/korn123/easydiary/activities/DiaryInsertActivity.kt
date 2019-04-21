@@ -60,7 +60,7 @@ class DiaryInsertActivity : EditActivity() {
                     mCurrentTimeMillis,
                     this@DiaryInsertActivity.diaryTitle.text.toString(),
                     this@DiaryInsertActivity.diaryContents.text.toString(),
-                    weatherSpinner.selectedItemPosition,
+                    mSelectedItemPosition,
                     allDay.isChecked
             )
             applyRemoveIndex()
@@ -82,7 +82,7 @@ class DiaryInsertActivity : EditActivity() {
         mCustomLineSpacing = false
         
         setupRecognizer()
-        setupSpinner()
+//        setupSpinner()
         setupShowcase()
         setupDialog()
         setupPhotoView()
@@ -236,7 +236,7 @@ class DiaryInsertActivity : EditActivity() {
 
         mShowcaseView = ShowcaseView.Builder(this)
                 .withMaterialShowcase()
-                .setTarget(ViewTarget(weatherSpinner))
+                .setTarget(ViewTarget(feelingSymbolButton))
                 .setContentTitle(getString(R.string.create_diary_showcase_title_1))
                 .setContentText(getString(R.string.create_diary_showcase_message_1))
                 .setStyle(R.style.ShowcaseTheme)
@@ -290,6 +290,8 @@ class DiaryInsertActivity : EditActivity() {
         allDay.setOnClickListener { view ->
             toggleTimePickerTool()
         }
+
+        feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog() }
     }
     
     private fun restoreContents(savedInstanceState: Bundle?) {

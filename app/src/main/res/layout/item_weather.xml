@@ -3,16 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/item_holder"
     android:gravity="center"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:padding="10dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="80dp">
         <ImageView
             android:id="@+id/imageView1"
-            android:layout_width="25dp"
-            android:layout_height="25dp" />
+            android:layout_width="@dimen/diary_symbol_width"
+            android:layout_height="@dimen/diary_symbol_height" />
         <TextView
             android:id="@+id/text1"
+            android:textSize="12dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center" />

@@ -82,7 +82,8 @@ object EasyDiaryUtils {
                 WEATHER_STARS -> setImageResource(R.drawable.ic_stars_2)
                 WEATHER_MOON -> setImageResource(R.drawable.ic_moon_9)
                 WEATHER_NIGHT_RAIN -> setImageResource(R.drawable.ic_night_rain)
-            }    
+                else -> setImageResource(0)
+            }
         }
     }
 
