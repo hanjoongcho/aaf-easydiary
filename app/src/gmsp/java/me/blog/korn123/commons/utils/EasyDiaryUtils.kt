@@ -101,6 +101,10 @@ object EasyDiaryUtils {
                 DAILY_FATHERHOOD -> setImageResource(R.drawable.ic_052_fatherhood)
                 DAILY_COFFEE -> setImageResource(R.drawable.ic_050_coffee)
                 DAILY_EAT -> setImageResource(R.drawable.ic_044_eat)
+                DAILY_ACTIVITY -> setImageResource(R.drawable.ic_031_activity)
+                DAILY_HURRY -> setImageResource(R.drawable.ic_041_hurry)
+                DAILY_COOKING -> setImageResource(R.drawable.ic_049_cooking)
+                DAILY_CLEANING -> setImageResource(R.drawable.ic_051_cleaning)
 
                 EMOJI_HAPPY -> setImageResource(R.drawable.ic_001_happy)
                 EMOJI_LAUGHING -> setImageResource(R.drawable.ic_002_laughing)
