@@ -681,8 +681,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ```
+### icon: daily-routine-objects-actions-3
+<div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
 
-### icons
+### icon: weather-set-2  
 Icon made by [Smashicons](https://www.flaticon.com/authors/smashicons) from www.flaticon.com  
 https://www.flaticon.com/packs/weather-set-2  
 Published by Smashicons  2 years ago  
@@ -723,13 +725,14 @@ Graphic Resources S.L
 Commercial Registry of Málaga, volume 4994, sheet 217, page number MA-113059, with Tax Number B-
 93183366 and registered office at 13 Molina Lario Street, 5th floor, 29015 Málaga, Spain.
 ```
-
+### icon: weather-set-4 
 https://www.flaticon.com/packs/weather-set-4  
 Published by Freepik  2 years ago  
 License: Flaticon Basic License  
 Download format: Vector icon (SVG & EPS), PNG and PSD  
 Used in Easy Diary version 1.3.2 or lower  
 ```
+License: Flaticon Basic License
 FREE LICENSE (WITH ATTRIBUTION)
 This license allows you to use for free any of Flaticon contents for your projects as long as they are
 attributed to their author in the definitive project".
@@ -762,6 +765,7 @@ Commercial Registry of Málaga, volume 4994, sheet 217, page number MA-113059, w
 93183366 and registered office at 13 Molina Lario Street, 5th floor, 29015 Málaga, Spain.
 ```
 
+### icons: etc
 http://www.iconsdb.com/
 ```
 This icon is provided as CC0 1.0 Universal (CC0 1.0) Public Domain Dedication.
