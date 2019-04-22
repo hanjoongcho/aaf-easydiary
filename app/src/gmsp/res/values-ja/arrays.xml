@@ -45,13 +45,31 @@
         <item>100|Happy</item>
         <item>101|Laughing</item>
         <item>102|Crying</item>
-        <item>103|Angry</item>
         <item>104|Tongue</item>
-        <item>105|Angry</item>
         <item>106|Wink</item>
         <item>107|Disappointed</item>
         <item>108|Sad</item>
         <item>109|Embarrassed</item>
+        <item>110|Thinking</item>
+        <item>111|Sick</item>
+        <item>112|Secret</item>
+        <item>113|Sleeping</item>
+        <item>114|Rich</item>
+        <item>119|Surprised</item>
+        <item>120|Laughing</item>
+        <item>121|Injured</item>
+        <item>122|Happy</item>
+        <item>123|Demon</item>
+        <item>124|In Love</item>
+        <item>125|Tongue</item>
+        <item>126|Calm</item>
+        <item>115|Devil</item>
+        <item>116|Skull</item>
+        <item>118|Alien</item>
+        <item>117|Poo</item>
+        <item>103|Angry</item>
+        <item>105|Angry</item>
+        <item>127|Angry</item>
     </string-array>
 
     <string-array name="pref_list_fonts_title">
