@@ -42,7 +42,7 @@ android {
         }
         gmsp {
             dimension "release"
-            versionName "${versions.publishVersion}_gmsp_production"
+            versionName "${versions.publishVersion}_gmsp"
             signingConfig signingConfigs.config
         }
         foss {
