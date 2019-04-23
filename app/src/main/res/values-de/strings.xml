@@ -236,6 +236,10 @@
         Add application-specific information pages, including FAQs and privacy policies\n
         Improved pin and fingerprint unlock toggle
     </string>
+    <string name="release_139">
+        v1.4.76 / 2019.04.23\n
+        Add 32 kinds of diary symbol icons
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->

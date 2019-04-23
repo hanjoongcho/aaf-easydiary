@@ -1,6 +1,6 @@
 <resources>
     <string-array name="weather_item_array">
-        <item>0|선택안함</item>
+        <item>0|Not selected</item>
         <item>1|Sunny</item>
         <item>2|Cloud and Sun</item>
         <item>3|RAIN Drops</item>
@@ -17,6 +17,9 @@
     </string-array>
 
     <string-array name="activity_item_array">
+    </string-array>
+
+    <string-array name="emoji_item_array">
     </string-array>
 
     <string-array name="pref_list_fonts_title">
