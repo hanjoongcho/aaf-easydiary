@@ -4,37 +4,37 @@
         <item>1|Sunny</item>
         <item>2|Cloud and Sun</item>
         <item>3|RAIN Drops</item>
-        <item>4|BOLT</item>
         <item>5|Snowing</item>
-        <item>6|Rainbow</item>
-        <item>7|Umbrella</item>
-        <item>8|Stars</item>
+        <item>4|BOLT</item>
         <item>9|Moon</item>
         <item>10|Night Rain</item>
+        <item>7|Umbrella</item>
+        <item>6|Rainbow</item>
+        <item>8|Stars</item>
     </string-array>
 
     <string-array name="daily_item_array">
-        <item>41|Working</item>
+        <item>49|Like</item>
         <item>42|Wallet</item>
         <item>43|Vitamins</item>
         <item>44|Game Pad</item>
-        <item>45|Shirt</item>
-        <item>46|Garbage</item>
-        <item>47|Tie</item>
         <item>48|Ticket</item>
-        <item>49|Like</item>
+        <item>45|Shirt</item>
+        <item>47|Tie</item>
+        <item>60|Hurry</item>
+        <item>41|Working</item>
         <item>50|Study</item>
         <item>51|Sleep</item>
         <item>52|Shopping Cart</item>
-        <item>53|Repair</item>
-        <item>54|List</item>
+        <item>59|Activity</item>
         <item>55|Pet</item>
         <item>56|Fatherhood</item>
-        <item>57|Coffee</item>
+        <item>53|Repair</item>
+        <item>54|List</item>
         <item>58|Eat</item>
-        <item>59|Activity</item>
-        <item>60|Hurry</item>
         <item>61|Cooking</item>
+        <item>57|Coffee</item>
+        <item>46|Garbage</item>
         <item>62|Cleaning</item>
     </string-array>
 
@@ -43,33 +43,33 @@
 
     <string-array name="emoji_item_array">
         <item>100|Happy</item>
-        <item>101|Laughing</item>
-        <item>102|Crying</item>
+        <item>122|Happy</item>
         <item>104|Tongue</item>
+        <item>125|Tongue</item>
         <item>106|Wink</item>
+        <item>124|In Love</item>
+        <item>114|Rich</item>
+        <item>119|Surprised</item>
+        <item>126|Calm</item>
+        <item>110|Thinking</item>
+        <item>101|Laughing</item>
+        <item>120|Laughing</item>
+        <item>102|Crying</item>
+        <item>109|Embarrassed</item>
         <item>107|Disappointed</item>
         <item>108|Sad</item>
-        <item>109|Embarrassed</item>
-        <item>110|Thinking</item>
         <item>111|Sick</item>
         <item>112|Secret</item>
         <item>113|Sleeping</item>
-        <item>114|Rich</item>
-        <item>119|Surprised</item>
-        <item>120|Laughing</item>
         <item>121|Injured</item>
-        <item>122|Happy</item>
+        <item>103|Angry</item>
+        <item>105|Angry</item>
+        <item>127|Angry</item>
         <item>123|Demon</item>
-        <item>124|In Love</item>
-        <item>125|Tongue</item>
-        <item>126|Calm</item>
         <item>115|Devil</item>
         <item>116|Skull</item>
         <item>118|Alien</item>
         <item>117|Poo</item>
-        <item>103|Angry</item>
-        <item>105|Angry</item>
-        <item>127|Angry</item>
     </string-array>
 
     <string-array name="pref_list_fonts_title">
