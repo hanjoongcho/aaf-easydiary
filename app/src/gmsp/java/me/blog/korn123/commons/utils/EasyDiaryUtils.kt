@@ -95,6 +95,7 @@ object EasyDiaryUtils {
                 DAILY_STUDY -> setImageResource(R.drawable.ic_018_study)
                 DAILY_SLEEP -> setImageResource(R.drawable.ic_023_sleep)
                 DAILY_SHOPPING_CART -> setImageResource(R.drawable.ic_024_shopping_cart)
+                DAILY_SHOPPING_BAG -> setImageResource(R.drawable.ic_025_shopping_bag)
                 DAILY_REPAIR -> setImageResource(R.drawable.ic_028_repair)
                 DAILY_LIST -> setImageResource(R.drawable.ic_029_list)
                 DAILY_PET -> setImageResource(R.drawable.ic_032_pet)

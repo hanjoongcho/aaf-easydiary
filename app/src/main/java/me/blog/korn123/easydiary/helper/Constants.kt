@@ -126,6 +126,7 @@ const val DAILY_ACTIVITY = 59
 const val DAILY_HURRY = 60
 const val DAILY_COOKING = 61
 const val DAILY_CLEANING = 62
+const val DAILY_SHOPPING_BAG = 63
 
 const val EMOJI_HAPPY = 100
 const val EMOJI_LAUGHING = 101
