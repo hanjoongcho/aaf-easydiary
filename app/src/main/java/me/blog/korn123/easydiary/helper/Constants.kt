@@ -62,6 +62,7 @@ const val REQUEST_CODE_SPEECH_INPUT = 100
 const val PREVIOUS_ACTIVITY = "previous_activity"
 const val PREVIOUS_ACTIVITY_CREATE = 1
 
+//  Weather 0 ~ 39
 const val WEATHER_SUNNY = 1
 const val WEATHER_CLOUD_AND_SUN = 2
 const val WEATHER_RAIN_DROPS = 3
@@ -72,38 +73,11 @@ const val WEATHER_UMBRELLA = 7
 const val WEATHER_STARS = 8
 const val WEATHER_MOON = 9
 const val WEATHER_NIGHT_RAIN = 10
+const val WEATHER_TEMPERATURE_L = 11
+const val WEATHER_TEMPERATURE_M = 12
+const val WEATHER_TEMPERATURE_H = 13
 
-const val ACTIVITY_CHEST = 11
-const val ACTIVITY_BALL = 12
-const val ACTIVITY_MEETING = 13
-const val ACTIVITY_MORE = 14
-const val ACTIVITY_CONNECTION = 15
-const val ACTIVITY_ENERGY = 16
-const val ACTIVITY_PARTY = 17
-const val ACTIVITY_FULL_BATTERY = 18
-const val ACTIVITY_LUNG = 19
-const val ACTIVITY_ROPE = 20
-const val ACTIVITY_ALARM = 21
-const val ACTIVITY_TIMER = 22
-const val ACTIVITY_CLOTHES = 23
-const val ACTIVITY_PUNCHING = 24
-const val ACTIVITY_CAMPING = 25
-const val ACTIVITY_STATIONARY_BIKE = 26
-const val ACTIVITY_STEPS = 27
-const val ACTIVITY_STAIRS = 28
-const val ACTIVITY_HEALTH_FOODS = 29
-const val ACTIVITY_ENERGY_DRINK = 30
-const val ACTIVITY_DUMBBELL = 31
-const val ACTIVITY_VACUUM = 32
-const val ACTIVITY_LAWN_MOWER = 33
-const val ACTIVITY_WATERING_CAN = 34
-const val ACTIVITY_BROOM = 35
-const val ACTIVITY_WATER = 36
-const val ACTIVITY_MICROPHONE = 37
-const val ACTIVITY_DUMBBELL2 = 38
-const val ACTIVITY_SKATING = 39
-const val ACTIVITY_TREADMILL = 40
-
+//  Daily 40 ~ 99
 const val DAILY_WORKING = 41
 const val DAILY_WALLET = 42
 const val DAILY_VITAMINS = 43
@@ -129,6 +103,7 @@ const val DAILY_CLEANING = 62
 const val DAILY_SHOPPING_BAG = 63
 const val DAILY_DUMBBELL = 64
 
+// Emoji 100 ~ 199
 const val EMOJI_HAPPY = 100
 const val EMOJI_LAUGHING = 101
 const val EMOJI_CRYING = 102
