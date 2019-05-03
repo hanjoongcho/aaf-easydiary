@@ -48,6 +48,7 @@ import java.io.File
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 abstract class EditActivity : EasyDiaryActivity() {
     protected lateinit var mRecognizerIntent: Intent
@@ -184,8 +185,22 @@ abstract class EditActivity : EasyDiaryActivity() {
         val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val symbolDialog = inflater.inflate(R.layout.dialog_feeling_pager, null)
 
+        val itemList = arrayListOf<Array<String>>()
+        val categoryList = arrayListOf<String>()
+        itemList.add(resources.getStringArray(R.array.weather_item_array))
+        itemList.add(resources.getStringArray(R.array.daily_item_array))
+        itemList.add(resources.getStringArray(R.array.emoji_item_array))
+        categoryList.add("날씨")
+        categoryList.add("일상생활")
+        categoryList.add("감정")
+
+        if (resources.getIdentifier("landscape_item_array", "array", packageName) != 0) {
+            itemList.add(resources.getStringArray(resources.getIdentifier("landscape_item_array", "array", packageName)))
+            categoryList.add("풍경")
+        }
+
         val viewPager = symbolDialog.findViewById(R.id.viewpager) as ViewPager
-        val samplePagerAdapter = SamplePagerAdapter(this)
+        val samplePagerAdapter = SamplePagerAdapter(this, itemList, categoryList)
         viewPager.adapter = samplePagerAdapter
 
         val slidingTabLayout = symbolDialog.findViewById(R.id.sliding_tabs) as SlidingTabLayout
@@ -373,13 +388,13 @@ abstract class EditActivity : EasyDiaryActivity() {
      * this class is the [.getPageTitle] method which controls what is displayed in the
      * [SlidingTabLayout].
      */
-    inner class SamplePagerAdapter(val activity: Activity) : PagerAdapter() {
+    inner class SamplePagerAdapter(val activity: Activity, private val items: ArrayList<Array<String>>, private val categories: List<String>) : PagerAdapter() {
 
         /**
          * @return the number of pages to display
          */
         override fun getCount(): Int {
-            return 10
+            return items.size
         }
 
         /**
@@ -400,7 +415,7 @@ abstract class EditActivity : EasyDiaryActivity() {
          * refer to the item's contents.
          */
         override fun getPageTitle(position: Int): CharSequence? {
-            return "Item " + (position + 1)
+            return categories[position]
         }
         // END_INCLUDE (pageradapter_getpagetitle)
 
@@ -415,10 +430,7 @@ abstract class EditActivity : EasyDiaryActivity() {
             container.addView(view)
 
             val symbolList = arrayListOf<DiarySymbol>()
-            resources.getStringArray(R.array.weather_item_array).map { item -> symbolList.add(DiarySymbol(item))}
-            resources.getStringArray(R.array.daily_item_array).map { item -> symbolList.add(DiarySymbol(item))}
-            resources.getStringArray(R.array.activity_item_array).map { item -> symbolList.add(DiarySymbol(item))}
-            resources.getStringArray(R.array.emoji_item_array).map { item -> symbolList.add(DiarySymbol(item))}
+            items[position].map { item -> symbolList.add(DiarySymbol(item))}
 
             val arrayAdapter = DiaryWeatherItemAdapter(activity, R.layout.item_weather, symbolList)
             val gridView = view.findViewById<GridView>(R.id.feelingSymbols)

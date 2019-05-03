@@ -54,7 +54,7 @@ class DiaryWeatherItemAdapter(
         }
 
         holder.imageView1?.let {
-            if (position == 0) {
+            if (mList[position].sequence == 0) {
                 it.visibility = View.GONE
             } else {
                 it.visibility = View.VISIBLE

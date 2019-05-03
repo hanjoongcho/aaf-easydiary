@@ -110,7 +110,12 @@ object EasyDiaryUtils {
                 DAILY_HURRY -> setImageResource(R.drawable.ic_041_hurry)
                 DAILY_COOKING -> setImageResource(R.drawable.ic_049_cooking)
                 DAILY_CLEANING -> setImageResource(R.drawable.ic_051_cleaning)
+
                 LANDSCAPE_BEACH -> setImageResource(R.drawable.ic_beach)
+                LANDSCAPE_BRIDGE -> setImageResource(R.drawable.ic_bridge)
+                LANDSCAPE_CAPE -> setImageResource(R.drawable.ic_cape)
+                LANDSCAPE_CASTLE -> setImageResource(R.drawable.ic_castle)
+                LANDSCAPE_CITYSCAPE -> setImageResource(R.drawable.ic_cityscape)
 
                 EMOJI_HAPPY -> setImageResource(R.drawable.ic_001_happy)
                 EMOJI_LAUGHING -> setImageResource(R.drawable.ic_002_laughing)

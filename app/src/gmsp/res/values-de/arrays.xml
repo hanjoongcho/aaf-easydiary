@@ -41,7 +41,6 @@
         <item>57|Coffee</item>
         <item>46|Garbage</item>
         <item>62|Cleaning</item>
-        <item>200|Beach</item>
     </string-array>
 
     <string-array name="activity_item_array">
@@ -76,6 +75,14 @@
         <item>116|Skull</item>
         <item>118|Alien</item>
         <item>117|Poo</item>
+    </string-array>
+
+    <string-array name="landscape_item_array">
+        <item>200|Beach</item>
+        <item>201|Bridge</item>
+        <item>202|Cape</item>
+        <item>203|Castle</item>
+        <item>204|City Scape</item>
     </string-array>
 
     <string-array name="pref_list_fonts_title">
