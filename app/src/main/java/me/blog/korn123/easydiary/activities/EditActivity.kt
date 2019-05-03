@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.activities
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.ActivityNotFoundException
@@ -12,12 +13,15 @@ import android.provider.MediaStore
 import android.speech.RecognizerIntent
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.ColorUtils
+import android.support.v4.view.PagerAdapter
+import android.support.v4.view.ViewPager
 import android.support.v7.app.AlertDialog
 import android.text.format.DateFormat
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import com.simplemobiletools.commons.helpers.BaseConfig
@@ -38,6 +42,7 @@ import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiarySymbol
 import me.blog.korn123.easydiary.models.PhotoUriDto
+import me.blog.korn123.easydiary.views.SlidingTabLayout
 import org.apache.commons.lang3.StringUtils
 import java.io.File
 import java.text.ParseException
@@ -171,30 +176,38 @@ abstract class EditActivity : EasyDiaryActivity() {
 //        weatherSpinner.adapter = arrayAdapter
 //    }
 
+    var mDialog: AlertDialog? = null
     protected fun openFeelingSymbolDialog() {
         val builder = AlertDialog.Builder(this)
-        var dialog: AlertDialog? = null
         builder.setNegativeButton(getString(android.R.string.cancel), null)
         builder.setMessage(getString(R.string.diary_symbol_guide_message))
         val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val symbolDialog = inflater.inflate(R.layout.dialog_feeling, null)
-        val symbolList = arrayListOf<DiarySymbol>()
-        resources.getStringArray(R.array.weather_item_array).map { item -> symbolList.add(DiarySymbol(item))}
-        resources.getStringArray(R.array.daily_item_array).map { item -> symbolList.add(DiarySymbol(item))}
-        resources.getStringArray(R.array.activity_item_array).map { item -> symbolList.add(DiarySymbol(item))}
-        resources.getStringArray(R.array.emoji_item_array).map { item -> symbolList.add(DiarySymbol(item))}
+        val symbolDialog = inflater.inflate(R.layout.dialog_feeling_pager, null)
 
-        val arrayAdapter = DiaryWeatherItemAdapter(this, R.layout.item_weather, symbolList)
-        val gridView = symbolDialog.findViewById<GridView>(R.id.feelingSymbols)
-        gridView.adapter = arrayAdapter
-        gridView.setOnItemClickListener { parent, view, position, id ->
-            val diarySymbol = parent.adapter.getItem(position) as DiarySymbol
-            selectFeelingSymbol(diarySymbol.sequence)
-            dialog?.dismiss()
-        }
+        val viewPager = symbolDialog.findViewById(R.id.viewpager) as ViewPager
+        val samplePagerAdapter = SamplePagerAdapter(this)
+        viewPager.adapter = samplePagerAdapter
+
+        val slidingTabLayout = symbolDialog.findViewById(R.id.sliding_tabs) as SlidingTabLayout
+        slidingTabLayout.setViewPager(viewPager)
+
+//        val symbolList = arrayListOf<DiarySymbol>()
+//        resources.getStringArray(R.array.weather_item_array).map { item -> symbolList.add(DiarySymbol(item))}
+//        resources.getStringArray(R.array.daily_item_array).map { item -> symbolList.add(DiarySymbol(item))}
+//        resources.getStringArray(R.array.activity_item_array).map { item -> symbolList.add(DiarySymbol(item))}
+//        resources.getStringArray(R.array.emoji_item_array).map { item -> symbolList.add(DiarySymbol(item))}
+//
+//        val arrayAdapter = DiaryWeatherItemAdapter(this, R.layout.item_weather, symbolList)
+//        val gridView = symbolDialog.findViewById<GridView>(R.id.feelingSymbols)
+//        gridView.adapter = arrayAdapter
+//        gridView.setOnItemClickListener { parent, view, position, id ->
+//            val diarySymbol = parent.adapter.getItem(position) as DiarySymbol
+//            selectFeelingSymbol(diarySymbol.sequence)
+//            dialog?.dismiss()
+//        }
         builder.setView(symbolDialog)
-        dialog = builder.create()
-        dialog?.show()
+        mDialog = builder.create()
+        mDialog?.show()
     }
     
     protected fun selectFeelingSymbol(index: Int) {
@@ -351,6 +364,82 @@ abstract class EditActivity : EasyDiaryActivity() {
                     },
                     DialogInterface.OnClickListener { dialog, which -> }
             )
+        }
+    }
+
+    /**
+     * The [android.support.v4.view.PagerAdapter] used to display pages in this sample.
+     * The individual pages are simple and just display two lines of text. The important section of
+     * this class is the [.getPageTitle] method which controls what is displayed in the
+     * [SlidingTabLayout].
+     */
+    inner class SamplePagerAdapter(val activity: Activity) : PagerAdapter() {
+
+        /**
+         * @return the number of pages to display
+         */
+        override fun getCount(): Int {
+            return 10
+        }
+
+        /**
+         * @return true if the value returned from [.instantiateItem] is the
+         * same object as the [View] added to the [ViewPager].
+         */
+        override fun isViewFromObject(view: View, o: Any): Boolean {
+            return o === view
+        }
+
+        // BEGIN_INCLUDE (pageradapter_getpagetitle)
+        /**
+         * Return the title of the item at `position`. This is important as what this method
+         * returns is what is displayed in the [SlidingTabLayout].
+         *
+         *
+         * Here we construct one using the position value, but for real application the title should
+         * refer to the item's contents.
+         */
+        override fun getPageTitle(position: Int): CharSequence? {
+            return "Item " + (position + 1)
+        }
+        // END_INCLUDE (pageradapter_getpagetitle)
+
+        /**
+         * Instantiate the [View] which should be displayed at `position`. Here we
+         * inflate a layout from the apps resources and then change the text view to signify the position.
+         */
+        override fun instantiateItem(container: ViewGroup, position: Int): Any {
+            // Inflate a new layout from our resources
+            val view = activity.layoutInflater.inflate(R.layout.dialog_feeling, container, false)
+            // Add the newly created View to the ViewPager
+            container.addView(view)
+
+            val symbolList = arrayListOf<DiarySymbol>()
+            resources.getStringArray(R.array.weather_item_array).map { item -> symbolList.add(DiarySymbol(item))}
+            resources.getStringArray(R.array.daily_item_array).map { item -> symbolList.add(DiarySymbol(item))}
+            resources.getStringArray(R.array.activity_item_array).map { item -> symbolList.add(DiarySymbol(item))}
+            resources.getStringArray(R.array.emoji_item_array).map { item -> symbolList.add(DiarySymbol(item))}
+
+            val arrayAdapter = DiaryWeatherItemAdapter(activity, R.layout.item_weather, symbolList)
+            val gridView = view.findViewById<GridView>(R.id.feelingSymbols)
+            gridView.adapter = arrayAdapter
+            gridView.setOnItemClickListener { parent, view, position, id ->
+                val diarySymbol = parent.adapter.getItem(position) as DiarySymbol
+                selectFeelingSymbol(diarySymbol.sequence)
+                mDialog?.dismiss()
+            }
+
+
+            // Return the View
+            return view
+        }
+
+        /**
+         * Destroy the item from the [ViewPager]. In our case this is simply removing the
+         * [View].
+         */
+        override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
+            container.removeView(`object` as View)
         }
     }
 }
