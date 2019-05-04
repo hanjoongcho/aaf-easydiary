@@ -145,6 +145,23 @@ const val LANDSCAPE_FIELDS = 207
 const val LANDSCAPE_FIELDS_1 = 208
 const val LANDSCAPE_FOREST = 209
 
+// Food and Drink 250 ~ 299
+const val FOOD_COFFEE = 250
+const val FOOD_SANDWICH = 251
+const val FOOD_STEAK = 252
+const val FOOD_PIE = 253
+const val FOOD_WATER = 254
+const val FOOD_MILK = 255
+const val FOOD_SALAD = 256
+const val FOOD_BAGUETTE = 257
+const val FOOD_WHISKEY = 258
+const val FOOD_WINE = 259
+const val FOOD_CAKE = 260
+const val FOOD_CHAMPAGNE = 261
+const val FOOD_FEEDING_BOTTLE = 262
+const val FOOD_BEER = 263
+const val FOOD_SUSHI = 264
+
 const val SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER = 0
 const val SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER = 1
 const val SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_NUMBER = 2

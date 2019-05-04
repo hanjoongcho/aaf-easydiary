@@ -177,6 +177,14 @@ abstract class EditActivity : EasyDiaryActivity() {
 //        weatherSpinner.adapter = arrayAdapter
 //    }
 
+    private fun addCategory(itemList: ArrayList<Array<String>>, categoryList: ArrayList<String>, resourceName: String, categoryName: String) {
+        val resourceId = resources.getIdentifier(resourceName, "array", packageName)
+        if (resourceId != 0) {
+            itemList.add(resources.getStringArray(resourceId))
+            categoryList.add(categoryName)
+        }
+    }
+
     var mDialog: AlertDialog? = null
     protected fun openFeelingSymbolDialog() {
         val builder = AlertDialog.Builder(this)
@@ -193,11 +201,9 @@ abstract class EditActivity : EasyDiaryActivity() {
         categoryList.add("날씨")
         categoryList.add("일상생활")
         categoryList.add("감정")
+        addCategory(itemList, categoryList, "landscape_item_array", "풍경")
+        addCategory(itemList, categoryList, "food_item_array", "음식&음료")
 
-        if (resources.getIdentifier("landscape_item_array", "array", packageName) != 0) {
-            itemList.add(resources.getStringArray(resources.getIdentifier("landscape_item_array", "array", packageName)))
-            categoryList.add("풍경")
-        }
 
         val viewPager = symbolDialog.findViewById(R.id.viewpager) as ViewPager
         val samplePagerAdapter = SamplePagerAdapter(this, itemList, categoryList)

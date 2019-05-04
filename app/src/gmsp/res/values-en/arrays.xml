@@ -90,6 +90,24 @@
         <item>209|Forest</item>
     </string-array>
 
+    <string-array name="food_item_array">
+        <item>250|Coffee</item>
+        <item>251|Sandwich</item>
+        <item>252|Steak</item>
+        <item>253|Pie</item>
+        <item>254|Water</item>
+        <item>255|Milk</item>
+        <item>256|Salad</item>
+        <item>257|Baguette</item>
+        <item>258|Whiskey</item>
+        <item>259|Wine</item>
+        <item>260|Cake</item>
+        <item>261|Champagne</item>
+        <item>262|Feeding Bottle</item>
+        <item>263|Beer</item>
+        <item>264|Sushi</item>
+    </string-array>
+
     <string-array name="pref_list_fonts_title">
         <item>NanumPen</item>
         <item>NanumBrush</item>

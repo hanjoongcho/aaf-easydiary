@@ -151,6 +151,22 @@ object EasyDiaryUtils {
                 EMOJI_CALM -> setImageResource(R.drawable.ic_050_calm)
                 EMOJI_ANGRY_2 -> setImageResource(R.drawable.ic_039_angry_2)
 
+                FOOD_COFFEE -> setImageResource(R.drawable.ic_001_coffee)
+                FOOD_SANDWICH -> setImageResource(R.drawable.ic_004_sandwich)
+                FOOD_STEAK -> setImageResource(R.drawable.ic_005_steak)
+                FOOD_PIE -> setImageResource(R.drawable.ic_007_pie)
+                FOOD_WATER -> setImageResource(R.drawable.ic_010_water)
+                FOOD_MILK -> setImageResource(R.drawable.ic_019_milk)
+                FOOD_SALAD -> setImageResource(R.drawable.ic_023_salad)
+                FOOD_BAGUETTE -> setImageResource(R.drawable.ic_024_baguette)
+                FOOD_WHISKEY -> setImageResource(R.drawable.ic_032_whiskey)
+                FOOD_WINE -> setImageResource(R.drawable.ic_043_wine)
+                FOOD_CAKE -> setImageResource(R.drawable.ic_034_cake_1)
+                FOOD_CHAMPAGNE -> setImageResource(R.drawable.ic_036_champagne)
+                FOOD_FEEDING_BOTTLE -> setImageResource(R.drawable.ic_038_feeding_bottle)
+                FOOD_BEER -> setImageResource(R.drawable.ic_040_beer)
+                FOOD_SUSHI -> setImageResource(R.drawable.ic_049_sushi_2)
+
                 else -> setImageResource(0)
             }
         }
