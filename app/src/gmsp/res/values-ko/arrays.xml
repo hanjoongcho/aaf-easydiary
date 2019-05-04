@@ -83,6 +83,11 @@
         <item>202|Cape</item>
         <item>203|Castle</item>
         <item>204|City Scape</item>
+        <item>205|Desert</item>
+        <item>206|Desert1</item>
+        <item>207|FIELDS</item>
+        <item>208|FIELDS1</item>
+        <item>209|Forest</item>
     </string-array>
 
     <string-array name="pref_list_fonts_title">
