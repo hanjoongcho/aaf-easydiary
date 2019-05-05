@@ -9,5 +9,5 @@ app/*.apk
 app/*.iml
 app/release
 
-# app/src/gms/res/drawable/ic_*
-# app/src/gmsp/res/drawable/ic_*
+app/src/gms/res/drawable/ic_*
+app/src/gmsp/res/drawable/ic_*
