@@ -115,6 +115,7 @@
         <item>302|Hiking</item>
         <item>303|Reading</item>
         <item>304|Nap</item>
+        <item>305|Park</item>
     </string-array>
 
     <string-array name="pref_list_fonts_title">
