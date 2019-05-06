@@ -17,6 +17,7 @@
     </string-array>
 
     <string-array name="emoji_item_array">
+        <item>49|Like</item>
         <item>100|Happy</item>
         <item>122|Happy</item>
         <item>104|Tongue</item>
@@ -49,12 +50,10 @@
 
     <string-array name="daily_item_array">
         <item>60|Hurry</item>
-        <item>49|Like</item>
         <item>41|Working</item>
         <item>50|Study</item>
         <item>51|Sleep</item>
-        <item>52|Shopping Cart</item>
-        <item>63|Shopping Bag</item>
+        <item>52|Shopping</item>
         <item>59|Activity</item>
         <item>62|Cleaning</item>
         <item>61|Cooking</item>
@@ -64,6 +63,7 @@
         <item>53|Repair</item>
         <item>54|List</item>
         <item>42|Wallet</item>
+        <item>63|Shopping Bag</item>
         <item>43|Vitamins</item>
         <item>44|Game Pad</item>
         <item>48|Ticket</item>
@@ -75,7 +75,7 @@
 
     <string-array name="food_item_array">
         <item>57|Coffee</item>
-        <item>250|Coffee</item>
+        <item>250|Burger</item>
         <item>251|Sandwich</item>
         <item>252|Steak</item>
         <item>253|Pie</item>

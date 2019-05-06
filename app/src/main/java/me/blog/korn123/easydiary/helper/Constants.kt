@@ -146,7 +146,7 @@ const val LANDSCAPE_FIELDS_1 = 208
 const val LANDSCAPE_FOREST = 209
 
 // Food and Drink 250 ~ 299
-const val FOOD_COFFEE = 250
+const val FOOD_BURGER = 250
 const val FOOD_SANDWICH = 251
 const val FOOD_STEAK = 252
 const val FOOD_PIE = 253
