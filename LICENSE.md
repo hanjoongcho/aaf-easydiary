@@ -772,11 +772,12 @@ Commercial Registry of Málaga, volume 4994, sheet 217, page number MA-113059, w
 93183366 and registered office at 13 Molina Lario Street, 5th floor, 29015 Málaga, Spain.
 ```
 
-### Icons: etc
+### Icons: From flaticon
 <div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
 
 <div>Icons made by <a href="https://www.flaticon.com/authors/monkik" title="monkik">monkik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
 
+### Icons: etc.
 http://www.iconsdb.com/
 ```
 This icon is provided as CC0 1.0 Universal (CC0 1.0) Public Domain Dedication.
