@@ -681,17 +681,17 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ```
-### icon: emoji-17
+### Icon Packs: emoji-17
 <div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>   
 https://www.flaticon.com/packs/emoji-17<br />
 Used in Easy Diary version 1.4.76 or higher
 
-### icon: daily-routine-objects-actions-3
+### Icon Packs: daily-routine-objects-actions-3
 <div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>   
 https://www.flaticon.com/packs/daily-routine-objects-actions-3<br />
 Used in Easy Diary version 1.4.76 or higher   
 
-### icon: weather-set-2  
+### Icon Packs: weather-set-2  
 Icon made by [Smashicons](https://www.flaticon.com/authors/smashicons) from www.flaticon.com  
 https://www.flaticon.com/packs/weather-set-2  
 Published by Smashicons  2 years ago  
@@ -732,7 +732,7 @@ Graphic Resources S.L
 Commercial Registry of Málaga, volume 4994, sheet 217, page number MA-113059, with Tax Number B-
 93183366 and registered office at 13 Molina Lario Street, 5th floor, 29015 Málaga, Spain.
 ```
-### icon: weather-set-4 
+### Icon Packs: weather-set-4 
 https://www.flaticon.com/packs/weather-set-4  
 Published by Freepik  2 years ago  
 License: Flaticon Basic License  
@@ -772,7 +772,11 @@ Commercial Registry of Málaga, volume 4994, sheet 217, page number MA-113059, w
 93183366 and registered office at 13 Molina Lario Street, 5th floor, 29015 Málaga, Spain.
 ```
 
-### icons: etc
+### Icons: etc
+<div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+
+<div>Icons made by <a href="https://www.flaticon.com/authors/monkik" title="monkik">monkik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+
 http://www.iconsdb.com/
 ```
 This icon is provided as CC0 1.0 Universal (CC0 1.0) Public Domain Dedication.
@@ -812,11 +816,6 @@ http://puppetscientists.com/#icons
 ```
 This icon is provided by puppetscientists as CC0 1.0 Universal (CC0 1.0) Public Domain Dedication.
 You can copy, modify, use, distribute this icon, even for commercial purposes, all without asking permission with no attribution required, but always appreciated.
-```
-
-http://www.freepik.com, http://www.flaticon.com
-```
-Icons made by Freepik from www.flaticon.com is licensed by CC 3.0 BY
 ```
 
 ### nanum fonts
