@@ -197,7 +197,7 @@ abstract class EditActivity : EasyDiaryActivity() {
         val categoryList = arrayListOf<String>()
         addCategory(itemList, categoryList, "weather_item_array", "날씨")
         addCategory(itemList, categoryList, "emoji_item_array", "감정")
-        addCategory(itemList, categoryList, "daily_item_array", "일상생활")
+        addCategory(itemList, categoryList, "daily_item_array", "일상생활&물건")
         addCategory(itemList, categoryList, "food_item_array", "음식&음료")
         addCategory(itemList, categoryList, "leisure_item_array", "여가생활")
         addCategory(itemList, categoryList, "landscape_item_array", "풍경")
