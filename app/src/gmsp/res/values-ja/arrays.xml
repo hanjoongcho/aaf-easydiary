@@ -116,6 +116,7 @@
         <item>303|Reading</item>
         <item>304|Nap</item>
         <item>305|Park</item>
+        <item>306|Fishing</item>
     </string-array>
 
     <string-array name="pref_list_fonts_title">
