@@ -62,6 +62,7 @@ const val REQUEST_CODE_SPEECH_INPUT = 100
 const val PREVIOUS_ACTIVITY = "previous_activity"
 const val PREVIOUS_ACTIVITY_CREATE = 1
 
+//  Weather 0 ~ 39
 const val WEATHER_SUNNY = 1
 const val WEATHER_CLOUD_AND_SUN = 2
 const val WEATHER_RAIN_DROPS = 3
@@ -72,38 +73,11 @@ const val WEATHER_UMBRELLA = 7
 const val WEATHER_STARS = 8
 const val WEATHER_MOON = 9
 const val WEATHER_NIGHT_RAIN = 10
+const val WEATHER_TEMPERATURE_L = 11
+const val WEATHER_TEMPERATURE_M = 12
+const val WEATHER_TEMPERATURE_H = 13
 
-const val ACTIVITY_CHEST = 11
-const val ACTIVITY_BALL = 12
-const val ACTIVITY_MEETING = 13
-const val ACTIVITY_MORE = 14
-const val ACTIVITY_CONNECTION = 15
-const val ACTIVITY_ENERGY = 16
-const val ACTIVITY_PARTY = 17
-const val ACTIVITY_FULL_BATTERY = 18
-const val ACTIVITY_LUNG = 19
-const val ACTIVITY_ROPE = 20
-const val ACTIVITY_ALARM = 21
-const val ACTIVITY_TIMER = 22
-const val ACTIVITY_CLOTHES = 23
-const val ACTIVITY_PUNCHING = 24
-const val ACTIVITY_CAMPING = 25
-const val ACTIVITY_STATIONARY_BIKE = 26
-const val ACTIVITY_STEPS = 27
-const val ACTIVITY_STAIRS = 28
-const val ACTIVITY_HEALTH_FOODS = 29
-const val ACTIVITY_ENERGY_DRINK = 30
-const val ACTIVITY_DUMBBELL = 31
-const val ACTIVITY_VACUUM = 32
-const val ACTIVITY_LAWN_MOWER = 33
-const val ACTIVITY_WATERING_CAN = 34
-const val ACTIVITY_BROOM = 35
-const val ACTIVITY_WATER = 36
-const val ACTIVITY_MICROPHONE = 37
-const val ACTIVITY_DUMBBELL2 = 38
-const val ACTIVITY_SKATING = 39
-const val ACTIVITY_TREADMILL = 40
-
+//  Daily 40 ~ 99
 const val DAILY_WORKING = 41
 const val DAILY_WALLET = 42
 const val DAILY_VITAMINS = 43
@@ -126,7 +100,10 @@ const val DAILY_ACTIVITY = 59
 const val DAILY_HURRY = 60
 const val DAILY_COOKING = 61
 const val DAILY_CLEANING = 62
+const val DAILY_SHOPPING_BAG = 63
+const val DAILY_DUMBBELL = 64
 
+// Emoji 100 ~ 199
 const val EMOJI_HAPPY = 100
 const val EMOJI_LAUGHING = 101
 const val EMOJI_CRYING = 102
@@ -155,6 +132,46 @@ const val EMOJI_IN_LOVE = 124
 const val EMOJI_TONGUE_1 = 125
 const val EMOJI_CALM = 126
 const val EMOJI_ANGRY_2 = 127
+
+// Landscape 200 ~ 249
+const val LANDSCAPE_BEACH = 200
+const val LANDSCAPE_BRIDGE = 201
+const val LANDSCAPE_CAPE = 202
+const val LANDSCAPE_CASTLE = 203
+const val LANDSCAPE_CITYSCAPE = 204
+const val LANDSCAPE_DESERT = 205
+const val LANDSCAPE_DESERT_1 = 206
+const val LANDSCAPE_FIELDS = 207
+const val LANDSCAPE_FIELDS_1 = 208
+const val LANDSCAPE_FOREST = 209
+
+// Food and Drink 250 ~ 299
+const val FOOD_COFFEE = 250
+const val FOOD_SANDWICH = 251
+const val FOOD_STEAK = 252
+const val FOOD_PIE = 253
+const val FOOD_WATER = 254
+const val FOOD_MILK = 255
+const val FOOD_SALAD = 256
+const val FOOD_BAGUETTE = 257
+const val FOOD_WHISKEY = 258
+const val FOOD_WINE = 259
+const val FOOD_CAKE = 260
+const val FOOD_CHAMPAGNE = 261
+const val FOOD_FEEDING_BOTTLE = 262
+const val FOOD_BEER = 263
+const val FOOD_SUSHI = 264
+const val FOOD_SAKE = 265
+
+// Leisure 300 ~ 349
+const val LEISURE_PICNIC = 300
+const val LEISURE_MOVIE = 301
+const val LEISURE_HIKING = 302
+const val LEISURE_READING = 303
+const val LEISURE_NAP = 304
+const val LEISURE_PARK = 305
+const val LEISURE_FISHING = 306
+const val LEISURE_FESTIVAL = 307
 
 const val SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER = 0
 const val SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER = 1

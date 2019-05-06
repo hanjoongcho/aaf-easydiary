@@ -3,42 +3,17 @@
         <item>0|選択しない</item>
         <item>1|Sunny</item>
         <item>2|Cloud and Sun</item>
-        <item>3|RAIN Drops</item>
+        <item>3|Rain Drops</item>
         <item>5|Snowing</item>
-        <item>4|BOLT</item>
+        <item>4|Bolt</item>
         <item>9|Moon</item>
         <item>10|Night Rain</item>
+        <item>11|Low Temperature</item>
+        <item>12|Medium Temperature</item>
+        <item>13|High Temperature</item>
         <item>7|Umbrella</item>
         <item>6|Rainbow</item>
         <item>8|Stars</item>
-    </string-array>
-
-    <string-array name="daily_item_array">
-        <item>49|Like</item>
-        <item>42|Wallet</item>
-        <item>43|Vitamins</item>
-        <item>44|Game Pad</item>
-        <item>48|Ticket</item>
-        <item>45|Shirt</item>
-        <item>47|Tie</item>
-        <item>60|Hurry</item>
-        <item>41|Working</item>
-        <item>50|Study</item>
-        <item>51|Sleep</item>
-        <item>52|Shopping Cart</item>
-        <item>59|Activity</item>
-        <item>55|Pet</item>
-        <item>56|Fatherhood</item>
-        <item>53|Repair</item>
-        <item>54|List</item>
-        <item>58|Eat</item>
-        <item>61|Cooking</item>
-        <item>57|Coffee</item>
-        <item>46|Garbage</item>
-        <item>62|Cleaning</item>
-    </string-array>
-
-    <string-array name="activity_item_array">
     </string-array>
 
     <string-array name="emoji_item_array">
@@ -70,6 +45,76 @@
         <item>116|Skull</item>
         <item>118|Alien</item>
         <item>117|Poo</item>
+    </string-array>
+
+    <string-array name="daily_item_array">
+        <item>60|Hurry</item>
+        <item>49|Like</item>
+        <item>41|Working</item>
+        <item>50|Study</item>
+        <item>51|Sleep</item>
+        <item>52|Shopping Cart</item>
+        <item>63|Shopping Bag</item>
+        <item>59|Activity</item>
+        <item>62|Cleaning</item>
+        <item>61|Cooking</item>
+        <item>58|Eat</item>
+        <item>56|Fatherhood</item>
+        <item>55|Pet</item>
+        <item>53|Repair</item>
+        <item>54|List</item>
+        <item>42|Wallet</item>
+        <item>43|Vitamins</item>
+        <item>44|Game Pad</item>
+        <item>48|Ticket</item>
+        <item>45|Shirt</item>
+        <item>47|Tie</item>
+        <item>64|Dumbbell</item>
+        <item>46|Garbage</item>
+    </string-array>
+
+    <string-array name="food_item_array">
+        <item>57|Coffee</item>
+        <item>250|Coffee</item>
+        <item>251|Sandwich</item>
+        <item>252|Steak</item>
+        <item>253|Pie</item>
+        <item>254|Water</item>
+        <item>255|Milk</item>
+        <item>256|Salad</item>
+        <item>257|Baguette</item>
+        <item>258|Whiskey</item>
+        <item>259|Wine</item>
+        <item>260|Cake</item>
+        <item>261|Champagne</item>
+        <item>262|Feeding Bottle</item>
+        <item>263|Beer</item>
+        <item>264|Sushi</item>
+        <item>265|Sake</item>
+    </string-array>
+
+    <string-array name="leisure_item_array">
+        <item>300|Picnic</item>
+        <item>301|Movie</item>
+        <item>302|Hiking</item>
+        <item>303|Reading</item>
+        <item>304|Nap</item>
+        <item>305|Park</item>
+        <item>306|Fishing</item>
+        <item>307|Festival</item>
+    </string-array>
+
+    <string-array name="landscape_item_array">
+        <item>200|Beach</item>
+        <item>201|Bridge</item>
+        <item>202|Cape</item>
+        <item>203|Castle</item>
+        <item>204|City Scape</item>
+        <item>205|Desert</item>
+        <item>206|Desert1</item>
+        <item>207|Fields</item>
+        <item>208|Fields1</item>
+        <item>209|Forest</item>
     </string-array>
 
     <string-array name="pref_list_fonts_title">

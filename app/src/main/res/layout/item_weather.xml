@@ -4,7 +4,7 @@
     android:id="@+id/item_holder"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="10dp"
+    android:padding="0dp"
     android:layout_width="match_parent"
     android:layout_height="80dp">
         <ImageView
