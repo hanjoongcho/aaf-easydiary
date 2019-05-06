@@ -117,6 +117,7 @@
         <item>304|Nap</item>
         <item>305|Park</item>
         <item>306|Fishing</item>
+        <item>307|Festival</item>
     </string-array>
 
     <string-array name="pref_list_fonts_title">
