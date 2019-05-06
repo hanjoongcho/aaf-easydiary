@@ -176,6 +176,9 @@ object EasyDiaryUtils {
                 LEISURE_PARK -> setImageResource(R.drawable.ic_architecture_and_city)
                 LEISURE_FISHING -> setImageResource(R.drawable.ic_fishing)
                 LEISURE_FESTIVAL -> setImageResource(R.drawable.ic_castle)
+                LEISURE_HAIR_SALON -> setImageResource(R.drawable.ic_hairdresser_m)
+                LEISURE_HAIR_SALON_1 -> setImageResource(R.drawable.ic_hairdresser_w)
+                LEISURE_TELEVISION -> setImageResource(R.drawable.ic_television)
 
                 else -> setImageResource(0)
             }

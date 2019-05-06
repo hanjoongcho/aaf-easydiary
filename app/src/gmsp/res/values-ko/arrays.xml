@@ -102,6 +102,9 @@
         <item>305|Park</item>
         <item>306|Fishing</item>
         <item>307|Festival</item>
+        <item>308|Hair Salon</item>
+        <item>309|Hair Salon</item>
+        <item>310|Television</item>
     </string-array>
 
     <string-array name="landscape_item_array">
