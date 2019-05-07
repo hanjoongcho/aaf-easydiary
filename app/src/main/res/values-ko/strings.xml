@@ -346,4 +346,10 @@
     <string name="privacy_policy_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/Privacy_ko.md</string>
     <string name="diary_symbol">다이어리 심볼</string>
     <string name="diary_symbol_guide_message">현재 날씨 또는 다이어리의 내용과 어울리는 심볼을 선택하세요.</string>
+    <string name="category_weather">날씨</string>
+    <string name="category_emotion">감정</string>
+    <string name="category_daily">일상생활&amp;물건</string>
+    <string name="category_food">음식&amp;음료</string>
+    <string name="category_leisure">여가생활</string>
+    <string name="category_landscape">풍경</string>
 </resources>

@@ -346,4 +346,10 @@
     <string name="privacy_policy_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/Privacy.md</string>
     <string name="diary_symbol">日記のシンボル</string>
     <string name="diary_symbol_guide_message">現在の天気やダイアリーの内容と一致シンボルを選択します。</string>
+    <string name="category_weather">天気</string>
+    <string name="category_emotion">感情</string>
+    <string name="category_daily">日常生活&amp;物事</string>
+    <string name="category_food">食べ物&amp;飲料</string>
+    <string name="category_leisure">余暇生活</string>
+    <string name="category_landscape">風景</string>
 </resources>

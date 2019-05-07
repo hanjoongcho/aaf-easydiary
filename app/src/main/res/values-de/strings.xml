@@ -346,4 +346,10 @@
     <string name="privacy_policy_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/Privacy.md</string>
     <string name="diary_symbol">Diary Symbol</string>
     <string name="diary_symbol_guide_message">Choose a symbol that matches the current weather or diary content.</string>
+    <string name="category_weather">Weather</string>
+    <string name="category_emotion">Emotion</string>
+    <string name="category_daily">Daily life&amp;Things</string>
+    <string name="category_food">Food&amp;Beverage</string>
+    <string name="category_leisure">Leisure life</string>
+    <string name="category_landscape">Landscape</string>
 </resources>
