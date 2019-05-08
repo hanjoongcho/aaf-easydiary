@@ -352,4 +352,6 @@
     <string name="category_food">Food&amp;Beverage</string>
     <string name="category_leisure">Leisure life</string>
     <string name="category_landscape">Landscape</string>
+    <string name="rotate_photo">Rotate</string>
+    <string name="close">CLOSE</string>
 </resources>

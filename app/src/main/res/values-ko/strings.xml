@@ -352,4 +352,6 @@
     <string name="category_food">음식&amp;음료</string>
     <string name="category_leisure">여가생활</string>
     <string name="category_landscape">풍경</string>
+    <string name="rotate_photo">Rotate</string>
+    <string name="close">닫기</string>
 </resources>
