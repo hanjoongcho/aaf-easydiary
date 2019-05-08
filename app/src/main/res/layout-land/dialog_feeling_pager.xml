@@ -16,9 +16,9 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content" />
-        <TextView
-            android:text="@string/close"
+        <ImageView
             android:id="@+id/closeBottomSheet"
+            android:src="@drawable/ic_cross"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:textColor="@android:color/white"
             android:layout_width="wrap_content"

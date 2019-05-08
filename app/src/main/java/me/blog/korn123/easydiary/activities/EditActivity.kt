@@ -208,7 +208,7 @@ abstract class EditActivity : EasyDiaryActivity() {
             val slidingTabLayout = symbolDialog.findViewById(R.id.sliding_tabs) as SlidingTabLayout
             slidingTabLayout.setViewPager(viewPager)
 
-            val dismissButton = symbolDialog.findViewById(R.id.closeBottomSheet) as TextView
+            val dismissButton = symbolDialog.findViewById(R.id.closeBottomSheet) as ImageView
             dismissButton.setOnClickListener { mDialog?.dismiss() }
 
             if (isLandScape()) {
