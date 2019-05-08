@@ -131,6 +131,10 @@ fun Activity.holdCurrentOrientation() {
     }
 }
 
+fun Activity.isLandScape(): Boolean {
+    return resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+}
+
 fun Activity.actionBarHeight(): Int {
     val typedValue = TypedValue()
     var actionBarHeight = 0

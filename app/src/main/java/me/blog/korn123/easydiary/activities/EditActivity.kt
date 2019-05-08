@@ -17,6 +17,7 @@ import android.support.v4.graphics.ColorUtils
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatDialog
 import android.text.format.DateFormat
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -185,10 +186,9 @@ abstract class EditActivity : EasyDiaryActivity() {
         }
     }
 
-    var mDialog: BottomSheetDialog? = null
+    var mDialog: AppCompatDialog? = null
     protected fun openFeelingSymbolDialog() {
         if (mDialog == null) {
-            mDialog = BottomSheetDialog(this)
             val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
             val symbolDialog = inflater.inflate(R.layout.dialog_feeling_pager, null)
 
@@ -211,10 +211,17 @@ abstract class EditActivity : EasyDiaryActivity() {
             val dismissButton = symbolDialog.findViewById(R.id.closeBottomSheet) as TextView
             dismissButton.setOnClickListener { mDialog?.dismiss() }
 
-            mDialog?.run {
-                setContentView(symbolDialog)
-                setCancelable(false)
-                setCanceledOnTouchOutside(true)
+            if (isLandScape()) {
+                val builder = AlertDialog.Builder(this)
+                builder.setView(symbolDialog)
+                mDialog = builder.create()
+            } else {
+                mDialog = BottomSheetDialog(this)
+                mDialog?.run {
+                    setContentView(symbolDialog)
+                    setCancelable(false)
+                    setCanceledOnTouchOutside(true)
+                }
             }
         }
         
