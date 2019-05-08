@@ -30,6 +30,7 @@ import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import io.realm.RealmList
+import kotlinx.android.synthetic.main.dialog_feeling_pager.*
 import kotlinx.android.synthetic.main.layout_bottom_toolbar.*
 import kotlinx.android.synthetic.main.layout_edit_contents.*
 import kotlinx.android.synthetic.main.layout_edit_photo_container.*
@@ -206,8 +207,16 @@ abstract class EditActivity : EasyDiaryActivity() {
 
             val slidingTabLayout = symbolDialog.findViewById(R.id.sliding_tabs) as SlidingTabLayout
             slidingTabLayout.setViewPager(viewPager)
-            mDialog?.setContentView(symbolDialog)    
-        } 
+
+            val dismissButton = symbolDialog.findViewById(R.id.closeBottomSheet) as TextView
+            dismissButton.setOnClickListener { mDialog?.dismiss() }
+
+            mDialog?.run {
+                setContentView(symbolDialog)
+                setCancelable(false)
+                setCanceledOnTouchOutside(true)
+            }
+        }
         
         mDialog?.show()
     }
