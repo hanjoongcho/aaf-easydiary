@@ -104,6 +104,7 @@ const val DAILY_SHOPPING_BAG = 63
 const val DAILY_DUMBBELL = 64
 const val DAILY_DISCUSSION = 65
 const val DAILY_DIET = 66
+const val DAILY_NO_ALCOHOL = 67
 
 // Emotion 100 ~ 199
 const val EMOTION_HAPPY = 100

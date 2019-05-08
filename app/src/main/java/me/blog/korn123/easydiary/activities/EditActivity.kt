@@ -11,6 +11,7 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Environment
 import android.provider.MediaStore
 import android.speech.RecognizerIntent
+import android.support.design.widget.BottomSheetDialog
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.ColorUtils
 import android.support.v4.view.PagerAdapter
@@ -183,31 +184,31 @@ abstract class EditActivity : EasyDiaryActivity() {
         }
     }
 
-    var mDialog: AlertDialog? = null
+    var mDialog: BottomSheetDialog? = null
     protected fun openFeelingSymbolDialog() {
-        val builder = AlertDialog.Builder(this)
-        builder.setNegativeButton(getString(android.R.string.cancel), null)
-        builder.setMessage(getString(R.string.diary_symbol_guide_message))
-        val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val symbolDialog = inflater.inflate(R.layout.dialog_feeling_pager, null)
+        if (mDialog == null) {
+            mDialog = BottomSheetDialog(this)
+            val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val symbolDialog = inflater.inflate(R.layout.dialog_feeling_pager, null)
 
-        val itemList = arrayListOf<Array<String>>()
-        val categoryList = arrayListOf<String>()
-        addCategory(itemList, categoryList, "weather_item_array", getString(R.string.category_weather))
-        addCategory(itemList, categoryList, "emotion_item_array", getString(R.string.category_emotion))
-        addCategory(itemList, categoryList, "daily_item_array", getString(R.string.category_daily))
-        addCategory(itemList, categoryList, "food_item_array", getString(R.string.category_food))
-        addCategory(itemList, categoryList, "leisure_item_array", getString(R.string.category_leisure))
-        addCategory(itemList, categoryList, "landscape_item_array", getString(R.string.category_landscape))
+            val itemList = arrayListOf<Array<String>>()
+            val categoryList = arrayListOf<String>()
+            addCategory(itemList, categoryList, "weather_item_array", getString(R.string.category_weather))
+            addCategory(itemList, categoryList, "emotion_item_array", getString(R.string.category_emotion))
+            addCategory(itemList, categoryList, "daily_item_array", getString(R.string.category_daily))
+            addCategory(itemList, categoryList, "food_item_array", getString(R.string.category_food))
+            addCategory(itemList, categoryList, "leisure_item_array", getString(R.string.category_leisure))
+            addCategory(itemList, categoryList, "landscape_item_array", getString(R.string.category_landscape))
 
-        val viewPager = symbolDialog.findViewById(R.id.viewpager) as ViewPager
-        val samplePagerAdapter = SamplePagerAdapter(this, itemList, categoryList)
-        viewPager.adapter = samplePagerAdapter
+            val viewPager = symbolDialog.findViewById(R.id.viewpager) as ViewPager
+            val samplePagerAdapter = SamplePagerAdapter(this, itemList, categoryList)
+            viewPager.adapter = samplePagerAdapter
 
-        val slidingTabLayout = symbolDialog.findViewById(R.id.sliding_tabs) as SlidingTabLayout
-        slidingTabLayout.setViewPager(viewPager)
-        builder.setView(symbolDialog)
-        mDialog = builder.create()
+            val slidingTabLayout = symbolDialog.findViewById(R.id.sliding_tabs) as SlidingTabLayout
+            slidingTabLayout.setViewPager(viewPager)
+            mDialog?.setContentView(symbolDialog)    
+        } 
+        
         mDialog?.show()
     }
     

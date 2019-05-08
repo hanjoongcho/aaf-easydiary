@@ -112,6 +112,7 @@ object EasyDiaryUtils {
                 DAILY_CLEANING -> setImageResource(R.drawable.ic_051_cleaning)
                 DAILY_DISCUSSION -> setImageResource(R.drawable.ic_discussion)
                 DAILY_DIET -> setImageResource(R.drawable.ic_diet)
+                DAILY_NO_ALCOHOL -> setImageResource(R.drawable.ic_no_alcohol)
 
                 LANDSCAPE_BEACH -> setImageResource(R.drawable.ic_beach)
                 LANDSCAPE_BRIDGE -> setImageResource(R.drawable.ic_bridge)
