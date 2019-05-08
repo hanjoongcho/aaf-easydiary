@@ -4,10 +4,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
-import android.view.Gravity
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.util.Log
+import android.view.*
 import android.widget.TextView
 import com.github.chrisbanes.photoview.PhotoView
 import io.github.aafactory.commons.utils.CommonUtils
@@ -45,6 +43,7 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
             title = "1 / $mPhotoCount"
         }
 
+        val a = SamplePagerAdapter(diaryDto)
         view_pager.adapter = SamplePagerAdapter(diaryDto)
         view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
@@ -68,7 +67,16 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> TransitionHelper.finishActivityWithTransition(this, TransitionHelper.TOP_TO_BOTTOM)
+            R.id.planner -> {
+                val photoView = view_pager.findViewWithTag<PhotoView>("view_" + view_pager.currentItem)
+                photoView.setRotationBy(90F)
+            }
         }
+        return true
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.diary_photo_view, menu)
         return true
     }
 
@@ -90,12 +98,14 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
                     FontUtils.setTypefaceDefault(textView)
                     textView.text = container.context.getString(R.string.photo_view_error_info)
                     container.addView(textView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                    textView.tag = "view_$position"
                     return textView    
                 }
                 false -> {
                     // Now just add PhotoView to ViewPager and return it
                     photoView.setImageBitmap(bitmap)
                     container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                    photoView.tag = "view_$position"
                     return photoView    
                 }
             }
