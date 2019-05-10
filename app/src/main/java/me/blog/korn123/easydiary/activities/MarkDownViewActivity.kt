@@ -19,6 +19,7 @@ import java.net.URL
 
 class MarkDownViewActivity : EasyDiaryActivity() {
     private lateinit var savedFilePath: String
+    private lateinit var markdownUrl: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +33,8 @@ class MarkDownViewActivity : EasyDiaryActivity() {
         }
 
         savedFilePath = "${Environment.getExternalStorageDirectory().absolutePath + MARKDOWN_DIRECTORY + pageTitle}.md"
+        markdownUrl = intent.getStringExtra(OPEN_URL_INFO)
+
         markdownView.addStyleSheet(Github()/*InternalStyleSheet()*/.apply {
             removeRule(".scrollup")
             addRule("body", "padding: 0px");
@@ -46,11 +49,11 @@ class MarkDownViewActivity : EasyDiaryActivity() {
                 }
             }
             false -> {
-                markdownView.loadMarkdownFromUrl(intent.getStringExtra(OPEN_URL_INFO))
+                markdownView.loadMarkdownFromUrl(markdownUrl)
                 markdownView.webViewClient =  object : WebViewClient() {
                     override fun onPageFinished(view: WebView, url: String) {
                         progressBar.visibility = View.GONE
-                        Thread(Runnable { downloadFile(intent.getStringExtra(OPEN_URL_INFO), savedFilePath) }).start()
+                        Thread(Runnable { downloadFile(markdownUrl, savedFilePath) }).start()
                     }
                 }
             }
@@ -79,9 +82,10 @@ class MarkDownViewActivity : EasyDiaryActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.update -> {
+                Thread.sleep(200) /*wait ripple animation*/
                 progressBar.visibility = View.VISIBLE
                 Thread(Runnable {
-                    downloadFile(intent.getStringExtra(OPEN_URL_INFO), savedFilePath)
+                    downloadFile(markdownUrl, savedFilePath)
                     runOnUiThread {
                         markdownView.loadMarkdownFromFile(File(savedFilePath))
                         markdownView.webViewClient =  object : WebViewClient() {
@@ -91,9 +95,10 @@ class MarkDownViewActivity : EasyDiaryActivity() {
                         }
                     }
                 }).start()
+                return true
             }
+            else -> return super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
     }
 
     companion object {
