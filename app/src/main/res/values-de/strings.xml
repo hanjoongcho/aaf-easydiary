@@ -240,6 +240,10 @@
         v1.4.76 / 2019.04.24\n
         Add 50 kinds of diary symbol icons
     </string>
+    <string name="release_140">
+        v1.4.77 / 2019.05.11\n
+        Add diary symbols and apply categories
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -346,4 +350,11 @@
     <string name="privacy_policy_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/Privacy.md</string>
     <string name="diary_symbol">Diary Symbol</string>
     <string name="diary_symbol_guide_message">Choose a symbol that matches the current weather or diary content.</string>
+    <string name="category_weather">Weather</string>
+    <string name="category_emotion">Emotion</string>
+    <string name="category_daily">Daily life&amp;Things</string>
+    <string name="category_food">Food&amp;Beverage</string>
+    <string name="category_leisure">Leisure life</string>
+    <string name="category_landscape">Landscape</string>
+    <string name="rotate_photo">Rotate</string>
 </resources>

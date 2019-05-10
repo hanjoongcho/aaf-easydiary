@@ -11,11 +11,13 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Environment
 import android.provider.MediaStore
 import android.speech.RecognizerIntent
+import android.support.design.widget.BottomSheetDialog
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.ColorUtils
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatDialog
 import android.text.format.DateFormat
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -24,18 +26,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
-import com.simplemobiletools.commons.helpers.BaseConfig
 import com.werb.pickphotoview.PickPhotoView
 import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import io.realm.RealmList
+import kotlinx.android.synthetic.main.dialog_feeling_pager.*
 import kotlinx.android.synthetic.main.layout_bottom_toolbar.*
 import kotlinx.android.synthetic.main.layout_edit_contents.*
 import kotlinx.android.synthetic.main.layout_edit_photo_container.*
 import kotlinx.android.synthetic.main.layout_edit_toolbar_sub.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryWeatherItemAdapter
 import me.blog.korn123.easydiary.extensions.*
@@ -185,46 +186,45 @@ abstract class EditActivity : EasyDiaryActivity() {
         }
     }
 
-    var mDialog: AlertDialog? = null
+    var mDialog: AppCompatDialog? = null
     protected fun openFeelingSymbolDialog() {
-        val builder = AlertDialog.Builder(this)
-        builder.setNegativeButton(getString(android.R.string.cancel), null)
-        builder.setMessage(getString(R.string.diary_symbol_guide_message))
-        val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val symbolDialog = inflater.inflate(R.layout.dialog_feeling_pager, null)
+        if (mDialog == null) {
+            val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val symbolDialog = inflater.inflate(R.layout.dialog_feeling_pager, null)
 
-        val itemList = arrayListOf<Array<String>>()
-        val categoryList = arrayListOf<String>()
-        addCategory(itemList, categoryList, "weather_item_array", "날씨")
-        addCategory(itemList, categoryList, "emoji_item_array", "감정")
-        addCategory(itemList, categoryList, "daily_item_array", "일상생활&물건")
-        addCategory(itemList, categoryList, "food_item_array", "음식&음료")
-        addCategory(itemList, categoryList, "leisure_item_array", "여가생활")
-        addCategory(itemList, categoryList, "landscape_item_array", "풍경")
+            val itemList = arrayListOf<Array<String>>()
+            val categoryList = arrayListOf<String>()
+            addCategory(itemList, categoryList, "weather_item_array", getString(R.string.category_weather))
+            addCategory(itemList, categoryList, "emotion_item_array", getString(R.string.category_emotion))
+            addCategory(itemList, categoryList, "daily_item_array", getString(R.string.category_daily))
+            addCategory(itemList, categoryList, "food_item_array", getString(R.string.category_food))
+            addCategory(itemList, categoryList, "leisure_item_array", getString(R.string.category_leisure))
+            addCategory(itemList, categoryList, "landscape_item_array", getString(R.string.category_landscape))
 
-        val viewPager = symbolDialog.findViewById(R.id.viewpager) as ViewPager
-        val samplePagerAdapter = SamplePagerAdapter(this, itemList, categoryList)
-        viewPager.adapter = samplePagerAdapter
+            val viewPager = symbolDialog.findViewById(R.id.viewpager) as ViewPager
+            val samplePagerAdapter = SamplePagerAdapter(this, itemList, categoryList)
+            viewPager.adapter = samplePagerAdapter
 
-        val slidingTabLayout = symbolDialog.findViewById(R.id.sliding_tabs) as SlidingTabLayout
-        slidingTabLayout.setViewPager(viewPager)
+            val slidingTabLayout = symbolDialog.findViewById(R.id.sliding_tabs) as SlidingTabLayout
+            slidingTabLayout.setViewPager(viewPager)
 
-//        val symbolList = arrayListOf<DiarySymbol>()
-//        resources.getStringArray(R.array.weather_item_array).map { item -> symbolList.add(DiarySymbol(item))}
-//        resources.getStringArray(R.array.daily_item_array).map { item -> symbolList.add(DiarySymbol(item))}
-//        resources.getStringArray(R.array.activity_item_array).map { item -> symbolList.add(DiarySymbol(item))}
-//        resources.getStringArray(R.array.emoji_item_array).map { item -> symbolList.add(DiarySymbol(item))}
-//
-//        val arrayAdapter = DiaryWeatherItemAdapter(this, R.layout.item_weather, symbolList)
-//        val gridView = symbolDialog.findViewById<GridView>(R.id.feelingSymbols)
-//        gridView.adapter = arrayAdapter
-//        gridView.setOnItemClickListener { parent, view, position, id ->
-//            val diarySymbol = parent.adapter.getItem(position) as DiarySymbol
-//            selectFeelingSymbol(diarySymbol.sequence)
-//            dialog?.dismiss()
-//        }
-        builder.setView(symbolDialog)
-        mDialog = builder.create()
+            val dismissButton = symbolDialog.findViewById(R.id.closeBottomSheet) as ImageView
+            dismissButton.setOnClickListener { mDialog?.dismiss() }
+
+            if (isLandScape()) {
+                val builder = AlertDialog.Builder(this)
+                builder.setView(symbolDialog)
+                mDialog = builder.create()
+            } else {
+                mDialog = BottomSheetDialog(this)
+                mDialog?.run {
+                    setContentView(symbolDialog)
+                    setCancelable(false)
+                    setCanceledOnTouchOutside(true)
+                }
+            }
+        }
+        
         mDialog?.show()
     }
     

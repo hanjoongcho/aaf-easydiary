@@ -240,7 +240,11 @@
         v1.4.76 / 2019.04.24\n
         ダイアリーシンボルアイコン50種追加
     </string>
-    
+    <string name="release_140">
+        v1.4.77 / 2019.05.11\n
+        ダイアリーシンボルの追加やカテゴリ適用
+    </string>
+
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -346,4 +350,11 @@
     <string name="privacy_policy_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/Privacy.md</string>
     <string name="diary_symbol">日記のシンボル</string>
     <string name="diary_symbol_guide_message">現在の天気やダイアリーの内容と一致シンボルを選択します。</string>
+    <string name="category_weather">天気</string>
+    <string name="category_emotion">感情</string>
+    <string name="category_daily">日常生活&amp;物事</string>
+    <string name="category_food">食べ物&amp;飲料</string>
+    <string name="category_leisure">余暇生活</string>
+    <string name="category_landscape">風景</string>
+    <string name="rotate_photo">Rotate</string>
 </resources>

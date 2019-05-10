@@ -37,6 +37,7 @@ const val WORKING_DIRECTORY = "/AAFactory/EasyDiary/"
 const val DIARY_PHOTO_DIRECTORY = "/AAFactory/EasyDiary/Photos/"
 const val DIARY_POSTCARD_DIRECTORY = "/AAFactory/EasyDiary/Postcards/"
 const val USER_CUSTOM_FONTS_DIRECTORY = "/AAFactory/EasyDiary/Fonts/"
+const val MARKDOWN_DIRECTORY = "/AAFactory/EasyDiary/Markdown/"
 const val DIARY_DB_NAME = "diary.realm"
 
 // startActivityForResult Request Code: Permission
@@ -102,36 +103,51 @@ const val DAILY_COOKING = 61
 const val DAILY_CLEANING = 62
 const val DAILY_SHOPPING_BAG = 63
 const val DAILY_DUMBBELL = 64
+const val DAILY_DISCUSSION = 65
+const val DAILY_DIET = 66
+const val DAILY_NO_ALCOHOL = 67
 
-// Emoji 100 ~ 199
-const val EMOJI_HAPPY = 100
-const val EMOJI_LAUGHING = 101
-const val EMOJI_CRYING = 102
-const val EMOJI_ANGRY = 103
-const val EMOJI_TONGUE = 104
-const val EMOJI_ANGRY_1 = 105
-const val EMOJI_WINK = 106
-const val EMOJI_DISAPPOINTED = 107
-const val EMOJI_SAD = 108
-const val EMOJI_EMBARRASSED = 109
-const val EMOJI_THINKING = 110
-const val EMOJI_SICK = 111
-const val EMOJI_SECRET = 112
-const val EMOJI_SLEEPING = 113
-const val EMOJI_RICH = 114
-const val EMOJI_DEVIL = 115
-const val EMOJI_SKULL = 116
-const val EMOJI_POO = 117
-const val EMOJI_ALIEN = 118
-const val EMOJI_SURPRISED = 119
-const val EMOJI_LAUGHING_1 = 120
-const val EMOJI_INJURED = 121
-const val EMOJI_HAPPY_1 = 122
-const val EMOJI_DEMON = 123
-const val EMOJI_IN_LOVE = 124
-const val EMOJI_TONGUE_1 = 125
-const val EMOJI_CALM = 126
-const val EMOJI_ANGRY_2 = 127
+// Emotion 100 ~ 199
+const val EMOTION_HAPPY = 100
+const val EMOTION_LAUGHING = 101
+const val EMOTION_CRYING = 102
+const val EMOTION_ANGRY = 103
+const val EMOTION_TONGUE = 104
+const val EMOTION_ANGRY_1 = 105
+const val EMOTION_WINK = 106
+const val EMOTION_DISAPPOINTED = 107
+const val EMOTION_SAD = 108
+const val EMOTION_EMBARRASSED = 109
+const val EMOTION_THINKING = 110
+const val EMOTION_SICK = 111
+const val EMOTION_SECRET = 112
+const val EMOTION_SLEEPING = 113
+const val EMOTION_RICH = 114
+const val EMOTION_DEVIL = 115
+const val EMOTION_SKULL = 116
+const val EMOTION_POO = 117
+const val EMOTION_ALIEN = 118
+const val EMOTION_SURPRISED = 119
+const val EMOTION_LAUGHING_1 = 120
+const val EMOTION_INJURED = 121
+const val EMOTION_HAPPY_1 = 122
+const val EMOTION_DEMON = 123
+const val EMOTION_IN_LOVE = 124
+const val EMOTION_TONGUE_1 = 125
+const val EMOTION_CALM = 126
+const val EMOTION_ANGRY_2 = 127
+const val EMOTION_CRY = 128
+const val EMOTION_HAPPY_2 = 129
+const val EMOTION_LOVE = 130
+const val EMOTION_HAPPY_3 = 131
+const val EMOTION_SLEEP = 132
+const val EMOTION_SMILE = 133
+const val EMOTION_SUFFER = 134
+const val EMOTION_EXCUSE = 135
+const val EMOTION_HAPPY_4 = 136
+const val EMOTION_HARMFUL = 137
+const val EMOTION_INCOMPREHENSION = 138
+const val EMOTION_SAD_1 = 139
 
 // Landscape 200 ~ 249
 const val LANDSCAPE_BEACH = 200
@@ -146,7 +162,7 @@ const val LANDSCAPE_FIELDS_1 = 208
 const val LANDSCAPE_FOREST = 209
 
 // Food and Drink 250 ~ 299
-const val FOOD_COFFEE = 250
+const val FOOD_BURGER = 250
 const val FOOD_SANDWICH = 251
 const val FOOD_STEAK = 252
 const val FOOD_PIE = 253
@@ -162,6 +178,9 @@ const val FOOD_FEEDING_BOTTLE = 262
 const val FOOD_BEER = 263
 const val FOOD_SUSHI = 264
 const val FOOD_SAKE = 265
+const val FOOD_RICE = 266
+const val FOOD_FRIED_CHICKEN = 267
+const val FOOD_CAKE_1 = 268
 
 // Leisure 300 ~ 349
 const val LEISURE_PICNIC = 300
@@ -172,6 +191,9 @@ const val LEISURE_NAP = 304
 const val LEISURE_PARK = 305
 const val LEISURE_FISHING = 306
 const val LEISURE_FESTIVAL = 307
+const val LEISURE_HAIR_SALON = 308
+const val LEISURE_HAIR_SALON_1 = 309
+const val LEISURE_TELEVISION = 310
 
 const val SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER = 0
 const val SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER = 1
