@@ -19,6 +19,7 @@
         <ImageView
             android:id="@+id/closeBottomSheet"
             android:src="@drawable/ic_cross"
+            android:layout_marginLeft="10dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:textColor="@android:color/white"
             android:layout_width="wrap_content"
