@@ -17,6 +17,18 @@
     </string-array>
 
     <string-array name="emotion_item_array">
+        <item>139|Sad</item>
+        <item>128|Cry</item>
+        <item>129|Happy</item>
+        <item>130|Love</item>
+        <item>131|Happy</item>
+        <item>132|Sleep</item>
+        <item>133|Smile</item>
+        <item>134|Suffer</item>
+        <item>135|Excuse</item>
+        <item>136|Happy</item>
+        <item>137|Hamful</item>
+        <item>138|Incomprehension</item>
         <item>49|Like</item>
         <item>100|Happy</item>
         <item>122|Happy</item>
@@ -46,9 +58,6 @@
         <item>116|Skull</item>
         <item>118|Alien</item>
         <item>117|Poo</item>
-        <item>128|Cry</item>
-        <item>129|Happy</item>
-        <item>130|Love</item>
     </string-array>
 
     <string-array name="daily_item_array">
@@ -86,6 +95,7 @@
         <item>264|Sushi</item>
         <item>253|Pie</item>
         <item>260|Cake</item>
+        <item>268|Cake</item>
         <item>256|Salad</item>
         <item>257|Baguette</item>
         <item>262|Feeding Bottle</item>

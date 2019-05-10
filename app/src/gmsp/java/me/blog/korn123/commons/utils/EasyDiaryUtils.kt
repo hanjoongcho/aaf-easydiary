@@ -156,6 +156,15 @@ object EasyDiaryUtils {
                 EMOTION_CRY -> setImageResource(R.drawable.ic_cry)
                 EMOTION_HAPPY_2 -> setImageResource(R.drawable.ic_happy_2)
                 EMOTION_LOVE -> setImageResource(R.drawable.ic_love)
+                EMOTION_HAPPY_3 -> setImageResource(R.drawable.ic_happy_1)
+                EMOTION_SLEEP -> setImageResource(R.drawable.ic_sleep_1)
+                EMOTION_SMILE -> setImageResource(R.drawable.ic_smile)
+                EMOTION_SUFFER -> setImageResource(R.drawable.ic_suffer)
+                EMOTION_EXCUSE -> setImageResource(R.drawable.ic_excuse_1)
+                EMOTION_HAPPY_4 -> setImageResource(R.drawable.ic_happy)
+                EMOTION_HARMFUL -> setImageResource(R.drawable.ic_harmful)
+                EMOTION_INCOMPREHENSION -> setImageResource(R.drawable.ic_incomprehension)
+                EMOTION_SAD_1-> setImageResource(R.drawable.ic_sad_2)
 
                 FOOD_BURGER -> setImageResource(R.drawable.ic_burger)
                 FOOD_SANDWICH -> setImageResource(R.drawable.ic_004_sandwich)
@@ -175,6 +184,7 @@ object EasyDiaryUtils {
                 FOOD_SAKE -> setImageResource(R.drawable.ic_044_sake)
                 FOOD_RICE -> setImageResource(R.drawable.ic_rice)
                 FOOD_FRIED_CHICKEN -> setImageResource(R.drawable.ic_fried_chicken)
+                FOOD_CAKE_1 -> setImageResource(R.drawable.ic_cake)
 
                 LEISURE_PICNIC -> setImageResource(R.drawable.ic_picnic)
                 LEISURE_MOVIE -> setImageResource(R.drawable.ic_movie)

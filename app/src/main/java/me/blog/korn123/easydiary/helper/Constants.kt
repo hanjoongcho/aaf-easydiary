@@ -139,6 +139,15 @@ const val EMOTION_ANGRY_2 = 127
 const val EMOTION_CRY = 128
 const val EMOTION_HAPPY_2 = 129
 const val EMOTION_LOVE = 130
+const val EMOTION_HAPPY_3 = 131
+const val EMOTION_SLEEP = 132
+const val EMOTION_SMILE = 133
+const val EMOTION_SUFFER = 134
+const val EMOTION_EXCUSE = 135
+const val EMOTION_HAPPY_4 = 136
+const val EMOTION_HARMFUL = 137
+const val EMOTION_INCOMPREHENSION = 138
+const val EMOTION_SAD_1 = 139
 
 // Landscape 200 ~ 249
 const val LANDSCAPE_BEACH = 200
@@ -171,6 +180,7 @@ const val FOOD_SUSHI = 264
 const val FOOD_SAKE = 265
 const val FOOD_RICE = 266
 const val FOOD_FRIED_CHICKEN = 267
+const val FOOD_CAKE_1 = 268
 
 // Leisure 300 ~ 349
 const val LEISURE_PICNIC = 300
