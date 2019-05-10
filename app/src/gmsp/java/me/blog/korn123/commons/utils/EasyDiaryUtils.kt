@@ -153,6 +153,9 @@ object EasyDiaryUtils {
                 EMOTION_TONGUE_1 -> setImageResource(R.drawable.ic_048_tongue_1)
                 EMOTION_CALM -> setImageResource(R.drawable.ic_050_calm)
                 EMOTION_ANGRY_2 -> setImageResource(R.drawable.ic_039_angry_2)
+                EMOTION_CRY -> setImageResource(R.drawable.ic_cry)
+                EMOTION_HAPPY_2 -> setImageResource(R.drawable.ic_happy_2)
+                EMOTION_LOVE -> setImageResource(R.drawable.ic_love)
 
                 FOOD_BURGER -> setImageResource(R.drawable.ic_burger)
                 FOOD_SANDWICH -> setImageResource(R.drawable.ic_004_sandwich)

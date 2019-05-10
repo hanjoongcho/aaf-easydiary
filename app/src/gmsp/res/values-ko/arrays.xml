@@ -46,6 +46,9 @@
         <item>116|Skull</item>
         <item>118|Alien</item>
         <item>117|Poo</item>
+        <item>128|Cry</item>
+        <item>129|Happy</item>
+        <item>130|Love</item>
     </string-array>
 
     <string-array name="daily_item_array">

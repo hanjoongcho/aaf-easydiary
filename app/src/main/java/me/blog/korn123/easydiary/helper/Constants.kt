@@ -135,6 +135,9 @@ const val EMOTION_IN_LOVE = 124
 const val EMOTION_TONGUE_1 = 125
 const val EMOTION_CALM = 126
 const val EMOTION_ANGRY_2 = 127
+const val EMOTION_CRY = 128
+const val EMOTION_HAPPY_2 = 129
+const val EMOTION_LOVE = 130
 
 // Landscape 200 ~ 249
 const val LANDSCAPE_BEACH = 200
