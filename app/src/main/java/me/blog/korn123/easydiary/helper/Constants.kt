@@ -37,6 +37,7 @@ const val WORKING_DIRECTORY = "/AAFactory/EasyDiary/"
 const val DIARY_PHOTO_DIRECTORY = "/AAFactory/EasyDiary/Photos/"
 const val DIARY_POSTCARD_DIRECTORY = "/AAFactory/EasyDiary/Postcards/"
 const val USER_CUSTOM_FONTS_DIRECTORY = "/AAFactory/EasyDiary/Fonts/"
+const val MARKDOWN_DIRECTORY = "/AAFactory/EasyDiary/Markdown/"
 const val DIARY_DB_NAME = "diary.realm"
 
 // startActivityForResult Request Code: Permission
