@@ -11,8 +11,8 @@
             <ImageView
                 android:id="@+id/weather"
                 android:layout_marginRight="10dp"
-                android:layout_width="20dp"
-                android:layout_height="20dp" />
+                android:layout_width="@dimen/diary_symbol_width_s"
+                android:layout_height="@dimen/diary_symbol_height_s" />
             
             <com.simplemobiletools.commons.views.MyTextView
                 xmlns:android="http://schemas.android.com/apk/res/android"

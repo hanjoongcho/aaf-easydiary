@@ -7,4 +7,6 @@
     <dimen name="settings_summary_margin_top">5dp</dimen>
     <dimen name="diary_symbol_width">32dp</dimen>
     <dimen name="diary_symbol_height">32dp</dimen>
+    <dimen name="diary_symbol_width_s">20dp</dimen>
+    <dimen name="diary_symbol_height_s">20dp</dimen>
 </resources>

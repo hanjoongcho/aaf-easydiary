@@ -63,12 +63,8 @@ object EasyDiaryUtils {
     }
 
     fun initWeatherView(context: Context, imageView: ImageView?, weatherFlag: Int, isShowEmptyWeatherView: Boolean = false, applyWhiteFilter: Boolean = false) {
-        imageView?.run { 
-            if (!isShowEmptyWeatherView && weatherFlag < 1) {
-                visibility = View.GONE
-            } else {
-                visibility = View.VISIBLE
-            }
+        imageView?.run {
+            visibility = if (!isShowEmptyWeatherView && weatherFlag < 1) View.GONE else View.VISIBLE
 
             when (weatherFlag) {
                 0 -> setImageResource(0)

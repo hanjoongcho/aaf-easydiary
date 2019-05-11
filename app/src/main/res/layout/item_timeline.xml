@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_holder"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -10,11 +11,6 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="30dp">
-        <ImageView
-            android:layout_marginLeft="5dp"
-            android:id="@+id/weather"
-            android:layout_width="20dp"
-            android:layout_height="20dp" />
         <TextView
             android:layout_marginLeft="10dp"
             android:textColor="@android:color/white"
@@ -72,11 +68,22 @@
             <android.support.v7.widget.CardView
                 style="@style/AppCard.Timeline"
                 android:layout_marginRight="34dp">
-                <com.simplemobiletools.commons.views.MyTextView
-                    android:textColor="@color/default_text_color"
-                    android:id="@+id/text1"
+                <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_marginRight="5dp"
+                        android:id="@+id/diarySymbol"
+                        android:layout_width="@dimen/diary_symbol_width_s"
+                        android:layout_height="@dimen/diary_symbol_height_s" />
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:id="@+id/text1"
+                        tools:text="Diary contents..."
+                        android:textColor="@color/default_text_color"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
             </android.support.v7.widget.CardView>
         </LinearLayout>
         
