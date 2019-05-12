@@ -27,7 +27,7 @@
         <item>134|Suffer</item>
         <item>135|Excuse</item>
         <item>136|Happy</item>
-        <item>137|Hamful</item>
+        <item>137|Harmful</item>
         <item>138|Incomprehension</item>
         <item>49|Like</item>
         <item>100|Happy</item>
@@ -66,6 +66,7 @@
         <item>41|Working</item>
         <item>50|Study</item>
         <item>51|Sleep</item>
+        <item>68|Wake Up</item>
         <item>52|Shopping</item>
         <item>59|Activity</item>
         <item>62|Cleaning</item>
