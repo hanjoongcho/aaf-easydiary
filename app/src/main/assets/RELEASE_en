@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.78 (date: 2019/05/13)
+  * Fixed an error that ended abnormally if some function of the setting screen does not have access to device storage
+
 # Changes in 1.4.77 (date: 2019/05/11)
   * Add diary symbols and apply categories
 
