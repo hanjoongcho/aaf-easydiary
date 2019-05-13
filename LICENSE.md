@@ -684,13 +684,18 @@ limitations under the License.
 
 ### Icon Packs: linear-color-emoticons
 <div>Icons made by <a href="https://www.freepik.com/?__hstc=57440181.a5ab1a2645099117daea41f465cabd51.1556414046547.1556812502237.1556933273215.4&__hssc=57440181.5.1556933273215&__hsfp=625471252" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+https://www.flaticon.com/packs/linear-color-emoticons<br />
+Used in Easy Diary version 1.4.76 or higher
 
 ### Icon Packs: food-and-drink-9
-https://www.flaticon.com/packs/food-and-drink-9
 <div>Icons made by <a href="https://www.flaticon.com/authors/twitter" title="Twitter">Twitter</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+https://www.flaticon.com/packs/food-and-drink-9<br />
+Used in Easy Diary version 1.4.76 or higher
 
 ### Icon Packs: landscapes-collection
 <div>Icons made by <a href="https://www.freepik.com/?__hstc=57440181.a5ab1a2645099117daea41f465cabd51.1556414046547.1556636949228.1556812502237.3&__hssc=57440181.6.1556812502237&__hsfp=825133012" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+https://www.flaticon.com/packs/landscapes-collection<br />
+Used in Easy Diary version 1.4.76 or higher
 
 ### Icon Packs: emoji-17
 <div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>   
