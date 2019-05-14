@@ -51,8 +51,8 @@ class EasyDiaryUtilsTest {
             var symbolArray = arrayOf(*weatherArr, *dailyArr)
             symbolArray.map { item -> symbolList.add(DiarySymbol(item))}
         }
-        symbolList.map { symbol ->  Log.i("AAF-t", "${symbol.sequence}" + "," + symbol.description)}
-        assertTrue(symbolList.size == 14)
+        symbolList.map { symbol ->  Log.i("AAF-t", "${symbolList.size}_${symbol.sequence}" + "," + symbol.description)}
+        assertTrue(symbolList.size == 38)
     }
 
     companion object {
