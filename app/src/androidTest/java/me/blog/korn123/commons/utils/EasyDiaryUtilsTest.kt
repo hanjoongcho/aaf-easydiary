@@ -47,14 +47,13 @@ class EasyDiaryUtilsTest {
         var symbolList = mutableListOf<DiarySymbol>()
         InstrumentationRegistry.getTargetContext()?.let {
             val weatherArr = it.resources.getStringArray(R.array.weather_item_array)
-            weatherArr.map { item -> symbolList.add(DiarySymbol(item))}
+            val dailyArr = it.resources.getStringArray(R.array.daily_item_array)
+            var symbolArray = arrayOf(*weatherArr, *dailyArr)
+            symbolArray.map { item -> symbolList.add(DiarySymbol(item))}
         }
         symbolList.map { symbol ->  Log.i("AAF-t", "${symbol.sequence}" + "," + symbol.description)}
         assertTrue(symbolList.size == 14)
     }
-
-
-
 
     companion object {
         private var sContext: Context? = null
