@@ -335,6 +335,7 @@
     <string name="export_excel_header_attach_photo_size">添付写真サイズ</string>
     <string name="export_excel_header_write_time_millis">書き込み日\n(Since January 1st 1970 in milliseconds.)</string>
     <string name="export_excel_header_weather">天気</string>
+    <string name="export_excel_header_symbol">Symbol</string>
     <string name="export_excel_header_is_all_day">一日中</string>
     <string name="weather_sunny">晴れ</string>
     <string name="weather_cloud_and_sun">曇り</string>

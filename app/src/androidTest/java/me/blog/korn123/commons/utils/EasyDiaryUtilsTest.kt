@@ -44,10 +44,11 @@ class EasyDiaryUtilsTest {
     
     @Test
     fun test_03() {
-        var symbolList = mutableListOf<DiarySymbol>()
-        var symbolMap = hashMapOf<Int, String>()
+        val symbolList = mutableListOf<DiarySymbol>()
+        val symbolMap = hashMapOf<Int, String>()
+        var symbolArray: Array<String>? = null
         InstrumentationRegistry.getTargetContext()?.let {
-            var symbolArray = arrayOf(
+            symbolArray = arrayOf(
                     *it.resources.getStringArray(R.array.weather_item_array),
                     *it.resources.getStringArray(R.array.emotion_item_array),
                     *it.resources.getStringArray(R.array.daily_item_array),
@@ -56,13 +57,13 @@ class EasyDiaryUtilsTest {
                     *it.resources.getStringArray(R.array.landscape_item_array)
             )
             
-            symbolArray.map { item ->
-                var symbolItem = DiarySymbol(item) 
+            symbolArray?.map { item ->
+                val symbolItem = DiarySymbol(item)
                 symbolList.add(symbolItem)
                 symbolMap.put(symbolItem.sequence, symbolItem.description)
             }
         }
-        symbolList.map { symbol ->  Log.i("AAF-t", "${symbol.sequence}-${symbol.description}/${symbolMap[symbol.sequence]} of ${symbolList.size}")}
+        symbolList.map { symbol ->  Log.i("AAF-t", "${symbol.sequence}-${symbol.description}/${symbolMap[symbol.sequence]} of ${symbolArray?.size ?: 0}")}
         assertTrue(symbolList.size == 122)
     }
 

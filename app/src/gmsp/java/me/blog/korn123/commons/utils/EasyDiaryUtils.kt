@@ -25,11 +25,13 @@ import me.blog.korn123.easydiary.adapters.SecondItemAdapter
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.models.DiarySymbol
 import me.blog.korn123.easydiary.models.PhotoUriDto
 import org.apache.commons.io.FileUtils
 import java.io.File
 import java.io.FileNotFoundException
 import java.util.*
+import kotlin.collections.HashMap
 
 /**
  * Created by hanjoong on 2017-04-30.
@@ -342,5 +344,23 @@ object EasyDiaryUtils {
         ContextCompat.getDrawable(context, resourceId)?.apply {
             setColorFilter(color, PorterDuff.Mode.SRC_IN)
         }
+    }
+
+    fun getDiarySymbolMap(context: Context): HashMap<Int, String> {
+        val symbolMap = hashMapOf<Int, String>()
+        val symbolArray = arrayOf(
+                *context.resources.getStringArray(R.array.weather_item_array),
+                *context.resources.getStringArray(R.array.emotion_item_array),
+                *context.resources.getStringArray(R.array.daily_item_array),
+                *context.resources.getStringArray(R.array.food_item_array),
+                *context.resources.getStringArray(R.array.leisure_item_array),
+                *context.resources.getStringArray(R.array.landscape_item_array)
+        )
+
+        symbolArray.map { item ->
+            val symbolItem = DiarySymbol(item)
+            symbolMap.put(symbolItem.sequence, symbolItem.description)
+        }
+        return symbolMap
     }
 }
