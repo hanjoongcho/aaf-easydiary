@@ -45,13 +45,24 @@ class EasyDiaryUtilsTest {
     @Test
     fun test_03() {
         var symbolList = mutableListOf<DiarySymbol>()
+        var symbolMap = hashMapOf<Int, String>()
         InstrumentationRegistry.getTargetContext()?.let {
-            val weatherArr = it.resources.getStringArray(R.array.weather_item_array)
-            val dailyArr = it.resources.getStringArray(R.array.daily_item_array)
-            var symbolArray = arrayOf(*weatherArr, *dailyArr)
-            symbolArray.map { item -> symbolList.add(DiarySymbol(item))}
+            var symbolArray = arrayOf(
+                    *it.resources.getStringArray(R.array.weather_item_array),
+                    *it.resources.getStringArray(R.array.emotion_item_array),
+                    *it.resources.getStringArray(R.array.daily_item_array),
+                    *it.resources.getStringArray(R.array.food_item_array),
+                    *it.resources.getStringArray(R.array.leisure_item_array),
+                    *it.resources.getStringArray(R.array.landscape_item_array)
+            )
+            
+            symbolArray.map { item ->
+                var symbolItem = DiarySymbol(item) 
+                symbolList.add(symbolItem)
+                symbolMap.put(symbolItem.sequence, symbolItem.description)
+            }
         }
-        symbolList.map { symbol ->  Log.i("AAF-t", "${symbolList.size}_${symbol.sequence}" + "," + symbol.description)}
+        symbolList.map { symbol ->  Log.i("AAF-t", "${symbol.sequence},${symbol.description}/${symbolMap[symbol.sequence]} of ${symbolList.size}")}
         assertTrue(symbolList.size == 38)
     }
 
