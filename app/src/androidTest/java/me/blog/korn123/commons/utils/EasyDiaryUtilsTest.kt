@@ -62,8 +62,8 @@ class EasyDiaryUtilsTest {
                 symbolMap.put(symbolItem.sequence, symbolItem.description)
             }
         }
-        symbolList.map { symbol ->  Log.i("AAF-t", "${symbol.sequence},${symbol.description}/${symbolMap[symbol.sequence]} of ${symbolList.size}")}
-        assertTrue(symbolList.size == 38)
+        symbolList.map { symbol ->  Log.i("AAF-t", "${symbol.sequence}-${symbol.description}/${symbolMap[symbol.sequence]} of ${symbolList.size}")}
+        assertTrue(symbolList.size == 122)
     }
 
     companion object {
