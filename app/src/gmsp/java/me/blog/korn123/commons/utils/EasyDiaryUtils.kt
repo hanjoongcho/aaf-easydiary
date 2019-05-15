@@ -184,6 +184,7 @@ object EasyDiaryUtils {
                 FOOD_RICE -> setImageResource(R.drawable.ic_rice)
                 FOOD_FRIED_CHICKEN -> setImageResource(R.drawable.ic_fried_chicken)
                 FOOD_CAKE_1 -> setImageResource(R.drawable.ic_cake)
+                FOOD_SOJU -> setImageResource(R.drawable.ic_soju)
 
                 LEISURE_PICNIC -> setImageResource(R.drawable.ic_picnic)
                 LEISURE_MOVIE -> setImageResource(R.drawable.ic_movie)
