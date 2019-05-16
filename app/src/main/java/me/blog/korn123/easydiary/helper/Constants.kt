@@ -79,6 +79,8 @@ const val WEATHER_NIGHT_RAIN = 10
 const val WEATHER_TEMPERATURE_L = 11
 const val WEATHER_TEMPERATURE_M = 12
 const val WEATHER_TEMPERATURE_H = 13
+const val WEATHER_DUST = 14
+const val WEATHER_DUST_STORM = 15
 
 //  Daily 40 ~ 99
 const val DAILY_WORKING = 41

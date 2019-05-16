@@ -83,6 +83,8 @@ object EasyDiaryUtils {
                 WEATHER_TEMPERATURE_L -> setImageResource(R.drawable.ic_temperature_2)
                 WEATHER_TEMPERATURE_M -> setImageResource(R.drawable.ic_temperature_1)
                 WEATHER_TEMPERATURE_H -> setImageResource(R.drawable.ic_temperature)
+                WEATHER_DUST-> setImageResource(R.drawable.ic_dust)
+                WEATHER_DUST_STORM -> setImageResource(R.drawable.ic_dust_storm)
 
                 DAILY_GAME_PAD -> setImageResource(R.drawable.ic_005_gamepad)
                 DAILY_SHIRT -> setImageResource(R.drawable.ic_008_shirt)
