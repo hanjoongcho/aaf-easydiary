@@ -19,6 +19,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.simplemobiletools.commons.extensions.toast
 import com.xw.repo.BubbleSeekBar
 import io.github.aafactory.commons.activities.BaseWebViewActivity
 import io.github.aafactory.commons.helpers.BaseConfig
@@ -205,9 +206,7 @@ class SettingsActivity : EasyDiaryActivity() {
                 // Check for existing Google Sign In account, if the user is already signed in
                 // the GoogleSignInAccount will be non-null.
                 var account: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
-                if (account == null) {
-                    startActivityForResult(client.signInIntent, 1106)
-                }
+                startActivityForResult(client.signInIntent, 1106)
             }
         }
     }
