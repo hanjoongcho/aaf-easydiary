@@ -335,6 +335,7 @@
     <string name="export_excel_header_attach_photo_size">첨부사진 크기(KB)</string>
     <string name="export_excel_header_write_time_millis">작성일자\n(Since January 1st 1970 in milliseconds.)</string>
     <string name="export_excel_header_weather">날씨</string>
+    <string name="export_excel_header_symbol">다이어리 심볼</string>
     <string name="export_excel_header_is_all_day">AllDay\n(작성일자 시간표기 유무)</string>
     <string name="weather_sunny">맑음</string>
     <string name="weather_cloud_and_sun">흐림</string>

@@ -333,7 +333,7 @@ class SettingsActivity : EasyDiaryActivity() {
             headerRow.createCell(ATTACH_PHOTO_NAME).setCellValue(getString(R.string.export_excel_header_attach_photo_path))
             headerRow.createCell(ATTACH_PHOTO_SIZE).setCellValue(getString(R.string.export_excel_header_attach_photo_size))
             headerRow.createCell(WRITE_TIME_MILLIS).setCellValue(getString(R.string.export_excel_header_write_time_millis))
-            headerRow.createCell(WEATHER).setCellValue(getString(R.string.export_excel_header_weather))
+            headerRow.createCell(SYMBOL).setCellValue(getString(R.string.export_excel_header_symbol))
             headerRow.createCell(IS_ALL_DAY).setCellValue(getString(R.string.export_excel_header_is_all_day))
 
             headerRow.getCell(SEQ).cellStyle = headerStyle
@@ -343,7 +343,7 @@ class SettingsActivity : EasyDiaryActivity() {
             headerRow.getCell(ATTACH_PHOTO_NAME).cellStyle = headerStyle
             headerRow.getCell(ATTACH_PHOTO_SIZE).cellStyle = headerStyle
             headerRow.getCell(WRITE_TIME_MILLIS).cellStyle = headerStyle
-            headerRow.getCell(WEATHER).cellStyle = headerStyle
+            headerRow.getCell(SYMBOL).cellStyle = headerStyle
             headerRow.getCell(IS_ALL_DAY).cellStyle = headerStyle
 
             // FIXME:
@@ -355,9 +355,10 @@ class SettingsActivity : EasyDiaryActivity() {
             sheet.setColumnWidth(ATTACH_PHOTO_NAME, 256 * 80)
             sheet.setColumnWidth(ATTACH_PHOTO_SIZE, 256 * 15)
             sheet.setColumnWidth(WRITE_TIME_MILLIS, 256 * 60)
-            sheet.setColumnWidth(WEATHER, 256 * 10)
+            sheet.setColumnWidth(SYMBOL, 256 * 10)
             sheet.setColumnWidth(IS_ALL_DAY, 256 * 30)
             val exportFileName = "aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}"
+            val diarySymbolMap = EasyDiaryUtils.getDiarySymbolMap(this)
             diaryList.forEachIndexed { index, diaryDto ->
                 val row = sheet.createRow(index + 1)
                 val photoNames = StringBuffer()
@@ -374,7 +375,7 @@ class SettingsActivity : EasyDiaryActivity() {
                 val attachPhotoNames = row.createCell(ATTACH_PHOTO_NAME).apply {cellStyle = bodyStyle}
                 val attachPhotoSizes = row.createCell(ATTACH_PHOTO_SIZE).apply {cellStyle = bodyStyle}
                 val writeTimeMillis = row.createCell(WRITE_TIME_MILLIS).apply {cellStyle = bodyStyle}
-                val weather = row.createCell(WEATHER).apply {cellStyle = bodyStyle}
+                val weather = row.createCell(SYMBOL).apply {cellStyle = bodyStyle}
                 val isAllDay = row.createCell(IS_ALL_DAY).apply {cellStyle = bodyStyle}
 
                 sequence.setCellValue(diaryDto.sequence.toDouble())
@@ -385,19 +386,7 @@ class SettingsActivity : EasyDiaryActivity() {
                 attachPhotoSizes.setCellValue(photoSizes.toString())
                 writeTimeMillis.setCellValue(diaryDto.currentTimeMillis.toDouble())
                 isAllDay.setCellValue(diaryDto.isAllDay)
-                weather.setCellValue(when(diaryDto.weather) {
-                    WEATHER_SUNNY -> getString(R.string.weather_sunny)
-                    WEATHER_CLOUD_AND_SUN -> getString(R.string.weather_cloud_and_sun)
-                    WEATHER_RAIN_DROPS -> getString(R.string.weather_rain_drops)
-                    WEATHER_BOLT -> getString(R.string.weather_bolt)
-                    WEATHER_SNOWING -> getString(R.string.weather_snowing)
-                    WEATHER_RAINBOW -> getString(R.string.weather_rainbow)
-                    WEATHER_UMBRELLA -> getString(R.string.weather_umbrella)
-                    WEATHER_STARS -> getString(R.string.weather_stars)
-                    WEATHER_MOON -> getString(R.string.weather_moon)
-                    WEATHER_NIGHT_RAIN -> getString(R.string.weather_night_rain)
-                    else -> ""
-                })
+                weather.setCellValue(diarySymbolMap[diaryDto.weather])
 
                 runOnUiThread {
                     progressInfo.text = "${index.plus(1)} / ${diaryList.size}\n${getString(R.string.export_excel_xls_location)}: ${WORKING_DIRECTORY + exportFileName}.xls"
@@ -578,7 +567,8 @@ class SettingsActivity : EasyDiaryActivity() {
         const val CONTENTS = 3
         const val ATTACH_PHOTO_NAME = 4
         const val ATTACH_PHOTO_SIZE = 5
-        const val WEATHER = 6
+        const val WEATHER = 6  /*longer used since version 1.4.79*/
+        const val SYMBOL = 6
         const val IS_ALL_DAY = 7
         const val WRITE_TIME_MILLIS = 8
     }

@@ -8,6 +8,8 @@
         <item>4|Bolt</item>
         <item>9|Moon</item>
         <item>10|Night Rain</item>
+        <item>14|Dust</item>
+        <item>15|Dust Storm</item>
         <item>11|Low Temperature</item>
         <item>12|Medium Temperature</item>
         <item>13|High Temperature</item>
@@ -108,6 +110,7 @@
         <item>261|Champagne</item>
         <item>263|Beer</item>
         <item>265|Sake</item>
+        <item>269|Soju</item>
         <item>43|Vitamins</item>
     </string-array>
 

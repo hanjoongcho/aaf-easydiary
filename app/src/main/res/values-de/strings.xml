@@ -335,6 +335,7 @@
     <string name="export_excel_header_attach_photo_size">Attached photo size</string>
     <string name="export_excel_header_write_time_millis">Write date\n(Since January 1st 1970 in milliseconds.)</string>
     <string name="export_excel_header_weather">Weather</string>
+    <string name="export_excel_header_symbol">Symbol</string>
     <string name="export_excel_header_is_all_day">AllDay</string>
     <string name="weather_sunny">Sunny</string>
     <string name="weather_cloud_and_sun">Cloud and Sun</string>

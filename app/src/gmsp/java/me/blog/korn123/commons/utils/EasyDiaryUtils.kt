@@ -25,11 +25,13 @@ import me.blog.korn123.easydiary.adapters.SecondItemAdapter
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.models.DiarySymbol
 import me.blog.korn123.easydiary.models.PhotoUriDto
 import org.apache.commons.io.FileUtils
 import java.io.File
 import java.io.FileNotFoundException
 import java.util.*
+import kotlin.collections.HashMap
 
 /**
  * Created by hanjoong on 2017-04-30.
@@ -81,6 +83,8 @@ object EasyDiaryUtils {
                 WEATHER_TEMPERATURE_L -> setImageResource(R.drawable.ic_temperature_2)
                 WEATHER_TEMPERATURE_M -> setImageResource(R.drawable.ic_temperature_1)
                 WEATHER_TEMPERATURE_H -> setImageResource(R.drawable.ic_temperature)
+                WEATHER_DUST-> setImageResource(R.drawable.ic_dust)
+                WEATHER_DUST_STORM -> setImageResource(R.drawable.ic_dust_storm)
 
                 DAILY_GAME_PAD -> setImageResource(R.drawable.ic_005_gamepad)
                 DAILY_SHIRT -> setImageResource(R.drawable.ic_008_shirt)
@@ -182,6 +186,7 @@ object EasyDiaryUtils {
                 FOOD_RICE -> setImageResource(R.drawable.ic_rice)
                 FOOD_FRIED_CHICKEN -> setImageResource(R.drawable.ic_fried_chicken)
                 FOOD_CAKE_1 -> setImageResource(R.drawable.ic_cake)
+                FOOD_SOJU -> setImageResource(R.drawable.ic_soju)
 
                 LEISURE_PICNIC -> setImageResource(R.drawable.ic_picnic)
                 LEISURE_MOVIE -> setImageResource(R.drawable.ic_movie)
@@ -342,5 +347,23 @@ object EasyDiaryUtils {
         ContextCompat.getDrawable(context, resourceId)?.apply {
             setColorFilter(color, PorterDuff.Mode.SRC_IN)
         }
+    }
+
+    fun getDiarySymbolMap(context: Context): HashMap<Int, String> {
+        val symbolMap = hashMapOf<Int, String>()
+        val symbolArray = arrayOf(
+                *context.resources.getStringArray(R.array.weather_item_array),
+                *context.resources.getStringArray(R.array.emotion_item_array),
+                *context.resources.getStringArray(R.array.daily_item_array),
+                *context.resources.getStringArray(R.array.food_item_array),
+                *context.resources.getStringArray(R.array.leisure_item_array),
+                *context.resources.getStringArray(R.array.landscape_item_array)
+        )
+
+        symbolArray.map { item ->
+            val symbolItem = DiarySymbol(item)
+            symbolMap.put(symbolItem.sequence, symbolItem.description)
+        }
+        return symbolMap
     }
 }
