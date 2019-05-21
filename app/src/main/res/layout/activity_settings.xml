@@ -44,6 +44,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <android.support.v7.widget.CardView
+                        android:id="@+id/credential"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="Google Sign-In for Android"
+                                style="@style/SettingsTitle" />
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="test..."
+                                style="@style/SettingsSummary" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+                    
+                    <android.support.v7.widget.CardView
                         android:id="@+id/fontSetting"
                         style="@style/AppCard.Settings">
                         <LinearLayout

@@ -14,6 +14,8 @@ import android.widget.AdapterView
 import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.xw.repo.BubbleSeekBar
 import io.github.aafactory.commons.activities.BaseWebViewActivity
 import io.github.aafactory.commons.helpers.BaseConfig
@@ -191,6 +193,13 @@ class SettingsActivity : EasyDiaryActivity() {
                     putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, getString(R.string.privacy_policy_title))
                 })
             }
+            R.id.credential -> {
+                // Configure sign-in to request the user's ID, email address, and basic
+                // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+                val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build()
+                val client = GoogleSignIn.getClient(this, gso)
+                startActivity(client.signInIntent)
+            }
         }
     }
     
@@ -233,7 +242,8 @@ class SettingsActivity : EasyDiaryActivity() {
         exportExcel.setOnClickListener(mOnClickListener)
         faq.setOnClickListener(mOnClickListener)
         privacyPolicy.setOnClickListener(mOnClickListener)
-
+        credential.setOnClickListener(mOnClickListener)
+        
         fontLineSpacing.configBuilder
                 .min(0.2F)
                 .max(1.8F)
