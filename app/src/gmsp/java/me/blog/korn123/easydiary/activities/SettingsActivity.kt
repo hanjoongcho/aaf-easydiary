@@ -200,13 +200,20 @@ class SettingsActivity : EasyDiaryActivity() {
             R.id.credential -> {
                 // Configure sign-in to request the user's ID, email address, and basic
                 // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-                val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build()
+                val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestIdToken("523901516987-1ovfkda44k1ub4g2l286ipi06g3nm295.apps.googleusercontent.com")
+                        .requestEmail()
+                        .build()
                 val client = GoogleSignIn.getClient(this, gso)
                 
                 // Check for existing Google Sign In account, if the user is already signed in
                 // the GoogleSignInAccount will be non-null.
                 var account: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
-                startActivityForResult(client.signInIntent, 1106)
+                if (account == null) {
+                    startActivityForResult(client.signInIntent, 1106)
+                } else {
+                    client.signOut().addOnCompleteListener { makeSnackBar("Sign out complete:)") }
+                }
             }
         }
     }
@@ -221,7 +228,8 @@ class SettingsActivity : EasyDiaryActivity() {
             var task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
             var googleSignAccount = task.getResult(ApiException::class.java)
             googleSignAccount?.let {
-                makeSnackBar("${it.displayName}, ${it.idToken}")
+                makeSnackBar("${it.id}, ${it.displayName}, ${it.idToken}")
+                userToken.text = it.idToken
             }
         }
     }

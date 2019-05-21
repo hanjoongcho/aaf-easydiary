@@ -52,7 +52,8 @@
                                 android:text="Google Sign-In for Android"
                                 style="@style/SettingsTitle" />
                             <com.simplemobiletools.commons.views.MyTextView
-                                android:text="test..."
+                                android:id="@+id/userToken"
+                                android:text="token..."
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
