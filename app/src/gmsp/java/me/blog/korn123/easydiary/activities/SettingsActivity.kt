@@ -15,7 +15,10 @@ import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 import com.xw.repo.BubbleSeekBar
 import io.github.aafactory.commons.activities.BaseWebViewActivity
 import io.github.aafactory.commons.helpers.BaseConfig
@@ -198,7 +201,28 @@ class SettingsActivity : EasyDiaryActivity() {
                 // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
                 val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build()
                 val client = GoogleSignIn.getClient(this, gso)
-                startActivity(client.signInIntent)
+                
+                // Check for existing Google Sign In account, if the user is already signed in
+                // the GoogleSignInAccount will be non-null.
+                var account: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
+                if (account == null) {
+                    startActivityForResult(client.signInIntent, 1106)
+                }
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        if (requestCode == 1106) {
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+            var task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
+            var googleSignAccount = task.getResult(ApiException::class.java)
+            googleSignAccount?.let {
+                makeSnackBar("${it.displayName}, ${it.idToken}")
             }
         }
     }
