@@ -240,7 +240,7 @@ class SettingsActivity : EasyDiaryActivity() {
         // use helper class instead of this
         // https://github.com/gsuitedevs/android-samples/blob/master/drive/deprecation/app/src/main/java/com/google/android/gms/drive/sample/driveapimigration/DriveServiceHelper.java
         val executor: Executor = Executors.newSingleThreadExecutor()
-        val task: Task<FileList> = Tasks.call(executor, Callable<FileList> { googleDriveService.files().list()./*setQ("mimeType=application/vnd.google-apps.document").setSpaces("drive").*/execute() })
+        val task: Task<FileList> = Tasks.call(executor, Callable<FileList> { googleDriveService.files().list().setQ("'root' in parents and trashed = false").setSpaces("drive").execute() })
         val fileDescription = StringBuilder()
         task.addOnSuccessListener {
             Log.i("GSuite", "${it.files.size}")
