@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.activities
 
+import android.accounts.Account
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -19,6 +20,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
+import com.google.api.client.extensions.android.http.AndroidHttp
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
+import com.google.api.client.json.gson.GsonFactory
+import com.google.api.services.drive.Drive
+import com.google.api.services.drive.DriveScopes
+import com.google.api.services.drive.model.FileList
 import com.simplemobiletools.commons.extensions.toast
 import com.xw.repo.BubbleSeekBar
 import io.github.aafactory.commons.activities.BaseWebViewActivity
@@ -43,6 +51,9 @@ import org.apache.poi.ss.usermodel.*
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
+import java.util.concurrent.Callable
+import java.util.concurrent.Executor
+import java.util.concurrent.Executors
 
 
 /**
@@ -208,14 +219,30 @@ class SettingsActivity : EasyDiaryActivity() {
                 
                 // Check for existing Google Sign In account, if the user is already signed in
                 // the GoogleSignInAccount will be non-null.
-                var account: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
-                if (account == null) {
+                var googleSignInAccount: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
+                if (googleSignInAccount == null) {
                     startActivityForResult(client.signInIntent, 1106)
                 } else {
-                    client.signOut().addOnCompleteListener { makeSnackBar("Sign out complete:)") }
+//                    client.signOut().addOnCompleteListener { makeSnackBar("Sign out complete:)") }
+                    testGSuiteDriveAPI(googleSignInAccount.account)
+                    userToken.text = googleSignInAccount.idToken
                 }
             }
         }
+    }
+
+    private fun testGSuiteDriveAPI(selectedAccount: Account?) {
+        val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(this, Collections.singleton(DriveScopes.DRIVE_FILE))
+        credential.selectedAccount = selectedAccount
+        val googleDriveService: Drive = Drive.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
+                .setApplicationName("AppName")
+                .build()
+
+        // use helper class instead of this
+        // https://github.com/gsuitedevs/android-samples/blob/master/drive/deprecation/app/src/main/java/com/google/android/gms/drive/sample/driveapimigration/DriveServiceHelper.java
+        val executor: Executor = Executors.newSingleThreadExecutor()
+        val task: Task<FileList> = Tasks.call(executor, Callable<FileList> { googleDriveService.files().list().execute() })
+        task.addOnSuccessListener { it.files.map { file -> Log.i("GSuite", "${file.name}")}  }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -230,6 +257,7 @@ class SettingsActivity : EasyDiaryActivity() {
             googleSignAccount?.let {
                 makeSnackBar("${it.id}, ${it.displayName}, ${it.idToken}")
                 userToken.text = it.idToken
+                testGSuiteDriveAPI(it.account)
             }
         }
     }

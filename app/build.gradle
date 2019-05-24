@@ -85,6 +85,7 @@ android {
     packagingOptions {
         exclude 'META-INF/commons_release.kotlin_module'
         exclude 'META-INF/rxjava.properties'
+        exclude 'META-INF/DEPENDENCIES'
     }
     lintOptions {
         checkReleaseBuilds false
@@ -108,6 +109,13 @@ dependencies {
     gmsImplementation "com.google.android.gms:play-services-auth:$versions.gms"
     gmspImplementation "com.google.android.gms:play-services-drive:$versions.gms"
     gmspImplementation "com.google.android.gms:play-services-auth:$versions.gms"
+    gmspImplementation 'com.google.http-client:google-http-client-gson:1.26.0'
+    gmspImplementation('com.google.api-client:google-api-client-android:1.26.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
+    gmspImplementation('com.google.apis:google-api-services-drive:v3-rev136-1.25.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
     implementation 'com.google.android:flexbox:1.0.0'
     implementation 'com.google.code.gson:gson:2.8.5'
     // jetbrains

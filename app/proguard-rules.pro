@@ -9,6 +9,15 @@
 -keep class android.support.v8.renderscript.** { *; }
 -dontwarn android.support.v8.renderscript.**
 
+-keep class com.google.common.** { *; }
+-dontwarn com.google.common.**
+
+-keep class org.apache.commons.** { *; }
+-dontwarn org.apache.commons.**
+
+-keep class org.apache.http.** { *; }
+-dontwarn org.apache.http.**
+
 -keepattributes Signature
 -keepattributes Annotation
 -keep class okhttp3.** { *; }
