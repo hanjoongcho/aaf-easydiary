@@ -27,9 +27,7 @@ import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.FileList
-import com.simplemobiletools.commons.extensions.toast
 import com.xw.repo.BubbleSeekBar
-import io.github.aafactory.commons.activities.BaseWebViewActivity
 import io.github.aafactory.commons.helpers.BaseConfig
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_settings.*
@@ -47,7 +45,9 @@ import me.blog.korn123.easydiary.gms.drive.RecoverPhotoActivity
 import me.blog.korn123.easydiary.helper.*
 import org.apache.commons.io.FilenameUtils
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
-import org.apache.poi.ss.usermodel.*
+import org.apache.poi.ss.usermodel.CellStyle
+import org.apache.poi.ss.usermodel.IndexedColors
+import org.apache.poi.ss.usermodel.Workbook
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
@@ -225,7 +225,6 @@ class SettingsActivity : EasyDiaryActivity() {
                 } else {
 //                    client.signOut().addOnCompleteListener { makeSnackBar("Sign out complete:)") }
                     testGSuiteDriveAPI(googleSignInAccount.account)
-                    userToken.text = googleSignInAccount.idToken
                 }
             }
         }
@@ -241,8 +240,15 @@ class SettingsActivity : EasyDiaryActivity() {
         // use helper class instead of this
         // https://github.com/gsuitedevs/android-samples/blob/master/drive/deprecation/app/src/main/java/com/google/android/gms/drive/sample/driveapimigration/DriveServiceHelper.java
         val executor: Executor = Executors.newSingleThreadExecutor()
-        val task: Task<FileList> = Tasks.call(executor, Callable<FileList> { googleDriveService.files().list().execute() })
-        task.addOnSuccessListener { it.files.map { file -> Log.i("GSuite", "${file.name}")}  }
+        val task: Task<FileList> = Tasks.call(executor, Callable<FileList> { googleDriveService.files().list()./*setQ("mimeType=application/vnd.google-apps.document").setSpaces("drive").*/execute() })
+        val fileDescription = StringBuilder()
+        task.addOnSuccessListener {
+            Log.i("GSuite", "${it.files.size}")
+            it.files.map {
+                file -> fileDescription.append(file.name)
+                userToken.text = fileDescription.toString()
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -256,7 +262,6 @@ class SettingsActivity : EasyDiaryActivity() {
             var googleSignAccount = task.getResult(ApiException::class.java)
             googleSignAccount?.let {
                 makeSnackBar("${it.id}, ${it.displayName}, ${it.idToken}")
-                userToken.text = it.idToken
                 testGSuiteDriveAPI(it.account)
             }
         }

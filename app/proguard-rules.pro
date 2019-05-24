@@ -12,6 +12,9 @@
 -keep class com.google.common.** { *; }
 -dontwarn com.google.common.**
 
+-keep class com.google.api.** { *; }
+-dontwarn com.google.api.**
+
 -keep class org.apache.commons.** { *; }
 -dontwarn org.apache.commons.**
 
