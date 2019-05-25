@@ -245,7 +245,7 @@ class SettingsActivity : EasyDiaryActivity() {
         task.addOnSuccessListener {
             Log.i("GSuite", "${it.files.size}")
             it.files.map {
-                file -> fileDescription.append(file.name)
+                file -> fileDescription.append("${file.name}\n")
                 userToken.text = fileDescription.toString()
             }
         }
