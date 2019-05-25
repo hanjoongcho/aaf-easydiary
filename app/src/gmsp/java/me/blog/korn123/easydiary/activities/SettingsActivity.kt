@@ -244,8 +244,21 @@ class SettingsActivity : EasyDiaryActivity() {
         val fileDescription = StringBuilder()
         task.addOnSuccessListener {
             Log.i("GSuite", "${it.files.size}")
+            var directoryId: String? = null
             it.files.map {
                 file -> fileDescription.append("${file.name}\n")
+                if (file.name == "AAF") directoryId = file.id
+            }
+            userToken.text = fileDescription.toString()
+
+            Log.i("GSuite", directoryId)
+            val t2: Task<FileList> = Tasks.call(executor, Callable<FileList> { googleDriveService.files().list().setQ("'$directoryId' in parents").setSpaces("drive").execute() })
+            t2.addOnSuccessListener {sub ->
+                Log.i("GSuite sub", "${sub.files.size}")
+                fileDescription.append("---\n")
+                sub.files.map {
+                    fileDescription.append("${it.name}\n")
+                }
                 userToken.text = fileDescription.toString()
             }
         }
