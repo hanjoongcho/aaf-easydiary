@@ -44,6 +44,7 @@ import me.blog.korn123.easydiary.gms.drive.RecoverDiaryActivity
 import me.blog.korn123.easydiary.gms.drive.RecoverPhotoActivity
 import me.blog.korn123.easydiary.helper.*
 import org.apache.commons.io.FilenameUtils
+import org.apache.commons.io.IOUtils
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.ss.usermodel.CellStyle
 import org.apache.poi.ss.usermodel.IndexedColors
@@ -236,11 +237,10 @@ class SettingsActivity : EasyDiaryActivity() {
         val googleDriveService: Drive = Drive.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
                 .setApplicationName("AppName")
                 .build()
+        val driveServiceHelper = DriveServiceHelper(googleDriveService)
 
-        // use helper class instead of this
-        // https://github.com/gsuitedevs/android-samples/blob/master/drive/deprecation/app/src/main/java/com/google/android/gms/drive/sample/driveapimigration/DriveServiceHelper.java
         val executor: Executor = Executors.newSingleThreadExecutor()
-        val task: Task<FileList> = Tasks.call(executor, Callable<FileList> { googleDriveService.files().list().setQ("'root' in parents and trashed = false").setSpaces("drive").execute() })
+        val task: Task<FileList> = driveServiceHelper.queryFiles("'root' in parents and trashed = false")
         val fileDescription = StringBuilder()
         task.addOnSuccessListener {
             Log.i("GSuite", "${it.files.size}")
@@ -252,14 +252,23 @@ class SettingsActivity : EasyDiaryActivity() {
             userToken.text = fileDescription.toString()
 
             Log.i("GSuite", directoryId)
-            val t2: Task<FileList> = Tasks.call(executor, Callable<FileList> { googleDriveService.files().list().setQ("'$directoryId' in parents").setSpaces("drive").execute() })
-            t2.addOnSuccessListener {sub ->
-                Log.i("GSuite sub", "${sub.files.size}")
-                fileDescription.append("---\n")
-                sub.files.map {
-                    fileDescription.append("${it.name}\n")
+            driveServiceHelper.queryFiles("'$directoryId' in parents").run {
+                addOnSuccessListener {sub ->
+                    Log.i("GSuite sub", "${sub.files.size}")
+                    fileDescription.append("---\n")
+                    sub.files.map {subFile ->
+                        fileDescription.append("${subFile.name}\n")
+                        Log.i("GSuite sub", subFile.mimeType)
+                        if (subFile.mimeType == "text/html") {
+//                            driveServiceHelper.openFileStream(subFile.id).addOnSuccessListener { `is` ->
+//                                IOUtils.readLines(`is`, "UTF-8").map { line ->
+//                                    Log.i("GSuite sub", line)
+//                                }
+//                            }
+                        }
+                    }
+                    userToken.text = fileDescription.toString()
                 }
-                userToken.text = fileDescription.toString()
             }
         }
     }

@@ -61,6 +61,10 @@ class DriveServiceHelper(private val mDriveService: Drive) {
         })
     }
 
+    fun openFileStream(fileId: String): Task<InputStream> {
+        return Tasks.call(mExecutor, Callable<InputStream> { mDriveService.files().get(fileId).executeMediaAsInputStream() })
+    }
+
     /**
      * Opens the file identified by `fileId` and returns a [Pair] of its name and
      * contents.
@@ -114,8 +118,8 @@ class DriveServiceHelper(private val mDriveService: Drive) {
      * request Drive Full Scope in the [Google
  * Developer's Console](https://play.google.com/apps/publish) and be submitted to Google for verification.
      */
-    fun queryFiles(): Task<FileList> {
-        return Tasks.call(mExecutor, Callable<FileList> { mDriveService.files().list().setSpaces("drive").execute() })
+    fun queryFiles(q: String): Task<FileList> {
+        return Tasks.call(mExecutor, Callable<FileList> { mDriveService.files().list().setQ(q).setSpaces("drive").execute() })
     }
 
     /**
