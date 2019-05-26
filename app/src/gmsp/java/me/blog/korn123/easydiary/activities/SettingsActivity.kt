@@ -19,6 +19,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.drive.AAF_EASY_DIARY_PHOTO
+import com.google.android.gms.drive.AAF_EASY_DIARY_PHOTO_DIRECTORY
 import com.google.android.gms.tasks.Task
 import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
@@ -239,52 +241,99 @@ class SettingsActivity : EasyDiaryActivity() {
     }
 
     private fun testGSuiteDriveAPI(selectedAccount: Account?) {
-        val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(this, DriveScopes.all())
+        // step01. init credential
+        val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(this, Collections.singleton(DriveScopes.DRIVE_FILE))
         credential.selectedAccount = selectedAccount
+
+        // step02. init drive service helper
         val googleDriveService: Drive = Drive.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
-                .setApplicationName("AppName")
+                .setApplicationName(getString(R.string.app_name))
                 .build()
         val driveServiceHelper = DriveServiceHelper(googleDriveService)
 
-        val executor: Executor = Executors.newSingleThreadExecutor()
-        val task: Task<FileList> = driveServiceHelper.queryFiles("'root' in parents and trashed = false")
-        val fileDescription = StringBuilder()
-        task.addOnSuccessListener {
-            Log.i("GSuite", "${it.files.size}")
-            var directoryId: String? = null
-            it.files.map {
-                file -> fileDescription.append("${file.name}\n")
-                if (file.name == "AAF") directoryId = file.id
-            }
-            userToken.text = fileDescription.toString()
+        // step03. determine application folder(not appDataFolder)
+        driveServiceHelper.queryFiles("'root' in parents and name = '${DriveServiceHelper.AAF_ROOT_FOLDER_NAME}' and trashed = false").run {
+            addOnSuccessListener { fileList ->
+                when (fileList.files.size) {
+                    0 -> driveServiceHelper.createAppFolder().addOnSuccessListener { fileId -> Log.i("GSuite", "Created application folder that app id is $fileId") }
+                    1 -> {
+                        val appFolder = fileList.files[0]
+                        Log.i("GSuite", "${appFolder.name}, ${appFolder.mimeType}, ${appFolder.id}")
+                        // step04. upload attach photo sample
+//                        driveServiceHelper.createFile(appFolder.id, "attach-photo-01", AAF_EASY_DIARY_PHOTO).run {
+//                            val photoPath = "${Environment.getExternalStorageDirectory().absolutePath}$AAF_EASY_DIARY_PHOTO_DIRECTORY"
+//                            addOnSuccessListener { fileId -> driveServiceHelper.uploadFile(fileId, "$photoPath/0ce9591f-ba7b-48f3-b724-1253d590b433", AAF_EASY_DIARY_PHOTO) }
+//                        }
 
-            Log.i("GSuite", directoryId)
-            driveServiceHelper.queryFiles("'$directoryId' in parents").run {
-                addOnSuccessListener {sub ->
-                    Log.i("GSuite sub", "${sub.files.size}")
-                    fileDescription.append("---\n")
-                    sub.files.map {subFile ->
-                        fileDescription.append("${subFile.name}\n")
-                        Log.i("GSuite sub", "${subFile.name}, ${subFile.mimeType}")
-                        if (subFile.mimeType == "application/octet-stream") {
-                            Log.i("GSuite sub", "${subFile.name} start read...")
-                            driveServiceHelper.readFile(subFile.id).run {
-                                addOnSuccessListener { lines ->
-                                    lines.map { line ->
-                                        Log.i("GSuite sub", line)
-                                    }
-                                    Log.i("GSuite sub", "${subFile.name} end read...")
+                        // step05. determine upload photo sample and download it
+                        val fileDescription = StringBuilder()
+                        driveServiceHelper.queryFiles("mimeType = '$AAF_EASY_DIARY_PHOTO' and trashed = false").run {
+                            addOnSuccessListener { result ->
+                                Log.i("GSuite sub", "${result.files.size}, ${result.nextPageToken}")
+                                val basePath = "${Environment.getExternalStorageDirectory().absolutePath + WORKING_DIRECTORY}"
+                                result.files.map { photoFile ->
+                                    fileDescription.append("${photoFile.name}\n")
+                                    driveServiceHelper.downloadFile(photoFile.id, "$basePath${photoFile.name}.JPEG")
                                 }
-                                addOnFailureListener { exception ->
-                                    Log.i("GSuite sub", "${subFile.name} read fail...${exception.message}")
-                                }
+                                userToken.text = fileDescription.toString()
                             }
                         }
                     }
-                    userToken.text = fileDescription.toString()
+                    else -> {}
                 }
             }
+            addOnFailureListener {
+                Log.i("GSuite", "not exist application folder")
+            }
         }
+
+
+//        val fileDescription = StringBuilder()
+//        task.addOnSuccessListener {
+//            Log.i("GSuite", "${it.files.size}")
+//            var directoryId: String? = null
+//            it.files.map {
+//                file -> fileDescription.append("${file.name}\n")
+//                if (file.name == "AAF") directoryId = file.id
+//            }
+//            userToken.text = fileDescription.toString()
+//
+//            Log.i("GSuite", directoryId)
+////            driveServiceHelper.createFile(directoryId!!).addOnSuccessListener { fileId ->
+////                driveServiceHelper.saveFile(fileId, "test00", "가나다라마")
+////            }
+//            driveServiceHelper.createAppFolder()
+//
+//            driveServiceHelper.queryFiles("'$directoryId' in parents").run {
+//                addOnSuccessListener {sub ->
+//                    Log.i("GSuite sub", "${sub.files.size}")
+//                    fileDescription.append("---\n")
+//                    sub.files.map {subFile ->
+//                        fileDescription.append("${subFile.name}\n")
+//                        Log.i("GSuite sub", "${subFile.name}, ${subFile.copyRequiresWriterPermission}, ${subFile.mimeType}")
+//                        if (subFile.mimeType == "text/plain") {
+//                            Log.i("GSuite sub", "${subFile.name} start read...")
+//                            driveServiceHelper.readFile(subFile.id).run {
+//                                addOnSuccessListener { lines ->
+//                                    lines.map { line ->
+//                                        Log.i("GSuite sub", line)
+//                                    }
+//                                    Log.i("GSuite sub", "${subFile.name} end read...")
+//                                }
+//                                addOnFailureListener { exception ->
+//                                    Log.i("GSuite sub", "${subFile.name} read fail...${exception.message}")
+//                                }
+//                            }
+//                        }
+//                    }
+//                    userToken.text = fileDescription.toString()
+//                }
+//            }
+//        }
+//        task.addOnFailureListener { exception ->
+//            Log.i("GSuite", "read fail...${exception.message}")
+//            exception.stackTrace
+//        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
