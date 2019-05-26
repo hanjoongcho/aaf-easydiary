@@ -44,7 +44,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <android.support.v7.widget.CardView
-                        android:id="@+id/credential"
+                        android:id="@+id/signIn"
                         style="@style/AppCard.Settings">
                         <LinearLayout
                             style="@style/LinearLayoutVertical">
@@ -54,6 +54,20 @@
                             <com.simplemobiletools.commons.views.MyTextView
                                 android:id="@+id/userToken"
                                 android:text="token..."
+                                style="@style/SettingsSummary" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/signOut"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="Google Sign-Out for Android"
+                                style="@style/SettingsTitle" />
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="clear token..."
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
                     </android.support.v7.widget.CardView>

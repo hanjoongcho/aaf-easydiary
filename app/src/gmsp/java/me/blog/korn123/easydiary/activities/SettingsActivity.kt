@@ -20,7 +20,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.google.android.gms.tasks.Tasks
 import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.json.gson.GsonFactory
@@ -44,7 +43,6 @@ import me.blog.korn123.easydiary.gms.drive.RecoverDiaryActivity
 import me.blog.korn123.easydiary.gms.drive.RecoverPhotoActivity
 import me.blog.korn123.easydiary.helper.*
 import org.apache.commons.io.FilenameUtils
-import org.apache.commons.io.IOUtils
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.ss.usermodel.CellStyle
 import org.apache.poi.ss.usermodel.IndexedColors
@@ -52,7 +50,6 @@ import org.apache.poi.ss.usermodel.Workbook
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
-import java.util.concurrent.Callable
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
@@ -209,7 +206,7 @@ class SettingsActivity : EasyDiaryActivity() {
                     putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, getString(R.string.privacy_policy_title))
                 })
             }
-            R.id.credential -> {
+            R.id.signIn -> {
                 // Configure sign-in to request the user's ID, email address, and basic
                 // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
                 val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -228,11 +225,21 @@ class SettingsActivity : EasyDiaryActivity() {
                     testGSuiteDriveAPI(googleSignInAccount.account)
                 }
             }
+            R.id.signOut -> {
+                // Configure sign-in to request the user's ID, email address, and basic
+                // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+                val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestIdToken("523901516987-1ovfkda44k1ub4g2l286ipi06g3nm295.apps.googleusercontent.com")
+                        .requestEmail()
+                        .build()
+                val client = GoogleSignIn.getClient(this, gso)
+                client.signOut().addOnCompleteListener { makeSnackBar("Sign out complete:)") }
+            }
         }
     }
 
     private fun testGSuiteDriveAPI(selectedAccount: Account?) {
-        val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(this, Collections.singleton(DriveScopes.DRIVE_FILE))
+        val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(this, DriveScopes.all())
         credential.selectedAccount = selectedAccount
         val googleDriveService: Drive = Drive.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
                 .setApplicationName("AppName")
@@ -335,8 +342,9 @@ class SettingsActivity : EasyDiaryActivity() {
         exportExcel.setOnClickListener(mOnClickListener)
         faq.setOnClickListener(mOnClickListener)
         privacyPolicy.setOnClickListener(mOnClickListener)
-        credential.setOnClickListener(mOnClickListener)
-        
+        signIn.setOnClickListener(mOnClickListener)
+        signOut.setOnClickListener(mOnClickListener)
+
         fontLineSpacing.configBuilder
                 .min(0.2F)
                 .max(1.8F)
