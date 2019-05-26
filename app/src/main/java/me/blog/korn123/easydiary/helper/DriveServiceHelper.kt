@@ -61,8 +61,10 @@ class DriveServiceHelper(private val mDriveService: Drive) {
         })
     }
 
-    fun openFileStream(fileId: String): Task<InputStream> {
-        return Tasks.call(mExecutor, Callable<InputStream> { mDriveService.files().get(fileId).executeMediaAsInputStream() })
+    fun readFile(fileId: String): Task<List<String>> {
+        return Tasks.call(mExecutor, Callable<List<String>> {
+            IOUtils.readLines(mDriveService.files().get(fileId).executeMediaAsInputStream(), "UTF-8")
+        })
     }
 
     /**

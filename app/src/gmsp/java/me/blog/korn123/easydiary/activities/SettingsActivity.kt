@@ -258,13 +258,20 @@ class SettingsActivity : EasyDiaryActivity() {
                     fileDescription.append("---\n")
                     sub.files.map {subFile ->
                         fileDescription.append("${subFile.name}\n")
-                        Log.i("GSuite sub", subFile.mimeType)
-                        if (subFile.mimeType == "text/html") {
-//                            driveServiceHelper.openFileStream(subFile.id).addOnSuccessListener { `is` ->
-//                                IOUtils.readLines(`is`, "UTF-8").map { line ->
-//                                    Log.i("GSuite sub", line)
-//                                }
-//                            }
+                        Log.i("GSuite sub", "${subFile.name}, ${subFile.mimeType}")
+                        if (subFile.mimeType == "application/octet-stream") {
+                            Log.i("GSuite sub", "${subFile.name} start read...")
+                            driveServiceHelper.readFile(subFile.id).run {
+                                addOnSuccessListener { lines ->
+                                    lines.map { line ->
+                                        Log.i("GSuite sub", line)
+                                    }
+                                    Log.i("GSuite sub", "${subFile.name} end read...")
+                                }
+                                addOnFailureListener { exception ->
+                                    Log.i("GSuite sub", "${subFile.name} read fail...${exception.message}")
+                                }
+                            }
                         }
                     }
                     userToken.text = fileDescription.toString()
