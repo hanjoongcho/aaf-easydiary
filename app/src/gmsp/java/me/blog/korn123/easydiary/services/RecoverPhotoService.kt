@@ -8,18 +8,23 @@ import android.os.Build
 import android.os.Environment
 import android.support.v4.app.NotificationCompat
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.drive.*
-import com.google.android.gms.drive.events.OpenFileCallback
-import com.google.android.gms.drive.query.Filters
-import com.google.android.gms.drive.query.Query
-import com.google.android.gms.drive.query.SearchableField
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.drive.AAF_EASY_DIARY_PHOTO
+import com.google.android.gms.drive.AAF_EASY_DIARY_PHOTO_DIRECTORY
+import com.google.android.gms.drive.DriveResourceClient
+import com.google.android.gms.drive.MetadataBuffer
+import com.google.api.client.extensions.android.http.AndroidHttp
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
+import com.google.api.client.json.gson.GsonFactory
+import com.google.api.services.drive.Drive
+import com.google.api.services.drive.DriveScopes
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.helper.*
-import org.apache.commons.io.FileUtils
 import java.io.File
-import java.io.IOException
+import java.util.*
 
 class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(name) {
     private lateinit var notificationBuilder: NotificationCompat.Builder
@@ -32,15 +37,22 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
     private var failCount = 0
     private var mInProcessJob = true
     private var targetIndexesCursor = 0
-    private val targetIndexes = arrayListOf<Int>()
+//    private val targetIndexes = arrayListOf<Int>()
+    private val targetItems = arrayListOf<HashMap<String, String>>()
     private val photoPath = "${Environment.getExternalStorageDirectory().absolutePath}$AAF_EASY_DIARY_PHOTO_DIRECTORY"
-    
+    private lateinit var mDriveServiceHelper: DriveServiceHelper
+
     override fun onCreate() {
 //        Handler().post { Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show() }
         super.onCreate()
-        GoogleSignIn.getLastSignedInAccount(this)?.let {
-            driveResourceClient = Drive.getDriveResourceClient(this, it)
-        }
+        val googleSignInAccount: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
+        val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(this, Collections.singleton(DriveScopes.DRIVE_FILE))
+        credential.selectedAccount = googleSignInAccount?.account
+        val googleDriveService: Drive = Drive.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
+                .setApplicationName(getString(R.string.app_name))
+                .build()
+        mDriveServiceHelper = DriveServiceHelper(googleDriveService)
+
         notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationBuilder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
 
@@ -59,11 +71,9 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
     override fun onDestroy() {
         super.onDestroy()
         mInProcessJob = false
-//        Handler().post { Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show() }
     }
     
     override fun onHandleIntent(intent: Intent?) {
-//        Handler().post { Toast.makeText(this, "onHandleIntent", Toast.LENGTH_SHORT).show() }
         mInProcessJob = true
         notificationManager.cancel(NOTIFICATION_COMPLETE_ID)
         notificationBuilder
@@ -73,6 +83,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
                 .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
                 .setOnlyAlertOnce(true)
                 .setContentTitle(getString(R.string.recover_attach_photo_title))
+                .setContentText("Preparing to download files...")
                 .addAction(
                         R.drawable.cloud_download,
                         getString(R.string.cancel),
@@ -83,7 +94,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
         startForeground(NOTIFICATION_FOREGROUND_ID, notificationBuilder.build())
 
         intent?.let {
-            recoverPhoto(DriveId.decodeFromString(it.getStringExtra(NOTIFICATION_DRIVE_ID)).asDriveFolder())
+            recoverPhoto()
         }
 
         // FIXME Hold async job???
@@ -92,60 +103,133 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
         }
     }
 
-    private fun recoverPhoto(folder: DriveFolder) {
-        val query = Query.Builder()
-                .addFilter(
-                        Filters.and(
-                                Filters.eq(SearchableField.MIME_TYPE, AAF_EASY_DIARY_PHOTO),
-                                Filters.eq(SearchableField.TRASHED, false)
-                        )
-                )
-                .build()
-        val queryTask = driveResourceClient?.queryChildren(folder, query)
-        queryTask?.addOnSuccessListener { it ->
-            mMetadataBuffer = it
-            mMetadataBuffer.forEachIndexed { index, metadata ->
-                if (!File("$photoPath${metadata.title}").exists()) targetIndexes.add(index)
-            }
-
-            remoteDriveFileCount = mMetadataBuffer.count
-            duplicateFileCount = remoteDriveFileCount - targetIndexes.size
-            when (targetIndexes.size) {
-                0 -> updateNotification()
-                else -> {
-                    val metaData = mMetadataBuffer[targetIndexes[targetIndexesCursor++]]
-                    retrieveContents(metaData.driveId.asDriveFile(), "$photoPath${metaData.title}")
-                } 
-            }
-        }
-    }
-
-    private fun retrieveContents(file: DriveFile, destFilePath: String) {
-        val openCallback = object : OpenFileCallback() {
-            override fun onProgress(bytesDownloaded: Long, bytesExpected: Long) {}
-            override fun onContents(driveContents: DriveContents) {
-                // [START_EXCLUDE]
-                try {
-                    FileUtils.copyInputStreamToFile(driveContents.inputStream, File(destFilePath))
-                    successCount++
-                    updateNotification()
-                } catch (e: IOException) {
-                    failCount++
-                    updateNotification()
+    private fun downloadAttachPhoto() {
+        if (targetIndexesCursor < targetItems.size) {
+            if (mInProcessJob) {
+                val item = targetItems[targetIndexesCursor++]
+                mDriveServiceHelper.downloadFile(item["id"]!!, "$photoPath${item["name"]}").run {
+                    addOnSuccessListener {
+                        successCount++
+                        updateNotification()
+                        downloadAttachPhoto()
+                    }
+                    addOnFailureListener {
+                        failCount++
+                        updateNotification()
+                        downloadAttachPhoto()
+                    }
                 }
-                // [END_EXCLUDE]
             }
-            override fun onError(e: Exception) {
-                failCount++
-                updateNotification()
+        }
+    }
+
+    private fun determineAttachPhoto(nextPageToken: String?) {
+        mDriveServiceHelper.queryFiles("mimeType = '$AAF_EASY_DIARY_PHOTO' and trashed = false",  1000, nextPageToken).run {
+            addOnSuccessListener { result ->
+                val basePath = Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY
+                result.files.map { photoFile ->
+                    remoteDriveFileCount++
+                    if (!File("$photoPath${photoFile.name}").exists()) {
+                        val item = hashMapOf<String, String>(Pair("id", photoFile.id), Pair("name", photoFile.name))
+                        targetItems.add(item)
+                    }
+                }
+
+                when (result.nextPageToken == null) {
+                    true -> {
+                        Log.i("GSuite", targetItems.size.toString())
+                        if (targetItems.size == 0) {
+                            updateNotification()
+                        } else {
+                            duplicateFileCount = remoteDriveFileCount - targetItems.size
+                            downloadAttachPhoto()
+                        }
+                    }
+                    false -> determineAttachPhoto(result.nextPageToken)
+                }
+            }
+            addOnFailureListener { exception -> exception.printStackTrace() }
+        }
+    }
+
+    private fun recoverPhoto() {
+        mDriveServiceHelper.queryFiles("'root' in parents and name = '${DriveServiceHelper.AAF_ROOT_FOLDER_NAME}' and trashed = false", 1, null).run {
+            addOnSuccessListener { fileList ->
+                when (fileList.files.size) {
+                    0 -> mDriveServiceHelper.createAppFolder().addOnSuccessListener { fileId -> Log.i("GSuite", "Created application folder that app id is $fileId") }
+                    1 -> {
+                        val appFolder = fileList.files[0]
+                        Log.i("GSuite", "${appFolder.name}, ${appFolder.mimeType}, ${appFolder.id}")
+                        // step04. upload attach photo sample
+//                        driveServiceHelper.createFile(appFolder.id, "attach-photo-01", AAF_EASY_DIARY_PHOTO).run {
+//                            val photoPath = "${Environment.getExternalStorageDirectory().absolutePath}$AAF_EASY_DIARY_PHOTO_DIRECTORY"
+//                            addOnSuccessListener { fileId -> driveServiceHelper.uploadFile(fileId, "$photoPath/0ce9591f-ba7b-48f3-b724-1253d590b433", AAF_EASY_DIARY_PHOTO) }
+//                        }
+
+                        // step05. determine upload photo sample and download it
+                        determineAttachPhoto(null)
+                    }
+                    else -> {}
+                }
+            }
+            addOnFailureListener {
+                Log.i("GSuite", "not exist application folder")
             }
         }
 
-        driveResourceClient?.openFile(file, DriveFile.MODE_READ_ONLY, openCallback)
+//        val query = Query.Builder()
+//                .addFilter(
+//                        Filters.and(
+//                                Filters.eq(SearchableField.MIME_TYPE, AAF_EASY_DIARY_PHOTO),
+//                                Filters.eq(SearchableField.TRASHED, false)
+//                        )
+//                )
+//                .build()
+//        val queryTask = driveResourceClient?.queryChildren(folder, query)
+//        queryTask?.addOnSuccessListener { it ->
+//            mMetadataBuffer = it
+//            mMetadataBuffer.forEachIndexed { index, metadata ->
+//                if (!File("$photoPath${metadata.title}").exists()) targetIndexes.add(index)
+//            }
+//
+//            remoteDriveFileCount = mMetadataBuffer.count
+//            duplicateFileCount = remoteDriveFileCount - targetIndexes.size
+//            when (targetIndexes.size) {
+//                0 -> updateNotification()
+//                else -> {
+//                    val metaData = mMetadataBuffer[targetIndexes[targetIndexesCursor++]]
+//                    retrieveContents(metaData.driveId.asDriveFile(), "$photoPath${metaData.title}")
+//                }
+//            }
+//        }
     }
 
+//    private fun retrieveContents(file: DriveFile, destFilePath: String) {
+//        val openCallback = object : OpenFileCallback() {
+//            override fun onProgress(bytesDownloaded: Long, bytesExpected: Long) {}
+//            override fun onContents(driveContents: DriveContents) {
+//                // [START_EXCLUDE]
+//                try {
+//                    FileUtils.copyInputStreamToFile(driveContents.inputStream, File(destFilePath))
+//                    successCount++
+//                    updateNotification()
+//                } catch (e: IOException) {
+//                    failCount++
+//                    updateNotification()
+//                }
+//                // [END_EXCLUDE]
+//            }
+//            override fun onError(e: Exception) {
+//                failCount++
+//                updateNotification()
+//            }
+//        }
+//
+//        driveResourceClient?.openFile(file, DriveFile.MODE_READ_ONLY, openCallback)
+//    }
+//
     private fun updateNotification() {
-        if (targetIndexes.size == 0) {
+        if (targetItems.size == 0) {
             launchCompleteNotification(getString(R.string.notification_msg_download_invalid))
         } else {
             notificationBuilder
@@ -155,16 +239,13 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
                         .addLine("${getString(R.string.notification_msg_download_success)}: $successCount")
                         .addLine("${getString(R.string.notification_msg_download_fail)}: $failCount")
                     )
-                    .setContentTitle("${getString(R.string.notification_msg_download_progress)}  ${successCount + failCount}/${targetIndexes.size}")
-                    .setProgress(targetIndexes.size, successCount + failCount, false)
+                    .setContentTitle("${getString(R.string.notification_msg_download_progress)}  ${successCount + failCount}/${targetItems.size}")
+                    .setProgress(targetItems.size, successCount + failCount, false)
             notificationManager.notify(NOTIFICATION_FOREGROUND_ID, notificationBuilder.build())
 
-            if (successCount + failCount < targetIndexes.size) {
+            if (successCount + failCount < targetItems.size) {
                 when (mInProcessJob) {
-                    true -> {
-                        val metaData = mMetadataBuffer[targetIndexes[targetIndexesCursor++]]
-                        retrieveContents(metaData.driveId.asDriveFile(), "$photoPath${metaData.title}")
-                    }
+                    true -> {}
                     false -> notificationManager.cancel(NOTIFICATION_FOREGROUND_ID)
                 }
             } else {
@@ -173,7 +254,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
         }
 //        if (currentCount == targetIndexes.size) finish()
     }
-    
+
     private fun launchCompleteNotification(contentText: String) {
         val resultNotificationBuilder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
         resultNotificationBuilder
@@ -210,7 +291,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
         duplicateFileCount = 0
         successCount = 0
         failCount = 0
-        targetIndexes.clear()
+        targetItems.clear()
         stopSelf()
     }
 }

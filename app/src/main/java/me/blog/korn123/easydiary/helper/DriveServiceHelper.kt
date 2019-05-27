@@ -21,6 +21,7 @@ import android.database.Cursor
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.support.v4.util.Pair
+import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.api.client.http.ByteArrayContent
@@ -89,10 +90,9 @@ class DriveServiceHelper(private val mDriveService: Drive) {
         })
     }
 
-    fun downloadFile(fileId: String, destFilePath: String): Task<Void> {
-        return Tasks.call(mExecutor, Callable<Void> {
+    fun downloadFile(fileId: String, destFilePath: String): Task<Int> {
+        return Tasks.call(mExecutor, Callable<Int> {
             IOUtils.copy(mDriveService.files().get(fileId).executeMediaAsInputStream(), FileOutputStream(File(destFilePath)))
-            null
         })
     }
 
@@ -155,8 +155,12 @@ class DriveServiceHelper(private val mDriveService: Drive) {
      * request Drive Full Scope in the [Google
  * Developer's Console](https://play.google.com/apps/publish) and be submitted to Google for verification.
      */
-    fun queryFiles(q: String, pageSize: Int = 10): Task<FileList> {
-        return Tasks.call(mExecutor, Callable<FileList> { mDriveService.files().list().setQ(q).setSpaces("drive").setOrderBy("createdTime").setPageSize(pageSize).execute() })
+    fun queryFiles(q: String, pageSize: Int = 10, nextPageToken: String?): Task<FileList> {
+        Log.i("GSuite H", nextPageToken ?: "없어~")
+        return when (nextPageToken == null) {
+            true -> Tasks.call(mExecutor, Callable<FileList> { mDriveService.files().list().setQ(q).setSpaces("drive").setOrderBy("createdTime").setPageSize(pageSize).execute() })
+            false -> Tasks.call(mExecutor, Callable<FileList> { mDriveService.files().list().setQ(q).setSpaces("drive").setOrderBy("createdTime").setPageSize(pageSize).setPageToken(nextPageToken).execute() })
+        }
     }
 
     /**
