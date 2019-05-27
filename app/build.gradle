@@ -109,7 +109,9 @@ dependencies {
     implementation "com.android.support:support-v4:$versions.supportLib"
     implementation "com.android.support:support-vector-drawable:$versions.supportLib"
     // google
+    gmsImplementation "com.google.android.gms:play-services-drive:$versions.gms"
     gmsImplementation "com.google.android.gms:play-services-auth:$versions.gms"
+    gmspImplementation "com.google.android.gms:play-services-drive:$versions.gms"
     gmspImplementation "com.google.android.gms:play-services-auth:$versions.gms"
     gmspImplementation 'com.google.http-client:google-http-client-gson:1.26.0'
     gmspImplementation('com.google.api-client:google-api-client-android:1.26.0') {

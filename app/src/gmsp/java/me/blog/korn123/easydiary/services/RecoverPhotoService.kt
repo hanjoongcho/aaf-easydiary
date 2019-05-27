@@ -13,8 +13,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.drive.AAF_EASY_DIARY_PHOTO
 import com.google.android.gms.drive.AAF_EASY_DIARY_PHOTO_DIRECTORY
-import com.google.android.gms.drive.DriveResourceClient
-import com.google.android.gms.drive.MetadataBuffer
 import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.json.gson.GsonFactory
@@ -29,8 +27,6 @@ import java.util.*
 class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(name) {
     private lateinit var notificationBuilder: NotificationCompat.Builder
     private lateinit var notificationManager: NotificationManager
-    private lateinit var mMetadataBuffer: MetadataBuffer
-    private var driveResourceClient: DriveResourceClient? = null
     private var remoteDriveFileCount = 0
     private var duplicateFileCount = 0
     private var successCount = 0
