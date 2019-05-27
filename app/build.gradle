@@ -93,10 +93,6 @@ android {
         // but continue the build even when errors are found:
         abortOnError false
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
 }
 
 dependencies {
@@ -111,6 +107,12 @@ dependencies {
     // google
     gmsImplementation "com.google.android.gms:play-services-drive:$versions.gms"
     gmsImplementation "com.google.android.gms:play-services-auth:$versions.gms"
+    gmsImplementation('com.google.api-client:google-api-client-android:1.26.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
+    gmsImplementation('com.google.apis:google-api-services-drive:v3-rev136-1.25.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
     gmspImplementation "com.google.android.gms:play-services-drive:$versions.gms"
     gmspImplementation "com.google.android.gms:play-services-auth:$versions.gms"
     gmspImplementation 'com.google.http-client:google-http-client-gson:1.26.0'
