@@ -608,9 +608,40 @@ class SettingsActivity : EasyDiaryActivity() {
 //            Log.i("PHOTO-URI", "${it.absolutePath} | ${EasyDiaryDbHelper.countPhotoUriBy(FILE_URI_PREFIX + it.absolutePath)}")
 //            if (EasyDiaryDbHelper.countPhotoUriBy(FILE_URI_PREFIX + it.absolutePath) == 0) it.delete()
 //        }
-        
+
         val uploadIntent = Intent(applicationContext, BackupDiaryActivity::class.java)
         startActivity(uploadIntent)
+    }
+    
+    private fun backupDiary() {
+        // FIXME credential 생성부분 공통처리
+        GoogleSignIn.getLastSignedInAccount(this)?.let {
+            val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(this, Collections.singleton(DriveScopes.DRIVE_FILE))
+            credential.selectedAccount = it.account
+            val googleDriveService: Drive = Drive.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
+                    .setApplicationName(getString(R.string.app_name))
+                    .build()
+
+            val name = DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
+            val driveServiceHelper = DriveServiceHelper(googleDriveService)
+            driveServiceHelper.queryFiles("'root' in parents and name = '${DriveServiceHelper.AAF_ROOT_FOLDER_NAME}' and trashed = false", 1, null).run {
+                addOnSuccessListener { fileList ->
+                    when (fileList.files.size) {
+                        0 -> driveServiceHelper.createAppFolder().addOnSuccessListener { fileId -> Log.i("GSuite", "Created application folder that app id is $fileId") }
+                        1 -> {
+                            val appFolder = fileList.files[0]
+                            driveServiceHelper.createFile(appFolder.id, EasyDiaryDbHelper.getInstance().path,  name, EasyDiaryUtils.easyDiaryMimeType).run {  
+                                addOnSuccessListener { createdId -> Log.i("GSuite", "return backup file id is $createdId") }
+                            }
+                        }
+                        else -> {}
+                    }
+                }
+                addOnFailureListener {
+                    Log.i("GSuite", "not exist application folder")
+                }
+            }
+        }
     }
 
     private fun openBackupIntent() = startActivity(Intent(applicationContext, BackupPhotoActivity::class.java))

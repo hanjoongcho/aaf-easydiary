@@ -29,6 +29,7 @@ import com.google.api.services.drive.Drive
 import com.google.api.services.drive.model.File
 import com.google.api.services.drive.model.FileList
 import org.apache.commons.io.FileUtils
+import org.apache.commons.io.FilenameUtils
 import org.apache.commons.io.IOUtils
 import java.io.*
 import java.util.Collections
@@ -64,14 +65,17 @@ class DriveServiceHelper(private val mDriveService: Drive) {
     /**
      * Creates a text file in the user's My Drive folder and returns its file ID.
      */
-    fun createFile(parentId: String, fileName: String, mimeType: String): Task<String> {
+    fun createFile(parentId: String, filePath: String, name: String, mimeType: String): Task<String> {
         return Tasks.call(mExecutor, Callable<String> {
             val metadata = File()
                     .setParents(listOf(parentId))
                     .setMimeType(mimeType)
-                    .setName(fileName)
+                    .setName(name)
 
-            val googleFile = mDriveService.files().create(metadata).execute()
+            // Convert content to an AbstractInputStreamContent instance.
+            val contentStream = ByteArrayContent(mimeType, IOUtils.toByteArray(FileInputStream(File(filePath))))
+            
+            val googleFile = mDriveService.files().create(metadata, contentStream).execute()
                     ?: throw IOException("Null result when requesting file creation.")
             googleFile.id
         })
