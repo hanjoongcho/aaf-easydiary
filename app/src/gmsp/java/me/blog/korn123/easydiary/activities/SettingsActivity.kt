@@ -206,10 +206,8 @@ class SettingsActivity : EasyDiaryActivity() {
                     putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, getString(R.string.privacy_policy_title))
                 })
             }
-            R.id.signIn -> {
-                initGoogleSignAccount { _ ->
-                    recoverByForegroundService()
-                }
+            R.id.testRestApi -> {
+                makeSnackBar("Start test :)")
             }
             R.id.signOut -> {
                 // Configure sign-in to request the user's ID, email address, and basic
@@ -416,7 +414,7 @@ class SettingsActivity : EasyDiaryActivity() {
         exportExcel.setOnClickListener(mOnClickListener)
         faq.setOnClickListener(mOnClickListener)
         privacyPolicy.setOnClickListener(mOnClickListener)
-        signIn.setOnClickListener(mOnClickListener)
+        testRestApi.setOnClickListener(mOnClickListener)
         signOut.setOnClickListener(mOnClickListener)
 
         fontLineSpacing.configBuilder

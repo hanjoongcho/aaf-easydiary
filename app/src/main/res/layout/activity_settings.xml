@@ -44,16 +44,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <android.support.v7.widget.CardView
-                        android:id="@+id/signIn"
+                        android:id="@+id/testRestApi"
                         style="@style/AppCard.Settings">
                         <LinearLayout
                             style="@style/LinearLayoutVertical">
                             <com.simplemobiletools.commons.views.MyTextView
-                                android:text="Google Sign-In for Android"
+                                android:text="Google REST API"
                                 style="@style/SettingsTitle" />
                             <com.simplemobiletools.commons.views.MyTextView
                                 android:id="@+id/userToken"
-                                android:text="token..."
+                                android:text="Test google rest api"
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
