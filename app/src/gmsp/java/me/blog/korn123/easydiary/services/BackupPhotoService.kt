@@ -9,22 +9,30 @@ import android.os.Environment
 import android.os.IBinder
 import android.support.v4.app.NotificationCompat
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.drive.*
 import com.google.android.gms.drive.query.Filters
 import com.google.android.gms.drive.query.Query
 import com.google.android.gms.drive.query.SearchableField
+import com.google.api.client.extensions.android.http.AndroidHttp
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
+import com.google.api.client.json.gson.GsonFactory
+import com.google.api.services.drive.DriveScopes
 import com.simplemobiletools.commons.extensions.getFileCount
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.helper.*
 import org.apache.commons.io.FileUtils
 import java.io.File
+import java.util.*
 
 class BackupPhotoService : Service() {
     private lateinit var notificationBuilder: NotificationCompat.Builder
     private lateinit var notificationManager: NotificationManager
     private lateinit var mDriveFolder: DriveFolder
+    private lateinit var mDriveServiceHelper: DriveServiceHelper
     private var driveResourceClient: DriveResourceClient? = null
     private var localDeviceFileCount = 0
     private var duplicateFileCount = 0
@@ -34,14 +42,21 @@ class BackupPhotoService : Service() {
     private var mInProcessJob = true
     private val targetFilenames = mutableListOf<String>()
     private val photoPath = "${Environment.getExternalStorageDirectory().absolutePath}$AAF_EASY_DIARY_PHOTO_DIRECTORY"
-
+    
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onCreate() {
-//        Handler().post { Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show() }
         GoogleSignIn.getLastSignedInAccount(this)?.let {
             driveResourceClient = Drive.getDriveResourceClient(this, it)
         }
+
+        val googleSignInAccount: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
+        val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(this, Collections.singleton(DriveScopes.DRIVE_FILE))
+        credential.selectedAccount = googleSignInAccount?.account
+        val googleDriveService: com.google.api.services.drive.Drive = com.google.api.services.drive.Drive.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
+                .setApplicationName(getString(R.string.app_name))
+                .build()
+        mDriveServiceHelper = DriveServiceHelper(googleDriveService)
         notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationBuilder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
         
@@ -58,7 +73,6 @@ class BackupPhotoService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-//        Handler().post { Toast.makeText(this, "onStartCommand", Toast.LENGTH_SHORT).show() }
 
         intent?.let {
             mDriveFolder = DriveId.decodeFromString(it.getStringExtra(NOTIFICATION_DRIVE_ID)).asDriveFolder()
@@ -74,53 +88,72 @@ class BackupPhotoService : Service() {
     }
     
     private fun backupPhoto() {
-        val query = Query.Builder()
-                .addFilter(
-                        Filters.and(
-                                Filters.eq(SearchableField.MIME_TYPE, AAF_EASY_DIARY_PHOTO),
-                                Filters.eq(SearchableField.TRASHED, false)
-                        )
-                )
-                .build()
-        val queryTask = driveResourceClient?.queryChildren(mDriveFolder, query)
-        queryTask?.addOnSuccessListener { metadataBuffer ->
-//            Handler().post { Toast.makeText(this, "metadataBuffer: ${metadataBuffer.count}", Toast.LENGTH_SHORT).show() }
-
-            notificationBuilder.setAutoCancel(true)
-                    .setDefaults(Notification.DEFAULT_ALL)
-                    .setWhen(System.currentTimeMillis())
-                    .setSmallIcon(R.drawable.cloud_upload)
-                    .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
-                    .setOnlyAlertOnce(true)
-                    .setContentTitle(getString(R.string.backup_attach_photo_title))
-                    .addAction(
-                        R.drawable.cloud_upload,
-                        getString(R.string.cancel),
-                        PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
-                            action = NotificationService.ACTION_BACKUP_CANCEL
-                        }, 0)
-                    )
-            startForeground(NOTIFICATION_FOREGROUND_ID, notificationBuilder.build())
-
-            val titles = mutableListOf<String>()
-            metadataBuffer.forEachIndexed { _, metadata ->
-                titles.add(metadata.title)
-            }
-
-            File(photoPath).listFiles().forEachIndexed { _, file ->
-                if (!titles.contains(file.name)) targetFilenames.add(file.name)
-            }
-
-            localDeviceFileCount = File(photoPath).getFileCount(true)
-            duplicateFileCount = localDeviceFileCount - targetFilenames.size
-
-            when (targetFilenames.size) {
-                0 -> updateNotification()
-                else -> {
-                    uploadDiaryPhoto(File("$photoPath${targetFilenames[targetFilenamesCursor++]}"), mDriveFolder)
+        // step01. 전체 파일 목록을 조회
+        mDriveServiceHelper.queryFiles("'root' in parents and name = '${DriveServiceHelper.AAF_ROOT_FOLDER_NAME}' and trashed = false", 1, null).run {
+            addOnSuccessListener { fileList ->
+                when (fileList.files.size) {
+                    0 -> mDriveServiceHelper.createAppFolder().addOnSuccessListener { fileId -> Log.i("GSuite", "Created application folder that app id is $fileId") }
+                    1 -> {
+                        val appFolder = fileList.files[0]
+                        Log.i("GSuite", "${appFolder.name}, ${appFolder.mimeType}, ${appFolder.id}")
+//                        determineAttachPhoto(null)
+                    }
+                    else -> {}
                 }
             }
+            addOnFailureListener {
+                Log.i("GSuite", "not exist application folder")
+            }
         }
+        
+        
+        
+//        val query = Query.Builder()
+//                .addFilter(
+//                        Filters.and(
+//                                Filters.eq(SearchableField.MIME_TYPE, AAF_EASY_DIARY_PHOTO),
+//                                Filters.eq(SearchableField.TRASHED, false)
+//                        )
+//                )
+//                .build()
+//        val queryTask = driveResourceClient?.queryChildren(mDriveFolder, query)
+//        queryTask?.addOnSuccessListener { metadataBuffer ->
+//
+//            notificationBuilder.setAutoCancel(true)
+//                    .setDefaults(Notification.DEFAULT_ALL)
+//                    .setWhen(System.currentTimeMillis())
+//                    .setSmallIcon(R.drawable.cloud_upload)
+//                    .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
+//                    .setOnlyAlertOnce(true)
+//                    .setContentTitle(getString(R.string.backup_attach_photo_title))
+//                    .addAction(
+//                        R.drawable.cloud_upload,
+//                        getString(R.string.cancel),
+//                        PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
+//                            action = NotificationService.ACTION_BACKUP_CANCEL
+//                        }, 0)
+//                    )
+//            startForeground(NOTIFICATION_FOREGROUND_ID, notificationBuilder.build())
+//
+//            val titles = mutableListOf<String>()
+//            metadataBuffer.forEachIndexed { _, metadata ->
+//                titles.add(metadata.title)
+//            }
+//
+//            File(photoPath).listFiles().forEachIndexed { _, file ->
+//                if (!titles.contains(file.name)) targetFilenames.add(file.name)
+//            }
+//
+//            localDeviceFileCount = File(photoPath).getFileCount(true)
+//            duplicateFileCount = localDeviceFileCount - targetFilenames.size
+//
+//            when (targetFilenames.size) {
+//                0 -> updateNotification()
+//                else -> {
+//                    uploadDiaryPhoto(File("$photoPath${targetFilenames[targetFilenamesCursor++]}"), mDriveFolder)
+//                }
+//            }
+//        }
     }
 
     private fun uploadDiaryPhoto(file: File, folder: DriveFolder) {

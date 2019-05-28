@@ -42,6 +42,7 @@ import me.blog.korn123.easydiary.gms.drive.BackupDiaryActivity
 import me.blog.korn123.easydiary.gms.drive.BackupPhotoActivity
 import me.blog.korn123.easydiary.gms.drive.RecoverDiaryActivity
 import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.services.BackupPhotoService
 import me.blog.korn123.easydiary.services.RecoverPhotoService
 import org.apache.commons.io.FilenameUtils
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
@@ -206,22 +207,7 @@ class SettingsActivity : EasyDiaryActivity() {
                 })
             }
             R.id.signIn -> {
-                // Configure sign-in to request the user's ID, email address, and basic
-                // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-                val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestIdToken("523901516987-1ovfkda44k1ub4g2l286ipi06g3nm295.apps.googleusercontent.com")
-                        .requestEmail()
-                        .build()
-                val client = GoogleSignIn.getClient(this, gso)
-                
-                // Check for existing Google Sign In account, if the user is already signed in
-                // the GoogleSignInAccount will be non-null.
-                var googleSignInAccount: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
-                if (googleSignInAccount == null) {
-                    startActivityForResult(client.signInIntent, 1106)
-                } else {
-//                    client.signOut().addOnCompleteListener { makeSnackBar("Sign out complete:)") }
-//                    testGSuiteDriveAPI(googleSignInAccount.account)
+                initGoogleSignAccount { _ ->
                     recoverByForegroundService()
                 }
             }
@@ -237,9 +223,57 @@ class SettingsActivity : EasyDiaryActivity() {
             }
         }
     }
+    
+    private lateinit var accountCallback: (Account) -> Unit
+    private fun initGoogleSignAccount(callback: (account: Account) -> Unit) {
+        accountCallback = callback
 
+        // Configure sign-in to request the user's ID, email address, and basic
+        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+        val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("523901516987-1ovfkda44k1ub4g2l286ipi06g3nm295.apps.googleusercontent.com")
+                .requestEmail()
+                .build()
+        val client = GoogleSignIn.getClient(this, gso)
+        
+        // Check for existing Google Sign In account, if the user is already signed in
+        // the GoogleSignInAccount will be non-null.
+        var googleSignInAccount: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
+
+        if (googleSignInAccount == null) {
+            startActivityForResult(client.signInIntent, 1106)
+        } else {
+            googleSignInAccount.account?.let {
+                accountCallback.invoke(it)
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        if (requestCode == 1106) {
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+            var task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
+            var googleSignAccount = task.getResult(ApiException::class.java)
+            googleSignAccount.account?.let {
+                accountCallback.invoke(it)
+            }
+        }
+    }
+    
+    private fun backupByForegroundService() {
+        showAlertDialog("다이어리 백업 작업을 시작하시겠습니까?", DialogInterface.OnClickListener {_, _ ->
+            val backupPhotoService = Intent(this, BackupPhotoService::class.java)
+            startService(backupPhotoService)
+            finish()
+        }, false)
+    }
+    
     private fun recoverByForegroundService() {
-        showAlertDialog("첨부 사진 복구 작업을 시작하시겠습니까?", DialogInterface.OnClickListener {_, _ ->
+        showAlertDialog("다이어리 복구 작업을 시작하시겠습니까?", DialogInterface.OnClickListener {_, _ ->
             val recoverPhotoService = Intent(this, RecoverPhotoService::class.java)
             startService(recoverPhotoService)
             finish()
@@ -342,22 +376,6 @@ class SettingsActivity : EasyDiaryActivity() {
 ////        }
 //    }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        
-        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-        if (requestCode == 1106) {
-            // The Task returned from this call is always completed, no need to attach
-            // a listener.
-            var task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
-            var googleSignAccount = task.getResult(ApiException::class.java)
-            googleSignAccount?.let {
-                makeSnackBar("${it.id}, ${it.displayName}, ${it.idToken}")
-//                testGSuiteDriveAPI(it.account)
-                recoverByForegroundService()
-            }
-        }
-    }
     
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -602,17 +620,6 @@ class SettingsActivity : EasyDiaryActivity() {
         }
     }
     
-    private fun openUploadIntent() {
-        // delete unused compressed photo file 
-//        File(Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY).listFiles()?.map {
-//            Log.i("PHOTO-URI", "${it.absolutePath} | ${EasyDiaryDbHelper.countPhotoUriBy(FILE_URI_PREFIX + it.absolutePath)}")
-//            if (EasyDiaryDbHelper.countPhotoUriBy(FILE_URI_PREFIX + it.absolutePath) == 0) it.delete()
-//        }
-
-        val uploadIntent = Intent(applicationContext, BackupDiaryActivity::class.java)
-        startActivity(uploadIntent)
-    }
-    
     private fun backupDiary() {
         // FIXME credential 생성부분 공통처리
         GoogleSignIn.getLastSignedInAccount(this)?.let {
@@ -644,10 +651,25 @@ class SettingsActivity : EasyDiaryActivity() {
         }
     }
 
-    private fun openBackupIntent() = startActivity(Intent(applicationContext, BackupPhotoActivity::class.java))
+    private fun openBackupIntent() = initGoogleSignAccount { _ ->
+        backupByForegroundService()
+    }
 
-    private fun openRecoverIntent() = recoverByForegroundService()
+    private fun openRecoverIntent() = initGoogleSignAccount { _ ->
+        recoverByForegroundService()
+    }
 
+    private fun openUploadIntent() {
+        // delete unused compressed photo file 
+//        File(Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY).listFiles()?.map {
+//            Log.i("PHOTO-URI", "${it.absolutePath} | ${EasyDiaryDbHelper.countPhotoUriBy(FILE_URI_PREFIX + it.absolutePath)}")
+//            if (EasyDiaryDbHelper.countPhotoUriBy(FILE_URI_PREFIX + it.absolutePath) == 0) it.delete()
+//        }
+
+        val uploadIntent = Intent(applicationContext, BackupDiaryActivity::class.java)
+        startActivity(uploadIntent)
+    }
+    
     private fun openDownloadIntent() = startActivity(Intent(applicationContext, RecoverDiaryActivity::class.java))
 
     private fun openThumbnailSettingDialog() {
