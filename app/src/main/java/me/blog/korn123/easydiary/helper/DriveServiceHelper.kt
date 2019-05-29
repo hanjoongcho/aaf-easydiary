@@ -192,8 +192,8 @@ class DriveServiceHelper() {
         Log.i("GSuite H", q)
         val fields = "nextPageToken, files(id, name, mimeType)"
         return when (nextPageToken == null) {
-            true -> Tasks.call(mExecutor, Callable<FileList> { mDriveService.files().list().setQ(q).setFields(fields).setSpaces("drive").setOrderBy("createdTime").setPageSize(pageSize).execute() })
-            false -> Tasks.call(mExecutor, Callable<FileList> { mDriveService.files().list().setQ(q).setFields(fields).setSpaces("drive").setOrderBy("createdTime").setPageSize(pageSize).setPageToken(nextPageToken).execute() })
+            true -> Tasks.call(mExecutor, Callable<FileList> { mDriveService.files().list().setQ(q).setFields(fields).setSpaces("drive").setOrderBy("createdTime desc").setPageSize(pageSize).execute() })
+            false -> Tasks.call(mExecutor, Callable<FileList> { mDriveService.files().list().setQ(q).setFields(fields).setSpaces("drive").setOrderBy("createdTime desc").setPageSize(pageSize).setPageToken(nextPageToken).execute() })
         }
     }
 

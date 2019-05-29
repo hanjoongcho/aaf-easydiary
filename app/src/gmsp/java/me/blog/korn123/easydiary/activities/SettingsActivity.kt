@@ -98,7 +98,7 @@ class SettingsActivity : EasyDiaryActivity() {
             R.id.recoverAttachPhoto -> {
                 mTaskFlag = SETTING_FLAG_IMPORT_PHOTO_GOOGLE_DRIVE
                 when (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    true -> openRecoverIntent()
+                    true -> executeDiaryRecovery()
                     false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
                 }
             }
@@ -639,7 +639,7 @@ class SettingsActivity : EasyDiaryActivity() {
                         SETTING_FLAG_EXPORT_GOOGLE_DRIVE -> openUploadIntent()
                         SETTING_FLAG_IMPORT_GOOGLE_DRIVE -> openDownloadIntent()
                         SETTING_FLAG_EXPORT_PHOTO_GOOGLE_DRIVE -> executeDiaryBackup()
-                        SETTING_FLAG_IMPORT_PHOTO_GOOGLE_DRIVE -> openRecoverIntent()
+                        SETTING_FLAG_IMPORT_PHOTO_GOOGLE_DRIVE -> executeDiaryRecovery()
                     }
                 }
                 REQUEST_CODE_EXTERNAL_STORAGE_WITH_FONT_SETTING -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
@@ -704,8 +704,22 @@ class SettingsActivity : EasyDiaryActivity() {
         }
     }
 
-    private fun openRecoverIntent() = initGoogleSignAccount { _ ->
-        recoverByForegroundService()
+    private fun executeDiaryRecovery() {
+        initGoogleSignAccount { account ->
+            val driveServiceHelper = DriveServiceHelper(this, account)
+
+            driveServiceHelper.queryFiles("mimeType contains 'text/aaf_v' and name contains '$DIARY_DB_NAME'", 1000)
+                    .addOnSuccessListener {
+                        it.files.map { file ->
+                            Log.i("GSuite", "${file.name}, ${file.mimeType}")
+                        }
+                        Log.i("GSuite", it.files.size.toString())
+                    }
+                    .addOnFailureListener { e ->
+                        e.printStackTrace()
+                    }
+//            recoverByForegroundService()
+        }
     }
 
     private fun openUploadIntent() {
