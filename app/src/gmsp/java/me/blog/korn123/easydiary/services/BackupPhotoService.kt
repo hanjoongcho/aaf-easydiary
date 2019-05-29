@@ -165,7 +165,7 @@ class BackupPhotoService : Service() {
 
     private fun uploadDiaryPhoto() {
         val fileName =  targetFilenames[targetFilenamesCursor]
-        mDriveServiceHelper.createFile(mAppFolderId, photoPath + fileName, fileName, AAF_EASY_DIARY_PHOTO).run {
+        mDriveServiceHelper.createFile(mAppFolderId, photoPath + fileName, fileName, DriveServiceHelper.MIME_TYPE_AAF_EASY_DIARY_PHOTO).run {
             addOnSuccessListener { _ ->
                 targetFilenamesCursor++
                 successCount++

@@ -120,7 +120,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
     }
 
     private fun determineAttachPhoto(nextPageToken: String?) {
-        mDriveServiceHelper.queryFiles("mimeType = '$AAF_EASY_DIARY_PHOTO' and trashed = false",  1000, nextPageToken).run {
+        mDriveServiceHelper.queryFiles("mimeType = '${DriveServiceHelper.MIME_TYPE_AAF_EASY_DIARY_PHOTO}' and trashed = false",  1000, nextPageToken).run {
             addOnSuccessListener { result ->
                 val basePath = Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY
                 result.files.map { photoFile ->

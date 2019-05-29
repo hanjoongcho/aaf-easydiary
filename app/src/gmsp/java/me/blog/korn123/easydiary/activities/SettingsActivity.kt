@@ -51,6 +51,7 @@ import org.apache.poi.ss.usermodel.IndexedColors
 import org.apache.poi.ss.usermodel.Workbook
 import java.io.File
 import java.io.FileOutputStream
+import java.lang.StringBuilder
 import java.util.*
 
 
@@ -208,6 +209,30 @@ class SettingsActivity : EasyDiaryActivity() {
             }
             R.id.testRestApi -> {
                 makeSnackBar("Start test :)")
+                initGoogleSignAccount { account ->
+                    val driveServiceHelper = DriveServiceHelper(this, account)
+                    // 01. Search folder matched AAF mime type  
+                    driveServiceHelper.queryFiles("'root' in parents and mimeType = '${DriveServiceHelper.MIME_TYPE_GOOGLE_APPS_FOLDER}'").run { 
+                        addOnSuccessListener {
+                            val sb = StringBuilder()
+                            it.files.map { file -> 
+                                sb.append("${file.name}|")
+                            }
+                            makeSnackBar(sb.toString()) 
+                            
+                            // 02. create two depth folder
+                            driveServiceHelper.createAAFFolder("01").run { 
+                                addOnSuccessListener { depth01 ->
+                                    driveServiceHelper.createAAFFolder("02", depth01).run { 
+                                        addOnSuccessListener { depth02 ->
+                                            makeSnackBar(depth02)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
             R.id.signOut -> {
                 // Configure sign-in to request the user's ID, email address, and basic

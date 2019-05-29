@@ -15,7 +15,9 @@
  */
 package me.blog.korn123.easydiary.helper
 
+import android.accounts.Account
 import android.content.ContentResolver
+import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
@@ -24,10 +26,15 @@ import android.support.v4.util.Pair
 import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
+import com.google.api.client.extensions.android.http.AndroidHttp
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.http.ByteArrayContent
+import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
+import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.File
 import com.google.api.services.drive.model.FileList
+import me.blog.korn123.easydiary.R
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.io.IOUtils
@@ -41,20 +48,51 @@ import java.util.concurrent.Executors
  * A utility for performing read/write operations on Drive files via the REST API and opening a
  * file picker UI via Storage Access Framework.
  */
-class DriveServiceHelper(private val mDriveService: Drive) {
+class DriveServiceHelper() {
+    lateinit var mDriveService: Drive
+    
+    constructor(context: Context, account: Account) : this() {
+        val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(context, Collections.singleton(DriveScopes.DRIVE_FILE))
+        credential.selectedAccount = account
+        val googleDriveService: Drive = Drive.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
+                .setApplicationName(context.getString(R.string.app_name))
+                .build()
+        mDriveService = googleDriveService
+    }
+
+    constructor(driveService: Drive) : this() {
+        this.mDriveService = driveService
+    }
+    
     private val mExecutor = Executors.newSingleThreadExecutor()
 
     companion object {
-        const val GOOGLE_APPS_FOLDER = "application/vnd.google-apps.folder"
+        const val MIME_TYPE_GOOGLE_APPS_FOLDER = "application/vnd.google-apps.folder"
+        const val MIME_TYPE_AAF_EASY_DIARY_PHOTO = "aaf/easy.diary.photo"
+        
         const val AAF_ROOT_FOLDER_NAME = "AAFactoty"
+        const val AAF_EASY_DIARY_PHOTO_FOLDER_NAME = "aaf-easydiary_photos"
     }
 
     fun createAppFolder(): Task<String> {
         return Tasks.call(mExecutor, Callable<String> {
             val metadata = File()
                     .setParents(listOf("root"))
-                    .setMimeType(GOOGLE_APPS_FOLDER)
+                    .setMimeType(MIME_TYPE_GOOGLE_APPS_FOLDER)
                     .setName(AAF_ROOT_FOLDER_NAME)
+
+            val googleFile = mDriveService.files().create(metadata).execute()
+                    ?: throw IOException("Null result when requesting file creation.")
+            googleFile.id
+        })
+    }
+
+    fun createAAFFolder(folderName: String, parentId: String = "root"): Task<String> {
+        return Tasks.call(mExecutor, Callable<String> {
+            val metadata = File()
+                    .setParents(listOf(parentId))
+                    .setMimeType(MIME_TYPE_GOOGLE_APPS_FOLDER)
+                    .setName(folderName)
 
             val googleFile = mDriveService.files().create(metadata).execute()
                     ?: throw IOException("Null result when requesting file creation.")
@@ -159,7 +197,7 @@ class DriveServiceHelper(private val mDriveService: Drive) {
      * request Drive Full Scope in the [Google
  * Developer's Console](https://play.google.com/apps/publish) and be submitted to Google for verification.
      */
-    fun queryFiles(q: String, pageSize: Int = 10, nextPageToken: String?): Task<FileList> {
+    fun queryFiles(q: String, pageSize: Int = 10, nextPageToken: String? = null): Task<FileList> {
         Log.i("GSuite H", nextPageToken ?: "없어~")
         Log.i("GSuite H", q)
         val fields = "nextPageToken, files(id, name, mimeType)"
