@@ -111,7 +111,7 @@ class BackupPhotoService : Service() {
         mDriveServiceHelper.queryFiles("'root' in parents and name = '${DriveServiceHelper.AAF_ROOT_FOLDER_NAME}' and trashed = false", 1, null).run {
             addOnSuccessListener { fileList ->
                 when (fileList.files.size) {
-                    0 -> mDriveServiceHelper.createAppFolder().addOnSuccessListener { fileId -> Log.i("GSuite", "Created application folder that app id is $fileId") }
+                    0 -> mDriveServiceHelper.createFolder(DriveServiceHelper.AAF_ROOT_FOLDER_NAME).addOnSuccessListener { fileId -> Log.i("GSuite", "Created application folder that app id is $fileId") }
                     1 -> {
                         val appFolder = fileList.files[0]
                         mAppFolderId = appFolder.id

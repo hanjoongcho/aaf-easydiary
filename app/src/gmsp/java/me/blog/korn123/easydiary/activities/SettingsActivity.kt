@@ -210,27 +210,8 @@ class SettingsActivity : EasyDiaryActivity() {
             R.id.testRestApi -> {
                 makeSnackBar("Start test :)")
                 initGoogleSignAccount { account ->
-                    val driveServiceHelper = DriveServiceHelper(this, account)
-                    // 01. Search folder matched AAF mime type  
-                    driveServiceHelper.queryFiles("'root' in parents and mimeType = '${DriveServiceHelper.MIME_TYPE_GOOGLE_APPS_FOLDER}'").run { 
-                        addOnSuccessListener {
-                            val sb = StringBuilder()
-                            it.files.map { file -> 
-                                sb.append("${file.name}|")
-                            }
-                            makeSnackBar(sb.toString()) 
-                            
-                            // 02. create two depth folder
-                            driveServiceHelper.createAAFFolder("01").run { 
-                                addOnSuccessListener { depth01 ->
-                                    driveServiceHelper.createAAFFolder("02", depth01).run { 
-                                        addOnSuccessListener { depth02 ->
-                                            makeSnackBar(depth02)
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                    initDriveWorkingDirectory(account) {
+                        initWorkFolderComplete()
                     }
                 }
             }
@@ -245,6 +226,57 @@ class SettingsActivity : EasyDiaryActivity() {
                 client.signOut().addOnCompleteListener { makeSnackBar("Sign out complete:)") }
             }
         }
+    }
+
+    private fun initDriveWorkingDirectory(account: Account, callback: () -> Unit) {
+        val driveServiceHelper = DriveServiceHelper(this, account)
+        // 01. AAF 폴더 검색
+        driveServiceHelper.queryFiles("'root' in parents and name = '${DriveServiceHelper.AAF_ROOT_FOLDER_NAME}'").run {
+            addOnSuccessListener { result ->
+                when (result.files.size) {
+                    // 02. AAF 폴더 없으면 생성
+                    0 -> driveServiceHelper.createFolder(DriveServiceHelper.AAF_ROOT_FOLDER_NAME).addOnSuccessListener { aafFolderId ->
+                        // 02-01. aaf-easydiary_photos 폴더 생성
+                        driveServiceHelper.createFolder(DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME, aafFolderId).addOnSuccessListener {
+                            // 02-02. aaf-easydiary_realm 폴더 생성
+                            driveServiceHelper.createFolder(DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME, aafFolderId).addOnSuccessListener {
+                                callback()
+                            }
+                        }
+                    }
+                    // 03. aaf-easydiary_photos 폴더 검색
+                    1 -> {
+                        val parentId = result.files[0].id
+                        driveServiceHelper.queryFiles("'$parentId' in parents and name = '${DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME}'").addOnSuccessListener {
+                            when (it.files.size) {
+                                // 03-01. aaf-easydiary_photos 폴더 생성
+                                0 -> driveServiceHelper.createFolder(DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME, parentId).addOnSuccessListener { photoFolderId ->
+                                    // 03-02. aaf-easydiary_realm 폴더 검색
+                                    driveServiceHelper.queryFiles("'$parentId' in parents and name = '${DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME}'").addOnSuccessListener { result ->
+                                        when (result.files.size) {
+                                            0 -> {
+                                                // 03-03. aaf-easydiary_realm 폴더 생성
+                                                driveServiceHelper.createFolder(DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME, parentId).addOnSuccessListener {
+                                                    callback()
+                                                }
+                                            }
+                                            1 -> callback()
+                                        }
+                                    }
+                                }
+                                1 -> {
+                                    callback()
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun initWorkFolderComplete() {
+        makeSnackBar("Prepare complete!!!)")
     }
     
     private lateinit var accountCallback: (Account) -> Unit
@@ -643,36 +675,36 @@ class SettingsActivity : EasyDiaryActivity() {
         }
     }
     
-    private fun backupDiary() {
-        // FIXME credential 생성부분 공통처리
-        GoogleSignIn.getLastSignedInAccount(this)?.let {
-            val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(this, Collections.singleton(DriveScopes.DRIVE_FILE))
-            credential.selectedAccount = it.account
-            val googleDriveService: Drive = Drive.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
-                    .setApplicationName(getString(R.string.app_name))
-                    .build()
-
-            val name = DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
-            val driveServiceHelper = DriveServiceHelper(googleDriveService)
-            driveServiceHelper.queryFiles("'root' in parents and name = '${DriveServiceHelper.AAF_ROOT_FOLDER_NAME}' and trashed = false", 1, null).run {
-                addOnSuccessListener { fileList ->
-                    when (fileList.files.size) {
-                        0 -> driveServiceHelper.createAppFolder().addOnSuccessListener { fileId -> Log.i("GSuite", "Created application folder that app id is $fileId") }
-                        1 -> {
-                            val appFolder = fileList.files[0]
-                            driveServiceHelper.createFile(appFolder.id, EasyDiaryDbHelper.getInstance().path,  name, EasyDiaryUtils.easyDiaryMimeType).run {  
-                                addOnSuccessListener { createdId -> Log.i("GSuite", "return backup file id is $createdId") }
-                            }
-                        }
-                        else -> {}
-                    }
-                }
-                addOnFailureListener {
-                    Log.i("GSuite", "not exist application folder")
-                }
-            }
-        }
-    }
+//    private fun backupDiary() {
+//        // FIXME credential 생성부분 공통처리
+//        GoogleSignIn.getLastSignedInAccount(this)?.let {
+//            val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(this, Collections.singleton(DriveScopes.DRIVE_FILE))
+//            credential.selectedAccount = it.account
+//            val googleDriveService: Drive = Drive.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
+//                    .setApplicationName(getString(R.string.app_name))
+//                    .build()
+//
+//            val name = DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
+//            val driveServiceHelper = DriveServiceHelper(googleDriveService)
+//            driveServiceHelper.queryFiles("'root' in parents and name = '${DriveServiceHelper.AAF_ROOT_FOLDER_NAME}' and trashed = false", 1, null).run {
+//                addOnSuccessListener { fileList ->
+//                    when (fileList.files.size) {
+//                        0 -> driveServiceHelper.createAppFolder().addOnSuccessListener { fileId -> Log.i("GSuite", "Created application folder that app id is $fileId") }
+//                        1 -> {
+//                            val appFolder = fileList.files[0]
+//                            driveServiceHelper.createFile(appFolder.id, EasyDiaryDbHelper.getInstance().path,  name, EasyDiaryUtils.easyDiaryMimeType).run {
+//                                addOnSuccessListener { createdId -> Log.i("GSuite", "return backup file id is $createdId") }
+//                            }
+//                        }
+//                        else -> {}
+//                    }
+//                }
+//                addOnFailureListener {
+//                    Log.i("GSuite", "not exist application folder")
+//                }
+//            }
+//        }
+//    }
 
     private fun openBackupIntent() = initGoogleSignAccount { _ ->
         backupByForegroundService()

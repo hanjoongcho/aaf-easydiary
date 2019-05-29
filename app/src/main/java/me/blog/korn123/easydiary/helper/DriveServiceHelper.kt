@@ -72,22 +72,10 @@ class DriveServiceHelper() {
         
         const val AAF_ROOT_FOLDER_NAME = "AAFactoty"
         const val AAF_EASY_DIARY_PHOTO_FOLDER_NAME = "aaf-easydiary_photos"
+        const val AAF_EASY_DIARY_REALM_FOLDER_NAME = "aaf-easydiary_realm"
     }
 
-    fun createAppFolder(): Task<String> {
-        return Tasks.call(mExecutor, Callable<String> {
-            val metadata = File()
-                    .setParents(listOf("root"))
-                    .setMimeType(MIME_TYPE_GOOGLE_APPS_FOLDER)
-                    .setName(AAF_ROOT_FOLDER_NAME)
-
-            val googleFile = mDriveService.files().create(metadata).execute()
-                    ?: throw IOException("Null result when requesting file creation.")
-            googleFile.id
-        })
-    }
-
-    fun createAAFFolder(folderName: String, parentId: String = "root"): Task<String> {
+    fun createFolder(folderName: String, parentId: String = "root"): Task<String> {
         return Tasks.call(mExecutor, Callable<String> {
             val metadata = File()
                     .setParents(listOf(parentId))
