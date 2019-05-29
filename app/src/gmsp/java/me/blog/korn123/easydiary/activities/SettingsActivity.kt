@@ -20,13 +20,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.drive.AAF_EASY_DIARY_PHOTO
 import com.google.android.gms.tasks.Task
-import com.google.api.client.extensions.android.http.AndroidHttp
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
-import com.google.api.client.json.gson.GsonFactory
-import com.google.api.services.drive.Drive
-import com.google.api.services.drive.DriveScopes
 import com.xw.repo.BubbleSeekBar
 import io.github.aafactory.commons.helpers.BaseConfig
 import io.github.aafactory.commons.utils.DateUtils
@@ -39,7 +33,6 @@ import me.blog.korn123.easydiary.adapters.FontItemAdapter
 import me.blog.korn123.easydiary.adapters.ThumbnailSizeItemAdapter
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.gms.drive.BackupDiaryActivity
-import me.blog.korn123.easydiary.gms.drive.BackupPhotoActivity
 import me.blog.korn123.easydiary.gms.drive.RecoverDiaryActivity
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.services.BackupPhotoService
@@ -51,7 +44,6 @@ import org.apache.poi.ss.usermodel.IndexedColors
 import org.apache.poi.ss.usermodel.Workbook
 import java.io.File
 import java.io.FileOutputStream
-import java.lang.StringBuilder
 import java.util.*
 
 
@@ -99,7 +91,7 @@ class SettingsActivity : EasyDiaryActivity() {
             R.id.backupAttachPhoto -> {
                 mTaskFlag = SETTING_FLAG_EXPORT_PHOTO_GOOGLE_DRIVE
                 when (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    true -> openBackupIntent()
+                    true -> executeDiaryBackup()
                     false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
                 }
             }
@@ -210,8 +202,8 @@ class SettingsActivity : EasyDiaryActivity() {
             R.id.testRestApi -> {
                 makeSnackBar("Start test :)")
                 initGoogleSignAccount { account ->
-                    initDriveWorkingDirectory(account) {
-                        initWorkFolderComplete()
+                    initDriveWorkingDirectory(account, DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) {
+                        initWorkFolderComplete(it)
                     }
                 }
             }
@@ -228,7 +220,7 @@ class SettingsActivity : EasyDiaryActivity() {
         }
     }
 
-    private fun initDriveWorkingDirectory(account: Account, callback: () -> Unit) {
+    private fun initDriveWorkingDirectory(account: Account, workingFolderName: String, callback: (workingFolderId: String) -> Unit) {
         val driveServiceHelper = DriveServiceHelper(this, account)
         // 01. AAF 폴더 검색
         driveServiceHelper.queryFiles("'root' in parents and name = '${DriveServiceHelper.AAF_ROOT_FOLDER_NAME}'").run {
@@ -236,36 +228,22 @@ class SettingsActivity : EasyDiaryActivity() {
                 when (result.files.size) {
                     // 02. AAF 폴더 없으면 생성
                     0 -> driveServiceHelper.createFolder(DriveServiceHelper.AAF_ROOT_FOLDER_NAME).addOnSuccessListener { aafFolderId ->
-                        // 02-01. aaf-easydiary_photos 폴더 생성
-                        driveServiceHelper.createFolder(DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME, aafFolderId).addOnSuccessListener {
-                            // 02-02. aaf-easydiary_realm 폴더 생성
-                            driveServiceHelper.createFolder(DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME, aafFolderId).addOnSuccessListener {
-                                callback()
-                            }
+                        // 02-01. workingFolder 생성
+                        driveServiceHelper.createFolder(workingFolderName, aafFolderId).addOnSuccessListener { workingFolderId ->
+                            callback(workingFolderId)
                         }
                     }
-                    // 03. aaf-easydiary_photos 폴더 검색
+                    // 03. workingFolder 검색
                     1 -> {
                         val parentId = result.files[0].id
-                        driveServiceHelper.queryFiles("'$parentId' in parents and name = '${DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME}'").addOnSuccessListener {
+                        driveServiceHelper.queryFiles("'$parentId' in parents and name = '$workingFolderName'").addOnSuccessListener {
                             when (it.files.size) {
-                                // 03-01. aaf-easydiary_photos 폴더 생성
-                                0 -> driveServiceHelper.createFolder(DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME, parentId).addOnSuccessListener { photoFolderId ->
-                                    // 03-02. aaf-easydiary_realm 폴더 검색
-                                    driveServiceHelper.queryFiles("'$parentId' in parents and name = '${DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME}'").addOnSuccessListener { result ->
-                                        when (result.files.size) {
-                                            0 -> {
-                                                // 03-03. aaf-easydiary_realm 폴더 생성
-                                                driveServiceHelper.createFolder(DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME, parentId).addOnSuccessListener {
-                                                    callback()
-                                                }
-                                            }
-                                            1 -> callback()
-                                        }
-                                    }
+                                // 03-01. workingFolder 생성
+                                0 -> driveServiceHelper.createFolder(workingFolderName, parentId).addOnSuccessListener { workingFolderId ->
+                                    callback(workingFolderId)
                                 }
                                 1 -> {
-                                    callback()
+                                    callback(it.files[0].id)
                                 }
                             }
                         }
@@ -275,8 +253,8 @@ class SettingsActivity : EasyDiaryActivity() {
         }
     }
 
-    private fun initWorkFolderComplete() {
-        makeSnackBar("Prepare complete!!!)")
+    private fun initWorkFolderComplete(workingFolderId: String) {
+        makeSnackBar("Prepare complete -$workingFolderId")
     }
     
     private lateinit var accountCallback: (Account) -> Unit
@@ -319,9 +297,10 @@ class SettingsActivity : EasyDiaryActivity() {
         }
     }
     
-    private fun backupByForegroundService() {
+    private fun backupByForegroundService(workingFolderId: String) {
         showAlertDialog("다이어리 백업 작업을 시작하시겠습니까?", DialogInterface.OnClickListener {_, _ ->
             val backupPhotoService = Intent(this, BackupPhotoService::class.java)
+            backupPhotoService.putExtra(DriveServiceHelper.WORKING_FOLDER_ID, workingFolderId)
             startService(backupPhotoService)
             finish()
         }, false)
@@ -659,7 +638,7 @@ class SettingsActivity : EasyDiaryActivity() {
                     when (mTaskFlag) {
                         SETTING_FLAG_EXPORT_GOOGLE_DRIVE -> openUploadIntent()
                         SETTING_FLAG_IMPORT_GOOGLE_DRIVE -> openDownloadIntent()
-                        SETTING_FLAG_EXPORT_PHOTO_GOOGLE_DRIVE -> openBackupIntent()
+                        SETTING_FLAG_EXPORT_PHOTO_GOOGLE_DRIVE -> executeDiaryBackup()
                         SETTING_FLAG_IMPORT_PHOTO_GOOGLE_DRIVE -> openRecoverIntent()
                     }
                 }
@@ -706,8 +685,23 @@ class SettingsActivity : EasyDiaryActivity() {
 //        }
 //    }
 
-    private fun openBackupIntent() = initGoogleSignAccount { _ ->
-        backupByForegroundService()
+    private fun executeDiaryBackup() {
+        initGoogleSignAccount { account ->
+            initDriveWorkingDirectory(account, DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME) {
+                val driveServiceHelper = DriveServiceHelper(this, account)
+                driveServiceHelper.createFile(
+                        it, EasyDiaryDbHelper.getInstance().path,
+                        DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"),
+                        EasyDiaryUtils.easyDiaryMimeType
+                ).addOnSuccessListener {
+                    makeSnackBar("Upload complete diary realm file")
+
+                    initDriveWorkingDirectory(account, DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
+                        backupByForegroundService(photoFolderId)
+                    }
+                }
+            }
+        }
     }
 
     private fun openRecoverIntent() = initGoogleSignAccount { _ ->

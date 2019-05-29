@@ -13,19 +13,13 @@ import android.util.Log
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.drive.*
-import com.google.android.gms.drive.query.Filters
-import com.google.android.gms.drive.query.Query
-import com.google.android.gms.drive.query.SearchableField
 import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.DriveScopes
-import com.simplemobiletools.commons.extensions.getFileCount
-import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.helper.*
-import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.time.StopWatch
 import java.io.File
 import java.util.*
@@ -46,7 +40,7 @@ class BackupPhotoService : Service() {
     private val remoteDriveFileNames  = mutableListOf<String>()
     private val targetFilenames = mutableListOf<String>()
     private val photoPath = "${Environment.getExternalStorageDirectory().absolutePath}$AAF_EASY_DIARY_PHOTO_DIRECTORY"
-    private lateinit var mAppFolderId: String
+    private lateinit var mWorkingFolderId: String
     
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -78,6 +72,7 @@ class BackupPhotoService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        mWorkingFolderId = intent?.getStringExtra(DriveServiceHelper.WORKING_FOLDER_ID) ?: ""
         backupPhoto()
         return super.onStartCommand(intent, flags, startId)
     }
@@ -107,28 +102,13 @@ class BackupPhotoService : Service() {
 
         stopWatch.reset()
         stopWatch.start()
+
         // step01. 전체 파일 목록을 조회
-        mDriveServiceHelper.queryFiles("'root' in parents and name = '${DriveServiceHelper.AAF_ROOT_FOLDER_NAME}' and trashed = false", 1, null).run {
-            addOnSuccessListener { fileList ->
-                when (fileList.files.size) {
-                    0 -> mDriveServiceHelper.createFolder(DriveServiceHelper.AAF_ROOT_FOLDER_NAME).addOnSuccessListener { fileId -> Log.i("GSuite", "Created application folder that app id is $fileId") }
-                    1 -> {
-                        val appFolder = fileList.files[0]
-                        mAppFolderId = appFolder.id
-                        Log.i("GSuite", "${appFolder.name}, ${appFolder.mimeType}, ${appFolder.id}")
-                        determineRemoteDrivePhotos(null)
-                    }
-                    else -> {}
-                }
-            }
-            addOnFailureListener {
-                Log.i("GSuite", "not exist application folder")
-            }
-        }
+        determineRemoteDrivePhotos(null)
     }
 
     private fun determineRemoteDrivePhotos(nextPageToken: String?) {
-        mDriveServiceHelper.queryFiles("'$mAppFolderId' in parents and mimeType = '$AAF_EASY_DIARY_PHOTO' and trashed = false",  1000, nextPageToken).run {
+        mDriveServiceHelper.queryFiles("'$mWorkingFolderId' in parents and mimeType = '${DriveServiceHelper.MIME_TYPE_AAF_EASY_DIARY_PHOTO}' and trashed = false",  1000, nextPageToken).run {
             addOnSuccessListener { result ->
                 result.files.map { photoFile ->
                     remoteDriveFileNames.add(photoFile.name)
@@ -165,7 +145,7 @@ class BackupPhotoService : Service() {
 
     private fun uploadDiaryPhoto() {
         val fileName =  targetFilenames[targetFilenamesCursor]
-        mDriveServiceHelper.createFile(mAppFolderId, photoPath + fileName, fileName, DriveServiceHelper.MIME_TYPE_AAF_EASY_DIARY_PHOTO).run {
+        mDriveServiceHelper.createFile(mWorkingFolderId, photoPath + fileName, fileName, DriveServiceHelper.MIME_TYPE_AAF_EASY_DIARY_PHOTO).run {
             addOnSuccessListener { _ ->
                 targetFilenamesCursor++
                 successCount++

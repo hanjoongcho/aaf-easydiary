@@ -73,6 +73,8 @@ class DriveServiceHelper() {
         const val AAF_ROOT_FOLDER_NAME = "AAFactoty"
         const val AAF_EASY_DIARY_PHOTO_FOLDER_NAME = "aaf-easydiary_photos"
         const val AAF_EASY_DIARY_REALM_FOLDER_NAME = "aaf-easydiary_realm"
+
+        const val WORKING_FOLDER_ID = "working-folder-id"
     }
 
     fun createFolder(folderName: String, parentId: String = "root"): Task<String> {
