@@ -5,8 +5,6 @@
     <ListView
         android:id="@+id/files"
         android:divider="@null"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
         android:layout_width="match_parent"
         android:layout_height="250dp">
     </ListView>

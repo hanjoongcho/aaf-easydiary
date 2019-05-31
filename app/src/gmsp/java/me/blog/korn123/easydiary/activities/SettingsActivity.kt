@@ -258,7 +258,7 @@ class SettingsActivity : EasyDiaryActivity() {
                     .addOnSuccessListener {
                         val realmFiles: ArrayList<HashMap<String, String>> = arrayListOf()
                         it.files.map { file -> 
-                            val itemInfo = hashMapOf<String, String>("name" to file.name, "id" to file.id)
+                            val itemInfo = hashMapOf<String, String>("name" to file.name, "id" to file.id, "createdTime" to file.createdTime.toString())
                             realmFiles.add(itemInfo)
                         }
                         

@@ -21,19 +21,22 @@ class RealmFileItemAdapter(
                 val inflater = (this.context as Activity).layoutInflater
                 row = inflater.inflate(this.layoutResourceId, parent, false)
                 holder = ViewHolder()
-                holder.textView = row.findViewById(R.id.fileName)
-                row.tag = holder    
+                holder.name = row.findViewById(R.id.fileName)
+                holder.createdTime = row.findViewById(R.id.createdTime)
+                row.tag = holder
             }
             false -> {
                 holder = row.tag as ViewHolder    
             }
         }
         
-        holder.textView?.text = list[position]["name"]
+        holder.name?.text = list[position]["name"]
+        holder.createdTime?.text = list[position]["createdTime"]
         return row
     }
 
     class ViewHolder {
-        var textView: TextView? = null
+        var name: TextView? = null
+        var createdTime: TextView? = null
     }
 }
