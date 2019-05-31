@@ -91,6 +91,7 @@ class BackupPhotoService : Service() {
                 .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
                 .setOnlyAlertOnce(true)
                 .setContentTitle(getString(R.string.backup_attach_photo_title))
+                .setContentText("Preparing to upload files...")
                 .addAction(
                         R.drawable.cloud_upload,
                         getString(R.string.cancel),

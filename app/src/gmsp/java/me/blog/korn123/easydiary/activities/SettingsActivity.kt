@@ -1,6 +1,9 @@
 package me.blog.korn123.easydiary.activities
 
 import android.accounts.Account
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
@@ -38,6 +41,7 @@ import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.services.BackupPhotoService
 import me.blog.korn123.easydiary.services.RecoverPhotoService
 import org.apache.commons.io.FilenameUtils
+import org.apache.commons.io.IOUtils
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.ss.usermodel.CellStyle
 import org.apache.poi.ss.usermodel.IndexedColors
@@ -52,207 +56,19 @@ import java.util.*
  */
 
 class SettingsActivity : EasyDiaryActivity() {
+    
+    /***************************************************************************************************
+     *   global peoperties
+     *
+     ***************************************************************************************************/
     private var mAlertDialog: AlertDialog? = null
     private var mTaskFlag = 0
-    private val mOnClickListener = View.OnClickListener { view ->
-        when (view.id) {
-            R.id.primaryColor -> TransitionHelper.startActivityWithTransition(this@SettingsActivity, Intent(this@SettingsActivity, CustomizationActivity::class.java))
-            R.id.fontSetting -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                openFontSettingDialog()
-            } else {
-                confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_FONT_SETTING)
-            }
-            R.id.thumbnailSetting -> {
-                openThumbnailSettingDialog()
-            }
-            R.id.sensitiveOption -> {
-                sensitiveOptionSwitcher.toggle()
-                config.diarySearchQueryCaseSensitive = sensitiveOptionSwitcher.isChecked
-            }
-            R.id.addTtfFontSetting -> {
-                openGuideView(getString(R.string.add_ttf_fonts_title))
-            }
-            R.id.restoreSetting -> {
-                mTaskFlag = SETTING_FLAG_IMPORT_GOOGLE_DRIVE
-                if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    openDownloadIntent()
-                } else { // Permission has already been granted
-                    confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
-                }
-            }
-            R.id.backupSetting -> {
-                mTaskFlag = SETTING_FLAG_EXPORT_GOOGLE_DRIVE
-                if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    openUploadIntent()
-                } else { // Permission has already been granted
-                    confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
-                }
-            }
-            R.id.backupAttachPhoto -> {
-                mTaskFlag = SETTING_FLAG_EXPORT_PHOTO_GOOGLE_DRIVE
-                when (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    true -> executeDiaryBackup()
-                    false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
-                }
-            }
-            R.id.recoverAttachPhoto -> {
-                mTaskFlag = SETTING_FLAG_IMPORT_PHOTO_GOOGLE_DRIVE
-                when (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    true -> executeDiaryRecovery()
-                    false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
-                }
-            }
-            R.id.exportExcel -> {
-                when (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    true -> exportExcel()
-                    false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_EXCEL)
-                }
-            }
-            R.id.restorePhotoSetting -> {
-                openGuideView(getString(R.string.restore_photo))
-            }
-            R.id.rateAppSetting -> openGooglePlayBy("me.blog.korn123.easydiary")
-            R.id.licenseView -> {
-                TransitionHelper.startActivityWithTransition(this, Intent(this, MarkDownViewActivity::class.java).apply {
-                    putExtra(MarkDownViewActivity.OPEN_URL_INFO, "https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/LICENSE.md")
-                    putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, getString(R.string.preferences_information_licenses))
-                })
-            }
-            R.id.releaseNotes -> checkWhatsNewDialog(false)
-            R.id.boldStyleOption -> {
-                boldStyleOptionSwitcher.toggle()
-                config.boldStyleEnable = boldStyleOptionSwitcher.isChecked
-            }
-            R.id.multiPickerOption -> {
-                multiPickerOptionSwitcher.toggle()
-                config.multiPickerEnable = multiPickerOptionSwitcher.isChecked
-            }
-            R.id.appLockSetting -> {
-                when (config.aafPinLockEnable) {
-                    true -> {
-                        if (config.fingerprintLockEnable) {
-                            showAlertDialog(getString(R.string.pin_release_need_fingerprint_disable), null)
-                        } else {
-                            appLockSettingSwitcher.isChecked = false
-                            config.aafPinLockEnable = false
-                            showAlertDialog(getString(R.string.pin_setting_release), null)    
-                        }
-                    }
-                    false -> {
-                        startActivity(Intent(this, PinLockActivity::class.java).apply {
-                            putExtra(FingerprintLockActivity.LAUNCHING_MODE, PinLockActivity.ACTIVITY_SETTING)
-                        })
-                    }
-                }
-            }
-            R.id.fingerprint -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    when (config.fingerprintLockEnable) {
-                        true -> {
-                            fingerprintSwitcher.isChecked = false
-                            config.fingerprintLockEnable = false
-                            showAlertDialog(getString(R.string.fingerprint_setting_release), null)
-                        }
-                        false -> {
-                            when (config.aafPinLockEnable) {
-                                true -> {
-                                    startActivity(Intent(this, FingerprintLockActivity::class.java).apply {
-                                        putExtra(FingerprintLockActivity.LAUNCHING_MODE, FingerprintLockActivity.ACTIVITY_SETTING)
-                                    })        
-                                }
-                                false -> {
-                                    showAlertDialog(getString(R.string.fingerprint_lock_need_pin_setting), null)
-                                }
-                            }
-                        }
-                    }    
-                } else {
-                    showAlertDialog(getString(R.string.fingerprint_not_available), null)
-                }
-            }
-            R.id.enableCardViewPolicy -> {
-                enableCardViewPolicySwitcher.toggle()
-                config.enableCardViewPolicy = enableCardViewPolicySwitcher.isChecked
-                updateCardViewPolicy(main_holder)
-            }
-            R.id.decreaseFont -> {
-                config.settingFontSize = config.settingFontSize - 5
-                initTextSize(main_holder, this)
-            }
-            R.id.increaseFont -> {
-                config.settingFontSize = config.settingFontSize + 5
-                initTextSize(main_holder, this)
-            }
-            R.id.contentsSummary -> {
-                contentsSummarySwitcher.toggle()
-                config.enableContentsSummary = contentsSummarySwitcher.isChecked 
-            }
-            R.id.faq -> {
-                TransitionHelper.startActivityWithTransition(this, Intent(this, MarkDownViewActivity::class.java).apply {
-                    putExtra(MarkDownViewActivity.OPEN_URL_INFO, getString(R.string.faq_url))
-                    putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, getString(R.string.faq_title))
-                })
-            }
-            R.id.privacyPolicy -> {
-                TransitionHelper.startActivityWithTransition(this, Intent(this, MarkDownViewActivity::class.java).apply {
-                    putExtra(MarkDownViewActivity.OPEN_URL_INFO, getString(R.string.privacy_policy_url))
-                    putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, getString(R.string.privacy_policy_title))
-                })
-            }
-            R.id.testRestApi -> {
-                makeSnackBar("Start test :)")
-                initGoogleSignAccount { account ->
-                    initDriveWorkingDirectory(account, DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) {
-                        initWorkFolderComplete(it)
-                    }
-                }
-            }
-            R.id.signOut -> {
-                // Configure sign-in to request the user's ID, email address, and basic
-                // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-                val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestIdToken("523901516987-1ovfkda44k1ub4g2l286ipi06g3nm295.apps.googleusercontent.com")
-                        .requestEmail()
-                        .build()
-                val client = GoogleSignIn.getClient(this, gso)
-                client.signOut().addOnCompleteListener { makeSnackBar("Sign out complete:)") }
-            }
-        }
-    }
 
-    private fun initDriveWorkingDirectory(account: Account, workingFolderName: String, callback: (workingFolderId: String) -> Unit) {
-        val driveServiceHelper = DriveServiceHelper(this, account)
-        // 01. AAF 폴더 검색
-        driveServiceHelper.queryFiles("'root' in parents and name = '${DriveServiceHelper.AAF_ROOT_FOLDER_NAME}'").run {
-            addOnSuccessListener { result ->
-                when (result.files.size) {
-                    // 02. AAF 폴더 없으면 생성
-                    0 -> driveServiceHelper.createFolder(DriveServiceHelper.AAF_ROOT_FOLDER_NAME).addOnSuccessListener { aafFolderId ->
-                        // 02-01. workingFolder 생성
-                        driveServiceHelper.createFolder(workingFolderName, aafFolderId).addOnSuccessListener { workingFolderId ->
-                            callback(workingFolderId)
-                        }
-                    }
-                    // 03. workingFolder 검색
-                    1 -> {
-                        val parentId = result.files[0].id
-                        driveServiceHelper.queryFiles("'$parentId' in parents and name = '$workingFolderName'").addOnSuccessListener {
-                            when (it.files.size) {
-                                // 03-01. workingFolder 생성
-                                0 -> driveServiceHelper.createFolder(workingFolderName, parentId).addOnSuccessListener { workingFolderId ->
-                                    callback(workingFolderId)
-                                }
-                                1 -> {
-                                    callback(it.files[0].id)
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
 
+    /***************************************************************************************************
+     *   override functions
+     *
+     ***************************************************************************************************/    
     private fun initWorkFolderComplete(workingFolderId: String) {
         makeSnackBar("Prepare complete -$workingFolderId")
     }
@@ -295,23 +111,6 @@ class SettingsActivity : EasyDiaryActivity() {
                 accountCallback.invoke(it)
             }
         }
-    }
-    
-    private fun backupByForegroundService(workingFolderId: String) {
-        showAlertDialog("다이어리 백업 작업을 시작하시겠습니까?", DialogInterface.OnClickListener {_, _ ->
-            val backupPhotoService = Intent(this, BackupPhotoService::class.java)
-            backupPhotoService.putExtra(DriveServiceHelper.WORKING_FOLDER_ID, workingFolderId)
-            startService(backupPhotoService)
-            finish()
-        }, false)
-    }
-    
-    private fun recoverByForegroundService() {
-        showAlertDialog("다이어리 복구 작업을 시작하시겠습니까?", DialogInterface.OnClickListener {_, _ ->
-            val recoverPhotoService = Intent(this, RecoverPhotoService::class.java)
-            startService(recoverPhotoService)
-            finish()
-        }, false)
     }
 
 //    private fun testGSuiteDriveAPI(selectedAccount: Account?) {
@@ -636,10 +435,10 @@ class SettingsActivity : EasyDiaryActivity() {
             when (requestCode) {
                 REQUEST_CODE_EXTERNAL_STORAGE -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                     when (mTaskFlag) {
-                        SETTING_FLAG_EXPORT_GOOGLE_DRIVE -> openUploadIntent()
-                        SETTING_FLAG_IMPORT_GOOGLE_DRIVE -> openDownloadIntent()
-                        SETTING_FLAG_EXPORT_PHOTO_GOOGLE_DRIVE -> executeDiaryBackup()
-                        SETTING_FLAG_IMPORT_PHOTO_GOOGLE_DRIVE -> executeDiaryRecovery()
+                        SETTING_FLAG_EXPORT_GOOGLE_DRIVE -> backupDiaryRealm()
+                        SETTING_FLAG_IMPORT_GOOGLE_DRIVE -> recoverDiaryRealm()
+                        SETTING_FLAG_EXPORT_PHOTO_GOOGLE_DRIVE -> backupDiaryPhoto()
+                        SETTING_FLAG_IMPORT_PHOTO_GOOGLE_DRIVE -> recoverDiaryPhoto()
                     }
                 }
                 REQUEST_CODE_EXTERNAL_STORAGE_WITH_FONT_SETTING -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
@@ -685,7 +484,50 @@ class SettingsActivity : EasyDiaryActivity() {
 //        }
 //    }
 
-    private fun executeDiaryBackup() {
+    /***************************************************************************************************
+     *   backup and recovery
+     *
+     ***************************************************************************************************/
+    private fun initDriveWorkingDirectory(account: Account, workingFolderName: String, callback: (workingFolderId: String) -> Unit) {
+        val driveServiceHelper = DriveServiceHelper(this, account)
+        // 01. AAF 폴더 검색
+        driveServiceHelper.queryFiles("'root' in parents and name = '${DriveServiceHelper.AAF_ROOT_FOLDER_NAME}'").run {
+            addOnSuccessListener { result ->
+                when (result.files.size) {
+                    // 02. AAF 폴더 없으면 생성
+                    0 -> driveServiceHelper.createFolder(DriveServiceHelper.AAF_ROOT_FOLDER_NAME).addOnSuccessListener { aafFolderId ->
+                        // 02-01. workingFolder 생성
+                        driveServiceHelper.createFolder(workingFolderName, aafFolderId).addOnSuccessListener { workingFolderId ->
+                            callback(workingFolderId)
+                        }
+                    }
+                    // 03. workingFolder 검색
+                    1 -> {
+                        val parentId = result.files[0].id
+                        driveServiceHelper.queryFiles("'$parentId' in parents and name = '$workingFolderName'").addOnSuccessListener {
+                            when (it.files.size) {
+                                // 03-01. workingFolder 생성
+                                0 -> driveServiceHelper.createFolder(workingFolderName, parentId).addOnSuccessListener { workingFolderId ->
+                                    callback(workingFolderId)
+                                }
+                                1 -> {
+                                    callback(it.files[0].id)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    private fun backupDiaryRealm() {
+        // delete unused compressed photo file 
+//        File(Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY).listFiles()?.map {
+//            Log.i("PHOTO-URI", "${it.absolutePath} | ${EasyDiaryDbHelper.countPhotoUriBy(FILE_URI_PREFIX + it.absolutePath)}")
+//            if (EasyDiaryDbHelper.countPhotoUriBy(FILE_URI_PREFIX + it.absolutePath) == 0) it.delete()
+//        }
+        
         initGoogleSignAccount { account ->
             initDriveWorkingDirectory(account, DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME) {
                 val driveServiceHelper = DriveServiceHelper(this, account)
@@ -695,46 +537,231 @@ class SettingsActivity : EasyDiaryActivity() {
                         EasyDiaryUtils.easyDiaryMimeType
                 ).addOnSuccessListener {
                     makeSnackBar("Upload complete diary realm file")
-
-                    initDriveWorkingDirectory(account, DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
-                        backupByForegroundService(photoFolderId)
-                    }
                 }
             }
         }
     }
 
-    private fun executeDiaryRecovery() {
+    private fun backupDiaryPhoto() {
+        initGoogleSignAccount { account ->
+            initDriveWorkingDirectory(account, DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
+                showAlertDialog("다이어리 첨부사진 백업 작업을 시작하시겠습니까?", DialogInterface.OnClickListener {_, _ ->
+                    val backupPhotoService = Intent(this, BackupPhotoService::class.java)
+                    backupPhotoService.putExtra(DriveServiceHelper.WORKING_FOLDER_ID, photoFolderId)
+                    startService(backupPhotoService)
+                    finish()
+                }, false)
+            }
+        }
+    }
+
+    private fun recoverDiaryRealm() {
         initGoogleSignAccount { account ->
             val driveServiceHelper = DriveServiceHelper(this, account)
 
-            driveServiceHelper.queryFiles("mimeType contains 'text/aaf_v' and name contains '$DIARY_DB_NAME'", 1000)
+            driveServiceHelper.queryFiles("mimeType contains 'text/aaf_v' and name contains '$DIARY_DB_NAME'", 1)
                     .addOnSuccessListener {
-                        it.files.map { file ->
-                            Log.i("GSuite", "${file.name}, ${file.mimeType}")
+                        val realmFile = it.files[0]
+                        makeSnackBar(realmFile.name)
+
+                        driveServiceHelper.downloadFile(realmFile.id, EasyDiaryDbHelper.getInstance().path).run {
+                            addOnSuccessListener {
+                                val readDiaryIntent = Intent(this@SettingsActivity, DiaryMainActivity::class.java)
+                                readDiaryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                                val mPendingIntentId = 123456
+                                val mPendingIntent = PendingIntent.getActivity(this@SettingsActivity, mPendingIntentId, readDiaryIntent, PendingIntent.FLAG_CANCEL_CURRENT)
+                                val mgr = this@SettingsActivity.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                                mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
+                                System.exit(0)
+                            }
+                            addOnFailureListener {  }
                         }
-                        Log.i("GSuite", it.files.size.toString())
                     }
                     .addOnFailureListener { e ->
                         e.printStackTrace()
                     }
-//            recoverByForegroundService()
         }
     }
-
-    private fun openUploadIntent() {
-        // delete unused compressed photo file 
-//        File(Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY).listFiles()?.map {
-//            Log.i("PHOTO-URI", "${it.absolutePath} | ${EasyDiaryDbHelper.countPhotoUriBy(FILE_URI_PREFIX + it.absolutePath)}")
-//            if (EasyDiaryDbHelper.countPhotoUriBy(FILE_URI_PREFIX + it.absolutePath) == 0) it.delete()
-//        }
-
-        val uploadIntent = Intent(applicationContext, BackupDiaryActivity::class.java)
-        startActivity(uploadIntent)
+    
+    private fun recoverDiaryPhoto() {
+        showAlertDialog("다이어리 첨부사진 복구 작업을 시작하시겠습니까?", DialogInterface.OnClickListener {_, _ ->
+            val recoverPhotoService = Intent(this, RecoverPhotoService::class.java)
+            startService(recoverPhotoService)
+            finish()
+        }, false)
     }
     
-    private fun openDownloadIntent() = startActivity(Intent(applicationContext, RecoverDiaryActivity::class.java))
 
+    /***************************************************************************************************
+     *   etc functions
+     *
+     ***************************************************************************************************/
+    private val mOnClickListener = View.OnClickListener { view ->
+        when (view.id) {
+            R.id.primaryColor -> TransitionHelper.startActivityWithTransition(this@SettingsActivity, Intent(this@SettingsActivity, CustomizationActivity::class.java))
+            R.id.fontSetting -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                openFontSettingDialog()
+            } else {
+                confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_FONT_SETTING)
+            }
+            R.id.thumbnailSetting -> {
+                openThumbnailSettingDialog()
+            }
+            R.id.sensitiveOption -> {
+                sensitiveOptionSwitcher.toggle()
+                config.diarySearchQueryCaseSensitive = sensitiveOptionSwitcher.isChecked
+            }
+            R.id.addTtfFontSetting -> {
+                openGuideView(getString(R.string.add_ttf_fonts_title))
+            }
+            R.id.restoreSetting -> {
+                mTaskFlag = SETTING_FLAG_IMPORT_GOOGLE_DRIVE
+                if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                    recoverDiaryRealm()
+                } else { // Permission has already been granted
+                    confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
+                }
+            }
+            R.id.backupSetting -> {
+                mTaskFlag = SETTING_FLAG_EXPORT_GOOGLE_DRIVE
+                if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                    backupDiaryRealm()
+                } else { // Permission has already been granted
+                    confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
+                }
+            }
+            R.id.backupAttachPhoto -> {
+                mTaskFlag = SETTING_FLAG_EXPORT_PHOTO_GOOGLE_DRIVE
+                when (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                    true -> backupDiaryPhoto()
+                    false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
+                }
+            }
+            R.id.recoverAttachPhoto -> {
+                mTaskFlag = SETTING_FLAG_IMPORT_PHOTO_GOOGLE_DRIVE
+                when (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                    true -> recoverDiaryPhoto()
+                    false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
+                }
+            }
+            R.id.exportExcel -> {
+                when (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                    true -> exportExcel()
+                    false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_EXCEL)
+                }
+            }
+            R.id.restorePhotoSetting -> {
+                openGuideView(getString(R.string.restore_photo))
+            }
+            R.id.rateAppSetting -> openGooglePlayBy("me.blog.korn123.easydiary")
+            R.id.licenseView -> {
+                TransitionHelper.startActivityWithTransition(this, Intent(this, MarkDownViewActivity::class.java).apply {
+                    putExtra(MarkDownViewActivity.OPEN_URL_INFO, "https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/LICENSE.md")
+                    putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, getString(R.string.preferences_information_licenses))
+                })
+            }
+            R.id.releaseNotes -> checkWhatsNewDialog(false)
+            R.id.boldStyleOption -> {
+                boldStyleOptionSwitcher.toggle()
+                config.boldStyleEnable = boldStyleOptionSwitcher.isChecked
+            }
+            R.id.multiPickerOption -> {
+                multiPickerOptionSwitcher.toggle()
+                config.multiPickerEnable = multiPickerOptionSwitcher.isChecked
+            }
+            R.id.appLockSetting -> {
+                when (config.aafPinLockEnable) {
+                    true -> {
+                        if (config.fingerprintLockEnable) {
+                            showAlertDialog(getString(R.string.pin_release_need_fingerprint_disable), null)
+                        } else {
+                            appLockSettingSwitcher.isChecked = false
+                            config.aafPinLockEnable = false
+                            showAlertDialog(getString(R.string.pin_setting_release), null)
+                        }
+                    }
+                    false -> {
+                        startActivity(Intent(this, PinLockActivity::class.java).apply {
+                            putExtra(FingerprintLockActivity.LAUNCHING_MODE, PinLockActivity.ACTIVITY_SETTING)
+                        })
+                    }
+                }
+            }
+            R.id.fingerprint -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    when (config.fingerprintLockEnable) {
+                        true -> {
+                            fingerprintSwitcher.isChecked = false
+                            config.fingerprintLockEnable = false
+                            showAlertDialog(getString(R.string.fingerprint_setting_release), null)
+                        }
+                        false -> {
+                            when (config.aafPinLockEnable) {
+                                true -> {
+                                    startActivity(Intent(this, FingerprintLockActivity::class.java).apply {
+                                        putExtra(FingerprintLockActivity.LAUNCHING_MODE, FingerprintLockActivity.ACTIVITY_SETTING)
+                                    })
+                                }
+                                false -> {
+                                    showAlertDialog(getString(R.string.fingerprint_lock_need_pin_setting), null)
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    showAlertDialog(getString(R.string.fingerprint_not_available), null)
+                }
+            }
+            R.id.enableCardViewPolicy -> {
+                enableCardViewPolicySwitcher.toggle()
+                config.enableCardViewPolicy = enableCardViewPolicySwitcher.isChecked
+                updateCardViewPolicy(main_holder)
+            }
+            R.id.decreaseFont -> {
+                config.settingFontSize = config.settingFontSize - 5
+                initTextSize(main_holder, this)
+            }
+            R.id.increaseFont -> {
+                config.settingFontSize = config.settingFontSize + 5
+                initTextSize(main_holder, this)
+            }
+            R.id.contentsSummary -> {
+                contentsSummarySwitcher.toggle()
+                config.enableContentsSummary = contentsSummarySwitcher.isChecked
+            }
+            R.id.faq -> {
+                TransitionHelper.startActivityWithTransition(this, Intent(this, MarkDownViewActivity::class.java).apply {
+                    putExtra(MarkDownViewActivity.OPEN_URL_INFO, getString(R.string.faq_url))
+                    putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, getString(R.string.faq_title))
+                })
+            }
+            R.id.privacyPolicy -> {
+                TransitionHelper.startActivityWithTransition(this, Intent(this, MarkDownViewActivity::class.java).apply {
+                    putExtra(MarkDownViewActivity.OPEN_URL_INFO, getString(R.string.privacy_policy_url))
+                    putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, getString(R.string.privacy_policy_title))
+                })
+            }
+            R.id.testRestApi -> {
+                makeSnackBar("Start test :)")
+                initGoogleSignAccount { account ->
+                    initDriveWorkingDirectory(account, DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) {
+                        initWorkFolderComplete(it)
+                    }
+                }
+            }
+            R.id.signOut -> {
+                // Configure sign-in to request the user's ID, email address, and basic
+                // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+                val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestIdToken("523901516987-1ovfkda44k1ub4g2l286ipi06g3nm295.apps.googleusercontent.com")
+                        .requestEmail()
+                        .build()
+                val client = GoogleSignIn.getClient(this, gso)
+                client.signOut().addOnCompleteListener { makeSnackBar("Sign out complete:)") }
+            }
+        }
+    }
+    
     private fun openThumbnailSettingDialog() {
         val builder = AlertDialog.Builder(this@SettingsActivity)
         builder.setNegativeButton(getString(android.R.string.cancel), null)

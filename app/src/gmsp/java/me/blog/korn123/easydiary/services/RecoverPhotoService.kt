@@ -289,6 +289,5 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
         failCount = 0
         targetItems.clear()
         stopSelf()
-        System.exit(0)
     }
 }
