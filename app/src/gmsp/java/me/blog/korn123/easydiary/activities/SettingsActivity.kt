@@ -9,6 +9,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.util.Log
@@ -572,6 +573,8 @@ class SettingsActivity : EasyDiaryActivity() {
                                 val mPendingIntent = PendingIntent.getActivity(this@SettingsActivity, mPendingIntentId, readDiaryIntent, PendingIntent.FLAG_CANCEL_CURRENT)
                                 val mgr = this@SettingsActivity.getSystemService(Context.ALARM_SERVICE) as AlarmManager
                                 mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
+                                ActivityCompat.finishAffinity(this@SettingsActivity)
+                                //System.runFinalizersOnExit(true)
                                 System.exit(0)
                             }
                             addOnFailureListener {  }
