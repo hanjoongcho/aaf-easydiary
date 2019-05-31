@@ -19,11 +19,13 @@
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay">
                 <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:visibility="gone"
                     android:layout_gravity="right"
                     android:layout_marginRight="30dp"
                     android:layout_marginEnd="30dp"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp" />
+                    android:layout_width="24dp"
+                    android:layout_height="24dp" />
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.AppBarLayout>
         

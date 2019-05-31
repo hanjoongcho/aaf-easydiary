@@ -239,6 +239,7 @@ class SettingsActivity : EasyDiaryActivity() {
     }
 
     private fun recoverDiaryRealm() {
+        progressBar.visibility = View.VISIBLE
         openRealmFilePickerDialog()
     }
     
@@ -254,14 +255,14 @@ class SettingsActivity : EasyDiaryActivity() {
         initGoogleSignAccount { account ->
             val driveServiceHelper = DriveServiceHelper(this, account)
 
-            driveServiceHelper.queryFiles("mimeType contains 'text/aaf_v' and name contains '$DIARY_DB_NAME'", 10)
+            driveServiceHelper.queryFiles("mimeType contains 'text/aaf_v' and name contains '$DIARY_DB_NAME'", 1000)
                     .addOnSuccessListener {
+
                         val realmFiles: ArrayList<HashMap<String, String>> = arrayListOf()
                         it.files.map { file -> 
                             val itemInfo = hashMapOf<String, String>("name" to file.name, "id" to file.id, "createdTime" to file.createdTime.toString())
                             realmFiles.add(itemInfo)
                         }
-                        
                         val builder = AlertDialog.Builder(this@SettingsActivity)
                         builder.setNegativeButton(getString(android.R.string.cancel), null)
                         builder.setTitle("다이어리 복구")
@@ -296,6 +297,7 @@ class SettingsActivity : EasyDiaryActivity() {
                         builder.setView(fontView)
                         mAlertDialog = builder.create()
                         mAlertDialog?.show()
+                        progressBar.visibility = View.GONE
                     }
                     .addOnFailureListener { e ->
                         e.printStackTrace()
