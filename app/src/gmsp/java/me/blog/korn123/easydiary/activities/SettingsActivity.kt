@@ -34,15 +34,13 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.FontItemAdapter
+import me.blog.korn123.easydiary.adapters.RealmFileItemAdapter
 import me.blog.korn123.easydiary.adapters.ThumbnailSizeItemAdapter
 import me.blog.korn123.easydiary.extensions.*
-import me.blog.korn123.easydiary.gms.drive.BackupDiaryActivity
-import me.blog.korn123.easydiary.gms.drive.RecoverDiaryActivity
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.services.BackupPhotoService
 import me.blog.korn123.easydiary.services.RecoverPhotoService
 import org.apache.commons.io.FilenameUtils
-import org.apache.commons.io.IOUtils
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.ss.usermodel.CellStyle
 import org.apache.poi.ss.usermodel.IndexedColors
@@ -57,46 +55,32 @@ import java.util.*
  */
 
 class SettingsActivity : EasyDiaryActivity() {
-    
+
     /***************************************************************************************************
      *   global peoperties
      *
      ***************************************************************************************************/
+    private lateinit var accountCallback: (Account) -> Unit
     private var mAlertDialog: AlertDialog? = null
     private var mTaskFlag = 0
-
+    
 
     /***************************************************************************************************
      *   override functions
      *
      ***************************************************************************************************/    
-    private fun initWorkFolderComplete(workingFolderId: String) {
-        makeSnackBar("Prepare complete -$workingFolderId")
-    }
-    
-    private lateinit var accountCallback: (Account) -> Unit
-    private fun initGoogleSignAccount(callback: (account: Account) -> Unit) {
-        accountCallback = callback
-
-        // Configure sign-in to request the user's ID, email address, and basic
-        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-        val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("523901516987-1ovfkda44k1ub4g2l286ipi06g3nm295.apps.googleusercontent.com")
-                .requestEmail()
-                .build()
-        val client = GoogleSignIn.getClient(this, gso)
-        
-        // Check for existing Google Sign In account, if the user is already signed in
-        // the GoogleSignInAccount will be non-null.
-        var googleSignInAccount: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
-
-        if (googleSignInAccount == null) {
-            startActivityForResult(client.signInIntent, 1106)
-        } else {
-            googleSignInAccount.account?.let {
-                accountCallback.invoke(it)
-            }
+    public override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_settings)
+        setSupportActionBar(toolbar)
+        supportActionBar?.run {
+            setTitle(R.string.settings)
+            setDisplayHomeAsUpEnabled(true)
         }
+
+        bindEvent()
+        EasyDiaryUtils.changeDrawableIconColor(this, config.primaryColor, R.drawable.minus_6)
+        EasyDiaryUtils.changeDrawableIconColor(this, config.primaryColor, R.drawable.plus_6)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -114,171 +98,6 @@ class SettingsActivity : EasyDiaryActivity() {
         }
     }
 
-//    private fun testGSuiteDriveAPI(selectedAccount: Account?) {
-//        // step01. init credential
-//        val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(this, Collections.singleton(DriveScopes.DRIVE_FILE))
-//        credential.selectedAccount = selectedAccount
-//
-//        // step02. init drive service helper
-//        val googleDriveService: Drive = Drive.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
-//                .setApplicationName(getString(R.string.app_name))
-//                .build()
-//        val driveServiceHelper = DriveServiceHelper(googleDriveService)
-//
-//        // step03. determine application folder(not appDataFolder)
-//        driveServiceHelper.queryFiles("'root' in parents and name = '${DriveServiceHelper.AAF_ROOT_FOLDER_NAME}' and trashed = false").run {
-//            addOnSuccessListener { fileList ->
-//                when (fileList.files.size) {
-//                    0 -> driveServiceHelper.createAppFolder().addOnSuccessListener { fileId -> Log.i("GSuite", "Created application folder that app id is $fileId") }
-//                    1 -> {
-//                        val appFolder = fileList.files[0]
-//                        Log.i("GSuite", "${appFolder.name}, ${appFolder.mimeType}, ${appFolder.id}")
-//                        // step04. upload attach photo sample
-////                        driveServiceHelper.createFile(appFolder.id, "attach-photo-01", AAF_EASY_DIARY_PHOTO).run {
-////                            val photoPath = "${Environment.getExternalStorageDirectory().absolutePath}$AAF_EASY_DIARY_PHOTO_DIRECTORY"
-////                            addOnSuccessListener { fileId -> driveServiceHelper.uploadFile(fileId, "$photoPath/0ce9591f-ba7b-48f3-b724-1253d590b433", AAF_EASY_DIARY_PHOTO) }
-////                        }
-//
-//                        // step05. determine upload photo sample and download it
-//                        val fileDescription = StringBuilder()
-//                        driveServiceHelper.queryFiles("mimeType = '$AAF_EASY_DIARY_PHOTO' and trashed = false").run {
-//                            addOnSuccessListener { result ->
-//                                Log.i("GSuite sub", "${result.files.size}, ${result.nextPageToken}")
-//                                val basePath = "${Environment.getExternalStorageDirectory().absolutePath + WORKING_DIRECTORY}"
-//                                result.files.map { photoFile ->
-//                                    fileDescription.append("${photoFile.name}\n")
-//                                    driveServiceHelper.downloadFile(photoFile.id, "$basePath${photoFile.name}.JPEG")
-//                                }
-//                                userToken.text = fileDescription.toString()
-//                            }
-//                        }
-//                    }
-//                    else -> {}
-//                }
-//            }
-//            addOnFailureListener {
-//                Log.i("GSuite", "not exist application folder")
-//            }
-//        }
-//
-//
-////        val fileDescription = StringBuilder()
-////        task.addOnSuccessListener {
-////            Log.i("GSuite", "${it.files.size}")
-////            var directoryId: String? = null
-////            it.files.map {
-////                file -> fileDescription.append("${file.name}\n")
-////                if (file.name == "AAF") directoryId = file.id
-////            }
-////            userToken.text = fileDescription.toString()
-////
-////            Log.i("GSuite", directoryId)
-//////            driveServiceHelper.createFile(directoryId!!).addOnSuccessListener { fileId ->
-//////                driveServiceHelper.saveFile(fileId, "test00", "가나다라마")
-//////            }
-////            driveServiceHelper.createAppFolder()
-////
-////            driveServiceHelper.queryFiles("'$directoryId' in parents").run {
-////                addOnSuccessListener {sub ->
-////                    Log.i("GSuite sub", "${sub.files.size}")
-////                    fileDescription.append("---\n")
-////                    sub.files.map {subFile ->
-////                        fileDescription.append("${subFile.name}\n")
-////                        Log.i("GSuite sub", "${subFile.name}, ${subFile.copyRequiresWriterPermission}, ${subFile.mimeType}")
-////                        if (subFile.mimeType == "text/plain") {
-////                            Log.i("GSuite sub", "${subFile.name} start read...")
-////                            driveServiceHelper.readFile(subFile.id).run {
-////                                addOnSuccessListener { lines ->
-////                                    lines.map { line ->
-////                                        Log.i("GSuite sub", line)
-////                                    }
-////                                    Log.i("GSuite sub", "${subFile.name} end read...")
-////                                }
-////                                addOnFailureListener { exception ->
-////                                    Log.i("GSuite sub", "${subFile.name} read fail...${exception.message}")
-////                                }
-////                            }
-////                        }
-////                    }
-////                    userToken.text = fileDescription.toString()
-////                }
-////            }
-////        }
-////        task.addOnFailureListener { exception ->
-////            Log.i("GSuite", "read fail...${exception.message}")
-////            exception.stackTrace
-////        }
-//    }
-
-    
-    public override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
-        setSupportActionBar(toolbar)
-        supportActionBar?.run {
-            setTitle(R.string.settings)
-            setDisplayHomeAsUpEnabled(true)
-        }
-
-        bindEvent()
-        EasyDiaryUtils.changeDrawableIconColor(this, config.primaryColor, R.drawable.minus_6)
-        EasyDiaryUtils.changeDrawableIconColor(this, config.primaryColor, R.drawable.plus_6)
-    }
-
-    private fun bindEvent() {
-        primaryColor.setOnClickListener(mOnClickListener)
-        fontSetting.setOnClickListener(mOnClickListener)
-        thumbnailSetting.setOnClickListener(mOnClickListener)
-        sensitiveOption.setOnClickListener(mOnClickListener)
-        addTtfFontSetting.setOnClickListener(mOnClickListener)
-        appLockSetting.setOnClickListener(mOnClickListener)
-        restoreSetting.setOnClickListener(mOnClickListener)
-        backupSetting.setOnClickListener(mOnClickListener)
-        rateAppSetting.setOnClickListener(mOnClickListener)
-        licenseView.setOnClickListener(mOnClickListener)
-        restorePhotoSetting.setOnClickListener(mOnClickListener)
-        releaseNotes.setOnClickListener(mOnClickListener)
-        boldStyleOption.setOnClickListener(mOnClickListener)
-        multiPickerOption.setOnClickListener(mOnClickListener)
-        backupAttachPhoto.setOnClickListener(mOnClickListener)
-        recoverAttachPhoto.setOnClickListener(mOnClickListener)
-        fingerprint.setOnClickListener(mOnClickListener)
-        enableCardViewPolicy.setOnClickListener(mOnClickListener)
-        decreaseFont.setOnClickListener(mOnClickListener)
-        increaseFont.setOnClickListener(mOnClickListener)
-        contentsSummary.setOnClickListener(mOnClickListener)
-        exportExcel.setOnClickListener(mOnClickListener)
-        faq.setOnClickListener(mOnClickListener)
-        privacyPolicy.setOnClickListener(mOnClickListener)
-        testRestApi.setOnClickListener(mOnClickListener)
-        signOut.setOnClickListener(mOnClickListener)
-
-        fontLineSpacing.configBuilder
-                .min(0.2F)
-                .max(1.8F)
-                .progress(config.lineSpacingScaleFactor)
-                .floatType()
-                .sectionCount(16)
-                .sectionTextInterval(2)
-                .showSectionText()
-                .sectionTextPosition(BubbleSeekBar.TextPosition.BELOW_SECTION_MARK)
-                .autoAdjustSectionMark()
-                .build()
-
-
-        val bubbleSeekBarListener = object : BubbleSeekBar.OnProgressChangedListener {
-            override fun onProgressChanged(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float, fromUser: Boolean) {
-                Log.i("progress", "$progress $progressFloat")
-                config.lineSpacingScaleFactor = progressFloat
-                setFontsStyle()
-                Log.i("progress", "${config.lineSpacingScaleFactor}")
-            }
-            override fun getProgressOnActionUp(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float) {}
-            override fun getProgressOnFinally(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float, fromUser: Boolean) {}
-        }
-        fontLineSpacing.setOnProgressChangedListener(bubbleSeekBarListener)
-    }
-
     override fun onResume() {
         super.onResume()
         initPreference()
@@ -292,141 +111,6 @@ class SettingsActivity : EasyDiaryActivity() {
             startActivity(readDiaryIntent)
             this.overridePendingTransition(0, 0)
         }
-    }
-
-    private fun setupInvite() {
-        inviteSummary.text = String.format(getString(R.string.invite_friends_summary), getString(R.string.app_name))
-        invite.setOnClickListener {
-            val text = String.format(getString(io.github.aafactory.commons.R.string.share_text), getString(R.string.app_name), getStoreUrl())
-            Intent().apply {
-                action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
-                putExtra(Intent.EXTRA_TEXT, text)
-                type = "text/plain"
-                startActivity(Intent.createChooser(this, getString(io.github.aafactory.commons.R.string.invite_via)))
-            }
-        }
-    }
-
-    private fun exportExcel() {
-        val builder = android.app.AlertDialog.Builder(this)
-        builder.setTitle(getString(R.string.export_excel_title))
-        builder.setIcon(ContextCompat.getDrawable(this, R.drawable.excel_3))
-        builder.setCancelable(false)
-        val alert = builder.create()
-        val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val containerView = inflater.inflate(R.layout.dialog_export_progress_excel, null)
-        val progressInfo = containerView.findViewById<TextView>(R.id.progressInfo)
-        var confirmButton = containerView.findViewById<Button>(R.id.confirm)
-        progressInfo.text = "Preparing to export..."
-        alert.setView(containerView)
-        alert.show()
-
-        Thread(Runnable {
-            val diaryList = EasyDiaryDbHelper.readDiary(null)
-            val wb: Workbook = HSSFWorkbook()
-            val sheet = wb.createSheet("new sheet")
-
-            val headerFont = wb.createFont().apply {
-                color = IndexedColors.WHITE.index
-            }
-            val headerStyle = wb.createCellStyle().apply {
-                wrapText = true
-                fillForegroundColor = IndexedColors.BLUE.index
-                fillPattern = CellStyle.SOLID_FOREGROUND
-                alignment = CellStyle.ALIGN_CENTER
-                verticalAlignment = CellStyle.VERTICAL_CENTER
-                setFont(headerFont)
-            }
-            val bodyStyle = wb.createCellStyle().apply {
-                wrapText = true
-                verticalAlignment = CellStyle.VERTICAL_TOP
-            }
-
-            val headerRow = sheet.createRow(0)
-            headerRow.height = 256 * 3
-            headerRow.createCell(SEQ).setCellValue(getString(R.string.export_excel_header_seq))
-            headerRow.createCell(WRITE_DATE).setCellValue(getString(R.string.export_excel_header_write_date))
-            headerRow.createCell(TITLE).setCellValue(getString(R.string.export_excel_header_title))
-            headerRow.createCell(CONTENTS).setCellValue(getString(R.string.export_excel_header_contents))
-            headerRow.createCell(ATTACH_PHOTO_NAME).setCellValue(getString(R.string.export_excel_header_attach_photo_path))
-            headerRow.createCell(ATTACH_PHOTO_SIZE).setCellValue(getString(R.string.export_excel_header_attach_photo_size))
-            headerRow.createCell(WRITE_TIME_MILLIS).setCellValue(getString(R.string.export_excel_header_write_time_millis))
-            headerRow.createCell(SYMBOL).setCellValue(getString(R.string.export_excel_header_symbol))
-            headerRow.createCell(IS_ALL_DAY).setCellValue(getString(R.string.export_excel_header_is_all_day))
-
-            headerRow.getCell(SEQ).cellStyle = headerStyle
-            headerRow.getCell(WRITE_DATE).cellStyle = headerStyle
-            headerRow.getCell(TITLE).cellStyle = headerStyle
-            headerRow.getCell(CONTENTS).cellStyle = headerStyle
-            headerRow.getCell(ATTACH_PHOTO_NAME).cellStyle = headerStyle
-            headerRow.getCell(ATTACH_PHOTO_SIZE).cellStyle = headerStyle
-            headerRow.getCell(WRITE_TIME_MILLIS).cellStyle = headerStyle
-            headerRow.getCell(SYMBOL).cellStyle = headerStyle
-            headerRow.getCell(IS_ALL_DAY).cellStyle = headerStyle
-
-            // FIXME:
-            // https://poi.apache.org/apidocs/dev/org/apache/poi/ss/usermodel/Sheet.html#setColumnWidth-int-int-
-            sheet.setColumnWidth(SEQ, 256 * 10)
-            sheet.setColumnWidth(WRITE_DATE, 256 * 30)
-            sheet.setColumnWidth(TITLE, 256 * 30)
-            sheet.setColumnWidth(CONTENTS, 256 * 50)
-            sheet.setColumnWidth(ATTACH_PHOTO_NAME, 256 * 80)
-            sheet.setColumnWidth(ATTACH_PHOTO_SIZE, 256 * 15)
-            sheet.setColumnWidth(WRITE_TIME_MILLIS, 256 * 60)
-            sheet.setColumnWidth(SYMBOL, 256 * 10)
-            sheet.setColumnWidth(IS_ALL_DAY, 256 * 30)
-            val exportFileName = "aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}"
-            val diarySymbolMap = EasyDiaryUtils.getDiarySymbolMap(this)
-            diaryList.forEachIndexed { index, diaryDto ->
-                val row = sheet.createRow(index + 1)
-                val photoNames = StringBuffer()
-                val photoSizes = StringBuffer()
-                diaryDto.photoUris?.map {
-                    photoNames.append("$DIARY_PHOTO_DIRECTORY${FilenameUtils.getName(it.getFilePath())}\n")
-                    photoSizes.append("${File(it.getFilePath()).length() / 1024}\n")
-                }
-
-                val sequence = row.createCell(SEQ).apply {cellStyle = bodyStyle}
-                val writeDate = row.createCell(WRITE_DATE).apply {cellStyle = bodyStyle}
-                val title = row.createCell(TITLE).apply {cellStyle = bodyStyle}
-                val contents = row.createCell(CONTENTS).apply {cellStyle = bodyStyle}
-                val attachPhotoNames = row.createCell(ATTACH_PHOTO_NAME).apply {cellStyle = bodyStyle}
-                val attachPhotoSizes = row.createCell(ATTACH_PHOTO_SIZE).apply {cellStyle = bodyStyle}
-                val writeTimeMillis = row.createCell(WRITE_TIME_MILLIS).apply {cellStyle = bodyStyle}
-                val weather = row.createCell(SYMBOL).apply {cellStyle = bodyStyle}
-                val isAllDay = row.createCell(IS_ALL_DAY).apply {cellStyle = bodyStyle}
-
-                sequence.setCellValue(diaryDto.sequence.toDouble())
-                writeDate.setCellValue(DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis))
-                title.setCellValue(diaryDto.title)
-                contents.setCellValue(diaryDto.contents)
-                attachPhotoNames.setCellValue(photoNames.toString())
-                attachPhotoSizes.setCellValue(photoSizes.toString())
-                writeTimeMillis.setCellValue(diaryDto.currentTimeMillis.toDouble())
-                isAllDay.setCellValue(diaryDto.isAllDay)
-                weather.setCellValue(diarySymbolMap[diaryDto.weather])
-
-                runOnUiThread {
-                    progressInfo.text = "${index.plus(1)} / ${diaryList.size}\n${getString(R.string.export_excel_xls_location)}: ${WORKING_DIRECTORY + exportFileName}.xls"
-                }
-            }
-
-            val outputStream = FileOutputStream("${Environment.getExternalStorageDirectory().absolutePath + WORKING_DIRECTORY + exportFileName}.xls")
-            wb.write(outputStream)
-            outputStream.close()
-            runOnUiThread {
-                confirmButton.visibility = View.VISIBLE
-                confirmButton.setOnClickListener { alert.cancel() }
-            }
-        }).start()
-    }
-
-    private fun openGuideView(title: String) {
-        TransitionHelper.startActivityWithTransition(this, Intent(this, MarkDownViewActivity::class.java).apply {
-            putExtra(MarkDownViewActivity.OPEN_URL_INFO, getString(R.string.add_ttf_fonts_info_url))
-            putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, title)
-        })
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -453,42 +137,40 @@ class SettingsActivity : EasyDiaryActivity() {
             makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3))
         }
     }
-    
-//    private fun backupDiary() {
-//        // FIXME credential 생성부분 공통처리
-//        GoogleSignIn.getLastSignedInAccount(this)?.let {
-//            val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(this, Collections.singleton(DriveScopes.DRIVE_FILE))
-//            credential.selectedAccount = it.account
-//            val googleDriveService: Drive = Drive.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
-//                    .setApplicationName(getString(R.string.app_name))
-//                    .build()
-//
-//            val name = DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
-//            val driveServiceHelper = DriveServiceHelper(googleDriveService)
-//            driveServiceHelper.queryFiles("'root' in parents and name = '${DriveServiceHelper.AAF_ROOT_FOLDER_NAME}' and trashed = false", 1, null).run {
-//                addOnSuccessListener { fileList ->
-//                    when (fileList.files.size) {
-//                        0 -> driveServiceHelper.createAppFolder().addOnSuccessListener { fileId -> Log.i("GSuite", "Created application folder that app id is $fileId") }
-//                        1 -> {
-//                            val appFolder = fileList.files[0]
-//                            driveServiceHelper.createFile(appFolder.id, EasyDiaryDbHelper.getInstance().path,  name, EasyDiaryUtils.easyDiaryMimeType).run {
-//                                addOnSuccessListener { createdId -> Log.i("GSuite", "return backup file id is $createdId") }
-//                            }
-//                        }
-//                        else -> {}
-//                    }
-//                }
-//                addOnFailureListener {
-//                    Log.i("GSuite", "not exist application folder")
-//                }
-//            }
-//        }
-//    }
 
+    
     /***************************************************************************************************
      *   backup and recovery
      *
      ***************************************************************************************************/
+    private fun initGoogleSignAccount(callback: (account: Account) -> Unit) {
+        accountCallback = callback
+
+        // Configure sign-in to request the user's ID, email address, and basic
+        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+        val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("523901516987-1ovfkda44k1ub4g2l286ipi06g3nm295.apps.googleusercontent.com")
+                .requestEmail()
+                .build()
+        val client = GoogleSignIn.getClient(this, gso)
+
+        // Check for existing Google Sign In account, if the user is already signed in
+        // the GoogleSignInAccount will be non-null.
+        var googleSignInAccount: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
+
+        if (googleSignInAccount == null) {
+            startActivityForResult(client.signInIntent, 1106)
+        } else {
+            googleSignInAccount.account?.let {
+                accountCallback.invoke(it)
+            }
+        }
+    }
+
+    private fun initWorkFolderComplete(workingFolderId: String) {
+        makeSnackBar("Prepare complete -$workingFolderId")
+    }
+    
     private fun initDriveWorkingDirectory(account: Account, workingFolderName: String, callback: (workingFolderId: String) -> Unit) {
         val driveServiceHelper = DriveServiceHelper(this, account)
         // 01. AAF 폴더 검색
@@ -557,33 +239,7 @@ class SettingsActivity : EasyDiaryActivity() {
     }
 
     private fun recoverDiaryRealm() {
-        initGoogleSignAccount { account ->
-            val driveServiceHelper = DriveServiceHelper(this, account)
-
-            driveServiceHelper.queryFiles("mimeType contains 'text/aaf_v' and name contains '$DIARY_DB_NAME'", 1)
-                    .addOnSuccessListener {
-                        val realmFile = it.files[0]
-                        makeSnackBar(realmFile.name)
-
-                        driveServiceHelper.downloadFile(realmFile.id, EasyDiaryDbHelper.getInstance().path).run {
-                            addOnSuccessListener {
-                                val readDiaryIntent = Intent(this@SettingsActivity, DiaryMainActivity::class.java)
-                                readDiaryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                                val mPendingIntentId = 123456
-                                val mPendingIntent = PendingIntent.getActivity(this@SettingsActivity, mPendingIntentId, readDiaryIntent, PendingIntent.FLAG_CANCEL_CURRENT)
-                                val mgr = this@SettingsActivity.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                                mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
-                                ActivityCompat.finishAffinity(this@SettingsActivity)
-                                //System.runFinalizersOnExit(true)
-                                System.exit(0)
-                            }
-                            addOnFailureListener {  }
-                        }
-                    }
-                    .addOnFailureListener { e ->
-                        e.printStackTrace()
-                    }
-        }
+        openRealmFilePickerDialog()
     }
     
     private fun recoverDiaryPhoto() {
@@ -593,12 +249,119 @@ class SettingsActivity : EasyDiaryActivity() {
             finish()
         }, false)
     }
-    
+
+    private fun openRealmFilePickerDialog() {
+        initGoogleSignAccount { account ->
+            val driveServiceHelper = DriveServiceHelper(this, account)
+
+            driveServiceHelper.queryFiles("mimeType contains 'text/aaf_v' and name contains '$DIARY_DB_NAME'", 10)
+                    .addOnSuccessListener {
+                        val realmFiles: ArrayList<HashMap<String, String>> = arrayListOf()
+                        it.files.map { file -> 
+                            val itemInfo = hashMapOf<String, String>("name" to file.name, "id" to file.id)
+                            realmFiles.add(itemInfo)
+                        }
+                        
+                        val builder = AlertDialog.Builder(this@SettingsActivity)
+                        builder.setNegativeButton(getString(android.R.string.cancel), null)
+                        builder.setTitle("다이어리 복구")
+                        builder.setMessage("복구대상 파일을 선택하세요.")
+                        val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                        val fontView = inflater.inflate(R.layout.dialog_realm_files, null)
+                        val listView = fontView.findViewById<ListView>(R.id.files)
+                        val adapter = RealmFileItemAdapter(this@SettingsActivity, R.layout.item_realm_file, realmFiles)
+                        listView.adapter = adapter
+                        listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+                            val itemInfo = parent.adapter.getItem(position) as HashMap<String, String>
+                            itemInfo["id"]?.let { realmFileId -> 
+                                driveServiceHelper.downloadFile(realmFileId, EasyDiaryDbHelper.getInstance().path).run {
+                                    addOnSuccessListener {
+                                        val readDiaryIntent = Intent(this@SettingsActivity, DiaryMainActivity::class.java)
+                                        readDiaryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                                        val mPendingIntentId = 123456
+                                        val mPendingIntent = PendingIntent.getActivity(this@SettingsActivity, mPendingIntentId, readDiaryIntent, PendingIntent.FLAG_CANCEL_CURRENT)
+                                        val mgr = this@SettingsActivity.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                                        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
+                                        ActivityCompat.finishAffinity(this@SettingsActivity)
+                                        //System.runFinalizersOnExit(true)
+                                        System.exit(0)
+                                    }
+                                    addOnFailureListener {  }
+                                }
+
+                            }
+                            mAlertDialog?.cancel()
+                        }
+
+                        builder.setView(fontView)
+                        mAlertDialog = builder.create()
+                        mAlertDialog?.show()
+                    }
+                    .addOnFailureListener { e ->
+                        e.printStackTrace()
+                    }
+        }
+    }
+
 
     /***************************************************************************************************
      *   etc functions
      *
      ***************************************************************************************************/
+    private fun bindEvent() {
+        primaryColor.setOnClickListener(mOnClickListener)
+        fontSetting.setOnClickListener(mOnClickListener)
+        thumbnailSetting.setOnClickListener(mOnClickListener)
+        sensitiveOption.setOnClickListener(mOnClickListener)
+        addTtfFontSetting.setOnClickListener(mOnClickListener)
+        appLockSetting.setOnClickListener(mOnClickListener)
+        restoreSetting.setOnClickListener(mOnClickListener)
+        backupSetting.setOnClickListener(mOnClickListener)
+        rateAppSetting.setOnClickListener(mOnClickListener)
+        licenseView.setOnClickListener(mOnClickListener)
+        restorePhotoSetting.setOnClickListener(mOnClickListener)
+        releaseNotes.setOnClickListener(mOnClickListener)
+        boldStyleOption.setOnClickListener(mOnClickListener)
+        multiPickerOption.setOnClickListener(mOnClickListener)
+        backupAttachPhoto.setOnClickListener(mOnClickListener)
+        recoverAttachPhoto.setOnClickListener(mOnClickListener)
+        fingerprint.setOnClickListener(mOnClickListener)
+        enableCardViewPolicy.setOnClickListener(mOnClickListener)
+        decreaseFont.setOnClickListener(mOnClickListener)
+        increaseFont.setOnClickListener(mOnClickListener)
+        contentsSummary.setOnClickListener(mOnClickListener)
+        exportExcel.setOnClickListener(mOnClickListener)
+        faq.setOnClickListener(mOnClickListener)
+        privacyPolicy.setOnClickListener(mOnClickListener)
+        testRestApi.setOnClickListener(mOnClickListener)
+        signOut.setOnClickListener(mOnClickListener)
+
+        fontLineSpacing.configBuilder
+                .min(0.2F)
+                .max(1.8F)
+                .progress(config.lineSpacingScaleFactor)
+                .floatType()
+                .sectionCount(16)
+                .sectionTextInterval(2)
+                .showSectionText()
+                .sectionTextPosition(BubbleSeekBar.TextPosition.BELOW_SECTION_MARK)
+                .autoAdjustSectionMark()
+                .build()
+
+
+        val bubbleSeekBarListener = object : BubbleSeekBar.OnProgressChangedListener {
+            override fun onProgressChanged(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float, fromUser: Boolean) {
+                Log.i("progress", "$progress $progressFloat")
+                config.lineSpacingScaleFactor = progressFloat
+                setFontsStyle()
+                Log.i("progress", "${config.lineSpacingScaleFactor}")
+            }
+            override fun getProgressOnActionUp(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float) {}
+            override fun getProgressOnFinally(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float, fromUser: Boolean) {}
+        }
+        fontLineSpacing.setOnProgressChangedListener(bubbleSeekBarListener)
+    }
+    
     private val mOnClickListener = View.OnClickListener { view ->
         when (view.id) {
             R.id.primaryColor -> TransitionHelper.startActivityWithTransition(this@SettingsActivity, Intent(this@SettingsActivity, CustomizationActivity::class.java))
@@ -799,7 +562,7 @@ class SettingsActivity : EasyDiaryActivity() {
         mAlertDialog?.show()
         listView.setSelection(selectedIndex)
     }
-    
+
     private fun openFontSettingDialog() {
         EasyDiaryUtils.initWorkingDirectory(this@SettingsActivity)
         val builder = AlertDialog.Builder(this@SettingsActivity)
@@ -869,6 +632,141 @@ class SettingsActivity : EasyDiaryActivity() {
         fingerprintSwitcher.isChecked = config.fingerprintLockEnable
         enableCardViewPolicySwitcher.isChecked = config.enableCardViewPolicy
         contentsSummarySwitcher.isChecked = config.enableContentsSummary
+    }
+
+    private fun setupInvite() {
+        inviteSummary.text = String.format(getString(R.string.invite_friends_summary), getString(R.string.app_name))
+        invite.setOnClickListener {
+            val text = String.format(getString(io.github.aafactory.commons.R.string.share_text), getString(R.string.app_name), getStoreUrl())
+            Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
+                putExtra(Intent.EXTRA_TEXT, text)
+                type = "text/plain"
+                startActivity(Intent.createChooser(this, getString(io.github.aafactory.commons.R.string.invite_via)))
+            }
+        }
+    }
+
+    private fun exportExcel() {
+        val builder = android.app.AlertDialog.Builder(this)
+        builder.setTitle(getString(R.string.export_excel_title))
+        builder.setIcon(ContextCompat.getDrawable(this, R.drawable.excel_3))
+        builder.setCancelable(false)
+        val alert = builder.create()
+        val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val containerView = inflater.inflate(R.layout.dialog_export_progress_excel, null)
+        val progressInfo = containerView.findViewById<TextView>(R.id.progressInfo)
+        var confirmButton = containerView.findViewById<Button>(R.id.confirm)
+        progressInfo.text = "Preparing to export..."
+        alert.setView(containerView)
+        alert.show()
+
+        Thread(Runnable {
+            val diaryList = EasyDiaryDbHelper.readDiary(null)
+            val wb: Workbook = HSSFWorkbook()
+            val sheet = wb.createSheet("new sheet")
+
+            val headerFont = wb.createFont().apply {
+                color = IndexedColors.WHITE.index
+            }
+            val headerStyle = wb.createCellStyle().apply {
+                wrapText = true
+                fillForegroundColor = IndexedColors.BLUE.index
+                fillPattern = CellStyle.SOLID_FOREGROUND
+                alignment = CellStyle.ALIGN_CENTER
+                verticalAlignment = CellStyle.VERTICAL_CENTER
+                setFont(headerFont)
+            }
+            val bodyStyle = wb.createCellStyle().apply {
+                wrapText = true
+                verticalAlignment = CellStyle.VERTICAL_TOP
+            }
+
+            val headerRow = sheet.createRow(0)
+            headerRow.height = 256 * 3
+            headerRow.createCell(SEQ).setCellValue(getString(R.string.export_excel_header_seq))
+            headerRow.createCell(WRITE_DATE).setCellValue(getString(R.string.export_excel_header_write_date))
+            headerRow.createCell(TITLE).setCellValue(getString(R.string.export_excel_header_title))
+            headerRow.createCell(CONTENTS).setCellValue(getString(R.string.export_excel_header_contents))
+            headerRow.createCell(ATTACH_PHOTO_NAME).setCellValue(getString(R.string.export_excel_header_attach_photo_path))
+            headerRow.createCell(ATTACH_PHOTO_SIZE).setCellValue(getString(R.string.export_excel_header_attach_photo_size))
+            headerRow.createCell(WRITE_TIME_MILLIS).setCellValue(getString(R.string.export_excel_header_write_time_millis))
+            headerRow.createCell(SYMBOL).setCellValue(getString(R.string.export_excel_header_symbol))
+            headerRow.createCell(IS_ALL_DAY).setCellValue(getString(R.string.export_excel_header_is_all_day))
+
+            headerRow.getCell(SEQ).cellStyle = headerStyle
+            headerRow.getCell(WRITE_DATE).cellStyle = headerStyle
+            headerRow.getCell(TITLE).cellStyle = headerStyle
+            headerRow.getCell(CONTENTS).cellStyle = headerStyle
+            headerRow.getCell(ATTACH_PHOTO_NAME).cellStyle = headerStyle
+            headerRow.getCell(ATTACH_PHOTO_SIZE).cellStyle = headerStyle
+            headerRow.getCell(WRITE_TIME_MILLIS).cellStyle = headerStyle
+            headerRow.getCell(SYMBOL).cellStyle = headerStyle
+            headerRow.getCell(IS_ALL_DAY).cellStyle = headerStyle
+
+            // FIXME:
+            // https://poi.apache.org/apidocs/dev/org/apache/poi/ss/usermodel/Sheet.html#setColumnWidth-int-int-
+            sheet.setColumnWidth(SEQ, 256 * 10)
+            sheet.setColumnWidth(WRITE_DATE, 256 * 30)
+            sheet.setColumnWidth(TITLE, 256 * 30)
+            sheet.setColumnWidth(CONTENTS, 256 * 50)
+            sheet.setColumnWidth(ATTACH_PHOTO_NAME, 256 * 80)
+            sheet.setColumnWidth(ATTACH_PHOTO_SIZE, 256 * 15)
+            sheet.setColumnWidth(WRITE_TIME_MILLIS, 256 * 60)
+            sheet.setColumnWidth(SYMBOL, 256 * 10)
+            sheet.setColumnWidth(IS_ALL_DAY, 256 * 30)
+            val exportFileName = "aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}"
+            val diarySymbolMap = EasyDiaryUtils.getDiarySymbolMap(this)
+            diaryList.forEachIndexed { index, diaryDto ->
+                val row = sheet.createRow(index + 1)
+                val photoNames = StringBuffer()
+                val photoSizes = StringBuffer()
+                diaryDto.photoUris?.map {
+                    photoNames.append("$DIARY_PHOTO_DIRECTORY${FilenameUtils.getName(it.getFilePath())}\n")
+                    photoSizes.append("${File(it.getFilePath()).length() / 1024}\n")
+                }
+
+                val sequence = row.createCell(SEQ).apply {cellStyle = bodyStyle}
+                val writeDate = row.createCell(WRITE_DATE).apply {cellStyle = bodyStyle}
+                val title = row.createCell(TITLE).apply {cellStyle = bodyStyle}
+                val contents = row.createCell(CONTENTS).apply {cellStyle = bodyStyle}
+                val attachPhotoNames = row.createCell(ATTACH_PHOTO_NAME).apply {cellStyle = bodyStyle}
+                val attachPhotoSizes = row.createCell(ATTACH_PHOTO_SIZE).apply {cellStyle = bodyStyle}
+                val writeTimeMillis = row.createCell(WRITE_TIME_MILLIS).apply {cellStyle = bodyStyle}
+                val weather = row.createCell(SYMBOL).apply {cellStyle = bodyStyle}
+                val isAllDay = row.createCell(IS_ALL_DAY).apply {cellStyle = bodyStyle}
+
+                sequence.setCellValue(diaryDto.sequence.toDouble())
+                writeDate.setCellValue(DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis))
+                title.setCellValue(diaryDto.title)
+                contents.setCellValue(diaryDto.contents)
+                attachPhotoNames.setCellValue(photoNames.toString())
+                attachPhotoSizes.setCellValue(photoSizes.toString())
+                writeTimeMillis.setCellValue(diaryDto.currentTimeMillis.toDouble())
+                isAllDay.setCellValue(diaryDto.isAllDay)
+                weather.setCellValue(diarySymbolMap[diaryDto.weather])
+
+                runOnUiThread {
+                    progressInfo.text = "${index.plus(1)} / ${diaryList.size}\n${getString(R.string.export_excel_xls_location)}: ${WORKING_DIRECTORY + exportFileName}.xls"
+                }
+            }
+
+            val outputStream = FileOutputStream("${Environment.getExternalStorageDirectory().absolutePath + WORKING_DIRECTORY + exportFileName}.xls")
+            wb.write(outputStream)
+            outputStream.close()
+            runOnUiThread {
+                confirmButton.visibility = View.VISIBLE
+                confirmButton.setOnClickListener { alert.cancel() }
+            }
+        }).start()
+    }
+
+    private fun openGuideView(title: String) {
+        TransitionHelper.startActivityWithTransition(this, Intent(this, MarkDownViewActivity::class.java).apply {
+            putExtra(MarkDownViewActivity.OPEN_URL_INFO, getString(R.string.add_ttf_fonts_info_url))
+            putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, title)
+        })
     }
 
     private fun getStoreUrl() = "https://play.google.com/store/apps/details?id=$packageName"
