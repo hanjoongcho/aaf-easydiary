@@ -97,6 +97,7 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+
     // android
     implementation 'com.android.support:multidex:1.0.3'
     implementation "com.android.support:appcompat-v7:$versions.supportLib"
@@ -104,31 +105,29 @@ dependencies {
     implementation "com.android.support:design:$versions.supportLib"
     implementation "com.android.support:support-v4:$versions.supportLib"
     implementation "com.android.support:support-vector-drawable:$versions.supportLib"
+
     // google
-    gmsImplementation "com.google.android.gms:play-services-drive:$versions.gms"
     gmsImplementation "com.google.android.gms:play-services-auth:$versions.gms"
-    gmsImplementation('com.google.api-client:google-api-client-android:1.26.0') {
-        exclude group: 'org.apache.httpcomponents'
-    }
-    gmsImplementation('com.google.apis:google-api-services-drive:v3-rev136-1.25.0') {
-        exclude group: 'org.apache.httpcomponents'
-    }
+    gmsImplementation 'com.google.http-client:google-http-client-gson:1.26.0'
+    gmsImplementation('com.google.api-client:google-api-client-android:1.26.0') { exclude group: 'org.apache.httpcomponents' }
+    gmsImplementation('com.google.apis:google-api-services-drive:v3-rev136-1.25.0') { exclude group: 'org.apache.httpcomponents' }
+
     gmspImplementation "com.google.android.gms:play-services-auth:$versions.gms"
     gmspImplementation 'com.google.http-client:google-http-client-gson:1.26.0'
-    gmspImplementation('com.google.api-client:google-api-client-android:1.26.0') {
-        exclude group: 'org.apache.httpcomponents'
-    }
-    gmspImplementation('com.google.apis:google-api-services-drive:v3-rev136-1.25.0') {
-        exclude group: 'org.apache.httpcomponents'
-    }
+    gmspImplementation('com.google.api-client:google-api-client-android:1.26.0') { exclude group: 'org.apache.httpcomponents' }
+    gmspImplementation('com.google.apis:google-api-services-drive:v3-rev136-1.25.0') { exclude group: 'org.apache.httpcomponents' }
+
     implementation 'com.google.android:flexbox:1.0.0'
     implementation 'com.google.code.gson:gson:2.8.5'
+
     // jetbrains
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
+
     // apache commons
     implementation 'commons-io:commons-io:2.6'
     implementation 'org.apache.commons:commons-lang3:3.7'
-    gmsImplementation 'io.github.aafactory:commons:0.9.6'
+
+    gmsImplementation 'io.github.aafactory:commons:0.9.7'
     gmspImplementation 'io.github.aafactory:commons:0.9.7'
     fossImplementation 'io.github.aafactory:commons-foss:0.9.6'
 //    implementation project(":aafactory-commons")
@@ -152,8 +151,10 @@ dependencies {
     // debug, release
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$LEAK_CANARY_VERSION"
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$LEAK_CANARY_VERSION"
+
     // test
     testImplementation 'junit:junit:4.12'
+
     // android test
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'

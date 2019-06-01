@@ -25,6 +25,7 @@ import me.blog.korn123.easydiary.adapters.SecondItemAdapter
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.models.DiarySymbol
 import me.blog.korn123.easydiary.models.PhotoUriDto
 import org.apache.commons.io.FileUtils
 import java.io.File
@@ -229,5 +230,19 @@ object EasyDiaryUtils {
         ContextCompat.getDrawable(context, resourceId)?.apply {
             setColorFilter(color, PorterDuff.Mode.SRC_IN)
         }
+    }
+
+    fun getDiarySymbolMap(context: Context): HashMap<Int, String> {
+        val symbolMap = hashMapOf<Int, String>()
+        val symbolArray = arrayOf(
+                *context.resources.getStringArray(R.array.weather_item_array)
+
+        )
+
+        symbolArray.map { item ->
+            val symbolItem = DiarySymbol(item)
+            symbolMap.put(symbolItem.sequence, symbolItem.description)
+        }
+        return symbolMap
     }
 }

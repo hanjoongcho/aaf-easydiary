@@ -9,39 +9,45 @@ import android.os.Environment
 import android.os.IBinder
 import android.support.v4.app.NotificationCompat
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.drive.*
-import com.google.android.gms.drive.query.Filters
-import com.google.android.gms.drive.query.Query
-import com.google.android.gms.drive.query.SearchableField
-import com.simplemobiletools.commons.extensions.getFileCount
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.api.client.extensions.android.http.AndroidHttp
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
+import com.google.api.client.json.gson.GsonFactory
+import com.google.api.services.drive.DriveScopes
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.helper.*
-import org.apache.commons.io.FileUtils
+import org.apache.commons.lang3.time.StopWatch
 import java.io.File
+import java.util.*
 
 class BackupPhotoService : Service() {
     private lateinit var notificationBuilder: NotificationCompat.Builder
     private lateinit var notificationManager: NotificationManager
-    private lateinit var mDriveFolder: DriveFolder
-    private var driveResourceClient: DriveResourceClient? = null
+    private lateinit var mDriveServiceHelper: DriveServiceHelper
     private var localDeviceFileCount = 0
     private var duplicateFileCount = 0
     private var successCount = 0
     private var failCount = 0
     private var targetFilenamesCursor = 0
     private var mInProcessJob = true
+    private val remoteDriveFileNames  = mutableListOf<String>()
     private val targetFilenames = mutableListOf<String>()
-    private val photoPath = "${Environment.getExternalStorageDirectory().absolutePath}$AAF_EASY_DIARY_PHOTO_DIRECTORY"
-
+    private val photoPath = "${Environment.getExternalStorageDirectory().absolutePath}$DIARY_PHOTO_DIRECTORY"
+    private lateinit var mWorkingFolderId: String
+    
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onCreate() {
-//        Handler().post { Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show() }
-        GoogleSignIn.getLastSignedInAccount(this)?.let {
-            driveResourceClient = Drive.getDriveResourceClient(this, it)
-        }
+        val googleSignInAccount: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
+        val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(this, Collections.singleton(DriveScopes.DRIVE_FILE))
+        credential.selectedAccount = googleSignInAccount?.account
+        val googleDriveService: com.google.api.services.drive.Drive = com.google.api.services.drive.Drive.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
+                .setApplicationName(getString(R.string.app_name))
+                .build()
+        mDriveServiceHelper = DriveServiceHelper(googleDriveService)
         notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationBuilder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
         
@@ -58,87 +64,88 @@ class BackupPhotoService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-//        Handler().post { Toast.makeText(this, "onStartCommand", Toast.LENGTH_SHORT).show() }
-
-        intent?.let {
-            mDriveFolder = DriveId.decodeFromString(it.getStringExtra(NOTIFICATION_DRIVE_ID)).asDriveFolder()
-            backupPhoto()
-        }
+        mWorkingFolderId = intent?.getStringExtra(DriveServiceHelper.WORKING_FOLDER_ID) ?: ""
+        backupPhoto()
         return super.onStartCommand(intent, flags, startId)
     }
     
     override fun onDestroy() {
         super.onDestroy()
         mInProcessJob = false
-//        Handler().post { Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show() }
     }
-    
-    private fun backupPhoto() {
-        val query = Query.Builder()
-                .addFilter(
-                        Filters.and(
-                                Filters.eq(SearchableField.MIME_TYPE, AAF_EASY_DIARY_PHOTO),
-                                Filters.eq(SearchableField.TRASHED, false)
-                        )
-                )
-                .build()
-        val queryTask = driveResourceClient?.queryChildren(mDriveFolder, query)
-        queryTask?.addOnSuccessListener { metadataBuffer ->
-//            Handler().post { Toast.makeText(this, "metadataBuffer: ${metadataBuffer.count}", Toast.LENGTH_SHORT).show() }
 
-            notificationBuilder.setAutoCancel(true)
-                    .setDefaults(Notification.DEFAULT_ALL)
-                    .setWhen(System.currentTimeMillis())
-                    .setSmallIcon(R.drawable.cloud_upload)
-                    .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
-                    .setOnlyAlertOnce(true)
-                    .setContentTitle(getString(R.string.backup_attach_photo_title))
-                    .addAction(
+    var stopWatch = StopWatch()
+    private fun backupPhoto() {
+        notificationBuilder.setAutoCancel(true)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(R.drawable.cloud_upload)
+                .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
+                .setOnlyAlertOnce(true)
+                .setContentTitle(getString(R.string.backup_attach_photo_title))
+                .setContentText("Preparing to upload files...")
+                .addAction(
                         R.drawable.cloud_upload,
                         getString(R.string.cancel),
                         PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
                             action = NotificationService.ACTION_BACKUP_CANCEL
                         }, 0)
-                    )
-            startForeground(NOTIFICATION_FOREGROUND_ID, notificationBuilder.build())
+                )
+        startForeground(NOTIFICATION_FOREGROUND_ID, notificationBuilder.build())
 
-            val titles = mutableListOf<String>()
-            metadataBuffer.forEachIndexed { _, metadata ->
-                titles.add(metadata.title)
-            }
+        stopWatch.reset()
+        stopWatch.start()
 
-            File(photoPath).listFiles().forEachIndexed { _, file ->
-                if (!titles.contains(file.name)) targetFilenames.add(file.name)
-            }
+        // step01. 전체 파일 목록을 조회
+        determineRemoteDrivePhotos(null)
+    }
 
-            localDeviceFileCount = File(photoPath).getFileCount(true)
-            duplicateFileCount = localDeviceFileCount - targetFilenames.size
+    private fun determineRemoteDrivePhotos(nextPageToken: String?) {
+        mDriveServiceHelper.queryFiles("mimeType = '${DriveServiceHelper.MIME_TYPE_AAF_EASY_DIARY_PHOTO}' and trashed = false",  1000, nextPageToken).run {
+            addOnSuccessListener { result ->
+                result.files.map { photoFile ->
+                    remoteDriveFileNames.add(photoFile.name)
+                }
 
-            when (targetFilenames.size) {
-                0 -> updateNotification()
-                else -> {
-                    uploadDiaryPhoto(File("$photoPath${targetFilenames[targetFilenamesCursor++]}"), mDriveFolder)
+                when (result.nextPageToken == null) {
+                    true -> {
+                        // step02. upload 대상 첨부사진 필터링
+                        val localPhotos = File(photoPath).listFiles()
+                        localPhotos.map { photo ->
+                            if (!remoteDriveFileNames.contains(photo.name)) {
+                                targetFilenames.add(photo.name)
+                            }
+                        }
+                        stopWatch.stop()
+                        Log.i("GSuite", "determineRemoteDrivePhotos: ${remoteDriveFileNames.size}")
+                        Log.i("GSuite", "targetFilenames: ${targetFilenames.size}")
+                        Log.i("GSuite", stopWatch.toString())
+
+                        localDeviceFileCount = localPhotos.size
+                        duplicateFileCount = localDeviceFileCount - targetFilenames.size
+                        if (targetFilenames.size == 0) {
+                            updateNotification()
+                        } else {
+                            uploadDiaryPhoto()
+                        }
+                    }
+                    false -> determineRemoteDrivePhotos(result.nextPageToken)
                 }
             }
+            addOnFailureListener { exception -> exception.printStackTrace() }
         }
     }
 
-    private fun uploadDiaryPhoto(file: File, folder: DriveFolder) {
-        driveResourceClient?.let {
-            it.createContents().continueWithTask<DriveFile> { task ->
-                val contents = task.result
-                val outputStream = contents.outputStream
-                FileUtils.copyFile(file, outputStream)
-                val changeSet = MetadataChangeSet.Builder()
-                        .setTitle(file.name)
-                        .setMimeType(AAF_EASY_DIARY_PHOTO)
-                        .setStarred(true)
-                        .build()
-                it.createFile(folder, changeSet, contents)
-            }.addOnSuccessListener { _ ->
+    private fun uploadDiaryPhoto() {
+        val fileName =  targetFilenames[targetFilenamesCursor]
+        mDriveServiceHelper.createFile(mWorkingFolderId, photoPath + fileName, fileName, DriveServiceHelper.MIME_TYPE_AAF_EASY_DIARY_PHOTO).run {
+            addOnSuccessListener { _ ->
+                targetFilenamesCursor++
                 successCount++
                 updateNotification()
-            }.addOnFailureListener { e ->
+            }
+            addOnFailureListener {
+                targetFilenamesCursor++
                 failCount++
                 updateNotification()
             }
@@ -162,7 +169,7 @@ class BackupPhotoService : Service() {
 
             if (successCount + failCount < targetFilenames.size) {
                 when (mInProcessJob) {
-                    true -> uploadDiaryPhoto(File("$photoPath${targetFilenames[targetFilenamesCursor++]}"), mDriveFolder)
+                    true -> uploadDiaryPhoto()
                     false -> notificationManager.cancel(NOTIFICATION_FOREGROUND_ID)
                 }
             } else {
