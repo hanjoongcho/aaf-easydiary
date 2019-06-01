@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.drive.*
 import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.json.gson.GsonFactory
@@ -27,10 +26,7 @@ import java.util.*
 class BackupPhotoService : Service() {
     private lateinit var notificationBuilder: NotificationCompat.Builder
     private lateinit var notificationManager: NotificationManager
-    private lateinit var mDriveFolder: DriveFolder
     private lateinit var mDriveServiceHelper: DriveServiceHelper
-    private var remoteDriveFileCount = 0
-    private var driveResourceClient: DriveResourceClient? = null
     private var localDeviceFileCount = 0
     private var duplicateFileCount = 0
     private var successCount = 0
@@ -39,16 +35,12 @@ class BackupPhotoService : Service() {
     private var mInProcessJob = true
     private val remoteDriveFileNames  = mutableListOf<String>()
     private val targetFilenames = mutableListOf<String>()
-    private val photoPath = "${Environment.getExternalStorageDirectory().absolutePath}$AAF_EASY_DIARY_PHOTO_DIRECTORY"
+    private val photoPath = "${Environment.getExternalStorageDirectory().absolutePath}$DIARY_PHOTO_DIRECTORY"
     private lateinit var mWorkingFolderId: String
     
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onCreate() {
-        GoogleSignIn.getLastSignedInAccount(this)?.let {
-            driveResourceClient = Drive.getDriveResourceClient(this, it)
-        }
-
         val googleSignInAccount: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
         val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(this, Collections.singleton(DriveScopes.DRIVE_FILE))
         credential.selectedAccount = googleSignInAccount?.account
@@ -109,7 +101,7 @@ class BackupPhotoService : Service() {
     }
 
     private fun determineRemoteDrivePhotos(nextPageToken: String?) {
-        mDriveServiceHelper.queryFiles("'$mWorkingFolderId' in parents and mimeType = '${DriveServiceHelper.MIME_TYPE_AAF_EASY_DIARY_PHOTO}' and trashed = false",  1000, nextPageToken).run {
+        mDriveServiceHelper.queryFiles("mimeType = '${DriveServiceHelper.MIME_TYPE_AAF_EASY_DIARY_PHOTO}' and trashed = false",  1000, nextPageToken).run {
             addOnSuccessListener { result ->
                 result.files.map { photoFile ->
                     remoteDriveFileNames.add(photoFile.name)

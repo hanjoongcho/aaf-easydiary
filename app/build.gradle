@@ -113,7 +113,6 @@ dependencies {
     gmsImplementation('com.google.apis:google-api-services-drive:v3-rev136-1.25.0') {
         exclude group: 'org.apache.httpcomponents'
     }
-    gmspImplementation "com.google.android.gms:play-services-drive:$versions.gms"
     gmspImplementation "com.google.android.gms:play-services-auth:$versions.gms"
     gmspImplementation 'com.google.http-client:google-http-client-gson:1.26.0'
     gmspImplementation('com.google.api-client:google-api-client-android:1.26.0') {
@@ -130,7 +129,7 @@ dependencies {
     implementation 'commons-io:commons-io:2.6'
     implementation 'org.apache.commons:commons-lang3:3.7'
     gmsImplementation 'io.github.aafactory:commons:0.9.6'
-    gmspImplementation 'io.github.aafactory:commons:0.9.6'
+    gmspImplementation 'io.github.aafactory:commons:0.9.7'
     fossImplementation 'io.github.aafactory:commons-foss:0.9.6'
 //    implementation project(":aafactory-commons")
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.1'

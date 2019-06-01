@@ -26,9 +26,6 @@
         <activity android:name="me.blog.korn123.easydiary.activities.DiaryReadActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name="me.blog.korn123.easydiary.activities.DiaryUpdateActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.DiaryMainActivity" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".gms.drive.BackupDiaryActivity" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".gms.drive.RecoverDiaryActivity" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".gms.drive.BackupPhotoActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.BarChartActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.CalendarActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.PhotoViewPagerActivity" android:theme="@style/AppTheme.NoActionBar" android:hardwareAccelerated="false" />

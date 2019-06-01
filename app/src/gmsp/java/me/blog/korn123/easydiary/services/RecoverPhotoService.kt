@@ -11,8 +11,6 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.drive.AAF_EASY_DIARY_PHOTO
-import com.google.android.gms.drive.AAF_EASY_DIARY_PHOTO_DIRECTORY
 import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.json.gson.GsonFactory
@@ -35,7 +33,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
     private var targetIndexesCursor = 0
 //    private val targetIndexes = arrayListOf<Int>()
     private val targetItems = arrayListOf<HashMap<String, String>>()
-    private val photoPath = "${Environment.getExternalStorageDirectory().absolutePath}$AAF_EASY_DIARY_PHOTO_DIRECTORY"
+    private val photoPath = "${Environment.getExternalStorageDirectory().absolutePath}$DIARY_PHOTO_DIRECTORY"
     private lateinit var mDriveServiceHelper: DriveServiceHelper
 
     override fun onCreate() {
