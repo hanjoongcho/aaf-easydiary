@@ -57,7 +57,7 @@ import java.util.*
 class SettingsActivity : EasyDiaryActivity() {
 
     /***************************************************************************************************
-     *   global peoperties
+     *   global properties
      *
      ***************************************************************************************************/
     private lateinit var accountCallback: (Account) -> Unit
@@ -149,7 +149,7 @@ class SettingsActivity : EasyDiaryActivity() {
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("523901516987-1ovfkda44k1ub4g2l286ipi06g3nm295.apps.googleusercontent.com")
+                .requestIdToken(getString(R.string.oauth_requerst_id_token))
                 .requestEmail()
                 .build()
         val client = GoogleSignIn.getClient(this, gso)
@@ -784,7 +784,7 @@ class SettingsActivity : EasyDiaryActivity() {
         const val CONTENTS = 3
         const val ATTACH_PHOTO_NAME = 4
         const val ATTACH_PHOTO_SIZE = 5
-        const val WEATHER = 6  /*longer used since version 1.4.79*/
+        const val WEATHER = 6  /* no longer used since version 1.4.79 */
         const val SYMBOL = 6
         const val IS_ALL_DAY = 7
         const val WRITE_TIME_MILLIS = 8
