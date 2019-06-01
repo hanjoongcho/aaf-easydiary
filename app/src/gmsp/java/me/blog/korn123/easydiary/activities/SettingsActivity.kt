@@ -205,6 +205,7 @@ class SettingsActivity : EasyDiaryActivity() {
     }
     
     private fun backupDiaryRealm() {
+        progressContainer.visibility = View.VISIBLE
         // delete unused compressed photo file 
 //        File(Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY).listFiles()?.map {
 //            Log.i("PHOTO-URI", "${it.absolutePath} | ${EasyDiaryDbHelper.countPhotoUriBy(FILE_URI_PREFIX + it.absolutePath)}")
@@ -219,7 +220,8 @@ class SettingsActivity : EasyDiaryActivity() {
                         DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"),
                         EasyDiaryUtils.easyDiaryMimeType
                 ).addOnSuccessListener {
-                    makeSnackBar("Upload complete diary realm file")
+                    progressContainer.visibility = View. GONE
+                    makeSnackBar("다이어리 백업작업이 완료되었습니다.")
                 }
             }
         }
@@ -239,7 +241,7 @@ class SettingsActivity : EasyDiaryActivity() {
     }
 
     private fun recoverDiaryRealm() {
-        progressBar.visibility = View.VISIBLE
+        progressContainer.visibility = View.VISIBLE
         openRealmFilePickerDialog()
     }
     
@@ -297,7 +299,7 @@ class SettingsActivity : EasyDiaryActivity() {
                         builder.setView(fontView)
                         mAlertDialog = builder.create()
                         mAlertDialog?.show()
-                        progressBar.visibility = View.GONE
+                        progressContainer.visibility = View.GONE
                     }
                     .addOnFailureListener { e ->
                         e.printStackTrace()
@@ -362,6 +364,8 @@ class SettingsActivity : EasyDiaryActivity() {
             override fun getProgressOnFinally(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float, fromUser: Boolean) {}
         }
         fontLineSpacing.setOnProgressChangedListener(bubbleSeekBarListener)
+
+        progressContainer.setOnTouchListener { _, _ -> true }
     }
     
     private val mOnClickListener = View.OnClickListener { view ->
