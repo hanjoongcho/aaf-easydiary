@@ -175,7 +175,7 @@ class SettingsActivity : EasyDiaryActivity() {
     private fun initDriveWorkingDirectory(account: Account, workingFolderName: String, callback: (workingFolderId: String) -> Unit) {
         val driveServiceHelper = DriveServiceHelper(this, account)
         // 01. AAF 폴더 검색
-        driveServiceHelper.queryFiles("'root' in parents and name = '${DriveServiceHelper.AAF_ROOT_FOLDER_NAME}'").run {
+        driveServiceHelper.queryFiles("'root' in parents and name = '${DriveServiceHelper.AAF_ROOT_FOLDER_NAME}' and trashed = false").run {
             addOnSuccessListener { result ->
                 when (result.files.size) {
                     // 02. AAF 폴더 없으면 생성
@@ -188,7 +188,7 @@ class SettingsActivity : EasyDiaryActivity() {
                     // 03. workingFolder 검색
                     1 -> {
                         val parentId = result.files[0].id
-                        driveServiceHelper.queryFiles("'$parentId' in parents and name = '$workingFolderName'").addOnSuccessListener {
+                        driveServiceHelper.queryFiles("'$parentId' in parents and name = '$workingFolderName' and trashed = false").addOnSuccessListener {
                             when (it.files.size) {
                                 // 03-01. workingFolder 생성
                                 0 -> driveServiceHelper.createFolder(workingFolderName, parentId).addOnSuccessListener { workingFolderId ->
