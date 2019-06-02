@@ -32,6 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <io.github.aafactory.commons.views.LabelLayout
+                    android:id="@+id/devMode"
                     android:layout_marginTop="5dp"
                     android:background="?attr/colorPrimary"
                     android:layout_width="match_parent"
@@ -47,22 +48,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <android.support.v7.widget.CardView
-                        android:id="@+id/testRestApi"
-                        style="@style/AppCard.Settings">
-                        <LinearLayout
-                            style="@style/LinearLayoutVertical">
-                            <com.simplemobiletools.commons.views.MyTextView
-                                android:text="Google REST API"
-                                style="@style/SettingsTitle" />
-                            <com.simplemobiletools.commons.views.MyTextView
-                                android:id="@+id/userToken"
-                                android:text="Test google rest api"
-                                style="@style/SettingsSummary" />
-                        </LinearLayout>
-                    </android.support.v7.widget.CardView>
-
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/signOut"
+                        android:id="@+id/signOutGoogleOAuth"
+                        android:visibility="gone"
                         style="@style/AppCard.Settings">
                         <LinearLayout
                             style="@style/LinearLayoutVertical">

@@ -63,6 +63,7 @@ class SettingsActivity : EasyDiaryActivity() {
     private lateinit var accountCallback: (Account) -> Unit
     private var mAlertDialog: AlertDialog? = null
     private var mTaskFlag = 0
+    private var mDevModeClickCount = 0
     
 
     /***************************************************************************************************
@@ -235,7 +236,7 @@ class SettingsActivity : EasyDiaryActivity() {
                     backupPhotoService.putExtra(DriveServiceHelper.WORKING_FOLDER_ID, photoFolderId)
                     startService(backupPhotoService)
                     finish()
-                }, false)
+                }, null)
             }
         }
     }
@@ -250,7 +251,7 @@ class SettingsActivity : EasyDiaryActivity() {
             val recoverPhotoService = Intent(this, RecoverPhotoService::class.java)
             startService(recoverPhotoService)
             finish()
-        }, false)
+        }, null)
     }
 
     private fun openRealmFilePickerDialog() {
@@ -337,8 +338,13 @@ class SettingsActivity : EasyDiaryActivity() {
         exportExcel.setOnClickListener(mOnClickListener)
         faq.setOnClickListener(mOnClickListener)
         privacyPolicy.setOnClickListener(mOnClickListener)
-        testRestApi.setOnClickListener(mOnClickListener)
-        signOut.setOnClickListener(mOnClickListener)
+        signOutGoogleOAuth.setOnClickListener(mOnClickListener)
+        devMode.setOnClickListener {
+            mDevModeClickCount++
+            if (mDevModeClickCount > 5) {
+                signOutGoogleOAuth.visibility = View.VISIBLE
+            }
+        }
 
         fontLineSpacing.configBuilder
                 .min(0.2F)
@@ -513,19 +519,11 @@ class SettingsActivity : EasyDiaryActivity() {
                     putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, getString(R.string.privacy_policy_title))
                 })
             }
-            R.id.testRestApi -> {
-                makeSnackBar("Start test :)")
-                initGoogleSignAccount { account ->
-                    initDriveWorkingDirectory(account, DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) {
-                        initWorkFolderComplete(it)
-                    }
-                }
-            }
-            R.id.signOut -> {
+            R.id.signOutGoogleOAuth -> {
                 // Configure sign-in to request the user's ID, email address, and basic
                 // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
                 val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestIdToken("523901516987-1ovfkda44k1ub4g2l286ipi06g3nm295.apps.googleusercontent.com")
+                        .requestIdToken(getString(R.string.oauth_requerst_id_token))
                         .requestEmail()
                         .build()
                 val client = GoogleSignIn.getClient(this, gso)
