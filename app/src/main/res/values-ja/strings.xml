@@ -1,112 +1,112 @@
 <resources>
-    <string name="app_name">イージー ダイアリー</string>
+    <string name="app_name">Easy Diary</string>
     <string name="common_create_seconds">Creation Seconds</string>
-    <string name="create_diary_title">ダイアリーを書く</string>
+    <string name="create_diary_title">日記を書く</string>
     <string name="write_date">作成日</string>
-    <string name="request_title_message">タイトルを入力してください.</string>
-    <string name="request_content_message">内容を入力してください.</string>
-    <string name="guide_message">タイトルを入力するか、と言うし.</string>
-    <string name="contents_text_hint">内容を入力するか、と言うし.</string>
-    <string name="delete_photo_confirm_message">この写真を削除しますか?</string>
-    <string name="gallery_intent_not_found_message">ギャラリーアプリがインストールされていないか、無効になっています.</string>
-    <string name="create_diary_showcase_button_1">次の</string>
+    <string name="request_title_message">タイトルを入力してください。</string>
+    <string name="request_content_message">内容を入力してください。</string>
+    <string name="guide_message">タイトルを入力するか、と言うし。</string>
+    <string name="contents_text_hint">内容を入力するか、と言うし。</string>
+    <string name="delete_photo_confirm_message">この写真を削除しますか？</string>
+    <string name="gallery_intent_not_found_message">ギャラリーアプリがインストールされていないか、無効になっています。</string>
+    <string name="create_diary_showcase_button_1">次へ</string>
     <string name="create_diary_showcase_button_2">閉じる</string>
     <string name="create_diary_showcase_title_1">天気</string>
     <string name="create_diary_showcase_title_2">タイトル</string>
     <string name="create_diary_showcase_title_3">内容</string>
-    <string name="create_diary_showcase_title_4">写真付き</string>
-    <string name="create_diary_showcase_title_5">文字の拡大</string>
-    <string name="create_diary_showcase_title_6">文字縮小</string>
+    <string name="create_diary_showcase_title_4">写真を添付</string>
+    <string name="create_diary_showcase_title_5">文字を拡大</string>
+    <string name="create_diary_showcase_title_6">文字を縮小</string>
     <string name="create_diary_showcase_title_7">日付を選択</string>
-    <string name="create_diary_showcase_title_8">時間の選択</string>
+    <string name="create_diary_showcase_title_8">時間を選択</string>
     <string name="create_diary_showcase_title_9">保存</string>
-    <string name="create_diary_showcase_message_1">ダイアリーの作成時間の天気を選択します. 天気選択は必須ではありません.</string>
-    <string name="create_diary_showcase_message_2">ダイアリーのタイトルを入力します. タイトル入力は必須ではありません.</string>
-    <string name="create_diary_showcase_message_3">日記, メモ, 要約ノートなどの内容を入力します.</string>
-    <string name="create_diary_showcase_message_4">ダイアリーに写真を添付します.</string>
-    <string name="create_diary_showcase_message_5">ダイアリーのテキストのサイズを拡大します.</string>
-    <string name="create_diary_showcase_message_6">ダイアリーのテキストのサイズを縮小します.</string>
-    <string name="create_diary_showcase_message_7">ダイアリーの作成日付を選択します. 過去の日付の日記を作成したい場合、日付を変更することができます.</string>
-    <string name="create_diary_showcase_message_8">ダイアリーの作成時間を選択します. 最後の時間のダイアリーの作成を希望する場合は、時間を変更することができます.</string>
-    <string name="create_diary_showcase_message_9">作成が完了したダイアリーを保存します.</string>
+    <string name="create_diary_showcase_message_1">日記の作成時間の天気を選択します。天気の選択は必須ではありません。</string>
+    <string name="create_diary_showcase_message_2">日記のタイトルを入力します。タイトルの入力は必須ではありません。</string>
+    <string name="create_diary_showcase_message_3">日記、メモ、要約ノートなどの内容を入力します。</string>
+    <string name="create_diary_showcase_message_4">日記に写真を添付します。</string>
+    <string name="create_diary_showcase_message_5">日記のテキストのサイズを拡大します。</string>
+    <string name="create_diary_showcase_message_6">日記のテキストのサイズを縮小します。</string>
+    <string name="create_diary_showcase_message_7">日記の作成日付を選択します。過去の日付の日記を作成したい場合、日付を変更することができます。</string>
+    <string name="create_diary_showcase_message_8">日記の作成時間を選択します。最後の時間の日記の作成を希望する場合は、時間を変更することができます。</string>
+    <string name="create_diary_showcase_message_9">作成が完了した日記を保存します。</string>
     <string name="read_diary_title">検索</string>
     <string name="input_mode_a">スピーチモード</string>
     <string name="input_mode_c">キーパッドモード</string>
-    <string name="guide_message_2">検索用語を入力するか、話す.</string>
-    <string name="recognizer_intent_not_found_message">音声認識モジュールがインストールされていないか、無効になっています.</string>
-    <string name="sample_diary_title_1">注意するより危険なれ.</string>
-    <string name="sample_diary_title_2">言うときを知っているだけ繰り返す.</string>
-    <string name="sample_diary_title_3">悪いニュースをたくさん聞くほど喜ぶべきである.</string>
-    <string name="sample_diary_title_4">豊かは慰めを、制約は、ウィンドウを呼ぶ.</string>
+    <string name="guide_message_2">検索用語を入力するか、話す。</string>
+    <string name="recognizer_intent_not_found_message">音声認識モジュールがインストールされていないか、無効になっています。</string>
+    <string name="sample_diary_title_1">注意するより危険なれ。</string>
+    <string name="sample_diary_title_2">言うときを知っているだけ繰り返す。</string>
+    <string name="sample_diary_title_3">悪いニュースをたくさん聞くほど喜ぶべきである。</string>
+    <string name="sample_diary_title_4">豊かさは慰めを、制約は創造性を呼ぶ。</string>
     <string name="sample_diary_1">通り過ぎた人生を振り返ってみると、リスクに陥った場合、よりも注意したために損害を招いてきたことを明らかに知ることができ.\n危険なれ.\n注意するより危険なれ.\n- グラントガドン, ‘10倍の法則’</string>
     <string name="sample_diary_2">あなたが言うときを知っているだけ繰り返す.\nしかし、聞けば、新しいことを学ぶことになる.\n- ダライ・ラマ</string>
-    <string name="sample_diary_3">あなたが指導者として最も聞く必要があるのが悪いニュースである.\n良いニュースは、明日も良いですが、悪いニュースは、明日はさらに悪化う.\nこれがたとえ事実が胸が痛いのに、いつも厳しい質問をして事実を言うことは安全理由だ.\n- エリック・シュミットグーグル会長, ‘Googleはどのように働く?’</string>
+    <string name="sample_diary_3">あなたが指導者として最も聞く必要があるのが悪いニュースである.\n良いニュースは、明日も良いですが、悪いニュースは、明日はさらに悪化う.\nこれがたとえ事実が胸が痛いのに、いつも厳しい質問をして事実を言うことは安全理由だ.\n- エリック・シュミットグーグル会長, ‘Googleはどのように働く？’</string>
     <string name="sample_diary_4">制約が創造性を閉じ込めるのではなく、制約を克服するために、創造性が発揮される.\nすべての偉大な作品や創造的な解決策は、時間的な制約、物理的な制約、資源の制約がすごく多かったものだった。\n何にせよ困難制約された環境で、創造性が生まれたりする.\n- ギムボンジン代表, ‘ベミンらしさ’</string>
-    <string name="read_diary_showcase_button_1">次の</string>
+    <string name="read_diary_showcase_button_1">次へ</string>
     <string name="read_diary_showcase_button_2">閉じる</string>
-    <string name="read_diary_showcase_title_1">ダイアリーを書く</string>
+    <string name="read_diary_showcase_title_1">日記を書く</string>
     <string name="read_diary_showcase_title_2">検索</string>
     <string name="read_diary_showcase_title_3">音声認識</string>
     <string name="read_diary_showcase_title_4">カレンダー</string>
     <string name="read_diary_showcase_title_5">タイムライン</string>
     <string name="read_diary_showcase_title_6">チャート</string>
     <string name="read_diary_showcase_title_7">詳細設定</string>
-    <string name="read_diary_showcase_title_8">ダイアリーを読む</string>
-    <string name="read_diary_showcase_message_1">日記、メモ、要約ノートなど様々な形態のダイアリーを時間の流れに沿って様々に作成することができます.</string>
-    <string name="read_diary_showcase_message_2">キーワードを利用して、日記を検索することができます. キーワードが入力されると、キーワードが一致するダイアリーが検索され、そのキーワードはハイライトされます.</string>
-    <string name="read_diary_showcase_message_3">音声認識機能を利用して、キーパッドなしで検索キーワードを入力することができます.</string>
-    <string name="read_diary_showcase_message_4">作成された日記は、カレンダーを利用して、日付順にまとめて見ることができます.</string>
-    <string name="read_diary_showcase_message_5">作成された日記は、タイムラインに提供されます.</string>
-    <string name="read_diary_showcase_message_6">全期間の日記作成状況をグラフで見ることができます.</string>
-    <string name="read_diary_showcase_message_7">詳細設定を使用して、フォントの変更、ロック番号の設定、ダイアリーのバックアップおよびリカバリ操作を行うことができます.</string>
-    <string name="read_diary_showcase_message_8">リスト内のダイアリーカードをクリックすると、その日記を見ることができます.</string>
-    <string name="diary_photo_migration_message">イージーダイアリーの写真付き方式が変更され、既存のリンク情報をでダイアリーフォルダに圧縮して保存します。\n作業が完了するまでしばらくお待ちください。</string>
-    <string name="read_diary_detail_title">ダイアリーを読む</string>
-    <string name="delete_confirm">削除しますか?</string>
-    <string name="read_diary_detail_showcase_button_1">次の</string>
+    <string name="read_diary_showcase_title_8">日記を読む</string>
+    <string name="read_diary_showcase_message_1">日記、メモ、要約ノートなど、時間の流れに合わせて様々な種類の日記を作成することができます。</string>
+    <string name="read_diary_showcase_message_2">キーワードを利用して日記を検索することができます。入力したキーワードに一致する日記が検索され、キーワードはハイライト表示されます。</string>
+    <string name="read_diary_showcase_message_3">音声認識機能を利用して、キーパッドなしで検索キーワードを入力することができます。</string>
+    <string name="read_diary_showcase_message_4">作成された日記は、カレンダーを利用して、日付順にまとめて見ることができます。</string>
+    <string name="read_diary_showcase_message_5">作成された日記は、タイムラインに提供されます。</string>
+    <string name="read_diary_showcase_message_6">全期間の日記作成状況をグラフで見ることができます。</string>
+    <string name="read_diary_showcase_message_7">詳細設定を使用して、フォントの変更、ロック番号の設定、日記のバックアップや復元などの操作を行うことができます。</string>
+    <string name="read_diary_showcase_message_8">リスト内の日記カードをクリックすると、その日記を見ることができます。</string>
+    <string name="diary_photo_migration_message">Easy Diaryの写真付き方式が変更され、既存のリンク情報をフォルダに圧縮して保存します。\n作業が完了するまでしばらくお待ちください。</string>
+    <string name="read_diary_detail_title">日記を読む</string>
+    <string name="delete_confirm">削除しますか？</string>
+    <string name="read_diary_detail_showcase_button_1">次へ</string>
     <string name="read_diary_detail_showcase_button_2">閉じる</string>
-    <string name="read_diary_detail_showcase_title_0">ダイアリーを読む</string>
+    <string name="read_diary_detail_showcase_title_0">日記を読む</string>
     <string name="read_diary_detail_showcase_title_1">ページの移動</string>
-    <string name="read_diary_detail_showcase_title_2">ダイアリー修正</string>
+    <string name="read_diary_detail_showcase_title_2">日記を修正</string>
     <string name="read_diary_detail_showcase_title_3">TTS</string>
     <string name="read_diary_detail_showcase_title_4">ポストカード</string>
-    <string name="read_diary_detail_showcase_title_5">ダイアリー削除</string>
-    <string name="read_diary_detail_showcase_message_0">保存されたダイアリーを閲覧します。保存されたダイアリーを変更したり、カスタムカラーを指定して、ダイアリーカードを作成することができます。</string>
-    <string name="read_diary_detail_showcase_message_1">画面を左右にドラッグすると、前または後に作成されたダイアリーを閲覧することができます.</string>
-    <string name="read_diary_detail_showcase_message_2">閲覧中のダイアリーを編集するためダイアリー修正画面に移動することができます.</string>
-    <string name="read_diary_detail_showcase_message_3">ダイアリー本文をグーグルTTS機能を利用して音声で聞くことができます.</string>
-    <string name="read_diary_detail_showcase_message_4">ダイアリーを利用して、ポストカードを作成し、他の人と共有することができます.</string>
-    <string name="read_diary_detail_showcase_message_5">現在閲覧中のダイアリーを削除して、検索画面に移動することができます.</string>
-    <string name="update_diary_title">ダイアリー修正</string>
-    <string name="back_pressed_confirm">\'確認\'ボタンを押すと、現在のダイアリーを保存せずに前の画面に移動します。</string>
+    <string name="read_diary_detail_showcase_title_5">日記を削除</string>
+    <string name="read_diary_detail_showcase_message_0">保存された日記を閲覧します。保存された日記を変更したり、カスタムカラーを指定して、日記カードを作成することができます。</string>
+    <string name="read_diary_detail_showcase_message_1">画面を左右にドラッグすると、前または後に作成された日記を閲覧することができます。</string>
+    <string name="read_diary_detail_showcase_message_2">閲覧中の日記を編集するため日記の修正画面に移動することができます。</string>
+    <string name="read_diary_detail_showcase_message_3">日記本文をGoogle TTS機能を利用して音声で聞くことができます。</string>
+    <string name="read_diary_detail_showcase_message_4">日記を利用してポストカードを作成し、他の人と共有することができます。</string>
+    <string name="read_diary_detail_showcase_message_5">現在閲覧中の日記を削除して、検索画面に移動することができます。</string>
+    <string name="update_diary_title">日記を修正</string>
+    <string name="back_pressed_confirm">\'確認\'ボタンを押すと、現在の日記を保存せずに前の画面に移動します。</string>
     <string name="rate_app">アプリを評価する</string>
-    <string name="guide_message_3">リクエスト操作の権限がありません.</string>
-    <string name="restore_diary">ダイアリー回復する</string>
-    <string name="restore_diary_summary">Googleのドライブにバックアップされたデータを利用して、すべてのコンテンツを回復します.</string>
-    <string name="restore_photo">ダイアリー添付写真の回復する(手動)</string>
+    <string name="guide_message_3">リクエスト操作の権限がありません。</string>
+    <string name="restore_diary">日記を復元する</string>
+    <string name="restore_diary_summary">Googleドライブにバックアップされたデータを利用して、すべてのコンテンツを回復します。</string>
+    <string name="restore_photo">日記の添付写真を復元する(手動)</string>
     <string name="restore_photo_summary">ユーザーは日記に添付された写真を直接復元します。</string>
-    <string name="backup_diary">ダイアリーバックアップする</string>
-    <string name="backup_diary_summary">すべてのコンテンツをGoogleのドライブにバックアップします.</string>
+    <string name="backup_diary">日記をバックアップする</string>
+    <string name="backup_diary_summary">すべてのコンテンツをGoogleドライブにバックアップします。</string>
     <string name="font_setting">フォントの設定</string>
-    <string name="add_ttf_fonts_title">TTF フォントを追加</string>
-    <string name="add_ttf_fonts_summary">ユーザーが所有しているTTFフォントをでダイアリーに追加して使用します.\nフォントが追加されると、組み込みのフォントと一緒にユーザーが追加したフォントを使用することができます.</string>
+    <string name="add_ttf_fonts_title">TTFフォントを追加</string>
+    <string name="add_ttf_fonts_summary">ユーザーが所有しているTTFフォントを日記に追加して使用します。\nフォントが追加されると、組み込みのフォントと一緒にユーザーが追加したフォントを使用することができます。</string>
     <string name="add_ttf_fonts_info_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/MANUAL_ja.md</string>
     <string name="diary_search_keyword_case_sensitive_title">大文字と小文字を区別</string>
-    <string name="diary_search_keyword_case_sensitive_summary">このオプションが有効になると、日記が大文字と小文字を区別するかどうかがチェックされます.</string>
+    <string name="diary_search_keyword_case_sensitive_summary">このオプションを有効にすると、日記の検索時にキーワードの大文字と小文字を区別するようになります。</string>
     <string name="setting_primary_color_title">テーマ</string>
-    <string name="setting_primary_color_summary">アプリケーションの原色を設定する.</string>
-    <string name="pick_text_color_guide_message">現在のバージョンではテーマの色の変更のみがサポートされています.\n将来的にテキストの色の変更が可能になります.</string>
-    <string name="pick_background_color_guide_message">現在のバージョンではテーマの色の変更のみがサポートされています.\n背景の色の変更は、将来利用可能になります.</string>
-    <string name="easy_photo_map_title">Easy PhotoMap</string>
-    <string name="easy_photo_map_summary">Easy Photo Map is a photomap application that displays the location of the photo on the map using the location information included in the photo.</string>
+    <string name="setting_primary_color_summary">アプリの原色を設定する。</string>
+    <string name="pick_text_color_guide_message">現在のバージョンではテーマの色の変更のみがサポートされています。\n将来的にテキストの色の変更が可能になります。</string>
+    <string name="pick_background_color_guide_message">現在のバージョンではテーマの色の変更のみがサポートされています。\n背景の色の変更は、将来利用可能になります。</string>
+    <string name="easy_photo_map_title">Easy Photo Map</string>
+    <string name="easy_photo_map_summary">Easy Photo Map は写真に含まれる位置情報を使用して、地図上に写真の位置を表示することができるフォトマップアプリです。</string>
     <string name="easy_password_title">Easy Password</string>
-    <string name="easy_password_summary">Easy Password is an application that helps you manage passwords used for login, document security, door lock, lock, credit card, account management, etc. by using one pattern lock set by the user.</string>
+    <string name="easy_password_summary">Easy Password はユーザーが設定した1つのパターンロックを使用して、ログインID、ドキュメントの保護、ドアロック、クレジットカードなどに使用される複数のパスワードを管理するのに役立つアプリです。</string>
     <string name="font_line_spacing">フォント、行間隔</string>
     <string name="font_line_spacing_summary">設定された割合に合わせてフォントの行間を変更します。</string>
     <string name="calendar_title">カレンダー</string>
-    <string name="guide_message_4">その日に作成された日記はありません.</string>
+    <string name="guide_message_4">その日に作成された日記はありません。</string>
     <string name="bar_chart_title">チャート</string>
-    <string name="bar_chart_status">時間帯別の日記を作成ステータス</string>
+    <string name="bar_chart_status">時間帯別の作成状況</string>
     <string name="range_a">0H~3H</string>
     <string name="range_b">4H~7H</string>
     <string name="range_c">8H~11H</string>
@@ -117,28 +117,28 @@
     <string name="write_time">作成時間</string>
     <string name="write_count">作成件数</string>
     <string name="unlock_guide_message">ロック番号を入力してください</string>
-    <string name="photo_view_error_info">写真を見つけることができませんでした.\nギャラリーから添付した画像が削除されたかの場所が変更されたことがあります.</string>
-    <string name="diary_card_export_info">ダイアリーカード保存パス</string>
-    <string name="diary_card_share_info">ダイアリーカード共有</string>
-    <string name="diary_card_export_error_message">ダイアリーカードの作成中にエラーが発生しました. もう一度お試しください.</string>
-    <string name="post_card_showcase_button_1">次の</string>
+    <string name="photo_view_error_info">写真を見つけることができませんでした。\nギャラリーから添付した画像が削除されたか、場所が変更された可能性があります。</string>
+    <string name="diary_card_export_info">日記カードの保存場所</string>
+    <string name="diary_card_share_info">日記カードを共有</string>
+    <string name="diary_card_export_error_message">日記カードの作成中にエラーが発生しました。もう一度お試しください。</string>
+    <string name="post_card_showcase_button_1">次へ</string>
     <string name="post_card_showcase_button_2">閉じる</string>
-    <string name="post_card_showcase_title_0">日記ポストカード</string>
+    <string name="post_card_showcase_title_0">日記のポストカード</string>
     <string name="post_card_showcase_title_1">テキストの色</string>
     <string name="post_card_showcase_title_2">背景色</string>
     <string name="post_card_showcase_title_3">ポストカードの作成</string>
     <string name="post_card_showcase_title_4">ポストカード共有</string>
     <string name="post_card_showcase_title_5">編集終了</string>
-    <string name="post_card_showcase_message_0">保存された日記を使用して、カスタムポストカードを作成して保存することができます.</string>
-    <string name="post_card_showcase_message_1">ポストカードのテキストの色を変更します. カラーピッカーを使用して、希望の色を選択することができます.</string>
-    <string name="post_card_showcase_message_2">ポストカードの背景色を変更します. カラーピッカーを使用して、希望の色を選択することができます.</string>
-    <string name="post_card_showcase_message_3">作成されたポストカードは、画像ファイルとして保存することができます.</string>
-    <string name="post_card_showcase_message_4">作成されたポストカードは、友人と共有することができます. 電子メール、SMS、メッセンジャーなどを利用してポストカードを共有できます.</string>
-    <string name="post_card_showcase_message_5">ポストカードの編集画面を終了して、前の画面に戻ります.</string>
+    <string name="post_card_showcase_message_0">保存された日記を使用して、カスタムポストカードを作成して保存することができます。</string>
+    <string name="post_card_showcase_message_1">ポストカードのテキストの色を変更します。カラーピッカーを使用して、希望の色を選択することができます。</string>
+    <string name="post_card_showcase_message_2">ポストカードの背景色を変更します。カラーピッカーを使用して、希望の色を選択することができます。</string>
+    <string name="post_card_showcase_message_3">作成されたポストカードは、画像ファイルとして保存することができます。</string>
+    <string name="post_card_showcase_message_4">作成されたポストカードは、友人と共有することができます。電子メール、SMS、メッセンジャーなどを利用してポストカードを共有できます。</string>
+    <string name="post_card_showcase_message_5">ポストカードの編集画面を終了して、前の画面に戻ります。</string>
     <string name="timeline_title">タイムライン</string>
     <string name="postcard_viewer_title">日記郵便はがき</string>
-    <string name="postcard_viewer_no_cards_saved">保存されたダイアリーポストカードがありません。</string>
-    <string name="google_drive_connect_message">Googleドライブの同期...</string>
+    <string name="postcard_viewer_no_cards_saved">保存された日記のポストカードがありません。</string>
+    <string name="google_drive_connect_message">Googleドライブと同期...</string>
     <string name="diary_count"></string>
     <string name="menu_calendar">カレンダー</string>
     <string name="menu_chart">チャート</string>
@@ -149,24 +149,24 @@
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.41 here.                                                      -->
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
-    <string name="preferences_category_settings">アプリケーションの設定</string>
-    <string name="preferences_category_information">アプリケーション情報</string>
+    <string name="preferences_category_settings">アプリの設定</string>
+    <string name="preferences_category_information">アプリの情報</string>
     <string name="preferences_information_licenses">オープンソースライセンス</string>
     <string name="preferences_information_licenses_summary">オープンソース・ソフトウェアのお知らせ</string>
-    <string name="preferences_category_aaf">AAF Easy Series</string>
+    <string name="preferences_category_aaf">AAF Easy シリーズ</string>
     <string name="invite_friends">友達を招待</string>
-    <string name="invite_friends_summary">%sアプリケーションを友達に共有します。</string>
+    <string name="invite_friends_summary">%sアプリを友達に共有します。</string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
-    <!--  Release notes here.                                                      -->
+    <!--  Release notes here.                                                                             -->
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <string name="release_103">
         v1.4.41 / 2018.05.28\n
-        作業用ディレクトリが存在しない場合は、「ポストカード」の閲覧モードで異常終了していたバグを修正
+        作業用ディレクトリが存在しない場合に、「ポストカード」の閲覧モードで異常終了していたバグを修正
     </string>
     <string name="release_105">
         v1.4.42 / 2018.06.27\n
-        ユーザーの経験（UX）を最適化
+        ユーザーエクスペリエンス（UX）の最適化
     </string>
     <string name="release_110">
         v1.4.47 / 2018.08.29\n
@@ -175,16 +175,16 @@
     <string name="release_114">
         v1.4.51 / 2018.09.29\n
         AAF共通モジュールの更新\n
-        Android 9 Pieにアプリのパッケージ環境を変更する
+        Android 9 Pie向けにアプリのパッケージ環境を変更
     </string>
     <string name="release_116">
         v1.4.53 / 2018.10.13\n
-        プレビュー写真サイズ設定機能を追加\n
+        プレビュー写真のサイズ設定機能を追加\n
         プレビュー写真のトグル機能を追加(折りたたみまたは展開)
     </string>
     <string name="release_118">
         v1.4.55 / 2018.11.01\n
-        日記の時間表現を改善する\n
+        日記の時間表現を改善\n
         日記のタイトルとタイムラインの時刻情報に太字の設定機能を追加
     </string>
     <string name="release_120">
@@ -193,7 +193,7 @@
     </string>
     <string name="release_126">
         v1.4.63 / 2018.11.25\n
-        Googleのドライブを使用した添付写真のバックアップと復元機能を追加
+        Googleドライブを使用した添付写真のバックアップと復元機能を追加
     </string>
     <string name="release_128">
         v1.4.65 / 2018.12.19\n
@@ -201,26 +201,26 @@
     </string>
     <string name="release_130">
         v1.4.67 / 2019.01.01\n
-        はがき画面に添付写真を表示する機能を改善しました
+        はがき画面に添付写真を表示する機能を改善
     </string>
     <string name="release_131">
         v1.4.68 / 2019.01.06\n
         ソフォスのワクチンに対する信頼性が低いと報告されているいくつかの項目に関するセキュリティ上の考慮事項の解決(Notification listener, Trigger installation)\n
-        はがきフォントサイズ調整機能追加
+        はがきフォントサイズ調整機能を追加
     </string>
     <string name="release_132">
         v1.4.69 / 2019.01.16\n
-        ユーザーの経験（UX）を最適化\n
-        Android 9 Pieバージョンで画面遷移が正常ではないというエラーを修正しました\n
+        ユーザーエクスペリエンス（UX）の最適化\n
+        Android 9 Pieバージョンで画面遷移が正常ではないというエラーを修正\n
         タイムライン日記作成ボタンを追加
     </string>
     <string name="release_133">
         v1.4.70 / 2019.01.25\n
-        日記の内容の概要を表示するオプションを追加しました
+        日記の内容の概要を表示するオプションを追加
     </string>
     <string name="release_134">
         v1.4.71 / 2019.01.26\n
-        デバイス指紋情報の変更時に、アプリケーションの異常終了するエラーを修正
+        デバイス指紋情報の変更時に、アプリが異常終了するエラーを修正
     </string>
     <string name="release_136">
         v1.4.73 / 2019.02.11\n
@@ -233,8 +233,8 @@
     </string>
     <string name="release_138">
         v1.4.75 / 2019.03.22\n
-        よくあるご質問、個人情報保護方針などのアプリケーション固有の情報のご案内ページを追加\n
-        ピンと指紋ロック解除画面の切り替え機能の改善
+        よくある質問、個人情報保護方針などアプリ固有の情報に関する案内ページを追加\n
+        PINと指紋ロック解除画面の切り替え機能の改善
     </string>
     <string name="release_139">
         v1.4.76 / 2019.04.24\n
@@ -246,7 +246,7 @@
     </string>
     <string name="release_141">
         v1.4.78 / 2019.05.13\n
-        設定画面の一部の機能がデバイスストレージにアクセスできない場合に異常終了するエラーを修正しました
+        設定画面の一部の機能が内部ストレージにアクセスできない場合に異常終了するエラーを修正
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -256,13 +256,13 @@
     <string name="write_diary">日記を書く</string>
     <string name="date_picker">日付を選択</string>
     <string name="time_picker">時間を選択</string>
-    <string name="seconds_picker">選択秒数</string>
+    <string name="seconds_picker">秒数を選択</string>
     <string name="save_diary">日記を保存する</string>
     <string name="photo_registration">写真の登録</string>
     <string name="zoom_in">ズームイン</string>
-    <string name="zoom_out">ズームアウトする</string>
-    <string name="edit_diary">ズームアウトする</string>
-    <string name="text_to_speech">ダイアリーからスピーチ</string>
+    <string name="zoom_out">ズームアウト</string>
+    <string name="edit_diary">日記を編集</string>
+    <string name="text_to_speech">日記からスピーチ</string>
     <string name="diary_postcard">日記郵便はがき</string>
     <string name="thumbnail_setting_title">サムネイルのサイズ</string>
     <string name="thumbnail_setting_summary">日記に添付された写真のサムネイルサイズを設定します。設定されたサイズは、検索画面ではなく、日記の作成および変更画面にのみ適用されます。</string>
@@ -271,24 +271,24 @@
     <string name="release_notes_title">リリースノート</string>
     <string name="release_notes_summary">バージョン別に新機能を確認してください。</string>
     <string name="attached_photo_count">添付の写真%d枚</string>
-    <string name="all_day">一日中</string>
+    <string name="all_day">終日</string>
     <string name="bold_style_option_title">太字の設定</string>
     <string name="bold_style_option_summary">日記のタイトルとタイムラインの時間を太字で表示するように設定します。</string>
     <string name="multi_picker_option_title">マルチピッカー設定</string>
-    <string name="multi_picker_option_summary">日記の写真を付けるときは、ギャラリーアプリを使わずに「簡単日記」に用意されているマルチピッカーを使います。 マルチピッカーを有効にすると、一度に複数の画像を添付できます。</string>
-    <string name="preferences_category_backup_restore">アプリケーションのバックアップとリストア</string>
-    <string name="backup_attach_photo_title">ダイアリー添付写真のバックアップ(Beta)</string>
-    <string name="backup_attach_photo_summary">添付した写真をGoogleドライブにバックアップします。 この機能は、一部のデバイスではベータ版のため動作しないことがあります。</string>
-    <string name="recover_attach_photo_title">ダイアリー添付写真の回復する(Beta)</string>
-    <string name="recover_attach_photo_summary">Googleのドライブにバックアップされた添付画像を回復します。この機能は、ベータサービス機能で、一部の機器では動作しないかももあります。</string>
+    <string name="multi_picker_option_summary">日記に写真を添付するとき、ギャラリーアプリを使わずに「Easy Diary」内蔵のマルチピッカーを使います。 マルチピッカーを有効にすると、一度に複数の画像を添付することができます。</string>
+    <string name="preferences_category_backup_restore">アプリのバックアップとリストア</string>
+    <string name="backup_attach_photo_title">日記の添付写真をバックアップ (Beta)</string>
+    <string name="backup_attach_photo_summary">添付した写真をGoogleドライブにバックアップします。 この機能はベータ版であり、一部の端末では正常に動作しない可能性があります。</string>
+    <string name="recover_attach_photo_title">日記の添付写真を復元 (Beta)</string>
+    <string name="recover_attach_photo_summary">Googleドライブにバックアップされた添付写真を復元します。この機能はベータ版であり、一部の端末では正常に動作しない可能性があります。</string>
     <string name="notification_msg_device_file_count">バックアップファイルの数</string>
     <string name="notification_msg_upload_file_count">アップロードするファイルの数</string>
     <string name="notification_msg_upload_invalid">すべてのバックアップ対象ファイルはすでに存在します。</string>
     <string name="notification_msg_upload_empty">バックアップ先のファイルが存在しません。</string>
     <string name="notification_msg_upload_progress">アップロード中…</string>
-    <string name="notification_msg_upload_complete">アップロードの完了</string>
-    <string name="notification_msg_upload_success">Upload Success</string>
-    <string name="notification_msg_upload_fail">Upload Fail</string>
+    <string name="notification_msg_upload_complete">アップロード完了</string>
+    <string name="notification_msg_upload_success">アップロード成功</string>
+    <string name="notification_msg_upload_fail">アップロード失敗</string>
     <string name="notification_msg_google_drive_file_count">回復ファイルの数</string>
     <string name="notification_msg_download_file_count">ダウンロードするファイルの数</string>
     <string name="notification_msg_download_invalid">すべての回復先ファイルがすでに存在しています。</string>
@@ -298,9 +298,9 @@
     <string name="notification_msg_download_success">ダウンロード成功</string>
     <string name="notification_msg_download_fail">ダウンロード失敗</string>
     <string name="notification_msg_duplicate_file_count">存在するファイルの数</string>
-    <string name="preferences_category_lock">アプリケーションロックの設定</string>
+    <string name="preferences_category_lock">アプリロックの設定</string>
     <string name="fingerprint_lock_title">指紋ロック(Beta)</string>
-    <string name="fingerprint_lock_summary">デバイスが指紋認識機能をサポートし、登録された指紋がある場合、登録された指紋でアプリケーションをロックします。</string>
+    <string name="fingerprint_lock_summary">デバイスが指紋認識機能をサポートし、登録された指紋がある場合、登録された指紋でアプリをロックします。</string>
     <string name="fingerprint_not_available">デバイスにインストール済みのオペレーティングシステムが、指紋認識機能をサポートしていません。</string>
     <string name="fingerprint_setting_complete">指紋ロックの設定が完了しました。</string>
     <string name="fingerprint_setting_release">指紋ロックの設定が解除されました。</string>
@@ -308,59 +308,64 @@
     <string name="fingerprint_authentication_fail_try_again">指紋認証に失敗しました。 もう一度お試しください。</string>
     <string name="fingerprint_authentication_info_changed">The fingerprint authentication information of the device has changed and the previously set authentication information can not be used.</string>
     <string name="pin_lock_title">PINロック設定</string>
-    <string name="pin_lock_summary">アプリケーションをロックするためのPINを設定します。</string>
+    <string name="pin_lock_summary">アプリをロックするためのPINを設定します。</string>
     <string name="pin_setting_complete">PINの設定が完了しました。</string>
     <string name="pin_setting_release">PINロックが無効です。</string>
     <string name="pin_release_need_fingerprint_disable">PINロックを無効にするには、指紋のロックを解除する必要があります。</string>
-    <string name="pin_setting_guide_message">PINとして使用する番号を入力してください.</string>
+    <string name="pin_setting_guide_message">PINとして使用する番号を入力してください。</string>
     <string name="pin_unlock_guide_message">PINを入力してください。</string>
     <string name="pin_verification_fail">PINの確認に失敗しました。</string>
     <string name="change_pin_lock_mode">PINロックモードに切り替える</string>
     <string name="diary_creation_time_disable_message">時間情報なし</string>
-    <string name="enable_card_view_policy_title">カードビューの設計を最適化</string>
-    <string name="enable_card_view_policy_summary">カードビューのデザインをデバイスに合わせて最適化されます。</string>
+    <string name="enable_card_view_policy_title">カード表示の最適化</string>
+    <string name="enable_card_view_policy_summary">カード表示のデザインをデバイスに合わせて最適化します。</string>
     <string name="font_size_title">フォントサイズの設定</string>
-    <string name="font_size_summary">フォントのサイズを減らすか、または拡大します。</string>
-    <string name="contents_summary_title">ダイアリーはコンテンツの要約</string>
-    <string name="contents_summary_description">カレンダー、タイムライン、検索画面などで提供されるダイアリーの内容を要約して表現します。</string>
-    <string name="init_cipher_error_guide_message">デバイスの指紋情報が変更されました。ピンロックモードに変更してロックを解除し、指紋のロックを解除した後、再設定して使用します。</string>
+    <string name="font_size_summary">フォントのサイズを縮小、または拡大します。</string>
+    <string name="contents_summary_title">日記の要約表示</string>
+    <string name="contents_summary_description">カレンダー、タイムライン、検索結果などで表示される日記の内容を要約します。</string>
+    <string name="init_cipher_error_guide_message">デバイスの指紋情報が変更されました。PINロックモードに変更してロックを解除し、指紋のロックを解除した後、再設定して使用します。</string>
     <string name="export_excel_title">Excelファイルにエクスポート</string>
     <string name="export_excel_description">すべてのコンテンツをExcelファイルに保存します。</string>
-    <string name="export_excel_xls_location">保管場所</string>
+    <string name="export_excel_xls_location">保存場所</string>
     <string name="export_excel_header_seq">シーケンス</string>
     <string name="export_excel_header_write_date">書き込み日</string>
     <string name="export_excel_header_title">日記のタイトル</string>
     <string name="export_excel_header_contents">日記の内容</string>
-    <string name="export_excel_header_attach_photo_path">添付フォトパス</string>
-    <string name="export_excel_header_attach_photo_size">添付写真サイズ</string>
-    <string name="export_excel_header_write_time_millis">書き込み日\n(Since January 1st 1970 in milliseconds.)</string>
+    <string name="export_excel_header_attach_photo_path">添付写真の保存場所</string>
+    <string name="export_excel_header_attach_photo_size">添付写真のサイズ</string>
+    <string name="export_excel_header_write_time_millis">書き込み日\n(1970年1月1日0時0分0秒を基準としたUNIX時間)</string>
     <string name="export_excel_header_weather">天気</string>
     <string name="export_excel_header_symbol">Symbol</string>
-    <string name="export_excel_header_is_all_day">一日中</string>
+    <string name="export_excel_header_is_all_day">終日</string>
     <string name="weather_sunny">晴れ</string>
     <string name="weather_cloud_and_sun">曇り</string>
     <string name="weather_rain_drops">雨</string>
     <string name="weather_bolt">雷</string>
-    <string name="weather_snowing">すべき</string>
+    <string name="weather_snowing">雪</string>
     <string name="weather_rainbow">虹</string>
     <string name="weather_umbrella">傘</string>
     <string name="weather_stars">星</string>
     <string name="weather_moon">月</string>
     <string name="weather_night_rain">夜の雨</string>
-    <string name="faq_title">よくある質問</string>
-    <string name="faq_description">イージーダイアリーのユーザーがよくある質問とそれに対する回答内容を確認することができます。</string>
+    <string name="faq_title">よくある質問と回答</string>
+    <string name="faq_description">Easy Diaryについての「よくある質問と回答」を確認することができます。</string>
     <string name="faq_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/FAQs.md</string>
     <string name="privacy_policy_title">個人情報保護方針</string>
-    <string name="privacy_policy_description">イージーダイアリー個人情報保護方針です。</string>
+    <string name="privacy_policy_description">Easy Diaryにおける個人情報の保護方針です。</string>
     <string name="privacy_policy_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/Privacy.md</string>
     <string name="diary_symbol">日記のシンボル</string>
-    <string name="diary_symbol_guide_message">現在の天気やダイアリーの内容と一致シンボルを選択します。</string>
+    <string name="diary_symbol_guide_message">今日の天気や日記の内容に一致するシンボルを選択しましょう。</string>
     <string name="category_weather">天気</string>
     <string name="category_emotion">感情</string>
     <string name="category_daily">日常生活&amp;物事</string>
-    <string name="category_food">食べ物&amp;飲料</string>
+    <string name="category_food">食事</string>
     <string name="category_leisure">余暇生活</string>
     <string name="category_landscape">風景</string>
+<<<<<<< HEAD
     <string name="rotate_photo">Rotate</string>
     <string name="task_progress_message">요청작업 진행중...</string>
 </resources>
+=======
+    <string name="rotate_photo">回転</string>
+</resources>
+>>>>>>> master
