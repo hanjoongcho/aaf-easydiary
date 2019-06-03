@@ -275,7 +275,8 @@ class SettingsActivity : EasyDiaryActivity() {
                         listView.adapter = adapter
                         listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
                             val itemInfo = parent.adapter.getItem(position) as HashMap<String, String>
-                            itemInfo["id"]?.let { realmFileId -> 
+                            itemInfo["id"]?.let { realmFileId ->
+                                progressContainer.visibility = View.VISIBLE
                                 driveServiceHelper.downloadFile(realmFileId, EasyDiaryDbHelper.getInstance().path).run {
                                     addOnSuccessListener {
                                         val readDiaryIntent = Intent(this@SettingsActivity, DiaryMainActivity::class.java)
