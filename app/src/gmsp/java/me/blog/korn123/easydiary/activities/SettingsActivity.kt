@@ -168,10 +168,6 @@ class SettingsActivity : EasyDiaryActivity() {
         }
     }
 
-    private fun initWorkFolderComplete(workingFolderId: String) {
-        makeSnackBar("Prepare complete -$workingFolderId")
-    }
-    
     private fun initDriveWorkingDirectory(account: Account, workingFolderName: String, callback: (workingFolderId: String) -> Unit) {
         val driveServiceHelper = DriveServiceHelper(this, account)
         // 01. AAF 폴더 검색
@@ -229,8 +225,10 @@ class SettingsActivity : EasyDiaryActivity() {
     }
 
     private fun backupDiaryPhoto() {
+        progressContainer.visibility = View.VISIBLE
         initGoogleSignAccount { account ->
             initDriveWorkingDirectory(account, DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
+                progressContainer.visibility = View.GONE
                 showAlertDialog("다이어리 첨부사진 백업 작업을 시작하시겠습니까?", DialogInterface.OnClickListener {_, _ ->
                     val backupPhotoService = Intent(this, BackupPhotoService::class.java)
                     backupPhotoService.putExtra(DriveServiceHelper.WORKING_FOLDER_ID, photoFolderId)

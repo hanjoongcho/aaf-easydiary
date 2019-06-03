@@ -609,7 +609,7 @@
             app:layout_constraintTop_toBottomOf="@id/progressBar"
             android:padding="10dp"
             android:textSize="15dp"
-            android:text="요청 작업 진행중..."
+            android:text="@string/task_progress_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </android.support.constraint.ConstraintLayout>
