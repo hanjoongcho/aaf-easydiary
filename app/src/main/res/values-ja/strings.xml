@@ -362,5 +362,5 @@
     <string name="category_leisure">余暇生活</string>
     <string name="category_landscape">風景</string>
     <string name="rotate_photo">回転</string>
-    <string name="task_progress_message">요청작업 진행중...</string>
+    <string name="task_progress_message">요청작업 진행중…</string>
 </resources>
