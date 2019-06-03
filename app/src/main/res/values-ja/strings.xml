@@ -361,11 +361,6 @@
     <string name="category_food">食事</string>
     <string name="category_leisure">余暇生活</string>
     <string name="category_landscape">風景</string>
-<<<<<<< HEAD
-    <string name="rotate_photo">Rotate</string>
+    <string name="rotate_photo">回転</string>
     <string name="task_progress_message">요청작업 진행중...</string>
 </resources>
-=======
-    <string name="rotate_photo">回転</string>
-</resources>
->>>>>>> master
