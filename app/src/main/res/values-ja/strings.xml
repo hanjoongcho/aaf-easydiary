@@ -82,11 +82,11 @@
     <string name="rate_app">アプリを評価する</string>
     <string name="guide_message_3">リクエスト操作の権限がありません。</string>
     <string name="restore_diary">日記を復元する</string>
-    <string name="restore_diary_summary">Googleドライブにバックアップされたデータを利用して、すべてのコンテンツを回復します。</string>
+    <string name="restore_diary_summary">Googleのドライブにバックアップされたデータを利用して、添付の写真を除くすべてのコンテンツを回復します。</string>
     <string name="restore_photo">日記の添付写真を復元する(手動)</string>
     <string name="restore_photo_summary">ユーザーは日記に添付された写真を直接復元します。</string>
     <string name="backup_diary">日記をバックアップする</string>
-    <string name="backup_diary_summary">すべてのコンテンツをGoogleドライブにバックアップします。</string>
+    <string name="backup_diary_summary">添付写真を除くすべてのコンテンツをGoogleのドライブにバックアップします。</string>
     <string name="font_setting">フォントの設定</string>
     <string name="add_ttf_fonts_title">TTFフォントを追加</string>
     <string name="add_ttf_fonts_summary">ユーザーが所有しているTTFフォントを日記に追加して使用します。\nフォントが追加されると、組み込みのフォントと一緒にユーザーが追加したフォントを使用することができます。</string>

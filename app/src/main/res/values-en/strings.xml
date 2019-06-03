@@ -82,11 +82,11 @@
     <string name="rate_app">Rate App</string>
     <string name="guide_message_3">Insufficient permission for the request feature.</string>
     <string name="restore_diary">Recover diary</string>
-    <string name="restore_diary_summary">Recover all content using data backed up to Google Drive.</string>
+    <string name="restore_diary_summary">Recover all content except attachments using data backed up to Google Drive.</string>
     <string name="restore_photo">Recover diary photos(Manual)</string>
     <string name="restore_photo_summary">Users directly recover photos attached to the diary.</string>
     <string name="backup_diary">Backup diary</string>
-    <string name="backup_diary_summary">Back up all your content to Google Drive.</string>
+    <string name="backup_diary_summary">Back up all content except attachments to Google Drive.</string>
     <string name="font_setting">Font setting</string>
     <string name="add_ttf_fonts_title">Add TTF font</string>
     <string name="add_ttf_fonts_summary">Add your own TTF fonts to the Easy Diary.\nIf the fonts are added, you can use the added fonts with the built-in fonts.</string>

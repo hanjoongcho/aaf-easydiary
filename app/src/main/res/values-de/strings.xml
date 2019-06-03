@@ -82,11 +82,11 @@
     <string name="rate_app">App bewerten</string>
     <string name="guide_message_3">Fehlende Berechtigung für das angeforderte Feature.</string>
     <string name="restore_diary">Tagebuch wiederherstellen</string>
-    <string name="restore_diary_summary">Alle Inhalte, die auf Google Drive gesichert sind, wiederherstellen.</string>
+    <string name="restore_diary_summary">Recover all content except attachments using data backed up to Google Drive.</string>
     <string name="restore_photo">Tagebuch-Fotos wiederherstellen</string>
     <string name="restore_photo_summary">Wenn Fotos dem Tagebuch angehängt wurden, stelle sie wieder her.</string>
     <string name="backup_diary">Tagebuch sichern</string>
-    <string name="backup_diary_summary">Sichere alle deine Inhalte auf Google Drive.</string>
+    <string name="backup_diary_summary">Back up all content except attachments to Google Drive.</string>
     <string name="font_setting">Schrift-Einstellungen</string>
     <string name="add_ttf_fonts_title">TTF-Schrift hinzufügen</string>
     <string name="add_ttf_fonts_summary">Füge deine eigene TTF-Schriften dem Easy Diary hinzu. Wenn die Schriften hinzugefügt wurden, kannst du sie zusammen mit den mitgelieferten Schriften verwenden.</string>
