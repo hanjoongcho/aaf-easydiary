@@ -121,9 +121,15 @@ Step5. Import 10 svg files for your project from your Android studio.
        night-rain.svg     -> ic_night_rain.xml
        moon-9.svg         -> ic_moon_9.xml
        bolt.svg           -> ic_bolt.xml
-Step6. Register your package name and SHA-1 signature certificate fingerprint for Google Drive use:
+Step6. Enable the drive API
+Step7. Use the link below create an OAuth 2.0 Client ID:
        https://console.developers.google.com/
-Step7. Build 'aaf-easydiary' project with android studio.
+Step8. Define OAuth 2.0 Client ID in the '/app/src/gms/res/values/keys.xml' file.
+       <resources>
+           <string name="oauth_requerst_id_token">523901516987-111111144k1ub4g2l286ipi06g3nm295.apps.googleusercontent.com</string>
+       </resources> 
+         
+Step9. Build 'aaf-easydiary' project with android studio.
        a. Build > Select Build Variant
        b. Select 'gmsRelease' from the Build Variant setting and run
 ```
