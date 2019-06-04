@@ -147,19 +147,18 @@ class SettingsActivity : EasyDiaryActivity() {
     private fun initGoogleSignAccount(callback: (account: Account) -> Unit) {
         accountCallback = callback
 
-        // Configure sign-in to request the user's ID, email address, and basic
-        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-        val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.oauth_requerst_id_token))
-                .requestEmail()
-                .build()
-        val client = GoogleSignIn.getClient(this, gso)
-
         // Check for existing Google Sign In account, if the user is already signed in
         // the GoogleSignInAccount will be non-null.
-        var googleSignInAccount: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
+        val googleSignInAccount: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
 
         if (googleSignInAccount == null) {
+            // Configure sign-in to request the user's ID, email address, and basic
+            // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+            val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(getString(R.string.oauth_requerst_id_token))
+                    .requestEmail()
+                    .build()
+            val client = GoogleSignIn.getClient(this, gso)
             startActivityForResult(client.signInIntent, 1106)
         } else {
             googleSignInAccount.account?.let {
@@ -342,6 +341,7 @@ class SettingsActivity : EasyDiaryActivity() {
             mDevModeClickCount++
             if (mDevModeClickCount > 5) {
                 signOutGoogleOAuth.visibility = View.VISIBLE
+                makeSnackBar(BuildConfig.VERSION_CODE.toString())
             }
         }
 
