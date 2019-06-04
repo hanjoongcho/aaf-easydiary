@@ -86,7 +86,8 @@ class SettingsActivity : EasyDiaryActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
+        pauseLock()
+        
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == 1106) {
             // The Task returned from this call is always completed, no need to attach
