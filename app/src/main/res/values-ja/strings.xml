@@ -362,5 +362,10 @@
     <string name="category_leisure">余暇生活</string>
     <string name="category_landscape">風景</string>
     <string name="rotate_photo">回転</string>
-    <string name="task_progress_message">요청작업 진행중…</string>
+    <string name="task_progress_message">リクエスト処理進行中…</string>
+    <string name="open_realm_file_title">日記回復</string>
+    <string name="open_realm_file_message">回復対象のファイルを選択します。</string>
+    <string name="backup_completed_message">ダイアリーバックアップジョブが完了しました。</string>
+    <string name="backup_confirm_message">ダイアリー添付写真のバックアップジョブを開始しますか?</string>
+    <string name="recover_confirm_attached_photo">ダイアリー添付写真の回復作業を開始しますか?</string>
 </resources>

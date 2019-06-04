@@ -87,9 +87,9 @@ class SettingsActivity : EasyDiaryActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         pauseLock()
-        
+
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-        if (requestCode == 1106) {
+        if (requestCode == REQUEST_CODE_GOOGLE_SIGN_IN) {
             // The Task returned from this call is always completed, no need to attach
             // a listener.
             var task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
@@ -160,7 +160,7 @@ class SettingsActivity : EasyDiaryActivity() {
                     .requestEmail()
                     .build()
             val client = GoogleSignIn.getClient(this, gso)
-            startActivityForResult(client.signInIntent, 1106)
+            startActivityForResult(client.signInIntent, REQUEST_CODE_GOOGLE_SIGN_IN)
         } else {
             googleSignInAccount.account?.let {
                 accountCallback.invoke(it)
@@ -218,7 +218,7 @@ class SettingsActivity : EasyDiaryActivity() {
                         EasyDiaryUtils.easyDiaryMimeType
                 ).addOnSuccessListener {
                     progressContainer.visibility = View. GONE
-                    makeSnackBar("다이어리 백업작업이 완료되었습니다.")
+                    makeSnackBar(getString(R.string.backup_completed_message))
                 }
             }
         }
@@ -229,7 +229,7 @@ class SettingsActivity : EasyDiaryActivity() {
         initGoogleSignAccount { account ->
             initDriveWorkingDirectory(account, DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
                 progressContainer.visibility = View.GONE
-                showAlertDialog("다이어리 첨부사진 백업 작업을 시작하시겠습니까?", DialogInterface.OnClickListener {_, _ ->
+                showAlertDialog(getString(R.string.backup_confirm_message), DialogInterface.OnClickListener {_, _ ->
                     val backupPhotoService = Intent(this, BackupPhotoService::class.java)
                     backupPhotoService.putExtra(DriveServiceHelper.WORKING_FOLDER_ID, photoFolderId)
                     startService(backupPhotoService)
@@ -245,7 +245,7 @@ class SettingsActivity : EasyDiaryActivity() {
     }
     
     private fun recoverDiaryPhoto() {
-        showAlertDialog("다이어리 첨부사진 복구 작업을 시작하시겠습니까?", DialogInterface.OnClickListener {_, _ ->
+        showAlertDialog(getString(R.string.backup_confirm_attached_photo), DialogInterface.OnClickListener {_, _ ->
             val recoverPhotoService = Intent(this, RecoverPhotoService::class.java)
             startService(recoverPhotoService)
             finish()
@@ -266,8 +266,8 @@ class SettingsActivity : EasyDiaryActivity() {
                         }
                         val builder = AlertDialog.Builder(this@SettingsActivity)
                         builder.setNegativeButton(getString(android.R.string.cancel), null)
-                        builder.setTitle("다이어리 복구")
-                        builder.setMessage("복구대상 파일을 선택하세요.")
+                        builder.setTitle(getString(R.string.open_realm_file_title))
+                        builder.setMessage(getString(R.string.open_realm_file_message))
                         val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
                         val fontView = inflater.inflate(R.layout.dialog_realm_files, null)
                         val listView = fontView.findViewById<ListView>(R.id.files)

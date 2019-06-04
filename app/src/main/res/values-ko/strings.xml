@@ -363,4 +363,9 @@
     <string name="category_landscape">풍경</string>
     <string name="rotate_photo">Rotate</string>
     <string name="task_progress_message">요청작업 진행중…</string>
+    <string name="open_realm_file_title">다이어리 복구</string>
+    <string name="open_realm_file_message">복구대상 파일을 선택하세요.</string>
+    <string name="backup_completed_message">다이어리 백업작업이 완료되었습니다.</string>
+    <string name="backup_confirm_message">다이어리 첨부사진 백업 작업을 시작하시겠습니까?</string>
+    <string name="recover_confirm_attached_photo">다이어리 첨부사진 복구 작업을 시작하시겠습니까?</string>
 </resources>

@@ -362,5 +362,10 @@
     <string name="category_leisure">Leisure life</string>
     <string name="category_landscape">Landscape</string>
     <string name="rotate_photo">Rotate</string>
-    <string name="task_progress_message">요청작업 진행중…</string>
+    <string name="task_progress_message">Request work in process…</string>
+    <string name="open_realm_file_title">Diary Recovery</string>
+    <string name="open_realm_file_message">Please choose a recovery target file.</string>
+    <string name="backup_completed_message">Diary backup job is complete.</string>
+    <string name="backup_confirm_message">Do you want to start an attached photo backup task?</string>
+    <string name="recover_confirm_attached_photo">Do you want to start an attached photo recovery task?</string>
 </resources>
