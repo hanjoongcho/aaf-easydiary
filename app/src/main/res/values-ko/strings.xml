@@ -248,6 +248,10 @@
         v1.4.78 / 2019.05.13\n
         저장소 접근권한이 없는경우 설정화면 일부 기능에서 비정상 종료되던 버그 수정
     </string>
+    <string name="release_142">
+        v1.4.79 / 2019.06.05\n
+        Google Drive Android API를 Google Drive REST API로 변경함(Google Drive Android API는 2019년 12월 6일부터 서비스 종료됨)  
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
