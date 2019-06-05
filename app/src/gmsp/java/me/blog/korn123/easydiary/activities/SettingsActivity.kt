@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.activities
 
 import android.accounts.Account
+import android.app.Activity
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
@@ -88,14 +89,22 @@ class SettingsActivity : EasyDiaryActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         pauseLock()
 
-        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-        if (requestCode == REQUEST_CODE_GOOGLE_SIGN_IN) {
-            // The Task returned from this call is always completed, no need to attach
-            // a listener.
-            var task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
-            var googleSignAccount = task.getResult(ApiException::class.java)
-            googleSignAccount.account?.let {
-                accountCallback.invoke(it)
+        when (requestCode == Activity.RESULT_OK && data != null) {
+            true -> {
+                // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+                if (requestCode == REQUEST_CODE_GOOGLE_SIGN_IN) {
+                    // The Task returned from this call is always completed, no need to attach
+                    // a listener.
+                    val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
+                    val googleSignAccount = task.getResult(ApiException::class.java)
+                    googleSignAccount.account?.let {
+                        accountCallback.invoke(it)
+                    }
+                }
+            }
+            false -> {
+                makeSnackBar("Google account verification failed.")
+                progressContainer.visibility = View. GONE
             }
         }
     }
