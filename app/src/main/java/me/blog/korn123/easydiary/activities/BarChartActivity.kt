@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.activities
 
+import android.graphics.Color
 import android.os.Bundle
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
@@ -82,10 +83,6 @@ class BarChartActivity : ChartBase() {
         l.formSize = 9f
         l.textSize = 11f
         l.xEntrySpace = 4f
-        // l.setExtra(ColorTemplate.VORDIPLOM_COLORS, new String[] { "abc",
-        // "def", "ghj", "ikl", "mno" });
-        // l.setCustom(ColorTemplate.VORDIPLOM_COLORS, new String[] { "abc",
-        // "def", "ghj", "ikl", "mno" });
 
         val mv = XYMarkerView(this, xAxisFormatter)
         mv.chartView = barChart // For bounds control
@@ -97,7 +94,7 @@ class BarChartActivity : ChartBase() {
     private fun setData(count: Int, range: Float) {
         val listDiary = EasyDiaryDbHelper.readDiary(null)
         val map = hashMapOf<Int, Int>()
-        listDiary?.map { diaryDto ->
+        listDiary.map { diaryDto ->
             val writeHour = DateUtils.timeMillisToDateTime(diaryDto.currentTimeMillis, "HH")
             val itemNumber = hourToItemNumber(Integer.parseInt(writeHour))
             if (map[itemNumber] == null) {
@@ -119,9 +116,10 @@ class BarChartActivity : ChartBase() {
         set1 = BarDataSet(yVals1, getString(R.string.bar_chart_status))
         val iValueFormatter = IValueFormatterExt(this)
         set1.valueFormatter = iValueFormatter
-        //            set1.setDrawIcons(false);
-
-        set1.setColors(*ColorTemplate.MATERIAL_COLORS)
+        val colors = intArrayOf(
+                Color.rgb(193, 37, 82), Color.rgb(255, 102, 0), Color.rgb(245, 199, 0),
+                Color.rgb(106, 150, 31), Color.rgb(179, 100, 53), Color.rgb(115, 130, 153))
+        set1.setColors(*colors)
 
         val dataSets = ArrayList<IBarDataSet>()
         dataSets.add(set1)
@@ -144,18 +142,13 @@ class BarChartActivity : ChartBase() {
         else -> getString(R.string.range_g)
     }
 
-    companion object {
-        fun hourToItemNumber(hour: Int): Int {
-            var itemNumber = when (hour) {
-                in 0..3 -> 1
-                in 4..7 -> 2
-                in 8..11 -> 3
-                in 12..15 -> 4
-                in 16..19 -> 5
-                in 20..23 -> 6
-                else -> 0
-            }
-            return itemNumber
-        }
+    private fun hourToItemNumber(hour: Int): Int = when (hour) {
+        in 0..3 -> 1
+        in 4..7 -> 2
+        in 8..11 -> 3
+        in 12..15 -> 4
+        in 16..19 -> 5
+        in 20..23 -> 6
+        else -> 0
     }
 }
