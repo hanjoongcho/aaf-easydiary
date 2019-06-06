@@ -89,7 +89,7 @@ class SettingsActivity : EasyDiaryActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         pauseLock()
 
-        when (requestCode == Activity.RESULT_OK && data != null) {
+        when (resultCode == Activity.RESULT_OK && data != null) {
             true -> {
                 // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
                 if (requestCode == REQUEST_CODE_GOOGLE_SIGN_IN) {
