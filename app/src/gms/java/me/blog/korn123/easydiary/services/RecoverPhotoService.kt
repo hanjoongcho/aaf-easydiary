@@ -31,7 +31,6 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
     private var failCount = 0
     private var mInProcessJob = true
     private var targetIndexesCursor = 0
-//    private val targetIndexes = arrayListOf<Int>()
     private val targetItems = arrayListOf<HashMap<String, String>>()
     private val photoPath = "${Environment.getExternalStorageDirectory().absolutePath}$DIARY_PHOTO_DIRECTORY"
     private lateinit var mDriveServiceHelper: DriveServiceHelper
@@ -77,7 +76,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
                 .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
                 .setOnlyAlertOnce(true)
                 .setContentTitle(getString(R.string.recover_attach_photo_title))
-                .setContentText("Preparing to download files...")
+                .setContentText(getString(R.string.task_progress_message))
                 .addAction(
                         R.drawable.cloud_download,
                         getString(R.string.cancel),
@@ -170,58 +169,8 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
                 Log.i("GSuite", "not exist application folder")
             }
         }
-
-//        val query = Query.Builder()
-//                .addFilter(
-//                        Filters.and(
-//                                Filters.eq(SearchableField.MIME_TYPE, AAF_EASY_DIARY_PHOTO),
-//                                Filters.eq(SearchableField.TRASHED, false)
-//                        )
-//                )
-//                .build()
-//        val queryTask = driveResourceClient?.queryChildren(folder, query)
-//        queryTask?.addOnSuccessListener { it ->
-//            mMetadataBuffer = it
-//            mMetadataBuffer.forEachIndexed { index, metadata ->
-//                if (!File("$photoPath${metadata.title}").exists()) targetIndexes.add(index)
-//            }
-//
-//            remoteDriveFileCount = mMetadataBuffer.count
-//            duplicateFileCount = remoteDriveFileCount - targetIndexes.size
-//            when (targetIndexes.size) {
-//                0 -> updateNotification()
-//                else -> {
-//                    val metaData = mMetadataBuffer[targetIndexes[targetIndexesCursor++]]
-//                    retrieveContents(metaData.driveId.asDriveFile(), "$photoPath${metaData.title}")
-//                }
-//            }
-//        }
     }
 
-//    private fun retrieveContents(file: DriveFile, destFilePath: String) {
-//        val openCallback = object : OpenFileCallback() {
-//            override fun onProgress(bytesDownloaded: Long, bytesExpected: Long) {}
-//            override fun onContents(driveContents: DriveContents) {
-//                // [START_EXCLUDE]
-//                try {
-//                    FileUtils.copyInputStreamToFile(driveContents.inputStream, File(destFilePath))
-//                    successCount++
-//                    updateNotification()
-//                } catch (e: IOException) {
-//                    failCount++
-//                    updateNotification()
-//                }
-//                // [END_EXCLUDE]
-//            }
-//            override fun onError(e: Exception) {
-//                failCount++
-//                updateNotification()
-//            }
-//        }
-//
-//        driveResourceClient?.openFile(file, DriveFile.MODE_READ_ONLY, openCallback)
-//    }
-//
     private fun updateNotification() {
         if (targetItems.size == 0) {
             launchCompleteNotification(getString(R.string.notification_msg_download_invalid))

@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.activities
 
 import android.accounts.Account
+import android.app.Activity
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
@@ -63,6 +64,7 @@ class SettingsActivity : EasyDiaryActivity() {
     private lateinit var accountCallback: (Account) -> Unit
     private var mAlertDialog: AlertDialog? = null
     private var mTaskFlag = 0
+    private var mDevModeClickCount = 0
     
 
     /***************************************************************************************************
@@ -85,15 +87,24 @@ class SettingsActivity : EasyDiaryActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        pauseLock()
 
-        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-        if (requestCode == 1106) {
-            // The Task returned from this call is always completed, no need to attach
-            // a listener.
-            var task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
-            var googleSignAccount = task.getResult(ApiException::class.java)
-            googleSignAccount.account?.let {
-                accountCallback.invoke(it)
+        when (requestCode == Activity.RESULT_OK && data != null) {
+            true -> {
+                // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+                if (requestCode == REQUEST_CODE_GOOGLE_SIGN_IN) {
+                    // The Task returned from this call is always completed, no need to attach
+                    // a listener.
+                    val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
+                    val googleSignAccount = task.getResult(ApiException::class.java)
+                    googleSignAccount.account?.let {
+                        accountCallback.invoke(it)
+                    }
+                }
+            }
+            false -> {
+                makeSnackBar("Google account verification failed.")
+                progressContainer.visibility = View. GONE
             }
         }
     }
@@ -146,20 +157,19 @@ class SettingsActivity : EasyDiaryActivity() {
     private fun initGoogleSignAccount(callback: (account: Account) -> Unit) {
         accountCallback = callback
 
-        // Configure sign-in to request the user's ID, email address, and basic
-        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-        val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.oauth_requerst_id_token))
-                .requestEmail()
-                .build()
-        val client = GoogleSignIn.getClient(this, gso)
-
         // Check for existing Google Sign In account, if the user is already signed in
         // the GoogleSignInAccount will be non-null.
-        var googleSignInAccount: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
+        val googleSignInAccount: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
 
         if (googleSignInAccount == null) {
-            startActivityForResult(client.signInIntent, 1106)
+            // Configure sign-in to request the user's ID, email address, and basic
+            // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+            val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(getString(R.string.oauth_requerst_id_token))
+                    .requestEmail()
+                    .build()
+            val client = GoogleSignIn.getClient(this, gso)
+            startActivityForResult(client.signInIntent, REQUEST_CODE_GOOGLE_SIGN_IN)
         } else {
             googleSignInAccount.account?.let {
                 accountCallback.invoke(it)
@@ -167,14 +177,10 @@ class SettingsActivity : EasyDiaryActivity() {
         }
     }
 
-    private fun initWorkFolderComplete(workingFolderId: String) {
-        makeSnackBar("Prepare complete -$workingFolderId")
-    }
-    
     private fun initDriveWorkingDirectory(account: Account, workingFolderName: String, callback: (workingFolderId: String) -> Unit) {
         val driveServiceHelper = DriveServiceHelper(this, account)
         // 01. AAF 폴더 검색
-        driveServiceHelper.queryFiles("'root' in parents and name = '${DriveServiceHelper.AAF_ROOT_FOLDER_NAME}'").run {
+        driveServiceHelper.queryFiles("'root' in parents and name = '${DriveServiceHelper.AAF_ROOT_FOLDER_NAME}' and trashed = false").run {
             addOnSuccessListener { result ->
                 when (result.files.size) {
                     // 02. AAF 폴더 없으면 생성
@@ -187,7 +193,7 @@ class SettingsActivity : EasyDiaryActivity() {
                     // 03. workingFolder 검색
                     1 -> {
                         val parentId = result.files[0].id
-                        driveServiceHelper.queryFiles("'$parentId' in parents and name = '$workingFolderName'").addOnSuccessListener {
+                        driveServiceHelper.queryFiles("'$parentId' in parents and name = '$workingFolderName' and trashed = false").addOnSuccessListener {
                             when (it.files.size) {
                                 // 03-01. workingFolder 생성
                                 0 -> driveServiceHelper.createFolder(workingFolderName, parentId).addOnSuccessListener { workingFolderId ->
@@ -221,21 +227,23 @@ class SettingsActivity : EasyDiaryActivity() {
                         EasyDiaryUtils.easyDiaryMimeType
                 ).addOnSuccessListener {
                     progressContainer.visibility = View. GONE
-                    makeSnackBar("다이어리 백업작업이 완료되었습니다.")
+                    makeSnackBar(getString(R.string.backup_completed_message))
                 }
             }
         }
     }
 
     private fun backupDiaryPhoto() {
+        progressContainer.visibility = View.VISIBLE
         initGoogleSignAccount { account ->
             initDriveWorkingDirectory(account, DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
-                showAlertDialog("다이어리 첨부사진 백업 작업을 시작하시겠습니까?", DialogInterface.OnClickListener {_, _ ->
+                progressContainer.visibility = View.GONE
+                showAlertDialog(getString(R.string.backup_confirm_message), DialogInterface.OnClickListener {_, _ ->
                     val backupPhotoService = Intent(this, BackupPhotoService::class.java)
                     backupPhotoService.putExtra(DriveServiceHelper.WORKING_FOLDER_ID, photoFolderId)
                     startService(backupPhotoService)
                     finish()
-                }, false)
+                }, null)
             }
         }
     }
@@ -246,11 +254,11 @@ class SettingsActivity : EasyDiaryActivity() {
     }
     
     private fun recoverDiaryPhoto() {
-        showAlertDialog("다이어리 첨부사진 복구 작업을 시작하시겠습니까?", DialogInterface.OnClickListener {_, _ ->
+        showAlertDialog(getString(R.string.recover_confirm_attached_photo), DialogInterface.OnClickListener {_, _ ->
             val recoverPhotoService = Intent(this, RecoverPhotoService::class.java)
             startService(recoverPhotoService)
             finish()
-        }, false)
+        }, null)
     }
 
     private fun openRealmFilePickerDialog() {
@@ -267,8 +275,8 @@ class SettingsActivity : EasyDiaryActivity() {
                         }
                         val builder = AlertDialog.Builder(this@SettingsActivity)
                         builder.setNegativeButton(getString(android.R.string.cancel), null)
-                        builder.setTitle("다이어리 복구")
-                        builder.setMessage("복구대상 파일을 선택하세요.")
+                        builder.setTitle(getString(R.string.open_realm_file_title))
+                        builder.setMessage(getString(R.string.open_realm_file_message))
                         val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
                         val fontView = inflater.inflate(R.layout.dialog_realm_files, null)
                         val listView = fontView.findViewById<ListView>(R.id.files)
@@ -276,7 +284,8 @@ class SettingsActivity : EasyDiaryActivity() {
                         listView.adapter = adapter
                         listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
                             val itemInfo = parent.adapter.getItem(position) as HashMap<String, String>
-                            itemInfo["id"]?.let { realmFileId -> 
+                            itemInfo["id"]?.let { realmFileId ->
+                                progressContainer.visibility = View.VISIBLE
                                 driveServiceHelper.downloadFile(realmFileId, EasyDiaryDbHelper.getInstance().path).run {
                                     addOnSuccessListener {
                                         val readDiaryIntent = Intent(this@SettingsActivity, DiaryMainActivity::class.java)
@@ -337,8 +346,14 @@ class SettingsActivity : EasyDiaryActivity() {
         exportExcel.setOnClickListener(mOnClickListener)
         faq.setOnClickListener(mOnClickListener)
         privacyPolicy.setOnClickListener(mOnClickListener)
-        testRestApi.setOnClickListener(mOnClickListener)
-        signOut.setOnClickListener(mOnClickListener)
+        signOutGoogleOAuth.setOnClickListener(mOnClickListener)
+        devMode.setOnClickListener {
+            mDevModeClickCount++
+            if (mDevModeClickCount > 5) {
+                signOutGoogleOAuth.visibility = View.VISIBLE
+                makeSnackBar(BuildConfig.VERSION_CODE.toString())
+            }
+        }
 
         fontLineSpacing.configBuilder
                 .min(0.2F)
@@ -513,19 +528,11 @@ class SettingsActivity : EasyDiaryActivity() {
                     putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, getString(R.string.privacy_policy_title))
                 })
             }
-            R.id.testRestApi -> {
-                makeSnackBar("Start test :)")
-                initGoogleSignAccount { account ->
-                    initDriveWorkingDirectory(account, DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) {
-                        initWorkFolderComplete(it)
-                    }
-                }
-            }
-            R.id.signOut -> {
+            R.id.signOutGoogleOAuth -> {
                 // Configure sign-in to request the user's ID, email address, and basic
                 // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
                 val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestIdToken("523901516987-1ovfkda44k1ub4g2l286ipi06g3nm295.apps.googleusercontent.com")
+                        .requestIdToken(getString(R.string.oauth_requerst_id_token))
                         .requestEmail()
                         .build()
                 val client = GoogleSignIn.getClient(this, gso)
