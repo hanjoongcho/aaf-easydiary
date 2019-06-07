@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.80 (date: 2019/06/07)
+  * Changed Google Drive Android API to Google Drive REST API (Google Drive Android API will be shut down on December 6, 2019)
+  
 # Changes in 1.4.78 (date: 2019/05/13)
   * Fixed an error that ended abnormally if some function of the setting screen does not have access to device storage
 

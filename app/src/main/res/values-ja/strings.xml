@@ -248,8 +248,8 @@
         v1.4.78 / 2019.05.13\n
         設定画面の一部の機能が内部ストレージにアクセスできない場合に異常終了するエラーを修正
     </string>
-    <string name="release_142">
-        v1.4.79 / 2019.06.05\n
+    <string name="release_143">
+        v1.4.80 / 2019.06.07\n
         Google Drive Android APIをGoogle Drive REST APIに変更 （Google Drive Android APIは2019年12月6日にサービス終了のため）
     </string>
     

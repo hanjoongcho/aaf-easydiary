@@ -248,8 +248,8 @@
         v1.4.78 / 2019.05.13\n
         Fixed an error that ended abnormally if some function of the setting screen does not have access to device storage
     </string>
-    <string name="release_142">
-        v1.4.79 / 2019.06.05\n
+    <string name="release_143">
+        v1.4.80 / 2019.06.07\n
         Changed Google Drive Android API to Google Drive REST API (Google Drive Android API will be shut down on December 6, 2019)
     </string>
     

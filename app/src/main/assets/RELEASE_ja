@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.80 (date: 2019/06/07)
+  * Google Drive Android APIをGoogle Drive REST APIに変更 （Google Drive Android APIは2019年12月6日にサービス終了のため）
+  
 # Changes in 1.4.78 (date: 2019/05/13)
   * 設定画面の一部の機能がデバイスストレージにアクセスできない場合に異常終了するエラーを修正しました
 
