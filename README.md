@@ -172,7 +172,7 @@ Currently supported languages are listed below:
 [strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-en/strings.xml)  
 
 > Japanese Translation contributor  
-* Google translation robot  
+* ScratchBuild (https://github.com/ScratchBuild)  
 [strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-ja/strings.xml)  
 
 > German Translation contributor
