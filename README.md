@@ -170,10 +170,12 @@ Currently supported languages are listed below:
 > English Translation contributor 
 * Google translation robot  
 [strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-en/strings.xml)  
+[MANUAL.md](https://github.com/hanjoongcho/aaf-easydiary/blob/master/MANUAL.md)  
 
 > Japanese Translation contributor  
 * ScratchBuild (https://github.com/ScratchBuild)  
 [strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-ja/strings.xml)  
+[MANUAL_ja.md](https://github.com/hanjoongcho/aaf-easydiary/blob/master/MANUAL_ja.md)  
 
 > German Translation contributor
 * fulmeek (https://github.com/fulmeek)  
