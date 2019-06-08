@@ -148,6 +148,15 @@
 
     <string-array name="symbol_item_array">
         <item>350|Youtube</item>
+        <item>351|Dropbox</item>
+        <item>352|PayPal</item>
+        <item>353|HTML5</item>
+        <item>354|Snapchat</item>
+        <item>355|Android</item>
+        <item>356|Linkedin</item>
+        <item>357|Twitter</item>
+        <item>358|Instagram</item>
+        <item>359|Facebook</item>
     </string-array>
 
     <string-array name="pref_list_fonts_title">

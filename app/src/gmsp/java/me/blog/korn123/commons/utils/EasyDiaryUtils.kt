@@ -205,6 +205,15 @@ object EasyDiaryUtils {
                 LEISURE_TELEVISION -> setImageResource(R.drawable.ic_television)
 
                 SYMBOL_YOUTUBE -> setImageResource(R.drawable.ic_youtube)
+                SYMBOL_DROPBOX -> setImageResource(R.drawable.ic_dropbox)
+                SYMBOL_PAYPAL -> setImageResource(R.drawable.ic_paypal)
+                SYMBOL_HTML5 -> setImageResource(R.drawable.ic_html5)
+                SYMBOL_SNAPCHAT -> setImageResource(R.drawable.ic_snapchat)
+                SYMBOL_ANDROID -> setImageResource(R.drawable.ic_android)
+                SYMBOL_LINKEDIN -> setImageResource(R.drawable.ic_linkedin)
+                SYMBOL_TWITTER -> setImageResource(R.drawable.ic_twitter)
+                SYMBOL_INSTAGRAM -> setImageResource(R.drawable.ic_instagram)
+                SYMBOL_FACEBOOK -> setImageResource(R.drawable.ic_facebook)
 
                 else -> setImageResource(0)
             }
