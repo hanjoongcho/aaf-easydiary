@@ -33,16 +33,9 @@ class PhotoViewHolder(
         val size = if (point.x > point.y) height else point.x
 
         if (forceSinglePhotoPosition > -1) {
-            when (position == forceSinglePhotoPosition) {
-                true -> {
-                    imageView.visibility = View.VISIBLE
-                    imageView.layoutParams.width = size
-                    imageView.layoutParams.height = size
-                }
-                false -> {
-                    imageView.visibility = View.GONE
-                }
-            }
+            imageView.visibility = View.VISIBLE
+            imageView.layoutParams.width = size
+            imageView.layoutParams.height = size
         } else {
             when (itemCount) {
                 1 -> {
