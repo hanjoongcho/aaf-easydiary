@@ -13,9 +13,11 @@ import me.blog.korn123.easydiary.viewholders.PhotoViewHolder
 
 class PhotoAdapter(
         val activity: Activity,
-        val photoUris: RealmList<PhotoUriDto>
+        val photoUris: RealmList<PhotoUriDto>,
+        private val longClickCallback: (position: Int) -> Unit
 ) : RecyclerView.Adapter<PhotoViewHolder>() {
     private val glideOptionMap = hashMapOf<Int, Int>()
+    private var forceSinglePhotoPosition: Int = -1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -30,10 +32,24 @@ class PhotoAdapter(
                     null -> glideOptionMap[position] = 1
                     else -> glideOptionMap[position] = glideOptionMap[position]?.plus(1) ?: 0
                 }
-                holder.bindTo(photoUri.getFilePath(), position, glideOptionMap[position]?.rem(9) ?: 0)
+                if (forceSinglePhotoPosition > -1) {
+                    holder.bindTo(photoUri.getFilePath(), position, glideOptionMap[position]?.rem(9) ?: 0, forceSinglePhotoPosition)
+                } else {
+                    holder.bindTo(photoUri.getFilePath(), position, glideOptionMap[position]?.rem(9) ?: 0)
+                }
             }
 
-            holder.bindTo(photoUri.getFilePath(), position)
+            holder.itemView.setOnLongClickListener { _ ->
+                longClickCallback.invoke(position)
+                forceSinglePhotoPosition = position
+                true
+            }
+
+            if (forceSinglePhotoPosition > -1) {
+                holder.bindTo(photoUri.getFilePath(), position, 0, forceSinglePhotoPosition)
+            } else {
+                holder.bindTo(photoUri.getFilePath(), position)
+            }
         }
     }
 

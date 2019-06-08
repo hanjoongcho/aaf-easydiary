@@ -86,7 +86,21 @@ class PostCardActivity : EasyDiaryActivity() {
             diaryDto.photoUris?.let {
                 if (/*resources.configuration.orientation == ORIENTATION_PORTRAIT && */it.size > 0) {
                     photoContainer.visibility = View.VISIBLE
-                    mPhotoAdapter = PhotoAdapter(this, it)
+
+                    // FIXME remove duplicate code
+                    mPhotoAdapter = PhotoAdapter(this, it) { _ ->
+                        photoGrid.run {
+                            when (resources.configuration.orientation == ORIENTATION_PORTRAIT) {
+                                true -> {
+                                    layoutParams.height = CommonUtils.getDefaultDisplay(this@PostCardActivity).x
+                                }
+                                false -> {
+                                    layoutParams.width = CommonUtils.getDefaultDisplay(this@PostCardActivity).y - actionBarHeight() - statusBarHeight() - seekBarContainer.height
+                                }
+                            }
+                        }
+                        mPhotoAdapter.notifyDataSetChanged()
+                    }
 
                     photoGrid.run {
                         layoutManager = FlexboxLayoutManager(this@PostCardActivity).apply {
