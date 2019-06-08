@@ -214,6 +214,16 @@ object EasyDiaryUtils {
                 SYMBOL_TWITTER -> setImageResource(R.drawable.ic_twitter)
                 SYMBOL_INSTAGRAM -> setImageResource(R.drawable.ic_instagram)
                 SYMBOL_FACEBOOK -> setImageResource(R.drawable.ic_facebook)
+                SYMBOL_FLICKR -> setImageResource(R.drawable.ic_flickr)
+                SYMBOL_REDDIT -> setImageResource(R.drawable.ic_reddit)
+                SYMBOL_TRELLO -> setImageResource(R.drawable.ic_trello)
+                SYMBOL_QUORA -> setImageResource(R.drawable.ic_quora)
+                SYMBOL_LINE -> setImageResource(R.drawable.ic_line)
+                SYMBOL_GITHUB -> setImageResource(R.drawable.ic_github_logo)
+                SYMBOL_LINUX -> setImageResource(R.drawable.ic_linux)
+                SYMBOL_UBUNTU -> setImageResource(R.drawable.ic_ubuntu)
+                SYMBOL_JAVA -> setImageResource(R.drawable.ic_java)
+                SYMBOL_SLIDESHARE -> setImageResource(R.drawable.ic_slideshare)
 
                 else -> setImageResource(0)
             }

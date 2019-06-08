@@ -157,6 +157,16 @@
         <item>357|Twitter</item>
         <item>358|Instagram</item>
         <item>359|Facebook</item>
+        <item>360|Flickr</item>
+        <item>361|Reddit</item>
+        <item>362|Trello</item>
+        <item>363|Quora</item>
+        <item>364|Line</item>
+        <item>365|GitHub</item>
+        <item>366|Linux</item>
+        <item>367|Ubuntu</item>
+        <item>368|Java</item>
+        <item>369|SlideShare</item>
     </string-array>
 
     <string-array name="pref_list_fonts_title">
