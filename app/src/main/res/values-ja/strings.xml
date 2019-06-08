@@ -372,4 +372,5 @@
     <string name="backup_completed_message">日記のバックアップジョブが完了しました。</string>
     <string name="backup_confirm_message">添付写真のバックアップを開始しますか？</string>
     <string name="recover_confirm_attached_photo">添付写真の復元作業を開始しますか？</string>
+    <string name="category_symbol">Symbol</string>
 </resources>

@@ -146,6 +146,10 @@
         <item>209|Forest</item>
     </string-array>
 
+    <string-array name="symbol_item_array">
+        <item>350|Youtube</item>
+    </string-array>
+
     <string-array name="pref_list_fonts_title">
         <item>NanumPen</item>
         <item>NanumBrush</item>

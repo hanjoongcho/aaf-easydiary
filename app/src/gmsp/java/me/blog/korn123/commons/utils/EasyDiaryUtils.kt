@@ -204,6 +204,8 @@ object EasyDiaryUtils {
                 LEISURE_HAIR_SALON_1 -> setImageResource(R.drawable.ic_hairdresser_w)
                 LEISURE_TELEVISION -> setImageResource(R.drawable.ic_television)
 
+                SYMBOL_YOUTUBE -> setImageResource(R.drawable.ic_youtube)
+
                 else -> setImageResource(0)
             }
         }
@@ -361,7 +363,8 @@ object EasyDiaryUtils {
                 *context.resources.getStringArray(R.array.daily_item_array),
                 *context.resources.getStringArray(R.array.food_item_array),
                 *context.resources.getStringArray(R.array.leisure_item_array),
-                *context.resources.getStringArray(R.array.landscape_item_array)
+                *context.resources.getStringArray(R.array.landscape_item_array),
+                *context.resources.getStringArray(R.array.symbol_item_array)
         )
 
         symbolArray.map { item ->

@@ -372,4 +372,5 @@
     <string name="backup_completed_message">다이어리 백업작업이 완료되었습니다.</string>
     <string name="backup_confirm_message">다이어리 첨부사진 백업 작업을 시작하시겠습니까?</string>
     <string name="recover_confirm_attached_photo">다이어리 첨부사진 복구 작업을 시작하시겠습니까?</string>
+    <string name="category_symbol">Symbol</string>
 </resources>

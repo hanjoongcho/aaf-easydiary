@@ -200,6 +200,7 @@ abstract class EditActivity : EasyDiaryActivity() {
             addCategory(itemList, categoryList, "food_item_array", getString(R.string.category_food))
             addCategory(itemList, categoryList, "leisure_item_array", getString(R.string.category_leisure))
             addCategory(itemList, categoryList, "landscape_item_array", getString(R.string.category_landscape))
+            addCategory(itemList, categoryList, "symbol_item_array", getString(R.string.category_symbol))
 
             val viewPager = symbolDialog.findViewById(R.id.viewpager) as ViewPager
             val samplePagerAdapter = SamplePagerAdapter(this, itemList, categoryList)

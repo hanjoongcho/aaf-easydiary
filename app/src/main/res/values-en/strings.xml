@@ -372,4 +372,5 @@
     <string name="backup_completed_message">Diary backup job is complete.</string>
     <string name="backup_confirm_message">Do you want to start an attached photo backup task?</string>
     <string name="recover_confirm_attached_photo">Do you want to start an attached photo recovery task?</string>
+    <string name="category_symbol">Symbol</string>
 </resources>
