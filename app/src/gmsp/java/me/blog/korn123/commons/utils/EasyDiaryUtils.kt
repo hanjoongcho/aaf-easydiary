@@ -204,6 +204,27 @@ object EasyDiaryUtils {
                 LEISURE_HAIR_SALON_1 -> setImageResource(R.drawable.ic_hairdresser_w)
                 LEISURE_TELEVISION -> setImageResource(R.drawable.ic_television)
 
+                SYMBOL_YOUTUBE -> setImageResource(R.drawable.ic_youtube)
+                SYMBOL_DROPBOX -> setImageResource(R.drawable.ic_dropbox)
+                SYMBOL_PAYPAL -> setImageResource(R.drawable.ic_paypal)
+                SYMBOL_HTML5 -> setImageResource(R.drawable.ic_html5)
+                SYMBOL_SNAPCHAT -> setImageResource(R.drawable.ic_snapchat)
+                SYMBOL_ANDROID -> setImageResource(R.drawable.ic_android)
+                SYMBOL_LINKEDIN -> setImageResource(R.drawable.ic_linkedin)
+                SYMBOL_TWITTER -> setImageResource(R.drawable.ic_twitter)
+                SYMBOL_INSTAGRAM -> setImageResource(R.drawable.ic_instagram)
+                SYMBOL_FACEBOOK -> setImageResource(R.drawable.ic_facebook)
+                SYMBOL_FLICKR -> setImageResource(R.drawable.ic_flickr)
+                SYMBOL_REDDIT -> setImageResource(R.drawable.ic_reddit)
+                SYMBOL_TRELLO -> setImageResource(R.drawable.ic_trello)
+                SYMBOL_QUORA -> setImageResource(R.drawable.ic_quora)
+                SYMBOL_LINE -> setImageResource(R.drawable.ic_line)
+                SYMBOL_GITHUB -> setImageResource(R.drawable.ic_github_logo)
+                SYMBOL_LINUX -> setImageResource(R.drawable.ic_linux)
+                SYMBOL_UBUNTU -> setImageResource(R.drawable.ic_ubuntu)
+                SYMBOL_JAVA -> setImageResource(R.drawable.ic_java)
+                SYMBOL_SLIDESHARE -> setImageResource(R.drawable.ic_slideshare)
+
                 else -> setImageResource(0)
             }
         }
@@ -361,7 +382,8 @@ object EasyDiaryUtils {
                 *context.resources.getStringArray(R.array.daily_item_array),
                 *context.resources.getStringArray(R.array.food_item_array),
                 *context.resources.getStringArray(R.array.leisure_item_array),
-                *context.resources.getStringArray(R.array.landscape_item_array)
+                *context.resources.getStringArray(R.array.landscape_item_array),
+                *context.resources.getStringArray(R.array.symbol_item_array)
         )
 
         symbolArray.map { item ->

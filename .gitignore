@@ -12,3 +12,4 @@ app/release
 app/src/gms/res/drawable/ic_*
 app/src/gmsp/res/drawable/ic_*
 app/src/gmsp/res/values/keys.xml
+app/gmsp/release/*.aab

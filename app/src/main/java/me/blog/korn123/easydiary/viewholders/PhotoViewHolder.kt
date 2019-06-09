@@ -27,35 +27,42 @@ class PhotoViewHolder(
 ) : RecyclerView.ViewHolder(itemView) {
     private val imageView: ImageView = itemView.findViewById(R.id.photo)
     
-    internal fun bindTo(photoPath: String, position: Int, glideOption: Int = GLIDE_CROP_TOP) {
+    internal fun bindTo(photoPath: String, position: Int, glideOption: Int = GLIDE_CROP_TOP, forceSinglePhotoPosition: Int = -1) {
         val point =  CommonUtils.getDefaultDisplay(activity)
         val height = point.y - activity.actionBarHeight() - activity.statusBarHeight() - activity.seekBarContainer.height
         val size = if (point.x > point.y) height else point.x
-                
-        when (itemCount) {
-            1 -> {
-                imageView.layoutParams.width = size
-                imageView.layoutParams.height = size
-                
-            }
-            3, 5, 6 -> {
-                if (position < 1) {
-                    imageView.layoutParams.width = (size * 0.8).toInt() 
+
+        if (forceSinglePhotoPosition > -1) {
+            imageView.visibility = View.VISIBLE
+            imageView.layoutParams.width = size
+            imageView.layoutParams.height = size
+        } else {
+            when (itemCount) {
+                1 -> {
+                    imageView.layoutParams.width = size
                     imageView.layoutParams.height = size
-                } else {
-                    imageView.layoutParams.width = (size * 0.2).toInt()
-                    imageView.layoutParams.height = (size * 0.2).toInt()
+
+                }
+                3, 5, 6 -> {
+                    if (position < 1) {
+                        imageView.layoutParams.width = (size * 0.8).toInt()
+                        imageView.layoutParams.height = size
+                    } else {
+                        imageView.layoutParams.width = (size * 0.2).toInt()
+                        imageView.layoutParams.height = (size * 0.2).toInt()
+                    }
+                }
+                2, 4 -> {
+                    imageView.layoutParams.width = size / 2
+                    imageView.layoutParams.height = size / 2
+                }
+                else -> {
+                    imageView.layoutParams.width = (size / Math.round(Math.sqrt(itemCount.toDouble())).toInt())
+                    imageView.layoutParams.height = (size / Math.round(Math.sqrt(itemCount.toDouble())).toInt())
                 }
             }
-            2, 4 -> {
-                imageView.layoutParams.width = size / 2
-                imageView.layoutParams.height = size / 2
-            }
-            else -> {
-                imageView.layoutParams.width = (size / Math.round(Math.sqrt(itemCount.toDouble())).toInt())
-                imageView.layoutParams.height = (size / Math.round(Math.sqrt(itemCount.toDouble())).toInt())
-            }
         }
+
 
         when (glideOption) {
             GLIDE_CROP_TOP -> Glide
