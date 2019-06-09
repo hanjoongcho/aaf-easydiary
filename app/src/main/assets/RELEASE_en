@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.83 (date: 2019/06/09)
+  * Apply Android App Bundle to reduce and optimize installation file size
+
 # Changes in 1.4.80 (date: 2019/06/07)
   * Changed Google Drive Android API to Google Drive REST API (Google Drive Android API will be shut down on December 6, 2019)
   

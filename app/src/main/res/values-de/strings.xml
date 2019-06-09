@@ -252,7 +252,11 @@
         v1.4.80 / 2019.06.07\n
         Changed Google Drive Android API to Google Drive REST API (Google Drive Android API will be shut down on December 6, 2019)
     </string>
-    
+    <string name="release_147">
+        v1.4.83 / 2019.06.09\n
+        Apply Android App Bundle to reduce and optimize installation file size
+    </string>
+
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
