@@ -2,6 +2,8 @@ package me.blog.korn123.easydiary.activities
 
 import android.graphics.Color
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
+import android.support.v4.graphics.drawable.DrawableCompat
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
@@ -45,6 +47,7 @@ class BarChartActivity : ChartBase() {
 
         barChart.setDrawGridBackground(false)
         // mChart.setDrawYLabels(false);
+//        barChart.zoom(1.5F, 0F, 0F, 0F)
 
         val xAxisFormatter = DayAxisValueFormatter(this, barChart)
 
@@ -108,7 +111,7 @@ class BarChartActivity : ChartBase() {
         for (i in 1..count) {
             var total = 0
             if (map[i] != null) total = map[i] ?: 0
-            yVals1.add(BarEntry(i.toFloat(), total.toFloat()))
+            yVals1.add(BarEntry(i.toFloat(), total.toFloat(), ContextCompat.getDrawable(this, R.drawable.ic_happy_1)))
         }
 
         val set1: BarDataSet
@@ -120,7 +123,7 @@ class BarChartActivity : ChartBase() {
                 Color.rgb(193, 37, 82), Color.rgb(255, 102, 0), Color.rgb(245, 199, 0),
                 Color.rgb(106, 150, 31), Color.rgb(179, 100, 53), Color.rgb(115, 130, 153))
         set1.setColors(*colors)
-
+        set1.setDrawIcons(true)
         val dataSets = ArrayList<IBarDataSet>()
         dataSets.add(set1)
 
@@ -128,7 +131,6 @@ class BarChartActivity : ChartBase() {
         data.setValueTextSize(10f)
         data.setValueTypeface(mTfLight)
         data.barWidth = 0.9f
-
         barChart.data = data
     }
 

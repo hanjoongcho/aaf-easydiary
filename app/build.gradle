@@ -131,7 +131,7 @@ dependencies {
     gmspImplementation 'io.github.aafactory:commons:0.9.7'
     fossImplementation 'io.github.aafactory:commons-foss:0.9.6'
 //    implementation project(":aafactory-commons")
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.1'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     implementation 'com.roomorama:caldroid:3.0.1'
     implementation 'com.github.chrisbanes:PhotoView:2.1.3'  
     implementation 'com.github.QuadFlask:colorpicker:0.0.13'
