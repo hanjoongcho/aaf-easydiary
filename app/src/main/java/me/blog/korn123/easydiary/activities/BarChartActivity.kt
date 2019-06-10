@@ -1,30 +1,19 @@
 package me.blog.korn123.easydiary.activities
 
-import android.graphics.Color
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v4.graphics.drawable.DrawableCompat
-import com.github.mikephil.charting.components.Legend
-import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.components.YAxis
-import com.github.mikephil.charting.data.BarData
-import com.github.mikephil.charting.data.BarDataSet
-import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
-import com.github.mikephil.charting.utils.ColorTemplate
-import io.github.aafactory.commons.utils.DateUtils
+import android.view.Menu
+import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_barchart.*
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.chart.*
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
-import java.util.*
+import me.blog.korn123.easydiary.chart.ChartBase
+import me.blog.korn123.easydiary.fragments.BarChartFragment
+import me.blog.korn123.easydiary.fragments.HorizontalBarChartFragment
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
  */
 
 class BarChartActivity : ChartBase() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_barchart)
@@ -34,123 +23,30 @@ class BarChartActivity : ChartBase() {
             setDisplayHomeAsUpEnabled(true)    
         }
 
-        barChart.setDrawBarShadow(false)
-        barChart.setDrawValueAboveBar(true)
-        barChart.description.isEnabled = false
-
-        // if more than 60 entries are displayed in the chart, no values will be
-        // drawn
-        barChart.setMaxVisibleValueCount(60)
-
-        // scaling can now only be done on x- and y-axis separately
-        barChart.setPinchZoom(false)
-
-        barChart.setDrawGridBackground(false)
-        // mChart.setDrawYLabels(false);
-//        barChart.zoom(1.5F, 0F, 0F, 0F)
-
-        val xAxisFormatter = DayAxisValueFormatter(this, barChart)
-
-        val xAxis = barChart.xAxis
-        xAxis.position = XAxis.XAxisPosition.BOTTOM
-        xAxis.typeface = mTfLight
-        xAxis.setDrawGridLines(false)
-        xAxis.granularity = 1f // only intervals of 1 day
-        xAxis.labelCount = 7
-        xAxis.valueFormatter = xAxisFormatter
-
-        val custom = MyAxisValueFormatter(this)
-
-        val leftAxis = barChart.axisLeft
-        leftAxis.typeface = mTfLight
-        leftAxis.setLabelCount(8, false)
-        leftAxis.valueFormatter = custom
-        leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
-        leftAxis.spaceTop = 15f
-        leftAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
-
-        val rightAxis = barChart.axisRight
-        rightAxis.setDrawGridLines(false)
-        rightAxis.typeface = mTfLight
-        rightAxis.setLabelCount(8, false)
-        rightAxis.valueFormatter = custom
-        rightAxis.spaceTop = 15f
-        rightAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
-
-        val l = barChart.legend
-        l.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
-        l.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
-        l.orientation = Legend.LegendOrientation.HORIZONTAL
-        l.setDrawInside(false)
-        l.form = Legend.LegendForm.SQUARE
-        l.formSize = 9f
-        l.textSize = 11f
-        l.xEntrySpace = 4f
-
-        val mv = XYMarkerView(this, xAxisFormatter)
-        mv.chartView = barChart // For bounds control
-        barChart.marker = mv // Set the marker to the chart
-
-        setData(6, 20f)
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.chartView, BarChartFragment())
+        fragmentTransaction.commit()
     }
 
-    private fun setData(count: Int, range: Float) {
-        val listDiary = EasyDiaryDbHelper.readDiary(null)
-        val map = hashMapOf<Int, Int>()
-        listDiary.map { diaryDto ->
-            val writeHour = DateUtils.timeMillisToDateTime(diaryDto.currentTimeMillis, "HH")
-            val itemNumber = hourToItemNumber(Integer.parseInt(writeHour))
-            if (map[itemNumber] == null) {
-                map.put(itemNumber, 1)
-            } else {
-                map.put(itemNumber, (map[itemNumber] ?: 0) + 1)
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.diary_chart, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> finish()
+            R.id.barChart -> {
+                val fragmentTransaction = supportFragmentManager.beginTransaction()
+                fragmentTransaction.replace(R.id.chartView, BarChartFragment())
+                fragmentTransaction.commit()
+            }
+            R.id.barChart2 -> {
+                val fragmentTransaction = supportFragmentManager.beginTransaction()
+                fragmentTransaction.replace(R.id.chartView, HorizontalBarChartFragment())
+                fragmentTransaction.commit()
             }
         }
-
-        val yVals1 = ArrayList<BarEntry>()
-        for (i in 1..count) {
-            var total = 0
-            if (map[i] != null) total = map[i] ?: 0
-            yVals1.add(BarEntry(i.toFloat(), total.toFloat(), ContextCompat.getDrawable(this, R.drawable.ic_happy_1)))
-        }
-
-        val set1: BarDataSet
-
-        set1 = BarDataSet(yVals1, getString(R.string.bar_chart_status))
-        val iValueFormatter = IValueFormatterExt(this)
-        set1.valueFormatter = iValueFormatter
-        val colors = intArrayOf(
-                Color.rgb(193, 37, 82), Color.rgb(255, 102, 0), Color.rgb(245, 199, 0),
-                Color.rgb(106, 150, 31), Color.rgb(179, 100, 53), Color.rgb(115, 130, 153))
-        set1.setColors(*colors)
-        set1.setDrawIcons(true)
-        val dataSets = ArrayList<IBarDataSet>()
-        dataSets.add(set1)
-
-        val data = BarData(dataSets)
-        data.setValueTextSize(10f)
-        data.setValueTypeface(mTfLight)
-        data.barWidth = 0.9f
-        barChart.data = data
-    }
-
-    fun itemNumberToRange(itemNumber: Int): String = when (itemNumber) {
-        1 -> getString(R.string.range_a)
-        2 -> getString(R.string.range_b)
-        3 -> getString(R.string.range_c)
-        4 -> getString(R.string.range_d)
-        5 -> getString(R.string.range_e)
-        6 -> getString(R.string.range_f)
-        else -> getString(R.string.range_g)
-    }
-
-    private fun hourToItemNumber(hour: Int): Int = when (hour) {
-        in 0..3 -> 1
-        in 4..7 -> 2
-        in 8..11 -> 3
-        in 12..15 -> 4
-        in 16..19 -> 5
-        in 20..23 -> 6
-        else -> 0
+        return super.onOptionsItemSelected(item)
     }
 }

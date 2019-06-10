@@ -1,17 +1,16 @@
 package me.blog.korn123.easydiary.chart
 
+import android.content.Context
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.formatter.IValueFormatter
 import com.github.mikephil.charting.utils.ViewPortHandler
-
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.activities.BarChartActivity
 
 /**
  * Created by CHO HANJOONG on 2017-03-23.
  */
 
-class IValueFormatterExt(private var barChartActivity: BarChartActivity) : IValueFormatter {
+class IValueFormatterExt(private var context: Context?) : IValueFormatter {
 
     /**
      * Called when a value (from labels inside the chart) is formatted
@@ -25,6 +24,6 @@ class IValueFormatterExt(private var barChartActivity: BarChartActivity) : IValu
      * @return the formatted label ready for being drawn
      */
     override fun getFormattedValue(value: Float, entry: Entry, dataSetIndex: Int, viewPortHandler: ViewPortHandler): String {
-        return value.toInt().toString() + barChartActivity.getString(R.string.diary_count)
+        return value.toInt().toString() + context?.getString(R.string.diary_count) ?: ""
     }
 }
