@@ -49,16 +49,18 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
 
     override fun onDownMotionEvent() {}
 
-    override fun onUpOrCancelMotionEvent(scrollState: ScrollState) {
-        Log.e("DEBUG", "onUpOrCancelMotionEvent: $scrollState")
-        if (!keypadIsShown()) {
-            if (scrollState == ScrollState.UP) {
-                if (toolbarIsShown()) {
-                    hideToolbar()
-                }
-            } else if (scrollState == ScrollState.DOWN) {
-                if (toolbarIsHidden()) {
-                    showToolbar()
+    override fun onUpOrCancelMotionEvent(scrollState: ScrollState?) {
+        scrollState?.let {
+            Log.e("DEBUG", "onUpOrCancelMotionEvent: $scrollState")
+            if (!keypadIsShown()) {
+                if (scrollState == ScrollState.UP) {
+                    if (toolbarIsShown()) {
+                        hideToolbar()
+                    }
+                } else if (scrollState == ScrollState.DOWN) {
+                    if (toolbarIsHidden()) {
+                        showToolbar()
+                    }
                 }
             }
         }
