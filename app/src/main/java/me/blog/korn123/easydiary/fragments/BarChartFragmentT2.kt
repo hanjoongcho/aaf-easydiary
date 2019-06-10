@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.fragments
 
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -8,12 +9,15 @@ import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.github.mikephil.charting.charts.BarLineChartBase
+import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import kotlinx.android.synthetic.main.fragment_barchart.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
@@ -26,6 +30,7 @@ import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import java.util.*
 
 class BarChartFragmentT2 : Fragment() {
+    val mSequences = arrayListOf<Int>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -45,7 +50,7 @@ class BarChartFragmentT2 : Fragment() {
         // mChart.setDrawYLabels(false);
         barChart.zoom(3.5F, 0F, 0F, 0F)
 
-        val xAxisFormatter = DayAxisValueFormatter(context, barChart)
+        val xAxisFormatter = AxisValueFormatter(context, barChart)
 
         val xAxis = barChart.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
@@ -113,6 +118,7 @@ class BarChartFragmentT2 : Fragment() {
                 true -> ContextCompat.getDrawable(context!!, EasyDiaryUtils.sequenceToSymbolResourceId(key))
                 false -> null
             }
+            mSequences.add(key)
             barEntries.add(BarEntry(index++, value.toFloat(), drawable))
         }
 
@@ -146,5 +152,12 @@ class BarChartFragmentT2 : Fragment() {
         in 16..19 -> 5
         in 20..23 -> 6
         else -> 0
+    }
+
+    inner class AxisValueFormatter(private var context: Context?, private val chart: BarLineChartBase<*>) : IAxisValueFormatter {
+        override fun getFormattedValue(value: Float, axis: AxisBase?): String {
+            val symbolMap = EasyDiaryUtils.getDiarySymbolMap(context!!)
+            return symbolMap[mSequences[value.toInt() - 1]] ?: "None"
+        }
     }
 }
