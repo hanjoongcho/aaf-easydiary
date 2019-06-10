@@ -64,169 +64,171 @@ object EasyDiaryUtils {
         if (!workingDirectory.exists()) workingDirectory.mkdirs()
     }
 
+    fun sequenceToSymbolResourceId(sequence: Int) = when (sequence) {
+        0 -> 0
+        WEATHER_SUNNY -> R.drawable.ic_sunny
+        WEATHER_CLOUD_AND_SUN -> R.drawable.ic_clouds_and_sun
+        WEATHER_RAIN_DROPS -> R.drawable.ic_raindrops
+        WEATHER_BOLT -> R.drawable.ic_bolt
+        WEATHER_SNOWING -> R.drawable.ic_snowing
+        WEATHER_RAINBOW -> R.drawable.ic_rainbow
+        WEATHER_UMBRELLA -> R.drawable.ic_umbrella_1
+        WEATHER_STARS -> R.drawable.ic_stars_2
+        WEATHER_MOON -> R.drawable.ic_moon_9
+        WEATHER_NIGHT_RAIN -> R.drawable.ic_night_rain
+        WEATHER_TEMPERATURE_L -> R.drawable.ic_temperature_2
+        WEATHER_TEMPERATURE_M -> R.drawable.ic_temperature_1
+        WEATHER_TEMPERATURE_H -> R.drawable.ic_temperature
+        WEATHER_DUST-> R.drawable.ic_dust
+        WEATHER_DUST_STORM -> R.drawable.ic_dust_storm
+
+        DAILY_GAME_PAD -> R.drawable.ic_005_gamepad
+        DAILY_SHIRT -> R.drawable.ic_008_shirt
+        DAILY_VITAMINS -> R.drawable.ic_004_vitamins
+        DAILY_WALLET -> R.drawable.ic_003_wallet
+        DAILY_WORKING -> R.drawable.ic_001_working
+        DAILY_GARBAGE -> R.drawable.ic_009_garbage
+        DAILY_TIE -> R.drawable.ic_014_tie
+        DAILY_TICKET -> R.drawable.ic_015_ticket
+        DAILY_LIKE -> R.drawable.ic_016_like
+        DAILY_STUDY -> R.drawable.ic_018_study
+        DAILY_SLEEP -> R.drawable.ic_023_sleep
+        DAILY_SHOPPING_CART -> R.drawable.ic_024_shopping_cart
+        DAILY_SHOPPING_BAG -> R.drawable.ic_025_shopping_bag
+        DAILY_REPAIR -> R.drawable.ic_028_repair
+        DAILY_LIST -> R.drawable.ic_029_list
+        DAILY_PET -> R.drawable.ic_032_pet
+        DAILY_FATHERHOOD -> R.drawable.ic_052_fatherhood
+        DAILY_COFFEE -> R.drawable.ic_050_coffee
+        DAILY_EAT -> R.drawable.ic_044_eat
+        DAILY_ACTIVITY -> R.drawable.ic_031_activity
+        DAILY_DUMBBELL -> R.drawable.ic_019_dumbbell
+        DAILY_HURRY -> R.drawable.ic_041_hurry
+        DAILY_COOKING -> R.drawable.ic_049_cooking
+        DAILY_CLEANING -> R.drawable.ic_051_cleaning
+        DAILY_DISCUSSION -> R.drawable.ic_discussion
+        DAILY_DIET -> R.drawable.ic_diet
+        DAILY_NO_ALCOHOL -> R.drawable.ic_no_alcohol
+        DAILY_WAKE_UP -> R.drawable.ic_wake_up
+
+        LANDSCAPE_BEACH -> R.drawable.ic_beach
+        LANDSCAPE_BRIDGE -> R.drawable.ic_bridge
+        LANDSCAPE_CAPE -> R.drawable.ic_cape
+        LANDSCAPE_CASTLE -> R.drawable.ic_castle
+        LANDSCAPE_CITYSCAPE -> R.drawable.ic_cityscape
+        LANDSCAPE_DESERT -> R.drawable.ic_desert
+        LANDSCAPE_DESERT_1 -> R.drawable.ic_desert_1
+        LANDSCAPE_FIELDS -> R.drawable.ic_fields
+        LANDSCAPE_FIELDS_1 -> R.drawable.ic_fields_1
+        LANDSCAPE_FOREST -> R.drawable.ic_forest
+
+        EMOTION_HAPPY -> R.drawable.ic_001_happy
+        EMOTION_LAUGHING -> R.drawable.ic_002_laughing
+        EMOTION_CRYING -> R.drawable.ic_003_crying
+        EMOTION_ANGRY -> R.drawable.ic_004_angry
+        EMOTION_TONGUE -> R.drawable.ic_005_tongue
+        EMOTION_ANGRY_1 -> R.drawable.ic_006_angry_1
+        EMOTION_WINK -> R.drawable.ic_007_wink
+        EMOTION_DISAPPOINTED -> R.drawable.ic_008_disappointed
+        EMOTION_SAD -> R.drawable.ic_009_sad
+        EMOTION_EMBARRASSED -> R.drawable.ic_010_embarrassed
+        EMOTION_THINKING -> R.drawable.ic_014_thinking
+        EMOTION_SICK -> R.drawable.ic_019_sick
+        EMOTION_SECRET -> R.drawable.ic_020_secret
+        EMOTION_SLEEPING -> R.drawable.ic_021_sleeping
+        EMOTION_RICH -> R.drawable.ic_025_rich
+        EMOTION_DEVIL -> R.drawable.ic_026_devil
+        EMOTION_SKULL -> R.drawable.ic_027_skull
+        EMOTION_POO -> R.drawable.ic_030_poo
+        EMOTION_ALIEN -> R.drawable.ic_032_alien
+        EMOTION_SURPRISED -> R.drawable.ic_033_surprised_2
+        EMOTION_LAUGHING_1 -> R.drawable.ic_041_laughing_1
+        EMOTION_INJURED -> R.drawable.ic_042_injured
+        EMOTION_HAPPY_1 -> R.drawable.ic_035_happy_2
+        EMOTION_DEMON -> R.drawable.ic_046_demon
+        EMOTION_IN_LOVE -> R.drawable.ic_047_in_love
+        EMOTION_TONGUE_1 -> R.drawable.ic_048_tongue_1
+        EMOTION_CALM -> R.drawable.ic_050_calm
+        EMOTION_ANGRY_2 -> R.drawable.ic_039_angry_2
+        EMOTION_CRY -> R.drawable.ic_cry
+        EMOTION_HAPPY_2 -> R.drawable.ic_happy_2
+        EMOTION_LOVE -> R.drawable.ic_love
+        EMOTION_HAPPY_3 -> R.drawable.ic_happy_1
+        EMOTION_SLEEP -> R.drawable.ic_sleep_1
+        EMOTION_SMILE -> R.drawable.ic_smile
+        EMOTION_SUFFER -> R.drawable.ic_suffer
+        EMOTION_EXCUSE -> R.drawable.ic_excuse_1
+        EMOTION_HAPPY_4 -> R.drawable.ic_happy
+        EMOTION_HARMFUL -> R.drawable.ic_harmful
+        EMOTION_INCOMPREHENSION -> R.drawable.ic_incomprehension
+        EMOTION_SAD_1-> R.drawable.ic_sad_2
+
+        FOOD_BURGER -> R.drawable.ic_burger
+        FOOD_SANDWICH -> R.drawable.ic_004_sandwich
+        FOOD_STEAK -> R.drawable.ic_steak
+        FOOD_PIE -> R.drawable.ic_pie
+        FOOD_WATER -> R.drawable.ic_010_water
+        FOOD_MILK -> R.drawable.ic_milk
+        FOOD_SALAD -> R.drawable.ic_023_salad
+        FOOD_BAGUETTE -> R.drawable.ic_024_baguette
+        FOOD_WHISKEY -> R.drawable.ic_whiskey
+        FOOD_WINE -> R.drawable.ic_wine
+        FOOD_CAKE -> R.drawable.ic_034_cake_1
+        FOOD_CHAMPAGNE -> R.drawable.ic_036_champagne
+        FOOD_FEEDING_BOTTLE -> R.drawable.ic_milk_powder
+        FOOD_BEER -> R.drawable.ic_beer
+        FOOD_SUSHI -> R.drawable.ic_sushi
+        FOOD_SAKE -> R.drawable.ic_044_sake
+        FOOD_RICE -> R.drawable.ic_rice
+        FOOD_FRIED_CHICKEN -> R.drawable.ic_fried_chicken
+        FOOD_CAKE_1 -> R.drawable.ic_cake
+        FOOD_SOJU -> R.drawable.ic_soju
+        FOOD_SOUP -> R.drawable.ic_soup
+        FOOD_CURRY -> R.drawable.ic_curry
+        FOOD_NOODLES -> R.drawable.ic_noodles
+        FOOD_FRIED_RICE -> R.drawable.ic_fried_rice
+
+        LEISURE_PICNIC -> R.drawable.ic_picnic
+        LEISURE_MOVIE -> R.drawable.ic_movie
+        LEISURE_HIKING -> R.drawable.ic_hiking
+        LEISURE_READING -> R.drawable.ic_open_book
+        LEISURE_NAP -> R.drawable.ic_relaxing
+        LEISURE_PARK -> R.drawable.ic_architecture_and_city
+        LEISURE_FISHING -> R.drawable.ic_fishing
+        LEISURE_FESTIVAL -> R.drawable.ic_castle
+        LEISURE_HAIR_SALON -> R.drawable.ic_hairdresser_m
+        LEISURE_HAIR_SALON_1 -> R.drawable.ic_hairdresser_w
+        LEISURE_TELEVISION -> R.drawable.ic_television
+
+        SYMBOL_YOUTUBE -> R.drawable.ic_youtube
+        SYMBOL_DROPBOX -> R.drawable.ic_dropbox
+        SYMBOL_PAYPAL -> R.drawable.ic_paypal
+        SYMBOL_HTML5 -> R.drawable.ic_html5
+        SYMBOL_SNAPCHAT -> R.drawable.ic_snapchat
+        SYMBOL_ANDROID -> R.drawable.ic_android
+        SYMBOL_LINKEDIN -> R.drawable.ic_linkedin
+        SYMBOL_TWITTER -> R.drawable.ic_twitter
+        SYMBOL_INSTAGRAM -> R.drawable.ic_instagram
+        SYMBOL_FACEBOOK -> R.drawable.ic_facebook
+        SYMBOL_FLICKR -> R.drawable.ic_flickr
+        SYMBOL_REDDIT -> R.drawable.ic_reddit
+        SYMBOL_TRELLO -> R.drawable.ic_trello
+        SYMBOL_QUORA -> R.drawable.ic_quora
+        SYMBOL_LINE -> R.drawable.ic_line
+        SYMBOL_GITHUB -> R.drawable.ic_github_logo
+        SYMBOL_LINUX -> R.drawable.ic_linux
+        SYMBOL_UBUNTU -> R.drawable.ic_ubuntu
+        SYMBOL_JAVA -> R.drawable.ic_java
+        SYMBOL_SLIDESHARE -> R.drawable.ic_slideshare
+
+        else -> 0
+    }
+    
     fun initWeatherView(context: Context, imageView: ImageView?, weatherFlag: Int, isShowEmptyWeatherView: Boolean = false, applyWhiteFilter: Boolean = false) {
         imageView?.run {
             visibility = if (!isShowEmptyWeatherView && weatherFlag < 1) View.GONE else View.VISIBLE
-
-            when (weatherFlag) {
-                0 -> setImageResource(0)
-                WEATHER_SUNNY -> setImageResource(R.drawable.ic_sunny)
-                WEATHER_CLOUD_AND_SUN -> setImageResource(R.drawable.ic_clouds_and_sun)
-                WEATHER_RAIN_DROPS -> setImageResource(R.drawable.ic_raindrops)
-                WEATHER_BOLT -> setImageResource(R.drawable.ic_bolt)
-                WEATHER_SNOWING -> setImageResource(R.drawable.ic_snowing)
-                WEATHER_RAINBOW -> setImageResource(R.drawable.ic_rainbow)
-                WEATHER_UMBRELLA -> setImageResource(R.drawable.ic_umbrella_1)
-                WEATHER_STARS -> setImageResource(R.drawable.ic_stars_2)
-                WEATHER_MOON -> setImageResource(R.drawable.ic_moon_9)
-                WEATHER_NIGHT_RAIN -> setImageResource(R.drawable.ic_night_rain)
-                WEATHER_TEMPERATURE_L -> setImageResource(R.drawable.ic_temperature_2)
-                WEATHER_TEMPERATURE_M -> setImageResource(R.drawable.ic_temperature_1)
-                WEATHER_TEMPERATURE_H -> setImageResource(R.drawable.ic_temperature)
-                WEATHER_DUST-> setImageResource(R.drawable.ic_dust)
-                WEATHER_DUST_STORM -> setImageResource(R.drawable.ic_dust_storm)
-
-                DAILY_GAME_PAD -> setImageResource(R.drawable.ic_005_gamepad)
-                DAILY_SHIRT -> setImageResource(R.drawable.ic_008_shirt)
-                DAILY_VITAMINS -> setImageResource(R.drawable.ic_004_vitamins)
-                DAILY_WALLET -> setImageResource(R.drawable.ic_003_wallet)
-                DAILY_WORKING -> setImageResource(R.drawable.ic_001_working)
-                DAILY_GARBAGE -> setImageResource(R.drawable.ic_009_garbage)
-                DAILY_TIE -> setImageResource(R.drawable.ic_014_tie)
-                DAILY_TICKET -> setImageResource(R.drawable.ic_015_ticket)
-                DAILY_LIKE -> setImageResource(R.drawable.ic_016_like)
-                DAILY_STUDY -> setImageResource(R.drawable.ic_018_study)
-                DAILY_SLEEP -> setImageResource(R.drawable.ic_023_sleep)
-                DAILY_SHOPPING_CART -> setImageResource(R.drawable.ic_024_shopping_cart)
-                DAILY_SHOPPING_BAG -> setImageResource(R.drawable.ic_025_shopping_bag)
-                DAILY_REPAIR -> setImageResource(R.drawable.ic_028_repair)
-                DAILY_LIST -> setImageResource(R.drawable.ic_029_list)
-                DAILY_PET -> setImageResource(R.drawable.ic_032_pet)
-                DAILY_FATHERHOOD -> setImageResource(R.drawable.ic_052_fatherhood)
-                DAILY_COFFEE -> setImageResource(R.drawable.ic_050_coffee)
-                DAILY_EAT -> setImageResource(R.drawable.ic_044_eat)
-                DAILY_ACTIVITY -> setImageResource(R.drawable.ic_031_activity)
-                DAILY_DUMBBELL -> setImageResource(R.drawable.ic_019_dumbbell)
-                DAILY_HURRY -> setImageResource(R.drawable.ic_041_hurry)
-                DAILY_COOKING -> setImageResource(R.drawable.ic_049_cooking)
-                DAILY_CLEANING -> setImageResource(R.drawable.ic_051_cleaning)
-                DAILY_DISCUSSION -> setImageResource(R.drawable.ic_discussion)
-                DAILY_DIET -> setImageResource(R.drawable.ic_diet)
-                DAILY_NO_ALCOHOL -> setImageResource(R.drawable.ic_no_alcohol)
-                DAILY_WAKE_UP -> setImageResource(R.drawable.ic_wake_up)
-
-                LANDSCAPE_BEACH -> setImageResource(R.drawable.ic_beach)
-                LANDSCAPE_BRIDGE -> setImageResource(R.drawable.ic_bridge)
-                LANDSCAPE_CAPE -> setImageResource(R.drawable.ic_cape)
-                LANDSCAPE_CASTLE -> setImageResource(R.drawable.ic_castle)
-                LANDSCAPE_CITYSCAPE -> setImageResource(R.drawable.ic_cityscape)
-                LANDSCAPE_DESERT -> setImageResource(R.drawable.ic_desert)
-                LANDSCAPE_DESERT_1 -> setImageResource(R.drawable.ic_desert_1)
-                LANDSCAPE_FIELDS -> setImageResource(R.drawable.ic_fields)
-                LANDSCAPE_FIELDS_1 -> setImageResource(R.drawable.ic_fields_1)
-                LANDSCAPE_FOREST -> setImageResource(R.drawable.ic_forest)
-
-                EMOTION_HAPPY -> setImageResource(R.drawable.ic_001_happy)
-                EMOTION_LAUGHING -> setImageResource(R.drawable.ic_002_laughing)
-                EMOTION_CRYING -> setImageResource(R.drawable.ic_003_crying)
-                EMOTION_ANGRY -> setImageResource(R.drawable.ic_004_angry)
-                EMOTION_TONGUE -> setImageResource(R.drawable.ic_005_tongue)
-                EMOTION_ANGRY_1 -> setImageResource(R.drawable.ic_006_angry_1)
-                EMOTION_WINK -> setImageResource(R.drawable.ic_007_wink)
-                EMOTION_DISAPPOINTED -> setImageResource(R.drawable.ic_008_disappointed)
-                EMOTION_SAD -> setImageResource(R.drawable.ic_009_sad)
-                EMOTION_EMBARRASSED -> setImageResource(R.drawable.ic_010_embarrassed)
-                EMOTION_THINKING -> setImageResource(R.drawable.ic_014_thinking)
-                EMOTION_SICK -> setImageResource(R.drawable.ic_019_sick)
-                EMOTION_SECRET -> setImageResource(R.drawable.ic_020_secret)
-                EMOTION_SLEEPING -> setImageResource(R.drawable.ic_021_sleeping)
-                EMOTION_RICH -> setImageResource(R.drawable.ic_025_rich)
-                EMOTION_DEVIL -> setImageResource(R.drawable.ic_026_devil)
-                EMOTION_SKULL -> setImageResource(R.drawable.ic_027_skull)
-                EMOTION_POO -> setImageResource(R.drawable.ic_030_poo)
-                EMOTION_ALIEN -> setImageResource(R.drawable.ic_032_alien)
-                EMOTION_SURPRISED -> setImageResource(R.drawable.ic_033_surprised_2)
-                EMOTION_LAUGHING_1 -> setImageResource(R.drawable.ic_041_laughing_1)
-                EMOTION_INJURED -> setImageResource(R.drawable.ic_042_injured)
-                EMOTION_HAPPY_1 -> setImageResource(R.drawable.ic_035_happy_2)
-                EMOTION_DEMON -> setImageResource(R.drawable.ic_046_demon)
-                EMOTION_IN_LOVE -> setImageResource(R.drawable.ic_047_in_love)
-                EMOTION_TONGUE_1 -> setImageResource(R.drawable.ic_048_tongue_1)
-                EMOTION_CALM -> setImageResource(R.drawable.ic_050_calm)
-                EMOTION_ANGRY_2 -> setImageResource(R.drawable.ic_039_angry_2)
-                EMOTION_CRY -> setImageResource(R.drawable.ic_cry)
-                EMOTION_HAPPY_2 -> setImageResource(R.drawable.ic_happy_2)
-                EMOTION_LOVE -> setImageResource(R.drawable.ic_love)
-                EMOTION_HAPPY_3 -> setImageResource(R.drawable.ic_happy_1)
-                EMOTION_SLEEP -> setImageResource(R.drawable.ic_sleep_1)
-                EMOTION_SMILE -> setImageResource(R.drawable.ic_smile)
-                EMOTION_SUFFER -> setImageResource(R.drawable.ic_suffer)
-                EMOTION_EXCUSE -> setImageResource(R.drawable.ic_excuse_1)
-                EMOTION_HAPPY_4 -> setImageResource(R.drawable.ic_happy)
-                EMOTION_HARMFUL -> setImageResource(R.drawable.ic_harmful)
-                EMOTION_INCOMPREHENSION -> setImageResource(R.drawable.ic_incomprehension)
-                EMOTION_SAD_1-> setImageResource(R.drawable.ic_sad_2)
-
-                FOOD_BURGER -> setImageResource(R.drawable.ic_burger)
-                FOOD_SANDWICH -> setImageResource(R.drawable.ic_004_sandwich)
-                FOOD_STEAK -> setImageResource(R.drawable.ic_steak)
-                FOOD_PIE -> setImageResource(R.drawable.ic_pie)
-                FOOD_WATER -> setImageResource(R.drawable.ic_010_water)
-                FOOD_MILK -> setImageResource(R.drawable.ic_milk)
-                FOOD_SALAD -> setImageResource(R.drawable.ic_023_salad)
-                FOOD_BAGUETTE -> setImageResource(R.drawable.ic_024_baguette)
-                FOOD_WHISKEY -> setImageResource(R.drawable.ic_whiskey)
-                FOOD_WINE -> setImageResource(R.drawable.ic_wine)
-                FOOD_CAKE -> setImageResource(R.drawable.ic_034_cake_1)
-                FOOD_CHAMPAGNE -> setImageResource(R.drawable.ic_036_champagne)
-                FOOD_FEEDING_BOTTLE -> setImageResource(R.drawable.ic_milk_powder)
-                FOOD_BEER -> setImageResource(R.drawable.ic_beer)
-                FOOD_SUSHI -> setImageResource(R.drawable.ic_sushi)
-                FOOD_SAKE -> setImageResource(R.drawable.ic_044_sake)
-                FOOD_RICE -> setImageResource(R.drawable.ic_rice)
-                FOOD_FRIED_CHICKEN -> setImageResource(R.drawable.ic_fried_chicken)
-                FOOD_CAKE_1 -> setImageResource(R.drawable.ic_cake)
-                FOOD_SOJU -> setImageResource(R.drawable.ic_soju)
-                FOOD_SOUP -> setImageResource(R.drawable.ic_soup)
-                FOOD_CURRY -> setImageResource(R.drawable.ic_curry)
-                FOOD_NOODLES -> setImageResource(R.drawable.ic_noodles)
-                FOOD_FRIED_RICE -> setImageResource(R.drawable.ic_fried_rice)
-
-                LEISURE_PICNIC -> setImageResource(R.drawable.ic_picnic)
-                LEISURE_MOVIE -> setImageResource(R.drawable.ic_movie)
-                LEISURE_HIKING -> setImageResource(R.drawable.ic_hiking)
-                LEISURE_READING -> setImageResource(R.drawable.ic_open_book)
-                LEISURE_NAP -> setImageResource(R.drawable.ic_relaxing)
-                LEISURE_PARK -> setImageResource(R.drawable.ic_architecture_and_city)
-                LEISURE_FISHING -> setImageResource(R.drawable.ic_fishing)
-                LEISURE_FESTIVAL -> setImageResource(R.drawable.ic_castle)
-                LEISURE_HAIR_SALON -> setImageResource(R.drawable.ic_hairdresser_m)
-                LEISURE_HAIR_SALON_1 -> setImageResource(R.drawable.ic_hairdresser_w)
-                LEISURE_TELEVISION -> setImageResource(R.drawable.ic_television)
-
-                SYMBOL_YOUTUBE -> setImageResource(R.drawable.ic_youtube)
-                SYMBOL_DROPBOX -> setImageResource(R.drawable.ic_dropbox)
-                SYMBOL_PAYPAL -> setImageResource(R.drawable.ic_paypal)
-                SYMBOL_HTML5 -> setImageResource(R.drawable.ic_html5)
-                SYMBOL_SNAPCHAT -> setImageResource(R.drawable.ic_snapchat)
-                SYMBOL_ANDROID -> setImageResource(R.drawable.ic_android)
-                SYMBOL_LINKEDIN -> setImageResource(R.drawable.ic_linkedin)
-                SYMBOL_TWITTER -> setImageResource(R.drawable.ic_twitter)
-                SYMBOL_INSTAGRAM -> setImageResource(R.drawable.ic_instagram)
-                SYMBOL_FACEBOOK -> setImageResource(R.drawable.ic_facebook)
-                SYMBOL_FLICKR -> setImageResource(R.drawable.ic_flickr)
-                SYMBOL_REDDIT -> setImageResource(R.drawable.ic_reddit)
-                SYMBOL_TRELLO -> setImageResource(R.drawable.ic_trello)
-                SYMBOL_QUORA -> setImageResource(R.drawable.ic_quora)
-                SYMBOL_LINE -> setImageResource(R.drawable.ic_line)
-                SYMBOL_GITHUB -> setImageResource(R.drawable.ic_github_logo)
-                SYMBOL_LINUX -> setImageResource(R.drawable.ic_linux)
-                SYMBOL_UBUNTU -> setImageResource(R.drawable.ic_ubuntu)
-                SYMBOL_JAVA -> setImageResource(R.drawable.ic_java)
-                SYMBOL_SLIDESHARE -> setImageResource(R.drawable.ic_slideshare)
-
-                else -> setImageResource(0)
-            }
+            setImageResource(sequenceToSymbolResourceId(weatherFlag))
+            
         }
     }
 

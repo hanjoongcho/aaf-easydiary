@@ -7,6 +7,7 @@ import kotlinx.android.synthetic.main.activity_barchart.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.chart.ChartBase
 import me.blog.korn123.easydiary.fragments.BarChartFragment
+import me.blog.korn123.easydiary.fragments.BarChartFragmentT2
 import me.blog.korn123.easydiary.fragments.HorizontalBarChartFragment
 
 /**
@@ -42,6 +43,11 @@ class BarChartActivity : ChartBase() {
                 fragmentTransaction.commit()
             }
             R.id.barChart2 -> {
+                val fragmentTransaction = supportFragmentManager.beginTransaction()
+                fragmentTransaction.replace(R.id.chartView, BarChartFragmentT2())
+                fragmentTransaction.commit()
+            }
+            R.id.barChart3 -> {
                 val fragmentTransaction = supportFragmentManager.beginTransaction()
                 fragmentTransaction.replace(R.id.chartView, HorizontalBarChartFragment())
                 fragmentTransaction.commit()

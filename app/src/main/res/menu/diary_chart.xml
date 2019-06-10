@@ -4,11 +4,16 @@
     <item
         android:id="@+id/barChart"
         android:orderInCategory="1"
-        android:title="Chart1. BarChart"
+        android:title="Bar Chart"
         app:showAsAction="never" />
     <item
         android:id="@+id/barChart2"
         android:orderInCategory="2"
-        android:title="Chart2. BarChart-II"
+        android:title="Bar Chart-II"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/barChart3"
+        android:orderInCategory="3"
+        android:title="Horizontal Bar Chart"
         app:showAsAction="never" />
 </menu>

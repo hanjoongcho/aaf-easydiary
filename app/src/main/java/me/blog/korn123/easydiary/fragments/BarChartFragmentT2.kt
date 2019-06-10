@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.fragments
 
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
@@ -15,6 +16,7 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import kotlinx.android.synthetic.main.fragment_barchart.*
+import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.chart.DayAxisValueFormatter
 import me.blog.korn123.easydiary.chart.IValueFormatterExt
@@ -23,7 +25,7 @@ import me.blog.korn123.easydiary.chart.XYMarkerView
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import java.util.*
 
-class HorizontalBarChartFragment : Fragment() {
+class BarChartFragmentT2 : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -41,7 +43,7 @@ class HorizontalBarChartFragment : Fragment() {
 
         barChart.setDrawGridBackground(true)
         // mChart.setDrawYLabels(false);
-//        barChart.zoom(1.5F, 0F, 0F, 0F)
+        barChart.zoom(3.5F, 0F, 0F, 0F)
 
         val xAxisFormatter = DayAxisValueFormatter(context, barChart)
 
@@ -107,7 +109,11 @@ class HorizontalBarChartFragment : Fragment() {
         val barEntries = ArrayList<BarEntry>()
         var index = 1.0F
         map.forEach { (key, value) ->
-            barEntries.add(BarEntry(index++, value.toFloat(), ContextCompat.getDrawable(context!!, R.drawable.ic_happy_1)))
+            val drawable: Drawable? = when (EasyDiaryUtils.sequenceToSymbolResourceId(key) > 0) {
+                true -> ContextCompat.getDrawable(context!!, EasyDiaryUtils.sequenceToSymbolResourceId(key))
+                false -> null
+            }
+            barEntries.add(BarEntry(index++, value.toFloat(), drawable))
         }
 
         val barDataSet: BarDataSet
