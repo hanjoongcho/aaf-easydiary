@@ -22,7 +22,6 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import kotlinx.android.synthetic.main.fragment_barchart.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.chart.DayAxisValueFormatter
 import me.blog.korn123.easydiary.chart.IValueFormatterExt
 import me.blog.korn123.easydiary.chart.MyAxisValueFormatter
 import me.blog.korn123.easydiary.chart.XYMarkerView
@@ -46,9 +45,9 @@ class BarChartFragmentT2 : Fragment() {
         // scaling can now only be done on x- and y-axis separately
         barChart.setPinchZoom(false)
 
-        barChart.setDrawGridBackground(true)
+//        barChart.setDrawGridBackground(true)
         // mChart.setDrawYLabels(false);
-        barChart.zoom(3.5F, 0F, 0F, 0F)
+        //barChart.zoom(3.5F, 0F, 0F, 0F)
 
         val xAxisFormatter = AxisValueFormatter(context, barChart)
 
@@ -78,15 +77,15 @@ class BarChartFragmentT2 : Fragment() {
         rightAxis.spaceTop = 15f
         rightAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
 
-        val l = barChart.legend
-        l.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
-        l.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
-        l.orientation = Legend.LegendOrientation.HORIZONTAL
-        l.setDrawInside(false)
-        l.form = Legend.LegendForm.SQUARE
-        l.formSize = 9f
-        l.textSize = 11f
-        l.xEntrySpace = 4f
+        val legend = barChart.legend
+        legend.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
+        legend.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
+        legend.orientation = Legend.LegendOrientation.HORIZONTAL
+        legend.setDrawInside(false)
+        legend.form = Legend.LegendForm.SQUARE
+        legend.formSize = 9f
+        legend.textSize = 11f
+        legend.xEntrySpace = 4f
 
         val mv = XYMarkerView(context!!, xAxisFormatter)
         mv.chartView = barChart // For bounds control
@@ -104,16 +103,21 @@ class BarChartFragmentT2 : Fragment() {
         val map = hashMapOf<Int, Int>()
         listDiary.map { diaryDto ->
             val targetColumn = diaryDto.weather
-            if (map[targetColumn] == null) {
-                map.put(targetColumn, 1)
-            } else {
-                map.put(targetColumn, (map[targetColumn] ?: 0) + 1)
+            if (targetColumn != 0) {
+                if (map[targetColumn] == null) {
+                    map.put(targetColumn, 1)
+                } else {
+                    map.put(targetColumn, (map[targetColumn] ?: 0) + 1)
+                }
             }
         }
 
+        var sortedMap = map.toList().sortedByDescending { (_, value) -> value }.toMap()   
+        
+        
         val barEntries = ArrayList<BarEntry>()
         var index = 1.0F
-        map.forEach { (key, value) ->
+        sortedMap.forEach { (key, value) ->
             val drawable: Drawable? = when (EasyDiaryUtils.sequenceToSymbolResourceId(key) > 0) {
                 true -> ContextCompat.getDrawable(context!!, EasyDiaryUtils.sequenceToSymbolResourceId(key))
                 false -> null
@@ -122,14 +126,15 @@ class BarChartFragmentT2 : Fragment() {
             barEntries.add(BarEntry(index++, value.toFloat(), drawable))
         }
 
+        barChart.zoom((map.size / 6.0F), 0F, 0F, 0F)
+        
         val barDataSet: BarDataSet
-
-        barDataSet = BarDataSet(barEntries, getString(R.string.bar_chart_status))
+        barDataSet = BarDataSet(barEntries, "다이어리 심볼기준 통계")
         val iValueFormatter = IValueFormatterExt(context)
         barDataSet.valueFormatter = iValueFormatter
         val colors = intArrayOf(
-                Color.rgb(193, 37, 82), Color.rgb(255, 102, 0), Color.rgb(245, 199, 0),
-                Color.rgb(106, 150, 31), Color.rgb(179, 100, 53), Color.rgb(115, 130, 153))
+                Color.rgb(152, 189, 248)/*, Color.rgb(255, 102, 0), Color.rgb(245, 199, 0),
+                Color.rgb(106, 150, 31), Color.rgb(179, 100, 53), Color.rgb(115, 130, 153)*/)
         barDataSet.setColors(*colors)
         barDataSet.setDrawIcons(true)
         barDataSet.setDrawValues(false)
@@ -142,16 +147,6 @@ class BarChartFragmentT2 : Fragment() {
         barData.barWidth = 0.9f
 
         barChart.data = barData
-    }
-
-    private fun hourToItemNumber(hour: Int): Int = when (hour) {
-        in 0..3 -> 1
-        in 4..7 -> 2
-        in 8..11 -> 3
-        in 12..15 -> 4
-        in 16..19 -> 5
-        in 20..23 -> 6
-        else -> 0
     }
 
     inner class AxisValueFormatter(private var context: Context?, private val chart: BarLineChartBase<*>) : IAxisValueFormatter {
