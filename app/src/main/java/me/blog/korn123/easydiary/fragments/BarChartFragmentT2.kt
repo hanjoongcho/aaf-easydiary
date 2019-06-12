@@ -92,6 +92,7 @@ class BarChartFragmentT2 : Fragment() {
         barChart.marker = mv // Set the marker to the chart
 
         setData(6, 20f)
+        barChart.animateXY(1000, 2500)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -125,8 +126,6 @@ class BarChartFragmentT2 : Fragment() {
             mSequences.add(key)
             barEntries.add(BarEntry(index++, value.toFloat(), drawable))
         }
-
-        barChart.zoom((map.size / 6.0F), 0F, 0F, 0F)
         
         val barDataSet: BarDataSet
         barDataSet = BarDataSet(barEntries, "다이어리 심볼기준 통계")
@@ -145,7 +144,7 @@ class BarChartFragmentT2 : Fragment() {
         barData.setValueTextSize(10f)
 //        barData.setValueTypeface(mTfLight)
         barData.barWidth = 0.9f
-
+        barChart.zoom((map.size / 6.0F), 0F, 0F, 0F)
         barChart.data = barData
     }
 
