@@ -1,20 +1,27 @@
 package me.blog.korn123.easydiary.fragments
 
+import android.content.Context
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.github.mikephil.charting.charts.BarLineChartBase
+import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import kotlinx.android.synthetic.main.fragment_barchart.*
+import me.blog.korn123.commons.utils.ChartUtils
+import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.chart.DayAxisValueFormatter
 import me.blog.korn123.easydiary.chart.IValueFormatterExt
@@ -24,6 +31,7 @@ import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import java.util.*
 
 class HorizontalBarChartFragment : Fragment() {
+    val mSequences = arrayListOf<Int>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -43,7 +51,7 @@ class HorizontalBarChartFragment : Fragment() {
         // mChart.setDrawYLabels(false);
 //        barChart.zoom(1.5F, 0F, 0F, 0F)
 
-        val xAxisFormatter = DayAxisValueFormatter(context, barChart)
+        val xAxisFormatter = AxisValueFormatter(context, barChart)
 
         val xAxis = barChart.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
@@ -86,6 +94,7 @@ class HorizontalBarChartFragment : Fragment() {
         barChart.marker = mv // Set the marker to the chart
 
         setData(6, 20f)
+        barChart.animateXY(1000, 2500)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -93,21 +102,19 @@ class HorizontalBarChartFragment : Fragment() {
     }
 
     private fun setData(count: Int, range: Float) {
-        val listDiary = EasyDiaryDbHelper.readDiary(null)
-        val map = hashMapOf<Int, Int>()
-        listDiary.map { diaryDto ->
-            val targetColumn = diaryDto.weather
-            if (map[targetColumn] == null) {
-                map.put(targetColumn, 1)
-            } else {
-                map.put(targetColumn, (map[targetColumn] ?: 0) + 1)
-            }
-        }
+        val sortedMap = ChartUtils.getSortedMapBySymbol()
 
         val barEntries = ArrayList<BarEntry>()
         var index = 1.0F
-        map.forEach { (key, value) ->
-            barEntries.add(BarEntry(index++, value.toFloat()))
+        sortedMap.forEach { (key, value) ->
+            if (index > 7) return@forEach
+
+            val drawable: Drawable? = when (EasyDiaryUtils.sequenceToSymbolResourceId(key) > 0) {
+                true -> ContextCompat.getDrawable(context!!, EasyDiaryUtils.sequenceToSymbolResourceId(key))
+                false -> null
+            }
+            mSequences.add(key)
+            barEntries.add(BarEntry(index++, value.toFloat(), drawable))
         }
 
         val barDataSet: BarDataSet
@@ -128,17 +135,14 @@ class HorizontalBarChartFragment : Fragment() {
         barData.setValueTextSize(10f)
 //        barData.setValueTypeface(mTfLight)
         barData.barWidth = 0.9f
-
+//        barChart.zoom((sortedMap.size / 6.0F), 0F, 0F, 0F)
         barChart.data = barData
     }
 
-    private fun hourToItemNumber(hour: Int): Int = when (hour) {
-        in 0..3 -> 1
-        in 4..7 -> 2
-        in 8..11 -> 3
-        in 12..15 -> 4
-        in 16..19 -> 5
-        in 20..23 -> 6
-        else -> 0
+    inner class AxisValueFormatter(private var context: Context?, private val chart: BarLineChartBase<*>) : IAxisValueFormatter {
+        override fun getFormattedValue(value: Float, axis: AxisBase?): String {
+            val symbolMap = EasyDiaryUtils.getDiarySymbolMap(context!!)
+            return symbolMap[mSequences[value.toInt() - 1]] ?: "None"
+        }
     }
 }

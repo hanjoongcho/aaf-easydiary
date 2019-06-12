@@ -20,6 +20,7 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import kotlinx.android.synthetic.main.fragment_barchart.*
+import me.blog.korn123.commons.utils.ChartUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.chart.IValueFormatterExt
@@ -100,20 +101,7 @@ class BarChartFragmentT2 : Fragment() {
     }
 
     private fun setData(count: Int, range: Float) {
-        val listDiary = EasyDiaryDbHelper.readDiary(null)
-        val map = hashMapOf<Int, Int>()
-        listDiary.map { diaryDto ->
-            val targetColumn = diaryDto.weather
-            if (targetColumn != 0) {
-                if (map[targetColumn] == null) {
-                    map.put(targetColumn, 1)
-                } else {
-                    map.put(targetColumn, (map[targetColumn] ?: 0) + 1)
-                }
-            }
-        }
-
-        val sortedMap = map.toList().sortedByDescending { (_, value) -> value }.toMap()
+        val sortedMap = ChartUtils.getSortedMapBySymbol()
 
         val barEntries = ArrayList<BarEntry>()
         var index = 1.0F
@@ -143,7 +131,7 @@ class BarChartFragmentT2 : Fragment() {
         barData.setValueTextSize(10f)
 //        barData.setValueTypeface(mTfLight)
         barData.barWidth = 0.9f
-        barChart.zoom((map.size / 6.0F), 0F, 0F, 0F)
+        barChart.zoom((sortedMap.size / 6.0F), 0F, 0F, 0F)
         barChart.data = barData
     }
 
