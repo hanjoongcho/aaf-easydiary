@@ -107,7 +107,7 @@ class HorizontalBarChartFragment : Fragment() {
         val barEntries = ArrayList<BarEntry>()
         var index = 1.0F
         map.forEach { (key, value) ->
-            barEntries.add(BarEntry(index++, value.toFloat(), ContextCompat.getDrawable(context!!, R.drawable.ic_happy_1)))
+            barEntries.add(BarEntry(index++, value.toFloat()))
         }
 
         val barDataSet: BarDataSet

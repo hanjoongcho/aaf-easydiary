@@ -65,7 +65,6 @@ object EasyDiaryUtils {
     }
 
     fun sequenceToSymbolResourceId(sequence: Int) = when (sequence) {
-        0 -> 0
         WEATHER_SUNNY -> R.drawable.ic_sunny
         WEATHER_CLOUD_AND_SUN -> R.drawable.ic_clouds_and_sun
         WEATHER_RAIN_DROPS -> R.drawable.ic_raindrops

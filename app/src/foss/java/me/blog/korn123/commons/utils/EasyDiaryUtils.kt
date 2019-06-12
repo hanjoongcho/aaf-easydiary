@@ -25,6 +25,7 @@ import me.blog.korn123.easydiary.adapters.SecondItemAdapter
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.models.DiarySymbol
 import me.blog.korn123.easydiary.models.PhotoUriDto
 import org.apache.commons.io.FileUtils
 import java.io.File
@@ -62,6 +63,15 @@ object EasyDiaryUtils {
         if (!workingDirectory.exists()) workingDirectory.mkdirs()
     }
 
+    fun sequenceToSymbolResourceId(sequence: Int) = when (sequence) {
+        WEATHER_SUNNY -> R.drawable.ic_sunny
+        WEATHER_CLOUD_AND_SUN -> R.drawable.ic_clouds_and_sun
+        WEATHER_RAIN_DROPS -> R.drawable.ic_raindrops
+        WEATHER_BOLT -> R.drawable.ic_bolt
+        WEATHER_SNOWING -> R.drawable.ic_snowing
+        else -> 0
+    }
+
     fun initWeatherView(context: Context, imageView: ImageView?, weatherFlag: Int, isShowEmptyWeatherView: Boolean = false, applyWhiteFilter: Boolean = false) {
         val filterColor = when (applyWhiteFilter) {
             true -> ContextCompat.getColor(context, android.R.color.white)
@@ -72,22 +82,10 @@ object EasyDiaryUtils {
         changeDrawableIconColor(context, filterColor, R.drawable.ic_raindrops)
         changeDrawableIconColor(context, filterColor, R.drawable.ic_bolt)
         changeDrawableIconColor(context, filterColor, R.drawable.ic_snowing)
-        
-        imageView?.run { 
-            if (!isShowEmptyWeatherView && weatherFlag < 1) {
-                visibility = View.GONE
-            } else {
-                visibility = View.VISIBLE
-            }
 
-            when (weatherFlag) {
-                0 -> setImageResource(0)
-                WEATHER_SUNNY -> setImageResource(R.drawable.ic_sunny)
-                WEATHER_CLOUD_AND_SUN -> setImageResource(R.drawable.ic_clouds_and_sun)
-                WEATHER_RAIN_DROPS -> setImageResource(R.drawable.ic_raindrops)
-                WEATHER_BOLT -> setImageResource(R.drawable.ic_bolt)
-                WEATHER_SNOWING -> setImageResource(R.drawable.ic_snowing)
-            }    
+        imageView?.run {
+            visibility = if (!isShowEmptyWeatherView && weatherFlag < 1) View.GONE else View.VISIBLE
+            setImageResource(sequenceToSymbolResourceId(weatherFlag))
         }
     }
 
@@ -233,5 +231,18 @@ object EasyDiaryUtils {
         ContextCompat.getDrawable(context, resourceId)?.apply {
             setColorFilter(color, PorterDuff.Mode.SRC_IN)
         }
+    }
+
+    fun getDiarySymbolMap(context: Context): HashMap<Int, String> {
+        val symbolMap = hashMapOf<Int, String>()
+        val symbolArray = arrayOf(
+                *context.resources.getStringArray(R.array.weather_item_array)
+        )
+
+        symbolArray.map { item ->
+            val symbolItem = DiarySymbol(item)
+            symbolMap.put(symbolItem.sequence, symbolItem.description)
+        }
+        return symbolMap
     }
 }

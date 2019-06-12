@@ -111,7 +111,7 @@ class BarChartFragment : Fragment() {
         for (i in 1..count) {
             var total = 0
             if (map[i] != null) total = map[i] ?: 0
-            barEntries.add(BarEntry(i.toFloat(), total.toFloat(), ContextCompat.getDrawable(context!!, R.drawable.ic_happy_1)))
+            barEntries.add(BarEntry(i.toFloat(), total.toFloat()))
         }
 
         val barDataSet: BarDataSet

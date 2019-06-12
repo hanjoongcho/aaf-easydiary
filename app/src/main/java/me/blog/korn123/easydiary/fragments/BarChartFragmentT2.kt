@@ -113,9 +113,8 @@ class BarChartFragmentT2 : Fragment() {
             }
         }
 
-        var sortedMap = map.toList().sortedByDescending { (_, value) -> value }.toMap()   
-        
-        
+        val sortedMap = map.toList().sortedByDescending { (_, value) -> value }.toMap()
+
         val barEntries = ArrayList<BarEntry>()
         var index = 1.0F
         sortedMap.forEach { (key, value) ->

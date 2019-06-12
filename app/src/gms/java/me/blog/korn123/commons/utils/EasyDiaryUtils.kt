@@ -63,28 +63,24 @@ object EasyDiaryUtils {
         if (!workingDirectory.exists()) workingDirectory.mkdirs()
     }
 
-    fun initWeatherView(context: Context, imageView: ImageView?, weatherFlag: Int, isShowEmptyWeatherView: Boolean = false, applyWhiteFilter: Boolean = false) {
-        imageView?.run { 
-            if (!isShowEmptyWeatherView && weatherFlag < 1) {
-                visibility = View.GONE
-            } else {
-                visibility = View.VISIBLE
-            }
+    fun sequenceToSymbolResourceId(sequence: Int) = when (sequence) {
+        WEATHER_SUNNY -> R.drawable.ic_sunny
+        WEATHER_CLOUD_AND_SUN -> R.drawable.ic_clouds_and_sun
+        WEATHER_RAIN_DROPS -> R.drawable.ic_raindrops
+        WEATHER_BOLT -> R.drawable.ic_bolt
+        WEATHER_SNOWING -> R.drawable.ic_snowing
+        WEATHER_RAINBOW -> R.drawable.ic_rainbow
+        WEATHER_UMBRELLA -> R.drawable.ic_umbrella_1
+        WEATHER_STARS -> R.drawable.ic_stars_2
+        WEATHER_MOON -> R.drawable.ic_moon_9
+        WEATHER_NIGHT_RAIN -> R.drawable.ic_night_rain
+        else -> 0
+    }
 
-            when (weatherFlag) {
-                0 -> setImageResource(0)
-                WEATHER_SUNNY -> setImageResource(R.drawable.ic_sunny)
-                WEATHER_CLOUD_AND_SUN -> setImageResource(R.drawable.ic_clouds_and_sun)
-                WEATHER_RAIN_DROPS -> setImageResource(R.drawable.ic_raindrops)
-                WEATHER_BOLT -> setImageResource(R.drawable.ic_bolt)
-                WEATHER_SNOWING -> setImageResource(R.drawable.ic_snowing)
-                WEATHER_RAINBOW -> setImageResource(R.drawable.ic_rainbow)
-                WEATHER_UMBRELLA -> setImageResource(R.drawable.ic_umbrella_1)
-                WEATHER_STARS -> setImageResource(R.drawable.ic_stars_2)
-                WEATHER_MOON -> setImageResource(R.drawable.ic_moon_9)
-                WEATHER_NIGHT_RAIN -> setImageResource(R.drawable.ic_night_rain)
-                else -> setImageResource(0)
-            }
+    fun initWeatherView(context: Context, imageView: ImageView?, weatherFlag: Int, isShowEmptyWeatherView: Boolean = false, applyWhiteFilter: Boolean = false) {
+        imageView?.run {
+            visibility = if (!isShowEmptyWeatherView && weatherFlag < 1) View.GONE else View.VISIBLE
+            setImageResource(sequenceToSymbolResourceId(weatherFlag))
         }
     }
 
