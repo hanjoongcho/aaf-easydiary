@@ -47,7 +47,7 @@ class HorizontalBarChartFragment : Fragment() {
         // scaling can now only be done on x- and y-axis separately
         barChart.setPinchZoom(false)
 
-        barChart.setDrawGridBackground(true)
+//        barChart.setDrawGridBackground(true)
         // mChart.setDrawYLabels(false);
 //        barChart.zoom(1.5F, 0F, 0F, 0F)
 
@@ -102,29 +102,30 @@ class HorizontalBarChartFragment : Fragment() {
     }
 
     private fun setData(count: Int, range: Float) {
-        val sortedMap = ChartUtils.getSortedMapBySymbol()
+        val sortedMap = ChartUtils.getSortedMapBySymbol(true)
 
         val barEntries = ArrayList<BarEntry>()
-        var index = 1.0F
+        var index = 10F
         sortedMap.forEach { (key, value) ->
-            if (index > 7) return@forEach
+            if (index < 1) return@forEach
 
             val drawable: Drawable? = when (EasyDiaryUtils.sequenceToSymbolResourceId(key) > 0) {
                 true -> ContextCompat.getDrawable(context!!, EasyDiaryUtils.sequenceToSymbolResourceId(key))
                 false -> null
             }
             mSequences.add(key)
-            barEntries.add(BarEntry(index++, value.toFloat(), drawable))
+            barEntries.add(BarEntry(index--, value.toFloat(), drawable))
         }
-
+        mSequences.reverse()
+        
         val barDataSet: BarDataSet
-
-        barDataSet = BarDataSet(barEntries, getString(R.string.bar_chart_status))
+        barDataSet = BarDataSet(barEntries, "다이어리 심볼기준 통계 TOP 10")
         val iValueFormatter = IValueFormatterExt(context)
         barDataSet.valueFormatter = iValueFormatter
         val colors = intArrayOf(
-                Color.rgb(193, 37, 82), Color.rgb(255, 102, 0), Color.rgb(245, 199, 0),
-                Color.rgb(106, 150, 31), Color.rgb(179, 100, 53), Color.rgb(115, 130, 153))
+                Color.rgb(255, 102, 0), Color.rgb(245, 199, 0),
+                Color.rgb(106, 150, 31), Color.rgb(179, 100, 53), Color.rgb(115, 130, 153)
+        )
         barDataSet.setColors(*colors)
         barDataSet.setDrawIcons(true)
         barDataSet.setDrawValues(false)

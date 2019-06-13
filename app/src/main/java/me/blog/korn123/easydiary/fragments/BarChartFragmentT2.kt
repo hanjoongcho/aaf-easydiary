@@ -101,7 +101,7 @@ class BarChartFragmentT2 : Fragment() {
     }
 
     private fun setData(count: Int, range: Float) {
-        val sortedMap = ChartUtils.getSortedMapBySymbol()
+        val sortedMap = ChartUtils.getSortedMapBySymbol(true)
 
         val barEntries = ArrayList<BarEntry>()
         var index = 1.0F
@@ -115,12 +115,12 @@ class BarChartFragmentT2 : Fragment() {
         }
         
         val barDataSet: BarDataSet
-        barDataSet = BarDataSet(barEntries, "다이어리 심볼기준 통계")
+        barDataSet = BarDataSet(barEntries, "다이어리 심볼기준 통계 전체")
         val iValueFormatter = IValueFormatterExt(context)
         barDataSet.valueFormatter = iValueFormatter
         val colors = intArrayOf(
-                Color.rgb(152, 189, 248)/*, Color.rgb(255, 102, 0), Color.rgb(245, 199, 0),
-                Color.rgb(106, 150, 31), Color.rgb(179, 100, 53), Color.rgb(115, 130, 153)*/)
+                Color.rgb(152, 189, 248), Color.rgb(255, 102, 0), Color.rgb(245, 199, 0),
+                Color.rgb(106, 150, 31), Color.rgb(179, 100, 53), Color.rgb(115, 130, 153))
         barDataSet.setColors(*colors)
         barDataSet.setDrawIcons(true)
         barDataSet.setDrawValues(false)

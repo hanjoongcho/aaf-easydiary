@@ -4,7 +4,7 @@ import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 
 class ChartUtils {
     companion object {
-        fun getSortedMapBySymbol(): Map<Int, Int> {
+        fun getSortedMapBySymbol(isReverse: Boolean = false): Map<Int, Int> {
             val listDiary = EasyDiaryDbHelper.readDiary(null)
             val map = hashMapOf<Int, Int>()
             listDiary.map { diaryDto ->
@@ -17,8 +17,12 @@ class ChartUtils {
                     }
                 }
             }
-
-            return map.toList().sortedByDescending { (_, value) -> value }.toMap()
+            
+            
+            return when(isReverse) {
+                true -> map.toList().sortedByDescending { (_, value) -> value }.toMap()
+                false -> map.toList().sortedBy { (_, value) -> value }.toMap()
+            } 
         }
     }
 }
