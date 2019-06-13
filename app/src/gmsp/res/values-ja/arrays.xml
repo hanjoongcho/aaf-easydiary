@@ -87,6 +87,7 @@
         <item>47|Tie</item>
         <item>64|Dumbbell</item>
         <item>46|Garbage</item>
+        <item>69|Scale</item>
     </string-array>
 
     <string-array name="food_item_array">
