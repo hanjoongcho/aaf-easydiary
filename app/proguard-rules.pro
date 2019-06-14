@@ -22,6 +22,9 @@
 -keep class org.apache.http.** { *; }
 -dontwarn org.apache.http.**
 
+-keep class com.github.mikephil.charting.** { *; }
+-dontwarn com.github.mikephil.charting.**
+
 -keepattributes Signature
 -keepattributes Annotation
 -keep class okhttp3.** { *; }

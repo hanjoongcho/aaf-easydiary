@@ -87,7 +87,7 @@ class BarChartFragment : Fragment() {
         barChart.marker = mv // Set the marker to the chart
 
         setData(6, 20f)
-        barChart.animateY(2500)
+        barChart.animateY(2000)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

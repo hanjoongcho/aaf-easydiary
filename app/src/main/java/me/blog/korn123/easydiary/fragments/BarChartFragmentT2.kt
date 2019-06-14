@@ -93,7 +93,7 @@ class BarChartFragmentT2 : Fragment() {
         barChart.marker = mv // Set the marker to the chart
 
         setData(6, 20f)
-        barChart.animateXY(1000, 2500)
+        barChart.animateY(2000)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -119,7 +119,7 @@ class BarChartFragmentT2 : Fragment() {
         val iValueFormatter = IValueFormatterExt(context)
         barDataSet.valueFormatter = iValueFormatter
         val colors = intArrayOf(
-                Color.rgb(152, 189, 248), Color.rgb(255, 102, 0), Color.rgb(245, 199, 0),
+                Color.rgb(193, 37, 82), Color.rgb(255, 102, 0), Color.rgb(245, 199, 0),
                 Color.rgb(106, 150, 31), Color.rgb(179, 100, 53), Color.rgb(115, 130, 153))
         barDataSet.setColors(*colors)
         barDataSet.setDrawIcons(true)
