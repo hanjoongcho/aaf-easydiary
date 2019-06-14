@@ -23,11 +23,9 @@ import kotlinx.android.synthetic.main.fragment_barchart.*
 import me.blog.korn123.commons.utils.ChartUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.chart.DayAxisValueFormatter
 import me.blog.korn123.easydiary.chart.IValueFormatterExt
 import me.blog.korn123.easydiary.chart.MyAxisValueFormatter
 import me.blog.korn123.easydiary.chart.XYMarkerView
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import java.util.*
 
 class HorizontalBarChartFragment : Fragment() {
@@ -64,19 +62,11 @@ class HorizontalBarChartFragment : Fragment() {
         val custom = MyAxisValueFormatter(context)
 
         val leftAxis = barChart.axisLeft
-//        leftAxis.typeface = mTfLight
-        leftAxis.setLabelCount(8, false)
-        leftAxis.valueFormatter = custom
         leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
-        leftAxis.spaceTop = 15f
         leftAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
 
         val rightAxis = barChart.axisRight
         rightAxis.setDrawGridLines(false)
-//        rightAxis.typeface = mTfLight
-        rightAxis.setLabelCount(8, false)
-        rightAxis.valueFormatter = custom
-        rightAxis.spaceTop = 15f
         rightAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
 
         val l = barChart.legend
@@ -93,31 +83,36 @@ class HorizontalBarChartFragment : Fragment() {
         mv.chartView = barChart // For bounds control
         barChart.marker = mv // Set the marker to the chart
 
-        setData(6, 20f)
-        barChart.animateXY(1000, 2500)
+        setData()
+        barChart.animateY(2000)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_horizontal_barchart, container, false)
     }
 
-    private fun setData(count: Int, range: Float) {
+    private fun setData() {
         val sortedMap = ChartUtils.getSortedMapBySymbol(true)
 
         val barEntries = ArrayList<BarEntry>()
-        var index = 10F
+        var index = 1F
+        val itemArray = arrayListOf<HashMap<String, Int>>()
         sortedMap.forEach { (key, value) ->
-            if (index < 1) return@forEach
-
-            val drawable: Drawable? = when (EasyDiaryUtils.sequenceToSymbolResourceId(key) > 0) {
-                true -> ContextCompat.getDrawable(context!!, EasyDiaryUtils.sequenceToSymbolResourceId(key))
+            if (index > 10) return@forEach
+            itemArray.add( hashMapOf("key" to key, "value" to value) )
+            mSequences.add(key)
+            index++
+        }
+        itemArray.reverse()
+        mSequences.reverse()
+        itemArray.forEachIndexed { index, item ->
+            val drawable: Drawable? = when (EasyDiaryUtils.sequenceToSymbolResourceId(item["key"]!!) > 0) {
+                true -> ContextCompat.getDrawable(context!!, EasyDiaryUtils.sequenceToSymbolResourceId(item["key"]!!))
                 false -> null
             }
-            mSequences.add(key)
-            barEntries.add(BarEntry(index--, value.toFloat(), drawable))
+            barEntries.add(BarEntry((index + 1F), item["value"]!!.toFloat(), drawable))
         }
-        mSequences.reverse()
-        
+
         val barDataSet: BarDataSet
         barDataSet = BarDataSet(barEntries, getString(R.string.statistics_symbol_top_ten))
         val iValueFormatter = IValueFormatterExt(context)
