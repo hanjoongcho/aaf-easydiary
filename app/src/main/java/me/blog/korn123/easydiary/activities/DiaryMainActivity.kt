@@ -159,7 +159,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, settingIntent)
             }
             R.id.chart -> {
-                val chartIntent = Intent(this@DiaryMainActivity, BarChartActivity::class.java)
+                val chartIntent = Intent(this@DiaryMainActivity, StatisticsActivity::class.java)
                 //                startActivity(chartIntent);
                 TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, chartIntent)
             }

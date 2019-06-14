@@ -119,7 +119,7 @@ class HorizontalBarChartFragment : Fragment() {
         mSequences.reverse()
         
         val barDataSet: BarDataSet
-        barDataSet = BarDataSet(barEntries, "다이어리 심볼기준 통계 TOP 10")
+        barDataSet = BarDataSet(barEntries, getString(R.string.statistics_symbol_top_ten))
         val iValueFormatter = IValueFormatterExt(context)
         barDataSet.valueFormatter = iValueFormatter
         val colors = intArrayOf(

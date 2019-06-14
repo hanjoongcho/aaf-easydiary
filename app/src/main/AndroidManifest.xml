@@ -26,7 +26,7 @@
         <activity android:name="me.blog.korn123.easydiary.activities.DiaryReadActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name="me.blog.korn123.easydiary.activities.DiaryUpdateActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.DiaryMainActivity" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.BarChartActivity" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.StatisticsActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.CalendarActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.PhotoViewPagerActivity" android:theme="@style/AppTheme.NoActionBar" android:hardwareAccelerated="false" />
         <activity android:name=".activities.PostCardActivity" android:theme="@style/AppTheme.NoActionBar" />

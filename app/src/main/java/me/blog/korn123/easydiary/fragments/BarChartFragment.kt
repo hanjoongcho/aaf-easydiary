@@ -40,7 +40,7 @@ class BarChartFragment : Fragment() {
         // scaling can now only be done on x- and y-axis separately
         barChart.setPinchZoom(false)
 
-        barChart.setDrawGridBackground(true)
+//        barChart.setDrawGridBackground(true)
         // mChart.setDrawYLabels(false);
 //        barChart.zoom(1.5F, 0F, 0F, 0F)
 
@@ -116,7 +116,7 @@ class BarChartFragment : Fragment() {
 
         val barDataSet: BarDataSet
 
-        barDataSet = BarDataSet(barEntries, getString(R.string.bar_chart_status))
+        barDataSet = BarDataSet(barEntries, getString(R.string.statistics_creation_time))
         val iValueFormatter = IValueFormatterExt(context)
         barDataSet.valueFormatter = iValueFormatter
         val colors = intArrayOf(

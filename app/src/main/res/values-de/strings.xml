@@ -32,6 +32,7 @@
     <string name="read_diary_title">Suchen</string>
     <string name="input_mode_a">Sprachmodus</string>
     <string name="input_mode_c">Tastaturmodus</string>
+    <string name="guide_message_2">Tippe oder sage den Suchbegriff.</string>
     <string name="recognizer_intent_not_found_message">Das Spracherkennungs-Modul ist nicht installiert oder ist deaktiviert.</string>
     <string name="sample_diary_title_1">Sei gefährlich und nicht vorsichtig.</string>
     <string name="sample_diary_title_2">Ich wiederhole, was ich weiß, wenn ich spreche.</string>
@@ -41,7 +42,6 @@
     <string name="sample_diary_2">Wenn du sprichst, wiederholst du, was du weißt. Aber wenn du zuhörst, wirst du etwas Neues lernen. - Der Dalai Lama</string>
     <string name="sample_diary_3">Es sind die schlechten Nachrichten, die Sie am meisten als Anführer hören müssen. Die guten Nachrichten sind morgen gut, aber die schlechten Nachrichten werden morgen schlechter sein. Deshalb ist es sicher, immer schwierige Fragen zu stellen und die Wahrheit zu sagen, auch wenn die Fakten herzzerreißend sind. - Eric Schmidt, Vorsitzender von Google, sagt: \"Wie funktioniert Google?\"</string>
     <string name="sample_diary_4">Beschränkungen haben keine Kreativität, aber Kreativität wird ausgeübt, um Beschränkungen zu überwinden. Jede großartige Arbeit oder kreative Lösung war eine Menge Zeitbeschränkungen, physische Einschränkungen und Ressourcenbeschränkungen. Was auch immer es ist, Kreativität wird in einer schwierigen und eingeschränkten Umgebung geboren. - 김봉진 대표, ‘배민다움’에서</string>
-    <string name="guide_message_2">Tippe oder sage den Suchbegriff.</string>
     <string name="read_diary_showcase_button_1">Weiter</string>
     <string name="read_diary_showcase_button_2">Schließen</string>
     <string name="read_diary_showcase_title_1">Tagebuch schreiben</string>
@@ -130,21 +130,21 @@
     <string name="post_card_showcase_title_4">Postkarte teilen</string>
     <string name="post_card_showcase_title_5">Bearbeitung verlassen</string>
     <string name="post_card_showcase_message_0">Du kannst den gespeicherten Eintrag verwenden und als eigene Postkarte speichern.</string>
-    <string name="menu_calendar">Kalender</string>
-    <string name="menu_chart">Diagram</string>
-    <string name="menu_timeline">Zeitleiste</string>
-    <string name="post_card">Tagebuch-Postkarten</string>
-    <string name="menu_delete">Löschen</string>
-    <string name="timeline_title">Zeitleiste</string>
     <string name="post_card_showcase_message_1">Ändere die Postkarten-Textfarbe. Du kannst die gewünschte Farbe mit dem Farbwähler wählen.</string>
     <string name="post_card_showcase_message_2">Ändere die Postkarten-Hintergrundfarbe. Du kannst die gewünschte Farbe mit dem Farbwähler wählen.</string>
     <string name="post_card_showcase_message_3">Erstellte Postkarten können als Bild gespeichert werden.</string>
     <string name="post_card_showcase_message_4">Erstellte Postkarten können mit Freunden geteilt werden. Teile deine Postkarten per E-Mail, MMS, Messenger, und mehr.</string>
     <string name="post_card_showcase_message_5">Verlasse die Postkarten-Bearbeitung und kehre zur vorherigen Ansicht zurück.</string>
+    <string name="timeline_title">Zeitleiste</string>
     <string name="postcard_viewer_title">Tagebuch-Postkarten</string>
     <string name="postcard_viewer_no_cards_saved">Keine gespeicherten Postkarten vorhanden.</string>
     <string name="google_drive_connect_message">Synchronisiere mit Google Drive ...</string>
     <string name="diary_count"></string>
+    <string name="menu_calendar">Kalender</string>
+    <string name="menu_chart">Statistics</string>
+    <string name="menu_timeline">Zeitleiste</string>
+    <string name="post_card">Tagebuch-Postkarten</string>
+    <string name="menu_delete">Löschen</string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.41 here.                                                      -->
@@ -377,4 +377,7 @@
     <string name="backup_confirm_message">Do you want to start an attached photo backup task?</string>
     <string name="recover_confirm_attached_photo">Do you want to start an attached photo recovery task?</string>
     <string name="category_symbol">Symbol</string>
+    <string name="statistics_creation_time">Statistics by creation time</string>
+    <string name="statistics_symbol_all">All statistics by symbol</string>
+    <string name="statistics_symbol_top_ten">Top 10 statistics by symbol</string>
 </resources>

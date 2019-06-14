@@ -4,16 +4,16 @@
     <item
         android:id="@+id/barChart"
         android:orderInCategory="1"
-        android:title="Bar Chart"
+        android:title="@string/statistics_creation_time"
         app:showAsAction="never" />
     <item
         android:id="@+id/barChart2"
         android:orderInCategory="2"
-        android:title="Bar Chart-II"
+        android:title="@string/statistics_symbol_all"
         app:showAsAction="never" />
     <item
         android:id="@+id/barChart3"
         android:orderInCategory="3"
-        android:title="Horizontal Bar Chart"
+        android:title="@string/statistics_symbol_top_ten"
         app:showAsAction="never" />
 </menu>

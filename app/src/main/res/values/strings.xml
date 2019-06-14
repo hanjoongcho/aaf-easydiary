@@ -141,7 +141,7 @@
     <string name="google_drive_connect_message">Google Drive in sync...</string>
     <string name="diary_count"></string>
     <string name="menu_calendar">Calendar</string>
-    <string name="menu_chart">Chart</string>
+    <string name="menu_chart">Statistics</string>
     <string name="menu_timeline">Timeline</string>
     <string name="post_card">Diary Postcard</string>
     <string name="menu_delete">Delete</string>
@@ -377,4 +377,7 @@
     <string name="backup_confirm_message">Do you want to start an attached photo backup task?</string>
     <string name="recover_confirm_attached_photo">Do you want to start an attached photo recovery task?</string>
     <string name="category_symbol">Symbol</string>
+    <string name="statistics_creation_time">Statistics by creation time</string>
+    <string name="statistics_symbol_all">All statistics by symbol</string>
+    <string name="statistics_symbol_top_ten">Top 10 statistics by symbol</string>
 </resources>
