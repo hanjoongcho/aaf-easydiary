@@ -372,7 +372,7 @@
     <string name="category_daily">日常生活と物事</string>
     <string name="category_food">食事</string>
     <string name="category_leisure">余暇生活</string>
-    <string name="category_landscape">風景</string>
+    <string name="category_landscape">風景&amp;建物</string>
     <string name="rotate_photo">回転</string>
     <string name="task_progress_message">リクエストを処理中…</string>
     <string name="open_realm_file_title">日記の復元</string>

@@ -145,6 +145,11 @@
         <item>207|Fields</item>
         <item>208|Fields1</item>
         <item>209|Forest</item>
+        <item>210|Apartment</item>
+        <item>211|Hospital</item>
+        <item>212|Museum</item>
+        <item>213|Town Hall</item>
+        <item>214|Train Station</item>
     </string-array>
 
     <string-array name="symbol_item_array">

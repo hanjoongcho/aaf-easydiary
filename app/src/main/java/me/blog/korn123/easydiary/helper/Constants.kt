@@ -156,7 +156,7 @@ const val EMOTION_HARMFUL = 137
 const val EMOTION_INCOMPREHENSION = 138
 const val EMOTION_SAD_1 = 139
 
-// Landscape 200 ~ 249
+// Landscape & Buildings 200 ~ 249
 const val LANDSCAPE_BEACH = 200
 const val LANDSCAPE_BRIDGE = 201
 const val LANDSCAPE_CAPE = 202
@@ -167,6 +167,11 @@ const val LANDSCAPE_DESERT_1 = 206
 const val LANDSCAPE_FIELDS = 207
 const val LANDSCAPE_FIELDS_1 = 208
 const val LANDSCAPE_FOREST = 209
+const val BUILDING_APARTMENT = 210
+const val BUILDING_HOSPITAL = 211
+const val BUILDING_MUSEUM = 212
+const val BUILDING_TOWN_HALL = 213
+const val BUILDING_TRAIN_STATION = 214
 
 // Food and Drink 250 ~ 299
 const val FOOD_BURGER = 250

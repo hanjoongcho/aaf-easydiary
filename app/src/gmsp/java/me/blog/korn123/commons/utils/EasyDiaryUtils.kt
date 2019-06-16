@@ -121,6 +121,11 @@ object EasyDiaryUtils {
         LANDSCAPE_FIELDS -> R.drawable.ic_fields
         LANDSCAPE_FIELDS_1 -> R.drawable.ic_fields_1
         LANDSCAPE_FOREST -> R.drawable.ic_forest
+        BUILDING_APARTMENT -> R.drawable.ic_apartment
+        BUILDING_HOSPITAL -> R.drawable.ic_hospital
+        BUILDING_MUSEUM -> R.drawable.ic_museum
+        BUILDING_TOWN_HALL -> R.drawable.ic_town_hall
+        BUILDING_TRAIN_STATION -> R.drawable.ic_train_station
 
         EMOTION_HAPPY -> R.drawable.ic_001_happy
         EMOTION_LAUGHING -> R.drawable.ic_002_laughing
