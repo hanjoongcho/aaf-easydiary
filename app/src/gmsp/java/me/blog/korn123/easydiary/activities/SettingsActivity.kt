@@ -265,7 +265,8 @@ class SettingsActivity : EasyDiaryActivity() {
         initGoogleSignAccount { account ->
             val driveServiceHelper = DriveServiceHelper(this, account)
 
-            driveServiceHelper.queryFiles("mimeType contains 'text/aaf_v' and name contains '$DIARY_DB_NAME'", 1000)
+//            driveServiceHelper.queryFiles("mimeType contains 'text/aaf_v' and name contains '$DIARY_DB_NAME'", 1000)
+            driveServiceHelper.queryFiles("mimeType contains 'text/aaf_v'", 1000)
                     .addOnSuccessListener {
 
                         val realmFiles: ArrayList<HashMap<String, String>> = arrayListOf()
@@ -311,7 +312,8 @@ class SettingsActivity : EasyDiaryActivity() {
                         progressContainer.visibility = View.GONE
                     }
                     .addOnFailureListener { e ->
-                        e.printStackTrace()
+                        makeSnackBar(e.message ?: "Please try again later.")
+                        mAlertDialog?.cancel()
                     }
         }
     }
