@@ -228,6 +228,9 @@ class SettingsActivity : EasyDiaryActivity() {
                 ).addOnSuccessListener {
                     progressContainer.visibility = View. GONE
                     makeSnackBar(getString(R.string.backup_completed_message))
+                }.addOnFailureListener { e ->
+                    makeSnackBar(e.message ?: "Please try again later.")
+                    progressContainer.visibility = View.GONE
                 }
             }
         }
@@ -312,8 +315,9 @@ class SettingsActivity : EasyDiaryActivity() {
                         progressContainer.visibility = View.GONE
                     }
                     .addOnFailureListener { e ->
+                        e.printStackTrace()
                         makeSnackBar(e.message ?: "Please try again later.")
-                        mAlertDialog?.cancel()
+                        progressContainer.visibility = View.GONE
                     }
         }
     }
