@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.85 (date: 2019/06/18)
+  * Google Drive(REST API) user rights acquisition error correction
+  
 # Changes in 1.4.84 (date: 2019/06/15)
   * Improved diary statistics
 
