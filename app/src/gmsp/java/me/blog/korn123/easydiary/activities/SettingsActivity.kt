@@ -26,6 +26,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
+import com.google.api.client.extensions.android.http.AndroidHttp
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
+import com.google.api.client.json.gson.GsonFactory
+import com.google.api.services.drive.Drive
+import com.google.api.services.drive.DriveScopes
+import com.google.api.services.drive.model.FileList
 import com.xw.repo.BubbleSeekBar
 import io.github.aafactory.commons.helpers.BaseConfig
 import io.github.aafactory.commons.utils.DateUtils
@@ -49,6 +57,8 @@ import org.apache.poi.ss.usermodel.Workbook
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
+import java.util.concurrent.Callable
+import java.util.concurrent.Executors
 
 
 /**
@@ -61,7 +71,7 @@ class SettingsActivity : EasyDiaryActivity() {
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var accountCallback: (Account) -> Unit
+    private lateinit var mAccountCallback: (Account) -> Unit
     private var mAlertDialog: AlertDialog? = null
     private var mTaskFlag = 0
     private var mDevModeClickCount = 0
@@ -92,14 +102,19 @@ class SettingsActivity : EasyDiaryActivity() {
         when (resultCode == Activity.RESULT_OK && data != null) {
             true -> {
                 // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-                if (requestCode == REQUEST_CODE_GOOGLE_SIGN_IN) {
-                    // The Task returned from this call is always completed, no need to attach
-                    // a listener.
-                    val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
-                    val googleSignAccount = task.getResult(ApiException::class.java)
-                    googleSignAccount.account?.let {
-                        accountCallback.invoke(it)
+                when (requestCode) {
+                    REQUEST_CODE_GOOGLE_SIGN_IN -> {
+                        // The Task returned from this call is always completed, no need to attach
+                        // a listener.
+                        val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
+                        val googleSignAccount = task.getResult(ApiException::class.java)
+                        googleSignAccount.account?.let {
+                            requestDrivePermissions(it) { mAccountCallback.invoke(it) }
+                        }
                     }
+                    REQUEST_CODE_GOOGLE_DRIVE_PERMISSIONS -> {
+                        mPermissionCallback.invoke()                        
+                    }       
                 }
             }
             false -> {
@@ -155,7 +170,7 @@ class SettingsActivity : EasyDiaryActivity() {
      *
      ***************************************************************************************************/
     private fun initGoogleSignAccount(callback: (account: Account) -> Unit) {
-        accountCallback = callback
+        mAccountCallback = callback
 
         // Check for existing Google Sign In account, if the user is already signed in
         // the GoogleSignInAccount will be non-null.
@@ -172,9 +187,32 @@ class SettingsActivity : EasyDiaryActivity() {
             startActivityForResult(client.signInIntent, REQUEST_CODE_GOOGLE_SIGN_IN)
         } else {
             googleSignInAccount.account?.let {
-                accountCallback.invoke(it)
+                requestDrivePermissions(it) { mAccountCallback.invoke(it) }
             }
         }
+    }
+    
+    // FIXME: workaround
+    private lateinit var mPermissionCallback: () -> Unit
+    private fun requestDrivePermissions(account: Account, permissionCallback: () -> Unit) {
+        mPermissionCallback = permissionCallback
+        val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(this, Collections.singleton(DriveScopes.DRIVE_FILE))
+        credential.selectedAccount = account
+        val googleDriveService: Drive = Drive.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
+                .setApplicationName(getString(R.string.app_name))
+                .build()
+        
+        val executor = Executors.newSingleThreadExecutor()
+        Tasks.call(executor, Callable<FileList> {
+            try {
+                var r = googleDriveService.files().list().setQ("'root' in parents and name = '${DriveServiceHelper.AAF_ROOT_FOLDER_NAME}' and trashed = false").setSpaces("drive").execute()
+                mPermissionCallback.invoke()
+                r
+            } catch (e: UserRecoverableAuthIOException) {
+                startActivityForResult(e.intent, REQUEST_CODE_GOOGLE_DRIVE_PERMISSIONS)
+                null
+            }
+        })
     }
 
     private fun initDriveWorkingDirectory(account: Account, workingFolderName: String, callback: (workingFolderId: String) -> Unit) {
@@ -206,6 +244,9 @@ class SettingsActivity : EasyDiaryActivity() {
                         }
                     }
                 }
+            }.addOnFailureListener { e ->
+                var aa = e as UserRecoverableAuthIOException
+                startActivityForResult(aa.intent, 100)
             }
         }
     }
@@ -257,11 +298,13 @@ class SettingsActivity : EasyDiaryActivity() {
     }
     
     private fun recoverDiaryPhoto() {
-        showAlertDialog(getString(R.string.recover_confirm_attached_photo), DialogInterface.OnClickListener {_, _ ->
-            val recoverPhotoService = Intent(this, RecoverPhotoService::class.java)
-            startService(recoverPhotoService)
-            finish()
-        }, null)
+        initGoogleSignAccount { _ ->
+            showAlertDialog(getString(R.string.recover_confirm_attached_photo), DialogInterface.OnClickListener {_, _ ->
+                val recoverPhotoService = Intent(this, RecoverPhotoService::class.java)
+                startService(recoverPhotoService)
+                finish()
+            }, null)
+        }
     }
 
     private fun openRealmFilePickerDialog() {
