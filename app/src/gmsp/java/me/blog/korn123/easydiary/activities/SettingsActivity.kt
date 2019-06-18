@@ -295,8 +295,10 @@ class SettingsActivity : EasyDiaryActivity() {
     }
     
     private fun recoverDiaryPhoto() {
+        progressContainer.visibility = View.VISIBLE
         initGoogleSignAccount { _ ->
             runOnUiThread {
+                progressContainer.visibility = View.GONE
                 showAlertDialog(getString(R.string.recover_confirm_attached_photo), DialogInterface.OnClickListener {_, _ ->
                     val recoverPhotoService = Intent(this, RecoverPhotoService::class.java)
                     startService(recoverPhotoService)
