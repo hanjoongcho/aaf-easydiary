@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.86 (date: 2019/06/19)
+  * Google Drive(REST API) 다이어리 첨부사진 복구하기 오류 수정
+
 # Changes in 1.4.85 (date: 2019/06/18)
   * Google Drive(REST API) 사용자 권한획득 오류 수정
   

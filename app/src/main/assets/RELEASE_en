@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.86 (date: 2019/06/19)
+  * Google Drive(REST API) Recovering photos with diary Fixing errors
+
 # Changes in 1.4.85 (date: 2019/06/18)
   * Google Drive(REST API) user rights acquisition error correction
   

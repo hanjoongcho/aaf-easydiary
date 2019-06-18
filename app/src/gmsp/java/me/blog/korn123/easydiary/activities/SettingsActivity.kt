@@ -244,9 +244,6 @@ class SettingsActivity : EasyDiaryActivity() {
                         }
                     }
                 }
-            }.addOnFailureListener { e ->
-                var aa = e as UserRecoverableAuthIOException
-                startActivityForResult(aa.intent, 100)
             }
         }
     }
@@ -299,11 +296,13 @@ class SettingsActivity : EasyDiaryActivity() {
     
     private fun recoverDiaryPhoto() {
         initGoogleSignAccount { _ ->
-            showAlertDialog(getString(R.string.recover_confirm_attached_photo), DialogInterface.OnClickListener {_, _ ->
-                val recoverPhotoService = Intent(this, RecoverPhotoService::class.java)
-                startService(recoverPhotoService)
-                finish()
-            }, null)
+            runOnUiThread {
+                showAlertDialog(getString(R.string.recover_confirm_attached_photo), DialogInterface.OnClickListener {_, _ ->
+                    val recoverPhotoService = Intent(this, RecoverPhotoService::class.java)
+                    startService(recoverPhotoService)
+                    finish()
+                }, null)
+            }
         }
     }
 
