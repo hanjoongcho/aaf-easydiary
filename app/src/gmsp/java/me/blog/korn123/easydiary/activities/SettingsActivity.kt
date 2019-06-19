@@ -326,7 +326,7 @@ class SettingsActivity : EasyDiaryActivity() {
                         }
                         val builder = AlertDialog.Builder(this@SettingsActivity)
                         builder.setNegativeButton(getString(android.R.string.cancel), null)
-                        builder.setTitle(getString(R.string.open_realm_file_title))
+                        builder.setTitle("${getString(R.string.open_realm_file_title)} (Total: ${it.files.size})")
                         builder.setMessage(getString(R.string.open_realm_file_message))
                         val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
                         val fontView = inflater.inflate(R.layout.dialog_realm_files, null)
