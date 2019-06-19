@@ -90,6 +90,9 @@ class SettingsActivity : EasyDiaryActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
+        // Clear google OAuth token generated prior to version 1.4.80
+        if (!config.clearLegacyToken) signOutGoogleOAuth(false)
+
         bindEvent()
         EasyDiaryUtils.changeDrawableIconColor(this, config.primaryColor, R.drawable.minus_6)
         EasyDiaryUtils.changeDrawableIconColor(this, config.primaryColor, R.drawable.plus_6)
@@ -432,7 +435,21 @@ class SettingsActivity : EasyDiaryActivity() {
 
         progressContainer.setOnTouchListener { _, _ -> true }
     }
-    
+
+    private fun signOutGoogleOAuth(showCompleteMessage: Boolean = true) {
+        // Configure sign-in to request the user's ID, email address, and basic
+        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+        val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.oauth_requerst_id_token))
+                .requestEmail()
+                .build()
+        val client = GoogleSignIn.getClient(this, gso)
+        client.signOut().addOnCompleteListener {
+            config.clearLegacyToken = true
+            if (showCompleteMessage) makeSnackBar("Sign out complete:)")
+        }
+    }
+
     private val mOnClickListener = View.OnClickListener { view ->
         when (view.id) {
             R.id.primaryColor -> TransitionHelper.startActivityWithTransition(this@SettingsActivity, Intent(this@SettingsActivity, CustomizationActivity::class.java))
@@ -579,14 +596,7 @@ class SettingsActivity : EasyDiaryActivity() {
                 })
             }
             R.id.signOutGoogleOAuth -> {
-                // Configure sign-in to request the user's ID, email address, and basic
-                // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-                val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestIdToken(getString(R.string.oauth_requerst_id_token))
-                        .requestEmail()
-                        .build()
-                val client = GoogleSignIn.getClient(this, gso)
-                client.signOut().addOnCompleteListener { makeSnackBar("Sign out complete:)") }
+                signOutGoogleOAuth()
             }
         }
     }

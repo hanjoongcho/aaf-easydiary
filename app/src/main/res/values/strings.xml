@@ -268,6 +268,10 @@
         v1.4.86 / 2019.06.19\n
         Google Drive(REST API) Recovering photos with diary Fixing errors
     </string>
+    <string name="release_152">
+        v1.4.87 / 2019.06.20\n
+        Fixed authentication token error for users authenticated to use Google Drive in v1.4.80 earlier
+    </string>
     
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->

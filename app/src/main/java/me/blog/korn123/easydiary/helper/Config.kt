@@ -65,11 +65,11 @@ class Config(context: Context) : BaseConfig(context) {
         set(fingerprintLockEnable) = prefs.edit().putBoolean(SETTING_FINGERPRINT_LOCK, fingerprintLockEnable).apply()
 
     var fingerprintEncryptData: String
-        get() = prefs.getString(FINGERPRINT_ENCRYPT_DATA, "")
+        get() = prefs.getString(FINGERPRINT_ENCRYPT_DATA, "") ?: ""
         set(fingerprintEncryptData) = prefs.edit().putString(FINGERPRINT_ENCRYPT_DATA, fingerprintEncryptData).apply()
 
     var fingerprintEncryptDataIV: String
-        get() = prefs.getString(FINGERPRINT_ENCRYPT_DATA_IV, "")
+        get() = prefs.getString(FINGERPRINT_ENCRYPT_DATA_IV, "") ?: ""
         set(fingerprintEncryptDataIV) = prefs.edit().putString(FINGERPRINT_ENCRYPT_DATA_IV, fingerprintEncryptDataIV).apply()
 
     var fingerprintAuthenticationFailCount: Int
@@ -88,4 +88,7 @@ class Config(context: Context) : BaseConfig(context) {
         get() = prefs.getInt(POSTCARD_CROP_MODE, 0)
         set(postCardCropMode) = prefs.edit().putInt(POSTCARD_CROP_MODE, postCardCropMode).apply()
 
+    var clearLegacyToken: Boolean
+        get() = prefs.getBoolean(SETTING_CLEAR_LEGACY_TOKEN, false)
+        set(clearLegacyToken) = prefs.edit().putBoolean(SETTING_CLEAR_LEGACY_TOKEN, clearLegacyToken).apply()
 }
