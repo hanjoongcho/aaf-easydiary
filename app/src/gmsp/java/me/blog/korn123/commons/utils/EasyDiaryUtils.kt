@@ -204,6 +204,15 @@ object EasyDiaryUtils {
         LEISURE_HAIR_SALON -> R.drawable.ic_hairdresser_m
         LEISURE_HAIR_SALON_1 -> R.drawable.ic_hairdresser_w
         LEISURE_TELEVISION -> R.drawable.ic_television
+        LEISURE_BASEBALL -> R.drawable.ic_baseball
+        LEISURE_BASKETBALL_M -> R.drawable.ic_basketball_player_m
+        LEISURE_BASKETBALL_W -> R.drawable.ic_basketball_player_w
+        LEISURE_FOOTBALL_M -> R.drawable.ic_football_m
+        LEISURE_FOOTBALL_W -> R.drawable.ic_football_w
+        LEISURE_SWIMMING_M -> R.drawable.ic_swimmer_m
+        LEISURE_SWIMMING_W -> R.drawable.ic_swimmer_w
+        LEISURE_TENNIS_M -> R.drawable.ic_tennis_player_m
+        LEISURE_TENNIS_W -> R.drawable.ic_tennis_player_w
 
         SYMBOL_YOUTUBE -> R.drawable.ic_youtube
         SYMBOL_DROPBOX -> R.drawable.ic_dropbox

@@ -132,6 +132,15 @@
         <item>308|Hair Salon</item>
         <item>309|Hair Salon</item>
         <item>310|Television</item>
+        <item>311|Baseball</item>
+        <item>312|Basketball</item>
+        <item>313|Basketball</item>
+        <item>314|Football</item>
+        <item>315|Football</item>
+        <item>316|Swimming</item>
+        <item>317|Swimming</item>
+        <item>318|Tennis</item>
+        <item>319|Tennis</item>
     </string-array>
 
     <string-array name="landscape_item_array">
