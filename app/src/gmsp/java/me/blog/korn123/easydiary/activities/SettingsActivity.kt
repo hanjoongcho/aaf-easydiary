@@ -313,7 +313,8 @@ class SettingsActivity : EasyDiaryActivity() {
             val driveServiceHelper = DriveServiceHelper(this, account)
 
 //            driveServiceHelper.queryFiles("mimeType contains 'text/aaf_v' and name contains '$DIARY_DB_NAME'", 1000)
-            driveServiceHelper.queryFiles("mimeType contains 'text/aaf_v' and trashed = false", 1000)
+            
+            driveServiceHelper.queryFiles("(mimeType = '${EasyDiaryUtils.easyDiaryMimeTypeAll.joinToString("' or mimeType = '")}') and trashed = false", 1000)
                     .addOnSuccessListener {
                         val realmFiles: ArrayList<HashMap<String, String>> = arrayListOf()
                         it.files.map { file -> 
