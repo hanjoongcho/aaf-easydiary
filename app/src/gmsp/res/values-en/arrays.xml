@@ -184,6 +184,19 @@
         <item>369|SlideShare</item>
     </string-array>
 
+    <string-array name="flag_item_array">
+        <item>450|Mauritius</item>
+        <item>452|Austria</item>
+        <item>453|Oman</item>
+        <item>454|Ethiopia</item>
+        <item>455|Tanzania</item>
+        <item>456|Nicaragua</item>
+        <item>457|Estonia</item>
+        <item>458|Uganda</item>
+        <item>459|Slovenia</item>
+        <item>543|South Korea</item>
+    </string-array>
+
     <string-array name="pref_list_fonts_title">
         <item>NanumPen</item>
         <item>NanumBrush</item>

@@ -235,6 +235,17 @@ object EasyDiaryUtils {
         SYMBOL_JAVA -> R.drawable.ic_java
         SYMBOL_SLIDESHARE -> R.drawable.ic_slideshare
 
+        FLAG_MAURITIUS -> R.drawable.ic_001_mauritius
+        FLAG_AUSTRIA -> R.drawable.ic_003_austria
+        FLAG_OMAN -> R.drawable.ic_004_oman
+        FLAG_ETHIOPIA -> R.drawable.ic_005_ethiopia
+        FLAG_TANZANIA -> R.drawable.ic_006_tanzania
+        FLAG_NICARAGUA -> R.drawable.ic_007_nicaragua
+        FLAG_ESTONIA -> R.drawable.ic_008_estonia
+        FLAG_UGANDA -> R.drawable.ic_009_uganda
+        FLAG_SLOVENIA -> R.drawable.ic_010_slovenia
+        FLAG_SOUTH_KOREA-> R.drawable.ic_094_south_korea
+
         else -> 0
     }
     
@@ -399,7 +410,8 @@ object EasyDiaryUtils {
                 *context.resources.getStringArray(R.array.food_item_array),
                 *context.resources.getStringArray(R.array.leisure_item_array),
                 *context.resources.getStringArray(R.array.landscape_item_array),
-                *context.resources.getStringArray(R.array.symbol_item_array)
+                *context.resources.getStringArray(R.array.symbol_item_array),
+                *context.resources.getStringArray(R.array.flag_item_array)
         )
 
         symbolArray.map { item ->
