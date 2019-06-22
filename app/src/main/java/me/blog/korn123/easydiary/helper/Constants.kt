@@ -268,16 +268,16 @@ const val FLAG_CHRISTMAS_ISLAND = 466
 const val FLAG_LEBANON = 467
 const val FLAG_CEUTA = 468
 const val FLAG_IRAQ = 469
-const val COOK_ISLAND = 450
-const val COOK_SYRIA = 451
-const val COOK_COCOS_ISLAND = 452
-const val COOK_HONDURAS = 453
-const val COOK_ANGUILLA = 454
-const val COOK_QATAR = 455
-const val COOK_AMERICAN_SAMOA = 456
-const val COOK_PUERTO_RICO = 457
-const val COOK_COMOROS = 458
-const val COOK_ = 459
+const val COOK_ISLAND = 470
+const val COOK_SYRIA = 471
+const val COOK_COCOS_ISLAND = 472
+const val COOK_HONDURAS = 473
+const val COOK_ANGUILLA = 474
+const val COOK_QATAR = 475
+const val COOK_AMERICAN_SAMOA = 476
+const val COOK_PUERTO_RICO = 477
+const val COOK_COMOROS = 478
+const val COOK_NORTH_KOREA = 479
 
 
 const val FLAG_SOUTH_KOREA = 543
