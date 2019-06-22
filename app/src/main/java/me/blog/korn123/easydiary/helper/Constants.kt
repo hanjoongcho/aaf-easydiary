@@ -246,6 +246,7 @@ const val SYMBOL_JAVA = 368
 const val SYMBOL_SLIDESHARE = 369
 
 // FLAGS 450 ~ 749
+// 001 ~ 010
 const val FLAG_MAURITIUS = 450
 const val FLAG_AUSTRIA = 452
 const val FLAG_OMAN = 453
@@ -255,6 +256,30 @@ const val FLAG_NICARAGUA = 456
 const val FLAG_ESTONIA = 457
 const val FLAG_UGANDA = 458
 const val FLAG_SLOVENIA = 459
+
+// 011 ~ 020
+const val FLAG_ZIMBABWE = 460
+const val FLAG_SANG_TOME_AND_PRINCE = 461
+const val FLAG_ITALY = 462
+const val FLAG_WALES = 463
+const val FLAG_EL_SALVADOR = 464
+const val FLAG_NEPAL = 465
+const val FLAG_CHRISTMAS_ISLAND = 466
+const val FLAG_LEBANON = 467
+const val FLAG_CEUTA = 468
+const val FLAG_IRAQ = 469
+const val COOK_ISLAND = 450
+const val COOK_SYRIA = 451
+const val COOK_COCOS_ISLAND = 452
+const val COOK_HONDURAS = 453
+const val COOK_ANGUILLA = 454
+const val COOK_QATAR = 455
+const val COOK_AMERICAN_SAMOA = 456
+const val COOK_PUERTO_RICO = 457
+const val COOK_COMOROS = 458
+const val COOK_ = 459
+
+
 const val FLAG_SOUTH_KOREA = 543
 
 const val SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER = 0
