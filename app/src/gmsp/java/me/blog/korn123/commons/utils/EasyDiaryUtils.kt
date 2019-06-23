@@ -269,8 +269,44 @@ object EasyDiaryUtils {
         FLAG_SCOTLAND -> R.drawable.ic_055_scotland
         FLAG_JAPAN -> R.drawable.ic_063_japan
         FLAG_ICELAND -> R.drawable.ic_080_iceland
+        FLAG_SLOVAKIA -> R.drawable.ic_091_slovakia
         FLAG_SOUTH_KOREA-> R.drawable.ic_094_south_korea
         FLAG_PAKISTAN -> R.drawable.ic_100_pakistan
+        FLAG_CAMEROON -> R.drawable.ic_105_cameroon
+        FLAG_HUNGARY -> R.drawable.ic_115_hungary
+        FLAG_MALAYSIA -> R.drawable.ic_118_malasya
+        FLAG_NEW_ZEALAND -> R.drawable.ic_121_new_zealand
+        FLAG_SPAIN -> R.drawable.ic_128_spain
+        FLAG_CHILE -> R.drawable.ic_131_chile
+        FLAG_SAUDI_ARABIA -> R.drawable.ic_133_saudi_arabia
+        FLAG_IRAN -> R.drawable.ic_136_iran
+        FLAG_NORWAY -> R.drawable.ic_143_norway
+        FLAG_UKRAINE -> R.drawable.ic_145_ukraine
+        FLAG_CZECH_REPUBLIC -> R.drawable.ic_149_czech_republic
+        FLAG_CUBA -> R.drawable.ic_153_cuba
+        FLAG_SWAZILAND -> R.drawable.ic_154_swaziland
+        FLAG_GERMANY -> R.drawable.ic_162_germany
+        FLAG_BELGIUM -> R.drawable.ic_165_belgium
+        FLAG_MOROCCO -> R.drawable.ic_166_morocco
+        FLAG_GREECE -> R.drawable.ic_170_greece
+        FLAG_DENMARK -> R.drawable.ic_174_denmark
+        FLAG_COLOMBIA -> R.drawable.ic_177_colombia
+        FLAG_IRELAND -> R.drawable.ic_179_ireland
+        FLAG_SWEDEN -> R.drawable.ic_184_sweden
+        FLAG_PHILIPPINES -> R.drawable.ic_192_philippines
+        FLAG_FRANCE -> R.drawable.ic_195_france
+        FLAG_ARGENTINA -> R.drawable.ic_198_argentina
+        FLAG_SWITZERLAND -> R.drawable.ic_205_switzerland
+        FLAG_INDONESIA -> R.drawable.ic_209_indonesia
+        FLAG_POLAND -> R.drawable.ic_211_poland
+        FLAG_ENGLAND -> R.drawable.ic_216_england
+        FLAG_TURKEY -> R.drawable.ic_218_turkey
+        FLAG_AUSTRALIA -> R.drawable.ic_234_australia
+        FLAG_CANADA -> R.drawable.ic_243_canada
+        FLAG_INDIA -> R.drawable.ic_246_india
+        FLAG_RUSSIA -> R.drawable.ic_248_russia
+        FLAG_MEXICO -> R.drawable.ic_252_mexico
+        FLAG_BRAZIL -> R.drawable.ic_255_brazil
 
         else -> 0
     }

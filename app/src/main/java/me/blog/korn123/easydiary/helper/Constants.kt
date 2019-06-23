@@ -283,6 +283,7 @@ const val FLAG_CHINA = 483
 const val FLAG_SCOTLAND = 504
 const val FLAG_JAPAN = 512
 const val FLAG_ICELAND = 529
+const val FLAG_SLOVAKIA = 540
 const val FLAG_SOUTH_KOREA = 543
 const val FLAG_PAKISTAN = 549
 const val FLAG_CAMEROON = 554

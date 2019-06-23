@@ -219,8 +219,44 @@
         <item>504|Scotland</item>
         <item>512|Japan</item>
         <item>529|Iceland</item>
+        <item>540|Slovakia</item>
         <item>543|South Korea</item>
         <item>549|Pakistan</item>
+        <item>554|Cameroon</item>
+        <item>564|Hungary</item>
+        <item>567|Malaysia</item>
+        <item>570|New Zealand</item>
+        <item>577|New Spain</item>
+        <item>580|Chile</item>
+        <item>582|Saudi Arabia</item>
+        <item>585|Iran</item>
+        <item>592|Norway</item>
+        <item>594|Ukraine</item>
+        <item>598|Czech Republic</item>
+        <item>602|Cuba</item>
+        <item>603|Swaziland</item>
+        <item>611|Germany</item>
+        <item>614|Belgium</item>
+        <item>615|Morocco</item>
+        <item>619|Greece</item>
+        <item>623|Denmark</item>
+        <item>626|Colombia</item>
+        <item>628|Ireland</item>
+        <item>633|Sweden</item>
+        <item>641|Philippines</item>
+        <item>644|France</item>
+        <item>647|Argentina</item>
+        <item>654|Switzerland</item>
+        <item>658|Indonesia</item>
+        <item>660|Poland</item>
+        <item>665|England</item>
+        <item>667|Turkey</item>
+        <item>683|Australia</item>
+        <item>692|Canada</item>
+        <item>695|India</item>
+        <item>697|Russia</item>
+        <item>701|Mexico</item>
+        <item>704|Brazil</item>
     </string-array>
 
     <string-array name="pref_list_fonts_title">
