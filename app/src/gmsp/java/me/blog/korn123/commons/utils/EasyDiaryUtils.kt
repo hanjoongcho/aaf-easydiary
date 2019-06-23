@@ -244,6 +244,27 @@ object EasyDiaryUtils {
         FLAG_ESTONIA -> R.drawable.ic_008_estonia
         FLAG_UGANDA -> R.drawable.ic_009_uganda
         FLAG_SLOVENIA -> R.drawable.ic_010_slovenia
+        FLAG_ZIMBABWE -> R.drawable.ic_011_zimbabwe
+        FLAG_SAO_TOME_AND_PRINCE -> R.drawable.ic_012_sao_tome_and_prince
+        FLAG_ITALY -> R.drawable.ic_013_italy
+        FLAG_WALES -> R.drawable.ic_014_wales
+        FLAG_EL_SALVADOR -> R.drawable.ic_015_el_salvador
+        FLAG_NEPAL -> R.drawable.ic_016_nepal
+        FLAG_CHRISTMAS_ISLAND -> R.drawable.ic_017_christmas_island
+        FLAG_LEBANON -> R.drawable.ic_018_lebanon
+        FLAG_CEUTA -> R.drawable.ic_019_ceuta
+        FLAG_IRAQ -> R.drawable.ic_020_iraq
+        FLAG_COOK_ISLAND -> R.drawable.ic_021_cook_islands
+        FLAG_SYRIA -> R.drawable.ic_022_syria
+        FLAG_COCOS_ISLAND -> R.drawable.ic_023_cocos_island
+        FLAG_HONDURAS -> R.drawable.ic_024_honduras
+        FLAG_ANGUILLA-> R.drawable.ic_025_anguilla
+        FLAG_QATAR -> R.drawable.ic_026_qatar
+        FLAG_AMERICAN_SAMOA -> R.drawable.ic_027_american_samoa
+        FLAG_PUERTO_RICO -> R.drawable.ic_028_puerto_rico
+        FLAG_COMOROS -> R.drawable.ic_029_comoros
+        FLAG_NORTH_KOREA -> R.drawable.ic_030_north_korea
+
         FLAG_SOUTH_KOREA-> R.drawable.ic_094_south_korea
 
         else -> 0
