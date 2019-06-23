@@ -215,7 +215,12 @@
         <item>478|Comoros</item>
         <item>479|North Korea</item>
 
+        <item>483|China</item>
+        <item>504|Scotland</item>
+        <item>512|Japan</item>
+        <item>529|Iceland</item>
         <item>543|South Korea</item>
+        <item>549|Pakistan</item>
     </string-array>
 
     <string-array name="pref_list_fonts_title">

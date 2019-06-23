@@ -265,7 +265,12 @@ object EasyDiaryUtils {
         FLAG_COMOROS -> R.drawable.ic_029_comoros
         FLAG_NORTH_KOREA -> R.drawable.ic_030_north_korea
 
+        FLAG_CHINA -> R.drawable.ic_034_china
+        FLAG_SCOTLAND -> R.drawable.ic_055_scotland
+        FLAG_JAPAN -> R.drawable.ic_063_japan
+        FLAG_ICELAND -> R.drawable.ic_080_iceland
         FLAG_SOUTH_KOREA-> R.drawable.ic_094_south_korea
+        FLAG_PAKISTAN -> R.drawable.ic_100_pakistan
 
         else -> 0
     }
