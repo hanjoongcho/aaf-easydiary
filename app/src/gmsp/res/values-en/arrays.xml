@@ -251,12 +251,14 @@
         <item>660|Poland</item>
         <item>665|England</item>
         <item>667|Turkey</item>
+        <item>675|United States</item>
         <item>683|Australia</item>
         <item>692|Canada</item>
         <item>695|India</item>
         <item>697|Russia</item>
         <item>701|Mexico</item>
         <item>704|Brazil</item>
+        <item>709|United Kingdom</item>
     </string-array>
 
     <string-array name="pref_list_fonts_title">

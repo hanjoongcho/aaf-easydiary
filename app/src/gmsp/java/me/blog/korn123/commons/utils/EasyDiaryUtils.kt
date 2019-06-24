@@ -301,12 +301,14 @@ object EasyDiaryUtils {
         FLAG_POLAND -> R.drawable.ic_211_poland
         FLAG_ENGLAND -> R.drawable.ic_216_england
         FLAG_TURKEY -> R.drawable.ic_218_turkey
+        FLAG_UNITED_STATES -> R.drawable.ic_226_united_states
         FLAG_AUSTRALIA -> R.drawable.ic_234_australia
         FLAG_CANADA -> R.drawable.ic_243_canada
         FLAG_INDIA -> R.drawable.ic_246_india
         FLAG_RUSSIA -> R.drawable.ic_248_russia
         FLAG_MEXICO -> R.drawable.ic_252_mexico
         FLAG_BRAZIL -> R.drawable.ic_255_brazil
+        FLAG_UNITED_KINGDOM -> R.drawable.ic_260_united_kingdom
 
         else -> 0
     }
