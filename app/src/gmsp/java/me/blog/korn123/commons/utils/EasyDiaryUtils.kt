@@ -166,7 +166,11 @@ object EasyDiaryUtils {
         EMOTION_HAPPY_4 -> R.drawable.ic_happy
         EMOTION_HARMFUL -> R.drawable.ic_harmful
         EMOTION_INCOMPREHENSION -> R.drawable.ic_incomprehension
-        EMOTION_SAD_1-> R.drawable.ic_sad_2
+        EMOTION_SAD_1 -> R.drawable.ic_sad_2
+        EMOTION_IDEA -> R.drawable.ic_idea
+        EMOTION_CONFUSION -> R.drawable.ic_confusion
+        EMOTION_MEMORY -> R.drawable.ic_memory
+        EMOTION_OBSERVATION -> R.drawable.ic_observation
 
         FOOD_BURGER -> R.drawable.ic_burger
         FOOD_SANDWICH -> R.drawable.ic_004_sandwich
