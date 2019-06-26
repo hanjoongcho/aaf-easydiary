@@ -157,6 +157,10 @@ const val EMOTION_HAPPY_4 = 136
 const val EMOTION_HARMFUL = 137
 const val EMOTION_INCOMPREHENSION = 138
 const val EMOTION_SAD_1 = 139
+const val EMOTION_IDEA = 140
+const val EMOTION_CONFUSION = 141
+const val EMOTION_MEMORY = 142
+const val EMOTION_OBSERVATION = 143
 
 // Landscape & Buildings 200 ~ 249
 const val LANDSCAPE_BEACH = 200
@@ -213,6 +217,15 @@ const val LEISURE_FESTIVAL = 307
 const val LEISURE_HAIR_SALON = 308
 const val LEISURE_HAIR_SALON_1 = 309
 const val LEISURE_TELEVISION = 310
+const val LEISURE_BASEBALL = 311
+const val LEISURE_BASKETBALL_M = 312
+const val LEISURE_BASKETBALL_W = 313
+const val LEISURE_FOOTBALL_M = 314
+const val LEISURE_FOOTBALL_W = 315
+const val LEISURE_SWIMMING_M = 316
+const val LEISURE_SWIMMING_W = 317
+const val LEISURE_TENNIS_M = 318
+const val LEISURE_TENNIS_W = 319
 
 // Symbol 350 ~ 449
 const val SYMBOL_YOUTUBE = 350
@@ -235,6 +248,85 @@ const val SYMBOL_LINUX = 366
 const val SYMBOL_UBUNTU = 367
 const val SYMBOL_JAVA = 368
 const val SYMBOL_SLIDESHARE = 369
+
+// FLAGS 450 ~ 749
+// 001 ~ 010
+const val FLAG_MAURITIUS = 450
+const val FLAG_AUSTRIA = 452
+const val FLAG_OMAN = 453
+const val FLAG_ETHIOPIA = 454
+const val FLAG_TANZANIA = 455
+const val FLAG_NICARAGUA = 456
+const val FLAG_ESTONIA = 457
+const val FLAG_UGANDA = 458
+const val FLAG_SLOVENIA = 459
+
+// 011 ~ 030
+const val FLAG_ZIMBABWE = 460
+const val FLAG_SAO_TOME_AND_PRINCE = 461
+const val FLAG_ITALY = 462
+const val FLAG_WALES = 463
+const val FLAG_EL_SALVADOR = 464
+const val FLAG_NEPAL = 465
+const val FLAG_CHRISTMAS_ISLAND = 466
+const val FLAG_LEBANON = 467
+const val FLAG_CEUTA = 468
+const val FLAG_IRAQ = 469
+const val FLAG_COOK_ISLAND = 470
+const val FLAG_SYRIA = 471
+const val FLAG_COCOS_ISLAND = 472
+const val FLAG_HONDURAS = 473
+const val FLAG_ANGUILLA = 474
+const val FLAG_QATAR = 475
+const val FLAG_AMERICAN_SAMOA = 476
+const val FLAG_PUERTO_RICO = 477
+const val FLAG_COMOROS = 478
+const val FLAG_NORTH_KOREA = 479
+
+const val FLAG_CHINA = 483
+const val FLAG_SCOTLAND = 504
+const val FLAG_JAPAN = 512
+const val FLAG_ICELAND = 529
+const val FLAG_SLOVAKIA = 540
+const val FLAG_SOUTH_KOREA = 543
+const val FLAG_PAKISTAN = 549
+const val FLAG_CAMEROON = 554
+const val FLAG_HUNGARY = 564
+const val FLAG_MALAYSIA = 567
+const val FLAG_NEW_ZEALAND = 570
+const val FLAG_SPAIN = 577
+const val FLAG_CHILE = 580
+const val FLAG_SAUDI_ARABIA = 582
+const val FLAG_IRAN = 585
+const val FLAG_NORWAY = 592
+const val FLAG_UKRAINE = 594
+const val FLAG_CZECH_REPUBLIC = 598
+const val FLAG_CUBA = 602
+const val FLAG_SWAZILAND = 603
+const val FLAG_GERMANY = 611
+const val FLAG_BELGIUM = 614
+const val FLAG_MOROCCO = 615
+const val FLAG_GREECE = 619
+const val FLAG_DENMARK = 623
+const val FLAG_COLOMBIA = 626
+const val FLAG_IRELAND = 628
+const val FLAG_SWEDEN = 633
+const val FLAG_PHILIPPINES = 641
+const val FLAG_FRANCE = 644
+const val FLAG_ARGENTINA = 647
+const val FLAG_SWITZERLAND = 654
+const val FLAG_INDONESIA = 658
+const val FLAG_POLAND = 660
+const val FLAG_ENGLAND = 665
+const val FLAG_TURKEY = 667
+const val FLAG_UNITED_STATES = 675
+const val FLAG_AUSTRALIA = 683
+const val FLAG_CANADA = 692
+const val FLAG_INDIA = 695
+const val FLAG_RUSSIA = 697
+const val FLAG_MEXICO = 701
+const val FLAG_BRAZIL = 704
+const val FLAG_UNITED_KINGDOM = 709
 
 const val SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER = 0
 const val SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER = 1

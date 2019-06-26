@@ -166,7 +166,11 @@ object EasyDiaryUtils {
         EMOTION_HAPPY_4 -> R.drawable.ic_happy
         EMOTION_HARMFUL -> R.drawable.ic_harmful
         EMOTION_INCOMPREHENSION -> R.drawable.ic_incomprehension
-        EMOTION_SAD_1-> R.drawable.ic_sad_2
+        EMOTION_SAD_1 -> R.drawable.ic_sad_2
+        EMOTION_IDEA -> R.drawable.ic_idea
+        EMOTION_CONFUSION -> R.drawable.ic_confusion
+        EMOTION_MEMORY -> R.drawable.ic_memory
+        EMOTION_OBSERVATION -> R.drawable.ic_observation
 
         FOOD_BURGER -> R.drawable.ic_burger
         FOOD_SANDWICH -> R.drawable.ic_004_sandwich
@@ -204,6 +208,15 @@ object EasyDiaryUtils {
         LEISURE_HAIR_SALON -> R.drawable.ic_hairdresser_m
         LEISURE_HAIR_SALON_1 -> R.drawable.ic_hairdresser_w
         LEISURE_TELEVISION -> R.drawable.ic_television
+        LEISURE_BASEBALL -> R.drawable.ic_baseball
+        LEISURE_BASKETBALL_M -> R.drawable.ic_basketball_player_m
+        LEISURE_BASKETBALL_W -> R.drawable.ic_basketball_player_w
+        LEISURE_FOOTBALL_M -> R.drawable.ic_football_m
+        LEISURE_FOOTBALL_W -> R.drawable.ic_football_w
+        LEISURE_SWIMMING_M -> R.drawable.ic_swimmer_m
+        LEISURE_SWIMMING_W -> R.drawable.ic_swimmer_w
+        LEISURE_TENNIS_M -> R.drawable.ic_tennis_player_m
+        LEISURE_TENNIS_W -> R.drawable.ic_tennis_player_w
 
         SYMBOL_YOUTUBE -> R.drawable.ic_youtube
         SYMBOL_DROPBOX -> R.drawable.ic_dropbox
@@ -225,6 +238,81 @@ object EasyDiaryUtils {
         SYMBOL_UBUNTU -> R.drawable.ic_ubuntu
         SYMBOL_JAVA -> R.drawable.ic_java
         SYMBOL_SLIDESHARE -> R.drawable.ic_slideshare
+
+        FLAG_MAURITIUS -> R.drawable.ic_001_mauritius
+        FLAG_AUSTRIA -> R.drawable.ic_003_austria
+        FLAG_OMAN -> R.drawable.ic_004_oman
+        FLAG_ETHIOPIA -> R.drawable.ic_005_ethiopia
+        FLAG_TANZANIA -> R.drawable.ic_006_tanzania
+        FLAG_NICARAGUA -> R.drawable.ic_007_nicaragua
+        FLAG_ESTONIA -> R.drawable.ic_008_estonia
+        FLAG_UGANDA -> R.drawable.ic_009_uganda
+        FLAG_SLOVENIA -> R.drawable.ic_010_slovenia
+        FLAG_ZIMBABWE -> R.drawable.ic_011_zimbabwe
+        FLAG_SAO_TOME_AND_PRINCE -> R.drawable.ic_012_sao_tome_and_prince
+        FLAG_ITALY -> R.drawable.ic_013_italy
+        FLAG_WALES -> R.drawable.ic_014_wales
+        FLAG_EL_SALVADOR -> R.drawable.ic_015_el_salvador
+        FLAG_NEPAL -> R.drawable.ic_016_nepal
+        FLAG_CHRISTMAS_ISLAND -> R.drawable.ic_017_christmas_island
+        FLAG_LEBANON -> R.drawable.ic_018_lebanon
+        FLAG_CEUTA -> R.drawable.ic_019_ceuta
+        FLAG_IRAQ -> R.drawable.ic_020_iraq
+        FLAG_COOK_ISLAND -> R.drawable.ic_021_cook_islands
+        FLAG_SYRIA -> R.drawable.ic_022_syria
+        FLAG_COCOS_ISLAND -> R.drawable.ic_023_cocos_island
+        FLAG_HONDURAS -> R.drawable.ic_024_honduras
+        FLAG_ANGUILLA-> R.drawable.ic_025_anguilla
+        FLAG_QATAR -> R.drawable.ic_026_qatar
+        FLAG_AMERICAN_SAMOA -> R.drawable.ic_027_american_samoa
+        FLAG_PUERTO_RICO -> R.drawable.ic_028_puerto_rico
+        FLAG_COMOROS -> R.drawable.ic_029_comoros
+        FLAG_NORTH_KOREA -> R.drawable.ic_030_north_korea
+
+        FLAG_CHINA -> R.drawable.ic_034_china
+        FLAG_SCOTLAND -> R.drawable.ic_055_scotland
+        FLAG_JAPAN -> R.drawable.ic_063_japan
+        FLAG_ICELAND -> R.drawable.ic_080_iceland
+        FLAG_SLOVAKIA -> R.drawable.ic_091_slovakia
+        FLAG_SOUTH_KOREA-> R.drawable.ic_094_south_korea
+        FLAG_PAKISTAN -> R.drawable.ic_100_pakistan
+        FLAG_CAMEROON -> R.drawable.ic_105_cameroon
+        FLAG_HUNGARY -> R.drawable.ic_115_hungary
+        FLAG_MALAYSIA -> R.drawable.ic_118_malasya
+        FLAG_NEW_ZEALAND -> R.drawable.ic_121_new_zealand
+        FLAG_SPAIN -> R.drawable.ic_128_spain
+        FLAG_CHILE -> R.drawable.ic_131_chile
+        FLAG_SAUDI_ARABIA -> R.drawable.ic_133_saudi_arabia
+        FLAG_IRAN -> R.drawable.ic_136_iran
+        FLAG_NORWAY -> R.drawable.ic_143_norway
+        FLAG_UKRAINE -> R.drawable.ic_145_ukraine
+        FLAG_CZECH_REPUBLIC -> R.drawable.ic_149_czech_republic
+        FLAG_CUBA -> R.drawable.ic_153_cuba
+        FLAG_SWAZILAND -> R.drawable.ic_154_swaziland
+        FLAG_GERMANY -> R.drawable.ic_162_germany
+        FLAG_BELGIUM -> R.drawable.ic_165_belgium
+        FLAG_MOROCCO -> R.drawable.ic_166_morocco
+        FLAG_GREECE -> R.drawable.ic_170_greece
+        FLAG_DENMARK -> R.drawable.ic_174_denmark
+        FLAG_COLOMBIA -> R.drawable.ic_177_colombia
+        FLAG_IRELAND -> R.drawable.ic_179_ireland
+        FLAG_SWEDEN -> R.drawable.ic_184_sweden
+        FLAG_PHILIPPINES -> R.drawable.ic_192_philippines
+        FLAG_FRANCE -> R.drawable.ic_195_france
+        FLAG_ARGENTINA -> R.drawable.ic_198_argentina
+        FLAG_SWITZERLAND -> R.drawable.ic_205_switzerland
+        FLAG_INDONESIA -> R.drawable.ic_209_indonesia
+        FLAG_POLAND -> R.drawable.ic_211_poland
+        FLAG_ENGLAND -> R.drawable.ic_216_england
+        FLAG_TURKEY -> R.drawable.ic_218_turkey
+        FLAG_UNITED_STATES -> R.drawable.ic_226_united_states
+        FLAG_AUSTRALIA -> R.drawable.ic_234_australia
+        FLAG_CANADA -> R.drawable.ic_243_canada
+        FLAG_INDIA -> R.drawable.ic_246_india
+        FLAG_RUSSIA -> R.drawable.ic_248_russia
+        FLAG_MEXICO -> R.drawable.ic_252_mexico
+        FLAG_BRAZIL -> R.drawable.ic_255_brazil
+        FLAG_UNITED_KINGDOM -> R.drawable.ic_260_united_kingdom
 
         else -> 0
     }
@@ -390,7 +478,8 @@ object EasyDiaryUtils {
                 *context.resources.getStringArray(R.array.food_item_array),
                 *context.resources.getStringArray(R.array.leisure_item_array),
                 *context.resources.getStringArray(R.array.landscape_item_array),
-                *context.resources.getStringArray(R.array.symbol_item_array)
+                *context.resources.getStringArray(R.array.symbol_item_array),
+                *context.resources.getStringArray(R.array.flag_item_array)
         )
 
         symbolArray.map { item ->

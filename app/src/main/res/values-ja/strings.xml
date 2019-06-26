@@ -396,4 +396,5 @@
     <string name="statistics_creation_time">作成時間別統計</string>
     <string name="statistics_symbol_all">シンボルごとの統計全体</string>
     <string name="statistics_symbol_top_ten">シンボルごとの統計TOP10</string>
+    <string name="category_flag">FLAG</string>
 </resources>
