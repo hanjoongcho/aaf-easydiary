@@ -110,6 +110,7 @@ object EasyDiaryUtils {
         DAILY_NO_ALCOHOL -> R.drawable.ic_no_alcohol
         DAILY_WAKE_UP -> R.drawable.ic_wake_up
         DAILY_SCALE -> R.drawable.ic_scale
+        DAILY_TAKE_AWAY -> R.drawable.ic_take_away
 
         LANDSCAPE_BEACH -> R.drawable.ic_beach
         LANDSCAPE_BRIDGE -> R.drawable.ic_bridge

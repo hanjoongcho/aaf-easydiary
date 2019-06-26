@@ -115,6 +115,7 @@ const val DAILY_DIET = 66
 const val DAILY_NO_ALCOHOL = 67
 const val DAILY_WAKE_UP = 68
 const val DAILY_SCALE = 69
+const val DAILY_TAKE_AWAY = 70
 
 // Emotion 100 ~ 199
 const val EMOTION_HAPPY = 100
