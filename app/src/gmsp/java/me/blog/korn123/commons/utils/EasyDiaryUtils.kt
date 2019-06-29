@@ -111,6 +111,8 @@ object EasyDiaryUtils {
         DAILY_WAKE_UP -> R.drawable.ic_wake_up
         DAILY_SCALE -> R.drawable.ic_scale
         DAILY_TAKE_AWAY -> R.drawable.ic_take_away
+        DAILY_CAR_WASH -> R.drawable.ic_car_wash
+        DAILY_CAR_WASH_2 -> R.drawable.ic_car_wash_2
 
         LANDSCAPE_BEACH -> R.drawable.ic_beach
         LANDSCAPE_BRIDGE -> R.drawable.ic_bridge
