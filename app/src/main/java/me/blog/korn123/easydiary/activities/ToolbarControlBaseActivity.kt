@@ -92,7 +92,7 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
         if (ViewHelper.getTranslationY(appBar) == toTranslationY) {
             return
         }
-        val animator = ValueAnimator.ofFloat(ViewHelper.getTranslationY(appBar), toTranslationY).setDuration(200)
+        val animator = ValueAnimator.ofFloat(ViewHelper.getTranslationY(appBar), toTranslationY).setDuration(500)
         animator.addUpdateListener { animation ->
             val translationY = animation.animatedValue as Float
             ViewHelper.setTranslationY(appBar, translationY)
