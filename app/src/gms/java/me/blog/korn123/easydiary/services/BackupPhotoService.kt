@@ -7,7 +7,7 @@ import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Environment
 import android.os.IBinder
-import android.support.v4.app.NotificationCompat
+import androidx.core.app.NotificationCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.google.android.gms.auth.api.signin.GoogleSignIn
