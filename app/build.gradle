@@ -102,9 +102,9 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation "androidx.appcompat:appcompat:1.0.2"
     implementation "androidx.cardview:cardview:$versions.supportLib"
-    implementation "com.google.android.material:material:$versions.supportLib"
     implementation "androidx.legacy:legacy-support-v4:$versions.supportLib"
     implementation "androidx.vectordrawable:vectordrawable:1.0.1"
+    implementation "com.google.android.material:material:$versions.supportLib"
 
     // google
     gmsImplementation "com.google.android.gms:play-services-auth:17.0.0"

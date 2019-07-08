@@ -12,7 +12,7 @@ import android.os.Bundle
 import android.os.Environment
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import android.support.v7.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -108,7 +108,7 @@ class SettingsActivity : EasyDiaryActivity() {
                         // a listener.
                         val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
                         val googleSignAccount = task.getResult(ApiException::class.java)
-                        googleSignAccount.account?.let {
+                        googleSignAccount?.account?.let {
                             requestDrivePermissions(it) { mAccountCallback.invoke(it) }
                         }
                     }

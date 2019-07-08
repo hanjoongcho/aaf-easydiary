@@ -1,5 +1,5 @@
 package me.blog.korn123.easydiary.gms.drive
 
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 
 class RecoverDiaryActivity : AppCompatActivity() 

@@ -111,7 +111,7 @@ class SettingsActivity : EasyDiaryActivity() {
                         // a listener.
                         val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
                         val googleSignAccount = task.getResult(ApiException::class.java)
-                        googleSignAccount.account?.let {
+                        googleSignAccount?.account?.let {
                             requestDrivePermissions(it) { mAccountCallback.invoke(it) }
                         }
                     }
