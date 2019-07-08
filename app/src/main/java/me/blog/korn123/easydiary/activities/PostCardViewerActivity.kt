@@ -5,8 +5,8 @@ import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
 import android.os.Environment
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.widget.AdapterView
 import io.github.aafactory.commons.utils.ColorUtils
@@ -52,7 +52,7 @@ class PostCardViewerActivity : EasyDiaryActivity() {
 //        }
         
         val spacesItemDecoration = SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding))
-        val gridLayoutManager = GridLayoutManager(this, 2)
+        val gridLayoutManager = androidx.recyclerview.widget.GridLayoutManager(this, 2)
 
         EasyDiaryUtils.initWorkingDirectory(this@PostCardViewerActivity)
         mPostcardAdapter = PostcardAdapter(
@@ -114,8 +114,8 @@ class PostCardViewerActivity : EasyDiaryActivity() {
         }
     }
     
-    internal class SpacesItemDecoration(private val space: Int) : RecyclerView.ItemDecoration() {
-        override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+    internal class SpacesItemDecoration(private val space: Int) : androidx.recyclerview.widget.RecyclerView.ItemDecoration() {
+        override fun getItemOffsets(outRect: Rect, view: View, parent: androidx.recyclerview.widget.RecyclerView, state: androidx.recyclerview.widget.RecyclerView.State) {
             val position = parent.getChildAdapterPosition(view)
             when (position % 2) {
                 0 -> {

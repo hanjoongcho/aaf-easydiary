@@ -4,7 +4,7 @@
     android:id="@+id/item_holder"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         style="@style/AppCard">
         <LinearLayout
             style="@style/LinearLayoutVertical">
@@ -51,5 +51,5 @@
                 </LinearLayout>
             </RelativeLayout>    
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 </RelativeLayout>    

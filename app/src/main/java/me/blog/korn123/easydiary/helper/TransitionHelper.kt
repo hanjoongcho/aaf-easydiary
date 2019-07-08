@@ -2,7 +2,7 @@ package me.blog.korn123.easydiary.helper
 
 import android.app.Activity
 import android.content.Intent
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.FragmentActivity
 import me.blog.korn123.easydiary.R
 
 /**

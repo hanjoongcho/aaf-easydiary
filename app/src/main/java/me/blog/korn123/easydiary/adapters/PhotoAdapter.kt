@@ -2,7 +2,7 @@ package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
 import android.content.res.Configuration.ORIENTATION_PORTRAIT
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.google.android.flexbox.FlexDirection
@@ -15,7 +15,7 @@ class PhotoAdapter(
         val activity: Activity,
         val photoUris: RealmList<PhotoUriDto>,
         private val longClickCallback: (position: Int) -> Unit
-) : RecyclerView.Adapter<PhotoViewHolder>() {
+) : androidx.recyclerview.widget.RecyclerView.Adapter<PhotoViewHolder>() {
     private val glideOptionMap = hashMapOf<Int, Int>()
     private var forceSinglePhotoPosition: Int = -1
 

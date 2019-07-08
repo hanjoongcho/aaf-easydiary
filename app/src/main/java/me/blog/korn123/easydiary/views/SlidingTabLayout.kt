@@ -3,7 +3,7 @@ package me.blog.korn123.easydiary.views
 import android.content.Context
 import android.graphics.Typeface
 import android.os.Build
-import android.support.v4.view.ViewPager
+import androidx.viewpager.widget.ViewPager
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
@@ -58,8 +58,8 @@ class SlidingTabLayout @JvmOverloads constructor(context: Context, attrs: Attrib
     private var mTabViewLayoutId: Int = 0
     private var mTabViewTextViewId: Int = 0
 
-    private var mViewPager: ViewPager? = null
-    private var mViewPagerPageChangeListener: ViewPager.OnPageChangeListener? = null
+    private var mViewPager: androidx.viewpager.widget.ViewPager? = null
+    private var mViewPagerPageChangeListener: androidx.viewpager.widget.ViewPager.OnPageChangeListener? = null
 
     private val mTabStrip: SlidingTabStrip
 
@@ -128,7 +128,7 @@ class SlidingTabLayout @JvmOverloads constructor(context: Context, attrs: Attrib
      *
      * @see ViewPager.setOnPageChangeListener
      */
-    fun setOnPageChangeListener(listener: ViewPager.OnPageChangeListener) {
+    fun setOnPageChangeListener(listener: androidx.viewpager.widget.ViewPager.OnPageChangeListener) {
         mViewPagerPageChangeListener = listener
     }
 
@@ -147,7 +147,7 @@ class SlidingTabLayout @JvmOverloads constructor(context: Context, attrs: Attrib
      * Sets the associated view pager. Note that the assumption here is that the pager content
      * (number of tabs and tab titles) does not change after this call has been made.
      */
-    fun setViewPager(viewPager: ViewPager?) {
+    fun setViewPager(viewPager: androidx.viewpager.widget.ViewPager?) {
         mTabStrip.removeAllViews()
 
         mViewPager = viewPager
@@ -244,7 +244,7 @@ class SlidingTabLayout @JvmOverloads constructor(context: Context, attrs: Attrib
         }
     }
 
-    private inner class InternalViewPagerListener : ViewPager.OnPageChangeListener {
+    private inner class InternalViewPagerListener : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
         private var mScrollState: Int = 0
 
         override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
@@ -277,7 +277,7 @@ class SlidingTabLayout @JvmOverloads constructor(context: Context, attrs: Attrib
         }
 
         override fun onPageSelected(position: Int) {
-            if (mScrollState == ViewPager.SCROLL_STATE_IDLE) {
+            if (mScrollState == androidx.viewpager.widget.ViewPager.SCROLL_STATE_IDLE) {
                 mTabStrip.onViewPagerPageChanged(position, 0f)
                 scrollToTab(position, 0)
             }

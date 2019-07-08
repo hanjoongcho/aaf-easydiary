@@ -10,13 +10,13 @@ import android.os.Bundle
 import android.os.Handler
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.app.FragmentStatePagerAdapter
-import android.support.v4.content.ContextCompat
-import android.support.v4.graphics.ColorUtils
-import android.support.v4.view.ViewPager
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
+import androidx.viewpager.widget.ViewPager
 import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -147,7 +147,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
     private fun setupViewPager() {
         // Set up the ViewPager with the sections adapter.
         diaryViewPager.adapter = mSectionsPagerAdapter
-        diaryViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        diaryViewPager.addOnPageChangeListener(object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
             override fun onPageSelected(position: Int) {
@@ -268,7 +268,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
     /**
      * A placeholder fragment containing a simple view.
      */
-    class PlaceholderFragment : Fragment() {
+    class PlaceholderFragment : androidx.fragment.app.Fragment() {
         private var mPrimaryColor = 0
         private lateinit var mRootView: ViewGroup
         private lateinit var realmInstance: Realm
@@ -441,12 +441,12 @@ class DiaryReadActivity : EasyDiaryActivity() {
      * one of the sections/tabs/pages.
      */
     inner class SectionsPagerAdapter(
-            fm: FragmentManager,
+            fm: androidx.fragment.app.FragmentManager,
             private val diaryList: ArrayList<DiaryDto>,
             private val query: String?
-    ) : FragmentStatePagerAdapter(fm) {
+    ) : androidx.fragment.app.FragmentStatePagerAdapter(fm) {
 
-        override fun getItem(position: Int): Fragment {
+        override fun getItem(position: Int): androidx.fragment.app.Fragment {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             return PlaceholderFragment.newInstance(diaryList[position].sequence, query)

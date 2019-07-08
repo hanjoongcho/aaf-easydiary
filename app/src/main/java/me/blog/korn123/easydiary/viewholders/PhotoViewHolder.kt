@@ -2,7 +2,7 @@ package me.blog.korn123.easydiary.viewholders
 
 import android.app.Activity
 import android.graphics.Bitmap
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
@@ -24,7 +24,7 @@ class PhotoViewHolder(
         itemView: View, 
         val activity: Activity,
         private val itemCount: Int 
-) : RecyclerView.ViewHolder(itemView) {
+) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
     private val imageView: ImageView = itemView.findViewById(R.id.photo)
     
     internal fun bindTo(photoPath: String, position: Int, glideOption: Int = GLIDE_CROP_TOP, forceSinglePhotoPosition: Int = -1) {

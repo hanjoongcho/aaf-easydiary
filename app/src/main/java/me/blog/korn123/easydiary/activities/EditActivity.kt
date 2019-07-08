@@ -13,13 +13,13 @@ import android.os.Environment
 import android.os.PersistableBundle
 import android.provider.MediaStore
 import android.speech.RecognizerIntent
-import android.support.design.widget.BottomSheetDialog
-import android.support.v4.content.ContextCompat
-import android.support.v4.graphics.ColorUtils
-import android.support.v4.view.PagerAdapter
-import android.support.v4.view.ViewPager
-import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatDialog
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
+import androidx.viewpager.widget.PagerAdapter
+import androidx.viewpager.widget.ViewPager
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatDialog
 import android.text.format.DateFormat
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -221,7 +221,7 @@ abstract class EditActivity : EasyDiaryActivity() {
             addCategory(itemList, categoryList, "symbol_item_array", getString(R.string.category_symbol))
             addCategory(itemList, categoryList, "flag_item_array", getString(R.string.category_flag))
 
-            val viewPager = symbolDialog.findViewById(R.id.viewpager) as ViewPager
+            val viewPager = symbolDialog.findViewById(R.id.viewpager) as androidx.viewpager.widget.ViewPager
             val samplePagerAdapter = SamplePagerAdapter(this, itemList, categoryList)
             viewPager.adapter = samplePagerAdapter
 
@@ -411,7 +411,7 @@ abstract class EditActivity : EasyDiaryActivity() {
      * this class is the [.getPageTitle] method which controls what is displayed in the
      * [SlidingTabLayout].
      */
-    inner class SamplePagerAdapter(val activity: Activity, private val items: ArrayList<Array<String>>, private val categories: List<String>) : PagerAdapter() {
+    inner class SamplePagerAdapter(val activity: Activity, private val items: ArrayList<Array<String>>, private val categories: List<String>) : androidx.viewpager.widget.PagerAdapter() {
 
         /**
          * @return the number of pages to display

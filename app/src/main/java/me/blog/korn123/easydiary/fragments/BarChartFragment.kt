@@ -2,8 +2,8 @@ package me.blog.korn123.easydiary.fragments
 
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.core.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,7 +24,7 @@ import me.blog.korn123.easydiary.chart.XYMarkerView
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import java.util.*
 
-class BarChartFragment : Fragment() {
+class BarChartFragment : androidx.fragment.app.Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -1,7 +1,7 @@
 package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -15,7 +15,7 @@ internal class PostcardAdapter(
         val activity: Activity,
         private val listPostcard: List<PostCardViewerActivity.PostCard>,
         private val onItemClickListener: AdapterView.OnItemClickListener
-) : RecyclerView.Adapter<PostcardViewHolder>() {
+) : androidx.recyclerview.widget.RecyclerView.Adapter<PostcardViewHolder>() {
     private val TAG = this::class.java.simpleName
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostcardViewHolder {

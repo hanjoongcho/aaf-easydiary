@@ -9,7 +9,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.speech.RecognizerIntent
-import android.support.v4.app.ActivityCompat
+import androidx.core.app.ActivityCompat
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*

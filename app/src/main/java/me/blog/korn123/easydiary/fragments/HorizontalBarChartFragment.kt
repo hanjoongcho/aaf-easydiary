@@ -4,8 +4,8 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.core.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +28,7 @@ import me.blog.korn123.easydiary.chart.MyAxisValueFormatter
 import me.blog.korn123.easydiary.chart.XYMarkerView
 import java.util.*
 
-class HorizontalBarChartFragment : Fragment() {
+class HorizontalBarChartFragment : androidx.fragment.app.Fragment() {
     val mSequences = arrayListOf<Int>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

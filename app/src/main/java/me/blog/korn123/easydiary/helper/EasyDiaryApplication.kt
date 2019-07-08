@@ -1,6 +1,6 @@
 package me.blog.korn123.easydiary.helper
 
-import android.support.multidex.MultiDexApplication
+import androidx.multidex.MultiDexApplication
 import com.squareup.leakcanary.LeakCanary
 import io.realm.Realm
 import me.blog.korn123.easydiary.BuildConfig

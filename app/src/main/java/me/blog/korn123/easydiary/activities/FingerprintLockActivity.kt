@@ -10,8 +10,8 @@ import android.os.CancellationSignal
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.KeyProperties
-import android.support.annotation.RequiresApi
-import android.support.v4.app.ActivityCompat
+import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
 import android.util.Base64
 import android.util.Log
 import android.view.View

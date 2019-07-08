@@ -2,9 +2,9 @@ package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
 import android.graphics.drawable.GradientDrawable
-import android.support.v4.content.ContextCompat
-import android.support.v4.graphics.ColorUtils
-import android.support.v7.widget.CardView
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
+import androidx.cardview.widget.CardView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
@@ -125,7 +125,7 @@ class DiaryMainItemAdapter(
         }
 
         val cardView = holder.item_holder?.getChildAt(0)
-        if (cardView is CardView) {
+        if (cardView is androidx.cardview.widget.CardView) {
             if (activity.config.enableCardViewPolicy) {
                 cardView.useCompatPadding = true
                 cardView.cardElevation = CommonUtils.dpToPixelFloatValue(activity, 2F)

@@ -12,7 +12,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
 import android.os.Looper
-import android.support.v4.content.FileProvider
+import androidx.core.content.FileProvider
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View

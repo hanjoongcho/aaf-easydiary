@@ -2,8 +2,8 @@ package me.blog.korn123.easydiary.activities
 
 import android.os.Bundle
 import android.os.Handler
-import android.support.v4.view.PagerAdapter
-import android.support.v4.view.ViewPager
+import androidx.viewpager.widget.PagerAdapter
+import androidx.viewpager.widget.ViewPager
 import android.util.Log
 import android.view.*
 import android.widget.TextView
@@ -45,7 +45,7 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
 
         val a = SamplePagerAdapter(diaryDto)
         view_pager.adapter = SamplePagerAdapter(diaryDto)
-        view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        view_pager.addOnPageChangeListener(object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
             override fun onPageSelected(position: Int) {
@@ -80,7 +80,7 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
         return true
     }
 
-    internal class SamplePagerAdapter(var diaryDto: DiaryDto) : PagerAdapter() {
+    internal class SamplePagerAdapter(var diaryDto: DiaryDto) : androidx.viewpager.widget.PagerAdapter() {
         override fun getCount(): Int {
             return diaryDto.photoUris?.size ?: 0
         }

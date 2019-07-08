@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_marginTop="@dimen/card_layout_margin"
         android:layout_marginLeft="@dimen/card_layout_margin"
         android:layout_marginRight="@dimen/card_layout_margin"
@@ -49,9 +49,9 @@
                 android:hint="@string/guide_message"
                 android:inputType="text|textCapSentences|textAutoCorrect|textAutoComplete" />
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
     
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_marginTop="@dimen/card_layout_margin"
@@ -72,7 +72,7 @@
                 android:hint="@string/contents_text_hint"
                 android:inputType="text|textCapSentences|textAutoCorrect|textAutoComplete|textMultiLine|textLongMessage" />
         </ScrollView>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
     <include layout="@layout/layout_bottom_toolbar" />
     <include layout="@layout/layout_edit_photo_container" />

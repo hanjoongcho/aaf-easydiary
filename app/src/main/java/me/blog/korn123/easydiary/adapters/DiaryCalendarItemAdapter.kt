@@ -2,7 +2,7 @@ package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
 import android.content.Context
-import android.support.v7.widget.CardView
+import androidx.cardview.widget.CardView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -75,7 +75,7 @@ class DiaryCalendarItemAdapter(
         }
 
         val cardView = holder.item_holder?.getChildAt(0)
-        if (cardView is CardView) {
+        if (cardView is androidx.cardview.widget.CardView) {
             if (context.config.enableCardViewPolicy) {
                 cardView.useCompatPadding = true
                 cardView.cardElevation = CommonUtils.dpToPixelFloatValue(context, 2F)

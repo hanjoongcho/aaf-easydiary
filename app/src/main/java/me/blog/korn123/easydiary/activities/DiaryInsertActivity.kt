@@ -7,8 +7,8 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Environment
 import android.speech.RecognizerIntent
-import android.support.v4.content.ContextCompat
-import android.support.v4.graphics.ColorUtils
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager

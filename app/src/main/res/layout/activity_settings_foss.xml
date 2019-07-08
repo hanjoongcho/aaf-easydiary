@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,17 +8,17 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <android.support.design.widget.AppBarLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/AppTheme.AppBarOverlay">
-            <android.support.v7.widget.Toolbar
+            <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
-        </android.support.design.widget.AppBarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
         
         <ScrollView
             android:id="@+id/main_holder"
@@ -43,7 +43,7 @@
                     android:padding="@dimen/card_layout_padding"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                    <android.support.v7.widget.CardView
+                    <androidx.cardview.widget.CardView
                         android:id="@+id/fontSetting"
                         style="@style/AppCard.Settings">
                         <LinearLayout
@@ -55,9 +55,9 @@
                                 android:id="@+id/fontSettingSummary"
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
-                    </android.support.v7.widget.CardView>
+                    </androidx.cardview.widget.CardView>
 
-                    <android.support.v7.widget.CardView
+                    <androidx.cardview.widget.CardView
                         style="@style/AppCard.Settings">
                         <LinearLayout
                             style="@style/LinearLayoutVertical">
@@ -77,9 +77,9 @@
                                 android:text="@string/font_line_spacing_summary"
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
-                    </android.support.v7.widget.CardView>
+                    </androidx.cardview.widget.CardView>
 
-                    <android.support.v7.widget.CardView
+                    <androidx.cardview.widget.CardView
                         style="@style/AppCard.Settings">
                         <LinearLayout
                             style="@style/LinearLayoutVertical">
@@ -117,9 +117,9 @@
                                     android:layout_height="wrap_content" />
                             </LinearLayout>
                         </LinearLayout>
-                    </android.support.v7.widget.CardView>
+                    </androidx.cardview.widget.CardView>
 
-                    <android.support.v7.widget.CardView
+                    <androidx.cardview.widget.CardView
                         android:id="@+id/addTtfFontSetting"
                         style="@style/AppCard.Settings">
                         <LinearLayout
@@ -131,9 +131,9 @@
                                 android:text="@string/add_ttf_fonts_summary"
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
-                    </android.support.v7.widget.CardView>
+                    </androidx.cardview.widget.CardView>
 
-                    <android.support.v7.widget.CardView
+                    <androidx.cardview.widget.CardView
                         android:id="@+id/primaryColor"
                         style="@style/AppCard.Settings">
                         <LinearLayout
@@ -147,9 +147,9 @@
                                 android:text="@string/setting_primary_color_summary"
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
-                    </android.support.v7.widget.CardView>
+                    </androidx.cardview.widget.CardView>
 
-                    <android.support.v7.widget.CardView
+                    <androidx.cardview.widget.CardView
                         android:id="@+id/thumbnailSetting"
                         style="@style/AppCard.Settings">
                         <LinearLayout
@@ -162,9 +162,9 @@
                                 android:text="@string/thumbnail_setting_summary"
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
-                    </android.support.v7.widget.CardView>
+                    </androidx.cardview.widget.CardView>
 
-                    <android.support.v7.widget.CardView
+                    <androidx.cardview.widget.CardView
                         android:id="@+id/contentsSummary"
                         style="@style/AppCard.Settings">
                         <LinearLayout
@@ -188,9 +188,9 @@
                                 android:text="@string/contents_summary_description"
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
-                    </android.support.v7.widget.CardView>
+                    </androidx.cardview.widget.CardView>
                     
-                    <android.support.v7.widget.CardView
+                    <androidx.cardview.widget.CardView
                         android:id="@+id/enableCardViewPolicy"
                         style="@style/AppCard.Settings">
                         <LinearLayout
@@ -214,9 +214,9 @@
                                 android:text="@string/enable_card_view_policy_summary"
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
-                    </android.support.v7.widget.CardView>
+                    </androidx.cardview.widget.CardView>
 
-                    <android.support.v7.widget.CardView
+                    <androidx.cardview.widget.CardView
                         android:id="@+id/multiPickerOption"
                         style="@style/AppCard.Settings">
                         <LinearLayout
@@ -240,9 +240,9 @@
                                 android:text="@string/multi_picker_option_summary"
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
-                    </android.support.v7.widget.CardView>
+                    </androidx.cardview.widget.CardView>
                     
-                    <android.support.v7.widget.CardView
+                    <androidx.cardview.widget.CardView
                         android:id="@+id/boldStyleOption"
                         style="@style/AppCard.Settings">
                         <LinearLayout
@@ -266,9 +266,9 @@
                                 android:text="@string/bold_style_option_summary"
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
-                    </android.support.v7.widget.CardView>
+                    </androidx.cardview.widget.CardView>
                     
-                    <android.support.v7.widget.CardView
+                    <androidx.cardview.widget.CardView
                         android:id="@+id/sensitiveOption"
                         style="@style/AppCard.Settings">
                         <LinearLayout
@@ -292,7 +292,7 @@
                                 android:text="@string/diary_search_keyword_case_sensitive_summary"
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
-                    </android.support.v7.widget.CardView>
+                    </androidx.cardview.widget.CardView>
                 </LinearLayout>
 
                 <io.github.aafactory.commons.views.LabelLayout
@@ -309,7 +309,7 @@
                     android:padding="@dimen/card_layout_padding"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                    <android.support.v7.widget.CardView
+                    <androidx.cardview.widget.CardView
                         android:id="@+id/appLockSetting"
                         style="@style/AppCard.Settings">
                         <LinearLayout
@@ -333,9 +333,9 @@
                                 android:text="@string/pin_lock_summary"
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
-                    </android.support.v7.widget.CardView>
+                    </androidx.cardview.widget.CardView>
 
-                    <android.support.v7.widget.CardView
+                    <androidx.cardview.widget.CardView
                         android:id="@+id/fingerprint"
                         style="@style/AppCard.Settings">
                         <LinearLayout
@@ -359,7 +359,7 @@
                                 android:text="@string/fingerprint_lock_summary"
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
-                    </android.support.v7.widget.CardView>
+                    </androidx.cardview.widget.CardView>
                 </LinearLayout>
                 
                 <io.github.aafactory.commons.views.LabelLayout
@@ -376,7 +376,7 @@
                     android:padding="@dimen/card_layout_padding"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                    <android.support.v7.widget.CardView
+                    <androidx.cardview.widget.CardView
                         android:id="@+id/rateAppSetting"
                         android:orientation="vertical"
                         style="@style/AppCard.Settings">
@@ -390,9 +390,9 @@
                                 android:text=""
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
-                    </android.support.v7.widget.CardView>
+                    </androidx.cardview.widget.CardView>
 
-                    <android.support.v7.widget.CardView
+                    <androidx.cardview.widget.CardView
                         android:id="@+id/invite"
                         android:orientation="vertical"
                         style="@style/AppCard.Settings">
@@ -406,9 +406,9 @@
                                 android:id="@+id/inviteSummary"
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
-                    </android.support.v7.widget.CardView>
+                    </androidx.cardview.widget.CardView>
 
-                    <android.support.v7.widget.CardView
+                    <androidx.cardview.widget.CardView
                         android:id="@+id/releaseNotes"
                         android:orientation="vertical"
                         style="@style/AppCard.Settings">
@@ -421,9 +421,9 @@
                                 android:text="@string/release_notes_summary"
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
-                    </android.support.v7.widget.CardView>
+                    </androidx.cardview.widget.CardView>
                     
-                    <android.support.v7.widget.CardView
+                    <androidx.cardview.widget.CardView
                         android:id="@+id/licenseView"
                         android:orientation="vertical"
                         style="@style/AppCard.Settings">
@@ -436,9 +436,9 @@
                                 android:text="@string/preferences_information_licenses_summary"
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
-                    </android.support.v7.widget.CardView>
+                    </androidx.cardview.widget.CardView>
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

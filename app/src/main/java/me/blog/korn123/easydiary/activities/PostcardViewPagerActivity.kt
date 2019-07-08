@@ -4,9 +4,9 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Environment
-import android.support.v4.content.FileProvider
-import android.support.v4.view.PagerAdapter
-import android.support.v4.view.ViewPager
+import androidx.core.content.FileProvider
+import androidx.viewpager.widget.PagerAdapter
+import androidx.viewpager.widget.ViewPager
 import android.view.*
 import android.widget.TextView
 import com.github.chrisbanes.photoview.PhotoView
@@ -47,7 +47,7 @@ class PostcardViewPagerActivity : EasyDiaryActivity() {
         }
 
         view_pager.adapter = PostcardPagerAdapter(mListPostcard)
-        view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        view_pager.addOnPageChangeListener(object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
             override fun onPageSelected(position: Int) {
@@ -87,7 +87,7 @@ class PostcardViewPagerActivity : EasyDiaryActivity() {
         startActivity(Intent.createChooser(shareIntent, getString(R.string.diary_card_share_info)))
     }
 
-    internal class PostcardPagerAdapter(var listPostcard: List<File>) : PagerAdapter() {
+    internal class PostcardPagerAdapter(var listPostcard: List<File>) : androidx.viewpager.widget.PagerAdapter() {
         override fun getCount(): Int {
             return listPostcard.size
         }

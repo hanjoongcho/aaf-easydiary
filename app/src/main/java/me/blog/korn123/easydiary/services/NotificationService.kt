@@ -2,7 +2,7 @@ package me.blog.korn123.easydiary.services
 
 import android.app.IntentService
 import android.content.Intent
-import android.support.v4.app.NotificationManagerCompat
+import androidx.core.app.NotificationManagerCompat
 import me.blog.korn123.easydiary.helper.NOTIFICATION_COMPLETE_ID
 
 

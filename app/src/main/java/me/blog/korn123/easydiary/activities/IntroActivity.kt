@@ -4,8 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.support.v4.graphics.ColorUtils
-import android.support.v7.app.AppCompatActivity
+import androidx.core.graphics.ColorUtils
+import androidx.appcompat.app.AppCompatActivity
 import android.view.ViewGroup
 import io.github.aafactory.commons.helpers.BaseConfig
 import io.github.aafactory.commons.utils.CommonUtils
