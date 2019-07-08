@@ -93,6 +93,8 @@ class DiaryInsertActivity : EditActivity() {
         
         setupKeypad()
         restoreContents(savedInstanceState)
+
+        toggleSimpleLayout()
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -270,21 +272,7 @@ class DiaryInsertActivity : EditActivity() {
         }
 
         bottomToolbar.setOnClickListener {
-            applicationContext?.let { context ->
-                when (photoContainerScrollView.visibility) {
-                    View.VISIBLE -> {
-                        photoContainerScrollView.visibility = View.GONE
-                        togglePhoto.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.expand))
-                        supportActionBar?.hide()
-                    }
-                    View.GONE -> {
-                        photoContainerScrollView.visibility = View.VISIBLE
-                        togglePhoto.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.collapse))
-                        supportActionBar?.show()
-                    }
-                    else -> {}
-                }
-            }
+            toggleSimpleLayout()
         }
 
         allDay.setOnClickListener { view ->

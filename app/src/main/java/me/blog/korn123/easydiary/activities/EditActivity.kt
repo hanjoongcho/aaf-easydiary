@@ -8,7 +8,9 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.drawable.GradientDrawable
+import android.os.Bundle
 import android.os.Environment
+import android.os.PersistableBundle
 import android.provider.MediaStore
 import android.speech.RecognizerIntent
 import android.support.design.widget.BottomSheetDialog
@@ -66,7 +68,23 @@ abstract class EditActivity : EasyDiaryActivity() {
     protected var mMinute = Integer.valueOf(DateUtils.getCurrentDateTime("mm"))
     protected var mSecond = Integer.valueOf(DateUtils.getCurrentDateTime("ss"))
     protected var mSelectedItemPosition = 0
-    
+
+    fun toggleSimpleLayout() {
+        when (photoContainerScrollView.visibility) {
+            View.VISIBLE -> {
+                photoContainerScrollView.visibility = View.GONE
+                togglePhoto.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.expand))
+                supportActionBar?.hide()
+            }
+            View.GONE -> {
+                photoContainerScrollView.visibility = View.VISIBLE
+                togglePhoto.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.collapse))
+                supportActionBar?.show()
+            }
+            else -> {}
+        }
+    }
+
     internal val mEditListener = View.OnClickListener { view ->
         hideSoftInputFromWindow()
 

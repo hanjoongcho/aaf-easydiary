@@ -93,6 +93,7 @@ class DiaryUpdateActivity : EditActivity() {
         setDateTime()
         bindEvent()
         initBottomContainer()
+        toggleSimpleLayout()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -229,21 +230,7 @@ class DiaryUpdateActivity : EditActivity() {
         }
 
         bottomToolbar.setOnClickListener {
-            applicationContext?.let { context ->
-                when (photoContainerScrollView.visibility) {
-                    View.VISIBLE -> {
-                        photoContainerScrollView.visibility = View.GONE
-                        togglePhoto.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.expand))
-                        supportActionBar?.hide()
-                    }
-                    View.GONE -> {
-                        photoContainerScrollView.visibility = View.VISIBLE
-                        togglePhoto.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.collapse))
-                        supportActionBar?.show()
-                    }
-                    else -> {}
-                }
-            }
+            toggleSimpleLayout()
         }
 
         allDay.setOnClickListener { _ ->
