@@ -7,8 +7,8 @@
 -keep class com.werb.** { *; }
 -dontwarn com.werb.**
 
--keep class android.support.v8.renderscript.** { *; }
--dontwarn android.support.v8.renderscript.**
+-keep class androidx.renderscript.** { *; }
+-dontwarn androidx.renderscript.**
 
 -keep class com.google.common.** { *; }
 -dontwarn com.google.common.**
