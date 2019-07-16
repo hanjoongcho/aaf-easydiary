@@ -4,6 +4,10 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.88 (date: 2019/07/xx)
+  * Migrated Android support library to AndroidX version
+  * Add diary symbol icon
+  
 # Changes in 1.4.87 (date: 2019/06/20)
   * Fixed authentication token error for users authenticated to use Google Drive in v1.4.80 earlier
 

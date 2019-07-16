@@ -272,6 +272,11 @@
         v1.4.87 / 2019.06.20\n
         Fixed authentication token error for users authenticated to use Google Drive in v1.4.80 earlier
     </string>
+    <string name="release_154">
+        v1.4.88 / 2019.07.xx\n
+        Migrated Android support library to AndroidX version\n
+        Add diary symbol icon
+    </string>
     
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
