@@ -3,37 +3,38 @@ package me.blog.korn123.easydiary.activities
 import android.app.KeyguardManager
 import android.content.DialogInterface
 import android.content.Intent
-import android.hardware.fingerprint.FingerprintManager
 import android.os.Build
 import android.os.Bundle
-import android.os.CancellationSignal
 import android.security.keystore.KeyGenParameterSpec
-import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.KeyProperties
-import androidx.annotation.RequiresApi
-import androidx.core.app.ActivityCompat
 import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
+import androidx.core.hardware.fingerprint.FingerprintManagerCompat
+import androidx.core.os.CancellationSignal
 import io.github.aafactory.commons.activities.BaseSimpleActivity
 import kotlinx.android.synthetic.main.activity_fingerprint.*
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.*
 import java.io.IOException
-import java.security.*
+import java.security.InvalidAlgorithmParameterException
+import java.security.KeyStore
+import java.security.KeyStoreException
+import java.security.NoSuchAlgorithmException
 import java.security.cert.CertificateException
 import javax.crypto.*
 import javax.crypto.spec.IvParameterSpec
 
-
 class FingerprintLockActivity : BaseSimpleActivity() {
     private lateinit var mKeyStore: KeyStore
     private lateinit var mKeyGenerator: KeyGenerator
-    private lateinit var mFingerprintManager: FingerprintManager
-    private lateinit var mCryptoObject: FingerprintManager.CryptoObject
+    private lateinit var mFingerprintManager: FingerprintManagerCompat
+    private lateinit var mCryptoObject: FingerprintManagerCompat.CryptoObject
     private var mCancellationSignal: CancellationSignal? = null
     private var mActivityMode: String? = null
     private var mSettingComplete = false
@@ -93,7 +94,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                 val keyguardManager = getSystemService(KeyguardManager::class.java)
 
                 // 05. FingerprintManager service 초기화
-                mFingerprintManager = getSystemService(FingerprintManager::class.java)
+                mFingerprintManager = FingerprintManagerCompat.from(this);
 
                 // 06. screen lock 설정여부 확인
                 if (!keyguardManager.isKeyguardSecure) {
@@ -121,7 +122,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                 // of the fingerprint.
                 defaultCipher?.let {
                     if (initCipher(it, KEY_NAME)) {
-                        mCryptoObject = FingerprintManager.CryptoObject(it)
+                        mCryptoObject = FingerprintManagerCompat.CryptoObject(it)
                         
                         // 10. 지문인식 시작
                         startListening(mCryptoObject)
@@ -146,7 +147,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
     }
     
     @RequiresApi(Build.VERSION_CODES.M)
-    fun startListening(cryptoObject: FingerprintManager.CryptoObject) {
+    fun startListening(cryptoObject: FingerprintManagerCompat.CryptoObject) {
         // 11. fingerprint 센서 상태 및 권한 확인
         if (!isFingerprintAuthAvailable()) {
             return
@@ -157,8 +158,8 @@ class FingerprintLockActivity : BaseSimpleActivity() {
 
         // 12. fingerprint authentication callback 등록
         mFingerprintManager
-                .authenticate(cryptoObject, mCancellationSignal, 0 /* flags */, object : FingerprintManager.AuthenticationCallback() {
-                    override fun onAuthenticationSucceeded(result: FingerprintManager.AuthenticationResult?) {
+                .authenticate(cryptoObject, 0 /* flags */, mCancellationSignal, object : FingerprintManagerCompat.AuthenticationCallback() {
+                    override fun onAuthenticationSucceeded(result: FingerprintManagerCompat.AuthenticationResult?) {
                         super.onAuthenticationSucceeded(result)
                         config.fingerprintAuthenticationFailCount = 0
                         
@@ -307,13 +308,15 @@ class FingerprintLockActivity : BaseSimpleActivity() {
      * Tries to encrypt some data with the generated key in [.createKey] which is
      * only works if the user has just authenticated via fingerprint.
      */
-    private fun tryEncrypt(cipher: Cipher) {
+    private fun tryEncrypt(cipher: Cipher?) {
         try {
-            val encrypted = cipher.doFinal(DUMMY_ENCRYPT_DATA.toByteArray())
-            val ivParams = cipher.parameters.getParameterSpec(IvParameterSpec::class.java)
-            val iv = Base64.encodeToString(ivParams.iv, Base64.DEFAULT)
-            config.fingerprintEncryptData = Base64.encodeToString(encrypted, Base64.DEFAULT)
-            config.fingerprintEncryptDataIV = iv
+            cipher?.let {
+                val encrypted = it.doFinal(DUMMY_ENCRYPT_DATA.toByteArray())
+                val ivParams = it.parameters.getParameterSpec(IvParameterSpec::class.java)
+                val iv = Base64.encodeToString(ivParams.iv, Base64.DEFAULT)
+                config.fingerprintEncryptData = Base64.encodeToString(encrypted, Base64.DEFAULT)
+                config.fingerprintEncryptDataIV = iv
+            }
         } catch (e: BadPaddingException) {
             e.printStackTrace()
             Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
@@ -323,12 +326,14 @@ class FingerprintLockActivity : BaseSimpleActivity() {
         }
     }
     
-    private fun tryDecrypt(cipher: Cipher): Boolean {
+    private fun tryDecrypt(cipher: Cipher?): Boolean {
         var result = true
         try {
-            val encodedData = Base64.decode(config.fingerprintEncryptData, Base64.DEFAULT)
-            val decodedData = cipher.doFinal(encodedData)
-            Log.i(TAG, "decode dummy data: ${String(decodedData)}, origin dummy data: $DUMMY_ENCRYPT_DATA")    
+            cipher?.let {
+                val encodedData = Base64.decode(config.fingerprintEncryptData, Base64.DEFAULT)
+                val decodedData = cipher.doFinal(encodedData)
+                Log.i(TAG, "decode dummy data: ${String(decodedData)}, origin dummy data: $DUMMY_ENCRYPT_DATA")
+            }
         } catch (e: Exception) {
             updateErrorMessage(getString(R.string.fingerprint_authentication_info_changed))
             result = false
