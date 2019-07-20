@@ -3,8 +3,11 @@ package me.blog.korn123.easydiary.activities
 import android.app.KeyguardManager
 import android.content.DialogInterface
 import android.content.Intent
+import android.hardware.biometrics.BiometricManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Base64
@@ -13,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.biometric.BiometricPrompt
 import androidx.core.app.ActivityCompat
 import androidx.core.hardware.fingerprint.FingerprintManagerCompat
 import androidx.core.os.CancellationSignal
@@ -27,6 +31,7 @@ import java.security.KeyStore
 import java.security.KeyStoreException
 import java.security.NoSuchAlgorithmException
 import java.security.cert.CertificateException
+import java.util.concurrent.Executor
 import javax.crypto.*
 import javax.crypto.spec.IvParameterSpec
 
@@ -50,6 +55,10 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                 putExtra(PinLockActivity.LAUNCHING_MODE, PinLockActivity.ACTIVITY_UNLOCK)
             })
             finish()
+        }
+
+        biometric.setOnClickListener {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && canAuthenticateWithBiometrics()) showBiometricPrompt()
         }
     }
 
@@ -344,7 +353,75 @@ class FingerprintLockActivity : BaseSimpleActivity() {
     private fun updateErrorMessage(errorMessage: String) {
         guideMessage.text = errorMessage
     }
-    
+
+    /***************************************************************************************************
+     *   Biometric Prompt
+     *   https://github.com/Kieun/android-biometricprompt
+     ***************************************************************************************************/
+
+    private fun getMainThreadExecutor(): Executor = MainThreadExecutor()
+
+    private class MainThreadExecutor : Executor {
+        private val handler = Handler(Looper.getMainLooper())
+
+        override fun execute(r: Runnable) {
+            handler.post(r)
+        }
+    }
+
+    /**
+     * Indicate whether this device can authenticate the user with biometrics
+     * @return true if there are any available biometric sensors and biometrics are enrolled on the device, if not, return false
+     */
+    private fun canAuthenticateWithBiometrics(): Boolean {
+        // Check whether the fingerprint can be used for authentication (Android M to P)
+        if (Build.VERSION.SDK_INT < 29) {
+            val fingerprintManagerCompat = FingerprintManagerCompat.from(this)
+            return fingerprintManagerCompat.hasEnrolledFingerprints() && fingerprintManagerCompat.isHardwareDetected
+        } else {    // Check biometric manager (from Android Q)
+            val biometricManager = this.getSystemService<BiometricManager>(BiometricManager::class.java)
+            return if (biometricManager != null) {
+                biometricManager.canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS
+            } else false
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    private fun showBiometricPrompt() {
+        val authenticationCallback = getAuthenticationCallback()
+        val mBiometricPrompt = BiometricPrompt(this, getMainThreadExecutor(), authenticationCallback)
+
+        // Set prompt info
+        val promptInfo = BiometricPrompt.PromptInfo.Builder()
+                .setDescription("Description")
+                .setTitle("Title")
+                .setSubtitle("Subtitle")
+                .setNegativeButtonText("Cancel")
+                .build()
+
+        mBiometricPrompt.authenticate(promptInfo)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    private fun getAuthenticationCallback(): BiometricPrompt.AuthenticationCallback {
+        return object : BiometricPrompt.AuthenticationCallback() {
+            override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                super.onAuthenticationError(errorCode, errString)
+                makeSnackBar(errString.toString())
+            }
+
+            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                super.onAuthenticationSucceeded(result)
+                makeSnackBar("onAuthenticationSucceeded")
+            }
+
+            override fun onAuthenticationFailed() {
+                super.onAuthenticationFailed()
+                makeSnackBar("onAuthenticationFailed")
+            }
+        }
+    }
+
     companion object {
         const val KEY_NAME = "me.blog.korn123"
         const val DUMMY_ENCRYPT_DATA = "aaf-easydiary"
