@@ -393,10 +393,10 @@ class FingerprintLockActivity : BaseSimpleActivity() {
 
         // Set prompt info
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
-                .setDescription("Description")
-                .setTitle("Title")
-                .setSubtitle("Subtitle")
-                .setNegativeButtonText("Cancel")
+                .setDescription(getString(R.string.place_finger))
+                .setTitle(getString(R.string.app_name))
+//                .setSubtitle("Subtitle")
+                .setNegativeButtonText(getString(R.string.cancel))
                 .build()
 
         mBiometricPrompt.authenticate(promptInfo)
