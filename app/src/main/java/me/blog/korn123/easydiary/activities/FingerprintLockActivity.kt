@@ -412,7 +412,8 @@ class FingerprintLockActivity : BaseSimpleActivity() {
 
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                 super.onAuthenticationSucceeded(result)
-                makeSnackBar("onAuthenticationSucceeded")
+                pauseLock()
+                finish()
             }
 
             override fun onAuthenticationFailed() {

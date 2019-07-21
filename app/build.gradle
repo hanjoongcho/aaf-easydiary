@@ -75,7 +75,7 @@ android {
             signingConfig signingConfigs.config
         }
         debug {
-            minifyEnabled true
+            minifyEnabled false
             signingConfig signingConfigs.config
         }
     }
