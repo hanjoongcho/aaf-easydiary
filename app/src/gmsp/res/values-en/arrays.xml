@@ -83,6 +83,7 @@
         <item>56|Fatherhood</item>
         <item>55|Pet</item>
         <item>53|Repair</item>
+        <item>73|Shower</item>
         <item>54|List</item>
         <item>70|Take Away</item>
         <item>71|Car Wash</item>
@@ -130,6 +131,8 @@
         <item>44|Game</item>
         <item>300|Picnic</item>
         <item>301|Movie</item>
+        <item>310|Television</item>
+        <item>320|Video</item>
         <item>302|Hiking</item>
         <item>303|Reading</item>
         <item>304|Nap</item>
@@ -138,7 +141,6 @@
         <item>307|Festival</item>
         <item>308|Hair Salon</item>
         <item>309|Hair Salon</item>
-        <item>310|Television</item>
         <item>311|Baseball</item>
         <item>312|Basketball</item>
         <item>313|Basketball</item>

@@ -113,6 +113,7 @@ object EasyDiaryUtils {
         DAILY_TAKE_AWAY -> R.drawable.ic_take_away
         DAILY_CAR_WASH -> R.drawable.ic_car_wash
         DAILY_CAR_WASH_2 -> R.drawable.ic_car_wash_2
+        DAILY_SHOWER -> R.drawable.ic_shower
 
         LANDSCAPE_BEACH -> R.drawable.ic_beach
         LANDSCAPE_BRIDGE -> R.drawable.ic_bridge
@@ -220,6 +221,7 @@ object EasyDiaryUtils {
         LEISURE_SWIMMING_W -> R.drawable.ic_swimmer_w
         LEISURE_TENNIS_M -> R.drawable.ic_tennis_player_m
         LEISURE_TENNIS_W -> R.drawable.ic_tennis_player_w
+        LEISURE_VIDEO_PLAYER -> R.drawable.ic_video_player
 
         SYMBOL_YOUTUBE -> R.drawable.ic_youtube
         SYMBOL_DROPBOX -> R.drawable.ic_dropbox
