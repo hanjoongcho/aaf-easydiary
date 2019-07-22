@@ -57,8 +57,9 @@ class FingerprintLockActivity : BaseSimpleActivity() {
             finish()
         }
 
-        biometric.setOnClickListener {
+        changePinLock.setOnLongClickListener {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && canAuthenticateWithBiometrics()) showBiometricPrompt()
+            true
         }
     }
 
