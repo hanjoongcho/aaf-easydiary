@@ -36,6 +36,11 @@ import javax.crypto.*
 import javax.crypto.spec.IvParameterSpec
 
 class FingerprintLockActivity : BaseSimpleActivity() {
+
+    /***************************************************************************************************
+     *   global properties
+     *
+     ***************************************************************************************************/
     private lateinit var mKeyStore: KeyStore
     private lateinit var mKeyGenerator: KeyGenerator
     private lateinit var mFingerprintManager: FingerprintManagerCompat
@@ -44,7 +49,12 @@ class FingerprintLockActivity : BaseSimpleActivity() {
     private var mActivityMode: String? = null
     private var mSettingComplete = false
     private val TAG = FingerprintLockActivity::class.java.simpleName
-    
+
+
+    /***************************************************************************************************
+     *   override functions
+     *
+     ***************************************************************************************************/
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_fingerprint)
@@ -66,7 +76,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
     override fun onResume() {
         isBackgroundColorFromPrimaryColor = true
         super.onResume()
-        
+
         if (!mSettingComplete) {
             guideMessage.text = getString(R.string.place_finger)
             FontUtils.setFontsTypeface(applicationContext, assets, null, container)
@@ -133,11 +143,11 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                 defaultCipher?.let {
                     if (initCipher(it, KEY_NAME)) {
                         mCryptoObject = FingerprintManagerCompat.CryptoObject(it)
-                        
+
                         // 10. 지문인식 시작
                         startListening(mCryptoObject)
                     } else {
-                        
+
                     }
                 }
             }
@@ -148,14 +158,19 @@ class FingerprintLockActivity : BaseSimpleActivity() {
         super.onPause()
         mCancellationSignal?.cancel()
     }
-    
+
     override fun getMainViewGroup(): ViewGroup? = container
 
     override fun onBackPressed() {
         super.onBackPressed()
         ActivityCompat.finishAffinity(this)
     }
-    
+
+
+    /***************************************************************************************************
+     *   FingerprintManager
+     *   
+     ***************************************************************************************************/
     @RequiresApi(Build.VERSION_CODES.M)
     fun startListening(cryptoObject: FingerprintManagerCompat.CryptoObject) {
         // 11. fingerprint 센서 상태 및 권한 확인
@@ -172,7 +187,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                     override fun onAuthenticationSucceeded(result: FingerprintManagerCompat.AuthenticationResult?) {
                         super.onAuthenticationSucceeded(result)
                         config.fingerprintAuthenticationFailCount = 0
-                        
+
                         when (mActivityMode) {
                             ACTIVITY_SETTING -> {
                                 tryEncrypt(mCryptoObject.cipher)
@@ -181,13 +196,13 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                                 showAlertDialog(getString(R.string.fingerprint_setting_complete), DialogInterface.OnClickListener { _, _ ->
                                     config.fingerprintLockEnable = true
                                     pauseLock()
-                                    finish() 
+                                    finish()
                                 }, false)
                             }
                             ACTIVITY_UNLOCK-> {
                                 if (tryDecrypt(mCryptoObject.cipher)) {
                                     pauseLock()
-                                    finish()    
+                                    finish()
                                 }
                             }
                         }
@@ -210,14 +225,13 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                     }
                 }, null)
     }
-    
+
     @RequiresApi(Build.VERSION_CODES.M)
     fun isFingerprintAuthAvailable(): Boolean {
         // The line below prevents the false positive inspection from Android Studio
-
         return mFingerprintManager.isHardwareDetected() && mFingerprintManager.hasEnrolledFingerprints()
     }
-    
+
     /**
      * Creates a symmetric key in the Android Key Store which can only be used after the user has
      * authenticated with fingerprint.
@@ -335,7 +349,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
             Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
         }
     }
-    
+
     private fun tryDecrypt(cipher: Cipher?): Boolean {
         var result = true
         try {
@@ -350,16 +364,16 @@ class FingerprintLockActivity : BaseSimpleActivity() {
         }
         return result
     }
-    
+
     private fun updateErrorMessage(errorMessage: String) {
         guideMessage.text = errorMessage
     }
+    
 
     /***************************************************************************************************
      *   Biometric Prompt
      *   https://github.com/Kieun/android-biometricprompt
      ***************************************************************************************************/
-
     private fun getMainThreadExecutor(): Executor = MainThreadExecutor()
 
     private class MainThreadExecutor : Executor {
@@ -423,7 +437,12 @@ class FingerprintLockActivity : BaseSimpleActivity() {
             }
         }
     }
-
+    
+    
+    /***************************************************************************************************
+     *   etc functions
+     *
+     ***************************************************************************************************/
     companion object {
         const val KEY_NAME = "me.blog.korn123"
         const val DUMMY_ENCRYPT_DATA = "aaf-easydiary"
