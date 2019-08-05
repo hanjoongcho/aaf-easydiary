@@ -1,44 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:layout_height="match_parent">
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+    </com.google.android.material.appbar.AppBarLayout>
+
     <LinearLayout
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:id="@+id/main_holder"
         android:orientation="vertical"
+        android:padding="@dimen/card_layout_padding"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <com.google.android.material.appbar.AppBarLayout
+        <androidx.cardview.widget.CardView
+            android:id="@+id/calendarCard"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay">
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
+            android:layout_weight="8"
+            android:layout_height="0dp">
+            <LinearLayout
+                android:id="@+id/calendar1"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
-        </com.google.android.material.appbar.AppBarLayout>
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
-        <LinearLayout
-            android:id="@+id/main_holder"
-            android:orientation="vertical"
-            android:padding="@dimen/card_layout_padding"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <androidx.cardview.widget.CardView
-                android:id="@+id/calendarCard"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <LinearLayout
-                    android:id="@+id/calendar1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
+            android:layout_weight="2"
+            android:layout_height="0dp">
             <ListView
                 android:layout_marginTop="@dimen/card_layout_margin"
                 android:dividerHeight="@dimen/card_layout_padding"
@@ -47,7 +49,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
             </ListView>
-            
+
             <LinearLayout
                 android:gravity="center"
                 android:layout_width="match_parent"
@@ -60,6 +62,6 @@
                     android:layout_height="wrap_content">
                 </TextView>
             </LinearLayout>
-        </LinearLayout>
+        </FrameLayout>
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
