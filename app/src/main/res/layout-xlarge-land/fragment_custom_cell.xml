@@ -24,8 +24,8 @@
             android:textSize="10dp"
             android:gravity="center|bottom"
             android:id="@+id/diaryCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="13dp"
+            android:layout_height="13dp" />
 
         <ImageView
             android:layout_marginLeft="5dp"
