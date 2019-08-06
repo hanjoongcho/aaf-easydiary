@@ -1,18 +1,22 @@
 package me.blog.korn123.easydiary.adapters
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.roomorama.caldroid.CaldroidFragment
 import com.roomorama.caldroid.CaldroidGridAdapter
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.getRootViewHeight
 import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 
 class CaldroidItemAdapter(
@@ -139,6 +143,17 @@ class CaldroidItemAdapter(
 
         // Set custom color if required
         setCustomResources(dateTime, cellView, tv1)
+
+        (context as Activity).run {
+            if (!isLandScape()) {
+                cellView?.let {
+                    val contentsHeight = (context as Activity).getRootViewHeight()
+                    val gridHeight = contentsHeight * .7/* weight 70% */ - (parent.parent.parent as LinearLayout).getChildAt(0).height
+                    val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, gridHeight.toInt() / 6)
+                    it.layoutParams = params
+                }
+            }
+        }
 
         return cellView
     }

@@ -7,6 +7,7 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
+import android.graphics.Point
 import android.net.Uri
 import com.google.android.material.snackbar.Snackbar
 import androidx.core.app.ActivityCompat
@@ -148,6 +149,17 @@ fun Activity.statusBarHeight(): Int {
         statusBarHeight = resources.getDimensionPixelSize(resourceId)
     }
     return statusBarHeight
+}
+
+fun Activity.getDefaultDisplay(): Point {
+    val display = windowManager.defaultDisplay
+    val size = Point()
+    display.getSize(size)
+    return size
+}
+
+fun Activity.getRootViewHeight(): Int {
+    return getDefaultDisplay().y - actionBarHeight() - statusBarHeight()
 }
 
 fun Activity.startActivityWithTransition(intent: Intent) {
