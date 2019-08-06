@@ -27,7 +27,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/calendarCard"
             android:layout_width="match_parent"
-            android:layout_weight="8"
+            android:layout_weight="7"
             android:layout_height="0dp">
             <LinearLayout
                 android:id="@+id/calendar1"
@@ -39,7 +39,7 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_weight="2"
+            android:layout_weight="3"
             android:layout_height="0dp">
             <ListView
                 android:layout_marginTop="@dimen/card_layout_margin"

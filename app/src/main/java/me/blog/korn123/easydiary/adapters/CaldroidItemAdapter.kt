@@ -11,6 +11,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.roomorama.caldroid.CaldroidFragment
 import com.roomorama.caldroid.CaldroidGridAdapter
+import io.github.aafactory.commons.utils.CALCULATION
+import io.github.aafactory.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
@@ -147,8 +149,10 @@ class CaldroidItemAdapter(
         (context as Activity).run {
             if (!isLandScape()) {
                 cellView?.let {
-                    val contentsHeight = (context as Activity).getRootViewHeight()
-                    val gridHeight = contentsHeight * .7/* weight 70% */ - (parent.parent.parent as LinearLayout).getChildAt(0).height
+                    val contentsHeight = (context as Activity).getRootViewHeight() - CommonUtils.dpToPixel(this, 6F, CALCULATION.FLOOR)
+                    var gridHeight = contentsHeight * .7/* weight 70% */ - (parent.parent.parent as LinearLayout).getChildAt(0).height
+                    // FIXME: hardcode height
+                    gridHeight -= CommonUtils.dpToPixel(this, 35F, CALCULATION.FLOOR)
                     val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, gridHeight.toInt() / 6)
                     it.layoutParams = params
                 }

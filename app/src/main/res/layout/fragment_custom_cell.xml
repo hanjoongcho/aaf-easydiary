@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_card_cell_default"
-    android:gravity="center"
+    android:gravity="center|top"
     android:padding="5dp"
     android:orientation="vertical">
 
