@@ -90,6 +90,9 @@ class SettingsActivity : EasyDiaryActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
+        // Clear google OAuth token generated prior to version 1.4.80
+        if (!config.clearLegacyToken) signOutGoogleOAuth(false)
+
         bindEvent()
         EasyDiaryUtils.changeDrawableIconColor(this, config.primaryColor, R.drawable.minus_6)
         EasyDiaryUtils.changeDrawableIconColor(this, config.primaryColor, R.drawable.plus_6)
@@ -250,7 +253,7 @@ class SettingsActivity : EasyDiaryActivity() {
 
     private fun backupDiaryRealm() {
         progressContainer.visibility = View.VISIBLE
-        // delete unused compressed photo file 
+        // delete unused compressed photo file
 //        File(Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY).listFiles()?.map {
 //            Log.i("PHOTO-URI", "${it.absolutePath} | ${EasyDiaryDbHelper.countPhotoUriBy(FILE_URI_PREFIX + it.absolutePath)}")
 //            if (EasyDiaryDbHelper.countPhotoUriBy(FILE_URI_PREFIX + it.absolutePath) == 0) it.delete()
@@ -313,7 +316,8 @@ class SettingsActivity : EasyDiaryActivity() {
             val driveServiceHelper = DriveServiceHelper(this, account)
 
 //            driveServiceHelper.queryFiles("mimeType contains 'text/aaf_v' and name contains '$DIARY_DB_NAME'", 1000)
-            driveServiceHelper.queryFiles("mimeType contains 'text/aaf_v' and trashed = false", 1000)
+
+            driveServiceHelper.queryFiles("(mimeType = '${EasyDiaryUtils.easyDiaryMimeTypeAll.joinToString("' or mimeType = '")}') and trashed = false", 1000)
                     .addOnSuccessListener {
                         val realmFiles: ArrayList<HashMap<String, String>> = arrayListOf()
                         it.files.map { file ->
@@ -322,7 +326,7 @@ class SettingsActivity : EasyDiaryActivity() {
                         }
                         val builder = AlertDialog.Builder(this@SettingsActivity)
                         builder.setNegativeButton(getString(android.R.string.cancel), null)
-                        builder.setTitle(getString(R.string.open_realm_file_title))
+                        builder.setTitle("${getString(R.string.open_realm_file_title)} (Total: ${it.files.size})")
                         builder.setMessage(getString(R.string.open_realm_file_message))
                         val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
                         val fontView = inflater.inflate(R.layout.dialog_realm_files, null)
@@ -430,6 +434,20 @@ class SettingsActivity : EasyDiaryActivity() {
         fontLineSpacing.setOnProgressChangedListener(bubbleSeekBarListener)
 
         progressContainer.setOnTouchListener { _, _ -> true }
+    }
+
+    private fun signOutGoogleOAuth(showCompleteMessage: Boolean = true) {
+        // Configure sign-in to request the user's ID, email address, and basic
+        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+        val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.oauth_requerst_id_token))
+                .requestEmail()
+                .build()
+        val client = GoogleSignIn.getClient(this, gso)
+        client.signOut().addOnCompleteListener {
+            config.clearLegacyToken = true
+            if (showCompleteMessage) makeSnackBar("Sign out complete:)")
+        }
     }
 
     private val mOnClickListener = View.OnClickListener { view ->
@@ -578,14 +596,7 @@ class SettingsActivity : EasyDiaryActivity() {
                 })
             }
             R.id.signOutGoogleOAuth -> {
-                // Configure sign-in to request the user's ID, email address, and basic
-                // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-                val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestIdToken(getString(R.string.oauth_requerst_id_token))
-                        .requestEmail()
-                        .build()
-                val client = GoogleSignIn.getClient(this, gso)
-                client.signOut().addOnCompleteListener { makeSnackBar("Sign out complete:)") }
+                signOutGoogleOAuth()
             }
         }
     }
