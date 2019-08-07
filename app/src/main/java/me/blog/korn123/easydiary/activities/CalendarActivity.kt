@@ -52,7 +52,7 @@ class CalendarActivity : EasyDiaryActivity() {
         val cal = Calendar.getInstance()
         val currentDate = cal.time
         refreshList(currentDate)
-        mArrayAdapterDiary = DiaryCalendarItemAdapter(this, R.layout.item_diary_calendar, this.mDiaryList!!)
+        mArrayAdapterDiary = DiaryCalendarItemAdapter(this, R.layout.item_diary_calendar, this.mDiaryList)
         selectedList.adapter = mArrayAdapterDiary
         selectedList.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
             val diaryDto = adapterView.adapter.getItem(i) as DiaryDto
@@ -66,17 +66,9 @@ class CalendarActivity : EasyDiaryActivity() {
             TransitionHelper.startActivityWithTransition(this@CalendarActivity, detailIntent)
         }
 
-        // Setup caldroid fragment
-        // **** If you want normal CaldroidFragment, use below line ****
-        //        calendarFragment = new CaldroidFragment();
-
-        // //////////////////////////////////////////////////////////////////////
-        // **** This is to show customized fragment. If you want customized
-        // version, uncomment below line ****
         calendarFragment = CalendarFragment()
 
         // Setup arguments
-
         // If Activity is created after rotation
         if (savedInstanceState != null) {
             calendarFragment.restoreStatesFromKey(savedInstanceState,
@@ -85,24 +77,14 @@ class CalendarActivity : EasyDiaryActivity() {
             val args = Bundle()
             args.putInt(CaldroidFragment.MONTH, cal.get(Calendar.MONTH) + 1)
             args.putInt(CaldroidFragment.YEAR, cal.get(Calendar.YEAR))
+//            args.putInt(CaldroidFragment.START_DAY_OF_WEEK, CaldroidFragment.MONDAY)
             args.putBoolean(CaldroidFragment.ENABLE_SWIPE, true)
             args.putBoolean(CaldroidFragment.SIX_WEEKS_IN_CALENDAR, true)
 
-            // Uncomment this to customize startDayOfWeek
-            // args.putInt(CaldroidFragment.START_DAY_OF_WEEK,
-            // CaldroidFragment.TUESDAY); // Tuesday
-
-            // Uncomment this line to use Caldroid in compact mode
-            // args.putBoolean(CaldroidFragment.SQUARE_TEXT_VIEW_CELL, false);
-
-            // Uncomment this line to use dark theme
-            //            args.putInt(CaldroidFragment.THEME_RESOURCE, com.caldroid.R.style.CaldroidDefaultDark);
-
             calendarFragment.arguments = args
-        }// If activity is created from fresh
+        }
 
         calendarFragment.setSelectedDate(currentDate)
-
         //        setCustomResourceForDates();
 
         // Attach to the activity
@@ -125,26 +107,9 @@ class CalendarActivity : EasyDiaryActivity() {
                 refreshList(date)
             }
 
-            override fun onChangeMonth(month: Int, year: Int) {
-                val text = "month: $month year: $year"
-                //                Toast.makeText(getApplicationContext(), text,
-                //                        Toast.LENGTH_SHORT).show();
-            }
-
-            override fun onLongClickDate(date: Date?, view: View?) {
-                //                Toast.makeText(getApplicationContext(),
-                //                        "Long click " + formatter.format(date),
-                //                        Toast.LENGTH_SHORT).show();
-            }
-
-            override fun onCaldroidViewCreated() {
-                if (calendarFragment.leftArrowButton != null) {
-                    //                    Toast.makeText(getApplicationContext(),
-                    //                            "Caldroid view is created", Toast.LENGTH_SHORT)
-                    //                            .show();
-                }
-            }
-
+            override fun onChangeMonth(month: Int, year: Int) { }
+            override fun onLongClickDate(date: Date?, view: View?) { }
+            override fun onCaldroidViewCreated() { }
         }
 
         // Setup Caldroid
