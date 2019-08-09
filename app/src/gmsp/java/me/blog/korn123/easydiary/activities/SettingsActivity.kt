@@ -400,6 +400,7 @@ class SettingsActivity : EasyDiaryActivity() {
         faq.setOnClickListener(mOnClickListener)
         privacyPolicy.setOnClickListener(mOnClickListener)
         signOutGoogleOAuth.setOnClickListener(mOnClickListener)
+        exportRealmFile.setOnClickListener(mOnClickListener)
         devMode.setOnClickListener {
             mDevModeClickCount++
             if (mDevModeClickCount > 5) {
@@ -503,6 +504,9 @@ class SettingsActivity : EasyDiaryActivity() {
                     true -> exportExcel()
                     false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_EXCEL)
                 }
+            }
+            R.id.exportRealmFile -> {
+                
             }
             R.id.restorePhotoSetting -> {
                 openGuideView(getString(R.string.restore_photo))

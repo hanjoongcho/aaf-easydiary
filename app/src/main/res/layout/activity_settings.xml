@@ -452,6 +452,20 @@
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
+                        android:id="@+id/exportRealmFile"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="Backup diary(Manual)"
+                                style="@style/SettingsTitle" />
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="Export Realm Database in device storage."
+                                style="@style/SettingsSummary" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                    
+                    <androidx.cardview.widget.CardView
                         android:id="@+id/restorePhotoSetting"
                         style="@style/AppCard.Settings">
                         <LinearLayout
