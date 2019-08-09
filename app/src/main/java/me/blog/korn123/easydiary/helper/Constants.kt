@@ -34,11 +34,13 @@ const val FILE_URI_PREFIX = "file:/"
 const val LINE_SPACING_SCALE_FACTOR = "line_spacing_scale_factor"
 const val LINE_SPACING_SCALE_DEFAULT = 1.0F
 
-const val WORKING_DIRECTORY = "/AAFactory/EasyDiary/"
-const val DIARY_PHOTO_DIRECTORY = "/AAFactory/EasyDiary/Photos/"
-const val DIARY_POSTCARD_DIRECTORY = "/AAFactory/EasyDiary/Postcards/"
-const val USER_CUSTOM_FONTS_DIRECTORY = "/AAFactory/EasyDiary/Fonts/"
-const val MARKDOWN_DIRECTORY = "/AAFactory/EasyDiary/Markdown/"
+const val WORKING_DIRECTORY           = "/AAFactory/EasyDiary/"
+const val DIARY_PHOTO_DIRECTORY       = "${WORKING_DIRECTORY}Photos/"
+const val DIARY_POSTCARD_DIRECTORY    = "${WORKING_DIRECTORY}Postcards/"
+const val USER_CUSTOM_FONTS_DIRECTORY = "${WORKING_DIRECTORY}Fonts/"
+const val MARKDOWN_DIRECTORY          = "${WORKING_DIRECTORY}Markdown/"
+const val BACKUP_EXCEL_DIRECTORY      = "${WORKING_DIRECTORY}Backup/Excel/"
+const val BACKUP_DB_DIRECTORY         = "${WORKING_DIRECTORY}Backup/Database/"
 const val DIARY_DB_NAME = "diary.realm"
 
 // startActivityForResult Request Code: Permission

@@ -515,11 +515,11 @@ class SettingsActivity : EasyDiaryActivity() {
                 weather.setCellValue(diarySymbolMap[diaryDto.weather])
 
                 runOnUiThread {
-                    progressInfo.text = "${index.plus(1)} / ${diaryList.size}\n${getString(R.string.export_excel_xls_location)}: ${WORKING_DIRECTORY + exportFileName}.xls"
+                    progressInfo.text = "${index.plus(1)} / ${diaryList.size}\n${getString(R.string.export_excel_xls_location)}: ${BACKUP_EXCEL_DIRECTORY + exportFileName}.xls"
                 }
             }
 
-            val outputStream = FileOutputStream("${Environment.getExternalStorageDirectory().absolutePath + WORKING_DIRECTORY + exportFileName}.xls")
+            val outputStream = FileOutputStream("${Environment.getExternalStorageDirectory().absolutePath + BACKUP_EXCEL_DIRECTORY + exportFileName}.xls")
             wb.write(outputStream)
             outputStream.close()
             runOnUiThread {

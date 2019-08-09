@@ -53,9 +53,12 @@ object EasyDiaryUtils {
 
     fun initWorkingDirectory(context: Context) {
         if (context.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-            makeDirectory(Environment.getExternalStorageDirectory().absolutePath + USER_CUSTOM_FONTS_DIRECTORY)
             makeDirectory(Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY)
-            makeDirectory(Environment.getExternalStorageDirectory().absolutePath + DIARY_POSTCARD_DIRECTORY)    
+            makeDirectory(Environment.getExternalStorageDirectory().absolutePath + DIARY_POSTCARD_DIRECTORY)
+            makeDirectory(Environment.getExternalStorageDirectory().absolutePath + USER_CUSTOM_FONTS_DIRECTORY)
+            makeDirectory(Environment.getExternalStorageDirectory().absolutePath + MARKDOWN_DIRECTORY)
+            makeDirectory(Environment.getExternalStorageDirectory().absolutePath + BACKUP_EXCEL_DIRECTORY)
+            makeDirectory(Environment.getExternalStorageDirectory().absolutePath + BACKUP_DB_DIRECTORY)
         }
     }
     
