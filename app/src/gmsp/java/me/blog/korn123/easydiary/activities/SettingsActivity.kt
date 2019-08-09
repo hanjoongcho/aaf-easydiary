@@ -49,7 +49,9 @@ import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.services.BackupPhotoService
 import me.blog.korn123.easydiary.services.RecoverPhotoService
+import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
+import org.apache.commons.io.IOUtils
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.ss.usermodel.CellStyle
 import org.apache.poi.ss.usermodel.IndexedColors
@@ -160,6 +162,12 @@ class SettingsActivity : EasyDiaryActivity() {
                 }
                 REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_EXCEL -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                     exportExcel()
+                }
+                REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_REALM -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                    exportRealmFile()
+                }
+                REQUEST_CODE_EXTERNAL_STORAGE_WITH_IMPORT_REALM -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                    importRealmFile()
                 }
             }
         } else {
@@ -339,15 +347,7 @@ class SettingsActivity : EasyDiaryActivity() {
                                 progressContainer.visibility = View.VISIBLE
                                 driveServiceHelper.downloadFile(realmFileId, EasyDiaryDbHelper.getInstance().path).run {
                                     addOnSuccessListener {
-                                        val readDiaryIntent = Intent(this@SettingsActivity, DiaryMainActivity::class.java)
-                                        readDiaryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                                        val mPendingIntentId = 123456
-                                        val mPendingIntent = PendingIntent.getActivity(this@SettingsActivity, mPendingIntentId, readDiaryIntent, PendingIntent.FLAG_CANCEL_CURRENT)
-                                        val mgr = this@SettingsActivity.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                                        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
-                                        ActivityCompat.finishAffinity(this@SettingsActivity)
-                                        //System.runFinalizersOnExit(true)
-                                        System.exit(0)
+                                        restartApp()
                                     }
                                     addOnFailureListener {  }
                                 }
@@ -401,6 +401,7 @@ class SettingsActivity : EasyDiaryActivity() {
         privacyPolicy.setOnClickListener(mOnClickListener)
         signOutGoogleOAuth.setOnClickListener(mOnClickListener)
         exportRealmFile.setOnClickListener(mOnClickListener)
+        importRealmFile.setOnClickListener(mOnClickListener)
         devMode.setOnClickListener {
             mDevModeClickCount++
             if (mDevModeClickCount > 5) {
@@ -506,7 +507,16 @@ class SettingsActivity : EasyDiaryActivity() {
                 }
             }
             R.id.exportRealmFile -> {
-                
+                when (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                    true -> exportRealmFile()
+                    false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_REALM)
+                }
+            }
+            R.id.importRealmFile -> {
+                when (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                    true -> importRealmFile()
+                    false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_IMPORT_REALM)
+                }
             }
             R.id.restorePhotoSetting -> {
                 openGuideView(getString(R.string.restore_photo))
@@ -722,6 +732,54 @@ class SettingsActivity : EasyDiaryActivity() {
                 type = "text/plain"
                 startActivity(Intent.createChooser(this, getString(io.github.aafactory.commons.R.string.invite_via)))
             }
+        }
+    }
+
+    private fun exportRealmFile() {
+        val srcFile = File(EasyDiaryDbHelper.getInstance().path)
+        val destFile = File(Environment.getExternalStorageDirectory().absolutePath + BACKUP_DB_DIRECTORY + DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"))
+        FileUtils.copyFile(srcFile, destFile, false)
+        showAlertDialog(destFile.absolutePath, null)
+    }
+
+    private fun importRealmFile() {
+        val files = File(Environment.getExternalStorageDirectory().absolutePath + BACKUP_DB_DIRECTORY).listFiles()
+        files?.let {
+            when (it.isNotEmpty()) {
+                true -> {
+                    val builder = AlertDialog.Builder(this)
+                    builder.setNegativeButton(getString(android.R.string.cancel), null)
+                    builder.setTitle("${getString(R.string.open_realm_file_title)} (Total: ${it.size})")
+                    builder.setMessage(getString(R.string.open_realm_file_message))
+
+                    val realmFiles: ArrayList<HashMap<String, String>> = arrayListOf()
+                    it.sortDescending()
+                    it.map { file ->
+                        val itemInfo = hashMapOf<String, String>("name" to file.name, "createdTime" to Date(file.lastModified()).toString())
+                        realmFiles.add(itemInfo)
+                    }
+
+                    val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                    val rootView = inflater.inflate(R.layout.dialog_realm_files, null)
+                    val listView = rootView.findViewById<ListView>(R.id.files)
+                    val adapter = RealmFileItemAdapter(this@SettingsActivity, R.layout.item_realm_file, realmFiles)
+                    listView.adapter = adapter
+                    listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+                        val itemInfo = parent.adapter.getItem(position) as HashMap<String, String>
+                        val srcFile = File(Environment.getExternalStorageDirectory().absolutePath + BACKUP_DB_DIRECTORY + itemInfo["name"])
+                        val destFile = File(EasyDiaryDbHelper.getInstance().path)
+                        FileUtils.copyFile(srcFile, destFile)
+                        restartApp()
+                        mAlertDialog?.cancel()
+                    }
+
+                    builder.setView(rootView)
+                    mAlertDialog = builder.create()
+                    mAlertDialog?.show()
+                }
+                false -> {}
+            }
+
         }
     }
 

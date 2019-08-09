@@ -2,8 +2,11 @@ package me.blog.korn123.easydiary.extensions
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlarmManager
 import android.app.AlertDialog
+import android.app.PendingIntent
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
@@ -16,6 +19,7 @@ import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
 import io.github.aafactory.commons.activities.BaseSimpleActivity
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.activities.FingerprintLockActivity
 import me.blog.korn123.easydiary.activities.PinLockActivity
 import me.blog.korn123.easydiary.dialogs.WhatsNewDialog
@@ -165,4 +169,16 @@ fun Activity.getRootViewHeight(): Int {
 fun Activity.startActivityWithTransition(intent: Intent) {
     startActivity(intent)
     overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+}
+
+fun Activity.restartApp() {
+    val readDiaryIntent = Intent(this, DiaryMainActivity::class.java)
+    readDiaryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+    val mPendingIntentId = 123456
+    val mPendingIntent = PendingIntent.getActivity(this, mPendingIntentId, readDiaryIntent, PendingIntent.FLAG_CANCEL_CURRENT)
+    val mgr = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
+    ActivityCompat.finishAffinity(this)
+    //System.runFinalizersOnExit(true)
+    System.exit(0)
 }
