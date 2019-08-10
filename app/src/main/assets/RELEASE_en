@@ -4,6 +4,10 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.90 (date: 2019/08/10)
+  * Added backup and recovery function using device storage
+  * Fixed an issue that caused some text to be truncated on calendars on some devices
+
 # Changes in 1.4.88 (date: 2019/07/16)
   * Migrated Android support library to AndroidX version
   * Add diary symbol icon
