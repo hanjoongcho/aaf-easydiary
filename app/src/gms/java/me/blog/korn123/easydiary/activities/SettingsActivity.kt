@@ -2,17 +2,11 @@ package me.blog.korn123.easydiary.activities
 
 import android.accounts.Account
 import android.app.Activity
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.appcompat.app.AlertDialog
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +15,8 @@ import android.widget.AdapterView
 import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -51,7 +47,6 @@ import me.blog.korn123.easydiary.services.BackupPhotoService
 import me.blog.korn123.easydiary.services.RecoverPhotoService
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
-import org.apache.commons.io.IOUtils
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.ss.usermodel.CellStyle
 import org.apache.poi.ss.usermodel.IndexedColors
@@ -737,9 +732,10 @@ class SettingsActivity : EasyDiaryActivity() {
 
     private fun exportRealmFile() {
         val srcFile = File(EasyDiaryDbHelper.getInstance().path)
-        val destFile = File(Environment.getExternalStorageDirectory().absolutePath + BACKUP_DB_DIRECTORY + DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"))
+        val destFilePath = BACKUP_DB_DIRECTORY + DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
+        val destFile = File(Environment.getExternalStorageDirectory().absolutePath + destFilePath)
         FileUtils.copyFile(srcFile, destFile, false)
-        showAlertDialog(destFile.absolutePath, null)
+        showAlertDialog(getString(R.string.export_realm_title), destFilePath, null)
     }
 
     private fun importRealmFile() {
@@ -784,10 +780,11 @@ class SettingsActivity : EasyDiaryActivity() {
     }
 
     private fun exportExcel() {
-        val builder = android.app.AlertDialog.Builder(this)
+        val builder = AlertDialog.Builder(this)
         builder.setTitle(getString(R.string.export_excel_title))
         builder.setIcon(ContextCompat.getDrawable(this, R.drawable.excel_3))
         builder.setCancelable(false)
+        builder.setPositiveButton(getString(R.string.ok), null)
         val alert = builder.create()
         val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val containerView = inflater.inflate(R.layout.dialog_export_progress_excel, null)
@@ -891,8 +888,8 @@ class SettingsActivity : EasyDiaryActivity() {
             wb.write(outputStream)
             outputStream.close()
             runOnUiThread {
-                confirmButton.visibility = View.VISIBLE
-                confirmButton.setOnClickListener { alert.cancel() }
+                //                confirmButton.visibility = View.VISIBLE
+//                confirmButton.setOnClickListener { alert.cancel() }
             }
         }).start()
     }

@@ -119,7 +119,7 @@ fun Context.showAlertDialog(message: String, positiveListener: DialogInterface.O
     alert.show()
 }
 
-fun Context.showAlertDialog(title: String, message: String, positiveListener: DialogInterface.OnClickListener) {
+fun Context.showAlertDialog(title: String, message: String, positiveListener: DialogInterface.OnClickListener?) {
     val builder = AlertDialog.Builder(this)
     builder.setTitle(title)
     builder.setMessage(message)
