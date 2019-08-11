@@ -735,7 +735,8 @@ class SettingsActivity : EasyDiaryActivity() {
         val destFilePath = BACKUP_DB_DIRECTORY + DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
         val destFile = File(Environment.getExternalStorageDirectory().absolutePath + destFilePath)
         FileUtils.copyFile(srcFile, destFile, false)
-        showAlertDialog(getString(R.string.export_realm_title), destFilePath, null)
+        showSimpleDialog(getString(R.string.export_realm_title), getString(R.string.export_realm_guide_message), destFilePath)
+
     }
 
     private fun importRealmFile() {
@@ -775,7 +776,6 @@ class SettingsActivity : EasyDiaryActivity() {
                 }
                 false -> {}
             }
-
         }
     }
 

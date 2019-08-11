@@ -410,6 +410,7 @@
     <string name="preferences_category_backup_restore_device">Application Backup and Restore(Device Storage)</string>
     <string name="export_realm_title">Backup diary</string>
     <string name="export_realm_description">Back up database files except the attached photo to the device storage.</string>
+    <string name="export_realm_guide_message">The database file has been saved to the device storage at the path below.</string>
     <string name="import_realm_title">Recover diary</string>
     <string name="import_realm_description">Recovers database files from device storage except attachments.</string>
 </resources>

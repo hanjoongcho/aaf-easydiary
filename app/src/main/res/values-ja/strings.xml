@@ -410,6 +410,7 @@
     <string name="preferences_category_backup_restore_device">アプリのバックアップとリストア(Device Storage)</string>
     <string name="export_realm_title">日記をバックアップする</string>
     <string name="export_realm_description">添付の写真を除いて、データベースファイルをデバイスのストレージにバックアップします。</string>
+    <string name="export_realm_guide_message">データベースファイルは、以下のパスのデバイスストレージに保存されています。</string>
     <string name="import_realm_title">日記を復元する</string>
     <string name="import_realm_description">添付の写真を除いて、データベースファイルをデバイスのストレージから回復します。</string>
 </resources>

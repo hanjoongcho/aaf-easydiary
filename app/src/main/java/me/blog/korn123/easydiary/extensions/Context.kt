@@ -1,19 +1,12 @@
 package me.blog.korn123.easydiary.extensions
 
-import android.app.Activity
-import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.preference.PreferenceManager
-import com.google.android.material.snackbar.Snackbar
-import androidx.core.content.ContextCompat
-import androidx.cardview.widget.CardView
 import android.util.TypedValue
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.simplemobiletools.commons.extensions.baseConfig
+import androidx.core.content.ContextCompat
 import io.github.aafactory.commons.utils.CommonUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.helper.Config
@@ -94,39 +87,6 @@ fun Context.checkPermission(permissions: Array<String>): Boolean {
         ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_DENIED
     }
     return listDeniedPermissions.isEmpty()
-}
-
-fun Context.makeSnackBar(view: View, message: String) {
-    Snackbar.make(view, message, Snackbar.LENGTH_SHORT).setAction("Action", null).show()
-}
-
-fun Context.showAlertDialog(message: String, positiveListener: DialogInterface.OnClickListener, negativeListener: DialogInterface.OnClickListener?) {
-    val builder = AlertDialog.Builder(this)
-    builder.setMessage(message)
-    builder.setCancelable(true)
-    builder.setNegativeButton(getString(R.string.cancel), negativeListener)
-    builder.setPositiveButton(getString(R.string.ok), positiveListener)
-    val alert = builder.create()
-    alert.show()
-}
-
-fun Context.showAlertDialog(message: String, positiveListener: DialogInterface.OnClickListener?, cancelable: Boolean = true) {
-    val builder = AlertDialog.Builder(this)
-    builder.setMessage(message)
-    builder.setCancelable(cancelable)
-    builder.setPositiveButton(getString(R.string.ok), positiveListener)
-    val alert = builder.create()
-    alert.show()
-}
-
-fun Context.showAlertDialog(title: String, message: String, positiveListener: DialogInterface.OnClickListener?) {
-    val builder = AlertDialog.Builder(this)
-    builder.setTitle(title)
-    builder.setMessage(message)
-    builder.setCancelable(false)
-    builder.setPositiveButton(getString(R.string.ok), positiveListener)
-    val alert = builder.create()
-    alert.show()
 }
 
 fun Context.preferencesContains(key: String): Boolean {

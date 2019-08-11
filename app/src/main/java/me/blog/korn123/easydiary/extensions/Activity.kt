@@ -3,18 +3,25 @@ package me.blog.korn123.easydiary.extensions
 import android.Manifest
 import android.app.Activity
 import android.app.AlarmManager
-import android.app.AlertDialog
 import android.app.PendingIntent
 import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.graphics.Point
 import android.net.Uri
-import com.google.android.material.snackbar.Snackbar
-import androidx.core.app.ActivityCompat
 import android.util.TypedValue
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.Button
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
 import io.github.aafactory.commons.activities.BaseSimpleActivity
@@ -181,4 +188,52 @@ fun Activity.restartApp() {
     ActivityCompat.finishAffinity(this)
     //System.runFinalizersOnExit(true)
     System.exit(0)
+}
+
+fun Activity.makeSnackBar(view: View, message: String) {
+    Snackbar.make(view, message, Snackbar.LENGTH_SHORT).setAction("Action", null).show()
+}
+
+fun Activity.showAlertDialog(message: String, positiveListener: DialogInterface.OnClickListener, negativeListener: DialogInterface.OnClickListener?) {
+    val builder = AlertDialog.Builder(this)
+    builder.setMessage(message)
+    builder.setCancelable(true)
+    builder.setNegativeButton(getString(R.string.cancel), negativeListener)
+    builder.setPositiveButton(getString(R.string.ok), positiveListener)
+    val alert = builder.create()
+    alert.show()
+}
+
+fun Activity.showAlertDialog(message: String, positiveListener: DialogInterface.OnClickListener?, cancelable: Boolean = true) {
+    val builder = AlertDialog.Builder(this)
+    builder.setMessage(message)
+    builder.setCancelable(cancelable)
+    builder.setPositiveButton(getString(R.string.ok), positiveListener)
+    val alert = builder.create()
+    alert.show()
+}
+
+fun Activity.showAlertDialog(title: String, message: String, positiveListener: DialogInterface.OnClickListener?) {
+    val builder = AlertDialog.Builder(this)
+    builder.setTitle(title)
+    builder.setMessage(message)
+    builder.setCancelable(false)
+    builder.setPositiveButton(getString(R.string.ok), positiveListener)
+    val alert = builder.create()
+    alert.show()
+}
+
+fun Activity.showSimpleDialog(title: String, description: String, contents: String) {
+    val builder = AlertDialog.Builder(this)
+    builder.setTitle(title)
+    builder.setMessage(description)
+    builder.setCancelable(false)
+    builder.setPositiveButton(getString(R.string.ok), null)
+    val alert = builder.create()
+    val inflater = getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+    val containerView = inflater.inflate(R.layout.dialog_simple, null)
+    val messageView = containerView.findViewById<TextView>(R.id.message)
+    messageView.text = contents
+    alert.setView(containerView)
+    alert.show()
 }
