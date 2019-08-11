@@ -4,7 +4,7 @@
 
 ---------------------------------------------------
 
-# Changes in 1.4.91 (date: 2019/08/11)
+# Changes in 1.4.91 (date: 2019/08/12)
   * Added backup and recovery function using device storage
   * Fixed an issue that caused some text to be truncated on calendars on some devices
 

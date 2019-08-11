@@ -278,7 +278,7 @@
         Add diary symbol icon
     </string>
     <string name="release_157">
-        v1.4.91 / 2019.08.11\n
+        v1.4.91 / 2019.08.12\n
         Added backup and recovery function using device storage\n
         Fixed an issue that caused some text to be truncated on calendars on some devices
     </string>
