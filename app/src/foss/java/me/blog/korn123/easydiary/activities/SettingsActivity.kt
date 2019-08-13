@@ -70,6 +70,11 @@ class SettingsActivity : EasyDiaryActivity() {
         bindEvent()
         EasyDiaryUtils.changeDrawableIconColor(this, config.primaryColor, R.drawable.minus_6)
         EasyDiaryUtils.changeDrawableIconColor(this, config.primaryColor, R.drawable.plus_6)
+
+        if (BuildConfig.FLAVOR == "foss") {
+            invite.visibility = View.GONE
+            rateAppSetting.visibility = View.GONE
+        }
     }
 
     override fun onResume() {
