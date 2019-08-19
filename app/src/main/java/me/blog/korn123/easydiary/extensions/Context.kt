@@ -76,8 +76,8 @@ fun Context.initTextSize(viewGroup: ViewGroup, context: Context) {
             }
 }
 
-fun Context.initTextSize(textView: TextView, context: Context) {
-    val defaultFontSize: Float = CommonUtils.dpToPixelFloatValue(context, DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE.toFloat())
+fun Context.initTextSize(textView: TextView) {
+    val defaultFontSize: Float = CommonUtils.dpToPixelFloatValue(this, DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE.toFloat())
     val settingFontSize: Float = config.settingFontSize
     textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
 }

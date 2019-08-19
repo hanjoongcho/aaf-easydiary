@@ -15,7 +15,7 @@ internal class PostcardAdapter(
         val activity: Activity,
         private val listPostcard: List<PostCardViewerActivity.PostCard>,
         private val onItemClickListener: AdapterView.OnItemClickListener
-) : androidx.recyclerview.widget.RecyclerView.Adapter<PostcardViewHolder>() {
+) : RecyclerView.Adapter<PostcardViewHolder>() {
     private val TAG = this::class.java.simpleName
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostcardViewHolder {
