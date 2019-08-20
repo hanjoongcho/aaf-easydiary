@@ -1,10 +1,11 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="?attr/colorPrimary"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="50dp">
-    <CheckBox
+    <androidx.appcompat.widget.AppCompatCheckBox
+        app:buttonTint="@android:color/white"
         android:id="@+id/allDay"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="@dimen/toolbar_icon_margin_side"
