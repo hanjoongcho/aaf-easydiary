@@ -312,7 +312,7 @@ class PostCardActivity : EasyDiaryActivity() {
         Thread(Runnable {
             try {
                 val diaryCardPath = "$DIARY_POSTCARD_DIRECTORY${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}_$mSequence.jpg"
-                mSavedDiaryCardPath = Environment.getExternalStorageDirectory().absolutePath + diaryCardPath
+                mSavedDiaryCardPath = EasyDiaryUtils.getStorageBasePath() + diaryCardPath
                 EasyDiaryUtils.initWorkingDirectory(this@PostCardActivity)
                 BitmapUtils.saveBitmapToFileCache(bitmap, mSavedDiaryCardPath)
                 Handler(Looper.getMainLooper()).post {

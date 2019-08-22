@@ -98,7 +98,7 @@ class PostCardViewerActivity : EasyDiaryActivity() {
     }
 
     private fun initPostCard() {
-        val listPostcard = File(Environment.getExternalStorageDirectory().absolutePath + DIARY_POSTCARD_DIRECTORY)
+        val listPostcard = File(EasyDiaryUtils.getStorageBasePath() + DIARY_POSTCARD_DIRECTORY)
                 .listFiles()
                 .filter { it.extension.equals("jpg", true)}
                 .sortedDescending()

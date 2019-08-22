@@ -372,14 +372,14 @@ class SettingsActivity : EasyDiaryActivity() {
     private fun exportRealmFile() {
         val srcFile = File(EasyDiaryDbHelper.getInstance().path)
         val destFilePath = BACKUP_DB_DIRECTORY + DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
-        val destFile = File(Environment.getExternalStorageDirectory().absolutePath + destFilePath)
+        val destFile = File(EasyDiaryUtils.getStorageBasePath() + destFilePath)
         FileUtils.copyFile(srcFile, destFile, false)
         showSimpleDialog(getString(R.string.export_realm_title), getString(R.string.export_realm_guide_message), destFilePath)
 
     }
 
     private fun importRealmFile() {
-        val files = File(Environment.getExternalStorageDirectory().absolutePath + BACKUP_DB_DIRECTORY).listFiles()
+        val files = File(EasyDiaryUtils.getStorageBasePath() + BACKUP_DB_DIRECTORY).listFiles()
         files?.let {
             when (it.isNotEmpty()) {
                 true -> {
@@ -402,7 +402,7 @@ class SettingsActivity : EasyDiaryActivity() {
                     listView.adapter = adapter
                     listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
                         val itemInfo = parent.adapter.getItem(position) as HashMap<String, String>
-                        val srcFile = File(Environment.getExternalStorageDirectory().absolutePath + BACKUP_DB_DIRECTORY + itemInfo["name"])
+                        val srcFile = File(EasyDiaryUtils.getStorageBasePath() + BACKUP_DB_DIRECTORY + itemInfo["name"])
                         val destFile = File(EasyDiaryDbHelper.getInstance().path)
                         FileUtils.copyFile(srcFile, destFile)
                         restartApp()
@@ -523,7 +523,7 @@ class SettingsActivity : EasyDiaryActivity() {
                 }
             }
 
-            val outputStream = FileOutputStream("${Environment.getExternalStorageDirectory().absolutePath + BACKUP_EXCEL_DIRECTORY + exportFileName}.xls")
+            val outputStream = FileOutputStream("${EasyDiaryUtils.getStorageBasePath() + BACKUP_EXCEL_DIRECTORY + exportFileName}.xls")
             wb.write(outputStream)
             outputStream.close()
             runOnUiThread {
@@ -834,7 +834,7 @@ class SettingsActivity : EasyDiaryActivity() {
             listFont.add(map)
         }
 
-        val fontDir = File(Environment.getExternalStorageDirectory().absolutePath + USER_CUSTOM_FONTS_DIRECTORY)
+        val fontDir = File(EasyDiaryUtils.getStorageBasePath() + USER_CUSTOM_FONTS_DIRECTORY)
         fontDir.list()?.let {
             for (fontName in it) {
                 if (FilenameUtils.getExtension(fontName).equals("ttf", ignoreCase = true)) {

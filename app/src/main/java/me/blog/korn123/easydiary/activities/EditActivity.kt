@@ -8,18 +8,8 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.drawable.GradientDrawable
-import android.os.Bundle
-import android.os.Environment
-import android.os.PersistableBundle
 import android.provider.MediaStore
 import android.speech.RecognizerIntent
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.ColorUtils
-import androidx.viewpager.widget.PagerAdapter
-import androidx.viewpager.widget.ViewPager
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatDialog
 import android.text.format.DateFormat
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -28,12 +18,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatDialog
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
+import androidx.viewpager.widget.ViewPager
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.werb.pickphotoview.PickPhotoView
 import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import io.realm.RealmList
-import kotlinx.android.synthetic.main.dialog_feeling_pager.*
 import kotlinx.android.synthetic.main.layout_bottom_toolbar.*
 import kotlinx.android.synthetic.main.layout_edit_contents.*
 import kotlinx.android.synthetic.main.layout_edit_photo_container.*
@@ -103,7 +98,7 @@ abstract class EditActivity : EasyDiaryActivity() {
             R.id.secondsPicker -> {
                 val itemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
                     val itemMap = parent.adapter.getItem(position) as HashMap<String, String>
-                    mSecond = Integer.valueOf(itemMap["value"])!!
+                    mSecond = Integer.valueOf(itemMap["value"]!!)
                     setDateTime()
                     mSecondsPickerDialog.cancel()
                 }
@@ -350,7 +345,7 @@ abstract class EditActivity : EasyDiaryActivity() {
         setVisiblePhotoProgress(true)
         Thread(Runnable {
             selectPaths.map { item ->
-                val photoPath = Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
+                val photoPath = EasyDiaryUtils.getStorageBasePath() + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
                 try {
                     EasyDiaryUtils.downSamplingImage(this, File(item), File(photoPath))
                     mPhotoUris.add(PhotoUriDto(FILE_URI_PREFIX + photoPath))

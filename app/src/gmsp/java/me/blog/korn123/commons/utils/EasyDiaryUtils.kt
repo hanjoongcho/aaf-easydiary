@@ -53,12 +53,12 @@ object EasyDiaryUtils {
 
     fun initWorkingDirectory(context: Context) {
         if (context.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-            makeDirectory(Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY)
-            makeDirectory(Environment.getExternalStorageDirectory().absolutePath + DIARY_POSTCARD_DIRECTORY)
-            makeDirectory(Environment.getExternalStorageDirectory().absolutePath + USER_CUSTOM_FONTS_DIRECTORY)
-            makeDirectory(Environment.getExternalStorageDirectory().absolutePath + MARKDOWN_DIRECTORY)
-            makeDirectory(Environment.getExternalStorageDirectory().absolutePath + BACKUP_EXCEL_DIRECTORY)
-            makeDirectory(Environment.getExternalStorageDirectory().absolutePath + BACKUP_DB_DIRECTORY)
+            makeDirectory(getStorageBasePath() + DIARY_PHOTO_DIRECTORY)
+            makeDirectory(getStorageBasePath() + DIARY_POSTCARD_DIRECTORY)
+            makeDirectory(getStorageBasePath() + USER_CUSTOM_FONTS_DIRECTORY)
+            makeDirectory(getStorageBasePath() + MARKDOWN_DIRECTORY)
+            makeDirectory(getStorageBasePath() + BACKUP_EXCEL_DIRECTORY)
+            makeDirectory(getStorageBasePath() + BACKUP_DB_DIRECTORY)
         }
     }
     
@@ -67,6 +67,10 @@ object EasyDiaryUtils {
         if (!workingDirectory.exists()) workingDirectory.mkdirs()
     }
 
+    fun getStorageBasePath(): String {
+        return Environment.getExternalStorageDirectory().absolutePath
+    } 
+    
     fun sequenceToSymbolResourceId(sequence: Int) = when (sequence) {
         WEATHER_SUNNY -> R.drawable.ic_sunny
         WEATHER_CLOUD_AND_SUN -> R.drawable.ic_clouds_and_sun

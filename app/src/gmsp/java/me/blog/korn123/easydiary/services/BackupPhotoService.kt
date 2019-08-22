@@ -16,6 +16,7 @@ import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.DriveScopes
+import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.helper.*
@@ -35,7 +36,7 @@ class BackupPhotoService : Service() {
     private var mInProcessJob = true
     private val remoteDriveFileNames  = mutableListOf<String>()
     private val targetFilenames = mutableListOf<String>()
-    private val photoPath = "${Environment.getExternalStorageDirectory().absolutePath}$DIARY_PHOTO_DIRECTORY"
+    private val photoPath = "${EasyDiaryUtils.getStorageBasePath()}$DIARY_PHOTO_DIRECTORY"
     private lateinit var mWorkingFolderId: String
     
     override fun onBind(intent: Intent?): IBinder? = null

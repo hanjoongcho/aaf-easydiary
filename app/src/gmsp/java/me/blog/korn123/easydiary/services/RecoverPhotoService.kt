@@ -16,6 +16,7 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
+import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.helper.*
@@ -32,7 +33,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
     private var mInProcessJob = true
     private var targetIndexesCursor = 0
     private val targetItems = arrayListOf<HashMap<String, String>>()
-    private val photoPath = "${Environment.getExternalStorageDirectory().absolutePath}$DIARY_PHOTO_DIRECTORY"
+    private val photoPath = "${EasyDiaryUtils.getStorageBasePath()}$DIARY_PHOTO_DIRECTORY"
     private lateinit var mDriveServiceHelper: DriveServiceHelper
 
     override fun onCreate() {
@@ -119,7 +120,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
     private fun determineAttachPhoto(nextPageToken: String?) {
         mDriveServiceHelper.queryFiles("mimeType = '${DriveServiceHelper.MIME_TYPE_AAF_EASY_DIARY_PHOTO}' and trashed = false",  1000, nextPageToken).run {
             addOnSuccessListener { result ->
-                val basePath = Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY
+                val basePath = EasyDiaryUtils.getStorageBasePath() + DIARY_PHOTO_DIRECTORY
                 result.files.map { photoFile ->
                     remoteDriveFileCount++
                     if (!File("$photoPath${photoFile.name}").exists()) {

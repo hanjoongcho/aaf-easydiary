@@ -9,6 +9,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import br.tiagohm.markdownview.css.styles.Github
 import kotlinx.android.synthetic.main.activity_markdown_view.*
+import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.confirmPermission
@@ -37,7 +38,7 @@ class MarkDownViewActivity : EasyDiaryActivity() {
             setHomeAsUpIndicator(R.drawable.ic_cross)
         }
 
-        savedFilePath = "${Environment.getExternalStorageDirectory().absolutePath + MARKDOWN_DIRECTORY + pageTitle}.md"
+        savedFilePath = "${EasyDiaryUtils.getStorageBasePath() + MARKDOWN_DIRECTORY + pageTitle}.md"
         markdownUrl = intent.getStringExtra(OPEN_URL_INFO)
         markdownView.run {
             addStyleSheet(Github()/*InternalStyleSheet()*/.apply {

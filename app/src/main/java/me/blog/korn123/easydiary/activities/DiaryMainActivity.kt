@@ -206,7 +206,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             for ((index, dto) in listPhotoUri.withIndex()) {
 //                Log.i("PHOTO-URI", dto.photoUri)
                 if (dto.isContentUri()) {
-                    val photoPath = Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
+                    val photoPath = EasyDiaryUtils.getStorageBasePath() + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
                     CommonUtils.uriToFile(this, Uri.parse(dto.photoUri), photoPath)
                     EasyDiaryDbHelper.getInstance().beginTransaction()
                     dto.photoUri = FILE_URI_PREFIX + photoPath
@@ -218,9 +218,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             }
 
             if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                File(Environment.getExternalStorageDirectory().absolutePath + WORKING_DIRECTORY).listFiles()?.let {
+                File(EasyDiaryUtils.getStorageBasePath() + WORKING_DIRECTORY).listFiles()?.let {
                     it.forEach { file ->
-                        if (file.extension.equals("jpg", true)) FileUtils.moveFileToDirectory(file, File(Environment.getExternalStorageDirectory().absolutePath + DIARY_POSTCARD_DIRECTORY), true)
+                        if (file.extension.equals("jpg", true)) FileUtils.moveFileToDirectory(file, File(EasyDiaryUtils.getStorageBasePath() + DIARY_POSTCARD_DIRECTORY), true)
                     }
                 }
             }

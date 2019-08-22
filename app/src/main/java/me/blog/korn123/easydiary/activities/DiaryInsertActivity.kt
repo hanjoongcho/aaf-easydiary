@@ -137,7 +137,7 @@ class DiaryInsertActivity : EditActivity() {
                 }
             }
             REQUEST_CODE_IMAGE_PICKER -> if (resultCode == Activity.RESULT_OK && data != null) {
-                val photoPath = Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
+                val photoPath = EasyDiaryUtils.getStorageBasePath() + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
                 //                    mPhotoUris.add(new PhotoUriDto(data.getData().toString()));
                 try {
                     CommonUtils.uriToFile(this, data.data!!, photoPath)

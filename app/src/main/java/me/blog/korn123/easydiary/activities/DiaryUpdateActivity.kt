@@ -1,20 +1,15 @@
 package me.blog.korn123.easydiary.activities
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.os.Environment
 import android.speech.RecognizerIntent
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.ColorUtils
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.LinearLayout
-import com.simplemobiletools.commons.helpers.BaseConfig
+import androidx.core.graphics.ColorUtils
 import com.werb.pickphotoview.util.PickConfig
 import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.CommonUtils
@@ -27,8 +22,6 @@ import kotlinx.android.synthetic.main.layout_edit_photo_container.*
 import kotlinx.android.synthetic.main.layout_edit_toolbar_sub.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.adapters.DiaryWeatherItemAdapter
-import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.pauseLock
@@ -121,8 +114,8 @@ class DiaryUpdateActivity : EditActivity() {
             REQUEST_CODE_IMAGE_PICKER -> try {
                 if (resultCode == Activity.RESULT_OK && data != null) {
                     if (mPhotoUris == null) mPhotoUris = RealmList()
-                    val photoPath = Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
-                    CommonUtils.uriToFile(this, data.data, photoPath)
+                    val photoPath = EasyDiaryUtils.getStorageBasePath() + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
+                    CommonUtils.uriToFile(this, data.data!!, photoPath)
                     mPhotoUris?.add(PhotoUriDto(FILE_URI_PREFIX + photoPath))
                     val thumbnailSize = config.settingThumbnailSize
                     val bitmap = BitmapUtils.decodeFile(photoPath, CommonUtils.dpToPixel(this, thumbnailSize - 5), CommonUtils.dpToPixel(this, thumbnailSize - 5))
