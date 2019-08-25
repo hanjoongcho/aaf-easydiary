@@ -66,6 +66,7 @@ fun Context.initTextSize(viewGroup: ViewGroup, context: Context) {
                 when (it) {
                     is TextView -> { 
                         when (it.id) {
+                            R.id.calendarDate -> it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize * 0.7F)
                             R.id.diaryCount -> it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize * 0.7F)
                             R.id.symbolTextArrow -> {}
                             R.id.createdDate -> {}

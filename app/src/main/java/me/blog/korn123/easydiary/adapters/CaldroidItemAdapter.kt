@@ -50,7 +50,7 @@ class CaldroidItemAdapter(
         val bottomPadding = cellView?.paddingBottom ?: 0
         val rightPadding = cellView?.paddingRight ?: 0
 
-        val tv1 = cellView?.findViewById<TextView>(R.id.tv1)
+        val tv1 = cellView?.findViewById<TextView>(R.id.calendarDate)
         val tv2 = cellView?.findViewById<TextView>(R.id.diaryCount)
         val imageView1 = cellView?.findViewById<ImageView>(R.id.weather)
 
