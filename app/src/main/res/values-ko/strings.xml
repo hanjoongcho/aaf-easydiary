@@ -413,4 +413,5 @@
     <string name="export_realm_guide_message">데이터베이스 파일이 아래 경로의 디바이스 저장소에 저장되었습니다.</string>
     <string name="import_realm_title">다이어리 복구하기</string>
     <string name="import_realm_description">첨부사진을 제외한 데이터베이스 파일을 디바이스 저장소로부터 복구합니다.</string>
+    <string name="diary_item_count">+ %d</string>
 </resources>

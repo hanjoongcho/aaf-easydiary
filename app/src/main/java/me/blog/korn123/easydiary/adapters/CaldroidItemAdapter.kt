@@ -1,6 +1,5 @@
 package me.blog.korn123.easydiary.adapters
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -11,14 +10,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.roomorama.caldroid.CaldroidFragment
 import com.roomorama.caldroid.CaldroidGridAdapter
-import io.github.aafactory.commons.utils.CALCULATION
-import io.github.aafactory.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.extensions.getRootViewHeight
 import me.blog.korn123.easydiary.extensions.initTextSize
-import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 
 class CaldroidItemAdapter(
@@ -51,9 +46,6 @@ class CaldroidItemAdapter(
         val rightPadding = cellView?.paddingRight ?: 0
 
         val tv1 = cellView?.findViewById<TextView>(R.id.calendarDate)
-        val tv2 = cellView?.findViewById<TextView>(R.id.diaryCount)
-        val imageView1 = cellView?.findViewById<ImageView>(R.id.weather)
-
         tv1?.setTextColor(Color.BLACK)
 
         // Get dateTime of this cell
@@ -114,30 +106,106 @@ class CaldroidItemAdapter(
         val count = EasyDiaryDbHelper.countDiaryBy(dateString)
 
         val mDiaryList = EasyDiaryDbHelper.readDiaryByDateString(dateString)
-        var initWeather = false
-        if (mDiaryList.size > 0) {
-            for (diaryDto in mDiaryList) {
-                if (diaryDto.weather > 0) {
-                    initWeather = true
-                    EasyDiaryUtils.initWeatherView(context, imageView1, diaryDto.weather)
-                    break
-                }
+        cellView?.findViewById<TextView>(R.id.itemCount)?.run {
+            setTextColor(Color.RED)
+            if (count > 3) {
+                text = context.getString(R.string.diary_item_count, count - 3)
+            } else {
+                text = null
             }
-            if (!initWeather) {
-                imageView1?.visibility = View.GONE
-                imageView1?.setImageResource(0)
-            }
-        } else {
-            imageView1?.visibility = View.GONE
-            imageView1?.setImageResource(0)
         }
 
-        if (count > 0) {
-            tv2?.text = count.toString() + parent.resources.getString(R.string.diary_count)
-            tv2?.setTextColor(parent.resources.getColor(R.color.diaryCountText))
-        } else {
-            tv2?.text = null
+//        var initWeather = false
+//        if (mDiaryList.size > 0) {
+//            for (diaryDto in mDiaryList) {
+//                if (diaryDto.weather > 0) {
+//                    initWeather = true
+//                    EasyDiaryUtils.initWeatherView(context, imageView1, diaryDto.weather)
+//                    break
+//                }
+//            }
+//            if (!initWeather) {
+//                imageView1?.visibility = View.GONE
+//                imageView1?.setImageResource(0)
+//            }
+//        } else {
+//            imageView1?.visibility = View.GONE
+//            imageView1?.setImageResource(0)
+//        }
+
+//        if (count > 0) {
+//            tv2?.text = count.toString() + parent.resources.getString(R.string.diary_count)
+//            tv2?.setTextColor(parent.resources.getColor(R.color.diaryCountText))
+//        } else {
+//            tv2?.text = null
+//        }
+
+        when {
+            mDiaryList.isEmpty() -> {
+                cellView?.findViewById<LinearLayout>(R.id.item1)?.run {
+                    (getChildAt(0) as ImageView).setImageResource(0)
+                    (getChildAt(1) as TextView).text = null
+                }
+                cellView?.findViewById<LinearLayout>(R.id.item2)?.run {
+                    (getChildAt(0) as ImageView).setImageResource(0)
+                    (getChildAt(1) as TextView).text = null
+                }
+                cellView?.findViewById<LinearLayout>(R.id.item3)?.run {
+                    (getChildAt(0) as ImageView).setImageResource(0)
+                    (getChildAt(1) as TextView).text = null
+                }
+            }
+            mDiaryList.size == 1 -> {
+                cellView?.findViewById<LinearLayout>(R.id.item1)?.run {
+                    val item = mDiaryList[0]
+                    EasyDiaryUtils.initWeatherView(context, getChildAt(0) as ImageView, item.weather)
+                    (getChildAt(1) as TextView).text = item.title ?: item.contents?.substring(10)
+                }
+                cellView?.findViewById<LinearLayout>(R.id.item2)?.run {
+                    (getChildAt(0) as ImageView).setImageResource(0)
+                    (getChildAt(1) as TextView).text = null
+                }
+                cellView?.findViewById<LinearLayout>(R.id.item3)?.run {
+                    (getChildAt(0) as ImageView).setImageResource(0)
+                    (getChildAt(1) as TextView).text = null
+                }
+            }
+            mDiaryList.size == 2 -> {
+                cellView?.findViewById<LinearLayout>(R.id.item1)?.run {
+                    val item = mDiaryList[0]
+                    EasyDiaryUtils.initWeatherView(context, getChildAt(0) as ImageView, item.weather)
+                    (getChildAt(1) as TextView).text = item.title ?: item.contents?.substring(10)
+                }
+                cellView?.findViewById<LinearLayout>(R.id.item2)?.run {
+                    val item = mDiaryList[1]
+                    EasyDiaryUtils.initWeatherView(context, getChildAt(0) as ImageView, item.weather)
+                    (getChildAt(1) as TextView).text = item.title ?: item.contents?.substring(10)
+                }
+                cellView?.findViewById<LinearLayout>(R.id.item3)?.run {
+                    (getChildAt(0) as ImageView).setImageResource(0)
+                    (getChildAt(1) as TextView).text = null
+                }
+            }
+            mDiaryList.size > 2 -> {
+                cellView?.findViewById<LinearLayout>(R.id.item1)?.run {
+                    val item = mDiaryList[0]
+                    EasyDiaryUtils.initWeatherView(context, getChildAt(0) as ImageView, item.weather)
+                    (getChildAt(1) as TextView).text = item.title ?: item.contents?.substring(10)
+                }
+                cellView?.findViewById<LinearLayout>(R.id.item2)?.run {
+                    val item = mDiaryList[1]
+                    EasyDiaryUtils.initWeatherView(context, getChildAt(0) as ImageView, item.weather)
+                    (getChildAt(1) as TextView).text = item.title ?: item.contents?.substring(10)
+                }
+                cellView?.findViewById<LinearLayout>(R.id.item3)?.run {
+                    val item = mDiaryList[2]
+                    EasyDiaryUtils.initWeatherView(context, getChildAt(0) as ImageView, item.weather)
+                    (getChildAt(1) as TextView).text = item.title ?: item.contents?.substring(10)
+                }
+            }
         }
+
+
         // Somehow after setBackgroundResource, the padding collapse.
         // This is to recover the padding
         cellView?.setPadding(leftPadding, topPadding, rightPadding,

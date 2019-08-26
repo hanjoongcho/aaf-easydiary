@@ -137,6 +137,7 @@ class CalendarActivity : EasyDiaryActivity() {
         mDiaryList.clear()
         mDiaryList.addAll(EasyDiaryDbHelper.readDiaryByDateString(formatter.format(date)))
         mArrayAdapterDiary?.notifyDataSetChanged()
+        selectedList.setSelection(0)
 
         if (mDiaryList.size > 0) {
             selectedList.visibility = View.VISIBLE

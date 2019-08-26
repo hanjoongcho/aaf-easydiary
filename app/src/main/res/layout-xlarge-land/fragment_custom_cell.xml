@@ -1,32 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/custom_cell"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_card_cell_default"
     android:padding="5dp"
     android:orientation="vertical">
-    <TextView
-        android:id="@+id/calendarDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
     <LinearLayout
-        android:gravity="center|top"
         android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <TextView
-            android:gravity="center|bottom"
-            android:id="@+id/diaryCount"
-            android:layout_width="wrap_content"
+            tools:text="1"
+            android:gravity="left"
+            android:id="@+id/calendarDate"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content" />
 
+        <me.blog.korn123.easydiary.views.CalendarItem
+            tools:text="1"
+            android:gravity="right"
+            android:textSize="9dp"
+            android:id="@+id/itemCount"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/item1"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <ImageView
-            android:layout_marginLeft="5dp"
-            android:id="@+id/weather"
-            android:layout_width="13dp"
-            android:layout_height="13dp" />
+            android:layout_width="8dp"
+            android:layout_height="8dp" />
+
+        <me.blog.korn123.easydiary.views.CalendarItem
+            android:maxLines="1"
+            android:textSize="9dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginStart="1dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/item2"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="8dp"
+            android:layout_height="8dp" />
+
+        <me.blog.korn123.easydiary.views.CalendarItem
+            android:maxLines="1"
+            android:textSize="9dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginStart="1dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/item3"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="8dp"
+            android:layout_height="8dp" />
+
+        <me.blog.korn123.easydiary.views.CalendarItem
+            android:maxLines="1"
+            android:textSize="9dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginStart="1dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 </LinearLayout>

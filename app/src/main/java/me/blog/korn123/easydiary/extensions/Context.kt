@@ -64,10 +64,10 @@ fun Context.initTextSize(viewGroup: ViewGroup, context: Context) {
             .map { index -> viewGroup.getChildAt(index) }
             .forEach {
                 when (it) {
+                    is me.blog.korn123.easydiary.views.CalendarItem -> {}
                     is TextView -> { 
                         when (it.id) {
                             R.id.calendarDate -> it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize * 0.7F)
-                            R.id.diaryCount -> it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize * 0.7F)
                             R.id.symbolTextArrow -> {}
                             R.id.createdDate -> {}
                             else -> it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
