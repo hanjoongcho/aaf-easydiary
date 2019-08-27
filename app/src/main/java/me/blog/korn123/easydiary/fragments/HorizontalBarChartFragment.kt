@@ -22,6 +22,7 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import kotlinx.android.synthetic.main.fragment_barchart.*
 import me.blog.korn123.commons.utils.ChartUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.chart.IValueFormatterExt
 import me.blog.korn123.easydiary.chart.MyAxisValueFormatter
@@ -106,8 +107,8 @@ class HorizontalBarChartFragment : androidx.fragment.app.Fragment() {
         itemArray.reverse()
         mSequences.reverse()
         itemArray.forEachIndexed { index, item ->
-            val drawable: Drawable? = when (EasyDiaryUtils.sequenceToSymbolResourceId(item["key"]!!) > 0) {
-                true -> ContextCompat.getDrawable(context!!, EasyDiaryUtils.sequenceToSymbolResourceId(item["key"]!!))
+            val drawable: Drawable? = when (FlavorUtils.sequenceToSymbolResourceId(item["key"]!!) > 0) {
+                true -> ContextCompat.getDrawable(context!!, FlavorUtils.sequenceToSymbolResourceId(item["key"]!!))
                 false -> null
             }
             barEntries.add(BarEntry((index + 1F), item["value"]!!.toFloat(), drawable))
@@ -137,7 +138,7 @@ class HorizontalBarChartFragment : androidx.fragment.app.Fragment() {
 
     inner class AxisValueFormatter(private var context: Context?, private val chart: BarLineChartBase<*>) : IAxisValueFormatter {
         override fun getFormattedValue(value: Float, axis: AxisBase?): String {
-            val symbolMap = EasyDiaryUtils.getDiarySymbolMap(context!!)
+            val symbolMap = FlavorUtils.getDiarySymbolMap(context!!)
             return symbolMap[mSequences[value.toInt() - 1]] ?: "None"
         }
     }

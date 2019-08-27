@@ -35,6 +35,7 @@ import io.github.aafactory.commons.helpers.BaseConfig
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_settings.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
@@ -488,7 +489,7 @@ class SettingsActivity : EasyDiaryActivity() {
             sheet.setColumnWidth(SYMBOL, 256 * 10)
             sheet.setColumnWidth(IS_ALL_DAY, 256 * 30)
             val exportFileName = "aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}"
-            val diarySymbolMap = EasyDiaryUtils.getDiarySymbolMap(this)
+            val diarySymbolMap = FlavorUtils.getDiarySymbolMap(this)
             diaryList.forEachIndexed { index, diaryDto ->
                 val row = sheet.createRow(index + 1)
                 val photoNames = StringBuffer()

@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.models.DiarySymbol
@@ -47,7 +48,7 @@ class DiaryWeatherItemAdapter(
         }
 
         FontUtils.setFontsTypeface(context, context.assets, null, holder.item_holder)
-        EasyDiaryUtils.initWeatherView(context, holder.imageView1, mList[position].sequence, true)
+        FlavorUtils.initWeatherView(context, holder.imageView1, mList[position].sequence, true)
         holder.textView1?.let {
             it.text = mList[position].description
 //            context.initTextSize(it, context)

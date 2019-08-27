@@ -17,6 +17,7 @@ import io.github.aafactory.commons.extensions.updateTextColors
 import io.github.aafactory.commons.helpers.BaseConfig
 import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
@@ -78,7 +79,7 @@ class TimelineItemAdapter(
         }
 
         holder.run {
-            EasyDiaryUtils.initWeatherView(context, diarySymbol, diaryDto.weather, false)
+            FlavorUtils.initWeatherView(context, diarySymbol, diaryDto.weather, false)
             textView1?.text = when (diaryDto.isAllDay) {
                 true -> applyBoldToDate(context.resources.getString(R.string.all_day), getSummary(diaryDto) ?: "")
                 false -> applyBoldToDate(DateUtils.timeMillisToDateTime(diaryDto.currentTimeMillis, DateUtils.TIME_PATTERN_WITH_SECONDS), getSummary(diaryDto)!!)

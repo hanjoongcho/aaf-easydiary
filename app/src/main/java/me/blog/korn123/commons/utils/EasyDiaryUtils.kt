@@ -31,6 +31,7 @@ import org.apache.commons.io.FileUtils
 import java.io.File
 import java.io.FileNotFoundException
 import java.util.*
+import kotlin.collections.HashMap
 
 /**
  * Created by hanjoong on 2017-04-30.
@@ -60,7 +61,7 @@ object EasyDiaryUtils {
             makeDirectory(getStorageBasePath() + BACKUP_DB_DIRECTORY)
         }
     }
-
+    
     private fun makeDirectory(path: String) {
         val workingDirectory = File(path)
         if (!workingDirectory.exists()) workingDirectory.mkdirs()
@@ -68,28 +69,7 @@ object EasyDiaryUtils {
 
     fun getStorageBasePath(): String {
         return Environment.getExternalStorageDirectory().absolutePath
-    }
-
-    fun sequenceToSymbolResourceId(sequence: Int) = when (sequence) {
-        WEATHER_SUNNY -> R.drawable.ic_sunny
-        WEATHER_CLOUD_AND_SUN -> R.drawable.ic_clouds_and_sun
-        WEATHER_RAIN_DROPS -> R.drawable.ic_raindrops
-        WEATHER_BOLT -> R.drawable.ic_bolt
-        WEATHER_SNOWING -> R.drawable.ic_snowing
-        WEATHER_RAINBOW -> R.drawable.ic_rainbow
-        WEATHER_UMBRELLA -> R.drawable.ic_umbrella_1
-        WEATHER_STARS -> R.drawable.ic_stars_2
-        WEATHER_MOON -> R.drawable.ic_moon_9
-        WEATHER_NIGHT_RAIN -> R.drawable.ic_night_rain
-        else -> 0
-    }
-
-    fun initWeatherView(context: Context, imageView: ImageView?, weatherFlag: Int, isShowEmptyWeatherView: Boolean = false, applyWhiteFilter: Boolean = false) {
-        imageView?.run {
-            visibility = if (!isShowEmptyWeatherView && weatherFlag < 1) View.GONE else View.VISIBLE
-            setImageResource(sequenceToSymbolResourceId(weatherFlag))
-        }
-    }
+    } 
 
     fun boldString(context: Context, textView: TextView?) {
         if (context.config.boldStyleEnable) {
@@ -233,19 +213,5 @@ object EasyDiaryUtils {
         ContextCompat.getDrawable(context, resourceId)?.apply {
             setColorFilter(color, PorterDuff.Mode.SRC_IN)
         }
-    }
-
-    fun getDiarySymbolMap(context: Context): HashMap<Int, String> {
-        val symbolMap = hashMapOf<Int, String>()
-        val symbolArray = arrayOf(
-                *context.resources.getStringArray(R.array.weather_item_array)
-
-        )
-
-        symbolArray.map { item ->
-            val symbolItem = DiarySymbol(item)
-            symbolMap.put(symbolItem.sequence, symbolItem.description)
-        }
-        return symbolMap
     }
 }

@@ -31,6 +31,7 @@ import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_post_card.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.PhotoAdapter
 import me.blog.korn123.easydiary.extensions.*
@@ -63,7 +64,7 @@ class PostCardActivity : EasyDiaryActivity() {
         }
         mSequence = intent.getIntExtra(DIARY_SEQUENCE, 0)
         val diaryDto = EasyDiaryDbHelper.readDiaryBy(mSequence)
-        EasyDiaryUtils.initWeatherView(this, weather, diaryDto.weather)
+        FlavorUtils.initWeatherView(this, weather, diaryDto.weather)
         when (diaryDto.title.isNullOrEmpty()) {
             true -> diaryTitle.visibility = View.GONE
             false -> diaryTitle.text = diaryDto.title

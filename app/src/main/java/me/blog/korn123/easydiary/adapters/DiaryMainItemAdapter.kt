@@ -18,6 +18,7 @@ import io.github.aafactory.commons.utils.CALCULATION
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
@@ -81,8 +82,8 @@ class DiaryMainItemAdapter(
         holder.textView3?.text = when (diaryDto.isAllDay) {
             true -> DateUtils.getFullPatternDate(diaryDto.currentTimeMillis)
             false -> DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis)
-        } 
-        EasyDiaryUtils.initWeatherView(context, holder.imageView, diaryDto.weather)
+        }
+        FlavorUtils.initWeatherView(context, holder.imageView, diaryDto.weather)
 
         holder.item_holder?.let {
             context.updateTextColors(it, 0, 0)
