@@ -105,7 +105,7 @@ class TimelineItemAdapter(
             when (StringUtils.isNotEmpty(diaryDto.title)) {
                 true -> diaryDto.title
 //                false -> StringUtils.abbreviate(diaryDto.contents, 10)
-                false -> diaryDto.contents?.let { it.split("\n")[0] }  ?: StringUtils.abbreviate(diaryDto.contents, 10)
+                false -> EasyDiaryUtils.summaryDiaryLabel(diaryDto)
             }
         }
         false -> {

@@ -16,7 +16,6 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
-import org.apache.commons.lang3.StringUtils
 
 class CaldroidItemAdapter(
         context: Context,
@@ -161,7 +160,7 @@ class CaldroidItemAdapter(
                 cellView?.findViewById<LinearLayout>(R.id.item1)?.run {
                     val item = mDiaryList[0]
                     FlavorUtils.initWeatherView(context, getChildAt(0) as ImageView, item.weather)
-                    (getChildAt(1) as TextView).text = if (StringUtils.isEmpty(item.title)) item.contents?.split("\n")?.get(0) else item.title
+                    (getChildAt(1) as TextView).text = EasyDiaryUtils.summaryDiaryLabel(item)
                 }
                 cellView?.findViewById<LinearLayout>(R.id.item2)?.run {
                     (getChildAt(0) as ImageView).setImageResource(0)
@@ -176,12 +175,12 @@ class CaldroidItemAdapter(
                 cellView?.findViewById<LinearLayout>(R.id.item1)?.run {
                     val item = mDiaryList[0]
                     FlavorUtils.initWeatherView(context, getChildAt(0) as ImageView, item.weather)
-                    (getChildAt(1) as TextView).text = if (StringUtils.isEmpty(item.title)) item.contents?.split("\n")?.get(0) else item.title
+                    (getChildAt(1) as TextView).text = EasyDiaryUtils.summaryDiaryLabel(item)
                 }
                 cellView?.findViewById<LinearLayout>(R.id.item2)?.run {
                     val item = mDiaryList[1]
                     FlavorUtils.initWeatherView(context, getChildAt(0) as ImageView, item.weather)
-                    (getChildAt(1) as TextView).text = if (StringUtils.isEmpty(item.title)) item.contents?.split("\n")?.get(0) else item.title
+                    (getChildAt(1) as TextView).text = EasyDiaryUtils.summaryDiaryLabel(item)
                 }
                 cellView?.findViewById<LinearLayout>(R.id.item3)?.run {
                     (getChildAt(0) as ImageView).setImageResource(0)
@@ -192,17 +191,17 @@ class CaldroidItemAdapter(
                 cellView?.findViewById<LinearLayout>(R.id.item1)?.run {
                     val item = mDiaryList[0]
                     FlavorUtils.initWeatherView(context, getChildAt(0) as ImageView, item.weather)
-                    (getChildAt(1) as TextView).text = if (StringUtils.isEmpty(item.title)) item.contents?.split("\n")?.get(0) else item.title
+                    (getChildAt(1) as TextView).text = EasyDiaryUtils.summaryDiaryLabel(item)
                 }
                 cellView?.findViewById<LinearLayout>(R.id.item2)?.run {
                     val item = mDiaryList[1]
                     FlavorUtils.initWeatherView(context, getChildAt(0) as ImageView, item.weather)
-                    (getChildAt(1) as TextView).text = if (StringUtils.isEmpty(item.title)) item.contents?.split("\n")?.get(0) else item.title
+                    (getChildAt(1) as TextView).text = EasyDiaryUtils.summaryDiaryLabel(item)
                 }
                 cellView?.findViewById<LinearLayout>(R.id.item3)?.run {
                     val item = mDiaryList[2]
                     FlavorUtils.initWeatherView(context, getChildAt(0) as ImageView, item.weather)
-                    (getChildAt(1) as TextView).text = if (StringUtils.isEmpty(item.title)) item.contents?.split("\n")?.get(0) else item.title
+                    (getChildAt(1) as TextView).text = EasyDiaryUtils.summaryDiaryLabel(item)
                 }
             }
         }

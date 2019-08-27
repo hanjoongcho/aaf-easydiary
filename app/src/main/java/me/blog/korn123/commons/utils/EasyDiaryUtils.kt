@@ -25,9 +25,11 @@ import me.blog.korn123.easydiary.adapters.SecondItemAdapter
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.models.DiaryDto
 import me.blog.korn123.easydiary.models.DiarySymbol
 import me.blog.korn123.easydiary.models.PhotoUriDto
 import org.apache.commons.io.FileUtils
+import org.apache.commons.lang3.StringUtils
 import java.io.File
 import java.io.FileNotFoundException
 import java.util.*
@@ -213,5 +215,9 @@ object EasyDiaryUtils {
         ContextCompat.getDrawable(context, resourceId)?.apply {
             setColorFilter(color, PorterDuff.Mode.SRC_IN)
         }
+    }
+
+    fun summaryDiaryLabel(diaryDto: DiaryDto): String {
+        return diaryDto.contents?.let { it.split("\n")[0] }  ?: StringUtils.abbreviate(diaryDto.contents, 10)
     }
 }
