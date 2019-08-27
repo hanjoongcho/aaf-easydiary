@@ -2,9 +2,9 @@ package me.blog.korn123.easydiary.views
 
 import android.content.Context
 import android.util.AttributeSet
-import android.widget.TextView
+import androidx.appcompat.widget.AppCompatTextView
 
-class CalendarItem : TextView {
+class CalendarItem : AppCompatTextView {
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)

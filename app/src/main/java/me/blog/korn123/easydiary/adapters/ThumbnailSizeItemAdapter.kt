@@ -16,7 +16,7 @@ import me.blog.korn123.easydiary.extensions.config
 class ThumbnailSizeItemAdapter(val activity: Activity, private val layoutResourceId: Int, private val list: List<Map<String, String>>
 ) : ArrayAdapter<Map<String, String>>(activity , layoutResourceId, list) {
     
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val row: View? = when (convertView) {
             null -> {
                 activity.layoutInflater.inflate(this.layoutResourceId, parent, false)
@@ -48,7 +48,7 @@ class ThumbnailSizeItemAdapter(val activity: Activity, private val layoutResourc
             holder.textView?.text = list[position]["optionTitle"]
         }
         
-        return row
+        return row!!
     }
 
     class ViewHolder {

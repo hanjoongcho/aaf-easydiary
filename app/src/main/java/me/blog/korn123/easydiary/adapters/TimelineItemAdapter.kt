@@ -38,7 +38,7 @@ class TimelineItemAdapter(
 ) : ArrayAdapter<DiaryDto>(context, layoutResourceId, list) {
     private var mPrimaryColor = 0
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var row = convertView
         val holder: ViewHolder? 
         if (row == null) {
@@ -91,7 +91,7 @@ class TimelineItemAdapter(
             }
         }
 
-        return row
+        return row!!
     }
 
     private fun applyBoldToDate(dateString: String, summary: String): SpannableString {

@@ -29,7 +29,7 @@ class DiaryCalendarItemAdapter(
         private val list: List<DiaryDto>
 ) : ArrayAdapter<DiaryDto>(context, layoutResourceId, list) {
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var row = convertView
         var holder: ViewHolder?
         if (row == null) {
@@ -84,7 +84,7 @@ class DiaryCalendarItemAdapter(
             }
         }
 
-        return row
+        return row!!
     }
 
     private fun setFontsTypeface(holder: ViewHolder) {

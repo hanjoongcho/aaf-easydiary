@@ -39,7 +39,7 @@ class DiaryMainItemAdapter(
 ) : ArrayAdapter<DiaryDto>(activity, layoutResourceId, list) {
     var currentQuery: String? = null
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var row = convertView
         val holder: ViewHolder
         if (row == null) {
@@ -141,7 +141,7 @@ class DiaryMainItemAdapter(
             false -> Integer.MAX_VALUE
         }
 
-        return row
+        return row!!
     }
 
     private class ViewHolder {

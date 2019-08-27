@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
@@ -24,7 +23,7 @@ class DiaryWeatherItemAdapter(
         private val mList: List<DiarySymbol>
 ) : ArrayAdapter<DiarySymbol>(context, mLayoutResourceId, mList) {
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         return initRow(position, convertView, parent)
     }
 
@@ -32,7 +31,7 @@ class DiaryWeatherItemAdapter(
         return initRow(position, convertView, parent)
     }
 
-    private fun initRow(position: Int, convertView: View?, parent: ViewGroup): View? {
+    private fun initRow(position: Int, convertView: View?, parent: ViewGroup): View {
         var row = convertView
         val holder: ViewHolder? 
         if (row == null) {
@@ -62,7 +61,7 @@ class DiaryWeatherItemAdapter(
             }
         }
         
-        return row
+        return row!!
     }
 
     private class ViewHolder {

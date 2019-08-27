@@ -13,7 +13,7 @@ class RealmFileItemAdapter(
         private val list: List<Map<String, String>>
 ) : ArrayAdapter<Map<String, String>>(activity , layoutResourceId, list) {
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var row = convertView
         val holder: ViewHolder
         when (row == null) {
@@ -32,7 +32,7 @@ class RealmFileItemAdapter(
         
         holder.name?.text = list[position]["name"]
         holder.createdTime?.text = list[position]["createdTime"]
-        return row
+        return row!!
     }
 
     class ViewHolder {

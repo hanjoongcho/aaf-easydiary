@@ -33,6 +33,7 @@ import kotlinx.android.synthetic.main.activity_diary_read.*
 import kotlinx.android.synthetic.main.fragment_diary_read.*
 import kotlinx.android.synthetic.main.layout_bottom_toolbar.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
@@ -356,7 +357,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
             }
 
             val weatherFlag = diaryDto.weather
-            EasyDiaryUtils.initWeatherView(context!!, weather, weatherFlag)
+            FlavorUtils.initWeatherView(context!!, weather, weatherFlag)
 
             // TODO fixme elegance
             val photoCount = diaryDto.photoUris?.size ?: 0 

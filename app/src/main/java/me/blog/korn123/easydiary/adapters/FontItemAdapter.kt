@@ -6,12 +6,12 @@ import android.graphics.BitmapFactory
 import android.graphics.PorterDuff
 import android.graphics.Typeface
 import android.os.AsyncTask
-import androidx.core.content.ContextCompat
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
@@ -24,7 +24,7 @@ import org.apache.commons.lang3.StringUtils
 class FontItemAdapter(val activity: Activity, private val layoutResourceId: Int, private val list: List<Map<String, String>>
 ) : ArrayAdapter<Map<String, String>>(activity , layoutResourceId, list) {
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var row = convertView
         val holder: ViewHolder?
         if (row == null) {
@@ -53,7 +53,7 @@ class FontItemAdapter(val activity: Activity, private val layoutResourceId: Int,
 //        Log.i("fontDialog", "$position")
         RenderTask(context, holder, position).execute()
 
-        return row
+        return row!!
     }
 
     class ViewHolder {
