@@ -116,20 +116,18 @@
                                     android:text="@string/font_size_summary"
                                     style="@style/SettingsSummary" />
 
-                                <com.qhutch.elevationimageview.ElevationImageView
+                                <ImageView
                                     android:id="@+id/decreaseFont"
                                     android:src="@drawable/minus_6"
-                                    app:compatEvelation="5dp"
                                     android:layout_marginRight="6dp"
                                     android:padding="3dp"
                                     android:background="?attr/selectableItemBackgroundBorderless"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content" />
 
-                                <com.qhutch.elevationimageview.ElevationImageView
+                                <ImageView
                                     android:id="@+id/increaseFont"
                                     android:src="@drawable/plus_6"
-                                    app:compatEvelation="5dp"
                                     android:padding="3dp"
                                     android:background="?attr/selectableItemBackgroundBorderless"
                                     android:layout_width="wrap_content"
