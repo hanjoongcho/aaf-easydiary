@@ -282,6 +282,11 @@
         Added backup and recovery function using device storage\n
         Fixed an issue that caused some text to be truncated on calendars on some devices
     </string>
+    <string name="release_159">
+        v1.4.93 / 2019.08.29\n
+        User Experience (UX) Optimization\n
+        Bug fixes that crash abnormally when entering the configuration screen on older OS
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
