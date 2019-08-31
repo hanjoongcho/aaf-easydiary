@@ -338,16 +338,19 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content">
                                     <RadioButton
+                                        android:alpha="0.7"
                                         android:id="@+id/startSaturday"
                                         android:text="@string/calendar_start_day_saturday"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"/>
                                     <RadioButton
+                                        android:alpha="0.7"
                                         android:id="@+id/startSunday"
                                         android:text="@string/calendar_start_day_sunday"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"/>
                                     <RadioButton
+                                        android:alpha="0.7"
                                         android:id="@+id/startMonday"
                                         android:text="@string/calendar_start_day_monday"
                                         android:layout_width="wrap_content"
