@@ -348,6 +348,19 @@ class SettingsActivity : EasyDiaryActivity() {
         fontLineSpacing.setOnProgressChangedListener(bubbleSeekBarListener)
 
         progressContainer.setOnTouchListener { _, _ -> true }
+
+        calendarStartDay.setOnCheckedChangeListener { _, i ->
+            val flag = when (i) {
+                R.id.startMonday -> CALENDAR_START_DAY_MONDAY
+//                R.id.startTuesday -> CALENDAR_START_DAY_TUESDAY
+//                R.id.startWednesday -> CALENDAR_START_DAY_WEDNESDAY
+//                R.id.startThursday -> CALENDAR_START_DAY_THURSDAY
+//                R.id.startFriday -> CALENDAR_START_DAY_FRIDAY
+                R.id.startSaturday -> CALENDAR_START_DAY_SATURDAY
+                else -> CALENDAR_START_DAY_SUNDAY
+            }
+            config.calendarStartDay = flag
+        }
     }
 
     private val mOnClickListener = View.OnClickListener { view ->
@@ -584,6 +597,11 @@ class SettingsActivity : EasyDiaryActivity() {
         fingerprintSwitcher.isChecked = config.fingerprintLockEnable
         enableCardViewPolicySwitcher.isChecked = config.enableCardViewPolicy
         contentsSummarySwitcher.isChecked = config.enableContentsSummary
+        when (config.calendarStartDay) {
+            CALENDAR_START_DAY_MONDAY -> startMonday.isChecked = true
+            CALENDAR_START_DAY_SATURDAY -> startSaturday.isChecked = true
+            else -> startSunday.isChecked = true
+        }
     }
 
     private fun setupInvite() {

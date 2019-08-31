@@ -310,6 +310,52 @@
                                 style="@style/SettingsSummary" />
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <com.simplemobiletools.commons.views.MyTextView
+                                    android:text="@string/calendar_start_day_title"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    style="@style/SettingsTitle" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:orientation="vertical"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <com.simplemobiletools.commons.views.MyTextView
+                                    android:text="@string/calendar_start_day_summary"
+                                    style="@style/SettingsSummary" />
+                                <RadioGroup
+                                    android:id="@+id/calendarStartDay"
+                                    android:orientation="horizontal"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content">
+                                    <RadioButton
+                                        android:id="@+id/startSaturday"
+                                        android:text="@string/calendar_start_day_saturday"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"/>
+                                    <RadioButton
+                                        android:id="@+id/startSunday"
+                                        android:text="@string/calendar_start_day_sunday"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"/>
+                                    <RadioButton
+                                        android:id="@+id/startMonday"
+                                        android:text="@string/calendar_start_day_monday"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"/>
+                                </RadioGroup>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
                 </LinearLayout>
 
                 <io.github.aafactory.commons.views.LabelLayout
