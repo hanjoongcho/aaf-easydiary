@@ -419,4 +419,9 @@
     <string name="import_realm_title">日記を復元する</string>
     <string name="import_realm_description">添付の写真を除いて、データベースファイルをデバイスのストレージから回復します。</string>
     <string name="diary_item_count">+ %d</string>
+    <string name="calendar_start_day_title">Calendar start day</string>
+    <string name="calendar_start_day_summary">Set the start day of the week.</string>
+    <string name="calendar_start_day_sunday">Sunday</string>
+    <string name="calendar_start_day_monday">Monday</string>
+    <string name="calendar_start_day_saturday">Saturday</string>
 </resources>

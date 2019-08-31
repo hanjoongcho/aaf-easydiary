@@ -78,6 +78,7 @@ class CalendarActivity : EasyDiaryActivity() {
             args.putInt(CaldroidFragment.MONTH, cal.get(Calendar.MONTH) + 1)
             args.putInt(CaldroidFragment.YEAR, cal.get(Calendar.YEAR))
 //            args.putInt(CaldroidFragment.START_DAY_OF_WEEK, CaldroidFragment.MONDAY)
+            args.putInt(CaldroidFragment.START_DAY_OF_WEEK, config.calendarStartDay)
             args.putBoolean(CaldroidFragment.ENABLE_SWIPE, true)
             args.putBoolean(CaldroidFragment.SIX_WEEKS_IN_CALENDAR, true)
 

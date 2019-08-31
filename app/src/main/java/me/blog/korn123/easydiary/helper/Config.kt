@@ -91,4 +91,8 @@ class Config(context: Context) : BaseConfig(context) {
     var clearLegacyToken: Boolean
         get() = prefs.getBoolean(SETTING_CLEAR_LEGACY_TOKEN, false)
         set(clearLegacyToken) = prefs.edit().putBoolean(SETTING_CLEAR_LEGACY_TOKEN, clearLegacyToken).apply()
+
+    var calendarStartDay: Int
+        get() = prefs.getInt(SETTING_CALENDAR_START_DAY, CALENDAR_START_DAY_SUNDAY)
+        set(calendarStartDay) = prefs.edit().putInt(SETTING_CALENDAR_START_DAY, calendarStartDay).apply()
 }

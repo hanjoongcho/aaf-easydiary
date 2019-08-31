@@ -24,6 +24,7 @@ const val FINGERPRINT_ENCRYPT_DATA = "fingerprint_encrypt_data"
 const val FINGERPRINT_ENCRYPT_DATA_IV = "fingerprint_encrypt_data_iv"
 const val FINGERPRINT_AUTHENTICATION_FAIL_COUNT = "fingerprint_authentication_fail_count"
 const val ENABLE_CARD_VIEW_POLICY = "enable_card_view_policy"
+const val SETTING_CALENDAR_START_DAY = "setting_calendar_start_day"
 
 const val CUSTOM_FONTS_SUPPORT_LANGUAGE = "en|ko" // custom fonts supported language
 const val CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT = "NanumPen.ttf"
@@ -368,6 +369,14 @@ const val POSTCARD_TEXT_COLOR = "postcard_text_color"
 const val POSTCARD_BG_COLOR_VALUE = -0x1
 const val POSTCARD_TEXT_COLOR_VALUE = -0xb5b5b4
 const val POSTCARD_CROP_MODE = "postcard_crop_mode"
+
+const val CALENDAR_START_DAY_SUNDAY = 1
+const val CALENDAR_START_DAY_MONDAY = 2
+const val CALENDAR_START_DAY_TUESDAY = 3
+const val CALENDAR_START_DAY_WEDNESDAY = 4
+const val CALENDAR_START_DAY_THURSDAY = 5
+const val CALENDAR_START_DAY_FRIDAY = 6
+const val CALENDAR_START_DAY_SATURDAY = 7
 
 // Save Instance State
 const val LIST_URI_STRING = "list_uri_string"

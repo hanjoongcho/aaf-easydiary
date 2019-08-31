@@ -419,4 +419,9 @@
     <string name="import_realm_title">다이어리 복구하기</string>
     <string name="import_realm_description">첨부사진을 제외한 데이터베이스 파일을 디바이스 저장소로부터 복구합니다.</string>
     <string name="diary_item_count">+ %d</string>
+    <string name="calendar_start_day_title">캘린더 시작 요일</string>
+    <string name="calendar_start_day_summary">한 주의 시작요일을 설정합니다.</string>
+    <string name="calendar_start_day_sunday">일요일</string>
+    <string name="calendar_start_day_monday">월요일</string>
+    <string name="calendar_start_day_saturday">토요일</string>
 </resources>
