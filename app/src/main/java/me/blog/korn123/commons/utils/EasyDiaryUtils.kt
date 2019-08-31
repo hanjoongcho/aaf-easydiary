@@ -218,6 +218,6 @@ object EasyDiaryUtils {
     }
 
     fun summaryDiaryLabel(diaryDto: DiaryDto): String {
-        return diaryDto.contents?.let { it.split("\n")[0] }  ?: StringUtils.abbreviate(diaryDto.contents, 10)
+        return diaryDto.title ?: StringUtils.abbreviate(diaryDto.contents, 10)
     }
 }

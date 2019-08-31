@@ -898,12 +898,8 @@ class SettingsActivity : EasyDiaryActivity() {
         enableCardViewPolicySwitcher.isChecked = config.enableCardViewPolicy
         contentsSummarySwitcher.isChecked = config.enableContentsSummary
         when (config.calendarStartDay) {
-            R.id.startMonday -> startMonday.isChecked = true
-//            R.id.startTuesday -> startMonday.isChecked = true
-//            R.id.startWednesday -> startMonday.isChecked = true
-//            R.id.startThursday -> startMonday.isChecked = true
-//            R.id.startFriday -> startMonday.isChecked = true
-            R.id.startSaturday -> startSaturday.isChecked = true
+            CALENDAR_START_DAY_MONDAY -> startMonday.isChecked = true
+            CALENDAR_START_DAY_SATURDAY -> startSaturday.isChecked = true
             else -> startSunday.isChecked = true
         }
     }
