@@ -218,6 +218,6 @@ object EasyDiaryUtils {
     }
 
     fun summaryDiaryLabel(diaryDto: DiaryDto): String {
-        return diaryDto.title ?: StringUtils.abbreviate(diaryDto.contents, 10)
+        return if (!diaryDto.title.isNullOrEmpty()) diaryDto.title!! else StringUtils.abbreviate(diaryDto.contents, 10)
     }
 }
