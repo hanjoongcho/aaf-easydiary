@@ -87,7 +87,7 @@ class CaldroidItemAdapter(
 
         // Customize for selected dates
         if (selectedDates != null && selectedDates.indexOf(dateTime) != -1) {
-            cellView?.setBackgroundResource(R.drawable.bg_card_cell_select_selector)
+            cellView?.setBackgroundResource(R.drawable.bg_card_cell_select)
             if (dateTime == getToday()) {
                 calendarDate?.setBackgroundResource(R.drawable.bg_calendar_circle)
                 calendarDate?.setTextColor(Color.WHITE)
