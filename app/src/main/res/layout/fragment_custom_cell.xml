@@ -13,7 +13,6 @@
         android:layout_height="wrap_content">
         <me.blog.korn123.easydiary.views.CalendarItem
             tools:text="11"
-            android:background="@drawable/bg_calendar_circle"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:gravity="center"

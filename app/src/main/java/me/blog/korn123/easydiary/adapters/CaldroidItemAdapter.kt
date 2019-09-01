@@ -46,8 +46,9 @@ class CaldroidItemAdapter(
         val bottomPadding = cellView?.paddingBottom ?: 0
         val rightPadding = cellView?.paddingRight ?: 0
 
-        val tv1 = cellView?.findViewById<TextView>(R.id.calendarDate)
-        tv1?.setTextColor(Color.BLACK)
+        val calendarDate = cellView?.findViewById<TextView>(R.id.calendarDate)
+        calendarDate?.setBackgroundResource(0)
+        calendarDate?.setTextColor(Color.BLACK)
 
         // Get dateTime of this cell
         val dateTime = this.datetimeList[position]
@@ -55,7 +56,7 @@ class CaldroidItemAdapter(
 
         // Set color of the dates in previous / next month
         if (dateTime.month != month) {
-            tv1?.setTextColor(resources
+            calendarDate?.setTextColor(resources
                     .getColor(com.caldroid.R.color.caldroid_darker_gray))
         }
 
@@ -67,7 +68,7 @@ class CaldroidItemAdapter(
                 || maxDateTime != null && dateTime.gt(maxDateTime)
                 || disableDates != null && disableDates.indexOf(dateTime) != -1) {
 
-            tv1?.setTextColor(CaldroidFragment.disabledTextColor)
+            calendarDate?.setTextColor(CaldroidFragment.disabledTextColor)
             if (CaldroidFragment.disabledBackgroundDrawable == -1) {
                 cellView?.setBackgroundResource(com.caldroid.R.drawable.disable_cell)
             } else {
@@ -76,6 +77,8 @@ class CaldroidItemAdapter(
 
             if (dateTime == getToday()) {
                 cellView?.setBackgroundResource(com.caldroid.R.drawable.red_border_gray_bg)
+                calendarDate?.setBackgroundResource(R.drawable.bg_calendar_circle)
+                calendarDate?.setTextColor(Color.WHITE)
             }
 
         } else {
@@ -85,23 +88,27 @@ class CaldroidItemAdapter(
         // Customize for selected dates
         if (selectedDates != null && selectedDates.indexOf(dateTime) != -1) {
             cellView?.setBackgroundResource(R.drawable.bg_card_cell_select_selector)
-
-            tv1?.setTextColor(Color.BLACK)
-
+            if (dateTime == getToday()) {
+                calendarDate?.setBackgroundResource(R.drawable.bg_calendar_circle)
+                calendarDate?.setTextColor(Color.WHITE)
+            }
         } else {
+            cellView?.setBackgroundResource(R.drawable.bg_card_cell_default)
             shouldResetSelectedView = true
         }
 
         if (shouldResetDiabledView && shouldResetSelectedView) {
             // Customize for today
             if (dateTime == getToday()) {
-                cellView?.setBackgroundResource(R.drawable.bg_card_cell_today_selector)
+//                cellView?.setBackgroundResource(R.drawable.bg_card_cell_today_selector)
+                calendarDate?.setBackgroundResource(R.drawable.bg_calendar_circle)
+                calendarDate?.setTextColor(Color.WHITE)
             } else {
                 cellView?.setBackgroundResource(R.drawable.bg_card_cell_default)
             }
         }
 
-        tv1?.text = "${dateTime.day}"
+        calendarDate?.text = "${dateTime.day}"
 
         val dateString = dateTime.format("YYYY-MM-DD")
         val count = EasyDiaryDbHelper.countDiaryBy(dateString)
@@ -213,7 +220,7 @@ class CaldroidItemAdapter(
                 bottomPadding)
 
         // Set custom color if required
-        setCustomResources(dateTime, cellView, tv1)
+        setCustomResources(dateTime, cellView, calendarDate)
 
 //        (context as Activity).run {
 //            if (!isLandScape()) {
