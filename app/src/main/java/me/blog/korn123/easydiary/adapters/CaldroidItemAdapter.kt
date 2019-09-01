@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.adapters
 
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,66 +47,35 @@ class CaldroidItemAdapter(
         val bottomPadding = cellView?.paddingBottom ?: 0
         val rightPadding = cellView?.paddingRight ?: 0
 
-        val calendarDate = cellView?.findViewById<TextView>(R.id.calendarDate)
-        calendarDate?.setBackgroundResource(0)
-        calendarDate?.setTextColor(Color.BLACK)
-
         // Get dateTime of this cell
         val dateTime = this.datetimeList[position]
         val resources = context.resources
 
-        // Set color of the dates in previous / next month
-        if (dateTime.month != month) {
-            calendarDate?.setTextColor(resources
-                    .getColor(com.caldroid.R.color.caldroid_darker_gray))
+        val calendarDate = cellView?.findViewById<TextView>(R.id.calendarDate)
+        calendarDate?.setBackgroundResource(0)
+        when (dateTime.weekDay) {
+            1 -> calendarDate?.setTextColor(Color.RED)
+            7 -> calendarDate?.setTextColor(Color.BLUE)
+            else -> calendarDate?.setTextColor(Color.BLACK)
         }
 
-        var shouldResetDiabledView = false
-        var shouldResetSelectedView = false
-
-        // Customize for disabled dates and date outside min/max dates
-        if (minDateTime != null && dateTime.lt(minDateTime)
-                || maxDateTime != null && dateTime.gt(maxDateTime)
-                || disableDates != null && disableDates.indexOf(dateTime) != -1) {
-
-            calendarDate?.setTextColor(CaldroidFragment.disabledTextColor)
-            if (CaldroidFragment.disabledBackgroundDrawable == -1) {
-                cellView?.setBackgroundResource(com.caldroid.R.drawable.disable_cell)
-            } else {
-                cellView?.setBackgroundResource(CaldroidFragment.disabledBackgroundDrawable)
-            }
-
-            if (dateTime == getToday()) {
-                cellView?.setBackgroundResource(com.caldroid.R.drawable.red_border_gray_bg)
-                calendarDate?.setBackgroundResource(R.drawable.bg_calendar_circle)
-                calendarDate?.setTextColor(Color.WHITE)
-            }
-
+        if (dateTime.month != month) { // Set color of the dates in previous / next month
+            calendarDate?.alpha = 0.5F
         } else {
-            shouldResetDiabledView = true
+            calendarDate?.alpha = 1.0F
         }
 
         // Customize for selected dates
         if (selectedDates != null && selectedDates.indexOf(dateTime) != -1) {
             cellView?.setBackgroundResource(R.drawable.bg_card_cell_select)
-            if (dateTime == getToday()) {
-                calendarDate?.setBackgroundResource(R.drawable.bg_calendar_circle)
-                calendarDate?.setTextColor(Color.WHITE)
-            }
         } else {
             cellView?.setBackgroundResource(R.drawable.bg_card_cell_default)
-            shouldResetSelectedView = true
         }
 
-        if (shouldResetDiabledView && shouldResetSelectedView) {
-            // Customize for today
-            if (dateTime == getToday()) {
-//                cellView?.setBackgroundResource(R.drawable.bg_card_cell_today_selector)
-                calendarDate?.setBackgroundResource(R.drawable.bg_calendar_circle)
-                calendarDate?.setTextColor(Color.WHITE)
-            } else {
-                cellView?.setBackgroundResource(R.drawable.bg_card_cell_default)
-            }
+        // Today's symbol
+        if (dateTime == getToday()) {
+            calendarDate?.setBackgroundResource(R.drawable.bg_calendar_circle)
+            calendarDate?.setTextColor(Color.WHITE)
         }
 
         calendarDate?.text = "${dateTime.day}"
@@ -122,31 +92,6 @@ class CaldroidItemAdapter(
                 text = null
             }
         }
-
-//        var initWeather = false
-//        if (mDiaryList.size > 0) {
-//            for (diaryDto in mDiaryList) {
-//                if (diaryDto.weather > 0) {
-//                    initWeather = true
-//                    EasyDiaryUtils.initWeatherView(context, imageView1, diaryDto.weather)
-//                    break
-//                }
-//            }
-//            if (!initWeather) {
-//                imageView1?.visibility = View.GONE
-//                imageView1?.setImageResource(0)
-//            }
-//        } else {
-//            imageView1?.visibility = View.GONE
-//            imageView1?.setImageResource(0)
-//        }
-
-//        if (count > 0) {
-//            tv2?.text = count.toString() + parent.resources.getString(R.string.diary_count)
-//            tv2?.setTextColor(parent.resources.getColor(R.color.diaryCountText))
-//        } else {
-//            tv2?.text = null
-//        }
 
         when {
             mDiaryList.isEmpty() -> {
