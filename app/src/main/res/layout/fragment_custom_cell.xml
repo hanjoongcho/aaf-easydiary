@@ -8,27 +8,29 @@
     android:background="@drawable/bg_card_cell_default"
     android:padding="5dp"
     android:orientation="vertical">
-    <LinearLayout
-        android:orientation="horizontal"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <TextView
-            tools:text="1"
-            android:gravity="left"
+        <me.blog.korn123.easydiary.views.CalendarItem
+            tools:text="11"
+            android:background="@drawable/bg_calendar_circle"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:gravity="center"
+            android:textSize="10dp"
             android:id="@+id/calendarDate"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content" />
+            android:layout_width="13dp"
+            android:layout_height="13dp" />
 
         <me.blog.korn123.easydiary.views.CalendarItem
-            tools:text="1"
-            android:gravity="right"
+            tools:text="3"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             android:textSize="9dp"
             android:id="@+id/itemCount"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:id="@+id/item1"
