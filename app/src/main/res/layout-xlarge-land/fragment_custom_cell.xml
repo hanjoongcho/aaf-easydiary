@@ -18,16 +18,16 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:gravity="center"
-            android:textSize="@dimen/calendar_item_text_default"
+            android:textSize="@dimen/calendar_item_text_xlarge"
             android:id="@+id/calendarDate"
-            android:layout_width="13dp"
-            android:layout_height="13dp" />
+            android:layout_width="18dp"
+            android:layout_height="18dp" />
 
         <me.blog.korn123.easydiary.views.CalendarItem
             tools:text="3"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:textSize="@dimen/calendar_item_text_default"
+            android:textSize="@dimen/calendar_item_text_xlarge"
             android:id="@+id/itemCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -40,12 +40,12 @@
         android:layout_height="wrap_content">
         <ImageView
             tools:src="@drawable/ic_bolt"
-            android:layout_width="@dimen/calendar_item_symbol_default"
-            android:layout_height="@dimen/calendar_item_symbol_default" />
+            android:layout_width="@dimen/calendar_item_symbol_xlarge"
+            android:layout_height="@dimen/calendar_item_symbol_xlarge" />
 
         <me.blog.korn123.easydiary.views.CalendarItem
             android:maxLines="1"
-            android:textSize="@dimen/calendar_item_text_default"
+            android:textSize="@dimen/calendar_item_text_xlarge"
             android:layout_marginLeft="1dp"
             android:layout_marginStart="1dp"
             android:layout_width="match_parent"
@@ -57,12 +57,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
-            android:layout_width="@dimen/calendar_item_symbol_default"
-            android:layout_height="@dimen/calendar_item_symbol_default" />
+            android:layout_width="@dimen/calendar_item_symbol_xlarge"
+            android:layout_height="@dimen/calendar_item_symbol_xlarge" />
 
         <me.blog.korn123.easydiary.views.CalendarItem
             android:maxLines="1"
-            android:textSize="@dimen/calendar_item_text_default"
+            android:textSize="@dimen/calendar_item_text_xlarge"
             android:layout_marginLeft="1dp"
             android:layout_marginStart="1dp"
             android:layout_width="match_parent"
@@ -74,12 +74,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
-            android:layout_width="@dimen/calendar_item_symbol_default"
-            android:layout_height="@dimen/calendar_item_symbol_default" />
+            android:layout_width="@dimen/calendar_item_symbol_xlarge"
+            android:layout_height="@dimen/calendar_item_symbol_xlarge" />
 
         <me.blog.korn123.easydiary.views.CalendarItem
             android:maxLines="1"
-            android:textSize="@dimen/calendar_item_text_default"
+            android:textSize="@dimen/calendar_item_text_xlarge"
             android:layout_marginLeft="1dp"
             android:layout_marginStart="1dp"
             android:layout_width="match_parent"

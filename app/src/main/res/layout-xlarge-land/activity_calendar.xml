@@ -27,23 +27,28 @@
             android:padding="@dimen/card_layout_padding"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <androidx.cardview.widget.CardView
-                android:id="@+id/calendarCard"
-                android:layout_weight="1"
+            <ScrollView
+                android:background="@android:color/white"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content">
-                <LinearLayout
-                    android:id="@+id/calendar1"
+                android:layout_weight="6"
+                android:layout_height="match_parent">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/calendarCard"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:id="@+id/calendar1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </ScrollView>
 
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_weight="4"
                 android:layout_height="match_parent">
                 <ListView
                     android:layout_marginLeft="@dimen/card_layout_margin"
@@ -53,7 +58,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                 </ListView>
-                
+
                 <LinearLayout
                     android:gravity="center"
                     android:layout_width="match_parent"

@@ -9,4 +9,8 @@
     <dimen name="diary_symbol_height">32dp</dimen>
     <dimen name="diary_symbol_width_s">20dp</dimen>
     <dimen name="diary_symbol_height_s">20dp</dimen>
+    <dimen name="calendar_item_text_default">9dp</dimen>
+    <dimen name="calendar_item_text_xlarge">18dp</dimen>
+    <dimen name="calendar_item_symbol_default">8dp</dimen>
+    <dimen name="calendar_item_symbol_xlarge">15dp</dimen>
 </resources>
