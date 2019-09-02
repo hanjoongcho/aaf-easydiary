@@ -287,6 +287,11 @@
         User Experience (UX) Optimization\n
         Bug fixes that crash abnormally when entering the configuration screen on older OS
     </string>
+    <string name="release_160">
+        v1.4.94 / 2019.09.03\n
+        Added calendar weekday start setting\n
+        Fixed an issue that prevented the calendar from showing in tablet landscape
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
