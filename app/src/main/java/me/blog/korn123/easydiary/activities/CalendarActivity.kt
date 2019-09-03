@@ -2,6 +2,8 @@ package me.blog.korn123.easydiary.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -18,6 +20,7 @@ import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.DiaryDto
+import org.apache.commons.lang3.StringUtils
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -108,7 +111,17 @@ class CalendarActivity : EasyDiaryActivity() {
                 refreshList(date)
             }
 
-            override fun onChangeMonth(month: Int, year: Int) { }
+            override fun onChangeMonth(month: Int, year: Int) {
+                val MONTH_YEAR_FLAG = (android.text.format.DateUtils.FORMAT_SHOW_DATE
+                        or android.text.format.DateUtils.FORMAT_NO_MONTH_DAY or android.text.format.DateUtils.FORMAT_SHOW_YEAR)
+                val monthYearStringBuilder = StringBuilder(50)
+                val monthYearFormatter = Formatter(monthYearStringBuilder, Locale.getDefault())
+                val format = SimpleDateFormat("yyyyMM")
+                val dateTimeString = "$year${StringUtils.leftPad(month.toString(), 2, "0")}"
+                val parsedDate = format.parse(dateTimeString).time
+                val monthTitle = android.text.format.DateUtils.formatDateRange(this@CalendarActivity, monthYearFormatter, parsedDate, parsedDate, MONTH_YEAR_FLAG).toString()
+                supportActionBar?.subtitle = monthTitle.toUpperCase(Locale.getDefault())
+            }
             override fun onLongClickDate(date: Date?, view: View?) { }
             override fun onCaldroidViewCreated() { }
         }
@@ -130,6 +143,19 @@ class CalendarActivity : EasyDiaryActivity() {
         // TODO Auto-generated method stub
         super.onSaveInstanceState(outState)
         calendarFragment.saveStatesToKey(outState!!, "CALDROID_SAVED_STATE")
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.diary_calendar, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.previous -> calendarFragment.prevMonth()
+            R.id.next -> calendarFragment.nextMonth()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     fun refreshList(date: Date) {

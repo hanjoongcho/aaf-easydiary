@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:icon="@drawable/arrow_89"
+        android:id="@+id/previous"
+        android:orderInCategory="100"
+        android:title="@string/calendar_menu_previous"
+        app:showAsAction="always" />
+    <item
+        android:icon="@drawable/arrow_25"
+        android:id="@+id/next"
+        android:orderInCategory="100"
+        android:title="@string/calendar_menu_next"
+        app:showAsAction="always" />
+</menu>

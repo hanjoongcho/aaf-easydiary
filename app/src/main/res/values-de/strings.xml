@@ -429,4 +429,6 @@
     <string name="calendar_start_day_sunday">Sunday</string>
     <string name="calendar_start_day_monday">Monday</string>
     <string name="calendar_start_day_saturday">Saturday</string>
+    <string name="calendar_menu_previous">Previous</string>
+    <string name="calendar_menu_next">Next</string>
 </resources>

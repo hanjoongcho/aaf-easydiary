@@ -429,4 +429,6 @@
     <string name="calendar_start_day_sunday">日曜日</string>
     <string name="calendar_start_day_monday">月曜</string>
     <string name="calendar_start_day_saturday">土曜日</string>
+    <string name="calendar_menu_previous">Previous</string>
+    <string name="calendar_menu_next">Next</string>
 </resources>

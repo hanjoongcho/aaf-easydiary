@@ -429,4 +429,6 @@
     <string name="calendar_start_day_sunday">일요일</string>
     <string name="calendar_start_day_monday">월요일</string>
     <string name="calendar_start_day_saturday">토요일</string>
+    <string name="calendar_menu_previous">Previous</string>
+    <string name="calendar_menu_next">Next</string>
 </resources>
