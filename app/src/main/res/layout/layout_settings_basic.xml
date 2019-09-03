@@ -1,0 +1,337 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <io.github.aafactory.commons.views.LabelLayout
+        android:id="@+id/devMode"
+        android:layout_marginTop="5dp"
+        android:background="?attr/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:text="@string/preferences_category_settings"
+            style="@style/SettingsCategory" />
+    </io.github.aafactory.commons.views.LabelLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="@dimen/card_layout_padding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <androidx.cardview.widget.CardView
+            android:id="@+id/signOutGoogleOAuth"
+            android:visibility="gone"
+            style="@style/AppCard.Settings">
+            <LinearLayout
+                style="@style/LinearLayoutVertical">
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="Google Sign-Out for Android"
+                    style="@style/SettingsTitle" />
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="clear token..."
+                    style="@style/SettingsSummary" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/fontSetting"
+            style="@style/AppCard.Settings">
+            <LinearLayout
+                style="@style/LinearLayoutVertical">
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="@string/font_setting"
+                    style="@style/SettingsTitle" />
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:id="@+id/fontSettingSummary"
+                    style="@style/SettingsSummary" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            style="@style/AppCard.Settings">
+            <LinearLayout
+                style="@style/LinearLayoutVertical">
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="@string/font_line_spacing"
+                    style="@style/SettingsTitle" />
+                <com.xw.repo.BubbleSeekBar
+                    android:id="@+id/fontLineSpacing"
+                    app:bsb_track_color="?attr/colorPrimary"
+                    app:bsb_second_track_color="?attr/colorAccent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"/>
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:id="@+id/fontLineSpacingSummary"
+                    android:text="@string/font_line_spacing_summary"
+                    style="@style/SettingsSummary" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            style="@style/AppCard.Settings">
+            <LinearLayout
+                style="@style/LinearLayoutVertical">
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="@string/font_size_title"
+                    style="@style/SettingsTitle" />
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:paddingRight="6dp"
+                        android:width="0dp"
+                        android:layout_weight="1"
+                        android:text="@string/font_size_summary"
+                        style="@style/SettingsSummary" />
+
+                    <ImageView
+                        android:id="@+id/decreaseFont"
+                        android:src="@drawable/minus_6"
+                        android:layout_marginRight="6dp"
+                        android:padding="3dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <ImageView
+                        android:id="@+id/increaseFont"
+                        android:src="@drawable/plus_6"
+                        android:padding="3dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/addTtfFontSetting"
+            style="@style/AppCard.Settings">
+            <LinearLayout
+                style="@style/LinearLayoutVertical">
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="@string/add_ttf_fonts_title"
+                    style="@style/SettingsTitle" />
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="@string/add_ttf_fonts_summary"
+                    style="@style/SettingsSummary" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/primaryColor"
+            style="@style/AppCard.Settings">
+            <LinearLayout
+                style="@style/LinearLayoutVertical">
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:id="@+id/primaryColorTitle"
+                    android:text="@string/setting_primary_color_title"
+                    style="@style/SettingsTitle" />
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:id="@+id/setting_primary_color_title"
+                    android:text="@string/setting_primary_color_summary"
+                    style="@style/SettingsSummary" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/thumbnailSetting"
+            style="@style/AppCard.Settings">
+            <LinearLayout
+                style="@style/LinearLayoutVertical">
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="@string/thumbnail_setting_title"
+                    style="@style/SettingsTitle" />
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:id="@+id/thumbnailSettingSummary"
+                    android:text="@string/thumbnail_setting_summary"
+                    style="@style/SettingsSummary" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/contentsSummary"
+            style="@style/AppCard.Settings">
+            <LinearLayout
+                style="@style/LinearLayoutVertical">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:text="@string/contents_summary_title"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        style="@style/SettingsTitle" />
+                    <Switch
+                        android:id="@+id/contentsSummarySwitcher"
+                        android:clickable="false"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="@string/contents_summary_description"
+                    style="@style/SettingsSummary" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/enableCardViewPolicy"
+            style="@style/AppCard.Settings">
+            <LinearLayout
+                style="@style/LinearLayoutVertical">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:text="@string/enable_card_view_policy_title"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        style="@style/SettingsTitle" />
+                    <Switch
+                        android:id="@+id/enableCardViewPolicySwitcher"
+                        android:clickable="false"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="@string/enable_card_view_policy_summary"
+                    style="@style/SettingsSummary" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/multiPickerOption"
+            style="@style/AppCard.Settings">
+            <LinearLayout
+                style="@style/LinearLayoutVertical">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:text="@string/multi_picker_option_title"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        style="@style/SettingsTitle" />
+                    <Switch
+                        android:id="@+id/multiPickerOptionSwitcher"
+                        android:clickable="false"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="@string/multi_picker_option_summary"
+                    style="@style/SettingsSummary" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/boldStyleOption"
+            style="@style/AppCard.Settings">
+            <LinearLayout
+                style="@style/LinearLayoutVertical">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:text="@string/bold_style_option_title"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        style="@style/SettingsTitle" />
+                    <Switch
+                        android:id="@+id/boldStyleOptionSwitcher"
+                        android:clickable="false"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="@string/bold_style_option_summary"
+                    style="@style/SettingsSummary" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/sensitiveOption"
+            style="@style/AppCard.Settings">
+            <LinearLayout
+                style="@style/LinearLayoutVertical">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:text="@string/diary_search_keyword_case_sensitive_title"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        style="@style/SettingsTitle" />
+                    <Switch
+                        android:id="@+id/sensitiveOptionSwitcher"
+                        android:clickable="false"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="@string/diary_search_keyword_case_sensitive_summary"
+                    style="@style/SettingsSummary" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            style="@style/AppCard.Settings">
+            <LinearLayout
+                style="@style/LinearLayoutVertical">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:text="@string/calendar_start_day_title"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        style="@style/SettingsTitle" />
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:text="@string/calendar_start_day_summary"
+                        style="@style/SettingsSummary" />
+                    <RadioGroup
+                        android:id="@+id/calendarStartDay"
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <RadioButton
+                            android:alpha="0.7"
+                            android:id="@+id/startSaturday"
+                            android:text="@string/calendar_start_day_saturday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <RadioButton
+                            android:alpha="0.7"
+                            android:id="@+id/startSunday"
+                            android:text="@string/calendar_start_day_sunday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <RadioButton
+                            android:alpha="0.7"
+                            android:id="@+id/startMonday"
+                            android:text="@string/calendar_start_day_monday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </RadioGroup>
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+</LinearLayout>
+

@@ -1,0 +1,74 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <io.github.aafactory.commons.views.LabelLayout
+        android:background="?attr/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:text="@string/preferences_category_lock"
+            style="@style/SettingsCategory" />
+    </io.github.aafactory.commons.views.LabelLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="@dimen/card_layout_padding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <androidx.cardview.widget.CardView
+            android:id="@+id/appLockSetting"
+            style="@style/AppCard.Settings">
+            <LinearLayout
+                style="@style/LinearLayoutVertical">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:text="@string/pin_lock_title"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        style="@style/SettingsTitle" />
+                    <Switch
+                        android:id="@+id/appLockSettingSwitcher"
+                        android:clickable="false"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="@string/pin_lock_summary"
+                    style="@style/SettingsSummary" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/fingerprint"
+            style="@style/AppCard.Settings">
+            <LinearLayout
+                style="@style/LinearLayoutVertical">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:text="@string/fingerprint_lock_title"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        style="@style/SettingsTitle" />
+                    <Switch
+                        android:id="@+id/fingerprintSwitcher"
+                        android:clickable="false"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="@string/fingerprint_lock_summary"
+                    style="@style/SettingsSummary" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+</LinearLayout>
+

@@ -6,13 +6,11 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -34,6 +32,12 @@ import com.xw.repo.BubbleSeekBar
 import io.github.aafactory.commons.helpers.BaseConfig
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_settings.*
+import kotlinx.android.synthetic.main.layout_settings_app_info.*
+import kotlinx.android.synthetic.main.layout_settings_backup_gms.*
+import kotlinx.android.synthetic.main.layout_settings_backup_local.*
+import kotlinx.android.synthetic.main.layout_settings_basic.*
+import kotlinx.android.synthetic.main.layout_settings_lock.*
+import kotlinx.android.synthetic.main.layout_settings_progress.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils

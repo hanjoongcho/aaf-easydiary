@@ -18,6 +18,10 @@ import com.xw.repo.BubbleSeekBar
 import io.github.aafactory.commons.helpers.BaseConfig
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_settings_foss.*
+import kotlinx.android.synthetic.main.layout_settings_app_info.*
+import kotlinx.android.synthetic.main.layout_settings_backup_local.*
+import kotlinx.android.synthetic.main.layout_settings_basic.*
+import kotlinx.android.synthetic.main.layout_settings_lock.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
@@ -346,8 +350,6 @@ class SettingsActivity : EasyDiaryActivity() {
             override fun getProgressOnFinally(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float, fromUser: Boolean) {}
         }
         fontLineSpacing.setOnProgressChangedListener(bubbleSeekBarListener)
-
-        progressContainer.setOnTouchListener { _, _ -> true }
 
         calendarStartDay.setOnCheckedChangeListener { _, i ->
             val flag = when (i) {

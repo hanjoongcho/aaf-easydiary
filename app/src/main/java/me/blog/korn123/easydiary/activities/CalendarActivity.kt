@@ -112,14 +112,14 @@ class CalendarActivity : EasyDiaryActivity() {
             }
 
             override fun onChangeMonth(month: Int, year: Int) {
-                val MONTH_YEAR_FLAG = (android.text.format.DateUtils.FORMAT_SHOW_DATE
+                val monthYearFlag = (android.text.format.DateUtils.FORMAT_SHOW_DATE
                         or android.text.format.DateUtils.FORMAT_NO_MONTH_DAY or android.text.format.DateUtils.FORMAT_SHOW_YEAR)
                 val monthYearStringBuilder = StringBuilder(50)
                 val monthYearFormatter = Formatter(monthYearStringBuilder, Locale.getDefault())
-                val format = SimpleDateFormat("yyyyMM")
+                val format = SimpleDateFormat("yyyyMM", Locale.getDefault())
                 val dateTimeString = "$year${StringUtils.leftPad(month.toString(), 2, "0")}"
                 val parsedDate = format.parse(dateTimeString).time
-                val monthTitle = android.text.format.DateUtils.formatDateRange(this@CalendarActivity, monthYearFormatter, parsedDate, parsedDate, MONTH_YEAR_FLAG).toString()
+                val monthTitle = android.text.format.DateUtils.formatDateRange(this@CalendarActivity, monthYearFormatter, parsedDate, parsedDate, monthYearFlag).toString()
                 supportActionBar?.subtitle = monthTitle.toUpperCase(Locale.getDefault())
             }
             override fun onLongClickDate(date: Date?, view: View?) { }
