@@ -8,8 +8,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
@@ -63,7 +65,13 @@ class TimelineActivity : EasyDiaryActivity() {
         closeToolbar.setOnClickListener {
             toggleFilterView(false)
         }
-        filterView.setOnTouchListener { _, _ -> true }
+        filterView.setOnTouchListener { _, motionEvent ->
+            if (motionEvent.action == MotionEvent.ACTION_UP) {
+                Log.i("aaft", motionEvent.action.toString())
+//                toggleFilterView(false)
+            }
+            true
+        }
 
         mDatePickerDialog = DatePickerDialog(this, mStartDateListener, mYear, mMonth - 1, mDayOfMonth)
         startDatePicker.setOnClickListener { mDatePickerDialog.show() }
