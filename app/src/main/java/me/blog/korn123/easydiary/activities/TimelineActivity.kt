@@ -1,5 +1,7 @@
 package me.blog.korn123.easydiary.activities
 
+import android.animation.ObjectAnimator
+import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -11,13 +13,17 @@ import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
+import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_timeline_diary.*
+import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.TimelineItemAdapter
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
+import org.apache.commons.lang3.StringUtils
+import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -28,6 +34,10 @@ class TimelineActivity : EasyDiaryActivity() {
     private var mTimelineItemAdapter: TimelineItemAdapter? = null
     private var mDiaryList: ArrayList<DiaryDto> = arrayListOf()
     private var mReverseSelection = false
+    private lateinit var mDatePickerDialog: DatePickerDialog
+    private var mYear = Integer.valueOf(DateUtils.getCurrentDateTime(DateUtils.YEAR_PATTERN))
+    private var mMonth = Integer.valueOf(DateUtils.getCurrentDateTime(DateUtils.MONTH_PATTERN))
+    private var mDayOfMonth = Integer.valueOf(DateUtils.getCurrentDateTime(DateUtils.DAY_PATTERN))
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,10 +52,38 @@ class TimelineActivity : EasyDiaryActivity() {
         timelineList.adapter = mTimelineItemAdapter
         
         setupTimelineSearch()
+
+        EasyDiaryUtils.changeDrawableIconColor(this, config.primaryColor, R.drawable.calendar_4_w)
+
         insertDiaryButton.setOnClickListener { _ ->
             val createDiary = Intent(this@TimelineActivity, DiaryInsertActivity::class.java)
             TransitionHelper.startActivityWithTransition(this@TimelineActivity, createDiary)
         }
+
+        closeToolbar.setOnClickListener {
+            toggleFilterView(false)
+        }
+        filterView.setOnTouchListener { _, _ -> true }
+
+        mDatePickerDialog = DatePickerDialog(this, mStartDateListener, mYear, mMonth - 1, mDayOfMonth)
+        startDatePicker.setOnClickListener { mDatePickerDialog.show() }
+    }
+
+    private var mStartDateListener: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+        mYear = year
+        mMonth = month + 1
+        mDayOfMonth = dayOfMonth
+        val format = SimpleDateFormat("yyyyMMdd")
+        val dateTimeString = String.format(
+                "%d%s%s",
+                mYear,
+                StringUtils.leftPad(mMonth.toString(), 2, "0"),
+                StringUtils.leftPad(mDayOfMonth.toString(), 2, "0")
+        )
+        val parsedDate = format.parse(dateTimeString)
+        val currentTimeMillis = parsedDate.time
+        startDate.text = DateUtils.getFullPatternDate(currentTimeMillis)
+        refreshList(null, currentTimeMillis)
     }
 
     override fun onResume() {
@@ -72,16 +110,26 @@ class TimelineActivity : EasyDiaryActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.search -> {
-                toolbar.visibility = View.GONE
-                searchViewContainer.visibility = View.VISIBLE
-                searchView.requestFocus()
-                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.showSoftInput(searchView, InputMethodManager.SHOW_IMPLICIT)
+                toggleFilterView(true)
+//                toolbar.visibility = View.GONE
+//                searchViewContainer.visibility = View.VISIBLE
+//                searchView.requestFocus()
+//                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//                imm.showSoftInput(searchView, InputMethodManager.SHOW_IMPLICIT)
             }
         }
         return super.onOptionsItemSelected(item)
     }
-    
+
+    private fun toggleFilterView(isVisible: Boolean) {
+        val height = if (isVisible) 0F else filterView.height.toFloat().unaryMinus()
+
+        ObjectAnimator.ofFloat(filterView, "translationY", height).apply {
+            duration = 1000
+            start()
+        }
+    }
+
     private fun setupTimelineSearch() {
         timelineList.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
             val diaryDto = adapterView.adapter.getItem(i) as DiaryDto
@@ -116,10 +164,10 @@ class TimelineActivity : EasyDiaryActivity() {
         })
     }
     
-    private fun refreshList(query: String? = null) {
+    private fun refreshList(query: String? = null, startTimeMillis: Long = 0) {
         mDiaryList.run {
             clear()
-            addAll(EasyDiaryDbHelper.readDiary(query, config.diarySearchQueryCaseSensitive))
+            addAll(EasyDiaryDbHelper.readDiary(query, config.diarySearchQueryCaseSensitive, startTimeMillis))
             reverse()
         }
         mTimelineItemAdapter?.notifyDataSetChanged()

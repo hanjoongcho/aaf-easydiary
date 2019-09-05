@@ -7,7 +7,10 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.os.Bundle
+import android.os.PersistableBundle
 import android.provider.MediaStore
 import android.speech.RecognizerIntent
 import android.text.format.DateFormat
@@ -64,6 +67,11 @@ abstract class EditActivity : EasyDiaryActivity() {
     protected var mMinute = Integer.valueOf(DateUtils.getCurrentDateTime("mm"))
     protected var mSecond = Integer.valueOf(DateUtils.getCurrentDateTime("ss"))
     protected var mSelectedItemPosition = 0
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        EasyDiaryUtils.changeDrawableIconColor(this, Color.WHITE, R.drawable.calendar_4_w)
+    }
 
     fun toggleSimpleLayout() {
         when (photoContainerScrollView.visibility) {

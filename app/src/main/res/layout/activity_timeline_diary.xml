@@ -2,6 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <com.google.android.material.appbar.AppBarLayout
@@ -55,7 +56,89 @@
             android:id="@+id/timelineList"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        </ListView>    
+        </ListView>
+    </LinearLayout>
+
+    <LinearLayout
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:translationY="0dp"
+        android:background="@android:color/white"
+        android:id="@+id/filterView"
+        android:padding="20dp"
+        android:orientation="vertical"
+        android:translationY="-500dp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="300dp">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_weight="3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:padding="3dp"
+                    android:text="시작일"
+                    android:textColor="@android:color/white"
+                    android:background="?attr/colorPrimary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <TextView
+                android:id="@+id/startDate"
+                android:text="없음"
+                android:layout_weight="7"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+            <ImageView
+                style="@style/image_view_custom_toolbar_icon"
+                android:id="@+id/startDatePicker"
+                app:srcCompat="@drawable/calendar_4_w"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_weight="3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:padding="3dp"
+                    android:text="종료일"
+                    android:textColor="@android:color/white"
+                    android:background="?attr/colorPrimary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <TextView
+                android:text="없음"
+                android:layout_weight="7"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+            <ImageView
+                style="@style/image_view_custom_toolbar_icon"
+                app:srcCompat="@drawable/calendar_4_w"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+        <LinearLayout
+            android:gravity="right|bottom"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                style="@style/image_view_custom_toolbar_icon"
+                android:id="@+id/closeToolbar"
+                android:text="닫기"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
     </LinearLayout>
 
     <com.simplemobiletools.commons.views.MyFloatingActionButton
