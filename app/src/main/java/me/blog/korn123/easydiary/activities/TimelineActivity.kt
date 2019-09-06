@@ -22,6 +22,7 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.TimelineItemAdapter
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import java.util.*
@@ -83,6 +84,18 @@ class TimelineActivity : EasyDiaryActivity() {
         mEDatePickerDialog = DatePickerDialog(this, mEndDateListener, mYear, mMonth - 1, mDayOfMonth)
         startDatePicker.setOnClickListener { mSDatePickerDialog.show() }
         endDatePicker.setOnClickListener { mEDatePickerDialog.show() }
+
+        query.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+                refreshList(charSequence.toString(), mStartMillis, mEndMillis)
+            }
+
+            override fun afterTextChanged(editable: Editable) {}
+        })
+
+        initTextSize(filterView, this)
     }
     
     private var mStartDateListener: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
@@ -135,7 +148,12 @@ class TimelineActivity : EasyDiaryActivity() {
     private fun toggleFilterView(isVisible: Boolean) {
         mFirstTouch = 0F
         val height = if (isVisible) 0F else filterView.height.toFloat().unaryMinus()
-
+        if (!isVisible) {
+            this.currentFocus?.let { focusView ->
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(focusView.windowToken, 0)
+            }
+        }
         ObjectAnimator.ofFloat(filterView, "translationY", height).apply {
             duration = 700
             start()

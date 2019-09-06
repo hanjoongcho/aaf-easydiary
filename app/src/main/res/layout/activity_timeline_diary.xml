@@ -132,6 +132,36 @@
                 android:layout_height="wrap_content"/>
         </LinearLayout>
         <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_weight="3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:padding="3dp"
+                    android:text="검색어"
+                    android:textColor="@android:color/white"
+                    android:background="?attr/colorPrimary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <com.simplemobiletools.commons.views.MyEditText
+                android:id="@+id/query"
+                android:hint="검색어를 입력하세요."
+                android:layout_weight="7"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+            <ImageView
+                android:visibility="invisible"
+                style="@style/image_view_custom_toolbar_icon"
+                app:srcCompat="@drawable/calendar_4_w"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+        <LinearLayout
             android:gravity="right"
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
