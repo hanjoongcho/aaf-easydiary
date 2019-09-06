@@ -40,6 +40,7 @@ class TimelineActivity : EasyDiaryActivity() {
     private var mYear = Integer.valueOf(DateUtils.getCurrentDateTime(DateUtils.YEAR_PATTERN))
     private var mMonth = Integer.valueOf(DateUtils.getCurrentDateTime(DateUtils.MONTH_PATTERN))
     private var mDayOfMonth = Integer.valueOf(DateUtils.getCurrentDateTime(DateUtils.DAY_PATTERN))
+    private var mFirstTouch = 0F
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,10 +66,13 @@ class TimelineActivity : EasyDiaryActivity() {
         closeToolbar.setOnClickListener {
             toggleFilterView(false)
         }
+        
         filterView.setOnTouchListener { _, motionEvent ->
-            if (motionEvent.action == MotionEvent.ACTION_UP) {
-                Log.i("aaft", motionEvent.action.toString())
-//                toggleFilterView(false)
+            if (mFirstTouch == 0F) mFirstTouch = motionEvent.y
+                    
+            Log.i("aaf-t", "${motionEvent.action} ${motionEvent.actionIndex} ${motionEvent.y}")
+            if (motionEvent.action == MotionEvent.ACTION_UP && (mFirstTouch - motionEvent.y > 200)) {
+                toggleFilterView(false)
             }
             true
         }
@@ -130,6 +134,7 @@ class TimelineActivity : EasyDiaryActivity() {
     }
 
     private fun toggleFilterView(isVisible: Boolean) {
+        mFirstTouch = 0F
         val height = if (isVisible) 0F else filterView.height.toFloat().unaryMinus()
 
         ObjectAnimator.ofFloat(filterView, "translationY", height).apply {

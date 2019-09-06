@@ -62,6 +62,7 @@
     <LinearLayout
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:translationY="0dp"
+        android:clickable="true"
         android:background="@android:color/white"
         android:id="@+id/filterView"
         android:padding="20dp"
