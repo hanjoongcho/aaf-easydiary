@@ -68,7 +68,7 @@ class TimelineActivity : EasyDiaryActivity() {
         }
         
         filterView.setOnTouchListener { _, motionEvent ->
-            if (mFirstTouch == 0F) mFirstTouch = motionEvent.y
+            if (mFirstTouch == 0F || mFirstTouch < motionEvent.y) mFirstTouch = motionEvent.y
                     
             Log.i("aaf-t", "${motionEvent.action} ${motionEvent.actionIndex} ${motionEvent.y}")
             if (motionEvent.action == MotionEvent.ACTION_UP && (mFirstTouch - motionEvent.y > 200)) {
