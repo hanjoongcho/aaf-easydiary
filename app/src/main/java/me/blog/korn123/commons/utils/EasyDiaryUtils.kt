@@ -220,4 +220,12 @@ object EasyDiaryUtils {
     fun summaryDiaryLabel(diaryDto: DiaryDto): String {
         return if (!diaryDto.title.isNullOrEmpty()) diaryDto.title!! else StringUtils.abbreviate(diaryDto.contents, 10)
     }
+
+    fun datePickerToTimeMillis(dayOfMonth: Int, month: Int, year: Int): Long {
+        val cal = Calendar.getInstance()
+        cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+        cal.set(Calendar.MONTH, month)
+        cal.set(Calendar.YEAR, year)
+        return cal.timeInMillis
+    }
 }

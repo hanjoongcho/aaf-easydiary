@@ -50,14 +50,17 @@ object EasyDiaryDbHelper {
         }
     }
 
-    fun readDiary(query: String?, isSensitive: Boolean = false, startTimeMillis: Long = 0): ArrayList<DiaryDto> {
+    fun readDiary(query: String?, isSensitive: Boolean = false, startTimeMillis: Long = 0, endTimeMillis: Long = 0): ArrayList<DiaryDto> {
         val mRealmInstance = Realm.getInstance(mDiaryConfig)
         val results: RealmResults<DiaryDto> = when (StringUtils.isEmpty(query)) {
             true -> {
-                when (startTimeMillis > 0) {
-                    true -> mRealmInstance.where(DiaryDto::class.java).greaterThanOrEqualTo("currentTimeMillis", startTimeMillis).findAll().sort(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
-                    false -> mRealmInstance.where(DiaryDto::class.java).findAll().sort(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
+                when {
+                    startTimeMillis > 0 && endTimeMillis > 0 -> mRealmInstance.where(DiaryDto::class.java).between("currentTimeMillis", startTimeMillis, endTimeMillis).findAll().sort(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
+                    startTimeMillis > 0 -> mRealmInstance.where(DiaryDto::class.java).greaterThanOrEqualTo("currentTimeMillis", startTimeMillis).findAll().sort(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
+                    endTimeMillis > 0 -> mRealmInstance.where(DiaryDto::class.java).lessThanOrEqualTo("currentTimeMillis", endTimeMillis).findAll().sort(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
+                    else -> mRealmInstance.where(DiaryDto::class.java).findAll().sort(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
                 }
+                
             }
             false -> {
                 if (isSensitive) {

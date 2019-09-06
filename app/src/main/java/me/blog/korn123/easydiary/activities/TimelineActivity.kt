@@ -24,23 +24,25 @@ import me.blog.korn123.easydiary.adapters.TimelineItemAdapter
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
-import org.apache.commons.lang3.StringUtils
-import java.text.SimpleDateFormat
 import java.util.*
+
 
 /**
  * Created by hanjoong on 2017-07-16.
  */
 
 class TimelineActivity : EasyDiaryActivity() {
+    private lateinit var mSDatePickerDialog: DatePickerDialog
+    private lateinit var mEDatePickerDialog: DatePickerDialog
     private var mTimelineItemAdapter: TimelineItemAdapter? = null
     private var mDiaryList: ArrayList<DiaryDto> = arrayListOf()
     private var mReverseSelection = false
-    private lateinit var mDatePickerDialog: DatePickerDialog
     private var mYear = Integer.valueOf(DateUtils.getCurrentDateTime(DateUtils.YEAR_PATTERN))
     private var mMonth = Integer.valueOf(DateUtils.getCurrentDateTime(DateUtils.MONTH_PATTERN))
     private var mDayOfMonth = Integer.valueOf(DateUtils.getCurrentDateTime(DateUtils.DAY_PATTERN))
     private var mFirstTouch = 0F
+    private var mStartMillis = 0L
+    private var mEndMillis = 0L
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,25 +79,22 @@ class TimelineActivity : EasyDiaryActivity() {
             true
         }
 
-        mDatePickerDialog = DatePickerDialog(this, mStartDateListener, mYear, mMonth - 1, mDayOfMonth)
-        startDatePicker.setOnClickListener { mDatePickerDialog.show() }
+        mSDatePickerDialog = DatePickerDialog(this, mStartDateListener, mYear, mMonth - 1, mDayOfMonth)
+        mEDatePickerDialog = DatePickerDialog(this, mEndDateListener, mYear, mMonth - 1, mDayOfMonth)
+        startDatePicker.setOnClickListener { mSDatePickerDialog.show() }
+        endDatePicker.setOnClickListener { mEDatePickerDialog.show() }
     }
-
-    private var mStartDateListener: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-        mYear = year
-        mMonth = month + 1
-        mDayOfMonth = dayOfMonth
-        val format = SimpleDateFormat("yyyyMMdd")
-        val dateTimeString = String.format(
-                "%d%s%s",
-                mYear,
-                StringUtils.leftPad(mMonth.toString(), 2, "0"),
-                StringUtils.leftPad(mDayOfMonth.toString(), 2, "0")
-        )
-        val parsedDate = format.parse(dateTimeString)
-        val currentTimeMillis = parsedDate.time
-        startDate.text = DateUtils.getFullPatternDate(currentTimeMillis)
-        refreshList(null, currentTimeMillis)
+    
+    private var mStartDateListener: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+        mStartMillis = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year)
+        startDate.text = DateUtils.getFullPatternDate(mStartMillis)
+        refreshList(null, mStartMillis, mEndMillis)
+    }
+    
+    private var mEndDateListener: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+        mEndMillis = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year)
+        endDate.text = DateUtils.getFullPatternDate(mEndMillis)
+        refreshList(null, mStartMillis, mEndMillis)
     }
 
     override fun onResume() {
@@ -138,7 +137,7 @@ class TimelineActivity : EasyDiaryActivity() {
         val height = if (isVisible) 0F else filterView.height.toFloat().unaryMinus()
 
         ObjectAnimator.ofFloat(filterView, "translationY", height).apply {
-            duration = 1000
+            duration = 700
             start()
         }
     }
@@ -177,10 +176,10 @@ class TimelineActivity : EasyDiaryActivity() {
         })
     }
     
-    private fun refreshList(query: String? = null, startTimeMillis: Long = 0) {
+    private fun refreshList(query: String? = null, startTimeMillis: Long = 0, endTimeMillis: Long = 0) {
         mDiaryList.run {
             clear()
-            addAll(EasyDiaryDbHelper.readDiary(query, config.diarySearchQueryCaseSensitive, startTimeMillis))
+            addAll(EasyDiaryDbHelper.readDiary(query, config.diarySearchQueryCaseSensitive, startTimeMillis, endTimeMillis))
             reverse()
         }
         mTimelineItemAdapter?.notifyDataSetChanged()

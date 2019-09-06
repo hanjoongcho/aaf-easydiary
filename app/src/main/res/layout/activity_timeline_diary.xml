@@ -70,7 +70,7 @@
         android:translationY="-500dp"
         android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="300dp">
+        android:layout_height="wrap_content">
         <LinearLayout
             android:orientation="horizontal"
             android:gravity="center"
@@ -119,20 +119,23 @@
                     android:layout_height="wrap_content"/>
             </LinearLayout>
             <TextView
+                android:id="@+id/endDate"
                 android:text="없음"
                 android:layout_weight="7"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"/>
             <ImageView
                 style="@style/image_view_custom_toolbar_icon"
+                android:id="@+id/endDatePicker"
                 app:srcCompat="@drawable/calendar_4_w"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
         <LinearLayout
-            android:gravity="right|bottom"
+            android:gravity="right"
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
             <TextView
                 style="@style/image_view_custom_toolbar_icon"
                 android:id="@+id/closeToolbar"
