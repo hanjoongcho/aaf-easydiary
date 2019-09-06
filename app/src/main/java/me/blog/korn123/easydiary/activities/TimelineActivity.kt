@@ -17,6 +17,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_timeline_diary.*
+import kotlinx.android.synthetic.main.layout_timeline_filter.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
@@ -74,7 +75,7 @@ class TimelineActivity : EasyDiaryActivity() {
             if (mFirstTouch == 0F || mFirstTouch < motionEvent.y) mFirstTouch = motionEvent.y
                     
             Log.i("aaf-t", "${motionEvent.action} ${motionEvent.actionIndex} ${motionEvent.y}")
-            if (motionEvent.action == MotionEvent.ACTION_UP && (mFirstTouch - motionEvent.y > 200)) {
+            if (motionEvent.action == MotionEvent.ACTION_UP && (mFirstTouch - motionEvent.y > 100)) {
                 toggleFilterView(false)
             }
             true
@@ -94,6 +95,14 @@ class TimelineActivity : EasyDiaryActivity() {
 
             override fun afterTextChanged(editable: Editable) {}
         })
+
+        clearFilter.setOnClickListener {
+            mStartMillis = 0L
+            mEndMillis = 0L
+            startDate.text = null
+            endDate.text = null
+            refreshList()
+        }
 
         initTextSize(filterView, this)
     }

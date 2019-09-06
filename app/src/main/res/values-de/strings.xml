@@ -431,4 +431,12 @@
     <string name="calendar_start_day_saturday">Saturday</string>
     <string name="calendar_menu_previous">Previous</string>
     <string name="calendar_menu_next">Next</string>
+    <string name="filter_start_date">Start Date</string>
+    <string name="filter_start_date_hint">Please enter a start date.</string>
+    <string name="filter_end_date">End Date</string>
+    <string name="filter_end_date_hint">Please enter an end date.</string>
+    <string name="filter_search_word">Search Word</string>
+    <string name="filter_search_word_hint">Please enter your search term.</string>
+    <string name="filter_clear">Reset filter</string>
+    <string name="filter_close">Close</string>
 </resources>

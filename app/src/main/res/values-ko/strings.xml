@@ -431,4 +431,12 @@
     <string name="calendar_start_day_saturday">토요일</string>
     <string name="calendar_menu_previous">Previous</string>
     <string name="calendar_menu_next">Next</string>
+    <string name="filter_start_date">시작일</string>
+    <string name="filter_start_date_hint">시작일을 입력하세요.</string>
+    <string name="filter_end_date">종료일</string>
+    <string name="filter_end_date_hint">종료일을 입력하세요.</string>
+    <string name="filter_search_word">검색어</string>
+    <string name="filter_search_word_hint">검색어를 입력하세요.</string>
+    <string name="filter_clear">필터 초기화</string>
+    <string name="filter_close">닫기</string>
 </resources>

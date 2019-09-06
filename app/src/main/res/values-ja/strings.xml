@@ -431,4 +431,12 @@
     <string name="calendar_start_day_saturday">土曜日</string>
     <string name="calendar_menu_previous">Previous</string>
     <string name="calendar_menu_next">Next</string>
+    <string name="filter_start_date">開始日</string>
+    <string name="filter_start_date_hint">開始日を入力してください。</string>
+    <string name="filter_end_date">終了日</string>
+    <string name="filter_end_date_hint">終了日を入力してください。</string>
+    <string name="filter_search_word">検索ワード</string>
+    <string name="filter_search_word_hint">検索語を入力してください。</string>
+    <string name="filter_clear">フィルタの初期化</string>
+    <string name="filter_close">閉じる</string>
 </resources>
