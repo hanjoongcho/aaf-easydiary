@@ -39,15 +39,9 @@ import java.util.*
 
 class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     private var mRecognizerIntent: Intent? = null
-
-    private var mCurrentTimeMillis: Long = 0
-
     private var mDiaryMainItemAdapter: DiaryMainItemAdapter? = null
-
     private var mDiaryList: MutableList<DiaryDto>? = null
-
     private var mShowcaseIndex = 0
-
     private var mShowcaseView: ShowcaseView? = null
 
     override fun getLayoutResId(): Int {
@@ -79,7 +73,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             finish()
         }
         
-        mCurrentTimeMillis = System.currentTimeMillis()
         setSupportActionBar(toolbar)
         supportActionBar?.run {
             title = getString(R.string.read_diary_title)
@@ -321,15 +314,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             val diaryDto = adapterView.adapter.getItem(i) as DiaryDto
             showAlertDialog("Do you want to copy the selected diary?",
                     DialogInterface.OnClickListener { _, _ ->
-                        val copyItem = DiaryDto(
-                                -1,
-                                mCurrentTimeMillis,
-                                diaryDto.title ?: "",
-                                diaryDto.contents ?: "",
-                                diaryDto.weather,
-                                diaryDto.isAllDay
-                        )
-                        copyItem.photoUris = diaryDto.photoUris
+                        val copyItem = EasyDiaryDbHelper.getInstance().copyFromRealm(diaryDto)
+                        copyItem.currentTimeMillis = System.currentTimeMillis()
+                        copyItem.updateDateString()
                         EasyDiaryDbHelper.insertDiary(copyItem)
                         refreshList()
                         Handler().post { diaryListView.setSelection(0) }
@@ -373,22 +360,22 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     private fun initSampleData() {
         EasyDiaryDbHelper.insertDiary(DiaryDto(
                 -1,
-                this.mCurrentTimeMillis - 395000000L, getString(R.string.sample_diary_title_1), getString(R.string.sample_diary_1),
+                System.currentTimeMillis() - 395000000L, getString(R.string.sample_diary_title_1), getString(R.string.sample_diary_1),
                 1
         ))
         EasyDiaryDbHelper.insertDiary(DiaryDto(
                 -1,
-                this.mCurrentTimeMillis - 263000000L, getString(R.string.sample_diary_title_2), getString(R.string.sample_diary_2),
+                System.currentTimeMillis() - 263000000L, getString(R.string.sample_diary_title_2), getString(R.string.sample_diary_2),
                 2
         ))
         EasyDiaryDbHelper.insertDiary(DiaryDto(
                 -1,
-                this.mCurrentTimeMillis - 132000000L, getString(R.string.sample_diary_title_3), getString(R.string.sample_diary_3),
+                System.currentTimeMillis() - 132000000L, getString(R.string.sample_diary_title_3), getString(R.string.sample_diary_3),
                 3
         ))
         EasyDiaryDbHelper.insertDiary(DiaryDto(
                 -1,
-                this.mCurrentTimeMillis - 4000000L, getString(R.string.sample_diary_title_4), getString(R.string.sample_diary_4),
+                System.currentTimeMillis() - 4000000L, getString(R.string.sample_diary_title_4), getString(R.string.sample_diary_4),
                 4
         ))
     }

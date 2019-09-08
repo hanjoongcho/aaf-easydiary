@@ -60,4 +60,8 @@ open class DiaryDto : RealmObject {
         this.weather = weather
         this.isAllDay = isAllDay
     }
+
+    fun updateDateString() {
+        this.dateString = DateUtils.timeMillisToDateTime(this.currentTimeMillis, DateUtils.DATE_PATTERN_DASH)
+    }
 }
