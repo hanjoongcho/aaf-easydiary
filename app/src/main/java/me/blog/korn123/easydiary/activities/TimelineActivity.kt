@@ -41,7 +41,6 @@ class TimelineActivity : EasyDiaryActivity() {
     private lateinit var mEDatePickerDialog: DatePickerDialog
     private var mTimelineItemAdapter: TimelineItemAdapter? = null
     private var mDiaryList: ArrayList<DiaryDto> = arrayListOf()
-    private var mUseSavedState = false
     private var mFirstTouch = 0F
 
     companion object {
@@ -82,8 +81,6 @@ class TimelineActivity : EasyDiaryActivity() {
                 moveListViewScrollToBottom()
             }
             else -> {
-                mUseSavedState = true
-
                 val filterSYear = savedInstanceState.getInt(FILTER_START_YEAR, YEAR)
                 val filterSMonth = savedInstanceState.getInt(FILTER_START_MONTH, MONTH)
                 val filterSDate = savedInstanceState.getInt(FILTER_START_DATE, DAY_OF_MONTH)
@@ -102,16 +99,20 @@ class TimelineActivity : EasyDiaryActivity() {
                 mSDatePickerDialog = DatePickerDialog(this, mStartDateListener, filterSYear, filterSMonth, filterSDate)
                 mEDatePickerDialog = DatePickerDialog(this, mEndDateListener, filterEYear, filterEMonth, filterEDate)
 
-                val itemIndex = EasyDiaryUtils.sequenceToPageIndex(mDiaryList, savedInstanceState.getInt(DIARY_SEQUENCE, -1))
-                if (itemIndex > 0) {
-                    Log.i("aaf-t" , "DIARY_SEQUENCE ${savedInstanceState.getInt(DIARY_SEQUENCE, -1)}")
-                    Log.i("aaf-t" , "index $itemIndex / ${mDiaryList.size}")
-                    Handler().post { timelineList.setSelection(itemIndex)}
-                }
 
                 if (savedInstanceState.getBoolean(FILTER_VIEW_VISIBLE, false)) toggleFilterView(true)
 
-                refreshList()
+                query.setText(savedInstanceState.getString(FILTER_QUERY, ""))
+
+//                val itemIndex = EasyDiaryUtils.sequenceToPageIndex(mDiaryList, savedInstanceState.getInt(DIARY_SEQUENCE, -1))
+//                if (itemIndex > 0) {
+//                    Log.i("aaf-t" , "DIARY_SEQUENCE ${savedInstanceState.getInt(DIARY_SEQUENCE, -1)}")
+//                    Log.i("aaf-t" , "index $itemIndex / ${mDiaryList.size}")
+//                    Handler().post { timelineList.setSelection(itemIndex)}
+//                }
+
+                // refreshList call from onTextChanged listener
+//                refreshList()
             }
         }
     }
@@ -138,6 +139,8 @@ class TimelineActivity : EasyDiaryActivity() {
         }
 
         if (filterView.translationY == 0F) outState?.putBoolean(FILTER_VIEW_VISIBLE, true)
+
+        outState?.putString(FILTER_QUERY, query.text.toString())
 
         Log.i("aaf-t" , "translationY ${filterView.translationY}")
 
@@ -212,12 +215,8 @@ class TimelineActivity : EasyDiaryActivity() {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
 
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
-                if (mUseSavedState) {
-                    mUseSavedState = false
-                } else {
-                    refreshList()
-                    moveListViewScrollToBottom()
-                }
+                refreshList()
+                moveListViewScrollToBottom()
                 Log.i("aaf-t", "onTextChanged")
             }
 
@@ -283,6 +282,7 @@ class TimelineActivity : EasyDiaryActivity() {
 
 
         Log.i("aaf-t", "input date ${DateUtils.timeMillisToDateTime(startMillis, DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}")
+        Log.i("aaf-t", "query ${query.text}")
 
         mDiaryList.run {
             clear()

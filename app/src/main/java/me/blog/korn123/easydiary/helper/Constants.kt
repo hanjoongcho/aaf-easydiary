@@ -395,6 +395,7 @@ const val FILTER_END_ENABLE = "filter_end_enable"
 const val FILTER_END_YEAR = "filter_end_year"
 const val FILTER_END_MONTH = "filter_end_month"
 const val FILTER_END_DATE = "filter_end_date"
+const val FILTER_QUERY = "filter_query"
 
 const val NOTIFICATION_FOREGROUND_ID: Int = 1001
 const val NOTIFICATION_COMPLETE_ID: Int = 1002
