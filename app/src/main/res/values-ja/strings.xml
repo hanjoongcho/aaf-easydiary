@@ -292,6 +292,11 @@
         カレンダー週の開始曜日の設定機能を追加\n
         タブレット横モードでカレンダーが見えなかった問題を解決
     </string>
+    <string name="release_161">
+        v1.4.95 / 2019.09.09\n
+        タイムライン検索フィルターの改善\n
+        日記コピー機能を追加
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -439,4 +444,5 @@
     <string name="filter_search_word_hint">検索語を入力してください。</string>
     <string name="filter_clear">フィルタの初期化</string>
     <string name="filter_close">閉じる</string>
+    <string name="copy_diary_item">選択した日記をコピーしますか？</string>
 </resources>

@@ -292,6 +292,11 @@
         Added calendar weekday start setting\n
         Fixed an issue that prevented the calendar from showing in tablet landscape
     </string>
+    <string name="release_161">
+        v1.4.95 / 2019.09.09\n
+        Improved timeline search filter\n
+        Diary copy function added
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -439,4 +444,5 @@
     <string name="filter_search_word_hint">Please enter your search term.</string>
     <string name="filter_clear">Reset filter</string>
     <string name="filter_close">Close</string>
+    <string name="copy_diary_item">Do you want to copy the selected diary?</string>
 </resources>

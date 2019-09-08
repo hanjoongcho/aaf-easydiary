@@ -312,7 +312,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
 
         diaryListView.setOnItemLongClickListener { adapterView, _, i, _ ->
             val diaryDto = adapterView.adapter.getItem(i) as DiaryDto
-            showAlertDialog("Do you want to copy the selected diary?",
+            showAlertDialog(getString(R.string.copy_diary_item),
                     DialogInterface.OnClickListener { _, _ ->
                         val copyItem = EasyDiaryDbHelper.getInstance().copyFromRealm(diaryDto)
                         copyItem.currentTimeMillis = System.currentTimeMillis()

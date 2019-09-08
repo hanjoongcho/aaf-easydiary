@@ -51,6 +51,7 @@ open class EasyDiaryActivity : BaseSimpleActivity() {
 
     fun checkWhatsNewDialog(applyFilter: Boolean = true) {
         arrayListOf<Release>().apply {
+            add(Release(161, R.string.release_161))
             add(Release(160, R.string.release_160))
             add(Release(159, R.string.release_159))
             add(Release(157, R.string.release_157))
