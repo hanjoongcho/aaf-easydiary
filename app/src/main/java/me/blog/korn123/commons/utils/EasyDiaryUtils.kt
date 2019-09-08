@@ -221,11 +221,27 @@ object EasyDiaryUtils {
         return if (!diaryDto.title.isNullOrEmpty()) diaryDto.title!! else StringUtils.abbreviate(diaryDto.contents, 10)
     }
 
-    fun datePickerToTimeMillis(dayOfMonth: Int, month: Int, year: Int): Long {
-        val cal = Calendar.getInstance()
-        cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-        cal.set(Calendar.MONTH, month)
+    fun datePickerToTimeMillis(dayOfMonth: Int, month: Int, year: Int, isFullHour: Boolean = false): Long {
+        val cal = Calendar.getInstance(Locale.getDefault())
         cal.set(Calendar.YEAR, year)
+        cal.set(Calendar.MONTH, month)
+        cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+        cal.set(Calendar.HOUR_OF_DAY, if (isFullHour) 23 else 0)
+        cal.set(Calendar.MINUTE, if (isFullHour) 59 else 0)
+        cal.set(Calendar.SECOND, if (isFullHour) 59 else 0)
         return cal.timeInMillis
+    }
+
+    fun sequenceToPageIndex(diaryList: ArrayList<DiaryDto>, sequence: Int): Int {
+        var pageIndex = 0
+        if (sequence > -1) {
+            for (i in diaryList.indices) {
+                if (diaryList[i].sequence == sequence) {
+                    pageIndex = i
+                    break
+                }
+            }
+        }
+        return pageIndex
     }
 }

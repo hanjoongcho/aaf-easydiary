@@ -12,14 +12,12 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
-import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_timeline_diary.*
 import kotlinx.android.synthetic.main.layout_timeline_filter.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.TimelineItemAdapter
 import me.blog.korn123.easydiary.extensions.config
@@ -43,13 +41,14 @@ class TimelineActivity : EasyDiaryActivity() {
     private lateinit var mEDatePickerDialog: DatePickerDialog
     private var mTimelineItemAdapter: TimelineItemAdapter? = null
     private var mDiaryList: ArrayList<DiaryDto> = arrayListOf()
-    private var mReverseSelection = false
-    private var mYear = Integer.valueOf(DateUtils.getCurrentDateTime(DateUtils.YEAR_PATTERN))
-    private var mMonth = Integer.valueOf(DateUtils.getCurrentDateTime(DateUtils.MONTH_PATTERN))
-    private var mDayOfMonth = Integer.valueOf(DateUtils.getCurrentDateTime(DateUtils.DAY_PATTERN))
+    private var mUseSavedState = false
     private var mFirstTouch = 0F
-    private var mStartMillis = 0L
-    private var mEndMillis = 0L
+
+    companion object {
+        private val YEAR = Calendar.getInstance().get(Calendar.YEAR)
+        private var MONTH = Calendar.getInstance().get(Calendar.MONTH)
+        private var DAY_OF_MONTH = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+    }
 
     /***************************************************************************************************
      *   override functions
@@ -71,27 +70,99 @@ class TimelineActivity : EasyDiaryActivity() {
 
         setupTimelineSearch()
 
-        mSDatePickerDialog = DatePickerDialog(this, mStartDateListener, mYear, mMonth - 1, mDayOfMonth)
-        mEDatePickerDialog = DatePickerDialog(this, mEndDateListener, mYear, mMonth - 1, mDayOfMonth)
-
         bindEvent()
         initTextSize(filterView, this)
+
+
+        when (savedInstanceState) {
+            null -> {
+                mSDatePickerDialog = DatePickerDialog(this, mStartDateListener, YEAR, MONTH, DAY_OF_MONTH)
+                mEDatePickerDialog = DatePickerDialog(this, mEndDateListener, YEAR, MONTH, DAY_OF_MONTH)
+                refreshList()
+                moveListViewScrollToBottom()
+            }
+            else -> {
+                mUseSavedState = true
+
+                val filterSYear = savedInstanceState.getInt(FILTER_START_YEAR, YEAR)
+                val filterSMonth = savedInstanceState.getInt(FILTER_START_MONTH, MONTH)
+                val filterSDate = savedInstanceState.getInt(FILTER_START_DATE, DAY_OF_MONTH)
+                if (savedInstanceState.getBoolean(FILTER_START_ENABLE, false))  {
+                    Log.i("aaf-t" , "get date $filterSYear $filterSMonth $filterSDate")
+                    startDate.text = DateUtils.getFullPatternDate(EasyDiaryUtils.datePickerToTimeMillis(filterSDate, filterSMonth, filterSYear))
+                }
+
+                val filterEYear = savedInstanceState.getInt(FILTER_START_YEAR, YEAR)
+                val filterEMonth = savedInstanceState.getInt(FILTER_START_MONTH, MONTH)
+                val filterEDate = savedInstanceState.getInt(FILTER_START_DATE, DAY_OF_MONTH)
+                if (savedInstanceState.getBoolean(FILTER_END_ENABLE, false))  {
+                    endDate.text = DateUtils.getFullPatternDate(EasyDiaryUtils.datePickerToTimeMillis(filterEDate, filterEMonth, filterEYear))
+                }
+
+                mSDatePickerDialog = DatePickerDialog(this, mStartDateListener, filterSYear, filterSMonth, filterSDate)
+                mEDatePickerDialog = DatePickerDialog(this, mEndDateListener, filterEYear, filterEMonth, filterEDate)
+
+                val itemIndex = EasyDiaryUtils.sequenceToPageIndex(mDiaryList, savedInstanceState.getInt(DIARY_SEQUENCE, -1))
+                if (itemIndex > 0) {
+                    Log.i("aaf-t" , "DIARY_SEQUENCE ${savedInstanceState.getInt(DIARY_SEQUENCE, -1)}")
+                    Log.i("aaf-t" , "index $itemIndex / ${mDiaryList.size}")
+                    Handler().post { timelineList.setSelection(itemIndex)}
+                }
+
+                if (savedInstanceState.getBoolean(FILTER_VIEW_VISIBLE, false)) toggleFilterView(true)
+
+                refreshList()
+            }
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        if (mDiaryList.isNotEmpty()) {
+            outState?.putInt(DIARY_SEQUENCE, mDiaryList[timelineList.firstVisiblePosition].sequence)
+            Log.i("aaf-t" , "firstVisiblePosition ${timelineList.firstVisiblePosition}")
+        }
+
+        if (startDate.text.isNotEmpty()) {
+            outState?.putBoolean(FILTER_START_ENABLE, true)
+            outState?.putInt(FILTER_START_YEAR, mSDatePickerDialog.datePicker.year)
+            outState?.putInt(FILTER_START_MONTH, mSDatePickerDialog.datePicker.month)
+            outState?.putInt(FILTER_START_DATE, mSDatePickerDialog.datePicker.dayOfMonth)
+            Log.i("aaf-t" , "set date ${mSDatePickerDialog.datePicker.year} ${mSDatePickerDialog.datePicker.month} ${mSDatePickerDialog.datePicker.dayOfMonth}")
+        }
+
+        if (endDate.text.isNotEmpty()) {
+            outState?.putBoolean(FILTER_END_ENABLE, true)
+            outState?.putInt(FILTER_END_YEAR, mEDatePickerDialog.datePicker.year)
+            outState?.putInt(FILTER_END_MONTH, mEDatePickerDialog.datePicker.month)
+            outState?.putInt(FILTER_END_DATE, mEDatePickerDialog.datePicker.dayOfMonth)
+        }
+
+        if (filterView.translationY == 0F) outState?.putBoolean(FILTER_VIEW_VISIBLE, true)
+
+        Log.i("aaf-t" , "translationY ${filterView.translationY}")
+
+        super.onSaveInstanceState(outState)
     }
 
     override fun onResume() {
         super.onResume()
-        refreshList(searchView.text.toString())
-
-        when {
-            config.previousActivity == PREVIOUS_ACTIVITY_CREATE -> {
+        if (config.previousActivity == PREVIOUS_ACTIVITY_CREATE) {
+                refreshList()
                 moveListViewScrollToBottom()
                 config.previousActivity = -1
-            }
-            !mReverseSelection && mDiaryList.size > 0 -> {
-                moveListViewScrollToBottom()
-                mReverseSelection = true
-            }
         }
+//        when {
+//            config.previousActivity == PREVIOUS_ACTIVITY_CREATE -> {
+//                refreshList(searchView.text.toString())
+//                moveListViewScrollToBottom()
+//                config.previousActivity = -1
+//            }
+//            !mReverseSelection && mDiaryList.size > 0 -> {
+//                refreshList(searchView.text.toString())
+//                moveListViewScrollToBottom()
+//                mReverseSelection = true
+//            }
+//        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -141,15 +212,19 @@ class TimelineActivity : EasyDiaryActivity() {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
 
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
-                refreshList(charSequence.toString(), mStartMillis, mEndMillis)
+                if (mUseSavedState) {
+                    mUseSavedState = false
+                } else {
+                    refreshList()
+                    moveListViewScrollToBottom()
+                }
+                Log.i("aaf-t", "onTextChanged")
             }
 
             override fun afterTextChanged(editable: Editable) {}
         })
 
         clearFilter.setOnClickListener {
-            mStartMillis = 0L
-            mEndMillis = 0L
             startDate.text = null
             endDate.text = null
             query.text = null
@@ -161,15 +236,17 @@ class TimelineActivity : EasyDiaryActivity() {
     }
 
     private var mStartDateListener: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-        mStartMillis = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year)
-        startDate.text = DateUtils.getFullPatternDate(mStartMillis)
-        refreshList(null, mStartMillis, mEndMillis)
+        val startMillis = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year)
+        startDate.text = DateUtils.getFullPatternDate(startMillis)
+        refreshList()
+        Log.i("aaf-t", "mStartDateListener")
     }
     
     private var mEndDateListener: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-        mEndMillis = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year)
-        endDate.text = DateUtils.getFullPatternDate(mEndMillis)
-        refreshList(null, mStartMillis, mEndMillis)
+        val endMillis = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year)
+        endDate.text = DateUtils.getFullPatternDate(endMillis)
+        refreshList()
+        Log.i("aaf-t", "mEndDateListener")
     }
 
     private fun toggleFilterView(isVisible: Boolean) {
@@ -192,39 +269,29 @@ class TimelineActivity : EasyDiaryActivity() {
             val diaryDto = adapterView.adapter.getItem(i) as DiaryDto
             val detailIntent = Intent(this@TimelineActivity, DiaryReadActivity::class.java)
             detailIntent.putExtra(DIARY_SEQUENCE, diaryDto.sequence)
-            detailIntent.putExtra(DIARY_SEARCH_QUERY, searchView.text.toString())
+            detailIntent.putExtra(DIARY_SEARCH_QUERY, query.text.toString())
             TransitionHelper.startActivityWithTransition(this@TimelineActivity, detailIntent)
         }
-
-        toggleToolBar.setOnClickListener {
-            this.currentFocus?.let {focusView ->
-                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(focusView.windowToken, 0)
-                supportActionBar?.run {
-                    subtitle = searchView.text
-                    FontUtils.setFontsTypeface(applicationContext, assets, null, findViewById(android.R.id.content))
-                }
-            }
-            toolbar.visibility = View.VISIBLE
-            searchViewContainer.visibility = View.GONE
-        }
-
-        searchView.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(p0: Editable?) {}
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                refreshList(p0.toString())
-                moveListViewScrollToBottom()
-            }
-        })
     }
     
-    private fun refreshList(query: String? = null, startTimeMillis: Long = 0, endTimeMillis: Long = 0) {
+    private fun refreshList() {
+        var startMillis = 0L
+        var endMillis = 0L
+
+        if (startDate.text.isNotEmpty()) startMillis = EasyDiaryUtils.datePickerToTimeMillis(mSDatePickerDialog.datePicker.dayOfMonth, mSDatePickerDialog.datePicker.month, mSDatePickerDialog.datePicker.year)
+        if (endDate.text.isNotEmpty()) endMillis = EasyDiaryUtils.datePickerToTimeMillis(mEDatePickerDialog.datePicker.dayOfMonth, mEDatePickerDialog.datePicker.month, mEDatePickerDialog.datePicker.year, true)
+
+
+        Log.i("aaf-t", "input date ${DateUtils.timeMillisToDateTime(startMillis, DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}")
+
         mDiaryList.run {
             clear()
-            addAll(EasyDiaryDbHelper.readDiary(query, config.diarySearchQueryCaseSensitive, startTimeMillis, endTimeMillis))
+            addAll(EasyDiaryDbHelper.readDiary(
+                    query.text.toString(),
+                    config.diarySearchQueryCaseSensitive,
+                    startMillis,
+                    endMillis
+            ))
             reverse()
         }
         mTimelineItemAdapter?.notifyDataSetChanged()

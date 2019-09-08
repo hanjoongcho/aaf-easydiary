@@ -386,11 +386,18 @@ const val SELECTED_DAY = "selected_day"
 const val SELECTED_HOUR = "selected_hour"
 const val SELECTED_MINUTE = "selected_minute"
 const val SELECTED_SECOND = "selected_second"
+const val FILTER_VIEW_VISIBLE = "filter_view_visible"
+const val FILTER_START_ENABLE = "filter_start_enable"
+const val FILTER_START_YEAR = "filter_start_year"
+const val FILTER_START_MONTH = "filter_start_month"
+const val FILTER_START_DATE = "filter_start_date"
+const val FILTER_END_ENABLE = "filter_end_enable"
+const val FILTER_END_YEAR = "filter_end_year"
+const val FILTER_END_MONTH = "filter_end_month"
+const val FILTER_END_DATE = "filter_end_date"
 
 const val NOTIFICATION_FOREGROUND_ID: Int = 1001
 const val NOTIFICATION_COMPLETE_ID: Int = 1002
 const val NOTIFICATION_CHANNEL_ID = "easy_diary_channel_id"
 const val NOTIFICATION_CHANNEL_NAME = "Easy-Diary notification channel"
 const val NOTIFICATION_CHANNEL_DESCRIPTION = "This channel is used for 'Easy-Diary' data backup and recovery operations."
-
-const val NOTIFICATION_DRIVE_ID = "notification_drive_id"
