@@ -7,15 +7,15 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
+import android.os.Handler
 import android.speech.RecognizerIntent
-import androidx.core.app.ActivityCompat
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
 import android.widget.AbsListView
 import android.widget.AdapterView
 import android.widget.RelativeLayout
+import androidx.core.app.ActivityCompat
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.github.ksoichiro.android.observablescrollview.ObservableListView
@@ -211,9 +211,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                     EasyDiaryDbHelper.getInstance().beginTransaction()
                     dto.photoUri = FILE_URI_PREFIX + photoPath
                     EasyDiaryDbHelper.getInstance().commitTransaction()
-                    runOnUiThread({
+                    runOnUiThread {
                         progressInfo.text = "Converting... ($index/${listPhotoUri.size})"
-                    })
+                    }
                 }
             }
 
@@ -225,10 +225,10 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 }
             }
 
-            runOnUiThread({
+            runOnUiThread {
                 progressDialog.visibility = View.GONE
                 modalContainer.visibility = View.GONE
-            })
+            }
         }).start()
     }
     
@@ -317,14 +317,36 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, detailIntent)
         }
 
+        diaryListView.setOnItemLongClickListener { adapterView, _, i, _ ->
+            val diaryDto = adapterView.adapter.getItem(i) as DiaryDto
+            showAlertDialog("Do you want to copy the selected diary?",
+                    DialogInterface.OnClickListener { _, _ ->
+                        val copyItem = DiaryDto(
+                                -1,
+                                mCurrentTimeMillis,
+                                diaryDto.title ?: "",
+                                diaryDto.contents ?: "",
+                                diaryDto.weather,
+                                diaryDto.isAllDay
+                        )
+                        copyItem.photoUris = diaryDto.photoUris
+                        EasyDiaryDbHelper.insertDiary(copyItem)
+                        refreshList()
+                        Handler().post { diaryListView.setSelection(0) }
+                    },
+                    null
+            )
+            true
+        }
+
         modalContainer.setOnTouchListener { _, _ -> true }
 
-        insertDiaryButton.setOnClickListener({ _ ->
+        insertDiaryButton.setOnClickListener{
             val createDiary = Intent(this@DiaryMainActivity, DiaryInsertActivity::class.java)
             //                startActivity(createDiary);
             //                DiaryMainActivity.this.overridePendingTransition(R.anim.anim_right_to_center, R.anim.anim_center_to_left);
             TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, createDiary)
-        })
+        }
     }
 
     private fun showSpeechDialog() {
@@ -333,7 +355,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         } catch (e: ActivityNotFoundException) {
             showAlertDialog(getString(R.string.recognizer_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
         }
-
     }
 
     private fun refreshList() {

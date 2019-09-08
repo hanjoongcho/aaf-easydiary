@@ -25,6 +25,12 @@ open class DiaryDto : RealmObject {
 
     var dateString: String? = null
 
+    /**
+     * Weather means diary symbol
+     * <pre>
+     *     As of version 1.4.76 and later, it supports various symbols other than weather.
+     * </pre>
+     */
     var weather: Int = 0
 
     var photoUris: RealmList<PhotoUriDto>? = null
