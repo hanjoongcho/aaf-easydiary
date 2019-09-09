@@ -98,6 +98,7 @@ class TimelineActivity : EasyDiaryActivity() {
 
                 if (savedInstanceState.getBoolean(FILTER_VIEW_VISIBLE, false)) toggleFilterView(true)
 
+                // refreshList call from onTextChanged listener
                 query.setText(savedInstanceState.getString(FILTER_QUERY, ""))
 
 //                val itemIndex = EasyDiaryUtils.sequenceToPageIndex(mDiaryList, savedInstanceState.getInt(DIARY_SEQUENCE, -1))
@@ -106,9 +107,6 @@ class TimelineActivity : EasyDiaryActivity() {
 //                    Log.i("aaf-t" , "index $itemIndex / ${mDiaryList.size}")
 //                    Handler().post { timelineList.setSelection(itemIndex)}
 //                }
-
-                // refreshList call from onTextChanged listener
-//                refreshList()
             }
         }
     }
@@ -291,7 +289,11 @@ class TimelineActivity : EasyDiaryActivity() {
             ))
             reverse()
         }
-        mTimelineItemAdapter?.notifyDataSetChanged()
+
+        mTimelineItemAdapter?.run {
+            currentQuery = query.text.toString()
+            notifyDataSetChanged()
+        }
     }
     
     private fun moveListViewScrollToBottom() {

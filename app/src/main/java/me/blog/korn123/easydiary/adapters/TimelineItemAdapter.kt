@@ -37,6 +37,7 @@ class TimelineItemAdapter(
         private val list: List<DiaryDto>
 ) : ArrayAdapter<DiaryDto>(context, layoutResourceId, list) {
     private var mPrimaryColor = 0
+    var currentQuery: String? = null
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var row = convertView
@@ -89,6 +90,14 @@ class TimelineItemAdapter(
                 context.updateAppViews(it)
                 context.initTextSize(it, context)
             }
+
+            if (!currentQuery.isNullOrEmpty()) {
+                if (context.config.diarySearchQueryCaseSensitive) {
+                    EasyDiaryUtils.highlightString(holder.textView1, currentQuery)
+                } else {
+                    EasyDiaryUtils.highlightStringIgnoreCase(holder.textView1, currentQuery)
+                }
+            }
         }
 
         return row!!
@@ -111,7 +120,7 @@ class TimelineItemAdapter(
         false -> {
             when (StringUtils.isNotEmpty(diaryDto.title)) {
                 true -> "${diaryDto.title}\n${diaryDto.contents}"
-                false -> "${diaryDto.contents}" 
+                false -> "${diaryDto.contents}"
             }
         }
     }
