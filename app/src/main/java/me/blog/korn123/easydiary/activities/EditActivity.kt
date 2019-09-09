@@ -10,7 +10,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.provider.MediaStore
 import android.speech.RecognizerIntent
 import android.text.format.DateFormat
@@ -45,14 +44,17 @@ import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiarySymbol
 import me.blog.korn123.easydiary.models.PhotoUriDto
 import me.blog.korn123.easydiary.views.SlidingTabLayout
-import org.apache.commons.lang3.StringUtils
 import java.io.File
 import java.text.ParseException
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 abstract class EditActivity : EasyDiaryActivity() {
+
+    /***************************************************************************************************
+     *   global properties
+     *
+     ***************************************************************************************************/
     protected lateinit var mRecognizerIntent: Intent
     protected lateinit var mPhotoUris: RealmList<PhotoUriDto>
     protected lateinit var mDatePickerDialog: DatePickerDialog
@@ -68,11 +70,52 @@ abstract class EditActivity : EasyDiaryActivity() {
     protected var mSecond = Integer.valueOf(DateUtils.getCurrentDateTime("ss"))
     protected var mSelectedItemPosition = 0
 
+
+    /***************************************************************************************************
+     *   override functions
+     *
+     ***************************************************************************************************/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         EasyDiaryUtils.changeDrawableIconColor(this, Color.WHITE, R.drawable.calendar_4_w)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home ->
+                showAlertDialog(getString(R.string.back_pressed_confirm),
+                        DialogInterface.OnClickListener { _, _ -> super.onBackPressed() },
+                        null
+                )
+        }
+        return true
+    }
+
+    override fun onBackPressed() {
+        showAlertDialog(getString(R.string.back_pressed_confirm),
+                DialogInterface.OnClickListener { _, _ -> super.onBackPressed() },
+                null
+        )
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            REQUEST_CODE_EXTERNAL_STORAGE -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                callImagePicker()
+            } else {
+                makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3))
+            }
+            else -> {
+            }
+        }
+    }
+
+    
+    /***************************************************************************************************
+     *   etc functions
+     *
+     ***************************************************************************************************/
     fun toggleSimpleLayout() {
         when (photoContainerScrollView.visibility) {
             View.VISIBLE -> {
@@ -118,7 +161,7 @@ abstract class EditActivity : EasyDiaryActivity() {
             R.id.microphone -> showSpeechDialog()
         }
     }
-
+    
     protected var mStartDateListener: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
         mYear = year
         mMonth = month + 1
@@ -130,37 +173,6 @@ abstract class EditActivity : EasyDiaryActivity() {
         mHourOfDay = hourOfDay
         mMinute = minute
         setDateTime()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home ->
-                showAlertDialog(getString(R.string.back_pressed_confirm),
-                        DialogInterface.OnClickListener { _, _ -> super.onBackPressed() },
-                        null
-                )
-        }
-        return true
-    }
-
-    override fun onBackPressed() {
-        showAlertDialog(getString(R.string.back_pressed_confirm),
-                DialogInterface.OnClickListener { _, _ -> super.onBackPressed() },
-                null
-        )
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            REQUEST_CODE_EXTERNAL_STORAGE -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                callImagePicker()
-            } else {
-                makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3))
-            }
-            else -> {
-            }
-        }
     }
 
     protected fun applyRemoveIndex() {
@@ -226,8 +238,8 @@ abstract class EditActivity : EasyDiaryActivity() {
             addCategory(itemList, categoryList, "flag_item_array", getString(R.string.category_flag))
 
             val viewPager = symbolDialog.findViewById(R.id.viewpager) as androidx.viewpager.widget.ViewPager
-            val samplePagerAdapter = SamplePagerAdapter(this, itemList, categoryList)
-            viewPager.adapter = samplePagerAdapter
+            val symbolPagerAdapter = SymbolPagerAdapter(this, itemList, categoryList)
+            viewPager.adapter = symbolPagerAdapter
 
             val slidingTabLayout = symbolDialog.findViewById(R.id.sliding_tabs) as SlidingTabLayout
             slidingTabLayout.setViewPager(viewPager)
@@ -297,18 +309,11 @@ abstract class EditActivity : EasyDiaryActivity() {
     
     protected fun setDateTime() {
         try {
-            val format = SimpleDateFormat("yyyyMMddHHmmss")
-            val dateTimeString = String.format(
-                    "%d%s%s%s%s%s",
-                    mYear,
-                    StringUtils.leftPad(mMonth.toString(), 2, "0"),
-                    StringUtils.leftPad(mDayOfMonth.toString(), 2, "0"),
-                    StringUtils.leftPad(mHourOfDay.toString(), 2, "0"),
-                    StringUtils.leftPad(mMinute.toString(), 2, "0"),
-                    StringUtils.leftPad(mSecond.toString(), 2, "0")
+            mCurrentTimeMillis = EasyDiaryUtils.datePickerToTimeMillis(
+                    mDayOfMonth, mMonth - 1, mYear,
+                    false,
+                    mHourOfDay, mMinute, mSecond
             )
-            val parsedDate = format.parse(dateTimeString)
-            mCurrentTimeMillis = parsedDate.time
             supportActionBar?.run {
                 title = DateUtils.getFullPatternDate(mCurrentTimeMillis)
                 subtitle = if (allDay.isChecked) "No time information" else DateUtils.timeMillisToDateTime(mCurrentTimeMillis, DateUtils.TIME_PATTERN_WITH_SECONDS)
@@ -391,9 +396,19 @@ abstract class EditActivity : EasyDiaryActivity() {
     protected fun initBottomToolbar() {
         bottomTitle.text = String.format(getString(R.string.attached_photo_count), photoContainer.childCount -1)
     }
-    
+
+
+    /***************************************************************************************************
+     *   abstract functions
+     *
+     ***************************************************************************************************/
     abstract fun setVisiblePhotoProgress(isVisible: Boolean)
     
+
+    /***************************************************************************************************
+     *   inner class
+     *
+     ***************************************************************************************************/
     internal inner class PhotoClickListener(var index: Int) : View.OnClickListener {
         override fun onClick(v: View) {
             val targetIndex = index
@@ -408,14 +423,14 @@ abstract class EditActivity : EasyDiaryActivity() {
             )
         }
     }
-
+    
     /**
      * The [android.support.v4.view.PagerAdapter] used to display pages in this sample.
      * The individual pages are simple and just display two lines of text. The important section of
      * this class is the [.getPageTitle] method which controls what is displayed in the
      * [SlidingTabLayout].
      */
-    inner class SamplePagerAdapter(val activity: Activity, private val items: ArrayList<Array<String>>, private val categories: List<String>) : androidx.viewpager.widget.PagerAdapter() {
+    inner class SymbolPagerAdapter(val activity: Activity, private val items: ArrayList<Array<String>>, private val categories: List<String>) : androidx.viewpager.widget.PagerAdapter() {
 
         /**
          * @return the number of pages to display

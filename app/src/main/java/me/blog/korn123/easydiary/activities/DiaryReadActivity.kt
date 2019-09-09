@@ -3,24 +3,19 @@ package me.blog.korn123.easydiary.activities
 import android.annotation.TargetApi
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
-import androidx.fragment.app.FragmentStatePagerAdapter
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.ColorUtils
-import androidx.viewpager.widget.ViewPager
 import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
+import androidx.fragment.app.FragmentPagerAdapter
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.simplemobiletools.commons.helpers.BaseConfig
@@ -454,16 +449,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
         }
 
         fun sequenceToPageIndex(sequence: Int): Int {
-            var pageIndex = 0
-            if (sequence > -1) {
-                for (i in diaryList.indices) {
-                    if (diaryList[i].sequence == sequence) {
-                        pageIndex = i
-                        break
-                    }
-                }
-            }
-            return pageIndex
+            return EasyDiaryUtils.sequenceToPageIndex(diaryList, sequence)
         }
 
         override fun getCount(): Int {

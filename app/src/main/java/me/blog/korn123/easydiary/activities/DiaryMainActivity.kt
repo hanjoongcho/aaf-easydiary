@@ -38,28 +38,22 @@ import java.util.*
  */
 
 class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
+
+    /***************************************************************************************************
+     *   global properties
+     *
+     ***************************************************************************************************/
     private var mRecognizerIntent: Intent? = null
     private var mDiaryMainItemAdapter: DiaryMainItemAdapter? = null
     private var mDiaryList: MutableList<DiaryDto>? = null
     private var mShowcaseIndex = 0
     private var mShowcaseView: ShowcaseView? = null
 
-    override fun getLayoutResId(): Int {
-        return R.layout.activity_diary_main
-    }
 
-    override fun createScrollable(): ObservableListView {
-        // ObservableListView uses setOnScrollListener, but it still works.
-        diaryListView.setOnScrollListener(object : AbsListView.OnScrollListener {
-            override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
-            }
-
-            override fun onScroll(view: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
-            }
-        })
-        return diaryListView
-    }
-
+    /***************************************************************************************************
+     *   override functions
+     *
+     ***************************************************************************************************/
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -72,7 +66,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         if (intent.getBooleanExtra(APP_FINISH_FLAG, false)) {
             finish()
         }
-        
+
         setSupportActionBar(toolbar)
         supportActionBar?.run {
             title = getString(R.string.read_diary_title)
@@ -108,13 +102,29 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
         refreshList()
         initTextSize(progressDialog, this)
-        
+
         val previousActivity = config.previousActivity
         if (previousActivity == PREVIOUS_ACTIVITY_CREATE) {
 //            diaryListView.smoothScrollToPosition(0)
             diaryListView.setSelection(0)
             config.previousActivity = -1
         }
+    }
+    
+    override fun getLayoutResId(): Int {
+        return R.layout.activity_diary_main
+    }
+
+    override fun createScrollable(): ObservableListView {
+        // ObservableListView uses setOnScrollListener, but it still works.
+        diaryListView.setOnScrollListener(object : AbsListView.OnScrollListener {
+            override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
+            }
+
+            override fun onScroll(view: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
+            }
+        })
+        return diaryListView
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -188,6 +198,11 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         if (progressDialog.visibility == View.GONE) ActivityCompat.finishAffinity(this@DiaryMainActivity)
     }
 
+
+    /***************************************************************************************************
+     *   etc functions
+     *
+     ***************************************************************************************************/    
     private fun openPostcardViewer() {
         val postCardViewer = Intent(this@DiaryMainActivity, PostCardViewerActivity::class.java)
         TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, postCardViewer)

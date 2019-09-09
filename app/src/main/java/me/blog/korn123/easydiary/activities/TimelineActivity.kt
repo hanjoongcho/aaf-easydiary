@@ -49,6 +49,7 @@ class TimelineActivity : EasyDiaryActivity() {
         private var DAY_OF_MONTH = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
     }
 
+    
     /***************************************************************************************************
      *   override functions
      *
@@ -187,6 +188,7 @@ class TimelineActivity : EasyDiaryActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    
     /***************************************************************************************************
      *   etc functions
      *

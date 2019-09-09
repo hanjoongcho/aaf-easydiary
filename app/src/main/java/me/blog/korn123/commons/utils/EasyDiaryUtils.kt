@@ -4,18 +4,16 @@ import android.content.Context
 import android.graphics.*
 import android.net.Uri
 import android.os.Environment
-import androidx.core.content.ContextCompat
-import androidx.appcompat.app.AlertDialog
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.BackgroundColorSpan
 import android.text.style.StyleSpan
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.AdapterView
-import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import id.zelory.compressor.Compressor
 import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.CALCULATION
@@ -26,14 +24,12 @@ import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
-import me.blog.korn123.easydiary.models.DiarySymbol
 import me.blog.korn123.easydiary.models.PhotoUriDto
 import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.StringUtils
 import java.io.File
 import java.io.FileNotFoundException
 import java.util.*
-import kotlin.collections.HashMap
 
 /**
  * Created by hanjoong on 2017-04-30.
@@ -221,14 +217,14 @@ object EasyDiaryUtils {
         return if (!diaryDto.title.isNullOrEmpty()) diaryDto.title!! else StringUtils.abbreviate(diaryDto.contents, 10)
     }
 
-    fun datePickerToTimeMillis(dayOfMonth: Int, month: Int, year: Int, isFullHour: Boolean = false): Long {
+    fun datePickerToTimeMillis(dayOfMonth: Int, month: Int, year: Int, isFullHour: Boolean = false, hour: Int = 0, minute: Int = 0, second: Int = 0): Long {
         val cal = Calendar.getInstance(Locale.getDefault())
         cal.set(Calendar.YEAR, year)
         cal.set(Calendar.MONTH, month)
         cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-        cal.set(Calendar.HOUR_OF_DAY, if (isFullHour) 23 else 0)
-        cal.set(Calendar.MINUTE, if (isFullHour) 59 else 0)
-        cal.set(Calendar.SECOND, if (isFullHour) 59 else 0)
+        cal.set(Calendar.HOUR_OF_DAY, if (isFullHour) 23 else hour)
+        cal.set(Calendar.MINUTE, if (isFullHour) 59 else minute)
+        cal.set(Calendar.SECOND, if (isFullHour) 59 else second)
         return cal.timeInMillis
     }
 
