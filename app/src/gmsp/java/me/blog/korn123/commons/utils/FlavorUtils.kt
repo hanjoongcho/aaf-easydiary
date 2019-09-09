@@ -120,6 +120,10 @@ object FlavorUtils {
         EMOTION_CONFUSION -> R.drawable.ic_confusion
         EMOTION_MEMORY -> R.drawable.ic_memory
         EMOTION_OBSERVATION -> R.drawable.ic_observation
+        EMOTION_SMILE2 -> R.drawable.ic_smile_4
+        EMOTION_AMAZE -> R.drawable.ic_amaze
+        EMOTION_DELIGHT -> R.drawable.ic_delight
+        EMOTION_EMBARRASSED2 -> R.drawable.ic_embarrassed_1
 
         FOOD_BURGER -> R.drawable.ic_burger
         FOOD_SANDWICH -> R.drawable.ic_004_sandwich

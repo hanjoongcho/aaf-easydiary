@@ -4,6 +4,10 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.96 (date: 2019/09/10)
+  * Improved timeline search filter
+  * Diary copy function added
+
 # Changes in 1.4.94 (date: 2019/09/03)
   * Added calendar weekday start setting
   * Fixed an issue that prevented the calendar from showing in tablet landscape

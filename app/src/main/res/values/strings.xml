@@ -292,8 +292,8 @@
         Added calendar weekday start setting\n
         Fixed an issue that prevented the calendar from showing in tablet landscape
     </string>
-    <string name="release_161">
-        v1.4.95 / 2019.09.09\n
+    <string name="release_162">
+        v1.4.96 / 2019.09.10\n
         Improved timeline search filter\n
         Diary copy function added
     </string>
