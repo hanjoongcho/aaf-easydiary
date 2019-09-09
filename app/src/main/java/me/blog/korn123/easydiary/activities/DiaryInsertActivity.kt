@@ -5,10 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.os.Environment
 import android.speech.RecognizerIntent
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.ColorUtils
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
@@ -16,6 +13,8 @@ import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.simplemobiletools.commons.helpers.BaseConfig

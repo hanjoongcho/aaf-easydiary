@@ -13,7 +13,6 @@ import androidx.core.graphics.ColorUtils
 import com.werb.pickphotoview.util.PickConfig
 import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.CommonUtils
-import io.github.aafactory.commons.utils.DateUtils
 import io.realm.RealmList
 import kotlinx.android.synthetic.main.activity_diary_update.*
 import kotlinx.android.synthetic.main.layout_bottom_toolbar.*
@@ -234,11 +233,13 @@ class DiaryUpdateActivity : EditActivity() {
     }
 
     private fun initDateTime() {
-        mYear = Integer.valueOf(DateUtils.timeMillisToDateTime(mCurrentTimeMillis, DateUtils.YEAR_PATTERN))
-        mMonth = Integer.valueOf(DateUtils.timeMillisToDateTime(mCurrentTimeMillis, DateUtils.MONTH_PATTERN))
-        mDayOfMonth = Integer.valueOf(DateUtils.timeMillisToDateTime(mCurrentTimeMillis, DateUtils.DAY_PATTERN))
-        mHourOfDay = Integer.valueOf(DateUtils.timeMillisToDateTime(mCurrentTimeMillis, "HH"))
-        mMinute = Integer.valueOf(DateUtils.timeMillisToDateTime(mCurrentTimeMillis, "mm"))
-        mSecond = Integer.valueOf(DateUtils.timeMillisToDateTime(mCurrentTimeMillis, "ss"))
+        val calendar = Calendar.getInstance(Locale.getDefault())
+        calendar.timeInMillis = mCurrentTimeMillis
+        mYear = calendar.get(Calendar.YEAR)
+        mMonth = calendar.get(Calendar.MONTH).plus(1)
+        mDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
+        mHourOfDay = calendar.get(Calendar.HOUR_OF_DAY)
+        mMinute = calendar.get(Calendar.MINUTE)
+        mSecond = calendar.get(Calendar.SECOND)
     }
 }

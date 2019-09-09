@@ -62,12 +62,18 @@ abstract class EditActivity : EasyDiaryActivity() {
     protected lateinit var mSecondsPickerDialog: AlertDialog
     protected val mRemoveIndexes = ArrayList<Int>()
     protected var mCurrentTimeMillis: Long = 0
-    protected var mYear = Integer.valueOf(DateUtils.getCurrentDateTime(DateUtils.YEAR_PATTERN))
-    protected var mMonth = Integer.valueOf(DateUtils.getCurrentDateTime(DateUtils.MONTH_PATTERN))
-    protected var mDayOfMonth = Integer.valueOf(DateUtils.getCurrentDateTime(DateUtils.DAY_PATTERN))
-    protected var mHourOfDay = Integer.valueOf(DateUtils.getCurrentDateTime("HH"))
-    protected var mMinute = Integer.valueOf(DateUtils.getCurrentDateTime("mm"))
-    protected var mSecond = Integer.valueOf(DateUtils.getCurrentDateTime("ss"))
+    private val mCalendar = Calendar.getInstance(Locale.getDefault())
+    protected var mYear = mCalendar.get(Calendar.YEAR)
+
+    /**
+     * mMonth is not Calendar.MONTH
+     * mMonth range is 1 ~ 12
+     */
+    protected var mMonth = mCalendar.get(Calendar.MONTH).plus(1)
+    protected var mDayOfMonth = mCalendar.get(Calendar.DAY_OF_MONTH)
+    protected var mHourOfDay = mCalendar.get(Calendar.HOUR_OF_DAY)
+    protected var mMinute = mCalendar.get(Calendar.MINUTE)
+    protected var mSecond = mCalendar.get(Calendar.SECOND)
     protected var mSelectedItemPosition = 0
 
 

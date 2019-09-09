@@ -42,12 +42,7 @@ class TimelineActivity : EasyDiaryActivity() {
     private var mTimelineItemAdapter: TimelineItemAdapter? = null
     private var mDiaryList: ArrayList<DiaryDto> = arrayListOf()
     private var mFirstTouch = 0F
-
-    companion object {
-        private val YEAR = Calendar.getInstance().get(Calendar.YEAR)
-        private var MONTH = Calendar.getInstance().get(Calendar.MONTH)
-        private var DAY_OF_MONTH = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
-    }
+    private val mCalendar = Calendar.getInstance(Locale.getDefault())
 
     
     /***************************************************************************************************
@@ -76,23 +71,23 @@ class TimelineActivity : EasyDiaryActivity() {
 
         when (savedInstanceState) {
             null -> {
-                mSDatePickerDialog = DatePickerDialog(this, mStartDateListener, YEAR, MONTH, DAY_OF_MONTH)
-                mEDatePickerDialog = DatePickerDialog(this, mEndDateListener, YEAR, MONTH, DAY_OF_MONTH)
+                mSDatePickerDialog = DatePickerDialog(this, mStartDateListener, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH))
+                mEDatePickerDialog = DatePickerDialog(this, mEndDateListener, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH))
                 refreshList()
                 moveListViewScrollToBottom()
             }
             else -> {
-                val filterSYear = savedInstanceState.getInt(FILTER_START_YEAR, YEAR)
-                val filterSMonth = savedInstanceState.getInt(FILTER_START_MONTH, MONTH)
-                val filterSDate = savedInstanceState.getInt(FILTER_START_DATE, DAY_OF_MONTH)
+                val filterSYear = savedInstanceState.getInt(FILTER_START_YEAR, mCalendar.get(Calendar.YEAR))
+                val filterSMonth = savedInstanceState.getInt(FILTER_START_MONTH, mCalendar.get(Calendar.MONTH))
+                val filterSDate = savedInstanceState.getInt(FILTER_START_DATE, mCalendar.get(Calendar.DAY_OF_MONTH))
                 if (savedInstanceState.getBoolean(FILTER_START_ENABLE, false))  {
                     Log.i("aaf-t" , "get date $filterSYear $filterSMonth $filterSDate")
                     startDate.text = DateUtils.getFullPatternDate(EasyDiaryUtils.datePickerToTimeMillis(filterSDate, filterSMonth, filterSYear))
                 }
 
-                val filterEYear = savedInstanceState.getInt(FILTER_START_YEAR, YEAR)
-                val filterEMonth = savedInstanceState.getInt(FILTER_START_MONTH, MONTH)
-                val filterEDate = savedInstanceState.getInt(FILTER_START_DATE, DAY_OF_MONTH)
+                val filterEYear = savedInstanceState.getInt(FILTER_START_YEAR, mCalendar.get(Calendar.YEAR))
+                val filterEMonth = savedInstanceState.getInt(FILTER_START_MONTH, mCalendar.get(Calendar.MONTH))
+                val filterEDate = savedInstanceState.getInt(FILTER_START_DATE, mCalendar.get(Calendar.DAY_OF_MONTH))
                 if (savedInstanceState.getBoolean(FILTER_END_ENABLE, false))  {
                     endDate.text = DateUtils.getFullPatternDate(EasyDiaryUtils.datePickerToTimeMillis(filterEDate, filterEMonth, filterEYear))
                 }
