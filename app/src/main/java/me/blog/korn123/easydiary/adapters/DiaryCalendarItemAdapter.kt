@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
 import android.content.Context
+import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -52,9 +53,11 @@ class DiaryCalendarItemAdapter(
                 true -> {
                     text = when (StringUtils.isNotEmpty(diaryDto.title)) {
                         true -> diaryDto.title
-                        false -> StringUtils.abbreviate(diaryDto.contents, 10)
+//                        false -> StringUtils.abbreviate(diaryDto.contents, 10)
+                        false -> diaryDto.contents
                     }
                     maxLines = 1
+                    ellipsize = TextUtils.TruncateAt.valueOf("END")
                 }
                 false -> {
                     text = when (StringUtils.isNotEmpty(diaryDto.title)) {
@@ -62,6 +65,7 @@ class DiaryCalendarItemAdapter(
                         false -> "${diaryDto.contents}"
                     }
                     maxLines = Integer.MAX_VALUE
+                    ellipsize = null
                 }
             }
         }
