@@ -3,10 +3,9 @@ package me.blog.korn123.easydiary.adapters
 import android.app.Activity
 import android.content.Context
 import android.graphics.Typeface
-import android.media.Image
 import android.text.SpannableString
+import android.text.TextUtils
 import android.text.style.StyleSpan
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -22,7 +21,6 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
 
@@ -98,6 +96,17 @@ class TimelineItemAdapter(
                     EasyDiaryUtils.highlightStringIgnoreCase(holder.textView1, currentQuery)
                 }
             }
+
+            when (context.config.enableContentsSummary) {
+                true -> {
+                    textView1?.maxLines = 2
+                    textView1?.ellipsize = TextUtils.TruncateAt.valueOf("END")
+                }
+                false -> {
+                    textView1?.maxLines = Integer.MAX_VALUE
+                    textView1?.ellipsize = null
+                }
+            }
         }
 
         return row!!
@@ -113,8 +122,8 @@ class TimelineItemAdapter(
         true -> {
             when (StringUtils.isNotEmpty(diaryDto.title)) {
                 true -> diaryDto.title
-//                false -> StringUtils.abbreviate(diaryDto.contents, 10)
-                false -> EasyDiaryUtils.summaryDiaryLabel(diaryDto)
+                false -> diaryDto.contents
+//                false -> EasyDiaryUtils.summaryDiaryLabel(diaryDto)
             }
         }
         false -> {
