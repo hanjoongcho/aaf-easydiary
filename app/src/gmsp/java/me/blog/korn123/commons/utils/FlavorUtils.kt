@@ -52,7 +52,7 @@ object FlavorUtils {
         DAILY_DISCUSSION -> R.drawable.ic_discussion
         DAILY_DIET -> R.drawable.ic_diet
         DAILY_NO_ALCOHOL -> R.drawable.ic_no_alcohol
-        DAILY_WAKE_UP -> R.drawable.ic_wake_up
+        DAILY_WAKE_UP -> R.drawable.ic_bed
         DAILY_SCALE -> R.drawable.ic_scale
         DAILY_TAKE_AWAY -> R.drawable.ic_take_away
         DAILY_CAR_WASH -> R.drawable.ic_car_wash
