@@ -12,6 +12,8 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.provider.MediaStore
 import android.speech.RecognizerIntent
+import android.text.Editable
+import android.text.TextWatcher
 import android.text.format.DateFormat
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -122,6 +124,18 @@ abstract class EditActivity : EasyDiaryActivity() {
      *   etc functions
      *
      ***************************************************************************************************/
+
+    fun addTextWatcher() {
+        diaryContents.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {}
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                bodyCount.text = p0?.length.toString()
+            }
+        })
+    }
+
     fun toggleSimpleLayout() {
         when (photoContainerScrollView.visibility) {
             View.VISIBLE -> {

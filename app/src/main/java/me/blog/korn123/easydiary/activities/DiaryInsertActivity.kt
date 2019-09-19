@@ -79,7 +79,8 @@ class DiaryInsertActivity : EditActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
         mCustomLineSpacing = false
-        
+
+        addTextWatcher()
         setupRecognizer()
 //        setupSpinner()
         setupShowcase()
