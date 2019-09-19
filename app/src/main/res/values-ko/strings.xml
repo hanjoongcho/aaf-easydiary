@@ -445,4 +445,5 @@
     <string name="filter_clear">필터 초기화</string>
     <string name="filter_close">닫기</string>
     <string name="copy_diary_item">선택된 다이어리를 복사하시겠습니까?</string>
+    <string name="diary_contents_length">글자수: %d</string>
 </resources>

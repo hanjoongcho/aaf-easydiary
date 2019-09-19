@@ -77,8 +77,7 @@
                     android:inputType="text|textCapSentences|textAutoCorrect|textAutoComplete|textMultiLine|textLongMessage" />
             </ScrollView>
             <TextView
-                android:text="0"
-                android:id="@+id/bodyCount"
+                android:id="@+id/contentsLength"
                 android:layout_gravity="bottom|end"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>

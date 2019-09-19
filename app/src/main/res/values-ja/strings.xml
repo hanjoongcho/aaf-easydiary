@@ -445,4 +445,5 @@
     <string name="filter_clear">フィルタの初期化</string>
     <string name="filter_close">閉じる</string>
     <string name="copy_diary_item">選択した日記をコピーしますか？</string>
+    <string name="diary_contents_length">文字数: %d</string>
 </resources>
