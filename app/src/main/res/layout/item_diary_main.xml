@@ -37,6 +37,12 @@
                 android:gravity="left"
                 style="@style/text_view_diary_main_item_inner_contents"/>
 
+            <com.simplemobiletools.commons.views.MyTextView
+                android:id="@+id/contentsLength"
+                android:layout_gravity="bottom|end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
             <RelativeLayout
                 android:id="@+id/photoContainer"
                 android:layout_marginTop="@dimen/card_contents_padding"

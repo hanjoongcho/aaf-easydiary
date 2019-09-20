@@ -2,12 +2,11 @@ package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
 import android.graphics.drawable.GradientDrawable
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.ColorUtils
-import androidx.cardview.widget.CardView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -26,7 +25,6 @@ import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
-
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -48,6 +46,7 @@ class DiaryMainItemAdapter(
             holder.textView1 = row.findViewById(R.id.text1)
             holder.textView2 = row.findViewById(R.id.text2)
             holder.textView3 = row.findViewById(R.id.text3)
+            holder.contentsLength = row.findViewById(R.id.contentsLength)
             holder.imageView = row.findViewById(R.id.weather)
             holder.item_holder = row.findViewById(R.id.item_holder)
             holder.photoViews = row.findViewById(R.id.photoViews)
@@ -141,6 +140,7 @@ class DiaryMainItemAdapter(
             false -> Integer.MAX_VALUE
         }
 
+        holder.contentsLength?.text = context.getString(R.string.diary_contents_length, diaryDto.contents?.length ?: 0)
         return row!!
     }
 
@@ -150,6 +150,7 @@ class DiaryMainItemAdapter(
         var textView1: TextView? = null
         var textView2: TextView? = null
         var textView3: TextView? = null
+        var contentsLength: TextView? = null
         var imageView: ImageView? = null
         var item_holder: ViewGroup? = null
     }
