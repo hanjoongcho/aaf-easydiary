@@ -60,6 +60,7 @@ object FlavorUtils {
         DAILY_SHOWER -> R.drawable.ic_shower
         DAILY_ONLINE_SHOP -> R.drawable.ic_online_shop
         DAILY_DRIVING -> R.drawable.ic_car
+        DAILY_CAR_REPAIR -> R.drawable.ic_car_repair
 
         LANDSCAPE_BEACH -> R.drawable.ic_beach
         LANDSCAPE_BRIDGE -> R.drawable.ic_bridge
