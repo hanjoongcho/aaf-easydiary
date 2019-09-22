@@ -387,6 +387,8 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 bottomToolbar.visibility = View.GONE
                 photoContainerScrollView.visibility = View.GONE
             }
+
+            contentsLength?.text = getString(R.string.diary_contents_length, diaryDto.contents?.length ?: 0)
         }
 
         private fun initBottomContainer() {

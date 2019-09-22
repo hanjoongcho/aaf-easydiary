@@ -37,8 +37,11 @@
                 android:gravity="left"
                 style="@style/text_view_diary_main_item_inner_contents"/>
 
-            <com.simplemobiletools.commons.views.MyTextView
+            <TextView
                 android:id="@+id/contentsLength"
+                android:padding="5dp"
+                android:textColor="?attr/colorPrimary"
+                android:background="@drawable/bg_card_stamp"
                 android:layout_gravity="bottom|end"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
