@@ -388,7 +388,12 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 photoContainerScrollView.visibility = View.GONE
             }
 
-            contentsLength?.text = getString(R.string.diary_contents_length, diaryDto.contents?.length ?: 0)
+            context?.let {
+                if (it.config.enableCountCharacters) {
+                    contentsLength.visibility = View.VISIBLE
+                    contentsLength.text = getString(R.string.diary_contents_length, diaryDto.contents?.length ?: 0)
+                }
+            }
         }
 
         private fun initBottomContainer() {

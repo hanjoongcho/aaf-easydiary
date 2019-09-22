@@ -39,6 +39,7 @@
 
             <TextView
                 android:id="@+id/contentsLength"
+                android:visibility="gone"
                 android:padding="5dp"
                 android:textColor="?attr/colorPrimary"
                 android:background="@drawable/bg_card_stamp"

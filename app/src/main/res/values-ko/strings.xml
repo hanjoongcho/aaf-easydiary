@@ -446,4 +446,6 @@
     <string name="filter_close">닫기</string>
     <string name="copy_diary_item">선택된 다이어리를 복사하시겠습니까?</string>
     <string name="diary_contents_length">글자수: %d</string>
+    <string name="count_characters_title">본문 글자수 세기</string>
+    <string name="count_characters_summary">다이어리 본문의 글자수를 카운팅합니다.</string>
 </resources>

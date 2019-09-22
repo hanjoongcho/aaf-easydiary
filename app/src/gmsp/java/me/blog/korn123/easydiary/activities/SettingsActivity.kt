@@ -571,6 +571,7 @@ class SettingsActivity : EasyDiaryActivity() {
         signOutGoogleOAuth.setOnClickListener(mOnClickListener)
         exportRealmFile.setOnClickListener(mOnClickListener)
         importRealmFile.setOnClickListener(mOnClickListener)
+        countCharacters.setOnClickListener(mOnClickListener)
         devMode.setOnClickListener {
             mDevModeClickCount++
             if (mDevModeClickCount > 5) {
@@ -794,6 +795,10 @@ class SettingsActivity : EasyDiaryActivity() {
             R.id.signOutGoogleOAuth -> {
                 signOutGoogleOAuth()
             }
+            R.id.countCharacters -> {
+                countCharactersSwitcher.toggle()
+                config.enableCountCharacters = countCharactersSwitcher.isChecked
+            }
         }
     }
     
@@ -901,6 +906,7 @@ class SettingsActivity : EasyDiaryActivity() {
         fingerprintSwitcher.isChecked = config.fingerprintLockEnable
         enableCardViewPolicySwitcher.isChecked = config.enableCardViewPolicy
         contentsSummarySwitcher.isChecked = config.enableContentsSummary
+        countCharactersSwitcher.isChecked = config.enableCountCharacters
         when (config.calendarStartDay) {
             CALENDAR_START_DAY_MONDAY -> startMonday.isChecked = true
             CALENDAR_START_DAY_SATURDAY -> startSaturday.isChecked = true

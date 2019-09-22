@@ -140,7 +140,14 @@ class DiaryMainItemAdapter(
             false -> Integer.MAX_VALUE
         }
 
-        holder.contentsLength?.text = context.getString(R.string.diary_contents_length, diaryDto.contents?.length ?: 0)
+        if (context.config.enableCountCharacters) {
+            holder.contentsLength?.run{
+                visibility = View.VISIBLE
+                text = context.getString(R.string.diary_contents_length, diaryDto.contents?.length ?: 0)
+            }
+        } else {
+            holder.contentsLength?.visibility = View.GONE
+        }
         return row!!
     }
 

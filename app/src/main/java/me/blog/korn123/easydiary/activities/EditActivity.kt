@@ -126,15 +126,18 @@ abstract class EditActivity : EasyDiaryActivity() {
      ***************************************************************************************************/
 
     fun addTextWatcher() {
-        contentsLength.text = getString(R.string.diary_contents_length, 0)
-        diaryContents.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(p0: Editable?) {}
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+        if (config.enableCountCharacters) {
+            contentsLength.visibility = View.VISIBLE
+            contentsLength.text = getString(R.string.diary_contents_length, 0)
+            diaryContents.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(p0: Editable?) {}
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                contentsLength.text = getString(R.string.diary_contents_length, p0?.length ?: 0)
-            }
-        })
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    contentsLength.text = getString(R.string.diary_contents_length, p0?.length ?: 0)
+                }
+            })
+        }
     }
 
     fun toggleSimpleLayout() {
