@@ -1,5 +1,6 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_holder"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -59,19 +60,31 @@
         android:layout_marginLeft="@dimen/card_layout_margin"
         android:layout_marginRight="@dimen/card_layout_margin"
         style="@style/AppCard">
-        <ScrollView
-            android:fillViewport="true"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-            <com.simplemobiletools.commons.views.MyEditText
-                android:id="@+id/diaryContents"
-                style="@style/edit_text_diary_edit_inner_contents"
-                android:background="@android:color/transparent"
-                android:gravity="top"
-                android:hint="@string/contents_text_hint"
-                android:inputType="text|textCapSentences|textAutoCorrect|textAutoComplete|textMultiLine|textLongMessage" />
-        </ScrollView>
+            <ScrollView
+                android:fillViewport="true"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <com.simplemobiletools.commons.views.MyEditText
+                    android:id="@+id/diaryContents"
+                    style="@style/edit_text_diary_edit_inner_contents"
+                    android:background="@android:color/transparent"
+                    android:gravity="top"
+                    android:hint="@string/contents_text_hint"
+                    android:inputType="text|textCapSentences|textAutoCorrect|textAutoComplete|textMultiLine|textLongMessage" />
+            </ScrollView>
+            <TextView
+                android:id="@+id/contentsLength"
+                android:visibility="gone"
+                android:padding="5dp"
+                android:textColor="?attr/colorPrimary"
+                android:background="@drawable/bg_card_stamp"
+                android:layout_gravity="bottom|end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </FrameLayout>
     </androidx.cardview.widget.CardView>
 
     <include layout="@layout/layout_bottom_toolbar" />

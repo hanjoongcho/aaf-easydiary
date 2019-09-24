@@ -4,13 +4,13 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Paint
-import android.graphics.Typeface
 import android.net.Uri
-import android.os.*
+import android.os.Build
+import android.os.Bundle
+import android.os.Handler
 import android.speech.RecognizerIntent
-import android.text.*
-import android.text.style.TypefaceSpan
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
 import android.widget.AbsListView
 import android.widget.AdapterView
@@ -23,7 +23,6 @@ import io.github.aafactory.commons.utils.CommonUtils
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_diary_main.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
 import me.blog.korn123.easydiary.extensions.*

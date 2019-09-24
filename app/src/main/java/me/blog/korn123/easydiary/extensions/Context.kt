@@ -71,7 +71,7 @@ fun Context.initTextSize(viewGroup: ViewGroup, context: Context) {
                     is me.blog.korn123.easydiary.views.CalendarItem -> {}
                     is TextView -> { 
                         when (it.id) {
-                            R.id.calendarDate -> it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize * 0.7F)
+                            R.id.contentsLength -> it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize * 0.8F)
                             R.id.symbolTextArrow -> {}
                             R.id.createdDate -> {}
                             else -> it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)

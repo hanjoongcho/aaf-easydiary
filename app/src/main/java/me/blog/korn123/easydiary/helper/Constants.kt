@@ -25,6 +25,7 @@ const val FINGERPRINT_ENCRYPT_DATA_IV = "fingerprint_encrypt_data_iv"
 const val FINGERPRINT_AUTHENTICATION_FAIL_COUNT = "fingerprint_authentication_fail_count"
 const val ENABLE_CARD_VIEW_POLICY = "enable_card_view_policy"
 const val SETTING_CALENDAR_START_DAY = "setting_calendar_start_day"
+const val SETTING_COUNT_CHARACTERS = "setting_count_characters"
 
 const val CUSTOM_FONTS_SUPPORT_LANGUAGE = "en|ko" // custom fonts supported language
 const val CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT = "NanumPen.ttf"
@@ -126,6 +127,7 @@ const val DAILY_CAR_WASH_2 = 72
 const val DAILY_SHOWER = 73
 const val DAILY_ONLINE_SHOP = 74
 const val DAILY_DRIVING = 75
+const val DAILY_CAR_REPAIR = 76
 
 // Emotion 100 ~ 199
 const val EMOTION_HAPPY = 100

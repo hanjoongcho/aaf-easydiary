@@ -95,4 +95,8 @@ class Config(context: Context) : BaseConfig(context) {
     var calendarStartDay: Int
         get() = prefs.getInt(SETTING_CALENDAR_START_DAY, CALENDAR_START_DAY_SUNDAY)
         set(calendarStartDay) = prefs.edit().putInt(SETTING_CALENDAR_START_DAY, calendarStartDay).apply()
+
+    var enableCountCharacters: Boolean
+        get() = prefs.getBoolean(SETTING_COUNT_CHARACTERS, false)
+        set(enableCountCharacters) = prefs.edit().putBoolean(SETTING_COUNT_CHARACTERS, enableCountCharacters).apply()
 }
