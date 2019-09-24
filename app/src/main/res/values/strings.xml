@@ -449,7 +449,7 @@
     <string name="filter_clear">Reset filter</string>
     <string name="filter_close">Close</string>
     <string name="copy_diary_item">Do you want to copy the selected diary?</string>
-    <string name="diary_contents_length">Number of characters: %d</string>
+    <string name="diary_contents_length">Characters: %d</string>
     <string name="count_characters_title">Text counting</string>
     <string name="count_characters_summary">Count the number of characters in the diary body.</string>
 </resources>
