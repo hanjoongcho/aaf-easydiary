@@ -10,7 +10,7 @@ val PERMISSIONS = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.p
 val EXTERNAL_STORAGE_PERMISSIONS = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
 
 const val START_MAIN_ACTIVITY = 0
-const val APP_BACKGROUND_ALPHA = 90
+const val APP_BACKGROUND_ALPHA = 225
 const val INTRO_BACKGROUND_ALPHA = 255
 const val SETTING_FONT_SIZE = "font_size"
 const val SETTING_FONT_NAME = "font_setting" 
