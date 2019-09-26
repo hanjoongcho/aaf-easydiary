@@ -60,7 +60,7 @@ class TimelineItemAdapter(
         if (mPrimaryColor == 0) {
             mPrimaryColor = BaseConfig(context).primaryColor
         }
-        holder.titleContainer?.setBackgroundColor(mPrimaryColor)
+//        holder.titleContainer?.setBackgroundColor(mPrimaryColor)
         //        GradientDrawable drawable = (GradientDrawable) holder.circle.getDrawable();
         //        drawable.setColor(mPrimaryColor);
 

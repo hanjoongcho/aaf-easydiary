@@ -7,7 +7,7 @@
     <io.github.aafactory.commons.views.LabelLayout
         android:id="@+id/devMode"
         android:layout_marginTop="2dp"
-        android:background="?attr/colorPrimary"
+        android:background="@drawable/bg_card_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
