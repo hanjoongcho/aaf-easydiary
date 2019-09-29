@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.roomorama.caldroid.CaldroidFragment
+import com.roomorama.caldroid.CaldroidFragmentEx
 import com.roomorama.caldroid.CaldroidListener
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
@@ -29,7 +30,7 @@ import java.util.*
  */
 
 class CalendarActivity : EasyDiaryActivity() {
-    private lateinit var calendarFragment: CaldroidFragment
+    private lateinit var calendarFragment: CaldroidFragmentEx
     private lateinit var mCurrentDate: Date
     private var mDiaryList: MutableList<DiaryDto> = mutableListOf()
     private var mArrayAdapterDiary: ArrayAdapter<DiaryDto>? = null

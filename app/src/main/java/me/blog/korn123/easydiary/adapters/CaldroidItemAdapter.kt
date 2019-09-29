@@ -15,6 +15,7 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 
@@ -69,7 +70,7 @@ class CaldroidItemAdapter(
         if (selectedDates != null && selectedDates.indexOf(dateTime) != -1) {
             cellView?.setBackgroundResource(R.drawable.bg_card_cell_select)
         } else {
-            cellView?.setBackgroundResource(R.drawable.bg_card_cell_default)
+            cellView?.setBackgroundColor(context.config.backgroundColor)
         }
 
         // Today's symbol
