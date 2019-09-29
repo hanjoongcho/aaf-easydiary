@@ -2,14 +2,12 @@ package me.blog.korn123.easydiary.adapters
 
 import android.content.Context
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.roomorama.caldroid.CaldroidFragment
 import com.roomorama.caldroid.CaldroidGridAdapter
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
@@ -68,9 +66,19 @@ class CaldroidItemAdapter(
 
         // Customize for selected dates
         if (selectedDates != null && selectedDates.indexOf(dateTime) != -1) {
-            cellView?.setBackgroundResource(R.drawable.bg_card_cell_select)
+            cellView?.let {
+                it.setBackgroundResource(R.drawable.bg_card_cell_select)
+                (it.findViewById<LinearLayout>(R.id.item1).getChildAt(1) as TextView).setTextColor(Color.BLACK)
+                (it.findViewById<LinearLayout>(R.id.item2).getChildAt(1) as TextView).setTextColor(Color.BLACK)
+                (it.findViewById<LinearLayout>(R.id.item3).getChildAt(1) as TextView).setTextColor(Color.BLACK)
+            }
         } else {
-            cellView?.setBackgroundColor(context.config.backgroundColor)
+            cellView?.let {
+                it.setBackgroundColor(context.config.backgroundColor)
+                (it.findViewById<LinearLayout>(R.id.item1).getChildAt(1) as TextView).setTextColor(context.config.textColor)
+                (it.findViewById<LinearLayout>(R.id.item2).getChildAt(1) as TextView).setTextColor(context.config.textColor)
+                (it.findViewById<LinearLayout>(R.id.item3).getChildAt(1) as TextView).setTextColor(context.config.textColor)
+            }
         }
 
         // Today's symbol
