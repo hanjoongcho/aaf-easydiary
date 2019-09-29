@@ -17,6 +17,7 @@
             tools:background="@drawable/bg_calendar_circle"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:applyStroke="true"
             android:gravity="center"
             android:textSize="@dimen/calendar_item_text_default"
             android:id="@+id/calendarDate"
@@ -27,6 +28,7 @@
             tools:text="3"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:applyStroke="true"
             android:textSize="@dimen/calendar_item_text_default"
             android:id="@+id/itemCount"
             android:layout_width="wrap_content"
@@ -36,11 +38,12 @@
     <LinearLayout
         android:id="@+id/item1"
         android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:minHeight="@dimen/calendar_item_height_default"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
-            tools:src="@drawable/ic_bolt"
+            tools:src="@drawable/ic_scale"
             android:layout_width="@dimen/calendar_item_symbol_default"
             android:layout_height="@dimen/calendar_item_symbol_default" />
 
@@ -55,10 +58,12 @@
     <LinearLayout
         android:id="@+id/item2"
         android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:minHeight="@dimen/calendar_item_height_default"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
+            tools:src="@drawable/ic_scale"
             android:layout_width="@dimen/calendar_item_symbol_default"
             android:layout_height="@dimen/calendar_item_symbol_default" />
 
@@ -73,10 +78,12 @@
     <LinearLayout
         android:id="@+id/item3"
         android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:minHeight="@dimen/calendar_item_height_default"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
+            tools:src="@drawable/ic_scale"
             android:layout_width="@dimen/calendar_item_symbol_default"
             android:layout_height="@dimen/calendar_item_symbol_default" />
 
