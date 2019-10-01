@@ -73,7 +73,7 @@
                     android:background="@android:color/transparent"
                     android:gravity="top"
                     android:hint="@string/contents_text_hint"
-                    android:inputType="text|textCapSentences|textAutoCorrect|textAutoComplete|textMultiLine|textLongMessage" />
+                    android:inputType="text|textCapSentences|textAutoCorrect|textMultiLine|textLongMessage" />
             </ScrollView>
             <TextView
                 android:id="@+id/contentsLength"
