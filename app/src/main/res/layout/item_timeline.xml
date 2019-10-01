@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <io.github.aafactory.commons.views.LabelLayout
+        android:background="@drawable/bg_card_title"
         android:gravity="center"
         android:id="@+id/titleContainer"
         android:orientation="horizontal"
@@ -80,6 +81,7 @@
                     <com.simplemobiletools.commons.views.MyTextView
                         android:id="@+id/text1"
                         tools:text="Diary contents..."
+                        android:ellipsize="end"
                         android:textColor="@color/default_text_color"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />

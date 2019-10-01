@@ -3,11 +3,15 @@ package me.blog.korn123.easydiary.extensions
 import android.content.Context
 import android.content.pm.PackageManager
 import android.preference.PreferenceManager
+import android.text.Spannable
+import android.text.SpannableString
 import android.util.TypedValue
+import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import io.github.aafactory.commons.utils.CommonUtils
+import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.helper.Config
 import me.blog.korn123.easydiary.helper.DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE
@@ -67,7 +71,7 @@ fun Context.initTextSize(viewGroup: ViewGroup, context: Context) {
                     is me.blog.korn123.easydiary.views.CalendarItem -> {}
                     is TextView -> { 
                         when (it.id) {
-                            R.id.calendarDate -> it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize * 0.7F)
+                            R.id.contentsLength -> it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize * 0.8F)
                             R.id.symbolTextArrow -> {}
                             R.id.createdDate -> {}
                             else -> it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
@@ -94,4 +98,10 @@ fun Context.checkPermission(permissions: Array<String>): Boolean {
 fun Context.preferencesContains(key: String): Boolean {
     val preferences = PreferenceManager.getDefaultSharedPreferences(this)
     return preferences.contains(key)
+}
+
+fun Context.applyFontToMenuItem(mi: MenuItem) {
+    val mNewTitle = SpannableString(mi.title)
+    mNewTitle.setSpan(CustomTypefaceSpan("", FontUtils.getCommonTypeface(this, assets)!!), 0, mNewTitle.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+    mi.title = mNewTitle
 }

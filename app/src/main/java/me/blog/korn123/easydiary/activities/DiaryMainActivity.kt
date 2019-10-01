@@ -191,6 +191,14 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.diary_main, menu)
+        val targetItems = mutableListOf<MenuItem>()
+        targetItems.add(menu.findItem(R.id.chart))
+        targetItems.add(menu.findItem(R.id.settings))
+        targetItems.add(menu.findItem(R.id.postCard))
+        targetItems.map { item ->
+            applyFontToMenuItem(item)
+        }
+        
         return true
     }
 

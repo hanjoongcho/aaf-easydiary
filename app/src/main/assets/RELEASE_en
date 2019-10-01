@@ -4,7 +4,10 @@
 
 ---------------------------------------------------
 
-# Changes in 1.4.96 (date: 2019/09/10)
+# Changes in 1.4.99 (date: 2019/09/26)
+  * Diary text counting function added
+
+# Changes in 1.4.97 (date: 2019/09/17)
   * Improved timeline search filter
   * Diary copy function added
 

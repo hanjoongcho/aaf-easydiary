@@ -50,7 +50,7 @@ object FontUtils {
         return result
     }
 
-    private fun getCommonTypeface(context: Context, assetManager: AssetManager): Typeface? {
+    fun getCommonTypeface(context: Context, assetManager: AssetManager): Typeface? {
         if (sTypeface == null) {
             setCommonTypeface(context, assetManager)
         }

@@ -75,6 +75,7 @@ class DiaryUpdateActivity : EditActivity() {
         }
         mCustomLineSpacing = false
 
+        addTextWatcher()
         setupRecognizer()
 //        setupSpinner()
         initData()

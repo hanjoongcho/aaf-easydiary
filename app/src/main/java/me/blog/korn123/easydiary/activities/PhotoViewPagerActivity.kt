@@ -2,9 +2,6 @@ package me.blog.korn123.easydiary.activities
 
 import android.os.Bundle
 import android.os.Handler
-import androidx.viewpager.widget.PagerAdapter
-import androidx.viewpager.widget.ViewPager
-import android.util.Log
 import android.view.*
 import android.widget.TextView
 import com.github.chrisbanes.photoview.PhotoView
@@ -43,8 +40,7 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
             title = "1 / $mPhotoCount"
         }
 
-        val a = SamplePagerAdapter(diaryDto)
-        view_pager.adapter = SamplePagerAdapter(diaryDto)
+        view_pager.adapter = PhotoPagerAdapter(diaryDto)
         view_pager.addOnPageChangeListener(object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
@@ -80,7 +76,7 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
         return true
     }
 
-    internal class SamplePagerAdapter(var diaryDto: DiaryDto) : androidx.viewpager.widget.PagerAdapter() {
+    internal class PhotoPagerAdapter(var diaryDto: DiaryDto) : androidx.viewpager.widget.PagerAdapter() {
         override fun getCount(): Int {
             return diaryDto.photoUris?.size ?: 0
         }

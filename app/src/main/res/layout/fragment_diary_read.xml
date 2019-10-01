@@ -5,36 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <androidx.cardview.widget.CardView
-        android:layout_marginTop="@dimen/card_layout_margin"
-        android:layout_marginLeft="@dimen/card_layout_margin"
-        android:layout_marginRight="@dimen/card_layout_margin"
-        style="@style/AppCard">
-        <LinearLayout
-            style="@style/LinearLayoutHorizontal">
-            <ImageView
-                android:id="@+id/weather"
-                android:layout_marginRight="10dp"
-                android:layout_width="32dp"
-                android:layout_height="32dp" />
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <com.simplemobiletools.commons.views.MyTextView
-                    android:id="@+id/diaryTitle"
-                    android:gravity="center_vertical"
-                    style="@style/text_view_diary_read_fragment_inner_contents"/>
-
-                <com.simplemobiletools.commons.views.MyTextView
-                    android:textColor="@color/default_text_color"
-                    android:gravity="center_vertical|right"
-                    android:id="@+id/date"
-                    style="@style/text_view_diary_read_fragment_inner_contents"/>
-            </LinearLayout>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_marginTop="@dimen/card_layout_margin"
@@ -42,15 +12,57 @@
         android:layout_marginLeft="@dimen/card_layout_margin"
         android:layout_marginRight="@dimen/card_layout_margin"
         style="@style/AppCard">
-        <ScrollView
-            android:fillViewport="true"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <com.simplemobiletools.commons.views.MyTextView
-                android:id="@+id/diaryContents"
-                android:gravity="left"
-                style="@style/text_view_diary_read_fragment_inner_contents"/>
-        </ScrollView>
+            <ScrollView
+                android:fillViewport="true"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <LinearLayout
+                    style="@style/LinearLayoutVertical">
+                    <LinearLayout
+                        android:layout_height="wrap_content"
+                        style="@style/LinearLayoutHorizontal">
+                        <ImageView
+                            android:id="@+id/weather"
+                            android:layout_marginRight="10dp"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp" />
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:id="@+id/diaryTitle"
+                                android:gravity="center_vertical"
+                                style="@style/text_view_diary_read_fragment_inner_contents"/>
+
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:textColor="@color/default_text_color"
+                                android:gravity="center_vertical|right"
+                                android:id="@+id/date"
+                                style="@style/text_view_diary_read_fragment_inner_contents"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:layout_marginTop="@dimen/card_contents_padding"
+                        android:id="@+id/diaryContents"
+                        android:gravity="left"
+                        style="@style/text_view_diary_read_fragment_inner_contents"/>
+                </LinearLayout>
+            </ScrollView>
+            <TextView
+                android:id="@+id/contentsLength"
+                android:visibility="gone"
+                android:padding="5dp"
+                android:textColor="?attr/colorPrimary"
+                android:background="@drawable/bg_card_stamp"
+                android:layout_gravity="bottom|end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </FrameLayout>
     </androidx.cardview.widget.CardView>
 
     <include layout="@layout/layout_bottom_toolbar" />

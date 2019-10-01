@@ -6,6 +6,7 @@ import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_barchart.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.chart.ChartBase
+import me.blog.korn123.easydiary.extensions.applyFontToMenuItem
 import me.blog.korn123.easydiary.fragments.BarChartFragment
 import me.blog.korn123.easydiary.fragments.BarChartFragmentT2
 import me.blog.korn123.easydiary.fragments.HorizontalBarChartFragment
@@ -31,6 +32,14 @@ class StatisticsActivity : ChartBase() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.diary_chart, menu)
+        val targetItems = mutableListOf<MenuItem>()
+        targetItems.add(menu.findItem(R.id.barChart))
+        targetItems.add(menu.findItem(R.id.barChart2))
+        targetItems.add(menu.findItem(R.id.barChart3))
+        targetItems.map { item ->
+            applyFontToMenuItem(item)
+        }
+        
         return true
     }
 

@@ -64,6 +64,7 @@
                     android:layout_height="match_parent">
                     <TextView
                         android:id="@+id/emptyInfo"
+                        android:textColor="@android:color/white"
                         android:text="@string/guide_message_4"
                         android:layout_marginTop="5dp"
                         android:layout_width="wrap_content"

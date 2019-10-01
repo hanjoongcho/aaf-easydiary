@@ -12,6 +12,8 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.provider.MediaStore
 import android.speech.RecognizerIntent
+import android.text.Editable
+import android.text.TextWatcher
 import android.text.format.DateFormat
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -122,6 +124,22 @@ abstract class EditActivity : EasyDiaryActivity() {
      *   etc functions
      *
      ***************************************************************************************************/
+
+    fun addTextWatcher() {
+        if (config.enableCountCharacters) {
+            contentsLength.visibility = View.VISIBLE
+            contentsLength.text = getString(R.string.diary_contents_length, 0)
+            diaryContents.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(p0: Editable?) {}
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    contentsLength.text = getString(R.string.diary_contents_length, p0?.length ?: 0)
+                }
+            })
+        }
+    }
+
     fun toggleSimpleLayout() {
         when (photoContainerScrollView.visibility) {
             View.VISIBLE -> {

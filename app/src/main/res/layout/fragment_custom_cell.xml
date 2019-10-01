@@ -36,6 +36,7 @@
     <LinearLayout
         android:id="@+id/item1"
         android:orientation="horizontal"
+        android:minHeight="@dimen/calendar_item_height_default"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
@@ -54,6 +55,7 @@
     <LinearLayout
         android:id="@+id/item2"
         android:orientation="horizontal"
+        android:minHeight="@dimen/calendar_item_height_default"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
@@ -71,6 +73,7 @@
     <LinearLayout
         android:id="@+id/item3"
         android:orientation="horizontal"
+        android:minHeight="@dimen/calendar_item_height_default"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView

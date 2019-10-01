@@ -37,6 +37,16 @@
                 android:gravity="left"
                 style="@style/text_view_diary_main_item_inner_contents"/>
 
+            <TextView
+                android:id="@+id/contentsLength"
+                android:visibility="gone"
+                android:padding="5dp"
+                android:textColor="?attr/colorPrimary"
+                android:background="@drawable/bg_card_stamp"
+                android:layout_gravity="bottom|end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
             <RelativeLayout
                 android:id="@+id/photoContainer"
                 android:layout_marginTop="@dimen/card_contents_padding"

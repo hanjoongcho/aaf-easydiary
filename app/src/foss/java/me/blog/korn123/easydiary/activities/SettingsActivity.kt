@@ -4,7 +4,6 @@ import android.accounts.Account
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,11 +16,13 @@ import androidx.core.content.ContextCompat
 import com.xw.repo.BubbleSeekBar
 import io.github.aafactory.commons.helpers.BaseConfig
 import io.github.aafactory.commons.utils.DateUtils
-import kotlinx.android.synthetic.main.activity_settings_foss.*
+import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.android.synthetic.main.layout_settings_app_info.*
+import kotlinx.android.synthetic.main.layout_settings_backup_gms.*
 import kotlinx.android.synthetic.main.layout_settings_backup_local.*
 import kotlinx.android.synthetic.main.layout_settings_basic.*
 import kotlinx.android.synthetic.main.layout_settings_lock.*
+import kotlinx.android.synthetic.main.layout_settings_progress.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
@@ -65,7 +66,7 @@ class SettingsActivity : EasyDiaryActivity() {
      ***************************************************************************************************/
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings_foss)
+        setContentView(R.layout.activity_settings)
         setSupportActionBar(toolbar)
         supportActionBar?.run {
             setTitle(R.string.settings)
@@ -128,14 +129,14 @@ class SettingsActivity : EasyDiaryActivity() {
     private fun exportRealmFile() {
         val srcFile = File(EasyDiaryDbHelper.getInstance().path)
         val destFilePath = BACKUP_DB_DIRECTORY + DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
-        val destFile = File(Environment.getExternalStorageDirectory().absolutePath + destFilePath)
+        val destFile = File(EasyDiaryUtils.getStorageBasePath() + destFilePath)
         FileUtils.copyFile(srcFile, destFile, false)
         showSimpleDialog(getString(R.string.export_realm_title), getString(R.string.export_realm_guide_message), destFilePath)
 
     }
 
     private fun importRealmFile() {
-        val files = File(Environment.getExternalStorageDirectory().absolutePath + BACKUP_DB_DIRECTORY).listFiles()
+        val files = File(EasyDiaryUtils.getStorageBasePath() + BACKUP_DB_DIRECTORY).listFiles()
         files?.let {
             when (it.isNotEmpty()) {
                 true -> {
@@ -158,7 +159,7 @@ class SettingsActivity : EasyDiaryActivity() {
                     listView.adapter = adapter
                     listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
                         val itemInfo = parent.adapter.getItem(position) as HashMap<String, String>
-                        val srcFile = File(Environment.getExternalStorageDirectory().absolutePath + BACKUP_DB_DIRECTORY + itemInfo["name"])
+                        val srcFile = File(EasyDiaryUtils.getStorageBasePath() + BACKUP_DB_DIRECTORY + itemInfo["name"])
                         val destFile = File(EasyDiaryDbHelper.getInstance().path)
                         FileUtils.copyFile(srcFile, destFile)
                         restartApp()
@@ -279,7 +280,7 @@ class SettingsActivity : EasyDiaryActivity() {
                 }
             }
 
-            val outputStream = FileOutputStream("${Environment.getExternalStorageDirectory().absolutePath + BACKUP_EXCEL_DIRECTORY + exportFileName}.xls")
+            val outputStream = FileOutputStream("${EasyDiaryUtils.getStorageBasePath() + BACKUP_EXCEL_DIRECTORY + exportFileName}.xls")
             wb.write(outputStream)
             outputStream.close()
             runOnUiThread {
@@ -301,12 +302,16 @@ class SettingsActivity : EasyDiaryActivity() {
         sensitiveOption.setOnClickListener(mOnClickListener)
         addTtfFontSetting.setOnClickListener(mOnClickListener)
         appLockSetting.setOnClickListener(mOnClickListener)
+        restoreSetting.setOnClickListener(mOnClickListener)
+        backupSetting.setOnClickListener(mOnClickListener)
         rateAppSetting.setOnClickListener(mOnClickListener)
         licenseView.setOnClickListener(mOnClickListener)
         restorePhotoSetting.setOnClickListener(mOnClickListener)
         releaseNotes.setOnClickListener(mOnClickListener)
         boldStyleOption.setOnClickListener(mOnClickListener)
         multiPickerOption.setOnClickListener(mOnClickListener)
+        backupAttachPhoto.setOnClickListener(mOnClickListener)
+        recoverAttachPhoto.setOnClickListener(mOnClickListener)
         fingerprint.setOnClickListener(mOnClickListener)
         enableCardViewPolicy.setOnClickListener(mOnClickListener)
         decreaseFont.setOnClickListener(mOnClickListener)
@@ -318,6 +323,7 @@ class SettingsActivity : EasyDiaryActivity() {
         signOutGoogleOAuth.setOnClickListener(mOnClickListener)
         exportRealmFile.setOnClickListener(mOnClickListener)
         importRealmFile.setOnClickListener(mOnClickListener)
+        countCharacters.setOnClickListener(mOnClickListener)
         devMode.setOnClickListener {
             mDevModeClickCount++
             if (mDevModeClickCount > 5) {
@@ -350,6 +356,8 @@ class SettingsActivity : EasyDiaryActivity() {
             override fun getProgressOnFinally(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float, fromUser: Boolean) {}
         }
         fontLineSpacing.setOnProgressChangedListener(bubbleSeekBarListener)
+
+        progressContainer.setOnTouchListener { _, _ -> true }
 
         calendarStartDay.setOnCheckedChangeListener { _, i ->
             val flag = when (i) {
@@ -492,6 +500,10 @@ class SettingsActivity : EasyDiaryActivity() {
                     putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, getString(R.string.privacy_policy_title))
                 })
             }
+            R.id.countCharacters -> {
+                countCharactersSwitcher.toggle()
+                config.enableCountCharacters = countCharactersSwitcher.isChecked
+            }
         }
     }
 
@@ -550,7 +562,7 @@ class SettingsActivity : EasyDiaryActivity() {
             listFont.add(map)
         }
 
-        val fontDir = File(Environment.getExternalStorageDirectory().absolutePath + USER_CUSTOM_FONTS_DIRECTORY)
+        val fontDir = File(EasyDiaryUtils.getStorageBasePath() + USER_CUSTOM_FONTS_DIRECTORY)
         fontDir.list()?.let {
             for (fontName in it) {
                 if (FilenameUtils.getExtension(fontName).equals("ttf", ignoreCase = true)) {
@@ -599,6 +611,7 @@ class SettingsActivity : EasyDiaryActivity() {
         fingerprintSwitcher.isChecked = config.fingerprintLockEnable
         enableCardViewPolicySwitcher.isChecked = config.enableCardViewPolicy
         contentsSummarySwitcher.isChecked = config.enableContentsSummary
+        countCharactersSwitcher.isChecked = config.enableCountCharacters
         when (config.calendarStartDay) {
             CALENDAR_START_DAY_MONDAY -> startMonday.isChecked = true
             CALENDAR_START_DAY_SATURDAY -> startSaturday.isChecked = true
