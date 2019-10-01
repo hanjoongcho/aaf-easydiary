@@ -21,7 +21,7 @@ class CaldroidItemAdapter(
         context: Context,
         month: Int,
         year: Int,
-        caldroidData: Map<String, Any>,
+        caldroidData: Map<String, Any?>,
         extraData: Map<String, Any>
 ) : CaldroidGridAdapter(context, month, year, caldroidData, extraData) {
 
