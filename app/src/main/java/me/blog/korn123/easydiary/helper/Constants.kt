@@ -128,6 +128,7 @@ const val DAILY_SHOWER = 73
 const val DAILY_ONLINE_SHOP = 74
 const val DAILY_DRIVING = 75
 const val DAILY_CAR_REPAIR = 76
+const val DAILY_TOOL_BOX = 77
 
 // Emotion 100 ~ 199
 const val EMOTION_HAPPY = 100
