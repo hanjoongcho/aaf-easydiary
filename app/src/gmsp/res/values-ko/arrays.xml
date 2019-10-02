@@ -19,32 +19,32 @@
     </string-array>
 
     <string-array name="emotion_item_array">
-        <item>139|Sad</item>
-        <item>128|Cry</item>
-        <item>129|Happy</item>
-        <item>130|Love</item>
-        <item>131|Happy</item>
-        <item>132|Sleep</item>
-        <item>133|Smile</item>
-        <item>134|Suffer</item>
-        <item>135|Excuse</item>
-        <item>136|Happy</item>
-        <item>137|Harmful</item>
-        <item>138|Incomprehension</item>
-        <item>144|Smile</item>
-        <item>145|Amaze</item>
-        <item>146|Delight</item>
-        <item>147|Embarrassed</item>
-        <item>140|Idea</item>
-        <item>141|Confusion</item>
-        <item>142|Memory</item>
-        <item>143|Observation</item>
-        <item>49|Like</item>
-        <item>100|Happy</item>
-        <item>122|Happy</item>
+        <item>139|슬픔</item>
+        <item>128|울음</item>
+        <item>129|행복함</item>
+        <item>130|사랑</item>
+        <item>131|행복함</item>
+        <item>132|졸림</item>
+        <item>133|미소</item>
+        <item>134|고통받음</item>
+        <item>135|변명</item>
+        <item>136|행복함</item>
+        <item>137|해로움</item>
+        <item>138|이해못함</item>
+        <item>144|웃음</item>
+        <item>145|놀라움</item>
+        <item>146|기쁨</item>
+        <item>147|당황스러움</item>
+        <item>140|생각</item>
+        <item>141|혼란</item>
+        <item>142|기억</item>
+        <item>143|감시</item>
+        <item>49|좋음</item>
+        <item>100|행복</item>
+        <item>122|행복</item>
         <item>104|Tongue</item>
         <item>125|Tongue</item>
-        <item>106|Wink</item>
+        <item>106|윙크</item>
         <item>124|In Love</item>
         <item>114|Rich</item>
         <item>119|Surprised</item>
