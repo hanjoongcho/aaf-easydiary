@@ -821,6 +821,8 @@ Commercial Registry of Málaga, volume 4994, sheet 217, page number MA-113059, w
 
 <div>Icons made by <a href="https://www.flaticon.com/authors/surang" title="surang">surang</a> from <a href="https://www.flaticon.com/"  title="Flaticon">www.flaticon.com</a></div>
 
+<div>Icons made by <a href="https://www.flaticon.com/authors/nikita-golubev" title="Nikita Golubev">Nikita Golubev</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+
 ### Icons: etc.
 http://www.iconsdb.com/
 ```
