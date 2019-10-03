@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.101 (date: 2019/10/03)
+  * Respond to Android 10 storage access issues (targetSdkVersion temporary downgrade to avoid scoped storage policy)
+
 # Changes in 1.4.99 (date: 2019/09/26)
   * Diary text counting function added
 

@@ -301,6 +301,10 @@
         v1.4.99 / 2019.09.26\n
         Diary text counting function added
     </string>
+    <string name="release_167">
+        v1.4.101 / 2019.10.03\n
+        Respond to Android 10 storage access issues (targetSdkVersion temporary downgrade to avoid scoped storage policy)
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
