@@ -39,6 +39,8 @@ import java.util.*
  */
 
 object EasyDiaryUtils {
+    private const val HIGHLIGHT_COLOR: Int = 0x9FFFFF00.toInt()
+
     val easyDiaryMimeType: String
         get() = "text/aaf_v" + EasyDiaryDbHelper.getInstance().version
 
@@ -100,7 +102,7 @@ object EasyDiaryUtils {
 
                 while (indexOfKeyword >= 0) {
                     //Create a background color span on the keyword
-                    spannableString.setSpan(BackgroundColorSpan(Color.YELLOW), indexOfKeyword, indexOfKeyword + targetString.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    spannableString.setSpan(BackgroundColorSpan(HIGHLIGHT_COLOR), indexOfKeyword, indexOfKeyword + targetString.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
                     //Get the next index of the keyword
                     indexOfKeyword = spannableString.toString().indexOf(targetString, indexOfKeyword + targetString.length)
@@ -128,7 +130,7 @@ object EasyDiaryUtils {
                 var indexOfKeyword = contentsLower.indexOf(inputLower)
 
                 while (indexOfKeyword >= 0) {
-                    spannableString.setSpan(BackgroundColorSpan(Color.YELLOW), indexOfKeyword, indexOfKeyword + inputLower.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    spannableString.setSpan(BackgroundColorSpan(HIGHLIGHT_COLOR), indexOfKeyword, indexOfKeyword + inputLower.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
                     indexOfKeyword = contentsLower.indexOf(inputLower, indexOfKeyword + inputLower.length)
                 }
