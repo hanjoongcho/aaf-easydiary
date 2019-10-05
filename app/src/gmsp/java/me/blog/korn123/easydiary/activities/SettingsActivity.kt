@@ -52,6 +52,7 @@ import me.blog.korn123.easydiary.services.BackupPhotoService
 import me.blog.korn123.easydiary.services.RecoverPhotoService
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
+import org.apache.commons.io.IOUtils
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.ss.usermodel.CellStyle
 import org.apache.poi.ss.usermodel.IndexedColors
@@ -105,18 +106,18 @@ class SettingsActivity : EasyDiaryActivity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
         pauseLock()
 
-        when (resultCode == Activity.RESULT_OK && data != null) {
+        when (resultCode == Activity.RESULT_OK && intent != null) {
             true -> {
                 // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
                 when (requestCode) {
                     REQUEST_CODE_GOOGLE_SIGN_IN -> {
                         // The Task returned from this call is always completed, no need to attach
                         // a listener.
-                        val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
+                        val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(intent)
                         val googleSignAccount = task.getResult(ApiException::class.java)
                         googleSignAccount?.account?.let {
                             requestDrivePermissions(it) { mAccountCallback.invoke(it) }
@@ -124,12 +125,28 @@ class SettingsActivity : EasyDiaryActivity() {
                     }
                     REQUEST_CODE_GOOGLE_DRIVE_PERMISSIONS -> {
                         mPermissionCallback.invoke()                        
-                    }       
+                    }
+                    REQUEST_CODE_FONT_PICK -> {
+                        intent.data?.let { uri ->
+                            val fileName = EasyDiaryUtils.queryName(contentResolver, uri)
+                            if (FilenameUtils.getExtension(fileName).equals("ttf", true)) {
+                                val inputStream = contentResolver.openInputStream(uri)
+                                val fontDestDir = File(EasyDiaryUtils.getStorageBasePath(this) + USER_CUSTOM_FONTS_DIRECTORY)
+                                FileUtils.copyInputStreamToFile(inputStream, File(fontDestDir, fileName))
+                            } else {
+                                makeSnackBar("$fileName is not ttf file.")
+                            }
+                        }
+                    }
                 }
             }
             false -> {
-                makeSnackBar("Google account verification failed.")
-                progressContainer.visibility = View. GONE
+                when (requestCode) {
+                    REQUEST_CODE_GOOGLE_SIGN_IN, REQUEST_CODE_GOOGLE_DRIVE_PERMISSIONS -> {
+                        makeSnackBar("Google account verification failed.")
+                        progressContainer.visibility = View. GONE
+                    }
+                }
             }
         }
     }
@@ -635,6 +652,29 @@ class SettingsActivity : EasyDiaryActivity() {
         }
     }
 
+    /**
+     * Fires an intent to spin up the "file chooser" UI and select an image.
+     */
+    private fun performFileSearch() {
+
+        // ACTION_OPEN_DOCUMENT is the intent to choose a file via the system's file
+        // browser.
+        // ACTION_OPEN_DOCUMENT
+        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+            // Filter to only show results that can be "opened", such as a
+            // file (as opposed to a list of contacts or timezones)
+//             addCategory(Intent.CATEGORY_OPENABLE)
+
+            // Filter to show only images, using the image MIME data type.
+            // If one wanted to search for ogg vorbis files, the type would be "audio/ogg".
+            // To search for all documents available via installed storage providers,
+            // it would be "*/*".
+            type = "*/*"
+        }
+
+        startActivityForResult(intent, REQUEST_CODE_FONT_PICK)
+    }
+
     private val mOnClickListener = View.OnClickListener { view ->
         when (view.id) {
             R.id.primaryColor -> TransitionHelper.startActivityWithTransition(this@SettingsActivity, Intent(this@SettingsActivity, CustomizationActivity::class.java))
@@ -651,7 +691,8 @@ class SettingsActivity : EasyDiaryActivity() {
                 config.diarySearchQueryCaseSensitive = sensitiveOptionSwitcher.isChecked
             }
             R.id.addTtfFontSetting -> {
-                openGuideView(getString(R.string.add_ttf_fonts_title))
+//                openGuideView(getString(R.string.add_ttf_fonts_title))
+                performFileSearch()
             }
             R.id.restoreSetting -> {
                 mTaskFlag = SETTING_FLAG_IMPORT_GOOGLE_DRIVE

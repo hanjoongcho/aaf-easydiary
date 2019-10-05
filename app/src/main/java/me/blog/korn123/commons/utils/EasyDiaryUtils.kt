@@ -1,11 +1,14 @@
 package me.blog.korn123.commons.utils
 
+import android.content.ContentResolver
 import android.content.Context
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.PorterDuff
 import android.graphics.Typeface
 import android.net.Uri
+import android.provider.OpenableColumns
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.BackgroundColorSpan
@@ -245,5 +248,17 @@ object EasyDiaryUtils {
             }
         }
         return pageIndex
+    }
+
+    fun queryName(resolver: ContentResolver, uri: Uri): String {
+        val returnCursor: Cursor? = resolver.query(uri, null, null, null, null)
+        var name: String? = null
+        returnCursor?.let {
+            val nameIndex = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+            it.moveToFirst()
+            name = returnCursor.getString(nameIndex);
+            returnCursor.close()
+        }
+        return name ?: UUID.randomUUID().toString()
     }
 }
