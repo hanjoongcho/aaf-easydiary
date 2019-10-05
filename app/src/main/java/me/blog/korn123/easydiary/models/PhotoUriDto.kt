@@ -24,6 +24,6 @@ open class PhotoUriDto : RealmObject {
     fun isContentUri(): Boolean = StringUtils.startsWith(photoUri, CONTENT_URI_PREFIX)
     
     fun getFilePath(): String {
-        return "${EasyDiaryUtils.getStorageBasePath()}$DIARY_PHOTO_DIRECTORY${FilenameUtils.getBaseName(photoUri)}"
+        return "$DIARY_PHOTO_DIRECTORY${FilenameUtils.getBaseName(photoUri)}"
     } 
 }

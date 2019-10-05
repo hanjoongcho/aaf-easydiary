@@ -383,7 +383,7 @@ abstract class EditActivity : EasyDiaryActivity() {
         setVisiblePhotoProgress(true)
         Thread(Runnable {
             selectPaths.map { item ->
-                val photoPath = EasyDiaryUtils.getStorageBasePath() + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
+                val photoPath = EasyDiaryUtils.getStorageBasePath(this) + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
                 try {
                     EasyDiaryUtils.downSamplingImage(this, File(item), File(photoPath))
                     mPhotoUris.add(PhotoUriDto(FILE_URI_PREFIX + photoPath))

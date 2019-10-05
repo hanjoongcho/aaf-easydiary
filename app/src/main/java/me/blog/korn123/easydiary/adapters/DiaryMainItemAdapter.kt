@@ -101,7 +101,7 @@ class DiaryMainItemAdapter(
         if (diaryDto.photoUris?.size ?: 0 > 0) {
             val maxPhotos = CommonUtils.getDefaultDisplay(activity).x / CommonUtils.dpToPixel(activity, 40F)
             diaryDto.photoUris?.map {
-                val path = it.getFilePath()
+                val path = EasyDiaryUtils.getStorageBasePath(context) + it.getFilePath()
                 val imageView = ImageView(activity)
                 val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(activity, 28F), CommonUtils.dpToPixel(activity, 28F))
                 layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(activity, 3F), 0)

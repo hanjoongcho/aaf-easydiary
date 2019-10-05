@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Build
-import android.os.Environment
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.appcompat.app.AppCompatActivity
@@ -36,7 +35,7 @@ class BackupPhotoService : Service() {
     private var mInProcessJob = true
     private val remoteDriveFileNames  = mutableListOf<String>()
     private val targetFilenames = mutableListOf<String>()
-    private val photoPath = "${EasyDiaryUtils.getStorageBasePath()}$DIARY_PHOTO_DIRECTORY"
+    private lateinit var mPhotoPath: String
     private lateinit var mWorkingFolderId: String
     
     override fun onBind(intent: Intent?): IBinder? = null
@@ -51,7 +50,8 @@ class BackupPhotoService : Service() {
         mDriveServiceHelper = DriveServiceHelper(googleDriveService)
         notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationBuilder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
-        
+        mPhotoPath = "${EasyDiaryUtils.getStorageBasePath(this)}$DIARY_PHOTO_DIRECTORY"
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Create the NotificationChannel
             val importance = NotificationManager.IMPORTANCE_DEFAULT
@@ -111,7 +111,7 @@ class BackupPhotoService : Service() {
                 when (result.nextPageToken == null) {
                     true -> {
                         // step02. upload 대상 첨부사진 필터링
-                        val localPhotos = File(photoPath).listFiles()
+                        val localPhotos = File(mPhotoPath).listFiles()
                         localPhotos.map { photo ->
                             if (!remoteDriveFileNames.contains(photo.name)) {
                                 targetFilenames.add(photo.name)
@@ -139,7 +139,7 @@ class BackupPhotoService : Service() {
 
     private fun uploadDiaryPhoto() {
         val fileName =  targetFilenames[targetFilenamesCursor]
-        mDriveServiceHelper.createFile(mWorkingFolderId, photoPath + fileName, fileName, DriveServiceHelper.MIME_TYPE_AAF_EASY_DIARY_PHOTO).run {
+        mDriveServiceHelper.createFile(mWorkingFolderId, mPhotoPath + fileName, fileName, DriveServiceHelper.MIME_TYPE_AAF_EASY_DIARY_PHOTO).run {
             addOnSuccessListener { _ ->
                 targetFilenamesCursor++
                 successCount++

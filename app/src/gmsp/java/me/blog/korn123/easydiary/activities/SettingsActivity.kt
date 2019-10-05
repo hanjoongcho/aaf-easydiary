@@ -377,14 +377,14 @@ class SettingsActivity : EasyDiaryActivity() {
     private fun exportRealmFile() {
         val srcFile = File(EasyDiaryDbHelper.getInstance().path)
         val destFilePath = BACKUP_DB_DIRECTORY + DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
-        val destFile = File(EasyDiaryUtils.getStorageBasePath() + destFilePath)
+        val destFile = File(EasyDiaryUtils.getStorageBasePath(this) + destFilePath)
         FileUtils.copyFile(srcFile, destFile, false)
         showSimpleDialog(getString(R.string.export_realm_title), getString(R.string.export_realm_guide_message), destFilePath)
 
     }
 
     private fun importRealmFile() {
-        val files = File(EasyDiaryUtils.getStorageBasePath() + BACKUP_DB_DIRECTORY).listFiles()
+        val files = File(EasyDiaryUtils.getStorageBasePath(this) + BACKUP_DB_DIRECTORY).listFiles()
         files?.let {
             when (it.isNotEmpty()) {
                 true -> {
@@ -407,7 +407,7 @@ class SettingsActivity : EasyDiaryActivity() {
                     listView.adapter = adapter
                     listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
                         val itemInfo = parent.adapter.getItem(position) as HashMap<String, String>
-                        val srcFile = File(EasyDiaryUtils.getStorageBasePath() + BACKUP_DB_DIRECTORY + itemInfo["name"])
+                        val srcFile = File(EasyDiaryUtils.getStorageBasePath(this) + BACKUP_DB_DIRECTORY + itemInfo["name"])
                         val destFile = File(EasyDiaryDbHelper.getInstance().path)
                         FileUtils.copyFile(srcFile, destFile)
                         restartApp()
@@ -500,7 +500,7 @@ class SettingsActivity : EasyDiaryActivity() {
                 val photoSizes = StringBuffer()
                 diaryDto.photoUris?.map {
                     photoNames.append("$DIARY_PHOTO_DIRECTORY${FilenameUtils.getName(it.getFilePath())}\n")
-                    photoSizes.append("${File(it.getFilePath()).length() / 1024}\n")
+                    photoSizes.append("${File(EasyDiaryUtils.getStorageBasePath(this) + it.getFilePath()).length() / 1024}\n")
                 }
 
                 val sequence = row.createCell(SEQ).apply {cellStyle = bodyStyle}
@@ -528,7 +528,7 @@ class SettingsActivity : EasyDiaryActivity() {
                 }
             }
 
-            val outputStream = FileOutputStream("${EasyDiaryUtils.getStorageBasePath() + BACKUP_EXCEL_DIRECTORY + exportFileName}.xls")
+            val outputStream = FileOutputStream("${EasyDiaryUtils.getStorageBasePath(this) + BACKUP_EXCEL_DIRECTORY + exportFileName}.xls")
             wb.write(outputStream)
             outputStream.close()
             runOnUiThread {
@@ -857,7 +857,7 @@ class SettingsActivity : EasyDiaryActivity() {
             listFont.add(map)
         }
 
-        val fontDir = File(EasyDiaryUtils.getStorageBasePath() + USER_CUSTOM_FONTS_DIRECTORY)
+        val fontDir = File(EasyDiaryUtils.getStorageBasePath(this) + USER_CUSTOM_FONTS_DIRECTORY)
         fontDir.list()?.let {
             for (fontName in it) {
                 if (FilenameUtils.getExtension(fontName).equals("ttf", ignoreCase = true)) {

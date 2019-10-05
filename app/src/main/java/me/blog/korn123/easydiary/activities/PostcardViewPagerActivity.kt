@@ -35,7 +35,7 @@ class PostcardViewPagerActivity : EasyDiaryActivity() {
         val intent = intent
         val sequence = intent.getIntExtra(POSTCARD_SEQUENCE, 0)
 
-        mListPostcard = File(EasyDiaryUtils.getStorageBasePath() + DIARY_POSTCARD_DIRECTORY)
+        mListPostcard = File(EasyDiaryUtils.getStorageBasePath(this) + DIARY_POSTCARD_DIRECTORY)
                 .listFiles()
                 .filter { it.extension.equals("jpg", true)}
                 .sortedDescending()

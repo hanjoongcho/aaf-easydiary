@@ -9,6 +9,7 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.BackgroundColorSpan
 import android.text.style.StyleSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.widget.AdapterView
@@ -55,13 +56,14 @@ object EasyDiaryUtils {
         }
 
     fun initWorkingDirectory(context: Context) {
+        Log.i("aaf-t", context.applicationInfo.dataDir)
         if (context.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-            makeDirectory(getStorageBasePath() + DIARY_PHOTO_DIRECTORY)
-            makeDirectory(getStorageBasePath() + DIARY_POSTCARD_DIRECTORY)
-            makeDirectory(getStorageBasePath() + USER_CUSTOM_FONTS_DIRECTORY)
-            makeDirectory(getStorageBasePath() + MARKDOWN_DIRECTORY)
-            makeDirectory(getStorageBasePath() + BACKUP_EXCEL_DIRECTORY)
-            makeDirectory(getStorageBasePath() + BACKUP_DB_DIRECTORY)
+            makeDirectory(getStorageBasePath(context) + DIARY_PHOTO_DIRECTORY)
+            makeDirectory(getStorageBasePath(context) + DIARY_POSTCARD_DIRECTORY)
+            makeDirectory(getStorageBasePath(context) + USER_CUSTOM_FONTS_DIRECTORY)
+            makeDirectory(getStorageBasePath(context) + MARKDOWN_DIRECTORY)
+            makeDirectory(getStorageBasePath(context) + BACKUP_EXCEL_DIRECTORY)
+            makeDirectory(getStorageBasePath(context) + BACKUP_DB_DIRECTORY)
         }
     }
     
@@ -70,8 +72,9 @@ object EasyDiaryUtils {
         if (!workingDirectory.exists()) workingDirectory.mkdirs()
     }
 
-    fun getStorageBasePath(): String {
-        return Environment.getExternalStorageDirectory().absolutePath
+    fun getStorageBasePath(context: Context): String {
+//        return Environment.getExternalStorageDirectory().absolutePath
+        return context.applicationInfo.dataDir
     } 
 
     fun boldString(context: Context, textView: TextView?) {
@@ -173,8 +176,8 @@ object EasyDiaryUtils {
             }
             false -> {
                 when (fixedWidth == fixedHeight) {
-                    true -> BitmapUtils.decodeFileCropCenter(photoUriDto.getFilePath(), CommonUtils.dpToPixel(context, fixedWidth.toFloat(), CALCULATION.FLOOR))
-                    false -> BitmapUtils.decodeFile(photoUriDto.getFilePath(), CommonUtils.dpToPixel(context, fixedWidth.toFloat(), CALCULATION.FLOOR), CommonUtils.dpToPixel(context, fixedHeight.toFloat(), CALCULATION.FLOOR))
+                    true -> BitmapUtils.decodeFileCropCenter(getStorageBasePath(context) + photoUriDto.getFilePath(), CommonUtils.dpToPixel(context, fixedWidth.toFloat(), CALCULATION.FLOOR))
+                    false -> BitmapUtils.decodeFile(getStorageBasePath(context) + photoUriDto.getFilePath(), CommonUtils.dpToPixel(context, fixedWidth.toFloat(), CALCULATION.FLOOR), CommonUtils.dpToPixel(context, fixedHeight.toFloat(), CALCULATION.FLOOR))
                 }
 
             }
@@ -197,7 +200,7 @@ object EasyDiaryUtils {
                     BitmapFactory.decodeStream(context.contentResolver.openInputStream(Uri.parse(photoUriDto.photoUri)))
                 }
                 false -> {
-                    BitmapFactory.decodeFile(photoUriDto.getFilePath())
+                    BitmapFactory.decodeFile(getStorageBasePath(context) + photoUriDto.getFilePath())
                 }
             }
         } catch (e: Exception) {

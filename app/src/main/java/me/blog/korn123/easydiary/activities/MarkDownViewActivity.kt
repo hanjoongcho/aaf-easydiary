@@ -38,7 +38,7 @@ class MarkDownViewActivity : EasyDiaryActivity() {
             setHomeAsUpIndicator(R.drawable.ic_cross)
         }
 
-        savedFilePath = "${EasyDiaryUtils.getStorageBasePath() + MARKDOWN_DIRECTORY + pageTitle}.md"
+        savedFilePath = "${EasyDiaryUtils.getStorageBasePath(this) + MARKDOWN_DIRECTORY + pageTitle}.md"
         markdownUrl = intent.getStringExtra(OPEN_URL_INFO)
         markdownView.run {
             addStyleSheet(Github()/*InternalStyleSheet()*/.apply {

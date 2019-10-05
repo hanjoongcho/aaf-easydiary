@@ -79,7 +79,7 @@ object FontUtils {
 
     fun getTypeface(context: Context, assetManager: AssetManager, fontName: String?): Typeface? {
         val assetsFonts = context.resources.getStringArray(R.array.pref_list_fonts_values)
-        val userFonts = File(EasyDiaryUtils.getStorageBasePath() + USER_CUSTOM_FONTS_DIRECTORY).list()
+        val userFonts = File(EasyDiaryUtils.getStorageBasePath(context) + USER_CUSTOM_FONTS_DIRECTORY).list()
         return when {
             isValidTypeface(assetsFonts, fontName) -> {
                 if (StringUtils.equals(fontName, CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT)) {
@@ -88,7 +88,7 @@ object FontUtils {
                     Typeface.createFromAsset(assetManager, "fonts/" + fontName)
                 }
             }
-            isValidTypeface(userFonts, fontName) -> Typeface.createFromFile(EasyDiaryUtils.getStorageBasePath() + USER_CUSTOM_FONTS_DIRECTORY + fontName)
+            isValidTypeface(userFonts, fontName) -> Typeface.createFromFile(EasyDiaryUtils.getStorageBasePath(context) + USER_CUSTOM_FONTS_DIRECTORY + fontName)
             else -> Typeface.DEFAULT
         }
     }

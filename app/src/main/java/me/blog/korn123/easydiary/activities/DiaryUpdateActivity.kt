@@ -114,7 +114,7 @@ class DiaryUpdateActivity : EditActivity() {
             REQUEST_CODE_IMAGE_PICKER -> try {
                 if (resultCode == Activity.RESULT_OK && data != null) {
                     if (mPhotoUris == null) mPhotoUris = RealmList()
-                    val photoPath = EasyDiaryUtils.getStorageBasePath() + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
+                    val photoPath = EasyDiaryUtils.getStorageBasePath(this) + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
                     CommonUtils.uriToFile(this, data.data!!, photoPath)
                     mPhotoUris?.add(PhotoUriDto(FILE_URI_PREFIX + photoPath))
                     val thumbnailSize = config.settingThumbnailSize
