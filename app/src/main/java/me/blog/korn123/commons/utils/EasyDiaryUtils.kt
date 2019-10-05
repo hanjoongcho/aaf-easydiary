@@ -1,17 +1,17 @@
 package me.blog.korn123.commons.utils
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.PorterDuff
+import android.graphics.Typeface
 import android.net.Uri
-import android.os.Environment
-import android.text.Spannable
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.BackgroundColorSpan
 import android.text.style.StyleSpan
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.TextView
@@ -23,7 +23,6 @@ import io.github.aafactory.commons.utils.CALCULATION
 import io.github.aafactory.commons.utils.CommonUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.SecondItemAdapter
-import me.blog.korn123.easydiary.extensions.CustomTypefaceSpan
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.*
@@ -56,7 +55,6 @@ object EasyDiaryUtils {
         }
 
     fun initWorkingDirectory(context: Context) {
-        Log.i("aaf-t", context.applicationInfo.dataDir)
         if (context.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
             makeDirectory(getStorageBasePath(context) + DIARY_PHOTO_DIRECTORY)
             makeDirectory(getStorageBasePath(context) + DIARY_POSTCARD_DIRECTORY)

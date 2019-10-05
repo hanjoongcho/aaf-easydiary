@@ -7,10 +7,12 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
 import android.widget.AbsListView
 import android.widget.AdapterView
@@ -238,6 +240,19 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                     it.forEach { file ->
                         if (file.extension.equals("jpg", true)) FileUtils.moveFileToDirectory(file, File(EasyDiaryUtils.getStorageBasePath(this) + DIARY_POSTCARD_DIRECTORY), true)
                     }
+                }
+
+                // Move attached photo from external storage to application data directory
+                // From publishVersionCode 168
+                Log.i("aaf-t", "${EasyDiaryUtils.getStorageBasePath(this)}")
+                val srcDir = File(Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY)
+                val destDir = File(EasyDiaryUtils.getStorageBasePath(this) + DIARY_PHOTO_DIRECTORY)
+                srcDir.listFiles().map { file ->
+                    Log.i("aaf-t", "${File(destDir, file.name).exists()} ${File(destDir, file.name).absolutePath}")
+                    if (File(destDir, file.name).exists()) {
+                        Log.i("aaf-t", "${File(destDir, file.name).delete()}")
+                    }
+                    FileUtils.moveToDirectory(file, destDir, true)
                 }
             }
 
