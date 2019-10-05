@@ -245,18 +245,56 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 // Move attached photo from external storage to application data directory
                 // From publishVersionCode 168
                 Log.i("aaf-t", "${EasyDiaryUtils.getStorageBasePath(this)}")
-                val srcDir = File(Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY)
-                val destDir = File(EasyDiaryUtils.getStorageBasePath(this) + DIARY_PHOTO_DIRECTORY)
-                srcDir.listFiles().map { file ->
-                    Log.i("aaf-t", "${File(destDir, file.name).exists()} ${File(destDir, file.name).absolutePath}")
-                    if (File(destDir, file.name).exists()) {
-                        Log.i("aaf-t", "${File(destDir, file.name).delete()}")
+
+                // 01. DIARY_PHOTO_DIRECTORY
+                val photoSrcDir = File(Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY)
+                val photoDestDir = File(EasyDiaryUtils.getStorageBasePath(this) + DIARY_PHOTO_DIRECTORY)
+                photoSrcDir.listFiles()?.let {
+                    it.forEachIndexed { index, file ->
+                        Log.i("aaf-t", "${File(photoDestDir, file.name).exists()} ${File(photoDestDir, file.name).absolutePath}")
+                        if (File(photoDestDir, file.name).exists()) {
+                            Log.i("aaf-t", "${File(photoDestDir, file.name).delete()}")
+                        }
+                        FileUtils.moveToDirectory(file, photoDestDir, true)
+                        runOnUiThread {
+                            migrationMessage.text = "Android 10 Scoped Storage 정책에 따른 저장소 위치 변경작업이 진행됩니다. 이 작업은 한번만 실행됩니다."
+                            progressInfo.text = "$index/${it.size} (Photo)"
+                        }
                     }
-                    FileUtils.moveToDirectory(file, destDir, true)
                 }
 //                destDir.listFiles().map { file ->
 //                    FileUtils.moveToDirectory(file, srcDir, true)
 //                }
+
+                // 02. DIARY_POSTCARD_DIRECTORY
+                val postCardSrcDir = File(Environment.getExternalStorageDirectory().absolutePath + DIARY_POSTCARD_DIRECTORY)
+                val postCardDestDir = File(EasyDiaryUtils.getStorageBasePath(this) + DIARY_POSTCARD_DIRECTORY)
+                postCardSrcDir.listFiles()?.let {
+                    it.forEachIndexed { index, file ->
+                        if (File(postCardDestDir, file.name).exists()) {
+                            File(postCardDestDir, file.name).delete()
+                        }
+                        FileUtils.moveToDirectory(file, postCardDestDir, true)
+                        runOnUiThread {
+                            progressInfo.text = "$index/${it.size} (Postcard)"
+                        }
+                    }
+                }
+
+                // 03. USER_CUSTOM_FONTS_DIRECTORY
+                val fontSrcDir = File(Environment.getExternalStorageDirectory().absolutePath + USER_CUSTOM_FONTS_DIRECTORY)
+                val fontDestDir = File(EasyDiaryUtils.getStorageBasePath(this) + USER_CUSTOM_FONTS_DIRECTORY)
+                fontSrcDir.listFiles()?.let {
+                    it.forEachIndexed { index, file ->
+                        if (File(fontDestDir, file.name).exists()) {
+                            File(fontDestDir, file.name).delete()
+                        }
+                        FileUtils.moveToDirectory(file, fontDestDir, true)
+                        runOnUiThread {
+                            progressInfo.text = "$index/${it.size} (Font)"
+                        }
+                    }
+                }
             }
 
             runOnUiThread {

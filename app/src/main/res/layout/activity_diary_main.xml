@@ -93,6 +93,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <com.simplemobiletools.commons.views.MyTextView
+            android:id="@+id/migrationMessage"
             android:text="@string/diary_photo_migration_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -102,6 +103,7 @@
             android:layout_height="20dp" />
         <com.simplemobiletools.commons.views.MyTextView
             android:id="@+id/progressInfo"
+            android:layout_gravity="right"
             android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
