@@ -254,6 +254,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                     }
                     FileUtils.moveToDirectory(file, destDir, true)
                 }
+//                destDir.listFiles().map { file ->
+//                    FileUtils.moveToDirectory(file, srcDir, true)
+//                }
             }
 
             runOnUiThread {
