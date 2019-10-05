@@ -4,6 +4,7 @@ import android.accounts.Account
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +16,7 @@ import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -453,7 +455,7 @@ class SettingsActivity : EasyDiaryActivity() {
         var confirmButton = containerView.findViewById<TextView>(R.id.confirm)
         progressInfo.text = "Preparing to export..."
         alert.setView(containerView)
-        alert.show()
+//        alert.show()
 
         Thread(Runnable {
             val diaryList = EasyDiaryDbHelper.readDiary(null)
@@ -540,18 +542,33 @@ class SettingsActivity : EasyDiaryActivity() {
                 isAllDay.setCellValue(diaryDto.isAllDay)
                 weather.setCellValue(diarySymbolMap[diaryDto.weather])
 
-                runOnUiThread {
-                    progressInfo.text = "${index.plus(1)} / ${diaryList.size}\n${getString(R.string.export_excel_xls_location)}: ${BACKUP_EXCEL_DIRECTORY + exportFileName}.xls"
-                }
+//                runOnUiThread {
+//                    progressInfo.text = "${index.plus(1)} / ${diaryList.size}\n${getString(R.string.export_excel_xls_location)}: ${BACKUP_EXCEL_DIRECTORY + exportFileName}.xls"
+//                }
             }
 
-            val outputStream = FileOutputStream("${EasyDiaryUtils.getStorageBasePath(this) + BACKUP_EXCEL_DIRECTORY + exportFileName}.xls")
+//            val destFileFullPath = "${EasyDiaryUtils.getStorageBasePath(this) + BACKUP_EXCEL_DIRECTORY + exportFileName}.xls"
+            val destFile = File(File(EasyDiaryUtils.getStorageBasePath(this) + BACKUP_EXCEL_DIRECTORY), "$exportFileName.xls")
+            Log.i("aaf-t", destFile.absolutePath)
+            val outputStream = FileOutputStream(destFile)
             wb.write(outputStream)
             outputStream.close()
-            runOnUiThread {
-                confirmButton.visibility = View.VISIBLE
-                confirmButton.setOnClickListener { alert.cancel() }
-            }
+
+            // test code for attach file to email
+            val authority = "$packageName.provider"
+            val uri = FileProvider.getUriForFile(this, authority, destFile)
+            val emailIntent: Intent = Intent(Intent.ACTION_SEND)
+            emailIntent.type = "text/plain"
+//            emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("email@example.com"))
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "subject here")
+            emailIntent.putExtra(Intent.EXTRA_TEXT, "body text")
+            emailIntent.putExtra(Intent.EXTRA_STREAM, uri)
+            startActivity(Intent.createChooser(emailIntent, "Pick an Email provider"))
+
+//            runOnUiThread {
+//                confirmButton.visibility = View.VISIBLE
+//                confirmButton.setOnClickListener { alert.cancel() }
+//            }
         }).start()
     }
 
