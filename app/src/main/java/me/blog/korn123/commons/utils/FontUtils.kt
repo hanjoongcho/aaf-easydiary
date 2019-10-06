@@ -3,8 +3,6 @@ package me.blog.korn123.commons.utils
 import android.content.Context
 import android.content.res.AssetManager
 import android.graphics.Typeface
-import android.os.Environment
-import android.util.Log
 import android.view.ViewGroup
 import android.widget.TextView
 import me.blog.korn123.easydiary.R
@@ -79,7 +77,7 @@ object FontUtils {
 
     fun getTypeface(context: Context, assetManager: AssetManager, fontName: String?): Typeface? {
         val assetsFonts = context.resources.getStringArray(R.array.pref_list_fonts_values)
-        val userFonts = File(EasyDiaryUtils.getStorageBasePath(context) + USER_CUSTOM_FONTS_DIRECTORY).list()
+        val userFonts = File(EasyDiaryUtils.getApplicationDataDirectory(context) + USER_CUSTOM_FONTS_DIRECTORY).list()
         return when {
             isValidTypeface(assetsFonts, fontName) -> {
                 if (StringUtils.equals(fontName, CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT)) {
@@ -88,7 +86,7 @@ object FontUtils {
                     Typeface.createFromAsset(assetManager, "fonts/" + fontName)
                 }
             }
-            isValidTypeface(userFonts, fontName) -> Typeface.createFromFile(EasyDiaryUtils.getStorageBasePath(context) + USER_CUSTOM_FONTS_DIRECTORY + fontName)
+            isValidTypeface(userFonts, fontName) -> Typeface.createFromFile(EasyDiaryUtils.getApplicationDataDirectory(context) + USER_CUSTOM_FONTS_DIRECTORY + fontName)
             else -> Typeface.DEFAULT
         }
     }

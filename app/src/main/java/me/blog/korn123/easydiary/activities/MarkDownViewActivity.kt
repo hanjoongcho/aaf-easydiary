@@ -1,7 +1,6 @@
 package me.blog.korn123.easydiary.activities
 
 import android.os.Bundle
-import android.os.Environment
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -38,7 +37,7 @@ class MarkDownViewActivity : EasyDiaryActivity() {
             setHomeAsUpIndicator(R.drawable.ic_cross)
         }
 
-        savedFilePath = "${EasyDiaryUtils.getStorageBasePath(this) + MARKDOWN_DIRECTORY + pageTitle}.md"
+        savedFilePath = "${EasyDiaryUtils.getApplicationDataDirectory(this) + MARKDOWN_DIRECTORY + pageTitle}.md"
         markdownUrl = intent.getStringExtra(OPEN_URL_INFO)
         markdownView.run {
             addStyleSheet(Github()/*InternalStyleSheet()*/.apply {

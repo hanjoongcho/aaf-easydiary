@@ -8,12 +8,12 @@ import android.graphics.BitmapFactory
 import android.graphics.PorterDuff
 import android.graphics.Typeface
 import android.net.Uri
+import android.os.Environment
 import android.provider.OpenableColumns
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.BackgroundColorSpan
 import android.text.style.StyleSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.widget.AdapterView
 import android.widget.ListView
@@ -59,12 +59,12 @@ object EasyDiaryUtils {
 
     fun initWorkingDirectory(context: Context) {
         if (context.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-            makeDirectory(getStorageBasePath(context) + DIARY_PHOTO_DIRECTORY)
-            makeDirectory(getStorageBasePath(context) + DIARY_POSTCARD_DIRECTORY)
-            makeDirectory(getStorageBasePath(context) + USER_CUSTOM_FONTS_DIRECTORY)
-            makeDirectory(getStorageBasePath(context) + MARKDOWN_DIRECTORY)
-            makeDirectory(getStorageBasePath(context) + BACKUP_EXCEL_DIRECTORY)
-            makeDirectory(getStorageBasePath(context) + BACKUP_DB_DIRECTORY)
+            makeDirectory(getApplicationDataDirectory(context) + DIARY_PHOTO_DIRECTORY)
+            makeDirectory(getApplicationDataDirectory(context) + DIARY_POSTCARD_DIRECTORY)
+            makeDirectory(getApplicationDataDirectory(context) + USER_CUSTOM_FONTS_DIRECTORY)
+            makeDirectory(getApplicationDataDirectory(context) + MARKDOWN_DIRECTORY)
+            makeDirectory(getApplicationDataDirectory(context) + BACKUP_EXCEL_DIRECTORY)
+            makeDirectory(getApplicationDataDirectory(context) + BACKUP_DB_DIRECTORY)
         }
     }
     
@@ -73,10 +73,12 @@ object EasyDiaryUtils {
         if (!workingDirectory.exists()) workingDirectory.mkdirs()
     }
 
-    fun getStorageBasePath(context: Context): String {
+    fun getApplicationDataDirectory(context: Context): String {
 //        return Environment.getExternalStorageDirectory().absolutePath
         return context.applicationInfo.dataDir
-    } 
+    }
+
+    fun getExternalStorageDirectory(): File = Environment.getExternalStorageDirectory()
 
     fun boldString(context: Context, textView: TextView?) {
         if (context.config.boldStyleEnable) {
@@ -177,8 +179,8 @@ object EasyDiaryUtils {
             }
             false -> {
                 when (fixedWidth == fixedHeight) {
-                    true -> BitmapUtils.decodeFileCropCenter(getStorageBasePath(context) + photoUriDto.getFilePath(), CommonUtils.dpToPixel(context, fixedWidth.toFloat(), CALCULATION.FLOOR))
-                    false -> BitmapUtils.decodeFile(getStorageBasePath(context) + photoUriDto.getFilePath(), CommonUtils.dpToPixel(context, fixedWidth.toFloat(), CALCULATION.FLOOR), CommonUtils.dpToPixel(context, fixedHeight.toFloat(), CALCULATION.FLOOR))
+                    true -> BitmapUtils.decodeFileCropCenter(getApplicationDataDirectory(context) + photoUriDto.getFilePath(), CommonUtils.dpToPixel(context, fixedWidth.toFloat(), CALCULATION.FLOOR))
+                    false -> BitmapUtils.decodeFile(getApplicationDataDirectory(context) + photoUriDto.getFilePath(), CommonUtils.dpToPixel(context, fixedWidth.toFloat(), CALCULATION.FLOOR), CommonUtils.dpToPixel(context, fixedHeight.toFloat(), CALCULATION.FLOOR))
                 }
 
             }
@@ -201,7 +203,7 @@ object EasyDiaryUtils {
                     BitmapFactory.decodeStream(context.contentResolver.openInputStream(Uri.parse(photoUriDto.photoUri)))
                 }
                 false -> {
-                    BitmapFactory.decodeFile(getStorageBasePath(context) + photoUriDto.getFilePath())
+                    BitmapFactory.decodeFile(getApplicationDataDirectory(context) + photoUriDto.getFilePath())
                 }
             }
         } catch (e: Exception) {

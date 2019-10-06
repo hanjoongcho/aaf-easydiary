@@ -3,10 +3,7 @@ package me.blog.korn123.easydiary.activities
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.os.Environment
 import androidx.core.content.FileProvider
-import androidx.viewpager.widget.PagerAdapter
-import androidx.viewpager.widget.ViewPager
 import android.view.*
 import android.widget.TextView
 import com.github.chrisbanes.photoview.PhotoView
@@ -35,7 +32,7 @@ class PostcardViewPagerActivity : EasyDiaryActivity() {
         val intent = intent
         val sequence = intent.getIntExtra(POSTCARD_SEQUENCE, 0)
 
-        mListPostcard = File(EasyDiaryUtils.getStorageBasePath(this) + DIARY_POSTCARD_DIRECTORY)
+        mListPostcard = File(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_POSTCARD_DIRECTORY)
                 .listFiles()
                 .filter { it.extension.equals("jpg", true)}
                 .sortedDescending()

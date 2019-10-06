@@ -456,4 +456,6 @@
     <string name="diary_contents_length">文字数: %d</string>
     <string name="count_characters_title">本文文字数世紀</string>
     <string name="count_characters_summary">ダイアリー本文の文字数をカウントします。</string>
+    <string name="send_email_attach_excel_title">엑셀파일 생성 및 이메일 전송</string>
+    <string name="send_email_attach_excel_description">모든 콘텐츠를 엑셀파일로 생성하고 이메일에 첨부합니다.</string>
 </resources>

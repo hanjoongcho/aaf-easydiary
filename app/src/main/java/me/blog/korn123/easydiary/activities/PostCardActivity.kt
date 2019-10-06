@@ -9,7 +9,6 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Matrix
 import android.os.Bundle
-import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import androidx.core.content.FileProvider
@@ -313,7 +312,7 @@ class PostCardActivity : EasyDiaryActivity() {
         Thread(Runnable {
             try {
                 val diaryCardPath = "$DIARY_POSTCARD_DIRECTORY${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}_$mSequence.jpg"
-                mSavedDiaryCardPath = EasyDiaryUtils.getStorageBasePath(this) + diaryCardPath
+                mSavedDiaryCardPath = EasyDiaryUtils.getApplicationDataDirectory(this) + diaryCardPath
                 EasyDiaryUtils.initWorkingDirectory(this@PostCardActivity)
                 BitmapUtils.saveBitmapToFileCache(bitmap, mSavedDiaryCardPath)
                 Handler(Looper.getMainLooper()).post {

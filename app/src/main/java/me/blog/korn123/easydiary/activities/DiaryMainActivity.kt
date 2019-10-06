@@ -224,7 +224,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             for ((index, dto) in listPhotoUri.withIndex()) {
 //                Log.i("PHOTO-URI", dto.photoUri)
                 if (dto.isContentUri()) {
-                    val photoPath = EasyDiaryUtils.getStorageBasePath(this) + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
+                    val photoPath = EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
                     CommonUtils.uriToFile(this, Uri.parse(dto.photoUri), photoPath)
                     EasyDiaryDbHelper.getInstance().beginTransaction()
                     dto.photoUri = FILE_URI_PREFIX + photoPath
@@ -236,19 +236,19 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             }
 
             if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                File(EasyDiaryUtils.getStorageBasePath(this) + WORKING_DIRECTORY).listFiles()?.let {
+                File(EasyDiaryUtils.getApplicationDataDirectory(this) + WORKING_DIRECTORY).listFiles()?.let {
                     it.forEach { file ->
-                        if (file.extension.equals("jpg", true)) FileUtils.moveFileToDirectory(file, File(EasyDiaryUtils.getStorageBasePath(this) + DIARY_POSTCARD_DIRECTORY), true)
+                        if (file.extension.equals("jpg", true)) FileUtils.moveFileToDirectory(file, File(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_POSTCARD_DIRECTORY), true)
                     }
                 }
 
                 // Move attached photo from external storage to application data directory
                 // From publishVersionCode 168
-                Log.i("aaf-t", "${EasyDiaryUtils.getStorageBasePath(this)}")
+                Log.i("aaf-t", "${EasyDiaryUtils.getApplicationDataDirectory(this)}")
 
                 // 01. DIARY_PHOTO_DIRECTORY
-                val photoSrcDir = File(Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY)
-                val photoDestDir = File(EasyDiaryUtils.getStorageBasePath(this) + DIARY_PHOTO_DIRECTORY)
+                val photoSrcDir = File(EasyDiaryUtils.getExternalStorageDirectory(), DIARY_PHOTO_DIRECTORY)
+                val photoDestDir = File(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY)
                 photoSrcDir.listFiles()?.let {
                     it.forEachIndexed { index, file ->
                         Log.i("aaf-t", "${File(photoDestDir, file.name).exists()} ${File(photoDestDir, file.name).absolutePath}")
@@ -267,8 +267,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
 //                }
 
                 // 02. DIARY_POSTCARD_DIRECTORY
-                val postCardSrcDir = File(Environment.getExternalStorageDirectory().absolutePath + DIARY_POSTCARD_DIRECTORY)
-                val postCardDestDir = File(EasyDiaryUtils.getStorageBasePath(this) + DIARY_POSTCARD_DIRECTORY)
+                val postCardSrcDir = File(EasyDiaryUtils.getExternalStorageDirectory(), DIARY_POSTCARD_DIRECTORY)
+                val postCardDestDir = File(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_POSTCARD_DIRECTORY)
                 postCardSrcDir.listFiles()?.let {
                     it.forEachIndexed { index, file ->
                         if (File(postCardDestDir, file.name).exists()) {
@@ -282,8 +282,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 }
 
                 // 03. USER_CUSTOM_FONTS_DIRECTORY
-                val fontSrcDir = File(Environment.getExternalStorageDirectory().absolutePath + USER_CUSTOM_FONTS_DIRECTORY)
-                val fontDestDir = File(EasyDiaryUtils.getStorageBasePath(this) + USER_CUSTOM_FONTS_DIRECTORY)
+                val fontSrcDir = File(EasyDiaryUtils.getExternalStorageDirectory(), USER_CUSTOM_FONTS_DIRECTORY)
+                val fontDestDir = File(EasyDiaryUtils.getApplicationDataDirectory(this) + USER_CUSTOM_FONTS_DIRECTORY)
                 fontSrcDir.listFiles()?.let {
                     it.forEachIndexed { index, file ->
                         if (File(fontDestDir, file.name).exists()) {

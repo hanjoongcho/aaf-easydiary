@@ -4,9 +4,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
-import android.os.Environment
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.widget.AdapterView
 import io.github.aafactory.commons.utils.ColorUtils
@@ -98,7 +95,7 @@ class PostCardViewerActivity : EasyDiaryActivity() {
     }
 
     private fun initPostCard() {
-        val listPostcard = File(EasyDiaryUtils.getStorageBasePath(this) + DIARY_POSTCARD_DIRECTORY)
+        val listPostcard = File(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_POSTCARD_DIRECTORY)
                 .listFiles()
                 .filter { it.extension.equals("jpg", true)}
                 .sortedDescending()

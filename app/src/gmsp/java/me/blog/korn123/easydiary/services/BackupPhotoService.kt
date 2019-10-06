@@ -50,7 +50,7 @@ class BackupPhotoService : Service() {
         mDriveServiceHelper = DriveServiceHelper(googleDriveService)
         notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationBuilder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
-        mPhotoPath = "${EasyDiaryUtils.getStorageBasePath(this)}$DIARY_PHOTO_DIRECTORY"
+        mPhotoPath = "${EasyDiaryUtils.getApplicationDataDirectory(this)}$DIARY_PHOTO_DIRECTORY"
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Create the NotificationChannel

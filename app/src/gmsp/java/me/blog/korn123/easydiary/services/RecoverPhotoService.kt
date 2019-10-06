@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Build
-import android.os.Environment
 import androidx.core.app.NotificationCompat
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
@@ -49,7 +48,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
 
         notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationBuilder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
-        mPhotoPath = "${EasyDiaryUtils.getStorageBasePath(this)}$DIARY_PHOTO_DIRECTORY"
+        mPhotoPath = "${EasyDiaryUtils.getApplicationDataDirectory(this)}$DIARY_PHOTO_DIRECTORY"
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && notificationManager.getNotificationChannel(NOTIFICATION_CHANNEL_ID) == null) {
             // Create the NotificationChannel
@@ -121,7 +120,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
     private fun determineAttachPhoto(nextPageToken: String?) {
         mDriveServiceHelper.queryFiles("mimeType = '${DriveServiceHelper.MIME_TYPE_AAF_EASY_DIARY_PHOTO}' and trashed = false",  1000, nextPageToken).run {
             addOnSuccessListener { result ->
-                val basePath = EasyDiaryUtils.getStorageBasePath(this@RecoverPhotoService) + DIARY_PHOTO_DIRECTORY
+                val basePath = EasyDiaryUtils.getApplicationDataDirectory(this@RecoverPhotoService) + DIARY_PHOTO_DIRECTORY
                 result.files.map { photoFile ->
                     remoteDriveFileCount++
                     if (!File("$mPhotoPath${photoFile.name}").exists()) {

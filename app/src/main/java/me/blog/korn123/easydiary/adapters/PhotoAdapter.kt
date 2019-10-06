@@ -2,7 +2,6 @@ package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
 import android.content.res.Configuration.ORIENTATION_PORTRAIT
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.google.android.flexbox.FlexDirection
@@ -34,9 +33,9 @@ class PhotoAdapter(
                     else -> glideOptionMap[position] = glideOptionMap[position]?.plus(1) ?: 0
                 }
                 if (forceSinglePhotoPosition > -1) {
-                    holder.bindTo(EasyDiaryUtils.getStorageBasePath(activity) + photoUri.getFilePath(), position, glideOptionMap[position]?.rem(9) ?: 0, forceSinglePhotoPosition)
+                    holder.bindTo(EasyDiaryUtils.getApplicationDataDirectory(activity) + photoUri.getFilePath(), position, glideOptionMap[position]?.rem(9) ?: 0, forceSinglePhotoPosition)
                 } else {
-                    holder.bindTo(EasyDiaryUtils.getStorageBasePath(activity) + photoUri.getFilePath(), position, glideOptionMap[position]?.rem(9) ?: 0)
+                    holder.bindTo(EasyDiaryUtils.getApplicationDataDirectory(activity) + photoUri.getFilePath(), position, glideOptionMap[position]?.rem(9) ?: 0)
                 }
             }
 
@@ -47,9 +46,9 @@ class PhotoAdapter(
             }
 
             if (forceSinglePhotoPosition > -1) {
-                holder.bindTo(EasyDiaryUtils.getStorageBasePath(activity) + photoUri.getFilePath(), position, 0, forceSinglePhotoPosition)
+                holder.bindTo(EasyDiaryUtils.getApplicationDataDirectory(activity) + photoUri.getFilePath(), position, 0, forceSinglePhotoPosition)
             } else {
-                holder.bindTo(EasyDiaryUtils.getStorageBasePath(activity) + photoUri.getFilePath(), position)
+                holder.bindTo(EasyDiaryUtils.getApplicationDataDirectory(activity) + photoUri.getFilePath(), position)
             }
         }
     }

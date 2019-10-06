@@ -73,6 +73,20 @@
                     style="@style/SettingsSummary" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/sendEmailWithExcel"
+            style="@style/AppCard.Settings">
+            <LinearLayout
+                style="@style/LinearLayoutVertical">
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="@string/send_email_attach_excel_title"
+                    style="@style/SettingsTitle" />
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="@string/send_email_attach_excel_description"
+                    style="@style/SettingsSummary" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
     </LinearLayout>
 </LinearLayout>
 
