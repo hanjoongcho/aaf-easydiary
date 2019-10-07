@@ -295,6 +295,21 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                         }
                     }
                 }
+
+                // 04. BACKUP_DB_DIRECTORY
+                val dbSrcDir = File(EasyDiaryUtils.getExternalStorageDirectory(), BACKUP_DB_DIRECTORY)
+                val dbDestDir = File(EasyDiaryUtils.getApplicationDataDirectory(this) + BACKUP_DB_DIRECTORY)
+                dbSrcDir.listFiles()?.let {
+                    it.forEachIndexed { index, file ->
+                        if (File(dbDestDir, file.name).exists()) {
+                            File(dbDestDir, file.name).delete()
+                        }
+                        FileUtils.moveToDirectory(file, dbDestDir, true)
+                        runOnUiThread {
+                            progressInfo.text = "$index/${it.size} (Database)"
+                        }
+                    }
+                }
             }
 
             runOnUiThread {
