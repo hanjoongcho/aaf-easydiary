@@ -306,8 +306,8 @@
         Android10ストレージアクセスの問題に対応（Scoped Storageポリシー回避のためのtargetSdkVersion一時ダウングレード）
     </string>
     <string name="release_168">
-        v1.4.102 / 2019.10.xx\n
-        Android 10 Scoped Storage 정책 대응을 위한 저장소 위치 변경 및 마이그레이션
+        v1.4.102 / 2019.10.08\n
+        Android10 Scoped Storage政策対応のための格納場所を変更し、移行
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->

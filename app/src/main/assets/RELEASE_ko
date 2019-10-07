@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.102 (date: 2019/10/08)
+  * Android 10 Scoped Storage 정책 대응을 위한 저장소 위치 변경 및 마이그레이션
+
 # Changes in 1.4.101 (date: 2019/10/03)
   * Android 10 스토리지 접근이슈 대응(Scoped Storage 정책 회피를 위한 targetSdkVersion 임시 다운그레이드)
 
