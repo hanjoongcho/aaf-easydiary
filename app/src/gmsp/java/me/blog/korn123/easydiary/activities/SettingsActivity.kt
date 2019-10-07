@@ -104,6 +104,11 @@ class SettingsActivity : EasyDiaryActivity() {
             invite.visibility = View.GONE
             rateAppSetting.visibility = View.GONE
         }
+
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+            exportExcel.visibility = View.GONE
+            restorePhotoSetting.visibility = View.GONE
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {

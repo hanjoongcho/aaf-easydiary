@@ -243,7 +243,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 }
 
                 // Move attached photo from external storage to application data directory
-                // From publishVersionCode 168
+                // From 1.4.102
                 Log.i("aaf-t", "${EasyDiaryUtils.getApplicationDataDirectory(this)}")
 
                 // 01. DIARY_PHOTO_DIRECTORY
