@@ -89,7 +89,7 @@
     <string name="backup_diary_summary">添付写真を除くすべてのコンテンツをGoogleドライブにバックアップします。</string>
     <string name="font_setting">フォントの設定</string>
     <string name="add_ttf_fonts_title">TTFフォントを追加</string>
-    <string name="add_ttf_fonts_summary">ユーザーが所有しているTTFフォントを日記に追加して使用します。\nフォントが追加されると、組み込みのフォントと一緒にユーザーが追加したフォントを使用することができます。</string>
+    <string name="add_ttf_fonts_summary">ユーザーが所有しているTTFフォントを日記に追加して使用します。\nフォントが追加されると、組み込みのフォントと一緒にユーザーが追加したフォントを使用することができます。\nファイルエクスプローラーを使用してTTFファイルを選択すると、フォントがEasy Diaryに自動的に登録され、フォント設定メニューでアクティブになります。</string>
     <string name="add_ttf_fonts_info_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/MANUAL_ja.md</string>
     <string name="diary_search_keyword_case_sensitive_title">大文字と小文字を区別</string>
     <string name="diary_search_keyword_case_sensitive_summary">このオプションを有効にすると、日記の検索時にキーワードの大文字と小文字を区別するようになります。</string>

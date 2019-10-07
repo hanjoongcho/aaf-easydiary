@@ -89,7 +89,7 @@
     <string name="backup_diary_summary">Back up all content except attachments to Google Drive.</string>
     <string name="font_setting">Schrift-Einstellungen</string>
     <string name="add_ttf_fonts_title">TTF-Schrift hinzufügen</string>
-    <string name="add_ttf_fonts_summary">Füge deine eigene TTF-Schriften dem Easy Diary hinzu. Wenn die Schriften hinzugefügt wurden, kannst du sie zusammen mit den mitgelieferten Schriften verwenden.</string>
+    <string name="add_ttf_fonts_summary">Füge deine eigene TTF-Schriften dem Easy Diary hinzu. Wenn die Schriften hinzugefügt wurden, kannst du sie zusammen mit den mitgelieferten Schriften verwenden.\nWhen you select a TTF file using the file explorer, the font is automatically registered in Easy Diary and activated in the font setting menu.</string>
     <string name="add_ttf_fonts_info_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/MANUAL_de.md</string>
     <string name="diary_search_keyword_case_sensitive_title">Groß-/Kleinschreibung beachten</string>
     <string name="diary_search_keyword_case_sensitive_summary">Wenn diese Option aktiviert ist, wird Groß- und Kleinschreibung unterschieden.</string>
