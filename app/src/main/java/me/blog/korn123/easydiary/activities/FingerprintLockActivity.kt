@@ -3,7 +3,7 @@ package me.blog.korn123.easydiary.activities
 import android.app.KeyguardManager
 import android.content.DialogInterface
 import android.content.Intent
-import android.hardware.biometrics.BiometricManager
+//import android.hardware.biometrics.BiometricManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -67,10 +67,10 @@ class FingerprintLockActivity : BaseSimpleActivity() {
             finish()
         }
 
-        changePinLock.setOnLongClickListener {
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && canAuthenticateWithBiometrics()) showBiometricPrompt()
-            true
-        }
+//        changePinLock.setOnLongClickListener {
+//            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && canAuthenticateWithBiometrics()) showBiometricPrompt()
+//            true
+//        }
     }
 
     override fun onResume() {
@@ -388,18 +388,18 @@ class FingerprintLockActivity : BaseSimpleActivity() {
      * Indicate whether this device can authenticate the user with biometrics
      * @return true if there are any available biometric sensors and biometrics are enrolled on the device, if not, return false
      */
-    private fun canAuthenticateWithBiometrics(): Boolean {
-        // Check whether the fingerprint can be used for authentication (Android M to P)
-        if (Build.VERSION.SDK_INT < 29) {
-            val fingerprintManagerCompat = FingerprintManagerCompat.from(this)
-            return fingerprintManagerCompat.hasEnrolledFingerprints() && fingerprintManagerCompat.isHardwareDetected
-        } else {    // Check biometric manager (from Android Q)
-            val biometricManager = this.getSystemService<BiometricManager>(BiometricManager::class.java)
-            return if (biometricManager != null) {
-                biometricManager.canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS
-            } else false
-        }
-    }
+//    private fun canAuthenticateWithBiometrics(): Boolean {
+//        // Check whether the fingerprint can be used for authentication (Android M to P)
+//        if (Build.VERSION.SDK_INT < 29) {
+//            val fingerprintManagerCompat = FingerprintManagerCompat.from(this)
+//            return fingerprintManagerCompat.hasEnrolledFingerprints() && fingerprintManagerCompat.isHardwareDetected
+//        } else {    // Check biometric manager (from Android Q)
+//            val biometricManager = this.getSystemService<BiometricManager>(BiometricManager::class.java)
+//            return if (biometricManager != null) {
+//                biometricManager.canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS
+//            } else false
+//        }
+//    }
 
     @RequiresApi(Build.VERSION_CODES.P)
     private fun showBiometricPrompt() {

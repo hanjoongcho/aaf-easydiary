@@ -382,7 +382,7 @@
     <string name="contents_summary_description">カレンダー、タイムライン、検索結果などで表示される日記の内容を要約します。</string>
     <string name="init_cipher_error_guide_message">デバイスの指紋情報が変更されました。PINロックモードに変更してロックを解除し、指紋のロックを解除した後、再設定して使用します。</string>
     <string name="export_excel_title">Excelファイルにエクスポート</string>
-    <string name="export_excel_description">すべてのコンテンツをExcelファイルに保存します。</string>
+    <string name="export_excel_description">添付の写真を除くすべてのコンテンツをExcelファイルとして保存します。</string>
     <string name="export_excel_xls_location">保存場所</string>
     <string name="export_excel_header_seq">シーケンス</string>
     <string name="export_excel_header_write_date">書き込み日</string>
@@ -456,6 +456,7 @@
     <string name="diary_contents_length">文字数: %d</string>
     <string name="count_characters_title">本文文字数世紀</string>
     <string name="count_characters_summary">ダイアリー本文の文字数をカウントします。</string>
-    <string name="send_email_attach_excel_title">엑셀파일 생성 및 이메일 전송</string>
-    <string name="send_email_attach_excel_description">모든 콘텐츠를 엑셀파일로 생성하고 이메일에 첨부합니다.</string>
+    <string name="send_email_attach_excel_title">エクセルファイルの作成と電子メールで送信</string>
+    <string name="send_email_attach_excel_description">添付写真を除くすべてのコンテンツをExcelファイルに生成し、電子メールに添付します。</string>
+    <string name="storage_migration_message">Android10 Scoped Storage政策による格納場所の変更が行われます。この作業は、一度だけ実行されます。</string>
 </resources>

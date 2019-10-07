@@ -382,7 +382,7 @@
     <string name="contents_summary_description">Summarize the contents of the diary provided in the calendar, timeline, search screen, and so on.</string>
     <string name="init_cipher_error_guide_message">The fingerprint information of the device has been changed. Change the PIN lock mode to unlock, then unlock the fingerprint lock and set it again.</string>
     <string name="export_excel_title">Export excel</string>
-    <string name="export_excel_description">Save all content as an Excel file.</string>
+    <string name="export_excel_description">Save all content except the attached photo as an Excel file.</string>
     <string name="export_excel_xls_location">Location</string>
     <string name="export_excel_header_seq">Sequence</string>
     <string name="export_excel_header_write_date">Write date</string>
@@ -456,6 +456,7 @@
     <string name="diary_contents_length">Characters: %d</string>
     <string name="count_characters_title">Text counting</string>
     <string name="count_characters_summary">Count the number of characters in the diary body.</string>
-    <string name="send_email_attach_excel_title">엑셀파일 생성 및 이메일 전송</string>
-    <string name="send_email_attach_excel_description">모든 콘텐츠를 엑셀파일로 생성하고 이메일에 첨부합니다.</string>
+    <string name="send_email_attach_excel_title">Excel file creation and email sending</string>
+    <string name="send_email_attach_excel_description">All content except the attached photo is created as an Excel file and attached to the email.</string>
+    <string name="storage_migration_message">Storage location changes will be made in accordance with the Android 10 Scoped Storage policy. This job runs only once.</string>
 </resources>

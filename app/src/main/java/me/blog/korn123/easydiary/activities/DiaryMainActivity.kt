@@ -244,8 +244,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
 
                 // Move attached photo from external storage to application data directory
                 // From 1.4.102
-                Log.i("aaf-t", "${EasyDiaryUtils.getApplicationDataDirectory(this)}")
-
                 // 01. DIARY_PHOTO_DIRECTORY
                 val photoSrcDir = File(EasyDiaryUtils.getExternalStorageDirectory(), DIARY_PHOTO_DIRECTORY)
                 val photoDestDir = File(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY)
@@ -257,7 +255,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                         }
                         FileUtils.moveToDirectory(file, photoDestDir, true)
                         runOnUiThread {
-                            migrationMessage.text = "Android 10 Scoped Storage 정책에 따른 저장소 위치 변경작업이 진행됩니다. 이 작업은 한번만 실행됩니다."
+                            migrationMessage.text = getString(R.string.storage_migration_message)
                             progressInfo.text = "$index/${it.size} (Photo)"
                         }
                     }
