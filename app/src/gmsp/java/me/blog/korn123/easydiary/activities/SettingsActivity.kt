@@ -139,7 +139,7 @@ class SettingsActivity : EasyDiaryActivity() {
                                 val fontDestDir = File(EasyDiaryUtils.getApplicationDataDirectory(this) + USER_CUSTOM_FONTS_DIRECTORY)
                                 FileUtils.copyInputStreamToFile(inputStream, File(fontDestDir, fileName))
                             } else {
-                                makeSnackBar("$fileName is not ttf file.")
+                                showAlertDialog(getString(R.string.add_ttf_fonts_title), "$fileName is not ttf file.", null)
                             }
                         }
                     }
