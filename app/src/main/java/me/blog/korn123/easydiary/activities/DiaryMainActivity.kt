@@ -221,6 +221,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     private fun migrateData() {
         Thread(Runnable {
             val listPhotoUri = EasyDiaryDbHelper.selectPhotoUriAll()
+            var isFontDirMigrate = false
             for ((index, dto) in listPhotoUri.withIndex()) {
 //                Log.i("PHOTO-URI", dto.photoUri)
                 if (dto.isContentUri()) {
@@ -253,12 +254,13 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                         if (File(photoDestDir, file.name).exists()) {
                             Log.i("aaf-t", "${File(photoDestDir, file.name).delete()}")
                         }
-                        FileUtils.moveToDirectory(file, photoDestDir, true)
+                        FileUtils.copyFileToDirectory(file, photoDestDir)
                         runOnUiThread {
                             migrationMessage.text = getString(R.string.storage_migration_message)
                             progressInfo.text = "$index/${it.size} (Photo)"
                         }
                     }
+                    photoSrcDir.renameTo(File(photoSrcDir.absolutePath + "_migration"))
                 }
 //                destDir.listFiles().map { file ->
 //                    FileUtils.moveToDirectory(file, srcDir, true)
@@ -272,11 +274,12 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                         if (File(postCardDestDir, file.name).exists()) {
                             File(postCardDestDir, file.name).delete()
                         }
-                        FileUtils.moveToDirectory(file, postCardDestDir, true)
+                        FileUtils.copyFileToDirectory(file, postCardDestDir)
                         runOnUiThread {
                             progressInfo.text = "$index/${it.size} (Postcard)"
                         }
                     }
+                    postCardSrcDir.renameTo(File(postCardSrcDir.absolutePath + "_migration"))
                 }
 
                 // 03. USER_CUSTOM_FONTS_DIRECTORY
@@ -287,11 +290,13 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                         if (File(fontDestDir, file.name).exists()) {
                             File(fontDestDir, file.name).delete()
                         }
-                        FileUtils.moveToDirectory(file, fontDestDir, true)
+                        FileUtils.copyFileToDirectory(file, fontDestDir)
                         runOnUiThread {
                             progressInfo.text = "$index/${it.size} (Font)"
                         }
                     }
+                    fontSrcDir.renameTo(File(fontSrcDir.absolutePath + "_migration"))
+                    if (it.isNotEmpty()) isFontDirMigrate = true
                 }
 
                 // 04. BACKUP_DB_DIRECTORY
@@ -302,17 +307,23 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                         if (File(dbDestDir, file.name).exists()) {
                             File(dbDestDir, file.name).delete()
                         }
-                        FileUtils.moveToDirectory(file, dbDestDir, true)
+                        FileUtils.copyFileToDirectory(file, dbDestDir)
                         runOnUiThread {
                             progressInfo.text = "$index/${it.size} (Database)"
                         }
                     }
+                    dbSrcDir.renameTo(File(dbSrcDir.absolutePath + "_migration"))
                 }
             }
 
             runOnUiThread {
                 progressDialog.visibility = View.GONE
                 modalContainer.visibility = View.GONE
+                if (isFontDirMigrate) {
+                    showAlertDialog("Font 리소스가 변경되어 애플리케이션을 다시 시작합니다.", DialogInterface.OnClickListener { _, _ ->
+                        restartApp()
+                    }, false)
+                }
             }
         }).start()
     }
