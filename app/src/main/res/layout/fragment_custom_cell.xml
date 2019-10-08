@@ -43,7 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
-            tools:src="@drawable/ic_scale"
+            tools:src="@drawable/ic_clouds_and_sun"
             android:layout_width="@dimen/calendar_item_symbol_default"
             android:layout_height="@dimen/calendar_item_symbol_default" />
 
@@ -63,7 +63,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
-            tools:src="@drawable/ic_scale"
+            tools:src="@drawable/ic_clouds_and_sun"
             android:layout_width="@dimen/calendar_item_symbol_default"
             android:layout_height="@dimen/calendar_item_symbol_default" />
 
@@ -83,7 +83,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
-            tools:src="@drawable/ic_scale"
+            tools:src="@drawable/ic_clouds_and_sun"
             android:layout_width="@dimen/calendar_item_symbol_default"
             android:layout_height="@dimen/calendar_item_symbol_default" />
 

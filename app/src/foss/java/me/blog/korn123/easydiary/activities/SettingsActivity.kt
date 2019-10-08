@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.activities
 
 import android.accounts.Account
+import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -13,12 +14,12 @@ import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import com.xw.repo.BubbleSeekBar
 import io.github.aafactory.commons.helpers.BaseConfig
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.android.synthetic.main.layout_settings_app_info.*
-import kotlinx.android.synthetic.main.layout_settings_backup_gms.*
 import kotlinx.android.synthetic.main.layout_settings_backup_local.*
 import kotlinx.android.synthetic.main.layout_settings_basic.*
 import kotlinx.android.synthetic.main.layout_settings_lock.*
@@ -66,7 +67,7 @@ class SettingsActivity : EasyDiaryActivity() {
      ***************************************************************************************************/
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
+        setContentView(R.layout.activity_settings_foss)
         setSupportActionBar(toolbar)
         supportActionBar?.run {
             setTitle(R.string.settings)
@@ -80,6 +81,43 @@ class SettingsActivity : EasyDiaryActivity() {
         if (BuildConfig.FLAVOR == "foss") {
             invite.visibility = View.GONE
             rateAppSetting.visibility = View.GONE
+        }
+
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+            exportExcel.visibility = View.GONE
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
+        pauseLock()
+
+        when (resultCode == Activity.RESULT_OK && intent != null) {
+            true -> {
+                // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+                when (requestCode) {
+                    REQUEST_CODE_FONT_PICK -> {
+                        intent.data?.let { uri ->
+                            val fileName = EasyDiaryUtils.queryName(contentResolver, uri)
+                            if (FilenameUtils.getExtension(fileName).equals("ttf", true)) {
+                                val inputStream = contentResolver.openInputStream(uri)
+                                val fontDestDir = File(EasyDiaryUtils.getApplicationDataDirectory(this) + USER_CUSTOM_FONTS_DIRECTORY)
+                                FileUtils.copyInputStreamToFile(inputStream, File(fontDestDir, fileName))
+                            } else {
+                                showAlertDialog(getString(R.string.add_ttf_fonts_title), "$fileName is not ttf file.", null)
+                            }
+                        }
+                    }
+                }
+            }
+            false -> {
+                when (requestCode) {
+                    REQUEST_CODE_GOOGLE_SIGN_IN, REQUEST_CODE_GOOGLE_DRIVE_PERMISSIONS -> {
+                        makeSnackBar("Google account verification failed.")
+                        progressContainer.visibility = View. GONE
+                    }
+                }
+            }
         }
     }
 
@@ -129,14 +167,13 @@ class SettingsActivity : EasyDiaryActivity() {
     private fun exportRealmFile() {
         val srcFile = File(EasyDiaryDbHelper.getInstance().path)
         val destFilePath = BACKUP_DB_DIRECTORY + DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
-        val destFile = File(EasyDiaryUtils.getStorageBasePath() + destFilePath)
+        val destFile = File(EasyDiaryUtils.getApplicationDataDirectory(this) + destFilePath)
         FileUtils.copyFile(srcFile, destFile, false)
-        showSimpleDialog(getString(R.string.export_realm_title), getString(R.string.export_realm_guide_message), destFilePath)
-
+        showSimpleDialog(getString(R.string.export_realm_title), getString(R.string.export_realm_guide_message), destFile.absolutePath)
     }
 
     private fun importRealmFile() {
-        val files = File(EasyDiaryUtils.getStorageBasePath() + BACKUP_DB_DIRECTORY).listFiles()
+        val files = File(EasyDiaryUtils.getApplicationDataDirectory(this) + BACKUP_DB_DIRECTORY).listFiles()
         files?.let {
             when (it.isNotEmpty()) {
                 true -> {
@@ -159,7 +196,7 @@ class SettingsActivity : EasyDiaryActivity() {
                     listView.adapter = adapter
                     listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
                         val itemInfo = parent.adapter.getItem(position) as HashMap<String, String>
-                        val srcFile = File(EasyDiaryUtils.getStorageBasePath() + BACKUP_DB_DIRECTORY + itemInfo["name"])
+                        val srcFile = File(EasyDiaryUtils.getApplicationDataDirectory(this) + BACKUP_DB_DIRECTORY + itemInfo["name"])
                         val destFile = File(EasyDiaryDbHelper.getInstance().path)
                         FileUtils.copyFile(srcFile, destFile)
                         restartApp()
@@ -175,7 +212,8 @@ class SettingsActivity : EasyDiaryActivity() {
         }
     }
 
-    private fun exportExcel() {
+    private fun sendEmailWithExcel() {
+        val exportFileName = "aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}"
         val builder = AlertDialog.Builder(this)
         builder.setTitle(getString(R.string.export_excel_title))
         builder.setIcon(ContextCompat.getDrawable(this, R.drawable.excel_3))
@@ -185,103 +223,52 @@ class SettingsActivity : EasyDiaryActivity() {
         val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val containerView = inflater.inflate(R.layout.dialog_export_progress_excel, null)
         val progressInfo = containerView.findViewById<TextView>(R.id.progressInfo)
-        var confirmButton = containerView.findViewById<TextView>(R.id.confirm)
+        alert.setView(containerView)
+        alert.show()
+
+        Thread(Runnable {
+            val workBook = createWorkBook(progressInfo, "Create excel file...")
+            val outputStream = FileOutputStream("${EasyDiaryUtils.getApplicationDataDirectory(this) + BACKUP_EXCEL_DIRECTORY + exportFileName}.xls")
+            workBook.write(outputStream)
+            outputStream.close()
+            runOnUiThread {
+                alert.cancel()
+            }
+
+            val destFile = File(File(EasyDiaryUtils.getApplicationDataDirectory(this) + BACKUP_EXCEL_DIRECTORY), "$exportFileName.xls")
+            // test code for attach file to email
+            val authority = "$packageName.provider"
+            val uri = FileProvider.getUriForFile(this, authority, destFile)
+            val emailIntent: Intent = Intent(Intent.ACTION_SEND)
+            emailIntent.type = "text/plain"
+//            emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("email@example.com"))
+//            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "subject here")
+//            emailIntent.putExtra(Intent.EXTRA_TEXT, "body text")
+            emailIntent.putExtra(Intent.EXTRA_STREAM, uri)
+            startActivity(Intent.createChooser(emailIntent, "Pick an Email provider"))
+        }).start()
+    }
+
+    private fun exportExcel() {
+        val exportFileName = "aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}"
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(getString(R.string.export_excel_title))
+        builder.setIcon(ContextCompat.getDrawable(this, R.drawable.excel_3))
+        builder.setCancelable(false)
+//        builder.setPositiveButton(getString(R.string.ok), null)
+        val alert = builder.create()
+        val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val containerView = inflater.inflate(R.layout.dialog_export_progress_excel, null)
+        val progressInfo = containerView.findViewById<TextView>(R.id.progressInfo)
+        val confirmButton = containerView.findViewById<TextView>(R.id.confirm)
         progressInfo.text = "Preparing to export..."
         alert.setView(containerView)
         alert.show()
 
         Thread(Runnable {
-            val diaryList = EasyDiaryDbHelper.readDiary(null)
-            val wb: Workbook = HSSFWorkbook()
-            val sheet = wb.createSheet("new sheet")
-
-            val headerFont = wb.createFont().apply {
-                color = IndexedColors.WHITE.index
-            }
-            val headerStyle = wb.createCellStyle().apply {
-                wrapText = true
-                fillForegroundColor = IndexedColors.BLUE.index
-                fillPattern = CellStyle.SOLID_FOREGROUND
-                alignment = CellStyle.ALIGN_CENTER
-                verticalAlignment = CellStyle.VERTICAL_CENTER
-                setFont(headerFont)
-            }
-            val bodyStyle = wb.createCellStyle().apply {
-                wrapText = true
-                verticalAlignment = CellStyle.VERTICAL_TOP
-            }
-
-            val headerRow = sheet.createRow(0)
-            headerRow.height = 256 * 3
-            headerRow.createCell(SEQ).setCellValue(getString(R.string.export_excel_header_seq))
-            headerRow.createCell(WRITE_DATE).setCellValue(getString(R.string.export_excel_header_write_date))
-            headerRow.createCell(TITLE).setCellValue(getString(R.string.export_excel_header_title))
-            headerRow.createCell(CONTENTS).setCellValue(getString(R.string.export_excel_header_contents))
-            headerRow.createCell(ATTACH_PHOTO_NAME).setCellValue(getString(R.string.export_excel_header_attach_photo_path))
-            headerRow.createCell(ATTACH_PHOTO_SIZE).setCellValue(getString(R.string.export_excel_header_attach_photo_size))
-            headerRow.createCell(WRITE_TIME_MILLIS).setCellValue(getString(R.string.export_excel_header_write_time_millis))
-            headerRow.createCell(SYMBOL).setCellValue(getString(R.string.export_excel_header_symbol))
-            headerRow.createCell(IS_ALL_DAY).setCellValue(getString(R.string.export_excel_header_is_all_day))
-
-            headerRow.getCell(SEQ).cellStyle = headerStyle
-            headerRow.getCell(WRITE_DATE).cellStyle = headerStyle
-            headerRow.getCell(TITLE).cellStyle = headerStyle
-            headerRow.getCell(CONTENTS).cellStyle = headerStyle
-            headerRow.getCell(ATTACH_PHOTO_NAME).cellStyle = headerStyle
-            headerRow.getCell(ATTACH_PHOTO_SIZE).cellStyle = headerStyle
-            headerRow.getCell(WRITE_TIME_MILLIS).cellStyle = headerStyle
-            headerRow.getCell(SYMBOL).cellStyle = headerStyle
-            headerRow.getCell(IS_ALL_DAY).cellStyle = headerStyle
-
-            // FIXME:
-            // https://poi.apache.org/apidocs/dev/org/apache/poi/ss/usermodel/Sheet.html#setColumnWidth-int-int-
-            sheet.setColumnWidth(SEQ, 256 * 10)
-            sheet.setColumnWidth(WRITE_DATE, 256 * 30)
-            sheet.setColumnWidth(TITLE, 256 * 30)
-            sheet.setColumnWidth(CONTENTS, 256 * 50)
-            sheet.setColumnWidth(ATTACH_PHOTO_NAME, 256 * 80)
-            sheet.setColumnWidth(ATTACH_PHOTO_SIZE, 256 * 15)
-            sheet.setColumnWidth(WRITE_TIME_MILLIS, 256 * 60)
-            sheet.setColumnWidth(SYMBOL, 256 * 10)
-            sheet.setColumnWidth(IS_ALL_DAY, 256 * 30)
-            val exportFileName = "aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}"
-            val diarySymbolMap = FlavorUtils.getDiarySymbolMap(this)
-            diaryList.forEachIndexed { index, diaryDto ->
-                val row = sheet.createRow(index + 1)
-                val photoNames = StringBuffer()
-                val photoSizes = StringBuffer()
-                diaryDto.photoUris?.map {
-                    photoNames.append("$DIARY_PHOTO_DIRECTORY${FilenameUtils.getName(it.getFilePath())}\n")
-                    photoSizes.append("${File(it.getFilePath()).length() / 1024}\n")
-                }
-
-                val sequence = row.createCell(SEQ).apply {cellStyle = bodyStyle}
-                val writeDate = row.createCell(WRITE_DATE).apply {cellStyle = bodyStyle}
-                val title = row.createCell(TITLE).apply {cellStyle = bodyStyle}
-                val contents = row.createCell(CONTENTS).apply {cellStyle = bodyStyle}
-                val attachPhotoNames = row.createCell(ATTACH_PHOTO_NAME).apply {cellStyle = bodyStyle}
-                val attachPhotoSizes = row.createCell(ATTACH_PHOTO_SIZE).apply {cellStyle = bodyStyle}
-                val writeTimeMillis = row.createCell(WRITE_TIME_MILLIS).apply {cellStyle = bodyStyle}
-                val weather = row.createCell(SYMBOL).apply {cellStyle = bodyStyle}
-                val isAllDay = row.createCell(IS_ALL_DAY).apply {cellStyle = bodyStyle}
-
-                sequence.setCellValue(diaryDto.sequence.toDouble())
-                writeDate.setCellValue(DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis))
-                title.setCellValue(diaryDto.title)
-                contents.setCellValue(diaryDto.contents)
-                attachPhotoNames.setCellValue(photoNames.toString())
-                attachPhotoSizes.setCellValue(photoSizes.toString())
-                writeTimeMillis.setCellValue(diaryDto.currentTimeMillis.toDouble())
-                isAllDay.setCellValue(diaryDto.isAllDay)
-                weather.setCellValue(diarySymbolMap[diaryDto.weather])
-
-                runOnUiThread {
-                    progressInfo.text = "${index.plus(1)} / ${diaryList.size}\n${getString(R.string.export_excel_xls_location)}: ${BACKUP_EXCEL_DIRECTORY + exportFileName}.xls"
-                }
-            }
-
-            val outputStream = FileOutputStream("${EasyDiaryUtils.getStorageBasePath() + BACKUP_EXCEL_DIRECTORY + exportFileName}.xls")
-            wb.write(outputStream)
+            val workBook = createWorkBook(progressInfo, "${getString(R.string.export_excel_xls_location)}: ${BACKUP_EXCEL_DIRECTORY + exportFileName}.xls")
+            val outputStream = FileOutputStream("${EasyDiaryUtils.getExternalStorageDirectory().absolutePath + BACKUP_EXCEL_DIRECTORY + exportFileName}.xls")
+            workBook.write(outputStream)
             outputStream.close()
             runOnUiThread {
                 confirmButton.visibility = View.VISIBLE
@@ -290,6 +277,99 @@ class SettingsActivity : EasyDiaryActivity() {
         }).start()
     }
 
+    private fun createWorkBook(infoView: TextView? = null, guideMessage: String? = ""): Workbook {
+        val diaryList = EasyDiaryDbHelper.readDiary(null)
+        val wb: Workbook = HSSFWorkbook()
+        val sheet = wb.createSheet("new sheet")
+
+        val headerFont = wb.createFont().apply {
+            color = IndexedColors.WHITE.index
+        }
+        val headerStyle = wb.createCellStyle().apply {
+            wrapText = true
+            fillForegroundColor = IndexedColors.BLUE.index
+            fillPattern = CellStyle.SOLID_FOREGROUND
+            alignment = CellStyle.ALIGN_CENTER
+            verticalAlignment = CellStyle.VERTICAL_CENTER
+            setFont(headerFont)
+        }
+        val bodyStyle = wb.createCellStyle().apply {
+            wrapText = true
+            verticalAlignment = CellStyle.VERTICAL_TOP
+        }
+
+        val headerRow = sheet.createRow(0)
+        headerRow.height = 256 * 3
+        headerRow.createCell(SEQ).setCellValue(getString(R.string.export_excel_header_seq))
+        headerRow.createCell(WRITE_DATE).setCellValue(getString(R.string.export_excel_header_write_date))
+        headerRow.createCell(TITLE).setCellValue(getString(R.string.export_excel_header_title))
+        headerRow.createCell(CONTENTS).setCellValue(getString(R.string.export_excel_header_contents))
+        headerRow.createCell(ATTACH_PHOTO_NAME).setCellValue(getString(R.string.export_excel_header_attach_photo_path))
+        headerRow.createCell(ATTACH_PHOTO_SIZE).setCellValue(getString(R.string.export_excel_header_attach_photo_size))
+        headerRow.createCell(WRITE_TIME_MILLIS).setCellValue(getString(R.string.export_excel_header_write_time_millis))
+        headerRow.createCell(SYMBOL).setCellValue(getString(R.string.export_excel_header_symbol))
+        headerRow.createCell(IS_ALL_DAY).setCellValue(getString(R.string.export_excel_header_is_all_day))
+
+        headerRow.getCell(SEQ).cellStyle = headerStyle
+        headerRow.getCell(WRITE_DATE).cellStyle = headerStyle
+        headerRow.getCell(TITLE).cellStyle = headerStyle
+        headerRow.getCell(CONTENTS).cellStyle = headerStyle
+        headerRow.getCell(ATTACH_PHOTO_NAME).cellStyle = headerStyle
+        headerRow.getCell(ATTACH_PHOTO_SIZE).cellStyle = headerStyle
+        headerRow.getCell(WRITE_TIME_MILLIS).cellStyle = headerStyle
+        headerRow.getCell(SYMBOL).cellStyle = headerStyle
+        headerRow.getCell(IS_ALL_DAY).cellStyle = headerStyle
+
+        // FIXME:
+        // https://poi.apache.org/apidocs/dev/org/apache/poi/ss/usermodel/Sheet.html#setColumnWidth-int-int-
+        sheet.setColumnWidth(SEQ, 256 * 10)
+        sheet.setColumnWidth(WRITE_DATE, 256 * 30)
+        sheet.setColumnWidth(TITLE, 256 * 30)
+        sheet.setColumnWidth(CONTENTS, 256 * 50)
+        sheet.setColumnWidth(ATTACH_PHOTO_NAME, 256 * 80)
+        sheet.setColumnWidth(ATTACH_PHOTO_SIZE, 256 * 15)
+        sheet.setColumnWidth(WRITE_TIME_MILLIS, 256 * 60)
+        sheet.setColumnWidth(SYMBOL, 256 * 10)
+        sheet.setColumnWidth(IS_ALL_DAY, 256 * 30)
+        val diarySymbolMap = FlavorUtils.getDiarySymbolMap(this)
+        diaryList.forEachIndexed { index, diaryDto ->
+            val row = sheet.createRow(index + 1)
+            val photoNames = StringBuffer()
+            val photoSizes = StringBuffer()
+            diaryDto.photoUris?.map {
+                photoNames.append("$DIARY_PHOTO_DIRECTORY${FilenameUtils.getName(it.getFilePath())}\n")
+                photoSizes.append("${File(it.getFilePath()).length() / 1024}\n")
+            }
+
+            val sequence = row.createCell(SEQ).apply {cellStyle = bodyStyle}
+            val writeDate = row.createCell(WRITE_DATE).apply {cellStyle = bodyStyle}
+            val title = row.createCell(TITLE).apply {cellStyle = bodyStyle}
+            val contents = row.createCell(CONTENTS).apply {cellStyle = bodyStyle}
+            val attachPhotoNames = row.createCell(ATTACH_PHOTO_NAME).apply {cellStyle = bodyStyle}
+            val attachPhotoSizes = row.createCell(ATTACH_PHOTO_SIZE).apply {cellStyle = bodyStyle}
+            val writeTimeMillis = row.createCell(WRITE_TIME_MILLIS).apply {cellStyle = bodyStyle}
+            val weather = row.createCell(SYMBOL).apply {cellStyle = bodyStyle}
+            val isAllDay = row.createCell(IS_ALL_DAY).apply {cellStyle = bodyStyle}
+
+            sequence.setCellValue(diaryDto.sequence.toDouble())
+            writeDate.setCellValue(DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis))
+            title.setCellValue(diaryDto.title)
+            contents.setCellValue(diaryDto.contents)
+            attachPhotoNames.setCellValue(photoNames.toString())
+            attachPhotoSizes.setCellValue(photoSizes.toString())
+            writeTimeMillis.setCellValue(diaryDto.currentTimeMillis.toDouble())
+            isAllDay.setCellValue(diaryDto.isAllDay)
+            weather.setCellValue(diarySymbolMap[diaryDto.weather])
+
+            runOnUiThread {
+                infoView?.run {
+                    text = "${index.plus(1)} / ${diaryList.size}\n$guideMessage"
+                }
+            }
+        }
+
+        return wb
+    }
 
     /***************************************************************************************************
      *   etc functions
@@ -302,22 +382,18 @@ class SettingsActivity : EasyDiaryActivity() {
         sensitiveOption.setOnClickListener(mOnClickListener)
         addTtfFontSetting.setOnClickListener(mOnClickListener)
         appLockSetting.setOnClickListener(mOnClickListener)
-        restoreSetting.setOnClickListener(mOnClickListener)
-        backupSetting.setOnClickListener(mOnClickListener)
         rateAppSetting.setOnClickListener(mOnClickListener)
         licenseView.setOnClickListener(mOnClickListener)
-        restorePhotoSetting.setOnClickListener(mOnClickListener)
         releaseNotes.setOnClickListener(mOnClickListener)
         boldStyleOption.setOnClickListener(mOnClickListener)
         multiPickerOption.setOnClickListener(mOnClickListener)
-        backupAttachPhoto.setOnClickListener(mOnClickListener)
-        recoverAttachPhoto.setOnClickListener(mOnClickListener)
         fingerprint.setOnClickListener(mOnClickListener)
         enableCardViewPolicy.setOnClickListener(mOnClickListener)
         decreaseFont.setOnClickListener(mOnClickListener)
         increaseFont.setOnClickListener(mOnClickListener)
         contentsSummary.setOnClickListener(mOnClickListener)
         exportExcel.setOnClickListener(mOnClickListener)
+        sendEmailWithExcel.setOnClickListener(mOnClickListener)
         faq.setOnClickListener(mOnClickListener)
         privacyPolicy.setOnClickListener(mOnClickListener)
         signOutGoogleOAuth.setOnClickListener(mOnClickListener)
@@ -373,6 +449,29 @@ class SettingsActivity : EasyDiaryActivity() {
         }
     }
 
+    /**
+     * Fires an intent to spin up the "file chooser" UI and select an image.
+     */
+    private fun performFileSearch() {
+
+        // ACTION_OPEN_DOCUMENT is the intent to choose a file via the system's file
+        // browser.
+        // ACTION_OPEN_DOCUMENT
+        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+            // Filter to only show results that can be "opened", such as a
+            // file (as opposed to a list of contacts or timezones)
+//             addCategory(Intent.CATEGORY_OPENABLE)
+
+            // Filter to show only images, using the image MIME data type.
+            // If one wanted to search for ogg vorbis files, the type would be "audio/ogg".
+            // To search for all documents available via installed storage providers,
+            // it would be "*/*".
+            type = "*/*"
+        }
+
+        startActivityForResult(intent, REQUEST_CODE_FONT_PICK)
+    }
+
     private val mOnClickListener = View.OnClickListener { view ->
         when (view.id) {
             R.id.primaryColor -> TransitionHelper.startActivityWithTransition(this@SettingsActivity, Intent(this@SettingsActivity, CustomizationActivity::class.java))
@@ -389,13 +488,17 @@ class SettingsActivity : EasyDiaryActivity() {
                 config.diarySearchQueryCaseSensitive = sensitiveOptionSwitcher.isChecked
             }
             R.id.addTtfFontSetting -> {
-                openGuideView(getString(R.string.add_ttf_fonts_title))
+//                openGuideView(getString(R.string.add_ttf_fonts_title))
+                performFileSearch()
             }
             R.id.exportExcel -> {
                 when (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                     true -> exportExcel()
                     false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_EXCEL)
                 }
+            }
+            R.id.sendEmailWithExcel -> {
+                sendEmailWithExcel()
             }
             R.id.exportRealmFile -> {
                 when (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
@@ -408,9 +511,6 @@ class SettingsActivity : EasyDiaryActivity() {
                     true -> importRealmFile()
                     false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_IMPORT_REALM)
                 }
-            }
-            R.id.restorePhotoSetting -> {
-                openGuideView(getString(R.string.restore_photo))
             }
             R.id.rateAppSetting -> openGooglePlayBy("me.blog.korn123.easydiary")
             R.id.licenseView -> {
@@ -562,7 +662,7 @@ class SettingsActivity : EasyDiaryActivity() {
             listFont.add(map)
         }
 
-        val fontDir = File(EasyDiaryUtils.getStorageBasePath() + USER_CUSTOM_FONTS_DIRECTORY)
+        val fontDir = File(EasyDiaryUtils.getApplicationDataDirectory(this) + USER_CUSTOM_FONTS_DIRECTORY)
         fontDir.list()?.let {
             for (fontName in it) {
                 if (FilenameUtils.getExtension(fontName).equals("ttf", ignoreCase = true)) {

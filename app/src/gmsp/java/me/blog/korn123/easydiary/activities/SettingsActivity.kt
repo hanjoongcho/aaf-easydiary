@@ -107,7 +107,6 @@ class SettingsActivity : EasyDiaryActivity() {
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
             exportExcel.visibility = View.GONE
-            restorePhotoSetting.visibility = View.GONE
         }
     }
 
@@ -401,8 +400,7 @@ class SettingsActivity : EasyDiaryActivity() {
         val destFilePath = BACKUP_DB_DIRECTORY + DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
         val destFile = File(EasyDiaryUtils.getApplicationDataDirectory(this) + destFilePath)
         FileUtils.copyFile(srcFile, destFile, false)
-        showSimpleDialog(getString(R.string.export_realm_title), getString(R.string.export_realm_guide_message), destFilePath)
-
+        showSimpleDialog(getString(R.string.export_realm_title), getString(R.string.export_realm_guide_message), destFile.absolutePath)
     }
 
     private fun importRealmFile() {
@@ -619,7 +617,6 @@ class SettingsActivity : EasyDiaryActivity() {
         backupSetting.setOnClickListener(mOnClickListener)
         rateAppSetting.setOnClickListener(mOnClickListener)
         licenseView.setOnClickListener(mOnClickListener)
-        restorePhotoSetting.setOnClickListener(mOnClickListener)
         releaseNotes.setOnClickListener(mOnClickListener)
         boldStyleOption.setOnClickListener(mOnClickListener)
         multiPickerOption.setOnClickListener(mOnClickListener)
@@ -793,9 +790,6 @@ class SettingsActivity : EasyDiaryActivity() {
                     true -> importRealmFile()
                     false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_IMPORT_REALM)
                 }
-            }
-            R.id.restorePhotoSetting -> {
-                openGuideView(getString(R.string.restore_photo))
             }
             R.id.rateAppSetting -> openGooglePlayBy("me.blog.korn123.easydiary")
             R.id.licenseView -> {
