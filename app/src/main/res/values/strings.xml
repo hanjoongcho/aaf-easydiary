@@ -305,8 +305,8 @@
         v1.4.101 / 2019.10.03\n
         Respond to Android 10 storage access issues (targetSdkVersion temporary downgrade to avoid scoped storage policy)
     </string>
-    <string name="release_168">
-        v1.4.102 / 2019.10.08\n
+    <string name="release_169">
+        v1.4.103 / 2019.10.09\n
         Change storage location and migrate to respond to Android 10 Scoped Storage policies
     </string>
 

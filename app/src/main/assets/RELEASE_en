@@ -4,7 +4,7 @@
 
 ---------------------------------------------------
 
-# Changes in 1.4.102 (date: 2019/10/08)
+# Changes in 1.4.103 (date: 2019/10/09)
   * Change storage location and migrate to respond to Android 10 Scoped Storage policies
 
 # Changes in 1.4.101 (date: 2019/10/03)
