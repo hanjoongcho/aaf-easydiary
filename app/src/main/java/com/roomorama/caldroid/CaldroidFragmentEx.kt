@@ -1395,22 +1395,19 @@ abstract class CaldroidFragmentEx : DialogFragment() {
 
     }
 
-    override fun onDetach() {
-        super.onDetach()
-
-        try {
-            val childFragmentManager = Fragment::class.java
-                    .getDeclaredField("mChildFragmentManager")
-            childFragmentManager.isAccessible = true
-            childFragmentManager.set(this, null)
-
-        } catch (e: NoSuchFieldException) {
-            throw RuntimeException(e)
-        } catch (e: IllegalAccessException) {
-            throw RuntimeException(e)
-        }
-
-    }
+//    https://stackoverflow.com/questions/56618453/after-migrating-to-androidx-application-crashes-with-attempt-to-invoke-androidx
+//    override fun onDetach() {
+//        super.onDetach()
+//        try {
+//            val childFragmentManager = Fragment::class.java.getDeclaredField("mChildFragmentManager")
+//            childFragmentManager.isAccessible = true
+//            childFragmentManager.set(this, null)
+//        } catch (e: NoSuchFieldException) {
+//            throw RuntimeException(e)
+//        } catch (e: IllegalAccessException) {
+//            throw RuntimeException(e)
+//        }
+//    }
 
     companion object {
         /**

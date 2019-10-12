@@ -1,6 +1,8 @@
 package me.blog.korn123.easydiary.activities
 
+import android.content.Intent
 import android.os.Bundle
+import androidx.viewpager.widget.PagerAdapter
 import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.android.synthetic.main.layout_settings_progress.*
 import me.blog.korn123.easydiary.R
@@ -13,7 +15,7 @@ class SettingsActivity : EasyDiaryActivity() {
      *   global properties
      *
      ***************************************************************************************************/
-
+    lateinit var mAdapter: PagerAdapter
 
     /***************************************************************************************************
      *   override functions
@@ -29,8 +31,8 @@ class SettingsActivity : EasyDiaryActivity() {
         }
 
         val fragmentList = arrayListOf(SettingsBasic(), SettingsLock(), SettingsGMSBackup(), SettingsLocalBackup(), SettingsAppInfo())
-        val adapter = DotIndicatorPager2Adapter(supportFragmentManager, fragmentList)
-        view_pager2.adapter = adapter
+        mAdapter = DotIndicatorPager2Adapter(supportFragmentManager, fragmentList)
+        view_pager2.adapter = mAdapter
         view_pager2.addOnPageChangeListener(object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
@@ -51,6 +53,11 @@ class SettingsActivity : EasyDiaryActivity() {
         progressContainer.setOnTouchListener { _, _ -> true }
     }
 
+
+    /***************************************************************************************************
+     *   etc functions
+     *
+     ***************************************************************************************************/
     fun updateUI() {
         super.onResume()
     }

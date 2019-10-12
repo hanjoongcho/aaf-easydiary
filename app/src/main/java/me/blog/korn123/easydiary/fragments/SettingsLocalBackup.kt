@@ -313,7 +313,7 @@ class SettingsLocalBackup() : androidx.fragment.app.Fragment() {
             R.id.exportExcel -> {
                 when (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                     true -> exportExcel()
-                    false -> mActivity.confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_EXCEL)
+                    false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_EXCEL)
                 }
             }
             R.id.sendEmailWithExcel -> {
@@ -322,13 +322,13 @@ class SettingsLocalBackup() : androidx.fragment.app.Fragment() {
             R.id.exportRealmFile -> {
                 when (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                     true -> exportRealmFile()
-                    false -> mActivity.confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_REALM)
+                    false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_REALM)
                 }
             }
             R.id.importRealmFile -> {
                 when (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                     true -> importRealmFile()
-                    false -> mActivity.confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_IMPORT_REALM)
+                    false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_IMPORT_REALM)
                 }
             }
         }

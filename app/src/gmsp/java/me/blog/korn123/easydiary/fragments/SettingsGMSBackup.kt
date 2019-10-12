@@ -375,7 +375,7 @@ class SettingsGMSBackup() : androidx.fragment.app.Fragment() {
                 if (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                     recoverDiaryRealm()
                 } else { // Permission has already been granted
-                    mActivity.confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
+                    confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
                 }
             }
             R.id.backupSetting -> {
@@ -383,21 +383,21 @@ class SettingsGMSBackup() : androidx.fragment.app.Fragment() {
                 if (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                     backupDiaryRealm()
                 } else { // Permission has already been granted
-                    mActivity.confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
+                    confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
                 }
             }
             R.id.backupAttachPhoto -> {
                 mTaskFlag = SETTING_FLAG_EXPORT_PHOTO_GOOGLE_DRIVE
                 when (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                     true -> backupDiaryPhoto()
-                    false -> mActivity.confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
+                    false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
                 }
             }
             R.id.recoverAttachPhoto -> {
                 mTaskFlag = SETTING_FLAG_IMPORT_PHOTO_GOOGLE_DRIVE
                 when (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                     true -> recoverDiaryPhoto()
-                    false -> mActivity.confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
+                    false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
                 }
             }
             R.id.signOutGoogleOAuth -> {
