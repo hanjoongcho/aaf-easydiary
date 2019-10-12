@@ -23,21 +23,33 @@
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
-        <ScrollView
+        <LinearLayout
             android:id="@+id/main_holder"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <LinearLayout
-                android:orientation="vertical"
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/view_pager2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <include layout="@layout/layout_settings_basic" />
-                <include layout="@layout/layout_settings_lock" />
-                <include layout="@layout/layout_settings_backup_gms" />
-                <include layout="@layout/layout_settings_backup_local" />
-                <include layout="@layout/layout_settings_app_info" />
-            </LinearLayout>
-        </ScrollView>
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                />
+
+            <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+                android:id="@+id/dots_indicator"
+                android:padding="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:dotsColor="@android:color/white"
+                app:dotsCornerRadius="8dp"
+                app:dotsSize="12dp"
+                app:dotsSpacing="4dp"
+                app:dotsWidthFactor="2.5"
+                app:progressMode="false"
+                app:selectedDotColor="?attr/colorPrimaryDark"
+                />
+        </LinearLayout>
     </LinearLayout>
 
     <include layout="@layout/layout_settings_progress" />

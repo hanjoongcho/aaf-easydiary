@@ -177,6 +177,7 @@ class PostCardActivity : EasyDiaryActivity() {
     }
     
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             REQUEST_CODE_BACKGROUND_COLOR_PICKER -> if (resultCode == Activity.RESULT_OK && data != null) {
                 val hexStringColor = "#" + data.getStringExtra("color")

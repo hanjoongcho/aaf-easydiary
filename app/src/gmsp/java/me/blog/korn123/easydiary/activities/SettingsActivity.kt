@@ -1,7 +1,7 @@
 package me.blog.korn123.easydiary.activities
 
 import android.os.Bundle
-import kotlinx.android.synthetic.main.activity_settings2.*
+import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.android.synthetic.main.layout_settings_progress.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DotIndicatorPager2Adapter
@@ -21,7 +21,7 @@ class SettingsActivity : EasyDiaryActivity() {
      ***************************************************************************************************/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings2)
+        setContentView(R.layout.activity_settings)
         setSupportActionBar(toolbar)
         supportActionBar?.run {
             setTitle(R.string.preferences_category_settings)
