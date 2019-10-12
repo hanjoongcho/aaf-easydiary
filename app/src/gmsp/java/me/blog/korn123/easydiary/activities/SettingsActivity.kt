@@ -44,6 +44,11 @@ class SettingsActivity : EasyDiaryActivity() {
                     3 -> getString(R.string.preferences_category_backup_restore_device)
                     else -> getString(R.string.preferences_category_information)
                 }
+                supportActionBar?.subtitle = when (position) {
+                    2 -> getString(R.string.preferences_category_backup_restore_sub)
+                    2 -> getString(R.string.preferences_category_backup_restore_device_sub)
+                    else -> null
+                }
             }
 
             override fun onPageScrollStateChanged(state: Int) {}

@@ -337,7 +337,8 @@
     <string name="bold_style_option_summary">Set the diary title and timeline time to be displayed in bold.</string>
     <string name="multi_picker_option_title">Multi picker setting</string>
     <string name="multi_picker_option_summary">When attaching a diary photo, I use the multi-picker provided in the diary without using the gallery app. When Multi-picker is enabled, you can attach multiple pictures at once.</string>
-    <string name="preferences_category_backup_restore">Application Backup and Restore(Google Drive)</string>
+    <string name="preferences_category_backup_restore">Application Backup and Restore</string>
+    <string name="preferences_category_backup_restore_sub">Google Drive</string>
     <string name="backup_attach_photo_title">Backup attached photos</string>
     <string name="backup_attach_photo_summary">Backup your attached photos to Google Drive. This feature may not work on some devices due to beta service.</string>
     <string name="recover_attach_photo_title">Recover attached photos</string>
@@ -434,7 +435,8 @@
     <string name="statistics_symbol_all">All statistics by symbol</string>
     <string name="statistics_symbol_top_ten">Top 10 statistics by symbol</string>
     <string name="category_flag">FLAG</string>
-    <string name="preferences_category_backup_restore_device">Application Backup and Restore(Device Storage)</string>
+    <string name="preferences_category_backup_restore_device">Application Backup and Restore</string>
+    <string name="preferences_category_backup_restore_device_sub">Device Storage</string>
     <string name="export_realm_title">Backup diary</string>
     <string name="export_realm_description">Back up database files except the attached photo to the device storage.</string>
     <string name="export_realm_guide_message">The database file has been saved to the device storage at the path below.</string>
