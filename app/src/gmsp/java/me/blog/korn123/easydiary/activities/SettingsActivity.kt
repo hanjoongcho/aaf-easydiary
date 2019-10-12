@@ -46,7 +46,7 @@ class SettingsActivity : EasyDiaryActivity() {
                 }
                 supportActionBar?.subtitle = when (position) {
                     2 -> getString(R.string.preferences_category_backup_restore_sub)
-                    2 -> getString(R.string.preferences_category_backup_restore_device_sub)
+                    3 -> getString(R.string.preferences_category_backup_restore_device_sub)
                     else -> null
                 }
             }
