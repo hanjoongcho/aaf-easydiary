@@ -140,9 +140,9 @@ class CalendarActivity : EasyDiaryActivity() {
     /**
      * Save current states of the Caldroid here
      */
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         // TODO Auto-generated method stub
-        super.onSaveInstanceState(outState)
+        super.onSaveInstanceState(outState!!)
         calendarFragment.saveStatesToKey(outState!!, "CALDROID_SAVED_STATE")
     }
 

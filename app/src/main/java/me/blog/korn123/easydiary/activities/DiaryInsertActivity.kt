@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.speech.RecognizerIntent
 import android.view.View
 import android.view.ViewGroup
@@ -97,7 +98,7 @@ class DiaryInsertActivity : EditActivity() {
         toggleSimpleLayout()
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         outState?.let {
             val listUriString = arrayListOf<String>()
             mPhotoUris.map { model ->

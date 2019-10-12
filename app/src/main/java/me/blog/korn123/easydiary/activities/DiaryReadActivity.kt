@@ -91,7 +91,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
         destroyModule()
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         val fragment = mSectionsPagerAdapter.instantiateItem(diaryViewPager, diaryViewPager.currentItem)
         if (fragment is PlaceholderFragment) {
             outState?.putInt(DIARY_SEQUENCE, fragment.getSequence())
@@ -447,7 +447,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
             fm: androidx.fragment.app.FragmentManager,
             private val diaryList: ArrayList<DiaryDto>,
             private val query: String?
-    ) : androidx.fragment.app.FragmentStatePagerAdapter(fm) {
+    ) : androidx.fragment.app.FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
         override fun getItem(position: Int): androidx.fragment.app.Fragment {
             // getItem is called to instantiate the fragment for the given page.

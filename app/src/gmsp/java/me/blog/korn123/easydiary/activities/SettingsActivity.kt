@@ -635,13 +635,13 @@ class SettingsActivity : EasyDiaryActivity() {
         exportRealmFile.setOnClickListener(mOnClickListener)
         importRealmFile.setOnClickListener(mOnClickListener)
         countCharacters.setOnClickListener(mOnClickListener)
-        devMode.setOnClickListener {
-            mDevModeClickCount++
-            if (mDevModeClickCount > 5) {
-                signOutGoogleOAuth.visibility = View.VISIBLE
-                makeSnackBar(BuildConfig.VERSION_CODE.toString())
-            }
-        }
+//        devMode.setOnClickListener {
+//            mDevModeClickCount++
+//            if (mDevModeClickCount > 5) {
+//                signOutGoogleOAuth.visibility = View.VISIBLE
+//                makeSnackBar(BuildConfig.VERSION_CODE.toString())
+//            }
+//        }
 
         fontLineSpacing.configBuilder
                 .min(0.2F)

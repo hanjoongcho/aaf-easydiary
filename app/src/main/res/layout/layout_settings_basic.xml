@@ -1,10 +1,10 @@
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <io.github.aafactory.commons.views.LabelLayout
+    android:layout_height="match_parent">
+    <!--<io.github.aafactory.commons.views.LabelLayout
         android:id="@+id/devMode"
         android:layout_marginTop="2dp"
         android:background="@drawable/bg_card_title"
@@ -13,7 +13,7 @@
         <TextView
             android:text="@string/preferences_category_settings"
             style="@style/SettingsCategory" />
-    </io.github.aafactory.commons.views.LabelLayout>
+    </io.github.aafactory.commons.views.LabelLayout>-->
 
     <LinearLayout
         android:orientation="vertical"
@@ -359,5 +359,5 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </LinearLayout>
-</LinearLayout>
+</ScrollView>
 

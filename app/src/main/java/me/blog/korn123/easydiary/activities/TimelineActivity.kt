@@ -111,7 +111,7 @@ class TimelineActivity : EasyDiaryActivity() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         if (mDiaryList.isNotEmpty()) {
             outState?.putInt(DIARY_SEQUENCE, mDiaryList[timelineList.firstVisiblePosition].sequence)
             Log.i("aaf-t" , "firstVisiblePosition ${timelineList.firstVisiblePosition}")

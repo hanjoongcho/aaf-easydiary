@@ -36,6 +36,7 @@
         <activity android:name=".activities.FingerprintLockActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.PinLockActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.MarkDownViewActivity" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.SettingsActivity2" android:theme="@style/AppTheme.NoActionBar" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
