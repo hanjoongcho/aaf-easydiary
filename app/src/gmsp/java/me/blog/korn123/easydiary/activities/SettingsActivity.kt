@@ -27,6 +27,7 @@ class SettingsActivity : EasyDiaryActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.run {
             setTitle(R.string.preferences_category_settings)
+            setSubtitle(" ")
             setDisplayHomeAsUpEnabled(true)
         }
 
