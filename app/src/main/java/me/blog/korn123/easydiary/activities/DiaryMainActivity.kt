@@ -159,7 +159,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         when (item.itemId) {
             android.R.id.home -> finish()
             R.id.settings -> {
-                val settingIntent = Intent(this@DiaryMainActivity, SettingsActivity2::class.java)
+                val settingIntent = Intent(this@DiaryMainActivity, SettingsActivity::class.java)
                 //                startActivity(settingIntent);
                 TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, settingIntent)
             }

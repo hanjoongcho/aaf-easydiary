@@ -21,21 +21,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <androidx.cardview.widget.CardView
-            android:id="@+id/signOutGoogleOAuth"
-            android:visibility="gone"
-            style="@style/AppCard.Settings">
-            <LinearLayout
-                style="@style/LinearLayoutVertical">
-                <com.simplemobiletools.commons.views.MyTextView
-                    android:text="Google Sign-Out for Android"
-                    style="@style/SettingsTitle" />
-                <com.simplemobiletools.commons.views.MyTextView
-                    android:text="clear token..."
-                    style="@style/SettingsSummary" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
             android:id="@+id/fontSetting"
             style="@style/AppCard.Settings">
             <LinearLayout

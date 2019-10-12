@@ -4,20 +4,34 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <io.github.aafactory.commons.views.LabelLayout
+    <!--<io.github.aafactory.commons.views.LabelLayout
         android:background="@drawable/bg_card_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
             android:text="@string/preferences_category_backup_restore"
             style="@style/SettingsCategory" />
-    </io.github.aafactory.commons.views.LabelLayout>
+    </io.github.aafactory.commons.views.LabelLayout>-->
 
     <LinearLayout
         android:orientation="vertical"
         android:padding="@dimen/card_layout_padding"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <androidx.cardview.widget.CardView
+            android:id="@+id/signOutGoogleOAuth"
+            style="@style/AppCard.Settings">
+            <LinearLayout
+                style="@style/LinearLayoutVertical">
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="Google Sign-Out for Android"
+                    style="@style/SettingsTitle" />
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="clear token..."
+                    style="@style/SettingsSummary" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
         <androidx.cardview.widget.CardView
             android:id="@+id/backupSetting"
             style="@style/AppCard.Settings">

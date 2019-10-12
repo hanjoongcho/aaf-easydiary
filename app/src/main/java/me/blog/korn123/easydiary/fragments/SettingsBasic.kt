@@ -1,10 +1,8 @@
 package me.blog.korn123.easydiary.fragments
 
-import android.accounts.Account
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,22 +13,7 @@ import android.widget.ListView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.Task
-import com.google.android.gms.tasks.Tasks
-import com.google.api.client.extensions.android.http.AndroidHttp
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
-import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
-import com.google.api.client.json.gson.GsonFactory
-import com.google.api.services.drive.Drive
-import com.google.api.services.drive.DriveScopes
-import com.google.api.services.drive.model.FileList
 import com.xw.repo.BubbleSeekBar
-import io.github.aafactory.commons.extensions.updateAppViews
-import io.github.aafactory.commons.extensions.updateTextColors
 import io.github.aafactory.commons.helpers.BaseConfig
 import kotlinx.android.synthetic.main.layout_settings_basic.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
@@ -38,16 +21,15 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.CustomizationActivity
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
+import me.blog.korn123.easydiary.activities.SettingsActivity
 import me.blog.korn123.easydiary.adapters.FontItemAdapter
-import me.blog.korn123.easydiary.adapters.RealmFileItemAdapter
+import me.blog.korn123.easydiary.adapters.ThumbnailSizeItemAdapter
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import java.io.File
 import java.util.*
-import java.util.concurrent.Callable
-import java.util.concurrent.Executors
 
 class SettingsBasic() : androidx.fragment.app.Fragment() {
 
@@ -57,12 +39,10 @@ class SettingsBasic() : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     private lateinit var progressContainer: ConstraintLayout
-    private lateinit var mAccountCallback: (Account) -> Unit
     private lateinit var mRootView: ViewGroup
     private lateinit var mContext: Context
     private lateinit var mActivity: Activity
     private var mAlertDialog: AlertDialog? = null
-    private var mTaskFlag = 0
 
 
     /***************************************************************************************************
@@ -84,20 +64,14 @@ class SettingsBasic() : androidx.fragment.app.Fragment() {
         EasyDiaryUtils.changeDrawableIconColor(mContext, mContext.config.primaryColor, R.drawable.minus_6)
         EasyDiaryUtils.changeDrawableIconColor(mContext, mContext.config.primaryColor, R.drawable.plus_6)
         bindEvent()
+        updateFragmentUI(mRootView)
+        initPreference()
     }
 
     override fun onResume() {
         super.onResume()
+        updateFragmentUI(mRootView)
         initPreference()
-        mRootView.let {
-            context?.run {
-                initTextSize(it, this)
-                updateTextColors(it,0,0)
-                updateAppViews(it)
-                updateCardViewPolicy(it)
-            }
-        }
-
         if (BaseConfig(mContext).isThemeChanged) {
             BaseConfig(mContext).isThemeChanged = false
             val readDiaryIntent = Intent(mContext, DiaryMainActivity::class.java)
@@ -115,18 +89,6 @@ class SettingsBasic() : androidx.fragment.app.Fragment() {
             true -> {
                 // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
                 when (requestCode) {
-                    REQUEST_CODE_GOOGLE_SIGN_IN -> {
-                        // The Task returned from this call is always completed, no need to attach
-                        // a listener.
-                        val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(intent)
-                        val googleSignAccount = task.getResult(ApiException::class.java)
-                        googleSignAccount?.account?.let {
-                            requestDrivePermissions(it) { mAccountCallback.invoke(it) }
-                        }
-                    }
-                    REQUEST_CODE_GOOGLE_DRIVE_PERMISSIONS -> {
-                        mPermissionCallback.invoke()
-                    }
                     REQUEST_CODE_FONT_PICK -> {
                         intent.data?.let { uri ->
                             val fileName = EasyDiaryUtils.queryName(mContext.contentResolver, uri)
@@ -152,108 +114,17 @@ class SettingsBasic() : androidx.fragment.app.Fragment() {
         }
     }
 
-    /***************************************************************************************************
-     *   backup and recovery
-     *
-     ***************************************************************************************************/
-    private fun initGoogleSignAccount(callback: (account: Account) -> Unit) {
-        mAccountCallback = callback
-
-        // Check for existing Google Sign In account, if the user is already signed in
-        // the GoogleSignInAccount will be non-null.
-        val googleSignInAccount: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(mContext)
-
-        if (googleSignInAccount == null) {
-            // Configure sign-in to request the user's ID, email address, and basic
-            // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-            val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(getString(R.string.oauth_requerst_id_token))
-                    .requestEmail()
-                    .build()
-            val client = GoogleSignIn.getClient(mActivity, gso)
-            startActivityForResult(client.signInIntent, REQUEST_CODE_GOOGLE_SIGN_IN)
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        mActivity.pauseLock()
+        if (mContext.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+            when (requestCode) {
+                REQUEST_CODE_EXTERNAL_STORAGE_WITH_FONT_SETTING -> if (mContext.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                    openFontSettingDialog()
+                }
+            }
         } else {
-            googleSignInAccount.account?.let {
-                requestDrivePermissions(it) { mAccountCallback.invoke(it) }
-            }
-        }
-    }
-
-    // FIXME: workaround
-    private lateinit var mPermissionCallback: () -> Unit
-    private fun requestDrivePermissions(account: Account, permissionCallback: () -> Unit) {
-        mPermissionCallback = permissionCallback
-        val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(mContext, Collections.singleton(DriveScopes.DRIVE_FILE))
-        credential.selectedAccount = account
-        val googleDriveService: Drive = Drive.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
-                .setApplicationName(getString(R.string.app_name))
-                .build()
-
-        val executor = Executors.newSingleThreadExecutor()
-        Tasks.call(executor, Callable<FileList> {
-            try {
-                var r = googleDriveService.files().list().setQ("'root' in parents and name = '${DriveServiceHelper.AAF_ROOT_FOLDER_NAME}' and trashed = false").setSpaces("drive").execute()
-                mPermissionCallback.invoke()
-                r
-            } catch (e: UserRecoverableAuthIOException) {
-                startActivityForResult(e.intent, REQUEST_CODE_GOOGLE_DRIVE_PERMISSIONS)
-                null
-            }
-        })
-    }
-
-    private fun recoverDiaryRealm() {
-        progressContainer.visibility = View.VISIBLE
-        openRealmFilePickerDialog()
-    }
-
-    private fun openRealmFilePickerDialog() {
-        initGoogleSignAccount { account ->
-            val driveServiceHelper = DriveServiceHelper(mContext, account)
-
-//            driveServiceHelper.queryFiles("mimeType contains 'text/aaf_v' and name contains '$DIARY_DB_NAME'", 1000)
-
-            driveServiceHelper.queryFiles("(mimeType = '${EasyDiaryUtils.easyDiaryMimeTypeAll.joinToString("' or mimeType = '")}') and trashed = false", 1000)
-                    .addOnSuccessListener {
-                        val realmFiles: ArrayList<HashMap<String, String>> = arrayListOf()
-                        it.files.map { file ->
-                            val itemInfo = hashMapOf<String, String>("name" to file.name, "id" to file.id, "createdTime" to file.createdTime.toString())
-                            realmFiles.add(itemInfo)
-                        }
-                        val builder = AlertDialog.Builder(mContext)
-                        builder.setNegativeButton(getString(android.R.string.cancel), null)
-                        builder.setTitle("${getString(R.string.open_realm_file_title)} (Total: ${it.files.size})")
-                        builder.setMessage(getString(R.string.open_realm_file_message))
-                        val inflater = mContext.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-                        val fontView = inflater.inflate(R.layout.dialog_realm_files, null)
-                        val listView = fontView.findViewById<ListView>(R.id.files)
-                        val adapter = RealmFileItemAdapter(mActivity, R.layout.item_realm_file, realmFiles)
-                        listView.adapter = adapter
-                        listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-                            val itemInfo = parent.adapter.getItem(position) as HashMap<String, String>
-                            itemInfo["id"]?.let { realmFileId ->
-                                progressContainer.visibility = View.VISIBLE
-                                driveServiceHelper.downloadFile(realmFileId, EasyDiaryDbHelper.getInstance().path).run {
-                                    addOnSuccessListener {
-                                        mActivity.restartApp()
-                                    }
-                                    addOnFailureListener {  }
-                                }
-
-                            }
-                            mAlertDialog?.cancel()
-                        }
-
-                        builder.setView(fontView)
-                        mAlertDialog = builder.create()
-                        mAlertDialog?.show()
-                        progressContainer.visibility = View.GONE
-                    }
-                    .addOnFailureListener { e ->
-                        e.printStackTrace()
-                        mActivity.makeSnackBar(e.message ?: "Please try again later.")
-                        progressContainer.visibility = View.GONE
-                    }
+            mActivity.makeSnackBar(mRootView, getString(R.string.guide_message_3))
         }
     }
 
@@ -264,194 +135,57 @@ class SettingsBasic() : androidx.fragment.app.Fragment() {
      ***************************************************************************************************/
     private val mOnClickListener = View.OnClickListener { view ->
         when (view.id) {
-            R.id.primaryColor -> TransitionHelper.startActivityWithTransition(mActivity, Intent(mActivity, CustomizationActivity::class.java))
             R.id.fontSetting -> if (mContext.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                 openFontSettingDialog()
             } else {
                 mActivity.confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_FONT_SETTING)
             }
-//            R.id.thumbnailSetting -> {
-//                openThumbnailSettingDialog()
-//            }
-//            R.id.sensitiveOption -> {
-//                sensitiveOptionSwitcher.toggle()
-//                mContext.config.diarySearchQueryCaseSensitive = sensitiveOptionSwitcher.isChecked
-//            }
-//            R.id.addTtfFontSetting -> {
-////                openGuideView(getString(R.string.add_ttf_fonts_title))
-//                performFileSearch()
-//            }
-//            R.id.restoreSetting -> {
-//                mTaskFlag = SETTING_FLAG_IMPORT_GOOGLE_DRIVE
-//                if (mContext.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-//                    recoverDiaryRealm()
-//                } else { // Permission has already been granted
-//                    mActivity.confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
-//                }
-//            }
-//            R.id.backupSetting -> {
-//                mTaskFlag = SETTING_FLAG_EXPORT_GOOGLE_DRIVE
-//                if (mContext.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-//                    backupDiaryRealm()
-//                } else { // Permission has already been granted
-//                    confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
-//                }
-//            }
-//            R.id.backupAttachPhoto -> {
-//                mTaskFlag = SETTING_FLAG_EXPORT_PHOTO_GOOGLE_DRIVE
-//                when (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-//                    true -> backupDiaryPhoto()
-//                    false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
-//                }
-//            }
-//            R.id.recoverAttachPhoto -> {
-//                mTaskFlag = SETTING_FLAG_IMPORT_PHOTO_GOOGLE_DRIVE
-//                when (mContext.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-//                    true -> recoverDiaryPhoto()
-//                    false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
-//                }
-//            }
-//            R.id.exportExcel -> {
-//                when (mContext.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-//                    true -> exportExcel()
-//                    false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_EXCEL)
-//                }
-//            }
-//            R.id.sendEmailWithExcel -> {
-//                sendEmailWithExcel()
-//            }
-//            R.id.exportRealmFile -> {
-//                when (mContext.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-//                    true -> exportRealmFile()
-//                    false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_REALM)
-//                }
-//            }
-//            R.id.importRealmFile -> {
-//                when (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-//                    true -> importRealmFile()
-//                    false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_IMPORT_REALM)
-//                }
-//            }
-//            R.id.rateAppSetting -> openGooglePlayBy("me.blog.korn123.easydiary")
-//            R.id.licenseView -> {
-//                TransitionHelper.startActivityWithTransition(this, Intent(this, MarkDownViewActivity::class.java).apply {
-//                    putExtra(MarkDownViewActivity.OPEN_URL_INFO, "https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/LICENSE.md")
-//                    putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, getString(R.string.preferences_information_licenses))
-//                })
-//            }
-//            R.id.releaseNotes -> checkWhatsNewDialog(false)
-//            R.id.boldStyleOption -> {
-//                boldStyleOptionSwitcher.toggle()
-//                mContext.config.boldStyleEnable = boldStyleOptionSwitcher.isChecked
-//            }
-//            R.id.multiPickerOption -> {
-//                multiPickerOptionSwitcher.toggle()
-//                mContext.config.multiPickerEnable = multiPickerOptionSwitcher.isChecked
-//            }
-//            R.id.appLockSetting -> {
-//                when (mContext.config.aafPinLockEnable) {
-//                    true -> {
-//                        if (mContext.config.fingerprintLockEnable) {
-//                            showAlertDialog(getString(R.string.pin_release_need_fingerprint_disable), null)
-//                        } else {
-//                            appLockSettingSwitcher.isChecked = false
-//                            mContext.config.aafPinLockEnable = false
-//                            showAlertDialog(getString(R.string.pin_setting_release), null)
-//                        }
-//                    }
-//                    false -> {
-//                        startActivity(Intent(this, PinLockActivity::class.java).apply {
-//                            putExtra(FingerprintLockActivity.LAUNCHING_MODE, PinLockActivity.ACTIVITY_SETTING)
-//                        })
-//                    }
-//                }
-//            }
-//            R.id.fingerprint -> {
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//                    when (mContext.config.fingerprintLockEnable) {
-//                        true -> {
-//                            fingerprintSwitcher.isChecked = false
-//                            mContext.config.fingerprintLockEnable = false
-//                            showAlertDialog(getString(R.string.fingerprint_setting_release), null)
-//                        }
-//                        false -> {
-//                            when (mContext.config.aafPinLockEnable) {
-//                                true -> {
-//                                    startActivity(Intent(this, FingerprintLockActivity::class.java).apply {
-//                                        putExtra(FingerprintLockActivity.LAUNCHING_MODE, FingerprintLockActivity.ACTIVITY_SETTING)
-//                                    })
-//                                }
-//                                false -> {
-//                                    showAlertDialog(getString(R.string.fingerprint_lock_need_pin_setting), null)
-//                                }
-//                            }
-//                        }
-//                    }
-//                } else {
-//                    showAlertDialog(getString(R.string.fingerprint_not_available), null)
-//                }
-//            }
-//            R.id.enableCardViewPolicy -> {
-//                enableCardViewPolicySwitcher.toggle()
-//                mContext.config.enableCardViewPolicy = enableCardViewPolicySwitcher.isChecked
-//                updateCardViewPolicy(main_holder)
-//            }
-//            R.id.decreaseFont -> {
-//                mContext.config.settingFontSize = mContext.config.settingFontSize - 5
-//                initTextSize(main_holder, this)
-//            }
-//            R.id.increaseFont -> {
-//                mContext.config.settingFontSize = mContext.config.settingFontSize + 5
-//                initTextSize(main_holder, this)
-//            }
-//            R.id.contentsSummary -> {
-//                contentsSummarySwitcher.toggle()
-//                mContext.config.enableContentsSummary = contentsSummarySwitcher.isChecked
-//            }
-//            R.id.faq -> {
-//                TransitionHelper.startActivityWithTransition(this, Intent(this, MarkDownViewActivity::class.java).apply {
-//                    putExtra(MarkDownViewActivity.OPEN_URL_INFO, getString(R.string.faq_url))
-//                    putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, getString(R.string.faq_title))
-//                })
-//            }
-//            R.id.privacyPolicy -> {
-//                TransitionHelper.startActivityWithTransition(this, Intent(this, MarkDownViewActivity::class.java).apply {
-//                    putExtra(MarkDownViewActivity.OPEN_URL_INFO, getString(R.string.privacy_policy_url))
-//                    putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, getString(R.string.privacy_policy_title))
-//                })
-//            }
-//            R.id.signOutGoogleOAuth -> {
-//                signOutGoogleOAuth()
-//            }
-//            R.id.countCharacters -> {
-//                countCharactersSwitcher.toggle()
-//                mContext.config.enableCountCharacters = countCharactersSwitcher.isChecked
-//            }
+            R.id.decreaseFont -> {
+                mContext.config.settingFontSize = mContext.config.settingFontSize - 5
+                mContext.initTextSize(mRootView, mContext)
+            }
+            R.id.increaseFont -> {
+                mContext.config.settingFontSize = mContext.config.settingFontSize + 5
+                mContext.initTextSize(mRootView, mContext)
+            }
+            R.id.addTtfFontSetting -> {
+//                openGuideView(getString(R.string.add_ttf_fonts_title))
+                performFileSearch()
+            }
+            R.id.primaryColor -> TransitionHelper.startActivityWithTransition(mActivity, Intent(mActivity, CustomizationActivity::class.java))
+            R.id.thumbnailSetting -> {
+                openThumbnailSettingDialog()
+            }
+            R.id.contentsSummary -> {
+                contentsSummarySwitcher.toggle()
+                mContext.config.enableContentsSummary = contentsSummarySwitcher.isChecked
+            }
+            R.id.enableCardViewPolicy -> {
+                enableCardViewPolicySwitcher.toggle()
+                mContext.config.enableCardViewPolicy = enableCardViewPolicySwitcher.isChecked
+                mContext.updateCardViewPolicy(mRootView)
+            }
+            R.id.multiPickerOption -> {
+                multiPickerOptionSwitcher.toggle()
+                mContext.config.multiPickerEnable = multiPickerOptionSwitcher.isChecked
+            }
+            R.id.boldStyleOption -> {
+                boldStyleOptionSwitcher.toggle()
+                mContext.config.boldStyleEnable = boldStyleOptionSwitcher.isChecked
+            }
+            R.id.sensitiveOption -> {
+                sensitiveOptionSwitcher.toggle()
+                mContext.config.diarySearchQueryCaseSensitive = sensitiveOptionSwitcher.isChecked
+            }
+            R.id.countCharacters -> {
+                countCharactersSwitcher.toggle()
+                mContext.config.enableCountCharacters = countCharactersSwitcher.isChecked
+            }
         }
     }
 
     private fun bindEvent() {
-        primaryColor.setOnClickListener(mOnClickListener)
         fontSetting.setOnClickListener(mOnClickListener)
-        thumbnailSetting.setOnClickListener(mOnClickListener)
-        sensitiveOption.setOnClickListener(mOnClickListener)
-        addTtfFontSetting.setOnClickListener(mOnClickListener)
-        boldStyleOption.setOnClickListener(mOnClickListener)
-        multiPickerOption.setOnClickListener(mOnClickListener)
-        enableCardViewPolicy.setOnClickListener(mOnClickListener)
-        decreaseFont.setOnClickListener(mOnClickListener)
-        increaseFont.setOnClickListener(mOnClickListener)
-        contentsSummary.setOnClickListener(mOnClickListener)
-        signOutGoogleOAuth.setOnClickListener(mOnClickListener)
-        countCharacters.setOnClickListener(mOnClickListener)
-//        devMode.setOnClickListener {
-//            mDevModeClickCount++
-//            if (mDevModeClickCount > 5) {
-//                signOutGoogleOAuth.visibility = View.VISIBLE
-//                makeSnackBar(BuildConfig.VERSION_CODE.toString())
-//            }
-//        }
-
         fontLineSpacing.configBuilder
                 .min(0.2F)
                 .max(1.8F)
@@ -463,8 +197,6 @@ class SettingsBasic() : androidx.fragment.app.Fragment() {
                 .sectionTextPosition(BubbleSeekBar.TextPosition.BELOW_SECTION_MARK)
                 .autoAdjustSectionMark()
                 .build()
-
-
         val bubbleSeekBarListener = object : BubbleSeekBar.OnProgressChangedListener {
             override fun onProgressChanged(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float, fromUser: Boolean) {
                 Log.i("progress", "$progress $progressFloat")
@@ -476,9 +208,16 @@ class SettingsBasic() : androidx.fragment.app.Fragment() {
             override fun getProgressOnFinally(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float, fromUser: Boolean) {}
         }
         fontLineSpacing.setOnProgressChangedListener(bubbleSeekBarListener)
-
-        progressContainer.setOnTouchListener { _, _ -> true }
-
+        decreaseFont.setOnClickListener(mOnClickListener)
+        increaseFont.setOnClickListener(mOnClickListener)
+        addTtfFontSetting.setOnClickListener(mOnClickListener)
+        primaryColor.setOnClickListener(mOnClickListener)
+        thumbnailSetting.setOnClickListener(mOnClickListener)
+        contentsSummary.setOnClickListener(mOnClickListener)
+        enableCardViewPolicy.setOnClickListener(mOnClickListener)
+        multiPickerOption.setOnClickListener(mOnClickListener)
+        boldStyleOption.setOnClickListener(mOnClickListener)
+        sensitiveOption.setOnClickListener(mOnClickListener)
         calendarStartDay.setOnCheckedChangeListener { _, i ->
             val flag = when (i) {
                 R.id.startMonday -> CALENDAR_START_DAY_MONDAY
@@ -491,6 +230,30 @@ class SettingsBasic() : androidx.fragment.app.Fragment() {
             }
             mContext.config.calendarStartDay = flag
         }
+        countCharacters.setOnClickListener(mOnClickListener)
+    }
+
+    /**
+     * Fires an intent to spin up the "file chooser" UI and select an image.
+     */
+    private fun performFileSearch() {
+
+        // ACTION_OPEN_DOCUMENT is the intent to choose a file via the system's file
+        // browser.
+        // ACTION_OPEN_DOCUMENT
+        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+            // Filter to only show results that can be "opened", such as a
+            // file (as opposed to a list of contacts or timezones)
+//             addCategory(Intent.CATEGORY_OPENABLE)
+
+            // Filter to show only images, using the image MIME data type.
+            // If one wanted to search for ogg vorbis files, the type would be "audio/ogg".
+            // To search for all documents available via installed storage providers,
+            // it would be "*/*".
+            type = "*/*"
+        }
+
+        startActivityForResult(intent, REQUEST_CODE_FONT_PICK)
     }
 
     private fun initPreference() {
@@ -506,6 +269,41 @@ class SettingsBasic() : androidx.fragment.app.Fragment() {
             CALENDAR_START_DAY_SATURDAY -> startSaturday.isChecked = true
             else -> startSunday.isChecked = true
         }
+    }
+
+    private fun openThumbnailSettingDialog() {
+        val builder = AlertDialog.Builder(mContext)
+        builder.setNegativeButton(getString(android.R.string.cancel), null)
+        builder.setTitle(getString(R.string.thumbnail_setting_title))
+        val inflater = mContext.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val containerView = inflater.inflate(R.layout.dialog_thumbnail, null)
+        val listView = containerView.findViewById<ListView>(R.id.listView)
+
+        var selectedIndex = 0
+        val listThumbnailSize = ArrayList<Map<String, String>>()
+        for (i in 40..200 step 10) {
+            listThumbnailSize.add(mapOf("optionTitle" to "${i}dp x ${i}dp", "size" to "$i"))
+        }
+
+        listThumbnailSize.mapIndexed { index, map ->
+            val size = map["size"] ?: "0"
+            if (mContext.config.settingThumbnailSize == size.toFloat()) selectedIndex = index
+        }
+
+        val arrayAdapter = ThumbnailSizeItemAdapter(mActivity, R.layout.item_font, listThumbnailSize)
+        listView.adapter = arrayAdapter
+        listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+            val fontInfo = parent.adapter.getItem(position) as HashMap<String, String>
+            fontInfo["size"]?.let {
+                mContext.config.settingThumbnailSize = it.toFloat()
+            }
+            mAlertDialog?.cancel()
+        }
+
+        builder.setView(containerView)
+        mAlertDialog = builder.create()
+        mAlertDialog?.show()
+        listView.setSelection(selectedIndex)
     }
 
     private fun openFontSettingDialog() {
@@ -553,6 +351,7 @@ class SettingsBasic() : androidx.fragment.app.Fragment() {
                 FontUtils.setCommonTypeface(mContext, mContext.assets)
                 initPreference()
                 setFontsStyle()
+                (mActivity as SettingsActivity).updateUI()
             }
             mAlertDialog?.cancel()
         }
