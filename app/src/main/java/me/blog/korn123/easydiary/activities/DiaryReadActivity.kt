@@ -267,11 +267,11 @@ class DiaryReadActivity : EasyDiaryActivity() {
     class PlaceholderFragment : androidx.fragment.app.Fragment() {
         private var mPrimaryColor = 0
         private lateinit var mRootView: ViewGroup
-        private lateinit var realmInstance: Realm
+        private lateinit var mRealmInstance: Realm
 
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
-            realmInstance = EasyDiaryDbHelper.getInstance()
+            mRealmInstance = EasyDiaryDbHelper.getInstance()
         }
         
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -296,10 +296,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                     }    
                 }
             }
-        }
 
-        override fun onResume() {
-            super.onResume()
             mRootView.let {
                 context?.run {
                     updateTextColors(it,0,0)
@@ -311,12 +308,11 @@ class DiaryReadActivity : EasyDiaryActivity() {
             initBottomContainer()
             setFontsTypeface()
             setFontsSize()
-
         }
 
         override fun onDestroy() {
             super.onDestroy()
-            realmInstance.close()
+            mRealmInstance.close()
         }
 
         fun getSequence() = arguments?.getInt(DIARY_SEQUENCE) ?: -1
@@ -324,7 +320,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
         fun getDiaryContents(): String = diaryContents.text.toString() 
         
         private fun initContents() {
-            val diaryDto = EasyDiaryDbHelper.readDiaryBy(realmInstance, getSequence())
+            val diaryDto = EasyDiaryDbHelper.readDiaryBy(mRealmInstance, getSequence())
             if (StringUtils.isEmpty(diaryDto.title)) {
                 diaryTitle.visibility = View.GONE
             }
