@@ -29,7 +29,7 @@ class SettingsActivity : EasyDiaryActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-        val fragmentList = arrayListOf(SettingsBasic(), SettingsLock(), SettingsGMSBackup(), SettingsLocalBackup(), SettingsAppInfo())
+        val fragmentList = arrayListOf(SettingsBasicFragment(), SettingsLockFragment(), SettingsGMSBackupFragment(), SettingsLocalBackupFragment(), SettingsAppInfoFragment())
         mAdapter = DotIndicatorPager2Adapter(supportFragmentManager, fragmentList)
         viewPager.adapter = mAdapter
         viewPager.addOnPageChangeListener(object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {

@@ -31,7 +31,7 @@ import org.apache.commons.io.FilenameUtils
 import java.io.File
 import java.util.*
 
-class SettingsBasic() : androidx.fragment.app.Fragment() {
+class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
 
 
     /***************************************************************************************************

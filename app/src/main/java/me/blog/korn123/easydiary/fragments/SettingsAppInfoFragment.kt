@@ -18,7 +18,7 @@ import me.blog.korn123.easydiary.extensions.openGooglePlayBy
 import me.blog.korn123.easydiary.extensions.updateFragmentUI
 import me.blog.korn123.easydiary.helper.TransitionHelper
 
-class SettingsAppInfo() : androidx.fragment.app.Fragment() {
+class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
 
 
     /***************************************************************************************************

@@ -16,7 +16,7 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.extensions.updateFragmentUI
 
-class SettingsLock : androidx.fragment.app.Fragment() {
+class SettingsLockFragment : androidx.fragment.app.Fragment() {
 
 
     /***************************************************************************************************

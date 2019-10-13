@@ -32,7 +32,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.*
 
-class SettingsLocalBackup() : androidx.fragment.app.Fragment() {
+class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
 
 
     /***************************************************************************************************
