@@ -40,9 +40,11 @@ class SettingsActivity : EasyDiaryActivity() {
                     when (position) {
                         0 -> {
                             title = getString(R.string.preferences_category_settings)
+                            subtitle = ""
                         }
                         1 -> {
                             title = getString(R.string.preferences_category_lock)
+                            subtitle = ""
                         }
                         2 -> {
                             title = getString(R.string.preferences_category_backup_restore_device)
@@ -50,6 +52,7 @@ class SettingsActivity : EasyDiaryActivity() {
                         }
                         else -> {
                             title = getString(R.string.preferences_category_information)
+                            subtitle = ""
                         }
                     }
                 }

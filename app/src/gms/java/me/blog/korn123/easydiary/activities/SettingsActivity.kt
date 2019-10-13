@@ -7,6 +7,7 @@ import kotlinx.android.synthetic.main.layout_settings_progress.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DotIndicatorPager2Adapter
 import me.blog.korn123.easydiary.fragments.*
+import org.apache.poi.util.StringUtil
 
 class SettingsActivity : EasyDiaryActivity() {
 
@@ -29,7 +30,7 @@ class SettingsActivity : EasyDiaryActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-        val fragmentList = arrayListOf(SettingsBasic(), SettingsLock(), SettingsGMSBackup(), SettingsLocalBackup(), SettingsAppInfo())
+        val fragmentList = arrayListOf(SettingsBasicFragment(), SettingsLockFragment(), SettingsGMSBackupFragment(), SettingsLocalBackupFragment(), SettingsAppInfoFragment())
         mAdapter = DotIndicatorPager2Adapter(supportFragmentManager, fragmentList)
         viewPager.adapter = mAdapter
         viewPager.addOnPageChangeListener(object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
@@ -40,9 +41,11 @@ class SettingsActivity : EasyDiaryActivity() {
                     when (position) {
                         0 -> {
                             title = getString(R.string.preferences_category_settings)
+                            subtitle = ""
                         }
                         1 -> {
                             title = getString(R.string.preferences_category_lock)
+                            subtitle = ""
                         }
                         2 -> {
                             title = getString(R.string.preferences_category_backup_restore)
@@ -55,6 +58,7 @@ class SettingsActivity : EasyDiaryActivity() {
                         }
                         else -> {
                             title = getString(R.string.preferences_category_information)
+                            subtitle = ""
                         }
                     }
                 }
