@@ -24,10 +24,10 @@
             <LinearLayout
                 style="@style/LinearLayoutVertical">
                 <com.simplemobiletools.commons.views.MyTextView
-                    android:text="Google Sign-Out for Android"
+                    android:text="@string/google_drive_account_sign_out_title"
                     style="@style/SettingsTitle" />
                 <com.simplemobiletools.commons.views.MyTextView
-                    android:text="clear token..."
+                    android:text="@string/google_drive_account_sign_out_description"
                     style="@style/SettingsSummary" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>

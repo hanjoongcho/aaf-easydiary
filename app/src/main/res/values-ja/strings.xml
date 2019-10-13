@@ -465,4 +465,6 @@
     <string name="send_email_attach_excel_title">エクセルファイルの作成と電子メールで送信</string>
     <string name="send_email_attach_excel_description">添付写真を除くすべてのコンテンツをExcelファイルに生成し、電子メールに添付します。</string>
     <string name="storage_migration_message">Android10 Scoped Storage政策による格納場所の変更が行われます。この作業は、一度だけ実行されます。</string>
+    <string name="google_drive_account_sign_out_title">구글드라이브 연동계정 초기화</string>
+    <string name="google_drive_account_sign_out_description">구글드라이브 연동계정을 이용하여 이지 다이어리에서 발급받은 토큰 정보를 클리어 합니다. </string>
 </resources>
