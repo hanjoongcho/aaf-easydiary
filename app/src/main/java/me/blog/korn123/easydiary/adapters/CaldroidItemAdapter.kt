@@ -52,6 +52,8 @@ class CaldroidItemAdapter(
 
         val calendarDate = cellView?.findViewById<TextView>(R.id.calendarDate)
         calendarDate?.setBackgroundResource(0)
+        calendarDate?.layoutParams?.width = context.config.settingFontSize.toInt() + 30
+        calendarDate?.layoutParams?.height = context.config.settingFontSize.toInt() + 30
         when (dateTime.weekDay) {
             1 -> calendarDate?.setTextColor(Color.RED)
             7 -> calendarDate?.setTextColor(Color.BLUE)

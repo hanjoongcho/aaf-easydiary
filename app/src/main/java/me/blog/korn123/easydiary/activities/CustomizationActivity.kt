@@ -3,7 +3,6 @@ package me.blog.korn123.easydiary.activities
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.ViewGroup
-import android.widget.TextView
 import io.github.aafactory.commons.activities.BaseCustomizationActivity
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
@@ -22,7 +21,6 @@ class CustomizationActivity : BaseCustomizationActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         isBackgroundColorFromPrimaryColor = true
-        val backgroundLabel: TextView = findViewById<TextView>(R.id.customization_background_color_label)
     }
 
     override fun onPause() {
