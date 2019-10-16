@@ -95,6 +95,31 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/calendarFontScale"
+            style="@style/AppCard.Settings">
+            <LinearLayout
+                style="@style/LinearLayoutVertical">
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="@string/calendar_font_scale_title"
+                    style="@style/SettingsTitle" />
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:paddingRight="6dp"
+                        android:width="0dp"
+                        android:layout_weight="1"
+                        android:text="@string/calendar_font_scale_description"
+                        style="@style/SettingsSummary" />
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:id="@+id/calendarFontScaleDescription"
+                        style="@style/SettingsSummary" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
             android:id="@+id/addTtfFontSetting"
             style="@style/AppCard.Settings">
             <LinearLayout

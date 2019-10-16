@@ -25,7 +25,7 @@ class WeekdayArrayAdapter(context: Context, textViewResourceId: Int,
         // To customize text size and color
         val viewGroup = localInflater.inflate(R.layout.item_weekday, null) as ViewGroup
         val textView = viewGroup.findViewById<TextView>(R.id.label)
-        textView.setBackgroundColor(Color.WHITE)
+//        textView.setBackgroundColor(Color.WHITE)
 
         // Set content
         val item = getItem(position)

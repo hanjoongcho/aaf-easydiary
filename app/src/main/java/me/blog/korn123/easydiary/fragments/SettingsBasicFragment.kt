@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.fragments
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Paint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ListView
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -23,7 +25,7 @@ import me.blog.korn123.easydiary.activities.CustomizationActivity
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.activities.SettingsActivity
 import me.blog.korn123.easydiary.adapters.FontItemAdapter
-import me.blog.korn123.easydiary.adapters.ThumbnailSizeItemAdapter
+import me.blog.korn123.easydiary.adapters.OptionItemAdapter
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import org.apache.commons.io.FileUtils
@@ -148,6 +150,9 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
                 mContext.config.settingFontSize = mContext.config.settingFontSize + 5
                 mContext.initTextSize(mRootView, mContext)
             }
+            R.id.calendarFontScale -> {
+                openCalendarFontScaleDialog()
+            }
             R.id.addTtfFontSetting -> {
 //                openGuideView(getString(R.string.add_ttf_fonts_title))
                 performFileSearch()
@@ -210,6 +215,7 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
         fontLineSpacing.setOnProgressChangedListener(bubbleSeekBarListener)
         decreaseFont.setOnClickListener(mOnClickListener)
         increaseFont.setOnClickListener(mOnClickListener)
+        calendarFontScale.setOnClickListener(mOnClickListener)
         addTtfFontSetting.setOnClickListener(mOnClickListener)
         primaryColor.setOnClickListener(mOnClickListener)
         thumbnailSetting.setOnClickListener(mOnClickListener)
@@ -258,6 +264,11 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
 
     private fun initPreference() {
         fontSettingSummary.text = FontUtils.fontFileNameToDisplayName(mContext, mContext.config.settingFontName)
+        calendarFontScaleDescription.text = when (mContext.config.settingCalendarFontScale) {
+            DEFAULT_CALENDAR_FONT_SCALE -> "사용하지 않음"
+            else -> "전역 폰트크기 x ${mContext.config.settingCalendarFontScale}"
+        }
+//        calendarFontScaleDescription.setPaintFlags(calendarFontScaleDescription.paintFlags or Paint.UNDERLINE_TEXT_FLAG)
         sensitiveOptionSwitcher.isChecked = mContext.config.diarySearchQueryCaseSensitive
         boldStyleOptionSwitcher.isChecked = mContext.config.boldStyleEnable
         multiPickerOptionSwitcher.isChecked = mContext.config.multiPickerEnable
@@ -271,30 +282,67 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
         }
     }
 
+    private fun openCalendarFontScaleDialog() {
+        val builder = AlertDialog.Builder(mContext)
+        builder.setNegativeButton(getString(android.R.string.cancel), null)
+        builder.setTitle(getString(R.string.calendar_font_scale_title))
+        val inflater = mContext.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val containerView = inflater.inflate(R.layout.dialog_option_item, null)
+        val listView = containerView.findViewById<ListView>(R.id.listView)
+
+        var selectedIndex = 0
+        val listFontScale = ArrayList<Map<String, String>>()
+        listFontScale.add(mapOf("optionTitle" to "전역 폰트크기 설정 안함", "optionValue" to "-1"))
+        for (i in 1..20 step 1) {
+            listFontScale.add(mapOf("optionTitle" to "전역 폰트크기 x ${String.format("%.1f", i * 0.1)}", "optionValue" to String.format("%.1f", i * 0.1)))
+        }
+
+        listFontScale.mapIndexed { index, map ->
+            val fontScale = map["optionValue"] ?: "0"
+            if (mContext.config.settingCalendarFontScale == fontScale.toFloat()) selectedIndex = index
+        }
+
+        val arrayAdapter = OptionItemAdapter(mActivity, R.layout.item_font, listFontScale, mContext.config.settingCalendarFontScale)
+        listView.adapter = arrayAdapter
+        listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+            val fontInfo = parent.adapter.getItem(position) as HashMap<String, String>
+            fontInfo["optionValue"]?.let {
+                mContext.config.settingCalendarFontScale = it.toFloat()
+            }
+            mAlertDialog?.cancel()
+            initPreference()
+        }
+
+        builder.setView(containerView)
+        mAlertDialog = builder.create()
+        mAlertDialog?.show()
+        listView.setSelection(selectedIndex)
+    }
+
     private fun openThumbnailSettingDialog() {
         val builder = AlertDialog.Builder(mContext)
         builder.setNegativeButton(getString(android.R.string.cancel), null)
         builder.setTitle(getString(R.string.thumbnail_setting_title))
         val inflater = mContext.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val containerView = inflater.inflate(R.layout.dialog_thumbnail, null)
+        val containerView = inflater.inflate(R.layout.dialog_option_item, null)
         val listView = containerView.findViewById<ListView>(R.id.listView)
 
         var selectedIndex = 0
         val listThumbnailSize = ArrayList<Map<String, String>>()
         for (i in 40..200 step 10) {
-            listThumbnailSize.add(mapOf("optionTitle" to "${i}dp x ${i}dp", "size" to "$i"))
+            listThumbnailSize.add(mapOf("optionTitle" to "${i}dp x ${i}dp", "optionValue" to "$i"))
         }
 
         listThumbnailSize.mapIndexed { index, map ->
-            val size = map["size"] ?: "0"
+            val size = map["optionValue"] ?: "0"
             if (mContext.config.settingThumbnailSize == size.toFloat()) selectedIndex = index
         }
 
-        val arrayAdapter = ThumbnailSizeItemAdapter(mActivity, R.layout.item_font, listThumbnailSize)
+        val arrayAdapter = OptionItemAdapter(mActivity, R.layout.item_font, listThumbnailSize, mContext.config.settingThumbnailSize)
         listView.adapter = arrayAdapter
         listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             val fontInfo = parent.adapter.getItem(position) as HashMap<String, String>
-            fontInfo["size"]?.let {
+            fontInfo["optionValue"]?.let {
                 mContext.config.settingThumbnailSize = it.toFloat()
             }
             mAlertDialog?.cancel()

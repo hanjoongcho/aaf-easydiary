@@ -13,7 +13,8 @@ const val START_MAIN_ACTIVITY = 0
 const val APP_BACKGROUND_ALPHA = 200
 const val INTRO_BACKGROUND_ALPHA = 255
 const val SETTING_FONT_SIZE = "font_size"
-const val SETTING_FONT_NAME = "font_setting" 
+const val SETTING_CALENDAR_FONT_SCALE = "setting_calendar_font_scale"
+const val SETTING_FONT_NAME = "font_setting"
 const val SETTING_THUMBNAIL_SIZE = "thumbnail_size" 
 const val SETTING_BOLD_STYLE = "setting_bold_style" 
 const val SETTING_MULTIPLE_PICKER = "setting_multiple_picker"
@@ -372,6 +373,7 @@ const val THUMBNAIL_BACKGROUND_ALPHA = 170
 const val DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE = 20
 const val DEFAULT_FONT_SIZE_UN_SUPPORT_LANGUAGE = 15
 const val DEFAULT_THUMBNAIL_SIZE_DP = 50 
+const val DEFAULT_CALENDAR_FONT_SCALE = -1F
 
 const val POSTCARD_BG_COLOR = "postcard_bg_color"
 const val POSTCARD_TEXT_COLOR = "postcard_text_color"

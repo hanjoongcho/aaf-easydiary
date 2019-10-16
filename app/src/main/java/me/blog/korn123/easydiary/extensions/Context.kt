@@ -14,6 +14,7 @@ import io.github.aafactory.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.helper.Config
+import me.blog.korn123.easydiary.helper.DEFAULT_CALENDAR_FONT_SCALE
 import me.blog.korn123.easydiary.helper.DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE
 
 /**
@@ -68,7 +69,11 @@ fun Context.initTextSize(viewGroup: ViewGroup, context: Context) {
             .map { index -> viewGroup.getChildAt(index) }
             .forEach {
                 when (it) {
-//                    is me.blog.korn123.easydiary.views.CalendarItem -> {}
+                    is me.blog.korn123.easydiary.views.CalendarItem -> {
+                        if (config.settingCalendarFontScale != DEFAULT_CALENDAR_FONT_SCALE) {
+                            it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize * config.settingCalendarFontScale)
+                        }
+                    }
                     is TextView -> { 
                         when (it.id) {
                             R.id.contentsLength -> it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize * 0.8F)

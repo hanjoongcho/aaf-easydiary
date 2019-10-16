@@ -13,7 +13,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 
 
-class ThumbnailSizeItemAdapter(val activity: Activity, private val layoutResourceId: Int, private val list: List<Map<String, String>>
+class OptionItemAdapter(val activity: Activity, private val layoutResourceId: Int, private val list: List<Map<String, String>>, val selectedValue: Float
 ) : ArrayAdapter<Map<String, String>>(activity , layoutResourceId, list) {
     
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -35,8 +35,8 @@ class ThumbnailSizeItemAdapter(val activity: Activity, private val layoutResourc
         
         val holder = row?.tag 
         if (holder is ViewHolder) {
-            val size = list[position]["size"] ?: "0"
-            if (context.config.settingThumbnailSize == size.toFloat()) {
+            val size = list[position]["optionValue"] ?: "0"
+            if (selectedValue == size.toFloat()) {
                 val drawable = ContextCompat.getDrawable(context, R.drawable.check_mark)
                 drawable?.let {
                     it.setColorFilter(context.config.primaryColor, PorterDuff.Mode.SRC_IN)

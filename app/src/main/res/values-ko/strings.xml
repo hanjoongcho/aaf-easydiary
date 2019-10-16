@@ -381,8 +381,8 @@
     <string name="diary_creation_time_disable_message">시간정보 없음</string>
     <string name="enable_card_view_policy_title">카드뷰 디자인 최적화</string>
     <string name="enable_card_view_policy_summary">카드뷰 디자인을 디바이스에 맞춰 최적화합니다.</string>
-    <string name="font_size_title">폰트크기 설정</string>
-    <string name="font_size_summary">폰트의 크기를 줄이거나 확대합니다.</string>
+    <string name="font_size_title">전역 폰트크기 설정</string>
+    <string name="font_size_summary">화면 상단의 툴바와 캘린더의 폰트 사이즈를 제외한 모든 화면의 폰트 사이즈를 줄이거나 확대합니다.</string>
     <string name="contents_summary_title">다이어리 콘텐츠 요약</string>
     <string name="contents_summary_description">캘린더, 타임라인, 검색 화면 등에서 제공하는 다이어리의 내용을 요약하여 표현합니다.</string>
     <string name="init_cipher_error_guide_message">디바이스의 지문정보가 변경되었습니다. 핀 잠금 모드로 변경하여 잠금을 해제하시고 지문인식 잠금을 해제 후 다시 설정하여 사용하세요.</string>
@@ -467,4 +467,6 @@
     <string name="storage_migration_message">Android 10 Scoped Storage 정책에 따른 저장소 위치 변경작업이 진행됩니다. 이 작업은 한번만 실행됩니다.</string>
     <string name="google_drive_account_sign_out_title">구글드라이브 연동계정 초기화</string>
     <string name="google_drive_account_sign_out_description">구글드라이브 연동계정을 이용하여 이지 다이어리에서 발급받은 토큰 정보를 클리어 합니다. </string>
+    <string name="calendar_font_scale_title">캘린더 폰트 스케일 설정</string>
+    <string name="calendar_font_scale_description">설정된 전역 폰트 사이즈를 기준으로 캘린더 내부의 폰트 사이즈의 스케일을 설정합니다.</string>
 </resources>

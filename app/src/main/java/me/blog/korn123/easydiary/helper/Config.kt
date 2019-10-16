@@ -52,6 +52,10 @@ class Config(context: Context) : BaseConfig(context) {
         get() = prefs.getFloat(SETTING_THUMBNAIL_SIZE, DEFAULT_THUMBNAIL_SIZE_DP.toFloat())
         set(settingThumbnailSize) = prefs.edit().putFloat(SETTING_THUMBNAIL_SIZE, settingThumbnailSize).apply()
 
+    var settingCalendarFontScale: Float
+        get() = prefs.getFloat(SETTING_CALENDAR_FONT_SCALE, DEFAULT_CALENDAR_FONT_SCALE.toFloat())
+        set(calendarFontScale) = prefs.edit().putFloat(SETTING_CALENDAR_FONT_SCALE, calendarFontScale).apply()
+
     var boldStyleEnable: Boolean
         get() = prefs.getBoolean(SETTING_BOLD_STYLE, false)
         set(boldStyleEnable) = prefs.edit().putBoolean(SETTING_BOLD_STYLE, boldStyleEnable).apply()
