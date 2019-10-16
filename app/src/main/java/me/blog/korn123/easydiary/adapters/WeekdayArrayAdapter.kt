@@ -10,9 +10,11 @@ import android.widget.TextView
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_MONDAY
 import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SATURDAY
 import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SUNDAY
+import org.w3c.dom.Text
 
 class WeekdayArrayAdapter(context: Context, textViewResourceId: Int,
                                objects: List<String>, themeResource: Int) : com.roomorama.caldroid.WeekdayArrayAdapter(context, textViewResourceId, objects, themeResource) {
@@ -21,12 +23,15 @@ class WeekdayArrayAdapter(context: Context, textViewResourceId: Int,
     
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         // To customize text size and color
-        val textView = localInflater.inflate(R.layout.item_weekday, null) as TextView
+        val viewGroup = localInflater.inflate(R.layout.item_weekday, null) as ViewGroup
+        val textView = viewGroup.findViewById<TextView>(R.id.label)
+        textView.setBackgroundColor(Color.WHITE)
 
         // Set content
         val item = getItem(position)
         textView.text = item
         FontUtils.setFontsTypeface(context, context.assets, "", parent)
+        context.initTextSize(viewGroup, context)
 
         when (context.config.calendarStartDay) {
             CALENDAR_START_DAY_SUNDAY -> {
