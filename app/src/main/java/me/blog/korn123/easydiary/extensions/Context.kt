@@ -68,7 +68,7 @@ fun Context.initTextSize(viewGroup: ViewGroup, context: Context) {
             .map { index -> viewGroup.getChildAt(index) }
             .forEach {
                 when (it) {
-//                    is me.blog.korn123.easydiary.views.CalendarItem -> {}
+                    is me.blog.korn123.easydiary.views.CalendarItem -> {}
                     is TextView -> { 
                         when (it.id) {
                             R.id.contentsLength -> it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize * 0.8F)
