@@ -442,7 +442,7 @@
     <string name="export_realm_guide_message">The database file has been saved to the device storage at the path below.</string>
     <string name="import_realm_title">Recover diary</string>
     <string name="import_realm_description">Recovers database files from device storage except attachments.</string>
-    <string name="diary_item_count">+ %d</string>
+    <string name="diary_item_count">+%d</string>
     <string name="calendar_start_day_title">Calendar start day</string>
     <string name="calendar_start_day_summary">Set the start day of the week.</string>
     <string name="calendar_start_day_sunday">Sunday</string>

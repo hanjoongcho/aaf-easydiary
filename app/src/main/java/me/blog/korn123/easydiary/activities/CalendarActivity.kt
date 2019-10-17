@@ -17,6 +17,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryCalendarItemAdapter
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.fragments.CalendarFragment
+import me.blog.korn123.easydiary.helper.DEFAULT_CALENDAR_FONT_SCALE
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.TransitionHelper
@@ -37,7 +38,11 @@ class CalendarActivity : EasyDiaryActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_calendar)
+        if (config.settingCalendarFontScale == DEFAULT_CALENDAR_FONT_SCALE) {
+            setContentView(R.layout.activity_calendar)
+        } else {
+            setContentView(R.layout.activity_calendar_scale)
+        }
         setSupportActionBar(toolbar)
         supportActionBar?.run {
             title = getString(R.string.calendar_title)

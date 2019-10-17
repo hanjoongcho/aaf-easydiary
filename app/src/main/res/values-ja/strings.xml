@@ -442,7 +442,7 @@
     <string name="export_realm_guide_message">データベースファイルは、以下のパスのデバイスストレージに保存されています。</string>
     <string name="import_realm_title">日記を復元する</string>
     <string name="import_realm_description">添付の写真を除いて、データベースファイルをデバイスのストレージから回復します。</string>
-    <string name="diary_item_count">+ %d</string>
+    <string name="diary_item_count">+%d</string>
     <string name="calendar_start_day_title">カレンダー開始日</string>
     <string name="calendar_start_day_summary">週の開始日を設定します。</string>
     <string name="calendar_start_day_sunday">日曜日</string>
