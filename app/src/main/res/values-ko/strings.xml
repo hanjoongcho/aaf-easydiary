@@ -466,7 +466,7 @@
     <string name="send_email_attach_excel_description">첨부 사진을 제외한 모든 콘텐츠를 엑셀파일로 생성하고 이메일에 첨부합니다.</string>
     <string name="storage_migration_message">Android 10 Scoped Storage 정책에 따른 저장소 위치 변경작업이 진행됩니다. 이 작업은 한번만 실행됩니다.</string>
     <string name="google_drive_account_sign_out_title">구글드라이브 연동계정 초기화</string>
-    <string name="google_drive_account_sign_out_description">구글드라이브 연동계정을 이용하여 이지 다이어리에서 발급받은 토큰 정보를 클리어 합니다. </string>
+    <string name="google_drive_account_sign_out_description">구글드라이브 연동계정을 이용하여 이지 다이어리에서 발급받은 토큰 정보를 클리어 합니다.</string>
     <string name="calendar_font_scale_title">캘린더 폰트 스케일 설정</string>
     <string name="calendar_font_scale_description">설정된 전역 폰트 사이즈를 기준으로 캘린더 내부의 폰트 사이즈의 스케일을 설정합니다.</string>
 </resources>
