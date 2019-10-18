@@ -138,7 +138,7 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
             R.id.fontSetting -> if (mContext.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                 openFontSettingDialog()
             } else {
-                mActivity.confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_FONT_SETTING)
+                confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_FONT_SETTING)
             }
             R.id.decreaseFont -> {
                 mContext.config.settingFontSize = mContext.config.settingFontSize - 5
