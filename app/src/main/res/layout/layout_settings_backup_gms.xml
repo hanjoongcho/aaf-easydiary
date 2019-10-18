@@ -19,20 +19,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <androidx.cardview.widget.CardView
-            android:id="@+id/signOutGoogleOAuth"
-            style="@style/AppCard.Settings">
-            <LinearLayout
-                style="@style/LinearLayoutVertical">
-                <com.simplemobiletools.commons.views.MyTextView
-                    android:text="@string/google_drive_account_sign_out_title"
-                    style="@style/SettingsTitle" />
-                <com.simplemobiletools.commons.views.MyTextView
-                    android:text="@string/google_drive_account_sign_out_description"
-                    style="@style/SettingsSummary" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
             android:id="@+id/backupSetting"
             style="@style/AppCard.Settings">
             <LinearLayout
@@ -84,6 +70,20 @@
                     style="@style/SettingsTitle" />
                 <com.simplemobiletools.commons.views.MyTextView
                     android:text="@string/recover_attach_photo_summary"
+                    style="@style/SettingsSummary" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/signOutGoogleOAuth"
+            style="@style/AppCard.Settings">
+            <LinearLayout
+                style="@style/LinearLayoutVertical">
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="@string/google_drive_account_sign_out_title"
+                    style="@style/SettingsTitle" />
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="@string/google_drive_account_sign_out_description"
                     style="@style/SettingsSummary" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
