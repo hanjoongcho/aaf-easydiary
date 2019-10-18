@@ -8,7 +8,6 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DotIndicatorPager2Adapter
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.fragments.*
-import org.apache.poi.util.StringUtil
 
 class SettingsActivity : EasyDiaryActivity() {
 

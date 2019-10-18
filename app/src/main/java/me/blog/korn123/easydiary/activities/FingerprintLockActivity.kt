@@ -74,7 +74,6 @@ class FingerprintLockActivity : BaseSimpleActivity() {
     }
 
     override fun onResume() {
-        isBackgroundColorFromPrimaryColor = true
         super.onResume()
 
         if (!mSettingComplete) {

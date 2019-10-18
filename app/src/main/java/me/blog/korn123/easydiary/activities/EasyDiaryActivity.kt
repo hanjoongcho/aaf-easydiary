@@ -33,7 +33,6 @@ open class EasyDiaryActivity : BaseSimpleActivity() {
     }
 
     override fun onResume() {
-        isBackgroundColorFromPrimaryColor = true
         super.onResume()
         resumeLock()
         

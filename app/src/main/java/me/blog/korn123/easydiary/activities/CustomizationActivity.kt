@@ -20,7 +20,6 @@ import me.blog.korn123.easydiary.helper.APP_BACKGROUND_ALPHA
 class CustomizationActivity : BaseCustomizationActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        isBackgroundColorFromPrimaryColor = true
     }
 
     override fun onPause() {
