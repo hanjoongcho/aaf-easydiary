@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.fragments
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -59,6 +60,10 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
 
         mContext = context!!
         mActivity = activity!!
+
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+            exportExcel.visibility = View.GONE
+        }
 
         bindEvent()
         updateFragmentUI(mRootView)

@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.layout_settings_app_info.*
-import kotlinx.android.synthetic.main.layout_settings_backup_local.*
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.MarkDownViewActivity
@@ -48,10 +47,6 @@ class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
         if (BuildConfig.FLAVOR == "foss") {
             invite.visibility = View.GONE
             rateAppSetting.visibility = View.GONE
-        }
-
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-            exportExcel.visibility = View.GONE
         }
 
         bindEvent()
