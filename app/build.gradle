@@ -129,9 +129,9 @@ dependencies {
     implementation 'commons-io:commons-io:2.6'
     implementation 'org.apache.commons:commons-lang3:3.7'
 
-    gmsImplementation 'io.github.aafactory:commons:0.9.10'
-    gmspImplementation 'io.github.aafactory:commons:0.9.10'
-    fossImplementation 'io.github.aafactory:commons:0.9.10'
+    gmsImplementation 'io.github.aafactory:commons:0.9.11'
+    gmspImplementation 'io.github.aafactory:commons:0.9.11'
+    fossImplementation 'io.github.aafactory:commons:0.9.11'
 //    implementation project(":aafactory-commons")
 
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
