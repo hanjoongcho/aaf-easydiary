@@ -58,7 +58,6 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
     private lateinit var mContext: Context
     private lateinit var mActivity: Activity
     private var mAlertDialog: AlertDialog? = null
-    private var mDevModeClickCount = 0
     private var mTaskFlag = 0
 
 
