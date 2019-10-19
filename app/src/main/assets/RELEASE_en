@@ -4,6 +4,10 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.104 (date: 2019/10/19)
+  * 캘린더 폰트 스케일 설정기능 추가
+  * 애플리케이션 설정화면 슬라이딩 페이지 적용
+
 # Changes in 1.4.103 (date: 2019/10/09)
   * Change storage location and migrate to respond to Android 10 Scoped Storage policies
 

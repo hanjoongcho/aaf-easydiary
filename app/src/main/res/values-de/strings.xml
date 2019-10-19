@@ -310,9 +310,9 @@
         Change storage location and migrate to respond to Android 10 Scoped Storage policies
     </string>
     <string name="release_170">
-        v1.4.104 / 2019.10.xx\n
-        캘린더 폰트 스케일 설정기능 추가\n
-        애플리케이션 설정화면 슬라이딩 페이지 적용
+        v1.4.104 / 2019.10.19\n
+        Added calendar font scale setting\n
+        Apply sliding page to setting screen
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
