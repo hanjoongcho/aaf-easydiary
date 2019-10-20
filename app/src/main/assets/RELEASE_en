@@ -4,9 +4,13 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.105 (date: 2019/10/20)
+  * Fixed an error that occurred when using the Excel file device saving function
+  * Fixed error when deleting diary from timeline
+
 # Changes in 1.4.104 (date: 2019/10/19)
-  * 캘린더 폰트 스케일 설정기능 추가
-  * 애플리케이션 설정화면 슬라이딩 페이지 적용
+  * Added calendar font scale setting
+  * Apply sliding page to setting screen
 
 # Changes in 1.4.103 (date: 2019/10/09)
   * Change storage location and migrate to respond to Android 10 Scoped Storage policies
