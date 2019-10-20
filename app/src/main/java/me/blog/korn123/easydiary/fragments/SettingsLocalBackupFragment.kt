@@ -187,6 +187,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
     }
 
     private fun exportExcel() {
+        EasyDiaryUtils.initLegacyWorkingDirectory(mContext)
         val exportFileName = "aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}"
         val builder = AlertDialog.Builder(mContext)
         builder.setTitle(getString(R.string.export_excel_title))

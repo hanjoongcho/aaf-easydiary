@@ -314,6 +314,10 @@
         Added calendar font scale setting\n
         Apply sliding page to setting screen
     </string>
+    <string name="release_171">
+        v1.4.105 / 2019.10.xx\n
+        Fixed an error that occurred when using the Excel file device saving function
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->

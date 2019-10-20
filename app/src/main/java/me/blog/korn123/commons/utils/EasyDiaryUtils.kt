@@ -67,7 +67,13 @@ object EasyDiaryUtils {
             makeDirectory(getApplicationDataDirectory(context) + BACKUP_DB_DIRECTORY)
         }
     }
-    
+
+    fun initLegacyWorkingDirectory(context: Context) {
+        if (context.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+            makeDirectory(getExternalStorageDirectory().absolutePath + BACKUP_EXCEL_DIRECTORY)
+        }
+    }
+
     private fun makeDirectory(path: String) {
         val workingDirectory = File(path)
         if (!workingDirectory.exists()) workingDirectory.mkdirs()
