@@ -104,6 +104,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
         refreshList()
         initTextSize(progressDialog, this)
+        invalidateOptionsMenu()
 
         val previousActivity = config.previousActivity
         if (previousActivity == PREVIOUS_ACTIVITY_CREATE) {
@@ -112,7 +113,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             config.previousActivity = -1
         }
     }
-    
+
     override fun getLayoutResId(): Int {
         return R.layout.activity_diary_main
     }
