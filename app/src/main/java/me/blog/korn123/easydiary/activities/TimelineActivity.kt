@@ -143,23 +143,13 @@ class TimelineActivity : EasyDiaryActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (config.previousActivity == PREVIOUS_ACTIVITY_CREATE) {
-                refreshList()
-                moveListViewScrollToBottom()
-                config.previousActivity = -1
+        if (config.previousActivity == PREVIOUS_ACTIVITY_CREATE ) {
+            refreshList()
+            moveListViewScrollToBottom()
+            config.previousActivity = -1
+        } else {
+            refreshList()
         }
-//        when {
-//            config.previousActivity == PREVIOUS_ACTIVITY_CREATE -> {
-//                refreshList(searchView.text.toString())
-//                moveListViewScrollToBottom()
-//                config.previousActivity = -1
-//            }
-//            !mReverseSelection && mDiaryList.size > 0 -> {
-//                refreshList(searchView.text.toString())
-//                moveListViewScrollToBottom()
-//                mReverseSelection = true
-//            }
-//        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -289,6 +279,8 @@ class TimelineActivity : EasyDiaryActivity() {
             ))
             reverse()
         }
+
+        Log.i("aaf-t", "query ${mDiaryList.size}")
 
         mTimelineItemAdapter?.run {
             currentQuery = query.text.toString()

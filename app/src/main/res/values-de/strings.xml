@@ -315,8 +315,9 @@
         Apply sliding page to setting screen
     </string>
     <string name="release_171">
-        v1.4.105 / 2019.10.xx\n
-        Fixed an error that occurred when using the Excel file device saving function
+        v1.4.105 / 2019.10.20\n
+        Fixed an error that occurred when using the Excel file device saving function\n
+        Fixed error when deleting diary from timeline
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
