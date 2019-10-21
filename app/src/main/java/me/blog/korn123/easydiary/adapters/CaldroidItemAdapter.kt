@@ -52,10 +52,12 @@ class CaldroidItemAdapter(
         val resources = context.resources
 
         val calendarDate = cellView?.findViewById<TextView>(R.id.calendarDate)
-        calendarDate?.setBackgroundResource(0)
-//        calendarDate?.setBackgroundColor(Color.WHITE)
-//        calendarDate?.layoutParams?.width = context.config.settingFontSize.toInt() + CommonUtils.dpToPixel(context, 2F)
-//        calendarDate?.layoutParams?.height = context.config.settingFontSize.toInt() + CommonUtils.dpToPixel(context, 2F)
+        calendarDate?.run {
+            //        calendarDate?.setBackgroundColor(Color.WHITE)
+            setBackgroundResource(0)
+            layoutParams?.width = (textSize * 2).toInt()
+            layoutParams?.height = (textSize * 2).toInt()
+        }
         when (dateTime.weekDay) {
             1 -> calendarDate?.setTextColor(Color.RED)
             7 -> calendarDate?.setTextColor(Color.BLUE)

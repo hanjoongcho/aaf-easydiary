@@ -33,6 +33,11 @@ class WeekdayArrayAdapter(context: Context, textViewResourceId: Int,
         FontUtils.setFontsTypeface(context, context.assets, "", parent)
         context.initTextSize(viewGroup, context)
 
+        textView.run {
+            layoutParams?.width = (textSize * 2).toInt()
+            layoutParams?.height = (textSize * 2).toInt()
+        }
+
         when (context.config.calendarStartDay) {
             CALENDAR_START_DAY_SUNDAY -> {
                 when (position) {
