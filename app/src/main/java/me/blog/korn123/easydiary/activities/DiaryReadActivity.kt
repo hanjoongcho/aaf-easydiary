@@ -304,10 +304,16 @@ class DiaryReadActivity : EasyDiaryActivity() {
                     updateCardViewPolicy(it)
                 }
             }
-            initContents()
+
             initBottomContainer()
             setFontsTypeface()
             setFontsSize()
+            initContents()
+        }
+
+        override fun onResume() {
+            super.onResume()
+            initContents()
         }
 
         override fun onDestroy() {
