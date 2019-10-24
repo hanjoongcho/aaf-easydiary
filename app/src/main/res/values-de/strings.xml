@@ -320,8 +320,9 @@
         Fixed error when deleting diary from timeline
     </string>
     <string name="release_172">
-        v1.4.106 / 2019.10.xx\n
+        v1.4.106 / 2019.10.25\n
         Fixed the error that the changed contents are not immediately visible after editing the diary\n
+        Remediation for Vulnerable Libraries with known Security Issues
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->

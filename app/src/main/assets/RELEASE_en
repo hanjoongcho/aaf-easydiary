@@ -4,6 +4,10 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.106 (date: 2019/10/25)
+  * Fixed the error that the changed contents are not immediately visible after editing the diary
+  * Remediation for Vulnerable Libraries with known Security Issues
+
 # Changes in 1.4.105 (date: 2019/10/20)
   * Fixed an error that occurred when using the Excel file device saving function
   * Fixed error when deleting diary from timeline

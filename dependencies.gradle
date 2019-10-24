@@ -2,7 +2,7 @@ ext.versions = [
 //    minSdk            : 16,
     /*compileSdk        : 29, Temporary downgrade to respond to Android Q 'Scoped Storage' policy */
     compileSdk        : 28,
-    publishVersion    : '1.4.106-beta',
+    publishVersion    : '1.4.106',
     publishVersionCode: 172,
 
     gradlePlugin      : '3.3.2',
