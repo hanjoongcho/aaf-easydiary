@@ -1,12 +1,12 @@
 package me.blog.korn123.easydiary.activities
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import br.tiagohm.markdownview.css.styles.Github
 import kotlinx.android.synthetic.main.activity_markdown_view.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
@@ -17,14 +17,19 @@ import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
 import me.blog.korn123.easydiary.helper.MARKDOWN_DIRECTORY
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE_WITH_MARKDOWN
 import org.apache.commons.io.FileUtils
+import org.apache.commons.io.IOUtils
 import java.io.File
+import java.io.FileInputStream
 import java.net.HttpURLConnection
 import java.net.URL
+import io.noties.markwon.Markwon
+import me.blog.korn123.easydiary.extensions.makeSnackBar
 
 
 class MarkDownViewActivity : EasyDiaryActivity() {
     private lateinit var savedFilePath: String
     private lateinit var markdownUrl: String
+    private lateinit var mMarkDown: Markwon
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,19 +42,16 @@ class MarkDownViewActivity : EasyDiaryActivity() {
             setHomeAsUpIndicator(R.drawable.ic_cross)
         }
 
+        mMarkDown = Markwon.create(this)
         savedFilePath = "${EasyDiaryUtils.getApplicationDataDirectory(this) + MARKDOWN_DIRECTORY + pageTitle}.md"
         markdownUrl = intent.getStringExtra(OPEN_URL_INFO)
-        markdownView.run {
-            addStyleSheet(Github()/*InternalStyleSheet()*/.apply {
-                removeRule(".scrollup")
-                addRule("body", "padding: 0px");
-            })
-            webViewClient =  object : WebViewClient() {
-                override fun onPageFinished(view: WebView, url: String) {
-                    progressBar.visibility = View.GONE
-                }
-            }
-        }
+//        markdownView.run {
+//            webViewClient =  object : WebViewClient() {
+//                override fun onPageFinished(view: WebView, url: String) {
+//                    progressBar.visibility = View.GONE
+//                }
+//            }
+//        }
 
         if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
             openMarkdownFile()
@@ -61,8 +63,8 @@ class MarkDownViewActivity : EasyDiaryActivity() {
     private fun openMarkdownFile() {
         when (File(savedFilePath).exists()) {
             true -> {
-                markdownView.loadMarkdownFromFile(File(savedFilePath))
-
+                runOnUiThread { progressBar.visibility = View.GONE }
+                mMarkDown.setMarkdown(markdownView, readSavedFile())
             }
             false -> {
                 Thread(Runnable { openMarkdownFileAfterDownload(markdownUrl, savedFilePath) }).start()
@@ -85,7 +87,8 @@ class MarkDownViewActivity : EasyDiaryActivity() {
         httpConn.disconnect()
 
         runOnUiThread {
-            markdownView.loadMarkdownFromFile(File(savedFilePath))
+            progressBar.visibility = View.GONE
+            mMarkDown.setMarkdown(markdownView, readSavedFile())
         }
     }
 
@@ -119,9 +122,20 @@ class MarkDownViewActivity : EasyDiaryActivity() {
             REQUEST_CODE_EXTERNAL_STORAGE_WITH_MARKDOWN -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                 openMarkdownFile()
             } else {
-                markdownView.loadMarkdownFromUrl(markdownUrl)
+                makeSnackBar("Permission denied")
             }
         }
+    }
+
+    private fun readSavedFile(): String {
+        val sb = StringBuilder()
+        val lines = IOUtils.readLines(FileInputStream(File(savedFilePath)), "UTF-8")
+        lines.map {
+            sb.append(it)
+            sb.append(System.getProperty("line.separator"))
+        }
+        Log.i("aaf-t", sb.toString())
+        return sb.toString()
     }
 
     companion object {

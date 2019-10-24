@@ -15,12 +15,16 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <br.tiagohm.markdownview.MarkdownView
+    <ScrollView
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:id="@+id/markdownView"
-        app:escapeHtml="false"
+        android:padding="10dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/markdownView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </ScrollView>
 
     <ProgressBar
         android:id="@+id/progressBar"
