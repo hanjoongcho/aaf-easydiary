@@ -35,13 +35,13 @@ The features/functions of the app include;
 
 ## Do I have to sign up or register before using Easy Diary?
 
-- Easy Diary doesn't require any registration or sign up process before users can make use of it. Download, and start writing, or recording whatever you wish of your daily activities.
+- Easy Diary doesn't require any registrations or sign up processes before users can make use of it. Download, and start writing, or recording whatever you wish of your daily activities.
 
 ---
 
 ## Easy Diary comes preloaded with diary entries, why?
 
-- Yes, the app comes with preloaded entries. This is so that you can get a feel of how your own entries would look like on the app. 
+- Yes, the app comes with preloaded entries. This is so that you can get the feel that how your own entries would look like on the app. 
 
 ---
 
@@ -87,7 +87,7 @@ You can add extra information to your entries. Like weather and time.
 
 ## Is there a maximum length of word I can write on an entry?
 
-- No, there is no limit to how many words can be used in an entry. You can't write as long as you want. However, it is advisable to keep your entry short, for easy readability next time. 
+- No, there is no limit to how many words can be used in an entry. You can write as long as you want. However, it is advisable to keep your entry short, for easy readability next time. 
 
 
 
@@ -108,7 +108,7 @@ You can add extra information to your entries. Like weather and time.
 
 ## Can I add multiple photos at a time?
 
-- Yes. you can add multiple photos at a time, but, you need to activate it.
+- Yes. you can add multiple photos one time, but, you need to activate it.
 
 Access the settings page and enable the `multi picker setting`
 
