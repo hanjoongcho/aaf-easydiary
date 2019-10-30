@@ -126,12 +126,12 @@
         <item>57|Coffee</item>
         <item>254|Water</item>
         <item>255|Milk</item>
-        <item>258|Whiskey</item>
-        <item>259|Wine</item>
-        <item>261|Champagne</item>
-        <item>263|Beer</item>
-        <item>265|Sake</item>
-        <item>269|Soju</item>
+        <item>258|Beverage</item>
+        <item>259|Beverage</item>
+        <item>261|Beverage</item>
+        <item>263|Beverage</item>
+        <item>265|Beverage</item>
+        <item>269|Beverage</item>
         <item>43|Vitamins</item>
     </string-array>
 

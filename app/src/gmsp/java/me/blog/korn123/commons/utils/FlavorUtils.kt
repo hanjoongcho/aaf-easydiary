@@ -136,18 +136,18 @@ object FlavorUtils {
         FOOD_MILK -> R.drawable.ic_milk
         FOOD_SALAD -> R.drawable.ic_023_salad
         FOOD_BAGUETTE -> R.drawable.ic_024_baguette
-        FOOD_WHISKEY -> R.drawable.ic_whiskey
-        FOOD_WINE -> R.drawable.ic_wine
+        FOOD_BEVERAGE03 -> R.drawable.ic_beverage03
+        FOOD_BEVERAGE04 -> R.drawable.ic_beverage04
         FOOD_CAKE -> R.drawable.ic_034_cake_1
-        FOOD_CHAMPAGNE -> R.drawable.ic_036_champagne
+        FOOD_BEVERAGE05 -> R.drawable.ic_beverage05
         FOOD_FEEDING_BOTTLE -> R.drawable.ic_milk_powder
-        FOOD_BEER -> R.drawable.ic_beer
+        FOOD_BEVERAGE01 -> R.drawable.ic_beverage01
         FOOD_SUSHI -> R.drawable.ic_sushi
-        FOOD_SAKE -> R.drawable.ic_044_sake
+        FOOD_BEVERAGE06 -> R.drawable.ic_beverage06
         FOOD_RICE -> R.drawable.ic_rice
         FOOD_FRIED_CHICKEN -> R.drawable.ic_fried_chicken
         FOOD_CAKE_1 -> R.drawable.ic_cake
-        FOOD_SOJU -> R.drawable.ic_soju
+        FOOD_BEVERAGE02 -> R.drawable.ic_beverage02
         FOOD_SOUP -> R.drawable.ic_soup
         FOOD_CURRY -> R.drawable.ic_curry
         FOOD_NOODLES -> R.drawable.ic_noodles
