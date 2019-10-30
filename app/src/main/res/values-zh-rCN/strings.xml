@@ -324,6 +324,10 @@
         Fixed the error that the changed contents are not immediately visible after editing the diary\n
         Remediation for Vulnerable Libraries with known Security Issues
     </string>
+    <string name="release_173">
+        v1.4.107 / 2019.10.31\n
+        User Experience (UX) Optimization
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->

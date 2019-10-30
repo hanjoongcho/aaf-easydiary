@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.107 (date: 2019/10/31)
+  * User Experience (UX) Optimization
+
 # Changes in 1.4.106 (date: 2019/10/25)
   * Fixed the error that the changed contents are not immediately visible after editing the diary
   * Remediation for Vulnerable Libraries with known Security Issues
