@@ -63,6 +63,7 @@ object FlavorUtils {
         DAILY_CAR_REPAIR -> R.drawable.ic_car_repair
         DAILY_TOOL_BOX -> R.drawable.ic_tool_box
         DAILY_TRAIN -> R.drawable.ic_train
+        DAILY_BUS -> R.drawable.ic_bus
 
         LANDSCAPE_BEACH -> R.drawable.ic_beach
         LANDSCAPE_BRIDGE -> R.drawable.ic_bridge
