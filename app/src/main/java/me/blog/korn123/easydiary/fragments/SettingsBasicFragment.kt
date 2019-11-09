@@ -263,8 +263,8 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
     private fun initPreference() {
         fontSettingSummary.text = FontUtils.fontFileNameToDisplayName(mContext, mContext.config.settingFontName)
         calendarFontScaleDescription.text = when (mContext.config.settingCalendarFontScale) {
-            DEFAULT_CALENDAR_FONT_SCALE -> "사용하지 않음"
-            else -> "전역 폰트크기 x ${mContext.config.settingCalendarFontScale}"
+            DEFAULT_CALENDAR_FONT_SCALE -> getString(R.string.calendar_font_scale_disable)
+            else -> getString(R.string.calendar_font_scale_factor, mContext.config.settingCalendarFontScale)
         }
 //        calendarFontScaleDescription.setPaintFlags(calendarFontScaleDescription.paintFlags or Paint.UNDERLINE_TEXT_FLAG)
         sensitiveOptionSwitcher.isChecked = mContext.config.diarySearchQueryCaseSensitive
@@ -290,9 +290,9 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
 
         var selectedIndex = 0
         val listFontScale = ArrayList<Map<String, String>>()
-        listFontScale.add(mapOf("optionTitle" to "전역 폰트크기 설정 안함", "optionValue" to "-1"))
+        listFontScale.add(mapOf("optionTitle" to getString(R.string.calendar_font_scale_disable), "optionValue" to "-1"))
         for (i in 1..20 step 1) {
-            listFontScale.add(mapOf("optionTitle" to "전역 폰트크기 x ${String.format("%.1f", i * 0.1)}", "optionValue" to String.format("%.1f", i * 0.1)))
+            listFontScale.add(mapOf("optionTitle" to getString(R.string.calendar_font_scale_factor, i * 0.1), "optionValue" to String.format("%.1f", i * 0.1)))
         }
 
         listFontScale.mapIndexed { index, map ->

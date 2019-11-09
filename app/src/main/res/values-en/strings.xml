@@ -488,4 +488,6 @@
     <string name="google_drive_account_sign_out_description">Remove token information published by Easy Diary using Google Drive linked account.</string>
     <string name="calendar_font_scale_title">Set calendar font size</string>
     <string name="calendar_font_scale_description">Scales the font size inside the calendar based on the set global font size.</string>
+    <string name="calendar_font_scale_disable">Do not use</string>
+    <string name="calendar_font_scale_factor">Global font size x %.1f</string>
 </resources>
