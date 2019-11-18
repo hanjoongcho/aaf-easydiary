@@ -280,6 +280,10 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
         }
     }
 
+    /**
+     *  Float Formatting depends on Locale
+     *  https://stackoverflow.com/questions/44541638/java-lang-numberformatexception-while-executing-in-france-machine
+     */
     private fun openCalendarFontScaleDialog() {
         val builder = AlertDialog.Builder(mContext)
         builder.setNegativeButton(getString(android.R.string.cancel), null)
@@ -292,7 +296,7 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
         val listFontScale = ArrayList<Map<String, String>>()
         listFontScale.add(mapOf("optionTitle" to getString(R.string.calendar_font_scale_disable), "optionValue" to "-1"))
         for (i in 1..20 step 1) {
-            listFontScale.add(mapOf("optionTitle" to getString(R.string.calendar_font_scale_factor, i * 0.1), "optionValue" to String.format("%.1f", i * 0.1)))
+            listFontScale.add(mapOf("optionTitle" to getString(R.string.calendar_font_scale_factor, i * 0.1), "optionValue" to "${i * 0.1F}"))
         }
 
         listFontScale.mapIndexed { index, map ->
