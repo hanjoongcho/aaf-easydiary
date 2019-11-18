@@ -4,7 +4,7 @@
 
 ---------------------------------------------------
 
-# Changes in 1.4.108 (date: 2019/11/17)
+# Changes in 1.4.108 (date: 2019/11/18)
   * Fixed an error that occurred when setting the calendar font scale on a device set to French
 
 # Changes in 1.4.107 (date: 2019/10/31)
