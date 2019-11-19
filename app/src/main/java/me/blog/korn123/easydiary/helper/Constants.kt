@@ -226,6 +226,7 @@ const val FOOD_SOUP = 270
 const val FOOD_CURRY = 271
 const val FOOD_NOODLES = 272
 const val FOOD_FRIED_RICE = 273
+const val FOOD_GRILL = 274
 
 // Leisure 300 ~ 349
 const val LEISURE_PICNIC = 300
