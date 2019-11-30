@@ -139,6 +139,7 @@
     </string-array>
 
     <string-array name="leisure_item_array">
+        <item>321|Party</item>
         <item>44|Game</item>
         <item>300|Picnic</item>
         <item>301|Movie</item>
