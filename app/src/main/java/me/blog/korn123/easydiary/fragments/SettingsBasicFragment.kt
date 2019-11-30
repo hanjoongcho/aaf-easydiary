@@ -401,7 +401,11 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
                 FontUtils.setCommonTypeface(mContext, mContext.assets)
                 initPreference()
                 setFontsStyle()
-                (mActivity as SettingsActivity).updateUI()
+
+                (mActivity as SettingsActivity).run {
+                    pauseLock()
+                    updateUI()
+                }
             }
             mAlertDialog?.cancel()
         }
