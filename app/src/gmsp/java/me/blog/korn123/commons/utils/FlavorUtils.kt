@@ -133,6 +133,7 @@ object FlavorUtils {
         FOOD_BURGER -> R.drawable.ic_burger
         FOOD_SANDWICH -> R.drawable.ic_004_sandwich
         FOOD_STEAK -> R.drawable.ic_steak
+        FOOD_GRILL -> R.drawable.ic_grill
         FOOD_PIE -> R.drawable.ic_pie
         FOOD_WATER -> R.drawable.ic_010_water
         FOOD_MILK -> R.drawable.ic_milk
@@ -176,6 +177,7 @@ object FlavorUtils {
         LEISURE_TENNIS_M -> R.drawable.ic_tennis_player_m
         LEISURE_TENNIS_W -> R.drawable.ic_tennis_player_w
         LEISURE_VIDEO_PLAYER -> R.drawable.ic_video_player
+        LEISURE_PARTY -> R.drawable.ic_party
 
         SYMBOL_YOUTUBE -> R.drawable.ic_youtube
         SYMBOL_DROPBOX -> R.drawable.ic_dropbox
