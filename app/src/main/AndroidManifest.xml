@@ -32,6 +32,7 @@
         <activity android:name=".activities.PostCardActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.TimelineActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.PostCardViewerActivity" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.DashboardActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.PostcardViewPagerActivity" android:theme="@style/AppTheme.NoActionBar" android:hardwareAccelerated="false" android:launchMode="singleTask" />
         <activity android:name=".activities.FingerprintLockActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.PinLockActivity" android:theme="@style/AppTheme.NoActionBar" />
