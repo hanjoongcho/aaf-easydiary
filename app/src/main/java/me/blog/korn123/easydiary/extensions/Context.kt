@@ -79,7 +79,8 @@ fun Context.initTextSize(viewGroup: ViewGroup, context: Context) {
                             R.id.contentsLength -> it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize * 0.8F)
                             R.id.symbolTextArrow -> {}
                             R.id.createdDate -> {}
-                            R.id.descriptionRank1, R.id.descriptionRank2, R.id.descriptionRank3 -> {}
+                            R.id.descriptionRank1, R.id.descriptionRank2, R.id.descriptionRank3, R.id.descriptionRank4,
+                            R.id.countRank1, R.id.countRank2, R.id.countRank3, R.id.countRank4 -> {}
                             else -> it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
                         }
                     }
