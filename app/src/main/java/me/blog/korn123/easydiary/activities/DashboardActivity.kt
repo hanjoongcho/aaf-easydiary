@@ -42,7 +42,7 @@ class DashboardActivity : EasyDiaryActivity() {
 
         val calendar = Calendar.getInstance()
         val endMillis = calendar.timeInMillis
-        calendar.add(Calendar.DATE, -7)
+        calendar.add(Calendar.DATE, -30)
         val startMillis = calendar.timeInMillis
 
         val sortedMapLastWeek = ChartUtils.getSortedMapBySymbol(true, startMillis, endMillis)

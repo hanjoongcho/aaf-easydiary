@@ -252,7 +252,7 @@
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintLeft_toLeftOf="parent"
                             android:id="@+id/countOfLastWeekLabel"
-                            android:text="Last 7 days"
+                            android:text="Last 30 days"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/dashboard_text_default"/>
