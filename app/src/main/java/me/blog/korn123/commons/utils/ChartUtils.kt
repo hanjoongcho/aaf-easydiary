@@ -4,8 +4,8 @@ import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 
 class ChartUtils {
     companion object {
-        fun getSortedMapBySymbol(isReverse: Boolean = false): Map<Int, Int> {
-            val listDiary = EasyDiaryDbHelper.readDiary(null)
+        fun getSortedMapBySymbol(isReverse: Boolean = false, startTimeMillis: Long = 0, endTimeMillis: Long = 0): Map<Int, Int> {
+            val listDiary = EasyDiaryDbHelper.readDiary(null, false, startTimeMillis, endTimeMillis)
             val map = hashMapOf<Int, Int>()
             listDiary.map { diaryDto ->
                 val targetColumn = diaryDto.weather
