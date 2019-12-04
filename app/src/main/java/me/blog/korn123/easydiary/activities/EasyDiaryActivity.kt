@@ -3,8 +3,6 @@ package me.blog.korn123.easydiary.activities
 import android.view.ViewGroup
 import com.simplemobiletools.commons.models.Release
 import io.github.aafactory.commons.activities.BaseSimpleActivity
-import io.github.aafactory.commons.extensions.updateAppViews
-import io.github.aafactory.commons.extensions.updateTextColors
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R

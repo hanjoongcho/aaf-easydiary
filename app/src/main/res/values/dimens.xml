@@ -15,6 +15,9 @@
     <dimen name="calendar_item_height_xlarge">22dp</dimen>
     <dimen name="calendar_item_text_xlarge">18dp</dimen>
     <dimen name="calendar_item_symbol_xlarge">15dp</dimen>
+    <dimen name="dashboard_symbol_default">40dp</dimen>
+    <dimen name="dashboard_text_default">15sp</dimen>
+    <dimen name="dashboard_text_large">20sp</dimen>
 
     <!--override dimens-->
     <dimen name="card_layout_padding">1dp</dimen>
