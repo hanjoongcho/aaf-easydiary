@@ -60,7 +60,7 @@ fun Context.updateTextColors(viewGroup: ViewGroup, tmpTextColor: Int = 0, tmpAcc
 //                    is MyAppCompatCheckbox -> it.setColors(textColor, accentColor, backgroundColor)
                     is FixedTextView -> {
                         when (it.id) {
-                            R.id.countOfLifetimeLabel, R.id.countOfLifetime , R.id.countOfLastWeekLabel, R.id.countOfLastWeek -> it.setTextColor(textColor)
+                            R.id.dashboardTitle, R.id.countDiary -> it.setTextColor(textColor)
                         }
                     }
                     is MyEditText -> {
@@ -86,8 +86,7 @@ fun Context.updateAppViews(viewGroup: ViewGroup, tmpBackgroundColor: Int = 0) {
                 when (it) {
                     is CardView -> {
                         when (it.id) {
-                            R.id.rank1, R.id.rank2, R.id.rank3, R.id.rank4,
-                            R.id.rank5, R.id.rank6, R.id.rank7, R.id.rank8 -> {}
+                            R.id.rank1, R.id.rank2, R.id.rank3, R.id.rank4 -> {}
                             else -> {
                                 it.setCardBackgroundColor(backgroundColor)
                                 updateAppViews(it)
