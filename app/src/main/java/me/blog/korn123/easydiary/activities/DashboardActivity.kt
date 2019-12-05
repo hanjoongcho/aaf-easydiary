@@ -40,21 +40,24 @@ class DashboardActivity : EasyDiaryActivity() {
         val symbolMap = FlavorUtils.getDiarySymbolMap(this)
 
 
-        val calendar = Calendar.getInstance()
-        val endMillis = calendar.timeInMillis
-        calendar.add(Calendar.DATE, -30)
-        val startMillis = calendar.timeInMillis
 
 
-        val lastMonthFragment = DashBoardCardFragment()
+
         supportFragmentManager.beginTransaction().run {
-            replace(R.id.lifetime, lastMonthFragment)
+            replace(R.id.lifetime, DashBoardCardFragment().apply {
+                val args = Bundle()
+                args.putString("FLAG", "LIFETIME")
+                arguments = args
+            })
             commit()
         }
 
-        val lifetimeFragment = DashBoardCardFragment()
         supportFragmentManager.beginTransaction().run {
-            replace(R.id.lastMonth, lifetimeFragment)
+            replace(R.id.lastMonth, DashBoardCardFragment().apply {
+                val args = Bundle()
+                args.putString("FLAG", "LAST_MONTH")
+                arguments = args
+            })
             commit()
         }
     }

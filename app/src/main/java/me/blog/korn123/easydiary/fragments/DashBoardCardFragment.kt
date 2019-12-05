@@ -9,6 +9,7 @@ import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import kotlinx.android.synthetic.main.fragment_dashboard_card.*
+import java.util.*
 
 class DashBoardCardFragment : androidx.fragment.app.Fragment() {
 
@@ -25,7 +26,21 @@ class DashBoardCardFragment : androidx.fragment.app.Fragment() {
 
         context?.let {
             val symbolMap = FlavorUtils.getDiarySymbolMap(it)
-            val sortedMap = ChartUtils.getSortedMapBySymbol(true)
+            val flag = arguments?.getString("FLAG", "LIFETIME")
+            val sortedMap = if (flag == "LAST_MONTH") {
+                val calendar = Calendar.getInstance()
+                val endMillis = calendar.timeInMillis
+                calendar.add(Calendar.DATE, -30)
+                val startMillis = calendar.timeInMillis
+                dashboardTitle.text = "Last Week"
+                diaryCount.text = EasyDiaryDbHelper.readDiary(null, true, startMillis, endMillis).size.toString()
+                ChartUtils.getSortedMapBySymbol(true, startMillis, endMillis)
+            } else {
+                dashboardTitle.text = "Lifetime"
+                diaryCount.text = EasyDiaryDbHelper.readDiary(null).size.toString()
+                ChartUtils.getSortedMapBySymbol(true)
+            }
+
             sortedMap.entries.forEachIndexed { index, entry ->
                 when (index) {
                     0 -> {
@@ -49,7 +64,6 @@ class DashBoardCardFragment : androidx.fragment.app.Fragment() {
                         countRank4.text = "${entry.value}"
                     }
                 }
-                countDiary.text = EasyDiaryDbHelper.readDiary(null).size.toString()
             }
         }
     }
