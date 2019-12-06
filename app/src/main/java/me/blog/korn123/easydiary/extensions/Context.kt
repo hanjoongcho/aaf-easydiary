@@ -60,7 +60,8 @@ fun Context.updateTextColors(viewGroup: ViewGroup, tmpTextColor: Int = 0, tmpAcc
 //                    is MyAppCompatCheckbox -> it.setColors(textColor, accentColor, backgroundColor)
                     is FixedTextView -> {
                         when (it.id) {
-                            R.id.dashboardTitle, R.id.diaryCount, R.id.markRank1 -> it.setTextColor(textColor)
+                            R.id.dashboardTitle, R.id.diaryCount, R.id.markRank1,
+                            R.id.markRank2, R.id.markRank3, R.id.markRank4 -> it.setTextColor(textColor)
                         }
                     }
                     is MyEditText -> {

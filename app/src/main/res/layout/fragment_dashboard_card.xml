@@ -55,13 +55,14 @@
                         android:gravity="center"
                         android:id="@+id/markRank1"
                         android:background="@drawable/bg_calendar_circle"
-                        android:textSize="@dimen/dashboard_text_default"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp">
+                        android:textSize="15dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp">
                     </me.blog.korn123.easydiary.views.FixedTextView>
                     <ImageView
                         app:layout_constraintTop_toBottomOf="@+id/markRank1"
                         app:layout_constraintLeft_toLeftOf="parent"
+                        android:padding="5dp"
                         android:id="@+id/symbolRank1"
                         android:layout_width="@dimen/dashboard_symbol_default"
                         android:layout_height="@dimen/dashboard_symbol_default"
@@ -69,6 +70,7 @@
                     <me.blog.korn123.easydiary.views.FixedTextView
                         tools:text="100"
                         app:layout_constraintTop_toTopOf="@+id/symbolRank1"
+                        app:layout_constraintBottom_toBottomOf="@+id/symbolRank1"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintLeft_toRightOf="@+id/symbolRank1"
                         android:id="@+id/countRank1"
@@ -78,7 +80,8 @@
                         android:textSize="@dimen/dashboard_text_large"/>
                     <me.blog.korn123.easydiary.views.FixedTextView
                         tools:text="Awesome day"
-                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/markRank1"
+                        app:layout_constraintBottom_toBottomOf="@+id/markRank1"
                         app:layout_constraintLeft_toRightOf="@+id/markRank1"
                         android:id="@+id/descriptionRank1"
                         android:layout_marginLeft="5dp"
@@ -91,7 +94,7 @@
 
             <androidx.cardview.widget.CardView
                 style="@style/AppCard"
-                android:layout_marginLeft="2.5dp"
+                android:layout_marginRight="2.5dp"
                 android:id="@+id/rank2"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -99,17 +102,29 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-                    <ImageView
+                    <me.blog.korn123.easydiary.views.FixedTextView
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
+                        android:text="2"
+                        android:gravity="center"
+                        android:id="@+id/markRank2"
+                        android:background="@drawable/bg_calendar_circle"
+                        android:textSize="15dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp">
+                    </me.blog.korn123.easydiary.views.FixedTextView>
+                    <ImageView
+                        app:layout_constraintTop_toBottomOf="@+id/markRank2"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        android:padding="5dp"
                         android:id="@+id/symbolRank2"
                         android:layout_width="@dimen/dashboard_symbol_default"
                         android:layout_height="@dimen/dashboard_symbol_default"
                         app:srcCompat="@drawable/ic_clouds_and_sun" />
                     <me.blog.korn123.easydiary.views.FixedTextView
                         tools:text="100"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toTopOf="@+id/descriptionRank2"
+                        app:layout_constraintTop_toTopOf="@+id/symbolRank2"
+                        app:layout_constraintBottom_toBottomOf="@+id/symbolRank2"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintLeft_toRightOf="@+id/symbolRank2"
                         android:id="@+id/countRank2"
@@ -119,10 +134,11 @@
                         android:textSize="@dimen/dashboard_text_large"/>
                     <me.blog.korn123.easydiary.views.FixedTextView
                         tools:text="Awesome day"
-                        app:layout_constraintTop_toBottomOf="@+id/symbolRank2"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/markRank2"
+                        app:layout_constraintBottom_toBottomOf="@+id/markRank2"
+                        app:layout_constraintLeft_toRightOf="@+id/markRank2"
                         android:id="@+id/descriptionRank2"
+                        android:layout_marginLeft="5dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
@@ -148,71 +164,101 @@
                 android:layout_height="wrap_content">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <ImageView
+                    android:layout_height="match_parent">
+                    <me.blog.korn123.easydiary.views.FixedTextView
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
+                        android:text="3"
+                        android:gravity="center"
+                        android:id="@+id/markRank3"
+                        android:background="@drawable/bg_calendar_circle"
+                        android:textSize="15dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp">
+                    </me.blog.korn123.easydiary.views.FixedTextView>
+                    <ImageView
+                        app:layout_constraintTop_toBottomOf="@+id/markRank3"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        android:padding="5dp"
                         android:id="@+id/symbolRank3"
                         android:layout_width="@dimen/dashboard_symbol_default"
                         android:layout_height="@dimen/dashboard_symbol_default"
                         app:srcCompat="@drawable/ic_clouds_and_sun" />
                     <me.blog.korn123.easydiary.views.FixedTextView
                         tools:text="100"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toTopOf="@+id/descriptionRank3"
+                        app:layout_constraintTop_toTopOf="@+id/symbolRank3"
+                        app:layout_constraintBottom_toBottomOf="@+id/symbolRank3"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintLeft_toRightOf="@+id/symbolRank3"
                         android:id="@+id/countRank3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
                         android:textSize="@dimen/dashboard_text_large"/>
                     <me.blog.korn123.easydiary.views.FixedTextView
                         tools:text="Awesome day"
-                        app:layout_constraintTop_toBottomOf="@+id/symbolRank3"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/markRank3"
+                        app:layout_constraintBottom_toBottomOf="@+id/markRank3"
+                        app:layout_constraintLeft_toRightOf="@+id/markRank3"
                         android:id="@+id/descriptionRank3"
+                        android:layout_marginLeft="5dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
                         android:textSize="@dimen/dashboard_text_default"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
                 style="@style/AppCard"
-                android:layout_marginLeft="2.5dp"
+                android:layout_marginRight="2.5dp"
                 android:id="@+id/rank4"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <ImageView
+                    android:layout_height="match_parent">
+                    <me.blog.korn123.easydiary.views.FixedTextView
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
+                        android:text="4"
+                        android:gravity="center"
+                        android:id="@+id/markRank4"
+                        android:background="@drawable/bg_calendar_circle"
+                        android:textSize="15dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp">
+                    </me.blog.korn123.easydiary.views.FixedTextView>
+                    <ImageView
+                        app:layout_constraintTop_toBottomOf="@+id/markRank4"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        android:padding="5dp"
                         android:id="@+id/symbolRank4"
                         android:layout_width="@dimen/dashboard_symbol_default"
                         android:layout_height="@dimen/dashboard_symbol_default"
                         app:srcCompat="@drawable/ic_clouds_and_sun" />
                     <me.blog.korn123.easydiary.views.FixedTextView
                         tools:text="100"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toTopOf="@+id/descriptionRank4"
+                        app:layout_constraintTop_toTopOf="@+id/symbolRank4"
+                        app:layout_constraintBottom_toBottomOf="@+id/symbolRank4"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintLeft_toRightOf="@+id/symbolRank4"
                         android:id="@+id/countRank4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
                         android:textSize="@dimen/dashboard_text_large"/>
                     <me.blog.korn123.easydiary.views.FixedTextView
                         tools:text="Awesome day"
-                        app:layout_constraintTop_toBottomOf="@+id/symbolRank4"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/markRank4"
+                        app:layout_constraintBottom_toBottomOf="@+id/markRank4"
+                        app:layout_constraintLeft_toRightOf="@+id/markRank4"
                         android:id="@+id/descriptionRank4"
+                        android:layout_marginLeft="5dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
                         android:textSize="@dimen/dashboard_text_default"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
