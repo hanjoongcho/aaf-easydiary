@@ -40,7 +40,7 @@
             android:layout_height="wrap_content">
             <androidx.cardview.widget.CardView
                 style="@style/AppCard"
-                android:layout_marginRight="2.5dp"
+                android:layout_margin="5dp"
                 android:id="@+id/rank1"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -90,7 +90,7 @@
 
             <androidx.cardview.widget.CardView
                 style="@style/AppCard"
-                android:layout_marginRight="2.5dp"
+                android:layout_margin="5dp"
                 android:id="@+id/rank2"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -149,7 +149,7 @@
             android:layout_height="wrap_content">
             <androidx.cardview.widget.CardView
                 style="@style/AppCard"
-                android:layout_marginRight="2.5dp"
+                android:layout_margin="5dp"
                 android:id="@+id/rank3"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -199,7 +199,7 @@
 
             <androidx.cardview.widget.CardView
                 style="@style/AppCard"
-                android:layout_marginRight="2.5dp"
+                android:layout_margin="5dp"
                 android:id="@+id/rank4"
                 android:layout_width="0dp"
                 android:layout_weight="1"
