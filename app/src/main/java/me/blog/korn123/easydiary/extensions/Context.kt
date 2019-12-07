@@ -60,8 +60,7 @@ fun Context.updateTextColors(viewGroup: ViewGroup, tmpTextColor: Int = 0, tmpAcc
 //                    is MyAppCompatCheckbox -> it.setColors(textColor, accentColor, backgroundColor)
                     is FixedTextView -> {
                         when (it.id) {
-                            R.id.dashboardTitle, R.id.diaryCount, R.id.markRank1,
-                            R.id.markRank2, R.id.markRank3, R.id.markRank4 -> it.setTextColor(textColor)
+                            R.id.dashboardTitle, R.id.diaryCount -> it.setTextColor(textColor)
                         }
                     }
                     is MyEditText -> {
@@ -87,7 +86,9 @@ fun Context.updateAppViews(viewGroup: ViewGroup, tmpBackgroundColor: Int = 0) {
                 when (it) {
                     is CardView -> {
                         when (it.id) {
-                            R.id.rank1, R.id.rank2, R.id.rank3, R.id.rank4 -> {}
+                            R.id.rank1, R.id.rank2, R.id.rank3, R.id.rank4 -> {
+                                it.cardElevation = CommonUtils.dpToPixelFloatValue(this, 5F)
+                            }
                             else -> {
                                 it.setCardBackgroundColor(backgroundColor)
                                 updateAppViews(it)
@@ -105,8 +106,8 @@ fun Context.updateCardViewPolicy(viewGroup: ViewGroup) {
             .map { viewGroup.getChildAt(it) }
             .forEach {
                 when (it) {
-                    is androidx.cardview.widget.CardView -> {
-                        if (config.enableCardViewPolicy) {
+                    is CardView -> {
+                        if (config.enableCardViewPolicy || it.id == R.id.rank1 || it.id == R.id.rank2 || it.id == R.id.rank3 || it.id == R.id.rank4) {
                             it.useCompatPadding = true
                             it.cardElevation = CommonUtils.dpToPixelFloatValue(this, 2F)
                         } else {

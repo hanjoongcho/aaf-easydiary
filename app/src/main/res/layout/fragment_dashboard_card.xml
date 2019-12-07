@@ -49,15 +49,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                     <me.blog.korn123.easydiary.views.FixedTextView
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
                         android:text="1"
                         android:gravity="center"
                         android:id="@+id/markRank1"
-                        android:background="@drawable/bg_calendar_circle"
-                        android:textSize="15dp"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp">
+                        style="@style/text_view_dashboard_ranking"
+                        tools:ignore="MissingConstraints">
                     </me.blog.korn123.easydiary.views.FixedTextView>
                     <ImageView
                         app:layout_constraintTop_toBottomOf="@+id/markRank1"
@@ -103,15 +99,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                     <me.blog.korn123.easydiary.views.FixedTextView
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
                         android:text="2"
                         android:gravity="center"
                         android:id="@+id/markRank2"
-                        android:background="@drawable/bg_calendar_circle"
-                        android:textSize="15dp"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp">
+                        style="@style/text_view_dashboard_ranking"
+                        tools:ignore="MissingConstraints">
                     </me.blog.korn123.easydiary.views.FixedTextView>
                     <ImageView
                         app:layout_constraintTop_toBottomOf="@+id/markRank2"
@@ -166,15 +158,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                     <me.blog.korn123.easydiary.views.FixedTextView
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
                         android:text="3"
                         android:gravity="center"
                         android:id="@+id/markRank3"
-                        android:background="@drawable/bg_calendar_circle"
-                        android:textSize="15dp"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp">
+                        style="@style/text_view_dashboard_ranking"
+                        tools:ignore="MissingConstraints">
                     </me.blog.korn123.easydiary.views.FixedTextView>
                     <ImageView
                         app:layout_constraintTop_toBottomOf="@+id/markRank3"
@@ -220,15 +208,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                     <me.blog.korn123.easydiary.views.FixedTextView
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
                         android:text="4"
                         android:gravity="center"
                         android:id="@+id/markRank4"
-                        android:background="@drawable/bg_calendar_circle"
-                        android:textSize="15dp"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp">
+                        style="@style/text_view_dashboard_ranking"
+                        tools:ignore="MissingConstraints">
                     </me.blog.korn123.easydiary.views.FixedTextView>
                     <ImageView
                         app:layout_constraintTop_toBottomOf="@+id/markRank4"
