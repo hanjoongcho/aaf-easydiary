@@ -58,11 +58,7 @@ fun Context.updateTextColors(viewGroup: ViewGroup, tmpTextColor: Int = 0, tmpAcc
                     is MySwitchCompat -> it.setColors(textColor, accentColor, backgroundColor)
 //                    is MyCompatRadioButton -> it.setColors(textColor, accentColor, backgroundColor)
 //                    is MyAppCompatCheckbox -> it.setColors(textColor, accentColor, backgroundColor)
-                    is FixedTextView -> {
-                        when (it.id) {
-                            R.id.dashboardTitle, R.id.diaryCount -> it.setTextColor(textColor)
-                        }
-                    }
+                    is FixedTextView -> {}
                     is MyEditText -> {
                         it.setTextColor(textColor)
                         it.setHintTextColor(textColor.adjustAlpha(0.5f))
@@ -86,11 +82,9 @@ fun Context.updateAppViews(viewGroup: ViewGroup, tmpBackgroundColor: Int = 0) {
                 when (it) {
                     is CardView -> {
                         when (it.id) {
-                            R.id.rank1, R.id.rank2, R.id.rank3, R.id.rank4 -> {
-                                it.cardElevation = CommonUtils.dpToPixelFloatValue(this, 5F)
-                            }
+                            R.id.rank1, R.id.rank2, R.id.rank3, R.id.rank4 -> {}
                             else -> {
-                                it.setCardBackgroundColor(backgroundColor)
+                                if (it.id != R.id.dashboardCard) it.setCardBackgroundColor(backgroundColor)
                                 updateAppViews(it)
                             }
                         }
@@ -114,6 +108,7 @@ fun Context.updateCardViewPolicy(viewGroup: ViewGroup) {
                             it.useCompatPadding = false
                             it.cardElevation = 0F
                         }
+                        updateCardViewPolicy(it)
                     }
                     is ViewGroup -> updateCardViewPolicy(it)
                 }
