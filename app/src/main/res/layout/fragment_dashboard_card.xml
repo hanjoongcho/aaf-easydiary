@@ -31,6 +31,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/dashboard_text_large"/>
+            <me.blog.korn123.easydiary.views.FixedTextView
+                app:layout_constraintTop_toBottomOf="@+id/dashboardTitle"
+                app:layout_constraintRight_toLeftOf="@+id/diaryCount"
+                app:layout_constraintLeft_toRightOf="@+id/dashboardTitle"
+                android:text="2019.01.01 ~ 2019.12.08"
+                android:id="@+id/period"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/dashboard_text_default"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout

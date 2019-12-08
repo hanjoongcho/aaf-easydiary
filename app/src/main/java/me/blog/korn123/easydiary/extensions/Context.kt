@@ -58,7 +58,6 @@ fun Context.updateTextColors(viewGroup: ViewGroup, tmpTextColor: Int = 0, tmpAcc
                     is MySwitchCompat -> it.setColors(textColor, accentColor, backgroundColor)
 //                    is MyCompatRadioButton -> it.setColors(textColor, accentColor, backgroundColor)
 //                    is MyAppCompatCheckbox -> it.setColors(textColor, accentColor, backgroundColor)
-                    is FixedTextView -> {}
                     is MyEditText -> {
                         it.setTextColor(textColor)
                         it.setHintTextColor(textColor.adjustAlpha(0.5f))

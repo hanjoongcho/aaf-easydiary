@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.ChartUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import kotlinx.android.synthetic.main.fragment_dashboard_card.*
+import java.text.SimpleDateFormat
 import java.util.*
 
 class DashBoardCardFragment : androidx.fragment.app.Fragment() {
@@ -34,10 +36,19 @@ class DashBoardCardFragment : androidx.fragment.app.Fragment() {
                 val startMillis = calendar.timeInMillis
                 dashboardTitle.text = "Last Week"
                 diaryCount.text = EasyDiaryDbHelper.readDiary(null, true, startMillis, endMillis).size.toString()
+                val startDate = DateUtils.getDateStringFromTimeMillis(startMillis, SimpleDateFormat.MEDIUM)
+                val endDate = DateUtils.getDateStringFromTimeMillis(endMillis, SimpleDateFormat.MEDIUM)
+                val periodInfo = "$startDate - $endDate"
+                period.text = periodInfo
                 ChartUtils.getSortedMapBySymbol(true, startMillis, endMillis)
             } else {
+                val items = EasyDiaryDbHelper.readDiary(null)
                 dashboardTitle.text = "Lifetime"
-                diaryCount.text = EasyDiaryDbHelper.readDiary(null).size.toString()
+                diaryCount.text = items.size.toString()
+                val startDate = DateUtils.getDateStringFromTimeMillis(items[items.size - 1].currentTimeMillis, SimpleDateFormat.MEDIUM)
+                val endDate = DateUtils.getDateStringFromTimeMillis(System.currentTimeMillis(), SimpleDateFormat.MEDIUM)
+                val periodInfo = "$startDate - $endDate"
+                period.text = periodInfo
                 ChartUtils.getSortedMapBySymbol(true)
             }
 
