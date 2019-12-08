@@ -50,6 +50,16 @@ object EasyDiaryDbHelper {
         }
     }
 
+    fun selectFirstDiary(): DiaryDto? {
+        val realm = Realm.getInstance(mDiaryConfig)
+        val firstItemTimeMillis = (realm.where(DiaryDto::class.java).min("currentTimeMillis") ?: 0L).toLong()
+        return realm.where(DiaryDto::class.java).equalTo("currentTimeMillis", firstItemTimeMillis).findFirst()
+    }
+
+    fun countDiaryAll(): Long {
+        return Realm.getInstance(mDiaryConfig).where(DiaryDto::class.java).count()
+    }
+
     fun readDiary(query: String?, isSensitive: Boolean = false, startTimeMillis: Long = 0, endTimeMillis: Long = 0): ArrayList<DiaryDto> {
         val mRealmInstance = Realm.getInstance(mDiaryConfig)
         var results: RealmResults<DiaryDto> = when (StringUtils.isEmpty(query)) {

@@ -42,11 +42,13 @@ class DashBoardCardFragment : androidx.fragment.app.Fragment() {
                 period.text = periodInfo
                 ChartUtils.getSortedMapBySymbol(true, startMillis, endMillis)
             } else {
-                val items = EasyDiaryDbHelper.readDiary(null)
+                val firstDiary = EasyDiaryDbHelper.selectFirstDiary()
+                val endMillis = System.currentTimeMillis()
+                val startMillis = firstDiary?.currentTimeMillis ?: endMillis
                 dashboardTitle.text = "Lifetime"
-                diaryCount.text = items.size.toString()
-                val startDate = DateUtils.getDateStringFromTimeMillis(items[items.size - 1].currentTimeMillis, SimpleDateFormat.MEDIUM)
-                val endDate = DateUtils.getDateStringFromTimeMillis(System.currentTimeMillis(), SimpleDateFormat.MEDIUM)
+                diaryCount.text = "${EasyDiaryDbHelper.countDiaryAll()}"
+                val startDate = DateUtils.getDateStringFromTimeMillis(startMillis, SimpleDateFormat.MEDIUM)
+                val endDate = DateUtils.getDateStringFromTimeMillis(endMillis, SimpleDateFormat.MEDIUM)
                 val periodInfo = "$startDate - $endDate"
                 period.text = periodInfo
                 ChartUtils.getSortedMapBySymbol(true)
