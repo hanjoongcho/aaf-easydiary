@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.110 (date: 2019/12/xx)
+  * Added Diary Dashboard feature
+
 # Changes in 1.4.108 (date: 2019/11/18)
   * Fixed an error that occurred when setting the calendar font scale on a device set to French
 
