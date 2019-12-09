@@ -30,6 +30,13 @@
             <LinearLayout
                 android:layout_marginBottom="5dp"
                 android:orientation="vertical"
+                android:id="@+id/statistics1"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"/>
+
+            <LinearLayout
+                android:layout_marginBottom="5dp"
+                android:orientation="vertical"
                 android:id="@+id/lifetime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>

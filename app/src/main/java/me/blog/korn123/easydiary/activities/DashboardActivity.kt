@@ -6,6 +6,7 @@ import kotlinx.android.synthetic.main.activity_diary_main.toolbar
 import me.blog.korn123.commons.utils.ChartUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.fragments.BarChartFragment
 import me.blog.korn123.easydiary.fragments.DashBoardCardFragment
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import java.util.*
@@ -37,16 +38,10 @@ class DashboardActivity : EasyDiaryActivity() {
             setHomeAsUpIndicator(R.drawable.ic_cross)
         }
 
-        val symbolMap = FlavorUtils.getDiarySymbolMap(this)
-
-
-
-
-
         supportFragmentManager.beginTransaction().run {
             replace(R.id.lifetime, DashBoardCardFragment().apply {
                 val args = Bundle()
-                args.putString("FLAG", "LIFETIME")
+                args.putString(DashBoardCardFragment.MODE_FLAG, DashBoardCardFragment.MODE_LIFETIME)
                 arguments = args
             })
             commit()
@@ -55,13 +50,17 @@ class DashboardActivity : EasyDiaryActivity() {
         supportFragmentManager.beginTransaction().run {
             replace(R.id.lastMonth, DashBoardCardFragment().apply {
                 val args = Bundle()
-                args.putString("FLAG", "LAST_MONTH")
+                args.putString(DashBoardCardFragment.MODE_FLAG, DashBoardCardFragment.MODE_LAST_MONTH)
                 arguments = args
             })
             commit()
         }
-    }
 
+        supportFragmentManager.beginTransaction().run {
+            replace(R.id.statistics1, BarChartFragment())
+            commit()
+        }
+    }
 
     /***************************************************************************************************
      *   etc functions

@@ -83,7 +83,7 @@ fun Context.updateAppViews(viewGroup: ViewGroup, tmpBackgroundColor: Int = 0) {
                         when (it.id) {
                             R.id.rank1, R.id.rank2, R.id.rank3, R.id.rank4 -> {}
                             else -> {
-                                if (it.id != R.id.dashboardCard) it.setCardBackgroundColor(backgroundColor)
+                                if (it.id != R.id.dashboardCard && it.id != R.id.statisticsCard) it.setCardBackgroundColor(backgroundColor)
                                 updateAppViews(it)
                             }
                         }
@@ -100,7 +100,9 @@ fun Context.updateCardViewPolicy(viewGroup: ViewGroup) {
             .forEach {
                 when (it) {
                     is CardView -> {
-                        if (config.enableCardViewPolicy || it.id == R.id.rank1 || it.id == R.id.rank2 || it.id == R.id.rank3 || it.id == R.id.rank4) {
+                        if (config.enableCardViewPolicy ||
+                                it.id == R.id.rank1 || it.id == R.id.rank2 || it.id == R.id.rank3 || it.id == R.id.rank4 ||
+                                it.id == R.id.statisticsCard) {
                             it.useCompatPadding = true
                             it.cardElevation = CommonUtils.dpToPixelFloatValue(this, 2F)
                         } else {

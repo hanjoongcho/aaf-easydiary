@@ -494,4 +494,6 @@
     <string name="calendar_font_scale_description">설정된 전역 폰트 사이즈를 기준으로 캘린더 내부의 폰트 사이즈의 스케일을 설정합니다.</string>
     <string name="calendar_font_scale_disable">사용하지 않음</string>
     <string name="calendar_font_scale_factor">전역 폰트크기 x %.1f</string>
+    <string name="dashboard_title_lifetime">Lifetime</string>
+    <string name="dashboard_title_last_month">Last Month</string>
 </resources>

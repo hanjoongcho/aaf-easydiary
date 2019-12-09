@@ -494,4 +494,6 @@
     <string name="calendar_font_scale_description">設定されたグローバルなフォントサイズを基準にカレンダー内のフォント・サイズのスケールを設定します。</string>
     <string name="calendar_font_scale_disable">使ってはいけません</string>
     <string name="calendar_font_scale_factor">グローバルフォントサイズ x %.1f</string>
+    <string name="dashboard_title_lifetime">Lifetime</string>
+    <string name="dashboard_title_last_month">Last Month</string>
 </resources>

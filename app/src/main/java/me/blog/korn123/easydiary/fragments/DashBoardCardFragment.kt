@@ -28,13 +28,13 @@ class DashBoardCardFragment : androidx.fragment.app.Fragment() {
 
         context?.let {
             val symbolMap = FlavorUtils.getDiarySymbolMap(it)
-            val flag = arguments?.getString("FLAG", "LIFETIME")
-            val sortedMap = if (flag == "LAST_MONTH") {
+            val flag = arguments?.getString(MODE_FLAG, MODE_LIFETIME)
+            val sortedMap = if (flag == MODE_LAST_MONTH) {
                 val calendar = Calendar.getInstance()
                 val endMillis = calendar.timeInMillis
                 calendar.add(Calendar.DATE, -30)
                 val startMillis = calendar.timeInMillis
-                dashboardTitle.text = "Last Week"
+                dashboardTitle.text = getString(R.string.dashboard_title_last_month)
                 diaryCount.text = EasyDiaryDbHelper.readDiary(null, true, startMillis, endMillis).size.toString()
                 val startDate = DateUtils.getDateStringFromTimeMillis(startMillis, SimpleDateFormat.MEDIUM)
                 val endDate = DateUtils.getDateStringFromTimeMillis(endMillis, SimpleDateFormat.MEDIUM)
@@ -45,7 +45,7 @@ class DashBoardCardFragment : androidx.fragment.app.Fragment() {
                 val firstDiary = EasyDiaryDbHelper.selectFirstDiary()
                 val endMillis = System.currentTimeMillis()
                 val startMillis = firstDiary?.currentTimeMillis ?: endMillis
-                dashboardTitle.text = "Lifetime"
+                dashboardTitle.text = getString(R.string.dashboard_title_lifetime)
                 diaryCount.text = "${EasyDiaryDbHelper.countDiaryAll()}"
                 val startDate = DateUtils.getDateStringFromTimeMillis(startMillis, SimpleDateFormat.MEDIUM)
                 val endDate = DateUtils.getDateStringFromTimeMillis(endMillis, SimpleDateFormat.MEDIUM)
@@ -54,30 +54,40 @@ class DashBoardCardFragment : androidx.fragment.app.Fragment() {
                 ChartUtils.getSortedMapBySymbol(true)
             }
 
-            sortedMap.entries.forEachIndexed { index, entry ->
-                when (index) {
-                    0 -> {
-                        FlavorUtils.initWeatherView(it, symbolRank1, entry.key)
-                        descriptionRank1.text = symbolMap[entry.key]
-                        countRank1.text = "${entry.value}"
-                    }
-                    1 -> {
-                        FlavorUtils.initWeatherView(it, symbolRank2, entry.key)
-                        descriptionRank2.text = symbolMap[entry.key]
-                        countRank2.text = "${entry.value}"
-                    }
-                    2 -> {
-                        FlavorUtils.initWeatherView(it, symbolRank3, entry.key)
-                        descriptionRank3.text = symbolMap[entry.key]
-                        countRank3.text = "${entry.value}"
-                    }
-                    3 -> {
-                        FlavorUtils.initWeatherView(it, symbolRank4, entry.key)
-                        descriptionRank4.text = symbolMap[entry.key]
-                        countRank4.text = "${entry.value}"
+            if (sortedMap.entries.size > 3) {
+                rankingCard.visibility = View.VISIBLE
+                guideCard.visibility = View.GONE
+                sortedMap.entries.forEachIndexed { index, entry ->
+                    when (index) {
+                        0 -> {
+                            FlavorUtils.initWeatherView(it, symbolRank1, entry.key)
+                            descriptionRank1.text = symbolMap[entry.key]
+                            countRank1.text = "${entry.value}"
+                        }
+                        1 -> {
+                            FlavorUtils.initWeatherView(it, symbolRank2, entry.key)
+                            descriptionRank2.text = symbolMap[entry.key]
+                            countRank2.text = "${entry.value}"
+                        }
+                        2 -> {
+                            FlavorUtils.initWeatherView(it, symbolRank3, entry.key)
+                            descriptionRank3.text = symbolMap[entry.key]
+                            countRank3.text = "${entry.value}"
+                        }
+                        3 -> {
+                            FlavorUtils.initWeatherView(it, symbolRank4, entry.key)
+                            descriptionRank4.text = symbolMap[entry.key]
+                            countRank4.text = "${entry.value}"
+                        }
                     }
                 }
             }
         }
+    }
+
+    companion object {
+        const val MODE_FLAG = "mode"
+        const val MODE_LIFETIME = "lifetime"
+        const val MODE_LAST_MONTH = "lastMonth"
     }
 }
