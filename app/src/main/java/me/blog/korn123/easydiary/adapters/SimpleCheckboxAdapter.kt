@@ -1,0 +1,38 @@
+package me.blog.korn123.easydiary.adapters
+
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import android.widget.AdapterView
+import androidx.recyclerview.widget.RecyclerView
+import me.blog.korn123.easydiary.R
+import kotlinx.android.synthetic.main.viewholder_simple_checkbox.view.*
+
+internal class SimpleCheckboxAdapter(
+        private val realmFiles: List<SimpleCheckbox>,
+        private val onItemClickListener: AdapterView.OnItemClickListener
+) : RecyclerView.Adapter<SimpleCheckboxViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SimpleCheckboxViewHolder {
+        val viewGroup = LayoutInflater
+                .from(parent.context)
+                .inflate(R.layout.viewholder_simple_checkbox, parent, false) as ViewGroup
+        return SimpleCheckboxViewHolder(viewGroup)
+    }
+
+    override fun getItemCount(): Int = realmFiles.size
+
+    override fun onBindViewHolder(holder: SimpleCheckboxViewHolder, position: Int) {
+        holder.bindTo(realmFiles[position])
+        holder.itemView.checkbox.setOnCheckedChangeListener { _, isChecked ->
+            realmFiles[position].isChecked = isChecked
+        }
+    }
+}
+
+class SimpleCheckboxViewHolder(viewGroup: ViewGroup) : RecyclerView.ViewHolder(viewGroup)  {
+    fun bindTo(simpleCheckbox: SimpleCheckbox) {
+        itemView.title.text = simpleCheckbox.title
+        itemView.description.text = simpleCheckbox.description
+    }
+}
+
+data class SimpleCheckbox(var title: String, var description: String, var isChecked: Boolean = false)

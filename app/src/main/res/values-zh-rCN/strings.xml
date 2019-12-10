@@ -500,4 +500,6 @@
     <string name="calendar_font_scale_factor">Global font size x %.1f</string>
     <string name="dashboard_title_lifetime">Lifetime</string>
     <string name="dashboard_title_last_month">Last Month</string>
+    <string name="delete_realm_title">Delete backup file</string>
+    <string name="delete_realm_description">Delete the backup file stored in the storage.</string>
 </resources>

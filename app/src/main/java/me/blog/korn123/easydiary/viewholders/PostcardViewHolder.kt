@@ -19,10 +19,10 @@ import kotlin.math.floor
 
 internal class PostcardViewHolder(itemView: View, val activity: Activity) : ViewHolder(itemView) {
     fun bindTo(postCard: PostCardViewerActivity.PostCard) {
-        val timeStampView = itemView.findViewById<TextView>(R.id.createdDate)
+        val timeStampView = itemView.createdDate
         timeStampView.setTextSize(TypedValue.COMPLEX_UNIT_PX, CommonUtils.dpToPixelFloatValue(activity, 10F))
         FontUtils.setFontsTypeface(activity, activity.assets, "", itemView.imageContainer)
-        itemView.findViewById<CheckBox>(R.id.itemCheck).isChecked = postCard.isItemChecked
+        itemView.itemCheck.isChecked = postCard.isItemChecked
         try {
             val format = SimpleDateFormat(POSTCARD_DATE_FORMAT, Locale.getDefault())
             timeStampView.text = DateUtils.getFullPatternDate(format.parse(postCard.file.name.split("_")[0]).time)
