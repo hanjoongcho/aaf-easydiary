@@ -174,7 +174,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
                     }
                     builder.setNegativeButton(getString(android.R.string.cancel), null)
                     builder.setTitle("${getString(R.string.open_realm_file_title)} (Total: ${it.size})")
-                    builder.setMessage(getString(R.string.open_realm_file_message))
+//                    builder.setMessage(getString(R.string.open_realm_file_message))
 
                     it.sortDescending()
                     it.map { file ->
