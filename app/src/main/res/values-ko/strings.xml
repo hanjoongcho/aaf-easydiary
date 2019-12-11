@@ -333,8 +333,9 @@
         프랑스어로 설정된 기기에서 캘린더 폰트 스케일 설정시 발생하던 오류수정
     </string>
     <string name="release_176">
-        v1.4.110 / 2019.12.xx\n
-        다이어리 대시보드 기능 추가
+        v1.4.110 / 2019.12.11\n
+        다이어리 대시보드 기능 추가\n
+        디바이스에 저장된 다이어리 백업파일 삭제기능 추가
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -498,8 +499,8 @@
     <string name="calendar_font_scale_description">설정된 전역 폰트 사이즈를 기준으로 캘린더 내부의 폰트 사이즈의 스케일을 설정합니다.</string>
     <string name="calendar_font_scale_disable">사용하지 않음</string>
     <string name="calendar_font_scale_factor">전역 폰트크기 x %.1f</string>
-    <string name="dashboard_title_lifetime">Lifetime</string>
-    <string name="dashboard_title_last_month">Last Month</string>
-    <string name="delete_realm_title">Delete backup file</string>
-    <string name="delete_realm_description">Delete the backup file stored in the storage.</string>
+    <string name="dashboard_title_lifetime">전체 기간</string>
+    <string name="dashboard_title_last_month">지난 30일</string>
+    <string name="delete_realm_title">다이어리 백업파일 삭제</string>
+    <string name="delete_realm_description">디바이스에 저장된 백업파일을 삭제합니다.</string>
 </resources>

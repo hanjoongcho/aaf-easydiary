@@ -299,7 +299,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
                         val builder = AlertDialog.Builder(mContext)
                         builder.setNegativeButton(getString(android.R.string.cancel), null)
                         builder.setTitle("${getString(R.string.open_realm_file_title)} (Total: ${it.files.size})")
-                        builder.setMessage(getString(R.string.open_realm_file_message))
+//                        builder.setMessage(getString(R.string.open_realm_file_message))
                         val inflater = mContext.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
                         val fontView = inflater.inflate(R.layout.dialog_realm_files, null)
                         val listView = fontView.findViewById<ListView>(R.id.files)

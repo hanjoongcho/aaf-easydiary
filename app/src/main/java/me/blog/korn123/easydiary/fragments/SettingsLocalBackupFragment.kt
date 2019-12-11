@@ -125,7 +125,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
                     val builder = AlertDialog.Builder(mContext)
                     builder.setNegativeButton(getString(android.R.string.cancel), null)
                     builder.setTitle("${getString(R.string.open_realm_file_title)} (Total: ${it.size})")
-                    builder.setMessage(getString(R.string.open_realm_file_message))
+//                    builder.setMessage(getString(R.string.open_realm_file_message))
 
                     val realmFiles: ArrayList<HashMap<String, String>> = arrayListOf()
                     it.sortDescending()
@@ -170,10 +170,14 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
                         realmInfoList.forEach { item ->
                             if (item.isChecked) checkedList.add(item.title)
                         }
-                        mActivity.makeSnackBar(checkedList.joinToString(","))
+                        mActivity.showAlertDialog(getString(R.string.delete_confirm), DialogInterface.OnClickListener { _, _ ->
+                            checkedList.map { filename ->
+                                File(EasyDiaryUtils.getApplicationDataDirectory(mContext) + BACKUP_DB_DIRECTORY + filename).delete()
+                            }
+                        } , null)
                     }
                     builder.setNegativeButton(getString(android.R.string.cancel), null)
-                    builder.setTitle("${getString(R.string.open_realm_file_title)} (Total: ${it.size})")
+                    builder.setTitle("${getString(R.string.delete_realm_title)} (Total: ${it.size})")
 //                    builder.setMessage(getString(R.string.open_realm_file_message))
 
                     it.sortDescending()

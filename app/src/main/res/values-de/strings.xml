@@ -333,8 +333,9 @@
         Fixed an error that occurred when setting the calendar font scale on a device set to French
     </string>
     <string name="release_176">
-        v1.4.110 / 2019.12.xx\n
-        Added Diary Dashboard feature
+        v1.4.110 / 2019.12.11\n
+        Added Diary Dashboard feature\n
+        Added the ability to delete the diary backup file stored in the device
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->

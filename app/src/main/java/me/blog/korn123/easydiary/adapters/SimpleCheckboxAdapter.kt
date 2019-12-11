@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.recyclerview.widget.RecyclerView
-import me.blog.korn123.easydiary.R
 import kotlinx.android.synthetic.main.viewholder_simple_checkbox.view.*
+import me.blog.korn123.easydiary.R
 
 internal class SimpleCheckboxAdapter(
         private val realmFiles: List<SimpleCheckbox>,
@@ -24,6 +24,9 @@ internal class SimpleCheckboxAdapter(
         holder.bindTo(realmFiles[position])
         holder.itemView.checkbox.setOnCheckedChangeListener { _, isChecked ->
             realmFiles[position].isChecked = isChecked
+        }
+        holder.itemView.setOnClickListener { view ->
+            view.checkbox.isChecked = !view.checkbox.isChecked
         }
     }
 }
