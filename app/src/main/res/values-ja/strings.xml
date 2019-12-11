@@ -501,6 +501,7 @@
     <string name="calendar_font_scale_factor">グローバルフォントサイズ x %.1f</string>
     <string name="dashboard_title_lifetime">全期間</string>
     <string name="dashboard_title_last_month">過去30日</string>
+    <string name="dashboard_guide_message">There is not enough data to generate ranking data over time. You need to write a diary using at least 4 symbols to activate dash board ranking.</string>
     <string name="delete_realm_title">バックアップファイルを削除</string>
     <string name="delete_realm_description">ストレージに保存されているバックアップファイルを削除します。</string>
 </resources>

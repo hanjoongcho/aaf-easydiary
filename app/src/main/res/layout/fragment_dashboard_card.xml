@@ -45,7 +45,7 @@
 
         <TextView
             android:id="@+id/guideCard"
-            android:text="There is not enough data to generate ranking data over time. You need to write a diary using at least 4 symbols to activate dash board ranking."
+            android:text="@string/dashboard_guide_message"
             android:padding="@dimen/dashboard_title_padding"
             android:gravity="center_vertical"
             android:layout_width="wrap_content"

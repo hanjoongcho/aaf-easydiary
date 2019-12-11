@@ -501,6 +501,7 @@
     <string name="calendar_font_scale_factor">전역 폰트크기 x %.1f</string>
     <string name="dashboard_title_lifetime">전체 기간</string>
     <string name="dashboard_title_last_month">지난 30일</string>
+    <string name="dashboard_guide_message">There is not enough data to generate ranking data over time. You need to write a diary using at least 4 symbols to activate dash board ranking.</string>
     <string name="delete_realm_title">다이어리 백업파일 삭제</string>
     <string name="delete_realm_description">디바이스에 저장된 백업파일을 삭제합니다.</string>
 </resources>
