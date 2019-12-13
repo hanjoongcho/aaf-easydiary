@@ -333,7 +333,7 @@
         フランス語に設定されたデバイスでカレンダーのフォントスケールを設定するときに発生したエラーを修正しました
     </string>
     <string name="release_176">
-        v1.4.110 / 2019.12.11\n
+        v1.4.110 / 2019.12.13\n
         日記ダッシュボード機能を追加\n
         デバイスに保存されたダイアリーバックアップファイルを削除する機能を追加
     </string>
@@ -501,7 +501,8 @@
     <string name="calendar_font_scale_factor">グローバルフォントサイズ x %.1f</string>
     <string name="dashboard_title_lifetime">全期間</string>
     <string name="dashboard_title_last_month">過去30日</string>
-    <string name="dashboard_guide_message">There is not enough data to generate ranking data over time. You need to write a diary using at least 4 symbols to activate dash board ranking.</string>
+    <string name="dashboard_guide_message">ランキングデータを生成するための十分なデータがありません。ランキングが有効になるには、4種類以上のシンボルを使用して日記を作成する必要があります。</string>
     <string name="delete_realm_title">バックアップファイルを削除</string>
     <string name="delete_realm_description">ストレージに保存されているバックアップファイルを削除します。</string>
+    <string name="menu_dashboard">ダッシュボード</string>
 </resources>

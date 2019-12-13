@@ -27,7 +27,7 @@
     <item
         android:id="@+id/dashboard"
         android:orderInCategory="100"
-        android:title="Dashboard"
+        android:title="@string/menu_dashboard"
         app:showAsAction="never" />
     <item
         android:id="@+id/chart"
