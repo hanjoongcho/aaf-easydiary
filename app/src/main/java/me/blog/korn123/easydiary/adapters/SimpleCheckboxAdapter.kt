@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.viewholder_simple_checkbox.view.*
 import me.blog.korn123.easydiary.R
 
-internal class SimpleCheckboxAdapter(
+internal class SimpleCheckboxAdapter (
         private val realmFiles: List<SimpleCheckbox>,
         private val onItemClickListener: AdapterView.OnItemClickListener
 ) : RecyclerView.Adapter<SimpleCheckboxViewHolder>() {
