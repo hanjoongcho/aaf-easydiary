@@ -16,8 +16,8 @@
             <me.blog.korn123.easydiary.views.FixedTextView
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                android:id="@+id/dashboardTitle"
-                android:text="@string/statistics_creation_time"
+                android:visibility="gone"
+                android:id="@+id/chartTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/dashboard_text_default"/>

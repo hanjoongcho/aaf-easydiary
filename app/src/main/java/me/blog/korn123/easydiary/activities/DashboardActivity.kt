@@ -56,8 +56,13 @@ class DashboardActivity : EasyDiaryActivity() {
             commit()
         }
 
+        val chartTitle = getString(R.string.statistics_creation_time)
         supportFragmentManager.beginTransaction().run {
-            replace(R.id.statistics1, BarChartFragment())
+            replace(R.id.statistics1, BarChartFragment().apply {
+                val args = Bundle()
+                args.putString(BarChartFragment.CHART_TITLE, chartTitle)
+                arguments = args
+            })
             commit()
         }
     }
