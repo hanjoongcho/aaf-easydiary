@@ -1,15 +1,10 @@
 package me.blog.korn123.easydiary.activities
 
 import android.os.Bundle
-import kotlinx.android.synthetic.main.activity_dashboard.*
-import kotlinx.android.synthetic.main.activity_diary_main.toolbar
-import me.blog.korn123.commons.utils.ChartUtils
-import me.blog.korn123.commons.utils.FlavorUtils
+import kotlinx.android.synthetic.main.activity_diary_main.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.fragments.BarChartFragment
 import me.blog.korn123.easydiary.fragments.DashBoardCardFragment
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
-import java.util.*
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -51,6 +46,15 @@ class DashboardActivity : EasyDiaryActivity() {
             replace(R.id.lastMonth, DashBoardCardFragment().apply {
                 val args = Bundle()
                 args.putString(DashBoardCardFragment.MODE_FLAG, DashBoardCardFragment.MODE_LAST_MONTH)
+                arguments = args
+            })
+            commit()
+        }
+
+        supportFragmentManager.beginTransaction().run {
+            replace(R.id.lastWeek, DashBoardCardFragment().apply {
+                val args = Bundle()
+                args.putString(DashBoardCardFragment.MODE_FLAG, DashBoardCardFragment.MODE_LAST_WEEK)
                 arguments = args
             })
             commit()

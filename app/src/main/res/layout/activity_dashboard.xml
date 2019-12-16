@@ -42,8 +42,15 @@
                 android:layout_height="wrap_content"/>
 
             <LinearLayout
+                android:layout_marginBottom="5dp"
                 android:orientation="vertical"
                 android:id="@+id/lastMonth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:id="@+id/lastWeek"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
