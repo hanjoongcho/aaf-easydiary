@@ -9,6 +9,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT
 import me.blog.korn123.easydiary.helper.USER_CUSTOM_FONTS_DIRECTORY
+import me.blog.korn123.easydiary.views.FixedTextView
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang3.StringUtils
 import java.io.File
@@ -22,15 +23,15 @@ object FontUtils {
 
     private fun setTypeface(context: Context, viewGroup: ViewGroup, typeface: Typeface?, customLineSpacing: Boolean) {
         for (i in 0 until viewGroup.childCount) {
-            val targetView = viewGroup.getChildAt(i)
-            if (targetView is ViewGroup) {
-                setTypeface(context, targetView, typeface, customLineSpacing)
-            } else if (targetView is TextView) {
-//                Log.i("fontInfo", targetView.text.toString())
-                targetView.typeface = typeface
-                if (customLineSpacing) {
-                    targetView.setLineSpacing(0F, context.config.lineSpacingScaleFactor)
+            when (val targetView = viewGroup.getChildAt(i)) {
+                is ViewGroup -> setTypeface(context, targetView, typeface, customLineSpacing)
+                is TextView -> {
+                    targetView.typeface = typeface
+                    if (customLineSpacing) {
+                        targetView.setLineSpacing(0F, context.config.lineSpacingScaleFactor)
+                    }
                 }
+                else -> {}
             }
         }
     }

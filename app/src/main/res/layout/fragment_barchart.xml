@@ -2,6 +2,8 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:contentPadding="@dimen/dashboard_card_padding"
+    app:cardCornerRadius="@dimen/dashboard_card_radius"
     android:id="@+id/dashboardCard"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -25,9 +27,6 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/statisticsCard"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginBottom="15dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <androidx.coordinatorlayout.widget.CoordinatorLayout

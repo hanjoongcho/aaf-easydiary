@@ -9,18 +9,18 @@ import me.blog.korn123.commons.utils.ChartUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
-import kotlinx.android.synthetic.main.fragment_dashboard_card.*
+import kotlinx.android.synthetic.main.fragment_dashboard_rank.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DashBoardCardFragment : androidx.fragment.app.Fragment() {
+class DashBoardRankFragment : androidx.fragment.app.Fragment() {
 
     /***************************************************************************************************
      *   override functions
      *
      ***************************************************************************************************/
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_dashboard_card, container, false)
+        return inflater.inflate(R.layout.fragment_dashboard_rank, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

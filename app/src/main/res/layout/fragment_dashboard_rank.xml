@@ -3,6 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    app:contentPadding="@dimen/dashboard_card_padding"
+    app:cardCornerRadius="@dimen/dashboard_card_radius"
     android:id="@+id/dashboardCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">

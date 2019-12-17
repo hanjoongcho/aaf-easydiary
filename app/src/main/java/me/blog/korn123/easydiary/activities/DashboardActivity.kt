@@ -3,10 +3,7 @@ package me.blog.korn123.easydiary.activities
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_diary_main.*
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.fragments.BarChartFragment
-import me.blog.korn123.easydiary.fragments.BarChartFragmentT2
-import me.blog.korn123.easydiary.fragments.DashBoardCardFragment
-import me.blog.korn123.easydiary.fragments.HorizontalBarChartFragment
+import me.blog.korn123.easydiary.fragments.*
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -36,27 +33,32 @@ class DashboardActivity : EasyDiaryActivity() {
         }
 
         supportFragmentManager.beginTransaction().run {
-            replace(R.id.lifetime, DashBoardCardFragment().apply {
+            replace(R.id.summary, DashBoardSummaryFragment())
+            commit()
+        }
+
+        supportFragmentManager.beginTransaction().run {
+            replace(R.id.lifetime, DashBoardRankFragment().apply {
                 val args = Bundle()
-                args.putString(DashBoardCardFragment.MODE_FLAG, DashBoardCardFragment.MODE_LIFETIME)
+                args.putString(DashBoardRankFragment.MODE_FLAG, DashBoardRankFragment.MODE_LIFETIME)
                 arguments = args
             })
             commit()
         }
 
         supportFragmentManager.beginTransaction().run {
-            replace(R.id.lastMonth, DashBoardCardFragment().apply {
+            replace(R.id.lastMonth, DashBoardRankFragment().apply {
                 val args = Bundle()
-                args.putString(DashBoardCardFragment.MODE_FLAG, DashBoardCardFragment.MODE_LAST_MONTH)
+                args.putString(DashBoardRankFragment.MODE_FLAG, DashBoardRankFragment.MODE_LAST_MONTH)
                 arguments = args
             })
             commit()
         }
 
         supportFragmentManager.beginTransaction().run {
-            replace(R.id.lastWeek, DashBoardCardFragment().apply {
+            replace(R.id.lastWeek, DashBoardRankFragment().apply {
                 val args = Bundle()
-                args.putString(DashBoardCardFragment.MODE_FLAG, DashBoardCardFragment.MODE_LAST_WEEK)
+                args.putString(DashBoardRankFragment.MODE_FLAG, DashBoardRankFragment.MODE_LAST_WEEK)
                 arguments = args
             })
             commit()
