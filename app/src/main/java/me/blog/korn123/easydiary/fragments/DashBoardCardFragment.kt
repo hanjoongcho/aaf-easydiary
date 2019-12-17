@@ -28,30 +28,45 @@ class DashBoardCardFragment : androidx.fragment.app.Fragment() {
 
         context?.let {
             val symbolMap = FlavorUtils.getDiarySymbolMap(it)
-            val flag = arguments?.getString(MODE_FLAG, MODE_LIFETIME)
-            val sortedMap = if (flag == MODE_LAST_MONTH) {
-                val calendar = Calendar.getInstance()
-                val endMillis = calendar.timeInMillis
-                calendar.add(Calendar.DATE, -30)
-                val startMillis = calendar.timeInMillis
-                dashboardTitle.text = getString(R.string.dashboard_title_last_month)
-                diaryCount.text = EasyDiaryDbHelper.readDiary(null, true, startMillis, endMillis).size.toString()
-                val startDate = DateUtils.getDateStringFromTimeMillis(startMillis, SimpleDateFormat.MEDIUM)
-                val endDate = DateUtils.getDateStringFromTimeMillis(endMillis, SimpleDateFormat.MEDIUM)
-                val periodInfo = "$startDate - $endDate"
-                period.text = periodInfo
-                ChartUtils.getSortedMapBySymbol(true, startMillis, endMillis)
-            } else {
-                val firstDiary = EasyDiaryDbHelper.selectFirstDiary()
-                val endMillis = System.currentTimeMillis()
-                val startMillis = firstDiary?.currentTimeMillis ?: endMillis
-                dashboardTitle.text = getString(R.string.dashboard_title_lifetime)
-                diaryCount.text = "${EasyDiaryDbHelper.countDiaryAll()}"
-                val startDate = DateUtils.getDateStringFromTimeMillis(startMillis, SimpleDateFormat.MEDIUM)
-                val endDate = DateUtils.getDateStringFromTimeMillis(endMillis, SimpleDateFormat.MEDIUM)
-                val periodInfo = "$startDate - $endDate"
-                period.text = periodInfo
-                ChartUtils.getSortedMapBySymbol(true)
+            val sortedMap = when (arguments?.getString(MODE_FLAG, MODE_LIFETIME)) {
+                MODE_LAST_MONTH -> {
+                    val calendar = Calendar.getInstance()
+                    val endMillis = calendar.timeInMillis
+                    calendar.add(Calendar.DATE, -30)
+                    val startMillis = calendar.timeInMillis
+                    dashboardTitle.text = getString(R.string.dashboard_title_last_month)
+                    diaryCount.text = EasyDiaryDbHelper.readDiary(null, true, startMillis, endMillis).size.toString()
+                    val startDate = DateUtils.getDateStringFromTimeMillis(startMillis, SimpleDateFormat.MEDIUM)
+                    val endDate = DateUtils.getDateStringFromTimeMillis(endMillis, SimpleDateFormat.MEDIUM)
+                    val periodInfo = "$startDate - $endDate"
+                    period.text = periodInfo
+                    ChartUtils.getSortedMapBySymbol(true, startMillis, endMillis)
+                }
+                MODE_LAST_WEEK -> {
+                    val calendar = Calendar.getInstance()
+                    val endMillis = calendar.timeInMillis
+                    calendar.add(Calendar.DATE, -7)
+                    val startMillis = calendar.timeInMillis
+                    dashboardTitle.text = getString(R.string.dashboard_title_last_week)
+                    diaryCount.text = EasyDiaryDbHelper.readDiary(null, true, startMillis, endMillis).size.toString()
+                    val startDate = DateUtils.getDateStringFromTimeMillis(startMillis, SimpleDateFormat.MEDIUM)
+                    val endDate = DateUtils.getDateStringFromTimeMillis(endMillis, SimpleDateFormat.MEDIUM)
+                    val periodInfo = "$startDate - $endDate"
+                    period.text = periodInfo
+                    ChartUtils.getSortedMapBySymbol(true, startMillis, endMillis)
+                }
+                else -> {
+                    val firstDiary = EasyDiaryDbHelper.selectFirstDiary()
+                    val endMillis = System.currentTimeMillis()
+                    val startMillis = firstDiary?.currentTimeMillis ?: endMillis
+                    dashboardTitle.text = getString(R.string.dashboard_title_lifetime)
+                    diaryCount.text = "${EasyDiaryDbHelper.countDiaryAll()}"
+                    val startDate = DateUtils.getDateStringFromTimeMillis(startMillis, SimpleDateFormat.MEDIUM)
+                    val endDate = DateUtils.getDateStringFromTimeMillis(endMillis, SimpleDateFormat.MEDIUM)
+                    val periodInfo = "$startDate - $endDate"
+                    period.text = periodInfo
+                    ChartUtils.getSortedMapBySymbol(true)
+                }
             }
 
             if (sortedMap.entries.size > 3) {
@@ -89,5 +104,6 @@ class DashBoardCardFragment : androidx.fragment.app.Fragment() {
         const val MODE_FLAG = "mode"
         const val MODE_LIFETIME = "lifetime"
         const val MODE_LAST_MONTH = "lastMonth"
+        const val MODE_LAST_WEEK = "lastWeek"
     }
 }

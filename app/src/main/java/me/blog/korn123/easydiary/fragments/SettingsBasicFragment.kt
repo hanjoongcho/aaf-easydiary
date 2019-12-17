@@ -304,7 +304,7 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
             if (mContext.config.settingCalendarFontScale == fontScale.toFloat()) selectedIndex = index
         }
 
-        val arrayAdapter = OptionItemAdapter(mActivity, R.layout.item_font, listFontScale, mContext.config.settingCalendarFontScale)
+        val arrayAdapter = OptionItemAdapter(mActivity, R.layout.item_check_label, listFontScale, mContext.config.settingCalendarFontScale)
         listView.adapter = arrayAdapter
         listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             val fontInfo = parent.adapter.getItem(position) as HashMap<String, String>
@@ -340,7 +340,7 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
             if (mContext.config.settingThumbnailSize == size.toFloat()) selectedIndex = index
         }
 
-        val arrayAdapter = OptionItemAdapter(mActivity, R.layout.item_font, listThumbnailSize, mContext.config.settingThumbnailSize)
+        val arrayAdapter = OptionItemAdapter(mActivity, R.layout.item_check_label, listThumbnailSize, mContext.config.settingThumbnailSize)
         listView.adapter = arrayAdapter
         listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             val fontInfo = parent.adapter.getItem(position) as HashMap<String, String>
@@ -392,7 +392,7 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
             if (mContext.config.settingFontName == map["fontName"]) selectedIndex = index
         }
 
-        val arrayAdapter = FontItemAdapter(activity!!, R.layout.item_font, listFont)
+        val arrayAdapter = FontItemAdapter(activity!!, R.layout.item_check_label, listFont)
         listView.adapter = arrayAdapter
         listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             val fontInfo = parent.adapter.getItem(position) as HashMap<String, String>

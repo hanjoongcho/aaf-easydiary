@@ -2,8 +2,6 @@ package me.blog.korn123.easydiary.fragments
 
 import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.core.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -86,6 +84,15 @@ class BarChartFragment : androidx.fragment.app.Fragment() {
         mv.chartView = barChart // For bounds control
         barChart.marker = mv // Set the marker to the chart
 
+        // determine title parameter
+        arguments?.let { bundle ->
+            val title = bundle.getString(CHART_TITLE)
+            if (title != null) {
+                chartTitle.text = title
+                chartTitle.visibility = View.VISIBLE
+            }
+        }
+
         setData(6, 20f)
         barChart.animateY(2000)
     }
@@ -144,5 +151,9 @@ class BarChartFragment : androidx.fragment.app.Fragment() {
         in 16..19 -> 5
         in 20..23 -> 6
         else -> 0
+    }
+
+    companion object {
+        const val CHART_TITLE = "chartTitle"
     }
 }

@@ -165,17 +165,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
                     val realmInfoList: ArrayList<SimpleCheckbox> = arrayListOf()
                     val builder = AlertDialog.Builder(mContext)
                     builder.setCancelable(false)
-                    builder.setPositiveButton(getString(R.string.delete)) { dialog, which ->
-                        val checkedList = mutableListOf<String>()
-                        realmInfoList.forEach { item ->
-                            if (item.isChecked) checkedList.add(item.title)
-                        }
-                        mActivity.showAlertDialog(getString(R.string.delete_confirm), DialogInterface.OnClickListener { _, _ ->
-                            checkedList.map { filename ->
-                                File(EasyDiaryUtils.getApplicationDataDirectory(mContext) + BACKUP_DB_DIRECTORY + filename).delete()
-                            }
-                        } , null)
-                    }
+                    builder.setPositiveButton(getString(R.string.delete)) { _, _ -> }
                     builder.setNegativeButton(getString(android.R.string.cancel), null)
                     builder.setTitle("${getString(R.string.delete_realm_title)} (Total: ${it.size})")
 //                    builder.setMessage(getString(R.string.open_realm_file_message))
@@ -196,7 +186,6 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
                         adapter = SimpleCheckboxAdapter(realmInfoList, AdapterView.OnItemClickListener { parent, view, position, id ->
                             val realmInfo = parent.adapter.getItem(position) as SimpleCheckbox
                             mActivity.makeSnackBar("${realmInfo.isChecked}")
-                            mAlertDialog?.cancel()
                         })
                         layoutManager = gridLayoutManager
 //                        addItemDecoration(spacesItemDecoration)
@@ -204,7 +193,22 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
 
                     builder.setView(rootView)
                     mAlertDialog = builder.create()
-                    mAlertDialog?.show()
+                    mAlertDialog?.let { dialog ->
+                        dialog.show()
+                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                            val checkedList = mutableListOf<String>()
+                            realmInfoList.forEach { item ->
+                                if (item.isChecked) checkedList.add(item.title)
+                            }
+                            mActivity.showAlertDialog(getString(R.string.delete_confirm), DialogInterface.OnClickListener { _, _ ->
+                                checkedList.map { filename ->
+                                    File(EasyDiaryUtils.getApplicationDataDirectory(mContext) + BACKUP_DB_DIRECTORY + filename).delete()
+                                }
+                                dialog.dismiss()
+                            } , null)
+                        }
+                    }
+
                 }
                 false -> {}
             }
