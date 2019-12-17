@@ -84,6 +84,15 @@ class HorizontalBarChartFragment : androidx.fragment.app.Fragment() {
         mv.chartView = barChart // For bounds control
         barChart.marker = mv // Set the marker to the chart
 
+        // determine title parameter
+        arguments?.let { bundle ->
+            val title = bundle.getString(BarChartFragment.CHART_TITLE)
+            if (title != null) {
+                chartTitle.text = title
+                chartTitle.visibility = View.VISIBLE
+            }
+        }
+
         setData()
         barChart.animateY(2000)
     }
