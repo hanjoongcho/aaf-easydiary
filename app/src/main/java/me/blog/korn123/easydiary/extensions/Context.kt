@@ -24,6 +24,8 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.helper.Config
 import me.blog.korn123.easydiary.helper.DEFAULT_CALENDAR_FONT_SCALE
 import me.blog.korn123.easydiary.helper.DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE
+import me.blog.korn123.easydiary.views.CompatPaddingCardView
+import me.blog.korn123.easydiary.views.FixedCardView
 import me.blog.korn123.easydiary.views.FixedTextView
 
 /**
@@ -80,13 +82,8 @@ fun Context.updateAppViews(viewGroup: ViewGroup, tmpBackgroundColor: Int = 0) {
             .forEach {
                 when (it) {
                     is CardView -> {
-                        when (it.id) {
-                            R.id.rank1, R.id.rank2, R.id.rank3, R.id.rank4 -> {}
-                            else -> {
-                                if (it.id != R.id.dashboardCard && it.id != R.id.statisticsCard) it.setCardBackgroundColor(backgroundColor)
-                                updateAppViews(it)
-                            }
-                        }
+                        if (it !is FixedCardView) it.setCardBackgroundColor(backgroundColor)
+                        updateAppViews(it)
                     }
                     is ViewGroup -> updateAppViews(it)
                 }
@@ -100,9 +97,7 @@ fun Context.updateCardViewPolicy(viewGroup: ViewGroup) {
             .forEach {
                 when (it) {
                     is CardView -> {
-                        if (config.enableCardViewPolicy ||
-                                it.id == R.id.rank1 || it.id == R.id.rank2 || it.id == R.id.rank3 || it.id == R.id.rank4 ||
-                                it.id == R.id.statisticsCard) {
+                        if (config.enableCardViewPolicy || it is CompatPaddingCardView) {
                             it.useCompatPadding = true
                             it.cardElevation = CommonUtils.dpToPixelFloatValue(this, 2F)
                         } else {

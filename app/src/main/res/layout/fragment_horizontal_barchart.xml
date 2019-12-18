@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<me.blog.korn123.easydiary.views.FixedCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:contentPadding="@dimen/dashboard_card_padding"
-    app:cardCornerRadius="@dimen/dashboard_card_radius"
-    android:id="@+id/dashboardCard"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout
@@ -36,5 +34,5 @@
                 android:layout_height="match_parent" />
         </androidx.cardview.widget.CardView>
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+</me.blog.korn123.easydiary.views.FixedCardView>
 
