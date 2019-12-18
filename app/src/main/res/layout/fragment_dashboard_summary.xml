@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <me.blog.korn123.easydiary.views.FixedCardView
+    <me.blog.korn123.easydiary.views.CompatPaddingCardView
         app:contentPadding="@dimen/dashboard_card_padding"
         app:cardCornerRadius="@dimen/dashboard_card_radius"
         android:layout_width="match_parent"
@@ -64,9 +64,9 @@
                 </LinearLayout>
             </me.blog.korn123.easydiary.views.CompatPaddingCardView>
         </LinearLayout>
-    </me.blog.korn123.easydiary.views.FixedCardView>
+    </me.blog.korn123.easydiary.views.CompatPaddingCardView>
 
-    <me.blog.korn123.easydiary.views.FixedCardView
+    <me.blog.korn123.easydiary.views.CompatPaddingCardView
         app:contentPadding="@dimen/dashboard_card_padding"
         app:cardCornerRadius="@dimen/dashboard_card_radius"
         android:layout_marginTop="5dp"
@@ -125,5 +125,5 @@
                 </LinearLayout>
             </me.blog.korn123.easydiary.views.CompatPaddingCardView>
         </LinearLayout>
-    </me.blog.korn123.easydiary.views.FixedCardView>
+    </me.blog.korn123.easydiary.views.CompatPaddingCardView>
 </LinearLayout>
