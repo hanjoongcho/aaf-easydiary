@@ -24,7 +24,7 @@ class DashBoardSummaryFragment : androidx.fragment.app.Fragment() {
         context?.let { ctx ->
             val diaryBackupUsingGMSMillis = ctx.config.diaryBackupGoogle
             diaryBackupUsingGMS.text = when {
-                diaryBackupUsingGMSMillis > 0L -> DateUtils.getFullPatternDate(diaryBackupUsingGMSMillis)
+                diaryBackupUsingGMSMillis > 0L -> DateUtils.getFullPatternDateWithTimeAndSeconds(diaryBackupUsingGMSMillis)
                 else -> "No backup information"
             }
         }
