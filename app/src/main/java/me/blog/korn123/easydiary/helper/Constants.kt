@@ -27,7 +27,6 @@ const val FINGERPRINT_AUTHENTICATION_FAIL_COUNT = "fingerprint_authentication_fa
 const val ENABLE_CARD_VIEW_POLICY = "enable_card_view_policy"
 const val SETTING_CALENDAR_START_DAY = "setting_calendar_start_day"
 const val SETTING_COUNT_CHARACTERS = "setting_count_characters"
-
 const val CUSTOM_FONTS_SUPPORT_LANGUAGE = "en|ko" // custom fonts supported language
 const val CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT = "NanumPen.ttf"
 const val CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT = "Default"
@@ -36,6 +35,9 @@ const val CONTENT_URI_PREFIX = "content:/"
 const val FILE_URI_PREFIX = "file:/"
 const val LINE_SPACING_SCALE_FACTOR = "line_spacing_scale_factor"
 const val LINE_SPACING_SCALE_DEFAULT = 1.0F
+const val DIARY_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE = "diary_last_backup_time_google_drive"
+const val DIARY_LAST_BACKUP_TIMESTAMP_LOCAL = "diary_last_backup_time_local"
+const val PHOTO_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE = "photo_last_backup_time_google_drive"
 
 const val WORKING_DIRECTORY           = "/AAFactory/EasyDiary/"
 const val DIARY_PHOTO_DIRECTORY       = "${WORKING_DIRECTORY}Photos/"

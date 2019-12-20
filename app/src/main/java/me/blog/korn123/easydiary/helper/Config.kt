@@ -104,4 +104,8 @@ class Config(context: Context) : BaseConfig(context) {
     var enableCountCharacters: Boolean
         get() = prefs.getBoolean(SETTING_COUNT_CHARACTERS, false)
         set(enableCountCharacters) = prefs.edit().putBoolean(SETTING_COUNT_CHARACTERS, enableCountCharacters).apply()
+
+    var diaryBackupGoogle: Long
+        get() = prefs.getLong(DIARY_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE, 0)
+        set(calendarStartDay) = prefs.edit().putLong(DIARY_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE, diaryBackupGoogle).apply()
 }

@@ -270,6 +270,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
                 ).addOnSuccessListener {
                     progressContainer.visibility = View. GONE
                     mActivity.makeSnackBar(getString(R.string.backup_completed_message))
+                    mActivity.config.diaryBackupGoogle = System.currentTimeMillis()
                 }.addOnFailureListener { e ->
                     mActivity.makeSnackBar(e.message ?: "Please try again later.")
                     progressContainer.visibility = View.GONE

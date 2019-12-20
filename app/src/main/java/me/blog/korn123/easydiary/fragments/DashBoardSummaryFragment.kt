@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.fragment_dashboard_summary.*
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.config
 
 class DashBoardSummaryFragment : androidx.fragment.app.Fragment() {
 
@@ -20,9 +21,14 @@ class DashBoardSummaryFragment : androidx.fragment.app.Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        diaryBackupUsingGMS.text = DateUtils.getFullPatternDate(System.currentTimeMillis())
-        attachedPhotoBackupUsingGMS.text = DateUtils.getFullPatternDate(System.currentTimeMillis())
-        diaryBackupLocal.text = DateUtils.getFullPatternDate(System.currentTimeMillis())
-        attachedPhotoBackupLocal.text = DateUtils.getFullPatternDate(System.currentTimeMillis())
+        context?.let { ctx ->
+            val diaryBackupUsingGMSMillis = ctx.config.diaryBackupGoogle
+            diaryBackupUsingGMS.text = when() {
+                DateUtils.getFullPatternDate(diaryBackupUsingGMSMillis)
+                        attachedPhotoBackupUsingGMS.text = DateUtils.getFullPatternDate(System.currentTimeMillis())
+                        diaryBackupLocal.text = DateUtils.getFullPatternDate(System.currentTimeMillis())
+                        attachedPhotoBackupLocal.text = DateUtils.getFullPatternDate(System.currentTimeMillis())
+            }
+        }
     }
 }
