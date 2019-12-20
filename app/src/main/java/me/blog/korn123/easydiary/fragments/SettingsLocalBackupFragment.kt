@@ -114,6 +114,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
         val destFilePath = BACKUP_DB_DIRECTORY + DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
         val destFile = File(EasyDiaryUtils.getApplicationDataDirectory(mContext) + destFilePath)
         FileUtils.copyFile(srcFile, destFile, false)
+        mContext.config.diaryBackupLocal = System.currentTimeMillis()
         mActivity.showSimpleDialog(getString(R.string.export_realm_title), getString(R.string.export_realm_guide_message), destFile.absolutePath)
     }
 

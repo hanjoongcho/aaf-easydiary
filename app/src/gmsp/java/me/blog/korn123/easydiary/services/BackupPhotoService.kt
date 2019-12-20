@@ -18,6 +18,7 @@ import com.google.api.services.drive.DriveScopes
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
+import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.*
 import org.apache.commons.lang3.time.StopWatch
 import java.io.File
@@ -174,6 +175,7 @@ class BackupPhotoService : Service() {
                     false -> notificationManager.cancel(NOTIFICATION_FOREGROUND_ID)
                 }
             } else {
+                config.photoBackupGoogle = System.currentTimeMillis()
                 launchCompleteNotification(getString(R.string.notification_msg_upload_complete))
             }
         }

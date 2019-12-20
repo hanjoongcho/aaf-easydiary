@@ -108,4 +108,12 @@ class Config(context: Context) : BaseConfig(context) {
     var diaryBackupGoogle: Long
         get() = prefs.getLong(DIARY_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE, 0)
         set(diaryBackupGoogle) = prefs.edit().putLong(DIARY_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE, diaryBackupGoogle).apply()
+
+    var photoBackupGoogle: Long
+        get() = prefs.getLong(PHOTO_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE, 0)
+        set(photoBackupGoogle) = prefs.edit().putLong(PHOTO_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE, photoBackupGoogle).apply()
+
+    var diaryBackupLocal: Long
+        get() = prefs.getLong(DIARY_LAST_BACKUP_TIMESTAMP_LOCAL, 0)
+        set(diaryBackupLocal) = prefs.edit().putLong(DIARY_LAST_BACKUP_TIMESTAMP_LOCAL, diaryBackupLocal).apply()
 }
