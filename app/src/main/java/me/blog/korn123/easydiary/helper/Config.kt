@@ -107,5 +107,5 @@ class Config(context: Context) : BaseConfig(context) {
 
     var diaryBackupGoogle: Long
         get() = prefs.getLong(DIARY_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE, 0)
-        set(calendarStartDay) = prefs.edit().putLong(DIARY_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE, diaryBackupGoogle).apply()
+        set(diaryBackupGoogle) = prefs.edit().putLong(DIARY_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE, diaryBackupGoogle).apply()
 }
