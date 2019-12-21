@@ -338,8 +338,9 @@
         디바이스에 저장된 다이어리 백업파일 삭제기능 추가
     </string>
     <string name="release_177">
-        v1.4.111 / 2019.12.xx\n
-        멀티피커에서 카메라 촬영을 통한 사진 첨부 기능 추가
+        v1.4.111 / 2019.12.21\n
+        멀티피커에서 카메라 촬영을 통해 사진 첨부 가능하도록 기능개선\n
+        다이어리 대시보드 기능 개선
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -510,4 +511,9 @@
     <string name="delete_realm_title">다이어리 백업파일 삭제</string>
     <string name="delete_realm_description">디바이스에 저장된 백업파일을 삭제합니다.</string>
     <string name="menu_dashboard">대시보드</string>
+    <string name="dashboard_title_backup_drive">구글드라이브 백업 히스토리</string>
+    <string name="dashboard_title_backup_local">디바이스 저장소 백업 히스토리</string>
+    <string name="dashboard_backup_guide_message">백업정보 없음</string>
+    <string name="last_diary_backup_time">다이어리 마지막 백업 시간:</string>
+    <string name="last_photo_backup_time">첨부사진 마지막 백업 시간:</string>
 </resources>

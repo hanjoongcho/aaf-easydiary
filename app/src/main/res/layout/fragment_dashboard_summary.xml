@@ -26,7 +26,7 @@
                     android:layout_height="35dp"/>
                 <me.blog.korn123.easydiary.views.FixedTextView
                     android:padding="10dp"
-                    android:text="Google Drive Backup History"
+                    android:text="@string/dashboard_title_backup_drive"
                     android:textSize="@dimen/dashboard_title_h1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
@@ -42,7 +42,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <me.blog.korn123.easydiary.views.FixedTextView
-                        android:text="Last diary backup time:"
+                        android:text="@string/last_diary_backup_time"
                         android:textSize="@dimen/dashboard_title_h2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
@@ -63,7 +63,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <me.blog.korn123.easydiary.views.FixedTextView
-                        android:text="Last attached photo backup time:"
+                        android:text="@string/last_photo_backup_time"
                         android:textSize="@dimen/dashboard_title_h2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
@@ -98,7 +98,7 @@
                     android:layout_height="40dp"/>
                 <me.blog.korn123.easydiary.views.FixedTextView
                     android:padding="10dp"
-                    android:text="Local Device Backup History"
+                    android:text="@string/dashboard_title_backup_local"
                     android:textSize="@dimen/dashboard_title_h1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
@@ -113,7 +113,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <me.blog.korn123.easydiary.views.FixedTextView
-                        android:text="Last diary backup time:"
+                        android:text="@string/last_diary_backup_time"
                         android:textSize="@dimen/dashboard_title_h2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>

@@ -338,8 +338,9 @@
         デバイスに保存されたダイアリーバックアップファイルを削除する機能を追加
     </string>
     <string name="release_177">
-        v1.4.111 / 2019.12.xx\n
-        マルチピッカーでカメラ撮影を通じた写真添付機能を追加
+        v1.4.111 / 2019.12.21\n
+        マルチピッカーでカメラ撮影を通じた写真添付機能を追加\n
+        ダイアリーのダッシュボード機能の改善
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -510,4 +511,9 @@
     <string name="delete_realm_title">バックアップファイルを削除</string>
     <string name="delete_realm_description">ストレージに保存されているバックアップファイルを削除します。</string>
     <string name="menu_dashboard">ダッシュボード</string>
+    <string name="dashboard_title_backup_drive">Googleドライブのバックアップ履歴</string>
+    <string name="dashboard_title_backup_local">ローカルデバイスのバックアップ履歴</string>
+    <string name="dashboard_backup_guide_message">バックアップ情報なし</string>
+    <string name="last_diary_backup_time">日記の最終バックアップ時間:</string>
+    <string name="last_photo_backup_time">添付写真の最終バックアップ時間:</string>
 </resources>

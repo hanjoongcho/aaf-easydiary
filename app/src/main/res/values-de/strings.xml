@@ -338,8 +338,9 @@
         Added the ability to delete the diary backup file stored in the device
     </string>
     <string name="release_177">
-        v1.4.111 / 2019.12.xx\n
-        Added the ability to attach photos by taking a camera from the multi-picker
+        v1.4.111 / 2019.12.21\n
+        Added the ability to attach photos by taking a camera from the multi-picker\n
+        Diary Dashboard Improvements
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -510,4 +511,9 @@
     <string name="delete_realm_title">Delete backup file</string>
     <string name="delete_realm_description">Delete the backup file stored in the storage.</string>
     <string name="menu_dashboard">Dashboard</string>
+    <string name="dashboard_title_backup_drive">Google Drive Backup History</string>
+    <string name="dashboard_title_backup_local">Local Device Backup History</string>
+    <string name="dashboard_backup_guide_message">No backup information</string>
+    <string name="last_diary_backup_time">Diary last backup time:</string>
+    <string name="last_photo_backup_time">Attached photo last backup time:</string>
 </resources>

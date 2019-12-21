@@ -25,19 +25,19 @@ class DashBoardSummaryFragment : androidx.fragment.app.Fragment() {
             val diaryBackupUsingGMSMillis = ctx.config.diaryBackupGoogle
             diaryBackupUsingGMS.text = when {
                 diaryBackupUsingGMSMillis > 0L -> DateUtils.getFullPatternDateWithTimeAndSeconds(diaryBackupUsingGMSMillis)
-                else -> "No backup information"
+                else -> getString(R.string.dashboard_backup_guide_message)
             }
 
             val photoBackupUsingGMSMillis = ctx.config.photoBackupGoogle
             attachedPhotoBackupUsingGMS.text = when {
                 photoBackupUsingGMSMillis > 0L -> DateUtils.getFullPatternDateWithTimeAndSeconds(photoBackupUsingGMSMillis)
-                else -> "No backup information"
+                else -> getString(R.string.dashboard_backup_guide_message)
             }
 
             val diaryBackupUsingLocal = ctx.config.diaryBackupLocal
             diaryBackupLocal.text = when {
                 diaryBackupUsingLocal > 0L -> DateUtils.getFullPatternDateWithTimeAndSeconds(diaryBackupUsingLocal)
-                else -> "No backup information"
+                else -> getString(R.string.dashboard_backup_guide_message)
             }
         }
     }

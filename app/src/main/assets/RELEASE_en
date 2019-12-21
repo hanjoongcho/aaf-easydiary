@@ -4,6 +4,10 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.111 (date: 2019/12/21)
+  * Added the ability to attach photos by taking a camera from the multi-picker
+  * Diary Dashboard Improvements
+
 # Changes in 1.4.110 (date: 2019/12/13)
   * Added Diary Dashboard feature
   * Added the ability to delete the diary backup file stored in the device
