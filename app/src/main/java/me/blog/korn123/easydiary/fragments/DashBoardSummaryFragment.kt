@@ -40,8 +40,5 @@ class DashBoardSummaryFragment : androidx.fragment.app.Fragment() {
                 else -> "No backup information"
             }
         }
-        attachedPhotoBackupUsingGMS.text = DateUtils.getFullPatternDate(System.currentTimeMillis())
-        diaryBackupLocal.text = DateUtils.getFullPatternDate(System.currentTimeMillis())
-        attachedPhotoBackupLocal.text = DateUtils.getFullPatternDate(System.currentTimeMillis())
     }
 }

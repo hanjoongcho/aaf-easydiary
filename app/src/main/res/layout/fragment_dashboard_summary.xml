@@ -15,12 +15,23 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <me.blog.korn123.easydiary.views.FixedTextView
-                android:padding="10dp"
-                android:text="Google Drive Backup History"
-                android:textSize="@dimen/dashboard_title_h1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    app:srcCompat="@drawable/ic_drive"
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"/>
+                <me.blog.korn123.easydiary.views.FixedTextView
+                    android:padding="10dp"
+                    android:text="Google Drive Backup History"
+                    android:textSize="@dimen/dashboard_title_h1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
             <me.blog.korn123.easydiary.views.CompatPaddingCardView
                 app:contentPadding="15dp"
                 app:cardCornerRadius="@dimen/dashboard_card_radius"
@@ -76,12 +87,22 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <me.blog.korn123.easydiary.views.FixedTextView
-                android:padding="10dp"
-                android:text="Local Device Backup History"
-                android:textSize="@dimen/dashboard_title_h1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_marginLeft="10dp"
+                    app:srcCompat="@drawable/ic_server"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"/>
+                <me.blog.korn123.easydiary.views.FixedTextView
+                    android:padding="10dp"
+                    android:text="Local Device Backup History"
+                    android:textSize="@dimen/dashboard_title_h1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
             <me.blog.korn123.easydiary.views.CompatPaddingCardView
                 app:contentPadding="15dp"
                 app:cardCornerRadius="@dimen/dashboard_card_radius"
@@ -98,27 +119,6 @@
                         android:layout_height="wrap_content"/>
                     <me.blog.korn123.easydiary.views.FixedTextView
                         android:id="@+id/diaryBackupLocal"
-                        android:textSize="@dimen/dashboard_title_h3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-                </LinearLayout>
-            </me.blog.korn123.easydiary.views.CompatPaddingCardView>
-            <me.blog.korn123.easydiary.views.CompatPaddingCardView
-                app:contentPadding="15dp"
-                app:cardCornerRadius="@dimen/dashboard_card_radius"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <me.blog.korn123.easydiary.views.FixedTextView
-                        android:text="Last attached photo backup time:"
-                        android:textSize="@dimen/dashboard_title_h2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-                    <me.blog.korn123.easydiary.views.FixedTextView
-                        android:id="@+id/attachedPhotoBackupLocal"
                         android:textSize="@dimen/dashboard_title_h3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
