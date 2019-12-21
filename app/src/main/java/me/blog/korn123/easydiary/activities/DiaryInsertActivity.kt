@@ -91,8 +91,7 @@ class DiaryInsertActivity : EditActivity() {
         initBottomToolbar()
         setDateTime()
         bindEvent()
-        initBottomContainer()
-        
+
         setupKeypad()
         restoreContents(savedInstanceState)
 

@@ -306,12 +306,6 @@ abstract class EditActivity : EasyDiaryActivity() {
         }
         FlavorUtils.initWeatherView(this, symbol, mSelectedItemPosition, false)
     }
-    
-    protected fun initBottomContainer() {
-        // set bottom thumbnail container
-        val drawable = photoView.background as GradientDrawable
-        drawable.setColor(ColorUtils.setAlphaComponent(config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA))
-    }
 
     protected fun setupRecognizer() {
         mRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {

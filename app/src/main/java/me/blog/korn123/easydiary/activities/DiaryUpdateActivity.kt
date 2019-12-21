@@ -85,7 +85,6 @@ class DiaryUpdateActivity : EditActivity() {
         initBottomToolbar()
         setDateTime()
         bindEvent()
-        initBottomContainer()
         toggleSimpleLayout()
     }
 
@@ -143,6 +142,9 @@ class DiaryUpdateActivity : EditActivity() {
                     val selectPaths = it.getSerializableExtra(PickConfig.INTENT_IMG_LIST_SELECT) as ArrayList<String>
                     attachPhotos(selectPaths)
                 }
+            }
+            REQUEST_CODE_CAPTURE_CAMERA -> if (resultCode == Activity.RESULT_OK) {
+                attachPhotos(arrayListOf(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY + CAPTURE_CAMERA_FILE_NAME))
             }
         }
     }
@@ -206,6 +208,7 @@ class DiaryUpdateActivity : EditActivity() {
     private fun bindEvent() {
         saveContents.setOnClickListener(mOnClickListener)
         photoView.setOnClickListener(mEditListener)
+        captureCamera.setOnClickListener(mEditListener)
         datePicker.setOnClickListener(mEditListener)
         timePicker.setOnClickListener(mEditListener)
         secondsPicker.setOnClickListener(mEditListener)
