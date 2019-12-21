@@ -15,14 +15,12 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.RecyclerView
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.layout_settings_backup_local.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.activities.PostCardViewerActivity
 import me.blog.korn123.easydiary.adapters.RealmFileItemAdapter
 import me.blog.korn123.easydiary.adapters.SimpleCheckbox
 import me.blog.korn123.easydiary.adapters.SimpleCheckboxAdapter
@@ -241,14 +239,12 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
 
             val destFile = File(File(EasyDiaryUtils.getApplicationDataDirectory(mContext) + BACKUP_EXCEL_DIRECTORY), "$exportFileName.xls")
             // test code for attach file to email
-            val authority = "${mContext.packageName}.provider"
-            val uri = FileProvider.getUriForFile(mContext, authority, destFile)
             val emailIntent: Intent = Intent(Intent.ACTION_SEND)
             emailIntent.type = "text/plain"
 //            emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("email@example.com"))
 //            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "subject here")
 //            emailIntent.putExtra(Intent.EXTRA_TEXT, "body text")
-            emailIntent.putExtra(Intent.EXTRA_STREAM, uri)
+            emailIntent.putExtra(Intent.EXTRA_STREAM, mContext.getUriForFile(destFile))
             startActivity(Intent.createChooser(emailIntent, "Pick an Email provider"))
         }).start()
     }

@@ -3,7 +3,6 @@ package me.blog.korn123.easydiary.activities
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import androidx.core.content.FileProvider
 import android.view.*
 import android.widget.TextView
 import com.github.chrisbanes.photoview.PhotoView
@@ -12,6 +11,7 @@ import kotlinx.android.synthetic.main.activity_photo_view_pager.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.getUriForFile
 import me.blog.korn123.easydiary.helper.DIARY_POSTCARD_DIRECTORY
 import me.blog.korn123.easydiary.helper.POSTCARD_SEQUENCE
 import java.io.File
@@ -80,7 +80,7 @@ class PostcardViewPagerActivity : EasyDiaryActivity() {
         val file = mListPostcard[view_pager.currentItem]
         val shareIntent = Intent()
         shareIntent.action = Intent.ACTION_SEND
-        shareIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this@PostcardViewPagerActivity, "$packageName.provider", file))
+        shareIntent.putExtra(Intent.EXTRA_STREAM, getUriForFile(file))
         shareIntent.type = "image/jpeg"
         startActivity(Intent.createChooser(shareIntent, getString(R.string.diary_card_share_info)))
     }

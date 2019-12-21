@@ -38,6 +38,7 @@ const val LINE_SPACING_SCALE_DEFAULT = 1.0F
 const val DIARY_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE = "diary_last_backup_time_google_drive"
 const val DIARY_LAST_BACKUP_TIMESTAMP_LOCAL = "diary_last_backup_time_local"
 const val PHOTO_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE = "photo_last_backup_time_google_drive"
+const val CAPTURE_CAMERA_FILE_NAME = "capture.jpg"
 
 const val WORKING_DIRECTORY           = "/AAFactory/EasyDiary/"
 const val DIARY_PHOTO_DIRECTORY       = "${WORKING_DIRECTORY}Photos/"
@@ -57,6 +58,7 @@ const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_EXCEL = 5
 const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_REALM = 6
 const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_IMPORT_REALM = 7
 const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_DELETE_REALM = 8
+const val REQUEST_CODE_CAPTURE_CAMERA = 9
 
 // startActivityForResult Request Code: Etc
 const val REQUEST_CODE_LOCK_SETTING = 21

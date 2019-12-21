@@ -29,6 +29,8 @@ import androidx.core.graphics.ColorUtils
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.werb.pickphotoview.PickPhotoView
+import com.werb.pickphotoview.util.PickConfig
+import com.werb.pickphotoview.util.PickUtils
 import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
@@ -165,6 +167,13 @@ abstract class EditActivity : EasyDiaryActivity() {
             } else {
                 confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
             }
+            R.id.captureCamera -> {
+                val captureFile = File(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY, CAPTURE_CAMERA_FILE_NAME)
+                captureFile.createNewFile()
+                val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, getUriForFile(captureFile))
+                startActivityForResult(intent, REQUEST_CODE_CAPTURE_CAMERA)
+            }
             R.id.datePicker -> {
                 mDatePickerDialog.show()
             }
@@ -228,6 +237,7 @@ abstract class EditActivity : EasyDiaryActivity() {
         val thumbnailSize = config.settingThumbnailSize
         val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(applicationContext, thumbnailSize), CommonUtils.dpToPixel(applicationContext, thumbnailSize))
         photoView.layoutParams = layoutParams
+        captureCamera.layoutParams = layoutParams
     }
 
 //    protected fun setupSpinner() {
@@ -355,7 +365,7 @@ abstract class EditActivity : EasyDiaryActivity() {
                 theme.resolveAttribute(R.attr.colorPrimaryDark, colorPrimaryDark, true)
                 theme.resolveAttribute(R.attr.colorPrimary, colorPrimary, true)
                 PickPhotoView.Builder(this)
-                        .setShowCamera(true)
+                        .setShowCamera(false)
                         .setHasPhotoSize(0)
                         .setPickPhotoSize(15)
                         .setAllPhotoSize(15)
@@ -411,7 +421,7 @@ abstract class EditActivity : EasyDiaryActivity() {
                 }
             }
             runOnUiThread {
-                photoContainer.postDelayed({ (photoContainer.parent as HorizontalScrollView).fullScroll(HorizontalScrollView.FOCUS_RIGHT) }, 100L)
+                photoContainer.postDelayed({ photoContainerScrollView.fullScroll(HorizontalScrollView.FOCUS_RIGHT) }, 100L)
                 setVisiblePhotoProgress(false)
             }
         }).start()

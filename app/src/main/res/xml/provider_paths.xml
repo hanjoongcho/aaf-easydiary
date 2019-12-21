@@ -11,4 +11,8 @@
     <files-path
         name="postcard"
         path="../AAFactory/EasyDiary/Postcards" />
+
+    <files-path
+        name="photo"
+        path="../AAFactory/EasyDiary/Photos" />
 </paths>

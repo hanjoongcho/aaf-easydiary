@@ -5,17 +5,30 @@
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/card_layout_margin">
     <LinearLayout
-        android:id="@+id/photoContainer"
-        android:gravity="center"
         android:orientation="horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/photoContainer"
+            android:layout_marginRight="3dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/photoView"
+                android:contentDescription="@string/photo_registration"
+                android:scaleType="center"
+                android:background="@drawable/bg_card_thumbnail"
+                android:src="@drawable/image_2_w"
+                android:layout_width="50dp"
+                android:layout_height="50dp" />
+        </LinearLayout>
         <ImageView
-            android:id="@+id/photoView"
-            android:contentDescription="@string/photo_registration"
+            android:id="@+id/captureCamera"
             android:scaleType="center"
             android:background="@drawable/bg_card_thumbnail"
-            android:src="@drawable/image_2_w"
+            android:src="@drawable/camera_4"
             android:layout_width="50dp"
             android:layout_height="50dp" />
     </LinearLayout>

@@ -37,6 +37,7 @@ import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import me.blog.korn123.easydiary.models.PhotoUriDto
 import org.apache.commons.lang3.StringUtils
+import java.io.File
 import java.util.*
 
 /**
@@ -172,6 +173,9 @@ class DiaryInsertActivity : EditActivity() {
                     attachPhotos(selectPaths)
                 }
             }
+            REQUEST_CODE_CAPTURE_CAMERA -> if (resultCode == Activity.RESULT_OK) {
+                attachPhotos(arrayListOf(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY + CAPTURE_CAMERA_FILE_NAME))
+            }
             else -> {
             }
         }
@@ -258,6 +262,7 @@ class DiaryInsertActivity : EditActivity() {
     private fun bindEvent() {
         saveContents.setOnClickListener(mOnClickListener)
         photoView.setOnClickListener(mEditListener)
+        captureCamera.setOnClickListener(mEditListener)
         datePicker.setOnClickListener(mEditListener)
         timePicker.setOnClickListener(mEditListener)
         secondsPicker.setOnClickListener(mEditListener)

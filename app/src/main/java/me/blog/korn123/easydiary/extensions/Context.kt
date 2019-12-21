@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.net.Uri
+import android.os.Build
 import android.preference.PreferenceManager
 import android.text.Spannable
 import android.text.SpannableString
@@ -13,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import com.simplemobiletools.commons.extensions.adjustAlpha
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
@@ -27,6 +30,7 @@ import me.blog.korn123.easydiary.helper.DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE
 import me.blog.korn123.easydiary.views.CompatPaddingCardView
 import me.blog.korn123.easydiary.views.FixedCardView
 import me.blog.korn123.easydiary.views.FixedTextView
+import java.io.File
 
 /**
  * Created by CHO HANJOONG on 2018-02-06.
@@ -175,4 +179,9 @@ fun Context.applyFontToMenuItem(mi: MenuItem) {
     val mNewTitle = SpannableString(mi.title)
     mNewTitle.setSpan(CustomTypefaceSpan("", FontUtils.getCommonTypeface(this, assets)!!), 0, mNewTitle.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
     mi.title = mNewTitle
+}
+
+fun Context.getUriForFile(targetFile: File): Uri {
+    val authority = "${this.packageName}.provider"
+    return if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) FileProvider.getUriForFile(this, authority, targetFile) else Uri.fromFile(targetFile)
 }

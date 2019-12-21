@@ -11,7 +11,6 @@ import android.graphics.Matrix
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import androidx.core.content.FileProvider
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -342,7 +341,7 @@ class PostCardActivity : EasyDiaryActivity() {
         val file = File(mSavedDiaryCardPath)
         val shareIntent = Intent()
         shareIntent.action = Intent.ACTION_SEND
-        shareIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this@PostCardActivity, "$packageName.provider", file))
+        shareIntent.putExtra(Intent.EXTRA_STREAM, getUriForFile(file))
         shareIntent.type = "image/jpeg"
         startActivity(Intent.createChooser(shareIntent, getString(R.string.diary_card_share_info)))
     }
