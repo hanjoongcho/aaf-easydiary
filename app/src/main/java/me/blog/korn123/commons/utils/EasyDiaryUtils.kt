@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.PorterDuff
 import android.graphics.Typeface
+import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Environment
 import android.provider.OpenableColumns
@@ -15,16 +16,19 @@ import android.text.Spanned
 import android.text.style.BackgroundColorSpan
 import android.text.style.StyleSpan
 import android.view.LayoutInflater
-import android.widget.AdapterView
-import android.widget.ListView
-import android.widget.TextView
+import android.view.ViewGroup
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import id.zelory.compressor.Compressor
 import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.CALCULATION
 import io.github.aafactory.commons.utils.CommonUtils
+import io.realm.RealmList
+import kotlinx.android.synthetic.main.fragment_diary_read.*
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.DiaryReadActivity
 import me.blog.korn123.easydiary.adapters.SecondItemAdapter
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
@@ -268,5 +272,22 @@ object EasyDiaryUtils {
             returnCursor.close()
         }
         return name ?: UUID.randomUUID().toString()
+    }
+
+    fun createAttachedPhotoView(context: Context, photoUriDto: PhotoUriDto, photoIndex: Int): ImageView {
+        val thumbnailSize = context.config.settingThumbnailSize
+        val bitmap = photoUriToDownSamplingBitmap(context, photoUriDto, 0, thumbnailSize.toInt() - 5, thumbnailSize.toInt() - 5)
+        val imageView = ImageView(context)
+        val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(context, thumbnailSize), CommonUtils.dpToPixel(context, thumbnailSize))
+        val marginLeft = if (photoIndex == 0)  0 else CommonUtils.dpToPixel(context, 3F)
+        layoutParams.setMargins(marginLeft, 0, 0, 0)
+        imageView.layoutParams = layoutParams
+        val drawable = ContextCompat.getDrawable(context, R.drawable.bg_card_thumbnail)
+        val gradient = drawable as GradientDrawable
+        gradient.setColor(ColorUtils.setAlphaComponent(context.config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA))
+        imageView.background = gradient
+        imageView.setImageBitmap(bitmap)
+        imageView.scaleType = ImageView.ScaleType.CENTER
+        return imageView
     }
 }

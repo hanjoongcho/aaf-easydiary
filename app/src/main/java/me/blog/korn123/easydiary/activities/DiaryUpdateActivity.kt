@@ -2,17 +2,10 @@ package me.blog.korn123.easydiary.activities
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.view.View
-import android.widget.HorizontalScrollView
-import android.widget.ImageView
-import android.widget.LinearLayout
-import androidx.core.graphics.ColorUtils
 import com.werb.pickphotoview.util.PickConfig
-import io.github.aafactory.commons.utils.BitmapUtils
-import io.github.aafactory.commons.utils.CommonUtils
 import io.realm.RealmList
 import kotlinx.android.synthetic.main.activity_diary_update.*
 import kotlinx.android.synthetic.main.layout_bottom_toolbar.*
@@ -27,9 +20,7 @@ import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
-import me.blog.korn123.easydiary.models.PhotoUriDto
 import org.apache.commons.lang3.StringUtils
-import java.io.IOException
 import java.util.*
 
 
@@ -157,23 +148,13 @@ class DiaryUpdateActivity : EditActivity() {
         // TODO fixme elegance
         mPhotoUris = RealmList()
         diaryDto.photoUris?.let {
-            mPhotoUris?.addAll(it)
+            mPhotoUris.addAll(it)
         }
 
-        mPhotoUris?.let {
+        mPhotoUris.let {
             val thumbnailSize = config.settingThumbnailSize
-            for ((index, dto) in it.withIndex()) {
-                val bitmap = EasyDiaryUtils.photoUriToDownSamplingBitmap(this, dto, 0, thumbnailSize.toInt() - 5, thumbnailSize.toInt() - 5)
-                val imageView = ImageView(this)
-                val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(this, thumbnailSize), CommonUtils.dpToPixel(this, thumbnailSize))
-                layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(this, 3F), 0)
-                imageView.layoutParams = layoutParams
-                val drawable = resources.getDrawable(R.drawable.bg_card_thumbnail)
-                val gradient = drawable as GradientDrawable
-                gradient.setColor(ColorUtils.setAlphaComponent(config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA))
-                imageView.background = gradient
-                imageView.setImageBitmap(bitmap)
-                imageView.scaleType = ImageView.ScaleType.CENTER
+            it.forEachIndexed { index, photoUriDto ->
+                val imageView = EasyDiaryUtils.createAttachedPhotoView(this, photoUriDto, index)
                 imageView.setOnClickListener(PhotoClickListener(index))
                 photoContainer.addView(imageView, photoContainer.childCount - 1)
             }

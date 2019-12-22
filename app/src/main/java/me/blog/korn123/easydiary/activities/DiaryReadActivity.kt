@@ -28,6 +28,7 @@ import kotlinx.android.synthetic.main.activity_diary_read.*
 import kotlinx.android.synthetic.main.fragment_diary_read.*
 import kotlinx.android.synthetic.main.layout_bottom_toolbar.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.commons.utils.EasyDiaryUtils.createAttachedPhotoView
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
@@ -367,20 +368,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 context?.let { appContext ->
                     val thumbnailSize = appContext.config.settingThumbnailSize
                     diaryDto.photoUris?.forEachIndexed { index, item ->
-                        val bitmap = EasyDiaryUtils.photoUriToDownSamplingBitmap(appContext, item, 0, thumbnailSize.toInt() - 5, thumbnailSize.toInt() - 5)
-                        val imageView = ImageView(context)
-                        val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(appContext, thumbnailSize), CommonUtils.dpToPixel(appContext, thumbnailSize))
-                        val marginLeft = if (index == 0)  0 else CommonUtils.dpToPixel(appContext, 3F)
-                        layoutParams.setMargins(marginLeft, 0, 0, 0)
-                        imageView.layoutParams = layoutParams
-//                        imageView.setBackgroundResource(R.drawable.bg_card_thumbnail)
-                        val drawable = ContextCompat.getDrawable(appContext, R.drawable.bg_card_thumbnail)
-                        val gradient = drawable as GradientDrawable
-                        gradient.setColor(ColorUtils.setAlphaComponent(mPrimaryColor, THUMBNAIL_BACKGROUND_ALPHA))
-//                        gradient.setColor(ColorUtils.setAlphaComponent(ContextCompat.getColor(appContext, android.R.color.white), THUMBNAIL_BACKGROUND_ALPHA))
-                        imageView.background = gradient
-                        imageView.setImageBitmap(bitmap)
-                        imageView.scaleType = ImageView.ScaleType.CENTER
+                       val imageView = createAttachedPhotoView(appContext, item, index)
                         photoContainer.addView(imageView)
                         imageView.setOnClickListener(PhotoClickListener(getSequence(), index))
                     }

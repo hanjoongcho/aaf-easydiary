@@ -272,19 +272,9 @@ class DiaryInsertActivity : EditActivity() {
             mMinute = it.getInt(SELECTED_MINUTE, mMinute)
             mSecond = it.getInt(SELECTED_SECOND, mSecond)
             val thumbnailSize = config.settingThumbnailSize
-            
-            for ((index, dto) in mPhotoUris.withIndex()) {
-                val bitmap = EasyDiaryUtils.photoUriToDownSamplingBitmap(this, dto, 0, thumbnailSize.toInt() - 5, thumbnailSize.toInt() - 5)
-                val imageView = ImageView(this)
-                val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(this, thumbnailSize), CommonUtils.dpToPixel(this, thumbnailSize))
-                layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(this, 3F), 0)
-                imageView.layoutParams = layoutParams
-                val drawable = ContextCompat.getDrawable(this, R.drawable.bg_card_thumbnail)
-                val gradient = drawable as GradientDrawable
-                gradient.setColor(ColorUtils.setAlphaComponent(BaseConfig(this@DiaryInsertActivity).primaryColor, THUMBNAIL_BACKGROUND_ALPHA))
-                imageView.background = gradient
-                imageView.setImageBitmap(bitmap)
-                imageView.scaleType = ImageView.ScaleType.CENTER
+
+            mPhotoUris.forEachIndexed { index, photoUriDto ->
+                val imageView = EasyDiaryUtils.createAttachedPhotoView(this, photoUriDto, index)
                 imageView.setOnClickListener(PhotoClickListener(index))
                 photoContainer.addView(imageView, photoContainer.childCount - 1)
             }
