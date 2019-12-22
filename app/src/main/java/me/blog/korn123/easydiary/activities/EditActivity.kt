@@ -168,8 +168,7 @@ abstract class EditActivity : EasyDiaryActivity() {
                 confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
             }
             R.id.captureCamera -> {
-                val captureFile = File(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY, CAPTURE_CAMERA_FILE_NAME)
-                captureFile.createNewFile()
+                val captureFile = createTemporaryPhotoFile()
                 val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, getUriForFile(captureFile))
                 startActivityForResult(intent, REQUEST_CODE_CAPTURE_CAMERA)

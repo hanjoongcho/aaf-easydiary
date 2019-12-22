@@ -22,15 +22,18 @@ import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
 import com.simplemobiletools.commons.views.*
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.views.ModalView
+import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.helper.Config
-import me.blog.korn123.easydiary.helper.DEFAULT_CALENDAR_FONT_SCALE
-import me.blog.korn123.easydiary.helper.DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE
+import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.views.CompatPaddingCardView
 import me.blog.korn123.easydiary.views.FixedCardView
 import me.blog.korn123.easydiary.views.FixedTextView
+import org.apache.commons.io.FileUtils
+import org.apache.commons.io.IOUtils
 import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
 
 /**
  * Created by CHO HANJOONG on 2018-02-06.
@@ -184,4 +187,20 @@ fun Context.applyFontToMenuItem(mi: MenuItem) {
 fun Context.getUriForFile(targetFile: File): Uri {
     val authority = "${this.packageName}.provider"
     return if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) FileProvider.getUriForFile(this, authority, targetFile) else Uri.fromFile(targetFile)
+}
+
+fun Context.createTemporaryPhotoFile(uri: Uri? = null, fromUri: Boolean = false): File {
+    val temporaryFile = File(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY, CAPTURE_CAMERA_FILE_NAME)
+    if (temporaryFile.exists()) temporaryFile.delete()
+
+    when (fromUri) {
+        true -> {
+            val inputStream = contentResolver.openInputStream(uri)
+            IOUtils.copy(inputStream, FileOutputStream(temporaryFile.absoluteFile))
+            IOUtils.closeQuietly(inputStream)
+        }
+        false -> temporaryFile.createNewFile()
+    }
+
+    return temporaryFile
 }

@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.speech.RecognizerIntent
 import android.view.View
 import android.view.ViewGroup
@@ -31,13 +30,13 @@ import kotlinx.android.synthetic.main.layout_edit_toolbar_sub.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.createTemporaryPhotoFile
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import me.blog.korn123.easydiary.models.PhotoUriDto
 import org.apache.commons.lang3.StringUtils
-import java.io.File
 import java.util.*
 
 /**
@@ -115,12 +114,12 @@ class DiaryInsertActivity : EditActivity() {
         super.onSaveInstanceState(outState)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
         pauseLock()
         when (requestCode) {
-            REQUEST_CODE_SPEECH_INPUT -> if (resultCode == Activity.RESULT_OK && data != null) {
-                val result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+            REQUEST_CODE_SPEECH_INPUT -> if (resultCode == Activity.RESULT_OK && intent != null) {
+                val result = intent.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                 if (mCurrentCursor == 0) { // edit title
                     val title = diaryTitle.text.toString()
                     val sb = StringBuilder(title)
@@ -137,45 +136,18 @@ class DiaryInsertActivity : EditActivity() {
                     diaryContents.setSelection(cursorPosition)
                 }
             }
-            REQUEST_CODE_IMAGE_PICKER -> if (resultCode == Activity.RESULT_OK && data != null) {
-                val photoPath = EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
-                //                    mPhotoUris.add(new PhotoUriDto(data.getData().toString()));
-                try {
-                    CommonUtils.uriToFile(this, data.data!!, photoPath)
-                    mPhotoUris.add(PhotoUriDto(FILE_URI_PREFIX + photoPath))
-                    val thumbnailSize = config.settingThumbnailSize
-                    val bitmap = BitmapUtils.decodeFile(photoPath, CommonUtils.dpToPixel(applicationContext, thumbnailSize - 5), CommonUtils.dpToPixel(applicationContext, thumbnailSize - 5))
-                    val imageView = ImageView(applicationContext)
-                    val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(applicationContext, thumbnailSize), CommonUtils.dpToPixel(applicationContext, thumbnailSize))
-                    layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(applicationContext, 3F), 0)
-                    imageView.layoutParams = layoutParams
-                    val drawable = ContextCompat.getDrawable(this, R.drawable.bg_card_thumbnail)
-                    val gradient = drawable as GradientDrawable
-                    gradient.setColor(ColorUtils.setAlphaComponent(config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA))
-                    imageView.background = gradient
-                    imageView.setImageBitmap(bitmap)
-                    imageView.scaleType = ImageView.ScaleType.CENTER
-                    //                    imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                    val currentIndex = mPhotoUris.size - 1
-                    imageView.setOnClickListener(PhotoClickListener(currentIndex))
-                    photoContainer.addView(imageView, photoContainer.childCount - 1)
-                    initBottomToolbar()
-                    photoContainer.postDelayed({ (photoContainer.parent as HorizontalScrollView).fullScroll(HorizontalScrollView.FOCUS_RIGHT) }, 100L)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-
+            REQUEST_CODE_IMAGE_PICKER -> if (resultCode == Activity.RESULT_OK && intent != null) {
+                val tempFile = createTemporaryPhotoFile(intent.data, true)
+                attachPhotos(arrayListOf(tempFile.absolutePath))
             }
             PickConfig.PICK_PHOTO_DATA -> {
-                data?.let {
+                intent?.let {
                     val selectPaths = it.getSerializableExtra(PickConfig.INTENT_IMG_LIST_SELECT) as ArrayList<String>
                     attachPhotos(selectPaths)
                 }
             }
             REQUEST_CODE_CAPTURE_CAMERA -> if (resultCode == Activity.RESULT_OK) {
                 attachPhotos(arrayListOf(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY + CAPTURE_CAMERA_FILE_NAME))
-            }
-            else -> {
             }
         }
     }
