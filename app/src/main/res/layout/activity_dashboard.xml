@@ -34,42 +34,36 @@
                 android:layout_height="wrap_content"/>
 
             <LinearLayout
-                android:layout_marginTop="5dp"
                 android:orientation="vertical"
                 android:id="@+id/statistics1"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"/>
 
             <LinearLayout
-                android:layout_marginTop="5dp"
                 android:orientation="vertical"
                 android:id="@+id/lifetime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
             <LinearLayout
-                android:layout_marginTop="5dp"
                 android:orientation="vertical"
                 android:id="@+id/lastMonth"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
             <LinearLayout
-                android:layout_marginTop="5dp"
                 android:orientation="vertical"
                 android:id="@+id/lastWeek"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
             <LinearLayout
-                android:layout_marginTop="5dp"
                 android:orientation="vertical"
                 android:id="@+id/statistics2"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"/>
 
             <LinearLayout
-                android:layout_marginTop="5dp"
                 android:orientation="vertical"
                 android:id="@+id/statistics3"
                 android:layout_width="match_parent"
