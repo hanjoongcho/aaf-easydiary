@@ -83,6 +83,14 @@
         <item name="layout_constraintTop_toTopOf">parent</item>
         <item name="layout_constraintLeft_toLeftOf">parent</item>
     </style>
+    <style name="card_view_dashboard">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="contentPadding">@dimen/dashboard_card_padding</item>
+        <item name="cardCornerRadius">@dimen/dashboard_card_radius</item>
+        <item name="cardUseCompatPadding">true</item>
+    </style>
+
 
     <!--Caldroid theme-->
     <style name="CaldroidDefaultGridView">

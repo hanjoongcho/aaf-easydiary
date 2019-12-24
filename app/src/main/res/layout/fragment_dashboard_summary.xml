@@ -6,11 +6,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <me.blog.korn123.easydiary.views.CompatPaddingCardView
-        app:contentPadding="@dimen/dashboard_card_padding"
-        app:cardCornerRadius="@dimen/dashboard_card_radius"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <me.blog.korn123.easydiary.views.FixedCardView
+        style="@style/card_view_dashboard">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -32,11 +29,8 @@
                     android:layout_height="wrap_content"/>
             </LinearLayout>
 
-            <me.blog.korn123.easydiary.views.CompatPaddingCardView
-                app:contentPadding="15dp"
-                app:cardCornerRadius="@dimen/dashboard_card_radius"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <me.blog.korn123.easydiary.views.FixedCardView
+                style="@style/card_view_dashboard">
                 <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="match_parent"
@@ -52,12 +46,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                 </LinearLayout>
-            </me.blog.korn123.easydiary.views.CompatPaddingCardView>
-            <me.blog.korn123.easydiary.views.CompatPaddingCardView
-                app:contentPadding="15dp"
-                app:cardCornerRadius="@dimen/dashboard_card_radius"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            </me.blog.korn123.easydiary.views.FixedCardView>
+            <me.blog.korn123.easydiary.views.FixedCardView
+                style="@style/card_view_dashboard">
                 <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="match_parent"
@@ -73,16 +64,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                 </LinearLayout>
-            </me.blog.korn123.easydiary.views.CompatPaddingCardView>
+            </me.blog.korn123.easydiary.views.FixedCardView>
         </LinearLayout>
-    </me.blog.korn123.easydiary.views.CompatPaddingCardView>
+    </me.blog.korn123.easydiary.views.FixedCardView>
 
-    <me.blog.korn123.easydiary.views.CompatPaddingCardView
-        app:contentPadding="@dimen/dashboard_card_padding"
-        app:cardCornerRadius="@dimen/dashboard_card_radius"
-        android:layout_marginTop="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <me.blog.korn123.easydiary.views.FixedCardView
+        style="@style/card_view_dashboard">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -103,11 +90,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
-            <me.blog.korn123.easydiary.views.CompatPaddingCardView
-                app:contentPadding="15dp"
-                app:cardCornerRadius="@dimen/dashboard_card_radius"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <me.blog.korn123.easydiary.views.FixedCardView
+                style="@style/card_view_dashboard">
                 <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="match_parent"
@@ -123,7 +107,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                 </LinearLayout>
-            </me.blog.korn123.easydiary.views.CompatPaddingCardView>
+            </me.blog.korn123.easydiary.views.FixedCardView>
         </LinearLayout>
-    </me.blog.korn123.easydiary.views.CompatPaddingCardView>
+    </me.blog.korn123.easydiary.views.FixedCardView>
 </LinearLayout>

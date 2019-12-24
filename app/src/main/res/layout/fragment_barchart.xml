@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<me.blog.korn123.easydiary.views.CompatPaddingCardView
+<me.blog.korn123.easydiary.views.FixedCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:contentPadding="@dimen/dashboard_card_padding"
-    app:cardCornerRadius="@dimen/dashboard_card_radius"
-    android:layout_width="match_parent"
+    style="@style/card_view_dashboard"
     android:layout_height="match_parent">
     <LinearLayout
         android:orientation="vertical"
@@ -34,4 +32,4 @@
                 android:layout_height="match_parent" />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </LinearLayout>
-</me.blog.korn123.easydiary.views.CompatPaddingCardView>
+</me.blog.korn123.easydiary.views.FixedCardView>

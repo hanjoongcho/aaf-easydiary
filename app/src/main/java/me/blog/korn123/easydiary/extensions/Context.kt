@@ -26,13 +26,10 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.helper.*
-import me.blog.korn123.easydiary.views.CompatPaddingCardView
 import me.blog.korn123.easydiary.views.FixedCardView
 import me.blog.korn123.easydiary.views.FixedTextView
-import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import java.io.File
-import java.io.FileInputStream
 import java.io.FileOutputStream
 
 /**
@@ -104,7 +101,7 @@ fun Context.updateCardViewPolicy(viewGroup: ViewGroup) {
             .forEach {
                 when (it) {
                     is CardView -> {
-                        if (config.enableCardViewPolicy || it is CompatPaddingCardView) {
+                        if (config.enableCardViewPolicy || it.useCompatPadding) {
                             it.useCompatPadding = true
                             it.cardElevation = CommonUtils.dpToPixelFloatValue(this, 2F)
                         } else {
