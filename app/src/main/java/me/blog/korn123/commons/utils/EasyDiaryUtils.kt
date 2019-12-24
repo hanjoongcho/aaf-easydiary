@@ -62,14 +62,14 @@ object EasyDiaryUtils {
         }
 
     fun initWorkingDirectory(context: Context) {
-        if (context.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+//        if (context.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
             makeDirectory(getApplicationDataDirectory(context) + DIARY_PHOTO_DIRECTORY)
             makeDirectory(getApplicationDataDirectory(context) + DIARY_POSTCARD_DIRECTORY)
             makeDirectory(getApplicationDataDirectory(context) + USER_CUSTOM_FONTS_DIRECTORY)
             makeDirectory(getApplicationDataDirectory(context) + MARKDOWN_DIRECTORY)
             makeDirectory(getApplicationDataDirectory(context) + BACKUP_EXCEL_DIRECTORY)
             makeDirectory(getApplicationDataDirectory(context) + BACKUP_DB_DIRECTORY)
-        }
+//        }
     }
 
     fun initLegacyWorkingDirectory(context: Context) {
