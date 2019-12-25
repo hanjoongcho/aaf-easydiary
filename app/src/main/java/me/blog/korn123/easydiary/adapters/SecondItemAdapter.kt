@@ -22,7 +22,7 @@ class SecondItemAdapter(
         private val mSeconds: Int
 ) : ArrayAdapter<Map<String, String>>(context, layoutResourceId, list) {
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var itemView: View? = convertView
         val viewHolder: ViewHolder
         when (itemView == null) {
@@ -48,7 +48,7 @@ class SecondItemAdapter(
             }
         }
 
-        return itemView
+        return itemView!!
     }
 
     private class ViewHolder {

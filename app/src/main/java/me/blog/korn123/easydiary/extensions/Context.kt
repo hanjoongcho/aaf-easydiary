@@ -192,7 +192,7 @@ fun Context.createTemporaryPhotoFile(uri: Uri? = null, fromUri: Boolean = false)
 
     when (fromUri) {
         true -> {
-            val inputStream = contentResolver.openInputStream(uri)
+            val inputStream = contentResolver.openInputStream(uri!!)
             IOUtils.copy(inputStream, FileOutputStream(temporaryFile.absoluteFile))
             IOUtils.closeQuietly(inputStream)
         }

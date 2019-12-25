@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="me.blog.korn123.easydiary">
     <application
+        android:requestLegacyExternalStorage="true"
         android:allowBackup="true"
         android:name=".helper.EasyDiaryApplication"
         android:icon="@mipmap/ic_launcher"

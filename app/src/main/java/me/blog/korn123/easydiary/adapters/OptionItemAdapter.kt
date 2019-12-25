@@ -20,7 +20,7 @@ class OptionItemAdapter(
         private val selectedValue: Float
 ) : ArrayAdapter<Map<String, String>>(activity , layoutResourceId, list) {
     
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var itemView: View? = convertView
         val viewHolder: ViewHolder
         when (itemView == null) {
@@ -48,7 +48,7 @@ class OptionItemAdapter(
         }
         viewHolder.textView?.text = list[position]["optionTitle"]
 
-        return itemView
+        return itemView!!
     }
 
     private class ViewHolder {
