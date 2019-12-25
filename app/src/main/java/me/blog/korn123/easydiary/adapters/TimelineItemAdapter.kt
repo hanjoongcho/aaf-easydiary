@@ -1,11 +1,11 @@
 package me.blog.korn123.easydiary.adapters
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.Typeface
 import android.text.SpannableString
 import android.text.TextUtils
 import android.text.style.StyleSpan
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -15,6 +15,7 @@ import io.github.aafactory.commons.extensions.updateAppViews
 import io.github.aafactory.commons.extensions.updateTextColors
 import io.github.aafactory.commons.helpers.BaseConfig
 import io.github.aafactory.commons.utils.DateUtils
+import kotlinx.android.synthetic.main.item_timeline.view.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
@@ -27,6 +28,8 @@ import org.apache.commons.lang3.StringUtils
 
 /**
  * Created by hanjoong on 2017-07-16.
+ * Refactored code on 20190-12-25.
+ *
  */
 
 class TimelineItemAdapter(
@@ -38,52 +41,42 @@ class TimelineItemAdapter(
     var currentQuery: String? = null
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        var row = convertView
-        val holder: ViewHolder? 
-        if (row == null) {
-            val inflater = (this.context as Activity).layoutInflater
-            row = inflater.inflate(this.layoutResourceId, parent, false)
-            holder = ViewHolder()
-            holder.diarySymbol = row.findViewById(R.id.diarySymbol)
-            holder.textView1 = row.findViewById(R.id.text1)
-            holder.title = row.findViewById(R.id.title)
-            holder.horizontalLine2 = row.findViewById(R.id.horizontalLine2)
-            holder.titleContainer = row.findViewById(R.id.titleContainer)
-            holder.circle = row.findViewById(R.id.circle)
-            holder.topLine = row.findViewById(R.id.topLine)
-            holder.item_holder = row.findViewById<ViewGroup>(R.id.item_holder) 
-            row.tag = holder
-        } else {
-            holder = row.tag as ViewHolder
+        val itemView: View = convertView ?: LayoutInflater.from(parent.context).inflate(this.layoutResourceId, parent, false)
+
+        when (itemView.tag is ViewHolder) {
+            true -> itemView.tag
+            false -> {
+                val holder = ViewHolder(
+                        itemView.diarySymbol, itemView.text1, itemView.title,
+                        itemView.horizontalLine2, itemView.titleContainer, itemView.circle,
+                        itemView.topLine, itemView.item_holder
+                )
+                itemView.tag = holder
+            }
         }
 
-        if (mPrimaryColor == 0) {
-            mPrimaryColor = BaseConfig(context).primaryColor
-        }
-//        holder.titleContainer?.setBackgroundColor(mPrimaryColor)
-        //        GradientDrawable drawable = (GradientDrawable) holder.circle.getDrawable();
-        //        drawable.setColor(mPrimaryColor);
+        (itemView.tag as ViewHolder).run {
+            if (mPrimaryColor == 0) {
+                mPrimaryColor = BaseConfig(context).primaryColor
+            }
+            setFontsTypeface(this)
 
-        setFontsTypeface(holder)
+            val diaryDto = list[position]
+            if (position > 0 && StringUtils.equals(diaryDto.dateString, list[position - 1].dateString)) {
+                titleContainer.visibility = View.GONE
+                topLine.visibility = View.GONE
+            } else {
+                title.text = DateUtils.getFullPatternDate(diaryDto.currentTimeMillis)
+                titleContainer.visibility = View.VISIBLE
+                topLine.visibility = View.VISIBLE
+            }
 
-        val diaryDto = list[position]
-        if (position > 0 && StringUtils.equals(diaryDto.dateString, list[position - 1].dateString)) {
-            holder.titleContainer!!.visibility = View.GONE
-            holder.topLine?.visibility = View.GONE
-        } else {
-            //            holder.title.setText(diaryDto.getDateString() + " " + DateUtils.timeMillisToDateTime(diaryDto.getCurrentTimeMillis(), "EEEE"));
-            holder.title?.text = DateUtils.getFullPatternDate(diaryDto.currentTimeMillis)
-            holder.titleContainer?.visibility = View.VISIBLE
-            holder.topLine?.visibility = View.VISIBLE
-        }
-
-        holder.run {
             FlavorUtils.initWeatherView(context, diarySymbol, diaryDto.weather, false)
-            textView1?.text = when (diaryDto.isAllDay) {
+            textView1.text = when (diaryDto.isAllDay) {
                 true -> applyBoldToDate(context.resources.getString(R.string.all_day), getSummary(diaryDto) ?: "")
                 false -> applyBoldToDate(DateUtils.timeMillisToDateTime(diaryDto.currentTimeMillis, DateUtils.TIME_PATTERN_WITH_SECONDS), getSummary(diaryDto)!!)
             }
-            item_holder?.let {
+            item_holder.let {
                 context.updateTextColors(it, 0, 0)
                 context.updateAppViews(it)
                 context.initTextSize(it, context)
@@ -91,25 +84,25 @@ class TimelineItemAdapter(
 
             if (!currentQuery.isNullOrEmpty()) {
                 if (context.config.diarySearchQueryCaseSensitive) {
-                    EasyDiaryUtils.highlightString(holder.textView1, currentQuery)
+                    EasyDiaryUtils.highlightString(textView1, currentQuery)
                 } else {
-                    EasyDiaryUtils.highlightStringIgnoreCase(holder.textView1, currentQuery)
+                    EasyDiaryUtils.highlightStringIgnoreCase(textView1, currentQuery)
                 }
             }
 
             when (context.config.enableContentsSummary) {
                 true -> {
-                    textView1?.maxLines = 2
-                    textView1?.ellipsize = TextUtils.TruncateAt.valueOf("END")
+                    textView1.maxLines = 2
+                    textView1.ellipsize = TextUtils.TruncateAt.valueOf("END")
                 }
                 false -> {
-                    textView1?.maxLines = Integer.MAX_VALUE
-                    textView1?.ellipsize = null
+                    textView1.maxLines = Integer.MAX_VALUE
+                    textView1.ellipsize = null
                 }
             }
         }
 
-        return row!!
+        return itemView
     }
 
     private fun applyBoldToDate(dateString: String, summary: String): SpannableString {
@@ -117,7 +110,7 @@ class TimelineItemAdapter(
         if (context.config.boldStyleEnable) spannableString.setSpan(StyleSpan(Typeface.BOLD), 0, dateString.length, 0)
         return spannableString
     }
-    
+
     private fun getSummary(diaryDto: DiaryDto): String? = when (context.config.enableContentsSummary) {
         true -> {
             when (StringUtils.isNotEmpty(diaryDto.title)) {
@@ -138,14 +131,9 @@ class TimelineItemAdapter(
         FontUtils.setFontsTypeface(context, context.assets, null, holder.item_holder)
     }
 
-    private class ViewHolder {
-        internal var diarySymbol: ImageView? = null
-        internal var textView1: TextView? = null
-        internal var title: TextView? = null
-        internal var horizontalLine2: View? = null
-        internal var titleContainer: ViewGroup? = null
-        internal var circle: ImageView? = null
-        internal var topLine: TextView? = null
-        internal var item_holder: ViewGroup? = null
-    }
+    private class ViewHolder (
+            val diarySymbol: ImageView, val textView1: TextView, val title: TextView,
+            val horizontalLine2: View, val titleContainer: ViewGroup, val circle: ImageView,
+            val topLine: TextView, val item_holder: ViewGroup
+    )
 }
