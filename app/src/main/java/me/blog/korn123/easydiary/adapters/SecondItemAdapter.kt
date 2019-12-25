@@ -14,6 +14,8 @@ import me.blog.korn123.easydiary.extensions.config
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
+ * Refactored code on 20190-12-25.
+ *
  */
 class SecondItemAdapter(
         context: Context,
