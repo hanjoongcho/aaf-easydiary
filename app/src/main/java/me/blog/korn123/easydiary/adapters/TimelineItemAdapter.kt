@@ -28,7 +28,7 @@ import org.apache.commons.lang3.StringUtils
 
 /**
  * Created by hanjoong on 2017-07-16.
- * Refactored code on 20190-12-25.
+ * Refactored code on 2019-12-25.
  *
  */
 
@@ -44,7 +44,7 @@ class TimelineItemAdapter(
         val itemView: View = convertView ?: LayoutInflater.from(parent.context).inflate(this.layoutResourceId, parent, false)
 
         when (itemView.tag is ViewHolder) {
-            true -> itemView.tag
+            true -> itemView.tag as ViewHolder
             false -> {
                 val holder = ViewHolder(
                         itemView.diarySymbol, itemView.text1, itemView.title,
@@ -52,10 +52,9 @@ class TimelineItemAdapter(
                         itemView.topLine, itemView.item_holder
                 )
                 itemView.tag = holder
+                holder
             }
-        }
-
-        (itemView.tag as ViewHolder).run {
+        }.run {
             if (mPrimaryColor == 0) {
                 mPrimaryColor = BaseConfig(context).primaryColor
             }

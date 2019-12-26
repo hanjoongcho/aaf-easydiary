@@ -14,7 +14,6 @@ import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_MONDAY
 import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SATURDAY
 import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SUNDAY
-import org.w3c.dom.Text
 
 class WeekdayArrayAdapter(context: Context, textViewResourceId: Int,
                                objects: List<String>, themeResource: Int) : com.roomorama.caldroid.WeekdayArrayAdapter(context, textViewResourceId, objects, themeResource) {

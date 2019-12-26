@@ -1,42 +1,40 @@
 package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import me.blog.korn123.easydiary.R
+import kotlinx.android.synthetic.main.item_realm_file.view.*
 
+/**
+ * Refactored code on 2019-12-25.
+ *
+ */
 class RealmFileItemAdapter(
-        private val activity: Activity,
+        activity: Activity,
         private val layoutResourceId: Int,
         private val list: List<Map<String, String>>
 ) : ArrayAdapter<Map<String, String>>(activity , layoutResourceId, list) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        var row = convertView
-        val holder: ViewHolder
-        when (row == null) {
-            true -> {
-                val inflater = (this.context as Activity).layoutInflater
-                row = inflater.inflate(this.layoutResourceId, parent, false)
-                holder = ViewHolder()
-                holder.name = row.findViewById(R.id.fileName)
-                holder.createdTime = row.findViewById(R.id.createdTime)
-                row.tag = holder
-            }
+        val itemView: View = convertView ?: LayoutInflater.from(parent.context).inflate(this.layoutResourceId, parent, false)
+
+        when (itemView.tag is ViewHolder) {
+            true -> itemView.tag as ViewHolder
             false -> {
-                holder = row.tag as ViewHolder    
+                val holder = ViewHolder(itemView.fileName, itemView.createdTime)
+                itemView.tag = holder
+                holder
             }
+        }.run {
+            name.text = list[position]["name"]
+            createdTime.text = list[position]["createdTime"]
         }
-        
-        holder.name?.text = list[position]["name"]
-        holder.createdTime?.text = list[position]["createdTime"]
-        return row!!
+
+        return itemView
     }
 
-    class ViewHolder {
-        var name: TextView? = null
-        var createdTime: TextView? = null
-    }
+    class ViewHolder(val name: TextView, val createdTime: TextView)
 }

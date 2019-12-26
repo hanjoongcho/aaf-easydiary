@@ -14,7 +14,7 @@ import me.blog.korn123.easydiary.extensions.config
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
- * Refactored code on 20190-12-25.
+ * Refactored code on 2019-12-25.
  *
  */
 class SecondItemAdapter(
@@ -28,14 +28,13 @@ class SecondItemAdapter(
         val itemView: View = convertView ?: LayoutInflater.from(parent.context).inflate(this.layoutResourceId, parent, false)
 
         when (itemView.tag is ViewHolder) {
-            true -> itemView.tag
+            true -> itemView.tag as ViewHolder
             false -> {
                 val holder = ViewHolder(itemView.seconds)
                 itemView.tag = holder
+                holder
             }
-        }
-
-        (itemView.tag as ViewHolder).run {
+        }.run {
             seconds.text = list[position]["label"]
             if (position == mSeconds) {
                 seconds.run {
