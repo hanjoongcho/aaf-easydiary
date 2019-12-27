@@ -22,6 +22,7 @@ import org.apache.commons.lang3.StringUtils
 /**
  * Created by CHO HANJOONG on 2017-03-16.
  * Refactored code on 2019-12-26.
+ *
  */
 
 class FontItemAdapter(val activity: Activity, private val layoutResourceId: Int, private val list: List<Map<String, String>>
