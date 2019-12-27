@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.roomorama.caldroid.CaldroidGridAdapter
-import io.github.aafactory.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
@@ -173,7 +172,6 @@ class CaldroidItemAdapter(
             }
         }
 
-
         // Somehow after setBackgroundResource, the padding collapse.
         // This is to recover the padding
         cellView?.setPadding(leftPadding, topPadding, rightPadding,
@@ -181,20 +179,6 @@ class CaldroidItemAdapter(
 
         // Set custom color if required
         setCustomResources(dateTime, cellView, calendarDate)
-
-//        (context as Activity).run {
-//            if (!isLandScape()) {
-//                cellView?.let {
-//                    val contentsHeight = (context as Activity).getRootViewHeight() - CommonUtils.dpToPixel(this, 6F, CALCULATION.FLOOR)
-//                    var gridHeight = contentsHeight * .7/* weight 70% */ - (parent.parent.parent as LinearLayout).getChildAt(0).height
-//                    // FIXME: hardcode height
-//                    gridHeight -= CommonUtils.dpToPixel(this, 35F, CALCULATION.FLOOR)
-//                    val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, gridHeight.toInt() / 6)
-//                    it.layoutParams = params
-//                }
-//            }
-//        }
-
         return cellView
     }
 }

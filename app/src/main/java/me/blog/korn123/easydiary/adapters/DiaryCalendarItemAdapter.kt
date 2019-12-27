@@ -1,8 +1,8 @@
 package me.blog.korn123.easydiary.adapters
 
-import android.app.Activity
 import android.content.Context
 import android.text.TextUtils
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -12,9 +12,9 @@ import android.widget.TextView
 import io.github.aafactory.commons.extensions.updateAppViews
 import io.github.aafactory.commons.extensions.updateTextColors
 import io.github.aafactory.commons.utils.CommonUtils
+import kotlinx.android.synthetic.main.item_diary_calendar.view.*
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
-import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.models.DiaryDto
@@ -22,6 +22,8 @@ import org.apache.commons.lang3.StringUtils
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
+ * Refactored code on 2019-12-26.
+ *
  */
 
 class DiaryCalendarItemAdapter(
@@ -31,73 +33,61 @@ class DiaryCalendarItemAdapter(
 ) : ArrayAdapter<DiaryDto>(context, layoutResourceId, list) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        var row = convertView
-        var holder: ViewHolder?
-        if (row == null) {
-            val inflater = (this.context as Activity).layoutInflater
-            row = inflater.inflate(this.layoutResourceId, parent, false)
-            holder = ViewHolder()
-            holder.textView1 = row.findViewById(R.id.text1)
-            holder.imageView = row.findViewById(R.id.weather)
-            holder.item_holder = row.findViewById(R.id.item_holder)
-            row.tag = holder
-        } else {
-            holder = row.tag as ViewHolder
-        }
+        val itemView: View = convertView ?: LayoutInflater.from(parent.context).inflate(this.layoutResourceId, parent, false)
 
-        setFontsTypeface(holder)
-
-        val diaryDto = list[position]
-        holder.textView1?.run {
-            when (context.config.enableContentsSummary) {
-                true -> {
-                    text = when (StringUtils.isNotEmpty(diaryDto.title)) {
-                        true -> diaryDto.title
+        when (itemView.tag is ViewHolder) {
+            true -> itemView.tag as ViewHolder
+            false -> {
+                val viewHolder = ViewHolder(itemView.text1, itemView.weather, itemView.item_holder)
+                itemView.tag = viewHolder
+                viewHolder
+            }
+        }.run {
+            FontUtils.setFontsTypeface(context, context.assets, null, item_holder)
+            val diaryDto = list[position]
+            textView1.run {
+                when (context.config.enableContentsSummary) {
+                    true -> {
+                        text = when (StringUtils.isNotEmpty(diaryDto.title)) {
+                            true -> diaryDto.title
 //                        false -> StringUtils.abbreviate(diaryDto.contents, 10)
-                        false -> diaryDto.contents
+                            false -> diaryDto.contents
+                        }
+                        maxLines = 1
+                        ellipsize = TextUtils.TruncateAt.valueOf("END")
                     }
-                    maxLines = 1
-                    ellipsize = TextUtils.TruncateAt.valueOf("END")
+                    false -> {
+                        text = when (StringUtils.isNotEmpty(diaryDto.title)) {
+                            true -> "${diaryDto.title}\n${diaryDto.contents}"
+                            false -> "${diaryDto.contents}"
+                        }
+                        maxLines = Integer.MAX_VALUE
+                        ellipsize = null
+                    }
                 }
-                false -> {
-                    text = when (StringUtils.isNotEmpty(diaryDto.title)) {
-                        true -> "${diaryDto.title}\n${diaryDto.contents}"
-                        false -> "${diaryDto.contents}"
-                    }
-                    maxLines = Integer.MAX_VALUE
-                    ellipsize = null
+            }
+
+            FlavorUtils.initWeatherView(context, imageView, diaryDto.weather)
+            item_holder.let {
+                context.updateTextColors(it, 0, 0)
+                context.updateAppViews(it)
+                context.initTextSize(it, context)
+            }
+
+            val cardView = item_holder.getChildAt(0)
+            if (cardView is androidx.cardview.widget.CardView) {
+                if (context.config.enableCardViewPolicy) {
+                    cardView.useCompatPadding = true
+                    cardView.cardElevation = CommonUtils.dpToPixelFloatValue(context, 2F)
+                } else {
+                    cardView.useCompatPadding = false
+                    cardView.cardElevation = 0F
                 }
             }
         }
 
-        FlavorUtils.initWeatherView(context, holder.imageView, diaryDto.weather)
-        holder.item_holder?.let {
-            context.updateTextColors(it, 0, 0)
-            context.updateAppViews(it)
-            context.initTextSize(it, context)
-        }
-
-        val cardView = holder.item_holder?.getChildAt(0)
-        if (cardView is androidx.cardview.widget.CardView) {
-            if (context.config.enableCardViewPolicy) {
-                cardView.useCompatPadding = true
-                cardView.cardElevation = CommonUtils.dpToPixelFloatValue(context, 2F)
-            } else {
-                cardView.useCompatPadding = false
-                cardView.cardElevation = 0F
-            }
-        }
-
-        return row!!
+        return itemView
     }
 
-    private fun setFontsTypeface(holder: ViewHolder) {
-        FontUtils.setFontsTypeface(context, context.assets, null, holder.item_holder)
-    }
-
-    private class ViewHolder {
-        internal var textView1: TextView? = null
-        internal var imageView: ImageView? = null
-        internal var item_holder: RelativeLayout? = null
-    }
+    private class ViewHolder(val textView1: TextView, val imageView: ImageView, val item_holder: RelativeLayout)
 }

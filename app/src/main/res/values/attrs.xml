@@ -3,4 +3,7 @@
     <declare-styleable name="CalendarItem">
         <attr name="applyStroke" format="boolean" />
     </declare-styleable>
+    <declare-styleable name="FixedCardView">
+        <attr name="fixedAppcompatPadding" format="boolean" />
+    </declare-styleable>
 </resources>

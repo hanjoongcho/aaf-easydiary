@@ -88,7 +88,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="contentPadding">@dimen/dashboard_card_padding</item>
         <item name="cardCornerRadius">@dimen/dashboard_card_radius</item>
-        <item name="cardUseCompatPadding">true</item>
+        <item name="fixedAppcompatPadding">true</item>
     </style>
 
 
