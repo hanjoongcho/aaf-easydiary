@@ -5,7 +5,7 @@
 ---------------------------------------------------
 
 # Changes in 1.4.111 (date: 2019/12/30)
-  * Added the ability to attach photos by taking a camera from the multi-picker
+  * Add photo attachment function through camera app integration
   * Diary Dashboard Improvements
 
 # Changes in 1.4.110 (date: 2019/12/13)
