@@ -337,8 +337,8 @@
         Added Diary Dashboard feature\n
         Added the ability to delete the diary backup file stored in the device
     </string>
-    <string name="release_177">
-        v1.4.111 / 2019.12.30\n
+    <string name="release_178">
+        v1.4.112 / 2019.12.31\n
         Add photo attachment function through camera app integration\n
         Diary Dashboard Improvements
     </string>
