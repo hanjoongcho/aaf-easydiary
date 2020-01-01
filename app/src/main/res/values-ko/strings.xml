@@ -471,7 +471,7 @@
     <string name="preferences_category_backup_restore_device">애플리케이션 백업 및 복구</string>
     <string name="preferences_category_backup_restore_device_sub">디바이스 저장소</string>
     <string name="export_realm_title">다이어리 백업하기</string>
-    <string name="export_realm_description">첨부사진을 제외한 데이터베이스 파일을 디바이스 저장소에 백업합니다.</string>
+    <string name="export_realm_description">첨부사진을 제외한 데이터베이스 파일을 디바이스 저장소에 백업합니다. 디바이스 저장소에 백업된 파일은 애플리케이션 삭제 시 같이 삭제되기 때문에 작성된 데이터를 영구적으로 보관하시려면 구글드라이브 백업 기능을 이용하시기 바랍니다.</string>
     <string name="export_realm_guide_message">데이터베이스 파일이 아래 경로의 디바이스 저장소에 저장되었습니다.</string>
     <string name="import_realm_title">다이어리 복구하기</string>
     <string name="import_realm_description">첨부사진을 제외한 데이터베이스 파일을 디바이스 저장소로부터 복구합니다.</string>

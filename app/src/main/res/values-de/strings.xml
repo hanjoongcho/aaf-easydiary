@@ -471,7 +471,7 @@
     <string name="preferences_category_backup_restore_device">Application Backup and Restore</string>
     <string name="preferences_category_backup_restore_device_sub">Device Storage</string>
     <string name="export_realm_title">Tagebuch sichern</string>
-    <string name="export_realm_description">Back up database files except the attached photo to the device storage.</string>
+    <string name="export_realm_description">Back up database files except the attached photo to the device storage. The files backed up in the device storage are deleted along with the application deletion, so if you want to keep the created data permanently, please use the Google Drive backup function.</string>
     <string name="export_realm_guide_message">The database file has been saved to the device storage at the path below.</string>
     <string name="import_realm_title">Tagebuch wiederherstellen</string>
     <string name="import_realm_description">Recovers database files from device storage except attachments.</string>
