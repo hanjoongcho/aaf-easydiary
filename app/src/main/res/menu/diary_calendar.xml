@@ -2,6 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:icon="@drawable/calendar_4_w"
+        android:id="@+id/datePicker"
+        android:orderInCategory="100"
+        android:title="@string/date_picker"
+        android:contentDescription="@string/date_picker"
+        app:showAsAction="always" />
+    <item
         android:icon="@drawable/left_arrow"
         android:id="@+id/previous"
         android:orderInCategory="100"

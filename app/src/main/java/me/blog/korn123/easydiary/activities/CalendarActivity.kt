@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.activities
 
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -31,8 +32,10 @@ import java.util.*
  */
 
 class CalendarActivity : EasyDiaryActivity() {
-    private lateinit var calendarFragment: CaldroidFragmentEx
+    private lateinit var mCalendarFragment: CaldroidFragmentEx
     private lateinit var mCurrentDate: Date
+    private lateinit var mDatePickerDialog: DatePickerDialog
+    private val mCalendar = Calendar.getInstance(Locale.getDefault())
     private var mDiaryList: MutableList<DiaryDto> = mutableListOf()
     private var mArrayAdapterDiary: ArrayAdapter<DiaryDto>? = null
 
@@ -48,6 +51,12 @@ class CalendarActivity : EasyDiaryActivity() {
             title = getString(R.string.calendar_title)
             setDisplayHomeAsUpEnabled(true)    
         }
+
+        mDatePickerDialog = DatePickerDialog(this, { _, year, month, dayOfMonth ->
+            mCalendar.set(year, month, dayOfMonth)
+            mCalendarFragment.moveToDate(mCalendar.time)
+            selectDateAndRefreshView(mCalendar.time)
+        }, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH))
 
         if (config.enableCardViewPolicy) {
             calendarCard.useCompatPadding = true
@@ -75,12 +84,12 @@ class CalendarActivity : EasyDiaryActivity() {
             TransitionHelper.startActivityWithTransition(this@CalendarActivity, detailIntent)
         }
 
-        calendarFragment = CalendarFragment()
+        mCalendarFragment = CalendarFragment()
 
         // Setup arguments
         // If Activity is created after rotation
         if (savedInstanceState != null) {
-            calendarFragment.restoreStatesFromKey(savedInstanceState,
+            mCalendarFragment.restoreStatesFromKey(savedInstanceState,
                     "CALDROID_SAVED_STATE")
         } else {
             val args = Bundle()
@@ -91,15 +100,15 @@ class CalendarActivity : EasyDiaryActivity() {
             args.putBoolean(CaldroidFragment.ENABLE_SWIPE, true)
             args.putBoolean(CaldroidFragment.SIX_WEEKS_IN_CALENDAR, true)
 
-            calendarFragment.arguments = args
+            mCalendarFragment.arguments = args
         }
 
-        calendarFragment.setSelectedDate(currentDate)
+        mCalendarFragment.setSelectedDate(currentDate)
         //        setCustomResourceForDates();
 
         // Attach to the activity
         val t = supportFragmentManager.beginTransaction()
-        t.replace(R.id.calendar1, calendarFragment)
+        t.replace(R.id.calendar1, mCalendarFragment)
         t.commit()
 
         // Setup listener
@@ -109,12 +118,8 @@ class CalendarActivity : EasyDiaryActivity() {
                 //                Toast.makeText(getApplicationContext(), formatter.format(date),
                 //                        Toast.LENGTH_SHORT).show();
                 //                ColorDrawable green = new ColorDrawable(Color.GREEN);
-                //                calendarFragment.setBackgroundDrawableForDate(green, date);
-                calendarFragment.clearSelectedDates()
-                calendarFragment.setSelectedDate(date)
-                calendarFragment.refreshView()
-                mCurrentDate = date
-                refreshList(date)
+                //                mCalendarFragment.setBackgroundDrawableForDate(green, date);
+                selectDateAndRefreshView(date)
             }
 
             override fun onChangeMonth(month: Int, year: Int) {
@@ -133,13 +138,13 @@ class CalendarActivity : EasyDiaryActivity() {
         }
 
         // Setup Caldroid
-        calendarFragment.caldroidListener = listener
+        mCalendarFragment.caldroidListener = listener
     }
 
     override fun onResume() {
         super.onResume()
         refreshList(mCurrentDate)
-        calendarFragment.refreshView()
+        mCalendarFragment.refreshView()
     }
     
     /**
@@ -148,7 +153,7 @@ class CalendarActivity : EasyDiaryActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         // TODO Auto-generated method stub
         super.onSaveInstanceState(outState!!)
-        calendarFragment.saveStatesToKey(outState!!, "CALDROID_SAVED_STATE")
+        mCalendarFragment.saveStatesToKey(outState!!, "CALDROID_SAVED_STATE")
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -158,8 +163,9 @@ class CalendarActivity : EasyDiaryActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.previous -> calendarFragment.prevMonth()
-            R.id.next -> calendarFragment.nextMonth()
+            R.id.previous -> mCalendarFragment.prevMonth()
+            R.id.next -> mCalendarFragment.nextMonth()
+            R.id.datePicker -> mDatePickerDialog.show()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -179,5 +185,13 @@ class CalendarActivity : EasyDiaryActivity() {
             selectedList.visibility = View.GONE
             emptyInfo.visibility = View.VISIBLE
         }
+    }
+
+    fun selectDateAndRefreshView(date: Date) {
+        mCalendarFragment.clearSelectedDates()
+        mCalendarFragment.setSelectedDate(date)
+        mCalendarFragment.refreshView()
+        mCurrentDate = date
+        refreshList(date)
     }
 }
