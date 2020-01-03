@@ -28,17 +28,28 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 /**
- * Created by hanjoong on 2017-03-28.
+ * Created by Hanjoong.Cho on 2017-03-28
+ * Refactored code on 2020-01-03
+ *
  */
 
 class CalendarActivity : EasyDiaryActivity() {
+
+    /***************************************************************************************************
+     *   global properties
+     *
+     ***************************************************************************************************/
     private lateinit var mCalendarFragment: CaldroidFragmentEx
-    private lateinit var mCurrentDate: Date
     private lateinit var mDatePickerDialog: DatePickerDialog
     private val mCalendar = Calendar.getInstance(Locale.getDefault())
     private var mDiaryList: MutableList<DiaryDto> = mutableListOf()
     private var mArrayAdapterDiary: ArrayAdapter<DiaryDto>? = null
 
+
+    /***************************************************************************************************
+     *   override functions
+     *
+     ***************************************************************************************************/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (config.settingCalendarFontScale == DEFAULT_CALENDAR_FONT_SCALE) {
@@ -55,7 +66,7 @@ class CalendarActivity : EasyDiaryActivity() {
         mDatePickerDialog = DatePickerDialog(this, { _, year, month, dayOfMonth ->
             mCalendar.set(year, month, dayOfMonth)
             mCalendarFragment.moveToDate(mCalendar.time)
-            selectDateAndRefreshView(mCalendar.time)
+            selectDateAndRefreshView()
         }, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH))
 
         if (config.enableCardViewPolicy) {
@@ -66,21 +77,15 @@ class CalendarActivity : EasyDiaryActivity() {
             calendarCard.cardElevation = 0F
         }
         
-        mCurrentDate = Calendar.getInstance().time
         val cal = Calendar.getInstance()
         val currentDate = cal.time
-        refreshList(currentDate)
+        refreshList()
         mArrayAdapterDiary = DiaryCalendarItemAdapter(this, R.layout.item_diary_calendar, this.mDiaryList)
         selectedList.adapter = mArrayAdapterDiary
         selectedList.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
             val diaryDto = adapterView.adapter.getItem(i) as DiaryDto
             val detailIntent = Intent(this@CalendarActivity, DiaryReadActivity::class.java)
             detailIntent.putExtra(DIARY_SEQUENCE, diaryDto.sequence)
-            detailIntent.putExtra("title", diaryDto.title)
-            detailIntent.putExtra("contents", diaryDto.contents)
-            detailIntent.putExtra("date", DateUtils.timeMillisToDateTime(diaryDto.currentTimeMillis, "yyyy-MM-dd HH:mm:ss"))
-            detailIntent.putExtra("current_time_millis", diaryDto.currentTimeMillis)
-            detailIntent.putExtra("weather", diaryDto.weather)
             TransitionHelper.startActivityWithTransition(this@CalendarActivity, detailIntent)
         }
 
@@ -89,13 +94,11 @@ class CalendarActivity : EasyDiaryActivity() {
         // Setup arguments
         // If Activity is created after rotation
         if (savedInstanceState != null) {
-            mCalendarFragment.restoreStatesFromKey(savedInstanceState,
-                    "CALDROID_SAVED_STATE")
+            mCalendarFragment.restoreStatesFromKey(savedInstanceState, "CALDROID_SAVED_STATE")
         } else {
             val args = Bundle()
             args.putInt(CaldroidFragment.MONTH, cal.get(Calendar.MONTH) + 1)
             args.putInt(CaldroidFragment.YEAR, cal.get(Calendar.YEAR))
-//            args.putInt(CaldroidFragment.START_DAY_OF_WEEK, CaldroidFragment.MONDAY)
             args.putInt(CaldroidFragment.START_DAY_OF_WEEK, config.calendarStartDay)
             args.putBoolean(CaldroidFragment.ENABLE_SWIPE, true)
             args.putBoolean(CaldroidFragment.SIX_WEEKS_IN_CALENDAR, true)
@@ -104,22 +107,17 @@ class CalendarActivity : EasyDiaryActivity() {
         }
 
         mCalendarFragment.setSelectedDate(currentDate)
-        //        setCustomResourceForDates();
 
         // Attach to the activity
         val t = supportFragmentManager.beginTransaction()
         t.replace(R.id.calendar1, mCalendarFragment)
         t.commit()
 
-        // Setup listener
-        val listener = object : CaldroidListener() {
-
+        mCalendarFragment.caldroidListener = object : CaldroidListener() {
             override fun onSelectDate(date: Date, view: View) {
-                //                Toast.makeText(getApplicationContext(), formatter.format(date),
-                //                        Toast.LENGTH_SHORT).show();
-                //                ColorDrawable green = new ColorDrawable(Color.GREEN);
-                //                mCalendarFragment.setBackgroundDrawableForDate(green, date);
-                selectDateAndRefreshView(date)
+                mCalendar.time = date
+                syncDatePicker()
+                selectDateAndRefreshView()
             }
 
             override fun onChangeMonth(month: Int, year: Int) {
@@ -136,14 +134,11 @@ class CalendarActivity : EasyDiaryActivity() {
             override fun onLongClickDate(date: Date?, view: View?) { }
             override fun onCaldroidViewCreated() { }
         }
-
-        // Setup Caldroid
-        mCalendarFragment.caldroidListener = listener
     }
 
     override fun onResume() {
         super.onResume()
-        refreshList(mCurrentDate)
+        refreshList()
         mCalendarFragment.refreshView()
     }
     
@@ -170,11 +165,16 @@ class CalendarActivity : EasyDiaryActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun refreshList(date: Date) {
+
+    /***************************************************************************************************
+     *   etc functions
+     *
+     ***************************************************************************************************/
+    private fun refreshList() {
         val formatter = SimpleDateFormat(DateUtils.DATE_PATTERN_DASH)
 
         mDiaryList.clear()
-        mDiaryList.addAll(EasyDiaryDbHelper.readDiaryByDateString(formatter.format(date)))
+        mDiaryList.addAll(EasyDiaryDbHelper.readDiaryByDateString(formatter.format(mCalendar.time)))
         mArrayAdapterDiary?.notifyDataSetChanged()
         selectedList.setSelection(0)
 
@@ -187,11 +187,14 @@ class CalendarActivity : EasyDiaryActivity() {
         }
     }
 
-    fun selectDateAndRefreshView(date: Date) {
+    private fun selectDateAndRefreshView() {
         mCalendarFragment.clearSelectedDates()
-        mCalendarFragment.setSelectedDate(date)
+        mCalendarFragment.setSelectedDate(mCalendar.time)
         mCalendarFragment.refreshView()
-        mCurrentDate = date
-        refreshList(date)
+        refreshList()
+    }
+
+    private fun syncDatePicker() {
+        mDatePickerDialog.updateDate(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH))
     }
 }
