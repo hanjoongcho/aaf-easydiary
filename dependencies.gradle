@@ -2,7 +2,7 @@ ext.versions = [
 //    minSdk            : 16,
     /* Temporarily apply 'requestLegacyExternalStorage' options respond to Android Q 'Scoped Storage' policy */
     compileSdk        : 29,
-    publishVersion    : '1.4.113-beta',
+    publishVersion    : '1.4.113',
     publishVersionCode: 179,
 
     gradlePlugin      : '3.3.2',

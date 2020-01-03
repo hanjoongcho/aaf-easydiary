@@ -342,6 +342,10 @@
         Add photo attachment function through camera app integration\n
         Diary Dashboard Improvements
     </string>
+    <string name="release_179">
+        v1.4.113 / 2020.01.04\n
+        Added date movement function using date picker on calendar screen
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
