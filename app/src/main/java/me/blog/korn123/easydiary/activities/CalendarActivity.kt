@@ -123,12 +123,11 @@ class CalendarActivity : EasyDiaryActivity() {
             override fun onChangeMonth(month: Int, year: Int) {
                 val monthYearFlag = (android.text.format.DateUtils.FORMAT_SHOW_DATE
                         or android.text.format.DateUtils.FORMAT_NO_MONTH_DAY or android.text.format.DateUtils.FORMAT_SHOW_YEAR)
-                val monthYearStringBuilder = StringBuilder(50)
-                val monthYearFormatter = Formatter(monthYearStringBuilder, Locale.getDefault())
-                val format = SimpleDateFormat("yyyyMM", Locale.getDefault())
-                val dateTimeString = "$year${StringUtils.leftPad(month.toString(), 2, "0")}"
-                val parsedDate = format.parse(dateTimeString).time
-                val monthTitle = android.text.format.DateUtils.formatDateRange(this@CalendarActivity, monthYearFormatter, parsedDate, parsedDate, monthYearFlag).toString()
+                val monthYearFormatter = Formatter(StringBuilder(50), Locale.getDefault())
+                val calendar = Calendar.getInstance(Locale.getDefault())
+                calendar.set(Calendar.YEAR, year)
+                calendar.set(Calendar.MONTH, month - 1)
+                val monthTitle = android.text.format.DateUtils.formatDateRange(this@CalendarActivity, monthYearFormatter, calendar.timeInMillis, calendar.timeInMillis, monthYearFlag).toString()
                 supportActionBar?.subtitle = monthTitle.toUpperCase(Locale.getDefault())
             }
             override fun onLongClickDate(date: Date?, view: View?) { }
@@ -147,8 +146,8 @@ class CalendarActivity : EasyDiaryActivity() {
      */
     override fun onSaveInstanceState(outState: Bundle) {
         // TODO Auto-generated method stub
-        super.onSaveInstanceState(outState!!)
-        mCalendarFragment.saveStatesToKey(outState!!, "CALDROID_SAVED_STATE")
+        super.onSaveInstanceState(outState)
+        mCalendarFragment.saveStatesToKey(outState, "CALDROID_SAVED_STATE")
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -171,7 +170,7 @@ class CalendarActivity : EasyDiaryActivity() {
      *
      ***************************************************************************************************/
     private fun refreshList() {
-        val formatter = SimpleDateFormat(DateUtils.DATE_PATTERN_DASH)
+        val formatter = SimpleDateFormat(DateUtils.DATE_PATTERN_DASH, Locale.getDefault())
 
         mDiaryList.clear()
         mDiaryList.addAll(EasyDiaryDbHelper.readDiaryByDateString(formatter.format(mCalendar.time)))

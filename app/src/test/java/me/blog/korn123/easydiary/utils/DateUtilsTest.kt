@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.utils
 import io.github.aafactory.commons.utils.DateUtils
 import org.junit.Assert
 import org.junit.Test
+import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -37,5 +38,10 @@ class DateUtilsTest {
     @Test
     fun getFullPatternDateWithTimeAndSeconds02() {
         Assert.assertEquals("dimanche 4 mars 2018 16:37 20", DateUtils.getFullPatternDateWithTimeAndSeconds(TIME_MILLIS, Locale.FRANCE))
+    }
+
+    @Test
+    fun getDateStringFromTimeMillis01() {
+        Assert.assertEquals("2018년 3월 4일 일요일 16:37 20", DateUtils.getDateStringFromTimeMillis(TIME_MILLIS, SimpleDateFormat.FULL))
     }
 }
