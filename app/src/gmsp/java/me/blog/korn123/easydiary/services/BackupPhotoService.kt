@@ -80,12 +80,14 @@ class BackupPhotoService : Service() {
     private fun backupPhoto() {
         notificationBuilder.setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
+                .setStyle(NotificationCompat.InboxStyle())
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.cloud_upload)
                 .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
                 .setOnlyAlertOnce(true)
-                .setContentTitle(getString(R.string.backup_attach_photo_title))
-                .setContentText(getString(R.string.task_progress_message))
+                .setContentTitle(getString(R.string.task_progress_message))
+//                .setContentText(getString(R.string.task_progress_message))
+                .setProgress(0, 0, true)
                 .addAction(
                         R.drawable.cloud_upload,
                         getString(R.string.cancel),
