@@ -131,6 +131,7 @@ object FlavorUtils {
         EMOTION_EMBARRASSED2 -> R.drawable.ic_embarrassed_1
 
         FOOD_BURGER -> R.drawable.ic_burger
+        FOOD_PIZZA -> R.drawable.ic_pizza
         FOOD_SANDWICH -> R.drawable.ic_004_sandwich
         FOOD_STEAK -> R.drawable.ic_steak
         FOOD_GRILL -> R.drawable.ic_grill
