@@ -72,12 +72,14 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
         notificationManager.cancel(NOTIFICATION_COMPLETE_ID)
         notificationBuilder
                 .setDefaults(Notification.DEFAULT_ALL)
+                .setStyle(NotificationCompat.InboxStyle())
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.cloud_download)
                 .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
                 .setOnlyAlertOnce(true)
-                .setContentTitle(getString(R.string.recover_attach_photo_title))
-                .setContentText(getString(R.string.task_progress_message))
+                .setContentTitle(getString(R.string.task_progress_message))
+//                .setContentText(getString(R.string.task_progress_message))
+                .setProgress(0, 0, true)
                 .addAction(
                         R.drawable.cloud_download,
                         getString(R.string.cancel),
