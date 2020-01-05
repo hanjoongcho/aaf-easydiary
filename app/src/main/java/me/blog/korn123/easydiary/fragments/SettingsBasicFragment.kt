@@ -95,7 +95,8 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
                             if (FilenameUtils.getExtension(fileName).equals("ttf", true)) {
                                 val inputStream = mContext.contentResolver.openInputStream(uri)
                                 val fontDestDir = File(EasyDiaryUtils.getApplicationDataDirectory(mContext) + USER_CUSTOM_FONTS_DIRECTORY)
-                                FileUtils.copyInputStreamToFile(inputStream, File(fontDestDir, fileName))
+                                FileUtils.copyToFile(inputStream, File(fontDestDir, fileName))
+                                mActivity.showAlertDialog("${FilenameUtils.getBaseName(fileName)} font file is registered.", null)
                             } else {
                                 mActivity.showAlertDialog(getString(R.string.add_ttf_fonts_title), "$fileName is not ttf file.", null)
                             }
