@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -280,6 +281,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
     }
 
     private fun recoverDiaryRealm() {
+        mActivity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
         progressContainer.visibility = View.VISIBLE
         openRealmFilePickerDialog()
     }
@@ -298,7 +300,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
                             realmFiles.add(itemInfo)
                         }
                         val builder = AlertDialog.Builder(mContext)
-                        builder.setNegativeButton(getString(android.R.string.cancel), null)
+                        builder.setNegativeButton(getString(android.R.string.cancel)) { _, _ -> mActivity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR }
                         builder.setTitle("${getString(R.string.open_realm_file_title)} (Total: ${it.files.size})")
 //                        builder.setMessage(getString(R.string.open_realm_file_message))
                         val inflater = mContext.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
