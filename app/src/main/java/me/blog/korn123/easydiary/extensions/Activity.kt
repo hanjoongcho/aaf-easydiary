@@ -15,12 +15,10 @@ import android.net.Uri
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
@@ -125,16 +123,15 @@ fun Activity.makeSnackBar(message: String) {
             .setAction("Action", null).show()
 }
 
-//fun Activity.setScreenOrientationSensor(disableSensor: Boolean) {
-//    requestedOrientation = when (disableSensor) {
-//        true -> ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
-//        false -> ActivityInfo.SCREEN_ORIENTATION_SENSOR
-//    }
-//}
+fun Activity.setScreenOrientationSensor(enableSensor: Boolean) {
+    requestedOrientation = when (enableSensor) {
+        true -> ActivityInfo.SCREEN_ORIENTATION_SENSOR
+        false -> ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
+    }
+}
 
 fun Activity.holdCurrentOrientation() {
-    val orientation = resources.configuration.orientation
-    when (orientation) {
+    when (resources.configuration.orientation) {
         Configuration.ORIENTATION_PORTRAIT -> requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         Configuration.ORIENTATION_LANDSCAPE -> requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
     }
