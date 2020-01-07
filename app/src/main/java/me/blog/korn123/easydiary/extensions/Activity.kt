@@ -28,6 +28,7 @@ import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.activities.FingerprintLockActivity
 import me.blog.korn123.easydiary.activities.PinLockActivity
 import me.blog.korn123.easydiary.dialogs.WhatsNewDialog
+import kotlin.system.exitProcess
 
 
 /**
@@ -184,7 +185,7 @@ fun Activity.restartApp() {
     mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
     ActivityCompat.finishAffinity(this)
     //System.runFinalizersOnExit(true)
-    System.exit(0)
+    exitProcess(0)
 }
 
 fun Activity.makeSnackBar(view: View, message: String) {

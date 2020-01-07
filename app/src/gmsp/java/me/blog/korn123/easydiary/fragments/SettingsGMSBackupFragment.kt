@@ -254,6 +254,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
     }
 
     private fun backupDiaryRealm() {
+        mActivity.setScreenOrientationSensor(false)
         progressContainer.visibility = View.VISIBLE
         // delete unused compressed photo file
 //        File(Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY).listFiles()?.map {
@@ -272,9 +273,11 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
                     progressContainer.visibility = View. GONE
                     mActivity.makeSnackBar(getString(R.string.backup_completed_message))
                     mActivity.config.diaryBackupGoogle = System.currentTimeMillis()
+                    mActivity.setScreenOrientationSensor(true)
                 }.addOnFailureListener { e ->
                     mActivity.makeSnackBar(e.message ?: "Please try again later.")
                     progressContainer.visibility = View.GONE
+                    mActivity.setScreenOrientationSensor(true)
                 }
             }
         }
