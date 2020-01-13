@@ -1,0 +1,523 @@
+<resources>
+    <string name="app_name">Easy Diary</string>
+    <string name="common_create_seconds">Création des secondes</string>
+	<string name="create_diary_title">Écrire un journal</string>
+	<string name="write_date">Date</string>
+	<string name="request_title_message">Veuillez entrer un titre.</string>
+	<string name="request_content_message">Veuillez saisir votre contenu.</string>
+	<string name="guide_message">Taper ou prononcer le titre.</string>
+	<string name="contents_text_hint">Taper ou prononcer le contenu.</string>
+	<string name="delete_photo_confirm_message">Êtes-vous sûr de vouloir supprimer cette photo ?</string>
+	<string name="gallery_intent_not_found_message">L'\application Galerie n'\est pas installée ou est désactivée.</string>
+	<string name="create_diary_showcase_button_1">Suivant</string>
+	<string name="create_diary_showcase_button_2">Fermer</string>
+	<string name="create_diary_showcase_title_1">Météo</string>
+	<string name="create_diary_showcase_title_2">Titre</string>
+	<string name="create_diary_showcase_title_3">Contenu</string>
+	<string name="create_diary_showcase_title_4">Joindre une photo</string>
+	<string name="create_diary_showcase_title_5">Agrandir la taille de la police</string>
+	<string name="create_diary_showcase_title_6">Réduire la taille de la police</string>
+	<string name="create_diary_showcase_title_7">Choisir la date</string>
+	<string name="create_diary_showcase_title_8">Choisir l'\heure</string>
+	<string name="create_diary_showcase_title_9">Enregistrer</string>
+	<string name="create_diary_showcase_message_1">Sélectionner la météo pour l'\heure de création du journal. La sélection de la météo n'\est pas obligatoire.</string>
+	<string name="create_diary_showcase_message_2">Saisir le titre du journal. L'\entrée d'\un sujet n'\est pas obligatoire.</string>
+	<string name="create_diary_showcase_message_3">Ajouter des journaux intimes, des notes, des notes de synthèse et plus encore.</string>
+	<string name="create_diary_showcase_message_4">Joindre une photo au journal.</string>
+	<string name="create_diary_showcase_message_5">Agrandir le texte utilisé dans le journal.</string>
+	<string name="create_diary_showcase_message_6">Réduire la taille de la police utilisée dans le journal.</string>
+	<string name="create_diary_showcase_message_7">Sélectionner la date de création du journal. Si vous voulez créer un agenda pour une date antérieure, vous pouvez modifier la date.</string>
+	<string name="create_diary_showcase_message_8">Sélectionner l'\heure de création du journal. Vous pouvez modifier l'\heure si vous voulez créer un journal pour une date antérieure.</string>
+	<string name="create_diary_showcase_message_9">Sauvegarder le journal.</string>
+	<string name="read_diary_title">Chercher</string>
+	<string name="input_mode_a">Mode vocal</string>
+	<string name="input_mode_c">Mode textuel</string>
+	<string name="guide_message_2">Taper ou dicter le sujet.</string>
+	<string name="recognizer_intent_not_found_message">Le module de reconnaissance vocale n'\est pas installé ou est désactivé.</string>
+	<string name="sample_diary_title_1">Soyez dangereux plutôt que prudent.</string>
+	<string name="sample_diary_title_2">Je répète ce que je sais quand je parle.</string>
+	<string name="sample_diary_title_3">Plus on entend de mauvaises nouvelles, plus on devrait être heureux.</string>
+	<string name="sample_diary_title_4">L'\abondance appelle le confort, la contrainte appelle la créativité.</string>
+	<string name="sample_diary_1">Quand vous regarderez votre vie passée, vous saurez sûrement que vous avez fait du tort à votre vie parce que vous êtes trop prudent pour ne pas être en danger.</string>
+	<string name="sample_diary_2">Quand vous parlez, vous ne faites que répéter ce que vous savez déjà. Mais si vous écoutez, vous pouvez apprendre quelque chose de nouveau. Le Dalaï Lama</string>
+	<string name="sample_diary_3">C'\est la mauvaise nouvelle que vous devez le plus entendre en tant que leader. \nLa bonne nouvelle est bonne demain, mais la mauvaise nouvelle sera pire demain. \nC'est parce que même si les faits sont déchirants, on peut dire que c'est sans risque. \nEric Schmidt, président de Google, "Comment fonctionne Google ?"</string>
+	<string name="sample_diary_4">Les contraintes ne sont pas un obstacle à la créativité, mais la créativité est utilisée pour surmonter les contraintes. \nTous les grands travaux ou solutions créatives sont ceux qui ont beaucoup de contraintes de temps, de contraintes physiques et de ressources. La créativité naît dans un environnement contraint. \n- Représentant Kim Bong-Jin</string>
+	<string name="read_diary_showcase_button_1">Suivant</string>
+	<string name="read_diary_showcase_button_2">Fermer</string>
+	<string name="read_diary_showcase_title_1">Écrire un journal</string>
+	<string name="read_diary_showcase_title_2">Chercher</string>
+	<string name="read_diary_showcase_title_3">Reconnaissance vocale</string>
+	<string name="read_diary_showcase_title_4">Calendrier</string>
+	<string name="read_diary_showcase_title_5">Historique</string>
+	<string name="read_diary_showcase_title_6">Graphique</string>
+	<string name="read_diary_showcase_title_7">Paramètres avancés</string>
+	<string name="read_diary_showcase_title_8">Consulter le journal</string>
+	<string name="read_diary_showcase_message_1">Vous pouvez créer divers journaux tels que journal intime, mémo, note de synthèse, etc. de manière chronologique.</string>
+	<string name="read_diary_showcase_message_2">Vous pouvez rechercher des journaux à l'aide de mots-clés. Lorsqu'un mot-clé est entré, le journal correspondant est recherché et le mot-clé est mis en évidence.</string>
+	<string name="read_diary_showcase_message_3">Vous pouvez utiliser la fonction de reconnaissance vocale pour entrer des mots-clés de recherche sans clavier.</string>
+	<string name="read_diary_showcase_message_4">Le journal créé peut être regroupé par date en utilisant le calendrier.</string>
+	<string name="read_diary_showcase_message_5">Le journal créé est présenté sous forme chronologique.</string>
+	<string name="read_diary_showcase_message_6">Vous pouvez consulter les graphiques des entrées du journal pour l'ensemble de la période.</string>
+	<string name="read_diary_showcase_message_7">Vous pouvez utiliser les paramètres avancés pour changer les polices de caractères, définir une méthode de verrouillage, sauvegarder et restaurer le journal.</string>
+	<string name="read_diary_showcase_message_8">Cliquer sur la carte du journal dans la liste pour afficher le journal.</string>
+	<string name="diary_photo_migration_message">La méthode pour joindre une image à EasyDiary est modifiée de façon à ce que les informations de lien existantes soient compressées et stockées dans le dossier EasyDiary.\nVeuillez attendre la fin de l'opération.</string>
+	<string name="read_diary_detail_title">Lire le journal</string>
+	<string name="delete_confirm">Êtes-vous sûr de vouloir supprimer ?</string>
+	<string name="read_diary_detail_showcase_button_1">Suivant</string>
+	<string name="read_diary_detail_showcase_button_2">Fermer</string>
+	<string name="read_diary_detail_showcase_title_0">Vue du journal</string>
+	<string name="read_diary_detail_showcase_title_1">Déplacer la page</string>
+	<string name="read_diary_detail_showcase_title_2">Modifier le journal</string>
+	<string name="read_diary_detail_showcase_title_3">TTS</string>
+	<string name="read_diary_detail_showcase_title_4">Carte postale</string>
+	<string name="read_diary_detail_showcase_title_5">Supprimer le journal</string>
+	<string name="read_diary_detail_showcase_message_0">Parcourir le journal sauvegardé. Vous pouvez modifier un journal enregistré ou créer une carte de journal en spécifiant une couleur personnalisée.</string>
+	<string name="read_diary_detail_showcase_message_1">Faites glisser l'écran vers la gauche ou la droite pour afficher les journaux créés avant ou après.</string>
+	<string name="read_diary_detail_showcase_message_2">Vous pouvez aller à l'écran d'édition du journal pour modifier le journal en cours de consultation.</string>
+	<string name="read_diary_detail_showcase_message_3">Vous pouvez écouter le texte du journal grâce à la fonction TTS de Google.</string>
+	<string name="read_diary_detail_showcase_message_4">Utiliser le journal pour créer des cartes postales et les partager avec les autres.</string>
+	<string name="read_diary_detail_showcase_message_5">Vous pouvez supprimer le journal actuel et passer à l'écran de recherche.</string>
+	<string name="update_diary_title">Modifier le journal</string>
+	<string name="back_pressed_confirm">Cliquer sur le bouton \'OK\' pour revenir à l'écran précédent sans enregistrer le journal actuel.</string>
+	<string name="rate_app">NOter l'application</string>
+	<string name="guide_message_3">Autorisation insuffisante pour la fonction demandée.</string>
+	<string name="restore_diary">Restaurer le journal</string>
+	<string name="restore_diary_summary">Restaurer tout le contenu, à l'exception des pièces jointes, à l'aide des données sauvegardées sur Google Drive.</string>
+	<string name="restore_photo">Restaurer les photos du journal (Manuellement)</string>
+	<string name="restore_photo_summary">Les utilisateurs restaurent directement les photos jointes au journal.</string>
+	<string name="backup_diary">Sauvegarder le journal</string>
+	<string name="backup_diary_summary">Sauvegarder tout le contenu sauf les pièces jointes sur Google Drive.</string>
+	<string name="font_setting">Paramètre de la police</string>
+	<string name="add_ttf_fonts_title">Ajouter la police TTF</string>
+	<string name="add_ttf_fonts_summary">Ajouter vos propres polices TTF.\nSi les polices sont ajoutées, vous pouvez utiliser les polices ajoutées avec les polices intégrées.\nQuand vous sélectionnez un fichier TTF en utilisant l'explorateur de fichiers, la police est automatiquement enregistrée et activée dans le menu de réglage des polices.</string>
+	<string name="add_ttf_fonts_info_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/MANUAL.md</string>
+	<string name="diary_search_keyword_case_sensitive_title">Sensibilité à la casse</string>
+	<string name="diary_search_keyword_case_sensitive_summary">Lorsque l'option est activée, elle vérifie si le journal correspond à la casse.</string>
+	<string name="setting_primary_color_title">Thème</string>
+	<string name="setting_primary_color_summary">Définir la couleur primaire de l'application.</string>
+	<string name="pick_text_color_guide_message">La version actuelle ne prend en charge que les changements de couleur des thèmes.\nLes changements de couleur des textes seront disponibles dans le futur.</string>
+	<string name="pick_background_color_guide_message">La version actuelle ne prend en charge que les changements de couleur des thèmes.\nLes changements de couleur de fond seront disponibles dans le futur.</string>
+	<string name="easy_photo_map_title">Easy PhotoMap</string>
+	<string name="easy_photo_map_summary">Easy Photo Map est une application de géolocalisation qui affiche l'emplacement de la photo sur la carte en utilisant les informations d'emplacement incluses dans la photo.</string>
+	<string name="easy_password_title">Easy Password</string>
+	<string name="easy_password_summary">Easy Password est une application qui vous aide à gérer les mots de passe utilisés pour la connexion, la sécurité des documents, le verrouillage des portes, la serrure, la carte de crédit, la gestion des comptes, etc. en utilisant un schéma de verrouillage défini par l'utilisateur.</string>
+	<string name="font_line_spacing">Espacement de la police</string>
+	<string name="font_line_spacing_summary">Modifier l'interligne de la police de caractères en fonction du ratio défini.</string>
+	<string name="calendar_title">Calendrier</string>
+	<string name="guide_message_4">Il n'y a pas de journal créé ce jour-là.</string>
+	<string name="bar_chart_title">Graphique</string>
+	<string name="bar_chart_status">Date de création du journal</string>
+	<string name="range_a">0h~3h</string>
+	<string name="range_b">4h~7h</string>
+	<string name="range_c">8h~11h</string>
+	<string name="range_d">12h~15h</string>
+	<string name="range_e">16h~19h</string>
+	<string name="range_f">20h~23h</string>
+	<string name="range_g">1h~24h</string>
+	<string name="write_time">durée de rédaction</string>
+	<string name="write_count">nombre de caractères</string>
+	<string name="unlock_guide_message">Veuillez entrer votre code PIN</string>
+	<string name="photo_view_error_info">Aucune photo trouvée. \nLes photos jointes de la galerie peuvent avoir été supprimées ou déplacées.</string>
+	<string name="diary_card_export_info">Chemin enregistré pour la carte du journal</string>
+	<string name="diary_card_share_info">Partager la carte du journal</string>
+	<string name="diary_card_export_error_message">Une erreur s'est produite lors de la génération de la carte du journal. Veuillez réessayer.</string>
+	<string name="post_card_showcase_button_1">Suivant</string>
+	<string name="post_card_showcase_button_2">Fermer</string>
+	<string name="post_card_showcase_title_0">Carte postale du journal</string>
+	<string name="post_card_showcase_title_1">Couleur du texte</string>
+	<string name="post_card_showcase_title_2">Couleur de fond</string>
+	<string name="post_card_showcase_title_3">Créer une carte postale</string>
+	<string name="post_card_showcase_title_4">Partager une carte postale</string>
+	<string name="post_card_showcase_title_5">Quitter l'édition</string>
+	<string name="post_card_showcase_message_0">Vous pouvez utiliser le journal enregistré pour créer et enregistrer des cartes postales personnalisées.</string>
+	<string name="post_card_showcase_message_1">Modifier la couleur du texte de la carte postale. Vous pouvez sélectionner la couleur souhaitée à l'aide du sélecteur de couleurs.</string>
+	<string name="post_card_showcase_message_2">Modifier la couleur de fond de la carte postale. Vous pouvez sélectionner la couleur souhaitée à l'aide du sélecteur de couleurs.</string>
+	<string name="post_card_showcase_message_3">Les cartes postales créées peuvent être enregistrées sous forme de fichiers image.</string>
+	<string name="post_card_showcase_message_4">La carte postale créée peut être partagée avec des amis. Partager votre carte postale par courriel, mms, messagerie, et plus encore.</string>
+	<string name="post_card_showcase_message_5">Quitter l'écran d'édition des cartes postales et revenir à l'écran précédent.</string>
+	<string name="timeline_title">Historique</string>
+	<string name="postcard_viewer_title">Carte postale du journal</string>
+	<string name="postcard_viewer_no_cards_saved">Aucune carte postale de journal enregistré.</string>
+	<string name="google_drive_connect_message">Synchronisation Google Drive en cours...</string>
+	<string name="diary_count"></string>
+	<string name="menu_calendar">Calendrier</string>
+	<string name="menu_chart">Statistiques</string>
+	<string name="menu_timeline">Historique</string>
+	<string name="post_card">Carte postale du journal</string>
+	<string name="menu_delete">Supprimer</string>
+
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <!--  Resources added since version 1.4.41 here.                                                      -->
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+	<string name="preferences_category_settings">Paramètres de l'application</string>
+	<string name="preferences_category_information">Information sur l'application</string>
+	<string name="preferences_information_licenses">Licences Open Source</string>
+	<string name="preferences_information_licenses_summary">Mentions sur les logiciels libres</string>
+	<string name="preferences_category_aaf">Séries AAF Easy</string>
+	<string name="invite_friends">Inviter des amis</string>
+	<string name="invite_friends_summary">Partager l'application %s avec vos amis.</string>
+
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <!--  Release notes here.                                                      -->
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <string name="release_103">
+        v1.4.41 / 2018.05.28\n
+        Correction d'un bogue qui se terminait anormalement en mode de navigation des cartes postales lorsqu'il n'y a pas de répertoire de travail
+    </string>
+    <string name="release_105">
+        v1.4.42 / 2018.06.27\n
+        Optimisation de l'expérience utilisateur (UX)
+    </string>
+    <string name="release_110">
+        v1.4.47 / 2018.08.29\n
+        Ajout d'une fonction de suppression des cartes postales
+    </string>
+    <string name="release_114">
+        v1.4.51 / 2018.09.29\n
+        Mise à jour du module commun de l'AAF\n
+        Changement du conditionnement de l'application pour Android 9 Pie
+    </string>
+    <string name="release_116">
+        v1.4.53 / 2018.10.13\n
+        Ajout de la fonction de réglage de la taille de la photo de prévisualisation\n
+        Ajout d'une fonction de prévisualisation des photos (pliage ou dépliage)
+    </string>
+    <string name="release_118">
+        v1.4.55 / 2018.11.01\n
+        Améliorer l'expression temporelle de la rédaction d'un journal intime\n
+        Fonction de réglage des caractères gras ajoutée au titre du journal et aux informations temporelles de la ligne de temps
+    </string>
+    <string name="release_120">
+        v1.4.57 / 2018.11.12\n
+        Ajout d'une fonction de réglage multi-élévateurs pour attacher plusieurs photos à la fois
+    </string>
+    <string name="release_126">
+        v1.4.63 / 2018.11.25\n
+        Ajout d'une fonction de sauvegarde et de récupération des photos jointes à l'aide de Google Drive
+    </string>
+    <string name="release_128">
+        v1.4.65 / 2018.12.19\n
+        Ajout d'une fonction de verrouillage à l'aide d'un capteur d'empreintes digitales
+    </string>
+    <string name="release_130">
+        v1.4.67 / 2019.01.01\n
+        Amélioration de la possibilité de visualiser les photos jointes sur l'écran de la carte postale
+    </string>
+    <string name="release_131">
+        v1.4.68 / 2019.01.06\n
+        Résolu les considérations de sécurité pour certains éléments qui sont signalés avec une faible confiance dans le vaccin Sophos (auditeur de notification, installation du déclencheur)\n
+        Ajout de la fonction d'ajustement de la taille des caractères des cartes postales
+    </string>
+    <string name="release_132">
+        v1.4.69 / 2019.01.16\n
+        Optimisation de l'expérience utilisateur (UX)
+        Correction d'une erreur à savoir que la transition d'écran n'est pas normale dans la version Android 9 Pie\n
+        Ajouter un bouton de création de journal de la timeline
+    </string>
+    <string name="release_133">
+        v1.4.70 / 2019.01.25\n
+        Ajout d'une option pour afficher le résumé du contenu du journal
+    </string>
+    <string name="release_134">
+        v1.4.71 / 2019.01.26\n
+        Correction d'une erreur selon laquelle l'application se terminait anormalement lors de la modification des informations d'empreintes digitales du dispositif
+    </string>
+    <string name="release_136">
+        v1.4.73 / 2019.02.11\n
+        Amélioration de la capacité à corriger les chiffres saisis lorsque le code PIN est défini et déverrouillé
+    </string>
+    <string name="release_137">
+        v1.4.74 / 2019.03.06\n
+        Amélioration de la capacité à appliquer des filtres aux images de cartes postales\n
+        Ajout de la possibilité d'exporter le journal vers un fichier Excel
+    </string>
+    <string name="release_138">
+        v1.4.75 / 2019.03.22\n
+        Ajouter des pages d'informations spécifiques à l'application, y compris des FAQ et des politiques de confidentialité\n
+        Bascule de déverrouillage d'épingle et d'empreinte digitale
+    </string>
+    <string name="release_139">
+        v1.4.76 / 2019.04.24\n
+        Ajouter 50 types d'icônes de symboles d'agenda
+    </string>
+    <string name="release_140">
+        v1.4.77 / 2019.05.11\n
+        Ajouter des symboles d'agenda et appliquer des catégories
+    </string>
+    <string name="release_141">
+        v1.4.78 / 2019.05.13\n
+        Correction d'une erreur qui se terminait anormalement si une fonction de l'écran de réglage n'avait pas accès à la mémoire du périphérique
+    </string>
+    <string name="release_143">
+        v1.4.80 / 2019.06.07\n
+        Changement de l'API Android de Google Drive pour l'API REST de Google Drive (l'API Android de Google Drive sera fermée le 6 décembre 2019)
+    </string>
+    <string name="release_147">
+        v1.4.83 / 2019.06.09\n
+       Appliquer Android App Bundle pour réduire et optimiser la taille du fichier d'installation
+    </string>
+    <string name="release_149">
+        v1.4.84 / 2019.06.15\n
+        Statistiques améliorées sur les journaux
+    </string>
+    <string name="release_150">
+        v1.4.85 / 2019.06.18\n
+        Correction de l'erreur d'acquisition des droits d'utilisateur de Google Drive(REST API)
+    </string>
+    <string name="release_151">
+        v1.4.86 / 2019.06.19\n
+        Google Drive(REST API) Récupération de photos avec l'agenda Correction d'erreurs
+    </string>
+    <string name="release_152">
+        v1.4.87 / 2019.06.20\n
+        Correction d'une erreur de jeton d'authentification pour les utilisateurs authentifiés pour utiliser Google Drive dans la version 1.4.80 précédente
+    </string>
+    <string name="release_154">
+        v1.4.88 / 2019.07.16\n
+        Migration de la bibliothèque de support Android vers la version AndroidX\n
+        Ajouter l'icône du symbole du journal
+    </string>
+    <string name="release_157">
+        v1.4.91 / 2019.08.12\n
+        Ajout d'une fonction de sauvegarde et de récupération utilisant le stockage du périphérique\n
+        Correction d'un problème qui faisait que certains textes étaient tronqués dans les calendriers sur certains périphériques
+    </string>
+    <string name="release_159">
+        v1.4.93 / 2019.08.29\n
+        UOptimisation de l'expérience utilisateur (UX)
+        Corrections de bogues qui se bloquent anormalement lors de l'entrée dans l'écran de configuration sur les anciens OS
+    </string>
+    <string name="release_160">
+        v1.4.94 / 2019.09.03\n
+        Ajout du paramètre de démarrage du calendrier en semaine\n
+        Correction d'un problème qui empêchait le calendrier de s'afficher dans le paysage de la tablette
+    </string>
+    <string name="release_163">
+        v1.4.97 / 2019.09.17\n
+        Filtre de recherche de la ligne de temps amélioré\n
+        Ajout d'une fonction de copie du journal
+    </string>
+    <string name="release_165">
+        v1.4.99 / 2019.09.26\n
+        Ajout d'une fonction de comptage du texte du journal
+    </string>
+    <string name="release_167">
+        v1.4.101 / 2019.10.03\n
+        Répondre aux problèmes d'accès au stockage d'Android 10 (déclassement temporaire de targetSdkVersion pour éviter une politique de stockage trop ambitieuse)
+    </string>
+    <string name="release_169">
+        v1.4.103 / 2019.10.09\n
+        Changer d'emplacement de stockage et migrer pour répondre aux politiques Android 10 Scoped Storage
+    </string>
+    <string name="release_170">
+        v1.4.104 / 2019.10.19\n
+        Ajout du réglage de l'échelle de la police du calendrier\n
+        Appliquer la page coulissante à l'écran de réglage
+    </string>
+    <string name="release_171">
+        v1.4.105 / 2019.10.20\n
+        Correction d'une erreur qui se produisait lors de l'utilisation de la fonction d'enregistrement de périphérique de fichier Excel
+        Correction d'une erreur lors de la suppression du journal de la timeline
+    </string>
+    <string name="release_172">
+        v1.4.106 / 2019.10.25\n
+        Correction de l'erreur selon laquelle le contenu modifié n'est pas immédiatement visible après l'édition du journal\n
+        Mesures correctives pour les bibliothèques vulnérables ayant des problèmes de sécurité connus
+    </string>
+    <string name="release_173">
+        v1.4.107 / 2019.10.31\n
+        Optimisation de l'expérience utilisateur (UX)
+    </string>
+    <string name="release_174">
+        v1.4.108 / 2019.11.18\n
+        Correction d'une erreur qui se produisait lors du réglage de l'échelle de la police du calendrier sur un appareil réglé sur le français
+    </string>
+    <string name="release_176">
+        v1.4.110 / 2019.12.13\n
+        Ajout de la fonctionnalité du tableau de bord\n
+         Ajout de la possibilité de supprimer le fichier de sauvegarde du journal stocké dans l'appareil
+    </string>
+    <string name="release_178">
+        v1.4.112 / 2019.12.31\n
+        Ajout de la fonction d'ajout de photos grâce à l'intégration d'une application photo\n 
+        Améliorations au tableau de bord du journal
+    </string>
+    <string name="release_179">
+        v1.4.113 / 2020.01.04\n
+        Ajout d'une fonction de déplacement de date utilisant le sélecteur de date sur l'écran du calendrier
+    </string>
+
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <!--  Resources added since version 1.4.47 here.                                                      -->
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+	<string name="speech_to_text">Commande vocale</string>
+	<string name="write_diary">Écrire un journal</string>
+	<string name="date_picker">Sélectionner la date</string>
+	<string name="time_picker">Sélectionner l'heure</string>
+	<string name="seconds_picker">Sélectionner les secondes</string>
+	<string name="save_diary">Sauvegarder le journal</string>
+	<string name="photo_registration">Enregistrement des photos</string>
+	<string name="zoom_in">Zoom avant</string>
+	<string name="zoom_out">Zoom arrière</string>
+	<string name="edit_diary">Modifier le journal</string>
+	<string name="text_to_speech">Journal vocal</string>
+	<string name="diary_postcard">Carte postale du journal</string>
+	<string name="thumbnail_setting_title">Taille des miniatures</string>
+	<string name="thumbnail_setting_summary">Régler la taille de la vignette de la photo attachée au journal. La taille définie s'applique uniquement à l'écran de création et de modification du journal, et non à l'écran de recherche.</string>
+	<string name="collapse_attached_photo">Effacer la photo jointe</string>
+	<string name="expand_attached_photo">Agrandir la photo jointe</string>
+	<string name="release_notes_title">Notes de version</string>
+	<string name="release_notes_summary">Vérifier les nouvelles fonctionnalités par version.</string>
+	<string name="attached_photo_count">%d Photos jointes</string>
+	<string name="all_day">Toute la journée</string>
+	<string name="bold_style_option_title">Configuration en gras</string>
+	<string name="bold_style_option_summary">Définir le titre du journal et l'historique à afficher en gras.</string>
+	<string name="multi_picker_option_title">Réglage du sélecteur multiple</string>
+	<string name="multi_picker_option_summary">Lorsque vous joignez une photo au journal, j'utilise le sélecteur multiple fourni dans le journal sans utiliser l'application de galerie. Lorsque la fonction multi-sélecteur est activée, vous pouvez joindre plusieurs photos à la fois.</string>
+	<string name="preferences_category_backup_restore">Sauvegarder et restaurer l'application</string>
+	<string name="preferences_category_backup_restore_sub">Google Drive</string>
+	<string name="backup_attach_photo_title">Sauvegarder les photos jointes</string>
+	<string name="backup_attach_photo_summary">Sauvegarder vos photos jointes sur Google Drive. Cette fonctionnalité peut ne pas fonctionner sur certains périphériques en raison du service bêta.</string>
+	<string name="recover_attach_photo_title">Restaurer les photos jointes</string>
+	<string name="recover_attach_photo_summary">Restaurer les photos jointes sauvegardées sur Google Drive. Cette fonctionnalité peut ne pas fonctionner sur certains périphériques en raison du service bêta.</string>
+	<string name="notification_msg_device_file_count">Nombre de fichiers à sauvegarder</string>
+	<string name="notification_msg_upload_file_count">Nombre de fichiers à télécharger</string>
+	<string name="notification_msg_upload_invalid">Tous les fichiers cibles de sauvegarde existent déjà.</string>
+	<string name="notification_msg_upload_empty">Le fichier à sauvegarder n'existe pas.</string>
+	<string name="notification_msg_upload_progress">Envoi...</string>
+	<string name="notification_msg_upload_complete">Envoi terminé</string>
+	<string name="notification_msg_upload_success">Réussite de l'envoi</string>
+	<string name="notification_msg_upload_fail">Échec de l'envoi</string>
+	<string name="notification_msg_google_drive_file_count">Nombre de fichiers restaurés</string>
+	<string name="notification_msg_download_file_count">Nombre de fichiers à télécharger</string>
+	<string name="notification_msg_download_invalid">Tous les fichiers cibles de restauration existent déjà.</string>
+	<string name="notification_msg_download_empty">Le fichier à restaurer n'existe pas.</string>
+	<string name="notification_msg_download_progress">Téléchargement...</string>
+	<string name="notification_msg_download_complete">Téléchargement terminé</string>
+	<string name="notification_msg_download_success">Téléchargement réussi</string>
+	<string name="notification_msg_download_fail">Échec du téléchargement</string>
+	<string name="notification_msg_duplicate_file_count">Nombre de fichiers existants</string>
+	<string name="preferences_category_lock">Réglage du verrouillage de l'application</string>
+	<string name="fingerprint_lock_title">Verrouillage par empreinte digitale(Beta)</string>
+	<string name="fingerprint_lock_summary">Si le périphérique prend en charge la reconnaissance d'empreintes digitales et possède une empreinte digitale enregistrée, verrouiller l'application avec l'empreinte digitale enregistrée.</string>
+	<string name="fingerprint_not_available">Le système d'exploitation installé sur l'appareil ne prend pas en charge la reconnaissance d'empreintes digitales.</string>
+	<string name="fingerprint_setting_complete">Le réglage du verrouillage par empreintes digitales est terminé.</string>
+	<string name="fingerprint_setting_release">Le verrouillage par empreinte digitale est désactivé.</string>
+	<string name="fingerprint_lock_need_pin_setting">Pour utiliser le verrouillage par empreintes digitales, vous devez d'abord définir un code PIN.</string>
+	<string name="fingerprint_authentication_fail_try_again">L'authentification par empreinte digitale a échoué. Veuillez réessayer.</string>
+	<string name="fingerprint_authentication_info_changed">Les informations d'authentification par empreinte digitale du périphérique ont changé et les informations d'authentification définies précédemment ne peuvent pas être utilisées.</string>
+	<string name="pin_lock_title">Réglage du verrouillage par code PIN</string>
+	<string name="pin_lock_summary">Définir le code PIN pour verrouiller l'application.</string>
+	<string name="pin_setting_complete">Le réglage du code PIN est terminé.</string>
+	<string name="pin_setting_release">Verrouillage par code PIN désactivé.</string>
+	<string name="pin_release_need_fingerprint_disable">Pour désactiver le verrouillage par code PIN, vous devez désactiver le verrouillage par empreinte digitale.</string>
+	<string name="pin_setting_guide_message">Veuillez entrer un nombre à utiliser comme code PIN.</string>
+	<string name="pin_unlock_guide_message">Veuillez entrer le code PIN.</string>
+	<string name="pin_verification_fail">La vérification du code PIN a échoué.</string>
+	<string name="change_pin_lock_mode">Passage au mode de verrouillage par code PIN</string>
+	<string name="diary_creation_time_disable_message">Aucune information de temps</string>
+	<string name="enable_card_view_policy_title">Optimiser la présentation des cartes</string>
+	<string name="enable_card_view_policy_summary">Optimiser la présentation des cartes pour l'appareil.</string>
+	<string name="font_size_title">Définir la taille de la police</string>
+	<string name="font_size_summary">Réduire ou agrandir la taille de la police.</string>
+	<string name="contents_summary_title">Résumé du contenu du journal</string>
+	<string name="contents_summary_description">Résumer le contenu du journal présenté dans le calendrier, l'historique, l'écran de recherche, etc.</string>
+	<string name="init_cipher_error_guide_message">Les informations d'empreinte digitale du périphérique ont été modifiées. Modifier le mode de verrouillage du code PIN pour le déverrouiller, puis déverrouiller le verrouillage par empreinte digitale et le reparamétrer.</string>
+	<string name="export_excel_title">Export vers excel</string>
+	<string name="export_excel_description">Enregistrer tout le contenu, sauf la photo jointe, dans un fichier Excel.</string>
+	<string name="export_excel_xls_location">Localisation</string>
+	<string name="export_excel_header_seq">Séquence</string>
+	<string name="export_excel_header_write_date">Écrire la date</string>
+	<string name="export_excel_header_title">Titre du journal</string>
+	<string name="export_excel_header_contents">Contenu du journal</string>
+	<string name="export_excel_header_attach_photo_path">Chemin des photos jointes</string>
+	<string name="export_excel_header_attach_photo_size">Taille de la photo jointe</string>
+	<string name="export_excel_header_write_time_millis">Écrire la date\n(Depuis le 1er janvier 1970 en millisecondes.)</string>
+	<string name="export_excel_header_weather">Météo</string>
+	<string name="export_excel_header_symbol">Symbole</string>
+	<string name="export_excel_header_is_all_day">Journée entière</string>
+	<string name="weather_sunny">Ensoleillé</string>
+	<string name="weather_cloud_and_sun">Nuage et soleil</string>
+	<string name="weather_rain_drops">Gouttes de pluie</string>
+	<string name="weather_bolt">Grêle</string>
+	<string name="weather_snowing">Neige</string>
+	<string name="weather_rainbow">Arc-en-ciel</string>
+	<string name="weather_umbrella">Parapluie</string>
+	<string name="weather_stars">Étoiles</string>
+	<string name="weather_moon">Lune</string>
+	<string name="weather_night_rain">Pluie nocturne</string>
+	<string name="faq_title">Foire aux questions</string>
+	<string name="faq_description">Vous pouvez consulter les questions fréquemment posées et les réponses.</string>
+	<string name="faq_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/FAQs.md</string>
+	<string name="privacy_policy_title">Politique de confidentialité</string>
+	<string name="privacy_policy_description">Politique de confidentialité de Easy Diary.</string>
+	<string name="privacy_policy_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/Privacy.md</string>
+	<string name="diary_symbol">Symbole du journal</string>
+	<string name="diary_symbol_guide_message">Choisir un symbole qui correspond à la météo actuelle ou au contenu du journal.</string>
+	<string name="category_weather">Météo</string>
+    <string name="category_emotion">Émotion</string>
+    <string name="category_daily">Vie quotidienne&amp;Choses diverses</string>
+    <string name="category_food">Nourriture&amp;Boisson</string>
+    <string name="category_leisure">Loisirs</string>
+    <string name="category_landscape">Paysage&amp;Bâtiments</string>
+    <string name="rotate_photo">Faire pivoter</string>
+    <string name="task_progress_message">Requête en cours…</string>
+    <string name="open_realm_file_title">Restauration du journal</string>
+    <string name="open_realm_file_message">Veuillez choisir un fichier cible de restauration.</string>
+    <string name="backup_completed_message">La sauvegarde du journal est terminée.</string>
+    <string name="backup_confirm_message">Voulez-vous démarrer une sauvegarde des photos jointes ?</string>
+    <string name="recover_confirm_attached_photo">Voulez-vous commencer une restauration des photos jointes ?</string>
+    <string name="category_symbol">Symbole</string>
+    <string name="statistics_creation_time">Statistiques par date de création</string>
+    <string name="statistics_symbol_all">Toutes les statistiques par symbole</string>
+    <string name="statistics_symbol_top_ten">Top 10 des statistiques par symbole</string>
+    <string name="category_flag">DRAPEAU</string>
+    <string name="preferences_category_backup_restore_device">Sauvegarde et restauration de l'application</string>
+    <string name="preferences_category_backup_restore_device_sub">Espace de stockage de l'appareil</string>
+    <string name="export_realm_title">Sauvegarder le journal</string>
+    <string name="export_realm_description">Sauvegarder les fichiers de la base de données, à l'exception des photos jointes, sur l'espace de stockage de l'appareil. \nLes fichiers sauvegardés sur l'espace de stockage de l'appareil sont supprimés en même temps que l'application, donc si vous souhaitez conserver les données créées de façon permanente, veuillez utiliser la fonction de sauvegarde de Google Drive.</string>
+    <string name="export_realm_guide_message">La base de données a été enregistré sur le l'espace de stockage de l'appareil au niveau du chemin d'accès suivant.</string>
+    <string name="import_realm_title">Restaurer le journal</string>
+    <string name="import_realm_description">Restaurer les fichiers de la base de données à partir de l'espace de stockage de l'appareil, à l'exception des pièces jointes.</string>
+    <string name="diary_item_count">+%d</string>
+    <string name="calendar_start_day_title">Jour de début du calendrier</string>
+    <string name="calendar_start_day_summary">Définir le jour de début de la semaine.</string>
+    <string name="calendar_start_day_sunday">Dimanche</string>
+    <string name="calendar_start_day_monday">Lundi</string>
+    <string name="calendar_start_day_saturday">Samedi</string>
+    <string name="calendar_menu_previous">Retour</string>
+    <string name="calendar_menu_next">Suivant</string>
+    <string name="filter_start_date">Date de début</string>
+    <string name="filter_start_date_hint">Veuillez entrer une date de début.</string>
+    <string name="filter_end_date">Date de fin</string>
+    <string name="filter_end_date_hint">Veuillez entrer une date de fin.</string>
+    <string name="filter_search_word">Rechercher un terme</string>
+    <string name="filter_search_word_hint">Veuillez entrer le terme recherché.</string>
+    <string name="filter_clear">Réinitialiser le filtre</string>
+    <string name="filter_close">Fermer</string>
+    <string name="copy_diary_item">Voulez-vous copier le journal sélectionné ?</string>
+    <string name="diary_contents_length">Caractères: %d</string>
+    <string name="count_characters_title">Comptage du texte</string>
+    <string name="count_characters_summary">Compter le nombre de caractères dans le contenu du journal.</string>
+    <string name="send_email_attach_excel_title">Création de fichiers Excel et envoi de courriels</string>
+    <string name="send_email_attach_excel_description">Tout le contenu, à l'exception de la photo jointe, est créé sous forme de fichier Excel et joint au courriel.</string>
+    <string name="storage_migration_message">Les modifications d'emplacement de stockage seront effectuées conformément à la politique de stockage d'\Android 10. Cette tâche ne s'exécute qu'une seule fois.</string>
+    <string name="google_drive_account_sign_out_title">Réinitialiser le compte lié à Google Drive</string>
+    <string name="google_drive_account_sign_out_description">Supprimer les informations du jeton publiées par Easy Diary en utilisant le compte lié à Google Drive.</string>
+    <string name="calendar_font_scale_title">Définir la taille de la police du calendrier</string>
+    <string name="calendar_font_scale_description">Met à l'échelle la taille de la police à l'intérieur du calendrier en fonction de la taille de police globale définie.</string>
+    <string name="calendar_font_scale_disable">Ne pas utiliser</string>
+    <string name="calendar_font_scale_factor">Taille globale de la police x %.1f</string>
+    <string name="dashboard_title_lifetime">Temps de conservation</string>
+    <string name="dashboard_title_last_month">Mois dernier</string>
+    <string name="dashboard_title_last_week">Semaine dernière</string>
+    <string name="dashboard_guide_message">Il n'y a pas assez de données pour générer des données de classement. Vous devez écrire un journal en utilisant au moins 4 symboles pour activer le classement du tableau de bord.</string>
+    <string name="delete_realm_title">Supprimer le fichier de sauvegarde</string>
+    <string name="delete_realm_description">Supprimer le fichier de sauvegarde stocké dans la mémoire.</string>
+    <string name="menu_dashboard">Tableau de bord</string>
+    <string name="dashboard_title_backup_drive">Historique des sauvegardes de Google Drive</string>
+    <string name="dashboard_title_backup_local">Historique des sauvegardes de l'appareil</string>
+    <string name="dashboard_backup_guide_message">Aucune information de sauvegarde</string>
+    <string name="last_diary_backup_time">Dernière sauvegarde du journal :</string>
+    <string name="last_photo_backup_time">Dernière sauvegarde des photos jointes :</string>
+</resources>
