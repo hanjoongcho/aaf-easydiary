@@ -1,9 +1,15 @@
-apply from: '../dependencies.gradle'
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'realm-android'
+
+ext.versions = [
+    /* Temporarily apply 'requestLegacyExternalStorage' options respond to Android Q 'Scoped Storage' policy */
+    compileSdk        : 29,
+    publishVersion    : '1.4.114-beta',
+    publishVersionCode: 180,
+]
 
 android {
     compileSdkVersion versions.compileSdk
@@ -21,7 +27,7 @@ android {
     
     defaultConfig {
         applicationId "me.blog.korn123.easydiary"
-        minSdkVersion MIN_SDK_VERSION
+        minSdkVersion 16
         targetSdkVersion versions.compileSdk
         versionCode versions.publishVersionCode
         versionName versions.publishVersion
@@ -123,7 +129,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
 
     // jetbrains
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
+//    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
 
     // apache commons
     implementation 'commons-io:commons-io:2.6'
