@@ -51,6 +51,7 @@
         <service android:name=".services.NotificationService" />
         <service android:name=".services.RecoverPhotoService" />
         <service android:name=".services.BackupPhotoService" />
+        <receiver android:name=".receivers.AlarmReceiver" />
     </application>
 
     <uses-permission android:name="android.permission.CAMERA" tools:node="remove" />
