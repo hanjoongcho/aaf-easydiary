@@ -16,6 +16,7 @@ import android.view.*
 import android.widget.AbsListView
 import android.widget.AdapterView
 import android.widget.RelativeLayout
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
@@ -49,6 +50,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     private var mDiaryList: MutableList<DiaryDto>? = null
     private var mShowcaseIndex = 0
     private var mShowcaseView: ShowcaseView? = null
+    private var mClearQueryClickCount = 0
+    private var mClearQueryFirstClickMillis = 0L
 
 
     /***************************************************************************************************
@@ -405,7 +408,19 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             override fun afterTextChanged(editable: Editable) {}
         })
 
-        clearQuery.setOnClickListener { _ -> query.setText(null) }
+        clearQuery.setOnClickListener { _ ->
+            query.text = null
+
+            if (mClearQueryClickCount == 0) mClearQueryFirstClickMillis = System.currentTimeMillis()
+            mClearQueryClickCount++
+            if (mClearQueryClickCount > 4) {
+//                Toast.makeText(this, "$mClearQueryClickCount ${System.currentTimeMillis() - mClearQueryFirstClickMillis}", Toast.LENGTH_SHORT).show()
+                if (System.currentTimeMillis() - mClearQueryFirstClickMillis < 2000) {
+                    TransitionHelper.startActivityWithTransition(this, Intent(this, DevActivity::class.java))
+                }
+                mClearQueryClickCount = 0
+            }
+        }
 
         diaryListView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
             val diaryDto = adapterView.adapter.getItem(i) as DiaryDto
