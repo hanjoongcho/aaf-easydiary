@@ -20,6 +20,7 @@ import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_NAME
 import me.blog.korn123.easydiary.receivers.AlarmReceiver
 
 class DevActivity : EasyDiaryActivity() {
+    var alarmSequence = 0
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +36,7 @@ class DevActivity : EasyDiaryActivity() {
 
             val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val targetMS = System.currentTimeMillis() + 100
-            val alarm = Alarm(1000, 0, 0, isEnabled = false, vibrate = false, soundTitle = "", soundUri = "", label = "")
+            val alarm = Alarm(alarmSequence++, 0, 0, isEnabled = false, vibrate = false, soundTitle = "", soundUri = "", label = "")
             AlarmManagerCompat.setAlarmClock(alarmManager, targetMS, getOpenAlarmTabIntent(), getAlarmIntent(alarm))
         }
     }
@@ -86,7 +87,7 @@ fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): No
     resultNotificationBuilder
             .setDefaults(Notification.DEFAULT_ALL)
             .setWhen(System.currentTimeMillis())
-            .setSmallIcon(R.drawable.ic_fried_chicken)
+            .setSmallIcon(R.drawable.ic_launcher_round)
             .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
             .setOngoing(false)
             .setAutoCancel(true)
