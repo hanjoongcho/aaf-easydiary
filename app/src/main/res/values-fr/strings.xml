@@ -346,6 +346,11 @@
         v1.4.113 / 2020.01.04\n
         Ajout d\'une fonction de déplacement de date utilisant le sélecteur de date sur l\'écran du calendrier
     </string>
+	<string name="release_180">
+        v1.4.114 / 2020.01.15\n
+        Added diary symbol icon\n
+        Added French support
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->

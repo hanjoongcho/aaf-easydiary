@@ -7,7 +7,7 @@ apply plugin: 'realm-android'
 ext.versions = [
     /* Temporarily apply 'requestLegacyExternalStorage' options respond to Android Q 'Scoped Storage' policy */
     compileSdk        : 29,
-    publishVersion    : '1.4.114-beta',
+    publishVersion    : '1.4.114',
     publishVersionCode: 180,
 ]
 
