@@ -16,7 +16,9 @@ import androidx.core.app.AlarmManagerCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import com.simplemobiletools.commons.extensions.addBit
 import com.simplemobiletools.commons.extensions.applyColorFilter
+import com.simplemobiletools.commons.extensions.removeBit
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import kotlinx.android.synthetic.main.activity_dev.*
 import me.blog.korn123.easydiary.R
@@ -34,7 +36,7 @@ class DevActivity : EasyDiaryActivity() {
      *
      ***************************************************************************************************/
     var alarmSequence = 0
-
+    var alarmDays = 0
 
     /***************************************************************************************************
      *   global properties
@@ -65,8 +67,18 @@ class DevActivity : EasyDiaryActivity() {
             val day = layoutInflater.inflate(R.layout.alarm_day, edit_alarm_days_holder, false) as TextView
             day.text = dayLetters[it]
 
-            val isDayChecked = 5 and pow != 0
+            val isDayChecked = alarmDays and pow != 0
             day.background = getProperDayDrawable(isDayChecked)
+
+            day.setOnClickListener {
+                val selectDay = alarmDays and pow == 0
+                alarmDays = if (selectDay) {
+                    alarmDays.addBit(pow)
+                } else {
+                    alarmDays.removeBit(pow)
+                }
+                day.background = getProperDayDrawable(selectDay)
+            }
 
             edit_alarm_days_holder.addView(day)
         }
