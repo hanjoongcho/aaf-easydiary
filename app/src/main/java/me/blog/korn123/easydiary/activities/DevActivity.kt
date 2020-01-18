@@ -5,12 +5,18 @@ import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.PowerManager
 import android.view.WindowManager
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.AlarmManagerCompat
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
+import com.simplemobiletools.commons.extensions.applyColorFilter
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import kotlinx.android.synthetic.main.activity_dev.*
 import me.blog.korn123.easydiary.R
@@ -19,10 +25,21 @@ import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_NAME
 import me.blog.korn123.easydiary.receivers.AlarmReceiver
+import kotlin.math.pow
 
 class DevActivity : EasyDiaryActivity() {
+
+    /***************************************************************************************************
+     *   override functions
+     *
+     ***************************************************************************************************/
     var alarmSequence = 0
 
+
+    /***************************************************************************************************
+     *   global properties
+     *
+     ***************************************************************************************************/
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dev)
@@ -32,6 +49,37 @@ class DevActivity : EasyDiaryActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
+        initDevUI()
+        bindEvent()
+    }
+
+    /***************************************************************************************************
+     *   etc functions
+     *
+     ***************************************************************************************************/
+    private fun initDevUI() {
+        val dayLetters = resources.getStringArray(R.array.week_day_letters).toList() as ArrayList<String>
+        val dayIndexes = arrayListOf(0, 1, 2, 3, 4, 5, 6)
+        dayIndexes.forEach {
+            val pow = 2.0.pow(it.toDouble()).toInt()
+            val day = layoutInflater.inflate(R.layout.alarm_day, edit_alarm_days_holder, false) as TextView
+            day.text = dayLetters[it]
+
+            val isDayChecked = 5 and pow != 0
+            day.background = getProperDayDrawable(isDayChecked)
+
+            edit_alarm_days_holder.addView(day)
+        }
+    }
+
+    private fun getProperDayDrawable(selected: Boolean): Drawable {
+        val drawableId = if (selected) R.drawable.circle_background_filled else R.drawable.circle_background_stroke
+        val drawable = ContextCompat.getDrawable(this, drawableId)
+        drawable!!.applyColorFilter(Color.WHITE)
+        return drawable
+    }
+
+    private fun bindEvent() {
         test01.setOnClickListener {
             makeSnackBar("test01...")
 
@@ -47,6 +95,11 @@ class DevActivity : EasyDiaryActivity() {
     }
 }
 
+
+/***************************************************************************************************
+ *   extensions
+ *
+ ***************************************************************************************************/
 data class Alarm(var id: Int, var timeInMinutes: Int, var days: Int, var isEnabled: Boolean, var vibrate: Boolean, var soundTitle: String,
                  var soundUri: String, var label: String)
 
