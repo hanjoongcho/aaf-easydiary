@@ -25,6 +25,15 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+            <LinearLayout
+                android:id="@+id/edit_alarm_days_holder"
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:layout_below="@+id/edit_alarm_time"
+                android:layout_marginTop="@dimen/medium_margin"
+                android:layout_marginBottom="@dimen/medium_margin"
+                android:orientation="horizontal"/>
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/test01"
                 android:text="AlarmManager Test-01"
