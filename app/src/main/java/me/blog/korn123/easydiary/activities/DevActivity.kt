@@ -7,6 +7,7 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.PowerManager
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.AlarmManagerCompat
 import androidx.core.app.NotificationCompat
@@ -35,7 +36,7 @@ class DevActivity : EasyDiaryActivity() {
             makeSnackBar("test01...")
 
             val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            val targetMS = System.currentTimeMillis() + 100
+            val targetMS = System.currentTimeMillis() + (1000 * 5)
             val alarm = Alarm(alarmSequence++, 0, 0, isEnabled = false, vibrate = false, soundTitle = "", soundUri = "", label = "")
             AlarmManagerCompat.setAlarmClock(alarmManager, targetMS, getOpenAlarmTabIntent(), getAlarmIntent(alarm))
         }
@@ -95,4 +96,11 @@ fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): No
             .setContentText("content")
             .setContentIntent(pendingIntent)
     return resultNotificationBuilder.build()
+}
+
+fun Activity.showOverLockScreen() {
+    window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
+            WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or
+            WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
+            WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
 }
