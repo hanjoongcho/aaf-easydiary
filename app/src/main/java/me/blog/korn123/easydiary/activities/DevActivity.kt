@@ -9,13 +9,15 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.PowerManager
+import android.text.SpannableString
+import android.text.format.DateFormat
+import android.text.style.RelativeSizeSpan
 import android.view.WindowManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.AlarmManagerCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import com.simplemobiletools.commons.extensions.addBit
 import com.simplemobiletools.commons.extensions.applyColorFilter
 import com.simplemobiletools.commons.extensions.removeBit
@@ -37,6 +39,7 @@ class DevActivity : EasyDiaryActivity() {
      ***************************************************************************************************/
     var alarmSequence = 0
     var alarmDays = 0
+    val alarm = Alarm(0, 0, 0, isEnabled = false, vibrate = false, soundTitle = "", soundUri = "", label = "")
 
     /***************************************************************************************************
      *   global properties
@@ -92,6 +95,10 @@ class DevActivity : EasyDiaryActivity() {
     }
 
     private fun bindEvent() {
+        edit_alarm_time.setOnClickListener {
+            TimePickerDialog(this, timeSetListener, alarm.timeInMinutes / 60, alarm.timeInMinutes % 60, DateFormat.is24HourFormat(this)).show()
+        }
+
         test01.setOnClickListener {
             makeSnackBar("test01...")
 
@@ -100,6 +107,15 @@ class DevActivity : EasyDiaryActivity() {
             val alarm = Alarm(alarmSequence++, 0, 0, isEnabled = false, vibrate = false, soundTitle = "", soundUri = "", label = "")
             AlarmManagerCompat.setAlarmClock(alarmManager, targetMS, getOpenAlarmTabIntent(), getAlarmIntent(alarm))
         }
+    }
+
+    private val timeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+        alarm.timeInMinutes = hourOfDay * 60 + minute
+        updateAlarmTime()
+    }
+
+    private fun updateAlarmTime() {
+        edit_alarm_time.text = getFormattedTime(alarm.timeInMinutes * 60, false, true)
     }
 
     companion object {
@@ -161,6 +177,42 @@ fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): No
             .setContentText("content")
             .setContentIntent(pendingIntent)
     return resultNotificationBuilder.build()
+}
+
+fun Context.getFormattedTime(passedSeconds: Int, showSeconds: Boolean, makeAmPmSmaller: Boolean): SpannableString {
+    val use24HourFormat = true
+    val hours = (passedSeconds / 3600) % 24
+    val minutes = (passedSeconds / 60) % 60
+    val seconds = passedSeconds % 60
+
+    return if (!use24HourFormat) {
+        val formattedTime = formatTo12HourFormat(showSeconds, hours, minutes, seconds)
+        val spannableTime = SpannableString(formattedTime)
+        val amPmMultiplier = if (makeAmPmSmaller) 0.4f else 1f
+        spannableTime.setSpan(RelativeSizeSpan(amPmMultiplier), spannableTime.length - 5, spannableTime.length, 0)
+        spannableTime
+    } else {
+        val formattedTime = formatTime(showSeconds, use24HourFormat, hours, minutes, seconds)
+        SpannableString(formattedTime)
+    }
+}
+
+fun Context.formatTo12HourFormat(showSeconds: Boolean, hours: Int, minutes: Int, seconds: Int): String {
+    val appendable = getString(if (hours >= 12) R.string.p_m else R.string.a_m)
+    val newHours = if (hours == 0 || hours == 12) 12 else hours % 12
+    return "${formatTime(showSeconds, false, newHours, minutes, seconds)} $appendable"
+}
+
+fun formatTime(showSeconds: Boolean, use24HourFormat: Boolean, hours: Int, minutes: Int, seconds: Int): String {
+    val hoursFormat = if (use24HourFormat) "%02d" else "%01d"
+    var format = "$hoursFormat:%02d"
+
+    return if (showSeconds) {
+        format += ":%02d"
+        String.format(format, hours, minutes, seconds)
+    } else {
+        String.format(format, hours, minutes)
+    }
 }
 
 fun Activity.showOverLockScreen() {
