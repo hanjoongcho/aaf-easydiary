@@ -6,9 +6,7 @@ apply plugin: 'realm-android'
 
 ext.versions = [
     /* Temporarily apply 'requestLegacyExternalStorage' options respond to Android Q 'Scoped Storage' policy */
-    compileSdk        : 29,
-    publishVersion    : '1.4.114',
-    publishVersionCode: 180,
+    compileSdk        : 29
 ]
 
 android {
@@ -29,8 +27,8 @@ android {
         applicationId "me.blog.korn123.easydiary"
         minSdkVersion 16
         targetSdkVersion versions.compileSdk
-        versionCode versions.publishVersionCode
-        versionName versions.publishVersion
+        versionCode 180
+        versionName '1.4.114'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
