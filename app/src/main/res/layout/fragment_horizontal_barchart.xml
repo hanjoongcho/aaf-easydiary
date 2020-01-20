@@ -14,6 +14,8 @@
             <me.blog.korn123.easydiary.views.FixedTextView
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
+                app:applyGlobalSize="false"
+                app:applyGlobalColor="false"
                 android:layout_margin="@dimen/dashboard_title_padding"
                 android:visibility="gone"
                 android:id="@+id/chartTitle"
