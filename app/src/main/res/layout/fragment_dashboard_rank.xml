@@ -15,6 +15,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <me.blog.korn123.easydiary.views.FixedTextView
+                app:applyGlobalSize="false"
+                app:applyGlobalColor="false"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 android:id="@+id/dashboardTitle"
@@ -23,6 +25,8 @@
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/dashboard_text_default"/>
             <me.blog.korn123.easydiary.views.FixedTextView
+                app:applyGlobalSize="false"
+                app:applyGlobalColor="false"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 tools:text="1578"
@@ -32,6 +36,8 @@
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/dashboard_text_large"/>
             <me.blog.korn123.easydiary.views.FixedTextView
+                app:applyGlobalSize="false"
+                app:applyGlobalColor="false"
                 app:layout_constraintTop_toBottomOf="@+id/dashboardTitle"
                 app:layout_constraintRight_toLeftOf="@+id/diaryCount"
                 app:layout_constraintLeft_toRightOf="@+id/dashboardTitle"
@@ -78,6 +84,8 @@
                         app:srcCompat="@drawable/ic_clouds_and_sun" />
 
                     <me.blog.korn123.easydiary.views.FixedTextView
+                        app:applyGlobalSize="false"
+                        app:applyGlobalColor="false"
                         android:id="@+id/markRank1"
                         style="@style/text_view_dashboard_ranking"
                         android:gravity="center"
@@ -85,6 +93,8 @@
                         tools:ignore="MissingConstraints" />
 
                     <me.blog.korn123.easydiary.views.FixedTextView
+                        app:applyGlobalSize="false"
+                        app:applyGlobalColor="false"
                         android:id="@+id/countRank1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -97,6 +107,8 @@
                         tools:text="100" />
 
                     <me.blog.korn123.easydiary.views.FixedTextView
+                        app:applyGlobalSize="false"
+                        app:applyGlobalColor="false"
                         android:id="@+id/descriptionRank1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -132,6 +144,8 @@
                         app:srcCompat="@drawable/ic_clouds_and_sun" />
 
                     <me.blog.korn123.easydiary.views.FixedTextView
+                        app:applyGlobalSize="false"
+                        app:applyGlobalColor="false"
                         android:id="@+id/markRank2"
                         style="@style/text_view_dashboard_ranking"
                         android:gravity="center"
@@ -139,6 +153,8 @@
                         tools:ignore="MissingConstraints"/>
 
                     <me.blog.korn123.easydiary.views.FixedTextView
+                        app:applyGlobalSize="false"
+                        app:applyGlobalColor="false"
                         android:id="@+id/countRank2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -151,6 +167,8 @@
                         tools:text="100" />
 
                     <me.blog.korn123.easydiary.views.FixedTextView
+                        app:applyGlobalSize="false"
+                        app:applyGlobalColor="false"
                         android:id="@+id/descriptionRank2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -187,6 +205,8 @@
                         app:srcCompat="@drawable/ic_clouds_and_sun" />
 
                     <me.blog.korn123.easydiary.views.FixedTextView
+                        app:applyGlobalSize="false"
+                        app:applyGlobalColor="false"
                         android:id="@+id/markRank3"
                         style="@style/text_view_dashboard_ranking"
                         android:gravity="center"
@@ -194,6 +214,8 @@
                         tools:ignore="MissingConstraints" />
 
                     <me.blog.korn123.easydiary.views.FixedTextView
+                        app:applyGlobalSize="false"
+                        app:applyGlobalColor="false"
                         android:id="@+id/countRank3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -206,6 +228,8 @@
                         tools:text="100" />
 
                     <me.blog.korn123.easydiary.views.FixedTextView
+                        app:applyGlobalSize="false"
+                        app:applyGlobalColor="false"
                         android:id="@+id/descriptionRank3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -242,6 +266,8 @@
                         app:srcCompat="@drawable/ic_clouds_and_sun" />
 
                     <me.blog.korn123.easydiary.views.FixedTextView
+                        app:applyGlobalSize="false"
+                        app:applyGlobalColor="false"
                         android:id="@+id/markRank4"
                         style="@style/text_view_dashboard_ranking"
                         android:gravity="center"
@@ -249,6 +275,8 @@
                         tools:ignore="MissingConstraints" />
 
                     <me.blog.korn123.easydiary.views.FixedTextView
+                        app:applyGlobalSize="false"
+                        app:applyGlobalColor="false"
                         android:id="@+id/countRank4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -261,6 +289,8 @@
                         tools:text="100" />
 
                     <me.blog.korn123.easydiary.views.FixedTextView
+                        app:applyGlobalSize="false"
+                        app:applyGlobalColor="false"
                         android:id="@+id/descriptionRank4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

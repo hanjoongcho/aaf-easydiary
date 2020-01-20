@@ -21,32 +21,38 @@
         android:id="@+id/main_holder"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <LinearLayout
-            android:orientation="vertical"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <me.blog.korn123.easydiary.views.FixedTextView
-                android:id="@+id/edit_alarm_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:textSize="44sp"
-                android:text="07:00"/>
-
             <LinearLayout
-                android:id="@+id/edit_alarm_days_holder"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="38dp"
-                android:layout_below="@+id/edit_alarm_time"
-                android:layout_marginTop="@dimen/medium_margin"
-                android:layout_marginBottom="@dimen/medium_margin"
-                android:orientation="horizontal"/>
+                android:layout_height="wrap_content">
+                <me.blog.korn123.easydiary.views.FixedTextView
+                    app:applyGlobalSize="false"
+                    app:applyGlobalColor="true"
+                    android:id="@+id/edit_alarm_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:textSize="44sp"
+                    android:text="07:00"/>
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/test01"
-                android:text="AlarmManager Test-01"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/edit_alarm_days_holder"
+                    android:layout_width="match_parent"
+                    android:layout_height="38dp"
+                    android:layout_below="@+id/edit_alarm_time"
+                    android:layout_marginTop="@dimen/medium_margin"
+                    android:layout_marginBottom="@dimen/medium_margin"
+                    android:orientation="horizontal"/>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/test01"
+                    android:text="AlarmManager Test-01"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
     </ScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
