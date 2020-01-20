@@ -24,6 +24,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 import io.noties.markwon.Markwon
 import me.blog.korn123.easydiary.extensions.makeSnackBar
+import java.io.FileNotFoundException
 
 
 class MarkDownViewActivity : EasyDiaryActivity() {
@@ -129,12 +130,16 @@ class MarkDownViewActivity : EasyDiaryActivity() {
 
     private fun readSavedFile(): String {
         val sb = StringBuilder()
-        val lines = IOUtils.readLines(FileInputStream(File(savedFilePath)), "UTF-8")
-        lines.map {
-            sb.append(it)
-            sb.append(System.getProperty("line.separator"))
+        try {
+            val lines = IOUtils.readLines(FileInputStream(File(savedFilePath)), "UTF-8")
+            lines.map {
+                sb.append(it)
+                sb.append(System.getProperty("line.separator"))
+            }
+            Log.i("aaf-t", sb.toString())
+        } catch (e: FileNotFoundException) {
+            sb.append(e.message)
         }
-        Log.i("aaf-t", sb.toString())
         return sb.toString()
     }
 
