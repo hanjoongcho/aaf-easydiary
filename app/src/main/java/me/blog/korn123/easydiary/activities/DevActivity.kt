@@ -13,13 +13,12 @@ import android.text.format.DateFormat
 import android.text.style.RelativeSizeSpan
 import android.view.WindowManager
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.AlarmManagerCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
-import com.simplemobiletools.commons.extensions.addBit
-import com.simplemobiletools.commons.extensions.applyColorFilter
-import com.simplemobiletools.commons.extensions.removeBit
+import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import kotlinx.android.synthetic.main.activity_dev.*
 import me.blog.korn123.easydiary.R
@@ -115,7 +114,7 @@ class DevActivity : EasyDiaryActivity() {
         }
 
         test01.setOnClickListener {
-            makeSnackBar(getNextAlarmTime())
+            makeSnackBar(String.format(getString(R.string.alarm_goes_off_in), formatMinutesToTimeString(getNextSecond()/60)))
 
             val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val targetMS = System.currentTimeMillis() + (getNextSecond() * 1000)
@@ -172,6 +171,11 @@ fun Context.getAlarmIntent(alarm: Alarm): PendingIntent {
     val intent = Intent(this, AlarmReceiver::class.java)
     intent.putExtra(DevActivity.ALARM_ID, alarm.id)
     return PendingIntent.getBroadcast(this, alarm.id, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+}
+
+fun Context.showRemainingTimeMessage(totalMinutes: Int) {
+    val fullString = String.format(getString(R.string.alarm_goes_off_in), formatMinutesToTimeString(totalMinutes))
+    toast(fullString, Toast.LENGTH_LONG)
 }
 
 fun Context.showAlarmNotification(alarm: Alarm) {
