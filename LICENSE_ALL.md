@@ -3,37 +3,23 @@
 ### aaf-easydiary
 https://github.com/hanjoongcho/aaf-easydiary
 ```
-Copyright 2017 Hanjoong Cho
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-   http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+hanjoongcho/aaf-easydiary is licensed under the   
+GNU General Public License v3.0   
+   
+Permissions of this strong copyleft license are conditioned on making available complete source code of licensed works and modifications, which include larger works using a licensed work, under the same license.   
+Copyright and license notices must be preserved.   
+Contributors provide an express grant of patent rights.
 ```
 
 ### Simple-Commons
 https://github.com/SimpleMobileTools/Simple-Commons
 ```
-Copyright 2017 SimpleMobileTools
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-   http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SimpleMobileTools/Simple-Commons is licensed under the   
+GNU General Public License v3.0   
+   
+Permissions of this strong copyleft license are conditioned on making available complete source code of licensed works and modifications, which include larger works using a licensed work, under the same license.   
+Copyright and license notices must be preserved.   
+Contributors provide an express grant of patent rights.
 ```
 
 ### leakcanary
