@@ -60,6 +60,9 @@ fun Context.updateTextColors(viewGroup: ViewGroup, tmpTextColor: Int = 0, tmpAcc
             .forEach {
                 when (it) {
                     is MyTextView -> it.setColors(textColor, accentColor, backgroundColor)
+                    is FixedTextView -> {
+                        if (it.applyGlobalColor) it.setColors(textColor, accentColor, backgroundColor)
+                    }
                     is MyAppCompatSpinner -> it.setColors(textColor, accentColor, backgroundColor)
                     is MySwitchCompat -> it.setColors(textColor, accentColor, backgroundColor)
 //                    is MyCompatRadioButton -> it.setColors(textColor, accentColor, backgroundColor)
@@ -144,7 +147,9 @@ fun Context.initTextSize(viewGroup: ViewGroup, context: Context) {
                             it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize * config.settingCalendarFontScale)
                         }
                     }
-                    is FixedTextView -> {}
+                    is FixedTextView -> {
+                        if (it.applyGlobalSize) it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
+                    }
                     is TextView -> { 
                         when (it.id) {
                             R.id.contentsLength -> it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize * 0.8F)
