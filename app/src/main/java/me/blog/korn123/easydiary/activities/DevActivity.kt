@@ -5,7 +5,6 @@ import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
-import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.PowerManager
@@ -24,11 +23,14 @@ import com.simplemobiletools.commons.extensions.removeBit
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import kotlinx.android.synthetic.main.activity_dev.*
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_NAME
 import me.blog.korn123.easydiary.receivers.AlarmReceiver
+import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.pow
 
 class DevActivity : EasyDiaryActivity() {
@@ -37,9 +39,9 @@ class DevActivity : EasyDiaryActivity() {
      *   override functions
      *
      ***************************************************************************************************/
-    var alarmSequence = 0
-    var alarmDays = 0
-    val alarm = Alarm(0, 0, 0, isEnabled = false, vibrate = false, soundTitle = "", soundUri = "", label = "")
+    private lateinit var mAlarm: Alarm
+    var mAlarmSequence = 0
+    var mAlarmDays = 0
 
     /***************************************************************************************************
      *   global properties
@@ -54,6 +56,7 @@ class DevActivity : EasyDiaryActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
+        initProperties()
         initDevUI()
         bindEvent()
     }
@@ -62,7 +65,17 @@ class DevActivity : EasyDiaryActivity() {
      *   etc functions
      *
      ***************************************************************************************************/
+    private fun initProperties() {
+        config.use24HourFormat = false
+        val calendar = Calendar.getInstance(Locale.getDefault())
+        var minutes = calendar.get(Calendar.HOUR_OF_DAY) * 60
+        minutes += calendar.get(Calendar.MINUTE)
+        mAlarm = Alarm(0, minutes, 0, isEnabled = false, vibrate = false, soundTitle = "", soundUri = "", label = "")
+    }
+
     private fun initDevUI() {
+        updateAlarmTime()
+
         val dayLetters = resources.getStringArray(R.array.week_day_letters).toList() as ArrayList<String>
         val dayIndexes = arrayListOf(0, 1, 2, 3, 4, 5, 6)
         dayIndexes.forEach {
@@ -70,17 +83,19 @@ class DevActivity : EasyDiaryActivity() {
             val day = layoutInflater.inflate(R.layout.alarm_day, edit_alarm_days_holder, false) as TextView
             day.text = dayLetters[it]
 
-            val isDayChecked = alarmDays and pow != 0
+            val isDayChecked = mAlarmDays and pow != 0
             day.background = getProperDayDrawable(isDayChecked)
 
+            day.setTextColor(if (isDayChecked) config.backgroundColor else config.textColor)
             day.setOnClickListener {
-                val selectDay = alarmDays and pow == 0
-                alarmDays = if (selectDay) {
-                    alarmDays.addBit(pow)
+                val selectDay = mAlarmDays and pow == 0
+                mAlarmDays = if (selectDay) {
+                    mAlarmDays.addBit(pow)
                 } else {
-                    alarmDays.removeBit(pow)
+                    mAlarmDays.removeBit(pow)
                 }
                 day.background = getProperDayDrawable(selectDay)
+                day.setTextColor(if (selectDay) config.backgroundColor else config.textColor)
             }
 
             edit_alarm_days_holder.addView(day)
@@ -90,32 +105,47 @@ class DevActivity : EasyDiaryActivity() {
     private fun getProperDayDrawable(selected: Boolean): Drawable {
         val drawableId = if (selected) R.drawable.circle_background_filled else R.drawable.circle_background_stroke
         val drawable = ContextCompat.getDrawable(this, drawableId)
-        drawable!!.applyColorFilter(Color.WHITE)
+        drawable!!.applyColorFilter(config.textColor)
         return drawable
     }
 
     private fun bindEvent() {
         edit_alarm_time.setOnClickListener {
-            TimePickerDialog(this, timeSetListener, alarm.timeInMinutes / 60, alarm.timeInMinutes % 60, DateFormat.is24HourFormat(this)).show()
+            TimePickerDialog(this, timeSetListener, mAlarm.timeInMinutes / 60, mAlarm.timeInMinutes % 60, DateFormat.is24HourFormat(this)).show()
         }
 
         test01.setOnClickListener {
-            makeSnackBar("test01...")
+            makeSnackBar(getNextAlarmTime())
 
             val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            val targetMS = System.currentTimeMillis() + (1000 * 5)
-            val alarm = Alarm(alarmSequence++, 0, 0, isEnabled = false, vibrate = false, soundTitle = "", soundUri = "", label = "")
+            val targetMS = System.currentTimeMillis() + (getNextSecond() * 1000)
+            val alarm = Alarm(mAlarmSequence++, 0, 0, isEnabled = false, vibrate = false, soundTitle = "", soundUri = "", label = "")
             AlarmManagerCompat.setAlarmClock(alarmManager, targetMS, getOpenAlarmTabIntent(), getAlarmIntent(alarm))
         }
     }
 
     private val timeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-        alarm.timeInMinutes = hourOfDay * 60 + minute
+        mAlarm.timeInMinutes = hourOfDay * 60 + minute
         updateAlarmTime()
     }
 
     private fun updateAlarmTime() {
-        edit_alarm_time.text = getFormattedTime(alarm.timeInMinutes * 60, false, true)
+        edit_alarm_time.text = getFormattedTime(mAlarm.timeInMinutes * 60, false, true)
+    }
+
+    private fun getNextSecond(): Int {
+        val calendar = Calendar.getInstance(Locale.getDefault())
+        var second = calendar.get(Calendar.HOUR_OF_DAY) * 60 * 60
+        second += calendar.get(Calendar.MINUTE) * 60
+        return mAlarm.timeInMinutes * 60 - second
+    }
+
+    private fun getNextAlarmTime(): String {
+        val nextSecond = getNextSecond()
+        val hours: Int = nextSecond / 3600
+        val minutes: Int = (nextSecond % 3600) / 60
+        val second: Int = (nextSecond % 216000) / 60
+        return String.format("[%d] %d시간 %d분 %d초 후에 일기장 알람~", nextSecond, hours, minutes, second)
     }
 
     companion object {
@@ -180,7 +210,7 @@ fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): No
 }
 
 fun Context.getFormattedTime(passedSeconds: Int, showSeconds: Boolean, makeAmPmSmaller: Boolean): SpannableString {
-    val use24HourFormat = true
+    val use24HourFormat = config.use24HourFormat
     val hours = (passedSeconds / 3600) % 24
     val minutes = (passedSeconds / 60) % 60
     val seconds = passedSeconds % 60
