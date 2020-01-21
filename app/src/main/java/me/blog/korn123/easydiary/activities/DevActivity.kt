@@ -199,8 +199,8 @@ fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): No
         notificationManager.createNotificationChannel(mChannel)
     }
 
-    val resultNotificationBuilder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
-    resultNotificationBuilder
+    val builder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
+    builder
             .setDefaults(Notification.DEFAULT_ALL)
             .setWhen(System.currentTimeMillis())
             .setSmallIcon(R.drawable.ic_launcher_round)
@@ -210,7 +210,9 @@ fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): No
             .setContentTitle("title")
             .setContentText("content")
             .setContentIntent(pendingIntent)
-    return resultNotificationBuilder.build()
+    val notification = builder.build()
+    notification.flags = notification.flags or Notification.FLAG_INSISTENT
+    return notification
 }
 
 fun Context.getFormattedTime(passedSeconds: Int, showSeconds: Boolean, makeAmPmSmaller: Boolean): SpannableString {
