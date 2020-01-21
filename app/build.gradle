@@ -40,17 +40,14 @@ android {
     productFlavors {
         gms {
             dimension "release"
-            versionName "gms"
             signingConfig signingConfigs.config
         }
         gmsp {
             dimension "release"
-            versionName "gmsp"
             signingConfig signingConfigs.config
         }
         foss {
             dimension "release"
-            versionName "foss"
             signingConfig signingConfigs.config
         }
     }

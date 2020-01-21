@@ -3,7 +3,6 @@ package me.blog.korn123.easydiary.fragments
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -100,7 +99,7 @@ class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
     }
 
     private fun initPreference() {
-        rateAppSettingSummary.text = String.format("Easy Diary v %s", BuildConfig.VERSION_NAME)
+        rateAppSettingSummary.text = String.format("Easy Diary v%s_%s", BuildConfig.VERSION_NAME, BuildConfig.FLAVOR)
     }
 
     private fun setupInvite() {
