@@ -186,7 +186,8 @@ Currently supported languages are listed below:
 [Contributing](Contributing.md)
 
 # License
-[LICENSE][LICENSE.md]
+[Easy Diary License](https://github.com/hanjoongcho/aaf-easydiary/blob/master/LICENSE)  
+[Third-Party License](https://github.com/hanjoongcho/aaf-easydiary/blob/master/THIRDPARTY.md)
 
 [licensesvg]: https://img.shields.io/badge/License-Apache--2.0-brightgreen.svg
 [README_ko.md]: https://github.com/hanjoongcho/aaf-easydiary/blob/master/README_ko.md
