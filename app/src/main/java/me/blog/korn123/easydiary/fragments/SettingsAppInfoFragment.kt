@@ -70,7 +70,7 @@ class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
             R.id.rateAppSetting -> mActivity.openGooglePlayBy("me.blog.korn123.easydiary")
             R.id.licenseView -> {
                 TransitionHelper.startActivityWithTransition(mActivity, Intent(mContext, MarkDownViewActivity::class.java).apply {
-                    putExtra(MarkDownViewActivity.OPEN_URL_INFO, "https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/LICENSE.md")
+                    putExtra(MarkDownViewActivity.OPEN_URL_INFO, "https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/THIRDPARTY.md")
                     putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, getString(R.string.preferences_information_licenses))
                 })
             }
