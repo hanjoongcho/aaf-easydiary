@@ -41,6 +41,7 @@ class DevActivity : EasyDiaryActivity() {
     private lateinit var mAlarm: Alarm
     var mAlarmSequence = 0
     var mAlarmDays = 0
+    val alarm = Alarm(0, 0, 0, isEnabled = false, vibrate = false, soundTitle = "", soundUri = "", label = "")
 
     /***************************************************************************************************
      *   global properties
@@ -144,6 +145,7 @@ class DevActivity : EasyDiaryActivity() {
         val hours: Int = nextSecond / 3600
         val minutes: Int = (nextSecond % 3600) / 60
         val second: Int = (nextSecond % 216000) / 60
+        edit_alarm_time.text = getFormattedTime(alarm.timeInMinutes * 60, false, true)
         return String.format("[%d] %d시간 %d분 %d초 후에 일기장 알람~", nextSecond, hours, minutes, second)
     }
 
@@ -190,7 +192,7 @@ fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): No
 
     if (isOreoPlus()) {
         // Create the NotificationChannel
-        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val importance = NotificationManager.IMPORTANCE_HIGH
         val mChannel = NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, importance)
         mChannel.description = NOTIFICATION_CHANNEL_DESCRIPTION
         // Register the channel with the system; you can't change the importance
@@ -210,6 +212,9 @@ fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): No
             .setContentTitle("title")
             .setContentText("content")
             .setContentIntent(pendingIntent)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+
+
     val notification = builder.build()
     notification.flags = notification.flags or Notification.FLAG_INSISTENT
     return notification
