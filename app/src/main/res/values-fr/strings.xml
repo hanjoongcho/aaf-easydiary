@@ -351,6 +351,10 @@
         Added diary symbol icon\n
         Added French support
     </string>
+	<string name="release_181">
+        v1.4.115 / 2020.01.21\n
+        License policy changed from 「Apache License 2.0」 to 「GNU General Public License v3.0」
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->

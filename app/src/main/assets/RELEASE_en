@@ -4,6 +4,13 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.115 (date: 2020/01/21)
+  * License policy changed from 「Apache License 2.0」 to 「GNU General Public License v3.0」
+
+# Changes in 1.4.114 (date: 2020/01/15)
+  * Added diary symbol icon
+  * Added French support
+
 # Changes in 1.4.113 (date: 2020/01/04)
   * Added date movement function using date picker on calendar screen
 
