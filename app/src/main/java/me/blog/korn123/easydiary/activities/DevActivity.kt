@@ -116,9 +116,10 @@ class DevActivity : EasyDiaryActivity() {
 
         test01.setOnClickListener {
             makeSnackBar(String.format(getString(R.string.alarm_goes_off_in), formatMinutesToTimeString(getNextSecond()/60)))
-
+            val calendar = Calendar.getInstance(Locale.getDefault())
+            val afterSecond = ((getNextSecond() / 60) * 60) - calendar.get(Calendar.SECOND)
             val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            val targetMS = System.currentTimeMillis() + (getNextSecond() * 1000)
+            val targetMS = System.currentTimeMillis() + (afterSecond * 1000)
             val alarm = Alarm(mAlarmSequence++, 0, 0, isEnabled = false, vibrate = false, soundTitle = "", soundUri = "", label = "")
             AlarmManagerCompat.setAlarmClock(alarmManager, targetMS, getOpenAlarmTabIntent(), getAlarmIntent(alarm))
         }
@@ -193,7 +194,7 @@ fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): No
     if (isOreoPlus()) {
         // Create the NotificationChannel
         val importance = NotificationManager.IMPORTANCE_HIGH
-        val mChannel = NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, importance)
+        val mChannel = NotificationChannel("${NOTIFICATION_CHANNEL_ID}_dev", "${NOTIFICATION_CHANNEL_NAME}_dev", importance)
         mChannel.description = NOTIFICATION_CHANNEL_DESCRIPTION
         // Register the channel with the system; you can't change the importance
         // or other notification behaviors after this
@@ -201,7 +202,7 @@ fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): No
         notificationManager.createNotificationChannel(mChannel)
     }
 
-    val builder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
+    val builder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_dev")
     builder
             .setDefaults(Notification.DEFAULT_ALL)
             .setWhen(System.currentTimeMillis())
