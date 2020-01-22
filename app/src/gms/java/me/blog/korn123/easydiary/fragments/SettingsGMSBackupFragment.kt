@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -253,6 +254,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
     }
 
     private fun backupDiaryRealm() {
+        mActivity.setScreenOrientationSensor(false)
         progressContainer.visibility = View.VISIBLE
         // delete unused compressed photo file
 //        File(Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY).listFiles()?.map {
@@ -270,15 +272,19 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
                 ).addOnSuccessListener {
                     progressContainer.visibility = View. GONE
                     mActivity.makeSnackBar(getString(R.string.backup_completed_message))
+                    mActivity.config.diaryBackupGoogle = System.currentTimeMillis()
+                    mActivity.setScreenOrientationSensor(true)
                 }.addOnFailureListener { e ->
                     mActivity.makeSnackBar(e.message ?: "Please try again later.")
                     progressContainer.visibility = View.GONE
+                    mActivity.setScreenOrientationSensor(true)
                 }
             }
         }
     }
 
     private fun recoverDiaryRealm() {
+        mActivity.setScreenOrientationSensor(false)
         progressContainer.visibility = View.VISIBLE
         openRealmFilePickerDialog()
     }
@@ -297,9 +303,9 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
                             realmFiles.add(itemInfo)
                         }
                         val builder = AlertDialog.Builder(mContext)
-                        builder.setNegativeButton(getString(android.R.string.cancel), null)
+                        builder.setNegativeButton(getString(android.R.string.cancel)) { _, _ -> mActivity.setScreenOrientationSensor(true) }
                         builder.setTitle("${getString(R.string.open_realm_file_title)} (Total: ${it.files.size})")
-                        builder.setMessage(getString(R.string.open_realm_file_message))
+//                        builder.setMessage(getString(R.string.open_realm_file_message))
                         val inflater = mContext.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
                         val fontView = inflater.inflate(R.layout.dialog_realm_files, null)
                         val listView = fontView.findViewById<ListView>(R.id.files)
@@ -420,66 +426,5 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
 //        }
     }
 
-    private fun initPreference() {
-
-    }
-
-    private fun openFontSettingDialog() {
-        EasyDiaryUtils.initWorkingDirectory(mContext)
-        val builder = AlertDialog.Builder(mContext)
-        builder.setNegativeButton(getString(android.R.string.cancel), null)
-        builder.setTitle(getString(R.string.font_setting))
-        val inflater = mContext.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val fontView = inflater.inflate(R.layout.dialog_fonts, null)
-        val listView = fontView.findViewById<ListView>(R.id.listFont)
-
-        val fontNameArray = resources.getStringArray(R.array.pref_list_fonts_title)
-        val fontPathArray = resources.getStringArray(R.array.pref_list_fonts_values)
-        val listFont = ArrayList<Map<String, String>>()
-        var selectedIndex = 0
-        for (i in fontNameArray.indices) {
-            val map = HashMap<String, String>()
-            map.put("disPlayFontName", fontNameArray[i])
-            map.put("fontName", fontPathArray[i])
-            listFont.add(map)
-        }
-
-        val fontDir = File(EasyDiaryUtils.getApplicationDataDirectory(mContext) + USER_CUSTOM_FONTS_DIRECTORY)
-        fontDir.list()?.let {
-            for (fontName in it) {
-                if (FilenameUtils.getExtension(fontName).equals("ttf", ignoreCase = true)) {
-                    val map = HashMap<String, String>()
-                    map.put("disPlayFontName", FilenameUtils.getBaseName(fontName))
-                    map.put("fontName", fontName)
-                    listFont.add(map)
-                }
-            }
-        }
-
-        listFont.mapIndexed { index, map ->
-            if (mContext.config.settingFontName == map["fontName"]) selectedIndex = index
-        }
-
-        val arrayAdapter = FontItemAdapter(activity!!, R.layout.item_font, listFont)
-        listView.adapter = arrayAdapter
-        listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-            val fontInfo = parent.adapter.getItem(position) as HashMap<String, String>
-            fontInfo["fontName"]?.let {
-                mContext.config.settingFontName = it
-                FontUtils.setCommonTypeface(mContext, mContext.assets)
-                initPreference()
-                setFontsStyle()
-            }
-            mAlertDialog?.cancel()
-        }
-
-        builder.setView(fontView)
-        mAlertDialog = builder.create()
-        mAlertDialog?.show()
-        listView.setSelection(selectedIndex)
-    }
-
-    private fun setFontsStyle() {
-        FontUtils.setFontsTypeface(mContext, mContext.assets, null, mRootView)
-    }
+    private fun initPreference() {}
 }
