@@ -19,6 +19,7 @@ import androidx.core.app.AlarmManagerCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.simplemobiletools.commons.extensions.*
+import com.simplemobiletools.commons.helpers.DAY_MINUTES
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import kotlinx.android.synthetic.main.activity_dev.*
 import me.blog.korn123.easydiary.R
@@ -40,8 +41,6 @@ class DevActivity : EasyDiaryActivity() {
      ***************************************************************************************************/
     private lateinit var mAlarm: Alarm
     var mAlarmSequence = 0
-    var mAlarmDays = 0
-    val alarm = Alarm(0, 0, 0, isEnabled = false, vibrate = false, soundTitle = "", soundUri = "", label = "")
 
     /***************************************************************************************************
      *   global properties
@@ -83,16 +82,16 @@ class DevActivity : EasyDiaryActivity() {
             val day = layoutInflater.inflate(R.layout.alarm_day, edit_alarm_days_holder, false) as TextView
             day.text = dayLetters[it]
 
-            val isDayChecked = mAlarmDays and pow != 0
+            val isDayChecked = mAlarm.days and pow != 0
             day.background = getProperDayDrawable(isDayChecked)
 
             day.setTextColor(if (isDayChecked) config.backgroundColor else config.textColor)
             day.setOnClickListener {
-                val selectDay = mAlarmDays and pow == 0
-                mAlarmDays = if (selectDay) {
-                    mAlarmDays.addBit(pow)
+                val selectDay = mAlarm.days and pow == 0
+                mAlarm.days = if (selectDay) {
+                    mAlarm.days.addBit(pow)
                 } else {
-                    mAlarmDays.removeBit(pow)
+                    mAlarm.days.removeBit(pow)
                 }
                 day.background = getProperDayDrawable(selectDay)
                 day.setTextColor(if (selectDay) config.backgroundColor else config.textColor)
@@ -115,13 +114,14 @@ class DevActivity : EasyDiaryActivity() {
         }
 
         test01.setOnClickListener {
-            makeSnackBar(String.format(getString(R.string.alarm_goes_off_in), formatMinutesToTimeString(getNextSecond()/60)))
-            val calendar = Calendar.getInstance(Locale.getDefault())
-            val afterSecond = ((getNextSecond() / 60) * 60) - calendar.get(Calendar.SECOND)
-            val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            val targetMS = System.currentTimeMillis() + (afterSecond * 1000)
-            val alarm = Alarm(mAlarmSequence++, 0, 0, isEnabled = false, vibrate = false, soundTitle = "", soundUri = "", label = "")
-            AlarmManagerCompat.setAlarmClock(alarmManager, targetMS, getOpenAlarmTabIntent(), getAlarmIntent(alarm))
+            scheduleNextAlarm(mAlarm, true)
+
+//            val calendar = Calendar.getInstance(Locale.getDefault())
+//            val afterSecond = ((getNextSecond() / 60) * 60) - calendar.get(Calendar.SECOND)
+//            val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//            val targetMS = System.currentTimeMillis() + (afterSecond * 1000)
+//            val alarm = Alarm(mAlarmSequence++, 0, 0, isEnabled = false, vibrate = false, soundTitle = "", soundUri = "", label = "")
+//            AlarmManagerCompat.setAlarmClock(alarmManager, targetMS, getOpenAlarmTabIntent(), getAlarmIntent(alarm))
         }
     }
 
@@ -146,7 +146,7 @@ class DevActivity : EasyDiaryActivity() {
         val hours: Int = nextSecond / 3600
         val minutes: Int = (nextSecond % 3600) / 60
         val second: Int = (nextSecond % 216000) / 60
-        edit_alarm_time.text = getFormattedTime(alarm.timeInMinutes * 60, false, true)
+        edit_alarm_time.text = getFormattedTime(mAlarm.timeInMinutes * 60, false, true)
         return String.format("[%d] %d시간 %d분 %d초 후에 일기장 알람~", nextSecond, hours, minutes, second)
     }
 
@@ -174,6 +174,35 @@ fun Context.getAlarmIntent(alarm: Alarm): PendingIntent {
     val intent = Intent(this, AlarmReceiver::class.java)
     intent.putExtra(DevActivity.ALARM_ID, alarm.id)
     return PendingIntent.getBroadcast(this, alarm.id, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+}
+
+// step01
+fun Context.scheduleNextAlarm(alarm: Alarm, showToast: Boolean) {
+    val calendar = Calendar.getInstance()
+    calendar.firstDayOfWeek = Calendar.MONDAY
+    for (i in 0..7) {
+        val currentDay = (calendar.get(Calendar.DAY_OF_WEEK) + 5) % 7
+        val isCorrectDay = alarm.days and 2.0.pow(currentDay).toInt() != 0
+        val currentTimeInMinutes = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE)
+        if (isCorrectDay && (alarm.timeInMinutes > currentTimeInMinutes || i > 0)) {
+            val triggerInMinutes = alarm.timeInMinutes - currentTimeInMinutes + (i * DAY_MINUTES)
+            setupAlarmClock(alarm, triggerInMinutes * 60 - calendar.get(Calendar.SECOND))
+
+            if (showToast) {
+                showRemainingTimeMessage(triggerInMinutes)
+            }
+            break
+        } else {
+            calendar.add(Calendar.DAY_OF_MONTH, 1)
+        }
+    }
+}
+
+// step02
+fun Context.setupAlarmClock(alarm: Alarm, triggerInSeconds: Int) {
+    val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    val targetMS = System.currentTimeMillis() + triggerInSeconds * 1000
+    AlarmManagerCompat.setAlarmClock(alarmManager, targetMS, getOpenAlarmTabIntent(), getAlarmIntent(alarm))
 }
 
 fun Context.showRemainingTimeMessage(totalMinutes: Int) {
