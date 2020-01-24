@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
+import android.media.RingtoneManager
 import android.os.Bundle
 import android.os.PowerManager
 import android.text.SpannableString
@@ -163,6 +164,18 @@ class DevActivity : EasyDiaryActivity() {
 data class Alarm(var id: Int, var timeInMinutes: Int, var days: Int, var isEnabled: Boolean, var vibrate: Boolean, var soundTitle: String,
                  var soundUri: String, var label: String)
 
+fun formatTime(showSeconds: Boolean, use24HourFormat: Boolean, hours: Int, minutes: Int, seconds: Int): String {
+    val hoursFormat = if (use24HourFormat) "%02d" else "%01d"
+    var format = "$hoursFormat:%02d"
+
+    return if (showSeconds) {
+        format += ":%02d"
+        String.format(format, hours, minutes, seconds)
+    } else {
+        String.format(format, hours, minutes)
+    }
+}
+
 fun Context.isScreenOn() = (getSystemService(Context.POWER_SERVICE) as PowerManager).isScreenOn
 
 fun Context.getOpenAlarmTabIntent(): PendingIntent {
@@ -272,18 +285,6 @@ fun Context.formatTo12HourFormat(showSeconds: Boolean, hours: Int, minutes: Int,
     val appendable = getString(if (hours >= 12) R.string.p_m else R.string.a_m)
     val newHours = if (hours == 0 || hours == 12) 12 else hours % 12
     return "${formatTime(showSeconds, false, newHours, minutes, seconds)} $appendable"
-}
-
-fun formatTime(showSeconds: Boolean, use24HourFormat: Boolean, hours: Int, minutes: Int, seconds: Int): String {
-    val hoursFormat = if (use24HourFormat) "%02d" else "%01d"
-    var format = "$hoursFormat:%02d"
-
-    return if (showSeconds) {
-        format += ":%02d"
-        String.format(format, hours, minutes, seconds)
-    } else {
-        String.format(format, hours, minutes)
-    }
 }
 
 fun Activity.showOverLockScreen() {
