@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
-import android.media.RingtoneManager
 import android.os.Bundle
 import android.os.PowerManager
 import android.text.SpannableString
@@ -25,13 +24,12 @@ import com.simplemobiletools.commons.helpers.isOreoPlus
 import kotlinx.android.synthetic.main.activity_dev.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_NAME
+import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.receivers.AlarmReceiver
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.math.pow
 
 class DevActivity : EasyDiaryActivity() {
@@ -114,7 +112,7 @@ class DevActivity : EasyDiaryActivity() {
             TimePickerDialog(this, timeSetListener, mAlarm.timeInMinutes / 60, mAlarm.timeInMinutes % 60, DateFormat.is24HourFormat(this)).show()
         }
 
-        test01.setOnClickListener {
+        executeAlarmManager.setOnClickListener {
             scheduleNextAlarm(mAlarm, true)
 
 //            val calendar = Calendar.getInstance(Locale.getDefault())
@@ -123,6 +121,9 @@ class DevActivity : EasyDiaryActivity() {
 //            val targetMS = System.currentTimeMillis() + (afterSecond * 1000)
 //            val alarm = Alarm(mAlarmSequence++, 0, 0, isEnabled = false, vibrate = false, soundTitle = "", soundUri = "", label = "")
 //            AlarmManagerCompat.setAlarmClock(alarmManager, targetMS, getOpenAlarmTabIntent(), getAlarmIntent(alarm))
+        }
+        openAlarmManager.setOnClickListener {
+            TransitionHelper.startActivityWithTransition(this, Intent(this, DiaryReminderActivity::class.java))
         }
     }
 

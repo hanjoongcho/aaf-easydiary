@@ -26,32 +26,71 @@
         app:layout_constraintBottom_toTopOf="parent"
         android:id="@+id/symbol"
         android:src="@drawable/intro"
+        android:layout_marginBottom="50dp"
         android:layout_width="100dp"
         android:layout_height="100dp" />
 
-    <TextView
-        app:layout_constraintTop_toBottomOf="@+id/symbol"
-        android:padding="10dp"
-        android:text="@string/app_name"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center_horizontal"
-        android:textColor="@android:color/white"
-        android:id="@+id/appName"
-        android:textStyle="bold" />
+    <ImageView
+        android:id="@+id/reminder_snooze"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:clickable="false"
+        android:padding="@dimen/activity_margin"
+        app:srcCompat="@drawable/edit"
+        app:layout_constraintBottom_toBottomOf="@+id/reminder_draggable"
+        app:layout_constraintEnd_toStartOf="@+id/reminder_draggable"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/reminder_draggable"/>
 
-    <TextView
+    <ImageView
+        android:id="@+id/reminder_draggable_background"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginBottom="@dimen/activity_margin"
+        android:alpha="0.2"
+        android:padding="@dimen/medium_margin"
+        android:src="@drawable/pulsing_background"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:id="@+id/confirm"
-        android:text="OK"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:padding="10dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toStartOf="@+id/reminder_dismiss"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/reminder_snooze"
+        app:layout_constraintTop_toBottomOf="@+id/symbol"/>
+
+    <ImageView
+        android:id="@+id/reminder_draggable"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginBottom="@dimen/activity_margin"
+        android:padding="@dimen/activity_margin"
+        android:src="@drawable/alarm_clock"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/reminder_dismiss"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/reminder_snooze"
+        app:layout_constraintTop_toBottomOf="@+id/symbol"/>
+
+    <ImageView
+        android:id="@+id/reminder_dismiss"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:clickable="false"
+        android:padding="@dimen/activity_margin"
+        android:src="@drawable/ic_cross"
+        app:layout_constraintBottom_toBottomOf="@+id/reminder_draggable"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/reminder_draggable"
+        app:layout_constraintTop_toTopOf="@+id/reminder_draggable"/>
+
+    <com.simplemobiletools.commons.views.MyTextView
+        android:id="@+id/reminder_guide"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:alpha="0"
+        android:text="Swipe right to Dismiss, or left to Snooze."
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reminder_draggable"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
