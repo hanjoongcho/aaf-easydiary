@@ -11,6 +11,8 @@ import android.view.animation.AnimationUtils
 import com.simplemobiletools.commons.extensions.*
 import kotlinx.android.synthetic.main.activity_diary_reminder.*
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.DiaryInsertActivity.Companion.DIARY_INSERT_MODE
+import me.blog.korn123.easydiary.activities.DiaryInsertActivity.Companion.MODE_RECEIVER
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.TransitionHelper
 
@@ -86,7 +88,9 @@ class DiaryReminderActivity : EasyDiaryActivity() {
                             reminder_draggable.performHapticFeedback()
                             didVibrate = true
 //                            snoozeAlarm()
-                            TransitionHelper.startActivityWithTransition(this, Intent(this, DiaryInsertActivity::class.java))
+                            TransitionHelper.startActivityWithTransition(this, Intent(this, DiaryInsertActivity::class.java).apply {
+                                putExtra(DIARY_INSERT_MODE, MODE_RECEIVER)
+                            })
                             finishActivity()
                         }
                     }
