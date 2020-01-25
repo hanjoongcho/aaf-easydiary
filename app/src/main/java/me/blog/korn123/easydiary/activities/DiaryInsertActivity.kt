@@ -74,6 +74,8 @@ class DiaryInsertActivity : EditActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_diary_insert)
+        if (intent.getStringExtra(DIARY_INSERT_MODE) == MODE_RECEIVER) showOverLockScreen()
+
         setSupportActionBar(toolbar)
         supportActionBar?.run {
             title = getString(R.string.create_diary_title)
@@ -279,5 +281,11 @@ class DiaryInsertActivity : EditActivity() {
                 photoContainer.addView(imageView, photoContainer.childCount - 1)
             }
         }
+    }
+
+    companion object {
+        const val DIARY_INSERT_MODE = "mode_default"
+        const val MODE_DEFAULT = "mode_default"
+        const val MODE_RECEIVER = "mode_receiver"
     }
 }
