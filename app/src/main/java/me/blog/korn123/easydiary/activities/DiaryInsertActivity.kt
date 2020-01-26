@@ -3,24 +3,15 @@ package me.blog.korn123.easydiary.activities
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.HorizontalScrollView
-import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.RelativeLayout
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.ColorUtils
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
-import com.simplemobiletools.commons.helpers.BaseConfig
 import com.werb.pickphotoview.util.PickConfig
-import io.github.aafactory.commons.utils.BitmapUtils
-import io.github.aafactory.commons.utils.CommonUtils
 import io.realm.RealmList
 import kotlinx.android.synthetic.main.activity_diary_insert.*
 import kotlinx.android.synthetic.main.layout_bottom_toolbar.*
@@ -29,10 +20,7 @@ import kotlinx.android.synthetic.main.layout_edit_photo_container.*
 import kotlinx.android.synthetic.main.layout_edit_toolbar_sub.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.createTemporaryPhotoFile
-import me.blog.korn123.easydiary.extensions.makeSnackBar
-import me.blog.korn123.easydiary.extensions.pauseLock
+import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import me.blog.korn123.easydiary.models.PhotoUriDto
@@ -67,14 +55,18 @@ class DiaryInsertActivity : EditActivity() {
             diaryDto.photoUris = mPhotoUris
             EasyDiaryDbHelper.insertDiary(diaryDto)
             config.previousActivity = PREVIOUS_ACTIVITY_CREATE
-            TransitionHelper.finishActivityWithTransition(this)
+            if (isReminderMode()) {
+                startMainActivityWithClearTask()
+            } else {
+                TransitionHelper.finishActivityWithTransition(this)
+            }
         }
     }
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_diary_insert)
-        if (intent.getStringExtra(DIARY_INSERT_MODE) == MODE_RECEIVER) showOverLockScreen()
+        if (isReminderMode()) showOverLockScreen()
 
         setSupportActionBar(toolbar)
         supportActionBar?.run {
@@ -283,9 +275,11 @@ class DiaryInsertActivity : EditActivity() {
         }
     }
 
+    private fun isReminderMode(): Boolean = intent.getStringExtra(DIARY_INSERT_MODE) == MODE_REMINDER
+
     companion object {
         const val DIARY_INSERT_MODE = "mode_default"
         const val MODE_DEFAULT = "mode_default"
-        const val MODE_RECEIVER = "mode_receiver"
+        const val MODE_REMINDER = "mode_reminder"
     }
 }
