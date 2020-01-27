@@ -28,6 +28,8 @@ import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.activities.FingerprintLockActivity
 import me.blog.korn123.easydiary.activities.PinLockActivity
 import me.blog.korn123.easydiary.dialogs.WhatsNewDialog
+import me.blog.korn123.easydiary.helper.DIARY_INSERT_MODE
+import me.blog.korn123.easydiary.helper.MODE_REMINDER
 import kotlin.system.exitProcess
 
 
@@ -243,3 +245,5 @@ fun Activity.startMainActivityWithClearTask() {
     }
     this.overridePendingTransition(0, 0)
 }
+
+fun Activity.isReminderMode(): Boolean = intent.getStringExtra(DIARY_INSERT_MODE) == MODE_REMINDER

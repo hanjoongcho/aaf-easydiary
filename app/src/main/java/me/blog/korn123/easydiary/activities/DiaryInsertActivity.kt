@@ -274,12 +274,4 @@ class DiaryInsertActivity : EditActivity() {
             }
         }
     }
-
-    private fun isReminderMode(): Boolean = intent.getStringExtra(DIARY_INSERT_MODE) == MODE_REMINDER
-
-    companion object {
-        const val DIARY_INSERT_MODE = "mode_default"
-        const val MODE_DEFAULT = "mode_default"
-        const val MODE_REMINDER = "mode_reminder"
-    }
 }

@@ -24,7 +24,7 @@
         <activity android:name=".activities.DiaryReadActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.DiaryUpdateActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.DiaryMainActivity" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.DiaryReminderActivity" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.DiaryReminderActivity" android:theme="@style/AppTheme.NoActionBar" android:autoRemoveFromRecents="true" />
         <activity android:name=".activities.DevActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.SettingsActivity" android:label="" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.CustomizationActivity" android:label="@string/customize_colors" android:theme="@style/AppTheme.NoActionBar" />
