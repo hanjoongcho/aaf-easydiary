@@ -112,18 +112,16 @@ class DevActivity : EasyDiaryActivity() {
             TimePickerDialog(this, timeSetListener, mAlarm.timeInMinutes / 60, mAlarm.timeInMinutes % 60, DateFormat.is24HourFormat(this)).show()
         }
 
-        executeAlarmManager.setOnClickListener {
-            scheduleNextAlarm(mAlarm, true)
-
-//            val calendar = Calendar.getInstance(Locale.getDefault())
-//            val afterSecond = ((getNextSecond() / 60) * 60) - calendar.get(Calendar.SECOND)
-//            val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//            val targetMS = System.currentTimeMillis() + (afterSecond * 1000)
-//            val alarm = Alarm(mAlarmSequence++, 0, 0, isEnabled = false, vibrate = false, soundTitle = "", soundUri = "", label = "")
-//            AlarmManagerCompat.setAlarmClock(alarmManager, targetMS, getOpenAlarmTabIntent(), getAlarmIntent(alarm))
-        }
         openAlarmManager.setOnClickListener {
             TransitionHelper.startActivityWithTransition(this, Intent(this, DiaryReminderActivity::class.java))
+        }
+
+        alarm_switch.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                scheduleNextAlarm(mAlarm, true)
+            } else {
+                cancelAlarmClock(mAlarm)
+            }
         }
     }
 
@@ -188,6 +186,11 @@ fun Context.getAlarmIntent(alarm: Alarm): PendingIntent {
     val intent = Intent(this, AlarmReceiver::class.java)
     intent.putExtra(DevActivity.ALARM_ID, alarm.id)
     return PendingIntent.getBroadcast(this, alarm.id, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+}
+
+fun Context.cancelAlarmClock(alarm: Alarm) {
+    val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    alarmManager.cancel(getAlarmIntent(alarm))
 }
 
 // step01
