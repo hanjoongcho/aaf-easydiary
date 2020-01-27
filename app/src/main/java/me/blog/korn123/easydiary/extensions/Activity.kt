@@ -36,16 +36,6 @@ import kotlin.system.exitProcess
 /**
  * Created by CHO HANJOONG on 2018-02-10.
  */
-
-fun Activity.pauseLock() {
-    if (config.aafPinLockEnable || config.fingerprintLockEnable) {
-        
-        // FIXME remove test code
-//        Toast.makeText(this, "${this::class.java.simpleName}", Toast.LENGTH_LONG).show()
-        config.aafPinLockPauseMillis = System.currentTimeMillis()
-    }
-}
-
 fun Activity.resumeLock() {
     if (config.aafPinLockPauseMillis > 0L && System.currentTimeMillis() - config.aafPinLockPauseMillis > 1000) {
         

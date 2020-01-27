@@ -38,7 +38,6 @@ class DiaryReminderActivity : EasyDiaryActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_diary_reminder)
         showOverLockScreen()
-        pauseLock() // Disables the active lock
 
         setupAudio()
         setupEvent()
