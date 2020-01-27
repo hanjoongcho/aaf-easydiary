@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import me.blog.korn123.easydiary.activities.*
+import me.blog.korn123.easydiary.helper.DIARY_INSERT_MODE
+import me.blog.korn123.easydiary.helper.MODE_REMINDER
 
 class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {

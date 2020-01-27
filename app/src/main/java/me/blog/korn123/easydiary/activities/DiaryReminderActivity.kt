@@ -8,35 +8,55 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.MotionEvent
 import android.view.animation.AnimationUtils
-import androidx.core.app.ActivityCompat
 import com.simplemobiletools.commons.extensions.*
 import kotlinx.android.synthetic.main.activity_diary_reminder.*
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.activities.DiaryInsertActivity.Companion.DIARY_INSERT_MODE
-import me.blog.korn123.easydiary.activities.DiaryInsertActivity.Companion.MODE_REMINDER
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.pauseLock
+import me.blog.korn123.easydiary.helper.DIARY_INSERT_MODE
+import me.blog.korn123.easydiary.helper.MODE_REMINDER
 import me.blog.korn123.easydiary.helper.TransitionHelper
 
 class DiaryReminderActivity : EasyDiaryActivity() {
+
+    /***************************************************************************************************
+     *   global properties
+     *
+     ***************************************************************************************************/
     private val swipeGuideFadeHandler = Handler()
     private var mediaPlayer: MediaPlayer? = null
     private var lastVolumeValue = 0.1f
     private var didVibrate = false
     private var dragDownX = 0f
 
+
+    /***************************************************************************************************
+     *   override functions
+     *
+     ***************************************************************************************************/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_diary_reminder)
         showOverLockScreen()
+        pauseLock() // Disables the active lock
 
         setupAudio()
         setupEvent()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        destroyPlayer()
+    }
+
+
+    /***************************************************************************************************
+     *   etc functions
+     *
+     ***************************************************************************************************/
     private fun setupEvent() {
         setupAlarmButtons()
     }
-
 
     private fun setupAlarmButtons() {
         reminder_draggable_background.startAnimation(AnimationUtils.loadAnimation(this, R.anim.pulsing_animation))
@@ -115,11 +135,6 @@ class DiaryReminderActivity : EasyDiaryActivity() {
         } catch (e: Exception) {
             showErrorToast(e)
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        destroyPlayer()
     }
 
     private fun destroyPlayer() {

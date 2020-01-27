@@ -6,81 +6,11 @@ import android.Manifest
  * Created by CHO HANJOONG on 2018-02-09.
  */
 
-val PERMISSIONS = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.SEND_SMS, Manifest.permission.READ_CONTACTS)
-val EXTERNAL_STORAGE_PERMISSIONS = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
 
-const val START_MAIN_ACTIVITY = 0
-const val APP_BACKGROUND_ALPHA = 200
-const val INTRO_BACKGROUND_ALPHA = 255
-const val SETTING_FONT_SIZE = "font_size"
-const val SETTING_CALENDAR_FONT_SCALE = "setting_calendar_font_scale"
-const val SETTING_FONT_NAME = "font_setting"
-const val SETTING_THUMBNAIL_SIZE = "thumbnail_size" 
-const val SETTING_BOLD_STYLE = "setting_bold_style" 
-const val SETTING_MULTIPLE_PICKER = "setting_multiple_picker"
-const val SETTING_FINGERPRINT_LOCK = "setting_fingerprint_lock"
-const val SETTING_CONTENTS_SUMMARY = "setting_contents_summary"
-const val SETTING_CLEAR_LEGACY_TOKEN = "setting_clear_legacy_token"
-const val FINGERPRINT_ENCRYPT_DATA = "fingerprint_encrypt_data"
-const val FINGERPRINT_ENCRYPT_DATA_IV = "fingerprint_encrypt_data_iv"
-const val FINGERPRINT_AUTHENTICATION_FAIL_COUNT = "fingerprint_authentication_fail_count"
-const val ENABLE_CARD_VIEW_POLICY = "enable_card_view_policy"
-const val SETTING_CALENDAR_START_DAY = "setting_calendar_start_day"
-const val SETTING_COUNT_CHARACTERS = "setting_count_characters"
-const val CUSTOM_FONTS_SUPPORT_LANGUAGE = "en|ko" // custom fonts supported language
-const val CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT = "NanumPen.ttf"
-const val CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT = "Default"
-const val DIARY_SEARCH_QUERY_CASE_SENSITIVE = "case_sensitive"
-const val CONTENT_URI_PREFIX = "content:/"
-const val FILE_URI_PREFIX = "file:/"
-const val LINE_SPACING_SCALE_FACTOR = "line_spacing_scale_factor"
-const val LINE_SPACING_SCALE_DEFAULT = 1.0F
-const val DIARY_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE = "diary_last_backup_time_google_drive"
-const val DIARY_LAST_BACKUP_TIMESTAMP_LOCAL = "diary_last_backup_time_local"
-const val PHOTO_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE = "photo_last_backup_time_google_drive"
-const val CAPTURE_CAMERA_FILE_NAME = "capture.jpg"
-
-const val WORKING_DIRECTORY           = "/AAFactory/EasyDiary/"
-const val DIARY_PHOTO_DIRECTORY       = "${WORKING_DIRECTORY}Photos/"
-const val DIARY_POSTCARD_DIRECTORY    = "${WORKING_DIRECTORY}Postcards/"
-const val USER_CUSTOM_FONTS_DIRECTORY = "${WORKING_DIRECTORY}Fonts/"
-const val MARKDOWN_DIRECTORY          = "${WORKING_DIRECTORY}Markdown/"
-const val BACKUP_EXCEL_DIRECTORY      = "${WORKING_DIRECTORY}Backup/Excel/"
-const val BACKUP_DB_DIRECTORY         = "${WORKING_DIRECTORY}Backup/Database/"
-const val DIARY_DB_NAME = "diary.realm"
-
-// startActivityForResult Request Code: Permission
-const val REQUEST_CODE_EXTERNAL_STORAGE = 1
-const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_SHARE_DIARY_CARD = 2
-const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_FONT_SETTING = 3
-const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_MARKDOWN = 4
-const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_EXCEL = 5
-const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_REALM = 6
-const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_IMPORT_REALM = 7
-const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_DELETE_REALM = 8
-const val REQUEST_CODE_CAPTURE_CAMERA = 9
-
-// startActivityForResult Request Code: Etc
-const val REQUEST_CODE_LOCK_SETTING = 21
-const val REQUEST_CODE_IMAGE_PICKER = 22
-
-// startActivityForResult Request Code: ColorPicker
-const val REQUEST_CODE_BACKGROUND_COLOR_PICKER = 31
-const val REQUEST_CODE_TEXT_COLOR_PICKER = 32
-
-const val SETTING_FLAG_EXPORT_GOOGLE_DRIVE = 1
-const val SETTING_FLAG_IMPORT_GOOGLE_DRIVE = 2
-const val SETTING_FLAG_EXPORT_PHOTO_GOOGLE_DRIVE = 3
-const val SETTING_FLAG_IMPORT_PHOTO_GOOGLE_DRIVE = 4
-
-const val REQUEST_CODE_SPEECH_INPUT = 100
-const val REQUEST_CODE_GOOGLE_SIGN_IN = 101
-const val REQUEST_CODE_GOOGLE_DRIVE_PERMISSIONS = 102
-const val REQUEST_CODE_FONT_PICK = 103
-
-const val PREVIOUS_ACTIVITY = "previous_activity"
-const val PREVIOUS_ACTIVITY_CREATE = 1
-
+/***************************************************************************************************
+ *   Diary Symbols
+ *
+ ***************************************************************************************************/
 //  Weather 0 ~ 39
 const val WEATHER_SUNNY = 1
 const val WEATHER_CLOUD_AND_SUN = 2
@@ -359,10 +289,123 @@ const val FLAG_MEXICO = 701
 const val FLAG_BRAZIL = 704
 const val FLAG_UNITED_KINGDOM = 709
 
+
+/***************************************************************************************************
+ *   Save Instance State
+ *
+ ***************************************************************************************************/
+const val LIST_URI_STRING = "list_uri_string"
+const val SELECTED_YEAR = "selected_year"
+const val SELECTED_MONTH = "selected_month"
+const val SELECTED_DAY = "selected_day"
+const val SELECTED_HOUR = "selected_hour"
+const val SELECTED_MINUTE = "selected_minute"
+const val SELECTED_SECOND = "selected_second"
+const val FILTER_VIEW_VISIBLE = "filter_view_visible"
+const val FILTER_START_ENABLE = "filter_start_enable"
+const val FILTER_START_YEAR = "filter_start_year"
+const val FILTER_START_MONTH = "filter_start_month"
+const val FILTER_START_DATE = "filter_start_date"
+const val FILTER_END_ENABLE = "filter_end_enable"
+const val FILTER_END_YEAR = "filter_end_year"
+const val FILTER_END_MONTH = "filter_end_month"
+const val FILTER_END_DATE = "filter_end_date"
+const val FILTER_QUERY = "filter_query"
+
+
+/***************************************************************************************************
+ *   Calendar constants
+ *
+ ***************************************************************************************************/
+const val CALENDAR_START_DAY_SUNDAY = 1
+const val CALENDAR_START_DAY_MONDAY = 2
+const val CALENDAR_START_DAY_TUESDAY = 3
+const val CALENDAR_START_DAY_WEDNESDAY = 4
+const val CALENDAR_START_DAY_THURSDAY = 5
+const val CALENDAR_START_DAY_FRIDAY = 6
+const val CALENDAR_START_DAY_SATURDAY = 7
+
+
+/***************************************************************************************************
+ *   Showcase constants
+ *
+ ***************************************************************************************************/
 const val SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER = 0
 const val SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER = 1
 const val SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_NUMBER = 2
 const val SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER = 3
+
+
+/***************************************************************************************************
+ *   Notification constants
+ *
+ ***************************************************************************************************/
+const val NOTIFICATION_FOREGROUND_ID = 1001
+const val NOTIFICATION_COMPLETE_ID = 1002
+const val NOTIFICATION_CHANNEL_ID = "easy_diary_channel_id"
+const val NOTIFICATION_CHANNEL_NAME = "Easy-Diary notification channel"
+const val NOTIFICATION_CHANNEL_DESCRIPTION = "This channel is used for 'Easy-Diary' data backup and recovery operations."
+
+
+/***************************************************************************************************
+ *   Path constants
+ *
+ ***************************************************************************************************/
+const val WORKING_DIRECTORY           = "/AAFactory/EasyDiary/"
+const val DIARY_PHOTO_DIRECTORY       = "${WORKING_DIRECTORY}Photos/"
+const val DIARY_POSTCARD_DIRECTORY    = "${WORKING_DIRECTORY}Postcards/"
+const val USER_CUSTOM_FONTS_DIRECTORY = "${WORKING_DIRECTORY}Fonts/"
+const val MARKDOWN_DIRECTORY          = "${WORKING_DIRECTORY}Markdown/"
+const val BACKUP_EXCEL_DIRECTORY      = "${WORKING_DIRECTORY}Backup/Excel/"
+const val BACKUP_DB_DIRECTORY         = "${WORKING_DIRECTORY}Backup/Database/"
+const val DIARY_DB_NAME = "diary.realm"
+
+
+/***************************************************************************************************
+ *   Request code constants
+ *
+ ***************************************************************************************************/
+// startActivityForResult Request Code: Permission
+const val REQUEST_CODE_EXTERNAL_STORAGE = 1
+const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_SHARE_DIARY_CARD = 2
+const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_FONT_SETTING = 3
+const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_MARKDOWN = 4
+const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_EXCEL = 5
+const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_REALM = 6
+const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_IMPORT_REALM = 7
+const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_DELETE_REALM = 8
+const val REQUEST_CODE_CAPTURE_CAMERA = 9
+
+// startActivityForResult Request Code: Etc
+const val REQUEST_CODE_LOCK_SETTING = 21
+const val REQUEST_CODE_IMAGE_PICKER = 22
+
+// startActivityForResult Request Code: ColorPicker
+const val REQUEST_CODE_BACKGROUND_COLOR_PICKER = 31
+const val REQUEST_CODE_TEXT_COLOR_PICKER = 32
+
+const val REQUEST_CODE_SPEECH_INPUT = 100
+const val REQUEST_CODE_GOOGLE_SIGN_IN = 101
+const val REQUEST_CODE_GOOGLE_DRIVE_PERMISSIONS = 102
+const val REQUEST_CODE_FONT_PICK = 103
+
+
+/***************************************************************************************************
+ *   Diary execution mode
+ *
+ ***************************************************************************************************/
+const val DIARY_INSERT_MODE = "mode_default"
+const val MODE_DEFAULT = "mode_default"
+const val MODE_REMINDER = "mode_reminder"
+const val START_MAIN_ACTIVITY = 0
+const val START_DIARY_INSERT_ACTIVITY = 1
+
+
+/***************************************************************************************************
+ *   Etc constants
+ *
+ ***************************************************************************************************/
+val EXTERNAL_STORAGE_PERMISSIONS = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
 
 const val INIT_DUMMY_DATA_FLAG = "init_dummy_data"
 
@@ -382,7 +425,7 @@ const val THUMBNAIL_BACKGROUND_ALPHA = 170
 
 const val DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE = 20
 const val DEFAULT_FONT_SIZE_UN_SUPPORT_LANGUAGE = 15
-const val DEFAULT_THUMBNAIL_SIZE_DP = 50 
+const val DEFAULT_THUMBNAIL_SIZE_DP = 50
 const val DEFAULT_CALENDAR_FONT_SCALE = -1F
 
 const val POSTCARD_BG_COLOR = "postcard_bg_color"
@@ -391,35 +434,40 @@ const val POSTCARD_BG_COLOR_VALUE = -0x1
 const val POSTCARD_TEXT_COLOR_VALUE = -0xb5b5b4
 const val POSTCARD_CROP_MODE = "postcard_crop_mode"
 
-const val CALENDAR_START_DAY_SUNDAY = 1
-const val CALENDAR_START_DAY_MONDAY = 2
-const val CALENDAR_START_DAY_TUESDAY = 3
-const val CALENDAR_START_DAY_WEDNESDAY = 4
-const val CALENDAR_START_DAY_THURSDAY = 5
-const val CALENDAR_START_DAY_FRIDAY = 6
-const val CALENDAR_START_DAY_SATURDAY = 7
+const val APP_BACKGROUND_ALPHA = 200
+const val INTRO_BACKGROUND_ALPHA = 255
+const val SETTING_FONT_SIZE = "font_size"
+const val SETTING_CALENDAR_FONT_SCALE = "setting_calendar_font_scale"
+const val SETTING_FONT_NAME = "font_setting"
+const val SETTING_THUMBNAIL_SIZE = "thumbnail_size"
+const val SETTING_BOLD_STYLE = "setting_bold_style"
+const val SETTING_MULTIPLE_PICKER = "setting_multiple_picker"
+const val SETTING_FINGERPRINT_LOCK = "setting_fingerprint_lock"
+const val SETTING_CONTENTS_SUMMARY = "setting_contents_summary"
+const val SETTING_CLEAR_LEGACY_TOKEN = "setting_clear_legacy_token"
+const val FINGERPRINT_ENCRYPT_DATA = "fingerprint_encrypt_data"
+const val FINGERPRINT_ENCRYPT_DATA_IV = "fingerprint_encrypt_data_iv"
+const val FINGERPRINT_AUTHENTICATION_FAIL_COUNT = "fingerprint_authentication_fail_count"
+const val ENABLE_CARD_VIEW_POLICY = "enable_card_view_policy"
+const val SETTING_CALENDAR_START_DAY = "setting_calendar_start_day"
+const val SETTING_COUNT_CHARACTERS = "setting_count_characters"
+const val CUSTOM_FONTS_SUPPORT_LANGUAGE = "en|ko" // custom fonts supported language
+const val CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT = "NanumPen.ttf"
+const val CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT = "Default"
+const val DIARY_SEARCH_QUERY_CASE_SENSITIVE = "case_sensitive"
+const val CONTENT_URI_PREFIX = "content:/"
+const val FILE_URI_PREFIX = "file:/"
+const val LINE_SPACING_SCALE_FACTOR = "line_spacing_scale_factor"
+const val LINE_SPACING_SCALE_DEFAULT = 1.0F
+const val DIARY_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE = "diary_last_backup_time_google_drive"
+const val DIARY_LAST_BACKUP_TIMESTAMP_LOCAL = "diary_last_backup_time_local"
+const val PHOTO_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE = "photo_last_backup_time_google_drive"
+const val CAPTURE_CAMERA_FILE_NAME = "capture.jpg"
 
-// Save Instance State
-const val LIST_URI_STRING = "list_uri_string"
-const val SELECTED_YEAR = "selected_year"
-const val SELECTED_MONTH = "selected_month"
-const val SELECTED_DAY = "selected_day"
-const val SELECTED_HOUR = "selected_hour"
-const val SELECTED_MINUTE = "selected_minute"
-const val SELECTED_SECOND = "selected_second"
-const val FILTER_VIEW_VISIBLE = "filter_view_visible"
-const val FILTER_START_ENABLE = "filter_start_enable"
-const val FILTER_START_YEAR = "filter_start_year"
-const val FILTER_START_MONTH = "filter_start_month"
-const val FILTER_START_DATE = "filter_start_date"
-const val FILTER_END_ENABLE = "filter_end_enable"
-const val FILTER_END_YEAR = "filter_end_year"
-const val FILTER_END_MONTH = "filter_end_month"
-const val FILTER_END_DATE = "filter_end_date"
-const val FILTER_QUERY = "filter_query"
+const val SETTING_FLAG_EXPORT_GOOGLE_DRIVE = 1
+const val SETTING_FLAG_IMPORT_GOOGLE_DRIVE = 2
+const val SETTING_FLAG_EXPORT_PHOTO_GOOGLE_DRIVE = 3
+const val SETTING_FLAG_IMPORT_PHOTO_GOOGLE_DRIVE = 4
 
-const val NOTIFICATION_FOREGROUND_ID: Int = 1001
-const val NOTIFICATION_COMPLETE_ID: Int = 1002
-const val NOTIFICATION_CHANNEL_ID = "easy_diary_channel_id"
-const val NOTIFICATION_CHANNEL_NAME = "Easy-Diary notification channel"
-const val NOTIFICATION_CHANNEL_DESCRIPTION = "This channel is used for 'Easy-Diary' data backup and recovery operations."
+const val PREVIOUS_ACTIVITY = "previous_activity"
+const val PREVIOUS_ACTIVITY_CREATE = 1
