@@ -1,7 +1,6 @@
 package me.blog.korn123.easydiary.extensions
 
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -26,7 +25,6 @@ import io.github.aafactory.commons.views.ModalView
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.views.FixedCardView
 import me.blog.korn123.easydiary.views.FixedTextView
@@ -42,6 +40,15 @@ import java.io.FileOutputStream
  */
 
 val Context.config: Config get() = Config.newInstance(this)
+
+fun Context.pauseLock() {
+    if (config.aafPinLockEnable || config.fingerprintLockEnable) {
+
+        // FIXME remove test code
+//        Toast.makeText(this, "${this::class.java.simpleName}", Toast.LENGTH_LONG).show()
+        config.aafPinLockPauseMillis = System.currentTimeMillis()
+    }
+}
 
 fun Context.updateTextColors(viewGroup: ViewGroup, tmpTextColor: Int = 0, tmpAccentColor: Int = 0) {
     val textColor = if (tmpTextColor == 0) baseConfig.textColor else tmpTextColor

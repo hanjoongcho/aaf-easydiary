@@ -4,8 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import me.blog.korn123.easydiary.activities.*
-import me.blog.korn123.easydiary.helper.DIARY_INSERT_MODE
-import me.blog.korn123.easydiary.helper.MODE_REMINDER
+import me.blog.korn123.easydiary.extensions.pauseLock
 
 class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
@@ -15,6 +14,7 @@ class AlarmReceiver : BroadcastReceiver() {
         } else {
             Intent(context, DiaryReminderActivity::class.java).apply {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.pauseLock() // Disables the active lock
                 context.startActivity(this)
             }
         }
