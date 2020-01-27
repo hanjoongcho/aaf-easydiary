@@ -12,7 +12,6 @@ import com.simplemobiletools.commons.extensions.*
 import kotlinx.android.synthetic.main.activity_diary_reminder.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.helper.DIARY_INSERT_MODE
 import me.blog.korn123.easydiary.helper.MODE_REMINDER
 import me.blog.korn123.easydiary.helper.TransitionHelper
