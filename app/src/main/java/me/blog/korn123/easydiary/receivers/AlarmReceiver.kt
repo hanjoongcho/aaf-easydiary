@@ -5,12 +5,16 @@ import android.content.Context
 import android.content.Intent
 import me.blog.korn123.easydiary.activities.*
 import me.blog.korn123.easydiary.extensions.pauseLock
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 
 class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        val alarm = Alarm(intent.getIntExtra(DevActivity.ALARM_ID, -1), 0, 0, isEnabled = false, vibrate = false, soundTitle = "", soundUri = "", label = "")
+        val alarmId = intent.getIntExtra(DevActivity.ALARM_ID, -1)
+        val alarm = EasyDiaryDbHelper.readAlarmBy(alarmId)
         if (context.isScreenOn()) {
-            context.showAlarmNotification(alarm)
+            alarm?.let {
+                context.showAlarmNotification(it)
+            }
         } else {
             Intent(context, DiaryReminderActivity::class.java).apply {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
