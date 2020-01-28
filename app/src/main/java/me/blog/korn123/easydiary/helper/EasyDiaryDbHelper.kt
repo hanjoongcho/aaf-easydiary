@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.helper
 
 import io.realm.*
+import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.models.DiaryDto
 import me.blog.korn123.easydiary.models.PhotoUriDto
 import org.apache.commons.lang3.StringUtils
@@ -14,14 +15,19 @@ object EasyDiaryDbHelper {
     private val mDiaryConfig: RealmConfiguration by lazy {
         RealmConfiguration.Builder()
                 .name("diary.realm")
-                .schemaVersion(7)
+                .schemaVersion(8)
                 .migration(EasyDiaryMigration())
                 .modules(Realm.getDefaultModule())
                 .build()
     } 
     
-    fun getInstance(): Realm = Realm.getInstance(mDiaryConfig) 
-            
+    fun getInstance(): Realm = Realm.getInstance(mDiaryConfig)
+
+
+    /***************************************************************************************************
+     *   Manage DiaryDto model
+     *
+     ***************************************************************************************************/
     fun insertDiary(currentTimeMillis: Long, title: String, contents: String) {
         Realm.getInstance(mDiaryConfig).executeTransaction { realm ->
             var sequence = 1
@@ -130,5 +136,36 @@ object EasyDiaryDbHelper {
             diaryDto.deleteFromRealm()
             mRealmInstance.commitTransaction()
         }
+    }
+
+
+    /***************************************************************************************************
+     *   Manage Alarm model
+     *
+     ***************************************************************************************************/
+    fun insertAlarm(alarm: Alarm) {
+        Realm.getInstance(mDiaryConfig).executeTransaction { realm ->
+            var sequence = 1
+            if (realm.where(Alarm::class.java).count() > 0L) {
+                val number = realm.where(Alarm::class.java).max("sequence")
+                number?.let {
+                    sequence = it.toInt().plus(1)
+                }
+            }
+            alarm.sequence = sequence
+            realm.insert(alarm)
+        }
+    }
+
+    fun countAlarmAll(): Long {
+        return Realm.getInstance(mDiaryConfig).where(Alarm::class.java).count()
+    }
+
+    fun readAlarmBy(sequence: Int): Alarm? {
+        return readAlarmBy(Realm.getInstance(mDiaryConfig), sequence)
+    }
+
+    private fun readAlarmBy(realmInstance: Realm, sequence: Int): Alarm? {
+        return realmInstance.where(Alarm::class.java).equalTo("sequence", sequence).findFirst()
     }
 }

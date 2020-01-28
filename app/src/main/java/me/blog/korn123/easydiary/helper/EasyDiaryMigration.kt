@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.helper
 
 import io.github.aafactory.commons.utils.DateUtils
 import io.realm.DynamicRealm
+import io.realm.FieldAttribute
 import io.realm.RealmMigration
 import io.realm.RealmObjectSchema
 
@@ -65,6 +66,20 @@ class EasyDiaryMigration : RealmMigration {
             
             if (currentVersion == 6L) {
                 it.addField("isAllDay", Boolean::class.javaPrimitiveType)
+                currentVersion++
+            }
+
+            if (currentVersion == 7L) {
+                schema.create("Alarm")
+                        .addField("sequence", Int::class.java, FieldAttribute.PRIMARY_KEY)
+                        .addField("id", Int::class.java)
+                        .addField("timeInMinutes", Int::class.java)
+                        .addField("days", Int::class.java)
+                        .addField("isEnabled", Boolean::class.java)
+                        .addField("vibrate", Boolean::class.java)
+                        .addField("soundTitle", String::class.java)
+                        .addField("soundUri", String::class.java)
+                        .addField("label", String::class.java)
                 currentVersion++
             }
 

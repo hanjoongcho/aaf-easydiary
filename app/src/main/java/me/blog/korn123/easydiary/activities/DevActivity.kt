@@ -24,10 +24,8 @@ import com.simplemobiletools.commons.helpers.isOreoPlus
 import kotlinx.android.synthetic.main.activity_dev.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
-import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
-import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_NAME
-import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.receivers.AlarmReceiver
 import java.util.*
 import kotlin.math.pow
@@ -57,6 +55,8 @@ class DevActivity : EasyDiaryActivity() {
         initProperties()
         initDevUI()
         bindEvent()
+
+        toast("${EasyDiaryDbHelper.countAlarmAll()}", Toast.LENGTH_LONG)
     }
 
     /***************************************************************************************************
@@ -68,7 +68,12 @@ class DevActivity : EasyDiaryActivity() {
         val calendar = Calendar.getInstance(Locale.getDefault())
         var minutes = calendar.get(Calendar.HOUR_OF_DAY) * 60
         minutes += calendar.get(Calendar.MINUTE)
-        mAlarm = Alarm(0, minutes, 0, isEnabled = false, vibrate = false, soundTitle = "", soundUri = "", label = "")
+
+        val tempAlarm = Alarm(0)
+        if (EasyDiaryDbHelper.countAlarmAll() == 0L) {
+            EasyDiaryDbHelper.insertAlarm(tempAlarm)
+        }
+        mAlarm = EasyDiaryDbHelper.readAlarmBy(1)!!
     }
 
     private fun initDevUI() {
@@ -86,6 +91,7 @@ class DevActivity : EasyDiaryActivity() {
 
             day.setTextColor(if (isDayChecked) config.backgroundColor else config.textColor)
             day.setOnClickListener {
+                EasyDiaryDbHelper.getInstance().beginTransaction()
                 val selectDay = mAlarm.days and pow == 0
                 mAlarm.days = if (selectDay) {
                     mAlarm.days.addBit(pow)
@@ -94,6 +100,7 @@ class DevActivity : EasyDiaryActivity() {
                 }
                 day.background = getProperDayDrawable(selectDay)
                 day.setTextColor(if (selectDay) config.backgroundColor else config.textColor)
+                EasyDiaryDbHelper.getInstance().commitTransaction()
             }
 
             edit_alarm_days_holder.addView(day)
@@ -126,7 +133,9 @@ class DevActivity : EasyDiaryActivity() {
     }
 
     private val timeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+        EasyDiaryDbHelper.getInstance().beginTransaction()
         mAlarm.timeInMinutes = hourOfDay * 60 + minute
+        EasyDiaryDbHelper.getInstance().commitTransaction()
         updateAlarmTime()
     }
 
@@ -160,8 +169,7 @@ class DevActivity : EasyDiaryActivity() {
  *   extensions
  *
  ***************************************************************************************************/
-data class Alarm(var id: Int, var timeInMinutes: Int, var days: Int, var isEnabled: Boolean, var vibrate: Boolean, var soundTitle: String,
-                 var soundUri: String, var label: String)
+//data class Alarm(var id: Int, var timeInMinutes: Int, var days: Int, var isEnabled: Boolean, var vibrate: Boolean, var soundTitle: String, var soundUri: String, var label: String)
 
 fun formatTime(showSeconds: Boolean, use24HourFormat: Boolean, hours: Int, minutes: Int, seconds: Int): String {
     val hoursFormat = if (use24HourFormat) "%02d" else "%01d"
