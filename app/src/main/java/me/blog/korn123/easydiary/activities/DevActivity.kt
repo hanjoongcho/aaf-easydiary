@@ -59,6 +59,16 @@ class DevActivity : EasyDiaryActivity() {
         toast("${EasyDiaryDbHelper.countAlarmAll()}", Toast.LENGTH_LONG)
     }
 
+    override fun onResume() {
+        super.onResume()
+        EasyDiaryDbHelper.getInstance().beginTransaction()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        EasyDiaryDbHelper.getInstance().commitTransaction()
+    }
+
     /***************************************************************************************************
      *   etc functions
      *
@@ -91,7 +101,6 @@ class DevActivity : EasyDiaryActivity() {
 
             day.setTextColor(if (isDayChecked) config.backgroundColor else config.textColor)
             day.setOnClickListener {
-                EasyDiaryDbHelper.getInstance().beginTransaction()
                 val selectDay = mAlarm.days and pow == 0
                 mAlarm.days = if (selectDay) {
                     mAlarm.days.addBit(pow)
@@ -100,11 +109,12 @@ class DevActivity : EasyDiaryActivity() {
                 }
                 day.background = getProperDayDrawable(selectDay)
                 day.setTextColor(if (selectDay) config.backgroundColor else config.textColor)
-                EasyDiaryDbHelper.getInstance().commitTransaction()
             }
 
             edit_alarm_days_holder.addView(day)
         }
+
+        alarm_switch.isChecked = mAlarm.isEnabled
     }
 
     private fun getProperDayDrawable(selected: Boolean): Drawable {
@@ -123,7 +133,8 @@ class DevActivity : EasyDiaryActivity() {
             TransitionHelper.startActivityWithTransition(this, Intent(this, DiaryReminderActivity::class.java))
         }
 
-        alarm_switch.setOnCheckedChangeListener { buttonView, isChecked ->
+        alarm_switch.setOnCheckedChangeListener { _, isChecked ->
+            mAlarm.isEnabled = isChecked
             if (isChecked) {
                 scheduleNextAlarm(mAlarm, true)
             } else {
@@ -133,30 +144,12 @@ class DevActivity : EasyDiaryActivity() {
     }
 
     private val timeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-        EasyDiaryDbHelper.getInstance().beginTransaction()
         mAlarm.timeInMinutes = hourOfDay * 60 + minute
-        EasyDiaryDbHelper.getInstance().commitTransaction()
         updateAlarmTime()
     }
 
     private fun updateAlarmTime() {
         edit_alarm_time.text = getFormattedTime(mAlarm.timeInMinutes * 60, false, true)
-    }
-
-    private fun getNextSecond(): Int {
-        val calendar = Calendar.getInstance(Locale.getDefault())
-        var second = calendar.get(Calendar.HOUR_OF_DAY) * 60 * 60
-        second += calendar.get(Calendar.MINUTE) * 60
-        return mAlarm.timeInMinutes * 60 - second
-    }
-
-    private fun getNextAlarmTime(): String {
-        val nextSecond = getNextSecond()
-        val hours: Int = nextSecond / 3600
-        val minutes: Int = (nextSecond % 3600) / 60
-        val second: Int = (nextSecond % 216000) / 60
-        edit_alarm_time.text = getFormattedTime(mAlarm.timeInMinutes * 60, false, true)
-        return String.format("[%d] %d시간 %d분 %d초 후에 일기장 알람~", nextSecond, hours, minutes, second)
     }
 
     companion object {
@@ -240,6 +233,14 @@ fun Context.showAlarmNotification(alarm: Alarm) {
     val notification = getAlarmNotification(pendingIntent, alarm)
     val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     notificationManager.notify(alarm.id, notification)
+    scheduleNextAlarm(alarm, false)
+}
+
+fun Context.rescheduleEnabledAlarms() {
+    toast("Reschedule enabled alarms that Easy Diary.", Toast.LENGTH_LONG)
+    EasyDiaryDbHelper.readAlarmAll().forEach {
+        if (it.isEnabled) scheduleNextAlarm(it, false)
+    }
 }
 
 @SuppressLint("NewApi")

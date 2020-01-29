@@ -415,7 +415,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             mClearQueryClickCount++
             if (mClearQueryClickCount > 4) {
 //                Toast.makeText(this, "$mClearQueryClickCount ${System.currentTimeMillis() - mClearQueryFirstClickMillis}", Toast.LENGTH_SHORT).show()
-                if (System.currentTimeMillis() - mClearQueryFirstClickMillis < 2000) {
+                if (System.currentTimeMillis() - mClearQueryFirstClickMillis < 3000) {
                     TransitionHelper.startActivityWithTransition(this, Intent(this, DevActivity::class.java))
                 }
                 mClearQueryClickCount = 0
