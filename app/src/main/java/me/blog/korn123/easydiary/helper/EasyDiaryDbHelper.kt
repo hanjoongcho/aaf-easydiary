@@ -161,6 +161,13 @@ object EasyDiaryDbHelper {
         return Realm.getInstance(mDiaryConfig).where(Alarm::class.java).count()
     }
 
+    fun readAlarmAll(): List<Alarm> {
+        val results = Realm.getInstance(mDiaryConfig).where(Alarm::class.java).findAll().sort("sequence", Sort.ASCENDING)
+        val list = mutableListOf<Alarm>()
+        list.addAll(results.subList(0, results.size))
+        return list
+    }
+
     fun readAlarmBy(sequence: Int): Alarm? {
         return readAlarmBy(Realm.getInstance(mDiaryConfig), sequence)
     }
