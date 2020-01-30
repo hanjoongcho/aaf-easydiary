@@ -11,6 +11,7 @@ import android.os.PowerManager
 import android.text.SpannableString
 import android.text.format.DateFormat
 import android.text.style.RelativeSizeSpan
+import android.view.View
 import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
@@ -115,6 +116,12 @@ class DevActivity : EasyDiaryActivity() {
         }
 
         alarm_switch.isChecked = mAlarm.isEnabled
+
+        val resourceId = resources.getIdentifier("ic_pizza", "drawable", packageName)
+        if (resourceId > 0) {
+            devConsoleSymbol.setImageDrawable(ContextCompat.getDrawable(this, resourceId))
+            devConsoleSymbol.visibility = View.VISIBLE
+        }
     }
 
     private fun getProperDayDrawable(selected: Boolean): Drawable {
