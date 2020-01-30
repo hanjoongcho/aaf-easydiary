@@ -21,59 +21,75 @@
         android:id="@+id/main_holder"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <androidx.cardview.widget.CardView
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/AppCard">
-            <LinearLayout
-                android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <RelativeLayout
+                android:layout_height="wrap_content"
+                style="@style/AppCard">
+                <ImageView
+                    android:id="@+id/devConsoleSymbol"
+                    android:visibility="gone"
+                    android:layout_width="77dp"
+                    android:layout_height="77dp"/>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/AppCard">
+                <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                    <me.blog.korn123.easydiary.views.FixedTextView
-                        app:applyGlobalSize="false"
-                        app:applyGlobalColor="true"
-                        android:id="@+id/edit_alarm_time"
-                        android:layout_toLeftOf="@+id/alarm_switch"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:textSize="44sp"
-                        android:text="07:00"/>
+                        android:layout_height="wrap_content">
+                        <me.blog.korn123.easydiary.views.FixedTextView
+                            app:applyGlobalSize="false"
+                            app:applyGlobalColor="true"
+                            android:id="@+id/edit_alarm_time"
+                            android:layout_toLeftOf="@+id/alarm_switch"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="?attr/selectableItemBackground"
+                            android:textSize="44sp"
+                            android:text="07:00"/>
 
-                    <LinearLayout
-                        android:id="@+id/edit_alarm_days_holder"
-                        android:layout_width="match_parent"
-                        android:layout_height="38dp"
-                        android:layout_below="@+id/edit_alarm_time"
-                        android:layout_marginTop="@dimen/medium_margin"
-                        android:layout_marginBottom="@dimen/medium_margin"
-                        android:orientation="horizontal"/>
+                        <LinearLayout
+                            android:id="@+id/edit_alarm_days_holder"
+                            android:layout_width="match_parent"
+                            android:layout_height="38dp"
+                            android:layout_below="@+id/edit_alarm_time"
+                            android:layout_marginTop="@dimen/medium_margin"
+                            android:layout_marginBottom="@dimen/medium_margin"
+                            android:orientation="horizontal"/>
 
-                    <com.simplemobiletools.commons.views.MySwitchCompat
-                        android:id="@+id/alarm_switch"
+                        <com.simplemobiletools.commons.views.MySwitchCompat
+                            android:id="@+id/alarm_switch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignTop="@+id/edit_alarm_time"
+                            android:layout_alignBottom="@id/edit_alarm_time"
+                            android:layout_alignParentRight="true"
+                            android:paddingLeft="@dimen/activity_margin"
+                            android:paddingRight="@dimen/medium_margin"/>
+                    </RelativeLayout>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/executeAlarmManager"
+                        android:text="Execute AlarmManager"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignTop="@+id/edit_alarm_time"
-                        android:layout_alignBottom="@id/edit_alarm_time"
-                        android:layout_alignParentRight="true"
-                        android:paddingLeft="@dimen/activity_margin"
-                        android:paddingRight="@dimen/medium_margin"/>
-                </RelativeLayout>
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/executeAlarmManager"
-                    android:text="Execute AlarmManager"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/openAlarmManager"
-                    android:text="Open Reminder"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+                        android:layout_height="wrap_content"/>
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/openAlarmManager"
+                        android:text="Open Reminder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
     </ScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
