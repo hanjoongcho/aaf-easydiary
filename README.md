@@ -3,7 +3,7 @@
 
 [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/unicodeveloper/awesome-opensource-apps)
 [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
-[![License][licensesvg]][LICENSE.md]
+[![License][licensesvg]][THIRDPARTY.md]
 
 <img src="screenshots/ic_launcher.png" >
 
@@ -186,9 +186,10 @@ Currently supported languages are listed below:
 [Contributing](Contributing.md)
 
 # License
-[Easy Diary License](https://github.com/hanjoongcho/aaf-easydiary/blob/master/LICENSE)  
-[Third-Party License](https://github.com/hanjoongcho/aaf-easydiary/blob/master/THIRDPARTY.md)
+[Easy Diary License][LICENSE]
+[Third-Party License][THIRDPARTY.md]
 
-[licensesvg]: https://img.shields.io/badge/License-Apache--2.0-brightgreen.svg
+[licensesvg]: https://img.shields.io/badge/License-GPL--3.0-brightgreen.svg
+[LICENSE]: https://github.com/hanjoongcho/aaf-easydiary/blob/master/LICENSE
 [README_ko.md]: https://github.com/hanjoongcho/aaf-easydiary/blob/master/README_ko.md
-[LICENSE.md]: https://github.com/hanjoongcho/aaf-easydiary/blob/master/LICENSE.md
+[THIRDPARTY.md]: https://github.com/hanjoongcho/aaf-easydiary/blob/master/THIRDPARTY.md
