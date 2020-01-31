@@ -186,7 +186,7 @@ Currently supported languages are listed below:
 [Contributing](Contributing.md)
 
 # License
-[Easy Diary License][LICENSE]
+[Easy Diary License][LICENSE]  
 [Third-Party License][THIRDPARTY.md]
 
 [licensesvg]: https://img.shields.io/badge/License-GPL--3.0-brightgreen.svg
