@@ -4,8 +4,10 @@ import android.content.Intent
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.RingtoneManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.Vibrator
 import android.view.MotionEvent
 import android.view.animation.AnimationUtils
 import com.simplemobiletools.commons.extensions.*
@@ -24,6 +26,7 @@ class DiaryReminderActivity : EasyDiaryActivity() {
      ***************************************************************************************************/
     private val swipeGuideFadeHandler = Handler()
     private var mediaPlayer: MediaPlayer? = null
+    private var vibrator: Vibrator? = null
     private var lastVolumeValue = 0.1f
     private var didVibrate = false
     private var dragDownX = 0f
@@ -38,6 +41,7 @@ class DiaryReminderActivity : EasyDiaryActivity() {
         setContentView(R.layout.activity_diary_reminder)
         showOverLockScreen()
 
+        setupVibrator()
         setupAudio()
         setupEvent()
     }
@@ -119,6 +123,12 @@ class DiaryReminderActivity : EasyDiaryActivity() {
         }
     }
 
+    private fun setupVibrator() {
+        vibrator = getSystemService(VIBRATOR_SERVICE) as Vibrator
+        val pattern = longArrayOf(100, 300, 100, 700, 300, 2000)
+        vibrator?.vibrate(pattern, 1)
+    }
+
     private fun setupAudio() {
         val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
         try {
@@ -139,6 +149,8 @@ class DiaryReminderActivity : EasyDiaryActivity() {
         mediaPlayer?.stop()
         mediaPlayer?.release()
         mediaPlayer = null
+
+        vibrator?.cancel()
     }
 
     private fun finishActivity() {
