@@ -15,22 +15,25 @@ import kotlinx.android.synthetic.main.activity_diary_reminder.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.DIARY_INSERT_MODE
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.MODE_REMINDER
 import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.models.Alarm
 
 class DiaryReminderActivity : EasyDiaryActivity() {
+
 
     /***************************************************************************************************
      *   global properties
      *
      ***************************************************************************************************/
+    private var mAlarm: Alarm? = null
     private val swipeGuideFadeHandler = Handler()
     private var mediaPlayer: MediaPlayer? = null
     private var vibrator: Vibrator? = null
     private var lastVolumeValue = 0.1f
     private var didVibrate = false
     private var dragDownX = 0f
-
 
     /***************************************************************************************************
      *   override functions
@@ -41,8 +44,11 @@ class DiaryReminderActivity : EasyDiaryActivity() {
         setContentView(R.layout.activity_diary_reminder)
         showOverLockScreen()
 
+        val alarmId = intent.getIntExtra(DevActivity.ALARM_ID, -1)
+        mAlarm = EasyDiaryDbHelper.readAlarmBy(alarmId)
+
         setupVibrator()
-        setupAudio()
+//        setupAudio()
         setupEvent()
     }
 
@@ -154,6 +160,9 @@ class DiaryReminderActivity : EasyDiaryActivity() {
     }
 
     private fun finishActivity() {
+        mAlarm?.let {
+            scheduleNextAlarm(it, true)
+        }
         destroyPlayer()
         finish()
         overridePendingTransition(0, 0)

@@ -57,7 +57,7 @@ class DevActivity : EasyDiaryActivity() {
         initDevUI()
         bindEvent()
 
-        toast("${EasyDiaryDbHelper.countAlarmAll()}", Toast.LENGTH_LONG)
+//        toast("${EasyDiaryDbHelper.countAlarmAll()}", Toast.LENGTH_LONG)
     }
 
     override fun onResume() {
@@ -135,11 +135,6 @@ class DevActivity : EasyDiaryActivity() {
         edit_alarm_time.setOnClickListener {
             TimePickerDialog(this, timeSetListener, mAlarm.timeInMinutes / 60, mAlarm.timeInMinutes % 60, DateFormat.is24HourFormat(this)).show()
         }
-
-        openAlarmManager.setOnClickListener {
-            TransitionHelper.startActivityWithTransition(this, Intent(this, DiaryReminderActivity::class.java))
-        }
-
         alarm_switch.setOnCheckedChangeListener { _, isChecked ->
             mAlarm.isEnabled = isChecked
             if (isChecked) {
@@ -147,6 +142,12 @@ class DevActivity : EasyDiaryActivity() {
             } else {
                 cancelAlarmClock(mAlarm)
             }
+        }
+
+        openAlarmManager.setOnClickListener {
+            TransitionHelper.startActivityWithTransition(this, Intent(this, DiaryReminderActivity::class.java).apply {
+                putExtra(ALARM_ID, mAlarm.id)
+            })
         }
     }
 

@@ -18,6 +18,7 @@ class AlarmReceiver : BroadcastReceiver() {
         } else {
             Intent(context, DiaryReminderActivity::class.java).apply {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                putExtra(DevActivity.ALARM_ID, alarmId)
                 context.pauseLock() // Disables the active lock
                 context.startActivity(this)
             }

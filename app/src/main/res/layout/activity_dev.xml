@@ -79,11 +79,6 @@
                     </RelativeLayout>
 
                     <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/executeAlarmManager"
-                        android:text="Execute AlarmManager"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-                    <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/openAlarmManager"
                         android:text="Open Reminder"
                         android:layout_width="wrap_content"
