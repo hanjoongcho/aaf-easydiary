@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
@@ -153,8 +154,17 @@ class DevActivity : EasyDiaryActivity() {
         }
 
         nextAlarmInfo.setOnClickListener {
-            val nextAlarm = Settings.System.getString(contentResolver, Settings.System.NEXT_ALARM_FORMATTED)
-            toast(nextAlarm, Toast.LENGTH_LONG)
+            var nextAlarm: String? = null
+            nextAlarm = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                am.nextAlarmClock.toString()
+            } else {
+                Settings.System.getString(contentResolver,Settings.System.NEXT_ALARM_FORMATTED)
+            }
+
+            nextAlarm?.let {
+                toast(it, Toast.LENGTH_LONG)
+            }
         }
     }
 
