@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat
 import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.DAY_MINUTES
 import com.simplemobiletools.commons.helpers.isOreoPlus
+import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_dev.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
@@ -154,17 +155,15 @@ class DevActivity : EasyDiaryActivity() {
         }
 
         nextAlarmInfo.setOnClickListener {
-            var nextAlarm: String? = null
+            val nextAlarm: String
             nextAlarm = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                am.nextAlarmClock.toString()
+                DateUtils.getFullPatternDateWithTime(am.nextAlarmClock.triggerTime)
             } else {
                 Settings.System.getString(contentResolver,Settings.System.NEXT_ALARM_FORMATTED)
             }
 
-            nextAlarm?.let {
-                toast(it, Toast.LENGTH_LONG)
-            }
+            toast(nextAlarm, Toast.LENGTH_LONG)
         }
     }
 
