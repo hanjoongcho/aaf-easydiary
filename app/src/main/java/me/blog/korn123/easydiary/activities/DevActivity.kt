@@ -155,10 +155,8 @@ class DevActivity : EasyDiaryActivity() {
         }
 
         nextAlarmInfo.setOnClickListener {
-            val nextAlarm: String
-            nextAlarm = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                DateUtils.getFullPatternDateWithTime(am.nextAlarmClock.triggerTime)
+            val nextAlarm = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                DateUtils.getFullPatternDateWithTime((getSystemService(Context.ALARM_SERVICE) as AlarmManager).nextAlarmClock?.triggerTime ?: 0)
             } else {
                 Settings.System.getString(contentResolver,Settings.System.NEXT_ALARM_FORMATTED)
             }
