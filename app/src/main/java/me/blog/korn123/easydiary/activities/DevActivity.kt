@@ -156,7 +156,11 @@ class DevActivity : EasyDiaryActivity() {
 
         nextAlarmInfo.setOnClickListener {
             val nextAlarm = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                DateUtils.getFullPatternDateWithTime((getSystemService(Context.ALARM_SERVICE) as AlarmManager).nextAlarmClock?.triggerTime ?: 0)
+                val triggerTimeMillis = (getSystemService(Context.ALARM_SERVICE) as AlarmManager).nextAlarmClock?.triggerTime ?: 0
+                when (triggerTimeMillis > 0) {
+                    true -> DateUtils.getFullPatternDateWithTime(triggerTimeMillis)
+                    false -> "Alarm info is not exist."
+                }
             } else {
                 Settings.System.getString(contentResolver,Settings.System.NEXT_ALARM_FORMATTED)
             }
