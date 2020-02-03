@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.PowerManager
+import android.provider.Settings
 import android.text.SpannableString
 import android.text.format.DateFormat
 import android.text.style.RelativeSizeSpan
@@ -30,6 +31,7 @@ import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.receivers.AlarmReceiver
 import java.util.*
 import kotlin.math.pow
+
 
 class DevActivity : EasyDiaryActivity() {
 
@@ -148,6 +150,11 @@ class DevActivity : EasyDiaryActivity() {
             TransitionHelper.startActivityWithTransition(this, Intent(this, DiaryReminderActivity::class.java).apply {
                 putExtra(ALARM_ID, mAlarm.id)
             })
+        }
+
+        nextAlarmInfo.setOnClickListener {
+            val nextAlarm = Settings.System.getString(contentResolver, Settings.System.NEXT_ALARM_FORMATTED)
+            toast(nextAlarm, Toast.LENGTH_LONG)
         }
     }
 
