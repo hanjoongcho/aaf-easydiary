@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.helper
 
+import android.util.Log
 import org.apache.commons.io.IOUtils
 import java.io.*
 import java.util.zip.ZipEntry
@@ -35,7 +36,9 @@ class ZipHelper {
         val zipOutputStream: ZipOutputStream
         try {
             zipOutputStream = ZipOutputStream(FileOutputStream(destFileName))
-            for (fileName in fileNames) {
+
+            fileNames.forEachIndexed { index, fileName ->
+                Log.i("aaf", "$index/${fileNames.size}")
                 try {
                     val fileInputStream = FileInputStream(rootDirectoryName + File.separator + fileName)
                     zipOutputStream.putNextEntry(ZipEntry(fileName))
@@ -46,7 +49,6 @@ class ZipHelper {
                 } catch (ex: IOException) {
                     System.err.println(ex)
                 }
-
             }
             zipOutputStream.close()
         } catch (e: FileNotFoundException) {

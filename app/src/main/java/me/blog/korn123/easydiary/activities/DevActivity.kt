@@ -172,13 +172,18 @@ class DevActivity : EasyDiaryActivity() {
         }
 
         exportData.setOnClickListener {
-            val zipHelper = ZipHelper()
-            val fileName = "bak.zip"
-            var workingPath = EasyDiaryUtils.getApplicationDataDirectory(this)
-            zipHelper.determineFiles(workingPath)
-            zipHelper.compress("$workingPath/$fileName")
+            Thread {
+                val zipHelper = ZipHelper()
+                val workingPath =  "${EasyDiaryUtils.getApplicationDataDirectory(this)}/"
+                val fileName = "bak.zip"
+                val destFile = File("${EasyDiaryUtils.getExternalStorageDirectory().absolutePath + WORKING_DIRECTORY + fileName}")
+                val compressFile = File("${workingPath + fileName}")
+                if (compressFile.exists()) compressFile.delete()
 
-            FileUtils.copyFile(File("$workingPath/$fileName"), File("${EasyDiaryUtils.getExternalStorageDirectory().absolutePath}$WORKING_DIRECTORY$fileName"))
+                zipHelper.determineFiles(workingPath)
+                zipHelper.compress("${workingPath + fileName}")
+                FileUtils.copyFile(compressFile, destFile)
+            }.start()
         }
     }
 
