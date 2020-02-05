@@ -173,16 +173,18 @@ class DevActivity : EasyDiaryActivity() {
 
         exportData.setOnClickListener {
             Thread {
-                val zipHelper = ZipHelper()
-                val workingPath =  "${EasyDiaryUtils.getApplicationDataDirectory(this)}/"
-                val fileName = "bak.zip"
-                val destFile = File("${EasyDiaryUtils.getExternalStorageDirectory().absolutePath + WORKING_DIRECTORY + fileName}")
-                val compressFile = File("${workingPath + fileName}")
+                val zipHelper = ZipHelper(this)
+                val workingPath =  EasyDiaryUtils.getApplicationDataDirectory(this) + WORKING_DIRECTORY
+                val destFileName = DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".zip"
+                val destFile = File(EasyDiaryUtils.getExternalStorageDirectory().absolutePath + WORKING_DIRECTORY + destFileName)
+                val compressFile = File(workingPath, "bak.zip")
                 if (compressFile.exists()) compressFile.delete()
 
                 zipHelper.determineFiles(workingPath)
-                zipHelper.compress("${workingPath + fileName}")
-                FileUtils.copyFile(compressFile, destFile)
+                zipHelper.printFileNames()
+                zipHelper.compress(compressFile)
+                FileUtils.moveFile(compressFile, destFile)
+                zipHelper.updateNotification(WORKING_DIRECTORY + destFileName, "Export complete")
             }.start()
         }
     }
@@ -289,7 +291,6 @@ fun Context.rescheduleEnabledAlarms() {
 
 @SuppressLint("NewApi")
 fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): Notification {
-
     if (isOreoPlus()) {
         // Create the NotificationChannel
         val importance = NotificationManager.IMPORTANCE_HIGH
@@ -302,7 +303,6 @@ fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): No
     }
 
     val builder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_dev")
-    builder
             .setDefaults(Notification.DEFAULT_ALL)
             .setWhen(System.currentTimeMillis())
             .setSmallIcon(R.drawable.ic_launcher_round)
@@ -313,7 +313,6 @@ fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): No
             .setContentText("content")
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-
 
     val notification = builder.build()
     notification.flags = notification.flags or Notification.FLAG_INSISTENT

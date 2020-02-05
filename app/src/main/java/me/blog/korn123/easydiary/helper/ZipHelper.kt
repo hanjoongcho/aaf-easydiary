@@ -1,18 +1,59 @@
 package me.blog.korn123.easydiary.helper
 
+import android.annotation.SuppressLint
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import com.simplemobiletools.commons.helpers.isOreoPlus
+import me.blog.korn123.easydiary.R
 import org.apache.commons.io.IOUtils
 import java.io.*
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
 
-class ZipHelper {
-    private val fileNames = ArrayList<String>()
-    private var rootDirectoryName: String? = null
+class ZipHelper(val context: Context) {
+    private lateinit var mBuilder: NotificationCompat.Builder
+    private val mTitle = "Compressing all files..."
+    private val mFileNames = ArrayList<String>()
+    private var mRootDirectoryName: String? = null
+
+    @SuppressLint("NewApi")
+    fun showNotification() {
+        val notificationManager = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
+        if (isOreoPlus()) {
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val mChannel = NotificationChannel("${NOTIFICATION_CHANNEL_ID}_compress", "${NOTIFICATION_CHANNEL_NAME}_compress", importance)
+            mChannel.description = NOTIFICATION_CHANNEL_DESCRIPTION
+            notificationManager.createNotificationChannel(mChannel)
+        }
+
+        mBuilder = NotificationCompat.Builder(context, "${NOTIFICATION_CHANNEL_ID}_compress")
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(R.drawable.ic_launcher_round)
+                .setOngoing(false)
+                .setAutoCancel(true)
+                .setOnlyAlertOnce(true)
+                .setContentTitle("Compressing all files...")
+                .setContentText("...")
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+        notificationManager.notify(0, mBuilder.build())
+    }
+
+    fun updateNotification(message: String, title: String) {
+        val notificationManager = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
+        mBuilder.setContentTitle(title)
+        mBuilder.setContentText(message)
+        notificationManager.notify(0, mBuilder.build())
+    }
 
     fun determineFiles(targetDirectoryName: String) {
-        this.rootDirectoryName = targetDirectoryName
+        this.mRootDirectoryName = targetDirectoryName
         determineFiles(targetDirectoryName, null)
     }
 
@@ -24,23 +65,24 @@ class ZipHelper {
                 determineFiles(file.absolutePath, currentBasePath)
             } else {
                 if (basePath == null) {
-                    fileNames.add(file.name)
+                    mFileNames.add(file.name)
                 } else {
-                    fileNames.add(basePath + file.name)
+                    mFileNames.add(basePath + file.name)
                 }
             }
         }
     }
 
-    fun compress(destFileName: String) {
+    fun compress(destFile: File) {
+        showNotification()
         val zipOutputStream: ZipOutputStream
         try {
-            zipOutputStream = ZipOutputStream(FileOutputStream(destFileName))
+            zipOutputStream = ZipOutputStream(FileOutputStream(destFile))
 
-            fileNames.forEachIndexed { index, fileName ->
-                Log.i("aaf", "$index/${fileNames.size}")
+            mFileNames.forEachIndexed { index, fileName ->
+                updateNotification("$index/${mFileNames.size} $fileName", mTitle)
                 try {
-                    val fileInputStream = FileInputStream(rootDirectoryName + File.separator + fileName)
+                    val fileInputStream = FileInputStream(mRootDirectoryName + fileName)
                     zipOutputStream.putNextEntry(ZipEntry(fileName))
                     val bytes = IOUtils.toByteArray(fileInputStream)
                     zipOutputStream.write(bytes, 0, bytes.size)
@@ -97,12 +139,11 @@ class ZipHelper {
         } catch (e: IOException) {
             e.printStackTrace()
         }
-
     }
 
     fun printFileNames() {
-        for (path in fileNames) {
-            println(path)
+        for (fileName in mFileNames) {
+            Log.i("aaf", fileName)
         }
     }
 }
