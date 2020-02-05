@@ -3,27 +3,21 @@ package me.blog.korn123.easydiary.activities
 import android.annotation.TargetApi
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import android.view.*
-import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.FragmentPagerAdapter
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.simplemobiletools.commons.helpers.BaseConfig
 import io.github.aafactory.commons.extensions.updateAppViews
 import io.github.aafactory.commons.extensions.updateTextColors
-import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
-import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_diary_read.*
 import kotlinx.android.synthetic.main.fragment_diary_read.*
 import kotlinx.android.synthetic.main.layout_bottom_toolbar.*
@@ -268,11 +262,9 @@ class DiaryReadActivity : EasyDiaryActivity() {
     class PlaceholderFragment : androidx.fragment.app.Fragment() {
         private var mPrimaryColor = 0
         private lateinit var mRootView: ViewGroup
-        private lateinit var mRealmInstance: Realm
 
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
-            mRealmInstance = EasyDiaryDbHelper.getInstance()
         }
         
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -319,7 +311,6 @@ class DiaryReadActivity : EasyDiaryActivity() {
 
         override fun onDestroy() {
             super.onDestroy()
-            mRealmInstance.close()
         }
 
         fun getSequence() = arguments?.getInt(DIARY_SEQUENCE) ?: -1
@@ -327,7 +318,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
         fun getDiaryContents(): String = diaryContents.text.toString() 
         
         private fun initContents() {
-            val diaryDto = EasyDiaryDbHelper.readDiaryBy(mRealmInstance, getSequence())
+            val diaryDto = EasyDiaryDbHelper.readDiaryBy(getSequence())
             if (StringUtils.isEmpty(diaryDto.title)) {
                 diaryTitle.visibility = View.GONE
             }

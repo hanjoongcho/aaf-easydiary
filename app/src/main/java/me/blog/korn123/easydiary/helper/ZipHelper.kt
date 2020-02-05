@@ -39,16 +39,27 @@ class ZipHelper(val context: Context) {
                 .setOngoing(false)
                 .setAutoCancel(true)
                 .setOnlyAlertOnce(true)
+                .setProgress(0, 0, true)
                 .setContentTitle("Compressing all files...")
                 .setContentText("...")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
         notificationManager.notify(0, mBuilder.build())
     }
 
-    fun updateNotification(message: String, title: String) {
+    private fun updateNotification(title: String, progress: Int) {
+        val message = "${progress.plus(1)}/${mFileNames.size} ${mFileNames[progress]}"
         val notificationManager = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
-        mBuilder.setContentTitle(title)
-        mBuilder.setContentText(message)
+        mBuilder.setProgress(mFileNames.size, progress.plus(1), false)
+                .setContentTitle(title)
+                .setContentText(message)
+        notificationManager.notify(0, mBuilder.build())
+    }
+
+    fun updateNotification(title: String, message: String) {
+        val notificationManager = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
+        mBuilder.setProgress(0, 0, false)
+                .setContentTitle(title)
+                .setContentText(message)
         notificationManager.notify(0, mBuilder.build())
     }
 
@@ -57,7 +68,7 @@ class ZipHelper(val context: Context) {
         determineFiles(targetDirectoryName, null)
     }
 
-    fun determineFiles(targetDirectory: String, basePath: String?) {
+    private fun determineFiles(targetDirectory: String, basePath: String?) {
         val sourceDir = File(targetDirectory)
         for (file in sourceDir.listFiles()) {
             if (file.isDirectory) {
@@ -80,7 +91,7 @@ class ZipHelper(val context: Context) {
             zipOutputStream = ZipOutputStream(FileOutputStream(destFile))
 
             mFileNames.forEachIndexed { index, fileName ->
-                updateNotification("$index/${mFileNames.size} $fileName", mTitle)
+                updateNotification(mTitle, index)
                 try {
                     val fileInputStream = FileInputStream(mRootDirectoryName + fileName)
                     zipOutputStream.putNextEntry(ZipEntry(fileName))

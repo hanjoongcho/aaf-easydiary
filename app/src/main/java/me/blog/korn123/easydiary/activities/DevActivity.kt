@@ -184,7 +184,7 @@ class DevActivity : EasyDiaryActivity() {
                 zipHelper.printFileNames()
                 zipHelper.compress(compressFile)
                 FileUtils.moveFile(compressFile, destFile)
-                zipHelper.updateNotification(WORKING_DIRECTORY + destFileName, "Export complete")
+                zipHelper.updateNotification("Export complete", WORKING_DIRECTORY + destFileName)
             }.start()
         }
     }
