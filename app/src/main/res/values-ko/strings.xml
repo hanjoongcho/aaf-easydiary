@@ -529,4 +529,6 @@
     <string name="dashboard_backup_guide_message">백업정보 없음</string>
     <string name="last_diary_backup_time">다이어리 마지막 백업 시간:</string>
     <string name="last_photo_backup_time">첨부사진 마지막 백업 시간:</string>
+    <string name="export_full_backup_title">Backup full data(Beta)</string>
+    <string name="export_full_backup_description">Compress and back up all the data related to the diary such as database, attached photo, post card, font, etc. into one file.</string>
 </resources>

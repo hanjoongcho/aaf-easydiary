@@ -66,6 +66,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
             exportExcel.visibility = View.GONE
+            exportFullBackupFile.visibility = View.GONE
         }
 
         bindEvent()
@@ -95,6 +96,9 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
                 }
                 REQUEST_CODE_EXTERNAL_STORAGE_WITH_DELETE_REALM -> if (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                     deleteRealmFile()
+                }
+                REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_FULL_BACKUP -> if (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                    exportFullBackupFile()
                 }
             }
         } else {
@@ -371,8 +375,25 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
 
         return wb
     }
-    
-    
+
+    private fun exportFullBackupFile() {
+        Thread {
+            val zipHelper = ZipHelper(mContext)
+            val workingPath =  EasyDiaryUtils.getApplicationDataDirectory(mContext) + WORKING_DIRECTORY
+            val destFileName = DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".zip"
+            val destFile = File(EasyDiaryUtils.getExternalStorageDirectory().absolutePath + WORKING_DIRECTORY + destFileName)
+            val compressFile = File(workingPath, "bak.zip")
+            if (compressFile.exists()) compressFile.delete()
+
+            zipHelper.determineFiles(workingPath)
+            zipHelper.printFileNames()
+            zipHelper.compress(compressFile)
+            FileUtils.moveFile(compressFile, destFile)
+            zipHelper.updateNotification("Export complete", WORKING_DIRECTORY + destFileName)
+        }.start()
+    }
+
+
     /***************************************************************************************************
      *   etc functions
      *
@@ -383,6 +404,12 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
                 when (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                     true -> exportExcel()
                     false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_EXCEL)
+                }
+            }
+            R.id.exportFullBackupFile -> {
+                when (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                    true -> exportFullBackupFile()
+                    false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_FULL_BACKUP)
                 }
             }
             R.id.sendEmailWithExcel -> {
@@ -415,6 +442,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
         exportRealmFile.setOnClickListener(mOnClickListener)
         importRealmFile.setOnClickListener(mOnClickListener)
         deleteRealmFile.setOnClickListener(mOnClickListener)
+        exportFullBackupFile.setOnClickListener(mOnClickListener)
     }
 
     private fun initPreference() {}
