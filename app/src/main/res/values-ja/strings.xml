@@ -357,7 +357,7 @@
     </string>
     <string name="release_183">
         v1.4.117 / 2020.02.xx\n
-        [BETA] Added full data backup feature
+        [BETA] 完全なデータバックアップ機能を追加
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -533,6 +533,6 @@
     <string name="dashboard_backup_guide_message">バックアップ情報なし</string>
     <string name="last_diary_backup_time">日記の最終バックアップ時間:</string>
     <string name="last_photo_backup_time">添付写真の最終バックアップ時間:</string>
-    <string name="export_full_backup_title">[BETA] Backup full data</string>
-    <string name="export_full_backup_description">Compress and back up all the data related to the diary such as database, attached photo, post card, font, etc. into one file.\nThis feature is a beta feature therefore may not work properly on some devices.</string>
+    <string name="export_full_backup_title">[BETA] 完全なデータをバックアップする</string>
+    <string name="export_full_backup_description">データベース、添付写真、ポストカード、フォントなど、日記に関連するすべてのデータを1つのファイルに圧縮してバックアップします。\nこの機能はベータ機能であるため、一部のデバイスでは正常に機能しない場合があります。</string>
 </resources>

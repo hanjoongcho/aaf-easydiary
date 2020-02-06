@@ -109,7 +109,6 @@ class ZipHelper(val context: Context) {
         } catch (e: IOException) {
             e.printStackTrace()
         }
-
     }
 
     fun decompress(zipFileName: String, compressDirectoryName: String) {
@@ -125,7 +124,6 @@ class ZipHelper(val context: Context) {
             while (zipEntry != null) {
                 val fileName = zipEntry.name
                 val newFile = File(compressDirectoryName + File.separator + fileName)
-                System.out.println("Unzipping to " + newFile.absolutePath)
 
                 File(newFile.parent).mkdirs()
                 val fileOutputStream = FileOutputStream(newFile)

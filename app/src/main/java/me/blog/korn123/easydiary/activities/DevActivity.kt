@@ -26,14 +26,11 @@ import com.simplemobiletools.commons.helpers.DAY_MINUTES
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_dev.*
-import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.receivers.AlarmReceiver
-import org.apache.commons.io.FileUtils
-import java.io.File
 import java.util.*
 import kotlin.math.pow
 
@@ -169,23 +166,6 @@ class DevActivity : EasyDiaryActivity() {
             }
 
             toast(nextAlarm, Toast.LENGTH_LONG)
-        }
-
-        exportData.setOnClickListener {
-            Thread {
-                val zipHelper = ZipHelper(this)
-                val workingPath =  EasyDiaryUtils.getApplicationDataDirectory(this) + WORKING_DIRECTORY
-                val destFileName = DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".zip"
-                val destFile = File(EasyDiaryUtils.getExternalStorageDirectory().absolutePath + WORKING_DIRECTORY + destFileName)
-                val compressFile = File(workingPath, "bak.zip")
-                if (compressFile.exists()) compressFile.delete()
-
-                zipHelper.determineFiles(workingPath)
-                zipHelper.printFileNames()
-                zipHelper.compress(compressFile)
-                FileUtils.moveFile(compressFile, destFile)
-                zipHelper.updateNotification("Export complete", WORKING_DIRECTORY + destFileName)
-            }.start()
         }
     }
 

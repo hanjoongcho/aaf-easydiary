@@ -89,12 +89,6 @@
                         android:text="Next Alarm"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
-
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/exportData"
-                        android:text="Export all data to a zip file"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
         </LinearLayout>
