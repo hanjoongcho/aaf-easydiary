@@ -4,12 +4,15 @@ import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.services.NotificationService
 import org.apache.commons.io.IOUtils
 import java.io.*
 import java.util.zip.ZipEntry
@@ -18,7 +21,6 @@ import java.util.zip.ZipOutputStream
 
 class ZipHelper(val context: Context) {
     private lateinit var mBuilder: NotificationCompat.Builder
-    private val mTitle = "Compressing all files..."
     private val mFileNames = ArrayList<String>()
     private var mRootDirectoryName: String? = null
 
@@ -43,16 +45,16 @@ class ZipHelper(val context: Context) {
                 .setContentTitle("Compressing all files...")
                 .setContentText("...")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-        notificationManager.notify(0, mBuilder.build())
+        notificationManager.notify(NOTIFICATION_COMPLETE_ID, mBuilder.build())
     }
 
-    private fun updateNotification(title: String, progress: Int) {
-        val message = "${progress.plus(1)}/${mFileNames.size} ${mFileNames[progress]}"
+    private fun updateNotification(progress: Int) {
+        val message = mFileNames[progress]
         val notificationManager = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
         mBuilder.setProgress(mFileNames.size, progress.plus(1), false)
-                .setContentTitle(title)
+                .setContentTitle("${progress.plus(1)}/${mFileNames.size}")
                 .setContentText(message)
-        notificationManager.notify(0, mBuilder.build())
+        notificationManager.notify(NOTIFICATION_COMPLETE_ID, mBuilder.build())
     }
 
     fun updateNotification(title: String, message: String) {
@@ -60,7 +62,14 @@ class ZipHelper(val context: Context) {
         mBuilder.setProgress(0, 0, false)
                 .setContentTitle(title)
                 .setContentText(message)
-        notificationManager.notify(0, mBuilder.build())
+                .addAction(
+                        R.drawable.ic_launcher_round,
+                        context.getString(R.string.dismiss),
+                        PendingIntent.getService(context, 0, Intent(context, NotificationService::class.java).apply {
+                            action = NotificationService.ACTION_DISMISS
+                        }, 0)
+                )
+        notificationManager.notify(NOTIFICATION_COMPLETE_ID, mBuilder.build())
     }
 
     fun determineFiles(targetDirectoryName: String) {
@@ -91,7 +100,7 @@ class ZipHelper(val context: Context) {
             zipOutputStream = ZipOutputStream(FileOutputStream(destFile))
 
             mFileNames.forEachIndexed { index, fileName ->
-                updateNotification(mTitle, index)
+                updateNotification(index)
                 try {
                     val fileInputStream = FileInputStream(mRootDirectoryName + fileName)
                     zipOutputStream.putNextEntry(ZipEntry(fileName))
