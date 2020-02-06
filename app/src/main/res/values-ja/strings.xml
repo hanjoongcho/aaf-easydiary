@@ -355,6 +355,10 @@
         v1.4.116 / 2020.01.21\n
         ライセンスポリシーが「Apache License 2.0」から「GNU General Public License v3.0」に変更されました
     </string>
+    <string name="release_183">
+        v1.4.117 / 2020.02.xx\n
+        [BETA] Added full data backup feature
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -529,6 +533,6 @@
     <string name="dashboard_backup_guide_message">バックアップ情報なし</string>
     <string name="last_diary_backup_time">日記の最終バックアップ時間:</string>
     <string name="last_photo_backup_time">添付写真の最終バックアップ時間:</string>
-    <string name="export_full_backup_title">Backup full data(Beta)</string>
-    <string name="export_full_backup_description">Compress and back up all the data related to the diary such as database, attached photo, post card, font, etc. into one file.</string>
+    <string name="export_full_backup_title">[BETA] Backup full data</string>
+    <string name="export_full_backup_description">Compress and back up all the data related to the diary such as database, attached photo, post card, font, etc. into one file.\nThis feature is a beta feature therefore may not work properly on some devices.</string>
 </resources>
