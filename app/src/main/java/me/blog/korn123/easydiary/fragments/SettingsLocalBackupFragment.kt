@@ -26,6 +26,7 @@ import me.blog.korn123.easydiary.adapters.SimpleCheckbox
 import me.blog.korn123.easydiary.adapters.SimpleCheckboxAdapter
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.viewmodels.BackupOperations
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
@@ -377,20 +378,8 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
     }
 
     private fun exportFullBackupFile() {
-        Thread {
-            val zipHelper = ZipHelper(mContext)
-            val workingPath =  EasyDiaryUtils.getApplicationDataDirectory(mContext) + WORKING_DIRECTORY
-            val destFileName = DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".zip"
-            val destFile = File(EasyDiaryUtils.getExternalStorageDirectory().absolutePath + WORKING_DIRECTORY + destFileName)
-            val compressFile = File(workingPath, "bak.zip")
-            if (compressFile.exists()) compressFile.delete()
-
-            zipHelper.determineFiles(workingPath)
-            zipHelper.printFileNames()
-            zipHelper.compress(compressFile)
-            FileUtils.moveFile(compressFile, destFile)
-            zipHelper.updateNotification("Export complete", WORKING_DIRECTORY + destFileName)
-        }.start()
+        val backupOperations = BackupOperations.Builder(mContext).build()
+        backupOperations.continuation.enqueue()
     }
 
 

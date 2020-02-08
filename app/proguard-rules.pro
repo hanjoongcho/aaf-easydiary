@@ -43,3 +43,5 @@
 -dontwarn java.awt.**
 -dontwarn javax.swing.**
 -dontwarn javax.imageio.**
+
+-dontwarn kotlinx.coroutines.flow.**inlined**

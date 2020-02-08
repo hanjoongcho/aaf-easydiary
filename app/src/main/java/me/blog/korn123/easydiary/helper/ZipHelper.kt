@@ -23,12 +23,14 @@ class ZipHelper(val context: Context) {
     private lateinit var mBuilder: NotificationCompat.Builder
     private val mFileNames = ArrayList<String>()
     private var mRootDirectoryName: String? = null
+    var isOnProgress = true
 
     @SuppressLint("NewApi")
     fun showNotification() {
         val notificationManager = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
         if (isOreoPlus()) {
-            val importance = NotificationManager.IMPORTANCE_HIGH
+//            val importance = NotificationManager.IMPORTANCE_HIGH
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
             val mChannel = NotificationChannel("${NOTIFICATION_CHANNEL_ID}_compress", "${NOTIFICATION_CHANNEL_NAME}_compress", importance)
             mChannel.description = NOTIFICATION_CHANNEL_DESCRIPTION
             notificationManager.createNotificationChannel(mChannel)
@@ -44,32 +46,45 @@ class ZipHelper(val context: Context) {
                 .setProgress(0, 0, true)
                 .setContentTitle("Compressing all files...")
                 .setContentText("...")
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
+//                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .addAction(
+                        R.drawable.ic_launcher_round,
+                        context.getString(R.string.cancel),
+                        PendingIntent.getService(context, 0, Intent(context, NotificationService::class.java).apply {
+                            action = NotificationService.ACTION_FULL_BACKUP_CANCEL
+                        }, 0)
+                )
         notificationManager.notify(NOTIFICATION_COMPLETE_ID, mBuilder.build())
     }
 
     private fun updateNotification(progress: Int) {
-        val message = mFileNames[progress]
-        val notificationManager = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
-        mBuilder.setProgress(mFileNames.size, progress.plus(1), false)
-                .setContentTitle("${progress.plus(1)}/${mFileNames.size}")
-                .setContentText(message)
-        notificationManager.notify(NOTIFICATION_COMPLETE_ID, mBuilder.build())
+        if (isOnProgress) {
+            val message = mFileNames[progress]
+            val notificationManager = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
+            mBuilder.setProgress(mFileNames.size, progress.plus(1), false)
+                    .setContentTitle("${progress.plus(1)}/${mFileNames.size}")
+                    .setContentText(message)
+            notificationManager.notify(NOTIFICATION_COMPLETE_ID, mBuilder.build())
+        }
     }
 
     fun updateNotification(title: String, message: String) {
-        val notificationManager = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
-        mBuilder.setProgress(0, 0, false)
-                .setContentTitle(title)
-                .setContentText(message)
-                .addAction(
-                        R.drawable.ic_launcher_round,
-                        context.getString(R.string.dismiss),
-                        PendingIntent.getService(context, 0, Intent(context, NotificationService::class.java).apply {
-                            action = NotificationService.ACTION_DISMISS
-                        }, 0)
-                )
-        notificationManager.notify(NOTIFICATION_COMPLETE_ID, mBuilder.build())
+        if (isOnProgress) {
+            val notificationManager = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
+            mBuilder.mActions.clear()
+            mBuilder.setProgress(0, 0, false)
+                    .setContentTitle(title)
+                    .setContentText(message)
+                    .addAction(
+                            R.drawable.ic_launcher_round,
+                            context.getString(R.string.dismiss),
+                            PendingIntent.getService(context, 0, Intent(context, NotificationService::class.java).apply {
+                                action = NotificationService.ACTION_DISMISS
+                            }, 0)
+                    )
+            notificationManager.notify(NOTIFICATION_COMPLETE_ID, mBuilder.build())
+        }
     }
 
     fun determineFiles(targetDirectoryName: String) {
