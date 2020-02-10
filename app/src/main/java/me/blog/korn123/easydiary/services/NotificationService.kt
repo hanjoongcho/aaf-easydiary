@@ -40,7 +40,6 @@ class NotificationService(name: String = "EasyDiaryNotificationService") : Inten
 
     private fun handleActionFullBackupCancel() {
         WorkManager.getInstance(this).cancelUniqueWork(WORK_MANAGER_BACKUP)
-        NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_COMPLETE_ID)
     }
 
     companion object {

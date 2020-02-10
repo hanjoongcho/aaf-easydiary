@@ -1,10 +1,12 @@
 package me.blog.korn123.easydiary.workers
 
 import android.content.Context
+import androidx.core.app.NotificationManagerCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.easydiary.helper.NOTIFICATION_COMPLETE_ID
 import me.blog.korn123.easydiary.helper.WORKING_DIRECTORY
 import me.blog.korn123.easydiary.helper.ZipHelper
 import org.apache.commons.io.FileUtils
@@ -37,5 +39,6 @@ class FullBackupWorker(val appContext: Context, workerParams: WorkerParameters)
     override fun onStopped() {
         super.onStopped()
         mZipHelper.isOnProgress = false
+        NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_COMPLETE_ID)
     }
 }

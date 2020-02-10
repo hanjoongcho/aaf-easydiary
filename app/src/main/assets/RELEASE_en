@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.117 (date: 2020/02/10)
+  * [BETA] Added full data backup feature
+
 # Changes in 1.4.116 (date: 2020/01/21)
   * License policy changed from 「Apache License 2.0」 to 「GNU General Public License v3.0」
 

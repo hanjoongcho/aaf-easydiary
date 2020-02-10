@@ -356,7 +356,7 @@
         라이선스 정책을 「Apache License 2.0」에서 「GNU General Public License v3.0」으로 변경함
     </string>
     <string name="release_183">
-        v1.4.117 / 2020.02.xx\n
+        v1.4.117 / 2020.02.10\n
         [BETA] 전체 데이터 백업기능 추가
     </string>
 
@@ -534,5 +534,5 @@
     <string name="last_diary_backup_time">다이어리 마지막 백업 시간:</string>
     <string name="last_photo_backup_time">첨부사진 마지막 백업 시간:</string>
     <string name="export_full_backup_title">[BETA] 전체 데이터 백업</string>
-    <string name="export_full_backup_description">데이터베이스, 첨부사진, 포스트카드, 폰트 파일등 이지 다이어리와 관련된 모든 데이터를 하나의 파일로 압축하고 백업합니다.\n이 기능은 베타 기능이므로 일부 장치에서는 제대로 작동하지 않을 수 있습니다.</string>
+    <string name="export_full_backup_description">데이터베이스, 첨부사진, 포스트카드, 폰트 파일등 이지 다이어리와 관련된 모든 데이터를 하나의 파일로 압축하고 백업합니다.\n이 기능은 베타 기능이므로 일부 장치에서 제대로 작동하지 않을 수 있습니다.\n저장경로: /AAFactory/EasyDiary/xxx.zip</string>
 </resources>

@@ -8,8 +8,10 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
+import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.services.NotificationService
@@ -115,6 +117,7 @@ class ZipHelper(val context: Context) {
             zipOutputStream = ZipOutputStream(FileOutputStream(destFile))
 
             mFileNames.forEachIndexed { index, fileName ->
+                if (!isOnProgress) return@forEachIndexed
                 updateNotification(index)
                 try {
                     val fileInputStream = FileInputStream(mRootDirectoryName + fileName)
