@@ -10,7 +10,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <service android:name=".services.NotificationService" tools:node="remove" />
         <service android:name=".services.RecoverPhotoService" tools:node="remove" />
         <service android:name=".services.BackupPhotoService" tools:node="remove" />
     </application>

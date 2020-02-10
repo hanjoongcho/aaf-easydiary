@@ -6,6 +6,7 @@ import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.android.synthetic.main.layout_settings_progress.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DotIndicatorPager2Adapter
+import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.fragments.SettingsAppInfoFragment
 import me.blog.korn123.easydiary.fragments.SettingsBasicFragment
 import me.blog.korn123.easydiary.fragments.SettingsLocalBackupFragment
@@ -52,6 +53,7 @@ class SettingsActivity : EasyDiaryActivity() {
                         2 -> {
                             title = getString(R.string.preferences_category_backup_restore_device)
                             subtitle = getString(R.string.preferences_category_backup_restore_device_sub)
+                            pauseLock()
                             updateUI()
                         }
                         else -> {
