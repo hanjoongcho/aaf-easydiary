@@ -2,10 +2,8 @@ package me.blog.korn123.easydiary.fragments
 
 import android.accounts.Account
 import android.app.Activity
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -31,9 +29,7 @@ import com.google.api.services.drive.model.FileList
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.layout_settings_backup_gms.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.adapters.FontItemAdapter
 import me.blog.korn123.easydiary.adapters.RealmFileItemAdapter
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
@@ -56,10 +52,10 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
     private lateinit var progressContainer: ConstraintLayout
     private lateinit var mAccountCallback: (Account) -> Unit
     private lateinit var mRootView: ViewGroup
-    private lateinit var mContext: Context
-    private lateinit var mActivity: Activity
     private var mAlertDialog: AlertDialog? = null
     private var mTaskFlag = 0
+    private val mActivity: Activity
+        get() { return activity!! }
 
 
     /***************************************************************************************************
@@ -74,12 +70,10 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        mContext = context!!
-        mActivity = activity!!
         progressContainer = mActivity.findViewById(R.id.progressContainer)
 
         // Clear google OAuth token generated prior to version 1.4.80
-        if (!mContext.config.clearLegacyToken) signOutGoogleOAuth(false)
+        if (!mActivity.config.clearLegacyToken) signOutGoogleOAuth(false)
 
         bindEvent()
         updateFragmentUI(mRootView)
@@ -114,10 +108,10 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
                     }
                     REQUEST_CODE_FONT_PICK -> {
                         intent.data?.let { uri ->
-                            val fileName = EasyDiaryUtils.queryName(mContext.contentResolver, uri)
+                            val fileName = EasyDiaryUtils.queryName(mActivity.contentResolver, uri)
                             if (FilenameUtils.getExtension(fileName).equals("ttf", true)) {
-                                val inputStream = mContext.contentResolver.openInputStream(uri)
-                                val fontDestDir = File(EasyDiaryUtils.getApplicationDataDirectory(mContext) + USER_CUSTOM_FONTS_DIRECTORY)
+                                val inputStream = mActivity.contentResolver.openInputStream(uri)
+                                val fontDestDir = File(EasyDiaryUtils.getApplicationDataDirectory(mActivity) + USER_CUSTOM_FONTS_DIRECTORY)
                                 FileUtils.copyInputStreamToFile(inputStream, File(fontDestDir, fileName))
                             } else {
                                 mActivity.showAlertDialog(getString(R.string.add_ttf_fonts_title), "$fileName is not ttf file.", null)
@@ -167,9 +161,9 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
                 .requestIdToken(getString(R.string.oauth_requerst_id_token))
                 .requestEmail()
                 .build()
-        val client = GoogleSignIn.getClient(mContext, gso)
+        val client = GoogleSignIn.getClient(mActivity, gso)
         client.signOut().addOnCompleteListener {
-            mContext.config.clearLegacyToken = true
+            mActivity.config.clearLegacyToken = true
             if (showCompleteMessage) mActivity.makeSnackBar("Sign out complete:)")
         }
     }
@@ -179,7 +173,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
 
         // Check for existing Google Sign In account, if the user is already signed in
         // the GoogleSignInAccount will be non-null.
-        val googleSignInAccount: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(mContext)
+        val googleSignInAccount: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(mActivity)
 
         if (googleSignInAccount == null) {
             // Configure sign-in to request the user's ID, email address, and basic
@@ -201,7 +195,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
     private lateinit var mPermissionCallback: () -> Unit
     private fun requestDrivePermissions(account: Account, permissionCallback: () -> Unit) {
         mPermissionCallback = permissionCallback
-        val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(mContext, Collections.singleton(DriveScopes.DRIVE_FILE))
+        val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(mActivity, Collections.singleton(DriveScopes.DRIVE_FILE))
         credential.selectedAccount = account
         val googleDriveService: Drive = Drive.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
                 .setApplicationName(getString(R.string.app_name))
@@ -221,7 +215,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
     }
 
     private fun initDriveWorkingDirectory(account: Account, workingFolderName: String, callback: (workingFolderId: String) -> Unit) {
-        val driveServiceHelper = DriveServiceHelper(mContext, account)
+        val driveServiceHelper = DriveServiceHelper(mActivity, account)
         // 01. AAF 폴더 검색
         driveServiceHelper.queryFiles("'root' in parents and name = '${DriveServiceHelper.AAF_ROOT_FOLDER_NAME}' and trashed = false").run {
             addOnSuccessListener { result ->
@@ -264,7 +258,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
 
         initGoogleSignAccount { account ->
             initDriveWorkingDirectory(account, DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME) {
-                val driveServiceHelper = DriveServiceHelper(mContext, account)
+                val driveServiceHelper = DriveServiceHelper(mActivity, account)
                 driveServiceHelper.createFile(
                         it, EasyDiaryDbHelper.getInstance().path,
                         DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"),
@@ -291,7 +285,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
 
     private fun openRealmFilePickerDialog() {
         initGoogleSignAccount { account ->
-            val driveServiceHelper = DriveServiceHelper(mContext, account)
+            val driveServiceHelper = DriveServiceHelper(mActivity, account)
 
 //            driveServiceHelper.queryFiles("mimeType contains 'text/aaf_v' and name contains '$DIARY_DB_NAME'", 1000)
 
@@ -302,11 +296,11 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
                             val itemInfo = hashMapOf<String, String>("name" to file.name, "id" to file.id, "createdTime" to file.createdTime.toString())
                             realmFiles.add(itemInfo)
                         }
-                        val builder = AlertDialog.Builder(mContext)
+                        val builder = AlertDialog.Builder(mActivity)
                         builder.setNegativeButton(getString(android.R.string.cancel)) { _, _ -> mActivity.setScreenOrientationSensor(true) }
                         builder.setTitle("${getString(R.string.open_realm_file_title)} (Total: ${it.files.size})")
 //                        builder.setMessage(getString(R.string.open_realm_file_message))
-                        val inflater = mContext.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                        val inflater = mActivity.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
                         val fontView = inflater.inflate(R.layout.dialog_realm_files, null)
                         val listView = fontView.findViewById<ListView>(R.id.files)
                         val adapter = RealmFileItemAdapter(mActivity, R.layout.item_realm_file, realmFiles)
@@ -345,7 +339,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
             mActivity.runOnUiThread {
                 progressContainer.visibility = View.GONE
                 mActivity.showAlertDialog(getString(R.string.recover_confirm_attached_photo), DialogInterface.OnClickListener {_, _ ->
-                    val recoverPhotoService = Intent(mContext, RecoverPhotoService::class.java)
+                    val recoverPhotoService = Intent(mActivity, RecoverPhotoService::class.java)
                     mActivity.startService(recoverPhotoService)
                     mActivity.finish()
                 }, null)
@@ -359,7 +353,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
             initDriveWorkingDirectory(account, DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
                 progressContainer.visibility = View.GONE
                 mActivity.showAlertDialog(getString(R.string.backup_confirm_message), DialogInterface.OnClickListener { _, _ ->
-                    val backupPhotoService = Intent(mContext, BackupPhotoService::class.java)
+                    val backupPhotoService = Intent(mActivity, BackupPhotoService::class.java)
                     backupPhotoService.putExtra(DriveServiceHelper.WORKING_FOLDER_ID, photoFolderId)
                     mActivity.startService(backupPhotoService)
                     mActivity.finish()
@@ -417,13 +411,6 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
         backupAttachPhoto.setOnClickListener(mOnClickListener)
         recoverAttachPhoto.setOnClickListener(mOnClickListener)
         signOutGoogleOAuth.setOnClickListener(mOnClickListener)
-//                devMode.setOnClickListener {
-//            mDevModeClickCount++
-//            if (mDevModeClickCount > 5) {
-//                signOutGoogleOAuth.visibility = View.VISIBLE
-//                makeSnackBar(BuildConfig.VERSION_CODE.toString())
-//            }
-//        }
     }
 
     private fun initPreference() {}
