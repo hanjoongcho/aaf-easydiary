@@ -359,6 +359,10 @@
         v1.4.118 / 2020.02.11\n
         [BETA] Added full data backup feature
     </string>
+    <string name="release_185">
+        v1.4.119 / 2020.02.15\n
+        Added diary symbol icon
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
