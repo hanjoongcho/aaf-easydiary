@@ -106,6 +106,10 @@
         <item>64|Dumbbell</item>
         <item>46|Garbage</item>
         <item>69|Scale</item>
+        <item>80|Todo</item>
+        <item>81|Doing</item>
+        <item>82|Done</item>
+        <item>83|Cancel</item>
     </string-array>
 
     <string-array name="food_item_array">
