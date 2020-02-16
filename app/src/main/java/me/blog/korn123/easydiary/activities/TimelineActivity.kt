@@ -12,16 +12,19 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_timeline_diary.*
 import kotlinx.android.synthetic.main.layout_timeline_filter.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.TimelineItemAdapter
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.openFeelingSymbolDialog
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import java.util.*
@@ -43,6 +46,7 @@ class TimelineActivity : EasyDiaryActivity() {
     private var mDiaryList: ArrayList<DiaryDto> = arrayListOf()
     private var mFirstTouch = 0F
     private val mCalendar = Calendar.getInstance(Locale.getDefault())
+    private var mSymbolSequence = -1
 
     
     /***************************************************************************************************
@@ -212,11 +216,24 @@ class TimelineActivity : EasyDiaryActivity() {
             startDate.text = null
             endDate.text = null
             query.text = null
+            mSymbolSequence = -1
+            symbolText.visibility = View.VISIBLE
+            FlavorUtils.initWeatherView(this, symbol, mSymbolSequence, false)
             refreshList()
         }
 
         startDatePicker.setOnClickListener { mSDatePickerDialog.show() }
         endDatePicker.setOnClickListener { mEDatePickerDialog.show() }
+
+        feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog { symbolSequence ->
+            mSymbolSequence = symbolSequence
+            when (symbolSequence == 0) {
+                true -> symbolText.visibility = View.VISIBLE
+                false -> symbolText.visibility = View.GONE
+            }
+            FlavorUtils.initWeatherView(this, symbol, mSymbolSequence, false)
+            refreshList()
+        }}
     }
 
     private var mStartDateListener: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
@@ -275,7 +292,8 @@ class TimelineActivity : EasyDiaryActivity() {
                     query.text.toString(),
                     config.diarySearchQueryCaseSensitive,
                     startMillis,
-                    endMillis
+                    endMillis,
+                    mSymbolSequence
             ))
             reverse()
         }
