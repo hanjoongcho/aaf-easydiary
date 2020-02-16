@@ -79,6 +79,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <me.blog.korn123.easydiary.views.FixedTextView
+                    app:applyGlobalSize="false"
+                    app:applyGlobalColor="false"
                     android:padding="10dp"
                     android:text="@string/dashboard_title_backup_local"
                     android:textSize="@dimen/dashboard_title_h1"
@@ -92,11 +94,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <me.blog.korn123.easydiary.views.FixedTextView
+                        app:applyGlobalSize="false"
+                        app:applyGlobalColor="false"
                         android:text="@string/last_diary_backup_time"
                         android:textSize="@dimen/dashboard_title_h2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                     <me.blog.korn123.easydiary.views.FixedTextView
+                        app:applyGlobalSize="false"
+                        app:applyGlobalColor="false"
                         android:id="@+id/diaryBackupLocal"
                         android:textSize="@dimen/dashboard_title_h3"
                         android:layout_width="wrap_content"

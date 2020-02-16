@@ -14,10 +14,7 @@ import kotlinx.android.synthetic.main.layout_edit_photo_container.*
 import kotlinx.android.synthetic.main.layout_edit_toolbar_sub.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.createTemporaryPhotoFile
-import me.blog.korn123.easydiary.extensions.makeSnackBar
-import me.blog.korn123.easydiary.extensions.pauseLock
+import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
@@ -192,7 +189,9 @@ class DiaryUpdateActivity : EditActivity() {
             toggleTimePickerTool()
         }
 
-        feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog() }
+        feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog { symbolSequence ->
+            selectFeelingSymbol(symbolSequence)
+        }}
     }
 
     private fun initDateTime() {

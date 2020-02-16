@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.extensions
 import android.Manifest
 import android.app.Activity
 import android.app.AlarmManager
+import android.app.Dialog
 import android.app.PendingIntent
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -15,21 +16,27 @@ import android.net.Uri
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
 import io.github.aafactory.commons.activities.BaseSimpleActivity
+import kotlinx.android.synthetic.main.layout_edit_contents.*
+import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.activities.FingerprintLockActivity
 import me.blog.korn123.easydiary.activities.PinLockActivity
+import me.blog.korn123.easydiary.adapters.SymbolPagerAdapter
 import me.blog.korn123.easydiary.dialogs.WhatsNewDialog
 import me.blog.korn123.easydiary.helper.DIARY_INSERT_MODE
 import me.blog.korn123.easydiary.helper.MODE_REMINDER
+import me.blog.korn123.easydiary.views.SlidingTabLayout
 import kotlin.system.exitProcess
 
 
@@ -237,3 +244,56 @@ fun Activity.startMainActivityWithClearTask() {
 }
 
 fun Activity.isReminderMode(): Boolean = intent.getStringExtra(DIARY_INSERT_MODE) == MODE_REMINDER
+
+fun Activity.openFeelingSymbolDialog(callback: (Int) -> Unit) {
+    var dialog: Dialog? = null
+    val inflater = getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+    val symbolDialog = inflater.inflate(R.layout.dialog_feeling_pager, null)
+
+    val itemList = arrayListOf<Array<String>>()
+    val categoryList = arrayListOf<String>()
+    addCategory(itemList, categoryList, "weather_item_array", getString(R.string.category_weather))
+    addCategory(itemList, categoryList, "emotion_item_array", getString(R.string.category_emotion))
+    addCategory(itemList, categoryList, "daily_item_array", getString(R.string.category_daily))
+    addCategory(itemList, categoryList, "food_item_array", getString(R.string.category_food))
+    addCategory(itemList, categoryList, "leisure_item_array", getString(R.string.category_leisure))
+    addCategory(itemList, categoryList, "landscape_item_array", getString(R.string.category_landscape))
+    addCategory(itemList, categoryList, "symbol_item_array", getString(R.string.category_symbol))
+    addCategory(itemList, categoryList, "flag_item_array", getString(R.string.category_flag))
+
+    val viewPager = symbolDialog.findViewById(R.id.viewpager) as androidx.viewpager.widget.ViewPager
+    val symbolPagerAdapter = SymbolPagerAdapter(this, itemList, categoryList) { symbolSequence ->
+        callback.invoke(symbolSequence)
+        dialog?.dismiss()
+    }
+    viewPager.adapter = symbolPagerAdapter
+
+    val slidingTabLayout = symbolDialog.findViewById(R.id.sliding_tabs) as SlidingTabLayout
+    slidingTabLayout.setViewPager(viewPager)
+
+    val dismissButton = symbolDialog.findViewById(R.id.closeBottomSheet) as ImageView
+    dismissButton.setOnClickListener { dialog?.dismiss() }
+
+    if (isLandScape()) {
+        val builder = AlertDialog.Builder(this)
+        builder.setView(symbolDialog)
+        dialog = builder.create()
+    } else {
+        dialog = BottomSheetDialog(this)
+        dialog.run {
+            setContentView(symbolDialog)
+            setCancelable(false)
+            setCanceledOnTouchOutside(true)
+        }
+    }
+
+    dialog.show()
+}
+
+fun Activity.addCategory(itemList: ArrayList<Array<String>>, categoryList: ArrayList<String>, resourceName: String, categoryName: String) {
+    val resourceId = resources.getIdentifier(resourceName, "array", packageName)
+    if (resourceId != 0) {
+        itemList.add(resources.getStringArray(resourceId))
+        categoryList.add(categoryName)
+    }
+}

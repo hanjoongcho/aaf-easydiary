@@ -66,7 +66,7 @@ object EasyDiaryDbHelper {
         return Realm.getInstance(mDiaryConfig).where(DiaryDto::class.java).count()
     }
 
-    fun readDiary(query: String?, isSensitive: Boolean = false, startTimeMillis: Long = 0, endTimeMillis: Long = 0): ArrayList<DiaryDto> {
+    fun readDiary(query: String?, isSensitive: Boolean = false, startTimeMillis: Long = 0, endTimeMillis: Long = 0, symbolSequence: Int = 0): ArrayList<DiaryDto> {
         val mRealmInstance = Realm.getInstance(mDiaryConfig)
         var results: RealmResults<DiaryDto> = when (StringUtils.isEmpty(query)) {
             true -> {
@@ -88,6 +88,11 @@ object EasyDiaryDbHelper {
             startTimeMillis > 0 -> results.where().greaterThanOrEqualTo("currentTimeMillis", startTimeMillis).findAll().sort(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
             endTimeMillis > 0 -> results.where().lessThanOrEqualTo("currentTimeMillis", endTimeMillis).findAll().sort(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
             else -> results
+        }
+
+        // apply feeling symbol
+        if (symbolSequence > 0) {
+            results = results.where().equalTo("weather", symbolSequence).findAll()
         }
 
         val list = ArrayList<DiaryDto>()
