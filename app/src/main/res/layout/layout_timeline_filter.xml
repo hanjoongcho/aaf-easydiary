@@ -141,7 +141,6 @@
                 android:layout_height="wrap_content">
                 <ImageView
                     android:id="@+id/symbol"
-                    android:visibility="gone"
                     app:srcCompat="@drawable/ic_select_symbol"
                     android:layout_marginRight="10dp"
                     android:layout_width="@dimen/diary_symbol_width"

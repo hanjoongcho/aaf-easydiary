@@ -91,7 +91,7 @@ object EasyDiaryDbHelper {
         }
 
         // apply feeling symbol
-        if (symbolSequence > 0) {
+        if (symbolSequence in 1..9998) {
             results = results.where().equalTo("weather", symbolSequence).findAll()
         }
 

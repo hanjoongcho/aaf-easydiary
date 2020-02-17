@@ -17,7 +17,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_timeline_diary.*
-import kotlinx.android.synthetic.main.layout_edit_contents.*
 import kotlinx.android.synthetic.main.layout_timeline_filter.*
 import kotlinx.android.synthetic.main.layout_timeline_filter.feelingSymbolButton
 import kotlinx.android.synthetic.main.layout_timeline_filter.symbol
@@ -49,7 +48,7 @@ class TimelineActivity : EasyDiaryActivity() {
     private var mDiaryList: ArrayList<DiaryDto> = arrayListOf()
     private var mFirstTouch = 0F
     private val mCalendar = Calendar.getInstance(Locale.getDefault())
-    private var mSymbolSequence = 0
+    private var mSymbolSequence = 9999
 
     
     /***************************************************************************************************
@@ -221,8 +220,7 @@ class TimelineActivity : EasyDiaryActivity() {
             startDate.text = null
             endDate.text = null
             query.text = null
-            mSymbolSequence = -1
-            symbolText.visibility = View.VISIBLE
+            mSymbolSequence = 9999
             FlavorUtils.initWeatherView(this, symbol, mSymbolSequence, false)
             refreshList()
         }
@@ -236,8 +234,8 @@ class TimelineActivity : EasyDiaryActivity() {
         }}
     }
 
-    private fun selectFeelingSymbol(index: Int = 0) {
-        mSymbolSequence = index
+    private fun selectFeelingSymbol(index: Int = 9999) {
+        mSymbolSequence = if (index == 0) 9999 else index
         FlavorUtils.initWeatherView(this, symbol, mSymbolSequence, false)
     }
 
