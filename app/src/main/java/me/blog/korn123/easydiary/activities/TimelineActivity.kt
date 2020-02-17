@@ -17,7 +17,10 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_timeline_diary.*
+import kotlinx.android.synthetic.main.layout_edit_contents.*
 import kotlinx.android.synthetic.main.layout_timeline_filter.*
+import kotlinx.android.synthetic.main.layout_timeline_filter.feelingSymbolButton
+import kotlinx.android.synthetic.main.layout_timeline_filter.symbol
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
@@ -46,7 +49,7 @@ class TimelineActivity : EasyDiaryActivity() {
     private var mDiaryList: ArrayList<DiaryDto> = arrayListOf()
     private var mFirstTouch = 0F
     private val mCalendar = Calendar.getInstance(Locale.getDefault())
-    private var mSymbolSequence = -1
+    private var mSymbolSequence = 0
 
     
     /***************************************************************************************************
@@ -113,6 +116,8 @@ class TimelineActivity : EasyDiaryActivity() {
 //                }
             }
         }
+
+        selectFeelingSymbol()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -226,14 +231,14 @@ class TimelineActivity : EasyDiaryActivity() {
         endDatePicker.setOnClickListener { mEDatePickerDialog.show() }
 
         feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog { symbolSequence ->
-            mSymbolSequence = symbolSequence
-            when (symbolSequence == 0) {
-                true -> symbolText.visibility = View.VISIBLE
-                false -> symbolText.visibility = View.GONE
-            }
-            FlavorUtils.initWeatherView(this, symbol, mSymbolSequence, false)
+            selectFeelingSymbol(symbolSequence)
             refreshList()
         }}
+    }
+
+    private fun selectFeelingSymbol(index: Int = 0) {
+        mSymbolSequence = index
+        FlavorUtils.initWeatherView(this, symbol, mSymbolSequence, false)
     }
 
     private var mStartDateListener: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
