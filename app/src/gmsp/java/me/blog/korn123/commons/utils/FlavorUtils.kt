@@ -9,7 +9,7 @@ import me.blog.korn123.easydiary.models.DiarySymbol
 
 object FlavorUtils {
     fun sequenceToSymbolResourceId(sequence: Int) = when (sequence) {
-        WEATHER_NONE -> R.drawable.ic_select_symbol
+        SYMBOL_SELECT_ALL -> R.drawable.ic_select_symbol
         WEATHER_SUNNY -> R.drawable.ic_sunny
         WEATHER_CLOUD_AND_SUN -> R.drawable.ic_clouds_and_sun
         WEATHER_RAIN_DROPS -> R.drawable.ic_raindrops
@@ -286,7 +286,7 @@ object FlavorUtils {
 
     fun initWeatherView(context: Context, imageView: ImageView?, weatherFlag: Int, isShowEmptyWeatherView: Boolean = false, applyWhiteFilter: Boolean = false) {
         imageView?.run {
-//            visibility = if (!isShowEmptyWeatherView && weatherFlag < 1) View.GONE else View.VISIBLE
+            visibility = if (!isShowEmptyWeatherView && weatherFlag < 1) View.GONE else View.VISIBLE
             setImageResource(sequenceToSymbolResourceId(weatherFlag))
         }
     }

@@ -17,8 +17,9 @@ const val WORK_MANAGER_BACKUP = "work_manager_backup"
  *   Diary Symbols
  *
  ***************************************************************************************************/
+const val SYMBOL_SELECT_ALL = 9999
+
 //  Weather 0 ~ 39
-const val WEATHER_NONE = 0
 const val WEATHER_SUNNY = 1
 const val WEATHER_CLOUD_AND_SUN = 2
 const val WEATHER_RAIN_DROPS = 3
