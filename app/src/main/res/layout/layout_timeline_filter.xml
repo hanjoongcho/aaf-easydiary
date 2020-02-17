@@ -142,16 +142,10 @@
                 <ImageView
                     android:id="@+id/symbol"
                     android:visibility="gone"
-                    app:srcCompat="@drawable/ic_star"
+                    app:srcCompat="@drawable/ic_select_symbol"
                     android:layout_marginRight="10dp"
                     android:layout_width="@dimen/diary_symbol_width"
                     android:layout_height="@dimen/diary_symbol_height" />
-                <TextView
-                    android:id="@+id/symbolText"
-                    android:text="None"
-                    android:layout_marginRight="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
                 <TextView
                     android:id="@+id/symbolTextArrow"
                     android:text="▼"
