@@ -24,7 +24,10 @@ import com.github.ksoichiro.android.observablescrollview.ObservableListView
 import io.github.aafactory.commons.utils.CommonUtils
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_diary_main.*
+import kotlinx.android.synthetic.main.activity_diary_main.feelingSymbolButton
+import kotlinx.android.synthetic.main.activity_diary_main.query
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
 import me.blog.korn123.easydiary.extensions.*
@@ -52,6 +55,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     private var mShowcaseView: ShowcaseView? = null
     private var mClearQueryClickCount = 0
     private var mClearQueryFirstClickMillis = 0L
+    private var mSymbolSequence = SYMBOL_SELECT_ALL
 
 
     /***************************************************************************************************
@@ -454,6 +458,16 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             //                DiaryMainActivity.this.overridePendingTransition(R.anim.anim_right_to_center, R.anim.anim_center_to_left);
             TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, createDiary)
         }
+
+        feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog { symbolSequence ->
+            selectFeelingSymbol(symbolSequence)
+            refreshList()
+        }}
+    }
+
+    private fun selectFeelingSymbol(index: Int = 9999) {
+        mSymbolSequence = if (index == 0) 9999 else index
+        FlavorUtils.initWeatherView(this, symbol, mSymbolSequence, false)
     }
 
     private fun showSpeechDialog() {
@@ -472,7 +486,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
 
     fun refreshList(query: String) {
         mDiaryList?.clear()
-        mDiaryList?.addAll(EasyDiaryDbHelper.readDiary(query, config.diarySearchQueryCaseSensitive))
+        mDiaryList?.addAll(EasyDiaryDbHelper.readDiary(query, config.diarySearchQueryCaseSensitive, 0, 0, mSymbolSequence))
         mDiaryMainItemAdapter?.currentQuery = query
         mDiaryMainItemAdapter?.notifyDataSetChanged()
     }
