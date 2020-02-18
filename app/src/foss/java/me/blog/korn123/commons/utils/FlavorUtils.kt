@@ -16,6 +16,7 @@ import java.util.*
 
 object FlavorUtils {
     fun sequenceToSymbolResourceId(sequence: Int) = when (sequence) {
+        SYMBOL_SELECT_ALL -> R.drawable.ic_select_symbol
         WEATHER_SUNNY -> R.drawable.ic_sunny
         WEATHER_CLOUD_AND_SUN -> R.drawable.ic_clouds_and_sun
         WEATHER_RAIN_DROPS -> R.drawable.ic_raindrops
