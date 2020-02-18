@@ -12,14 +12,11 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
-import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_timeline_diary.*
 import kotlinx.android.synthetic.main.layout_timeline_filter.*
-import kotlinx.android.synthetic.main.layout_timeline_filter.feelingSymbolButton
-import kotlinx.android.synthetic.main.layout_timeline_filter.symbol
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
@@ -48,7 +45,7 @@ class TimelineActivity : EasyDiaryActivity() {
     private var mDiaryList: ArrayList<DiaryDto> = arrayListOf()
     private var mFirstTouch = 0F
     private val mCalendar = Calendar.getInstance(Locale.getDefault())
-    private var mSymbolSequence = 9999
+    private var mSymbolSequence = SYMBOL_SELECT_ALL
 
     
     /***************************************************************************************************
