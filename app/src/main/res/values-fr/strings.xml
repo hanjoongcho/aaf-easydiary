@@ -363,6 +363,11 @@
         v1.4.119 / 2020.02.15\n
         Added diary symbol icon
     </string>
+	<string name="release_186">
+        v1.4.120 / 2020.02.19\n
+        Added diary symbol icon\n
+        Added search function using diary symbol
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
