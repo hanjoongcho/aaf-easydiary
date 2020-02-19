@@ -225,7 +225,7 @@ class TimelineActivity : EasyDiaryActivity() {
         startDatePicker.setOnClickListener { mSDatePickerDialog.show() }
         endDatePicker.setOnClickListener { mEDatePickerDialog.show() }
 
-        feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog { symbolSequence ->
+        feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog(getString(R.string.diary_symbol_search_message)) { symbolSequence ->
             selectFeelingSymbol(symbolSequence)
             refreshList()
         }}

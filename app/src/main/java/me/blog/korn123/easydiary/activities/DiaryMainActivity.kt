@@ -459,7 +459,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, createDiary)
         }
 
-        feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog { symbolSequence ->
+        feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog(getString(R.string.diary_symbol_search_message)) { symbolSequence ->
             selectFeelingSymbol(symbolSequence)
             refreshList()
         }}

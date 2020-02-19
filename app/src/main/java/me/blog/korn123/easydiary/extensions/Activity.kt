@@ -26,8 +26,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
 import io.github.aafactory.commons.activities.BaseSimpleActivity
-import kotlinx.android.synthetic.main.layout_edit_contents.*
-import me.blog.korn123.commons.utils.FlavorUtils
+import kotlinx.android.synthetic.main.dialog_feeling_pager.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.activities.FingerprintLockActivity
@@ -245,7 +244,7 @@ fun Activity.startMainActivityWithClearTask() {
 
 fun Activity.isReminderMode(): Boolean = intent.getStringExtra(DIARY_INSERT_MODE) == MODE_REMINDER
 
-fun Activity.openFeelingSymbolDialog(callback: (Int) -> Unit) {
+fun Activity.openFeelingSymbolDialog(guideMessage: String, callback: (Int) -> Unit) {
     var dialog: Dialog? = null
     val inflater = getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     val symbolDialog = inflater.inflate(R.layout.dialog_feeling_pager, null)
@@ -262,6 +261,7 @@ fun Activity.openFeelingSymbolDialog(callback: (Int) -> Unit) {
     addCategory(itemList, categoryList, "flag_item_array", getString(R.string.category_flag))
 
     val viewPager = symbolDialog.findViewById(R.id.viewpager) as androidx.viewpager.widget.ViewPager
+    symbolDialog.findViewById<TextView>(R.id.diarySymbolGuide).text = guideMessage
     val symbolPagerAdapter = SymbolPagerAdapter(this, itemList, categoryList) { symbolSequence ->
         callback.invoke(symbolSequence)
         dialog?.dismiss()

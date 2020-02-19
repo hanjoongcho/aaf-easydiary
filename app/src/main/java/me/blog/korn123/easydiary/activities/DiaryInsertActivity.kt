@@ -251,7 +251,7 @@ class DiaryInsertActivity : EditActivity() {
             toggleTimePickerTool()
         }
 
-        feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog { symbolSequence ->
+        feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog(getString(R.string.diary_symbol_guide_message)) { symbolSequence ->
             selectFeelingSymbol(symbolSequence)
         }}
     }

@@ -544,4 +544,5 @@
     <string name="last_photo_backup_time">添付写真の最終バックアップ時間:</string>
     <string name="export_full_backup_title">[BETA] 完全なデータをバックアップする</string>
     <string name="export_full_backup_description">データベース、添付写真、ポストカード、フォントなど、日記に関連するすべてのデータを1つのファイルに圧縮してバックアップします。\nこの機能はベータ機能であるため、一部のデバイスでは正常に機能しない場合があります。\n保存パス: /AAFactory/EasyDiary/xxx.zip</string>
+    <string name="diary_symbol_search_message">フィルタリングするダイアリーシンボルを選択します。</string>
 </resources>
