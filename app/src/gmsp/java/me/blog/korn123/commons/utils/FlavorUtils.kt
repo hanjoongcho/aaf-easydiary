@@ -69,6 +69,7 @@ object FlavorUtils {
         DAILY_DOING -> R.drawable.ic_doing
         DAILY_DONE -> R.drawable.ic_done
         DAILY_CANCEL -> R.drawable.ic_cancel
+        DAILY_RECIPE -> R.drawable.ic_recipe
 
         LANDSCAPE_BEACH -> R.drawable.ic_beach
         LANDSCAPE_BRIDGE -> R.drawable.ic_bridge

@@ -110,6 +110,7 @@
         <item>81|Doing</item>
         <item>82|Done</item>
         <item>83|Cancel</item>
+        <item>84|Recipe</item>
     </string-array>
 
     <string-array name="food_item_array">
