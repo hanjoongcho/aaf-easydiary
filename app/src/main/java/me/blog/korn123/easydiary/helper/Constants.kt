@@ -258,6 +258,7 @@ const val FLAG_PUERTO_RICO = 477
 const val FLAG_COMOROS = 478
 const val FLAG_NORTH_KOREA = 479
 
+// Random
 const val FLAG_CHINA = 483
 const val FLAG_SCOTLAND = 504
 const val FLAG_JAPAN = 512
@@ -302,6 +303,7 @@ const val FLAG_RUSSIA = 697
 const val FLAG_MEXICO = 701
 const val FLAG_BRAZIL = 704
 const val FLAG_UNITED_KINGDOM = 709
+const val FLAG_THAILAND = 710
 
 
 /***************************************************************************************************
