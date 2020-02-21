@@ -30,15 +30,13 @@ class CaldroidItemAdapter(
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         var cellView = convertView
 
-        // For reuse
         if (convertView == null) {
-            cellView = inflater.inflate(R.layout.fragment_custom_cell, null)
-        }
-
-        if (cellView is ViewGroup) {
-//            context?.updateTextColors(cellView)
-            context?.initTextSize(cellView, context)
-            FontUtils.setFontsTypeface(context, context.assets, null, cellView)
+            cellView = inflater.inflate(R.layout.fragment_custom_cell, null).apply {
+                if (this is ViewGroup) {
+                    context?.initTextSize(this, context)
+                    FontUtils.setFontsTypeface(context, context.assets, null, this)
+                }
+            }
         }
         
         val topPadding = cellView?.paddingTop ?: 0

@@ -286,6 +286,7 @@
         <item>701|Mexico</item>
         <item>704|Brazil</item>
         <item>709|United Kingdom</item>
+        <item>710|Thailand</item>
     </string-array>
 
     <string-array name="pref_list_fonts_title">

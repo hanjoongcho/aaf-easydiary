@@ -281,6 +281,7 @@ object FlavorUtils {
         FLAG_MEXICO -> R.drawable.ic_252_mexico
         FLAG_BRAZIL -> R.drawable.ic_255_brazil
         FLAG_UNITED_KINGDOM -> R.drawable.ic_260_united_kingdom
+        FLAG_THAILAND -> R.drawable.ic_238_thailand
 
         else -> 0
     }
