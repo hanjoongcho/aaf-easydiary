@@ -488,3 +488,4 @@ const val SETTING_FLAG_IMPORT_PHOTO_GOOGLE_DRIVE = 4
 
 const val PREVIOUS_ACTIVITY = "previous_activity"
 const val PREVIOUS_ACTIVITY_CREATE = 1
+const val AAF_TEST = "aaf-test"
