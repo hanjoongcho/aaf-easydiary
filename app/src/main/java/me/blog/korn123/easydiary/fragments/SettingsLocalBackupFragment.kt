@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,10 +13,12 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.simplemobiletools.commons.extensions.toast
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.layout_settings_backup_local.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
@@ -35,6 +38,7 @@ import org.apache.poi.ss.usermodel.IndexedColors
 import org.apache.poi.ss.usermodel.Workbook
 import java.io.File
 import java.io.FileOutputStream
+import java.net.URI
 import java.util.*
 
 class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
@@ -99,11 +103,22 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
                     deleteRealmFile()
                 }
                 REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_FULL_BACKUP -> if (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    exportFullBackupFile()
+                    createFileWithSAF()
                 }
             }
         } else {
             mActivity.makeSnackBar(mActivity.findViewById(android.R.id.content), getString(R.string.guide_message_3))
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
+        if (resultCode == Activity.RESULT_OK && intent != null) {
+            when (requestCode) {
+                REQUEST_CODE_SAF_WRITE -> if (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                    exportFullBackupFile(intent.data)
+                }
+            }
         }
     }
 
@@ -377,8 +392,22 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
         return wb
     }
 
-    private fun exportFullBackupFile() {
-        val backupOperations = BackupOperations.Builder(mContext).build()
+    private fun createFileWithSAF() {
+        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+            // Filter to only show results that can be "opened", such as
+            // a file (as opposed to a list of contacts or timezones).
+            addCategory(Intent.CATEGORY_OPENABLE)
+
+            // Create a file with the requested MIME type.
+            type = "application/zip"
+            putExtra(Intent.EXTRA_TITLE, DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".zip")
+        }
+
+        startActivityForResult(intent, REQUEST_CODE_SAF_WRITE)
+    }
+
+    private fun exportFullBackupFile(uri: Uri?) {
+        val backupOperations = BackupOperations.Builder(mContext, uri.toString()).build()
         backupOperations.continuation.enqueue()
     }
 
@@ -397,7 +426,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
             }
             R.id.exportFullBackupFile -> {
                 when (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    true -> exportFullBackupFile()
+                    true -> createFileWithSAF()
                     false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_FULL_BACKUP)
                 }
             }
