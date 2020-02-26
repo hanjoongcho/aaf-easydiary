@@ -71,7 +71,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
             exportExcel.visibility = View.GONE
-            exportFullBackupFile.visibility = View.GONE
+//            exportFullBackupFile.visibility = View.GONE
         }
 
         bindEvent()
