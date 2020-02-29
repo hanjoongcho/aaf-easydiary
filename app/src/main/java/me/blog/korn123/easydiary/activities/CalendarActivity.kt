@@ -189,7 +189,7 @@ class CalendarActivity : EasyDiaryActivity() {
     private fun selectDateAndRefreshView() {
         mCalendarFragment.clearSelectedDates()
         mCalendarFragment.setSelectedDate(mCalendar.time)
-        mCalendarFragment.refreshView()
+        mCalendarFragment.refreshViewOnlyCurrentPage()
         refreshList()
     }
 

@@ -41,7 +41,7 @@ class CaldroidItemAdapter(
             }
             Log.i(AAF_TEST, "$position: new instance")
         } else {
-            Log.i(AAF_TEST, "$position: recycle instance")
+            Log.i(AAF_TEST, "$position: recycle instance ${this.datetimeList[position].month}")
         }
         
         val topPadding = cellView?.paddingTop ?: 0
