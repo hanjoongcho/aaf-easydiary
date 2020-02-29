@@ -973,6 +973,17 @@ abstract class CaldroidFragmentEx : DialogFragment() {
         }
     }
 
+    fun refreshViewOnlyCurrentPage() {
+        // If month and year is not yet initialized, refreshView doesn't do
+        // anything
+        if (month == -1 || year == -1) {
+            return
+        }
+
+        refreshMonthTitleTextView()
+        datePagerAdapters[currentVirtualPosition].notifyDataSetChanged()
+    }
+
     /**
      * Retrieve initial arguments to the fragment Data can include: month, year,
      * dialogTitle, mShowNavigationArrows,(String) mDisableDates, selectedDates,
