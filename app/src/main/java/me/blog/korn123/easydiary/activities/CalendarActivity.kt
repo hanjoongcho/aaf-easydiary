@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.activities
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -18,10 +19,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryCalendarItemAdapter
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.fragments.CalendarFragment
-import me.blog.korn123.easydiary.helper.DEFAULT_CALENDAR_FONT_SCALE
-import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
-import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
 import java.text.SimpleDateFormat
@@ -121,12 +119,12 @@ class CalendarActivity : EasyDiaryActivity() {
             }
 
             override fun onChangeMonth(month: Int, year: Int) {
-                val monthYearFlag = (android.text.format.DateUtils.FORMAT_SHOW_DATE
-                        or android.text.format.DateUtils.FORMAT_NO_MONTH_DAY or android.text.format.DateUtils.FORMAT_SHOW_YEAR)
+                val monthYearFlag = android.text.format.DateUtils.FORMAT_SHOW_DATE or android.text.format.DateUtils.FORMAT_NO_MONTH_DAY or android.text.format.DateUtils.FORMAT_SHOW_YEAR
                 val monthYearFormatter = Formatter(StringBuilder(50), Locale.getDefault())
                 val calendar = Calendar.getInstance(Locale.getDefault())
                 calendar.set(Calendar.YEAR, year)
                 calendar.set(Calendar.MONTH, month - 1)
+                calendar.set(Calendar.DATE, 1)
                 val monthTitle = android.text.format.DateUtils.formatDateRange(this@CalendarActivity, monthYearFormatter, calendar.timeInMillis, calendar.timeInMillis, monthYearFlag).toString()
                 supportActionBar?.subtitle = monthTitle.toUpperCase(Locale.getDefault())
             }
