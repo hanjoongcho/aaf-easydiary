@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.121 (date: 2020/03/02)
+  * Improved the speed of the calendar screen(1st improvement)
+
 # Changes in 1.4.120 (date: 2020/02/19)
   * Added diary symbol icon
   * Added search function using diary symbol
