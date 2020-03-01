@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,12 +12,10 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.simplemobiletools.commons.extensions.toast
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.layout_settings_backup_local.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
@@ -38,7 +35,6 @@ import org.apache.poi.ss.usermodel.IndexedColors
 import org.apache.poi.ss.usermodel.Workbook
 import java.io.File
 import java.io.FileOutputStream
-import java.net.URI
 import java.util.*
 
 class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
@@ -69,10 +65,10 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
         mContext = context!!
         mActivity = activity!!
 
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-            exportExcel.visibility = View.GONE
+//        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+//            exportExcel.visibility = View.GONE
 //            exportFullBackupFile.visibility = View.GONE
-        }
+//        }
 
         bindEvent()
         updateFragmentUI(mRootView)
@@ -91,7 +87,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
         if (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
             when (requestCode) {
                 REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_EXCEL -> if (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    exportExcel()
+                    createExportExcelUri()
                 }
                 REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_REALM -> if (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                     exportRealmFile()
@@ -103,7 +99,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
                     deleteRealmFile()
                 }
                 REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_FULL_BACKUP -> if (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    createFileWithSAF()
+                    createFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".zip", MIME_TYPE_ZIP, REQUEST_CODE_SAF_WRITE_ZIP)
                 }
             }
         } else {
@@ -115,8 +111,11 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
         super.onActivityResult(requestCode, resultCode, intent)
         if (resultCode == Activity.RESULT_OK && intent != null) {
             when (requestCode) {
-                REQUEST_CODE_SAF_WRITE -> if (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                REQUEST_CODE_SAF_WRITE_ZIP -> if (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                     exportFullBackupFile(intent.data)
+                }
+                REQUEST_CODE_SAF_WRITE_XLS -> if (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                    exportExcel(intent.data)
                 }
             }
         }
@@ -269,8 +268,12 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
         }).start()
     }
 
-    private fun exportExcel() {
-        EasyDiaryUtils.initLegacyWorkingDirectory(mContext)
+    private fun createExportExcelUri() {
+        createFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".xls", MIME_TYPE_XLS, REQUEST_CODE_SAF_WRITE_XLS)
+    }
+
+    private fun exportExcel(uri: Uri?) {
+//        EasyDiaryUtils.initLegacyWorkingDirectory(mContext)
         val exportFileName = "aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}"
         val builder = AlertDialog.Builder(mContext)
         builder.setTitle(getString(R.string.export_excel_title))
@@ -287,10 +290,11 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
         alert.show()
 
         Thread(Runnable {
-            val workBook = createWorkBook(progressInfo, "${getString(R.string.export_excel_xls_location)}: ${BACKUP_EXCEL_DIRECTORY + exportFileName}.xls")
-            val outputStream = FileOutputStream("${EasyDiaryUtils.getExternalStorageDirectory().absolutePath + BACKUP_EXCEL_DIRECTORY + exportFileName}.xls")
+            val workBook = createWorkBook(progressInfo, "$exportFileName.xls")
+//            val outputStream = FileOutputStream("${EasyDiaryUtils.getExternalStorageDirectory().absolutePath + BACKUP_EXCEL_DIRECTORY + exportFileName}.xls")
+            val outputStream = mContext.contentResolver.openOutputStream(uri!!)
             workBook.write(outputStream)
-            outputStream.close()
+            outputStream?.close()
             mActivity.runOnUiThread {
                 confirmButton.visibility = View.VISIBLE
                 confirmButton.setOnClickListener { alert.cancel() }
@@ -392,18 +396,17 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
         return wb
     }
 
-    private fun createFileWithSAF() {
+    private fun createFileWithSAF(fileName: String, mimeType: String, requestCode: Int) {
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
             // Filter to only show results that can be "opened", such as
             // a file (as opposed to a list of contacts or timezones).
             addCategory(Intent.CATEGORY_OPENABLE)
 
+            type = mimeType
             // Create a file with the requested MIME type.
-            type = "application/zip"
-            putExtra(Intent.EXTRA_TITLE, DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".zip")
+            putExtra(Intent.EXTRA_TITLE, fileName)
         }
-
-        startActivityForResult(intent, REQUEST_CODE_SAF_WRITE)
+        startActivityForResult(intent, requestCode)
     }
 
     private fun exportFullBackupFile(uri: Uri?) {
@@ -420,13 +423,13 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
         when (view.id) {
             R.id.exportExcel -> {
                 when (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    true -> exportExcel()
+                    true -> createExportExcelUri()
                     false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_EXCEL)
                 }
             }
             R.id.exportFullBackupFile -> {
                 when (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    true -> createFileWithSAF()
+                    true -> createFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".zip", MIME_TYPE_ZIP, REQUEST_CODE_SAF_WRITE_ZIP)
                     false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_FULL_BACKUP)
                 }
             }
