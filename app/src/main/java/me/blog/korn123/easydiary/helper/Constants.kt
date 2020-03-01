@@ -401,7 +401,8 @@ const val REQUEST_CODE_IMAGE_PICKER = 22
 const val REQUEST_CODE_BACKGROUND_COLOR_PICKER = 31
 const val REQUEST_CODE_TEXT_COLOR_PICKER = 32
 
-const val REQUEST_CODE_SAF_WRITE = 40
+const val REQUEST_CODE_SAF_WRITE_ZIP = 40
+const val REQUEST_CODE_SAF_WRITE_XLS = 41
 
 const val REQUEST_CODE_SPEECH_INPUT = 100
 const val REQUEST_CODE_GOOGLE_SIGN_IN = 101
@@ -418,6 +419,14 @@ const val MODE_DEFAULT = "mode_default"
 const val MODE_REMINDER = "mode_reminder"
 const val START_MAIN_ACTIVITY = 0
 const val START_DIARY_INSERT_ACTIVITY = 1
+
+
+/***************************************************************************************************
+ *   SAF mime type
+ *
+ ***************************************************************************************************/
+const val MIME_TYPE_ZIP = "application/zip"
+const val MIME_TYPE_XLS = "application/vnd.ms-excel"
 
 
 /***************************************************************************************************
