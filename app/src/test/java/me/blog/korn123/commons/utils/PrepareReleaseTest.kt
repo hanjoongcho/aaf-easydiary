@@ -9,7 +9,13 @@ class PrepareReleaseTest {
     @Throws(Exception::class)
     fun determine_strings_xml() {
         File("./src/main/res/").listFiles().map {
-            println(it.absolutePath)
+            if (it.name.startsWith("values")) {
+                it.listFiles().map { targetFile ->
+                    if (targetFile.name == "strings.xml") {
+                        println(targetFile.absolutePath)
+                    }
+                }
+            }
         }
 
         Assert.assertTrue(true)
