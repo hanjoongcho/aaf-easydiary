@@ -1,8 +1,10 @@
 package me.blog.korn123.commons.utils
 
+import org.apache.commons.io.FileUtils
 import org.junit.Assert
 import org.junit.Test
 import java.io.File
+import java.nio.charset.StandardCharsets
 
 class PrepareReleaseTest {
     @Test
@@ -12,7 +14,12 @@ class PrepareReleaseTest {
             if (it.name.startsWith("values")) {
                 it.listFiles().map { targetFile ->
                     if (targetFile.name == "strings.xml") {
-                        println(targetFile.absolutePath)
+                        val lines = FileUtils.readLines(targetFile, StandardCharsets.UTF_8)
+                        println(targetFile.absolutePath + ": " + lines.size)
+                        lines.forEach { line ->
+//                            println(line)
+                        }
+
                     }
                 }
             }
