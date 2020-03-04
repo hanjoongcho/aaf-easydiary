@@ -82,7 +82,7 @@ class PrepareRelease {
                                 }
                                 else -> {
                                     for (i in valuesOther.size until valuesDefaultTotal) {
-                                        valuesOther.add(valuesDefault?.get(i))
+                                        valuesOther.add(valuesOther.lastIndex, valuesDefault?.get(i.minus(1)))
                                     }
                                 }
                             }
