@@ -1,9 +1,11 @@
 package me.blog.korn123.commons.utils
 
 import org.apache.commons.io.FileUtils
+import org.apache.commons.io.IOUtils
 import org.junit.Assert
 import org.junit.Test
 import java.io.File
+import java.io.FileOutputStream
 import java.nio.charset.StandardCharsets
 
 class PrepareReleaseTest {
@@ -22,7 +24,7 @@ class PrepareReleaseTest {
         return startIndex
     }
 
-    private fun determineLastReleaseEndLine(values: List<String>?, startIndex: Int): Int {
+    private fun determineLastReleaseEndLine(values: List<String>?, startIndex: Int, newReleaseLines: ArrayList<String>? = null): Int {
         var endIndex = -1
         values?.let {
             for (lineNum in startIndex until it.size) {
@@ -34,6 +36,7 @@ class PrepareReleaseTest {
 
             for (lineNum in startIndex until endIndex.plus(1)) {
                 println(it[lineNum])
+                newReleaseLines?.add(it[lineNum])
             }
         }
         return endIndex;
@@ -42,25 +45,30 @@ class PrepareReleaseTest {
     @Test
     @Throws(Exception::class)
     fun determine_strings_xml() {
-        var valuesDefault: List<String>?
-        var startIndex = -1
-        var endIndex = -1
+        var valuesDefault: List<String>? = null
+        val newReleaseLines: ArrayList<String> = arrayListOf()
         File("./src/main/res/").listFiles()?.map { localeFolder ->
             if (localeFolder.name.startsWith("values")) {
                 if (localeFolder.name == "values") {
                     valuesDefault = FileUtils.readLines(File(localeFolder.absolutePath + "/strings.xml"), StandardCharsets.UTF_8)
                     println("Total lines: ${valuesDefault?.size}")
-                    startIndex = determineLastReleaseStartLine(valuesDefault)
-                    endIndex = determineLastReleaseEndLine(valuesDefault, startIndex)
+                    val startIndex = determineLastReleaseStartLine(valuesDefault)
+                    val endIndex = determineLastReleaseEndLine(valuesDefault, startIndex, newReleaseLines)
                     println("Current release: $startIndex ~ $endIndex")
                     println("============================================================")
-                }
-
-                localeFolder.listFiles()?.map { targetFile ->
-                    if (targetFile.name == "strings.xml") {
-                        val valuesOther = FileUtils.readLines(targetFile, StandardCharsets.UTF_8)
-                        println(localeFolder.name + ": " + valuesOther.size)
-                        determineLastReleaseEndLine(valuesOther, determineLastReleaseStartLine(valuesOther))
+                } else {
+                    localeFolder.listFiles()?.map { targetFile ->
+                        if (targetFile.name == "strings.xml") {
+                            val valuesOther = FileUtils.readLines(targetFile, StandardCharsets.UTF_8)
+                            println(localeFolder.name + ": " + valuesOther.size)
+                            if (valuesOther.size < (valuesDefault?.size ?: 0) ) {
+                                val endIndex = determineLastReleaseEndLine(valuesOther, determineLastReleaseStartLine(valuesOther))
+                                valuesOther.addAll(endIndex.plus(1), newReleaseLines)
+                                val os = FileOutputStream(targetFile)
+                                IOUtils.writeLines(valuesOther, null, os, StandardCharsets.UTF_8)
+                                os.close()
+                            }
+                        }
                     }
                 }
             }
