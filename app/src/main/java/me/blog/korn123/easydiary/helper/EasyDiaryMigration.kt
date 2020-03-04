@@ -106,7 +106,7 @@ class EasyDiaryMigration : RealmMigration {
             //         int age;
             //         ************************************************/
             //        // Migrate from version 0 to version 1
-            //        if (currentVersion == 0) {
+            //        if (mCurrentVersion == 0) {
             //            RealmObjectSchema personSchema = schema.get("Person");
             //
             //            // Combine 'firstName' and 'lastName' in a new field called 'fullName'
@@ -120,7 +120,7 @@ class EasyDiaryMigration : RealmMigration {
             //                    })
             //                    .removeField("firstName")
             //                    .removeField("lastName");
-            //            currentVersion++;
+            //            mCurrentVersion++;
             //        }
             //
             //        /************************************************
@@ -137,7 +137,7 @@ class EasyDiaryMigration : RealmMigration {
             //         RealmList<Pet> pets;    // add an array property
             //         ************************************************/
             //        // Migrate from version 1 to version 2
-            //        if (currentVersion == 1) {
+            //        if (mCurrentVersion == 1) {
             //
             //            // Create a new class
             //            RealmObjectSchema petSchema = schema.create("Pet")
@@ -158,7 +158,7 @@ class EasyDiaryMigration : RealmMigration {
             //                            }
             //                        }
             //                    });
-            //            currentVersion++;
+            //            mCurrentVersion++;
             //        }
             //
             //        /************************************************
@@ -173,7 +173,7 @@ class EasyDiaryMigration : RealmMigration {
             //         int age;
             //         ************************************************/
             //        // Migrate from version 2 to version 3
-            //        if (currentVersion == 2) {
+            //        if (mCurrentVersion == 2) {
             //            RealmObjectSchema personSchema = schema.get("Person");
             //            personSchema.setNullable("fullName", true); // fullName is nullable now.
             //
@@ -195,7 +195,7 @@ class EasyDiaryMigration : RealmMigration {
             //                    })
             //                    .removeField("type")
             //                    .renameField("type_tmp", "type");
-            //            currentVersion++;
+            //            mCurrentVersion++;
             //        }
         }
     }
