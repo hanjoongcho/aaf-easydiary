@@ -61,9 +61,21 @@ class PrepareReleaseTest {
                         if (targetFile.name == "strings.xml") {
                             val valuesOther = FileUtils.readLines(targetFile, StandardCharsets.UTF_8)
                             println(localeFolder.name + ": " + valuesOther.size)
-                            if (valuesOther.size < (valuesDefault?.size ?: 0) ) {
-                                val endIndex = determineLastReleaseEndLine(valuesOther, determineLastReleaseStartLine(valuesOther))
+                            val valuesDefaultTotal = valuesDefault?.size ?: 0
+                            val startIndex = determineLastReleaseStartLine(valuesOther)
+                            val endIndex = determineLastReleaseEndLine(valuesOther, startIndex)
+                            if (valuesOther.size < valuesDefaultTotal ) {
                                 valuesOther.addAll(endIndex.plus(1), newReleaseLines)
+                                val os = FileOutputStream(targetFile)
+                                IOUtils.writeLines(valuesOther, null, os, StandardCharsets.UTF_8)
+                                os.close()
+                            } else if (valuesOther.size == valuesDefaultTotal) {
+                                var num = 0
+                                while (num < newReleaseLines.size) {
+                                    valuesOther.removeAt(startIndex)
+                                    num++
+                                }
+                                valuesOther.addAll(startIndex, newReleaseLines)
                                 val os = FileOutputStream(targetFile)
                                 IOUtils.writeLines(valuesOther, null, os, StandardCharsets.UTF_8)
                                 os.close()
