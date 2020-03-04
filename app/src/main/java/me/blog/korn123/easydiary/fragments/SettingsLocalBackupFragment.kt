@@ -99,7 +99,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
                     deleteRealmFile()
                 }
                 REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_FULL_BACKUP -> if (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    createFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".zip", MIME_TYPE_ZIP, REQUEST_CODE_SAF_WRITE_ZIP)
+                    writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".zip", MIME_TYPE_ZIP, REQUEST_CODE_SAF_WRITE_ZIP)
                 }
             }
         } else {
@@ -116,6 +116,9 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
                 }
                 REQUEST_CODE_SAF_WRITE_XLS -> if (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                     exportExcel(intent.data)
+                }
+                REQUEST_CODE_SAF_READ_ZIP -> {
+                    importFullBackupFile(intent.data)
                 }
             }
         }
@@ -269,7 +272,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
     }
 
     private fun createExportExcelUri() {
-        createFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".xls", MIME_TYPE_XLS, REQUEST_CODE_SAF_WRITE_XLS)
+        writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".xls", MIME_TYPE_XLS, REQUEST_CODE_SAF_WRITE_XLS)
     }
 
     private fun exportExcel(uri: Uri?) {
@@ -396,7 +399,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
         return wb
     }
 
-    private fun createFileWithSAF(fileName: String, mimeType: String, requestCode: Int) {
+    private fun writeFileWithSAF(fileName: String, mimeType: String, requestCode: Int) {
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
             // Filter to only show results that can be "opened", such as
             // a file (as opposed to a list of contacts or timezones).
@@ -409,9 +412,22 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
         startActivityForResult(intent, requestCode)
     }
 
+    private fun readFileWithSAF() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+            type = MIME_TYPE_ZIP
+        }
+        startActivityForResult(intent, REQUEST_CODE_SAF_READ_ZIP)
+    }
+
     private fun exportFullBackupFile(uri: Uri?) {
         val backupOperations = BackupOperations.Builder(mContext, uri.toString()).build()
         backupOperations.continuation.enqueue()
+    }
+
+    private fun importFullBackupFile(uri: Uri?) {
+        val zipHelper = ZipHelper(mContext)
+        zipHelper.decompress(uri)
+
     }
 
 
@@ -429,9 +445,12 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
             }
             R.id.exportFullBackupFile -> {
                 when (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    true -> createFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".zip", MIME_TYPE_ZIP, REQUEST_CODE_SAF_WRITE_ZIP)
+                    true -> writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".zip", MIME_TYPE_ZIP, REQUEST_CODE_SAF_WRITE_ZIP)
                     false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_FULL_BACKUP)
                 }
+            }
+            R.id.importFullBackupFile -> {
+                readFileWithSAF()
             }
             R.id.sendEmailWithExcel -> {
                 sendEmailWithExcel()
@@ -464,6 +483,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
         importRealmFile.setOnClickListener(mOnClickListener)
         deleteRealmFile.setOnClickListener(mOnClickListener)
         exportFullBackupFile.setOnClickListener(mOnClickListener)
+        importFullBackupFile.setOnClickListener(mOnClickListener)
     }
 
     private fun initPreference() {}

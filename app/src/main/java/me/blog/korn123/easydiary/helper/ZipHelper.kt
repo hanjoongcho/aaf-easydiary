@@ -7,12 +7,14 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.isOreoPlus
+import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.services.NotificationService
 import org.apache.commons.io.IOUtils
@@ -134,6 +136,43 @@ class ZipHelper(val context: Context) {
             zipOutputStream.close()
         } catch (e: FileNotFoundException) {
             e.printStackTrace()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+
+    fun decompress(uri: Uri?) {
+        val uriStream = context.contentResolver.openInputStream(uri!!)
+        val buffer = ByteArray(1024)
+        try {
+            val zipInputStream = ZipInputStream(uriStream)
+            var zipEntry: ZipEntry? = zipInputStream.nextEntry
+            val workingPath =  EasyDiaryUtils.getApplicationDataDirectory(context) + WORKING_DIRECTORY
+            while (zipEntry != null) {
+                val fileName = zipEntry.name
+                Log.i(AAF_TEST, fileName)
+                val newFile = File(workingPath + fileName)
+
+                File(newFile.parent).mkdirs()
+                val fileOutputStream = FileOutputStream(newFile)
+                var len: Int
+                writeLoop@ while (true) {
+                    len = zipInputStream.read(buffer)
+                    if (len > 0) {
+                        fileOutputStream.write(buffer, 0, len)
+                    } else {
+                        break@writeLoop
+                    }
+                }
+                fileOutputStream.close()
+
+                zipInputStream.closeEntry()
+                zipEntry = zipInputStream.nextEntry
+            }
+
+            zipInputStream.closeEntry()
+            zipInputStream.close()
+            uriStream?.close()
         } catch (e: IOException) {
             e.printStackTrace()
         }

@@ -553,4 +553,6 @@
     <string name="export_full_backup_title">[BETA] Backup full data</string>
     <string name="export_full_backup_description">Compress and back up all the data related to the diary such as database, attached photo, post card, font, etc. into one file.\nThis feature is a beta feature therefore may not work properly on some devices.</string>
     <string name="diary_symbol_search_message">Select the diary symbol you want to filter.</string>
+    <string name="import_full_backup_title">[BETA] Recover full data</string>
+    <string name="import_full_backup_description">[BETA] Decompress and recover all the data related to the diary such as database, attached photo, post card, font, etc.\nThis feature is a beta feature therefore may not work properly on some devices.</string>
 </resources>
