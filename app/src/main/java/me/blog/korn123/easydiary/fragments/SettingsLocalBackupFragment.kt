@@ -129,13 +129,13 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
      *   backup and recovery
      *
      ***************************************************************************************************/
-    private fun exportRealmFile() {
+    private fun exportRealmFile(showDialog: Boolean = true) {
         val srcFile = File(EasyDiaryDbHelper.getInstance().path)
         val destFilePath = BACKUP_DB_DIRECTORY + DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
         val destFile = File(EasyDiaryUtils.getApplicationDataDirectory(mContext) + destFilePath)
         FileUtils.copyFile(srcFile, destFile, false)
         mContext.config.diaryBackupLocal = System.currentTimeMillis()
-        mActivity.showSimpleDialog(getString(R.string.export_realm_title), getString(R.string.export_realm_guide_message), destFile.absolutePath)
+        if (showDialog) mActivity.showSimpleDialog(getString(R.string.export_realm_title), getString(R.string.export_realm_guide_message), destFile.absolutePath)
     }
 
     private fun importRealmFile() {
@@ -420,14 +420,16 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
     }
 
     private fun exportFullBackupFile(uri: Uri?) {
-        val backupOperations = BackupOperations.Builder(mContext, uri.toString()).build()
-        backupOperations.continuation.enqueue()
+        exportRealmFile(false)
+        BackupOperations.Builder(mContext, uri.toString(), BackupOperations.WORK_MODE_BACKUP).build().apply {
+            continuation.enqueue()
+        }
     }
 
     private fun importFullBackupFile(uri: Uri?) {
-        val zipHelper = ZipHelper(mContext)
-        zipHelper.decompress(uri)
-
+        BackupOperations.Builder(mContext, uri.toString(), BackupOperations.WORK_MODE_RECOVERY).build().apply {
+            continuation.enqueue()
+        }
     }
 
 

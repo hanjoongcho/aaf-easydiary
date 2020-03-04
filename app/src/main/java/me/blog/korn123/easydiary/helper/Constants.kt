@@ -11,6 +11,7 @@ import android.Manifest
  *
  ***************************************************************************************************/
 const val WORK_MANAGER_BACKUP = "work_manager_backup"
+const val WORK_MANAGER_RECOVERY = "work_manager_recovery"
 
 
 /***************************************************************************************************

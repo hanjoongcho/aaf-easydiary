@@ -142,6 +142,7 @@ class ZipHelper(val context: Context) {
     }
 
     fun decompress(uri: Uri?) {
+        showNotification()
         val uriStream = context.contentResolver.openInputStream(uri!!)
         val buffer = ByteArray(1024)
         try {
