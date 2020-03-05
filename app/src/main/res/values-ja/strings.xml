@@ -554,5 +554,5 @@
     <string name="export_full_backup_description">データベース、添付写真、ポストカード、フォントなど、日記に関連するすべてのデータを1つのファイルに圧縮してバックアップします。\nこの機能はベータ機能であるため、一部のデバイスでは正常に機能しない場合があります。</string>
     <string name="diary_symbol_search_message">フィルタリングするダイアリーシンボルを選択します。</string>
     <string name="import_full_backup_title">[BETA] Recover full data</string>
-    <string name="import_full_backup_description">[BETA] Decompress and recover all the data related to the diary such as database, attached photo, post card, font, etc.\nThis feature is a beta feature therefore may not work properly on some devices.</string>
+    <string name="import_full_backup_description">Decompress and recover all the data related to the diary such as database, attached photo, post card, font, etc.\nThis feature is a beta feature therefore may not work properly on some devices.</string>
 </resources>

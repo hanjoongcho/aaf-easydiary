@@ -31,7 +31,7 @@ class ZipHelper(val context: Context) {
     var isOnProgress = true
 
     @SuppressLint("NewApi")
-    fun showNotification(title: String, message: String) {
+    fun showNotification(title: String, message: String, actionString: String) {
         val notificationManager = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
         if (isOreoPlus()) {
 //            val importance = NotificationManager.IMPORTANCE_HIGH
@@ -58,7 +58,7 @@ class ZipHelper(val context: Context) {
                         R.drawable.ic_launcher_round,
                         context.getString(R.string.cancel),
                         PendingIntent.getService(context, 0, Intent(context, NotificationService::class.java).apply {
-                            action = NotificationService.ACTION_FULL_BACKUP_CANCEL
+                            action = actionString
                         }, 0)
                 )
         notificationManager.notify(NOTIFICATION_COMPLETE_ID, mBuilder.build())
@@ -72,6 +72,17 @@ class ZipHelper(val context: Context) {
                     .setContentTitle("${progress.plus(1)}/${mFileNames.size}")
                     .setContentText(message)
 
+            notificationManager.notify(NOTIFICATION_COMPLETE_ID, mBuilder.build())
+        }
+    }
+
+    private fun updateDecompressProgress(progress: Int, totalCount: Int, fileName: String) {
+        if (isOnProgress) {
+            val notificationManager = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
+            mBuilder.setProgress(totalCount, progress.plus(1), false)
+                    .setContentTitle("${progress.plus(1)}/$totalCount")
+                    .setContentText(fileName)
+                    .setStyle(NotificationCompat.BigTextStyle().bigText(fileName).setSummaryText(fileName))
             notificationManager.notify(NOTIFICATION_COMPLETE_ID, mBuilder.build())
         }
     }
@@ -117,7 +128,7 @@ class ZipHelper(val context: Context) {
     }
 
     fun compress(destFile: File) {
-        showNotification("Full data backup", "Preparing to backup all data ...")
+        showNotification("Full data backup", "Preparing to backup all data ...", NotificationService.ACTION_FULL_BACKUP_CANCEL)
         val zipOutputStream: ZipOutputStream
         try {
             zipOutputStream = ZipOutputStream(FileOutputStream(destFile))
@@ -144,15 +155,35 @@ class ZipHelper(val context: Context) {
         }
     }
 
+    fun countFileEntry(uri: Uri?): Int {
+        val uriStream = context.contentResolver.openInputStream(uri!!)
+        var count = 0
+        try {
+            val zipInputStream = ZipInputStream(uriStream)
+            while (zipInputStream.nextEntry != null) {
+                zipInputStream.closeEntry()
+                count++
+            }
+            zipInputStream.close()
+            uriStream?.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return count
+    }
+
     fun decompress(uri: Uri?) {
-        showNotification("Full data recovery", "Recovery of all data is in progress.")
+        showNotification("Full data recovery", "Recovery of all data is in progress.", NotificationService.ACTION_FULL_RECOVERY_CANCEL)
+        val fileCount = countFileEntry(uri)
         val uriStream = context.contentResolver.openInputStream(uri!!)
         val buffer = ByteArray(1024)
         try {
             val zipInputStream = ZipInputStream(uriStream)
             var zipEntry: ZipEntry? = zipInputStream.nextEntry
             val workingPath =  EasyDiaryUtils.getApplicationDataDirectory(context) + WORKING_DIRECTORY
+            var index = 0
             while (zipEntry != null) {
+                if (!isOnProgress) break
                 val fileName = zipEntry.name
                 Log.i(AAF_TEST, fileName)
                 val newFile = File(workingPath + fileName)
@@ -172,6 +203,7 @@ class ZipHelper(val context: Context) {
 
                 zipInputStream.closeEntry()
                 zipEntry = zipInputStream.nextEntry
+                updateDecompressProgress(index++, fileCount, fileName)
             }
 
             zipInputStream.closeEntry()

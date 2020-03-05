@@ -5,13 +5,9 @@ import android.net.Uri
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.helper.NOTIFICATION_COMPLETE_ID
-import me.blog.korn123.easydiary.helper.WORKING_DIRECTORY
 import me.blog.korn123.easydiary.helper.ZipHelper
 import me.blog.korn123.easydiary.viewmodels.BackupOperations
-import org.apache.commons.io.FileUtils
-import java.io.File
 
 class FullRecoveryWorker(private val context: Context, workerParams: WorkerParameters)
     : Worker(context, workerParams) {
