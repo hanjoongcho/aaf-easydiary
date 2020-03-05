@@ -31,7 +31,7 @@ class ZipHelper(val context: Context) {
     var isOnProgress = true
 
     @SuppressLint("NewApi")
-    fun showNotification() {
+    fun showNotification(title: String, message: String) {
         val notificationManager = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
         if (isOreoPlus()) {
 //            val importance = NotificationManager.IMPORTANCE_HIGH
@@ -49,8 +49,9 @@ class ZipHelper(val context: Context) {
                 .setAutoCancel(true)
                 .setOnlyAlertOnce(true)
                 .setProgress(0, 0, true)
-                .setContentTitle("Compressing all files...")
-                .setContentText("...")
+                .setContentTitle(title)
+                .setContentText(message)
+                .setStyle(NotificationCompat.BigTextStyle().bigText(message).setSummaryText(message))
 //                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .addAction(
@@ -70,6 +71,7 @@ class ZipHelper(val context: Context) {
             mBuilder.setProgress(mFileNames.size, progress.plus(1), false)
                     .setContentTitle("${progress.plus(1)}/${mFileNames.size}")
                     .setContentText(message)
+
             notificationManager.notify(NOTIFICATION_COMPLETE_ID, mBuilder.build())
         }
     }
@@ -81,6 +83,7 @@ class ZipHelper(val context: Context) {
             mBuilder.setProgress(0, 0, false)
                     .setContentTitle(title)
                     .setContentText(message)
+                    .setStyle(NotificationCompat.BigTextStyle().bigText(message).setSummaryText(message))
                     .addAction(
                             R.drawable.ic_launcher_round,
                             context.getString(R.string.dismiss),
@@ -114,7 +117,7 @@ class ZipHelper(val context: Context) {
     }
 
     fun compress(destFile: File) {
-        showNotification()
+        showNotification("Full data backup", "Preparing to backup all data ...")
         val zipOutputStream: ZipOutputStream
         try {
             zipOutputStream = ZipOutputStream(FileOutputStream(destFile))
@@ -142,7 +145,7 @@ class ZipHelper(val context: Context) {
     }
 
     fun decompress(uri: Uri?) {
-        showNotification()
+        showNotification("Full data recovery", "Recovery of all data is in progress.")
         val uriStream = context.contentResolver.openInputStream(uri!!)
         val buffer = ByteArray(1024)
         try {
