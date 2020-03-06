@@ -91,7 +91,7 @@ class ZipHelper(val context: Context) {
         if (isOnProgress) {
             val notificationManager = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
             mBuilder.mActions.clear()
-            mBuilder.setProgress(0, 0, false)
+            mBuilder/*.setProgress(0, 0, false)*/
                     .setContentTitle(title)
                     .setContentText(message)
                     .setStyle(NotificationCompat.BigTextStyle().bigText(message).setSummaryText(message))
