@@ -71,7 +71,7 @@ class ZipHelper(val context: Context) {
             mBuilder.setProgress(mFileNames.size, progress.plus(1), false)
                     .setContentTitle("${progress.plus(1)}/${mFileNames.size}")
                     .setContentText(message)
-
+                    .setStyle(NotificationCompat.BigTextStyle().bigText(message).setSummaryText(message))
             notificationManager.notify(NOTIFICATION_COMPLETE_ID, mBuilder.build())
         }
     }

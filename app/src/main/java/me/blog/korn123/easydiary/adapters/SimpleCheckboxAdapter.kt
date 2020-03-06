@@ -21,13 +21,13 @@ internal class SimpleCheckboxAdapter (
     override fun getItemCount(): Int = realmFiles.size
 
     override fun onBindViewHolder(holder: SimpleCheckboxViewHolder, position: Int) {
-        holder.bindTo(realmFiles[position])
         holder.itemView.checkbox.setOnCheckedChangeListener { _, isChecked ->
             realmFiles[position].isChecked = isChecked
         }
         holder.itemView.setOnClickListener { view ->
             view.checkbox.isChecked = !view.checkbox.isChecked
         }
+        holder.bindTo(realmFiles[position])
     }
 }
 
@@ -35,6 +35,7 @@ class SimpleCheckboxViewHolder(viewGroup: ViewGroup) : RecyclerView.ViewHolder(v
     fun bindTo(simpleCheckbox: SimpleCheckbox) {
         itemView.title.text = simpleCheckbox.title
         itemView.description.text = simpleCheckbox.description
+        itemView.checkbox.isChecked = simpleCheckbox.isChecked
     }
 }
 
