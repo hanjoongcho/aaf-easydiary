@@ -4,8 +4,6 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.core.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,18 +17,20 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
+import io.github.aafactory.commons.utils.CommonUtils
 import kotlinx.android.synthetic.main.fragment_barchart.*
 import me.blog.korn123.commons.utils.ChartUtils
-import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.chart.IValueFormatterExt
 import me.blog.korn123.easydiary.chart.MyAxisValueFormatter
 import me.blog.korn123.easydiary.chart.XYMarkerView
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.extensions.scaledDrawable
 import java.util.*
 
 class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
+    private val mContext: Context
+        get() { return context!! }
     val mSequences = arrayListOf<Int>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -117,7 +117,7 @@ class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
         var index = 1.0F
         sortedMap.forEach { (key, value) ->
             val drawable: Drawable? = when (FlavorUtils.sequenceToSymbolResourceId(key) > 0) {
-                true -> ContextCompat.getDrawable(context!!, FlavorUtils.sequenceToSymbolResourceId(key))
+                true -> scaledDrawable(FlavorUtils.sequenceToSymbolResourceId(key), CommonUtils.dpToPixel(mContext,24F) ,CommonUtils.dpToPixel(mContext,24F))
                 false -> null
             }
             mSequences.add(key)
