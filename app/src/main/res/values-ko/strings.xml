@@ -374,7 +374,8 @@
     </string>
     <string name="release_188">
         v1.4.122 / 2020.03.xx\n
-        [BugFix] Some symbols appear unusually large in dashboard statistics
+        [BETA] Added full data recovery feature
+        Some symbols appear unusually large in dashboard statistics
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -555,4 +556,6 @@
     <string name="diary_symbol_search_message">필터링하려는 다이어리 심벌을 선택하세요.</string>
     <string name="import_full_backup_title">[BETA] Recover full data</string>
     <string name="import_full_backup_description">Decompress and recover all the data related to the diary such as database, attached photo, post card, font, etc.\nThis feature is a beta feature therefore may not work properly on some devices.</string>
+    <string name="calendar_sort_ascending">Ascending</string>
+    <string name="calendar_sort_descending">Descending</string>
 </resources>

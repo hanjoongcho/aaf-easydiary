@@ -8,6 +8,11 @@ import java.io.FileOutputStream
 import java.nio.charset.StandardCharsets
 
 class PrepareRelease {
+    companion object {
+        const val SYNC_RELEASE = "sync_release"
+        const val SYNC_NEW_STRING = "sync_new_string"
+    }
+
     data class Release(var currentVersion: Int = -1, var startIndex: Int = -1, var endIndex: Int = -1)
 
     fun determineLastReleaseStartLine(values: List<String>?): Release {
@@ -45,9 +50,10 @@ class PrepareRelease {
     }
 
     @SuppressLint("NewApi")
-    fun syncReleaseInformation() {
+    fun syncReleaseInformation(syncMode: String) {
         var valuesDefault: List<String>? = null
         var defaultRelease: Release? = null
+        var defaultReleaseCurrentVersion = -1
         val newReleaseLines: ArrayList<String> = arrayListOf()
         File("./app/src/main/res/").listFiles()?.map { localeFolder ->
             if (localeFolder.name.startsWith("values")) {
@@ -60,6 +66,7 @@ class PrepareRelease {
                         println("Current release: ${it.startIndex} ~ ${it.endIndex}")
                         println("============================================================")
                     }
+                    defaultReleaseCurrentVersion = defaultRelease?.currentVersion ?: 0
                 } else {
                     localeFolder.listFiles()?.map { targetFile ->
                         if (targetFile.name == "strings.xml") {
@@ -68,15 +75,15 @@ class PrepareRelease {
                             val valuesDefaultTotal = valuesDefault?.size ?: 0
                             val otherRelease = determineLastReleaseStartLine(valuesOther)
                             otherRelease.endIndex = determineLastReleaseEndLine(valuesOther, otherRelease.startIndex)
+
                             when {
-                                (defaultRelease?.currentVersion ?: 0) > otherRelease.currentVersion -> {
+                                syncMode == SYNC_RELEASE && defaultReleaseCurrentVersion > otherRelease.currentVersion -> {
                                     valuesOther.addAll(otherRelease.endIndex.plus(1), newReleaseLines)
                                 }
-                                valuesOther.size == valuesDefaultTotal -> {
-                                    var num = 0
-                                    while (num < newReleaseLines.size) {
+                                syncMode == SYNC_RELEASE && defaultReleaseCurrentVersion == otherRelease.currentVersion -> {
+                                    println("remove line : ${otherRelease.startIndex} ~ ${otherRelease.endIndex}")
+                                    for (removeLineNum in otherRelease.startIndex..otherRelease.endIndex) {
                                         valuesOther.removeAt(otherRelease.startIndex)
-                                        num++
                                     }
                                     valuesOther.addAll(otherRelease.startIndex, newReleaseLines)
                                 }
@@ -99,5 +106,6 @@ class PrepareRelease {
 
 fun main() {
     val prepareRelease = PrepareRelease()
-    prepareRelease.syncReleaseInformation()
+//    prepareRelease.syncReleaseInformation(PrepareRelease.SYNC_RELEASE)
+    prepareRelease.syncReleaseInformation(PrepareRelease.SYNC_NEW_STRING)
 }

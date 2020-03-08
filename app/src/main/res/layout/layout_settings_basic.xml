@@ -4,16 +4,6 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <!--<io.github.aafactory.commons.views.LabelLayout
-        android:id="@+id/devMode"
-        android:layout_marginTop="2dp"
-        android:background="@drawable/bg_card_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:text="@string/preferences_category_settings"
-            style="@style/SettingsCategory" />
-    </io.github.aafactory.commons.views.LabelLayout>-->
 
     <LinearLayout
         android:orientation="vertical"
@@ -340,6 +330,32 @@
                             android:layout_height="wrap_content"/>
                     </RadioGroup>
                 </LinearLayout>
+                <!--<LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:text="@string/calendar_start_day_summary"
+                        style="@style/SettingsSummary" />
+                    <RadioGroup
+                        android:id="@+id/calendarSorting"
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <RadioButton
+                            android:alpha="0.7"
+                            android:id="@+id/ascending"
+                            android:text="@string/calendar_sort_ascending"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <RadioButton
+                            android:alpha="0.7"
+                            android:id="@+id/descending"
+                            android:text="@string/calendar_sort_descending"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </RadioGroup>
+                </LinearLayout>-->
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
