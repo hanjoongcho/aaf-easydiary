@@ -14,6 +14,7 @@ import com.roomorama.caldroid.CaldroidFragmentEx
 import com.roomorama.caldroid.CaldroidListener
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
+import io.realm.Sort
 import kotlinx.android.synthetic.main.activity_calendar.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryCalendarItemAdapter
@@ -169,9 +170,9 @@ class CalendarActivity : EasyDiaryActivity() {
      ***************************************************************************************************/
     private fun refreshList() {
         val formatter = SimpleDateFormat(DateUtils.DATE_PATTERN_DASH, Locale.getDefault())
-
+        val sort: Sort = if (config.calendarSorting == CALENDAR_SORTING_ASC) Sort.ASCENDING else Sort.DESCENDING
         mDiaryList.clear()
-        mDiaryList.addAll(EasyDiaryDbHelper.readDiaryByDateString(formatter.format(mCalendar.time)))
+        mDiaryList.addAll(EasyDiaryDbHelper.readDiaryByDateString(formatter.format(mCalendar.time), sort))
         mArrayAdapterDiary?.notifyDataSetChanged()
         selectedList.setSelection(0)
 

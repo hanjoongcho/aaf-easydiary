@@ -108,8 +108,8 @@ object EasyDiaryDbHelper {
         return realmInstance.where(DiaryDto::class.java).equalTo("sequence", sequence).findFirst()!!
     }
 
-    fun readDiaryByDateString(dateString: String?): List<DiaryDto> {
-        val results: RealmResults<DiaryDto> = Realm.getInstance(mDiaryConfig).where(DiaryDto::class.java).equalTo("dateString", dateString).findAll().sort("sequence", Sort.DESCENDING)
+    fun readDiaryByDateString(dateString: String?, sort: Sort = Sort.DESCENDING): List<DiaryDto> {
+        val results: RealmResults<DiaryDto> = Realm.getInstance(mDiaryConfig).where(DiaryDto::class.java).equalTo("dateString", dateString).findAll().sort("sequence", sort)
         val list = ArrayList<DiaryDto>()
         list.addAll(results.subList(0, results.size))
         return list

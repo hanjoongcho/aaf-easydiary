@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.roomorama.caldroid.CaldroidGridAdapter
+import io.realm.Sort
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
@@ -17,6 +18,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.helper.AAF_TEST
+import me.blog.korn123.easydiary.helper.CALENDAR_SORTING_ASC
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 
 class CaldroidItemAdapter(
@@ -100,7 +102,8 @@ class CaldroidItemAdapter(
         val dateString = dateTime.format("YYYY-MM-DD")
         val count = EasyDiaryDbHelper.countDiaryBy(dateString)
 
-        val mDiaryList = EasyDiaryDbHelper.readDiaryByDateString(dateString)
+        val sort: Sort = if (context.config.calendarSorting == CALENDAR_SORTING_ASC) Sort.ASCENDING else Sort.DESCENDING
+        val mDiaryList = EasyDiaryDbHelper.readDiaryByDateString(dateString, sort)
         cellView?.findViewById<TextView>(R.id.itemCount)?.run {
             setTextColor(Color.RED)
             if (count > 3) {

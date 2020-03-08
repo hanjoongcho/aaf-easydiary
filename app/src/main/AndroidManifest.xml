@@ -30,7 +30,7 @@
         <activity android:name=".activities.CustomizationActivity" android:label="@string/customize_colors" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.WebViewActivity" />
         <activity android:name=".activities.StatisticsActivity" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.CalendarActivity" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.CalendarActivity" android:theme="@style/AppTheme.NoActionBar" android:launchMode="singleTask" />
         <activity android:name=".activities.PhotoViewPagerActivity" android:theme="@style/AppTheme.NoActionBar" android:hardwareAccelerated="false" />
         <activity android:name=".activities.PostCardActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.TimelineActivity" android:theme="@style/AppTheme.NoActionBar" />
