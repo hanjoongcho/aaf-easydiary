@@ -330,12 +330,29 @@
                             android:layout_height="wrap_content"/>
                     </RadioGroup>
                 </LinearLayout>
-                <!--<LinearLayout
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            style="@style/AppCard.Settings">
+            <LinearLayout
+                style="@style/LinearLayoutVertical">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:text="@string/calendar_sort_title"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        style="@style/SettingsTitle" />
+                </LinearLayout>
+                <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <com.simplemobiletools.commons.views.MyTextView
-                        android:text="@string/calendar_start_day_summary"
+                        android:text="@string/calendar_sort_summary"
                         style="@style/SettingsSummary" />
                     <RadioGroup
                         android:id="@+id/calendarSorting"
@@ -355,7 +372,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                     </RadioGroup>
-                </LinearLayout>-->
+                </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

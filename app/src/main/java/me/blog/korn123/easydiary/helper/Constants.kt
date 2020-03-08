@@ -334,13 +334,17 @@ const val FILTER_QUERY = "filter_query"
  *   Calendar constants
  *
  ***************************************************************************************************/
-const val CALENDAR_START_DAY_SUNDAY = 1
-const val CALENDAR_START_DAY_MONDAY = 2
-const val CALENDAR_START_DAY_TUESDAY = 3
+const val SETTING_CALENDAR_START_DAY = "setting_calendar_start_day"
+const val SETTING_CALENDAR_SORTING   = "setting_calendar_sorting"
+const val CALENDAR_SORTING_ASC  = 1
+const val CALENDAR_SORTING_DESC = 2
+const val CALENDAR_START_DAY_SUNDAY    = 1
+const val CALENDAR_START_DAY_MONDAY    = 2
+const val CALENDAR_START_DAY_TUESDAY   = 3
 const val CALENDAR_START_DAY_WEDNESDAY = 4
-const val CALENDAR_START_DAY_THURSDAY = 5
-const val CALENDAR_START_DAY_FRIDAY = 6
-const val CALENDAR_START_DAY_SATURDAY = 7
+const val CALENDAR_START_DAY_THURSDAY  = 5
+const val CALENDAR_START_DAY_FRIDAY    = 6
+const val CALENDAR_START_DAY_SATURDAY  = 7
 
 
 /***************************************************************************************************
@@ -479,7 +483,6 @@ const val FINGERPRINT_ENCRYPT_DATA = "fingerprint_encrypt_data"
 const val FINGERPRINT_ENCRYPT_DATA_IV = "fingerprint_encrypt_data_iv"
 const val FINGERPRINT_AUTHENTICATION_FAIL_COUNT = "fingerprint_authentication_fail_count"
 const val ENABLE_CARD_VIEW_POLICY = "enable_card_view_policy"
-const val SETTING_CALENDAR_START_DAY = "setting_calendar_start_day"
 const val SETTING_COUNT_CHARACTERS = "setting_count_characters"
 const val CUSTOM_FONTS_SUPPORT_LANGUAGE = "en|ko" // custom fonts supported language
 const val CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT = "NanumPen.ttf"

@@ -374,8 +374,9 @@
     </string>
     <string name="release_188">
         v1.4.122 / 2020.03.xx\n
-        [BETA] Added full data recovery feature
-        Some symbols appear unusually large in dashboard statistics
+        [BETA] Added full data recovery feature\n
+        Some symbols appear unusually large in dashboard statistics\n
+        Added sort option of the diary list in the calendar screen
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -558,4 +559,6 @@
     <string name="import_full_backup_description">Decompress and recover all the data related to the diary such as database, attached photo, post card, font, etc.\nThis feature is a beta feature therefore may not work properly on some devices.</string>
     <string name="calendar_sort_ascending">Ascending</string>
     <string name="calendar_sort_descending">Descending</string>
+    <string name="calendar_sort_title">Calendar sort option</string>
+    <string name="calendar_sort_summary">Set the sort order of the daily diary list in the calendar screen.</string>
 </resources>

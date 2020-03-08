@@ -230,7 +230,7 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
         boldStyleOption.setOnClickListener(mOnClickListener)
         sensitiveOption.setOnClickListener(mOnClickListener)
         calendarStartDay.setOnCheckedChangeListener { _, i ->
-            val flag = when (i) {
+            mContext.config.calendarStartDay = when (i) {
                 R.id.startMonday -> CALENDAR_START_DAY_MONDAY
 //                R.id.startTuesday -> CALENDAR_START_DAY_TUESDAY
 //                R.id.startWednesday -> CALENDAR_START_DAY_WEDNESDAY
@@ -239,7 +239,12 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
                 R.id.startSaturday -> CALENDAR_START_DAY_SATURDAY
                 else -> CALENDAR_START_DAY_SUNDAY
             }
-            mContext.config.calendarStartDay = flag
+        }
+        calendarSorting.setOnCheckedChangeListener { _, i ->
+            mContext.config.calendarSorting = when (i) {
+                R.id.ascending -> CALENDAR_SORTING_ASC
+                else -> CALENDAR_SORTING_DESC
+            }
         }
         countCharacters.setOnClickListener(mOnClickListener)
     }
@@ -284,6 +289,10 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
             CALENDAR_START_DAY_MONDAY -> startMonday.isChecked = true
             CALENDAR_START_DAY_SATURDAY -> startSaturday.isChecked = true
             else -> startSunday.isChecked = true
+        }
+        when (mContext.config.calendarSorting) {
+            CALENDAR_SORTING_ASC -> ascending.isChecked = true
+            CALENDAR_SORTING_DESC -> descending.isChecked = true
         }
     }
 
