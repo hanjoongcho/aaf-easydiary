@@ -374,9 +374,9 @@
     </string>
     <string name="release_188">
         v1.4.122 / 2020.03.xx\n
-        [BETA] Added full data recovery feature\n
-        Some symbols appear unusually large in dashboard statistics\n
-        Added sort option of the diary list in the calendar screen
+        [BETA] 完全なデータ復旧機能を追加\n
+        ダッシュボードの統計画面で、いくつかのシンボルが異常な大きさに見えるエラーを修正\n
+        カレンダー画面の一見日記リストの並べ替えオプションを追加
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -555,10 +555,10 @@
     <string name="export_full_backup_title">[BETA] 完全なデータをバックアップする</string>
     <string name="export_full_backup_description">データベース、添付写真、ポストカード、フォントなど、日記に関連するすべてのデータを1つのファイルに圧縮してバックアップします。\nこの機能はベータ機能であるため、一部のデバイスでは正常に機能しない場合があります。</string>
     <string name="diary_symbol_search_message">フィルタリングするダイアリーシンボルを選択します。</string>
-    <string name="import_full_backup_title">[BETA] Recover full data</string>
-    <string name="import_full_backup_description">Decompress and recover all the data related to the diary such as database, attached photo, post card, font, etc.\nThis feature is a beta feature therefore may not work properly on some devices.</string>
-    <string name="calendar_sort_ascending">Ascending</string>
-    <string name="calendar_sort_descending">Descending</string>
-    <string name="calendar_sort_title">Calendar sort option</string>
-    <string name="calendar_sort_summary">Set the sort order of the daily diary list in the calendar screen.</string>
+    <string name="import_full_backup_title">[BETA] 完全なデータ復旧</string>
+    <string name="import_full_backup_description">データベース、添付写真、ポストカード、フォントファイルなどでダイアリーに関連するすべてのデータをバックアップされた圧縮ファイルを使用して修復します。\nこの機能はベータ機能であるため、一部のデバイスでは正常に機能しない場合があります。</string>
+    <string name="calendar_sort_ascending">昇順</string>
+    <string name="calendar_sort_descending">降順</string>
+    <string name="calendar_sort_title">カレンダーの並べ替えを設定</string>
+    <string name="calendar_sort_summary">日付別ダイアリーリストのソート方法を設定します。</string>
 </resources>
