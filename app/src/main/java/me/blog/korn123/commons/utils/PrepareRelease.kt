@@ -63,64 +63,101 @@ class PrepareRelease {
         var valuesDefault: List<String>? = null
         var defaultRelease: Release? = null
         var defaultReleaseCurrentVersion = -1
-        File("./app/src/main/res/").listFiles()?.map { localeFolder ->
-            if (localeFolder.name.startsWith("values")) {
-                if (localeFolder.name == "values") {
-                    valuesDefault = FileUtils.readLines(File(localeFolder.absolutePath + "/strings.xml"), StandardCharsets.UTF_8)
-                    println("Total lines: ${valuesDefault?.size}")
-                    defaultRelease = determineLastReleaseStartLine(valuesDefault)
-                    defaultRelease?.let {
-                        defaultReleaseCurrentVersion = it.currentVersion
-                        it.endIndex = determineLastReleaseEndLine(valuesDefault, it, true)
-                        println("Range of lines: ${it.startIndex} ~ ${it.endIndex}")
-                        it.releaseInfoLines.map { line ->
-                            println(line)
-                        }
-                        println("Current version: $defaultReleaseCurrentVersion")
-                        println("Current versionName: ${it.currentVersionName}")
-                        println("============================================================")
-                    }
-                } else if (syncMode != SYNC_RELEASE_NOTE) {
-                    localeFolder.listFiles()?.map { targetFile ->
-                        if (targetFile.name == "strings.xml") {
-                            val valuesOther = FileUtils.readLines(targetFile, StandardCharsets.UTF_8)
-                            println(localeFolder.name + ": " + valuesOther.size)
-                            val valuesDefaultTotal = valuesDefault?.size ?: 0
-                            val otherRelease = determineLastReleaseStartLine(valuesOther)
-                            otherRelease.endIndex = determineLastReleaseEndLine(valuesOther, otherRelease)
+        when (syncMode) {
+            SYNC_RELEASE_STRING, SYNC_NEW_STRING -> {
+                File("./app/src/main/res/").listFiles()?.map { localeFolder ->
+                    if (localeFolder.name.startsWith("values")) {
+                        if (localeFolder.name == "values") {
+                            valuesDefault = FileUtils.readLines(File(localeFolder.absolutePath + "/strings.xml"), StandardCharsets.UTF_8)
+                            println("Total lines: ${valuesDefault?.size}")
+                            defaultRelease = determineLastReleaseStartLine(valuesDefault)
+                            defaultRelease?.let {
+                                println("======================================> Start: Current release info")
+                                defaultReleaseCurrentVersion = it.currentVersion
+                                it.endIndex = determineLastReleaseEndLine(valuesDefault, it, true)
+                                println("Range of lines: ${it.startIndex} ~ ${it.endIndex}")
+                                it.releaseInfoLines.map { line ->
+                                    println(line)
+                                }
+                                println("Current version: $defaultReleaseCurrentVersion")
+                                println("Current versionName: ${it.currentVersionName}")
+                                println("======================================> End: Current release info")
+                            }
+                        } else {
+                            localeFolder.listFiles()?.map { targetFile ->
+                                if (targetFile.name == "strings.xml") {
+                                    val valuesOther = FileUtils.readLines(targetFile, StandardCharsets.UTF_8)
+                                    println(localeFolder.name + ": " + valuesOther.size)
+                                    val valuesDefaultTotal = valuesDefault?.size ?: 0
+                                    val otherRelease = determineLastReleaseStartLine(valuesOther)
+                                    otherRelease.endIndex = determineLastReleaseEndLine(valuesOther, otherRelease)
 
-                            when {
-                                syncMode == SYNC_RELEASE_STRING && defaultReleaseCurrentVersion > otherRelease.currentVersion -> {
-                                    defaultRelease?.let {
-                                        valuesOther.addAll(otherRelease.endIndex.plus(1), it.releaseInfoLines)
+                                    when {
+                                        defaultReleaseCurrentVersion > otherRelease.currentVersion -> {
+                                            defaultRelease?.let {
+                                                valuesOther.addAll(otherRelease.endIndex.plus(1), it.releaseInfoLines)
+                                            }
+                                        }
+                                        defaultReleaseCurrentVersion == otherRelease.currentVersion -> {
+                                            println("remove line : ${otherRelease.startIndex} ~ ${otherRelease.endIndex}")
+                                            for (removeLineNum in otherRelease.startIndex..otherRelease.endIndex) {
+                                                valuesOther.removeAt(otherRelease.startIndex)
+                                            }
+                                            defaultRelease?.let {
+                                                valuesOther.addAll(otherRelease.startIndex, it.releaseInfoLines)
+                                            }
+                                        }
+                                        syncMode == SYNC_NEW_STRING -> {
+                                            for (i in valuesOther.size until valuesDefaultTotal) {
+                                                valuesOther.add(valuesOther.lastIndex, valuesDefault?.get(i.minus(1)))
+                                            }
+                                        }
                                     }
-                                }
-                                syncMode == SYNC_RELEASE_STRING && defaultReleaseCurrentVersion == otherRelease.currentVersion -> {
-                                    println("remove line : ${otherRelease.startIndex} ~ ${otherRelease.endIndex}")
-                                    for (removeLineNum in otherRelease.startIndex..otherRelease.endIndex) {
-                                        valuesOther.removeAt(otherRelease.startIndex)
-                                    }
-                                    defaultRelease?.let {
-                                        valuesOther.addAll(otherRelease.startIndex, it.releaseInfoLines)
-                                    }
-                                }
-                                syncMode == SYNC_NEW_STRING -> {
-                                    for (i in valuesOther.size until valuesDefaultTotal) {
-                                        valuesOther.add(valuesOther.lastIndex, valuesDefault?.get(i.minus(1)))
-                                    }
+                                    val os = FileOutputStream(targetFile)
+                                    IOUtils.writeLines(valuesOther, null, os, StandardCharsets.UTF_8)
+                                    os.close()
                                 }
                             }
-                            val os = FileOutputStream(targetFile)
-                            IOUtils.writeLines(valuesOther, null, os, StandardCharsets.UTF_8)
-                            os.close()
                         }
                     }
                 }
             }
-        }
+            SYNC_RELEASE_NOTE -> {
+                println("======================================> Start: sync release note")
+                File("./app/src/main/assets/").listFiles()?.map { file ->
+                    println(file.absolutePath)
+                    if (file.name.startsWith("RELEASE")) {
+                        val locale = when {
+                            file.name.startsWith("RELEASE_en") -> "en"
+                            file.name.startsWith("RELEASE_ja") -> "ja"
+                            else -> "ko"
+                        }
+                        val releaseNotes = FileUtils.readLines(file, StandardCharsets.UTF_8)
+                        releaseNotes?.let {
+                            val infoLine = it[6]
+                            val releaseNoteVersionName = infoLine.split("# Changes in ")[1].split(" ")[0]
+                            val strings = FileUtils.readLines(File("./app/src/main/res/values-$locale/strings.xml"), StandardCharsets.UTF_8)
+                            val release = determineLastReleaseStartLine(strings)
+                            determineLastReleaseEndLine(strings, release, true)
+                            if (releaseNoteVersionName != release.currentVersionName) {
+                                println("Update release note version to ${release.currentVersionName} from $releaseNoteVersionName")
+                                release.let { it ->
+                                    println(it.currentVersionName)
+                                    val newLines = arrayListOf("\n")
+                                    for (lineIndex in 2..it.releaseInfoLines.size.minus(2)) {
+                                        val newLine = "  * ${it.releaseInfoLines[lineIndex].replace("\\n", "").trim()}"
+                                        println(newLine)
+                                        newLines.add(newLine + "\n")
+                                    }
+                                    releaseNotes.addAll(5, newLines)
 
-        if (syncMode == SYNC_RELEASE_NOTE) {
-
+                                }
+                            }
+                        }
+                    }
+                }
+                println("======================================> End: sync release note")
+            }
         }
     }
 }
