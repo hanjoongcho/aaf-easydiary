@@ -4,6 +4,11 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.123 (date: 2020.03.xx)
+  * Added feature about 1 ko
+  * Added feature about 2 ko
+  * Added feature about 3 ko
+
 # Changes in 1.4.122 (date: 2020/03/09)
   * [BETA] 전체 데이터 복구기능 추가
   * 대시보드 통계화면에서 일부 심벌이 비정상적인 크기로 보이는 오류수정

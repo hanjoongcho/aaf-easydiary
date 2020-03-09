@@ -14,7 +14,7 @@ class PrepareRelease {
         const val SYNC_RELEASE_NOTE = "sync_release_note"
     }
 
-    data class Release(var currentVersion: Int = -1, var currentVersionName: String = "", var releaseInfoLines: ArrayList<String> = arrayListOf(), var startIndex: Int = -1, var endIndex: Int = -1)
+    data class Release(var currentVersion: Int = -1, var currentVersionName: String = "", var currentVersionReleaseDate: String = "", var releaseInfoLines: ArrayList<String> = arrayListOf(), var startIndex: Int = -1, var endIndex: Int = -1)
 
     fun determineLastReleaseStartLine(values: List<String>?): Release {
         val defaultRelease = Release()
@@ -35,6 +35,7 @@ class PrepareRelease {
                 }
             }
             defaultRelease.currentVersionName = lines[versionNameInfoIndex].split("/")[0].trim().replace("v", "")
+            defaultRelease.currentVersionReleaseDate = lines[versionNameInfoIndex].split("/")[1].trim().replace("\\n", "")
         }
         return defaultRelease
     }
@@ -136,23 +137,27 @@ class PrepareRelease {
                         releaseNotes?.let {
                             val infoLine = it[6]
                             val releaseNoteVersionName = infoLine.split("# Changes in ")[1].split(" ")[0]
-                            val strings = FileUtils.readLines(File("./app/src/main/res/values-$locale/strings.xml"), StandardCharsets.UTF_8)
+                            val valuesFilePath = "./app/src/main/res/values-$locale/strings.xml"
+                            val strings = FileUtils.readLines(File(valuesFilePath), StandardCharsets.UTF_8)
                             val release = determineLastReleaseStartLine(strings)
                             determineLastReleaseEndLine(strings, release, true)
                             if (releaseNoteVersionName != release.currentVersionName) {
                                 println("Update release note version to ${release.currentVersionName} from $releaseNoteVersionName")
                                 release.let { it ->
                                     println(it.currentVersionName)
-                                    val newLines = arrayListOf("\n")
+                                    val newLines = arrayListOf("\n# Changes in ${release.currentVersionName} (date: ${release.currentVersionReleaseDate})")
                                     for (lineIndex in 2..it.releaseInfoLines.size.minus(2)) {
                                         val newLine = "  * ${it.releaseInfoLines[lineIndex].replace("\\n", "").trim()}"
                                         println(newLine)
-                                        newLines.add(newLine + "\n")
+                                        newLines.add(newLine)
                                     }
                                     releaseNotes.addAll(5, newLines)
-
                                 }
                             }
+
+                            val os = FileOutputStream(file)
+                            IOUtils.writeLines(releaseNotes, null, os, StandardCharsets.UTF_8)
+                            os.close()
                         }
                     }
                 }
