@@ -4,6 +4,11 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.122 (date: 2020/03/09)
+  * [BETA] Added full data recovery feature
+  * Some symbols appear unusually large in dashboard statistics
+  * Added sort option of the diary list in the calendar screen
+
 # Changes in 1.4.121 (date: 2020/03/02)
   * Improved the speed of the calendar screen(1st improvement)
 
