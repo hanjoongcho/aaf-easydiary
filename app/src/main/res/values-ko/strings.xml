@@ -378,6 +378,12 @@
         대시보드 통계화면에서 일부 심벌이 비정상적인 크기로 보이는 오류수정\n
         캘린더 화면의 일별 일기목록에 대한 정렬옵션 추가
     </string>
+    <string name="release_189">
+        v1.4.123 / 2020.03.xx\n
+        Added feature about 1\n
+        Added feature about 2\n
+        Added feature about 3
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
