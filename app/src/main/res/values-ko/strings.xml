@@ -380,9 +380,9 @@
     </string>
     <string name="release_189">
         v1.4.123 / 2020.03.xx\n
-        Added feature about 1 ko \n
-        Added feature about 2 ko \n
-        Added feature about 3 ko
+        Added feature about 1\n
+        Added feature about 2\n
+        Added feature about 3
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -567,4 +567,5 @@
     <string name="calendar_sort_descending">내림차순</string>
     <string name="calendar_sort_title">캘린더 정렬 설정</string>
     <string name="calendar_sort_summary">일자별 다이어리 목록의 정렬 방법을 설정합니다.</string>
+    <string name="preferences_category_font">애플리케이션 폰트설정</string>
 </resources>

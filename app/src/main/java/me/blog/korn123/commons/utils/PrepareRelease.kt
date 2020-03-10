@@ -94,6 +94,11 @@ class PrepareRelease {
                                     otherRelease.endIndex = determineLastReleaseEndLine(valuesOther, otherRelease)
 
                                     when {
+                                        syncMode == SYNC_NEW_STRING -> {
+                                            for (i in valuesOther.size until valuesDefaultTotal) {
+                                                valuesOther.add(valuesOther.lastIndex, valuesDefault?.get(i.minus(1)))
+                                            }
+                                        }
                                         defaultReleaseCurrentVersion > otherRelease.currentVersion -> {
                                             defaultRelease?.let {
                                                 valuesOther.addAll(otherRelease.endIndex.plus(1), it.releaseInfoLines)
@@ -106,11 +111,6 @@ class PrepareRelease {
                                             }
                                             defaultRelease?.let {
                                                 valuesOther.addAll(otherRelease.startIndex, it.releaseInfoLines)
-                                            }
-                                        }
-                                        syncMode == SYNC_NEW_STRING -> {
-                                            for (i in valuesOther.size until valuesDefaultTotal) {
-                                                valuesOther.add(valuesOther.lastIndex, valuesDefault?.get(i.minus(1)))
                                             }
                                         }
                                     }
@@ -170,6 +170,6 @@ class PrepareRelease {
 fun main() {
     val prepareRelease = PrepareRelease()
 //    prepareRelease.syncReleaseInformation(PrepareRelease.SYNC_RELEASE_STRING)
-//    prepareRelease.syncReleaseInformation(PrepareRelease.SYNC_NEW_STRING)
-    prepareRelease.syncReleaseInformation(PrepareRelease.SYNC_RELEASE_NOTE)
+    prepareRelease.syncReleaseInformation(PrepareRelease.SYNC_NEW_STRING)
+//    prepareRelease.syncReleaseInformation(PrepareRelease.SYNC_RELEASE_NOTE)
 }

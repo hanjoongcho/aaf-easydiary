@@ -567,4 +567,5 @@
     <string name="calendar_sort_descending">Descending</string>
     <string name="calendar_sort_title">Calendar sort option</string>
     <string name="calendar_sort_summary">Set the sort order of the daily diary list in the calendar screen.</string>
+    <string name="preferences_category_font">Application font setting</string>
 </resources>
