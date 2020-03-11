@@ -49,11 +49,18 @@ object EasyDiaryUtils {
     private const val HIGHLIGHT_COLOR: Int = 0x9FFFFF00.toInt()
 
     val easyDiaryMimeType: String
-        get() = "text/aaf_v" + EasyDiaryDbHelper.getInstance().version
+        get() {
+            val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
+            val currentVersion = realmInstance.version.toInt()
+            realmInstance.close()
+            return "text/aaf_v$currentVersion"
+        }
 
     val easyDiaryMimeTypeAll: Array<String?>
         get() {
-            val currentVersion = EasyDiaryDbHelper.getInstance().version.toInt()
+            val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
+            val currentVersion = realmInstance.version.toInt()
+            realmInstance.close()
             val easyDiaryMimeType = arrayOfNulls<String>(currentVersion)
             for (i in 0 until currentVersion) {
                 easyDiaryMimeType[i] = "text/aaf_v" + (i + 1)

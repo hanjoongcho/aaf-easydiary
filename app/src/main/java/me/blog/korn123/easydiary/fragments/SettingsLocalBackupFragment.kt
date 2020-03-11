@@ -164,8 +164,9 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
                         val itemInfo = parent.adapter.getItem(position) as HashMap<String, String>
                         val srcFile = File(EasyDiaryUtils.getApplicationDataDirectory(mContext) + BACKUP_DB_DIRECTORY + itemInfo["name"])
                         val destFile = File(EasyDiaryDbHelper.getInstance().path)
+                        EasyDiaryDbHelper.getInstance().close()
                         FileUtils.copyFile(srcFile, destFile)
-                        mActivity.restartApp()
+                        mActivity.refreshApp()
                         mAlertDialog?.cancel()
                     }
 

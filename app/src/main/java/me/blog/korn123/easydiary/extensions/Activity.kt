@@ -35,6 +35,7 @@ import me.blog.korn123.easydiary.adapters.SymbolPagerAdapter
 import me.blog.korn123.easydiary.dialogs.WhatsNewDialog
 import me.blog.korn123.easydiary.helper.DIARY_INSERT_MODE
 import me.blog.korn123.easydiary.helper.MODE_REMINDER
+import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.views.SlidingTabLayout
 import kotlin.system.exitProcess
 
@@ -184,6 +185,12 @@ fun Activity.restartApp() {
     ActivityCompat.finishAffinity(this)
     //System.runFinalizersOnExit(true)
     exitProcess(0)
+}
+
+fun Activity.refreshApp() {
+    val readDiaryIntent = Intent(this, DiaryMainActivity::class.java)
+    readDiaryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+    TransitionHelper.startActivityWithTransition(this, readDiaryIntent)
 }
 
 fun Activity.makeSnackBar(view: View, message: String) {

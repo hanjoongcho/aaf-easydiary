@@ -229,16 +229,17 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
 
     private fun migrateData() {
         Thread(Runnable {
-            val listPhotoUri = EasyDiaryDbHelper.selectPhotoUriAll()
+            val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
+            val listPhotoUri = EasyDiaryDbHelper.selectPhotoUriAll(realmInstance)
             var isFontDirMigrate = false
             for ((index, dto) in listPhotoUri.withIndex()) {
 //                Log.i("PHOTO-URI", dto.photoUri)
                 if (dto.isContentUri()) {
                     val photoPath = EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
                     CommonUtils.uriToFile(this, Uri.parse(dto.photoUri), photoPath)
-                    EasyDiaryDbHelper.getInstance().beginTransaction()
+                    realmInstance.beginTransaction()
                     dto.photoUri = FILE_URI_PREFIX + photoPath
-                    EasyDiaryDbHelper.getInstance().commitTransaction()
+                    realmInstance.commitTransaction()
                     runOnUiThread {
                         progressInfo.text = "Converting... ($index/${listPhotoUri.size})"
                     }
@@ -325,6 +326,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 }
             }
 
+            realmInstance.close()
             runOnUiThread {
                 progressDialog.visibility = View.GONE
                 modalContainer.visibility = View.GONE
