@@ -130,7 +130,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     private fun exportRealmFile(showDialog: Boolean = true) {
-        val srcFile = File(EasyDiaryDbHelper.getInstance().path)
+        val srcFile = File(EasyDiaryDbHelper.getRealmPath())
         val destFilePath = BACKUP_DB_DIRECTORY + DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
         val destFile = File(EasyDiaryUtils.getApplicationDataDirectory(mContext) + destFilePath)
         FileUtils.copyFile(srcFile, destFile, false)
@@ -163,8 +163,8 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
                     listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
                         val itemInfo = parent.adapter.getItem(position) as HashMap<String, String>
                         val srcFile = File(EasyDiaryUtils.getApplicationDataDirectory(mContext) + BACKUP_DB_DIRECTORY + itemInfo["name"])
-                        val destFile = File(EasyDiaryDbHelper.getInstance().path)
-                        EasyDiaryDbHelper.getInstance().close()
+                        val destFile = File(EasyDiaryDbHelper.getRealmPath())
+                        EasyDiaryDbHelper.closeInstance()
                         FileUtils.copyFile(srcFile, destFile)
                         mActivity.refreshApp()
                         mAlertDialog?.cancel()

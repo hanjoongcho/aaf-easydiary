@@ -25,6 +25,7 @@ import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.DAY_MINUTES
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import io.github.aafactory.commons.utils.DateUtils
+import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_dev.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
@@ -42,7 +43,7 @@ class DevActivity : EasyDiaryActivity() {
      *
      ***************************************************************************************************/
     private lateinit var mAlarm: Alarm
-    var mAlarmSequence = 0
+    var mRealmInstance: Realm? = null
 
     /***************************************************************************************************
      *   global properties
@@ -66,12 +67,13 @@ class DevActivity : EasyDiaryActivity() {
 
     override fun onResume() {
         super.onResume()
-        EasyDiaryDbHelper.getInstance().beginTransaction()
+        mRealmInstance?.beginTransaction()
     }
 
     override fun onPause() {
         super.onPause()
-        EasyDiaryDbHelper.getInstance().commitTransaction()
+        mRealmInstance?.commitTransaction()
+        mRealmInstance?.close()
     }
 
     /***************************************************************************************************
@@ -89,6 +91,7 @@ class DevActivity : EasyDiaryActivity() {
             EasyDiaryDbHelper.insertAlarm(tempAlarm)
         }
         mAlarm = EasyDiaryDbHelper.readAlarmBy(1)!!
+        mRealmInstance = EasyDiaryDbHelper.getTemporaryInstance()
     }
 
     private fun initDevUI() {

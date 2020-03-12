@@ -22,16 +22,24 @@ object EasyDiaryDbHelper {
 
     private var mRealmInstance: Realm? = null
 
-    fun getTemporaryInstance() = Realm.getInstance(mDiaryConfig)!!
-
-    fun getInstance(): Realm {
+    private fun getInstance(): Realm {
         if (mRealmInstance == null || mRealmInstance?.isClosed == true) {
             mRealmInstance = Realm.getInstance(mDiaryConfig)
-        } 
+        }
         return mRealmInstance!!
     }
 
+    fun getTemporaryInstance() = Realm.getInstance(mDiaryConfig)!!
 
+    fun closeInstance() {
+        mRealmInstance?.close()
+    }
+
+    fun getRealmPath(): String {
+        return getInstance().path
+    }
+
+    
     /***************************************************************************************************
      *   Manage DiaryDto model
      *

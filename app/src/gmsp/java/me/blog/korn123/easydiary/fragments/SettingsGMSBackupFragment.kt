@@ -255,12 +255,12 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
 //            Log.i("PHOTO-URI", "${it.absolutePath} | ${EasyDiaryDbHelper.countPhotoUriBy(FILE_URI_PREFIX + it.absolutePath)}")
 //            if (EasyDiaryDbHelper.countPhotoUriBy(FILE_URI_PREFIX + it.absolutePath) == 0) it.delete()
 //        }
-
+        val realmPath = EasyDiaryDbHelper.getRealmPath()
         initGoogleSignAccount { account ->
             initDriveWorkingDirectory(account, DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME) {
                 val driveServiceHelper = DriveServiceHelper(mActivity, account)
                 driveServiceHelper.createFile(
-                        it, EasyDiaryDbHelper.getInstance().path,
+                        it, realmPath,
                         DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"),
                         EasyDiaryUtils.easyDiaryMimeType
                 ).addOnSuccessListener {
@@ -309,8 +309,8 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
                             val itemInfo = parent.adapter.getItem(position) as HashMap<String, String>
                             itemInfo["id"]?.let { realmFileId ->
                                 progressContainer.visibility = View.VISIBLE
-                                val realmPath = EasyDiaryDbHelper.getInstance().path
-                                EasyDiaryDbHelper.getInstance().close()
+                                val realmPath = EasyDiaryDbHelper.getRealmPath()
+                                EasyDiaryDbHelper.closeInstance()
                                 driveServiceHelper.downloadFile(realmFileId, realmPath).run {
                                     addOnSuccessListener {
                                         mActivity.refreshApp()

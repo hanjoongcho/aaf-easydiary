@@ -440,7 +440,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             val diaryDto = adapterView.adapter.getItem(i) as DiaryDto
             showAlertDialog(getString(R.string.copy_diary_item),
                     DialogInterface.OnClickListener { _, _ ->
-                        val copyItem = EasyDiaryDbHelper.getInstance().copyFromRealm(diaryDto)
+                        val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
+                        val copyItem = realmInstance.copyFromRealm(diaryDto)
+                        realmInstance.close()
                         copyItem.currentTimeMillis = System.currentTimeMillis()
                         copyItem.updateDateString()
                         EasyDiaryDbHelper.insertDiary(copyItem)
