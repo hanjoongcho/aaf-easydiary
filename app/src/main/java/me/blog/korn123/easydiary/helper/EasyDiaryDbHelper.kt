@@ -39,7 +39,7 @@ object EasyDiaryDbHelper {
         return getInstance().path
     }
 
-    
+
     /***************************************************************************************************
      *   Manage DiaryDto model
      *
