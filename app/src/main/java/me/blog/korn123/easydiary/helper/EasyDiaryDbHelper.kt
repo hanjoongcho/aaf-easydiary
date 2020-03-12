@@ -16,7 +16,7 @@ object EasyDiaryDbHelper {
                 .name("diary.realm")
                 .schemaVersion(8)
                 .migration(EasyDiaryMigration())
-                .modules(Realm.getDefaultModule())
+                .modules(Realm.getDefaultModule()!!)
                 .build()
     }
 
@@ -36,20 +36,6 @@ object EasyDiaryDbHelper {
      *   Manage DiaryDto model
      *
      ***************************************************************************************************/
-    fun insertDiary(currentTimeMillis: Long, title: String, contents: String) {
-        getInstance().executeTransaction { realm ->
-            var sequence = 1
-            if (realm.where(DiaryDto::class.java).count() > 0L) {
-                val number = realm.where(DiaryDto::class.java).max("sequence")
-                number?.let {
-                    sequence = it.toInt().plus(1)
-                }
-            }
-            val diaryDto = DiaryDto(sequence, currentTimeMillis, title, contents)
-            realm.insert(diaryDto)
-        }
-    }
-
     fun insertDiary(diaryDto: DiaryDto) {
         getInstance().executeTransaction { realm ->
             var sequence = 1
@@ -108,11 +94,7 @@ object EasyDiaryDbHelper {
         return list
     }
 
-    fun readDiaryBy(sequence: Int): DiaryDto {
-        return readDiaryBy(getInstance(), sequence)
-    }
-
-    fun readDiaryBy(realmInstance: Realm, sequence: Int): DiaryDto {
+    fun readDiaryBy(sequence: Int, realmInstance: Realm = getInstance()): DiaryDto {
         return realmInstance.where(DiaryDto::class.java).equalTo("sequence", sequence).findFirst()!!
     }
 
