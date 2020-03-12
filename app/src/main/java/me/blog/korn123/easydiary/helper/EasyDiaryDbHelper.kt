@@ -22,7 +22,7 @@ object EasyDiaryDbHelper {
 
     private var mRealmInstance: Realm? = null
 
-    fun getTemporaryInstance() = Realm.getInstance(mDiaryConfig)
+    fun getTemporaryInstance() = Realm.getInstance(mDiaryConfig)!!
 
     fun getInstance(): Realm {
         if (mRealmInstance == null || mRealmInstance?.isClosed == true) {
@@ -141,13 +141,12 @@ object EasyDiaryDbHelper {
         getInstance().executeTransaction { realm -> realm.insertOrUpdate(diaryDto) }
     }
 
-    fun deleteDiary(sequence: Int) {
-        val mRealmInstance = getInstance()
-        val diaryDto = mRealmInstance.where(DiaryDto::class.java).equalTo("sequence", sequence).findFirst()
+    fun deleteDiary(sequence: Int, realmInstance: Realm = getInstance()) {
+        val diaryDto = realmInstance.where(DiaryDto::class.java).equalTo("sequence", sequence).findFirst()
         if (diaryDto != null) {
-            mRealmInstance.beginTransaction()
+            realmInstance.beginTransaction()
             diaryDto.deleteFromRealm()
-            mRealmInstance.commitTransaction()
+            realmInstance.commitTransaction()
         }
     }
 
