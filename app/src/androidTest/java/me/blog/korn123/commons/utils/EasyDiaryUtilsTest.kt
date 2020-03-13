@@ -7,9 +7,9 @@ import android.util.Log
 import android.widget.TextView
 import androidx.test.InstrumentationRegistry
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.preferenceToJsonString
 import me.blog.korn123.easydiary.models.DiarySymbol
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import org.junit.Assert.*
 import org.junit.BeforeClass
 import org.junit.Test
 
@@ -63,5 +63,12 @@ class EasyDiaryUtilsTest {
         }
         symbolList.map { symbol ->  Log.i("AAF-t", "${symbol.sequence}-${symbol.description}/${symbolMap[symbol.sequence]} of ${symbolArray?.size ?: 0}")}
         assertTrue(symbolList.size == 122)
+    }
+
+    @Test
+    fun test_04() {
+        val jsonString = InstrumentationRegistry.getTargetContext().preferenceToJsonString()
+        println(jsonString)
+        assertEquals(jsonString, "")
     }
 }

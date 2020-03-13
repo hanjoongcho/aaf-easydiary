@@ -31,6 +31,13 @@ import me.blog.korn123.easydiary.views.FixedTextView
 import org.apache.commons.io.IOUtils
 import java.io.File
 import java.io.FileOutputStream
+import com.google.gson.GsonBuilder
+import com.google.gson.Gson
+import com.simplemobiletools.commons.helpers.BACKGROUND_COLOR
+import com.simplemobiletools.commons.helpers.PRIMARY_COLOR
+import com.simplemobiletools.commons.helpers.SETTING_CARD_VIEW_BACKGROUND_COLOR
+import com.simplemobiletools.commons.helpers.TEXT_COLOR
+
 
 /**
  * Created by CHO HANJOONG on 2018-02-06.
@@ -215,4 +222,27 @@ fun Context.createTemporaryPhotoFile(uri: Uri? = null, fromUri: Boolean = false)
     }
 
     return temporaryFile
+}
+
+
+fun Context.preferenceToJsonString(): String {
+    var jsonString: String = ""
+    val preferenceMap: HashMap<String, Any> = hashMapOf()
+    preferenceMap[APP_LOCK_ENABLE] = config.aafPinLockEnable
+    preferenceMap[APP_LOCK_SAVED_PASSWORD] = config.aafPinLockSavedPassword
+    preferenceMap[SETTING_BOLD_STYLE] = config.boldStyleEnable
+    preferenceMap[SETTING_CALENDAR_SORTING] = config.calendarSorting
+    preferenceMap[SETTING_CALENDAR_START_DAY] = config.calendarStartDay
+    preferenceMap[DIARY_SEARCH_QUERY_CASE_SENSITIVE] = config.diarySearchQueryCaseSensitive
+
+    preferenceMap[PRIMARY_COLOR] = config.primaryColor
+    preferenceMap[BACKGROUND_COLOR] = config.backgroundColor
+    preferenceMap[TEXT_COLOR] = config.textColor
+    preferenceMap[SETTING_CARD_VIEW_BACKGROUND_COLOR] = config.screenBackgroundColor
+
+
+
+    val gson = GsonBuilder().setPrettyPrinting().create()
+    jsonString = gson.toJson(preferenceMap)
+    return jsonString
 }
