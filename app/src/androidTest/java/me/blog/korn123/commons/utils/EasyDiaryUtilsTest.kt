@@ -7,7 +7,9 @@ import android.util.Log
 import android.widget.TextView
 import androidx.test.InstrumentationRegistry
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.jsonStringToHashMap
 import me.blog.korn123.easydiary.extensions.preferenceToJsonString
+import me.blog.korn123.easydiary.helper.APP_LOCK_SAVED_PASSWORD
 import me.blog.korn123.easydiary.models.DiarySymbol
 import org.junit.Assert.*
 import org.junit.BeforeClass
@@ -69,6 +71,7 @@ class EasyDiaryUtilsTest {
     fun test_04() {
         val jsonString = InstrumentationRegistry.getTargetContext().preferenceToJsonString()
         println(jsonString)
-        assertEquals(jsonString, "")
+        val map = InstrumentationRegistry.getTargetContext().jsonStringToHashMap(jsonString)
+        assertEquals(map[APP_LOCK_SAVED_PASSWORD], "0000")
     }
 }

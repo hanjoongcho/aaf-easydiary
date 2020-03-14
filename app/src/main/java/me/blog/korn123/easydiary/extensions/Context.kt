@@ -16,6 +16,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import com.google.common.reflect.TypeToken
 import com.simplemobiletools.commons.extensions.adjustAlpha
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
@@ -37,6 +38,7 @@ import com.simplemobiletools.commons.helpers.BACKGROUND_COLOR
 import com.simplemobiletools.commons.helpers.PRIMARY_COLOR
 import com.simplemobiletools.commons.helpers.SETTING_CARD_VIEW_BACKGROUND_COLOR
 import com.simplemobiletools.commons.helpers.TEXT_COLOR
+import java.lang.reflect.Type
 
 
 /**
@@ -240,9 +242,12 @@ fun Context.preferenceToJsonString(): String {
     preferenceMap[TEXT_COLOR] = config.textColor
     preferenceMap[SETTING_CARD_VIEW_BACKGROUND_COLOR] = config.screenBackgroundColor
 
-
-
     val gson = GsonBuilder().setPrettyPrinting().create()
     jsonString = gson.toJson(preferenceMap)
     return jsonString
+}
+
+fun Context.jsonStringToHashMap(jsonString: String): HashMap<String, Any> {
+    val type = object : TypeToken<HashMap<String, Any>>(){}.type
+    return GsonBuilder().create().fromJson(jsonString, type)
 }
