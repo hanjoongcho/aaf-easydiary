@@ -32,15 +32,19 @@ open class EasyDiaryActivity : BaseSimpleActivity() {
 
     override fun onResume() {
         super.onResume()
-        resumeLock()
-        
-        mRootView?.let { 
-            initTextSize(it, this)
-            updateTextColors(it)
-            updateAppViews(it)
-            updateCardViewPolicy(it)
+        if (config.updatePreference) {
+            config.updatePreference = false
+            startMainActivityWithClearTask()
+        } else {
+            resumeLock()
+            mRootView?.let {
+                initTextSize(it, this)
+                updateTextColors(it)
+                updateAppViews(it)
+                updateCardViewPolicy(it)
+            }
+            FontUtils.setFontsTypeface(applicationContext, assets, null, findViewById<ViewGroup>(android.R.id.content), mCustomLineSpacing)
         }
-        FontUtils.setFontsTypeface(applicationContext, assets, null, findViewById<ViewGroup>(android.R.id.content), mCustomLineSpacing)
     }
 
     override fun getMainViewGroup(): ViewGroup? = mRootView

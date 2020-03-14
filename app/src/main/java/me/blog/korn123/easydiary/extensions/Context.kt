@@ -34,10 +34,12 @@ import java.io.File
 import java.io.FileOutputStream
 import com.google.gson.GsonBuilder
 import com.google.gson.Gson
+import com.google.gson.stream.JsonReader
 import com.simplemobiletools.commons.helpers.BACKGROUND_COLOR
 import com.simplemobiletools.commons.helpers.PRIMARY_COLOR
 import com.simplemobiletools.commons.helpers.SETTING_CARD_VIEW_BACKGROUND_COLOR
 import com.simplemobiletools.commons.helpers.TEXT_COLOR
+import java.io.FileReader
 import java.lang.reflect.Type
 
 
@@ -226,7 +228,6 @@ fun Context.createTemporaryPhotoFile(uri: Uri? = null, fromUri: Boolean = false)
     return temporaryFile
 }
 
-
 fun Context.preferenceToJsonString(): String {
     var jsonString: String = ""
     val preferenceMap: HashMap<String, Any> = hashMapOf()
@@ -250,4 +251,12 @@ fun Context.preferenceToJsonString(): String {
 fun Context.jsonStringToHashMap(jsonString: String): HashMap<String, Any> {
     val type = object : TypeToken<HashMap<String, Any>>(){}.type
     return GsonBuilder().create().fromJson(jsonString, type)
+}
+
+fun Context.jsonFileToHashMap(filename: String): HashMap<String, Any> {
+    val reader = JsonReader(FileReader(filename))
+    val type = object : TypeToken<HashMap<String, Any>>(){}.type
+    val map: HashMap<String, Any> = GsonBuilder().create().fromJson(reader, type)
+    reader.close()
+    return map
 }

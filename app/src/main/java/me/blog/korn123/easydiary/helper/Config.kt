@@ -120,4 +120,8 @@ class Config(context: Context) : BaseConfig(context) {
     var calendarSorting: Int
         get() = prefs.getInt(SETTING_CALENDAR_SORTING, CALENDAR_SORTING_DESC)
         set(calendarSorting) = prefs.edit().putInt(SETTING_CALENDAR_SORTING, calendarSorting).apply()
+
+    var updatePreference: Boolean
+        get() = prefs.getBoolean(UPDATE_SHARED_PREFERENCE, false)
+        set(updatePreference) = prefs.edit().putBoolean(UPDATE_SHARED_PREFERENCE, updatePreference).apply()
 }

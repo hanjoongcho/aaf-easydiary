@@ -19,6 +19,7 @@ import me.blog.korn123.easydiary.activities.CustomizationActivity
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.adapters.OptionItemAdapter
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.startMainActivityWithClearTask
 import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
 import me.blog.korn123.easydiary.extensions.updateFragmentUI
 import me.blog.korn123.easydiary.helper.*
@@ -65,10 +66,7 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
         initPreference()
         if (BaseConfig(mContext).isThemeChanged) {
             BaseConfig(mContext).isThemeChanged = false
-            val readDiaryIntent = Intent(mContext, DiaryMainActivity::class.java)
-            readDiaryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(readDiaryIntent)
-            mActivity.overridePendingTransition(0, 0)
+            mActivity.startMainActivityWithClearTask()
         }
     }
 
