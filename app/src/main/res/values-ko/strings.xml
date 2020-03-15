@@ -379,10 +379,8 @@
         캘린더 화면의 일별 일기목록에 대한 정렬옵션 추가
     </string>
     <string name="release_189">
-        v1.4.123 / 2020.03.xx\n
-        Separate font-related setting option from basic setting screen\n
-        Added feature about 2\n
-        Added feature about 3
+        v1.4.123 / 2020.03.15\n
+        폰트관련 설정기능을 기본설정 화면에서 분리
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->

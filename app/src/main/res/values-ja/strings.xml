@@ -379,10 +379,8 @@
         カレンダー画面の一見日記リストの並べ替えオプションを追加
     </string>
     <string name="release_189">
-        v1.4.123 / 2020.03.xx\n
-        Separate font-related setting option from basic setting screen\n
-        Added feature about 2\n
-        Added feature about 3
+        v1.4.123 / 2020.03.15\n
+        フォント関連の設定機能を設定画面から分離
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
