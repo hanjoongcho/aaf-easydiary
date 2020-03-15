@@ -12,9 +12,7 @@ import com.simplemobiletools.commons.helpers.TEXT_COLOR
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.jsonFileToHashMap
-import me.blog.korn123.easydiary.helper.NOTIFICATION_COMPLETE_ID
-import me.blog.korn123.easydiary.helper.WORKING_DIRECTORY
-import me.blog.korn123.easydiary.helper.ZipHelper
+import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.viewmodels.BackupOperations
 import java.io.File
 
@@ -31,10 +29,19 @@ class FullRecoveryWorker(private val context: Context, workerParams: WorkerParam
             if (File(jsonFilename).exists()) {
                 val map = context.jsonFileToHashMap(jsonFilename)
                 context.config.run {
+                    // theme
                     primaryColor = (map[PRIMARY_COLOR] as Double).toInt()
                     backgroundColor = (map[BACKGROUND_COLOR] as Double).toInt()
                     textColor = (map[TEXT_COLOR] as Double).toInt()
                     screenBackgroundColor = (map[SETTING_CARD_VIEW_BACKGROUND_COLOR] as Double).toInt()
+
+                    // font
+                    settingFontName = map[SETTING_FONT_NAME] as String
+                    lineSpacingScaleFactor = (map[LINE_SPACING_SCALE_FACTOR] as Double).toFloat()
+                    settingFontSize = (map[SETTING_FONT_SIZE] as Double).toFloat()
+                    settingCalendarFontScale = (map[SETTING_CALENDAR_FONT_SCALE] as Double).toFloat()
+                    boldStyleEnable = map[SETTING_BOLD_STYLE] as Boolean
+
                     updatePreference = true
                 }
             }

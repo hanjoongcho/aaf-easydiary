@@ -233,15 +233,22 @@ fun Context.preferenceToJsonString(): String {
     val preferenceMap: HashMap<String, Any> = hashMapOf()
     preferenceMap[APP_LOCK_ENABLE] = config.aafPinLockEnable
     preferenceMap[APP_LOCK_SAVED_PASSWORD] = config.aafPinLockSavedPassword
-    preferenceMap[SETTING_BOLD_STYLE] = config.boldStyleEnable
     preferenceMap[SETTING_CALENDAR_SORTING] = config.calendarSorting
     preferenceMap[SETTING_CALENDAR_START_DAY] = config.calendarStartDay
     preferenceMap[DIARY_SEARCH_QUERY_CASE_SENSITIVE] = config.diarySearchQueryCaseSensitive
 
+    // theme
     preferenceMap[PRIMARY_COLOR] = config.primaryColor
     preferenceMap[BACKGROUND_COLOR] = config.backgroundColor
     preferenceMap[TEXT_COLOR] = config.textColor
     preferenceMap[SETTING_CARD_VIEW_BACKGROUND_COLOR] = config.screenBackgroundColor
+
+    // font
+    preferenceMap[SETTING_FONT_NAME] = config.settingFontName
+    preferenceMap[LINE_SPACING_SCALE_FACTOR] = config.lineSpacingScaleFactor
+    preferenceMap[SETTING_FONT_SIZE] = config.settingFontSize
+    preferenceMap[SETTING_CALENDAR_FONT_SCALE] = config.settingCalendarFontScale
+    preferenceMap[SETTING_BOLD_STYLE] = config.boldStyleEnable
 
     val gson = GsonBuilder().setPrettyPrinting().create()
     jsonString = gson.toJson(preferenceMap)
