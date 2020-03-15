@@ -10,6 +10,7 @@ import com.simplemobiletools.commons.helpers.PRIMARY_COLOR
 import com.simplemobiletools.commons.helpers.SETTING_CARD_VIEW_BACKGROUND_COLOR
 import com.simplemobiletools.commons.helpers.TEXT_COLOR
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.jsonFileToHashMap
 import me.blog.korn123.easydiary.helper.*
@@ -45,6 +46,7 @@ class FullRecoveryWorker(private val context: Context, workerParams: WorkerParam
                     updatePreference = true
                 }
             }
+            FontUtils.setCommonTypeface(context, context.assets)
             mZipHelper.updateNotification("Import complete", "You can now select a restore point using the Restore Diary feature.")
         } else {}
         return Result.success()
