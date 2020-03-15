@@ -27,8 +27,8 @@ android {
         applicationId "me.blog.korn123.easydiary"
         minSdkVersion 16
         targetSdkVersion versions.compileSdk
-        versionCode 189
-        versionName '1.4.123'
+        versionCode 190
+        versionName '1.4.124'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -126,9 +126,11 @@ dependencies {
     // google
     implementation 'com.google.android:flexbox:1.0.0'
     implementation 'com.google.code.gson:gson:2.8.5'
+    implementation group: 'com.google.guava', name: 'guava', version: '26.0-android'
+
     gmsImplementation ('androidx.work:work-runtime-ktx:2.3.1') { exclude group: 'com.google.guava', module: 'listenablefuture' }
     gmspImplementation ('androidx.work:work-runtime-ktx:2.3.1') { exclude group: 'com.google.guava', module: 'listenablefuture' }
-    fossImplementation 'androidx.work:work-runtime-ktx:2.3.1'
+    fossImplementation ('androidx.work:work-runtime-ktx:2.3.1') { exclude group: 'com.google.guava', module: 'listenablefuture' }
 
     // apache commons
     implementation 'commons-io:commons-io:2.6'
