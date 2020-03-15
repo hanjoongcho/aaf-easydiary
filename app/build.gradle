@@ -6,7 +6,7 @@ apply plugin: 'realm-android'
 
 ext.versions = [
     /* Temporarily apply 'requestLegacyExternalStorage' options respond to Android Q 'Scoped Storage' policy */
-    compileSdk        : 29
+    compileSdk: 29
 ]
 
 android {
@@ -135,7 +135,7 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.7'
 
     // AAFactory
-    implementation 'io.github.aafactory:commons:0.9.11'
+    implementation 'io.github.aafactory:commons:1.0.0'
 //    implementation project(":aafactory-commons")
 
     // etc.
