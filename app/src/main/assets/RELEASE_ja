@@ -4,10 +4,8 @@
 
 ---------------------------------------------------
 
-# Changes in 1.4.123 (date: 2020.03.xx)
-  * Added feature about 1 ja
-  * Added feature about 2 ja
-  * Added feature about 3 ja
+# Changes in 1.4.123 (date: 2020.03.15)
+  * フォント関連の設定機能を設定画面から分離
 
 # Changes in 1.4.122 (date: 2020/03/09)
   * [BETA] 完全なデータ復旧機能を追加
