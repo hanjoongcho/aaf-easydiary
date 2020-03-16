@@ -3,8 +3,10 @@ package me.blog.korn123.easydiary.activities
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.speech.RecognizerIntent
 import android.view.View
+import android.view.ViewGroup
 import com.werb.pickphotoview.util.PickConfig
 import io.realm.RealmList
 import kotlinx.android.synthetic.main.activity_diary_update.*
@@ -62,7 +64,7 @@ class DiaryUpdateActivity : EditActivity() {
             title = getString(R.string.update_diary_title)
             setDisplayHomeAsUpEnabled(true)
         }
-        mCustomLineSpacing = false
+//        mCustomLineSpacing = false
 
         addTextWatcher()
         setupRecognizer()
@@ -140,7 +142,10 @@ class DiaryUpdateActivity : EditActivity() {
         //        getSupportActionBar().setSubtitle(DateUtils.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
         diaryContents.setText(diaryDto.contents)
         mCurrentTimeMillis = diaryDto.currentTimeMillis
-        diaryContents.requestFocus()
+//        diaryContents.requestFocus()
+        Handler().post {
+            contentsContainer.scrollY = intent.getIntExtra(DIARY_CONTENTS_SCROLL_Y, 0) - (feelingSymbolButton.parent.parent as ViewGroup).measuredHeight
+        }
 
         // TODO fixme elegance
         mPhotoUris = RealmList()

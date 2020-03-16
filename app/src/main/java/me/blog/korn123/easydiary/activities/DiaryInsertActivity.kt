@@ -74,7 +74,7 @@ class DiaryInsertActivity : EditActivity() {
             title = getString(R.string.create_diary_title)
             setDisplayHomeAsUpEnabled(true)
         }
-        mCustomLineSpacing = false
+//        mCustomLineSpacing = false
 
         addTextWatcher()
         setupRecognizer()

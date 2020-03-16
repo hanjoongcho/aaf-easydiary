@@ -450,6 +450,7 @@ const val APP_LOCK_SAVED_PASSWORD = "application_lock_password"
 const val APP_LOCK_DEFAULT_PASSWORD = "0000"
 
 const val DIARY_SEQUENCE = "diary_sequence"
+const val DIARY_CONTENTS_SCROLL_Y = "diary_contents_scroll_y"
 const val DIARY_SEARCH_QUERY = "diary_search_query"
 const val DIARY_ATTACH_PHOTO_INDEX = "diary_attach_photo_index"
 const val POSTCARD_SEQUENCE = "postcard_sequence"

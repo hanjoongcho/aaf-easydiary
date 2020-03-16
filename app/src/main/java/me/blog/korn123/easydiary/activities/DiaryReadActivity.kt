@@ -10,6 +10,7 @@ import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import android.view.*
 import android.widget.RelativeLayout
+import android.widget.ScrollView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentPagerAdapter
 import com.github.amlcurran.showcaseview.ShowcaseView
@@ -113,9 +114,10 @@ class DiaryReadActivity : EasyDiaryActivity() {
                     showAlertDialog(getString(R.string.delete_confirm), positiveListener, negativeListener)
                 }
                 R.id.edit -> {
-                    val updateDiaryIntent = Intent(this@DiaryReadActivity, DiaryUpdateActivity::class.java)
-                    updateDiaryIntent.putExtra(DIARY_SEQUENCE, fragment.getSequence())
-                    //                startActivity(updateDiaryIntent);
+                    val updateDiaryIntent = Intent(this@DiaryReadActivity, DiaryUpdateActivity::class.java).apply {
+                        putExtra(DIARY_SEQUENCE, fragment.getSequence())
+                        putExtra(DIARY_CONTENTS_SCROLL_Y, (fragment.diaryContents.parent.parent as ScrollView).scrollY)
+                    }
                     TransitionHelper.startActivityWithTransition(this@DiaryReadActivity, updateDiaryIntent)
                 }
                 R.id.speechOutButton -> textToSpeech(fragment.getDiaryContents())
@@ -314,7 +316,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
         }
 
         fun getSequence() = arguments?.getInt(DIARY_SEQUENCE) ?: -1
-        
+
         fun getDiaryContents(): String = diaryContents.text.toString() 
         
         private fun initContents() {

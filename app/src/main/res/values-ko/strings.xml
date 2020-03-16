@@ -382,6 +382,10 @@
         v1.4.124 / 2020.03.15\n
         폰트관련 설정기능을 기본설정 화면에서 분리
     </string>
+    <string name="release_191">
+        v1.4.125 / 2020.03.xx\n
+        Added cursor position setting option when entering diary edit screen
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
