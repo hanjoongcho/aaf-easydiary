@@ -142,9 +142,12 @@ class DiaryUpdateActivity : EditActivity() {
         //        getSupportActionBar().setSubtitle(DateUtils.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
         diaryContents.setText(diaryDto.contents)
         mCurrentTimeMillis = diaryDto.currentTimeMillis
-//        diaryContents.requestFocus()
-        Handler().post {
-            contentsContainer.scrollY = intent.getIntExtra(DIARY_CONTENTS_SCROLL_Y, 0) - (feelingSymbolButton.parent.parent as ViewGroup).measuredHeight
+        if (config.holdPositionEnterEditScreen) {
+            Handler().post {
+                contentsContainer.scrollY = intent.getIntExtra(DIARY_CONTENTS_SCROLL_Y, 0) - (feelingSymbolButton.parent.parent as ViewGroup).measuredHeight
+            }
+        } else {
+            diaryContents.requestFocus()
         }
 
         // TODO fixme elegance

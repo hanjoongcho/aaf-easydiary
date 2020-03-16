@@ -102,6 +102,10 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
                 countCharactersSwitcher.toggle()
                 mContext.config.enableCountCharacters = countCharactersSwitcher.isChecked
             }
+            R.id.holdPositionEnterEditScreen -> {
+                holdPositionSwitcher.toggle()
+                mContext.config.holdPositionEnterEditScreen = holdPositionSwitcher.isChecked
+            }
         }
     }
 
@@ -130,6 +134,7 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
             }
         }
         countCharacters.setOnClickListener(mOnClickListener)
+        holdPositionEnterEditScreen.setOnClickListener(mOnClickListener)
     }
 
     private fun initPreference() {
@@ -147,6 +152,7 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
             CALENDAR_SORTING_ASC -> ascending.isChecked = true
             CALENDAR_SORTING_DESC -> descending.isChecked = true
         }
+        holdPositionSwitcher.isChecked = mContext.config.holdPositionEnterEditScreen
     }
 
     private fun openThumbnailSettingDialog() {

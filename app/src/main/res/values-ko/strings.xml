@@ -570,4 +570,6 @@
     <string name="calendar_sort_title">캘린더 정렬 설정</string>
     <string name="calendar_sort_summary">일자별 다이어리 목록의 정렬 방법을 설정합니다.</string>
     <string name="preferences_category_font">애플리케이션 폰트설정</string>
+    <string name="hold_position_title">Fixed scroll position setting</string>
+    <string name="hold_position_summary">When the edit screen starts, the scroll position on the browse screen is maintained.</string>
 </resources>

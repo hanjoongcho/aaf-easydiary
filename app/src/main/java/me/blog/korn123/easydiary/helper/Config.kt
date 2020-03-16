@@ -124,4 +124,8 @@ class Config(context: Context) : BaseConfig(context) {
     var updatePreference: Boolean
         get() = prefs.getBoolean(UPDATE_SHARED_PREFERENCE, false)
         set(updatePreference) = prefs.edit().putBoolean(UPDATE_SHARED_PREFERENCE, updatePreference).apply()
+
+    var holdPositionEnterEditScreen: Boolean
+        get() = prefs.getBoolean(HOLD_POSITION_ENTER_EDIT_SCREEN, false)
+        set(holdPositionEnterEditScreen) = prefs.edit().putBoolean(HOLD_POSITION_ENTER_EDIT_SCREEN, holdPositionEnterEditScreen).apply()
 }

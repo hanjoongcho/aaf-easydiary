@@ -570,4 +570,6 @@
     <string name="calendar_sort_title">カレンダーの並べ替えを設定</string>
     <string name="calendar_sort_summary">日付別ダイアリーリストのソート方法を設定します。</string>
     <string name="preferences_category_font">アプリケーションフォント設定</string>
+    <string name="hold_position_title">Fixed scroll position setting</string>
+    <string name="hold_position_summary">When the edit screen starts, the scroll position on the browse screen is maintained.</string>
 </resources>
