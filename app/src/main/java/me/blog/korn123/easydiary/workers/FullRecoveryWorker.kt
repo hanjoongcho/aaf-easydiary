@@ -47,7 +47,7 @@ class FullRecoveryWorker(private val context: Context, workerParams: WorkerParam
                 }
             }
             FontUtils.setCommonTypeface(context, context.assets)
-            mZipHelper.updateNotification("Import complete", "You can now select a restore point using the Restore Diary feature.")
+            mZipHelper.updateNotification(NOTIFICATION_DECOMPRESS_ID, "Import complete", "You can now select a restore point using the Restore Diary feature.")
         } else {}
         return Result.success()
     }

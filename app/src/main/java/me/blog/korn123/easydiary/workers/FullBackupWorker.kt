@@ -8,6 +8,7 @@ import androidx.work.WorkerParameters
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.extensions.preferenceToJsonString
 import me.blog.korn123.easydiary.helper.NOTIFICATION_COMPLETE_ID
+import me.blog.korn123.easydiary.helper.NOTIFICATION_COMPRESS_ID
 import me.blog.korn123.easydiary.helper.WORKING_DIRECTORY
 import me.blog.korn123.easydiary.helper.ZipHelper
 import me.blog.korn123.easydiary.viewmodels.BackupOperations
@@ -43,7 +44,7 @@ class FullBackupWorker(private val context: Context, workerParams: WorkerParamet
 //            FileUtils.moveFile(compressFile, destFile)
             FileUtils.copyFile(compressFile, os)
             os?.close()
-            mZipHelper.updateNotification("Export complete", "The exported file size is ${FileUtils.byteCountToDisplaySize(compressFile.length())}")
+            mZipHelper.updateNotification(NOTIFICATION_COMPRESS_ID, "Export complete", "The exported file size is ${FileUtils.byteCountToDisplaySize(compressFile.length())}")
         } else {
             compressFile.delete()
         }
