@@ -4,16 +4,16 @@ import android.app.IntentService
 import android.content.Intent
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.WorkManager
-import me.blog.korn123.easydiary.helper.NOTIFICATION_COMPLETE_ID
-import me.blog.korn123.easydiary.helper.WORK_MANAGER_BACKUP
-import me.blog.korn123.easydiary.helper.WORK_MANAGER_RECOVERY
+import me.blog.korn123.easydiary.helper.*
 
 
 class NotificationService(name: String = "EasyDiaryNotificationService") : IntentService(name) {
     override fun onHandleIntent(intent: Intent?) {
         intent?.let {
             when (it.action) {
-                ACTION_DISMISS -> handleActionDismiss()
+                ACTION_DISMISS -> NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_COMPLETE_ID)
+                ACTION_DISMISS_COMPRESS -> NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_COMPRESS_ID)
+                ACTION_DISMISS_DECOMPRESS -> NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_DECOMPRESS_ID)
                 ACTION_SNOOZE -> handleActionSnooze()
                 ACTION_RECOVER_CANCEL -> handleActionRecoverCancel()
                 ACTION_BACKUP_CANCEL -> handleActionBackupCancel()
@@ -21,11 +21,6 @@ class NotificationService(name: String = "EasyDiaryNotificationService") : Inten
                 ACTION_FULL_RECOVERY_CANCEL -> handleActionFullRecoveryCancel()
             }
         }
-    }
-
-    private fun handleActionDismiss() {
-        val notificationManagerCompat = NotificationManagerCompat.from(applicationContext)
-        notificationManagerCompat.cancel(NOTIFICATION_COMPLETE_ID)
     }
 
     private fun handleActionSnooze() {}
@@ -50,6 +45,8 @@ class NotificationService(name: String = "EasyDiaryNotificationService") : Inten
 
     companion object {
         const val ACTION_DISMISS = "me.blog.korn123.easydiary.services.action.ACTION_DISMISS"
+        const val ACTION_DISMISS_COMPRESS = "me.blog.korn123.easydiary.services.action.ACTION_DISMISS_COMPRESS"
+        const val ACTION_DISMISS_DECOMPRESS = "me.blog.korn123.easydiary.services.action.ACTION_DISMISS_DECOMPRESS"
         const val ACTION_SNOOZE = "me.blog.korn123.easydiary.services.ACTION_SNOOZE"
         const val ACTION_BACKUP_CANCEL = "me.blog.korn123.easydiary.services.ACTION_BACKUP_CANCEL"
         const val ACTION_RECOVER_CANCEL = "me.blog.korn123.easydiary.services.ACTION_RECOVER_CANCEL"

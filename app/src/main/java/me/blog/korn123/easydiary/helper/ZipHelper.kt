@@ -7,6 +7,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -41,18 +42,19 @@ class ZipHelper(val context: Context) {
         mBuilder = NotificationCompat.Builder(context, "${NOTIFICATION_CHANNEL_ID}_zip_helper")
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.drawable.ic_launcher_round)
+                .setSmallIcon(R.drawable.data_backup)
+                .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_launcher_round))
                 .setOngoing(false)
                 .setAutoCancel(true)
                 .setOnlyAlertOnce(true)
                 .setProgress(0, 0, true)
                 .setContentTitle(title)
                 .setContentText(message)
-                .setStyle(NotificationCompat.BigTextStyle().bigText(message).setSummaryText(message))
+                .setStyle(NotificationCompat.BigTextStyle().bigText(message).setSummaryText(title))
 //                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .addAction(
-                        R.drawable.ic_launcher_round,
+                        R.drawable.data_backup,
                         context.getString(R.string.cancel),
                         PendingIntent.getService(context, 0, Intent(context, NotificationService::class.java).apply {
                             action = actionString
@@ -68,7 +70,7 @@ class ZipHelper(val context: Context) {
             mBuilder.setProgress(mFileNames.size, progress.plus(1), false)
                     .setContentTitle("${progress.plus(1)}/${mFileNames.size}")
                     .setContentText(message)
-                    .setStyle(NotificationCompat.BigTextStyle().bigText(message).setSummaryText(message))
+                    .setStyle(NotificationCompat.BigTextStyle().bigText(message).setSummaryText("Compressing"))
             notificationManager.notify(NOTIFICATION_COMPRESS_ID, mBuilder.build())
         }
     }
@@ -79,24 +81,25 @@ class ZipHelper(val context: Context) {
             mBuilder.setProgress(totalCount, progress.plus(1), false)
                     .setContentTitle("${progress.plus(1)}/$totalCount")
                     .setContentText(fileName)
-                    .setStyle(NotificationCompat.BigTextStyle().bigText(fileName).setSummaryText(fileName))
+                    .setStyle(NotificationCompat.BigTextStyle().bigText(fileName).setSummaryText("Decompressing"))
             notificationManager.notify(NOTIFICATION_DECOMPRESS_ID, mBuilder.build())
         }
     }
 
     fun updateNotification(notificationId: Int, title: String, message: String) {
         if (isOnProgress) {
+            val actionFlag = if (notificationId == NOTIFICATION_COMPRESS_ID) NotificationService.ACTION_DISMISS_COMPRESS else NotificationService.ACTION_DISMISS_DECOMPRESS
             val notificationManager = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
             mBuilder.mActions.clear()
             mBuilder/*.setProgress(0, 0, false)*/
                     .setContentTitle(title)
                     .setContentText(message)
-                    .setStyle(NotificationCompat.BigTextStyle().bigText(message).setSummaryText(message))
+                    .setStyle(NotificationCompat.BigTextStyle().bigText(message))
                     .addAction(
                             R.drawable.ic_launcher_round,
                             context.getString(R.string.dismiss),
                             PendingIntent.getService(context, 0, Intent(context, NotificationService::class.java).apply {
-                                action = NotificationService.ACTION_DISMISS
+                                action = actionFlag
                             }, 0)
                     )
             notificationManager.notify(notificationId, mBuilder.build())
@@ -152,12 +155,12 @@ class ZipHelper(val context: Context) {
         }
     }
 
-    fun countFileEntry(uri: Uri?): Int {
+    private fun countFileEntry(uri: Uri?): Int {
         val uriStream = context.contentResolver.openInputStream(uri!!)
         var count = 0
         try {
             val zipInputStream = ZipInputStream(uriStream)
-            while (zipInputStream.nextEntry != null) {
+            while (zipInputStream.nextEntry != null && isOnProgress) {
                 zipInputStream.closeEntry()
                 count++
             }
