@@ -571,5 +571,5 @@
     <string name="calendar_sort_summary">Set the sort order of the daily diary list in the calendar screen.</string>
     <string name="preferences_category_font">Application font setting</string>
     <string name="hold_position_title">Fixed scroll position setting</string>
-    <string name="hold_position_summary">When the edit screen starts, the scroll position on the browse screen is maintained.</string>
+    <string name="hold_position_summary">When the edit screen starts, the scroll position on the browse screen is maintained. If this setting is not set, scrolling moves to the last position of the text.</string>
 </resources>
