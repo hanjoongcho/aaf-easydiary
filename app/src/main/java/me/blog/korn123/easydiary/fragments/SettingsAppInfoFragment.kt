@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.fragments
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -43,11 +44,6 @@ class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
         mContext = context!!
         mActivity = activity!!
 
-        if (BuildConfig.FLAVOR == "foss") {
-            invite.visibility = View.GONE
-            rateAppSetting.visibility = View.GONE
-        }
-
         bindEvent()
         updateFragmentUI(mRootView)
         initPreference()
@@ -66,7 +62,13 @@ class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
      ***************************************************************************************************/
     private val mOnClickListener = View.OnClickListener { view ->
         when (view.id) {
-            R.id.rateAppSetting -> mActivity.openGooglePlayBy("me.blog.korn123.easydiary")
+            R.id.rateAppSetting -> {
+                if (BuildConfig.FLAVOR == "foss") {
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getStoreUrl())))
+                } else {
+                    mActivity.openGooglePlayBy("me.blog.korn123.easydiary")
+                }
+            }
             R.id.licenseView -> {
                 TransitionHelper.startActivityWithTransition(mActivity, Intent(mContext, MarkDownViewActivity::class.java).apply {
                     putExtra(MarkDownViewActivity.OPEN_URL_INFO, "https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/THIRDPARTY.md")
@@ -116,5 +118,7 @@ class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
         }
     }
 
-    private fun getStoreUrl() = "https://play.google.com/store/apps/details?id=${mContext.packageName}"
+    private fun getStoreUrl(): String {
+        return if (BuildConfig.FLAVOR == "foss") "https://f-droid.org/packages/${mContext.packageName}/" else "https://play.google.com/store/apps/details?id=${mContext.packageName}"
+    }
 }
