@@ -50,7 +50,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
      ***************************************************************************************************/
     private var mRecognizerIntent: Intent? = null
     private var mDiaryMainItemAdapter: DiaryMainItemAdapter? = null
-    private var mDiaryList: MutableList<DiaryDto>? = null
+    private var mDiaryList: ArrayList<DiaryDto>? = null
     private var mShowcaseIndex = 0
     private var mShowcaseView: ShowcaseView? = null
     private var mClearQueryClickCount = 0
