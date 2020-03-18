@@ -39,22 +39,20 @@
         android:layout_width="match_parent"
         android:layout_weight="1"
         android:layout_height="0dp">
-        <LinearLayout
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/launcherIcon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 android:src="@drawable/intro"
                 android:layout_width="60dp"
                 android:layout_height="60dp" />
             <TextView
                 android:id="@+id/infoMessage"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/launcherIcon"
                 android:padding="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -62,7 +60,6 @@
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
                 tools:text="@string/pin_unlock_guide_message"/>
-        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout

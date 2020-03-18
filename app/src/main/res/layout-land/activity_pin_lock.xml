@@ -8,29 +8,24 @@
     android:layout_height="match_parent">
     <LinearLayout
         android:orientation="vertical"
+        android:gravity="center"
         android:layout_weight="4"
         android:layout_width="0dp"
         android:layout_height="match_parent">
-        <LinearLayout
-            android:orientation="vertical"
+        <ImageView
+            android:src="@drawable/intro"
+            android:layout_width="60dp"
+            android:layout_height="60dp" />
+
+        <TextView
+            android:id="@+id/infoMessage"
+            android:padding="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <ImageView
-                android:src="@drawable/intro"
-                android:layout_width="60dp"
-                android:layout_height="60dp" />
-            
-            <TextView
-                android:id="@+id/infoMessage"
-                android:padding="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="@android:color/white"
-                android:textStyle="bold"
-                tools:text="@string/pin_unlock_guide_message"/>
-        </LinearLayout>
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            tools:text="@string/pin_unlock_guide_message"/>
     </LinearLayout>
 
     <RelativeLayout
