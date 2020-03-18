@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package com.example.android.common.view
+package me.blog.korn123.easydiary.views
 
-import android.R
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -24,7 +23,6 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.widget.LinearLayout
-import me.blog.korn123.easydiary.views.SlidingTabLayout
 
 internal class SlidingTabStrip @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : LinearLayout(context, attrs) {
 
@@ -51,7 +49,7 @@ internal class SlidingTabStrip @JvmOverloads constructor(context: Context, attrs
         val density = resources.displayMetrics.density
 
         val outValue = TypedValue()
-        context.theme.resolveAttribute(R.attr.colorForeground, outValue, true)
+        context.theme.resolveAttribute(android.R.attr.colorForeground, outValue, true)
         val themeForegroundColor = outValue.data
 
         mDefaultBottomBorderColor = setColorAlpha(themeForegroundColor,

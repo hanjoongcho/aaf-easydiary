@@ -3,7 +3,6 @@ package me.blog.korn123.easydiary.views
 import android.content.Context
 import android.graphics.Typeface
 import android.os.Build
-import androidx.viewpager.widget.ViewPager
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
@@ -12,7 +11,8 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.HorizontalScrollView
 import android.widget.TextView
-import com.example.android.common.view.SlidingTabStrip
+import androidx.viewpager.widget.ViewPager
+import me.blog.korn123.easydiary.views.SlidingTabLayout.TabColorizer
 
 
 /*

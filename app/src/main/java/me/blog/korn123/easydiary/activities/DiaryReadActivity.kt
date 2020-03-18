@@ -69,7 +69,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager, diaryList, query)
         val startPageIndex = when(savedInstanceState == null) {
             true -> mSectionsPagerAdapter.sequenceToPageIndex(intent.getIntExtra(DIARY_SEQUENCE, -1))
-            false -> mSectionsPagerAdapter.sequenceToPageIndex(savedInstanceState?.getInt(DIARY_SEQUENCE, -1) ?: -1)
+            false -> mSectionsPagerAdapter.sequenceToPageIndex(savedInstanceState.getInt(DIARY_SEQUENCE, -1))
         }
 
         setupViewPager()

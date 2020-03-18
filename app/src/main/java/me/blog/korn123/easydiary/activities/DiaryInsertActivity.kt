@@ -19,7 +19,6 @@ import kotlinx.android.synthetic.main.layout_edit_contents.*
 import kotlinx.android.synthetic.main.layout_edit_photo_container.*
 import kotlinx.android.synthetic.main.layout_edit_toolbar_sub.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
@@ -93,7 +92,7 @@ class DiaryInsertActivity : EditActivity() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState?.let {
+        outState.let {
             val listUriString = arrayListOf<String>()
             mPhotoUris.map { model ->
                 listUriString.add(model.photoUri ?: "")

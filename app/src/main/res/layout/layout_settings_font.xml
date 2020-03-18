@@ -59,7 +59,7 @@
                     android:layout_height="wrap_content">
                     <com.simplemobiletools.commons.views.MyTextView
                         android:paddingRight="6dp"
-                        android:width="0dp"
+                        android:layout_width="0dp"
                         android:layout_weight="1"
                         android:text="@string/font_size_summary"
                         style="@style/SettingsSummary" />
@@ -98,7 +98,8 @@
                     android:layout_height="wrap_content">
                     <com.simplemobiletools.commons.views.MyTextView
                         android:paddingRight="6dp"
-                        android:width="0dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
                         android:layout_weight="1"
                         android:text="@string/calendar_font_scale_description"
                         style="@style/SettingsSummary" />

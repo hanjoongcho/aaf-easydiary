@@ -138,7 +138,7 @@
     <string name="timeline_title">Zeitleiste</string>
     <string name="postcard_viewer_title">Tagebuch-Postkarten</string>
     <string name="postcard_viewer_no_cards_saved">Keine gespeicherten Postkarten vorhanden.</string>
-    <string name="google_drive_connect_message">Synchronisiere mit Google Drive ...</string>
+    <string name="google_drive_connect_message">Synchronisiere mit Google Drive …</string>
     <string name="diary_count"></string>
     <string name="menu_calendar">Kalender</string>
     <string name="menu_chart">Statistics</string>

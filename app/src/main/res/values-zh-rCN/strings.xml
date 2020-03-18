@@ -138,7 +138,7 @@
     <string name="timeline_title">时间线</string>
     <string name="postcard_viewer_title">日记卡</string>
     <string name="postcard_viewer_no_cards_saved">没有已存的日记卡</string>
-    <string name="google_drive_connect_message">Google云盘正在同步...</string>
+    <string name="google_drive_connect_message">Google云盘正在同步…</string>
     <string name="diary_count"></string>
     <string name="menu_calendar">日历</string>
     <string name="menu_chart">统计</string>

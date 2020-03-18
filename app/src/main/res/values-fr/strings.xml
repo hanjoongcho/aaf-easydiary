@@ -138,7 +138,7 @@
 	<string name="timeline_title">Historique</string>
 	<string name="postcard_viewer_title">Carte postale du journal</string>
 	<string name="postcard_viewer_no_cards_saved">Aucune carte postale de journal enregistré.</string>
-	<string name="google_drive_connect_message">Synchronisation Google Drive en cours...</string>
+	<string name="google_drive_connect_message">Synchronisation Google Drive en cours…</string>
 	<string name="diary_count"></string>
 	<string name="menu_calendar">Calendrier</string>
 	<string name="menu_chart">Statistiques</string>
@@ -424,7 +424,7 @@
 	<string name="notification_msg_upload_file_count">Nombre de fichiers à télécharger</string>
 	<string name="notification_msg_upload_invalid">Tous les fichiers cibles de sauvegarde existent déjà.</string>
 	<string name="notification_msg_upload_empty">Le fichier à sauvegarder n\'existe pas.</string>
-	<string name="notification_msg_upload_progress">Envoi...</string>
+	<string name="notification_msg_upload_progress">Envoi…</string>
 	<string name="notification_msg_upload_complete">Envoi terminé</string>
 	<string name="notification_msg_upload_success">Réussite de l\'envoi</string>
 	<string name="notification_msg_upload_fail">Échec de l\'envoi</string>
@@ -432,7 +432,7 @@
 	<string name="notification_msg_download_file_count">Nombre de fichiers à télécharger</string>
 	<string name="notification_msg_download_invalid">Tous les fichiers cibles de restauration existent déjà.</string>
 	<string name="notification_msg_download_empty">Le fichier à restaurer n\'existe pas.</string>
-	<string name="notification_msg_download_progress">Téléchargement...</string>
+	<string name="notification_msg_download_progress">Téléchargement…</string>
 	<string name="notification_msg_download_complete">Téléchargement terminé</string>
 	<string name="notification_msg_download_success">Téléchargement réussi</string>
 	<string name="notification_msg_download_fail">Échec du téléchargement</string>
