@@ -118,28 +118,28 @@ class TimelineActivity : EasyDiaryActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         if (mDiaryList.isNotEmpty()) {
-            outState?.putInt(DIARY_SEQUENCE, mDiaryList[timelineList.firstVisiblePosition].sequence)
+            outState.putInt(DIARY_SEQUENCE, mDiaryList[timelineList.firstVisiblePosition].sequence)
             Log.i("aaf-t" , "firstVisiblePosition ${timelineList.firstVisiblePosition}")
         }
 
         if (startDate.text.isNotEmpty()) {
-            outState?.putBoolean(FILTER_START_ENABLE, true)
-            outState?.putInt(FILTER_START_YEAR, mSDatePickerDialog.datePicker.year)
-            outState?.putInt(FILTER_START_MONTH, mSDatePickerDialog.datePicker.month)
-            outState?.putInt(FILTER_START_DATE, mSDatePickerDialog.datePicker.dayOfMonth)
+            outState.putBoolean(FILTER_START_ENABLE, true)
+            outState.putInt(FILTER_START_YEAR, mSDatePickerDialog.datePicker.year)
+            outState.putInt(FILTER_START_MONTH, mSDatePickerDialog.datePicker.month)
+            outState.putInt(FILTER_START_DATE, mSDatePickerDialog.datePicker.dayOfMonth)
             Log.i("aaf-t" , "set date ${mSDatePickerDialog.datePicker.year} ${mSDatePickerDialog.datePicker.month} ${mSDatePickerDialog.datePicker.dayOfMonth}")
         }
 
         if (endDate.text.isNotEmpty()) {
-            outState?.putBoolean(FILTER_END_ENABLE, true)
-            outState?.putInt(FILTER_END_YEAR, mEDatePickerDialog.datePicker.year)
-            outState?.putInt(FILTER_END_MONTH, mEDatePickerDialog.datePicker.month)
-            outState?.putInt(FILTER_END_DATE, mEDatePickerDialog.datePicker.dayOfMonth)
+            outState.putBoolean(FILTER_END_ENABLE, true)
+            outState.putInt(FILTER_END_YEAR, mEDatePickerDialog.datePicker.year)
+            outState.putInt(FILTER_END_MONTH, mEDatePickerDialog.datePicker.month)
+            outState.putInt(FILTER_END_DATE, mEDatePickerDialog.datePicker.dayOfMonth)
         }
 
-        if (filterView.translationY == 0F) outState?.putBoolean(FILTER_VIEW_VISIBLE, true)
+        if (filterView.translationY == 0F) outState.putBoolean(FILTER_VIEW_VISIBLE, true)
 
-        outState?.putString(FILTER_QUERY, query.text.toString())
+        outState.putString(FILTER_QUERY, query.text.toString())
 
         Log.i("aaf-t" , "translationY ${filterView.translationY}")
 

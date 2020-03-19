@@ -27,8 +27,7 @@ import java.io.File
  */
 
 class PostCardViewerActivity : EasyDiaryActivity() {
-    private val TAG = this::class.java.simpleName
-    private var mListPostcard: ArrayList<PostCardViewerActivity.PostCard> = arrayListOf() 
+    private var mListPostcard: ArrayList<PostCardViewerActivity.PostCard> = arrayListOf()
     private lateinit var mPostcardAdapter: PostcardAdapter 
     
     override fun onCreate(savedInstanceState: Bundle?) {

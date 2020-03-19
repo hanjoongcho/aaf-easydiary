@@ -24,6 +24,6 @@ class IValueFormatterExt(private var context: Context?) : IValueFormatter {
      * @return the formatted label ready for being drawn
      */
     override fun getFormattedValue(value: Float, entry: Entry, dataSetIndex: Int, viewPortHandler: ViewPortHandler): String {
-        return value.toInt().toString() + context?.getString(R.string.diary_count) ?: ""
+        return value.toInt().toString() + context?.getString(R.string.diary_count)
     }
 }

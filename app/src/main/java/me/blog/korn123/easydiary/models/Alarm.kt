@@ -13,14 +13,12 @@ open class Alarm : RealmObject {
     var soundTitle: String? = null
     var soundUri: String? = null
     var label: String? = null
-    var id: Int = sequence
-        get() = sequence
+    val id: Int
+        get() = this.sequence
 
     constructor()
 
     constructor(days: Int) {
         this.days = days
     }
-
-
 }

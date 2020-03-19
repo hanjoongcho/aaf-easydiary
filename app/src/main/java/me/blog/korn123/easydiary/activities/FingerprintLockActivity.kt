@@ -48,7 +48,6 @@ class FingerprintLockActivity : BaseSimpleActivity() {
     private var mCancellationSignal: CancellationSignal? = null
     private var mActivityMode: String? = null
     private var mSettingComplete = false
-    private val TAG = FingerprintLockActivity::class.java.simpleName
 
 
     /***************************************************************************************************
@@ -443,6 +442,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
      *
      ***************************************************************************************************/
     companion object {
+        private val TAG = FingerprintLockActivity::class.java.simpleName
         const val KEY_NAME = "me.blog.korn123"
         const val DUMMY_ENCRYPT_DATA = "aaf-easydiary"
         const val LAUNCHING_MODE   = "launching_mode"

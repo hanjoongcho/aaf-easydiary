@@ -1,17 +1,8 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-<!--    <io.github.aafactory.commons.views.LabelLayout
-        android:background="@drawable/bg_card_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:text="@string/preferences_category_information"
-            style="@style/SettingsCategory" />
-    </io.github.aafactory.commons.views.LabelLayout>-->
 
     <LinearLayout
         android:orientation="vertical"

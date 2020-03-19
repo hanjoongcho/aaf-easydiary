@@ -90,7 +90,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         val fragment = mSectionsPagerAdapter.instantiateItem(diaryViewPager, diaryViewPager.currentItem)
         if (fragment is PlaceholderFragment) {
-            outState?.putInt(DIARY_SEQUENCE, fragment.getSequence())
+            outState.putInt(DIARY_SEQUENCE, fragment.getSequence())
         }
         super.onSaveInstanceState(outState)
     }

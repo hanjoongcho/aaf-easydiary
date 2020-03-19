@@ -13,6 +13,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <LinearLayout
+        android:baselineAligned="false"
         android:orientation="horizontal"
         android:gravity="center"
         android:layout_width="match_parent"
@@ -49,6 +50,7 @@
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
+        android:baselineAligned="false"
         android:orientation="horizontal"
         android:gravity="center"
         android:layout_width="match_parent"
@@ -112,6 +114,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:baselineAligned="false"
         android:gravity="center"
         android:orientation="horizontal"
         android:layout_width="match_parent"

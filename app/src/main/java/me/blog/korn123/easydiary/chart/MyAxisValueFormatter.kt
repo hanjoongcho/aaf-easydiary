@@ -10,6 +10,6 @@ class MyAxisValueFormatter(private var context: Context?) : IAxisValueFormatter 
     private val mFormat: DecimalFormat = DecimalFormat("###,###,###,##0")
 
     override fun getFormattedValue(value: Float, axis: AxisBase): String {
-        return mFormat.format(value.toDouble()) + context?.getString(R.string.diary_count) ?: ""
+        return mFormat.format(value.toDouble()) + context?.getString(R.string.diary_count)
     }
 }

@@ -147,8 +147,8 @@ class PostCardActivity : EasyDiaryActivity() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState?.putInt(POSTCARD_BG_COLOR, mBgColor)
-        outState?.putInt(POSTCARD_TEXT_COLOR, mTextColor)
+        outState.putInt(POSTCARD_BG_COLOR, mBgColor)
+        outState.putInt(POSTCARD_TEXT_COLOR, mTextColor)
         super.onSaveInstanceState(outState)
     }
 

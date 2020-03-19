@@ -233,7 +233,7 @@ class SlidingTabLayout @JvmOverloads constructor(context: Context, attrs: Attrib
 
         val selectedChild = mTabStrip.getChildAt(tabIndex)
         if (selectedChild != null) {
-            var targetScrollX = selectedChild!!.getLeft() + positionOffset
+            var targetScrollX = selectedChild.left + positionOffset
 
             if (tabIndex > 0 || positionOffset > 0) {
                 // If we're not at the first child and are mid-scroll, make sure we obey the offset
@@ -257,7 +257,7 @@ class SlidingTabLayout @JvmOverloads constructor(context: Context, attrs: Attrib
 
             val selectedTitle = mTabStrip.getChildAt(position)
             val extraOffset = if (selectedTitle != null)
-                (positionOffset * selectedTitle!!.getWidth()).toInt()
+                (positionOffset * selectedTitle.width).toInt()
             else
                 0
             scrollToTab(position, extraOffset)
