@@ -415,6 +415,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         })
 
         clearQuery.setOnClickListener { _ ->
+            selectFeelingSymbol()
             query.text = null
 
             if (mClearQueryClickCount == 0) mClearQueryFirstClickMillis = System.currentTimeMillis()
