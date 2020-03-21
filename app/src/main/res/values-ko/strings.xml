@@ -572,4 +572,7 @@
     <string name="preferences_category_font">애플리케이션 폰트설정</string>
     <string name="hold_position_title">스크롤 위치 설정</string>
     <string name="hold_position_summary">편집화면이 시작될 때 열람 모드에서의 스크롤 위치를 유지합니다. 이 설정을 하지 않을 경우 스크롤은 글의 마지막 위치로 이동됩니다.</string>
+    <string name="max_lines_title">Max Lines</string>
+    <string name="max_lines_summary">Set the maximum number of lines to be displayed when the content summary option is activated.</string>
+    <string name="max_lines_value">%d Lines</string>
 </resources>

@@ -128,4 +128,8 @@ class Config(context: Context) : BaseConfig(context) {
     var holdPositionEnterEditScreen: Boolean
         get() = prefs.getBoolean(HOLD_POSITION_ENTER_EDIT_SCREEN, false)
         set(holdPositionEnterEditScreen) = prefs.edit().putBoolean(HOLD_POSITION_ENTER_EDIT_SCREEN, holdPositionEnterEditScreen).apply()
+
+    var summaryMaxLines: Int
+        get() = prefs.getInt(SETTING_SUMMARY_MAX_LINES, SETTING_SUMMARY_MAX_LINES_DEFAULT)
+        set(summaryMaxLines) = prefs.edit().putInt(SETTING_SUMMARY_MAX_LINES, summaryMaxLines).apply()
 }

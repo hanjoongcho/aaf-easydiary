@@ -53,7 +53,7 @@ class DiaryCalendarItemAdapter(
 //                        false -> StringUtils.abbreviate(diaryDto.contents, 10)
                             false -> diaryDto.contents
                         }
-                        maxLines = 1
+                        maxLines = context.config.summaryMaxLines
                         ellipsize = TextUtils.TruncateAt.valueOf("END")
                     }
                     false -> {

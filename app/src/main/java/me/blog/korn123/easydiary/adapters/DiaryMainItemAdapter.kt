@@ -136,7 +136,7 @@ class DiaryMainItemAdapter(
             }
 
             textView2.maxLines = when (activity.config.enableContentsSummary) {
-                true -> 3
+                true -> activity.config.summaryMaxLines
                 false -> Integer.MAX_VALUE
             }
 

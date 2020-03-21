@@ -91,7 +91,7 @@ class TimelineItemAdapter(
 
             when (context.config.enableContentsSummary) {
                 true -> {
-                    textView1.maxLines = 2
+                    textView1.maxLines = context.config.summaryMaxLines.plus(1)
                     textView1.ellipsize = TextUtils.TruncateAt.valueOf("END")
                 }
                 false -> {

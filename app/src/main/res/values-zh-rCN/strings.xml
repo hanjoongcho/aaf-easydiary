@@ -572,4 +572,7 @@
     <string name="preferences_category_font">Application font setting</string>
     <string name="hold_position_title">Fixed scroll position setting</string>
     <string name="hold_position_summary">When the edit screen starts, the scroll position on the browse screen is maintained. If this setting is not set, scrolling moves to the last position of the text.</string>
+    <string name="max_lines_title">Max Lines</string>
+    <string name="max_lines_summary">Set the maximum number of lines to be displayed when the content summary option is activated.</string>
+    <string name="max_lines_value">%d Lines</string>
 </resources>

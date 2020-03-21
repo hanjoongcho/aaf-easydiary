@@ -36,6 +36,9 @@
                     android:id="@+id/thumbnailSettingSummary"
                     android:text="@string/thumbnail_setting_summary"
                     style="@style/SettingsSummary" />
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:id="@+id/thumbnailSettingDescription"
+                    style="@style/SettingsSummary" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -61,6 +64,30 @@
                 </LinearLayout>
                 <com.simplemobiletools.commons.views.MyTextView
                     android:text="@string/contents_summary_description"
+                    style="@style/SettingsSummary" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/maxLines"
+            style="@style/AppCard.Settings">
+            <LinearLayout
+                style="@style/LinearLayoutVertical">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:text="@string/max_lines_title"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        style="@style/SettingsTitle" />
+                </LinearLayout>
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="@string/max_lines_summary"
+                    style="@style/SettingsSummary" />
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:id="@+id/maxLinesValue"
                     style="@style/SettingsSummary" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
