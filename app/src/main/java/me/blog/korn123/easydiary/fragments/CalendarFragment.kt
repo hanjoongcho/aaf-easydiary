@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.fragments
 
 import com.roomorama.caldroid.CaldroidFragmentEx
 import com.roomorama.caldroid.CaldroidGridAdapter
+import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.CaldroidItemAdapter
 import me.blog.korn123.easydiary.adapters.WeekdayArrayAdapter
 import me.blog.korn123.easydiary.extensions.config
@@ -18,7 +19,7 @@ class CalendarFragment : CaldroidFragmentEx() {
 
     override fun getNewWeekdayAdapter(themeResource: Int): WeekdayArrayAdapter {
         return WeekdayArrayAdapter(
-                activity!!, com.caldroid.R.layout.weekday_textview,
+                activity!!, R.layout.item_weekday,
                 daysOfWeek, themeResource)
     }
 }

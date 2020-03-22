@@ -15,14 +15,14 @@ import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_MONDAY
 import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SATURDAY
 import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SUNDAY
 
-class WeekdayArrayAdapter(context: Context, textViewResourceId: Int,
+class WeekdayArrayAdapter(context: Context, private val textViewResourceId: Int,
                                objects: List<String>, themeResource: Int) : com.roomorama.caldroid.WeekdayArrayAdapter(context, textViewResourceId, objects, themeResource) {
 
     val localInflater: LayoutInflater = getLayoutInflater(getContext(), themeResource);
     
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         // To customize text size and color
-        val viewGroup = localInflater.inflate(R.layout.item_weekday, null) as ViewGroup
+        val viewGroup = localInflater.inflate(textViewResourceId, null) as ViewGroup
         val textView = viewGroup.findViewById<TextView>(R.id.label)
 //        textView.setBackgroundColor(Color.WHITE)
 
@@ -32,10 +32,10 @@ class WeekdayArrayAdapter(context: Context, textViewResourceId: Int,
         FontUtils.setFontsTypeface(context, context.assets, "", parent)
         context.initTextSize(viewGroup, context)
 
-        textView.run {
-            layoutParams?.width = (textSize * 2).toInt()
-            layoutParams?.height = (textSize * 2).toInt()
-        }
+//        textView.run {
+//            layoutParams?.width = (textSize * 2).toInt()
+//            layoutParams?.height = (textSize * 2).toInt()
+//        }
 
         when (context.config.calendarStartDay) {
             CALENDAR_START_DAY_SUNDAY -> {
