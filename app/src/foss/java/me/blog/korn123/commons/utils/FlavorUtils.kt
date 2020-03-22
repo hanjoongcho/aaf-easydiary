@@ -30,11 +30,11 @@ object FlavorUtils {
             true -> ContextCompat.getColor(context, android.R.color.white)
             false -> context.config.textColor
         }
-        EasyDiaryUtils.changeDrawableIconColor(context, filterColor, R.drawable.ic_sunny)
-        EasyDiaryUtils.changeDrawableIconColor(context, filterColor, R.drawable.ic_clouds_and_sun)
-        EasyDiaryUtils.changeDrawableIconColor(context, filterColor, R.drawable.ic_raindrops)
-        EasyDiaryUtils.changeDrawableIconColor(context, filterColor, R.drawable.ic_bolt)
-        EasyDiaryUtils.changeDrawableIconColor(context, filterColor, R.drawable.ic_snowing)
+//        EasyDiaryUtils.changeDrawableIconColor(context, filterColor, R.drawable.ic_sunny)
+//        EasyDiaryUtils.changeDrawableIconColor(context, filterColor, R.drawable.ic_clouds_and_sun)
+//        EasyDiaryUtils.changeDrawableIconColor(context, filterColor, R.drawable.ic_raindrops)
+//        EasyDiaryUtils.changeDrawableIconColor(context, filterColor, R.drawable.ic_bolt)
+//        EasyDiaryUtils.changeDrawableIconColor(context, filterColor, R.drawable.ic_snowing)
 
         imageView?.run {
             visibility = if (!isShowEmptyWeatherView && weatherFlag < 1) View.GONE else View.VISIBLE
