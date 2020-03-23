@@ -82,6 +82,7 @@ const val DAILY_DOING = 81
 const val DAILY_DONE = 82
 const val DAILY_CANCEL = 83
 const val DAILY_RECIPE = 84
+const val DAILY_STOCK = 85
 
 
 // Emotion 100 ~ 199

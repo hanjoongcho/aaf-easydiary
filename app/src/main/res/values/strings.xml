@@ -383,8 +383,10 @@
         Separate font-related setting option from basic setting screen
     </string>
     <string name="release_191">
-        v1.4.125 / 2020.03.xx\n
-        Added cursor position setting option when entering diary edit screen
+        v1.4.125 / 2020.03.23\n
+        Added cursor position setting option when entering diary edit screen\n
+        Added the function to set the maximum number of lines in the content summary view option\n
+        Fixed an issue where the day of the week was cut off on the calendar screen
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
