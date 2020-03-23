@@ -388,6 +388,9 @@
         Added the function to set the maximum number of lines in the content summary view option\n
         Fixed an issue where the day of the week was cut off on the calendar screen
     </string>
+    <string name="release_192">
+        v1.4.126 / 2020.03.xx\n
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
