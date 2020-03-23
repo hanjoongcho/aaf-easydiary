@@ -71,6 +71,7 @@ object FlavorUtils {
         DAILY_CANCEL -> R.drawable.ic_cancel
         DAILY_RECIPE -> R.drawable.ic_recipe
         DAILY_STOCK -> R.drawable.ic_dollar
+        DAILY_CONTRACT -> R.drawable.ic_contract
 
         LANDSCAPE_BEACH -> R.drawable.ic_beach
         LANDSCAPE_BRIDGE -> R.drawable.ic_bridge

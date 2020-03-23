@@ -112,6 +112,7 @@
         <item>83|Cancel</item>
         <item>84|Recipe</item>
         <item>85|Stock</item>
+        <item>86|Contract</item>
     </string-array>
 
     <string-array name="food_item_array">
