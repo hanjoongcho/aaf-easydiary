@@ -22,6 +22,7 @@ import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_diary_read.*
 import kotlinx.android.synthetic.main.fragment_diary_read.*
 import kotlinx.android.synthetic.main.layout_bottom_toolbar.*
+import me.blog.korn123.commons.utils.AesUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createAttachedPhotoView
 import me.blog.korn123.commons.utils.FlavorUtils
@@ -126,6 +127,9 @@ class DiaryReadActivity : EasyDiaryActivity() {
                     postCardIntent.putExtra(DIARY_SEQUENCE, fragment.getSequence())
                     //                startActivityForResult(postCardIntent, Constants.REQUEST_CODE_BACKGROUND_COLOR_PICKER);
                     TransitionHelper.startActivityWithTransition(this@DiaryReadActivity, postCardIntent)
+                }
+                R.id.encryption -> {
+                    fragment.encryptData()
                 }
             }
         }
@@ -394,6 +398,12 @@ class DiaryReadActivity : EasyDiaryActivity() {
         fun setFontsSize() {
             context?.let {
                 it.initTextSize(mRootView, it)
+            }
+        }
+
+        fun encryptData() {
+            context?.let {
+                diaryContents.text = AesUtils.encryptPassword(it, diaryContents.text.toString(), "apple")
             }
         }
 
