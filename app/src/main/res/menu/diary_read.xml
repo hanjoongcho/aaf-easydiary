@@ -20,12 +20,6 @@
         android:title="@string/diary_postcard"
         app:showAsAction="always" />
     <item
-        android:id="@+id/encryption"
-        android:icon="@drawable/padlock"
-        android:orderInCategory="100"
-        android:title="Encryption"
-        app:showAsAction="always" />
-    <item
         android:id="@+id/delete"
         android:icon="@drawable/delete_w"
         android:orderInCategory="100"

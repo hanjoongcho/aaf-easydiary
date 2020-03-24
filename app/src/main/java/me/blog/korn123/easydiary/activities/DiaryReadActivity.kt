@@ -128,9 +128,6 @@ class DiaryReadActivity : EasyDiaryActivity() {
                     //                startActivityForResult(postCardIntent, Constants.REQUEST_CODE_BACKGROUND_COLOR_PICKER);
                     TransitionHelper.startActivityWithTransition(this@DiaryReadActivity, postCardIntent)
                 }
-                R.id.encryption -> {
-                    fragment.encryptData()
-                }
             }
         }
         return true
@@ -281,7 +278,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
         override fun onActivityCreated(savedInstanceState: Bundle?) {
             super.onActivityCreated(savedInstanceState)
 
-            bottomToolbar.setOnClickListener {
+            togglePhoto.setOnClickListener {
                 context?.let { context ->
                     when (photoContainerScrollView.visibility) {
                         View.VISIBLE -> {
@@ -294,6 +291,14 @@ class DiaryReadActivity : EasyDiaryActivity() {
                         }
                     }    
                 }
+            }
+
+            encryptData.setOnClickListener {
+                encryptData()
+            }
+
+            decryptData.setOnClickListener {
+                decryptData()
             }
 
             mRootView.let {
@@ -401,9 +406,31 @@ class DiaryReadActivity : EasyDiaryActivity() {
             }
         }
 
-        fun encryptData() {
+        private fun encryptData() {
             context?.let {
-                diaryContents.text = AesUtils.encryptPassword(it, diaryContents.text.toString(), "apple")
+                val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
+                val diaryDto = EasyDiaryDbHelper.readDiaryBy(getSequence(), realmInstance)
+                realmInstance.beginTransaction()
+                diaryDto.isEncrypt = true
+                diaryDto.title = AesUtils.encryptPassword(it, diaryDto.title ?: "", "apple")
+                diaryDto.contents = AesUtils.encryptPassword(it, diaryDto.contents ?: "", "apple")
+                realmInstance.commitTransaction()
+                realmInstance.close()
+                initContents()
+            }
+        }
+
+        private fun decryptData() {
+            context?.let {
+                val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
+                val diaryDto = EasyDiaryDbHelper.readDiaryBy(getSequence(), realmInstance)
+                realmInstance.beginTransaction()
+                diaryDto.isEncrypt = false
+                diaryDto.title = AesUtils.decryptPassword(it, diaryDto.title ?: "", "apple")
+                diaryDto.contents = AesUtils.decryptPassword(it, diaryDto.contents ?: "", "apple")
+                realmInstance.commitTransaction()
+                realmInstance.close()
+                initContents()
             }
         }
 

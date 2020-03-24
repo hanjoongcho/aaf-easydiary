@@ -41,6 +41,8 @@ open class DiaryDto : RealmObject {
     
     var isAllDay: Boolean = false
 
+    var isEncrypt: Boolean = false
+
     constructor()
 
     constructor(sequence: Int, currentTimeMillis: Long, title: String, contents: String) {
