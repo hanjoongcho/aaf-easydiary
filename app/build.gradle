@@ -157,7 +157,7 @@ dependencies {
     implementation group: 'org.apache.poi', name: 'poi', version: '3.9'
     implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:4.0'
     implementation 'io.noties.markwon:core:4.1.2'
-    implementation 'com.github.tozny:java-aes-crypto:1.1.0'
+    implementation group: 'org.jasypt', name: 'jasypt', version: '1.9.2'
 
     // test
     testImplementation 'junit:junit:4.12'

@@ -22,11 +22,8 @@ import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_diary_read.*
 import kotlinx.android.synthetic.main.fragment_diary_read.*
 import kotlinx.android.synthetic.main.layout_bottom_toolbar.*
-import me.blog.korn123.commons.utils.AesUtils
-import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.commons.utils.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createAttachedPhotoView
-import me.blog.korn123.commons.utils.FlavorUtils
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
@@ -420,8 +417,8 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 val diaryDto = EasyDiaryDbHelper.readDiaryBy(getSequence(), realmInstance)
                 realmInstance.beginTransaction()
                 diaryDto.isEncrypt = true
-                diaryDto.title = AesUtils.encryptPassword(it, diaryDto.title ?: "", "apple")
-                diaryDto.contents = AesUtils.encryptPassword(it, diaryDto.contents ?: "", "apple")
+                diaryDto.title = JasyptUtils.encrypt(diaryDto.title ?: "", "apple")
+                diaryDto.contents = JasyptUtils.encrypt(diaryDto.contents ?: "", "apple")
                 realmInstance.commitTransaction()
                 realmInstance.close()
                 initContents()
@@ -434,8 +431,8 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 val diaryDto = EasyDiaryDbHelper.readDiaryBy(getSequence(), realmInstance)
                 realmInstance.beginTransaction()
                 diaryDto.isEncrypt = false
-                diaryDto.title = AesUtils.decryptPassword(it, diaryDto.title ?: "", "apple")
-                diaryDto.contents = AesUtils.decryptPassword(it, diaryDto.contents ?: "", "apple")
+                diaryDto.title = JasyptUtils.decrypt(diaryDto.title ?: "", "apple")
+                diaryDto.contents = JasyptUtils.decrypt(diaryDto.contents ?: "", "apple")
                 realmInstance.commitTransaction()
                 realmInstance.close()
                 initContents()
