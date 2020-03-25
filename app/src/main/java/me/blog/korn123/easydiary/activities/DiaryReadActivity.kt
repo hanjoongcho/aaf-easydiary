@@ -55,6 +55,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
     private var mTextToSpeech: TextToSpeech? = null
     private var mShowcaseView: ShowcaseView? = null
     private var mShowcaseIndex = 1
+    var mIsEncryptData: Boolean = false
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -128,6 +129,12 @@ class DiaryReadActivity : EasyDiaryActivity() {
                     //                startActivityForResult(postCardIntent, Constants.REQUEST_CODE_BACKGROUND_COLOR_PICKER);
                     TransitionHelper.startActivityWithTransition(this@DiaryReadActivity, postCardIntent)
                 }
+                R.id.encryptData -> {
+                    fragment.encryptData()
+                }
+                R.id.decryptData -> {
+                    fragment.decryptData()
+                }
             }
         }
         return true
@@ -135,6 +142,10 @@ class DiaryReadActivity : EasyDiaryActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.diary_read, menu)
+        when (mIsEncryptData) {
+            true -> menu.findItem(R.id.encryptData).isVisible = false
+            false -> menu.findItem(R.id.decryptData).isVisible = false
+        }
         return true
     }
     
@@ -293,14 +304,6 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 }
             }
 
-            encryptData.setOnClickListener {
-                encryptData()
-            }
-
-            decryptData.setOnClickListener {
-                decryptData()
-            }
-
             mRootView.let {
                 context?.run {
                     updateTextColors(it,0,0)
@@ -386,6 +389,11 @@ class DiaryReadActivity : EasyDiaryActivity() {
                     contentsLength.text = getString(R.string.diary_contents_length, diaryDto.contents?.length ?: 0)
                 }
             }
+
+            (activity as DiaryReadActivity).run {
+                mIsEncryptData = diaryDto.isEncrypt
+                invalidateOptionsMenu()
+            }
         }
 
         private fun initBottomContainer() {
@@ -406,7 +414,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
             }
         }
 
-        private fun encryptData() {
+        fun encryptData() {
             context?.let {
                 val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
                 val diaryDto = EasyDiaryDbHelper.readDiaryBy(getSequence(), realmInstance)
@@ -420,7 +428,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
             }
         }
 
-        private fun decryptData() {
+        fun decryptData() {
             context?.let {
                 val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
                 val diaryDto = EasyDiaryDbHelper.readDiaryBy(getSequence(), realmInstance)

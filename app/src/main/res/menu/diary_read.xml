@@ -20,6 +20,18 @@
         android:title="@string/diary_postcard"
         app:showAsAction="always" />
     <item
+        android:id="@+id/encryptData"
+        android:icon="@drawable/padlock"
+        android:orderInCategory="100"
+        android:title="EncryptData"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/decryptData"
+        android:icon="@drawable/unlock"
+        android:orderInCategory="100"
+        android:title="DecryptData"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/delete"
         android:icon="@drawable/delete_w"
         android:orderInCategory="100"
