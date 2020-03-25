@@ -9,7 +9,7 @@ class AesUtils {
     companion object {
         fun encryptPassword(context: Context, plainText: String, password: String): String {
             var cipherText:String = ""
-            val key: AesCbcWithIntegrity.SecretKeys = AesCbcWithIntegrity.generateKeyFromPassword(password, context.getString(R.string.oauth_requerst_id_token))
+            val key: AesCbcWithIntegrity.SecretKeys = AesCbcWithIntegrity.generateKeyFromPassword(password, context.getString(R.string.easy_diary_salt_string))
 
             // The encryption / storage & display:
             val civ = AesCbcWithIntegrity.encrypt(plainText, AesCbcWithIntegrity.keys(keyString(key)))
@@ -18,7 +18,7 @@ class AesUtils {
         }
 
         fun decryptPassword(context: Context, cipherText: String, password: String): String {
-            val key: AesCbcWithIntegrity.SecretKeys = AesCbcWithIntegrity.generateKeyFromPassword(password, context.getString(R.string.oauth_requerst_id_token))
+            val key: AesCbcWithIntegrity.SecretKeys = AesCbcWithIntegrity.generateKeyFromPassword(password, context.getString(R.string.easy_diary_salt_string))
             var plainText:String = ""
             try {
                 val cipherTextIvMac = AesCbcWithIntegrity.CipherTextIvMac(cipherText)
