@@ -10,6 +10,8 @@ class JasyptUtilsTest {
         val plainText = "apple and banana"
         val keyString = "test-password-string"
         val cipherText = JasyptUtils.encrypt(plainText, keyString)
+        println(plainText)
+        println(JasyptUtils.decrypt(cipherText, "test-password-strina"))
         assertEquals(plainText, JasyptUtils.decrypt(cipherText, keyString))
     }
 }

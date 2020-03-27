@@ -24,10 +24,6 @@ import kotlinx.android.synthetic.main.layout_bottom_toolbar.*
 import me.blog.korn123.commons.utils.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createAttachedPhotoView
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.initTextSize
-import me.blog.korn123.easydiary.extensions.showAlertDialog
-import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
@@ -36,6 +32,7 @@ import android.view.LayoutInflater
 import android.widget.*
 import androidx.core.graphics.ColorUtils
 import io.github.aafactory.commons.extensions.baseConfig
+import me.blog.korn123.easydiary.extensions.*
 
 
 /**
@@ -154,8 +151,8 @@ class DiaryReadActivity : EasyDiaryActivity() {
 
     private fun showEncryptPagePopup() {
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val popupView = inflater.inflate(R.layout.popup_page, null)
-        popupView.setBackgroundColor(ColorUtils.setAlphaComponent(baseConfig.primaryColor, 225))
+        val popupView = inflater.inflate(R.layout.popup_page, null) as ViewGroup
+        popupView.setBackgroundColor(ColorUtils.setAlphaComponent(baseConfig.backgroundColor, 235))
         val width = LinearLayout.LayoutParams.MATCH_PARENT
         val height = LinearLayout.LayoutParams.MATCH_PARENT
         val popupWindow = PopupWindow(popupView, width, height, true)
@@ -163,6 +160,22 @@ class DiaryReadActivity : EasyDiaryActivity() {
         popupView.findViewById<ImageView>(R.id.closePopup).setOnClickListener {
             popupWindow.dismiss()
         }
+
+        val onclickListener = View.OnClickListener {
+            when (it.id) {
+                R.id.button1 -> {}
+            }
+        }
+        popupView.findViewById<TextView>(R.id.button1).setOnClickListener { onclickListener }
+
+
+        popupView.run {
+            initTextSize(this, context)
+            updateTextColors(this)
+            updateAppViews(this)
+            updateCardViewPolicy(this)
+        }
+        FontUtils.setFontsTypeface(applicationContext, assets, null, popupView, true)
     }
 
     private fun setupViewPager() {
