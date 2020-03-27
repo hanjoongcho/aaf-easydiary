@@ -157,8 +157,10 @@ class DiaryReadActivity : EasyDiaryActivity() {
         val height = LinearLayout.LayoutParams.MATCH_PARENT
         val popupWindow = PopupWindow(popupView, width, height, true)
         popupWindow.showAtLocation(findViewById<ViewGroup>(android.R.id.content).rootView, Gravity.CENTER, 0, 0)
+        setScreenOrientationSensor(false)
         popupView.findViewById<ImageView>(R.id.closePopup).setOnClickListener {
             popupWindow.dismiss()
+            setScreenOrientationSensor(true)
         }
 
         val onclickListener = View.OnClickListener {
@@ -167,7 +169,14 @@ class DiaryReadActivity : EasyDiaryActivity() {
             }
         }
         popupView.findViewById<TextView>(R.id.button1).setOnClickListener { onclickListener }
-
+        popupView.findViewById<TextView>(R.id.button2).setOnClickListener { onclickListener }
+        popupView.findViewById<TextView>(R.id.button3).setOnClickListener { onclickListener }
+        popupView.findViewById<TextView>(R.id.button4).setOnClickListener { onclickListener }
+        popupView.findViewById<TextView>(R.id.button5).setOnClickListener { onclickListener }
+        popupView.findViewById<TextView>(R.id.button6).setOnClickListener { onclickListener }
+        popupView.findViewById<TextView>(R.id.button7).setOnClickListener { onclickListener }
+        popupView.findViewById<TextView>(R.id.button8).setOnClickListener { onclickListener }
+        popupView.findViewById<TextView>(R.id.button9).setOnClickListener { onclickListener }
 
         popupView.run {
             initTextSize(this, context)

@@ -50,7 +50,7 @@
         <com.simplemobiletools.commons.views.MyTextView
             app:layout_constraintTop_toBottomOf="@id/searchCard"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:text="입력된 패스워드를 이용하여 다이어리의 제목 및 본문내용을 암호화합니다. 패스워드는 복원이 불가하기 때문에 복호화 요청시 기존의 패스워드를 모를경우 데이터를 복호화 할 수 없습니다."
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -72,7 +72,6 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <com.simplemobiletools.commons.views.MyTextView
-                    android:padding="10dp"
                     style="@style/text_view_number_button"
                     android:id="@+id/button1"
                     android:text="1">
@@ -85,6 +84,7 @@
                 android:layout_height="match_parent">
                 <com.simplemobiletools.commons.views.MyTextView
                     style="@style/text_view_number_button"
+                    android:id="@+id/button2"
                     android:text="2">
                 </com.simplemobiletools.commons.views.MyTextView>
             </LinearLayout>
@@ -95,6 +95,7 @@
                 android:layout_height="match_parent">
                 <com.simplemobiletools.commons.views.MyTextView
                     style="@style/text_view_number_button"
+                    android:id="@+id/button3"
                     android:text="3">
                 </com.simplemobiletools.commons.views.MyTextView>
             </LinearLayout>
@@ -111,6 +112,7 @@
                 android:layout_height="match_parent">
                 <com.simplemobiletools.commons.views.MyTextView
                     style="@style/text_view_number_button"
+                    android:id="@+id/button4"
                     android:text="4">
                 </com.simplemobiletools.commons.views.MyTextView>
             </LinearLayout>
@@ -121,6 +123,7 @@
                 android:layout_height="match_parent">
                 <com.simplemobiletools.commons.views.MyTextView
                     style="@style/text_view_number_button"
+                    android:id="@+id/button5"
                     android:text="5">
                 </com.simplemobiletools.commons.views.MyTextView>
             </LinearLayout>
@@ -131,6 +134,7 @@
                 android:layout_height="match_parent">
                 <com.simplemobiletools.commons.views.MyTextView
                     style="@style/text_view_number_button"
+                    android:id="@+id/button6"
                     android:text="6">
                 </com.simplemobiletools.commons.views.MyTextView>
             </LinearLayout>
@@ -147,6 +151,7 @@
                 android:layout_height="match_parent">
                 <com.simplemobiletools.commons.views.MyTextView
                     style="@style/text_view_number_button"
+                    android:id="@+id/button7"
                     android:text="7">
                 </com.simplemobiletools.commons.views.MyTextView>
             </LinearLayout>
@@ -157,6 +162,7 @@
                 android:layout_height="match_parent">
                 <com.simplemobiletools.commons.views.MyTextView
                     style="@style/text_view_number_button"
+                    android:id="@+id/button8"
                     android:text="8">
                 </com.simplemobiletools.commons.views.MyTextView>
             </LinearLayout>
@@ -167,6 +173,7 @@
                 android:layout_height="match_parent">
                 <com.simplemobiletools.commons.views.MyTextView
                     style="@style/text_view_number_button"
+                    android:id="@+id/button9"
                     android:text="9">
                 </com.simplemobiletools.commons.views.MyTextView>
             </LinearLayout>
