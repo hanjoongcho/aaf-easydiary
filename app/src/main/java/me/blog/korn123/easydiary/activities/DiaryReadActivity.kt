@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.activities
 
 import android.annotation.TargetApi
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
@@ -9,8 +10,6 @@ import android.os.Handler
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import android.view.*
-import android.widget.RelativeLayout
-import android.widget.ScrollView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentPagerAdapter
 import com.github.amlcurran.showcaseview.ShowcaseView
@@ -33,6 +32,11 @@ import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
 import java.util.*
+import android.view.LayoutInflater
+import android.widget.*
+import androidx.core.graphics.ColorUtils
+import io.github.aafactory.commons.extensions.baseConfig
+
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -127,10 +131,12 @@ class DiaryReadActivity : EasyDiaryActivity() {
                     TransitionHelper.startActivityWithTransition(this@DiaryReadActivity, postCardIntent)
                 }
                 R.id.encryptData -> {
-                    fragment.encryptData()
+                    showEncryptPagePopup()
+//                    fragment.encryptData()
                 }
                 R.id.decryptData -> {
-                    fragment.decryptData()
+                    showEncryptPagePopup()
+//                    fragment.decryptData()
                 }
             }
         }
@@ -145,7 +151,20 @@ class DiaryReadActivity : EasyDiaryActivity() {
         }
         return true
     }
-    
+
+    private fun showEncryptPagePopup() {
+        val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val popupView = inflater.inflate(R.layout.popup_page, null)
+        popupView.setBackgroundColor(ColorUtils.setAlphaComponent(baseConfig.primaryColor, 225))
+        val width = LinearLayout.LayoutParams.MATCH_PARENT
+        val height = LinearLayout.LayoutParams.MATCH_PARENT
+        val popupWindow = PopupWindow(popupView, width, height, true)
+        popupWindow.showAtLocation(findViewById<ViewGroup>(android.R.id.content).rootView, Gravity.CENTER, 0, 0)
+        popupView.findViewById<ImageView>(R.id.closePopup).setOnClickListener {
+            popupWindow.dismiss()
+        }
+    }
+
     private fun setupViewPager() {
         // Set up the ViewPager with the sections adapter.
         diaryViewPager.adapter = mSectionsPagerAdapter
