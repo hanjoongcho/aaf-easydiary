@@ -119,7 +119,7 @@ fun BaseSimpleActivity.checkWhatsNew(releases: List<Release>, currVersion: Int, 
 }
 
 fun Activity.makeToast(message: String) {
-    Toast.makeText(this, message, Toast.LENGTH_SHORT)
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
 
 fun Activity.makeSnackBar(message: String) {

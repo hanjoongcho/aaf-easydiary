@@ -32,6 +32,7 @@ import android.view.LayoutInflater
 import android.widget.*
 import androidx.core.graphics.ColorUtils
 import io.github.aafactory.commons.extensions.baseConfig
+import kotlinx.android.synthetic.main.popup_page.view.*
 import me.blog.korn123.easydiary.extensions.*
 
 
@@ -150,6 +151,9 @@ class DiaryReadActivity : EasyDiaryActivity() {
     }
 
     private fun showEncryptPagePopup() {
+        var inputPass = ""
+        var confirmPass = ""
+        holdCurrentOrientation()
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val popupView = inflater.inflate(R.layout.popup_page, null) as ViewGroup
         popupView.setBackgroundColor(ColorUtils.setAlphaComponent(baseConfig.backgroundColor, 235))
@@ -157,29 +161,68 @@ class DiaryReadActivity : EasyDiaryActivity() {
         val height = LinearLayout.LayoutParams.MATCH_PARENT
         val popupWindow = PopupWindow(popupView, width, height, true)
         popupWindow.showAtLocation(findViewById<ViewGroup>(android.R.id.content).rootView, Gravity.CENTER, 0, 0)
-        setScreenOrientationSensor(false)
-        popupView.findViewById<ImageView>(R.id.closePopup).setOnClickListener {
+        popupView.closePopup.setOnClickListener {
             popupWindow.dismiss()
-            setScreenOrientationSensor(true)
         }
+        popupView.guideMessage.text = "Enter a password to use for encryption."
 
         val onclickListener = View.OnClickListener {
+            when (inputPass.length) {
+                0 -> popupView.pass1.text = "*"
+                1 -> popupView.pass2.text = "*"
+                2 -> popupView.pass3.text = "*"
+                3 -> popupView.pass4.text = "*"
+                4 -> popupView.pass5.text = "*"
+                5 -> popupView.pass6.text = "*"
+            }
+
             when (it.id) {
-                R.id.button1 -> {}
+                R.id.button1 -> inputPass += "1"
+                R.id.button2 -> inputPass += "2"
+                R.id.button3 -> inputPass += "3"
+                R.id.button4 -> inputPass += "4"
+                R.id.button5 -> inputPass += "5"
+                R.id.button6 -> inputPass += "6"
+                R.id.button7 -> inputPass += "7"
+                R.id.button8 -> inputPass += "8"
+                R.id.button9 -> inputPass += "9"
+                R.id.button0 -> inputPass += "0"
+            }
+
+            if (inputPass.length == 6) {
+                if (confirmPass.length == 6) {
+                    when (confirmPass == inputPass) {
+                        true -> makeToast("OK")
+                        false -> makeToast("FAIL")
+                    }
+                    inputPass = ""
+                    confirmPass = ""
+                    popupView.guideMessage.text = "Enter a password to use for encryption."
+                } else {
+                    confirmPass = inputPass
+                    inputPass = ""
+                    popupView.guideMessage.text = "Enter the pin number you entered again"
+                }
+                popupView.pass1.text = ""
+                popupView.pass2.text = ""
+                popupView.pass3.text = ""
+                popupView.pass4.text = ""
+                popupView.pass5.text = ""
+                popupView.pass6.text = ""
             }
         }
-        popupView.findViewById<TextView>(R.id.button1).setOnClickListener { onclickListener }
-        popupView.findViewById<TextView>(R.id.button2).setOnClickListener { onclickListener }
-        popupView.findViewById<TextView>(R.id.button3).setOnClickListener { onclickListener }
-        popupView.findViewById<TextView>(R.id.button4).setOnClickListener { onclickListener }
-        popupView.findViewById<TextView>(R.id.button5).setOnClickListener { onclickListener }
-        popupView.findViewById<TextView>(R.id.button6).setOnClickListener { onclickListener }
-        popupView.findViewById<TextView>(R.id.button7).setOnClickListener { onclickListener }
-        popupView.findViewById<TextView>(R.id.button8).setOnClickListener { onclickListener }
-        popupView.findViewById<TextView>(R.id.button9).setOnClickListener { onclickListener }
+        popupView.button1.setOnClickListener(onclickListener)
+        popupView.button2.setOnClickListener(onclickListener)
+        popupView.button3.setOnClickListener(onclickListener)
+        popupView.button4.setOnClickListener(onclickListener)
+        popupView.button5.setOnClickListener(onclickListener)
+        popupView.button6.setOnClickListener(onclickListener)
+        popupView.button7.setOnClickListener(onclickListener)
+        popupView.button8.setOnClickListener(onclickListener)
+        popupView.button9.setOnClickListener(onclickListener)
 
         popupView.run {
-            initTextSize(this, context)
+//            initTextSize(this, context)
             updateTextColors(this)
             updateAppViews(this)
             updateCardViewPolicy(this)
