@@ -164,7 +164,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
         popupView.closePopup.setOnClickListener {
             popupWindow.dismiss()
         }
-        popupView.guideMessage.text = "Enter a password to use for encryption."
+        popupView.guideMessage.text = if (inEncrypt) "Enter the password to be used for encryption." else "Enter the password to be used for decryption."
 
         val onclickListener = View.OnClickListener {
             when (inputPass.length) {
@@ -194,13 +194,15 @@ class DiaryReadActivity : EasyDiaryActivity() {
                     when (confirmPass == inputPass) {
                         true -> {
                             makeToast("OK")
-                            if (inEncrypt) fragment.encryptData(inputPass) else fragment.decryptData(inputPass)
+                            fragment.encryptData(inputPass)
                         }
                         false -> makeToast("FAIL")
                     }
                     inputPass = ""
                     confirmPass = ""
                     popupView.guideMessage.text = "Enter a password to use for encryption."
+                } else if (!inEncrypt) {
+                    fragment.decryptData(inputPass)
                 } else {
                     confirmPass = inputPass
                     inputPass = ""
@@ -520,8 +522,8 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 if (diaryDto.encryptKeyHash == JasyptUtils.sha256(inputPass)) {
                     realmInstance.beginTransaction()
                     diaryDto.isEncrypt = false
-                    diaryDto.title = JasyptUtils.decrypt(diaryDto.title ?: "", "apple")
-                    diaryDto.contents = JasyptUtils.decrypt(diaryDto.contents ?: "", "apple")
+                    diaryDto.title = JasyptUtils.decrypt(diaryDto.title ?: "", inputPass)
+                    diaryDto.contents = JasyptUtils.decrypt(diaryDto.contents ?: "", inputPass)
                     realmInstance.commitTransaction()
                     realmInstance.close()
                     initContents()

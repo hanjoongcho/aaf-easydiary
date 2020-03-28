@@ -94,7 +94,7 @@ class EasyDiaryMigration : RealmMigration {
             }
 
             if (currentVersion == 10L) {
-                it.addField("encryptKeyHash", String::class.javaPrimitiveType)
+                it.addField("encryptKeyHash", String::class.java)
                 currentVersion++
             }
 
