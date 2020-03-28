@@ -8,8 +8,9 @@
     android:layout_height="match_parent">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:padding="10dp"
+        android:layout_weight="4"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp">
         <ImageView
             style="@style/image_view_custom_toolbar_icon"
             app:layout_constraintTop_toTopOf="parent"
@@ -24,14 +25,14 @@
         <com.simplemobiletools.commons.views.MyTextView
             app:layout_constraintTop_toBottomOf="@id/closePopup"
             app:layout_constraintStart_toStartOf="parent"
-            android:textSize="17sp"
-            android:id="@+id/guideMessage"
+            android:textSize="20sp"
+            android:id="@+id/description"
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
         <LinearLayout
-            app:layout_constraintTop_toBottomOf="@id/guideMessage"
+            app:layout_constraintTop_toBottomOf="@id/description"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="20dp"
             android:id="@+id/searchCard"
@@ -64,8 +65,8 @@
         <com.simplemobiletools.commons.views.MyTextView
             app:layout_constraintTop_toBottomOf="@id/searchCard"
             app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/guideMessage"
             android:layout_marginTop="20dp"
-            android:text="입력된 패스워드를 이용하여 다이어리의 제목 및 본문내용을 암호화합니다. 패스워드는 복원이 불가하기 때문에 복호화 요청시 기존의 패스워드를 모를경우 데이터를 복호화 할 수 없습니다."
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -74,8 +75,9 @@
         android:theme="@style/AppTheme.AppBarOverlay"
         android:orientation="vertical"
         android:padding="20dp"
+        android:layout_weight="6"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp">
         <LinearLayout
             android:orientation="horizontal"
             android:layout_weight="1"
@@ -225,8 +227,9 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <com.simplemobiletools.commons.views.MyTextView
+                    android:id="@+id/buttonDel"
                     style="@style/text_view_number_button"
-                    android:text="">
+                    android:text="←">
                 </com.simplemobiletools.commons.views.MyTextView>
             </LinearLayout>
         </LinearLayout>

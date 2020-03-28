@@ -156,7 +156,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
         holdCurrentOrientation()
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val popupView = inflater.inflate(R.layout.popup_page, null) as ViewGroup
-        popupView.setBackgroundColor(ColorUtils.setAlphaComponent(baseConfig.backgroundColor, 235))
+        popupView.setBackgroundColor(ColorUtils.setAlphaComponent(baseConfig.backgroundColor, 255))
         val width = LinearLayout.LayoutParams.MATCH_PARENT
         val height = LinearLayout.LayoutParams.MATCH_PARENT
         val popupWindow = PopupWindow(popupView, width, height, true)
@@ -164,18 +164,29 @@ class DiaryReadActivity : EasyDiaryActivity() {
         popupView.closePopup.setOnClickListener {
             popupWindow.dismiss()
         }
-        popupView.guideMessage.text = if (inEncrypt) "Enter the password to be used for encryption." else "Enter the password to be used for decryption."
+
+        fun clearPassView() {
+            popupView.pass1.text = ""
+            popupView.pass2.text = ""
+            popupView.pass3.text = ""
+            popupView.pass4.text = ""
+            popupView.pass5.text = ""
+            popupView.pass6.text = ""
+        }
+
+        when (inEncrypt) {
+            true -> {
+                popupView.description.text = "Diary Encryption"
+                popupView.guideMessage.text = "다이어리 암호화에 사용될 핀번호를 입력하세요.\n핀번호는 복원이 불가하기 때문에 복호화 요청시 기존의 핀번호를 모를경우 데이터를 복호화 할 수 없습니다."
+            }
+            false -> {
+                popupView.description.text = "Diary Decryption"
+                popupView.guideMessage.text = "다이어리 복호화에 사용될 핀번호를 입력하세요.\n입력된 핀번호를 이용하여 다이어리의 제목 및 본문내용을 복호화합니다."
+            }
+        }
 
         val onclickListener = View.OnClickListener {
-            when (inputPass.length) {
-                0 -> popupView.pass1.text = "*"
-                1 -> popupView.pass2.text = "*"
-                2 -> popupView.pass3.text = "*"
-                3 -> popupView.pass4.text = "*"
-                4 -> popupView.pass5.text = "*"
-                5 -> popupView.pass6.text = "*"
-            }
-
+            clearPassView()
             when (it.id) {
                 R.id.button1 -> inputPass += "1"
                 R.id.button2 -> inputPass += "2"
@@ -187,7 +198,17 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 R.id.button8 -> inputPass += "8"
                 R.id.button9 -> inputPass += "9"
                 R.id.button0 -> inputPass += "0"
+                R.id.buttonDel -> {
+                    if (inputPass.isNotEmpty()) inputPass = inputPass.substring(0, inputPass.length.minus(1))
+                }
             }
+
+            if (inputPass.isNotEmpty()) popupView.pass1.text = "*"
+            if (inputPass.length > 1) popupView.pass2.text = "*"
+            if (inputPass.length > 2) popupView.pass3.text = "*"
+            if (inputPass.length > 3) popupView.pass4.text = "*"
+            if (inputPass.length > 4) popupView.pass5.text = "*"
+            if (inputPass.length > 5) popupView.pass6.text = "*"
 
             if (inputPass.length == 6) {
                 if (confirmPass.length == 6) {
@@ -196,30 +217,24 @@ class DiaryReadActivity : EasyDiaryActivity() {
                             fragment.encryptData(inputPass)
                             popupWindow.dismiss()
                         }
-                        false -> makeToast("FAIL")
+                        false -> popupView.guideMessage.text = "최초 입력한 핀번호와 확인용 핀번호가 일치하지 않습니다.\n핀번호를 다시 입력하세요."
                     }
                     inputPass = ""
                     confirmPass = ""
-                    popupView.guideMessage.text = "Enter a password to use for encryption."
                 } else if (!inEncrypt) {
                     when (fragment.decryptData(inputPass)) {
                         true -> popupWindow.dismiss()
                         false -> {
                             inputPass = ""
-                            makeToast("Passwords do not match.")
+                            popupView.guideMessage.text = "핀번호가 일치하지 않습니다.\n다이어리 암호화시 설정한 핀번호를 입력하세요."
                         }
                     }
                 } else {
                     confirmPass = inputPass
                     inputPass = ""
-                    popupView.guideMessage.text = "Enter the pin number you entered again"
+                    popupView.guideMessage.text = "다이어리 암호화에 사용될 핀번호를 한번 더 입력하세요"
                 }
-                popupView.pass1.text = ""
-                popupView.pass2.text = ""
-                popupView.pass3.text = ""
-                popupView.pass4.text = ""
-                popupView.pass5.text = ""
-                popupView.pass6.text = ""
+               clearPassView()
             }
         }
         popupView.button1.setOnClickListener(onclickListener)
@@ -231,6 +246,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
         popupView.button7.setOnClickListener(onclickListener)
         popupView.button8.setOnClickListener(onclickListener)
         popupView.button9.setOnClickListener(onclickListener)
+        popupView.buttonDel.setOnClickListener(onclickListener)
 
         popupView.run {
 //            initTextSize(this, context)
