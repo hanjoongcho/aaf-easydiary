@@ -45,3 +45,6 @@
 -dontwarn javax.imageio.**
 
 -dontwarn kotlinx.coroutines.flow.**inlined**
+
+-dontwarn com.ibm.icu.**
+-dontwarn org.jasypt.web.**
