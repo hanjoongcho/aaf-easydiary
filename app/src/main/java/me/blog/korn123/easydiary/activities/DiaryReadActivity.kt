@@ -163,6 +163,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
         popupWindow.showAtLocation(findViewById<ViewGroup>(android.R.id.content).rootView, Gravity.CENTER, 0, 0)
         popupView.closePopup.setOnClickListener {
             popupWindow.dismiss()
+            clearHoldOrientation()
         }
 
         fun clearPassView() {

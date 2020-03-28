@@ -142,6 +142,10 @@ fun Activity.holdCurrentOrientation() {
     }
 }
 
+fun Activity.clearHoldOrientation() {
+    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+}
+
 fun Activity.isLandScape(): Boolean {
     return resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 }
