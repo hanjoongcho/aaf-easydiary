@@ -193,8 +193,8 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 if (confirmPass.length == 6) {
                     when (confirmPass == inputPass) {
                         true -> {
-                            makeToast("OK")
                             fragment.encryptData(inputPass)
+                            popupWindow.dismiss()
                         }
                         false -> makeToast("FAIL")
                     }
@@ -202,7 +202,13 @@ class DiaryReadActivity : EasyDiaryActivity() {
                     confirmPass = ""
                     popupView.guideMessage.text = "Enter a password to use for encryption."
                 } else if (!inEncrypt) {
-                    fragment.decryptData(inputPass)
+                    when (fragment.decryptData(inputPass)) {
+                        true -> popupWindow.dismiss()
+                        false -> {
+                            inputPass = ""
+                            makeToast("Passwords do not match.")
+                        }
+                    }
                 } else {
                     confirmPass = inputPass
                     inputPass = ""
@@ -515,7 +521,8 @@ class DiaryReadActivity : EasyDiaryActivity() {
             }
         }
 
-        fun decryptData(inputPass: String) {
+        fun decryptData(inputPass: String): Boolean {
+            var result = true
             context?.let {
                 val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
                 val diaryDto = EasyDiaryDbHelper.readDiaryBy(getSequence(), realmInstance)
@@ -528,9 +535,10 @@ class DiaryReadActivity : EasyDiaryActivity() {
                     realmInstance.close()
                     initContents()
                 } else {
-                    activity?.makeToast("Passwords do not match.")
+                    result = false
                 }
             }
+            return result
         }
 
         companion object {

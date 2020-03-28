@@ -22,9 +22,10 @@
             android:layout_height="wrap_content"/>
 
         <com.simplemobiletools.commons.views.MyTextView
-            android:id="@+id/guideMessage"
             app:layout_constraintTop_toBottomOf="@id/closePopup"
             app:layout_constraintStart_toStartOf="parent"
+            android:textSize="17sp"
+            android:id="@+id/guideMessage"
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -32,7 +33,7 @@
         <LinearLayout
             app:layout_constraintTop_toBottomOf="@id/guideMessage"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:id="@+id/searchCard"
             android:orientation="horizontal"
             android:gravity="center"
