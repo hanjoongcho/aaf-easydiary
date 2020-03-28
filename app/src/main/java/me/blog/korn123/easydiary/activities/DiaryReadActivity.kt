@@ -129,11 +129,11 @@ class DiaryReadActivity : EasyDiaryActivity() {
                     TransitionHelper.startActivityWithTransition(this@DiaryReadActivity, postCardIntent)
                 }
                 R.id.encryptData -> {
-                    showEncryptPagePopup()
+                    showEncryptPagePopup(fragment, true)
 //                    fragment.encryptData()
                 }
                 R.id.decryptData -> {
-                    showEncryptPagePopup()
+                    showEncryptPagePopup(fragment, false)
 //                    fragment.decryptData()
                 }
             }
@@ -150,7 +150,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
         return true
     }
 
-    private fun showEncryptPagePopup() {
+    private fun showEncryptPagePopup(fragment: PlaceholderFragment, inEncrypt: Boolean) {
         var inputPass = ""
         var confirmPass = ""
         holdCurrentOrientation()
@@ -192,7 +192,10 @@ class DiaryReadActivity : EasyDiaryActivity() {
             if (inputPass.length == 6) {
                 if (confirmPass.length == 6) {
                     when (confirmPass == inputPass) {
-                        true -> makeToast("OK")
+                        true -> {
+                            makeToast("OK")
+                            if (inEncrypt) fragment.encryptData(inputPass) else fragment.decryptData(inputPass)
+                        }
                         false -> makeToast("FAIL")
                     }
                     inputPass = ""
@@ -495,31 +498,36 @@ class DiaryReadActivity : EasyDiaryActivity() {
             }
         }
 
-        fun encryptData() {
+        fun encryptData(inputPass: String) {
             context?.let {
                 val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
                 val diaryDto = EasyDiaryDbHelper.readDiaryBy(getSequence(), realmInstance)
                 realmInstance.beginTransaction()
                 diaryDto.isEncrypt = true
-                diaryDto.title = JasyptUtils.encrypt(diaryDto.title ?: "", "apple")
-                diaryDto.contents = JasyptUtils.encrypt(diaryDto.contents ?: "", "apple")
+                diaryDto.title = JasyptUtils.encrypt(diaryDto.title ?: "", inputPass)
+                diaryDto.contents = JasyptUtils.encrypt(diaryDto.contents ?: "", inputPass)
+                diaryDto.encryptKeyHash = JasyptUtils.sha256(inputPass)
                 realmInstance.commitTransaction()
                 realmInstance.close()
                 initContents()
             }
         }
 
-        fun decryptData() {
+        fun decryptData(inputPass: String) {
             context?.let {
                 val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
                 val diaryDto = EasyDiaryDbHelper.readDiaryBy(getSequence(), realmInstance)
-                realmInstance.beginTransaction()
-                diaryDto.isEncrypt = false
-                diaryDto.title = JasyptUtils.decrypt(diaryDto.title ?: "", "apple")
-                diaryDto.contents = JasyptUtils.decrypt(diaryDto.contents ?: "", "apple")
-                realmInstance.commitTransaction()
-                realmInstance.close()
-                initContents()
+                if (diaryDto.encryptKeyHash == JasyptUtils.sha256(inputPass)) {
+                    realmInstance.beginTransaction()
+                    diaryDto.isEncrypt = false
+                    diaryDto.title = JasyptUtils.decrypt(diaryDto.title ?: "", "apple")
+                    diaryDto.contents = JasyptUtils.decrypt(diaryDto.contents ?: "", "apple")
+                    realmInstance.commitTransaction()
+                    realmInstance.close()
+                    initContents()
+                } else {
+                    activity?.makeToast("Passwords do not match.")
+                }
             }
         }
 

@@ -93,6 +93,11 @@ class EasyDiaryMigration : RealmMigration {
                 currentVersion++
             }
 
+            if (currentVersion == 10L) {
+                it.addField("encryptKeyHash", String::class.javaPrimitiveType)
+                currentVersion++
+            }
+
             //        // During a migration, a DynamicRealm is exposed. A DynamicRealm is an untyped variant of a normal Realm, but
             //        // with the same object creation and query capabilities.
             //        // A DynamicRealm uses Strings instead of Class references because the Classes might not even exist or have been

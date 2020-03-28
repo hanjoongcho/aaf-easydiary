@@ -43,6 +43,8 @@ open class DiaryDto : RealmObject {
 
     var isEncrypt: Boolean = false
 
+    var encryptKeyHash: String? = null
+
     constructor()
 
     constructor(sequence: Int, currentTimeMillis: Long, title: String, contents: String) {
