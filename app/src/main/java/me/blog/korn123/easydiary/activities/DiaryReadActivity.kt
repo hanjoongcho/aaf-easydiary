@@ -247,6 +247,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
         popupView.button7.setOnClickListener(onclickListener)
         popupView.button8.setOnClickListener(onclickListener)
         popupView.button9.setOnClickListener(onclickListener)
+        popupView.button0.setOnClickListener(onclickListener)
         popupView.buttonDel.setOnClickListener(onclickListener)
 
         popupView.run {
