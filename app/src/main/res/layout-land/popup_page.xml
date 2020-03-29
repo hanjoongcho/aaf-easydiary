@@ -87,35 +87,35 @@
             android:layout_width="match_parent"
             android:layout_height="0dp">
             <LinearLayout
+                android:id="@+id/button1"
                 android:gravity="center"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <com.simplemobiletools.commons.views.MyTextView
                     style="@style/text_view_number_button"
-                    android:id="@+id/button1"
                     android:text="1">
                 </com.simplemobiletools.commons.views.MyTextView>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/button2"
                 android:gravity="center"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <com.simplemobiletools.commons.views.MyTextView
                     style="@style/text_view_number_button"
-                    android:id="@+id/button2"
                     android:text="2">
                 </com.simplemobiletools.commons.views.MyTextView>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/button3"
                 android:gravity="center"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <com.simplemobiletools.commons.views.MyTextView
                     style="@style/text_view_number_button"
-                    android:id="@+id/button3"
                     android:text="3">
                 </com.simplemobiletools.commons.views.MyTextView>
             </LinearLayout>
@@ -126,35 +126,35 @@
             android:layout_width="match_parent"
             android:layout_height="0dp">
             <LinearLayout
+                android:id="@+id/button4"
                 android:gravity="center"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <com.simplemobiletools.commons.views.MyTextView
                     style="@style/text_view_number_button"
-                    android:id="@+id/button4"
                     android:text="4">
                 </com.simplemobiletools.commons.views.MyTextView>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/button5"
                 android:gravity="center"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <com.simplemobiletools.commons.views.MyTextView
                     style="@style/text_view_number_button"
-                    android:id="@+id/button5"
                     android:text="5">
                 </com.simplemobiletools.commons.views.MyTextView>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/button6"
                 android:gravity="center"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <com.simplemobiletools.commons.views.MyTextView
                     style="@style/text_view_number_button"
-                    android:id="@+id/button6"
                     android:text="6">
                 </com.simplemobiletools.commons.views.MyTextView>
             </LinearLayout>
@@ -165,35 +165,35 @@
             android:layout_width="match_parent"
             android:layout_height="0dp">
             <LinearLayout
+                android:id="@+id/button7"
                 android:gravity="center"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <com.simplemobiletools.commons.views.MyTextView
                     style="@style/text_view_number_button"
-                    android:id="@+id/button7"
                     android:text="7">
                 </com.simplemobiletools.commons.views.MyTextView>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/button8"
                 android:gravity="center"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <com.simplemobiletools.commons.views.MyTextView
                     style="@style/text_view_number_button"
-                    android:id="@+id/button8"
                     android:text="8">
                 </com.simplemobiletools.commons.views.MyTextView>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/button9"
                 android:gravity="center"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <com.simplemobiletools.commons.views.MyTextView
                     style="@style/text_view_number_button"
-                    android:id="@+id/button9"
                     android:text="9">
                 </com.simplemobiletools.commons.views.MyTextView>
             </LinearLayout>
@@ -214,23 +214,23 @@
                 </com.simplemobiletools.commons.views.MyTextView>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/button0"
                 android:gravity="center"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <com.simplemobiletools.commons.views.MyTextView
                     style="@style/text_view_number_button"
-                    android:id="@+id/button0"
                     android:text="0">
                 </com.simplemobiletools.commons.views.MyTextView>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/buttonDel"
                 android:gravity="center"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <com.simplemobiletools.commons.views.MyTextView
-                    android:id="@+id/buttonDel"
                     style="@style/text_view_number_button"
                     android:text="←">
                 </com.simplemobiletools.commons.views.MyTextView>
