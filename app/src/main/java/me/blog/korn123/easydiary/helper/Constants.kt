@@ -84,6 +84,7 @@ const val DAILY_CANCEL = 83
 const val DAILY_RECIPE = 84
 const val DAILY_STOCK = 85
 const val DAILY_CONTRACT = 86
+const val DAILY_PIN_CODE = 87
 
 
 // Emotion 100 ~ 199
