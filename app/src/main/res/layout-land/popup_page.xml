@@ -4,28 +4,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:background="?attr/colorPrimary"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:padding="10dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:padding="10dp"
-        android:layout_weight="4"
-        android:layout_width="match_parent"
-        android:layout_height="0dp">
-        <ImageView
-            style="@style/image_view_custom_toolbar_icon"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:id="@+id/closePopup"
-            android:theme="@style/AppTheme.AppBarOverlay"
-            android:contentDescription=""
-            android:src="@drawable/ic_cross"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
+        android:layout_weight="5"
+        android:layout_width="0dp"
+        android:layout_height="match_parent">
         <com.simplemobiletools.commons.views.MyTextView
-            app:layout_constraintTop_toBottomOf="@id/closePopup"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:text="Description..."
             android:textSize="20sp"
@@ -79,9 +68,19 @@
         android:theme="@style/AppTheme.AppBarOverlay"
         android:orientation="vertical"
         android:padding="20dp"
-        android:layout_weight="6"
-        android:layout_width="match_parent"
-        android:layout_height="0dp">
+        android:layout_weight="5"
+        android:layout_width="0dp"
+        android:layout_height="match_parent">
+        <ImageView
+            style="@style/image_view_custom_toolbar_icon"
+            android:layout_gravity="right"
+            android:id="@+id/closePopup"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            android:contentDescription=""
+            android:src="@drawable/ic_cross"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
         <LinearLayout
             android:orientation="horizontal"
             android:layout_weight="1"

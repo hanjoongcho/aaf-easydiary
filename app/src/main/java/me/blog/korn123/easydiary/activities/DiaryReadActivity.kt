@@ -156,7 +156,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
         holdCurrentOrientation()
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val popupView = inflater.inflate(R.layout.popup_page, null) as ViewGroup
-        popupView.setBackgroundColor(ColorUtils.setAlphaComponent(baseConfig.backgroundColor, 255))
+        popupView.setBackgroundColor(ColorUtils.setAlphaComponent(baseConfig.backgroundColor, 250))
         val width = LinearLayout.LayoutParams.MATCH_PARENT
         val height = LinearLayout.LayoutParams.MATCH_PARENT
         val popupWindow = PopupWindow(popupView, width, height, true)

@@ -242,7 +242,7 @@ class DiaryInsertActivity : EditActivity() {
             false
         }
 
-        bottomToolbar.setOnClickListener {
+        togglePhoto.setOnClickListener {
             toggleSimpleLayout()
         }
 

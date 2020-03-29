@@ -189,7 +189,7 @@ class DiaryUpdateActivity : EditActivity() {
             false
         }
 
-        bottomToolbar.setOnClickListener {
+        togglePhoto.setOnClickListener {
             toggleSimpleLayout()
         }
 
