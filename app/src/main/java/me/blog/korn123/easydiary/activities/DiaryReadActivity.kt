@@ -177,12 +177,12 @@ class DiaryReadActivity : EasyDiaryActivity() {
 
         when (inEncrypt) {
             true -> {
-                popupView.description.text = "Diary Encryption"
-                popupView.guideMessage.text = "다이어리 암호화에 사용될 핀번호를 입력하세요.\n핀번호는 복원이 불가하기 때문에 복호화 요청시 기존의 핀번호를 모를경우 데이터를 복호화 할 수 없습니다."
+                popupView.description.text = getString(R.string.diary_encryption_title)
+                popupView.guideMessage.text = getString(R.string.diary_encryption_guide)
             }
             false -> {
-                popupView.description.text = "Diary Decryption"
-                popupView.guideMessage.text = "다이어리 복호화에 사용될 핀번호를 입력하세요.\n입력된 핀번호를 이용하여 다이어리의 제목 및 본문내용을 복호화합니다."
+                popupView.description.text =  getString(R.string.diary_decryption_title)
+                popupView.guideMessage.text = getString(R.string.diary_decryption_guide)
             }
         }
 
@@ -218,7 +218,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                             fragment.encryptData(inputPass)
                             popupWindow.dismiss()
                         }
-                        false -> popupView.guideMessage.text = "최초 입력한 핀번호와 확인용 핀번호가 일치하지 않습니다.\n핀번호를 다시 입력하세요."
+                        false -> popupView.guideMessage.text = getString(R.string.diary_pin_number_confirm_error)
                     }
                     inputPass = ""
                     confirmPass = ""
@@ -227,13 +227,13 @@ class DiaryReadActivity : EasyDiaryActivity() {
                         true -> popupWindow.dismiss()
                         false -> {
                             inputPass = ""
-                            popupView.guideMessage.text = "핀번호가 일치하지 않습니다.\n다이어리 암호화시 설정한 핀번호를 입력하세요."
+                            popupView.guideMessage.text = getString(R.string.diary_pin_number_verification_error)
                         }
                     }
                 } else {
                     confirmPass = inputPass
                     inputPass = ""
-                    popupView.guideMessage.text = "다이어리 암호화에 사용될 핀번호를 한번 더 입력하세요"
+                    popupView.guideMessage.text = getString(R.string.diary_pin_number_confirm_guide)
                 }
                clearPassView()
             }

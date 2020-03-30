@@ -390,6 +390,7 @@
     </string>
     <string name="release_192">
         v1.4.126 / 2020.03.xx\n
+        Added diary encryption feature using pin number
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -580,4 +581,11 @@
     <string name="max_lines_title">Max Lines</string>
     <string name="max_lines_summary">Set the maximum number of lines to be displayed when the content summary option is activated.</string>
     <string name="max_lines_value">%d Lines</string>
+    <string name="diary_encryption_title">Diary Encryption</string>
+    <string name="diary_encryption_guide">Please enter the pin number to be used for diary encryption.\nThe pin number cannot be recovered, so be careful not to forget the set pin number.</string>
+    <string name="diary_decryption_title">Diary Decryption</string>
+    <string name="diary_decryption_guide">Enter the pin number to be used for diary decoding.\nDecrypt the diary\'s title and body content using the entered pin number.</string>
+    <string name="diary_pin_number_confirm_guide">Enter the pin number to be used for diary encryption once more.</string>
+    <string name="diary_pin_number_confirm_error">The first entered PIN number does not match the confirmation PIN number.\nPlease enter the PIN number again.</string>
+    <string name="diary_pin_number_verification_error">The PIN numbers do not match.\nPlease enter the PIN number you set when encrypting the diary.</string>
 </resources>
