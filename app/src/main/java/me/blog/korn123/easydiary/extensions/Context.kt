@@ -7,8 +7,10 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.preference.PreferenceManager
+import android.text.Html
 import android.text.Spannable
 import android.text.SpannableString
+import android.text.Spanned
 import android.util.TypedValue
 import android.view.MenuItem
 import android.view.ViewGroup
@@ -266,4 +268,11 @@ fun Context.jsonFileToHashMap(filename: String): HashMap<String, Any> {
     val map: HashMap<String, Any> = GsonBuilder().create().fromJson(reader, type)
     reader.close()
     return map
+}
+
+fun Context.fromHtml(target: String): Spanned {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+        return Html.fromHtml(target)
+    }
+    return Html.fromHtml(target, Html.FROM_HTML_MODE_LEGACY);
 }

@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
+import android.text.Html
 import android.view.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentPagerAdapter
@@ -178,7 +179,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
         when (inEncrypt) {
             true -> {
                 popupView.description.text = getString(R.string.diary_encryption_title)
-                popupView.guideMessage.text = getString(R.string.diary_encryption_guide)
+                popupView.guideMessage.text = fromHtml(getString(R.string.diary_encryption_guide))
             }
             false -> {
                 popupView.description.text =  getString(R.string.diary_decryption_title)

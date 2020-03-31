@@ -10,7 +10,7 @@
     android:layout_height="match_parent">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:padding="10dp"
-        android:layout_weight="4"
+        android:layout_weight="5"
         android:layout_width="match_parent"
         android:layout_height="0dp">
         <ImageView
@@ -79,7 +79,7 @@
         android:theme="@style/AppTheme.AppBarOverlay"
         android:orientation="vertical"
         android:padding="20dp"
-        android:layout_weight="6"
+        android:layout_weight="5"
         android:layout_width="match_parent"
         android:layout_height="0dp">
         <LinearLayout
