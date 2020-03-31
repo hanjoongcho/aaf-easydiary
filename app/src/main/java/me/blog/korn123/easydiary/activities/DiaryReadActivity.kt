@@ -179,7 +179,8 @@ class DiaryReadActivity : EasyDiaryActivity() {
         when (inEncrypt) {
             true -> {
                 popupView.description.text = getString(R.string.diary_encryption_title)
-                popupView.guideMessage.text = fromHtml(getString(R.string.diary_encryption_guide))
+                popupView.guideMessage.text = getString(R.string.diary_encryption_guide)
+                EasyDiaryUtils.warningString(popupView.guideMessage)
             }
             false -> {
                 popupView.description.text =  getString(R.string.diary_decryption_title)

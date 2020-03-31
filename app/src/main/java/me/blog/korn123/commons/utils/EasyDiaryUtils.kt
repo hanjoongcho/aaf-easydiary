@@ -15,6 +15,7 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.BackgroundColorSpan
 import android.text.style.StyleSpan
+import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.*
@@ -135,6 +136,13 @@ object EasyDiaryUtils {
                 tv.text = spannableString    
             }
         }
+    }
+
+    fun warningString(textView: TextView) {
+        val spannableString = SpannableString(textView.text)
+        spannableString.setSpan(UnderlineSpan(), 0, textView.text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString.setSpan(StyleSpan(Typeface.ITALIC), 0, textView.text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        textView.text = spannableString
     }
 
     fun highlightStringIgnoreCase(textView: TextView?, input: String?) {
