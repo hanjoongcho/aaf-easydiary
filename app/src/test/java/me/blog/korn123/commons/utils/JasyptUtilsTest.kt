@@ -15,4 +15,20 @@ class JasyptUtilsTest {
         println(JasyptUtils.decrypt(cipherText, keyString))
         assertEquals(plainText, JasyptUtils.decrypt(cipherText, keyString))
     }
+
+    @Test
+    fun test_02() {
+        val plainText = ""
+        val keyString = "test-password-string"
+        val cipherText = JasyptUtils.encrypt(plainText, keyString)
+        println(cipherText)
+        assertEquals("", plainText)
+    }
+
+    @Test
+    fun test_03() {
+        val cipherText = ""
+        val keyString = "test-password-string"
+        assertEquals("", JasyptUtils.encrypt(cipherText, keyString))
+    }
 }

@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.layout_edit_contents.*
 import kotlinx.android.synthetic.main.layout_edit_photo_container.*
 import kotlinx.android.synthetic.main.layout_edit_toolbar_sub.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.commons.utils.JasyptUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
@@ -40,12 +41,29 @@ class DiaryUpdateActivity : EditActivity() {
                 diaryContents.requestFocus()
                 makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
             } else {
-                val diaryDto = DiaryDto(
-                        mSequence,
-                        mCurrentTimeMillis,
-                        diaryTitle.text.toString(),
-                        diaryContents.text.toString()
-                )
+
+                val encryptionPass = intent.getStringExtra(DIARY_ENCRYPT_PASSWORD)
+                val diaryDto = when (encryptionPass == null) {
+                    true -> {
+                        DiaryDto(
+                                mSequence,
+                                mCurrentTimeMillis,
+                                diaryTitle.text.toString(),
+                                diaryContents.text.toString()
+                        )
+                    }
+                    false -> {
+                        DiaryDto(
+                                mSequence,
+                                mCurrentTimeMillis,
+                                JasyptUtils.encrypt(diaryTitle.text.toString(), encryptionPass),
+                                JasyptUtils.encrypt(diaryContents.text.toString(), encryptionPass),
+                                true,
+                                JasyptUtils.sha256(encryptionPass)
+                        )
+                    }
+                }
+
                 diaryDto.weather = mSelectedItemPosition
                 diaryDto.isAllDay = allDay.isChecked
                 applyRemoveIndex()
@@ -138,9 +156,20 @@ class DiaryUpdateActivity : EditActivity() {
             toggleTimePickerTool()
         }
 
-        diaryTitle.setText(diaryDto.title)
-        //        getSupportActionBar().setSubtitle(DateUtils.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
-        diaryContents.setText(diaryDto.contents)
+        val encryptionPass = intent.getStringExtra(DIARY_ENCRYPT_PASSWORD)
+        when (encryptionPass == null) {
+            true -> {
+                diaryTitle.setText(diaryDto.title)
+                //        getSupportActionBar().setSubtitle(DateUtils.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
+                diaryContents.setText(diaryDto.contents)
+            }
+            false -> {
+                diaryTitle.setText(JasyptUtils.decrypt(diaryDto.title ?: "", encryptionPass))
+                //        getSupportActionBar().setSubtitle(DateUtils.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
+                diaryContents.setText(JasyptUtils.decrypt(diaryDto.contents ?: "", encryptionPass))
+            }
+        }
+
         mCurrentTimeMillis = diaryDto.currentTimeMillis
         if (config.holdPositionEnterEditScreen) {
             Handler().post {

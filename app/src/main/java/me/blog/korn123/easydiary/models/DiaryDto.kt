@@ -47,6 +47,11 @@ open class DiaryDto : RealmObject {
 
     constructor()
 
+    constructor(sequence: Int, currentTimeMillis: Long, title: String, contents: String, isEncrypt: Boolean, encryptKeyHash: String) : this(sequence, currentTimeMillis, title, contents) {
+        this.isEncrypt = isEncrypt
+        this.encryptKeyHash = encryptKeyHash
+    }
+
     constructor(sequence: Int, currentTimeMillis: Long, title: String, contents: String) {
         this.sequence = sequence
         this.currentTimeMillis = currentTimeMillis

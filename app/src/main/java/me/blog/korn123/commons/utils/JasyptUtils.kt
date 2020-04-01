@@ -6,12 +6,14 @@ import java.security.MessageDigest
 class JasyptUtils {
     companion object {
         fun encrypt(plainText: String, keyString: String): String {
+            if (plainText.isEmpty()) return ""
             val basicTextEncryptor = BasicTextEncryptor()
             basicTextEncryptor.setPasswordCharArray(keyString.toCharArray())
             return basicTextEncryptor.encrypt(plainText)
         }
 
         fun decrypt(cipherText: String, keyString: String): String {
+            if (cipherText.isEmpty()) return ""
             val basicTextEncryptor = BasicTextEncryptor()
             basicTextEncryptor.setPasswordCharArray(keyString.toCharArray())
             return basicTextEncryptor.decrypt(cipherText)

@@ -57,6 +57,12 @@ class DiaryReadActivity : EasyDiaryActivity() {
     private var mShowcaseIndex = 1
     var mIsEncryptData: Boolean = false
 
+    companion object {
+        const val ENCRYPTION = "encryption"
+        const val DECRYPTION = "decryption"
+        const val EDITING = "editing"
+    }
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_diary_read)
@@ -116,11 +122,13 @@ class DiaryReadActivity : EasyDiaryActivity() {
                     showAlertDialog(getString(R.string.delete_confirm), positiveListener, negativeListener)
                 }
                 R.id.edit -> {
-                    val updateDiaryIntent = Intent(this@DiaryReadActivity, DiaryUpdateActivity::class.java).apply {
-                        putExtra(DIARY_SEQUENCE, fragment.getSequence())
-                        putExtra(DIARY_CONTENTS_SCROLL_Y, (fragment.diaryContents.parent.parent as ScrollView).scrollY)
+                    if (fragment.isEncryptContents()) {
+                        showEncryptPagePopup(fragment, EDITING) { inputPass ->
+                            startEditing(fragment, inputPass)
+                        }
+                    } else {
+                        startEditing(fragment)
                     }
-                    TransitionHelper.startActivityWithTransition(this@DiaryReadActivity, updateDiaryIntent)
                 }
                 R.id.speechOutButton -> textToSpeech(fragment.getDiaryContents())
                 R.id.postCard -> {
@@ -130,12 +138,10 @@ class DiaryReadActivity : EasyDiaryActivity() {
                     TransitionHelper.startActivityWithTransition(this@DiaryReadActivity, postCardIntent)
                 }
                 R.id.encryptData -> {
-                    showEncryptPagePopup(fragment, true)
-//                    fragment.encryptData()
+                    showEncryptPagePopup(fragment, ENCRYPTION)
                 }
                 R.id.decryptData -> {
-                    showEncryptPagePopup(fragment, false)
-//                    fragment.decryptData()
+                    showEncryptPagePopup(fragment, DECRYPTION)
                 }
             }
         }
@@ -151,7 +157,19 @@ class DiaryReadActivity : EasyDiaryActivity() {
         return true
     }
 
-    private fun showEncryptPagePopup(fragment: PlaceholderFragment, inEncrypt: Boolean) {
+    private fun startEditing(fragment: PlaceholderFragment, inputPass: String? = null) {
+        val updateDiaryIntent = Intent(this@DiaryReadActivity, DiaryUpdateActivity::class.java).apply {
+            putExtra(DIARY_SEQUENCE, fragment.getSequence())
+            putExtra(DIARY_CONTENTS_SCROLL_Y, (fragment.diaryContents.parent.parent as ScrollView).scrollY)
+            inputPass?.let {
+                putExtra(DIARY_ENCRYPT_PASSWORD, it)
+            }
+
+        }
+        TransitionHelper.startActivityWithTransition(this@DiaryReadActivity, updateDiaryIntent)
+    }
+
+    private fun showEncryptPagePopup(fragment: PlaceholderFragment, workMode: String, callback: ((inputPass: String) -> Unit)? = null) {
         var inputPass = ""
         var confirmPass = ""
         holdCurrentOrientation()
@@ -176,15 +194,19 @@ class DiaryReadActivity : EasyDiaryActivity() {
             popupView.pass6.text = ""
         }
 
-        when (inEncrypt) {
-            true -> {
+        when (workMode) {
+            ENCRYPTION -> {
                 popupView.description.text = getString(R.string.diary_encryption_title)
                 popupView.guideMessage.text = getString(R.string.diary_encryption_guide)
                 EasyDiaryUtils.warningString(popupView.guideMessage)
             }
-            false -> {
+            DECRYPTION -> {
                 popupView.description.text =  getString(R.string.diary_decryption_title)
                 popupView.guideMessage.text = getString(R.string.diary_decryption_guide)
+            }
+            EDITING -> {
+                popupView.description.text =  getString(R.string.diary_decryption_title)
+                popupView.guideMessage.text = getString(R.string.diary_decryption_guide_before_editing)
             }
         }
 
@@ -214,28 +236,45 @@ class DiaryReadActivity : EasyDiaryActivity() {
             if (inputPass.length > 5) popupView.pass6.text = "*"
 
             if (inputPass.length == 6) {
-                if (confirmPass.length == 6) {
-                    when (confirmPass == inputPass) {
-                        true -> {
-                            fragment.encryptData(inputPass)
-                            popupWindow.dismiss()
+
+                when {
+                    confirmPass.length == 6 -> {
+                        when (confirmPass == inputPass) {
+                            true -> {
+                                fragment.encryptData(inputPass)
+                                popupWindow.dismiss()
+                            }
+                            false -> popupView.guideMessage.text = getString(R.string.diary_pin_number_confirm_error)
                         }
-                        false -> popupView.guideMessage.text = getString(R.string.diary_pin_number_confirm_error)
+                        inputPass = ""
+                        confirmPass = ""
                     }
-                    inputPass = ""
-                    confirmPass = ""
-                } else if (!inEncrypt) {
-                    when (fragment.decryptData(inputPass)) {
-                        true -> popupWindow.dismiss()
-                        false -> {
-                            inputPass = ""
-                            popupView.guideMessage.text = getString(R.string.diary_pin_number_verification_error)
+                    workMode == DECRYPTION -> {
+                        when (fragment.decryptData(inputPass)) {
+                            true -> popupWindow.dismiss()
+                            false -> {
+                                inputPass = ""
+                                popupView.guideMessage.text = getString(R.string.diary_pin_number_verification_error)
+                            }
                         }
                     }
-                } else {
-                    confirmPass = inputPass
-                    inputPass = ""
-                    popupView.guideMessage.text = getString(R.string.diary_pin_number_confirm_guide)
+                    workMode == EDITING -> {
+                        when (fragment.getPasswordHash() == JasyptUtils.sha256(inputPass)) {
+                            true -> {
+                                callback?.invoke(inputPass)
+                                popupWindow.dismiss()
+                            }
+                            else -> {
+                                inputPass = ""
+                                popupView.guideMessage.text = getString(R.string.diary_pin_number_verification_error)
+                            }
+                        }
+                    }
+                    else -> {
+                        confirmPass = inputPass
+                        inputPass = ""
+                        popupView.guideMessage.text = getString(R.string.diary_pin_number_confirm_guide)
+                    }
                 }
                clearPassView()
             }
@@ -442,7 +481,11 @@ class DiaryReadActivity : EasyDiaryActivity() {
         fun getSequence() = arguments?.getInt(DIARY_SEQUENCE) ?: -1
 
         fun getDiaryContents(): String = diaryContents.text.toString() 
-        
+
+        fun isEncryptContents() = EasyDiaryDbHelper.readDiaryBy(getSequence()).isEncrypt
+
+        fun getPasswordHash() = EasyDiaryDbHelper.readDiaryBy(getSequence()).encryptKeyHash
+
         private fun initContents() {
             val diaryDto = EasyDiaryDbHelper.readDiaryBy(getSequence())
             if (StringUtils.isEmpty(diaryDto.title)) {
