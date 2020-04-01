@@ -170,6 +170,8 @@ class DiaryReadActivity : EasyDiaryActivity() {
     }
 
     private fun showEncryptPagePopup(fragment: PlaceholderFragment, workMode: String, callback: ((inputPass: String) -> Unit)? = null) {
+        EasyDiaryUtils.changeDrawableIconColor(this, config.textColor, R.drawable.delete)
+
         var inputPass = ""
         var confirmPass = ""
         holdCurrentOrientation()
@@ -198,7 +200,6 @@ class DiaryReadActivity : EasyDiaryActivity() {
             ENCRYPTION -> {
                 popupView.description.text = getString(R.string.diary_encryption_title)
                 popupView.guideMessage.text = getString(R.string.diary_encryption_guide)
-                EasyDiaryUtils.warningString(popupView.guideMessage)
             }
             DECRYPTION -> {
                 popupView.description.text =  getString(R.string.diary_decryption_title)
@@ -209,6 +210,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 popupView.guideMessage.text = getString(R.string.diary_decryption_guide_before_editing)
             }
         }
+        EasyDiaryUtils.warningString(popupView.guideMessage)
 
         val onclickListener = View.OnClickListener {
             clearPassView()
