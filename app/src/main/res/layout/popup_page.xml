@@ -82,13 +82,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <androidx.appcompat.widget.AppCompatRadioButton
-                android:text="열람을 위해 한번만 복호화"
+                android:text="@string/diary_decryption_mode_once"
                 android:id="@+id/decMode1"
                 android:checked="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <androidx.appcompat.widget.AppCompatRadioButton
-                android:text="복호화 후 핀번호 설정 제거"
+                android:text="@string/diary_decryption_mode_permanent"
                 android:id="@+id/decMode2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />

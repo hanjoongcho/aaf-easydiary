@@ -589,4 +589,6 @@
 	<string name="diary_pin_number_confirm_error">The first entered PIN number does not match the confirmation PIN number.\nPlease enter the PIN number again.</string>
 	<string name="diary_pin_number_verification_error">The PIN numbers do not match.\nPlease enter the PIN number you set when encrypting the diary.</string>
     <string name="diary_decryption_guide_before_editing">Enter the PIN number you set when encrypting the diary.\nWhen the diary is edited, it is encrypted again with the existing password.</string>
+    <string name="diary_decryption_mode_once">Decrypt once for viewing</string>
+    <string name="diary_decryption_mode_permanent">Remove the pin number setting after decryption</string>
 </resources>
