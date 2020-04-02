@@ -9,32 +9,36 @@ import android.os.Bundle
 import android.os.Handler
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
-import android.text.Html
 import android.view.*
+import android.widget.LinearLayout
+import android.widget.PopupWindow
+import android.widget.RelativeLayout
+import android.widget.ScrollView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.FragmentPagerAdapter
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.simplemobiletools.commons.helpers.BaseConfig
+import io.github.aafactory.commons.extensions.baseConfig
 import io.github.aafactory.commons.extensions.updateAppViews
 import io.github.aafactory.commons.extensions.updateTextColors
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_diary_read.*
 import kotlinx.android.synthetic.main.fragment_diary_read.*
 import kotlinx.android.synthetic.main.layout_bottom_toolbar.*
-import me.blog.korn123.commons.utils.*
+import kotlinx.android.synthetic.main.popup_page.view.*
+import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createAttachedPhotoView
+import me.blog.korn123.commons.utils.FlavorUtils
+import me.blog.korn123.commons.utils.FontUtils
+import me.blog.korn123.commons.utils.JasyptUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
 import java.util.*
-import android.view.LayoutInflater
-import android.widget.*
-import androidx.core.graphics.ColorUtils
-import io.github.aafactory.commons.extensions.baseConfig
-import kotlinx.android.synthetic.main.popup_page.view.*
-import me.blog.korn123.easydiary.extensions.*
 
 
 /**
@@ -176,12 +180,17 @@ class DiaryReadActivity : EasyDiaryActivity() {
         var confirmPass = ""
         holdCurrentOrientation()
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val popupView = inflater.inflate(R.layout.popup_page, null) as ViewGroup
-        popupView.setBackgroundColor(ColorUtils.setAlphaComponent(baseConfig.backgroundColor, 250))
+        val popupView = (inflater.inflate(R.layout.popup_page, null) as ViewGroup).apply {
+            setBackgroundColor(ColorUtils.setAlphaComponent(baseConfig.backgroundColor, 250))
+            decMode1.setTextColor(config.textColor)
+            decMode2.setTextColor(config.textColor)
+        }
+
         val width = LinearLayout.LayoutParams.MATCH_PARENT
         val height = LinearLayout.LayoutParams.MATCH_PARENT
-        val popupWindow = PopupWindow(popupView, width, height, true)
-        popupWindow.showAtLocation(findViewById<ViewGroup>(android.R.id.content).rootView, Gravity.CENTER, 0, 0)
+        val popupWindow = PopupWindow(popupView, width, height, true).apply {
+            showAtLocation(findViewById<ViewGroup>(android.R.id.content).rootView, Gravity.CENTER, 0, 0)
+        }
         popupView.closePopup.setOnClickListener {
             popupWindow.dismiss()
             clearHoldOrientation()
@@ -200,14 +209,17 @@ class DiaryReadActivity : EasyDiaryActivity() {
             ENCRYPTION -> {
                 popupView.description.text = getString(R.string.diary_encryption_title)
                 popupView.guideMessage.text = getString(R.string.diary_encryption_guide)
+                popupView.decMode.visibility = View.GONE
             }
             DECRYPTION -> {
                 popupView.description.text =  getString(R.string.diary_decryption_title)
                 popupView.guideMessage.text = getString(R.string.diary_decryption_guide)
+                popupView.decMode.visibility = View.VISIBLE
             }
             EDITING -> {
                 popupView.description.text =  getString(R.string.diary_decryption_title)
                 popupView.guideMessage.text = getString(R.string.diary_decryption_guide_before_editing)
+                popupView.decMode.visibility = View.GONE
             }
         }
         EasyDiaryUtils.warningString(popupView.guideMessage)

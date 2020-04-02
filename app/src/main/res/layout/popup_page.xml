@@ -73,6 +73,26 @@
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+
+        <RadioGroup
+            android:id="@+id/decMode"
+            app:layout_constraintTop_toBottomOf="@id/guideMessage"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatRadioButton
+                android:text="열람을 위해 한번만 복호화"
+                android:id="@+id/decMode1"
+                android:checked="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <androidx.appcompat.widget.AppCompatRadioButton
+                android:text="복호화 후 핀번호 설정 제거"
+                android:id="@+id/decMode2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RadioGroup>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
