@@ -45,6 +45,6 @@ class CustomizationActivity : BaseCustomizationActivity() {
     }
     
     override fun getMainViewGroup(): ViewGroup? = findViewById<ViewGroup>(R.id.main_holder)
-    override fun getBackgroundAlpha(): Int = APP_BACKGROUND_ALPHA
+//    override fun getBackgroundAlpha(): Int = APP_BACKGROUND_ALPHA
 }
 

@@ -48,7 +48,7 @@ open class EasyDiaryActivity : BaseSimpleActivity() {
     }
 
     override fun getMainViewGroup(): ViewGroup? = mRootView
-    override fun getBackgroundAlpha(): Int = APP_BACKGROUND_ALPHA
+//    override fun getBackgroundAlpha(): Int = APP_BACKGROUND_ALPHA
 
     fun checkWhatsNewDialog(applyFilter: Boolean = true) {
         arrayListOf<Release>().apply {
