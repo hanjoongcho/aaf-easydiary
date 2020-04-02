@@ -264,8 +264,15 @@ class DiaryReadActivity : EasyDiaryActivity() {
                         confirmPass = ""
                     }
                     workMode == DECRYPTION -> {
-                        when (fragment.decryptData(inputPass)) {
-                            true -> popupWindow.dismiss()
+                        when (fragment.getPasswordHash() == JasyptUtils.sha256(inputPass)) {
+                            true -> {
+                                if (popupView.decMode1.isChecked) {
+                                    fragment.decryptDataOnce(inputPass)
+                                } else {
+                                    fragment.decryptData(inputPass)
+                                }
+                                popupWindow.dismiss()
+                            }
                             false -> {
                                 inputPass = ""
                                 popupView.guideMessage.text = getString(R.string.diary_pin_number_verification_error)
@@ -596,6 +603,11 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 realmInstance.close()
                 initContents()
             }
+        }
+
+        fun decryptDataOnce(inputPass: String) {
+            diaryTitle.text = JasyptUtils.decrypt(diaryTitle.text.toString(), inputPass)
+            diaryContents.text = JasyptUtils.decrypt(diaryContents.text.toString(), inputPass)
         }
 
         fun decryptData(inputPass: String): Boolean {
