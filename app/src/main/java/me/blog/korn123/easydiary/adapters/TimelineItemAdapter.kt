@@ -71,9 +71,13 @@ class TimelineItemAdapter(
             }
 
             FlavorUtils.initWeatherView(context, diarySymbol, diaryDto.weather, false)
+            val mergedContents = when (StringUtils.isNotEmpty(diaryDto.title)) {
+                true -> "${diaryDto.title}\n${diaryDto.contents}"
+                false -> "${diaryDto.contents}"
+            }
             textView1.text = when (diaryDto.isAllDay) {
-                true -> applyBoldToDate(context.resources.getString(R.string.all_day), getSummary(diaryDto) ?: "")
-                false -> applyBoldToDate(DateUtils.timeMillisToDateTime(diaryDto.currentTimeMillis, DateUtils.TIME_PATTERN_WITH_SECONDS), getSummary(diaryDto)!!)
+                true -> applyBoldToDate(context.resources.getString(R.string.all_day), mergedContents)
+                false -> applyBoldToDate(DateUtils.timeMillisToDateTime(diaryDto.currentTimeMillis, DateUtils.TIME_PATTERN_WITH_SECONDS), mergedContents)
             }
             item_holder.let {
                 context.updateTextColors(it, 0, 0)
@@ -108,22 +112,6 @@ class TimelineItemAdapter(
         val spannableString = SpannableString("$dateString\n$summary")
         if (context.config.boldStyleEnable) spannableString.setSpan(StyleSpan(Typeface.BOLD), 0, dateString.length, 0)
         return spannableString
-    }
-
-    private fun getSummary(diaryDto: DiaryDto): String? = when (context.config.enableContentsSummary) {
-        true -> {
-            when (StringUtils.isNotEmpty(diaryDto.title)) {
-                true -> diaryDto.title
-                false -> diaryDto.contents
-//                false -> EasyDiaryUtils.summaryDiaryLabel(diaryDto)
-            }
-        }
-        false -> {
-            when (StringUtils.isNotEmpty(diaryDto.title)) {
-                true -> "${diaryDto.title}\n${diaryDto.contents}"
-                false -> "${diaryDto.contents}"
-            }
-        }
     }
 
     private fun setFontsTypeface(holder: ViewHolder) {
