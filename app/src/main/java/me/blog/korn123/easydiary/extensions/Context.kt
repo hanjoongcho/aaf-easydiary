@@ -233,24 +233,27 @@ fun Context.createTemporaryPhotoFile(uri: Uri? = null, fromUri: Boolean = false)
 fun Context.preferenceToJsonString(): String {
     var jsonString: String = ""
     val preferenceMap: HashMap<String, Any> = hashMapOf()
-    preferenceMap[APP_LOCK_ENABLE] = config.aafPinLockEnable
-    preferenceMap[APP_LOCK_SAVED_PASSWORD] = config.aafPinLockSavedPassword
-    preferenceMap[SETTING_CALENDAR_SORTING] = config.calendarSorting
-    preferenceMap[SETTING_CALENDAR_START_DAY] = config.calendarStartDay
-    preferenceMap[DIARY_SEARCH_QUERY_CASE_SENSITIVE] = config.diarySearchQueryCaseSensitive
 
-    // theme
+    // Settings Basic
     preferenceMap[PRIMARY_COLOR] = config.primaryColor
     preferenceMap[BACKGROUND_COLOR] = config.backgroundColor
-    preferenceMap[TEXT_COLOR] = config.textColor
     preferenceMap[SETTING_CARD_VIEW_BACKGROUND_COLOR] = config.screenBackgroundColor
+    preferenceMap[TEXT_COLOR] = config.textColor
+    preferenceMap[DIARY_SEARCH_QUERY_CASE_SENSITIVE] = config.diarySearchQueryCaseSensitive
+    preferenceMap[SETTING_CALENDAR_START_DAY] = config.calendarStartDay
+    preferenceMap[SETTING_CALENDAR_SORTING] = config.calendarSorting
+    preferenceMap[SETTING_THUMBNAIL_SIZE] = config.settingThumbnailSize
 
-    // font
+    // Settings font
     preferenceMap[SETTING_FONT_NAME] = config.settingFontName
     preferenceMap[LINE_SPACING_SCALE_FACTOR] = config.lineSpacingScaleFactor
     preferenceMap[SETTING_FONT_SIZE] = config.settingFontSize
     preferenceMap[SETTING_CALENDAR_FONT_SCALE] = config.settingCalendarFontScale
     preferenceMap[SETTING_BOLD_STYLE] = config.boldStyleEnable
+
+    // Settings Lock
+    preferenceMap[APP_LOCK_ENABLE] = config.aafPinLockEnable
+    preferenceMap[APP_LOCK_SAVED_PASSWORD] = config.aafPinLockSavedPassword
 
     val gson = GsonBuilder().setPrettyPrinting().create()
     jsonString = gson.toJson(preferenceMap)

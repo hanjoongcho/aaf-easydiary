@@ -30,18 +30,22 @@ class FullRecoveryWorker(private val context: Context, workerParams: WorkerParam
             if (File(jsonFilename).exists()) {
                 val map = context.jsonFileToHashMap(jsonFilename)
                 context.config.run {
-                    // theme
+                    // Settings Basic
                     primaryColor = (map[PRIMARY_COLOR] as Double).toInt()
                     backgroundColor = (map[BACKGROUND_COLOR] as Double).toInt()
-                    textColor = (map[TEXT_COLOR] as Double).toInt()
                     screenBackgroundColor = (map[SETTING_CARD_VIEW_BACKGROUND_COLOR] as Double).toInt()
+                    textColor = (map[TEXT_COLOR] as Double).toInt()
+                    calendarStartDay = (map[SETTING_CALENDAR_START_DAY] as Double).toInt()
+                    calendarSorting = (map[SETTING_CALENDAR_SORTING] as Double).toInt()
 
-                    // font
+                    // Settings font
                     settingFontName = map[SETTING_FONT_NAME] as String
                     lineSpacingScaleFactor = (map[LINE_SPACING_SCALE_FACTOR] as Double).toFloat()
                     settingFontSize = (map[SETTING_FONT_SIZE] as Double).toFloat()
                     settingCalendarFontScale = (map[SETTING_CALENDAR_FONT_SCALE] as Double).toFloat()
                     boldStyleEnable = map[SETTING_BOLD_STYLE] as Boolean
+
+                    // Settings Lock
 
                     updatePreference = true
                 }
