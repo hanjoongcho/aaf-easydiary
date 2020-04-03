@@ -588,7 +588,7 @@
     <string name="diary_pin_number_confirm_guide">日記の暗号化に使用する暗証番号をもう一度入力してください。</string>
     <string name="diary_pin_number_confirm_error">最初に入力したPIN番号が確認PIN番号と一致しません。\nPIN番号をもう一度入力してください。</string>
     <string name="diary_pin_number_verification_error">PIN番号が一致しません。\n日記を暗号化するときに設定したPIN番号を入力してください。</string>
-    <string name="diary_decryption_guide_before_editing">Enter the PIN number you set when encrypting the diary.\nWhen the diary is edited, it is encrypted again with the existing password.</string>
-    <string name="diary_decryption_mode_once">Decrypt once for viewing</string>
-    <string name="diary_decryption_mode_permanent">Remove the pin number setting after decryption</string>
+    <string name="diary_decryption_guide_before_editing">日記を暗号化するときに設定したPIN番号を入力します。\n日記を編集すると、既存のパスワードで再度暗号化されます。</string>
+    <string name="diary_decryption_mode_once">閲覧のために一度だけ復号化する</string>
+    <string name="diary_decryption_mode_permanent">復号化後にピン番号設定を削除します</string>
 </resources>

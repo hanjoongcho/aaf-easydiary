@@ -588,7 +588,7 @@
     <string name="diary_pin_number_confirm_guide">다이어리 암호화에 사용될 핀번호를 한번 더 입력하세요</string>
     <string name="diary_pin_number_confirm_error">최초 입력한 핀번호와 확인용 핀번호가 일치하지 않습니다.\n핀번호를 다시 입력하세요.</string>
     <string name="diary_pin_number_verification_error">핀번호가 일치하지 않습니다.\n다이어리 암호화시 설정한 핀번호를 입력하세요.</string>
-    <string name="diary_decryption_guide_before_editing">Enter the PIN number you set when encrypting the diary.\nWhen the diary is edited, it is encrypted again with the existing password.</string>
+    <string name="diary_decryption_guide_before_editing">다이어리 암호화시 설정한 핀번호를 입력하세요.\n다이어리 편집이 끝나면 기존에 설정하신 핀번호로 다시 암호화 됩니다.</string>
     <string name="diary_decryption_mode_once">열람을 위해 한 번만 복호화 함</string>
     <string name="diary_decryption_mode_permanent">복호화 진행 후 설정된 핀번호를 제거함</string>
 </resources>
