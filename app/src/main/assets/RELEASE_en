@@ -6,7 +6,7 @@
 
 # Changes in 1.4.126 (date: 2020.04.05)
   * Added diary encryption feature using pin number
-  * The requestLegacyExternalStorage option is temporarily applied to solve the Scoped Storage policy of the multi-picker module
+  * Temporarily apply the requestLegacyExternalStorage option to respond to multi-picker scoped storage issues in Android 10
 
 # Changes in 1.4.125 (date: 2020.03.23)
   * Added cursor position setting option when entering diary edit screen

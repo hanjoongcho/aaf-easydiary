@@ -391,7 +391,7 @@
     <string name="release_192">
         v1.4.126 / 2020.04.05\n
         핀번호를 이용한 개별 다이어리 콘텐츠 암호화 기능 추가\n
-        멀티피커 모듈의 Scoped Storage 정책 해결을 위해 requestLegacyExternalStorage 옵션을 임시로 적용함
+        Android 10에서 발생하는 멀티피커 Scoped Storage 이슈 대응을 위한 requestLegacyExternalStorage 옵션 임시적용
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->

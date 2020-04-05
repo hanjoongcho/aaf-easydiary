@@ -391,7 +391,7 @@
     <string name="release_192">
         v1.4.126 / 2020.04.05\n
         Added diary encryption feature using pin number\n
-        The requestLegacyExternalStorage option is temporarily applied to solve the Scoped Storage policy of the multi-picker module
+        Temporarily apply the requestLegacyExternalStorage option to respond to multi-picker scoped storage issues in Android 10
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
