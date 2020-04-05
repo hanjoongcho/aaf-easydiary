@@ -389,9 +389,9 @@
         Fixed an issue where the day of the week was cut off on the calendar screen
     </string>
     <string name="release_192">
-        v1.4.126 / 2020.03.xx\n
+        v1.4.126 / 2020.04.05\n
         Added diary encryption feature using pin number\n
-        [BETA] Improved full data backup and recovery
+        The requestLegacyExternalStorage option is temporarily applied to solve the Scoped Storage policy of the multi-picker module
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->

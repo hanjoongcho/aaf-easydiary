@@ -6,6 +6,7 @@ apply plugin: 'realm-android'
 
 ext.versions = [
     /* Temporarily apply 'requestLegacyExternalStorage' options respond to Android Q 'Scoped Storage' policy */
+    /* Scoped Storage issue of 'com.werb.pickphotoview: pickphotoview' library needs to be resolved */
     compileSdk: 29
 ]
 
@@ -28,7 +29,7 @@ android {
         minSdkVersion 16
         targetSdkVersion versions.compileSdk
         versionCode 192
-        versionName '1.4.126-beta'
+        versionName '1.4.126'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
