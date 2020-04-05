@@ -393,6 +393,10 @@
         핀번호를 이용한 개별 다이어리 콘텐츠 암호화 기능 추가\n
         Android 10에서 발생하는 멀티피커 Scoped Storage 이슈 대응을 위한 requestLegacyExternalStorage 옵션 임시적용
     </string>
+    <string name="release_193">
+        v1.4.127 / 2020.04.xx\n
+        ...\n
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->

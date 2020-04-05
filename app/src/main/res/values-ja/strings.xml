@@ -393,6 +393,10 @@
         ピン番号を使用して日記暗号化機能を追加\n
         Android10で発生するマルチピッカーScoped Storage問題に対応するためのrequestLegacyExternalStorageオプション一時的に適用
     </string>
+    <string name="release_193">
+        v1.4.127 / 2020.04.xx\n
+        ...\n
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->

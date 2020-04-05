@@ -393,6 +393,10 @@
         Added diary encryption feature using pin number\n
         Temporarily apply the requestLegacyExternalStorage option to respond to multi-picker scoped storage issues in Android 10
     </string>
+    <string name="release_193">
+        v1.4.127 / 2020.04.xx\n
+        ...\n
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
