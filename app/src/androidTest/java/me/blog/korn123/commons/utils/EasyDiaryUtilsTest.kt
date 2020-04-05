@@ -75,6 +75,12 @@ class EasyDiaryUtilsTest {
         val jsonString = InstrumentationRegistry.getTargetContext().preferenceToJsonString()
         Log.i(AAF_TEST, jsonString)
         val map = InstrumentationRegistry.getTargetContext().jsonStringToHashMap(jsonString)
-        assertEquals(map[SETTING_CARD_VIEW_BACKGROUND_COLOR], 50.0)
+        Log.i(AAF_TEST, map.toString())
+
+        val screenBackgroundColor: Int = (map[SETTING_CARD_VIEW_BACKGROUND_COLOR] as Double).toInt()
+        val settingThumbnailSize: Float = (map[SETTING_THUMBNAIL_SIZE] as Double).toFloat()
+
+        assertEquals(screenBackgroundColor, -13882581)
+        assertEquals(settingThumbnailSize, 50.0F)
     }
 }
