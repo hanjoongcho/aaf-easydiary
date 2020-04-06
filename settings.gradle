@@ -1,5 +1,5 @@
-include ':app'
+//include ':app'
 //include ':app', ':aafactory-commons'
 //project(':aafactory-commons').projectDir = new File(settingsDir, "../aafactory-commons/commons")
-//include ':app', ':pickphotoview'
-//project(':pickphotoview').projectDir = new File(settingsDir, "../PickPhotoSample/pickphotoview")
+include ':app', ':pickphotoview'
+project(':pickphotoview').projectDir = new File(settingsDir, "../PickPhotoSample/pickphotoview")
