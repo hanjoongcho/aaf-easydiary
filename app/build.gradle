@@ -138,8 +138,8 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.7'
 
     // AAFactory
-    implementation 'io.github.aafactory:commons:1.0.2'
-//    implementation project(":aafactory-commons")
+//    implementation 'io.github.aafactory:commons:1.0.2'
+    implementation project(":aafactory-commons")
 
     // etc.
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
@@ -151,7 +151,6 @@ dependencies {
     implementation 'com.xw.repo:bubbleseekbar:3.17'
     implementation 'com.github.bumptech.glide:glide:4.8.0'
 //    implementation 'com.werb.pickphotoview:pickphotoview:0.4.8'
-    implementation project(":pickphotoview")
     implementation 'com.github.ksoichiro:android-observablescrollview:1.5.2'
     implementation 'com.nineoldandroids:library:2.4.0'
     implementation 'jp.wasabeef:glide-transformations:4.0.0'

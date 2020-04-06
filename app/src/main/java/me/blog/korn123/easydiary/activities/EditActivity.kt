@@ -8,6 +8,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.speech.RecognizerIntent
@@ -313,13 +314,13 @@ abstract class EditActivity : EasyDiaryActivity() {
         }
     }
     
-    fun attachPhotos(selectPaths: ArrayList<String>) {
+    fun attachPhotos(selectPaths: ArrayList<String>, isUriString: Boolean = false) {
         setVisiblePhotoProgress(true)
         Thread(Runnable {
             selectPaths.map { item ->
                 val photoPath = EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
                 try {
-                    EasyDiaryUtils.downSamplingImage(this, File(item), File(photoPath))
+                    if (isUriString) EasyDiaryUtils.downSamplingImage(this, Uri.parse(item), File(photoPath)) else EasyDiaryUtils.downSamplingImage(this, File(item), File(photoPath))
                     mPhotoUris.add(PhotoUriDto(FILE_URI_PREFIX + photoPath))
                     val thumbnailSize = config.settingThumbnailSize
                     val bitmap = BitmapUtils.decodeFile(photoPath, CommonUtils.dpToPixel(applicationContext, thumbnailSize - 5), CommonUtils.dpToPixel(applicationContext, thumbnailSize - 5))
