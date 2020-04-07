@@ -239,10 +239,16 @@ fun Context.preferenceToJsonString(): String {
     preferenceMap[BACKGROUND_COLOR] = config.backgroundColor
     preferenceMap[SETTING_CARD_VIEW_BACKGROUND_COLOR] = config.screenBackgroundColor
     preferenceMap[TEXT_COLOR] = config.textColor
+    preferenceMap[SETTING_THUMBNAIL_SIZE] = config.settingThumbnailSize
+    preferenceMap[SETTING_CONTENTS_SUMMARY] = config.enableContentsSummary
+    preferenceMap[SETTING_SUMMARY_MAX_LINES] = config.summaryMaxLines
+    preferenceMap[ENABLE_CARD_VIEW_POLICY] = config.enableCardViewPolicy
+    preferenceMap[SETTING_MULTIPLE_PICKER] = config.multiPickerEnable
     preferenceMap[DIARY_SEARCH_QUERY_CASE_SENSITIVE] = config.diarySearchQueryCaseSensitive
     preferenceMap[SETTING_CALENDAR_START_DAY] = config.calendarStartDay
     preferenceMap[SETTING_CALENDAR_SORTING] = config.calendarSorting
-    preferenceMap[SETTING_THUMBNAIL_SIZE] = config.settingThumbnailSize
+    preferenceMap[SETTING_COUNT_CHARACTERS] = config.enableCountCharacters
+    preferenceMap[HOLD_POSITION_ENTER_EDIT_SCREEN] = config.holdPositionEnterEditScreen
 
     // Settings font
     preferenceMap[SETTING_FONT_NAME] = config.settingFontName

@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.workers
 
 import android.content.Context
 import android.net.Uri
+import android.text.BoringLayout
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
@@ -35,8 +36,16 @@ class FullRecoveryWorker(private val context: Context, workerParams: WorkerParam
                     backgroundColor = (map[BACKGROUND_COLOR] as Double).toInt()
                     screenBackgroundColor = (map[SETTING_CARD_VIEW_BACKGROUND_COLOR] as Double).toInt()
                     textColor = (map[TEXT_COLOR] as Double).toInt()
+                    settingThumbnailSize = (map[SETTING_THUMBNAIL_SIZE] as Double).toFloat()
+                    enableContentsSummary = map[SETTING_CONTENTS_SUMMARY] as Boolean
+                    summaryMaxLines =(map[SETTING_SUMMARY_MAX_LINES] as Double).toInt()
+                    enableCardViewPolicy = map[ENABLE_CARD_VIEW_POLICY] as Boolean
+                    multiPickerEnable = map[SETTING_MULTIPLE_PICKER] as Boolean
+                    diarySearchQueryCaseSensitive = map[DIARY_SEARCH_QUERY_CASE_SENSITIVE] as Boolean
                     calendarStartDay = (map[SETTING_CALENDAR_START_DAY] as Double).toInt()
                     calendarSorting = (map[SETTING_CALENDAR_SORTING] as Double).toInt()
+                    enableCountCharacters = map[SETTING_COUNT_CHARACTERS] as Boolean
+                    holdPositionEnterEditScreen = map[HOLD_POSITION_ENTER_EDIT_SCREEN] as Boolean
 
                     // Settings font
                     settingFontName = map[SETTING_FONT_NAME] as String
