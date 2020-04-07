@@ -101,7 +101,7 @@ class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
     }
 
     private fun initPreference() {
-        rateAppSettingSummary.text = String.format("Easy Diary v%s_%s", BuildConfig.VERSION_NAME, BuildConfig.FLAVOR)
+        rateAppSettingSummary.text = String.format("v%s_%s_%s (%d)", BuildConfig.VERSION_NAME, BuildConfig.FLAVOR, BuildConfig.BUILD_TYPE, BuildConfig.VERSION_CODE)
     }
 
     private fun setupInvite() {

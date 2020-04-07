@@ -139,6 +139,7 @@ dependencies {
 
     // AAFactory
     implementation 'io.github.aafactory:commons:1.0.4'
+//    implementation project(":aafactory-commons")
 
     // etc.
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
