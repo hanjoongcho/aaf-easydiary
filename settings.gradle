@@ -1,3 +1,4 @@
 include ':app'
 //include ':app', ':aafactory-commons'
 //project(':aafactory-commons').projectDir = new File(settingsDir, "../aafactory-commons/commons")
+

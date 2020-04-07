@@ -126,7 +126,7 @@ class DiaryUpdateActivity : EditActivity() {
             PickConfig.PICK_PHOTO_DATA -> {
                 intent?.let {
                     val selectPaths = it.getSerializableExtra(PickConfig.INTENT_IMG_LIST_SELECT) as ArrayList<String>
-                    attachPhotos(selectPaths)
+                    attachPhotos(selectPaths, true)
                 }
             }
             REQUEST_CODE_CAPTURE_CAMERA -> if (resultCode == Activity.RESULT_OK) {

@@ -37,9 +37,11 @@ import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import me.blog.korn123.easydiary.models.PhotoUriDto
 import org.apache.commons.io.FileUtils
+import org.apache.commons.io.IOUtils
 import org.apache.commons.lang3.StringUtils
 import java.io.File
 import java.io.FileNotFoundException
+import java.io.FileOutputStream
 import java.util.*
 
 /**
@@ -237,7 +239,19 @@ object EasyDiaryUtils {
         }
         return bitmap
     }
-    
+
+    fun downSamplingImage(context: Context, uri: Uri, destFile: File) {
+        val uriStream = context.contentResolver.openInputStream(uri)
+        val tempFile = File.createTempFile(UUID.randomUUID().toString(), "tmp")
+        val fos = FileOutputStream(tempFile)
+        IOUtils.copy(uriStream, fos)
+        val compressedFile = Compressor(context).setQuality(70).compressToFile(tempFile)
+        FileUtils.copyFile(compressedFile, destFile)
+        uriStream?.close()
+        fos.close()
+        tempFile.delete()
+    }
+
     fun downSamplingImage(context: Context, srcFile: File, destFile: File) {
         val compressedFile = Compressor(context).setQuality(70).compressToFile(srcFile)
         FileUtils.copyFile(compressedFile, destFile)

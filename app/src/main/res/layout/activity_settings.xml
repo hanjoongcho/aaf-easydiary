@@ -46,7 +46,7 @@
                 app:dotsSpacing="4dp"
                 app:dotsWidthFactor="2.5"
                 app:progressMode="false"
-                app:selectedDotColor="?attr/colorPrimaryDark"
+                app:selectedDotColor="?attr/colorPrimary"
                 />
         </LinearLayout>
     </LinearLayout>
