@@ -27,7 +27,7 @@ import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_diary_read.*
 import kotlinx.android.synthetic.main.fragment_diary_read.*
 import kotlinx.android.synthetic.main.layout_bottom_toolbar.*
-import kotlinx.android.synthetic.main.popup_page.view.*
+import kotlinx.android.synthetic.main.popup_encription.view.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createAttachedPhotoView
 import me.blog.korn123.commons.utils.FlavorUtils
@@ -180,7 +180,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
         var confirmPass = ""
         holdCurrentOrientation()
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val popupView = (inflater.inflate(R.layout.popup_page, null) as ViewGroup).apply {
+        val popupView = (inflater.inflate(R.layout.popup_encription, null) as ViewGroup).apply {
             setBackgroundColor(ColorUtils.setAlphaComponent(baseConfig.backgroundColor, 250))
             decMode1.setTextColor(config.textColor)
             decMode2.setTextColor(config.textColor)

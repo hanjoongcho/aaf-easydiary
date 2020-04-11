@@ -1,25 +1,33 @@
 package me.blog.korn123.easydiary.fragments
 
+import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ListView
+import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import io.github.aafactory.commons.extensions.baseConfig
+import io.github.aafactory.commons.extensions.updateAppViews
+import io.github.aafactory.commons.extensions.updateTextColors
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.layout_settings_backup_local.*
+import kotlinx.android.synthetic.main.popup_location_selector.view.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
+import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.RealmFileItemAdapter
 import me.blog.korn123.easydiary.adapters.SimpleCheckbox
@@ -401,6 +409,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
         return wb
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     private fun writeFileWithSAF(fileName: String, mimeType: String, requestCode: Int) {
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
             // Filter to only show results that can be "opened", such as
@@ -461,7 +470,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
             }
             R.id.exportRealmFile -> {
                 when (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    true -> exportRealmFile()
+                    true -> showLocationSelectionPopup()
                     false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_REALM)
                 }
             }
@@ -491,6 +500,34 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
     }
 
     private fun initPreference() {}
+
+    private fun showLocationSelectionPopup() {
+        var dialog: AlertDialog? = null
+        val builder = AlertDialog.Builder(mContext)
+        val inflater = mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val popupView = (inflater.inflate(R.layout.popup_location_selector, null) as ViewGroup).apply {
+            setBackgroundColor(mContext.baseConfig.backgroundColor)
+            locMode1.setTextColor(mContext.config.textColor)
+            locMode2.setTextColor(mContext.config.textColor)
+            description.text = "Choose a storage option."
+            closePopup.setOnClickListener { dialog?.dismiss() }
+            locMode.setOnCheckedChangeListener { _, checkedId ->
+                when (checkedId) {
+                    R.id.locMode1 -> { exportRealmFile() }
+                    R.id.locMode2 -> {}
+                }
+                dialog?.dismiss()
+            }
+        }
+        mContext.updateTextColors(popupView)
+        mContext.updateAppViews(popupView)
+        mContext.updateCardViewPolicy(popupView)
+
+        FontUtils.setFontsTypeface(mContext, mContext.assets, null, popupView, true)
+        builder.setView(popupView)
+        dialog = builder.create()
+        dialog.show()
+    }
 
     companion object {
         const val SEQ = 0

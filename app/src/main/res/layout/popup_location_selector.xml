@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:background="?attr/colorPrimary"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        style="@style/image_view_custom_toolbar_icon"
+        android:layout_gravity="right"
+        android:id="@+id/closePopup"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:contentDescription=""
+        android:src="@drawable/delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <com.simplemobiletools.commons.views.MyTextView
+        app:layout_constraintTop_toBottomOf="@id/closePopup"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="Description..."
+        android:id="@+id/description"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <RadioGroup
+        android:id="@+id/locMode"
+        app:layout_constraintTop_toBottomOf="@id/guideMessage"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:text="@string/diary_decryption_mode_once"
+            android:id="@+id/locMode1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:text="@string/diary_decryption_mode_permanent"
+            android:id="@+id/locMode2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RadioGroup>
+</LinearLayout>
+
