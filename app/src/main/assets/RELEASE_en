@@ -4,6 +4,10 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.127 (date: 2020.04.12)
+  * Removed requestLegacyExternalStorage option
+  * Adding database file backup and recovery feature using SAF (Storage Access Framework)
+
 # Changes in 1.4.126 (date: 2020.04.05)
   * Added diary encryption feature using pin number
   * Temporarily apply the requestLegacyExternalStorage option to respond to multi-picker scoped storage issues in Android 10

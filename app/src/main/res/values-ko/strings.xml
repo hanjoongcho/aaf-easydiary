@@ -394,9 +394,9 @@
         Android 10에서 발생하는 멀티피커 Scoped Storage 이슈 대응을 위한 requestLegacyExternalStorage 옵션 임시적용
     </string>
     <string name="release_193">
-        v1.4.127 / 2020.04.xx\n
-        Removed requestLegacyExternalStorage option\n
-        Adding database file backup and recovery feature using SAF (Storage Access Framework)
+        v1.4.127 / 2020.04.12\n
+        requestLegacyExternalStorage 옵션 제거\n
+        SAF(Storage Access Framework)를 이용한 데이터베이스 파일 백업 및 복구 기능 추가
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->

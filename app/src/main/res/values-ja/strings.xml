@@ -394,9 +394,9 @@
         Android10で発生するマルチピッカーScoped Storage問題に対応するためのrequestLegacyExternalStorageオプション一時的に適用
     </string>
     <string name="release_193">
-        v1.4.127 / 2020.04.xx\n
-        Removed requestLegacyExternalStorage option\n
-        Adding database file backup and recovery feature using SAF (Storage Access Framework)
+        v1.4.127 / 2020.04.12\n
+        requestLegacyExternalStorageオプションを削除しました\n
+        SAF(Storage Access Framework)を利用したデータベースファイルのバックアップと復元機能を追加
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -597,12 +597,12 @@
     <string name="diary_decryption_guide_before_editing">日記を暗号化するときに設定したPIN番号を入力します。\n日記を編集すると、既存のパスワードで再度暗号化されます。</string>
     <string name="diary_decryption_mode_once">閲覧のために一度だけ復号化する</string>
     <string name="diary_decryption_mode_permanent">復号化後にピン番号設定を削除します</string>
-    <string name="backup_internal_title">Backup to internal storage</string>
-    <string name="backup_internal_description">The backup file is saved in the Easy Diary internal storage. The backed up files cannot be accessed using applications other than Easy Diary.</string>
-    <string name="backup_external_title">Backup to external storage</string>
-    <string name="backup_external_description">The backup file is stored in an external public storage. The backed up files can be accessed using File Explorer.</string>
-    <string name="recovery_internal_title">Restore from internal storage</string>
-    <string name="recovery_internal_description">Diary contents are restored using the database backup file stored in the Easy Diary internal storage.</string>
-    <string name="recovery_external_title">Restore from external storage</string>
-    <string name="recovery_external_description">Diary contents are restored using the database backup file stored in the external public storage.</string>
+    <string name="backup_internal_title">内部ストレージへのバックアップ</string>
+    <string name="backup_internal_description">バックアップファイルはEasy Diaryの内部ストレージに保存されます。 Easy Diary以外のアプリケーションを使用して、バックアップされたファイルにアクセスすることはできません。</string>
+    <string name="backup_external_title">外部ストレージへのバックアップ</string>
+    <string name="backup_external_description">バックアップファイルは、外部のパブリックストレージに保存されます。 バックアップされたファイルは、エクスプローラーを使用してアクセスできます。</string>
+    <string name="recovery_internal_title">内部ストレージから復元</string>
+    <string name="recovery_internal_description">Easy Diaryの内部ストレージに保存されているデータベースバックアップファイルを使用して、日記の内容が復元されます。</string>
+    <string name="recovery_external_title">外部ストレージから復元</string>
+    <string name="recovery_external_description">日記の内容は、外部のパブリックストレージに保存されているデータベースバックアップファイルを使用して復元されます。</string>
 </resources>

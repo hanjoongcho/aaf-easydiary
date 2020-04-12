@@ -4,6 +4,10 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.127 (date: 2020.04.12)
+  * requestLegacyExternalStorageオプションを削除しました
+  * SAF(Storage Access Framework)を利用したデータベースファイルのバックアップと復元機能を追加
+
 # Changes in 1.4.126 (date: 2020.04.05)
   * ピン番号を使用して日記暗号化機能を追加
   * Android10で発生するマルチピッカーScoped Storage問題に対応するためのrequestLegacyExternalStorageオプション一時的に適用
