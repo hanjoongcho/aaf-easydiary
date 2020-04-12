@@ -82,7 +82,7 @@ class TimelineItemAdapter(
             item_holder.let {
                 context.updateTextColors(it, 0, 0)
                 context.updateAppViews(it)
-                context.initTextSize(it, context)
+                context.initTextSize(it)
             }
 
             if (!currentQuery.isNullOrEmpty()) {

@@ -53,7 +53,7 @@ class IntroActivity : AppCompatActivity(), Handler.Callback {
         super.onResume()
         main_holder.setBackgroundColor(ColorUtils.setAlphaComponent(BaseConfig(this).primaryColor, INTRO_BACKGROUND_ALPHA))
         FontUtils.setFontsTypeface(this, assets, null, findViewById<ViewGroup>(android.R.id.content))
-        initTextSize(findViewById<ViewGroup>(android.R.id.content), this)
+        initTextSize(findViewById<ViewGroup>(android.R.id.content))
     }
 
     override fun handleMessage(message: Message): Boolean {

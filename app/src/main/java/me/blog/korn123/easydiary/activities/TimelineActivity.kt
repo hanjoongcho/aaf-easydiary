@@ -69,7 +69,7 @@ class TimelineActivity : EasyDiaryActivity() {
         setupTimelineSearch()
 
         bindEvent()
-        initTextSize(filterView, this)
+        initTextSize(filterView)
 
 
         when (savedInstanceState) {

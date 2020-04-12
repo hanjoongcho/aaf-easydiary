@@ -87,7 +87,7 @@ class DiaryMainItemAdapter(
             item_holder.let {
                 context.updateTextColors(it, 0, 0)
                 context.updateAppViews(it)
-                context.initTextSize(it, context)
+                context.initTextSize(it)
             }
 
             when (diaryDto.photoUris?.size ?: 0 > 0) {

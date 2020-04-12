@@ -30,12 +30,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <com.simplemobiletools.commons.views.MyTextView
-                android:textSize="20sp"
                 android:id="@+id/modeInternalTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <com.simplemobiletools.commons.views.MyTextView
                 android:id="@+id/modeInternalDescription"
+                android:alpha="0.7"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
@@ -48,11 +48,11 @@
             android:layout_height="wrap_content">
             <com.simplemobiletools.commons.views.MyTextView
                 android:id="@+id/modeExternalTitle"
-                android:textSize="20sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <com.simplemobiletools.commons.views.MyTextView
                 android:id="@+id/modeExternalDescription"
+                android:alpha="0.7"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </LinearLayout>

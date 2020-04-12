@@ -601,4 +601,8 @@
 	<string name="backup_internal_description">The backup file is saved in the Easy Diary internal storage. The backed up files cannot be accessed using applications other than Easy Diary.</string>
 	<string name="backup_external_title">Backup to external storage</string>
 	<string name="backup_external_description">The backup file is stored in an external public storage. The backed up files can be accessed using File Explorer.</string>
+    <string name="recovery_internal_title">Restore from internal storage</string>
+    <string name="recovery_internal_description">Diary contents are restored using the database backup file stored in the Easy Diary internal storage.</string>
+    <string name="recovery_external_title">Restore from external storage</string>
+    <string name="recovery_external_description">Diary contents are restored using the database backup file stored in the external public storage.</string>
 </resources>

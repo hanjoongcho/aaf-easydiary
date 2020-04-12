@@ -586,7 +586,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
 
         fun setFontsSize() {
             context?.let {
-                it.initTextSize(mRootView, it)
+                it.initTextSize(mRootView)
             }
         }
 

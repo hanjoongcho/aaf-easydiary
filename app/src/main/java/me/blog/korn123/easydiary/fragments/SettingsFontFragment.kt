@@ -148,11 +148,11 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
             }
             R.id.decreaseFont -> {
                 mContext.config.settingFontSize = mContext.config.settingFontSize - 5
-                mContext.initTextSize(mRootView, mContext)
+                mContext.initTextSize(mRootView)
             }
             R.id.increaseFont -> {
                 mContext.config.settingFontSize = mContext.config.settingFontSize + 5
-                mContext.initTextSize(mRootView, mContext)
+                mContext.initTextSize(mRootView)
             }
             R.id.calendarFontScale -> {
                 openCalendarFontScaleDialog()

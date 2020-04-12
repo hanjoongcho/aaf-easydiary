@@ -37,7 +37,7 @@ class CaldroidItemAdapter(
         if (convertView == null) {
             cellView = inflater.inflate(R.layout.fragment_custom_cell, null).apply {
                 if (this is ViewGroup) {
-                    context?.initTextSize(this, context)
+                    context?.initTextSize(this)
                     FontUtils.setFontsTypeface(context, context.assets, null, this)
                 }
             }

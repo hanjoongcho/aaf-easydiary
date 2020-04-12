@@ -30,7 +30,7 @@ class WeekdayArrayAdapter(context: Context, private val textViewResourceId: Int,
         val item = getItem(position)
         textView.text = item
         FontUtils.setFontsTypeface(context, context.assets, "", parent)
-        context.initTextSize(viewGroup, context)
+        context.initTextSize(viewGroup)
 
 //        textView.run {
 //            layoutParams?.width = (textSize * 2).toInt()

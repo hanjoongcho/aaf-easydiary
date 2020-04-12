@@ -19,7 +19,7 @@ import me.blog.korn123.commons.utils.FontUtils
 fun Fragment.updateFragmentUI(rootView: ViewGroup) {
     rootView.let {
         context?.run {
-            initTextSize(it, this)
+            initTextSize(it)
             updateTextColors(it,0,0)
             updateAppViews(it)
             updateCardViewPolicy(it)

@@ -38,7 +38,7 @@ open class EasyDiaryActivity : BaseSimpleActivity() {
         } else {
             resumeLock()
             mRootView?.let {
-                initTextSize(it, this)
+                initTextSize(it)
                 updateTextColors(it)
                 updateAppViews(it)
                 updateCardViewPolicy(it)
