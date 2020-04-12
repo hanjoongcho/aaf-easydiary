@@ -413,7 +413,9 @@ const val REQUEST_CODE_TEXT_COLOR_PICKER = 32
 
 const val REQUEST_CODE_SAF_WRITE_ZIP = 40
 const val REQUEST_CODE_SAF_WRITE_XLS = 41
-const val REQUEST_CODE_SAF_READ_ZIP = 42
+const val REQUEST_CODE_SAF_WRITE_REALM = 42
+const val REQUEST_CODE_SAF_READ_ZIP = 43
+const val REQUEST_CODE_SAF_READ_REALM = 44
 
 const val REQUEST_CODE_SPEECH_INPUT = 100
 const val REQUEST_CODE_GOOGLE_SIGN_IN = 101
@@ -438,6 +440,7 @@ const val START_DIARY_INSERT_ACTIVITY = 1
  ***************************************************************************************************/
 const val MIME_TYPE_ZIP = "application/zip"
 const val MIME_TYPE_XLS = "application/vnd.ms-excel"
+const val MIME_TYPE_REALM = "application/octet-stream"
 
 
 /***************************************************************************************************

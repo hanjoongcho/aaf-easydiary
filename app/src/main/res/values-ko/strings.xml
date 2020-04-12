@@ -395,7 +395,8 @@
     </string>
     <string name="release_193">
         v1.4.127 / 2020.04.xx\n
-        Removed requestLegacyExternalStorage option
+        Removed requestLegacyExternalStorage option\n
+        Adding database file backup and recovery feature using SAF (Storage Access Framework)
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -596,4 +597,8 @@
     <string name="diary_decryption_guide_before_editing">다이어리 암호화시 설정한 핀번호를 입력하세요.\n다이어리 편집이 끝나면 기존에 설정하신 핀번호로 다시 암호화 됩니다.</string>
     <string name="diary_decryption_mode_once">열람을 위해 한 번만 복호화 함</string>
     <string name="diary_decryption_mode_permanent">복호화 진행 후 설정된 핀번호를 제거함</string>
+    <string name="backup_internal_title">내부 저장소에 백업</string>
+    <string name="backup_internal_description">이지다이어리 내부 저장소에 백업파일이 저장됩니다. 백업된 파일은 이지 다이어리가 아닌 다른 애플리케이션을 이용해서 접근할 수 없습니다.</string>
+    <string name="backup_external_title">외부 저장소에 백업</string>
+    <string name="backup_external_description">외부 공용저장소에 백업파일이 저장됩니다. 백업된 파일은 파일 탐색기를 이용해서 접근할 수 있습니다.</string>
 </resources>

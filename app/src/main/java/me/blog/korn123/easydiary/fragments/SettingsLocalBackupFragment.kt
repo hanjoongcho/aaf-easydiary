@@ -37,11 +37,13 @@ import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.viewmodels.BackupOperations
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
+import org.apache.commons.io.IOUtils
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.ss.usermodel.CellStyle
 import org.apache.poi.ss.usermodel.IndexedColors
 import org.apache.poi.ss.usermodel.Workbook
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.util.*
 
@@ -98,10 +100,10 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
                     createExportExcelUri()
                 }
                 REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_REALM -> if (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    exportRealmFile()
+                    showLocationSelectionPopup(MODE_BACKUP, getString(R.string.backup_internal_title), getString(R.string.backup_internal_description), getString(R.string.backup_external_title), getString(R.string.backup_external_description))
                 }
                 REQUEST_CODE_EXTERNAL_STORAGE_WITH_IMPORT_REALM -> if (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    importRealmFile()
+                    showLocationSelectionPopup(MODE_RECOVERY, getString(R.string.backup_internal_title), getString(R.string.backup_internal_description), getString(R.string.backup_external_title), getString(R.string.backup_external_description))
                 }
                 REQUEST_CODE_EXTERNAL_STORAGE_WITH_DELETE_REALM -> if (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                     deleteRealmFile()
@@ -128,6 +130,12 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
                 REQUEST_CODE_SAF_READ_ZIP -> {
                     importFullBackupFile(intent.data)
                 }
+                REQUEST_CODE_SAF_WRITE_REALM -> {
+                    exportRealmFileWithSAF(intent.data)
+                }
+                REQUEST_CODE_SAF_READ_REALM -> {
+
+                }
             }
         }
     }
@@ -144,6 +152,16 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
         FileUtils.copyFile(srcFile, destFile, false)
         mContext.config.diaryBackupLocal = System.currentTimeMillis()
         if (showDialog) mActivity.showSimpleDialog(getString(R.string.export_realm_title), getString(R.string.export_realm_guide_message), destFile.absolutePath)
+    }
+
+    private fun exportRealmFileWithSAF(uri: Uri?) {
+        uri?.let {
+            val os = mContext.contentResolver.openOutputStream(it)
+            val `is` = FileInputStream(EasyDiaryDbHelper.getRealmPath())
+            IOUtils.copy(`is`, os)
+            os?.close()
+            `is`.close()
+        }
     }
 
     private fun importRealmFile() {
@@ -470,13 +488,13 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
             }
             R.id.exportRealmFile -> {
                 when (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    true -> showLocationSelectionPopup()
+                    true -> showLocationSelectionPopup(MODE_BACKUP, getString(R.string.backup_internal_title), getString(R.string.backup_internal_description), getString(R.string.backup_external_title), getString(R.string.backup_external_description))
                     false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_REALM)
                 }
             }
             R.id.importRealmFile -> {
                 when (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    true -> importRealmFile()
+                    true -> showLocationSelectionPopup(MODE_RECOVERY, getString(R.string.backup_internal_title), getString(R.string.backup_internal_description), getString(R.string.backup_external_title), getString(R.string.backup_external_description))
                     false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_IMPORT_REALM)
                 }
             }
@@ -501,20 +519,29 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
 
     private fun initPreference() {}
 
-    private fun showLocationSelectionPopup() {
+    private fun showLocationSelectionPopup(popupMode: Int, internalTitle: String, internalDescription: String, externalTitle: String, externalDescription: String) {
         var dialog: AlertDialog? = null
         val builder = AlertDialog.Builder(mContext)
         val inflater = mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val popupView = (inflater.inflate(R.layout.popup_location_selector, null) as ViewGroup).apply {
+            modeInternalTitle.text = internalTitle
+            modeInternalDescription.text = internalDescription
+            modeExternalTitle.text = externalTitle
+            modeExternalDescription.text = externalDescription
+
             setBackgroundColor(mContext.baseConfig.backgroundColor)
-            locMode1.setTextColor(mContext.config.textColor)
-            locMode2.setTextColor(mContext.config.textColor)
-            description.text = "Choose a storage option."
             closePopup.setOnClickListener { dialog?.dismiss() }
-            locMode.setOnCheckedChangeListener { _, checkedId ->
-                when (checkedId) {
-                    R.id.locMode1 -> { exportRealmFile() }
-                    R.id.locMode2 -> {}
+            modeInternal.setOnClickListener {
+                when (popupMode) {
+                    MODE_BACKUP -> exportRealmFile()
+                    MODE_RECOVERY -> importRealmFile()
+                }
+                dialog?.dismiss()
+            }
+            modeExternal.setOnClickListener {
+                when (popupMode) {
+                    MODE_BACKUP -> writeFileWithSAF(DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"), MIME_TYPE_REALM, REQUEST_CODE_SAF_WRITE_REALM)
+                    MODE_RECOVERY -> writeFileWithSAF(DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"), MIME_TYPE_REALM, REQUEST_CODE_SAF_READ_REALM)
                 }
                 dialog?.dismiss()
             }
@@ -525,8 +552,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
 
         FontUtils.setFontsTypeface(mContext, mContext.assets, null, popupView, true)
         builder.setView(popupView)
-        dialog = builder.create()
-        dialog.show()
+        dialog = builder.create().apply { show() }
     }
 
     companion object {
@@ -540,5 +566,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
         const val SYMBOL = 6
         const val IS_ALL_DAY = 7
         const val WRITE_TIME_MILLIS = 8
+        const val MODE_BACKUP = 0
+        const val MODE_RECOVERY = 1
     }
 }

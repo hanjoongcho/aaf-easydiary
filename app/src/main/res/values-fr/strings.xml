@@ -395,7 +395,8 @@
     </string>
     <string name="release_193">
         v1.4.127 / 2020.04.xx\n
-        Removed requestLegacyExternalStorage option
+        Removed requestLegacyExternalStorage option\n
+        Adding database file backup and recovery feature using SAF (Storage Access Framework)
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -596,4 +597,8 @@
     <string name="diary_decryption_guide_before_editing">Enter the PIN number you set when encrypting the diary.\nWhen the diary is edited, it is encrypted again with the existing password.</string>
     <string name="diary_decryption_mode_once">Decrypt once for viewing</string>
     <string name="diary_decryption_mode_permanent">Remove the pin number setting after decryption</string>
+	<string name="backup_internal_title">Backup to internal storage</string>
+	<string name="backup_internal_description">The backup file is saved in the Easy Diary internal storage. The backed up files cannot be accessed using applications other than Easy Diary.</string>
+	<string name="backup_external_title">Backup to external storage</string>
+	<string name="backup_external_description">The backup file is stored in an external public storage. The backed up files can be accessed using File Explorer.</string>
 </resources>
