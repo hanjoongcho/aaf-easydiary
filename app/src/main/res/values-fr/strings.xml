@@ -527,7 +527,7 @@
     <string name="preferences_category_backup_restore_device">Sauvegarde et restauration de l\'application</string>
     <string name="preferences_category_backup_restore_device_sub">Espace de stockage de l\'appareil</string>
     <string name="export_realm_title">Sauvegarder le journal</string>
-    <string name="export_realm_description">Sauvegarder les fichiers de la base de données, à l\'exception des photos jointes, sur l\'espace de stockage de l\'appareil. \nLes fichiers sauvegardés sur l\'espace de stockage de l\'appareil sont supprimés en même temps que l\'application, donc si vous souhaitez conserver les données créées de façon permanente, veuillez utiliser la fonction de sauvegarde de Google Drive.</string>
+	<string name="export_realm_description">Back up database files except the attached photo to the device storage.\nSince files backed up in the internal storage are deleted when the application is deleted, use the external public storage or Google Drive backup function to permanently store the created data.</string>
     <string name="export_realm_guide_message">La base de données a été enregistré sur le l\'espace de stockage de l\'appareil au niveau du chemin d\'accès suivant.</string>
     <string name="import_realm_title">Restaurer le journal</string>
     <string name="import_realm_description">Restaurer les fichiers de la base de données à partir de l\'espace de stockage de l\'appareil, à l\'exception des pièces jointes.</string>
