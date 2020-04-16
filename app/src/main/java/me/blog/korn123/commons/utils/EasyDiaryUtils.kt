@@ -10,6 +10,8 @@ import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Environment
+import android.os.Handler
+import android.os.Looper
 import android.provider.OpenableColumns
 import android.text.SpannableString
 import android.text.Spanned
@@ -22,6 +24,7 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
+import com.simplemobiletools.commons.extensions.toast
 import id.zelory.compressor.Compressor
 import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.CALCULATION
@@ -241,15 +244,27 @@ object EasyDiaryUtils {
     }
 
     fun downSamplingImage(context: Context, uri: Uri, destFile: File) {
+        val mimeType = context.contentResolver.getType(uri)
         val uriStream = context.contentResolver.openInputStream(uri)
-        val tempFile = File.createTempFile(UUID.randomUUID().toString(), "tmp")
-        val fos = FileOutputStream(tempFile)
-        IOUtils.copy(uriStream, fos)
-        val compressedFile = Compressor(context).setQuality(70).compressToFile(tempFile)
-        FileUtils.copyFile(compressedFile, destFile)
-        uriStream?.close()
-        fos.close()
-        tempFile.delete()
+        when (mimeType) {
+            "image/gif" -> {
+                Handler(Looper.getMainLooper()).post { context.toast(mimeType, Toast.LENGTH_SHORT) }
+                val fos = FileOutputStream(destFile)
+                IOUtils.copy(uriStream, fos)
+                uriStream?.close()
+                fos.close()
+            }
+            else ->{
+                val tempFile = File.createTempFile(UUID.randomUUID().toString(), "tmp")
+                val fos = FileOutputStream(tempFile)
+                IOUtils.copy(uriStream, fos)
+                val compressedFile = Compressor(context).setQuality(70).compressToFile(tempFile)
+                FileUtils.copyFile(compressedFile, destFile)
+                uriStream?.close()
+                fos.close()
+                tempFile.delete()
+            }
+        }
     }
 
     fun downSamplingImage(context: Context, srcFile: File, destFile: File) {
@@ -308,8 +323,8 @@ object EasyDiaryUtils {
         val bitmap = photoUriToDownSamplingBitmap(context, photoUriDto, 0, thumbnailSize.toInt() - 5, thumbnailSize.toInt() - 5)
         val imageView = ImageView(context)
         val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(context, thumbnailSize), CommonUtils.dpToPixel(context, thumbnailSize))
-        val marginLeft = if (photoIndex == 0)  0 else CommonUtils.dpToPixel(context, 3F)
-        layoutParams.setMargins(marginLeft, 0, 0, 0)
+//        val marginLeft = if (photoIndex == 0)  0 else CommonUtils.dpToPixel(context, 3F)
+        layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(context, 3F), 0)
         imageView.layoutParams = layoutParams
         val drawable = ContextCompat.getDrawable(context, R.drawable.bg_card_thumbnail)
         val gradient = drawable as GradientDrawable
