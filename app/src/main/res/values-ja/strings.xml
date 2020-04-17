@@ -398,6 +398,10 @@
         requestLegacyExternalStorageオプションを削除しました\n
         SAF(Storage Access Framework)を利用したデータベースファイルのバックアップと復元機能を追加
     </string>
+    <string name="release_194">
+        v1.4.128 / 2020.04.xx\n
+        Added feature to attach animated GIF files
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
