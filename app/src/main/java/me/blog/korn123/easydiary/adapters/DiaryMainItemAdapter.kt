@@ -115,7 +115,7 @@ class DiaryMainItemAdapter(
                     imageView.setPadding(padding, padding, padding, padding)
                     val options = RequestOptions()
 //                        .centerCrop()
-                            .error(R.drawable.question_shield)
+                            .error(R.drawable.error_7)
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .priority(Priority.HIGH)
                     Glide.with(context).load(path).apply(options).into(imageView)

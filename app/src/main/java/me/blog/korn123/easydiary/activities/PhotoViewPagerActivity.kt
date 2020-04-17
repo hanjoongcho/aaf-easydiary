@@ -113,7 +113,7 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
                     diaryDto.photoUris?.let {
                         it[position]?.let { photoUriDto ->
                             val options = RequestOptions()
-                                    .error(R.drawable.question_shield)
+                                    .error(R.drawable.error_7)
                                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                                     .priority(Priority.HIGH)
                             Glide.with(container.context)

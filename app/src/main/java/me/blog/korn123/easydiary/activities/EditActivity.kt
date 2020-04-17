@@ -347,7 +347,7 @@ abstract class EditActivity : EasyDiaryActivity() {
                         photoContainer.addView(imageView, photoContainer.childCount - 1)
                         val options = RequestOptions()
 //                        .centerCrop()
-                                .error(R.drawable.question_shield)
+                                .error(R.drawable.error_7)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .priority(Priority.HIGH)
                         Glide.with(applicationContext).load(photoPath).apply(options).into(imageView)

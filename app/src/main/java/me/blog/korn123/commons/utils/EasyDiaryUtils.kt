@@ -221,13 +221,13 @@ object EasyDiaryUtils {
         }
     } catch (fe: FileNotFoundException) {
         fe.printStackTrace()
-        BitmapFactory.decodeResource(context.resources, R.drawable.question_shield)
+        BitmapFactory.decodeResource(context.resources, R.drawable.error_7)
     } catch (se: SecurityException) {
         se.printStackTrace()
-        BitmapFactory.decodeResource(context.resources, R.drawable.question_shield)
+        BitmapFactory.decodeResource(context.resources, R.drawable.error_7)
     } catch (e: Exception) {
         e.printStackTrace()
-        BitmapFactory.decodeResource(context.resources, R.drawable.question_shield)
+        BitmapFactory.decodeResource(context.resources, R.drawable.error_7)
     }
 
     fun photoUriToBitmap(context: Context, photoUriDto: PhotoUriDto): Bitmap? {
@@ -341,7 +341,7 @@ object EasyDiaryUtils {
 
         val options = RequestOptions()
 //                        .centerCrop()
-                .error(R.drawable.question_shield)
+                .error(R.drawable.error_7)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .priority(Priority.HIGH)
         Glide.with(context).load(getApplicationDataDirectory(context) + photoUriDto.getFilePath()).apply(options).into(imageView)
