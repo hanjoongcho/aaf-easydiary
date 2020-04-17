@@ -92,9 +92,9 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
         override fun instantiateItem(container: ViewGroup, position: Int): View {
             val viewHolder = LinearLayout(container.context).apply { tag = "view_$position" }
             val photoView = PhotoView(container.context)
-            val imageFileName = diaryDto.photoUris!![position]!!.getFilePath()
+            val imageFilePath = EasyDiaryUtils.getApplicationDataDirectory(container.context) + diaryDto.photoUris!![position]!!.getFilePath()
 
-            when (File(imageFileName).exists()) {
+            when (File(imageFilePath).exists()) {
                 false -> {
                     val textView = TextView(container.context)
                     textView.gravity = Gravity.CENTER
@@ -117,7 +117,7 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
                                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                                     .priority(Priority.HIGH)
                             Glide.with(container.context)
-                                    .load(EasyDiaryUtils.getApplicationDataDirectory(container.context) + photoUriDto.getFilePath())
+                                    .load(imageFilePath)
                                     .apply(options)
                                     .into(photoView)
                         }
