@@ -24,6 +24,10 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
+import com.bumptech.glide.Glide
+import com.bumptech.glide.Priority
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.simplemobiletools.commons.extensions.toast
 import id.zelory.compressor.Compressor
 import io.github.aafactory.commons.utils.BitmapUtils
@@ -320,7 +324,7 @@ object EasyDiaryUtils {
 
     fun createAttachedPhotoView(context: Context, photoUriDto: PhotoUriDto, photoIndex: Int): ImageView {
         val thumbnailSize = context.config.settingThumbnailSize
-        val bitmap = photoUriToDownSamplingBitmap(context, photoUriDto, 0, thumbnailSize.toInt() - 5, thumbnailSize.toInt() - 5)
+//        val bitmap = photoUriToDownSamplingBitmap(context, photoUriDto, 0, thumbnailSize.toInt() - 5, thumbnailSize.toInt() - 5)
         val imageView = ImageView(context)
         val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(context, thumbnailSize), CommonUtils.dpToPixel(context, thumbnailSize))
 //        val marginLeft = if (photoIndex == 0)  0 else CommonUtils.dpToPixel(context, 3F)
@@ -330,8 +334,18 @@ object EasyDiaryUtils {
         val gradient = drawable as GradientDrawable
         gradient.setColor(ColorUtils.setAlphaComponent(context.config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA))
         imageView.background = gradient
-        imageView.setImageBitmap(bitmap)
-        imageView.scaleType = ImageView.ScaleType.CENTER
+//        imageView.setImageBitmap(bitmap)
+        imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+        val padding = (CommonUtils.dpToPixel(context, 2.5F, CALCULATION.FLOOR))
+        imageView.setPadding(padding, padding, padding, padding)
+
+        val options = RequestOptions()
+//                        .centerCrop()
+                .error(R.drawable.question_shield)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .priority(Priority.HIGH)
+        Glide.with(context).load(getApplicationDataDirectory(context) + photoUriDto.getFilePath()).apply(options).into(imageView)
+
         return imageView
     }
 }
