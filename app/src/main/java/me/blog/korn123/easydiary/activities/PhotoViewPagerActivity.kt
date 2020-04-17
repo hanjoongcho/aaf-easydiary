@@ -3,18 +3,25 @@ package me.blog.korn123.easydiary.activities
 import android.os.Bundle
 import android.os.Handler
 import android.view.*
+import android.widget.LinearLayout
 import android.widget.TextView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.Priority
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.github.chrisbanes.photoview.PhotoView
 import io.github.aafactory.commons.utils.CommonUtils
 import kotlinx.android.synthetic.main.activity_photo_view_pager.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.DIARY_ATTACH_PHOTO_INDEX
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.DiaryDto
+import java.io.File
 
 /**
  * Created by hanjoong on 2017-06-08.
@@ -64,8 +71,9 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
         when (item.itemId) {
             android.R.id.home -> TransitionHelper.finishActivityWithTransition(this, TransitionHelper.TOP_TO_BOTTOM)
             R.id.planner -> {
-                val photoView = view_pager.findViewWithTag<PhotoView>("view_" + view_pager.currentItem)
-                photoView.setRotationBy(90F)
+                (view_pager.findViewWithTag<LinearLayout>("view_${view_pager.currentItem}")).getChildAt(0).run {
+                    if (this is PhotoView) setRotationBy(90F)
+                }
             }
         }
         return true
@@ -82,27 +90,41 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
         }
 
         override fun instantiateItem(container: ViewGroup, position: Int): View {
+            val viewHolder = LinearLayout(container.context).apply { tag = "view_$position" }
             val photoView = PhotoView(container.context)
-            //            photoView.setImageResource(sDrawables[position]);
-            val bitmap = EasyDiaryUtils.photoUriToBitmap(container.context, diaryDto.photoUris!![position]!!)
-            when (bitmap == null) {
-                true -> {
+            val imageFileName = diaryDto.photoUris!![position]!!.getFilePath()
+
+            when (File(imageFileName).exists()) {
+                false -> {
                     val textView = TextView(container.context)
                     textView.gravity = Gravity.CENTER
                     val padding = CommonUtils.dpToPixel(container.context, 10F)
                     textView.setPadding(padding, padding, padding, padding)
-                    FontUtils.setTypefaceDefault(textView)
+                    textView.typeface = FontUtils.getCommonTypeface(container.context, container.context.assets)
                     textView.text = container.context.getString(R.string.photo_view_error_info)
-                    container.addView(textView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-                    textView.tag = "view_$position"
-                    return textView    
+                    textView.setTextColor(container.context.config.textColor)
+                    viewHolder.addView(textView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                    container.addView(viewHolder, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                    return viewHolder
                 }
-                false -> {
+                true -> {
                     // Now just add PhotoView to ViewPager and return it
-                    photoView.setImageBitmap(bitmap)
-                    container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-                    photoView.tag = "view_$position"
-                    return photoView    
+//                    photoView.setImageBitmap(bitmap)
+                    diaryDto.photoUris?.let {
+                        it[position]?.let { photoUriDto ->
+                            val options = RequestOptions()
+                                    .error(R.drawable.question_shield)
+                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                    .priority(Priority.HIGH)
+                            Glide.with(container.context)
+                                    .load(EasyDiaryUtils.getApplicationDataDirectory(container.context) + photoUriDto.getFilePath())
+                                    .apply(options)
+                                    .into(photoView)
+                        }
+                    }
+                    viewHolder.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                    container.addView(viewHolder, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                    return viewHolder
                 }
             }
         }
