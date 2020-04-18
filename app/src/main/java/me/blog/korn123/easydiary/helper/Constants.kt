@@ -438,9 +438,11 @@ const val START_DIARY_INSERT_ACTIVITY = 1
  *   SAF mime type
  *
  ***************************************************************************************************/
+const val MIME_TYPE_BINARY =  "application/octet-stream"
 const val MIME_TYPE_ZIP = "application/zip"
 const val MIME_TYPE_XLS = "application/vnd.ms-excel"
 const val MIME_TYPE_REALM = "application/octet-stream"
+const val MIME_TYPE_JPEG = "image/jpeg"
 
 
 /***************************************************************************************************

@@ -26,8 +26,13 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
+import com.bumptech.glide.Glide
+import com.bumptech.glide.Priority
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.werb.pickphotoview.PickPhotoView
 import io.github.aafactory.commons.utils.BitmapUtils
+import io.github.aafactory.commons.utils.CALCULATION
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import io.realm.RealmList
@@ -320,10 +325,16 @@ abstract class EditActivity : EasyDiaryActivity() {
             selectPaths.map { item ->
                 val photoPath = EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
                 try {
-                    if (isUriString) EasyDiaryUtils.downSamplingImage(this, Uri.parse(item), File(photoPath)) else EasyDiaryUtils.downSamplingImage(this, File(item), File(photoPath))
-                    mPhotoUris.add(PhotoUriDto(FILE_URI_PREFIX + photoPath))
+                    val mimeType: String = when (isUriString) {
+                        true -> EasyDiaryUtils.downSamplingImage(this, Uri.parse(item), File(photoPath))
+                        false -> {
+                            EasyDiaryUtils.downSamplingImage(this, File(item), File(photoPath))
+                            MIME_TYPE_JPEG
+                        }
+                    }
+                    mPhotoUris.add(PhotoUriDto(FILE_URI_PREFIX + photoPath, mimeType))
                     val thumbnailSize = config.settingThumbnailSize
-                    val bitmap = BitmapUtils.decodeFile(photoPath, CommonUtils.dpToPixel(applicationContext, thumbnailSize - 5), CommonUtils.dpToPixel(applicationContext, thumbnailSize - 5))
+//                    val bitmap = BitmapUtils.decodeFile(photoPath, CommonUtils.dpToPixel(applicationContext, thumbnailSize - 5), CommonUtils.dpToPixel(applicationContext, thumbnailSize - 5))
                     val imageView = ImageView(applicationContext)
                     val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(applicationContext, thumbnailSize), CommonUtils.dpToPixel(applicationContext, thumbnailSize))
                     layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(applicationContext, 3F), 0)
@@ -332,12 +343,20 @@ abstract class EditActivity : EasyDiaryActivity() {
                     val gradient = drawable as GradientDrawable
                     gradient.setColor(ColorUtils.setAlphaComponent(config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA))
                     imageView.background = gradient
-                    imageView.setImageBitmap(bitmap)
-                    imageView.scaleType = ImageView.ScaleType.CENTER
+//                    imageView.setImageBitmap(bitmap)
+                    imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+                    val padding = (CommonUtils.dpToPixel(applicationContext, 2.5F, CALCULATION.FLOOR))
+                    imageView.setPadding(padding, padding, padding, padding)
                     val currentIndex = mPhotoUris.size - 1
                     imageView.setOnClickListener(PhotoClickListener(currentIndex))
                     runOnUiThread {
                         photoContainer.addView(imageView, photoContainer.childCount - 1)
+                        val options = RequestOptions()
+//                        .centerCrop()
+                                .error(R.drawable.error_7)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .priority(Priority.HIGH)
+                        Glide.with(applicationContext).load(photoPath).apply(options).into(imageView)
                         initBottomToolbar()
 
                     }

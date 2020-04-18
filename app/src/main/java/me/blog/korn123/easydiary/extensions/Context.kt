@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.extensions
 
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -19,9 +20,15 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.google.common.reflect.TypeToken
+import com.google.gson.GsonBuilder
+import com.google.gson.stream.JsonReader
 import com.simplemobiletools.commons.extensions.adjustAlpha
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
+import com.simplemobiletools.commons.helpers.BACKGROUND_COLOR
+import com.simplemobiletools.commons.helpers.PRIMARY_COLOR
+import com.simplemobiletools.commons.helpers.SETTING_CARD_VIEW_BACKGROUND_COLOR
+import com.simplemobiletools.commons.helpers.TEXT_COLOR
 import com.simplemobiletools.commons.views.*
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.views.ModalView
@@ -34,15 +41,7 @@ import me.blog.korn123.easydiary.views.FixedTextView
 import org.apache.commons.io.IOUtils
 import java.io.File
 import java.io.FileOutputStream
-import com.google.gson.GsonBuilder
-import com.google.gson.Gson
-import com.google.gson.stream.JsonReader
-import com.simplemobiletools.commons.helpers.BACKGROUND_COLOR
-import com.simplemobiletools.commons.helpers.PRIMARY_COLOR
-import com.simplemobiletools.commons.helpers.SETTING_CARD_VIEW_BACKGROUND_COLOR
-import com.simplemobiletools.commons.helpers.TEXT_COLOR
 import java.io.FileReader
-import java.lang.reflect.Type
 
 
 /**
@@ -284,4 +283,17 @@ fun Context.fromHtml(target: String): Spanned {
         return Html.fromHtml(target)
     }
     return Html.fromHtml(target, Html.FROM_HTML_MODE_LEGACY);
+}
+
+fun Context.shareFile(targetFile: File) {
+    shareFile(targetFile, contentResolver.getType(getUriForFile(targetFile)) ?: MIME_TYPE_BINARY)
+}
+
+fun Context.shareFile(targetFile: File, mimeType: String) {
+    Intent().apply {
+        action = Intent.ACTION_SEND
+        putExtra(Intent.EXTRA_STREAM, getUriForFile(targetFile))
+        type = mimeType
+        startActivity(Intent.createChooser(this, getString(R.string.diary_card_share_info)))
+    }
 }

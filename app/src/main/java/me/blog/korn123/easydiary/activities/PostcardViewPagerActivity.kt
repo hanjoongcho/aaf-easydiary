@@ -1,6 +1,5 @@
 package me.blog.korn123.easydiary.activities
 
-import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.*
@@ -11,8 +10,9 @@ import kotlinx.android.synthetic.main.activity_photo_view_pager.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.extensions.getUriForFile
+import me.blog.korn123.easydiary.extensions.shareFile
 import me.blog.korn123.easydiary.helper.DIARY_POSTCARD_DIRECTORY
+import me.blog.korn123.easydiary.helper.MIME_TYPE_JPEG
 import me.blog.korn123.easydiary.helper.POSTCARD_SEQUENCE
 import java.io.File
 
@@ -71,18 +71,9 @@ class PostcardViewPagerActivity : EasyDiaryActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.share -> shareDiary()
+            R.id.share -> shareFile(mListPostcard[view_pager.currentItem], MIME_TYPE_JPEG)
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun shareDiary() {
-        val file = mListPostcard[view_pager.currentItem]
-        val shareIntent = Intent()
-        shareIntent.action = Intent.ACTION_SEND
-        shareIntent.putExtra(Intent.EXTRA_STREAM, getUriForFile(file))
-        shareIntent.type = "image/jpeg"
-        startActivity(Intent.createChooser(shareIntent, getString(R.string.diary_card_share_info)))
     }
 
     internal class PostcardPagerAdapter(var listPostcard: List<File>) : androidx.viewpager.widget.PagerAdapter() {

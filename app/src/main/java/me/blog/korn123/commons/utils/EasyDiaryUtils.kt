@@ -7,9 +7,12 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.PorterDuff
 import android.graphics.Typeface
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Environment
+import android.os.Handler
+import android.os.Looper
 import android.provider.OpenableColumns
 import android.text.SpannableString
 import android.text.Spanned
@@ -22,6 +25,15 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
+import com.bumptech.glide.Glide
+import com.bumptech.glide.Priority
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
+import com.simplemobiletools.commons.extensions.toast
 import id.zelory.compressor.Compressor
 import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.CALCULATION
@@ -214,13 +226,13 @@ object EasyDiaryUtils {
         }
     } catch (fe: FileNotFoundException) {
         fe.printStackTrace()
-        BitmapFactory.decodeResource(context.resources, R.drawable.question_shield)
+        BitmapFactory.decodeResource(context.resources, R.drawable.error_7)
     } catch (se: SecurityException) {
         se.printStackTrace()
-        BitmapFactory.decodeResource(context.resources, R.drawable.question_shield)
+        BitmapFactory.decodeResource(context.resources, R.drawable.error_7)
     } catch (e: Exception) {
         e.printStackTrace()
-        BitmapFactory.decodeResource(context.resources, R.drawable.question_shield)
+        BitmapFactory.decodeResource(context.resources, R.drawable.error_7)
     }
 
     fun photoUriToBitmap(context: Context, photoUriDto: PhotoUriDto): Bitmap? {
@@ -240,16 +252,29 @@ object EasyDiaryUtils {
         return bitmap
     }
 
-    fun downSamplingImage(context: Context, uri: Uri, destFile: File) {
+    fun downSamplingImage(context: Context, uri: Uri, destFile: File): String {
+        val mimeType = context.contentResolver.getType(uri) ?: MIME_TYPE_JPEG
         val uriStream = context.contentResolver.openInputStream(uri)
-        val tempFile = File.createTempFile(UUID.randomUUID().toString(), "tmp")
-        val fos = FileOutputStream(tempFile)
-        IOUtils.copy(uriStream, fos)
-        val compressedFile = Compressor(context).setQuality(70).compressToFile(tempFile)
-        FileUtils.copyFile(compressedFile, destFile)
-        uriStream?.close()
-        fos.close()
-        tempFile.delete()
+        when (mimeType) {
+            "image/gif" -> {
+//                Handler(Looper.getMainLooper()).post { context.toast(mimeType, Toast.LENGTH_SHORT) }
+                val fos = FileOutputStream(destFile)
+                IOUtils.copy(uriStream, fos)
+                uriStream?.close()
+                fos.close()
+            }
+            else ->{
+                val tempFile = File.createTempFile(UUID.randomUUID().toString(), "tmp")
+                val fos = FileOutputStream(tempFile)
+                IOUtils.copy(uriStream, fos)
+                val compressedFile = Compressor(context).setQuality(70).compressToFile(tempFile)
+                FileUtils.copyFile(compressedFile, destFile)
+                uriStream?.close()
+                fos.close()
+                tempFile.delete()
+            }
+        }
+        return mimeType
     }
 
     fun downSamplingImage(context: Context, srcFile: File, destFile: File) {
@@ -305,18 +330,37 @@ object EasyDiaryUtils {
 
     fun createAttachedPhotoView(context: Context, photoUriDto: PhotoUriDto, photoIndex: Int): ImageView {
         val thumbnailSize = context.config.settingThumbnailSize
-        val bitmap = photoUriToDownSamplingBitmap(context, photoUriDto, 0, thumbnailSize.toInt() - 5, thumbnailSize.toInt() - 5)
+//        val bitmap = photoUriToDownSamplingBitmap(context, photoUriDto, 0, thumbnailSize.toInt() - 5, thumbnailSize.toInt() - 5)
         val imageView = ImageView(context)
         val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(context, thumbnailSize), CommonUtils.dpToPixel(context, thumbnailSize))
-        val marginLeft = if (photoIndex == 0)  0 else CommonUtils.dpToPixel(context, 3F)
-        layoutParams.setMargins(marginLeft, 0, 0, 0)
+//        val marginLeft = if (photoIndex == 0)  0 else CommonUtils.dpToPixel(context, 3F)
+        layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(context, 3F), 0)
         imageView.layoutParams = layoutParams
         val drawable = ContextCompat.getDrawable(context, R.drawable.bg_card_thumbnail)
         val gradient = drawable as GradientDrawable
         gradient.setColor(ColorUtils.setAlphaComponent(context.config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA))
         imageView.background = gradient
-        imageView.setImageBitmap(bitmap)
-        imageView.scaleType = ImageView.ScaleType.CENTER
+//        imageView.setImageBitmap(bitmap)
+        imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+        val padding = (CommonUtils.dpToPixel(context, 2.5F, CALCULATION.FLOOR))
+        imageView.setPadding(padding, padding, padding, padding)
+        val listener = object : RequestListener<Drawable> {
+            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                imageView.scaleType = ImageView.ScaleType.CENTER
+                return false
+            }
+
+            override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                return false
+            }
+        }
+        val options = RequestOptions()
+//                        .centerCrop()
+                .error(R.drawable.error_7)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .priority(Priority.HIGH)
+        Glide.with(context).load(getApplicationDataDirectory(context) + photoUriDto.getFilePath()).listener(listener).apply(options).into(imageView)
+
         return imageView
     }
 }
