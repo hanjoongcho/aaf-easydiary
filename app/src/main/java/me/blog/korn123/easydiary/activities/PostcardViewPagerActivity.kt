@@ -1,6 +1,5 @@
 package me.blog.korn123.easydiary.activities
 
-import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.*
@@ -11,7 +10,6 @@ import kotlinx.android.synthetic.main.activity_photo_view_pager.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.extensions.getUriForFile
 import me.blog.korn123.easydiary.extensions.shareFile
 import me.blog.korn123.easydiary.helper.DIARY_POSTCARD_DIRECTORY
 import me.blog.korn123.easydiary.helper.MIME_TYPE_JPEG

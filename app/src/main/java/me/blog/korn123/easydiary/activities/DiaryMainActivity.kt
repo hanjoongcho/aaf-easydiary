@@ -164,10 +164,10 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home -> {
-                supportActionBar?.setDisplayHomeAsUpEnabled(false)
-                return true
-            }
+//            android.R.id.home -> {
+//                supportActionBar?.setDisplayHomeAsUpEnabled(false)
+//                return true
+//            }
             R.id.settings -> {
                 val settingIntent = Intent(this@DiaryMainActivity, SettingsActivity::class.java)
                 //                startActivity(settingIntent);
@@ -441,7 +441,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         }
 
         diaryListView.setOnItemLongClickListener { adapterView, _, i, _ ->
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+//            supportActionBar?.setDisplayHomeAsUpEnabled(true)
             val diaryDto = adapterView.adapter.getItem(i) as DiaryDto
             showAlertDialog(getString(R.string.copy_diary_item),
                     DialogInterface.OnClickListener { _, _ ->

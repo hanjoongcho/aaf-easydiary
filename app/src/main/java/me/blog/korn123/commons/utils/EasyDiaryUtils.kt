@@ -252,12 +252,12 @@ object EasyDiaryUtils {
         return bitmap
     }
 
-    fun downSamplingImage(context: Context, uri: Uri, destFile: File) {
-        val mimeType = context.contentResolver.getType(uri)
+    fun downSamplingImage(context: Context, uri: Uri, destFile: File): String {
+        val mimeType = context.contentResolver.getType(uri) ?: MIME_TYPE_JPEG
         val uriStream = context.contentResolver.openInputStream(uri)
         when (mimeType) {
             "image/gif" -> {
-                Handler(Looper.getMainLooper()).post { context.toast(mimeType, Toast.LENGTH_SHORT) }
+//                Handler(Looper.getMainLooper()).post { context.toast(mimeType, Toast.LENGTH_SHORT) }
                 val fos = FileOutputStream(destFile)
                 IOUtils.copy(uriStream, fos)
                 uriStream?.close()
@@ -274,6 +274,7 @@ object EasyDiaryUtils {
                 tempFile.delete()
             }
         }
+        return mimeType
     }
 
     fun downSamplingImage(context: Context, srcFile: File, destFile: File) {

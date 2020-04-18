@@ -286,7 +286,7 @@ fun Context.fromHtml(target: String): Spanned {
 }
 
 fun Context.shareFile(targetFile: File) {
-    shareFile(targetFile, MIME_TYPE_JPEG)
+    shareFile(targetFile, contentResolver.getType(getUriForFile(targetFile)) ?: MIME_TYPE_BINARY)
 }
 
 fun Context.shareFile(targetFile: File, mimeType: String) {

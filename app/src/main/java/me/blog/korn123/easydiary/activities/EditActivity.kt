@@ -325,8 +325,14 @@ abstract class EditActivity : EasyDiaryActivity() {
             selectPaths.map { item ->
                 val photoPath = EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
                 try {
-                    if (isUriString) EasyDiaryUtils.downSamplingImage(this, Uri.parse(item), File(photoPath)) else EasyDiaryUtils.downSamplingImage(this, File(item), File(photoPath))
-                    mPhotoUris.add(PhotoUriDto(FILE_URI_PREFIX + photoPath))
+                    val mimeType: String = when (isUriString) {
+                        true -> EasyDiaryUtils.downSamplingImage(this, Uri.parse(item), File(photoPath))
+                        false -> {
+                            EasyDiaryUtils.downSamplingImage(this, File(item), File(photoPath))
+                            MIME_TYPE_JPEG
+                        }
+                    }
+                    mPhotoUris.add(PhotoUriDto(FILE_URI_PREFIX + photoPath, mimeType))
                     val thumbnailSize = config.settingThumbnailSize
 //                    val bitmap = BitmapUtils.decodeFile(photoPath, CommonUtils.dpToPixel(applicationContext, thumbnailSize - 5), CommonUtils.dpToPixel(applicationContext, thumbnailSize - 5))
                     val imageView = ImageView(applicationContext)

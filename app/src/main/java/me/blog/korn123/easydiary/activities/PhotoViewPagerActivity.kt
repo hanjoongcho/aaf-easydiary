@@ -76,9 +76,9 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
             }
             R.id.share -> {
                 (view_pager.adapter as PhotoPagerAdapter).diaryDto.photoUris?.let {
-                    it[view_pager.currentItem]?.let { diaryDto ->
-                        val filePath = EasyDiaryUtils.getApplicationDataDirectory(this) + diaryDto.getFilePath()
-                        shareFile(File(filePath))
+                    it[view_pager.currentItem]?.let { photoUri ->
+                        val filePath = EasyDiaryUtils.getApplicationDataDirectory(this) + photoUri.getFilePath()
+                        shareFile(File(filePath), photoUri.mimeType ?: MIME_TYPE_JPEG)
                     }
                 }
             }
