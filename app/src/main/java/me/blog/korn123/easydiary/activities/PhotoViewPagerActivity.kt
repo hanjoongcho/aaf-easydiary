@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.activities
 import android.os.Bundle
 import android.os.Handler
 import android.view.*
+import android.webkit.MimeTypeMap
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.bumptech.glide.Glide
@@ -16,10 +17,8 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.helper.DIARY_ATTACH_PHOTO_INDEX
-import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
-import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.extensions.shareFile
+import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import java.io.File
 
@@ -73,6 +72,14 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
             R.id.planner -> {
                 (view_pager.findViewWithTag<LinearLayout>("view_${view_pager.currentItem}")).getChildAt(0).run {
                     if (this is PhotoView) setRotationBy(90F)
+                }
+            }
+            R.id.share -> {
+                (view_pager.adapter as PhotoPagerAdapter).diaryDto.photoUris?.let {
+                    it[view_pager.currentItem]?.let { diaryDto ->
+                        val filePath = EasyDiaryUtils.getApplicationDataDirectory(this) + diaryDto.getFilePath()
+                        shareFile(File(filePath))
+                    }
                 }
             }
         }
