@@ -609,4 +609,7 @@
     <string name="recovery_internal_description">Easy Diaryの内部ストレージに保存されているデータベースバックアップファイルを使用して、日記の内容が復元されます。</string>
     <string name="recovery_external_title">外部ストレージから復元</string>
     <string name="recovery_external_description">日記の内容は、外部のパブリックストレージに保存されているデータベースバックアップファイルを使用して復元されます。</string>
+    <string name="delete_selected_items_confirm">Are you sure you want to delete the %d selected items?</string>
+    <string name="duplicate_selected_items_confirm">Are you sure you want to duplicate the %d selected items?</string>
+    <string name="no_items_warning">There are no items selected.</string>
 </resources>

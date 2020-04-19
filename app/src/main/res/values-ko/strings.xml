@@ -609,4 +609,7 @@
     <string name="recovery_internal_description">이지다이어리 내부 저장소에 저장된 데이터베이스 백업파일을 이용하여 다이어리 콘텐츠를 복원합니다.</string>
     <string name="recovery_external_title">외부 저장소에서 복원</string>
     <string name="recovery_external_description">외부 공용저장소에 저장된 데이터베이스 백업파일을 이용하여 다이어리 콘텐츠를 복원합니다.</string>
+    <string name="delete_selected_items_confirm">Are you sure you want to delete the %d selected items?</string>
+    <string name="duplicate_selected_items_confirm">Are you sure you want to duplicate the %d selected items?</string>
+    <string name="no_items_warning">There are no items selected.</string>
 </resources>

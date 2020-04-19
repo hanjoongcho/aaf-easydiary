@@ -172,6 +172,45 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 mDiaryMainItemAdapter?.notifyDataSetChanged()
                 return true
             }
+            R.id.delete -> {
+                mDiaryMainItemAdapter?.getSelectedItems()?.run {
+                    when (this.isNotEmpty()) {
+                        true -> {
+                            showAlertDialog(getString(R.string.delete_selected_items_confirm, this.size), DialogInterface.OnClickListener { _, _ ->
+                                EasyDiaryDbHelper.beginTransaction()
+                                this.map {
+                                    it.deleteFromRealm()
+                                }
+                                EasyDiaryDbHelper.commitTransaction()
+                                refreshList()
+                            }, null)
+                        }
+                        false -> {
+                            showAlertDialog(getString(R.string.no_items_warning), null)
+                        }
+                    }
+                }
+            }
+            R.id.duplication -> {
+                mDiaryMainItemAdapter?.getSelectedItems()?.run {
+                    when (this.isNotEmpty()) {
+                        true -> {
+                            showAlertDialog(getString(R.string.duplicate_selected_items_confirm, this.size), DialogInterface.OnClickListener { _, _ ->
+                                this.reversed().map {
+                                    EasyDiaryDbHelper.beginTransaction()
+                                    it.isSelected = false
+                                    EasyDiaryDbHelper.commitTransaction()
+                                    EasyDiaryDbHelper.duplicateDiary(it)
+                                }
+                                refreshList()
+                            }, null)
+                        }
+                        false -> {
+                            showAlertDialog(getString(R.string.no_items_warning), null)
+                        }
+                    }
+                }
+            }
             R.id.settings -> {
                 val settingIntent = Intent(this@DiaryMainActivity, SettingsActivity::class.java)
                 //                startActivity(settingIntent);

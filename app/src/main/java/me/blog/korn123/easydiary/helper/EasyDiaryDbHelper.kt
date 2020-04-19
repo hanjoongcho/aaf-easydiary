@@ -39,6 +39,20 @@ object EasyDiaryDbHelper {
         return getInstance().path
     }
 
+    fun beginTransaction() {
+        getInstance().beginTransaction()
+    }
+
+    fun commitTransaction() {
+        getInstance().commitTransaction()
+    }
+
+    fun duplicateDiary(diaryDto: DiaryDto, realmInstance: Realm = getInstance()) {
+        val copyItem = realmInstance.copyFromRealm(diaryDto)
+        copyItem.currentTimeMillis = System.currentTimeMillis()
+        copyItem.updateDateString()
+        insertDiary(copyItem)
+    }
 
     /***************************************************************************************************
      *   Manage DiaryDto model

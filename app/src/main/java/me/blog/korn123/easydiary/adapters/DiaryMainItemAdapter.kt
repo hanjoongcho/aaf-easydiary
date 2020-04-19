@@ -67,10 +67,9 @@ class DiaryMainItemAdapter(
         }.run {
             val diaryDto = list[position]
             selection.setOnCheckedChangeListener { _, isChecked ->
-                val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
-                realmInstance.beginTransaction()
+                EasyDiaryDbHelper.beginTransaction()
                 diaryDto.isSelected = isChecked
-                realmInstance.commitTransaction()
+                EasyDiaryDbHelper.commitTransaction()
             }
 
             when ((activity as DiaryMainActivity).mDiaryMode) {
@@ -186,6 +185,14 @@ class DiaryMainItemAdapter(
         }
 
         return itemView
+    }
+
+    fun getSelectedItems(): List<DiaryDto> {
+        val selectedItems = arrayListOf<DiaryDto>()
+        list.map {
+            if (it.isSelected) selectedItems.add(it)
+        }
+        return selectedItems
     }
 
     private class ViewHolder(
