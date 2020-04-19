@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:icon="@drawable/copy"
+        android:id="@+id/duplication"
+        android:orderInCategory="100"
+        android:title="@string/menu_calendar"
+        app:showAsAction="always" />
+    <item
+        android:icon="@drawable/ic_aaf_delete"
+        android:id="@+id/delete"
+        android:orderInCategory="100"
+        android:title="@string/menu_calendar"
+        app:showAsAction="always" />
+</menu>

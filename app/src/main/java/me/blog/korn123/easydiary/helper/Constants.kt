@@ -464,6 +464,7 @@ const val DIARY_CONTENTS_SCROLL_Y = "diary_contents_scroll_y"
 const val DIARY_SEARCH_QUERY = "diary_search_query"
 const val DIARY_ATTACH_PHOTO_INDEX = "diary_attach_photo_index"
 const val DIARY_ENCRYPT_PASSWORD = "diary_encrypt_password"
+const val DIARY_MODE = "diary_mode"
 const val POSTCARD_SEQUENCE = "postcard_sequence"
 
 const val OPEN_URL_INFO = "open_url_info"

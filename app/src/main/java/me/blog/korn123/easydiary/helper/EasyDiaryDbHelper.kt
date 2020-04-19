@@ -14,7 +14,7 @@ object EasyDiaryDbHelper {
     private val mDiaryConfig: RealmConfiguration by lazy {
         RealmConfiguration.Builder()
                 .name("diary.realm")
-                .schemaVersion(12)
+                .schemaVersion(13)
                 .migration(EasyDiaryMigration())
                 .modules(Realm.getDefaultModule()!!)
                 .build()
@@ -39,6 +39,28 @@ object EasyDiaryDbHelper {
         return getInstance().path
     }
 
+    fun beginTransaction() {
+        getInstance().beginTransaction()
+    }
+
+    fun commitTransaction() {
+        getInstance().commitTransaction()
+    }
+
+    fun duplicateDiary(diaryDto: DiaryDto, realmInstance: Realm = getInstance()) {
+        val copyItem = realmInstance.copyFromRealm(diaryDto)
+        copyItem.currentTimeMillis = System.currentTimeMillis()
+        copyItem.updateDateString()
+        insertDiary(copyItem)
+    }
+
+    fun clearSelectedStatus() {
+        beginTransaction()
+        readDiary(null).map {
+            if (it.isSelected) it.isSelected = false
+        }
+        commitTransaction()
+    }
 
     /***************************************************************************************************
      *   Manage DiaryDto model

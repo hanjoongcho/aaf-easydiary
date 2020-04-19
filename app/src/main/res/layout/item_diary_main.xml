@@ -9,6 +9,11 @@
             style="@style/LinearLayoutVertical">
             <LinearLayout
                 style="@style/LinearLayoutHorizontal">
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/selection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
                 <ImageView
                     android:id="@+id/weather"
                     android:layout_marginRight="10dp"
@@ -16,7 +21,9 @@
                     android:layout_height="@dimen/diary_symbol_width" />
                 
                 <LinearLayout
-                    style="@style/LinearLayoutVertical">
+                    style="@style/LinearLayoutVertical"
+                    android:layout_width="0dp"
+                    android:layout_weight="1">
                     <com.simplemobiletools.commons.views.MyTextView
                         android:id="@+id/text1"
                         android:gravity="center_vertical"

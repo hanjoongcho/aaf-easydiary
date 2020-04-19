@@ -30,6 +30,7 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
+import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
@@ -56,6 +57,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     private var mClearQueryClickCount = 0
     private var mClearQueryFirstClickMillis = 0L
     private var mSymbolSequence = SYMBOL_SELECT_ALL
+    var mDiaryMode = DiaryMode.READ
 
 
     /***************************************************************************************************
@@ -102,7 +104,18 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         initShowcase()
         EasyDiaryUtils.initWorkingDirectory(this@DiaryMainActivity)
         migrateData()
-        if (savedInstanceState == null) checkWhatsNewDialog()
+
+        when (savedInstanceState == null) {
+            true -> checkWhatsNewDialog()
+            false -> {
+                mDiaryMode = savedInstanceState.getSerializable(DIARY_MODE) as DiaryMode
+            }
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putSerializable(DIARY_MODE, mDiaryMode)
+        super.onSaveInstanceState(outState)
     }
 
     override fun onResume() {
@@ -164,10 +177,52 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-//            android.R.id.home -> {
-//                supportActionBar?.setDisplayHomeAsUpEnabled(false)
-//                return true
-//            }
+            android.R.id.home -> {
+                mDiaryMode = DiaryMode.READ
+                invalidateOptionsMenu()
+                mDiaryMainItemAdapter?.notifyDataSetChanged()
+                return true
+            }
+            R.id.delete -> {
+                mDiaryMainItemAdapter?.getSelectedItems()?.run {
+                    when (this.isNotEmpty()) {
+                        true -> {
+                            showAlertDialog(getString(R.string.delete_selected_items_confirm, this.size), DialogInterface.OnClickListener { _, _ ->
+                                EasyDiaryDbHelper.beginTransaction()
+                                this.map {
+                                    it.deleteFromRealm()
+                                }
+                                EasyDiaryDbHelper.commitTransaction()
+                                refreshList()
+                            }, null)
+                        }
+                        false -> {
+                            showAlertDialog(getString(R.string.no_items_warning), null)
+                        }
+                    }
+                }
+            }
+            R.id.duplication -> {
+                mDiaryMainItemAdapter?.getSelectedItems()?.run {
+                    when (this.isNotEmpty()) {
+                        true -> {
+                            showAlertDialog(getString(R.string.duplicate_selected_items_confirm, this.size), DialogInterface.OnClickListener { _, _ ->
+                                this.reversed().map {
+                                    EasyDiaryDbHelper.beginTransaction()
+                                    it.isSelected = false
+                                    EasyDiaryDbHelper.commitTransaction()
+                                    EasyDiaryDbHelper.duplicateDiary(it)
+                                }
+                                refreshList()
+                                Handler().post { diaryListView.setSelection(0) }
+                            }, null)
+                        }
+                        false -> {
+                            showAlertDialog(getString(R.string.no_items_warning), null)
+                        }
+                    }
+                }
+            }
             R.id.settings -> {
                 val settingIntent = Intent(this@DiaryMainActivity, SettingsActivity::class.java)
                 //                startActivity(settingIntent);
@@ -203,16 +258,21 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.diary_main, menu)
-        val targetItems = mutableListOf<MenuItem>()
-        targetItems.add(menu.findItem(R.id.postCard))
-        targetItems.add(menu.findItem(R.id.dashboard))
-        targetItems.add(menu.findItem(R.id.chart))
-        targetItems.add(menu.findItem(R.id.settings))
-        targetItems.map { item ->
-            applyFontToMenuItem(item)
+        when (mDiaryMode) {
+            DiaryMode.READ -> {
+                supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                menuInflater.inflate(R.menu.diary_main, menu)
+                applyFontToMenuItem(menu.findItem(R.id.postCard))
+                applyFontToMenuItem(menu.findItem(R.id.dashboard))
+                applyFontToMenuItem(menu.findItem(R.id.chart))
+                applyFontToMenuItem(menu.findItem(R.id.settings))
+            }
+            DiaryMode.DELETE -> {
+                supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                menuInflater.inflate(R.menu.diary_main_delete, menu)
+                applyFontToMenuItem(menu.findItem(R.id.delete))
+            }
         }
-        
         return true
     }
 
@@ -441,21 +501,24 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         }
 
         diaryListView.setOnItemLongClickListener { adapterView, _, i, _ ->
-//            supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            val diaryDto = adapterView.adapter.getItem(i) as DiaryDto
-            showAlertDialog(getString(R.string.copy_diary_item),
-                    DialogInterface.OnClickListener { _, _ ->
-                        val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
-                        val copyItem = realmInstance.copyFromRealm(diaryDto)
-                        realmInstance.close()
-                        copyItem.currentTimeMillis = System.currentTimeMillis()
-                        copyItem.updateDateString()
-                        EasyDiaryDbHelper.insertDiary(copyItem)
-                        refreshList()
-                        Handler().post { diaryListView.setSelection(0) }
-                    },
-                    null
-            )
+            EasyDiaryDbHelper.clearSelectedStatus()
+            mDiaryMode = DiaryMode.DELETE
+            invalidateOptionsMenu()
+            mDiaryMainItemAdapter?.notifyDataSetChanged()
+//            val diaryDto = adapterView.adapter.getItem(i) as DiaryDto
+//            showAlertDialog(getString(R.string.copy_diary_item),
+//                    DialogInterface.OnClickListener { _, _ ->
+//                        val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
+//                        val copyItem = realmInstance.copyFromRealm(diaryDto)
+//                        realmInstance.close()
+//                        copyItem.currentTimeMillis = System.currentTimeMillis()
+//                        copyItem.updateDateString()
+//                        EasyDiaryDbHelper.insertDiary(copyItem)
+//                        refreshList()
+//                        Handler().post { diaryListView.setSelection(0) }
+//                    },
+//                    null
+//            )
             true
         }
 

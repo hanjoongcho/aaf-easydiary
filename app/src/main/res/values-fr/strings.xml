@@ -399,8 +399,9 @@
         Adding database file backup and recovery feature using SAF (Storage Access Framework)
     </string>
     <string name="release_194">
-        v1.4.128 / 2020.04.xx\n
-        Added feature to attach animated GIF files
+        v1.4.128 / 2020.04.20\n
+        Added feature to attach animated GIF files\n
+        Added diary multiple copy and delete feature
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -609,4 +610,7 @@
     <string name="recovery_internal_description">Diary contents are restored using the database backup file stored in the Easy Diary internal storage.</string>
     <string name="recovery_external_title">Restore from external storage</string>
     <string name="recovery_external_description">Diary contents are restored using the database backup file stored in the external public storage.</string>
+    <string name="delete_selected_items_confirm">Are you sure you want to delete the %d selected items?</string>
+    <string name="duplicate_selected_items_confirm">Are you sure you want to duplicate the %d selected items?</string>
+    <string name="no_items_warning">There are no items selected.</string>
 </resources>

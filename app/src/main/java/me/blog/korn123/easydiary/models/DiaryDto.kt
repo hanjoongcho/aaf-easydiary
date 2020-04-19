@@ -45,6 +45,8 @@ open class DiaryDto : RealmObject {
 
     var encryptKeyHash: String? = null
 
+    var isSelected: Boolean = false
+
     constructor()
 
     constructor(sequence: Int, currentTimeMillis: Long, title: String, contents: String, isEncrypt: Boolean, encryptKeyHash: String) : this(sequence, currentTimeMillis, title, contents) {
