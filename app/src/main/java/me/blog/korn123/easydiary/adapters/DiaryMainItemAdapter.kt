@@ -72,7 +72,7 @@ class DiaryMainItemAdapter(
                 diaryDto.isSelected = isChecked
                 realmInstance.commitTransaction()
             }
-            
+
             when ((activity as DiaryMainActivity).mDiaryMode) {
                 DiaryMode.READ -> selection.visibility = View.GONE
                 DiaryMode.DELETE -> {
