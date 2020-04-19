@@ -54,6 +54,14 @@ object EasyDiaryDbHelper {
         insertDiary(copyItem)
     }
 
+    fun clearSelectedStatus() {
+        beginTransaction()
+        readDiary(null).map {
+            if (it.isSelected) it.isSelected = false
+        }
+        commitTransaction()
+    }
+
     /***************************************************************************************************
      *   Manage DiaryDto model
      *

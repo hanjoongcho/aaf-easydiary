@@ -104,7 +104,18 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         initShowcase()
         EasyDiaryUtils.initWorkingDirectory(this@DiaryMainActivity)
         migrateData()
-        if (savedInstanceState == null) checkWhatsNewDialog()
+
+        when (savedInstanceState == null) {
+            true -> checkWhatsNewDialog()
+            false -> {
+                mDiaryMode = savedInstanceState.getSerializable(DIARY_MODE) as DiaryMode
+            }
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putSerializable(DIARY_MODE, mDiaryMode)
+        super.onSaveInstanceState(outState)
     }
 
     override fun onResume() {
@@ -203,6 +214,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                                     EasyDiaryDbHelper.duplicateDiary(it)
                                 }
                                 refreshList()
+                                Handler().post { diaryListView.setSelection(0) }
                             }, null)
                         }
                         false -> {
@@ -489,6 +501,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         }
 
         diaryListView.setOnItemLongClickListener { adapterView, _, i, _ ->
+            EasyDiaryDbHelper.clearSelectedStatus()
             mDiaryMode = DiaryMode.DELETE
             invalidateOptionsMenu()
             mDiaryMainItemAdapter?.notifyDataSetChanged()
