@@ -27,8 +27,11 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.DiaryMainActivity
+import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
@@ -55,13 +58,29 @@ class DiaryMainItemAdapter(
                 val viewHolder = ViewHolder(
                         itemView.photoContainer, itemView.photoViews,
                         itemView.text1, itemView.text2, itemView.text3,
-                        itemView.contentsLength, itemView.weather, itemView.item_holder
+                        itemView.contentsLength, itemView.weather, itemView.item_holder,
+                        itemView.selection
                 )
                 itemView.tag = viewHolder
                 viewHolder
             }
         }.run {
             val diaryDto = list[position]
+            selection.setOnCheckedChangeListener { _, isChecked ->
+                val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
+                realmInstance.beginTransaction()
+                diaryDto.isSelected = isChecked
+                realmInstance.commitTransaction()
+            }
+            
+            when ((activity as DiaryMainActivity).mDiaryMode) {
+                DiaryMode.READ -> selection.visibility = View.GONE
+                DiaryMode.DELETE -> {
+                    selection.visibility = View.VISIBLE
+                    selection.isChecked = diaryDto.isSelected
+                }
+            }
+
             if (StringUtils.isEmpty(diaryDto.title)) {
                 textView1.visibility = View.GONE
             } else {
@@ -172,6 +191,7 @@ class DiaryMainItemAdapter(
     private class ViewHolder(
             val photoContainer: RelativeLayout, val photoViews: LinearLayout,
             val textView1: TextView, val textView2: TextView, val textView3: TextView,
-            val contentsLength: TextView, val imageView: ImageView, val item_holder: ViewGroup
+            val contentsLength: TextView, val imageView: ImageView, val item_holder: ViewGroup,
+            val selection: CheckBox
     )
 }

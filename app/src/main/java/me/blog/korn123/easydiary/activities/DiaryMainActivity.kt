@@ -57,7 +57,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     private var mClearQueryClickCount = 0
     private var mClearQueryFirstClickMillis = 0L
     private var mSymbolSequence = SYMBOL_SELECT_ALL
-    private var mDiaryMode = DiaryMode.READ
+    var mDiaryMode = DiaryMode.READ
+
 
     /***************************************************************************************************
      *   override functions
@@ -168,6 +169,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             android.R.id.home -> {
                 mDiaryMode = DiaryMode.READ
                 invalidateOptionsMenu()
+                mDiaryMainItemAdapter?.notifyDataSetChanged()
                 return true
             }
             R.id.settings -> {
@@ -450,6 +452,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         diaryListView.setOnItemLongClickListener { adapterView, _, i, _ ->
             mDiaryMode = DiaryMode.DELETE
             invalidateOptionsMenu()
+            mDiaryMainItemAdapter?.notifyDataSetChanged()
 //            val diaryDto = adapterView.adapter.getItem(i) as DiaryDto
 //            showAlertDialog(getString(R.string.copy_diary_item),
 //                    DialogInterface.OnClickListener { _, _ ->
