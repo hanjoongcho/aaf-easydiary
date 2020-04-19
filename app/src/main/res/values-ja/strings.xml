@@ -399,8 +399,9 @@
         SAF(Storage Access Framework)を利用したデータベースファイルのバックアップと復元機能を追加
     </string>
     <string name="release_194">
-        v1.4.128 / 2020.04.xx\n
-        Added feature to attach animated GIF files
+        v1.4.128 / 2020.04.20\n
+        アニメーションGIFファイルを添付する機能を追加\n
+        ダイアリー複数のコピーと削除機能を追加
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -609,7 +610,7 @@
     <string name="recovery_internal_description">Easy Diaryの内部ストレージに保存されているデータベースバックアップファイルを使用して、日記の内容が復元されます。</string>
     <string name="recovery_external_title">外部ストレージから復元</string>
     <string name="recovery_external_description">日記の内容は、外部のパブリックストレージに保存されているデータベースバックアップファイルを使用して復元されます。</string>
-    <string name="delete_selected_items_confirm">Are you sure you want to delete the %d selected items?</string>
-    <string name="duplicate_selected_items_confirm">Are you sure you want to duplicate the %d selected items?</string>
-    <string name="no_items_warning">There are no items selected.</string>
+    <string name="delete_selected_items_confirm">選択した%d個のアイテムを削除してもよろしいですか?</string>
+    <string name="duplicate_selected_items_confirm">%d個の選択されたアイテムを複製しますか?</string>
+    <string name="no_items_warning">アイテムが選択されていません。</string>
 </resources>

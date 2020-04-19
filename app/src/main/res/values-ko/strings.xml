@@ -399,8 +399,9 @@
         SAF(Storage Access Framework)를 이용한 데이터베이스 파일 백업 및 복구 기능 추가
     </string>
     <string name="release_194">
-        v1.4.128 / 2020.04.xx\n
-        Added feature to attach animated GIF files
+        v1.4.128 / 2020.04.20\n
+        애니메이션 GIF 첨부기능 추가\n
+        다이어리 다중 복사 및 삭제 기능 추가
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -609,7 +610,7 @@
     <string name="recovery_internal_description">이지다이어리 내부 저장소에 저장된 데이터베이스 백업파일을 이용하여 다이어리 콘텐츠를 복원합니다.</string>
     <string name="recovery_external_title">외부 저장소에서 복원</string>
     <string name="recovery_external_description">외부 공용저장소에 저장된 데이터베이스 백업파일을 이용하여 다이어리 콘텐츠를 복원합니다.</string>
-    <string name="delete_selected_items_confirm">Are you sure you want to delete the %d selected items?</string>
-    <string name="duplicate_selected_items_confirm">Are you sure you want to duplicate the %d selected items?</string>
-    <string name="no_items_warning">There are no items selected.</string>
+    <string name="delete_selected_items_confirm">선택된 %d건의 항목을 삭제 하시겠습니까?</string>
+    <string name="duplicate_selected_items_confirm">선택된 %d건의 항목을 복사 하시겠습니까?</string>
+    <string name="no_items_warning">선택된 항목이 없습니다.</string>
 </resources>
