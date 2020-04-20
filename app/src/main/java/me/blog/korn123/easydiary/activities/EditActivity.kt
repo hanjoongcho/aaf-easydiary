@@ -319,7 +319,7 @@ abstract class EditActivity : EasyDiaryActivity() {
         }
     }
     
-    fun attachPhotos(selectPaths: ArrayList<String>, isUriString: Boolean = false) {
+    fun attachPhotos(selectPaths: ArrayList<String>, isUriString: Boolean) {
         setVisiblePhotoProgress(true)
         Thread(Runnable {
             selectPaths.map { item ->
@@ -334,7 +334,6 @@ abstract class EditActivity : EasyDiaryActivity() {
                     }
                     mPhotoUris.add(PhotoUriDto(FILE_URI_PREFIX + photoPath, mimeType))
                     val thumbnailSize = config.settingThumbnailSize
-//                    val bitmap = BitmapUtils.decodeFile(photoPath, CommonUtils.dpToPixel(applicationContext, thumbnailSize - 5), CommonUtils.dpToPixel(applicationContext, thumbnailSize - 5))
                     val imageView = ImageView(applicationContext)
                     val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(applicationContext, thumbnailSize), CommonUtils.dpToPixel(applicationContext, thumbnailSize))
                     layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(applicationContext, 3F), 0)
@@ -343,7 +342,6 @@ abstract class EditActivity : EasyDiaryActivity() {
                     val gradient = drawable as GradientDrawable
                     gradient.setColor(ColorUtils.setAlphaComponent(config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA))
                     imageView.background = gradient
-//                    imageView.setImageBitmap(bitmap)
                     imageView.scaleType = ImageView.ScaleType.CENTER_CROP
                     val padding = (CommonUtils.dpToPixel(applicationContext, 2.5F, CALCULATION.FLOOR))
                     imageView.setPadding(padding, padding, padding, padding)

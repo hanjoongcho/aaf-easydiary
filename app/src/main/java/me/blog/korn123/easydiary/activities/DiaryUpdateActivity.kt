@@ -120,17 +120,16 @@ class DiaryUpdateActivity : EditActivity() {
                 }
             }
             REQUEST_CODE_IMAGE_PICKER -> if (resultCode == Activity.RESULT_OK && intent != null) {
-                val tempFile = createTemporaryPhotoFile(intent.data, true)
-                attachPhotos(arrayListOf(tempFile.absolutePath))
+                attachPhotos(arrayListOf(intent.data.toString()), true)
             }
             PickConfig.PICK_PHOTO_DATA -> {
                 intent?.let {
-                    val selectPaths = it.getSerializableExtra(PickConfig.INTENT_IMG_LIST_SELECT) as ArrayList<String>
-                    attachPhotos(selectPaths, true)
+                    val selectedUriPaths = it.getSerializableExtra(PickConfig.INTENT_IMG_LIST_SELECT) as ArrayList<String>
+                    attachPhotos(selectedUriPaths, true)
                 }
             }
             REQUEST_CODE_CAPTURE_CAMERA -> if (resultCode == Activity.RESULT_OK) {
-                attachPhotos(arrayListOf(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY + CAPTURE_CAMERA_FILE_NAME))
+                attachPhotos(arrayListOf(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY + CAPTURE_CAMERA_FILE_NAME), false)
             }
         }
     }

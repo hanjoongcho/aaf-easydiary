@@ -134,15 +134,15 @@ class DiaryMainItemAdapter(
                     gradient.setColor(ColorUtils.setAlphaComponent(activity.config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA))
                     imageView.background = gradient
                     imageView.scaleType = ImageView.ScaleType.CENTER
-                    val padding = (CommonUtils.dpToPixel(activity, 1.5F, CALCULATION.FLOOR))
-                    imageView.setPadding(padding, padding, padding, padding)
+                    CommonUtils.dpToPixel(activity, 1.5F, CALCULATION.FLOOR).apply {
+                        imageView.setPadding(this, this, this, this)
+                    }
                     val listener = object : RequestListener<Drawable> {
                         override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
                             return false
                         }
 
                         override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                            imageView.scaleType = ImageView.ScaleType.CENTER_CROP
                             return false
                         }
                     }
@@ -151,6 +151,7 @@ class DiaryMainItemAdapter(
                             .placeholder(R.drawable.error_7)
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .priority(Priority.HIGH)
+                            .centerCrop()
                     Glide.with(context).load(path).listener(listener).apply(options).into(imageView)
                     if (photoViews.childCount >= maxPhotos) return@map
                     photoViews.addView(imageView)

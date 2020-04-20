@@ -341,25 +341,16 @@ object EasyDiaryUtils {
         gradient.setColor(ColorUtils.setAlphaComponent(context.config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA))
         imageView.background = gradient
 //        imageView.setImageBitmap(bitmap)
-        imageView.scaleType = ImageView.ScaleType.CENTER_CROP
         val padding = (CommonUtils.dpToPixel(context, 2.5F, CALCULATION.FLOOR))
         imageView.setPadding(padding, padding, padding, padding)
-        val listener = object : RequestListener<Drawable> {
-            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                imageView.scaleType = ImageView.ScaleType.CENTER
-                return false
-            }
-
-            override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                return false
-            }
-        }
+        imageView.scaleType = ImageView.ScaleType.CENTER
         val options = RequestOptions()
-//                        .centerCrop()
-                .error(R.drawable.error_7)
+//                .error(R.drawable.error_7)
+                .placeholder(R.drawable.error_7)
+                .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .priority(Priority.HIGH)
-        Glide.with(context).load(getApplicationDataDirectory(context) + photoUriDto.getFilePath()).listener(listener).apply(options).into(imageView)
+        Glide.with(context).load(getApplicationDataDirectory(context) + photoUriDto.getFilePath()).apply(options).into(imageView)
 
         return imageView
     }
