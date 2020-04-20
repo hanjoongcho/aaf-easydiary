@@ -398,8 +398,8 @@
         Removed requestLegacyExternalStorage option\n
         Adding database file backup and recovery feature using SAF (Storage Access Framework)
     </string>
-    <string name="release_194">
-        v1.4.128 / 2020.04.20\n
+	<string name="release_195">
+        v1.4.129 / 2020.04.21\n
         Added feature to attach animated GIF files\n
         Added diary multiple copy and delete feature
     </string>
