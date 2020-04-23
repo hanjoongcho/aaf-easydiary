@@ -10,18 +10,21 @@ import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val alarmId = intent.getIntExtra(DevActivity.ALARM_ID, -1)
-        val alarm = EasyDiaryDbHelper.readAlarmBy(alarmId)
-        if (context.isScreenOn()) {
-            alarm?.let {
-                context.showAlarmNotification(it)
-            }
-        } else {
-            Intent(context, DiaryReminderActivity::class.java).apply {
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                putExtra(DevActivity.ALARM_ID, alarmId)
-                context.pauseLock() // Disables the active lock
-                context.startActivity(this)
-            }
+        EasyDiaryDbHelper.readAlarmBy(alarmId)?.let {
+            context.showAlarmNotification(it)
         }
+
+//        if (context.isScreenOn()) {
+//            alarm?.let {
+//                context.showAlarmNotification(it)
+//            }
+//        } else {
+//            Intent(context, DiaryReminderActivity::class.java).apply {
+//                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//                putExtra(DevActivity.ALARM_ID, alarmId)
+//                context.pauseLock() // Disables the active lock
+//                context.startActivity(this)
+//            }
+//        }
     }
 }

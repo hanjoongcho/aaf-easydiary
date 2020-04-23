@@ -263,6 +263,12 @@ fun Context.showAlarmNotification(alarm: Alarm) {
     val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     notificationManager.notify(alarm.id, notification)
     scheduleNextAlarm(alarm, false)
+    val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
+    if (!isScreenOn()) {
+        powerManager.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP, "myApp:notificationLock").apply {
+            acquire(3000)
+        }
+    }
 }
 
 fun Context.rescheduleEnabledAlarms() {
@@ -298,7 +304,7 @@ fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): No
             .setPriority(NotificationCompat.PRIORITY_HIGH)
 
     val notification = builder.build()
-    notification.flags = notification.flags or Notification.FLAG_INSISTENT
+//    notification.flags = notification.flags or Notification.FLAG_INSISTENT
     return notification
 }
 
