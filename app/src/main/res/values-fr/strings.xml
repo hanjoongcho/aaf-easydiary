@@ -403,6 +403,10 @@
         Added feature to attach animated GIF files\n
         Added diary multiple copy and delete feature
     </string>
+    <string name="release_196">
+        v1.4.130 / 2020.04.xx\n
+        …
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
