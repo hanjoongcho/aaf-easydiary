@@ -22,8 +22,7 @@ import androidx.core.app.AlarmManagerCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.simplemobiletools.commons.extensions.*
-import com.simplemobiletools.commons.helpers.DAY_MINUTES
-import com.simplemobiletools.commons.helpers.isOreoPlus
+import com.simplemobiletools.commons.helpers.*
 import io.github.aafactory.commons.utils.DateUtils
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_dev.*
@@ -117,11 +116,13 @@ class DevActivity : EasyDiaryActivity() {
                 }
                 day.background = getProperDayDrawable(selectDay)
                 day.setTextColor(if (selectDay) config.backgroundColor else config.textColor)
+                alarm_days.text = getSelectedDaysString(mAlarm.days)
             }
 
             edit_alarm_days_holder.addView(day)
         }
-
+        alarm_days.text = getSelectedDaysString(mAlarm.days)
+        alarm_days.setTextColor(config.textColor)
         alarm_switch.isChecked = mAlarm.isEnabled
 
         val resourceId = resources.getIdentifier("ic_pizza", "drawable", packageName)
@@ -262,9 +263,11 @@ fun Context.showAlarmNotification(alarm: Alarm) {
     val notification = getAlarmNotification(pendingIntent, alarm)
     val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     notificationManager.notify(alarm.id, notification)
-    scheduleNextAlarm(alarm, false)
     val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
-    if (!isScreenOn()) {
+    if (isScreenOn()) {
+        scheduleNextAlarm(alarm, true)
+    } else {
+        scheduleNextAlarm(alarm, false)
         powerManager.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP, "myApp:notificationLock").apply {
             acquire(3000)
         }
@@ -330,6 +333,25 @@ fun Context.formatTo12HourFormat(showSeconds: Boolean, hours: Int, minutes: Int,
     val appendable = getString(if (hours >= 12) R.string.p_m else R.string.a_m)
     val newHours = if (hours == 0 || hours == 12) 12 else hours % 12
     return "${formatTime(showSeconds, false, newHours, minutes, seconds)} $appendable"
+}
+
+// format day bits to strings like "Mon, Tue, Wed"
+fun Context.getSelectedDaysString(bitMask: Int): String {
+    val dayBits = arrayListOf(MONDAY_BIT, TUESDAY_BIT, WEDNESDAY_BIT, THURSDAY_BIT, FRIDAY_BIT, SATURDAY_BIT, SUNDAY_BIT)
+    val weekDays = arrayListOf("월", "화", "수", "목", "금", "토", "일")
+
+    if (baseConfig.isSundayFirst) {
+        dayBits.moveLastItemToFront()
+        weekDays.moveLastItemToFront()
+    }
+
+    var days = ""
+    dayBits.forEachIndexed { index, bit ->
+        if (bitMask and bit != 0) {
+            days += "${weekDays[index]}, "
+        }
+    }
+    return days.trim().trimEnd(',')
 }
 
 fun Activity.showOverLockScreen() {
