@@ -336,30 +336,36 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
     }
 
     private fun recoverDiaryPhoto() {
+        mActivity.setScreenOrientationSensor(false)
         progressContainer.visibility = View.VISIBLE
         initGoogleSignAccount { _ ->
             mActivity.runOnUiThread {
                 progressContainer.visibility = View.GONE
-                mActivity.showAlertDialog(getString(R.string.recover_confirm_attached_photo), DialogInterface.OnClickListener {_, _ ->
-                    val recoverPhotoService = Intent(mActivity, RecoverPhotoService::class.java)
-                    mActivity.startService(recoverPhotoService)
-                    mActivity.finish()
-                }, null)
+                mActivity.run {
+                    showAlertDialog(getString(R.string.recover_confirm_attached_photo), DialogInterface.OnClickListener { _, _ ->
+                        val recoverPhotoService = Intent(this, RecoverPhotoService::class.java)
+                        startService(recoverPhotoService)
+                        finish()
+                    }, DialogInterface.OnClickListener { _, _ -> setScreenOrientationSensor(true) })
+                }
             }
         }
     }
 
     private fun backupDiaryPhoto() {
+        mActivity.setScreenOrientationSensor(false)
         progressContainer.visibility = View.VISIBLE
         initGoogleSignAccount { account ->
             initDriveWorkingDirectory(account, DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
                 progressContainer.visibility = View.GONE
-                mActivity.showAlertDialog(getString(R.string.backup_confirm_message), DialogInterface.OnClickListener { _, _ ->
-                    val backupPhotoService = Intent(mActivity, BackupPhotoService::class.java)
-                    backupPhotoService.putExtra(DriveServiceHelper.WORKING_FOLDER_ID, photoFolderId)
-                    mActivity.startService(backupPhotoService)
-                    mActivity.finish()
-                }, null)
+                mActivity.run {
+                    showAlertDialog(getString(R.string.backup_confirm_message), DialogInterface.OnClickListener { _, _ ->
+                        val backupPhotoService = Intent(this, BackupPhotoService::class.java)
+                        backupPhotoService.putExtra(DriveServiceHelper.WORKING_FOLDER_ID, photoFolderId)
+                        startService(backupPhotoService)
+                        finish()
+                    }, DialogInterface.OnClickListener { _, _ -> setScreenOrientationSensor(true) })
+                }
             }
         }
     }
