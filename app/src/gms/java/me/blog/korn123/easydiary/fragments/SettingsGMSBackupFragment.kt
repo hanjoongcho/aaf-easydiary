@@ -54,8 +54,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
     private lateinit var mRootView: ViewGroup
     private var mAlertDialog: AlertDialog? = null
     private var mTaskFlag = 0
-    private val mActivity: Activity
-        get() { return activity!! }
+    private val mActivity = activity!!
 
 
     /***************************************************************************************************
