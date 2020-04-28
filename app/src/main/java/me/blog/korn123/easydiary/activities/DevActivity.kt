@@ -304,8 +304,8 @@ fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): No
             .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
             .setOngoing(false)
             .setAutoCancel(true)
-            .setContentTitle("title")
-            .setContentText("content")
+            .setContentTitle("Easy Diary alarm: ${alarm.id}")
+            .setContentText(alarm.label)
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
 
