@@ -19,6 +19,7 @@
     <ScrollView
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:id="@+id/main_holder"
+        android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
@@ -28,12 +29,33 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 style="@style/AppCard">
-                <ImageView
-                    android:id="@+id/devConsoleSymbol"
-                    android:visibility="gone"
-                    android:layout_width="77dp"
-                    android:layout_height="77dp"/>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/devConsoleSymbol"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        android:visibility="visible"
+                        android:layout_width="77dp"
+                        android:layout_height="77dp"/>
+                    <androidx.appcompat.widget.AppCompatButton
+                        app:layout_constraintTop_toBottomOf="@+id/devConsoleSymbol"
+                        app:layout_constraintLeft_toLeftOf="@+id/devConsoleSymbol"
+                        android:id="@+id/openAlarmManager"
+                        android:text="Open Reminder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <androidx.appcompat.widget.AppCompatButton
+                        app:layout_constraintTop_toBottomOf="@+id/devConsoleSymbol"
+                        app:layout_constraintLeft_toRightOf="@+id/openAlarmManager"
+                        android:id="@+id/nextAlarmInfo"
+                        android:text="Next Alarm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
@@ -80,6 +102,22 @@
                             android:layout_marginBottom="@dimen/medium_margin"
                             android:orientation="horizontal"/>
 
+                        <com.simplemobiletools.commons.views.MyEditText
+                            android:id="@+id/alarmTitle"
+                            android:hint="Alarm title"
+                            android:layout_below="@id/edit_alarm_days_holder"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                        </com.simplemobiletools.commons.views.MyEditText>
+
+                        <com.simplemobiletools.commons.views.MyEditText
+                            android:id="@+id/alarmDescription"
+                            android:hint="Alarm description"
+                            android:layout_below="@id/alarmTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                        </com.simplemobiletools.commons.views.MyEditText>
+
                         <com.simplemobiletools.commons.views.MySwitchCompat
                             android:id="@+id/alarm_switch"
                             android:layout_width="wrap_content"
@@ -90,18 +128,6 @@
                             android:paddingLeft="@dimen/activity_margin"
                             android:paddingRight="@dimen/medium_margin"/>
                     </RelativeLayout>
-
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/openAlarmManager"
-                        android:text="Open Reminder"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/nextAlarmInfo"
-                        android:text="Next Alarm"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
         </LinearLayout>

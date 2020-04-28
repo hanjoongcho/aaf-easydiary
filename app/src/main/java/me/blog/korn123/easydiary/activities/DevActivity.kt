@@ -124,6 +124,8 @@ class DevActivity : EasyDiaryActivity() {
         alarm_days.text = getSelectedDaysString(mAlarm.days)
         alarm_days.setTextColor(config.textColor)
         alarm_switch.isChecked = mAlarm.isEnabled
+        alarmTitle.setText("Easy Diary")
+        alarmDescription.setText(mAlarm.label)
 
         val resourceId = resources.getIdentifier("ic_pizza", "drawable", packageName)
         if (resourceId > 0) {
@@ -147,6 +149,7 @@ class DevActivity : EasyDiaryActivity() {
             mAlarm.isEnabled = isChecked
             if (isChecked) {
                 scheduleNextAlarm(mAlarm, true)
+                mAlarm.label = alarmDescription.text.toString()
             } else {
                 cancelAlarmClock(mAlarm)
             }
