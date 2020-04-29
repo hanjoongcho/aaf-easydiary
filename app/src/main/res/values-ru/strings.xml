@@ -403,6 +403,10 @@
         Added feature to attach animated GIF files\n
         Added diary multiple copy and delete feature
     </string>
+    <string name="release_196">
+        v1.4.130 / 2020.04.xx\n
+        …
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -580,15 +584,13 @@
     <string name="export_full_backup_title">[BETA] Резервное копирование всех данных</string>
     <string name="export_full_backup_description">Сжатие и сохранение всех данных, относящихся к дневнику, таких как база данных, прикрепленные фотографии, почтовые марки, шрифты и т.д. в один файл.\nДанная функция находится в бета-разработке, поэтому она может работать некорректно на некоторых устройствах.\nМесто сохранения: /AAFactory/EasyDiary/xxx.zip</string>
     <string name="diary_symbol_search_message">Выберите символ с которым вы хотите отфильтровать записи.</string>
-    
     <string name="import_full_backup_title">[BETA] Восстановление всех данных</string>
     <string name="import_full_backup_description">Распаковка и восстановление всех данных, относящиеся к дневнику, такие как база данных, прикрепленные фотографии, почтовые марки, шрифты и т.д. \nДанная функция находится в бета-разработке, поэтому она может работать некорректно на некоторых устройствах.</string>
     <string name="calendar_sort_ascending">По возрастанию</string>
     <string name="calendar_sort_descending">По убыванию</string>
     <string name="calendar_sort_title">Опция сортировки Календаря</string>
     <string name="calendar_sort_summary">Установите порядок сортировки списка ежедневных дневников на экране календаря.</string>
-	
-	 <string name="preferences_category_font">Настройка шрифта приложения</string>
+	<string name="preferences_category_font">Настройка шрифта приложения</string>
     <string name="hold_position_title">Настройка положения прокрутки</string>
     <string name="hold_position_summary">Когда экран редактирования запускается, положение прокрутки на экране просмотра сохраняется. Если этот параметр не установлен, прокрутка перемещается в последнюю позицию текста.</string>
     <string name="max_lines_title">Maксимум Строк</string>
