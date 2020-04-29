@@ -1,0 +1,618 @@
+<resources>
+    <string name="app_name">Easy Diary</string>
+    <string name="common_create_seconds">Секунды создания</string>
+    <string name="create_diary_title">Написать дневник</string>
+    <string name="write_date">Дата</string>
+    <string name="request_title_message">Пожалуйста, введите заголовок.</string>
+    <string name="request_content_message">Пожалуйста, введите содержание.</string>
+    <string name="guide_message">Введите или произнесите заголовок.</string>
+    <string name="contents_text_hint">Введите или произнесите содержание.</string>
+    <string name="delete_photo_confirm_message">Вы уверены, что хотите удалить это фото?</string>
+    <string name="gallery_intent_not_found_message">Галерея не установлена или отключена.</string>
+    <string name="create_diary_showcase_button_1">Далее</string>
+    <string name="create_diary_showcase_button_2">Закрыть</string>
+    <string name="create_diary_showcase_title_1">Погода</string>
+    <string name="create_diary_showcase_title_2">Заголовок</string>
+    <string name="create_diary_showcase_title_3">Содержание</string>
+    <string name="create_diary_showcase_title_4">Прикрепить фото</string>
+    <string name="create_diary_showcase_title_5">Увеличить шрифт</string>
+    <string name="create_diary_showcase_title_6">Уменьшить шрифт</string>
+    <string name="create_diary_showcase_title_7">Выбрать дату</string>
+    <string name="create_diary_showcase_title_8">Выбрать время</string>
+    <string name="create_diary_showcase_title_9">Сохранить</string>
+    <string name="create_diary_showcase_message_1">Выберите погоду, которая подходит для времени написания дневника. Выбор погоды не обязателен.</string>
+    <string name="create_diary_showcase_message_2">Введите заголовок вашей записи. Введение заголовка не обязательно.</string>
+    <string name="create_diary_showcase_message_3">Пишите дневники, заметки, замечания и многое другое.</string>
+    <string name="create_diary_showcase_message_4">Прикрепите фото к дневниковой записи.</string>
+    <string name="create_diary_showcase_message_5">Увеличьте текст, используемый в дневнике.</string>
+    <string name="create_diary_showcase_message_6">Уменьшите текст, используемый в дневнике.</string>
+    <string name="create_diary_showcase_message_7">Выберите дату сделанной записи. Если вы хотите сделать запись за прошедший день, вы можете изменить дату на данный день.</string>
+    <string name="create_diary_showcase_message_8">Выберите время создания записи. Вы можете изменить время если вы хотите сделать запись за прошедшее время.</string>
+    <string name="create_diary_showcase_message_9">Сохраните сделанную запись.</string>
+    <string name="read_diary_title">Поиск</string>
+    <string name="input_mode_a">Голосовой ввод</string>
+    <string name="input_mode_c">Режим клавиатуры</string>
+    <string name="guide_message_2">Введите или произнесите поисковой запрос.</string>
+    <string name="recognizer_intent_not_found_message">Система распознавания речи не установлена или отключена.</string>
+    <string name="sample_diary_title_1">Быть в опасности, а не остерегаться.</string>
+    <string name="sample_diary_title_2">Я повторяю то, что знаю, когда говорю.</string>
+    <string name="sample_diary_title_3">Хорошие вести не испортятся, а вот плохие могут стать еще хуже.</string>
+    <string name="sample_diary_title_4">Изобилие призывает к комфорту, ограничение - к творчеству.</string>
+    <string name="sample_diary_1">Если вы оглянетесь назад на свою жизнь, то увидите, что вы пострадали, будучи слишком осторожными, а не находясь в опасности.\nОпасность в опасности.\nБыть в опасности, а не остерегаться.\n- Грант Кардон, Правило 10Х</string>
+    <string name="sample_diary_2">Когда ты говоришь, то лишь повторяешь то, что уже знаешь.\nНо если ты слушаешь, то можешь узнать что-то новое.\n- Далай Лама</string>
+    <string name="sample_diary_3">Для сотрудников должно быть безопасно задавать на встречах трудные вопросы и приносить дурные вести. \nКак раз хорошие вести не испортятся, если сообщить их завтра, а вот плохие могут стать еще хуже. \n- Эрик Шмидт, Директор Google, \"Как работает Google\"</string>
+    <string name="sample_diary_4">Ограничения не являются препятствием для творчества, но творчество используется для преодоления ограничений. \nВсе великие работы или творческие решения – это те, которые имеют много временных ограничений, физических ограничений и ограничений ресурсов. Творчество рождается в ограниченной среде. \n- Представитель Ким Бон-Джина</string>
+    <string name="read_diary_showcase_button_1">Далее</string>
+    <string name="read_diary_showcase_button_2">Закрыть</string>
+    <string name="read_diary_showcase_title_1">Написать</string>
+    <string name="read_diary_showcase_title_2">Поиск</string>
+    <string name="read_diary_showcase_title_3">Распознавание речи</string>
+    <string name="read_diary_showcase_title_4">Календарь</string>
+    <string name="read_diary_showcase_title_5">Лента</string>
+    <string name="read_diary_showcase_title_6">Диаграмма</string>
+    <string name="read_diary_showcase_title_7">Расширенные настройки</string>
+    <string name="read_diary_showcase_title_8">Просмотр</string>
+    <string name="read_diary_showcase_message_1">Вы можете создавать различные записи в виде дневника, заметки, кратких примечаний и т.д. в зависимости от времени.</string>
+    <string name="read_diary_showcase_message_2">Вы можете искать записи с помощью ключевых слов. При вводе ключевого слова, производится поиск соответствующей записи и нужное вам слово выделяется.</string>
+    <string name="read_diary_showcase_message_3">Вы можете использовать функцию распознавания речи для ввода ключевых слов без использования клавиатуры.</string>
+    <string name="read_diary_showcase_message_4">Созданные заметки могут быть сгруппированы по дате в календаре.</string>
+    <string name="read_diary_showcase_message_5">Созданные заметки отображаются в ленте.</string>
+    <string name="read_diary_showcase_message_6">Вы можете увидеть диаграмму записей дневника сделанных за весь период.</string>
+    <string name="read_diary_showcase_message_7">Вы можете использовать расширенные настройки для изменения шрифтов, установки ключа блокировки, резервного копирования и восстановления дневника.</string>
+    <string name="read_diary_showcase_message_8">Нажмите на карточку дневника в списке, чтобы просмотреть.</string>
+    <string name="diary_photo_migration_message">Метод вложения изображения EasyDiary изменяется таким образом, чтобы существующая информация о ссылке сжималась и хранилась в папке EasyDiary.\nПодождите, пока операция не завершится.</string>
+    <string name="read_diary_detail_title">Читать Дневник</string>
+    <string name="delete_confirm">Вы уверены, что хотите удалить эту запись?</string>
+    <string name="read_diary_detail_showcase_button_1">Далее</string>
+    <string name="read_diary_detail_showcase_button_2">Закрыть</string>
+    <string name="read_diary_detail_showcase_title_0">Просмотр Дневника</string>
+    <string name="read_diary_detail_showcase_title_1">Листайте страницы</string>
+    <string name="read_diary_detail_showcase_title_2">Редактируйте Дневник</string>
+    <string name="read_diary_detail_showcase_title_3">Прочитать вслух</string>
+    <string name="read_diary_detail_showcase_title_4">Почтовая марка</string>
+    <string name="read_diary_detail_showcase_title_5">Удалить запись</string>
+    <string name="read_diary_detail_showcase_message_0">Просмотрите сохраненный дневник. Вы можете изменить сохраненный дневник или создать карточку дневника, указав собственный цвет.</string>
+    <string name="read_diary_detail_showcase_message_1">Перетащите экран влево или вправо, чтобы просмотреть дневники, созданные до или после.</string>
+    <string name="read_diary_detail_showcase_message_2">Вы можете перейти в режим редактирования дневника, чтобы отредактировать просматриваемый дневник.</string>
+    <string name="read_diary_detail_showcase_message_3">Вы можете прослушать написанное вами, используя синтезатор речи Google TTS.</string>
+    <string name="read_diary_detail_showcase_message_4">Используйте дневник, чтобы создавать почтовые марки и делиться ими с другими.</string>
+    <string name="read_diary_detail_showcase_message_5">Вы можете удалить текущий дневник и перейти на экран поиска.</string>
+    <string name="update_diary_title">Редактировать Дневник</string>
+    <string name="back_pressed_confirm">Нажмите \'OK\', чтобы перейти в предыдущий экран, не сохраняя текущую запись.</string>
+    <string name="rate_app">Оценить приложение</string>
+    <string name="guide_message_3">Недостаточно прав для запрашиваемой функции.</string>
+    <string name="restore_diary">Восстановить Дневник</string>
+    <string name="restore_diary_summary">Восстановить все содержимое, кроме вложений, используя данные, резервные для Google Диска.</string>
+    <string name="restore_photo">Восстановление дневниковых фотографий (Руководство)</string>
+    <string name="restore_photo_summary">Вы можете восстановить фотографии, прикрепленные к дневнику самостоятельно.</string>
+    <string name="backup_diary">Резервное копирование Дневника</string>
+    <string name="backup_diary_summary">Резервное копирование всего содержимого, кроме вложений, на Google Диск.</string>
+    <string name="font_setting">Настройка шрифта</string>
+    <string name="add_ttf_fonts_title">Добавить шрифт TTF</string>
+    <string name="add_ttf_fonts_summary">Добавьте свои собственные шрифты формата TTF в Easy Diary.\nЕсли шрифты добавлены, вы можете использовать добавленные шрифты вместе со встроенными шрифтами.\nПри выборе файла TTF с помощью диспетчера файлов шрифт автоматически регистрируется в Easy Diary и активируется в меню настройки шрифта.</string>
+    <string name="add_ttf_fonts_info_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/MANUAL_ru.md</string>
+    <string name="diary_search_keyword_case_sensitive_title">Case sensitive</string>
+    <string name="diary_search_keyword_case_sensitive_summary">Когда данная опция активирована, она проверяет соотносится ли ключевое слово с заданным регистром.</string>
+    <string name="setting_primary_color_title">Тема</string>
+    <string name="setting_primary_color_summary">Установите основной цвет приложения.</string>
+    <string name="pick_text_color_guide_message">Текущая версия поддерживает только изменения цвета темы.\nИзменение цвета текста будет доступно в будущем.</string>
+    <string name="pick_background_color_guide_message">Текущая версия поддерживает только изменения цвета темы.\nИзменение цвета фона будет доступно в будущем.</string>
+    <string name="easy_photo_map_title">Easy PhotoMap</string>
+    <string name="easy_photo_map_summary">Easy Photo Map - приложение, которое отображает местоположение фотографии на карте, используя информацию о местоположении, имеющуюся в фотографии.</string>
+    <string name="easy_password_title">Easy Password</string>
+    <string name="easy_password_summary">Easy Password - приложение, которое поможет вам управлять паролями, которые нужны для входа, безопасности документов, блокировки дверей, блокировки, кредитной карты, управления счетами и т.д.с помощью одной блокировки, установленной пользователем.</string>
+    <string name="font_line_spacing">Межстрочный интервал</string>
+    <string name="font_line_spacing_summary">Измените межстрочный интервал шрифта в соответствии с установленным соотношением</string>
+    <string name="calendar_title">Календарь</string>
+    <string name="guide_message_4">В этот день не создано ни одной записи.</string>
+    <string name="bar_chart_title">Диаграмма</string>
+    <string name="bar_chart_status">Статус дневника по часам</string>
+    <string name="range_a">0ч~3ч</string>
+    <string name="range_b">4ч~7ч</string>
+    <string name="range_c">8ч~11ч</string>
+    <string name="range_d">12ч~15ч</string>
+    <string name="range_e">16ч~19ч</string>
+    <string name="range_f">20ч~23ч</string>
+    <string name="range_g">1ч~24ч</string>
+    <string name="write_time">время записи</string>
+    <string name="write_count">кол-во записей</string>
+    <string name="unlock_guide_message">Пожалуйста, введите ваш код блокировки</string>
+    <string name="photo_view_error_info">Фотографии не найдены.\nВложенные фотографии из Галереи могут быть удалены или перемещены.</string>
+    <string name="diary_card_export_info">Путь сохранения карточки Дневника</string>
+    <string name="diary_card_share_info">Поделиться карточкой Дневника</string>
+    <string name="diary_card_export_error_message">Произошла ошибка при создании карточки дневника. Пожалуйста, попробуйте еще раз.</string>
+    <string name="post_card_showcase_button_1">Далее</string>
+    <string name="post_card_showcase_button_2">Закрыть</string>
+    <string name="post_card_showcase_title_0">Почтовая Марка</string>
+    <string name="post_card_showcase_title_1">Цвет текста</string>
+    <string name="post_card_showcase_title_2">Цвет фона</string>
+    <string name="post_card_showcase_title_3">Создать Почтовую Марку</string>
+    <string name="post_card_showcase_title_4">Поделиться Почтовой Маркой</string>
+    <string name="post_card_showcase_title_5">Выйти из редактирования</string>
+    <string name="post_card_showcase_message_0">Вы можете использовать сохраненную запись для создания и сохранения пользовательских почтовых марок.</string>
+    <string name="post_card_showcase_message_1">Измените цвет текста почтовой марки. Вы можете выбрать нужный цвет с помощью палитры цветов.</string>
+    <string name="post_card_showcase_message_2">Измените цвет фона почтовой марки. Вы можете выбрать нужный цвет с помощью палитры цветов.</string>
+    <string name="post_card_showcase_message_3">Созданная почтовая марка может быть сохранена в виде изображения.</string>
+    <string name="post_card_showcase_message_4">Созданная почтовая марка может быть отправлена друзьям. Поделись своей почтовой маркой с помощью электронной почты, MMS, мессенджеров и т. д.</string>
+    <string name="post_card_showcase_message_5">Выйдите из экрана редактирования почтовой марки и вернитесь к предыдущему экрану.</string>
+    <string name="timeline_title">Лента</string>
+    <string name="postcard_viewer_title">Почтовая Марка</string>
+    <string name="postcard_viewer_no_cards_saved">Нет почтовых марок.</string>
+    <string name="google_drive_connect_message">Google Диск синхронизируется...</string>
+    <string name="diary_count"></string>
+    <string name="menu_calendar">Календарь</string>
+    <string name="menu_chart">Статистика</string>
+    <string name="menu_timeline">Лента</string>
+    <string name="post_card">Почтовая Марка</string>
+    <string name="menu_delete">Удалить</string>
+
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <!--  Resources added since version 1.4.41 here.                                                      -->
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <string name="preferences_category_settings">Настройки приложения</string>
+    <string name="preferences_category_information">Информация о приложении</string>
+    <string name="preferences_information_licenses">Open Source Licenses</string>
+    <string name="preferences_information_licenses_summary">Open source software notices</string>
+    <string name="preferences_category_aaf">AAF Easy Series</string>
+    <string name="invite_friends">Пригласить друзей</string>
+    <string name="invite_friends_summary">Поделись приложением %s со своими друзьями.</string>
+
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <!--  Release notes here.                                                      -->
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <string name="release_103">
+        v1.4.41 / 2018.05.28\n
+        Fixed a bug that abnormally terminated in Postcard browse mode when there is no working directory
+    </string>
+    <string name="release_105">
+        v1.4.42 / 2018.06.27\n
+        User Experience (UX) Optimization
+    </string>
+    <string name="release_110">
+        v1.4.47 / 2018.08.29\n
+        Added post card deletion function
+    </string>
+    <string name="release_114">
+        v1.4.51 / 2018.09.29\n
+        AAF common module update\n
+        Change app packaging environment to Android 9 Pie
+    </string>
+    <string name="release_116">
+        v1.4.53 / 2018.10.13\n
+        Added preview photo size setting function\n
+        Added preview photo toggle function(fold or unfold)
+    </string>
+    <string name="release_118">
+        v1.4.55 / 2018.11.01\n
+        Improving the time expression of diary writing\n
+        Boldface setting function added to diary title and timeline time information
+    </string>
+    <string name="release_120">
+        v1.4.57 / 2018.11.12\n
+        Added multi-picker setting function to attach multiple pictures at one time
+    </string>
+    <string name="release_126">
+        v1.4.63 / 2018.11.25\n
+        Added attached photos backup and recovery function using Google Drive
+    </string>
+    <string name="release_128">
+        v1.4.65 / 2018.12.19\n
+        Added lock function using fingerprint sensor
+    </string>
+    <string name="release_130">
+        v1.4.67 / 2019.01.01\n
+        Improved the ability to view attached photos on the postcard screen
+    </string>
+    <string name="release_131">
+        v1.4.68 / 2019.01.06\n
+        Solved security considerations for some items that are reported with low confidence in Sophos vaccine(Notification listener, Trigger installation)\n
+        Add Postcard font size adjustment function
+    </string>
+    <string name="release_132">
+        v1.4.69 / 2019.01.16\n
+        User Experience (UX) Optimization\n
+        Fixed an error that screen transition is not normal in Android 9 Pie version\n
+        Add timeline diary creation button
+    </string>
+    <string name="release_133">
+        v1.4.70 / 2019.01.25\n
+        Added option to view summary of diary content
+    </string>
+    <string name="release_134">
+        v1.4.71 / 2019.01.26\n
+        Fixed an error that the application terminated abnormally when changing device fingerprint information
+    </string>
+    <string name="release_136">
+        v1.4.73 / 2019.02.11\n
+        Improved the ability to correct input digits when PIN is set and unlocked
+    </string>
+    <string name="release_137">
+        v1.4.74 / 2019.03.06\n
+        Improved the ability to apply filters to postcard images\n
+        Added ability to export diary to Excel file
+    </string>
+    <string name="release_138">
+        v1.4.75 / 2019.03.22\n
+        Add application-specific information pages, including FAQs and privacy policies\n
+        Improved pin and fingerprint unlock toggle
+    </string>
+    <string name="release_139">
+        v1.4.76 / 2019.04.24\n
+        Add 50 kinds of diary symbol icons
+    </string>
+    <string name="release_140">
+        v1.4.77 / 2019.05.11\n
+        Add diary symbols and apply categories
+    </string>
+    <string name="release_141">
+        v1.4.78 / 2019.05.13\n
+        Fixed an error that ended abnormally if some function of the setting screen does not have access to device storage
+    </string>
+    <string name="release_143">
+        v1.4.80 / 2019.06.07\n
+        Changed Google Drive Android API to Google Drive REST API (Google Drive Android API will be shut down on December 6, 2019)
+    </string>
+    <string name="release_147">
+        v1.4.83 / 2019.06.09\n
+        Apply Android App Bundle to reduce and optimize installation file size
+    </string>
+    <string name="release_149">
+        v1.4.84 / 2019.06.15\n
+        Improved diary statistics
+    </string>
+    <string name="release_150">
+        v1.4.85 / 2019.06.18\n
+        Google Drive(REST API) user rights acquisition error correction
+    </string>
+    <string name="release_151">
+        v1.4.86 / 2019.06.19\n
+        Google Drive(REST API) Recovering photos with diary Fixing errors
+    </string>
+    <string name="release_152">
+        v1.4.87 / 2019.06.20\n
+        Fixed authentication token error for users authenticated to use Google Drive in v1.4.80 earlier
+    </string>
+    <string name="release_154">
+        v1.4.88 / 2019.07.16\n
+        Migrated Android support library to AndroidX version\n
+        Add diary symbol icon
+    </string>
+    <string name="release_157">
+        v1.4.91 / 2019.08.12\n
+        Added backup and recovery function using device storage\n
+        Fixed an issue that caused some text to be truncated on calendars on some devices
+    </string>
+    <string name="release_159">
+        v1.4.93 / 2019.08.29\n
+        User Experience (UX) Optimization\n
+        Bug fixes that crash abnormally when entering the configuration screen on older OS
+    </string>
+    <string name="release_160">
+        v1.4.94 / 2019.09.03\n
+        Added calendar weekday start setting\n
+        Fixed an issue that prevented the calendar from showing in tablet landscape
+    </string>
+    <string name="release_163">
+        v1.4.97 / 2019.09.17\n
+        Improved timeline search filter\n
+        Diary copy function added
+    </string>
+    <string name="release_165">
+        v1.4.99 / 2019.09.26\n
+        Diary text counting function added
+    </string>
+    <string name="release_167">
+        v1.4.101 / 2019.10.03\n
+        Respond to Android 10 storage access issues (targetSdkVersion temporary downgrade to avoid scoped storage policy)
+    </string>
+    <string name="release_169">
+        v1.4.103 / 2019.10.09\n
+        Change storage location and migrate to respond to Android 10 Scoped Storage policies
+    </string>
+    <string name="release_170">
+        v1.4.104 / 2019.10.19\n
+        Added calendar font scale setting\n
+        Apply sliding page to setting screen
+    </string>
+    <string name="release_171">
+        v1.4.105 / 2019.10.20\n
+        Fixed an error that occurred when using the Excel file device saving function\n
+        Fixed error when deleting diary from timeline
+    </string>
+    <string name="release_172">
+        v1.4.106 / 2019.10.25\n
+        Fixed the error that the changed contents are not immediately visible after editing the diary\n
+        Remediation for Vulnerable Libraries with known Security Issues
+    </string>
+    <string name="release_173">
+        v1.4.107 / 2019.10.31\n
+        User Experience (UX) Optimization
+    </string>
+    <string name="release_174">
+        v1.4.108 / 2019.11.18\n
+        Fixed an error that occurred when setting the calendar font scale on a device set to French
+    </string>
+    <string name="release_176">
+        v1.4.110 / 2019.12.13\n
+        Added Diary Dashboard feature\n
+        Added the ability to delete the diary backup file stored in the device
+    </string>
+    <string name="release_178">
+        v1.4.112 / 2019.12.31\n
+        Add photo attachment function through camera app integration\n
+        Diary Dashboard Improvements
+    </string>
+    <string name="release_179">
+        v1.4.113 / 2020.01.04\n
+        Added date movement function using date picker on calendar screen
+    </string>
+    <string name="release_180">
+        v1.4.114 / 2020.01.15\n
+        Added diary symbol icon\n
+        Added French support
+    </string>
+    <string name="release_182">
+        v1.4.116 / 2020.01.21\n
+        License policy changed from 「Apache License 2.0」 to 「GNU General Public License v3.0」
+    </string>
+    <string name="release_184">
+        v1.4.118 / 2020.02.11\n
+        [BETA] Added full data backup feature
+    </string>
+    <string name="release_185">
+        v1.4.119 / 2020.02.15\n
+        Added diary symbol icon
+    </string>
+    <string name="release_186">
+        v1.4.120 / 2020.02.19\n
+        Added diary symbol icon\n
+        Added search function using diary symbol
+    </string>
+	<string name="release_187">
+        v1.4.121 / 2020.03.02\n
+        Improved the speed of the calendar screen(1st improvement)
+    </string>
+    <string name="release_188">
+        v1.4.122 / 2020.03.09\n
+        [BETA] Added full data recovery feature\n
+        Some symbols appear unusually large in dashboard statistics\n
+        Added sort option of the diary list in the calendar screen
+    </string>
+    <string name="release_190">
+        v1.4.124 / 2020.03.15\n
+        Separate font-related setting option from basic setting screen
+    </string>
+    <string name="release_191">
+        v1.4.125 / 2020.03.23\n
+        Added cursor position setting option when entering diary edit screen\n
+        Added the function to set the maximum number of lines in the content summary view option\n
+        Fixed an issue where the day of the week was cut off on the calendar screen
+    </string>
+    <string name="release_192">
+        v1.4.126 / 2020.04.05\n
+        Added diary encryption feature using pin number\n
+        Temporarily apply the requestLegacyExternalStorage option to respond to multi-picker scoped storage issues in Android 10
+    </string>
+    <string name="release_193">
+        v1.4.127 / 2020.04.12\n
+        Removed requestLegacyExternalStorage option\n
+        Adding database file backup and recovery feature using SAF (Storage Access Framework)
+    </string>
+    <string name="release_195">
+        v1.4.129 / 2020.04.21\n
+        Added feature to attach animated GIF files\n
+        Added diary multiple copy and delete feature
+    </string>
+
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <!--  Resources added since version 1.4.47 here.                                                      -->
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <string name="speech_to_text">Голосовой ввод</string>
+    <string name="write_diary">Написать дневник</string>
+    <string name="date_picker">Выбрать дату</string>
+    <string name="time_picker">Выбрать время</string>
+    <string name="seconds_picker">Выбрать секунды</string>
+    <string name="save_diary">Сохранить дневник</string>
+    <string name="photo_registration">Регистрация фотографий</string>
+    <string name="zoom_in">Приблизить</string>
+    <string name="zoom_out">Отдалить</string>
+    <string name="edit_diary">Редактировать дневник</string>
+    <string name="text_to_speech">Произнести</string>
+    <string name="diary_postcard">Почтовая Марка</string>
+    <string name="thumbnail_setting_title">Размер миниатюры</string>
+    <string name="thumbnail_setting_summary">Устанавливает размер миниатюры фотографии, прикрепленной к дневнику. Заданный размер применяется только к экрану создания и изменения дневника, но не к экрану поиска.</string>
+    <string name="collapse_attached_photo">Свернуть прикрепленное фото</string>
+    <string name="expand_attached_photo">Развернуть прикрепленное фото</string>
+    <string name="release_notes_title">Release Notes</string>
+    <string name="release_notes_summary">Check for new features by release version.</string>
+    <string name="attached_photo_count">%d Приложенные Фотографии</string>
+    <string name="all_day">Весь день</string>
+    <string name="bold_style_option_title">Сделать текст жирным</string>
+    <string name="bold_style_option_summary">Отображает заголовок дневника и время в ленте жирным шрифтом.</string>
+    <string name="multi_picker_option_title">Включить мульти-выбор</string>
+    <string name="multi_picker_option_summary">При прикреплении фотографий вместо приложения галереи используйте мульти-выбор, предоставляемый Easy Diary. Если мульти-выбор включен, вы можете прикрепить несколько фотографий одновременно.</string>
+    <string name="preferences_category_backup_restore">Резервное копирование и Восстановление Приложения</string>
+    <string name="preferences_category_backup_restore_sub">Google Диск</string>
+    <string name="backup_attach_photo_title">Резервное копирование прикрепленных фотографий</string>
+    <string name="backup_attach_photo_summary">Сделайте резервную копию всех фотографий, прикрепленных к дневнику, на Google Диск. Эта функция может не работать на некоторых устройствах.</string>
+    <string name="recover_attach_photo_title">Восстановить прикрепленные фотографии</string>
+    <string name="recover_attach_photo_summary">Восстанавливает прикрепленные фотографии сохраненные на Google Диске. Эта функция может не работать на некоторых устройствах.</string>
+    <string name="notification_msg_device_file_count">Количество файлов для резервной копии</string>
+    <string name="notification_msg_upload_file_count">Количество загружаемых файлов</string>
+    <string name="notification_msg_upload_invalid">Все файлы для восстановления уже существуют.</string>
+    <string name="notification_msg_upload_empty">Файл для резервного копирования не существует.</string>
+    <string name="notification_msg_upload_progress">Загружается…</string>
+    <string name="notification_msg_upload_complete">Загрузка завершена</string>
+    <string name="notification_msg_upload_success">Загрузка выполнена успешно</string>
+    <string name="notification_msg_upload_fail">Ошибка загрузки</string>
+    <string name="notification_msg_google_drive_file_count">Количество восстановленных файлов</string>
+    <string name="notification_msg_download_file_count">Количество файлов для скачивания</string>
+    <string name="notification_msg_download_invalid">Все целевые файлы восстановления уже существуют.</string>
+    <string name="notification_msg_download_empty">Файл для восстановления не существует.</string>
+    <string name="notification_msg_download_progress">Скачивается…</string>
+    <string name="notification_msg_download_complete">Загрузка завершена</string>
+    <string name="notification_msg_download_success">Скачивание выполнена успешно</string>
+    <string name="notification_msg_download_fail">Ошибка скачивания</string>
+    <string name="notification_msg_duplicate_file_count">Количество существующих файлов</string>
+    <string name="preferences_category_lock">Настройка блокировки приложения</string>
+    <string name="fingerprint_lock_title">Блокировка отпечатком пальца (BETA)</string>
+    <string name="fingerprint_lock_summary">Если устройство поддерживает распознавание отпечатков пальцев и имеет зарегистрированный отпечаток пальца, заблокируйте приложение с зарегистрированным отпечатком пальца.</string>
+    <string name="fingerprint_not_available">Операционная система, установленная на устройстве, не поддерживает функцию распознавания отпечатков пальцев.</string>
+    <string name="fingerprint_setting_complete">Настройка блокировки отпечатков пальцев завершена.</string>
+    <string name="fingerprint_setting_release">Блокировка отпечатков пальцев отключена.</string>
+    <string name="fingerprint_lock_need_pin_setting">Чтобы использовать блокировку отпечатка пальца, вам нужно сначала установить PIN-код.</string>
+    <string name="fingerprint_authentication_fail_try_again">Проверка подлинности по отпечатку пальца не удалась. Пожалуйста, попробуйте снова.</string>
+    <string name="fingerprint_authentication_info_changed">Информация аутентификации отпечатка пальца устройства изменилась, и ранее установленная информация аутентификации не может использоваться.</string>
+    <string name="pin_lock_title">Настройка блокировки PIN-кода.</string>
+    <string name="pin_lock_summary">Установите PIN-код для блокировки приложения.</string>
+    <string name="pin_setting_complete">Установка PIN-кода завершена.</string>
+    <string name="pin_setting_release">Блокировка PIN отключена.</string>
+    <string name="pin_release_need_fingerprint_disable">Чтобы отключить блокировку PIN-кодом, необходимо отключить блокировку отпечатков пальцев.</string>
+    <string name="pin_setting_guide_message">Пожалуйста, введите число для использования в качестве PIN-кода.</string>
+    <string name="pin_unlock_guide_message">Пожалуйста, введите PIN-код.</string>
+    <string name="pin_verification_fail">Проверка PIN не удалась.</string>
+    <string name="change_pin_lock_mode">Переход в режим блокировки PIN</string>
+    <string name="diary_creation_time_disable_message">Нет информации о времени</string>
+    <string name="enable_card_view_policy_title">Оптимизировать дизайн карточек</string>
+    <string name="enable_card_view_policy_summary">Оптимизируйте дизайн карточек под устройство.</string>
+    <string name="font_size_title">Установить размер шрифта</string>
+    <string name="font_size_summary">Уменьшите или увеличьте размер шрифта.</string>
+    <string name="contents_summary_title">Краткое изложение дневника</string>
+    <string name="contents_summary_description">Суммируйте содержимое дневника, представленного в календаре, временной шкале, экране поиска и т. д.</string>
+    <string name="init_cipher_error_guide_message">Информация об отпечатке пальца устройства была изменена. Измените режим блокировки PIN-кода, чтобы разблокировать, затем разблокируйте блокировку отпечатка пальца и установите ее снова.</string>
+    <string name="export_excel_title">Экспорт в Excel</string>
+    <string name="export_excel_description">Сохранить весь контент, кроме прикрепленной фотографии, в виде файла Excel.</string>
+    <string name="export_excel_xls_location">Расположение</string>
+    <string name="export_excel_header_seq">Последовательность</string>
+    <string name="export_excel_header_write_date">Дата написания</string>
+    <string name="export_excel_header_title">Заголовок Дневника</string>
+    <string name="export_excel_header_contents">Содержание Дневника</string>
+    <string name="export_excel_header_attach_photo_path">Путь к припленному фото</string>
+    <string name="export_excel_header_attach_photo_size">Размер прикрепленного фото</string>
+    <string name="export_excel_header_write_time_millis">Дата написания\n(с 1 января 1970 года в миллисекундах.)</string>
+    <string name="export_excel_header_weather">Погода</string>
+    <string name="export_excel_header_symbol">Символ</string>
+    <string name="export_excel_header_is_all_day">ВесьДень</string>
+    <string name="weather_sunny">Солнечно</string>
+    <string name="weather_cloud_and_sun">Облачно</string>
+    <string name="weather_rain_drops">Небольшой дождь</string>
+    <string name="weather_bolt">Молния</string>
+    <string name="weather_snowing">Снег</string>
+    <string name="weather_rainbow">Радуга</string>
+    <string name="weather_umbrella">Зонтик</string>
+    <string name="weather_stars">Звезды</string>
+    <string name="weather_moon">Луна</string>
+    <string name="weather_night_rain">Ночной дождь</string>
+    <string name="faq_title">FAQs</string>
+    <string name="faq_description">Здесь вы можете найти ответы на часто задаваемые вопросы.</string>
+    <string name="faq_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/FAQs.md</string>
+    <string name="privacy_policy_title">Политика конфиденциальности</string>
+    <string name="privacy_policy_description">Политика конфиденциальности Easy Diary.</string>
+    <string name="privacy_policy_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/Privacy.md</string>
+    <string name="diary_symbol">Символ Дневника</string>
+    <string name="diary_symbol_guide_message">Выберите символ, который соответствует текущей погоде или содержанию дневника.</string>
+    <string name="category_weather">Погода</string>
+    <string name="category_emotion">Настроение</string>
+    <string name="category_daily">Повседневная жизнь&amp;Дела</string>
+    <string name="category_food">Еда&amp;Напитки</string>
+    <string name="category_leisure">Досуг</string>
+    <string name="category_landscape">Ландшафт&amp;Здания</string>
+    <string name="rotate_photo">Повернуть</string>
+    <string name="task_progress_message">Запрашиваемая работа в процессе…</string>
+    <string name="open_realm_file_title">Восстановление Дневника</string>
+    <string name="open_realm_file_message">Пожалуйста, выберите целевой файл восстановления.</string>
+    <string name="backup_completed_message">Резервное копирование дневника завершено.</string>
+    <string name="backup_confirm_message">Вы хотите начать резервное копирование прикрепленных фотографий?</string>
+    <string name="recover_confirm_attached_photo">Вы хотите начать восстановление прикрепленных фотографий?</string>
+    <string name="category_symbol">Символ</string>
+    <string name="statistics_creation_time">Статистика по времени создания</string>
+    <string name="statistics_symbol_all">Вся статистика по символам</string>
+    <string name="statistics_symbol_top_ten">Топ-10 символов</string>
+    <string name="category_flag">Флаг</string>
+    <string name="preferences_category_backup_restore_device">Резервное Копирование и Восстановление приложения</string>
+    <string name="preferences_category_backup_restore_device_sub">Память Телефона</string>
+    <string name="export_realm_title">Резервное копирование дневника</string>
+    <string name="export_realm_description">Резервное копирование файлов базы данных, кроме прикрепленной фотографии, в хранилище устройства.\nФайлы, сохраненные в хранилище устройства, удаляются вместе с удалением приложения, поэтому, если вы хотите сохранить созданные данные на постоянной основе, воспользуйтесь функцией резервного копирования Google Диска.</string>
+    <string name="export_realm_guide_message">Файл базы данных был сохранен в хранилище устройства по указанному ниже пути.</string>
+    <string name="import_realm_title">Восстановить дневник</string>
+    <string name="import_realm_description">Восстанавливает файлы базы данных из хранилища устройства, кроме вложений.</string>
+    <string name="diary_item_count">+%d</string>
+    <string name="calendar_start_day_title">Первый день календаря</string>
+    <string name="calendar_start_day_summary">Установить первый день недели.</string>
+    <string name="calendar_start_day_sunday">Воскресенье</string>
+    <string name="calendar_start_day_monday">Понедельник</string>
+    <string name="calendar_start_day_saturday">Суббота</string>
+    <string name="calendar_menu_previous">Предыдущий</string>
+    <string name="calendar_menu_next">Следующий</string>
+    <string name="filter_start_date">Начальная Дата</string>
+    <string name="filter_start_date_hint">Пожалуйста, введите начальную дату.</string>
+    <string name="filter_end_date">Конечная Дата</string>
+    <string name="filter_end_date_hint">Пожалуйста введите конечную дату.</string>
+    <string name="filter_search_word">Найти Слово</string>
+    <string name="filter_search_word_hint">Пожалуйста, введите поисковый запрос.</string>
+    <string name="filter_clear">Сбросить фильтр</string>
+    <string name="filter_close">Закрыть</string>
+    <string name="copy_diary_item">Хотите скопировать выбранную запись?</string>
+    <string name="diary_contents_length">Символов: %d</string>
+    <string name="count_characters_title">Подсчет текста</string>
+    <string name="count_characters_summary">Считает количество символов в заметках.</string>
+    <string name="send_email_attach_excel_title">Создание файла Excel и отправка по электронной почте</string>
+    <string name="send_email_attach_excel_description">Весь контент, кроме прикрепленных фотографий, создается в виде файла Excel и прикрепляется к электронному письму.</string>
+    <string name="storage_migration_message">Изменения места хранения будут производиться в соответствии с политикой хранения Android 10. Данная операция выполняется только один раз.</string>
+    <string name="google_drive_account_sign_out_title">Сбросить связанный аккаунт Google диска</string>
+    <string name="google_drive_account_sign_out_description">Удалить информацию о токене, опубликованную Easy Diary, с помощью связанной учетной записи Google диска.</string>
+    <string name="calendar_font_scale_title">Установить размер шрифта календаря</string>
+    <string name="calendar_font_scale_description">Масштабирует размер шрифта внутри календаря на основе установленного глобального размера шрифта.</string>
+    <string name="calendar_font_scale_disable">Не использовать</string>
+    <string name="calendar_font_scale_factor">Глобальный размер шрифта x %.1f</string>
+    <string name="dashboard_title_lifetime">За всё время</string>
+    <string name="dashboard_title_last_month">В прошлом месяце</string>
+    <string name="dashboard_title_last_week">На прошлой неделе</string>
+    <string name="dashboard_guide_message">Здесь недостаточно данных для создания рейтинга. Вы должны оставить как минимум 4 записи с символом настроения заметки для активации панели с рейтингом.</string>
+    <string name="delete_realm_title">Удалить файл резервной копии</string>
+    <string name="delete_realm_description">Удалить файл резервной копии, хранящийся в устройстве.</string>
+    <string name="menu_dashboard">Панель индикаторов</string>
+    <string name="dashboard_title_backup_drive">Google Диск История Копирования</string>
+    <string name="dashboard_title_backup_local">Локальное Устройство История Копирования</string>
+    <string name="dashboard_backup_guide_message">Нет информации</string>
+    <string name="last_diary_backup_time">Время последнего резервного копирования дневника:</string>
+    <string name="last_photo_backup_time">Время последнего резервного копирования прикрепленных фотографий:</string>
+    <string name="export_full_backup_title">[BETA] Резервное копирование всех данных</string>
+    <string name="export_full_backup_description">Сжатие и сохранение всех данных, относящихся к дневнику, таких как база данных, прикрепленные фотографии, почтовые марки, шрифты и т.д. в один файл.\nДанная функция находится в бета-разработке, поэтому она может работать некорректно на некоторых устройствах.\nМесто сохранения: /AAFactory/EasyDiary/xxx.zip</string>
+    <string name="diary_symbol_search_message">Выберите символ с которым вы хотите отфильтровать записи.</string>
+    
+    <string name="import_full_backup_title">[BETA] Восстановление всех данных</string>
+    <string name="import_full_backup_description">Распаковка и восстановление всех данных, относящиеся к дневнику, такие как база данных, прикрепленные фотографии, почтовые марки, шрифты и т.д. \nДанная функция находится в бета-разработке, поэтому она может работать некорректно на некоторых устройствах.</string>
+    <string name="calendar_sort_ascending">По возрастанию</string>
+    <string name="calendar_sort_descending">По убыванию</string>
+    <string name="calendar_sort_title">Опция сортировки Календаря</string>
+    <string name="calendar_sort_summary">Установите порядок сортировки списка ежедневных дневников на экране календаря.</string>
+	
+	 <string name="preferences_category_font">Настройка шрифта приложения</string>
+    <string name="hold_position_title">Настройка положения прокрутки</string>
+    <string name="hold_position_summary">Когда экран редактирования запускается, положение прокрутки на экране просмотра сохраняется. Если этот параметр не установлен, прокрутка перемещается в последнюю позицию текста.</string>
+    <string name="max_lines_title">Maксимум Строк</string>
+    <string name="max_lines_summary">Установите максимальное количество строк, которые будут отображаться при включении опции краткого изложения дневника.</string>
+    <string name="max_lines_value">%d Строк</string>
+    <string name="diary_encryption_title">Шифрование дневника</string>
+    <string name="diary_encryption_guide">Пожалуйста, введите номер пин-кода, который будет использоваться для шифрования дневника. \nЗашифруйте заголовок и текст текущего выбранного дневника, используя введенный номер пин-кода. \nНомер пин-кода восстановить невозможно, поэтому будьте осторожны, чтобы не забыть установленный пин-код.</string>
+    <string name="diary_decryption_title">Расшифровка дневника</string>
+    <string name="diary_decryption_guide">Введите пин-код, который будет использован для расшифровки дневника.\nРасшифруйте заголовок и содержание дневника, используя введенный номер пин-кода.</string>
+    <string name="diary_pin_number_confirm_guide">Введите номер пин-кода, который будет использоваться для шифрования дневника ещё раз.</string>
+    <string name="diary_pin_number_confirm_error">Первый введенный ПИН-код не соответствует ПИН-коду подтверждения.\nПожалуйста, введите ПИН-код еще раз.</string>
+    <string name="diary_pin_number_verification_error">Номера ПИН-кода не совпадают.\nПожалуйста, введите номер ПИН-кода, который вы указали при шифровании дневника.</string>
+    <string name="diary_decryption_guide_before_editing">Введите ПИН-код, который вы установили при шифровании дневника.\nКогда дневник редактируется, он снова зашифровывается с помощью существующего пароля.</string>
+    <string name="diary_decryption_mode_once">Расшифровать один раз для просмотра</string>
+    <string name="diary_decryption_mode_permanent">Удалить настройки номера ПИН-кода после расшифровки</string>
+    <string name="backup_internal_title">Резервное копирование во внутреннюю память</string>
+    <string name="backup_internal_description">Файл резервной копии сохраняется во внутреннем хранилище Easy Diary. Доступ к резервным копиям файлов невозможен с помощью приложений, отличных от Easy Diary..</string>
+    <string name="backup_external_title">Резервное копирование на внешнее хранилище</string>
+    <string name="backup_external_description">Файл резервной копии хранится во внешнем общем хранилище. Доступ к резервным копиям файлов можно получить с помощью проводника.</string>
+    <string name="recovery_internal_title">Восстановить из внутреннего хранилища</string>
+    <string name="recovery_internal_description">Содержимое дневника восстанавливается с помощью файла резервной копии базы данных, хранящегося во внутреннем хранилище Easy Diary.</string>
+    <string name="recovery_external_title">Восстановить из внешнего хранилища</string>
+    <string name="recovery_external_description">Содержание дневника восстанавливается с использованием файла резервной копии базы данных, хранящегося во внешнем общем хранилище.</string>
+    <string name="delete_selected_items_confirm">Вы уверены, что хотите удалить %d выбранных элементов?</string>
+    <string name="duplicate_selected_items_confirm">Вы уверены, что хотите сделать дубликат %d выбранных элементов?</string>
+    <string name="no_items_warning">Нет выбранных элементов.</string>
+</resources>
