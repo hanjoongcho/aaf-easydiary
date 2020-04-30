@@ -5,30 +5,35 @@ import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
-import android.graphics.drawable.Drawable
+import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
 import android.text.SpannableString
-import android.text.format.DateFormat
 import android.text.style.RelativeSizeSpan
 import android.view.View
 import android.view.WindowManager
-import android.widget.TextView
+import android.widget.AdapterView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.AlarmManagerCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
-import com.simplemobiletools.commons.extensions.*
+import com.simplemobiletools.commons.extensions.baseConfig
+import com.simplemobiletools.commons.extensions.formatMinutesToTimeString
+import com.simplemobiletools.commons.extensions.moveLastItemToFront
+import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.*
 import io.github.aafactory.commons.utils.DateUtils
-import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_dev.*
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.adapters.AlarmAdapter
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
+import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
+import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_NAME
 import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.receivers.AlarmReceiver
 import java.util.*
@@ -41,8 +46,9 @@ class DevActivity : EasyDiaryActivity() {
      *   override functions
      *
      ***************************************************************************************************/
-    private lateinit var mAlarm: Alarm
-    var mRealmInstance: Realm? = null
+    private lateinit var mAlarmAdapter: AlarmAdapter
+    private var mAlarmList: ArrayList<Alarm> = arrayListOf()
+
 
     /***************************************************************************************************
      *   global properties
@@ -57,28 +63,36 @@ class DevActivity : EasyDiaryActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
+        mAlarmAdapter = AlarmAdapter(
+            this@DevActivity,
+            mAlarmList,
+            AdapterView.OnItemClickListener { _, _, position, _ ->
+            }
+        )
+
+        alarmRecyclerView.apply {
+            layoutManager = androidx.recyclerview.widget.GridLayoutManager(this@DevActivity, 1)
+            addItemDecoration(SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding)))
+            adapter = mAlarmAdapter
+        }
+
         initProperties()
         initDevUI()
         bindEvent()
-
-//        toast("${EasyDiaryDbHelper.countAlarmAll()}", Toast.LENGTH_LONG)
+        updateAlarmList()
     }
 
-    override fun onResume() {
-        super.onResume()
-        mRealmInstance?.beginTransaction()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        mRealmInstance?.commitTransaction()
-        mRealmInstance?.close()
-    }
 
     /***************************************************************************************************
      *   etc functions
      *
      ***************************************************************************************************/
+    private fun updateAlarmList() {
+        mAlarmList.clear()
+        mAlarmList.addAll(EasyDiaryDbHelper.readAlarmAll())
+        mAlarmAdapter.notifyDataSetChanged()
+    }
+
     private fun initProperties() {
         config.use24HourFormat = false
         val calendar = Calendar.getInstance(Locale.getDefault())
@@ -89,44 +103,9 @@ class DevActivity : EasyDiaryActivity() {
         if (EasyDiaryDbHelper.countAlarmAll() == 0L) {
             EasyDiaryDbHelper.insertAlarm(tempAlarm)
         }
-        mAlarm = EasyDiaryDbHelper.readAlarmBy(1)!!
-        mRealmInstance = EasyDiaryDbHelper.getTemporaryInstance()
     }
 
     private fun initDevUI() {
-        updateAlarmTime()
-
-        val dayLetters = resources.getStringArray(R.array.week_day_letters).toList() as ArrayList<String>
-        val dayIndexes = arrayListOf(0, 1, 2, 3, 4, 5, 6)
-        dayIndexes.forEach {
-            val pow = 2.0.pow(it.toDouble()).toInt()
-            val day = layoutInflater.inflate(R.layout.alarm_day, edit_alarm_days_holder, false) as TextView
-            day.text = dayLetters[it]
-
-            val isDayChecked = mAlarm.days and pow != 0
-            day.background = getProperDayDrawable(isDayChecked)
-
-            day.setTextColor(if (isDayChecked) config.backgroundColor else config.textColor)
-            day.setOnClickListener {
-                val selectDay = mAlarm.days and pow == 0
-                mAlarm.days = if (selectDay) {
-                    mAlarm.days.addBit(pow)
-                } else {
-                    mAlarm.days.removeBit(pow)
-                }
-                day.background = getProperDayDrawable(selectDay)
-                day.setTextColor(if (selectDay) config.backgroundColor else config.textColor)
-                alarm_days.text = getSelectedDaysString(mAlarm.days)
-            }
-
-            edit_alarm_days_holder.addView(day)
-        }
-        alarm_days.text = getSelectedDaysString(mAlarm.days)
-        alarm_days.setTextColor(config.textColor)
-        alarm_switch.isChecked = mAlarm.isEnabled
-        alarmTitle.setText("Easy Diary")
-        alarmDescription.setText(mAlarm.label)
-
         val resourceId = resources.getIdentifier("ic_pizza", "drawable", packageName)
         if (resourceId > 0) {
             devConsoleSymbol.setImageDrawable(ContextCompat.getDrawable(this, resourceId))
@@ -134,32 +113,12 @@ class DevActivity : EasyDiaryActivity() {
         }
     }
 
-    private fun getProperDayDrawable(selected: Boolean): Drawable {
-        val drawableId = if (selected) R.drawable.circle_background_filled else R.drawable.circle_background_stroke
-        val drawable = ContextCompat.getDrawable(this, drawableId)
-        drawable!!.applyColorFilter(config.textColor)
-        return drawable
-    }
-
     private fun bindEvent() {
-        edit_alarm_time.setOnClickListener {
-            TimePickerDialog(this, timeSetListener, mAlarm.timeInMinutes / 60, mAlarm.timeInMinutes % 60, DateFormat.is24HourFormat(this)).show()
-        }
-        alarm_switch.setOnCheckedChangeListener { _, isChecked ->
-            mAlarm.isEnabled = isChecked
-            if (isChecked) {
-                scheduleNextAlarm(mAlarm, true)
-                mAlarm.label = alarmDescription.text.toString()
-            } else {
-                cancelAlarmClock(mAlarm)
-            }
-        }
-
-        openAlarmManager.setOnClickListener {
-            TransitionHelper.startActivityWithTransition(this, Intent(this, DiaryReminderActivity::class.java).apply {
-                putExtra(ALARM_ID, mAlarm.id)
-            })
-        }
+//        openAlarmManager.setOnClickListener {
+//            TransitionHelper.startActivityWithTransition(this, Intent(this, DiaryReminderActivity::class.java).apply {
+//                putExtra(ALARM_ID, mAlarm.id)
+//            })
+//        }
 
         nextAlarmInfo.setOnClickListener {
             val nextAlarm = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -174,19 +133,25 @@ class DevActivity : EasyDiaryActivity() {
 
             toast(nextAlarm, Toast.LENGTH_LONG)
         }
-    }
 
-    private val timeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-        mAlarm.timeInMinutes = hourOfDay * 60 + minute
-        updateAlarmTime()
-    }
-
-    private fun updateAlarmTime() {
-        edit_alarm_time.text = getFormattedTime(mAlarm.timeInMinutes * 60, false, true)
+        addAlarm.setOnClickListener {
+            EasyDiaryDbHelper.insertAlarm(Alarm())
+            updateAlarmList()
+        }
     }
 
     companion object {
         const val ALARM_ID = "alarm_id"
+    }
+}
+
+class SpacesItemDecoration(private val space: Int) : androidx.recyclerview.widget.RecyclerView.ItemDecoration() {
+    override fun getItemOffsets(outRect: Rect, view: View, parent: androidx.recyclerview.widget.RecyclerView, state: androidx.recyclerview.widget.RecyclerView.State) {
+        val position = parent.getChildAdapterPosition(view)
+        when (position == 0) {
+            true -> outRect.top = 0
+            false -> outRect.top = space
+        }
     }
 }
 
