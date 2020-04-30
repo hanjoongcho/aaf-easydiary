@@ -106,11 +106,6 @@ class DevActivity : EasyDiaryActivity() {
     }
 
     private fun initDevUI() {
-        val resourceId = resources.getIdentifier("ic_pizza", "drawable", packageName)
-        if (resourceId > 0) {
-            devConsoleSymbol.setImageDrawable(ContextCompat.getDrawable(this, resourceId))
-            devConsoleSymbol.visibility = View.VISIBLE
-        }
     }
 
     private fun bindEvent() {

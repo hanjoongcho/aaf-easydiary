@@ -32,33 +32,26 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <ImageView
-                    android:id="@+id/devConsoleSymbol"
+                <androidx.appcompat.widget.AppCompatButton
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    android:visibility="visible"
-                    android:layout_width="77dp"
-                    android:layout_height="77dp"/>
-                <androidx.appcompat.widget.AppCompatButton
-                    app:layout_constraintTop_toBottomOf="@+id/devConsoleSymbol"
-                    app:layout_constraintLeft_toLeftOf="@+id/devConsoleSymbol"
                     android:id="@+id/openAlarmManager"
                     android:text="Open Reminder"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
                 <androidx.appcompat.widget.AppCompatButton
-                    app:layout_constraintTop_toBottomOf="@+id/devConsoleSymbol"
-                    app:layout_constraintLeft_toRightOf="@+id/openAlarmManager"
+                    app:layout_constraintTop_toBottomOf="@+id/openAlarmManager"
+                    app:layout_constraintLeft_toLeftOf="parent"
                     android:id="@+id/nextAlarmInfo"
                     android:text="Next Alarm"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
                 <androidx.appcompat.widget.AppCompatButton
-                    app:layout_constraintTop_toBottomOf="@+id/devConsoleSymbol"
-                    app:layout_constraintLeft_toRightOf="@+id/nextAlarmInfo"
+                    app:layout_constraintTop_toBottomOf="@+id/nextAlarmInfo"
+                    app:layout_constraintLeft_toLeftOf="parent"
                     android:id="@+id/addAlarm"
                     android:text="Add Alarm"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
