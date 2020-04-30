@@ -13,10 +13,7 @@ import com.simplemobiletools.commons.extensions.applyColorFilter
 import com.simplemobiletools.commons.extensions.removeBit
 import kotlinx.android.synthetic.main.viewholder_alarm.view.*
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.activities.cancelAlarmClock
-import me.blog.korn123.easydiary.activities.getFormattedTime
-import me.blog.korn123.easydiary.activities.getSelectedDaysString
-import me.blog.korn123.easydiary.activities.scheduleNextAlarm
+import me.blog.korn123.easydiary.activities.*
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.Alarm
@@ -29,6 +26,7 @@ class AlarmViewHolder(itemView: View, val activity: Activity) : RecyclerView.Vie
 
         val dayLetters = activity.resources.getStringArray(R.array.week_day_letters).toList() as ArrayList<String>
         val dayIndexes = arrayListOf(0, 1, 2, 3, 4, 5, 6)
+        itemView.edit_alarm_days_holder.removeAllViews()
         dayIndexes.forEach {
             val pow = 2.0.pow(it.toDouble()).toInt()
             val day = activity.layoutInflater.inflate(R.layout.alarm_day, itemView.edit_alarm_days_holder, false) as TextView
@@ -78,6 +76,10 @@ class AlarmViewHolder(itemView: View, val activity: Activity) : RecyclerView.Vie
                 activity.cancelAlarmClock(alarm)
             }
             EasyDiaryDbHelper.commitTransaction()
+        }
+        itemView.deleteAlarm.setOnClickListener {
+            EasyDiaryDbHelper.deleteAlarm(alarm.sequence)
+            (activity as DevActivity).updateAlarmList()
         }
     }
 

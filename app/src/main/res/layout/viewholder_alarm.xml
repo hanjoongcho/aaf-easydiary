@@ -62,6 +62,13 @@
                 android:layout_height="wrap_content">
             </com.simplemobiletools.commons.views.MyEditText>
 
+            <Button
+                android:id="@+id/deleteAlarm"
+                android:text="Delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/alarm_switch"/>
+
             <com.simplemobiletools.commons.views.MySwitchCompat
                 android:id="@+id/alarm_switch"
                 android:layout_width="wrap_content"

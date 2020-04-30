@@ -180,6 +180,16 @@ object EasyDiaryDbHelper {
         }
     }
 
+    fun deleteAlarm(sequence: Int) {
+        readAlarmBy(sequence)?.let {
+            getInstance().run {
+                beginTransaction()
+                it.deleteFromRealm()
+                commitTransaction()
+            }
+        }
+    }
+
     fun countAlarmAll(): Long {
         return getInstance().where(Alarm::class.java).count()
     }

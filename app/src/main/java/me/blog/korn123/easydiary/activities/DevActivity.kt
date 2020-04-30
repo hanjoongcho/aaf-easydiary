@@ -87,7 +87,7 @@ class DevActivity : EasyDiaryActivity() {
      *   etc functions
      *
      ***************************************************************************************************/
-    private fun updateAlarmList() {
+    fun updateAlarmList() {
         mAlarmList.clear()
         mAlarmList.addAll(EasyDiaryDbHelper.readAlarmAll())
         mAlarmAdapter.notifyDataSetChanged()
@@ -231,7 +231,7 @@ fun Context.showAlarmNotification(alarm: Alarm) {
         scheduleNextAlarm(alarm, true)
     } else {
         scheduleNextAlarm(alarm, false)
-        powerManager.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP, "myApp:notificationLock").apply {
+        powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.ON_AFTER_RELEASE, "myApp:notificationLock").apply {
             acquire(3000)
         }
     }
