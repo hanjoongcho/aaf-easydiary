@@ -6,30 +6,34 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Rect
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
 import android.text.SpannableString
+import android.text.format.DateFormat
 import android.text.style.RelativeSizeSpan
+import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.widget.AdapterView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.AlarmManagerCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
-import com.simplemobiletools.commons.extensions.baseConfig
-import com.simplemobiletools.commons.extensions.formatMinutesToTimeString
-import com.simplemobiletools.commons.extensions.moveLastItemToFront
-import com.simplemobiletools.commons.extensions.toast
+import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.*
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_dev.*
+import kotlinx.android.synthetic.main.dialog_alarm.view.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.AlarmAdapter
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
@@ -43,7 +47,7 @@ import kotlin.math.pow
 class DevActivity : EasyDiaryActivity() {
 
     /***************************************************************************************************
-     *   override functions
+     *   global properties
      *
      ***************************************************************************************************/
     private lateinit var mAlarmAdapter: AlarmAdapter
@@ -51,7 +55,7 @@ class DevActivity : EasyDiaryActivity() {
 
 
     /***************************************************************************************************
-     *   global properties
+     *   override functions
      *
      ***************************************************************************************************/
     public override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,6 +71,75 @@ class DevActivity : EasyDiaryActivity() {
             this@DevActivity,
             mAlarmList,
             AdapterView.OnItemClickListener { _, _, position, _ ->
+                val alarm = mAlarmList[position]
+                var alertDialog: AlertDialog? = null
+                val builder = AlertDialog.Builder(this)
+                builder.setNegativeButton(getString(android.R.string.cancel)) { _, _ ->  alertDialog?.dismiss() }
+                builder.setPositiveButton(getString(android.R.string.ok)) { _, _ ->  alertDialog?.dismiss() }
+                val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                val rootView = inflater.inflate(R.layout.dialog_alarm, null).apply {
+                    val dayLetters = resources.getStringArray(R.array.week_day_letters).toList() as ArrayList<String>
+                    val dayIndexes = arrayListOf(0, 1, 2, 3, 4, 5, 6)
+                    edit_alarm_days_holder.removeAllViews()
+                    dayIndexes.forEach {
+                        val pow = 2.0.pow(it.toDouble()).toInt()
+                        val day = layoutInflater.inflate(R.layout.alarm_day, edit_alarm_days_holder, false) as TextView
+                        day.text = dayLetters[it]
+
+                        val isDayChecked = alarm.days and pow != 0
+                        day.background = getProperDayDrawable(isDayChecked)
+
+                        day.setTextColor(if (isDayChecked) config.backgroundColor else config.textColor)
+                        day.setOnClickListener {
+                            EasyDiaryDbHelper.beginTransaction()
+                            val selectDay = alarm.days and pow == 0
+                            alarm.days = if (selectDay) {
+                                alarm.days.addBit(pow)
+                            } else {
+                                alarm.days.removeBit(pow)
+                            }
+                            day.background = getProperDayDrawable(selectDay)
+                            day.setTextColor(if (selectDay) config.backgroundColor else config.textColor)
+                            alarm_days.text = getSelectedDaysString(alarm.days)
+                            EasyDiaryDbHelper.commitTransaction()
+                        }
+
+                        edit_alarm_days_holder.addView(day)
+                    }
+                    alarm_days.text = getSelectedDaysString(alarm.days)
+                    alarm_days.setTextColor(config.textColor)
+                    alarm_switch.isChecked = alarm.isEnabled
+                    alarmTitle.setText("Easy Diary")
+                    alarmDescription.setText(alarm.label)
+                    edit_alarm_time.text = getFormattedTime(alarm.timeInMinutes * 60, false, true)
+
+                    edit_alarm_time.setOnClickListener {
+                        TimePickerDialog(this@DevActivity, TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+                            EasyDiaryDbHelper.beginTransaction()
+                            alarm.timeInMinutes = hourOfDay * 60 + minute
+                            edit_alarm_time.text = getFormattedTime(alarm.timeInMinutes * 60, false, true)
+                            EasyDiaryDbHelper.commitTransaction()
+                        }, alarm.timeInMinutes / 60, alarm.timeInMinutes % 60, DateFormat.is24HourFormat(this@DevActivity)).show()
+                    }
+                    alarm_switch.setOnCheckedChangeListener { _, isChecked ->
+                        EasyDiaryDbHelper.beginTransaction()
+                        alarm.isEnabled = isChecked
+                        if (isChecked) {
+                            scheduleNextAlarm(alarm, true)
+                            alarm.label = alarmDescription.text.toString()
+                        } else {
+                            cancelAlarmClock(alarm)
+                        }
+                        EasyDiaryDbHelper.commitTransaction()
+                    }
+                    deleteAlarm.setOnClickListener {
+                        EasyDiaryDbHelper.deleteAlarm(alarm.sequence)
+                        updateAlarmList()
+                    }
+                }
+                builder.setView(rootView)
+                alertDialog = builder.create()
+                alertDialog.show()
             }
         )
 
@@ -91,6 +164,13 @@ class DevActivity : EasyDiaryActivity() {
         mAlarmList.clear()
         mAlarmList.addAll(EasyDiaryDbHelper.readAlarmAll())
         mAlarmAdapter.notifyDataSetChanged()
+    }
+
+    private fun getProperDayDrawable(selected: Boolean): Drawable {
+        val drawableId = if (selected) R.drawable.circle_background_filled else R.drawable.circle_background_stroke
+        val drawable = ContextCompat.getDrawable(this, drawableId)
+        drawable!!.applyColorFilter(config.textColor)
+        return drawable
     }
 
     private fun initProperties() {

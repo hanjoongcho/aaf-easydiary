@@ -19,52 +19,69 @@
                 android:id="@+id/edit_alarm_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
                 android:textSize="44sp"
                 android:text="07:00"/>
 
-            <CheckBox
-                android:id="@+id/checkTT"
-                android:layout_toLeftOf="@+id/alarm_switch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
             <com.simplemobiletools.commons.views.MyTextView
                 android:id="@+id/alarm_days"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edit_alarm_time"
-                android:layout_toLeftOf="@+id/alarm_switch"
                 android:ellipsize="end"
                 android:includeFontPadding="false"
                 android:maxLines="1"
-                android:padding="@dimen/tiny_margin"
+                android:paddingLeft="@dimen/tiny_margin"
                 android:textSize="@dimen/bigger_text_size"
                 tools:text="Mon, Tue, Wed, Thu, Fri"/>
 
-            <com.simplemobiletools.commons.views.MyTextView
+            <LinearLayout
+                android:id="@+id/edit_alarm_days_holder"
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:layout_below="@+id/alarm_days"
+                android:layout_marginTop="@dimen/medium_margin"
+                android:layout_marginBottom="@dimen/medium_margin"
+                android:orientation="horizontal"/>
+
+            <com.simplemobiletools.commons.views.MyEditText
                 android:id="@+id/alarmTitle"
                 android:hint="Alarm title"
-                android:layout_below="@id/alarm_days"
+                android:layout_below="@id/edit_alarm_days_holder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-            </com.simplemobiletools.commons.views.MyTextView>
+            </com.simplemobiletools.commons.views.MyEditText>
 
-            <com.simplemobiletools.commons.views.MyTextView
+            <com.simplemobiletools.commons.views.MyEditText
                 android:id="@+id/alarmDescription"
                 android:hint="Alarm description"
                 android:layout_below="@id/alarmTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-            </com.simplemobiletools.commons.views.MyTextView>
+            </com.simplemobiletools.commons.views.MyEditText>
 
-            <com.simplemobiletools.commons.views.MySwitchCompat
-                android:id="@+id/alarm_switch"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_alignTop="@+id/edit_alarm_time"
                 android:layout_alignBottom="@id/edit_alarm_time"
                 android:layout_alignParentRight="true"
-                android:paddingLeft="@dimen/activity_margin"
-                android:paddingRight="@dimen/medium_margin"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/deleteAlarm"
+                    android:text="Delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@+id/alarm_switch"/>
+
+                <com.simplemobiletools.commons.views.MySwitchCompat
+                    android:id="@+id/alarm_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+
+                    android:paddingLeft="@dimen/activity_margin"
+                    android:paddingRight="@dimen/medium_margin"/>
+            </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

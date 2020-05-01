@@ -22,12 +22,9 @@ internal class AlarmAdapter(
     }
 
     override fun onBindViewHolder(holder: AlarmViewHolder, position: Int) {
-//        holder.itemView.itemCheck.setOnCheckedChangeListener { _, isChecked ->
-//            alarmList[position].isItemChecked = isChecked
-//        }
-//        holder.itemView.setOnClickListener {
-//            onItemClickListener.onItemClick(null, it, holder.adapterPosition, holder.itemId)
-//        }
+        holder.itemView.setOnClickListener {
+            onItemClickListener.onItemClick(null, it, holder.adapterPosition, holder.itemId)
+        }
         holder.bindTo(alarmList[position])
     }
 
