@@ -14,6 +14,7 @@ import me.blog.korn123.easydiary.models.Alarm
 
 class AlarmViewHolder(itemView: View, val activity: Activity) : RecyclerView.ViewHolder(itemView) {
     fun bindTo(alarm: Alarm) {
+        itemView.alarm_switch.setOnCheckedChangeListener(null)
         itemView.alarm_days.text = activity.getSelectedDaysString(alarm.days)
         itemView.alarm_days.setTextColor(activity.config.textColor)
         itemView.alarm_switch.isChecked = alarm.isEnabled

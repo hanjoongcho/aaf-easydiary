@@ -1,80 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    style="@style/AppCard">
-    <LinearLayout
-        android:orientation="vertical"
+    android:layout_height="wrap_content">
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <RelativeLayout
+        android:layout_height="wrap_content"
+        style="@style/AppCard">
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <me.blog.korn123.easydiary.views.FixedTextView
-                app:applyGlobalSize="false"
-                app:applyGlobalColor="true"
-                android:id="@+id/edit_alarm_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:textSize="44sp"
-                android:text="07:00"/>
-
-            <com.simplemobiletools.commons.views.MyTextView
-                android:id="@+id/alarm_days"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/edit_alarm_time"
-                android:ellipsize="end"
-                android:includeFontPadding="false"
-                android:maxLines="1"
-                android:paddingLeft="@dimen/tiny_margin"
-                android:textSize="@dimen/bigger_text_size"
-                tools:text="Mon, Tue, Wed, Thu, Fri"/>
-
-            <LinearLayout
-                android:id="@+id/edit_alarm_days_holder"
-                android:layout_width="match_parent"
-                android:layout_height="38dp"
-                android:layout_below="@+id/alarm_days"
-                android:layout_marginTop="@dimen/medium_margin"
-                android:layout_marginBottom="@dimen/medium_margin"
-                android:orientation="horizontal"/>
-
-            <com.simplemobiletools.commons.views.MyEditText
-                android:id="@+id/alarmDescription"
-                android:hint="Alarm description"
-                android:layout_below="@id/edit_alarm_days_holder"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-            </com.simplemobiletools.commons.views.MyEditText>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_alignTop="@+id/edit_alarm_time"
-                android:layout_alignBottom="@id/edit_alarm_time"
-                android:layout_alignParentRight="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <Button
-                    android:id="@+id/deleteAlarm"
-                    android:text="Del"
+                <me.blog.korn123.easydiary.views.FixedTextView
+                    app:applyGlobalSize="false"
+                    app:applyGlobalColor="true"
+                    android:id="@+id/edit_alarm_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toLeftOf="@+id/alarm_switch"/>
+                    android:background="?attr/selectableItemBackground"
+                    android:textSize="44sp"
+                    android:text="07:00"/>
 
-                <com.simplemobiletools.commons.views.MySwitchCompat
-                    android:id="@+id/alarm_switch"
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:id="@+id/alarm_days"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/edit_alarm_time"
+                    android:ellipsize="end"
+                    android:includeFontPadding="false"
+                    android:maxLines="1"
+                    android:paddingLeft="@dimen/tiny_margin"
+                    android:textSize="@dimen/bigger_text_size"
+                    tools:text="Mon, Tue, Wed, Thu, Fri"/>
+
+                <LinearLayout
+                    android:id="@+id/edit_alarm_days_holder"
+                    android:layout_width="match_parent"
+                    android:layout_height="38dp"
+                    android:layout_below="@+id/alarm_days"
+                    android:layout_marginTop="@dimen/medium_margin"
+                    android:layout_marginBottom="@dimen/medium_margin"
+                    android:orientation="horizontal"/>
+
+                <com.simplemobiletools.commons.views.MyEditText
+                    android:id="@+id/alarmDescription"
+                    android:hint="Alarm description"
+                    android:layout_below="@id/edit_alarm_days_holder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </com.simplemobiletools.commons.views.MyEditText>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_alignTop="@+id/edit_alarm_time"
+                    android:layout_alignBottom="@id/edit_alarm_time"
+                    android:layout_alignParentRight="true"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/deleteAlarm"
+                        android:src="@drawable/delete_w"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
 
-                    android:paddingLeft="@dimen/activity_margin"
-                    android:paddingRight="@dimen/medium_margin"/>
-            </LinearLayout>
-        </RelativeLayout>
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+                    <com.simplemobiletools.commons.views.MySwitchCompat
+                        android:id="@+id/alarm_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:paddingLeft="@dimen/activity_margin"
+                        android:paddingRight="@dimen/medium_margin"/>
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <RelativeLayout
+        android:padding="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.simplemobiletools.commons.views.MyTextView
+            android:foreground="?attr/selectableItemBackground"
+            android:id="@+id/cancel"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="10dp"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/ok"
+            android:layout_toStartOf="@+id/ok"
+            android:text="@android:string/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <com.simplemobiletools.commons.views.MyTextView
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:id="@+id/ok"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:text="@android:string/ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+</LinearLayout>
+
+
 

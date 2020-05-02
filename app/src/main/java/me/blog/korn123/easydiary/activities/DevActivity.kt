@@ -16,6 +16,7 @@ import android.text.format.DateFormat
 import android.text.style.RelativeSizeSpan
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.TextView
@@ -30,11 +31,12 @@ import com.simplemobiletools.commons.helpers.*
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_dev.*
 import kotlinx.android.synthetic.main.dialog_alarm.view.*
+import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.AlarmAdapter
-import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.exportRealmFile
-import me.blog.korn123.easydiary.extensions.makeSnackBar
+import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
@@ -75,8 +77,7 @@ class DevActivity : EasyDiaryActivity() {
                 val alarm = mAlarmList[position]
                 var alertDialog: AlertDialog? = null
                 val builder = AlertDialog.Builder(this)
-                builder.setNegativeButton(getString(android.R.string.cancel)) { _, _ ->  alertDialog?.dismiss() }
-                builder.setPositiveButton(getString(android.R.string.ok)) { _, _ ->  alertDialog?.dismiss() }
+                builder.setCancelable(false)
                 val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
                 val rootView = inflater.inflate(R.layout.dialog_alarm, null).apply {
                     val dayLetters = resources.getStringArray(R.array.week_day_letters).toList() as ArrayList<String>
@@ -133,8 +134,26 @@ class DevActivity : EasyDiaryActivity() {
                         EasyDiaryDbHelper.commitTransaction()
                     }
                     deleteAlarm.setOnClickListener {
-                        EasyDiaryDbHelper.deleteAlarm(alarm.sequence)
+                        alertDialog?.dismiss()
+                        EasyDiaryDbHelper.beginTransaction()
+                        alarm.deleteFromRealm()
+                        EasyDiaryDbHelper.commitTransaction()
                         updateAlarmList()
+                    }
+                    ok.setOnClickListener {
+                        alertDialog?.dismiss()
+                        mAlarmAdapter.notifyDataSetChanged()
+                    }
+                    cancel.setOnClickListener {
+                        alertDialog?.dismiss()
+                    }
+
+                    if (this is ViewGroup) {
+                        this.setBackgroundColor(config.backgroundColor)
+                        initTextSize(this)
+                        updateTextColors(this)
+                        updateAppViews(this)
+                        FontUtils.setFontsTypeface(this@DevActivity, this@DevActivity.assets, null, this)
                     }
                 }
                 builder.setView(rootView)
@@ -155,6 +174,15 @@ class DevActivity : EasyDiaryActivity() {
         updateAlarmList()
     }
 
+    override fun onPause() {
+        super.onPause()
+        EasyDiaryUtils.changeDrawableIconColor(this, android.R.color.white, R.drawable.delete_w)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        EasyDiaryUtils.changeDrawableIconColor(this, config.textColor, R.drawable.delete_w)
+    }
 
     /***************************************************************************************************
      *   etc functions

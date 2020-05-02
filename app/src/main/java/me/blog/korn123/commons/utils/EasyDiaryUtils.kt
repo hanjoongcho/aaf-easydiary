@@ -3,10 +3,7 @@ package me.blog.korn123.commons.utils
 import android.content.ContentResolver
 import android.content.Context
 import android.database.Cursor
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.PorterDuff
-import android.graphics.Typeface
+import android.graphics.*
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Build
@@ -278,7 +275,11 @@ object EasyDiaryUtils {
 
     fun changeDrawableIconColor(context: Context, color: Int, resourceId: Int) {
         ContextCompat.getDrawable(context, resourceId)?.apply {
-            setColorFilter(color, PorterDuff.Mode.SRC_IN)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                colorFilter = BlendModeColorFilter(color, BlendMode.SRC_IN);
+            } else {
+                setColorFilter(color, PorterDuff.Mode.SRC_IN)
+            }
         }
     }
 
