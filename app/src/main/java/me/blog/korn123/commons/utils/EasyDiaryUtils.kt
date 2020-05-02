@@ -7,41 +7,34 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.PorterDuff
 import android.graphics.Typeface
-import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
-import android.os.Handler
-import android.os.Looper
 import android.provider.OpenableColumns
+import android.text.Html
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.BackgroundColorSpan
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
-import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
-import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.Target
-import com.simplemobiletools.commons.extensions.toast
+import com.google.common.reflect.TypeToken
+import com.google.gson.GsonBuilder
+import com.google.gson.stream.JsonReader
 import id.zelory.compressor.Compressor
 import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.CALCULATION
 import io.github.aafactory.commons.utils.CommonUtils
-import io.realm.RealmList
-import kotlinx.android.synthetic.main.fragment_diary_read.*
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.activities.DiaryReadActivity
 import me.blog.korn123.easydiary.adapters.SecondItemAdapter
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
@@ -54,6 +47,7 @@ import org.apache.commons.lang3.StringUtils
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
+import java.io.FileReader
 import java.util.*
 
 /**
@@ -353,5 +347,25 @@ object EasyDiaryUtils {
         Glide.with(context).load(getApplicationDataDirectory(context) + photoUriDto.getFilePath()).apply(options).into(imageView)
 
         return imageView
+    }
+
+    fun jsonFileToHashMap(filename: String): HashMap<String, Any> {
+        val reader = JsonReader(FileReader(filename))
+        val type = object : TypeToken<HashMap<String, Any>>(){}.type
+        val map: HashMap<String, Any> = GsonBuilder().create().fromJson(reader, type)
+        reader.close()
+        return map
+    }
+
+    fun fromHtml(target: String): Spanned {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            return Html.fromHtml(target)
+        }
+        return Html.fromHtml(target, Html.FROM_HTML_MODE_LEGACY);
+    }
+
+    fun jsonStringToHashMap(jsonString: String): HashMap<String, Any> {
+        val type = object : TypeToken<HashMap<String, Any>>(){}.type
+        return GsonBuilder().create().fromJson(jsonString, type)
     }
 }

@@ -2,7 +2,6 @@ package me.blog.korn123.easydiary.workers
 
 import android.content.Context
 import android.net.Uri
-import android.text.BoringLayout
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
@@ -11,9 +10,9 @@ import com.simplemobiletools.commons.helpers.PRIMARY_COLOR
 import com.simplemobiletools.commons.helpers.SETTING_CARD_VIEW_BACKGROUND_COLOR
 import com.simplemobiletools.commons.helpers.TEXT_COLOR
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.commons.utils.EasyDiaryUtils.jsonFileToHashMap
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.jsonFileToHashMap
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.viewmodels.BackupOperations
 import java.io.File
@@ -29,7 +28,7 @@ class FullRecoveryWorker(private val context: Context, workerParams: WorkerParam
         if (mZipHelper.isOnProgress) {
             val jsonFilename = EasyDiaryUtils.getApplicationDataDirectory(context) + WORKING_DIRECTORY + "preference.json"
             if (File(jsonFilename).exists()) {
-                val map = context.jsonFileToHashMap(jsonFilename)
+                val map = jsonFileToHashMap(jsonFilename)
                 context.config.run {
                     // Settings Basic
                     primaryColor = (map[PRIMARY_COLOR] as Double).toInt()

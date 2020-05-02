@@ -8,10 +8,8 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.preference.PreferenceManager
-import android.text.Html
 import android.text.Spannable
 import android.text.SpannableString
-import android.text.Spanned
 import android.util.TypedValue
 import android.view.MenuItem
 import android.view.ViewGroup
@@ -19,9 +17,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import com.google.common.reflect.TypeToken
 import com.google.gson.GsonBuilder
-import com.google.gson.stream.JsonReader
 import com.simplemobiletools.commons.extensions.adjustAlpha
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
@@ -43,7 +39,6 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import java.io.File
 import java.io.FileOutputStream
-import java.io.FileReader
 
 
 /**
@@ -265,26 +260,6 @@ fun Context.preferenceToJsonString(): String {
     val gson = GsonBuilder().setPrettyPrinting().create()
     jsonString = gson.toJson(preferenceMap)
     return jsonString
-}
-
-fun Context.jsonStringToHashMap(jsonString: String): HashMap<String, Any> {
-    val type = object : TypeToken<HashMap<String, Any>>(){}.type
-    return GsonBuilder().create().fromJson(jsonString, type)
-}
-
-fun Context.jsonFileToHashMap(filename: String): HashMap<String, Any> {
-    val reader = JsonReader(FileReader(filename))
-    val type = object : TypeToken<HashMap<String, Any>>(){}.type
-    val map: HashMap<String, Any> = GsonBuilder().create().fromJson(reader, type)
-    reader.close()
-    return map
-}
-
-fun Context.fromHtml(target: String): Spanned {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-        return Html.fromHtml(target)
-    }
-    return Html.fromHtml(target, Html.FROM_HTML_MODE_LEGACY);
 }
 
 fun Context.shareFile(targetFile: File) {

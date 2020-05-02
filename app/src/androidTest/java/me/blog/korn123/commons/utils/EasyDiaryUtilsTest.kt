@@ -1,6 +1,5 @@
 package me.blog.korn123.commons.utils
 
-import android.content.Context
 import android.text.SpannedString
 import android.text.style.BackgroundColorSpan
 import android.util.Log
@@ -8,14 +7,11 @@ import android.widget.TextView
 import androidx.test.InstrumentationRegistry
 import com.simplemobiletools.commons.helpers.SETTING_CARD_VIEW_BACKGROUND_COLOR
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.extensions.jsonStringToHashMap
 import me.blog.korn123.easydiary.extensions.preferenceToJsonString
 import me.blog.korn123.easydiary.helper.AAF_TEST
-import me.blog.korn123.easydiary.helper.APP_LOCK_SAVED_PASSWORD
 import me.blog.korn123.easydiary.helper.SETTING_THUMBNAIL_SIZE
 import me.blog.korn123.easydiary.models.DiarySymbol
 import org.junit.Assert.*
-import org.junit.BeforeClass
 import org.junit.Test
 
 /**
@@ -74,7 +70,7 @@ class EasyDiaryUtilsTest {
     fun test_04() {
         val jsonString = InstrumentationRegistry.getTargetContext().preferenceToJsonString()
         Log.i(AAF_TEST, jsonString)
-        val map = InstrumentationRegistry.getTargetContext().jsonStringToHashMap(jsonString)
+        val map = EasyDiaryUtils.jsonStringToHashMap(jsonString)
         Log.i(AAF_TEST, map.toString())
 
         val screenBackgroundColor: Int = (map[SETTING_CARD_VIEW_BACKGROUND_COLOR] as Double).toInt()
