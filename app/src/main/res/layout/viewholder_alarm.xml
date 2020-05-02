@@ -25,11 +25,6 @@
                     android:textSize="44sp"
                     android:text="07:00"/>
 
-                <CheckBox
-                    android:id="@+id/checkTT"
-                    android:layout_toLeftOf="@+id/alarm_switch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
                 <com.simplemobiletools.commons.views.MyTextView
                     android:id="@+id/alarm_days"
                     android:layout_width="match_parent"
@@ -44,17 +39,9 @@
                     tools:text="Mon, Tue, Wed, Thu, Fri"/>
 
                 <com.simplemobiletools.commons.views.MyTextView
-                    android:id="@+id/alarmTitle"
-                    android:hint="Alarm title"
-                    android:layout_below="@id/alarm_days"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                </com.simplemobiletools.commons.views.MyTextView>
-
-                <com.simplemobiletools.commons.views.MyTextView
                     android:id="@+id/alarmDescription"
                     android:hint="Alarm description"
-                    android:layout_below="@id/alarmTitle"
+                    android:layout_below="@id/alarm_days"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                 </com.simplemobiletools.commons.views.MyTextView>

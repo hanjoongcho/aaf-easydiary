@@ -17,7 +17,6 @@ class AlarmViewHolder(itemView: View, val activity: Activity) : RecyclerView.Vie
         itemView.alarm_days.text = activity.getSelectedDaysString(alarm.days)
         itemView.alarm_days.setTextColor(activity.config.textColor)
         itemView.alarm_switch.isChecked = alarm.isEnabled
-        itemView.alarmTitle.text = "Easy Diary"
         itemView.alarmDescription.text = alarm.label
         itemView.edit_alarm_time.text = activity.getFormattedTime(alarm.timeInMinutes * 60, false, true)
 
@@ -32,7 +31,5 @@ class AlarmViewHolder(itemView: View, val activity: Activity) : RecyclerView.Vie
             }
             EasyDiaryDbHelper.commitTransaction()
         }
-        
-        itemView.checkTT.setOnCheckedChangeListener { compoundButton, b ->  }
     }
 }

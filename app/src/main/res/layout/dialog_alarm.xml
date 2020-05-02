@@ -45,17 +45,9 @@
                 android:orientation="horizontal"/>
 
             <com.simplemobiletools.commons.views.MyEditText
-                android:id="@+id/alarmTitle"
-                android:hint="Alarm title"
-                android:layout_below="@id/edit_alarm_days_holder"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </com.simplemobiletools.commons.views.MyEditText>
-
-            <com.simplemobiletools.commons.views.MyEditText
                 android:id="@+id/alarmDescription"
                 android:hint="Alarm description"
-                android:layout_below="@id/alarmTitle"
+                android:layout_below="@id/edit_alarm_days_holder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
             </com.simplemobiletools.commons.views.MyEditText>
@@ -69,7 +61,7 @@
                 android:layout_height="wrap_content">
                 <Button
                     android:id="@+id/deleteAlarm"
-                    android:text="Delete"
+                    android:text="Del"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toLeftOf="@+id/alarm_switch"/>

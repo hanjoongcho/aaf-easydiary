@@ -110,7 +110,6 @@ class DevActivity : EasyDiaryActivity() {
                     alarm_days.text = getSelectedDaysString(alarm.days)
                     alarm_days.setTextColor(config.textColor)
                     alarm_switch.isChecked = alarm.isEnabled
-                    alarmTitle.setText("Easy Diary")
                     alarmDescription.setText(alarm.label)
                     edit_alarm_time.text = getFormattedTime(alarm.timeInMinutes * 60, false, true)
 
