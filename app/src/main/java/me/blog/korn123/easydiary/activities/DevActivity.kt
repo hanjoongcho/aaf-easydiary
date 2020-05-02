@@ -33,6 +33,7 @@ import kotlinx.android.synthetic.main.dialog_alarm.view.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.AlarmAdapter
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.exportRealmFile
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
@@ -306,6 +307,10 @@ fun Context.showAlarmNotification(alarm: Alarm) {
     val notification = getAlarmNotification(pendingIntent, alarm)
     val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     notificationManager.notify(alarm.id, notification)
+
+    // Backup diary database file
+    exportRealmFile()
+
     val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
     if (isScreenOn()) {
         scheduleNextAlarm(alarm, true)

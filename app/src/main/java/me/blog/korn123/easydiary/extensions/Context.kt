@@ -31,6 +31,7 @@ import com.simplemobiletools.commons.helpers.SETTING_CARD_VIEW_BACKGROUND_COLOR
 import com.simplemobiletools.commons.helpers.TEXT_COLOR
 import com.simplemobiletools.commons.views.*
 import io.github.aafactory.commons.utils.CommonUtils
+import io.github.aafactory.commons.utils.DateUtils
 import io.github.aafactory.commons.views.ModalView
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
@@ -38,6 +39,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.views.FixedCardView
 import me.blog.korn123.easydiary.views.FixedTextView
+import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import java.io.File
 import java.io.FileOutputStream
@@ -296,4 +298,12 @@ fun Context.shareFile(targetFile: File, mimeType: String) {
         type = mimeType
         startActivity(Intent.createChooser(this, getString(R.string.diary_card_share_info)))
     }
+}
+
+fun Context.exportRealmFile() {
+    val srcFile = File(EasyDiaryDbHelper.getRealmPath())
+    val destFilePath = BACKUP_DB_DIRECTORY + DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
+    val destFile = File(EasyDiaryUtils.getApplicationDataDirectory(this) + destFilePath)
+    FileUtils.copyFile(srcFile, destFile, false)
+    config.diaryBackupLocal = System.currentTimeMillis()
 }

@@ -146,12 +146,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     private fun exportRealmFile(showDialog: Boolean = true) {
-        val srcFile = File(EasyDiaryDbHelper.getRealmPath())
-        val destFilePath = BACKUP_DB_DIRECTORY + DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
-        val destFile = File(EasyDiaryUtils.getApplicationDataDirectory(mContext) + destFilePath)
-        FileUtils.copyFile(srcFile, destFile, false)
-        mContext.config.diaryBackupLocal = System.currentTimeMillis()
-//        if (showDialog) mActivity.showSimpleDialog(getString(R.string.export_realm_title), getString(R.string.export_realm_guide_message), destFile.absolutePath)
+        mActivity.exportRealmFile()
         mActivity.makeSnackBar("Operation completed.")
     }
 

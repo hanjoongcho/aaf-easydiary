@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.extensions
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlarmManager
 import android.app.Dialog
@@ -27,7 +28,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
 import io.github.aafactory.commons.activities.BaseSimpleActivity
-import kotlinx.android.synthetic.main.dialog_feeling_pager.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.activities.FingerprintLockActivity
@@ -135,6 +135,7 @@ fun Activity.setScreenOrientationSensor(enableSensor: Boolean) {
     }
 }
 
+@SuppressLint("SourceLockedOrientationActivity")
 fun Activity.holdCurrentOrientation() {
     when (resources.configuration.orientation) {
         Configuration.ORIENTATION_PORTRAIT -> requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -313,3 +314,4 @@ fun Activity.addCategory(itemList: ArrayList<Array<String>>, categoryList: Array
         categoryList.add(categoryName)
     }
 }
+
