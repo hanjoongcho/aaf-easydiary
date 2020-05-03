@@ -15,10 +15,8 @@ import android.provider.Settings
 import android.text.SpannableString
 import android.text.format.DateFormat
 import android.text.style.RelativeSizeSpan
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.util.TypedValue
+import android.view.*
 import android.widget.AdapterView
 import android.widget.TextView
 import android.widget.Toast
@@ -29,6 +27,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.*
+import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_dev.*
 import kotlinx.android.synthetic.main.dialog_alarm.view.*
@@ -36,7 +35,10 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.AlarmAdapter
-import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.exportRealmFile
+import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
@@ -77,13 +79,15 @@ class DevActivity : EasyDiaryActivity() {
             AdapterView.OnItemClickListener { _, _, position, _ ->
                 val alarm = mAlarmList[position]
                 var alertDialog: AlertDialog? = null
-                val builder = AlertDialog.Builder(this)
-                builder.setCancelable(false)
-                builder.setPositiveButton(getString(android.R.string.ok)) { _, _ ->
-                    alertDialog?.dismiss()
-                    mAlarmAdapter.notifyDataSetChanged()
+                val builder = AlertDialog.Builder(this).apply {
+                    setTitle("Title!!!")
+                    setCancelable(false)
+                    setPositiveButton(getString(android.R.string.ok)) { _, _ ->
+                        alertDialog?.dismiss()
+                        mAlarmAdapter.notifyDataSetChanged()
+                    }
+                    setNegativeButton(getString(android.R.string.cancel)) { _, _ -> alertDialog?.dismiss() }
                 }
-                builder.setNegativeButton(getString(android.R.string.cancel)) { _, _ -> alertDialog?.dismiss() }
                 val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
                 val rootView = inflater.inflate(R.layout.dialog_alarm, null).apply {
                     val dayLetters = resources.getStringArray(R.array.week_day_letters).toList() as ArrayList<String>
@@ -146,13 +150,6 @@ class DevActivity : EasyDiaryActivity() {
                         EasyDiaryDbHelper.commitTransaction()
                         updateAlarmList()
                     }
-                    ok.setOnClickListener {
-                        alertDialog?.dismiss()
-                        mAlarmAdapter.notifyDataSetChanged()
-                    }
-                    cancel.setOnClickListener {
-                        alertDialog?.dismiss()
-                    }
 
                     if (this is ViewGroup) {
                         this.setBackgroundColor(config.backgroundColor)
@@ -162,11 +159,23 @@ class DevActivity : EasyDiaryActivity() {
                         FontUtils.setFontsTypeface(this@DevActivity, this@DevActivity.assets, null, this)
                     }
                 }
-                builder.setView(rootView)
+
                 alertDialog = builder.create().apply {
+                    setView(rootView)
                     window?.setBackgroundDrawable(ColorDrawable(baseConfig.backgroundColor))
-                    show()
                     val globalTypeface = FontUtils.getCommonTypeface(this@DevActivity, this@DevActivity.assets)
+                    requestWindowFeature(Window.FEATURE_NO_TITLE)
+                    val customTitle = TextView(this@DevActivity).apply {
+                        text = "Custom Title"
+                        setTextColor(baseConfig.textColor)
+                        typeface = globalTypeface
+                        val padding = CommonUtils.dpToPixel(this@DevActivity, 10F)
+                        setPadding(padding * 2, padding, padding * 2, padding)
+                        setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18F)
+//                        setBackgroundColor(resources.getColor(android.R.color.white))
+                    }
+                    setCustomTitle(customTitle)
+                    show()
                     getButton(AlertDialog.BUTTON_POSITIVE).run {
                         setTextColor(baseConfig.textColor)
                         typeface = globalTypeface

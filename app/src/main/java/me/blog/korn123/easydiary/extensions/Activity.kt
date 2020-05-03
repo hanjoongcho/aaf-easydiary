@@ -95,7 +95,7 @@ fun Activity.confirmPermission(permissions: Array<String>, requestCode: Int) {
     }
 }
 
-fun BaseSimpleActivity.checkWhatsNew(releases: List<Release>, currVersion: Int, applyFilter: Boolean = true) {
+fun Activity.checkWhatsNew(releases: List<Release>, currVersion: Int, applyFilter: Boolean = true) {
     when (applyFilter) {
         true -> {
             if (baseConfig.lastVersion == 0) {
