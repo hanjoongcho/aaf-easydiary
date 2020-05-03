@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Rect
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -78,6 +79,11 @@ class DevActivity : EasyDiaryActivity() {
                 var alertDialog: AlertDialog? = null
                 val builder = AlertDialog.Builder(this)
                 builder.setCancelable(false)
+                builder.setPositiveButton(getString(android.R.string.ok)) { _, _ ->
+                    alertDialog?.dismiss()
+                    mAlarmAdapter.notifyDataSetChanged()
+                }
+                builder.setNegativeButton(getString(android.R.string.cancel)) { _, _ -> alertDialog?.dismiss() }
                 val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
                 val rootView = inflater.inflate(R.layout.dialog_alarm, null).apply {
                     val dayLetters = resources.getStringArray(R.array.week_day_letters).toList() as ArrayList<String>
@@ -157,8 +163,20 @@ class DevActivity : EasyDiaryActivity() {
                     }
                 }
                 builder.setView(rootView)
-                alertDialog = builder.create()
-                alertDialog.show()
+                alertDialog = builder.create().apply {
+                    window?.setBackgroundDrawable(ColorDrawable(baseConfig.backgroundColor))
+                    show()
+                    val globalTypeface = FontUtils.getCommonTypeface(this@DevActivity, this@DevActivity.assets)
+                    getButton(AlertDialog.BUTTON_POSITIVE).run {
+                        setTextColor(baseConfig.textColor)
+                        typeface = globalTypeface
+                    }
+                    getButton(AlertDialog.BUTTON_NEGATIVE).run {
+                        setTextColor(baseConfig.textColor)
+                        typeface = globalTypeface
+                    }
+                    getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(baseConfig.textColor)
+                }
             }
         )
 
