@@ -77,12 +77,21 @@ class DevActivity : EasyDiaryActivity() {
             this@DevActivity,
             mAlarmList,
             AdapterView.OnItemClickListener { _, _, position, _ ->
-                val alarm = mAlarmList[position]
+                val alarm = EasyDiaryDbHelper.duplicateAlarm(mAlarmList[position])
                 var alertDialog: AlertDialog? = null
                 val builder = AlertDialog.Builder(this).apply {
                     setTitle("Title!!!")
                     setCancelable(false)
                     setPositiveButton(getString(android.R.string.ok)) { _, _ ->
+                        // update alarm schedule
+                        if (alarm.isEnabled) {
+                            scheduleNextAlarm(alarm, true)
+                        } else {
+                            cancelAlarmClock(alarm)
+                        }
+                        
+                        // save alarm
+                        EasyDiaryDbHelper.updateAlarm(alarm)
                         alertDialog?.dismiss()
                         mAlarmAdapter.notifyDataSetChanged()
                     }
@@ -92,6 +101,9 @@ class DevActivity : EasyDiaryActivity() {
                 val rootView = inflater.inflate(R.layout.dialog_alarm, null).apply {
                     val dayLetters = resources.getStringArray(R.array.week_day_letters).toList() as ArrayList<String>
                     val dayIndexes = arrayListOf(0, 1, 2, 3, 4, 5, 6)
+                    if (config.isSundayFirst) {
+                        dayIndexes.moveLastItemToFront()
+                    }
                     edit_alarm_days_holder.removeAllViews()
                     dayIndexes.forEach {
                         val pow = 2.0.pow(it.toDouble()).toInt()
@@ -126,27 +138,17 @@ class DevActivity : EasyDiaryActivity() {
 
                     edit_alarm_time.setOnClickListener {
                         TimePickerDialog(this@DevActivity, TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-                            EasyDiaryDbHelper.beginTransaction()
                             alarm.timeInMinutes = hourOfDay * 60 + minute
                             edit_alarm_time.text = getFormattedTime(alarm.timeInMinutes * 60, false, true)
-                            EasyDiaryDbHelper.commitTransaction()
                         }, alarm.timeInMinutes / 60, alarm.timeInMinutes % 60, DateFormat.is24HourFormat(this@DevActivity)).show()
                     }
                     alarm_switch.setOnCheckedChangeListener { _, isChecked ->
-                        EasyDiaryDbHelper.beginTransaction()
                         alarm.isEnabled = isChecked
-                        if (isChecked) {
-                            scheduleNextAlarm(alarm, true)
-                            alarm.label = alarmDescription.text.toString()
-                        } else {
-                            cancelAlarmClock(alarm)
-                        }
-                        EasyDiaryDbHelper.commitTransaction()
                     }
                     deleteAlarm.setOnClickListener {
                         alertDialog?.dismiss()
                         EasyDiaryDbHelper.beginTransaction()
-                        alarm.deleteFromRealm()
+                        mAlarmList[position].deleteFromRealm()
                         EasyDiaryDbHelper.commitTransaction()
                         updateAlarmList()
                     }
@@ -159,7 +161,6 @@ class DevActivity : EasyDiaryActivity() {
                         FontUtils.setFontsTypeface(this@DevActivity, this@DevActivity.assets, null, this)
                     }
                 }
-
                 alertDialog = builder.create().apply {
                     setView(rootView)
                     window?.setBackgroundDrawable(ColorDrawable(baseConfig.backgroundColor))

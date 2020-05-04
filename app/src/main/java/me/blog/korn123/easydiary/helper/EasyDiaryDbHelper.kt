@@ -166,6 +166,10 @@ object EasyDiaryDbHelper {
      *   Manage Alarm model
      *
      ***************************************************************************************************/
+    private fun readAlarmBy(realmInstance: Realm, sequence: Int): Alarm? {
+        return realmInstance.where(Alarm::class.java).equalTo("sequence", sequence).findFirst()
+    }
+
     fun insertAlarm(alarm: Alarm) {
         getInstance().executeTransaction { realm ->
             var sequence = 1
@@ -205,8 +209,12 @@ object EasyDiaryDbHelper {
         return readAlarmBy(getInstance(), sequence)
     }
 
-    private fun readAlarmBy(realmInstance: Realm, sequence: Int): Alarm? {
-        return realmInstance.where(Alarm::class.java).equalTo("sequence", sequence).findFirst()
+    fun duplicateAlarm(alarm: Alarm, realmInstance: Realm = getInstance()): Alarm {
+        return realmInstance.copyFromRealm(alarm)
+    }
+
+    fun updateAlarm(alarm: Alarm) {
+        getInstance().executeTransaction { realm -> realm.insertOrUpdate(alarm) }
     }
 }
 
