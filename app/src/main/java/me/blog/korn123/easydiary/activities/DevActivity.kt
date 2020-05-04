@@ -89,7 +89,7 @@ class DevActivity : EasyDiaryActivity() {
                         } else {
                             cancelAlarmClock(alarm)
                         }
-                        
+
                         // save alarm
                         EasyDiaryDbHelper.updateAlarm(alarm)
                         alertDialog?.dismiss()
