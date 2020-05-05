@@ -40,10 +40,7 @@ import me.blog.korn123.easydiary.extensions.exportRealmFile
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateTextColors
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
-import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
-import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
-import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_NAME
+import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.receivers.AlarmReceiver
 import java.util.*
@@ -312,8 +309,10 @@ fun formatTime(showSeconds: Boolean, use24HourFormat: Boolean, hours: Int, minut
 fun Context.isScreenOn() = (getSystemService(Context.POWER_SERVICE) as PowerManager).isScreenOn
 
 fun Context.getOpenAlarmTabIntent(): PendingIntent {
-    val diaryMainIntent = Intent(this, DiaryMainActivity::class.java)
-    return PendingIntent.getActivity(this, 1000, diaryMainIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+    val intent = Intent(this, DiaryInsertActivity::class.java).apply {
+        putExtra(DIARY_INSERT_MODE, MODE_REMINDER)
+    }
+    return PendingIntent.getActivity(this, 1000, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 }
 
 fun Context.getAlarmIntent(alarm: Alarm): PendingIntent {

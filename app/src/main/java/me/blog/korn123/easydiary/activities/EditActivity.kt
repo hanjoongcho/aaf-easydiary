@@ -101,7 +101,13 @@ abstract class EditActivity : EasyDiaryActivity() {
 
     override fun onBackPressed() {
         showAlertDialog(getString(R.string.back_pressed_confirm),
-                DialogInterface.OnClickListener { _, _ -> super.onBackPressed() },
+                DialogInterface.OnClickListener { _, _ ->
+                    if (isReminderMode()) {
+                        startMainActivityWithClearTask()
+                    } else {
+                        super.onBackPressed()
+                    }
+                },
                 null
         )
     }
