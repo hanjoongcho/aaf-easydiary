@@ -39,7 +39,7 @@ class EasyDiaryMigration : RealmMigration {
             }
 
             if (currentVersion == 2L) {
-                it.addField("weather", Int::class.javaPrimitiveType)
+                it.addField("weather", Int::class.java)
                 .transform { obj -> obj.set("weather", 0) }
                 currentVersion++
             }
@@ -60,12 +60,12 @@ class EasyDiaryMigration : RealmMigration {
             }
 
             if (currentVersion == 5L) {
-                it.addField("fontSize", Float::class.javaPrimitiveType)
+                it.addField("fontSize", Float::class.java)
                 currentVersion++
             }
             
             if (currentVersion == 6L) {
-                it.addField("isAllDay", Boolean::class.javaPrimitiveType)
+                it.addField("isAllDay", Boolean::class.java)
                 currentVersion++
             }
 
@@ -89,7 +89,7 @@ class EasyDiaryMigration : RealmMigration {
             }
 
             if (currentVersion == 9L) {
-                it.addField("isEncrypt", Boolean::class.javaPrimitiveType)
+                it.addField("isEncrypt", Boolean::class.java)
                 currentVersion++
             }
 
@@ -108,7 +108,12 @@ class EasyDiaryMigration : RealmMigration {
             }
 
             if (currentVersion == 12L) {
-                it.addField("isSelected", Boolean::class.javaPrimitiveType)
+                it.addField("isSelected", Boolean::class.java)
+                currentVersion++
+            }
+
+            if (currentVersion == 13L) {
+                schema.get("Alarm")?.addField("workMode", Int::class.java)
                 currentVersion++
             }
 

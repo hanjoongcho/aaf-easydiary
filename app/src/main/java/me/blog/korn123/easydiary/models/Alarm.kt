@@ -13,6 +13,7 @@ open class Alarm : RealmObject {
     var soundTitle: String? = null
     var soundUri: String? = null
     var label: String? = null
+    var workMode: Int = 0 /* 0: Diary write alarm, 1: Auto backup with google drive, 2: Auto backup with application storage */
     val id: Int
         get() = this.sequence
 

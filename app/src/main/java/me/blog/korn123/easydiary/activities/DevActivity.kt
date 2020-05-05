@@ -77,10 +77,10 @@ class DevActivity : EasyDiaryActivity() {
             this@DevActivity,
             mAlarmList,
             AdapterView.OnItemClickListener { _, _, position, _ ->
+                var rootView: View? = null
                 val alarm = EasyDiaryDbHelper.duplicateAlarm(mAlarmList[position])
                 var alertDialog: AlertDialog? = null
                 val builder = AlertDialog.Builder(this).apply {
-                    setTitle("Title!!!")
                     setCancelable(false)
                     setPositiveButton(getString(android.R.string.ok)) { _, _ ->
                         // update alarm schedule
@@ -91,6 +91,7 @@ class DevActivity : EasyDiaryActivity() {
                         }
 
                         // save alarm
+                        alarm.label = rootView?.alarmDescription?.text.toString()
                         EasyDiaryDbHelper.updateAlarm(alarm)
                         alertDialog?.dismiss()
                         mAlarmAdapter.notifyDataSetChanged()
@@ -98,7 +99,7 @@ class DevActivity : EasyDiaryActivity() {
                     setNegativeButton(getString(android.R.string.cancel)) { _, _ -> alertDialog?.dismiss() }
                 }
                 val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
-                val rootView = inflater.inflate(R.layout.dialog_alarm, null).apply {
+                rootView = inflater.inflate(R.layout.dialog_alarm, null).apply {
                     val dayLetters = resources.getStringArray(R.array.week_day_letters).toList() as ArrayList<String>
                     val dayIndexes = arrayListOf(0, 1, 2, 3, 4, 5, 6)
                     if (config.isSundayFirst) {
@@ -167,7 +168,10 @@ class DevActivity : EasyDiaryActivity() {
                     val globalTypeface = FontUtils.getCommonTypeface(this@DevActivity, this@DevActivity.assets)
                     requestWindowFeature(Window.FEATURE_NO_TITLE)
                     val customTitle = TextView(this@DevActivity).apply {
-                        text = "Custom Title"
+                        text = when (alarm.workMode) {
+                            0 -> "다이어리 쓰기 알림 설정"
+                            else -> ""
+                        }
                         setTextColor(baseConfig.textColor)
                         typeface = globalTypeface
                         val padding = CommonUtils.dpToPixel(this@DevActivity, 10F)
