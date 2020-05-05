@@ -28,6 +28,7 @@ import kotlinx.android.synthetic.main.activity_diary_main.feelingSymbolButton
 import kotlinx.android.synthetic.main.activity_diary_main.query
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
+import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
 import me.blog.korn123.easydiary.enums.DiaryMode
@@ -253,6 +254,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 }
             }
             R.id.dashboard -> TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, Intent(this@DiaryMainActivity, DashboardActivity::class.java))
+            R.id.devConsole -> TransitionHelper.startActivityWithTransition(this, Intent(this, DevActivity::class.java))
         }
         return super.onOptionsItemSelected(item)
     }
@@ -266,6 +268,10 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 applyFontToMenuItem(menu.findItem(R.id.dashboard))
                 applyFontToMenuItem(menu.findItem(R.id.chart))
                 applyFontToMenuItem(menu.findItem(R.id.settings))
+                menu.findItem(R.id.devConsole).run {
+                    applyFontToMenuItem(this)
+                    if (BuildConfig.DEBUG) this.setVisible(true) else this.setVisible(false)
+                }
             }
             DiaryMode.DELETE -> {
                 supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -480,16 +486,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         clearQuery.setOnClickListener { _ ->
             selectFeelingSymbol()
             query.text = null
-
-            if (mClearQueryClickCount == 0) mClearQueryFirstClickMillis = System.currentTimeMillis()
-            mClearQueryClickCount++
-            if (mClearQueryClickCount > 4) {
-//                Toast.makeText(this, "$mClearQueryClickCount ${System.currentTimeMillis() - mClearQueryFirstClickMillis}", Toast.LENGTH_SHORT).show()
-                if (System.currentTimeMillis() - mClearQueryFirstClickMillis < 3000) {
-                    TransitionHelper.startActivityWithTransition(this, Intent(this, DevActivity::class.java))
-                }
-                mClearQueryClickCount = 0
-            }
         }
 
         diaryListView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
