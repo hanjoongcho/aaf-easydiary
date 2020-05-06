@@ -16,6 +16,20 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
+                <me.blog.korn123.easydiary.views.FixedTextView
+                    app:applyGlobalSize="false"
+                    app:applyGlobalColor="false"
+                    android:id="@+id/alarmLabel"
+                    android:textSize="11dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/bg_card_stamp"
+                    android:padding="5dp"
+                    android:text="Diary Writing"
+                    android:textColor="?attr/colorPrimary" />
+
                 <me.blog.korn123.easydiary.views.FixedTextView
                     app:applyGlobalSize="false"
                     app:applyGlobalColor="true"
@@ -48,8 +62,7 @@
                 <com.simplemobiletools.commons.views.MySwitchCompat
                     android:id="@+id/alarm_switch"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignTop="@+id/edit_alarm_time"
+                    android:layout_height="wrap_content"
                     android:layout_alignBottom="@id/edit_alarm_time"
                     android:layout_alignParentRight="true"
                     android:paddingLeft="@dimen/activity_margin"
