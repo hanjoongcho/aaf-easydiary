@@ -20,34 +20,40 @@
     <LinearLayout
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:id="@+id/main_holder"
-        android:padding="10dp"
+        android:padding="@dimen/card_layout_padding"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            app:contentPadding="0dp"
-            style="@style/AppCard">
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <androidx.appcompat.widget.AppCompatButton
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    android:id="@+id/nextAlarmInfo"
+            android:id="@+id/nextAlarm"
+            android:orientation="vertical"
+            style="@style/AppCard.Settings">
+            <LinearLayout
+                style="@style/LinearLayoutVertical">
+                <com.simplemobiletools.commons.views.MyTextView
                     android:text="Next Alarm"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-                <androidx.appcompat.widget.AppCompatButton
-                    app:layout_constraintTop_toBottomOf="@+id/nextAlarmInfo"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    android:id="@+id/addAlarm"
+                    style="@style/SettingsTitle" />
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:id="@+id/nextAlarmSummary"
+                    android:text=""
+                    style="@style/SettingsSummary" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/addAlarm"
+            android:orientation="vertical"
+            style="@style/AppCard.Settings">
+            <LinearLayout
+                style="@style/LinearLayoutVertical">
+                <com.simplemobiletools.commons.views.MyTextView
                     android:text="Add Alarm"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    style="@style/SettingsTitle" />
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:id="@+id/addAlarmSummary"
+                    android:text=""
+                    style="@style/SettingsSummary" />
+            </LinearLayout>
         </androidx.cardview.widget.CardView>
 
         <androidx.recyclerview.widget.RecyclerView

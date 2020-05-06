@@ -246,7 +246,7 @@ class DevActivity : EasyDiaryActivity() {
     }
 
     private fun bindEvent() {
-        nextAlarmInfo.setOnClickListener {
+        nextAlarm.setOnClickListener {
             val nextAlarm = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val triggerTimeMillis = (getSystemService(Context.ALARM_SERVICE) as AlarmManager).nextAlarmClock?.triggerTime ?: 0
                 when (triggerTimeMillis > 0) {
