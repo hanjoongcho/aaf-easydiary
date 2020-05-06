@@ -246,12 +246,6 @@ class DevActivity : EasyDiaryActivity() {
     }
 
     private fun bindEvent() {
-//        openAlarmManager.setOnClickListener {
-//            TransitionHelper.startActivityWithTransition(this, Intent(this, DiaryReminderActivity::class.java).apply {
-//                putExtra(ALARM_ID, mAlarm.id)
-//            })
-//        }
-
         nextAlarmInfo.setOnClickListener {
             val nextAlarm = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val triggerTimeMillis = (getSystemService(Context.ALARM_SERVICE) as AlarmManager).nextAlarmClock?.triggerTime ?: 0
@@ -367,7 +361,7 @@ fun Context.showAlarmNotification(alarm: Alarm) {
     notificationManager.notify(alarm.id, notification)
 
     // Backup diary database file
-    exportRealmFile()
+//    exportRealmFile()
 
     val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
     if (isScreenOn()) {

@@ -36,13 +36,6 @@
                 <androidx.appcompat.widget.AppCompatButton
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    android:id="@+id/openAlarmManager"
-                    android:text="Open Reminder"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-                <androidx.appcompat.widget.AppCompatButton
-                    app:layout_constraintTop_toBottomOf="@+id/openAlarmManager"
-                    app:layout_constraintLeft_toLeftOf="parent"
                     android:id="@+id/nextAlarmInfo"
                     android:text="Next Alarm"
                     android:layout_width="match_parent"
