@@ -216,5 +216,12 @@ object EasyDiaryDbHelper {
     fun updateAlarm(alarm: Alarm) {
         getInstance().executeTransaction { realm -> realm.insertOrUpdate(alarm) }
     }
+
+    fun createTemporaryAlarm(workMode: Int = Alarm.WORK_MODE_DIARY_WRITING): Alarm {
+        val alarm = Alarm().apply { this.workMode = workMode }
+        val sequence = getInstance().where(Alarm::class.java).max("sequence") ?: 0
+        alarm.sequence = sequence.toInt().plus(1)
+        return alarm
+    }
 }
 

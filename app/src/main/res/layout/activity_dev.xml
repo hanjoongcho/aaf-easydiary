@@ -41,16 +41,31 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/addAlarm"
+            android:id="@+id/addWritingAlarm"
             android:orientation="vertical"
             style="@style/AppCard.Settings">
             <LinearLayout
                 style="@style/LinearLayoutVertical">
                 <com.simplemobiletools.commons.views.MyTextView
-                    android:text="Add Alarm"
+                    android:text="Diary writing schedule"
                     style="@style/SettingsTitle" />
                 <com.simplemobiletools.commons.views.MyTextView
                     android:id="@+id/addAlarmSummary"
+                    android:text=""
+                    style="@style/SettingsSummary" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/addLocalBackupAlarm"
+            android:orientation="vertical"
+            style="@style/AppCard.Settings">
+            <LinearLayout
+                style="@style/LinearLayoutVertical">
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="Diary local backup schedule"
+                    style="@style/SettingsTitle" />
+                <com.simplemobiletools.commons.views.MyTextView
                     android:text=""
                     style="@style/SettingsSummary" />
             </LinearLayout>

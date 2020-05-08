@@ -74,120 +74,7 @@ class DevActivity : EasyDiaryActivity() {
             this@DevActivity,
             mAlarmList,
             AdapterView.OnItemClickListener { _, _, position, _ ->
-                var rootView: View? = null
-                val alarm = EasyDiaryDbHelper.duplicateAlarm(mAlarmList[position])
-                var alertDialog: AlertDialog? = null
-                val builder = AlertDialog.Builder(this).apply {
-                    setCancelable(false)
-                    setPositiveButton(getString(android.R.string.ok)) { _, _ ->
-                        // update alarm schedule
-                        if (alarm.isEnabled) {
-                            scheduleNextAlarm(alarm, true)
-                        } else {
-                            cancelAlarmClock(alarm)
-                        }
-
-                        // save alarm
-                        alarm.label = rootView?.alarmDescription?.text.toString()
-                        EasyDiaryDbHelper.updateAlarm(alarm)
-                        alertDialog?.dismiss()
-                        mAlarmAdapter.notifyDataSetChanged()
-                    }
-                    setNegativeButton(getString(android.R.string.cancel)) { _, _ -> alertDialog?.dismiss() }
-                }
-                val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
-                rootView = inflater.inflate(R.layout.dialog_alarm, null).apply {
-                    val dayLetters = resources.getStringArray(R.array.week_day_letters).toList() as ArrayList<String>
-                    val dayIndexes = arrayListOf(0, 1, 2, 3, 4, 5, 6)
-                    if (config.isSundayFirst) {
-                        dayIndexes.moveLastItemToFront()
-                    }
-                    edit_alarm_days_holder.removeAllViews()
-                    dayIndexes.forEach {
-                        val pow = 2.0.pow(it.toDouble()).toInt()
-                        val day = layoutInflater.inflate(R.layout.alarm_day, edit_alarm_days_holder, false) as TextView
-                        day.text = dayLetters[it]
-
-                        val isDayChecked = alarm.days and pow != 0
-                        day.background = getProperDayDrawable(isDayChecked)
-
-                        day.setTextColor(if (isDayChecked) config.backgroundColor else config.textColor)
-                        day.setOnClickListener {
-                            EasyDiaryDbHelper.beginTransaction()
-                            val selectDay = alarm.days and pow == 0
-                            alarm.days = if (selectDay) {
-                                alarm.days.addBit(pow)
-                            } else {
-                                alarm.days.removeBit(pow)
-                            }
-                            day.background = getProperDayDrawable(selectDay)
-                            day.setTextColor(if (selectDay) config.backgroundColor else config.textColor)
-                            alarm_days.text = getSelectedDaysString(alarm.days)
-                            EasyDiaryDbHelper.commitTransaction()
-                        }
-
-                        edit_alarm_days_holder.addView(day)
-                    }
-                    alarm_days.text = getSelectedDaysString(alarm.days)
-                    alarm_days.setTextColor(config.textColor)
-                    alarm_switch.isChecked = alarm.isEnabled
-                    alarmDescription.setText(alarm.label)
-                    edit_alarm_time.text = getFormattedTime(alarm.timeInMinutes * 60, false, true)
-
-                    edit_alarm_time.setOnClickListener {
-                        TimePickerDialog(this@DevActivity, TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-                            alarm.timeInMinutes = hourOfDay * 60 + minute
-                            edit_alarm_time.text = getFormattedTime(alarm.timeInMinutes * 60, false, true)
-                        }, alarm.timeInMinutes / 60, alarm.timeInMinutes % 60, DateFormat.is24HourFormat(this@DevActivity)).show()
-                    }
-                    alarm_switch.setOnCheckedChangeListener { _, isChecked ->
-                        alarm.isEnabled = isChecked
-                    }
-                    deleteAlarm.setOnClickListener {
-                        alertDialog?.dismiss()
-                        EasyDiaryDbHelper.beginTransaction()
-                        mAlarmList[position].deleteFromRealm()
-                        EasyDiaryDbHelper.commitTransaction()
-                        updateAlarmList()
-                    }
-
-                    if (this is ViewGroup) {
-                        this.setBackgroundColor(config.backgroundColor)
-                        initTextSize(this)
-                        updateTextColors(this)
-                        updateAppViews(this)
-                        FontUtils.setFontsTypeface(this@DevActivity, this@DevActivity.assets, null, this)
-                    }
-                }
-                alertDialog = builder.create().apply {
-                    setView(rootView)
-                    window?.setBackgroundDrawable(ColorDrawable(baseConfig.backgroundColor))
-                    val globalTypeface = FontUtils.getCommonTypeface(this@DevActivity, this@DevActivity.assets)
-                    requestWindowFeature(Window.FEATURE_NO_TITLE)
-                    val customTitle = TextView(this@DevActivity).apply {
-                        text = when (alarm.workMode) {
-                            0 -> "다이어리 쓰기 알림 설정"
-                            else -> ""
-                        }
-                        setTextColor(baseConfig.textColor)
-                        typeface = globalTypeface
-                        val padding = CommonUtils.dpToPixel(this@DevActivity, 10F)
-                        setPadding(padding * 2, padding, padding * 2, padding)
-                        setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18F)
-//                        setBackgroundColor(resources.getColor(android.R.color.white))
-                    }
-                    setCustomTitle(customTitle)
-                    show()
-                    getButton(AlertDialog.BUTTON_POSITIVE).run {
-                        setTextColor(baseConfig.textColor)
-                        typeface = globalTypeface
-                    }
-                    getButton(AlertDialog.BUTTON_NEGATIVE).run {
-                        setTextColor(baseConfig.textColor)
-                        typeface = globalTypeface
-                    }
-                    getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(baseConfig.textColor)
-                }
+                openAlarmDialog(EasyDiaryDbHelper.duplicateAlarm(mAlarmList[position]), mAlarmList[position])
             }
         )
 
@@ -217,6 +104,128 @@ class DevActivity : EasyDiaryActivity() {
      *   etc functions
      *
      ***************************************************************************************************/
+    private fun openAlarmDialog(temporaryAlarm: Alarm, storedAlarm: Alarm? = null) {
+        var rootView: View? = null
+        var alertDialog: AlertDialog? = null
+        val builder = AlertDialog.Builder(this).apply {
+            setCancelable(false)
+            setPositiveButton(getString(android.R.string.ok)) { _, _ ->
+                // update alarm schedule
+                if (temporaryAlarm.isEnabled) {
+                    scheduleNextAlarm(temporaryAlarm, true)
+                } else {
+                    cancelAlarmClock(temporaryAlarm)
+                }
+
+                // save alarm
+                temporaryAlarm.label = rootView?.alarmDescription?.text.toString()
+                EasyDiaryDbHelper.updateAlarm(temporaryAlarm)
+                alertDialog?.dismiss()
+                updateAlarmList()
+            }
+            setNegativeButton(getString(android.R.string.cancel)) { _, _ -> alertDialog?.dismiss() }
+        }
+        val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        rootView = inflater.inflate(R.layout.dialog_alarm, null).apply {
+            val dayLetters = resources.getStringArray(R.array.week_day_letters).toList() as ArrayList<String>
+            val dayIndexes = arrayListOf(0, 1, 2, 3, 4, 5, 6)
+            if (config.isSundayFirst) {
+                dayIndexes.moveLastItemToFront()
+            }
+            edit_alarm_days_holder.removeAllViews()
+            dayIndexes.forEach {
+                val pow = 2.0.pow(it.toDouble()).toInt()
+                val day = layoutInflater.inflate(R.layout.alarm_day, edit_alarm_days_holder, false) as TextView
+                day.text = dayLetters[it]
+
+                val isDayChecked = temporaryAlarm.days and pow != 0
+                day.background = getProperDayDrawable(isDayChecked)
+
+                day.setTextColor(if (isDayChecked) config.backgroundColor else config.textColor)
+                day.setOnClickListener {
+                    EasyDiaryDbHelper.beginTransaction()
+                    val selectDay = temporaryAlarm.days and pow == 0
+                    temporaryAlarm.days = if (selectDay) {
+                        temporaryAlarm.days.addBit(pow)
+                    } else {
+                        temporaryAlarm.days.removeBit(pow)
+                    }
+                    day.background = getProperDayDrawable(selectDay)
+                    day.setTextColor(if (selectDay) config.backgroundColor else config.textColor)
+                    alarm_days.text = getSelectedDaysString(temporaryAlarm.days)
+                    EasyDiaryDbHelper.commitTransaction()
+                }
+
+                edit_alarm_days_holder.addView(day)
+            }
+            alarm_days.text = getSelectedDaysString(temporaryAlarm.days)
+            alarm_days.setTextColor(config.textColor)
+            alarm_switch.isChecked = temporaryAlarm.isEnabled
+            alarmDescription.setText(temporaryAlarm.label)
+            edit_alarm_time.text = getFormattedTime(temporaryAlarm.timeInMinutes * 60, false, true)
+
+            edit_alarm_time.setOnClickListener {
+                TimePickerDialog(this@DevActivity, TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+                    temporaryAlarm.timeInMinutes = hourOfDay * 60 + minute
+                    edit_alarm_time.text = getFormattedTime(temporaryAlarm.timeInMinutes * 60, false, true)
+                }, temporaryAlarm.timeInMinutes / 60, temporaryAlarm.timeInMinutes % 60, DateFormat.is24HourFormat(this@DevActivity)).show()
+            }
+            alarm_switch.setOnCheckedChangeListener { _, isChecked ->
+                temporaryAlarm.isEnabled = isChecked
+            }
+            when (storedAlarm == null) {
+                true -> { deleteAlarm.visibility = View.GONE }
+                false -> {
+                    deleteAlarm.setOnClickListener {
+                        alertDialog?.dismiss()
+                        EasyDiaryDbHelper.beginTransaction()
+                        storedAlarm.deleteFromRealm()
+                        EasyDiaryDbHelper.commitTransaction()
+                        updateAlarmList()
+                    }
+                }
+            }
+
+            if (this is ViewGroup) {
+                this.setBackgroundColor(config.backgroundColor)
+                initTextSize(this)
+                updateTextColors(this)
+                updateAppViews(this)
+                FontUtils.setFontsTypeface(this@DevActivity, this@DevActivity.assets, null, this)
+            }
+        }
+        alertDialog = builder.create().apply {
+            setView(rootView)
+            window?.setBackgroundDrawable(ColorDrawable(baseConfig.backgroundColor))
+            val globalTypeface = FontUtils.getCommonTypeface(this@DevActivity, this@DevActivity.assets)
+            requestWindowFeature(Window.FEATURE_NO_TITLE)
+            val customTitle = TextView(this@DevActivity).apply {
+                text = when (temporaryAlarm.workMode) {
+                    Alarm.WORK_MODE_DIARY_WRITING -> "다이어리 쓰기 알림 설정"
+                    Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> "디바이스 저장소 백업 설정"
+                    else -> ""
+                }
+                setTextColor(baseConfig.textColor)
+                typeface = globalTypeface
+                val padding = CommonUtils.dpToPixel(this@DevActivity, 10F)
+                setPadding(padding * 2, padding, padding * 2, padding)
+                setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18F)
+//                        setBackgroundColor(resources.getColor(android.R.color.white))
+            }
+            setCustomTitle(customTitle)
+            show()
+            getButton(AlertDialog.BUTTON_POSITIVE).run {
+                setTextColor(baseConfig.textColor)
+                typeface = globalTypeface
+            }
+            getButton(AlertDialog.BUTTON_NEGATIVE).run {
+                setTextColor(baseConfig.textColor)
+                typeface = globalTypeface
+            }
+            getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(baseConfig.textColor)
+        }
+    }
+
     fun updateAlarmList() {
         mAlarmList.clear()
         mAlarmList.addAll(EasyDiaryDbHelper.readAlarmAll())
@@ -260,9 +269,9 @@ class DevActivity : EasyDiaryActivity() {
             toast(nextAlarm, Toast.LENGTH_LONG)
         }
 
-        addAlarm.setOnClickListener {
-            EasyDiaryDbHelper.insertAlarm(Alarm())
-            updateAlarmList()
+        addWritingAlarm.setOnClickListener { openAlarmDialog(EasyDiaryDbHelper.createTemporaryAlarm()) }
+        addLocalBackupAlarm.setOnClickListener {
+            openAlarmDialog(EasyDiaryDbHelper.createTemporaryAlarm(Alarm.WORK_MODE_DIARY_BACKUP_LOCAL))
         }
     }
 
@@ -360,8 +369,9 @@ fun Context.showAlarmNotification(alarm: Alarm) {
     val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     notificationManager.notify(alarm.id, notification)
 
-    // Backup diary database file
-//    exportRealmFile()
+    when (alarm.workMode) {
+        Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> exportRealmFile()
+    }
 
     val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
     if (isScreenOn()) {
