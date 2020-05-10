@@ -1,32 +1,35 @@
 package me.blog.korn123.easydiary.extensions
 
+import android.annotation.SuppressLint
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
+import android.os.PowerManager
 import android.preference.PreferenceManager
 import android.text.Spannable
 import android.text.SpannableString
+import android.text.style.RelativeSizeSpan
 import android.util.TypedValue
 import android.view.*
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.app.AlarmManagerCompat
+import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.google.gson.GsonBuilder
-import com.simplemobiletools.commons.extensions.adjustAlpha
-import com.simplemobiletools.commons.extensions.baseConfig
-import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
-import com.simplemobiletools.commons.helpers.BACKGROUND_COLOR
-import com.simplemobiletools.commons.helpers.PRIMARY_COLOR
-import com.simplemobiletools.commons.helpers.SETTING_CARD_VIEW_BACKGROUND_COLOR
-import com.simplemobiletools.commons.helpers.TEXT_COLOR
+import com.simplemobiletools.commons.extensions.*
+import com.simplemobiletools.commons.helpers.*
 import com.simplemobiletools.commons.views.*
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
@@ -35,14 +38,19 @@ import kotlinx.android.synthetic.main.dialog_message.view.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.DiaryInsertActivity
+import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.Alarm
+import me.blog.korn123.easydiary.receivers.AlarmReceiver
 import me.blog.korn123.easydiary.views.FixedCardView
 import me.blog.korn123.easydiary.views.FixedTextView
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import java.io.File
 import java.io.FileOutputStream
+import java.util.*
+import kotlin.math.pow
 
 
 /**
@@ -332,4 +340,150 @@ fun Context.exportRealmFile() {
     val destFile = File(EasyDiaryUtils.getApplicationDataDirectory(this) + destFilePath)
     FileUtils.copyFile(srcFile, destFile, false)
     config.diaryBackupLocal = System.currentTimeMillis()
+}
+
+fun Context.formatTime(showSeconds: Boolean, use24HourFormat: Boolean, hours: Int, minutes: Int, seconds: Int): String {
+    val hoursFormat = if (use24HourFormat) "%02d" else "%01d"
+    var format = "$hoursFormat:%02d"
+
+    return if (showSeconds) {
+        format += ":%02d"
+        String.format(format, hours, minutes, seconds)
+    } else {
+        String.format(format, hours, minutes)
+    }
+}
+
+fun Context.getFormattedTime(passedSeconds: Int, showSeconds: Boolean, makeAmPmSmaller: Boolean): SpannableString {
+    val use24HourFormat = config.use24HourFormat
+    val hours = (passedSeconds / 3600) % 24
+    val minutes = (passedSeconds / 60) % 60
+    val seconds = passedSeconds % 60
+
+    return if (!use24HourFormat) {
+        val formattedTime = formatTo12HourFormat(showSeconds, hours, minutes, seconds)
+        val spannableTime = SpannableString(formattedTime)
+        val amPmMultiplier = if (makeAmPmSmaller) 0.4f else 1f
+        spannableTime.setSpan(RelativeSizeSpan(amPmMultiplier), spannableTime.length - 5, spannableTime.length, 0)
+        spannableTime
+    } else {
+        val formattedTime = formatTime(showSeconds, use24HourFormat, hours, minutes, seconds)
+        SpannableString(formattedTime)
+    }
+}
+
+fun Context.formatTo12HourFormat(showSeconds: Boolean, hours: Int, minutes: Int, seconds: Int): String {
+    val appendable = getString(if (hours >= 12) R.string.p_m else R.string.a_m)
+    val newHours = if (hours == 0 || hours == 12) 12 else hours % 12
+    return "${formatTime(showSeconds, false, newHours, minutes, seconds)} $appendable"
+}
+
+fun Context.isScreenOn() = (getSystemService(Context.POWER_SERVICE) as PowerManager).isScreenOn
+
+fun Context.getOpenAlarmTabIntent(): PendingIntent {
+    val intent = Intent(this, DiaryInsertActivity::class.java).apply {
+        putExtra(DIARY_INSERT_MODE, MODE_REMINDER)
+    }
+    return PendingIntent.getActivity(this, 1000, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+}
+
+fun Context.getAlarmIntent(alarm: Alarm): PendingIntent {
+    val intent = Intent(this, AlarmReceiver::class.java)
+    intent.putExtra(SettingsScheduleFragment.ALARM_ID, alarm.id)
+    return PendingIntent.getBroadcast(this, alarm.id, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+}
+
+fun Context.cancelAlarmClock(alarm: Alarm) {
+    val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    alarmManager.cancel(getAlarmIntent(alarm))
+}
+
+fun Context.scheduleNextAlarm(alarm: Alarm, showToast: Boolean) {
+    val calendar = Calendar.getInstance()
+    calendar.firstDayOfWeek = Calendar.MONDAY
+    for (i in 0..7) {
+        val currentDay = (calendar.get(Calendar.DAY_OF_WEEK) + 5) % 7
+        val isCorrectDay = alarm.days and 2.0.pow(currentDay).toInt() != 0
+        val currentTimeInMinutes = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE)
+        if (isCorrectDay && (alarm.timeInMinutes > currentTimeInMinutes || i > 0)) {
+            val triggerInMinutes = alarm.timeInMinutes - currentTimeInMinutes + (i * DAY_MINUTES)
+            setupAlarmClock(alarm, triggerInMinutes * 60 - calendar.get(Calendar.SECOND))
+
+            if (showToast) {
+                showRemainingTimeMessage(triggerInMinutes)
+            }
+            break
+        } else {
+            calendar.add(Calendar.DAY_OF_MONTH, 1)
+        }
+    }
+}
+
+fun Context.setupAlarmClock(alarm: Alarm, triggerInSeconds: Int) {
+    val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    val targetMS = System.currentTimeMillis() + triggerInSeconds * 1000
+    AlarmManagerCompat.setAlarmClock(alarmManager, targetMS, getOpenAlarmTabIntent(), getAlarmIntent(alarm))
+}
+
+fun Context.showRemainingTimeMessage(totalMinutes: Int) {
+    val fullString = String.format(getString(R.string.alarm_goes_off_in), formatMinutesToTimeString(totalMinutes))
+    toast(fullString, Toast.LENGTH_LONG)
+}
+
+fun Context.showAlarmNotification(alarm: Alarm) {
+    val pendingIntent = getOpenAlarmTabIntent()
+    val notification = getAlarmNotification(pendingIntent, alarm)
+    val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    notificationManager.notify(alarm.id, notification)
+
+    when (alarm.workMode) {
+        Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> exportRealmFile()
+    }
+
+    val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
+    if (isScreenOn()) {
+        scheduleNextAlarm(alarm, true)
+    } else {
+        scheduleNextAlarm(alarm, false)
+        powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.ON_AFTER_RELEASE, "myApp:notificationLock").apply {
+            acquire(3000)
+        }
+    }
+}
+
+fun Context.rescheduleEnabledAlarms() {
+//    toast("Reschedule enabled alarms that Easy Diary.", Toast.LENGTH_LONG)
+    EasyDiaryDbHelper.readAlarmAll().forEach {
+        if (it.isEnabled) scheduleNextAlarm(it, false)
+    }
+}
+
+@SuppressLint("NewApi")
+fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): Notification {
+    if (isOreoPlus()) {
+        // Create the NotificationChannel
+        val importance = NotificationManager.IMPORTANCE_HIGH
+        val mChannel = NotificationChannel("${NOTIFICATION_CHANNEL_ID}_dev", "${NOTIFICATION_CHANNEL_NAME}_dev", importance)
+        mChannel.description = NOTIFICATION_CHANNEL_DESCRIPTION
+        // Register the channel with the system; you can't change the importance
+        // or other notification behaviors after this
+        val notificationManager = getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(mChannel)
+    }
+
+    val builder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_dev")
+            .setDefaults(Notification.DEFAULT_ALL)
+            .setWhen(System.currentTimeMillis())
+            .setSmallIcon(R.drawable.ic_launcher_round)
+            .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
+            .setOngoing(false)
+            .setAutoCancel(true)
+            .setContentTitle("Easy Diary alarm: ${alarm.id}")
+            .setContentText(alarm.label)
+            .setContentIntent(pendingIntent)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+
+    val notification = builder.build()
+//    notification.flags = notification.flags or Notification.FLAG_INSISTENT
+    return notification
 }

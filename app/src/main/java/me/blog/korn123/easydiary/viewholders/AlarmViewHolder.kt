@@ -3,12 +3,12 @@ package me.blog.korn123.easydiary.viewholders
 import android.app.Activity
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.simplemobiletools.commons.extensions.getSelectedDaysString
 import kotlinx.android.synthetic.main.viewholder_alarm.view.*
-import me.blog.korn123.easydiary.activities.cancelAlarmClock
-import me.blog.korn123.easydiary.activities.getFormattedTime
-import me.blog.korn123.easydiary.activities.getSelectedDaysString
-import me.blog.korn123.easydiary.activities.scheduleNextAlarm
+import me.blog.korn123.easydiary.extensions.cancelAlarmClock
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.getFormattedTime
+import me.blog.korn123.easydiary.extensions.scheduleNextAlarm
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.Alarm
 

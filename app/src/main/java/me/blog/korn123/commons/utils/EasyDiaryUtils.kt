@@ -13,6 +13,7 @@ import android.text.Html
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.BackgroundColorSpan
+import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
@@ -27,6 +28,9 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.common.reflect.TypeToken
 import com.google.gson.GsonBuilder
 import com.google.gson.stream.JsonReader
+import com.simplemobiletools.commons.extensions.baseConfig
+import com.simplemobiletools.commons.extensions.moveLastItemToFront
+import com.simplemobiletools.commons.helpers.*
 import id.zelory.compressor.Compressor
 import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.CALCULATION
@@ -368,5 +372,24 @@ object EasyDiaryUtils {
     fun jsonStringToHashMap(jsonString: String): HashMap<String, Any> {
         val type = object : TypeToken<HashMap<String, Any>>(){}.type
         return GsonBuilder().create().fromJson(jsonString, type)
+    }
+
+    // format day bits to strings like "Mon, Tue, Wed"
+    fun Context.getSelectedDaysString(bitMask: Int): String {
+        val dayBits = arrayListOf(MONDAY_BIT, TUESDAY_BIT, WEDNESDAY_BIT, THURSDAY_BIT, FRIDAY_BIT, SATURDAY_BIT, SUNDAY_BIT)
+        val weekDays = arrayListOf("월", "화", "수", "목", "금", "토", "일")
+
+        if (baseConfig.isSundayFirst) {
+            dayBits.moveLastItemToFront()
+            weekDays.moveLastItemToFront()
+        }
+
+        var days = ""
+        dayBits.forEachIndexed { index, bit ->
+            if (bitMask and bit != 0) {
+                days += "${weekDays[index]}, "
+            }
+        }
+        return days.trim().trimEnd(',')
     }
 }

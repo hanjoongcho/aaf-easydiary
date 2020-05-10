@@ -66,8 +66,6 @@ class DiaryInsertActivity : EditActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_diary_insert)
-        if (isReminderMode()) showOverLockScreen()
-
         setSupportActionBar(toolbar)
         supportActionBar?.run {
             title = getString(R.string.create_diary_title)
