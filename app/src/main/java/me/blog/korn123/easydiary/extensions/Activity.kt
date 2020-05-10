@@ -209,12 +209,14 @@ fun Activity.makeSnackBar(view: View, message: String) {
 
 fun Activity.showAlertDialog(message: String, positiveListener: DialogInterface.OnClickListener, negativeListener: DialogInterface.OnClickListener?) {
     val builder = AlertDialog.Builder(this)
-    builder.setMessage(message)
+//    builder.setMessage(message)
     builder.setCancelable(true)
     builder.setNegativeButton(getString(R.string.cancel), negativeListener)
     builder.setPositiveButton(getString(R.string.ok), positiveListener)
-    val alert = builder.create()
-    alert.show()
+    builder.create().apply {
+        updateAlertDialog(this, message)
+    }
+
 }
 
 fun Activity.showAlertDialog(message: String, positiveListener: DialogInterface.OnClickListener?, cancelable: Boolean = true) {

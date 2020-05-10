@@ -35,10 +35,7 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.AlarmAdapter
-import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.exportRealmFile
-import me.blog.korn123.easydiary.extensions.initTextSize
-import me.blog.korn123.easydiary.extensions.updateAppViews
+import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.Alarm
@@ -195,34 +192,12 @@ class DevActivity : EasyDiaryActivity() {
             }
         }
         alertDialog = builder.create().apply {
-            setView(rootView)
-            window?.setBackgroundDrawable(ColorDrawable(baseConfig.backgroundColor))
-            val globalTypeface = FontUtils.getCommonTypeface(this@DevActivity, this@DevActivity.assets)
-            requestWindowFeature(Window.FEATURE_NO_TITLE)
-            val customTitle = TextView(this@DevActivity).apply {
-                text = when (temporaryAlarm.workMode) {
-                    Alarm.WORK_MODE_DIARY_WRITING -> "다이어리 쓰기 알림 설정"
-                    Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> "디바이스 저장소 백업 설정"
-                    else -> ""
-                }
-                setTextColor(baseConfig.textColor)
-                typeface = globalTypeface
-                val padding = CommonUtils.dpToPixel(this@DevActivity, 10F)
-                setPadding(padding * 2, padding, padding * 2, padding)
-                setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18F)
-//                        setBackgroundColor(resources.getColor(android.R.color.white))
+            val customTitle = when (temporaryAlarm.workMode) {
+                Alarm.WORK_MODE_DIARY_WRITING -> "다이어리 쓰기 알림 설정"
+                Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> "디바이스 저장소 백업 설정"
+                else -> ""
             }
-            setCustomTitle(customTitle)
-            show()
-            getButton(AlertDialog.BUTTON_POSITIVE).run {
-                setTextColor(baseConfig.textColor)
-                typeface = globalTypeface
-            }
-            getButton(AlertDialog.BUTTON_NEGATIVE).run {
-                setTextColor(baseConfig.textColor)
-                typeface = globalTypeface
-            }
-            getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(baseConfig.textColor)
+            updateAlertDialog(this, null, rootView, customTitle)
         }
     }
 

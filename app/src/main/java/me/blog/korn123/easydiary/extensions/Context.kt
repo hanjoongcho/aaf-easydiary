@@ -5,15 +5,17 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.preference.PreferenceManager
 import android.text.Spannable
 import android.text.SpannableString
 import android.util.TypedValue
-import android.view.MenuItem
-import android.view.ViewGroup
+import android.view.*
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -29,10 +31,12 @@ import com.simplemobiletools.commons.views.*
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import io.github.aafactory.commons.views.ModalView
+import kotlinx.android.synthetic.main.dialog_message.view.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.views.FixedCardView
 import me.blog.korn123.easydiary.views.FixedTextView
 import org.apache.commons.io.FileUtils
@@ -185,6 +189,53 @@ fun Context.initTextSize(textView: TextView) {
     val defaultFontSize: Float = CommonUtils.dpToPixelFloatValue(this, DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE.toFloat())
     val settingFontSize: Float = config.settingFontSize
     textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
+}
+
+fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null, customView: View? = null, customTitle: String? = null) {
+    alertDialog.run {
+        when (customView == null) {
+            true -> {
+                val inflater = getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                val messageView = inflater.inflate(R.layout.dialog_message, null).apply {
+                    simpleMessage.text = message
+                    if (this is ViewGroup) {
+                        this.setBackgroundColor(config.backgroundColor)
+                        initTextSize(this)
+                        updateTextColors(this)
+                        updateAppViews(this)
+                        FontUtils.setFontsTypeface(this@updateAlertDialog, this@updateAlertDialog.assets, null, this)
+                    }
+                }
+                setView(messageView)
+            }
+            false -> setView(customView)
+        }
+        window?.setBackgroundDrawable(ColorDrawable(baseConfig.backgroundColor))
+        val globalTypeface = FontUtils.getCommonTypeface(this@updateAlertDialog, this@updateAlertDialog.assets)
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        customTitle?.let {
+            val titleView = TextView(this@updateAlertDialog).apply {
+                text = customTitle
+                setTextColor(baseConfig.textColor)
+                typeface = globalTypeface
+                val padding = CommonUtils.dpToPixel(this@updateAlertDialog, 10F)
+                setPadding(padding * 2, padding, padding * 2, padding)
+                setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18F)
+//                        setBackgroundColor(resources.getColor(android.R.color.white))
+            }
+            setCustomTitle(titleView)
+        }
+        show()
+        getButton(AlertDialog.BUTTON_POSITIVE).run {
+            setTextColor(baseConfig.textColor)
+            typeface = globalTypeface
+        }
+        getButton(AlertDialog.BUTTON_NEGATIVE).run {
+            setTextColor(baseConfig.textColor)
+            typeface = globalTypeface
+        }
+        getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(baseConfig.textColor)
+    }
 }
 
 fun Context.checkPermission(permissions: Array<String>): Boolean {
