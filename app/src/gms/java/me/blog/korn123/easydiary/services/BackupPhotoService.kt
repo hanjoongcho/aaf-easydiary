@@ -5,19 +5,20 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Build
-import android.os.Environment
 import android.os.IBinder
-import androidx.core.app.NotificationCompat
-import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.DriveScopes
+import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
+import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.*
 import org.apache.commons.lang3.time.StopWatch
 import java.io.File
@@ -35,7 +36,7 @@ class BackupPhotoService : Service() {
     private var mInProcessJob = true
     private val remoteDriveFileNames  = mutableListOf<String>()
     private val targetFilenames = mutableListOf<String>()
-    private val photoPath = "${Environment.getExternalStorageDirectory().absolutePath}$DIARY_PHOTO_DIRECTORY"
+    private lateinit var mPhotoPath: String
     private lateinit var mWorkingFolderId: String
     
     override fun onBind(intent: Intent?): IBinder? = null
@@ -50,7 +51,8 @@ class BackupPhotoService : Service() {
         mDriveServiceHelper = DriveServiceHelper(googleDriveService)
         notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationBuilder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
-        
+        mPhotoPath = "${EasyDiaryUtils.getApplicationDataDirectory(this)}$DIARY_PHOTO_DIRECTORY"
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Create the NotificationChannel
             val importance = NotificationManager.IMPORTANCE_DEFAULT
@@ -78,12 +80,14 @@ class BackupPhotoService : Service() {
     private fun backupPhoto() {
         notificationBuilder.setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
+                .setStyle(NotificationCompat.InboxStyle())
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.cloud_upload)
                 .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
                 .setOnlyAlertOnce(true)
-                .setContentTitle(getString(R.string.backup_attach_photo_title))
-                .setContentText(getString(R.string.task_progress_message))
+                .setContentTitle(getString(R.string.task_progress_message))
+//                .setContentText(getString(R.string.task_progress_message))
+                .setProgress(0, 0, true)
                 .addAction(
                         R.drawable.cloud_upload,
                         getString(R.string.cancel),
@@ -110,7 +114,7 @@ class BackupPhotoService : Service() {
                 when (result.nextPageToken == null) {
                     true -> {
                         // step02. upload 대상 첨부사진 필터링
-                        val localPhotos = File(photoPath).listFiles()
+                        val localPhotos = File(mPhotoPath).listFiles()
                         localPhotos.map { photo ->
                             if (!remoteDriveFileNames.contains(photo.name)) {
                                 targetFilenames.add(photo.name)
@@ -138,7 +142,7 @@ class BackupPhotoService : Service() {
 
     private fun uploadDiaryPhoto() {
         val fileName =  targetFilenames[targetFilenamesCursor]
-        mDriveServiceHelper.createFile(mWorkingFolderId, photoPath + fileName, fileName, DriveServiceHelper.MIME_TYPE_AAF_EASY_DIARY_PHOTO).run {
+        mDriveServiceHelper.createFile(mWorkingFolderId, mPhotoPath + fileName, fileName, DriveServiceHelper.MIME_TYPE_AAF_EASY_DIARY_PHOTO).run {
             addOnSuccessListener { _ ->
                 targetFilenamesCursor++
                 successCount++
@@ -173,6 +177,7 @@ class BackupPhotoService : Service() {
                     false -> notificationManager.cancel(NOTIFICATION_FOREGROUND_ID)
                 }
             } else {
+                config.photoBackupGoogle = System.currentTimeMillis()
                 launchCompleteNotification(getString(R.string.notification_msg_upload_complete))
             }
         }

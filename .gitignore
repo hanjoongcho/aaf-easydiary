@@ -9,7 +9,7 @@ app/*.apk
 app/*.iml
 app/release
 
-app/src/gms/res/drawable/ic_*
-app/src/gmsp/res/drawable/ic_*
-app/src/gmsp/res/values/keys.xml
+app/src/gmsDev/res/drawable/ic_*
+app/src/gmsProd/res/drawable/ic_*
+app/src/gmsProd/res/values/keys.xml
 app/gmsp/release/*.aab

@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Build
-import android.os.Environment
 import androidx.core.app.NotificationCompat
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
@@ -16,6 +15,7 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
+import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.helper.*
@@ -32,7 +32,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
     private var mInProcessJob = true
     private var targetIndexesCursor = 0
     private val targetItems = arrayListOf<HashMap<String, String>>()
-    private val photoPath = "${Environment.getExternalStorageDirectory().absolutePath}$DIARY_PHOTO_DIRECTORY"
+    private lateinit var mPhotoPath: String
     private lateinit var mDriveServiceHelper: DriveServiceHelper
 
     override fun onCreate() {
@@ -48,6 +48,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
 
         notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationBuilder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
+        mPhotoPath = "${EasyDiaryUtils.getApplicationDataDirectory(this)}$DIARY_PHOTO_DIRECTORY"
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && notificationManager.getNotificationChannel(NOTIFICATION_CHANNEL_ID) == null) {
             // Create the NotificationChannel
@@ -71,12 +72,14 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
         notificationManager.cancel(NOTIFICATION_COMPLETE_ID)
         notificationBuilder
                 .setDefaults(Notification.DEFAULT_ALL)
+                .setStyle(NotificationCompat.InboxStyle())
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.cloud_download)
                 .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
                 .setOnlyAlertOnce(true)
-                .setContentTitle(getString(R.string.recover_attach_photo_title))
-                .setContentText(getString(R.string.task_progress_message))
+                .setContentTitle(getString(R.string.task_progress_message))
+//                .setContentText(getString(R.string.task_progress_message))
+                .setProgress(0, 0, true)
                 .addAction(
                         R.drawable.cloud_download,
                         getString(R.string.cancel),
@@ -100,7 +103,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
         if (targetIndexesCursor < targetItems.size) {
             if (mInProcessJob) {
                 val item = targetItems[targetIndexesCursor++]
-                mDriveServiceHelper.downloadFile(item["id"]!!, "$photoPath${item["name"]}").run {
+                mDriveServiceHelper.downloadFile(item["id"]!!, "$mPhotoPath${item["name"]}").run {
                     addOnSuccessListener {
                         successCount++
                         updateNotification()
@@ -119,10 +122,10 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
     private fun determineAttachPhoto(nextPageToken: String?) {
         mDriveServiceHelper.queryFiles("mimeType = '${DriveServiceHelper.MIME_TYPE_AAF_EASY_DIARY_PHOTO}' and trashed = false",  1000, nextPageToken).run {
             addOnSuccessListener { result ->
-                val basePath = Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY
+                val basePath = EasyDiaryUtils.getApplicationDataDirectory(this@RecoverPhotoService) + DIARY_PHOTO_DIRECTORY
                 result.files.map { photoFile ->
                     remoteDriveFileCount++
-                    if (!File("$photoPath${photoFile.name}").exists()) {
+                    if (!File("$mPhotoPath${photoFile.name}").exists()) {
                         val item = hashMapOf<String, String>(Pair("id", photoFile.id), Pair("name", photoFile.name))
                         targetItems.add(item)
                     }

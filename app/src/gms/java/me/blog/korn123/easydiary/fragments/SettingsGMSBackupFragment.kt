@@ -105,18 +105,6 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
                     REQUEST_CODE_GOOGLE_DRIVE_PERMISSIONS -> {
                         mPermissionCallback.invoke()
                     }
-                    REQUEST_CODE_FONT_PICK -> {
-                        intent.data?.let { uri ->
-                            val fileName = EasyDiaryUtils.queryName(mActivity.contentResolver, uri)
-                            if (FilenameUtils.getExtension(fileName).equals("ttf", true)) {
-                                val inputStream = mActivity.contentResolver.openInputStream(uri)
-                                val fontDestDir = File(EasyDiaryUtils.getApplicationDataDirectory(mActivity) + USER_CUSTOM_FONTS_DIRECTORY)
-                                FileUtils.copyInputStreamToFile(inputStream, File(fontDestDir, fileName))
-                            } else {
-                                mActivity.showAlertDialog(getString(R.string.add_ttf_fonts_title), "$fileName is not ttf file.", null)
-                            }
-                        }
-                    }
                 }
             }
             false -> {

@@ -50,7 +50,7 @@ import java.util.concurrent.Executors
  */
 class DriveServiceHelper() {
     lateinit var mDriveService: Drive
-
+    
     constructor(context: Context, account: Account) : this() {
         val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(context, Collections.singleton(DriveScopes.DRIVE_FILE))
         credential.selectedAccount = account
@@ -63,13 +63,13 @@ class DriveServiceHelper() {
     constructor(driveService: Drive) : this() {
         this.mDriveService = driveService
     }
-
+    
     private val mExecutor = Executors.newSingleThreadExecutor()
 
     companion object {
         const val MIME_TYPE_GOOGLE_APPS_FOLDER = "application/vnd.google-apps.folder"
         const val MIME_TYPE_AAF_EASY_DIARY_PHOTO = "aaf/easy.diary.photo"
-
+        
         const val AAF_ROOT_FOLDER_NAME = "AAFactoty"
         const val AAF_EASY_DIARY_PHOTO_FOLDER_NAME = "aaf-easydiary_photos"
         const val AAF_EASY_DIARY_REALM_FOLDER_NAME = "aaf-easydiary_realm"
@@ -102,7 +102,7 @@ class DriveServiceHelper() {
 
             // Convert content to an AbstractInputStreamContent instance.
             val contentStream = ByteArrayContent(mimeType, IOUtils.toByteArray(FileInputStream(File(filePath))))
-
+            
             val googleFile = mDriveService.files().create(metadata, contentStream).execute()
                     ?: throw IOException("Null result when requesting file creation.")
             googleFile.id

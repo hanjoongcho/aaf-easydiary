@@ -37,30 +37,39 @@ android {
         renderscriptSupportModeEnabled true
         signingConfig signingConfigs.config
     }
-    flavorDimensions "release"
+    flavorDimensions "buildType"
     productFlavors {
-        gms {
-            dimension "release"
+        gmsProd {
+            dimension "buildType"
             signingConfig signingConfigs.config
         }
-        gmsp {
-            dimension "release"
+        gmsDev {
+            dimension "buildType"
             signingConfig signingConfigs.config
         }
         foss {
-            dimension "release"
+            dimension "buildType"
             signingConfig signingConfigs.config
         }
     }
     sourceSets {
-        gms {
-            manifest.srcFile 'src/gms/AndroidManifest.xml'
-        }
-        gmsp {
+        gmsProd {
             manifest.srcFile 'src/gmsp/AndroidManifest.xml'
+            java {
+                srcDirs 'src/main/java', 'src/gmsProd/java', 'src/gms/java'
+            }
+        }
+        gmsDev {
+            manifest.srcFile 'src/gms/AndroidManifest.xml'
+            java {
+                srcDirs 'src/main/java', 'src/gmsDev/java', 'src/gms/java'
+            }
         }
         foss {
             manifest.srcFile 'src/foss/AndroidManifest.xml'
+            java {
+                srcDirs 'src/main/java', 'src/foss/java'
+            }
         }
     }
     buildTypes {
@@ -114,23 +123,23 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0'
 
     // google gms api
-    gmsImplementation "com.google.android.gms:play-services-auth:17.0.0"
-    gmsImplementation 'com.google.http-client:google-http-client-gson:1.26.0'
-    gmsImplementation('com.google.api-client:google-api-client-android:1.26.0') { exclude group: 'org.apache.httpcomponents' }
-    gmsImplementation('com.google.apis:google-api-services-drive:v3-rev136-1.25.0') { exclude group: 'org.apache.httpcomponents' }
+    gmsDevImplementation "com.google.android.gms:play-services-auth:17.0.0"
+    gmsDevImplementation 'com.google.http-client:google-http-client-gson:1.26.0'
+    gmsDevImplementation('com.google.api-client:google-api-client-android:1.26.0') { exclude group: 'org.apache.httpcomponents' }
+    gmsDevImplementation('com.google.apis:google-api-services-drive:v3-rev136-1.25.0') { exclude group: 'org.apache.httpcomponents' }
 
-    gmspImplementation "com.google.android.gms:play-services-auth:17.0.0"
-    gmspImplementation 'com.google.http-client:google-http-client-gson:1.26.0'
-    gmspImplementation('com.google.api-client:google-api-client-android:1.26.0') { exclude group: 'org.apache.httpcomponents' }
-    gmspImplementation('com.google.apis:google-api-services-drive:v3-rev136-1.25.0') { exclude group: 'org.apache.httpcomponents' }
+    gmsProdImplementation "com.google.android.gms:play-services-auth:17.0.0"
+    gmsProdImplementation 'com.google.http-client:google-http-client-gson:1.26.0'
+    gmsProdImplementation('com.google.api-client:google-api-client-android:1.26.0') { exclude group: 'org.apache.httpcomponents' }
+    gmsProdImplementation('com.google.apis:google-api-services-drive:v3-rev136-1.25.0') { exclude group: 'org.apache.httpcomponents' }
 
     // google
     implementation 'com.google.android:flexbox:1.0.0'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation group: 'com.google.guava', name: 'guava', version: '26.0-android'
 
-    gmsImplementation ('androidx.work:work-runtime-ktx:2.3.1') { exclude group: 'com.google.guava', module: 'listenablefuture' }
-    gmspImplementation ('androidx.work:work-runtime-ktx:2.3.1') { exclude group: 'com.google.guava', module: 'listenablefuture' }
+    gmsDevImplementation ('androidx.work:work-runtime-ktx:2.3.1') { exclude group: 'com.google.guava', module: 'listenablefuture' }
+    gmsProdImplementation ('androidx.work:work-runtime-ktx:2.3.1') { exclude group: 'com.google.guava', module: 'listenablefuture' }
     fossImplementation ('androidx.work:work-runtime-ktx:2.3.1') { exclude group: 'com.google.guava', module: 'listenablefuture' }
 
     // apache commons
