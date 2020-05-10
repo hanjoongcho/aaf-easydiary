@@ -5,11 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:background="?attr/colorPrimary"
     android:orientation="vertical"
-    android:padding="10dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <ImageView
         style="@style/image_view_custom_toolbar_icon"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
         android:layout_gravity="right"
         android:id="@+id/closePopup"
         android:theme="@style/AppTheme.AppBarOverlay"
@@ -23,8 +24,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
+            android:padding="@dimen/card_contents_padding"
             android:background="?attr/selectableItemBackground"
-            android:padding="10dp"
             android:id="@+id/modeInternal"
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -40,8 +41,8 @@
                 android:layout_height="wrap_content"/>
         </LinearLayout>
         <LinearLayout
+            android:padding="@dimen/card_contents_padding"
             android:background="?attr/selectableItemBackground"
-            android:padding="10dp"
             android:id="@+id/modeExternal"
             android:orientation="vertical"
             android:layout_width="match_parent"

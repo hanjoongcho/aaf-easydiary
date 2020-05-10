@@ -530,7 +530,9 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
 
     private fun showLocationSelectionPopup(popupMode: Int, internalTitle: String, internalDescription: String, externalTitle: String, externalDescription: String) {
         var dialog: AlertDialog? = null
-        val builder = AlertDialog.Builder(mContext)
+        val builder = AlertDialog.Builder(mContext).apply {
+            setNegativeButton(getString(android.R.string.cancel), null)
+        }
         val inflater = mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val popupView = (inflater.inflate(R.layout.popup_location_selector, null) as ViewGroup).apply {
             modeInternalTitle.text = internalTitle
@@ -555,14 +557,16 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
                 dialog?.dismiss()
             }
         }
-        mContext.updateTextColors(popupView)
-        mContext.initTextSize(popupView)
-        mContext.updateAppViews(popupView)
-        mContext.updateCardViewPolicy(popupView)
+        mContext.run {
+            updateTextColors(popupView)
+            initTextSize(popupView)
+        }
 
         FontUtils.setFontsTypeface(mContext, mContext.assets, null, popupView, true)
         builder.setView(popupView)
-        dialog = builder.create().apply { show() }
+        dialog = builder.create().apply {
+            mContext.updateAlertDialog(this, null, popupView)
+        }
     }
 
     companion object {
