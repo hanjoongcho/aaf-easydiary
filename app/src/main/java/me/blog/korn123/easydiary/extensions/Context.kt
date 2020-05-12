@@ -18,6 +18,7 @@ import android.text.SpannableString
 import android.text.style.RelativeSizeSpan
 import android.util.TypedValue
 import android.view.*
+import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -31,9 +32,11 @@ import com.google.gson.GsonBuilder
 import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.*
 import com.simplemobiletools.commons.views.*
+import io.github.aafactory.commons.extensions.baseConfig
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import io.github.aafactory.commons.views.ModalView
+import kotlinx.android.synthetic.main.dialog_alarm.view.*
 import kotlinx.android.synthetic.main.dialog_message.view.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
@@ -123,6 +126,17 @@ fun Context.updateAppViews(viewGroup: ViewGroup, tmpBackgroundColor: Int = 0) {
                         updateAppViews(it)
                     }
                     is ViewGroup -> updateAppViews(it)
+                    is RadioButton -> {
+                        it.run {
+                            setTextColor(config.textColor)
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                buttonTintList = ColorStateList(arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked)), intArrayOf(
+                                        baseConfig.textColor,
+                                        baseConfig.textColor
+                                ))
+                            }
+                        }
+                    }
                 }
             }
 }
@@ -228,7 +242,7 @@ fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null,
                 typeface = globalTypeface
                 val padding = CommonUtils.dpToPixel(this@updateAlertDialog, 10F)
                 setPadding(padding * 2, padding, padding * 2, padding)
-                setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18F)
+                setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20F)
 //                        setBackgroundColor(resources.getColor(android.R.color.white))
             }
             setCustomTitle(titleView)

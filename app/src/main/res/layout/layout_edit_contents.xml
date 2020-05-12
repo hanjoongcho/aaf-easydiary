@@ -25,13 +25,13 @@
                     android:layout_marginRight="10dp"
                     android:layout_width="@dimen/diary_symbol_width"
                     android:layout_height="@dimen/diary_symbol_height" />
-                <TextView
+                <com.simplemobiletools.commons.views.MyTextView
                     android:id="@+id/symbolText"
                     android:text="@string/diary_symbol"
                     android:layout_marginRight="10dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />    
-                <TextView
+                    android:layout_height="wrap_content" />
+                <com.simplemobiletools.commons.views.MyTextView
                     android:id="@+id/symbolTextArrow"
                     android:text="▼"
                     android:textSize="10dp"

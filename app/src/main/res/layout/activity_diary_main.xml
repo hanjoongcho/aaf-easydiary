@@ -45,7 +45,7 @@
                         android:layout_marginRight="10dp"
                         android:layout_width="@dimen/diary_symbol_width"
                         android:layout_height="@dimen/diary_symbol_height" />
-                    <TextView
+                    <com.simplemobiletools.commons.views.MyTextView
                         android:id="@+id/symbolTextArrow"
                         android:layout_gravity="center_vertical"
                         android:text="▼"

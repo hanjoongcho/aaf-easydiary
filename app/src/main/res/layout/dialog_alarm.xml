@@ -48,10 +48,29 @@
                     android:layout_marginBottom="@dimen/medium_margin"
                     android:orientation="horizontal"/>
 
+                <RadioGroup
+                    android:id="@+id/workModeGroup"
+                    android:layout_below="@+id/edit_alarm_days_holder"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/diaryWriting"
+                        android:text="Diary writing"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/diaryBackupLocal"
+                        android:text="Diary backup (Device local)"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </RadioGroup>
+
                 <com.simplemobiletools.commons.views.MyEditText
                     android:id="@+id/alarmDescription"
                     android:hint="Alarm description"
-                    android:layout_below="@id/edit_alarm_days_holder"
+                    android:layout_below="@id/workModeGroup"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                 </com.simplemobiletools.commons.views.MyEditText>

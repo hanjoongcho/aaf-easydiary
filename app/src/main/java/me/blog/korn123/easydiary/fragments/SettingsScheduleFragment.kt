@@ -1,26 +1,19 @@
 package me.blog.korn123.easydiary.fragments
 
 import android.app.Activity
-import android.app.AlarmManager
 import android.app.TimePickerDialog
-import android.content.Context
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.simplemobiletools.commons.extensions.*
-import io.github.aafactory.commons.utils.DateUtils
-import kotlinx.android.synthetic.main.activity_dev.*
 import kotlinx.android.synthetic.main.dialog_alarm.view.*
 import kotlinx.android.synthetic.main.layout_settings_schedule.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
@@ -77,7 +70,6 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
         }
 
         initProperties()
-        bindEvent()
         updateAlarmList()
     }
 
@@ -97,7 +89,7 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
      *   etc functions
      *
      ***************************************************************************************************/
-    private fun openAlarmDialog(temporaryAlarm: Alarm, storedAlarm: Alarm? = null) {
+    fun openAlarmDialog(temporaryAlarm: Alarm, storedAlarm: Alarm? = null) {
         mActivity.run {
             var rootView: View? = null
             var alertDialog: AlertDialog? = null
@@ -179,6 +171,16 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
                         }
                     }
                 }
+                when (temporaryAlarm.workMode) {
+                    Alarm.WORK_MODE_DIARY_WRITING -> diaryWriting.isChecked = true
+                    Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> diaryBackupLocal.isChecked = true
+                }
+                workModeGroup.setOnCheckedChangeListener { _, i ->
+                    when (i) {
+                        R.id.diaryWriting -> temporaryAlarm.workMode = Alarm.WORK_MODE_DIARY_WRITING
+                        R.id.diaryBackupLocal -> temporaryAlarm.workMode = Alarm.WORK_MODE_DIARY_BACKUP_LOCAL
+                    }
+                }
 
                 if (this is ViewGroup) {
                     this.setBackgroundColor(config.backgroundColor)
@@ -188,41 +190,14 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
                     FontUtils.setFontsTypeface(this@run, this@run.assets, null, this)
                 }
             }
+
             alertDialog = builder.create().apply {
-                val customTitle = when (temporaryAlarm.workMode) {
-                    Alarm.WORK_MODE_DIARY_WRITING -> "다이어리 쓰기 알림 설정"
-                    Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> "디바이스 저장소 백업 설정"
-                    else -> ""
-                }
-                updateAlertDialog(this, null, rootView, customTitle)
+                updateAlertDialog(this, null, rootView, "다이어리 스케줄 설정")
             }
         }
     }
 
-    private fun bindEvent() {
-        mActivity.run {
-            nextAlarm.setOnClickListener {
-                val nextAlarm = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    val triggerTimeMillis = (getSystemService(Context.ALARM_SERVICE) as AlarmManager).nextAlarmClock?.triggerTime ?: 0
-                    when (triggerTimeMillis > 0) {
-                        true -> DateUtils.getFullPatternDateWithTime(triggerTimeMillis)
-                        false -> "Alarm info is not exist."
-                    }
-                } else {
-                    Settings.System.getString(contentResolver, Settings.System.NEXT_ALARM_FORMATTED)
-                }
-
-                toast(nextAlarm, Toast.LENGTH_LONG)
-            }
-
-            addWritingAlarm.setOnClickListener { openAlarmDialog(EasyDiaryDbHelper.createTemporaryAlarm()) }
-            addLocalBackupAlarm.setOnClickListener {
-                openAlarmDialog(EasyDiaryDbHelper.createTemporaryAlarm(Alarm.WORK_MODE_DIARY_BACKUP_LOCAL))
-            }
-        }
-    }
-
-    fun updateAlarmList() {
+    private fun updateAlarmList() {
         mAlarmList.clear()
         mAlarmList.addAll(EasyDiaryDbHelper.readAlarmAll())
         mAlarmAdapter.notifyDataSetChanged()
