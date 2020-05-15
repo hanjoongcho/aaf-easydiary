@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -14,7 +14,13 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+            <com.simplemobiletools.commons.views.MyTextView
+                style="@style/SettingsTitle"
+                android:text="요일 및 시간"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
             <RelativeLayout
+                style="@style/SettingsSummary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <me.blog.korn123.easydiary.views.FixedTextView
@@ -41,39 +47,12 @@
 
                 <LinearLayout
                     android:id="@+id/edit_alarm_days_holder"
+                    android:gravity="bottom"
                     android:layout_width="match_parent"
                     android:layout_height="38dp"
                     android:layout_below="@+id/alarm_days"
                     android:layout_marginTop="@dimen/medium_margin"
-                    android:layout_marginBottom="@dimen/medium_margin"
                     android:orientation="horizontal"/>
-
-                <RadioGroup
-                    android:id="@+id/workModeGroup"
-                    android:layout_below="@+id/edit_alarm_days_holder"
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <androidx.appcompat.widget.AppCompatRadioButton
-                        android:id="@+id/diaryWriting"
-                        android:text="Diary writing"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-
-                    <androidx.appcompat.widget.AppCompatRadioButton
-                        android:id="@+id/diaryBackupLocal"
-                        android:text="Diary backup (Device local)"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-                </RadioGroup>
-
-                <com.simplemobiletools.commons.views.MyEditText
-                    android:id="@+id/alarmDescription"
-                    android:hint="Alarm description"
-                    android:layout_below="@id/workModeGroup"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                </com.simplemobiletools.commons.views.MyEditText>
 
                 <LinearLayout
                     android:orientation="horizontal"
@@ -97,9 +76,59 @@
                         android:paddingRight="@dimen/medium_margin"/>
                 </LinearLayout>
             </RelativeLayout>
+            <View
+                android:background="?attr/colorPrimary"
+                android:layout_marginVertical="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+
+            <com.simplemobiletools.commons.views.MyTextView
+                style="@style/SettingsTitle"
+                android:text="스케줄 유형"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <RadioGroup
+                style="@style/SettingsSummary"
+                android:id="@+id/workModeGroup"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/diaryWriting"
+                    android:gravity="top"
+                    android:text="다이어리 작성\n다이어리 작성 스케줄을 등록합니다.\n스케줄이 등록되면 설정된 요일과 시간에 맞춰 알림 메시지를 제공합니다."
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/diaryBackupLocal"
+                    android:gravity="top"
+                    android:text="다이어리 백업(디바이스 저장소)\n스케줄을 등록하면 설정된 요일과 시간에 맞춰 디비이스 로컬 저장소에 첨부사진을 제외한 데이터베이스 파일을 백업하고 작업결과를 알림 메시지로 제공합니다."
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </RadioGroup>
+
+            <View
+                android:background="?attr/colorPrimary"
+                android:layout_marginVertical="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+
+            <com.simplemobiletools.commons.views.MyTextView
+                style="@style/SettingsTitle"
+                android:text="스켈줄 설명"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <com.simplemobiletools.commons.views.MyEditText
+                style="@style/SettingsSummary"
+                android:paddingTop="0dp"
+                android:id="@+id/alarmDescription"
+                android:hint="Alarm description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </com.simplemobiletools.commons.views.MyEditText>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
-</LinearLayout>
+</ScrollView>
 
 
 

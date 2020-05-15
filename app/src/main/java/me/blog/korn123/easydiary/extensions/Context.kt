@@ -42,6 +42,7 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryInsertActivity
+import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.Alarm
@@ -394,9 +395,17 @@ fun Context.formatTo12HourFormat(showSeconds: Boolean, hours: Int, minutes: Int,
 
 fun Context.isScreenOn() = (getSystemService(Context.POWER_SERVICE) as PowerManager).isScreenOn
 
-fun Context.getOpenAlarmTabIntent(): PendingIntent {
-    val intent = Intent(this, DiaryInsertActivity::class.java).apply {
-        putExtra(DIARY_INSERT_MODE, MODE_REMINDER)
+fun Context.getOpenAlarmTabIntent(alarm: Alarm): PendingIntent {
+    val intent: Intent? = when (alarm.workMode) {
+        Alarm.WORK_MODE_DIARY_WRITING -> {
+            Intent(this, DiaryInsertActivity::class.java).apply {
+                putExtra(DIARY_INSERT_MODE, MODE_REMINDER)
+            }
+        }
+        Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> {
+            Intent(this, DiaryMainActivity::class.java)
+        }
+        else -> null
     }
     return PendingIntent.getActivity(this, 1000, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 }
@@ -436,7 +445,7 @@ fun Context.scheduleNextAlarm(alarm: Alarm, showToast: Boolean) {
 fun Context.setupAlarmClock(alarm: Alarm, triggerInSeconds: Int) {
     val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val targetMS = System.currentTimeMillis() + triggerInSeconds * 1000
-    AlarmManagerCompat.setAlarmClock(alarmManager, targetMS, getOpenAlarmTabIntent(), getAlarmIntent(alarm))
+    AlarmManagerCompat.setAlarmClock(alarmManager, targetMS, getOpenAlarmTabIntent(alarm), getAlarmIntent(alarm))
 }
 
 fun Context.showRemainingTimeMessage(totalMinutes: Int) {
@@ -445,7 +454,7 @@ fun Context.showRemainingTimeMessage(totalMinutes: Int) {
 }
 
 fun Context.showAlarmNotification(alarm: Alarm) {
-    val pendingIntent = getOpenAlarmTabIntent()
+    val pendingIntent = getOpenAlarmTabIntent(alarm)
     val notification = getAlarmNotification(pendingIntent, alarm)
     val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     notificationManager.notify(alarm.id, notification)
