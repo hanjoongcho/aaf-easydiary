@@ -63,7 +63,7 @@
                     android:text="Notification"
                     style="@style/SettingsTitle" />
                 <com.simplemobiletools.commons.views.MyTextView
-                    android:text="small icon + large icon + title + text + intent"
+                    android:text="small icon + large icon + title + text + intent + action"
                     style="@style/SettingsSummary" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>

@@ -4,6 +4,7 @@ import android.app.IntentService
 import android.content.Intent
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.WorkManager
+import me.blog.korn123.easydiary.activities.DevActivity
 import me.blog.korn123.easydiary.helper.*
 
 
@@ -15,6 +16,7 @@ class NotificationService(name: String = "EasyDiaryNotificationService") : Inten
                 ACTION_DISMISS_GMS_BACKUP_COMPLETE -> NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_GMS_BACKUP_COMPLETE_ID)
                 ACTION_DISMISS_COMPRESS -> NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_COMPRESS_ID)
                 ACTION_DISMISS_DECOMPRESS -> NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_DECOMPRESS_ID)
+                ACTION_DISMISS_DEV -> NotificationManagerCompat.from(applicationContext).cancel(DevActivity.NOTIFICATION_ID_02)
                 ACTION_SNOOZE -> handleActionSnooze()
                 ACTION_RECOVER_CANCEL -> handleActionRecoverCancel()
                 ACTION_BACKUP_CANCEL -> handleActionBackupCancel()
@@ -49,6 +51,7 @@ class NotificationService(name: String = "EasyDiaryNotificationService") : Inten
         const val ACTION_DISMISS_GMS_RECOVERY_COMPLETE = "me.blog.korn123.easydiary.services.action.ACTION_DISMISS_GMS_RECOVERY_COMPLETE"
         const val ACTION_DISMISS_COMPRESS = "me.blog.korn123.easydiary.services.action.ACTION_DISMISS_COMPRESS"
         const val ACTION_DISMISS_DECOMPRESS = "me.blog.korn123.easydiary.services.action.ACTION_DISMISS_DECOMPRESS"
+        const val ACTION_DISMISS_DEV = "me.blog.korn123.easydiary.services.action.ACTION_DISMISS_DEV"
         const val ACTION_SNOOZE = "me.blog.korn123.easydiary.services.ACTION_SNOOZE"
         const val ACTION_BACKUP_CANCEL = "me.blog.korn123.easydiary.services.ACTION_BACKUP_CANCEL"
         const val ACTION_RECOVER_CANCEL = "me.blog.korn123.easydiary.services.ACTION_RECOVER_CANCEL"

@@ -20,6 +20,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_NAME
+import me.blog.korn123.easydiary.services.NotificationService
 
 
 class DevActivity : EasyDiaryActivity() {
@@ -59,12 +60,12 @@ class DevActivity : EasyDiaryActivity() {
 
         notification1.setOnClickListener {
             (applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).apply {
-                notify(2000, createNotification(NotificationInfo(R.drawable.ic_diary_writing)))
+                notify(NOTIFICATION_ID_01, createNotification(NotificationInfo(R.drawable.ic_diary_writing)))
             }
         }
         notification2.setOnClickListener {
             (applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).apply {
-                notify(2001, createNotification(NotificationInfo(R.drawable.ic_diary_backup_local)))
+                notify(NOTIFICATION_ID_02, createNotification(NotificationInfo(R.drawable.ic_diary_backup_local)))
             }
         }
     }
@@ -106,17 +107,27 @@ class DevActivity : EasyDiaryActivity() {
                             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         }, PendingIntent.FLAG_UPDATE_CURRENT)
                 )
-//                    .addAction(
-//                            R.drawable.cloud_download,
-//                            getString(R.string.dismiss),
-//                            PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
-//                                action = NotificationService.ACTION_DISMISS
-//                            }, 0)
-//                    )
+                .addAction(
+                        R.drawable.ic_easydiary,
+                        getString(R.string.dismiss),
+                        PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
+                            action = NotificationService.ACTION_DISMISS_DEV
+                        }, 0)
+                )
         return notificationBuilder.build()
+    }
+
+    companion object {
+        const val NOTIFICATION_ID_01 = 2000
+        const val NOTIFICATION_ID_02 = 2001
     }
 }
 
+
+/***************************************************************************************************
+ *   classes
+ *
+ ***************************************************************************************************/
 class SpacesItemDecoration(private val space: Int) : androidx.recyclerview.widget.RecyclerView.ItemDecoration() {
     override fun getItemOffsets(outRect: Rect, view: View, parent: androidx.recyclerview.widget.RecyclerView, state: androidx.recyclerview.widget.RecyclerView.State) {
         val position = parent.getChildAdapterPosition(view)
@@ -128,6 +139,7 @@ class SpacesItemDecoration(private val space: Int) : androidx.recyclerview.widge
 }
 
 data class NotificationInfo(var largeIconResourceId: Int)
+
 
 /***************************************************************************************************
  *   extensions
