@@ -497,8 +497,12 @@ fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): No
     val builder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_dev")
             .setDefaults(Notification.DEFAULT_ALL)
             .setWhen(System.currentTimeMillis())
-            .setSmallIcon(R.drawable.ic_launcher_round)
-            .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
+            .setSmallIcon(R.drawable.ic_easydiary)
+            .setLargeIcon(when (alarm.workMode) {
+                Alarm.WORK_MODE_DIARY_WRITING -> BitmapFactory.decodeResource(resources, R.drawable.ic_diary_writing)
+                Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> BitmapFactory.decodeResource(resources, R.drawable.ic_diary_backup_local)
+                else -> null
+            })
             .setOngoing(false)
             .setAutoCancel(true)
             .setContentTitle("Easy Diary alarm: ${alarm.id}")

@@ -1,4 +1,9 @@
 <resources>
+    <!-- aafactory-commons -->
+    <!--<color name="colorPrimaryDark">#05868C</color>-->
+    <!--<color name="colorPrimary">#07ABB3</color>-->
+    <!--<color name="colorAccent">@color/colorPrimary</color>-->
+
     <!--App theme-->
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>

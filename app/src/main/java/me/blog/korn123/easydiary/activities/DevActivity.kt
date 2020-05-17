@@ -1,17 +1,24 @@
 package me.blog.korn123.easydiary.activities
 
 import android.app.AlarmManager
+import android.app.Notification
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
+import android.graphics.BitmapFactory
 import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.View
 import android.widget.Toast
+import androidx.core.app.NotificationCompat
 import com.simplemobiletools.commons.extensions.toast
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_dev.*
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
 
 
 class DevActivity : EasyDiaryActivity() {
@@ -48,6 +55,17 @@ class DevActivity : EasyDiaryActivity() {
 
             toast(nextAlarm, Toast.LENGTH_LONG)
         }
+
+        notification1.setOnClickListener {
+            (applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).apply {
+                notify(1, createNotification(NotificationInfo(R.drawable.ic_diary_writing)))
+            }
+        }
+        notification2.setOnClickListener {
+            (applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).apply {
+                notify(2, createNotification(NotificationInfo(R.drawable.ic_diary_backup_local)))
+            }
+        }
     }
 
 
@@ -56,6 +74,33 @@ class DevActivity : EasyDiaryActivity() {
      *
      ***************************************************************************************************/
     private fun initDevUI() { }
+
+    private fun createNotification(notificationInfo: NotificationInfo): Notification {
+        val notificationBuilder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
+        notificationBuilder
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(R.drawable.ic_easydiary)
+                .setLargeIcon(BitmapFactory.decodeResource(resources, notificationInfo.largeIconResourceId))
+                .setOnlyAlertOnce(true)
+                .setOngoing(false)
+                .setAutoCancel(true)
+                .setContentTitle("content title")
+                .setContentText("content text")
+                .setContentIntent(
+                        PendingIntent.getActivity(this, 0, Intent(this, DiaryMainActivity::class.java).apply {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        }, PendingIntent.FLAG_UPDATE_CURRENT)
+                )
+//                    .addAction(
+//                            R.drawable.cloud_download,
+//                            getString(R.string.dismiss),
+//                            PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
+//                                action = NotificationService.ACTION_DISMISS
+//                            }, 0)
+//                    )
+        return notificationBuilder.build()
+    }
 }
 
 class SpacesItemDecoration(private val space: Int) : androidx.recyclerview.widget.RecyclerView.ItemDecoration() {
@@ -68,6 +113,7 @@ class SpacesItemDecoration(private val space: Int) : androidx.recyclerview.widge
     }
 }
 
+data class NotificationInfo(var largeIconResourceId: Int)
 
 /***************************************************************************************************
  *   extensions

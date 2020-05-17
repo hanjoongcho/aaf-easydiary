@@ -42,8 +42,8 @@ class ZipHelper(val context: Context) {
         mBuilder = NotificationCompat.Builder(context, "${NOTIFICATION_CHANNEL_ID}_zip_helper")
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.drawable.data_backup)
-                .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_launcher_round))
+                .setSmallIcon(R.drawable.ic_easydiary)
+                .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_diary_backup_local))
                 .setOngoing(false)
                 .setAutoCancel(true)
                 .setOnlyAlertOnce(true)
@@ -54,7 +54,7 @@ class ZipHelper(val context: Context) {
 //                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .addAction(
-                        R.drawable.data_backup,
+                        R.drawable.ic_easydiary,
                         context.getString(R.string.cancel),
                         PendingIntent.getService(context, 0, Intent(context, NotificationService::class.java).apply {
                             action = actionString
@@ -86,6 +86,7 @@ class ZipHelper(val context: Context) {
         }
     }
 
+    @SuppressLint("RestrictedApi")
     fun updateNotification(notificationId: Int, title: String, message: String) {
         if (isOnProgress) {
             val actionFlag = if (notificationId == NOTIFICATION_COMPRESS_ID) NotificationService.ACTION_DISMISS_COMPRESS else NotificationService.ACTION_DISMISS_DECOMPRESS
@@ -96,7 +97,7 @@ class ZipHelper(val context: Context) {
                     .setContentText(message)
                     .setStyle(NotificationCompat.BigTextStyle().bigText(message))
                     .addAction(
-                            R.drawable.ic_launcher_round,
+                            R.drawable.ic_easydiary,
                             context.getString(R.string.dismiss),
                             PendingIntent.getService(context, 0, Intent(context, NotificationService::class.java).apply {
                                 action = actionFlag

@@ -74,14 +74,14 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setStyle(NotificationCompat.InboxStyle())
                 .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.drawable.cloud_download)
-                .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
+                .setSmallIcon(R.drawable.ic_easydiary)
+                .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_googledrive_download))
                 .setOnlyAlertOnce(true)
                 .setContentTitle(getString(R.string.task_progress_message))
 //                .setContentText(getString(R.string.task_progress_message))
                 .setProgress(0, 0, true)
                 .addAction(
-                        R.drawable.cloud_download,
+                        R.drawable.ic_easydiary,
                         getString(R.string.cancel),
                         PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
                             action = NotificationService.ACTION_RECOVER_CANCEL
@@ -212,8 +212,8 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
                         .addLine("${getString(R.string.notification_msg_download_fail)}: $failCount")
                 )
                 .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.drawable.cloud_download)
-                .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
+                .setSmallIcon(R.drawable.ic_easydiary)
+                .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_googledrive_download))
                 .setOnlyAlertOnce(true)
                 .setOngoing(false)
                 .setAutoCancel(true)
@@ -225,7 +225,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
                         }, PendingIntent.FLAG_UPDATE_CURRENT)
                 )
                 .addAction(
-                        R.drawable.cloud_download,
+                        R.drawable.ic_easydiary,
                         getString(R.string.dismiss),
                         PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
                             action = NotificationService.ACTION_DISMISS

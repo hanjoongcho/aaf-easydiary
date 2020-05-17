@@ -82,14 +82,14 @@ class BackupPhotoService : Service() {
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setStyle(NotificationCompat.InboxStyle())
                 .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.drawable.cloud_upload)
-                .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
+                .setSmallIcon(R.drawable.ic_easydiary)
+                .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_googledrive_upload))
                 .setOnlyAlertOnce(true)
                 .setContentTitle(getString(R.string.task_progress_message))
 //                .setContentText(getString(R.string.task_progress_message))
                 .setProgress(0, 0, true)
                 .addAction(
-                        R.drawable.cloud_upload,
+                        R.drawable.ic_easydiary,
                         getString(R.string.cancel),
                         PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
                             action = NotificationService.ACTION_BACKUP_CANCEL
@@ -195,8 +195,8 @@ class BackupPhotoService : Service() {
                         .addLine("${getString(R.string.notification_msg_upload_fail)}: $failCount")
                 )
                 .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.drawable.cloud_upload)
-                .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_round))
+                .setSmallIcon(R.drawable.ic_easydiary)
+                .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_googledrive_upload))
                 .setOngoing(false)
                 .setAutoCancel(true)
                 .setContentTitle(getString(R.string.backup_attach_photo_title))
@@ -207,7 +207,7 @@ class BackupPhotoService : Service() {
                         }, PendingIntent.FLAG_UPDATE_CURRENT)
                 )
                 .addAction(
-                        R.drawable.cloud_upload,
+                        R.drawable.ic_easydiary,
                         getString(R.string.dismiss),
                         PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
                             action = NotificationService.ACTION_DISMISS
