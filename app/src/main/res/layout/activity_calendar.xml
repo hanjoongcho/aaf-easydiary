@@ -51,14 +51,13 @@
                 android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <TextView
+                <com.simplemobiletools.commons.views.MyTextView
                     android:id="@+id/emptyInfo"
-                    android:textColor="@android:color/white"
                     android:text="@string/guide_message_4"
                     android:layout_marginTop="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
-                </TextView>
+                </com.simplemobiletools.commons.views.MyTextView>
             </LinearLayout>
         </FrameLayout>
     </LinearLayout>

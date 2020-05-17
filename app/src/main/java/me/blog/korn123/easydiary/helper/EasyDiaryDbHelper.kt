@@ -14,7 +14,7 @@ object EasyDiaryDbHelper {
     private val mDiaryConfig: RealmConfiguration by lazy {
         RealmConfiguration.Builder()
                 .name("diary.realm")
-                .schemaVersion(14)
+                .schemaVersion(15)
                 .migration(EasyDiaryMigration())
                 .modules(Realm.getDefaultModule()!!)
                 .build()

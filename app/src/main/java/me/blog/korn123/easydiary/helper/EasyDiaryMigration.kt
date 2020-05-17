@@ -5,6 +5,7 @@ import io.realm.DynamicRealm
 import io.realm.FieldAttribute
 import io.realm.RealmMigration
 import io.realm.RealmObjectSchema
+import me.blog.korn123.easydiary.models.Alarm
 
 /**
  * Created by hanjoong on 2017-03-25.
@@ -116,6 +117,13 @@ class EasyDiaryMigration : RealmMigration {
                 schema.get("Alarm")?.addField("workMode", Int::class.java)
                 currentVersion++
             }
+
+            if (currentVersion == 14L) {
+                // Delete all test data
+                realm.delete("Alarm")
+                currentVersion++
+            }
+
 
             //        // During a migration, a DynamicRealm is exposed. A DynamicRealm is an untyped variant of a normal Realm, but
             //        // with the same object creation and query capabilities.

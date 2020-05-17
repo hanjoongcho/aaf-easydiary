@@ -212,14 +212,6 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
 
     private fun initProperties() {
         mActivity.config.use24HourFormat = false
-        val calendar = Calendar.getInstance(Locale.getDefault())
-        var minutes = calendar.get(Calendar.HOUR_OF_DAY) * 60
-        minutes += calendar.get(Calendar.MINUTE)
-
-        val tempAlarm = Alarm(0)
-        if (EasyDiaryDbHelper.countAlarmAll() == 0L) {
-            EasyDiaryDbHelper.insertAlarm(tempAlarm)
-        }
     }
 
     companion object {
