@@ -70,7 +70,7 @@ class SettingsActivity : EasyDiaryActivity() {
                             subtitle = getString(R.string.preferences_category_backup_restore_device_sub)
                         }
                         5 -> {
-                            title = "Application Schedule"
+                            title = getString(R.string.preferences_category_schedule)
                             subtitle = ""
 
                         }

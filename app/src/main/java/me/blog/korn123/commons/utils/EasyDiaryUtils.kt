@@ -373,23 +373,4 @@ object EasyDiaryUtils {
         val type = object : TypeToken<HashMap<String, Any>>(){}.type
         return GsonBuilder().create().fromJson(jsonString, type)
     }
-
-    // format day bits to strings like "Mon, Tue, Wed"
-    fun Context.getSelectedDaysString(bitMask: Int): String {
-        val dayBits = arrayListOf(MONDAY_BIT, TUESDAY_BIT, WEDNESDAY_BIT, THURSDAY_BIT, FRIDAY_BIT, SATURDAY_BIT, SUNDAY_BIT)
-        val weekDays = arrayListOf("월", "화", "수", "목", "금", "토", "일")
-
-        if (baseConfig.isSundayFirst) {
-            dayBits.moveLastItemToFront()
-            weekDays.moveLastItemToFront()
-        }
-
-        var days = ""
-        dayBits.forEachIndexed { index, bit ->
-            if (bitMask and bit != 0) {
-                days += "${weekDays[index]}, "
-            }
-        }
-        return days.trim().trimEnd(',')
-    }
 }

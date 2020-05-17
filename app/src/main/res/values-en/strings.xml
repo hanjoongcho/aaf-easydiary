@@ -404,7 +404,8 @@
         Added diary multiple copy and delete feature
     </string>
     <string name="release_196">
-        v1.4.130 / 2020.04.xx\n
+        v1.4.130 / 2020.05.xx\n
+        Added diary schedule setting feature
         …
     </string>
 
@@ -617,4 +618,5 @@
     <string name="delete_selected_items_confirm">Are you sure you want to delete the %d selected items?</string>
     <string name="duplicate_selected_items_confirm">Are you sure you want to duplicate the %d selected items?</string>
     <string name="no_items_warning">There are no items selected.</string>
+    <string name="preferences_category_schedule">Schedule setting (Beta)</string>
 </resources>
