@@ -1,9 +1,7 @@
 package me.blog.korn123.easydiary.activities
 
-import android.app.AlarmManager
-import android.app.Notification
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.annotation.SuppressLint
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -15,10 +13,13 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.simplemobiletools.commons.extensions.toast
+import com.simplemobiletools.commons.helpers.isOreoPlus
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_dev.*
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
+import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_NAME
 
 
 class DevActivity : EasyDiaryActivity() {
@@ -58,12 +59,12 @@ class DevActivity : EasyDiaryActivity() {
 
         notification1.setOnClickListener {
             (applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).apply {
-                notify(1, createNotification(NotificationInfo(R.drawable.ic_diary_writing)))
+                notify(2000, createNotification(NotificationInfo(R.drawable.ic_diary_writing)))
             }
         }
         notification2.setOnClickListener {
             (applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).apply {
-                notify(2, createNotification(NotificationInfo(R.drawable.ic_diary_backup_local)))
+                notify(2001, createNotification(NotificationInfo(R.drawable.ic_diary_backup_local)))
             }
         }
     }
@@ -75,8 +76,21 @@ class DevActivity : EasyDiaryActivity() {
      ***************************************************************************************************/
     private fun initDevUI() { }
 
+    @SuppressLint("NewApi")
     private fun createNotification(notificationInfo: NotificationInfo): Notification {
-        val notificationBuilder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
+        if (isOreoPlus()) {
+            // Create the NotificationChannel
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel("${NOTIFICATION_CHANNEL_ID}_dev", "${NOTIFICATION_CHANNEL_NAME}_dev", importance)
+            channel.description = NOTIFICATION_CHANNEL_DESCRIPTION
+
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        val notificationBuilder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_dev")
         notificationBuilder
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())

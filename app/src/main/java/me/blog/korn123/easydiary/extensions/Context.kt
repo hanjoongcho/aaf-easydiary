@@ -36,7 +36,6 @@ import io.github.aafactory.commons.extensions.baseConfig
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import io.github.aafactory.commons.views.ModalView
-import kotlinx.android.synthetic.main.dialog_alarm.view.*
 import kotlinx.android.synthetic.main.dialog_message.view.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
@@ -486,15 +485,15 @@ fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): No
     if (isOreoPlus()) {
         // Create the NotificationChannel
         val importance = NotificationManager.IMPORTANCE_HIGH
-        val mChannel = NotificationChannel("${NOTIFICATION_CHANNEL_ID}_dev", "${NOTIFICATION_CHANNEL_NAME}_dev", importance)
-        mChannel.description = NOTIFICATION_CHANNEL_DESCRIPTION
+        val channel = NotificationChannel("${NOTIFICATION_CHANNEL_ID}_alarm", "${NOTIFICATION_CHANNEL_NAME}_alarm", importance)
+        channel.description = NOTIFICATION_CHANNEL_DESCRIPTION
         // Register the channel with the system; you can't change the importance
         // or other notification behaviors after this
         val notificationManager = getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(mChannel)
+        notificationManager.createNotificationChannel(channel)
     }
 
-    val builder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_dev")
+    val builder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_alarm")
             .setDefaults(Notification.DEFAULT_ALL)
             .setWhen(System.currentTimeMillis())
             .setSmallIcon(R.drawable.ic_easydiary)
@@ -505,7 +504,7 @@ fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): No
             })
             .setOngoing(false)
             .setAutoCancel(true)
-            .setContentTitle("Easy Diary alarm: ${alarm.id}")
+            .setContentTitle("Easy Diary schedule notification")
             .setContentText(alarm.label)
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_HIGH)

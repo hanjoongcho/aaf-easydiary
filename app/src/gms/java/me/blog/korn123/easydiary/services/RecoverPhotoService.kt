@@ -47,13 +47,13 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
         mDriveServiceHelper = DriveServiceHelper(googleDriveService)
 
         notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationBuilder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
+        notificationBuilder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_download")
         mPhotoPath = "${EasyDiaryUtils.getApplicationDataDirectory(this)}$DIARY_PHOTO_DIRECTORY"
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && notificationManager.getNotificationChannel(NOTIFICATION_CHANNEL_ID) == null) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && notificationManager.getNotificationChannel("${NOTIFICATION_CHANNEL_ID}_download") == null) {
             // Create the NotificationChannel
             val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val mChannel = NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, importance)
+            val mChannel = NotificationChannel("${NOTIFICATION_CHANNEL_ID}_download", "${NOTIFICATION_CHANNEL_NAME}_download", importance)
             mChannel.description = NOTIFICATION_CHANNEL_DESCRIPTION
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
@@ -69,7 +69,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
     
     override fun onHandleIntent(intent: Intent?) {
         mInProcessJob = true
-        notificationManager.cancel(NOTIFICATION_COMPLETE_ID)
+        notificationManager.cancel(NOTIFICATION_GMS_RECOVERY_COMPLETE_ID)
         notificationBuilder
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setStyle(NotificationCompat.InboxStyle())
@@ -87,7 +87,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
                             action = NotificationService.ACTION_RECOVER_CANCEL
                         }, 0)
                 )
-        startForeground(NOTIFICATION_FOREGROUND_ID, notificationBuilder.build())
+        startForeground(NOTIFICATION_FOREGROUND_GMS_RECOVERY_ID, notificationBuilder.build())
 
         intent?.let {
             recoverPhoto()
@@ -187,12 +187,12 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
                     )
                     .setContentTitle("${getString(R.string.notification_msg_download_progress)}  ${successCount + failCount}/${targetItems.size}")
                     .setProgress(targetItems.size, successCount + failCount, false)
-            notificationManager.notify(NOTIFICATION_FOREGROUND_ID, notificationBuilder.build())
+            notificationManager.notify(NOTIFICATION_FOREGROUND_GMS_RECOVERY_ID, notificationBuilder.build())
 
             if (successCount + failCount < targetItems.size) {
                 when (mInProcessJob) {
                     true -> {}
-                    false -> notificationManager.cancel(NOTIFICATION_FOREGROUND_ID)
+                    false -> notificationManager.cancel(NOTIFICATION_FOREGROUND_GMS_RECOVERY_ID)
                 }
             } else {
                 launchCompleteNotification(getString(R.string.notification_msg_download_complete))
@@ -202,7 +202,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
     }
 
     private fun launchCompleteNotification(contentText: String) {
-        val resultNotificationBuilder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
+        val resultNotificationBuilder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_download")
         resultNotificationBuilder
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setStyle(NotificationCompat.InboxStyle()
@@ -228,10 +228,10 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
                         R.drawable.ic_easydiary,
                         getString(R.string.dismiss),
                         PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
-                            action = NotificationService.ACTION_DISMISS
+                            action = NotificationService.ACTION_DISMISS_GMS_RECOVERY_COMPLETE
                         }, 0)
                 )
-        notificationManager.notify(NOTIFICATION_COMPLETE_ID, resultNotificationBuilder.build())
+        notificationManager.notify(NOTIFICATION_GMS_RECOVERY_COMPLETE_ID, resultNotificationBuilder.build())
         mInProcessJob = false
         remoteDriveFileCount = 0
         duplicateFileCount = 0

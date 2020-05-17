@@ -11,7 +11,8 @@ class NotificationService(name: String = "EasyDiaryNotificationService") : Inten
     override fun onHandleIntent(intent: Intent?) {
         intent?.let {
             when (it.action) {
-                ACTION_DISMISS -> NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_COMPLETE_ID)
+                ACTION_DISMISS_GMS_RECOVERY_COMPLETE -> NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_GMS_RECOVERY_COMPLETE_ID)
+                ACTION_DISMISS_GMS_BACKUP_COMPLETE -> NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_GMS_BACKUP_COMPLETE_ID)
                 ACTION_DISMISS_COMPRESS -> NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_COMPRESS_ID)
                 ACTION_DISMISS_DECOMPRESS -> NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_DECOMPRESS_ID)
                 ACTION_SNOOZE -> handleActionSnooze()
@@ -44,7 +45,8 @@ class NotificationService(name: String = "EasyDiaryNotificationService") : Inten
     }
 
     companion object {
-        const val ACTION_DISMISS = "me.blog.korn123.easydiary.services.action.ACTION_DISMISS"
+        const val ACTION_DISMISS_GMS_BACKUP_COMPLETE = "me.blog.korn123.easydiary.services.action.ACTION_DISMISS_GMS_BACKUP_COMPLETE"
+        const val ACTION_DISMISS_GMS_RECOVERY_COMPLETE = "me.blog.korn123.easydiary.services.action.ACTION_DISMISS_GMS_RECOVERY_COMPLETE"
         const val ACTION_DISMISS_COMPRESS = "me.blog.korn123.easydiary.services.action.ACTION_DISMISS_COMPRESS"
         const val ACTION_DISMISS_DECOMPRESS = "me.blog.korn123.easydiary.services.action.ACTION_DISMISS_DECOMPRESS"
         const val ACTION_SNOOZE = "me.blog.korn123.easydiary.services.ACTION_SNOOZE"

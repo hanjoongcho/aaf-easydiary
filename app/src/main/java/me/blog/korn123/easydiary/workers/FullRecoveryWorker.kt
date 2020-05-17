@@ -69,6 +69,6 @@ class FullRecoveryWorker(private val context: Context, workerParams: WorkerParam
     override fun onStopped() {
         super.onStopped()
         mZipHelper.isOnProgress = false
-        NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_COMPLETE_ID)
+        NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_DECOMPRESS_ID)
     }
 }
