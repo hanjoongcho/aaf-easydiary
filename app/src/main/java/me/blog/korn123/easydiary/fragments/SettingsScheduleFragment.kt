@@ -2,12 +2,14 @@ package me.blog.korn123.easydiary.fragments
 
 import android.app.Activity
 import android.app.TimePickerDialog
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -27,6 +29,7 @@ import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.Alarm
 import java.util.*
 import kotlin.math.pow
+
 
 class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
 
@@ -198,7 +201,10 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
 
                             alertDialog?.dismiss()
                         } else {
-                            rootView.alarmDescription.requestFocus()
+                            rootView.alarmDescription.run {
+                                requestFocus()
+                                (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).showSoftInput(this@run, InputMethodManager.RESULT_UNCHANGED_SHOWN)
+                            }
                         }
                     }
                 }
@@ -207,8 +213,11 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
     }
 
     private fun updateAlarmList() {
-        mAlarmList.clear()
-        mAlarmList.addAll(EasyDiaryDbHelper.readAlarmAll())
+        mAlarmList.run {
+            clear()
+            addAll(EasyDiaryDbHelper.readAlarmAll())
+            infoMessage.visibility = if (this.isEmpty()) View.VISIBLE else View.GONE
+        }
         mAlarmAdapter.notifyDataSetChanged()
     }
 
