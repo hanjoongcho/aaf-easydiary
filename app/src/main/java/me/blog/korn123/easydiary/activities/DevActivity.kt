@@ -65,7 +65,7 @@ class DevActivity : EasyDiaryActivity() {
         }
         notification2.setOnClickListener {
             (applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).apply {
-                notify(NOTIFICATION_ID_02, createNotification(NotificationInfo(R.drawable.ic_diary_backup_local)))
+                notify(NOTIFICATION_ID_02, createNotification(NotificationInfo(R.drawable.ic_diary_backup_local, true)))
             }
         }
     }
@@ -107,13 +107,15 @@ class DevActivity : EasyDiaryActivity() {
                             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         }, PendingIntent.FLAG_UPDATE_CURRENT)
                 )
-                .addAction(
-                        R.drawable.ic_easydiary,
-                        getString(R.string.dismiss),
-                        PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
-                            action = NotificationService.ACTION_DISMISS_DEV
-                        }, 0)
-                )
+        if (notificationInfo.useActionButton) {
+            notificationBuilder.addAction(
+                    R.drawable.ic_easydiary,
+                    getString(R.string.dismiss),
+                    PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
+                        action = NotificationService.ACTION_DISMISS_DEV
+                    }, 0)
+            )
+        }
         return notificationBuilder.build()
     }
 
@@ -138,7 +140,7 @@ class SpacesItemDecoration(private val space: Int) : androidx.recyclerview.widge
     }
 }
 
-data class NotificationInfo(var largeIconResourceId: Int)
+data class NotificationInfo(var largeIconResourceId: Int, var useActionButton: Boolean = false)
 
 
 /***************************************************************************************************
