@@ -619,4 +619,10 @@
     <string name="duplicate_selected_items_confirm">선택된 %d건의 항목을 복사 하시겠습니까?</string>
     <string name="no_items_warning">선택된 항목이 없습니다.</string>
     <string name="preferences_category_schedule">Schedule setting (Beta)</string>
+    <string name="schedule_time">Day and time</string>
+    <string name="schedule_type">Schedule type</string>
+    <string name="schedule_description">Schedule description</string>
+    <string name="schedule_description_hint">Alarm description</string>
+    <string name="schedule_diary_writing_description">Diary writing\nRegister the diary writing schedule.\nWhen the schedule is registered, a notification message is provided according to the set day and time.</string>
+    <string name="schedule_backup_local_description">Diary backup (Device storage)\nRegistering the schedule backs up the database files excluding attached pictures to the device local storage according to the set day and time and provides the result of the operation as a notification message.</string>
 </resources>

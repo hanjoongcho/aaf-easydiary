@@ -16,7 +16,7 @@
             android:layout_height="wrap_content">
             <com.simplemobiletools.commons.views.MyTextView
                 style="@style/SettingsTitle"
-                android:text="요일 및 시간"
+                android:text="@string/schedule_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <RelativeLayout
@@ -84,7 +84,7 @@
 
             <com.simplemobiletools.commons.views.MyTextView
                 style="@style/SettingsTitle"
-                android:text="스케줄 유형"
+                android:text="@string/schedule_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <RadioGroup
@@ -96,13 +96,13 @@
                 <androidx.appcompat.widget.AppCompatRadioButton
                     android:id="@+id/diaryWriting"
                     android:gravity="top"
-                    android:text="다이어리 작성\n다이어리 작성 스케줄을 등록합니다.\n스케줄이 등록되면 설정된 요일과 시간에 맞춰 알림 메시지를 제공합니다."
+                    android:text="@string/schedule_diary_writing_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
                 <androidx.appcompat.widget.AppCompatRadioButton
                     android:id="@+id/diaryBackupLocal"
                     android:gravity="top"
-                    android:text="다이어리 백업(디바이스 저장소)\n스케줄을 등록하면 설정된 요일과 시간에 맞춰 디비이스 로컬 저장소에 첨부사진을 제외한 데이터베이스 파일을 백업하고 작업결과를 알림 메시지로 제공합니다."
+                    android:text="@string/schedule_backup_local_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
             </RadioGroup>
@@ -115,14 +115,14 @@
 
             <com.simplemobiletools.commons.views.MyTextView
                 style="@style/SettingsTitle"
-                android:text="스케줄 설명"
+                android:text="@string/schedule_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <com.simplemobiletools.commons.views.MyEditText
                 style="@style/SettingsSummary"
                 android:paddingTop="0dp"
                 android:id="@+id/alarmDescription"
-                android:hint="Alarm description"
+                android:hint="@string/schedule_description_hint"
                 android:inputType="text|textAutoCorrect|textAutoComplete"
                 android:imeOptions="actionDone"
                 android:maxLines="1"

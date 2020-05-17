@@ -182,7 +182,7 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
             }
 
             alertDialog = builder.create().apply {
-                updateAlertDialog(this, null, rootView, "다이어리 스케줄 설정")
+                updateAlertDialog(this, null, rootView, null)
                 getButton(AlertDialog.BUTTON_POSITIVE).run {
                     setOnClickListener {
                         if (rootView.alarmDescription.text.isNotEmpty()) {
