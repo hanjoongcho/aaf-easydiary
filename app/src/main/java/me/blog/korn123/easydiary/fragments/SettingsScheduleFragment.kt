@@ -95,20 +95,7 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
             var alertDialog: AlertDialog? = null
             val builder = AlertDialog.Builder(this).apply {
                 setCancelable(false)
-                setPositiveButton(getString(android.R.string.ok)) { _, _ ->
-                    // update alarm schedule
-                    if (temporaryAlarm.isEnabled) {
-                        scheduleNextAlarm(temporaryAlarm, true)
-                    } else {
-                        cancelAlarmClock(temporaryAlarm)
-                    }
-
-                    // save alarm
-                    temporaryAlarm.label = rootView?.alarmDescription?.text.toString()
-                    EasyDiaryDbHelper.updateAlarm(temporaryAlarm)
-                    alertDialog?.dismiss()
-                    updateAlarmList()
-                }
+                setPositiveButton(getString(android.R.string.ok), null)
                 setNegativeButton(getString(android.R.string.cancel)) { _, _ -> alertDialog?.dismiss() }
             }
             val inflater = getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -193,6 +180,28 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
 
             alertDialog = builder.create().apply {
                 updateAlertDialog(this, null, rootView, "다이어리 스케줄 설정")
+                getButton(AlertDialog.BUTTON_POSITIVE).run {
+                    setOnClickListener {
+                        if (rootView.alarmDescription.text.isNotEmpty()) {
+                            // update alarm schedule
+                            if (temporaryAlarm.isEnabled) {
+                                scheduleNextAlarm(temporaryAlarm, true)
+                            } else {
+                                cancelAlarmClock(temporaryAlarm)
+                            }
+
+                            // save alarm
+                            temporaryAlarm.label = rootView?.alarmDescription?.text.toString()
+                            EasyDiaryDbHelper.updateAlarm(temporaryAlarm)
+                            alertDialog?.dismiss()
+                            updateAlarmList()
+
+                            alertDialog?.dismiss()
+                        } else {
+                            rootView.alarmDescription.requestFocus()
+                        }
+                    }
+                }
             }
         }
     }
