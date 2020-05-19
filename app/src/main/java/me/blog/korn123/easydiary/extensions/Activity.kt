@@ -122,9 +122,9 @@ fun Activity.makeToast(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
 
-fun Activity.makeSnackBar(message: String) {
+fun Activity.makeSnackBar(message: String, duration: Int = Snackbar.LENGTH_SHORT) {
     Snackbar
-            .make(findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT)
+            .make(findViewById(android.R.id.content), message, duration)
             .setAction("Action", null).show()
 }
 

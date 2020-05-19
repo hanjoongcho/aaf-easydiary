@@ -15,6 +15,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.*
 import kotlinx.android.synthetic.main.dialog_alarm.view.*
 import kotlinx.android.synthetic.main.layout_settings_schedule.*
@@ -185,25 +186,31 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
                 updateAlertDialog(this, null, rootView, getString(R.string.preferences_category_schedule))
                 getButton(AlertDialog.BUTTON_POSITIVE).run {
                     setOnClickListener {
-                        if (rootView.alarmDescription.text.isNotEmpty()) {
-                            // update alarm schedule
-                            if (temporaryAlarm.isEnabled) {
-                                scheduleNextAlarm(temporaryAlarm, true)
-                            } else {
-                                cancelAlarmClock(temporaryAlarm)
+                        when {
+                            rootView.alarm_days.text.isEmpty() -> {
+                                toast("Please select days.")
                             }
+                            rootView.alarmDescription.text.isEmpty() -> {
+                                rootView.alarmDescription.run {
+                                    requestFocus()
+                                    toast("Please input schedule description.")
+                                    (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).showSoftInput(this@run, InputMethodManager.RESULT_UNCHANGED_SHOWN)
+                                }
+                            }
+                            else -> {
+                                // update alarm schedule
+                                if (temporaryAlarm.isEnabled) {
+                                    scheduleNextAlarm(temporaryAlarm, true)
+                                } else {
+                                    cancelAlarmClock(temporaryAlarm)
+                                }
 
-                            // save alarm
-                            temporaryAlarm.label = rootView?.alarmDescription?.text.toString()
-                            EasyDiaryDbHelper.updateAlarm(temporaryAlarm)
-                            alertDialog?.dismiss()
-                            updateAlarmList()
-
-                            alertDialog?.dismiss()
-                        } else {
-                            rootView.alarmDescription.run {
-                                requestFocus()
-                                (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).showSoftInput(this@run, InputMethodManager.RESULT_UNCHANGED_SHOWN)
+                                // save alarm
+                                temporaryAlarm.label = rootView?.alarmDescription?.text.toString()
+                                EasyDiaryDbHelper.updateAlarm(temporaryAlarm)
+                                alertDialog?.dismiss()
+                                updateAlarmList()
+                                alertDialog?.dismiss()
                             }
                         }
                     }
