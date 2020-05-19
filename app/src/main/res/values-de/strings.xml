@@ -404,9 +404,8 @@
         Added diary multiple copy and delete feature
     </string>
     <string name="release_196">
-        v1.4.130 / 2020.05.xx\n
+        v1.4.130 / 2020.05.20\n
         Added diary schedule setting feature
-        …
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -460,7 +459,7 @@
     <string name="notification_msg_download_fail">Download Fail</string>
     <string name="notification_msg_duplicate_file_count">Number of exist files</string>
     <string name="preferences_category_lock">Application lock setting</string>
-    <string name="fingerprint_lock_title">Fingerprint lock(Beta)</string>
+    <string name="fingerprint_lock_title">Fingerprint lock</string>
     <string name="fingerprint_lock_summary">If the device supports fingerprint recognition and has a registered fingerprint, lock the application with the registered fingerprint.</string>
     <string name="fingerprint_not_available">The operating system installed on the device does not support fingerprint recognition.</string>
     <string name="fingerprint_setting_complete">Fingerprint lock setting is completed.</string>
@@ -618,11 +617,12 @@
     <string name="delete_selected_items_confirm">Are you sure you want to delete the %d selected items?</string>
     <string name="duplicate_selected_items_confirm">Are you sure you want to duplicate the %d selected items?</string>
     <string name="no_items_warning">There are no items selected.</string>
-    <string name="preferences_category_schedule">Schedule setting (Beta)</string>
+    <string name="preferences_category_schedule">[Beta] Schedule setting</string>
     <string name="schedule_time">Day and time</string>
     <string name="schedule_type">Schedule type</string>
     <string name="schedule_description">Schedule description</string>
     <string name="schedule_description_hint">Alarm description</string>
     <string name="schedule_diary_writing_description">Diary writing\nRegister the diary writing schedule.\nWhen the schedule is registered, a notification message is provided according to the set day and time.</string>
     <string name="schedule_backup_local_description">Diary backup (Device storage)\nRegistering the schedule backs up the database files excluding attached pictures to the device local storage according to the set day and time and provides the result of the operation as a notification message.</string>
+    <string name="schedule_empty_message">There is no set schedule information.\nClick the plus button on the top right to add a new schedule.</string>
 </resources>

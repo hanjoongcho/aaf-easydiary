@@ -404,9 +404,8 @@
         다이어리 다중 복사 및 삭제 기능 추가
     </string>
     <string name="release_196">
-        v1.4.130 / 2020.05.xx\n
+        v1.4.130 / 2020.05.20\n
         Added diary schedule setting feature
-        …
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -460,7 +459,7 @@
     <string name="notification_msg_download_fail">다운로드 실패</string>
     <string name="notification_msg_duplicate_file_count">중복 파일</string>
     <string name="preferences_category_lock">애플리케이션 잠금설정</string>
-    <string name="fingerprint_lock_title">지문인식 잠금(Beta)</string>
+    <string name="fingerprint_lock_title">지문인식 잠금</string>
     <string name="fingerprint_lock_summary">디바이스가 지문인식 기능을 지원하고 등록된 지문이 있는경우 등록된 지문으로 애플리케이션을 잠금니다.</string>
     <string name="fingerprint_not_available">디바이스에 설치된 운영시스템이 지문인식 기능을 지원하지 않습니다.</string>
     <string name="fingerprint_setting_complete">지문인식 잠금 설정이 완료되었습니다.</string>
@@ -618,11 +617,12 @@
     <string name="delete_selected_items_confirm">선택된 %d건의 항목을 삭제 하시겠습니까?</string>
     <string name="duplicate_selected_items_confirm">선택된 %d건의 항목을 복사 하시겠습니까?</string>
     <string name="no_items_warning">선택된 항목이 없습니다.</string>
-    <string name="preferences_category_schedule">Schedule setting (Beta)</string>
-    <string name="schedule_time">Day and time</string>
-    <string name="schedule_type">Schedule type</string>
-    <string name="schedule_description">Schedule description</string>
-    <string name="schedule_description_hint">Alarm description</string>
-    <string name="schedule_diary_writing_description">Diary writing\nRegister the diary writing schedule.\nWhen the schedule is registered, a notification message is provided according to the set day and time.</string>
-    <string name="schedule_backup_local_description">Diary backup (Device storage)\nRegistering the schedule backs up the database files excluding attached pictures to the device local storage according to the set day and time and provides the result of the operation as a notification message.</string>
+    <string name="preferences_category_schedule">[Beta] 스케줄 설정</string>
+    <string name="schedule_time">요일 및 시간</string>
+    <string name="schedule_type">스케줄 유형</string>
+    <string name="schedule_description">스케줄 설명</string>
+    <string name="schedule_description_hint">알림 메시지에 사용된 레이블 정보를 입력하세요.</string>
+    <string name="schedule_diary_writing_description">다이어리 쓰기\n다이어리 작성 일정을 등록합니다.\n스케줄이 등록되면 설정된 날짜와 시간에 맞춰 알림 메시지가 제공됩니다.</string>
+    <string name="schedule_backup_local_description">다이어리 백업 (디바이스 저장소)\n스케줄을 등록하면 설정된 날짜와 시간에 맞춰 첨부사진을 제외한 데이터베이스 파일을 디바이스 저장소에 백업하고 작업 결과를 알림 메시지로 제공합니다.</string>
+    <string name="schedule_empty_message">설정된 스케줄 정보가 없습니다.\n우측 상단 플러스 버튼을 클릭해서 새로운 스케줄을 추가하세요.</string>
 </resources>

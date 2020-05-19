@@ -404,9 +404,8 @@
         ダイアリー複数のコピーと削除機能を追加
     </string>
     <string name="release_196">
-        v1.4.130 / 2020.05.xx\n
+        v1.4.130 / 2020.05.20\n
         Added diary schedule setting feature
-        …
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -460,7 +459,7 @@
     <string name="notification_msg_download_fail">ダウンロード失敗</string>
     <string name="notification_msg_duplicate_file_count">存在するファイルの数</string>
     <string name="preferences_category_lock">アプリロックの設定</string>
-    <string name="fingerprint_lock_title">指紋ロック(Beta)</string>
+    <string name="fingerprint_lock_title">指紋ロック</string>
     <string name="fingerprint_lock_summary">デバイスが指紋認識機能をサポートし、登録された指紋がある場合、登録された指紋でアプリをロックします。</string>
     <string name="fingerprint_not_available">デバイスにインストール済みのオペレーティングシステムが、指紋認識機能をサポートしていません。</string>
     <string name="fingerprint_setting_complete">指紋ロックの設定が完了しました。</string>
@@ -618,11 +617,12 @@
     <string name="delete_selected_items_confirm">選択した%d個のアイテムを削除してもよろしいですか?</string>
     <string name="duplicate_selected_items_confirm">%d個の選択されたアイテムを複製しますか?</string>
     <string name="no_items_warning">アイテムが選択されていません。</string>
-    <string name="preferences_category_schedule">Schedule setting (Beta)</string>
-    <string name="schedule_time">Day and time</string>
-    <string name="schedule_type">Schedule type</string>
-    <string name="schedule_description">Schedule description</string>
-    <string name="schedule_description_hint">Alarm description</string>
-    <string name="schedule_diary_writing_description">Diary writing\nRegister the diary writing schedule.\nWhen the schedule is registered, a notification message is provided according to the set day and time.</string>
-    <string name="schedule_backup_local_description">Diary backup (Device storage)\nRegistering the schedule backs up the database files excluding attached pictures to the device local storage according to the set day and time and provides the result of the operation as a notification message.</string>
+    <string name="preferences_category_schedule">[Beta] スケジュール設定</string>
+    <string name="schedule_time">日時</string>
+    <string name="schedule_type">スケジュールタイプ</string>
+    <string name="schedule_description">スケジュールの説明</string>
+    <string name="schedule_description_hint">通知メッセージに使用されたラベル情報を入力してください。</string>
+    <string name="schedule_diary_writing_description">日記を書く\n日記作成スケジュールを登録します。\nスケジュールが登録されると、設定された日時に応じて通知メッセージが表示されます。</string>
+    <string name="schedule_backup_local_description">日記のバックアップ (デバイスストレージ)\nスケジュールを登録すると、添付された画像を除くデータベースファイルが、設定された日時に従ってデバイスのローカルストレージにバックアップされ、操作の結果が通知メッセージとして提供されます。</string>
+    <string name="schedule_empty_message">There is no set schedule information.\nClick the plus button on the top right to add a new schedule.</string>
 </resources>

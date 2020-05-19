@@ -404,9 +404,8 @@
         Added diary multiple copy and delete feature
     </string>
     <string name="release_196">
-        v1.4.130 / 2020.05.xx\n
+        v1.4.130 / 2020.05.20\n
         Added diary schedule setting feature
-        …
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -460,7 +459,7 @@
     <string name="notification_msg_download_fail">Ошибка скачивания</string>
     <string name="notification_msg_duplicate_file_count">Количество существующих файлов</string>
     <string name="preferences_category_lock">Настройка блокировки приложения</string>
-    <string name="fingerprint_lock_title">Блокировка отпечатком пальца (BETA)</string>
+    <string name="fingerprint_lock_title">Блокировка отпечатком пальца</string>
     <string name="fingerprint_lock_summary">Если устройство поддерживает распознавание отпечатков пальцев и имеет зарегистрированный отпечаток пальца, заблокируйте приложение с зарегистрированным отпечатком пальца.</string>
     <string name="fingerprint_not_available">Операционная система, установленная на устройстве, не поддерживает функцию распознавания отпечатков пальцев.</string>
     <string name="fingerprint_setting_complete">Настройка блокировки отпечатков пальцев завершена.</string>
@@ -618,11 +617,12 @@
     <string name="delete_selected_items_confirm">Вы уверены, что хотите удалить %d выбранных элементов?</string>
     <string name="duplicate_selected_items_confirm">Вы уверены, что хотите сделать дубликат %d выбранных элементов?</string>
     <string name="no_items_warning">Нет выбранных элементов.</string>
-    <string name="preferences_category_schedule">Schedule setting (Beta)</string>
+    <string name="preferences_category_schedule">[Beta] Schedule setting</string>
     <string name="schedule_time">Day and time</string>
     <string name="schedule_type">Schedule type</string>
     <string name="schedule_description">Schedule description</string>
     <string name="schedule_description_hint">Alarm description</string>
     <string name="schedule_diary_writing_description">Diary writing\nRegister the diary writing schedule.\nWhen the schedule is registered, a notification message is provided according to the set day and time.</string>
     <string name="schedule_backup_local_description">Diary backup (Device storage)\nRegistering the schedule backs up the database files excluding attached pictures to the device local storage according to the set day and time and provides the result of the operation as a notification message.</string>
+    <string name="schedule_empty_message">There is no set schedule information.\nClick the plus button on the top right to add a new schedule.</string>
 </resources>

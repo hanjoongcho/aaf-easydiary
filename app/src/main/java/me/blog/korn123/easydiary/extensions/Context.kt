@@ -474,7 +474,6 @@ fun Context.showAlarmNotification(alarm: Alarm) {
 }
 
 fun Context.rescheduleEnabledAlarms() {
-//    toast("Reschedule enabled alarms that Easy Diary.", Toast.LENGTH_LONG)
     EasyDiaryDbHelper.readAlarmAll().forEach {
         if (it.isEnabled) scheduleNextAlarm(it, false)
     }

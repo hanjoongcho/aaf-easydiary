@@ -19,7 +19,7 @@
     <com.simplemobiletools.commons.views.MyTextView
         android:id="@+id/infoMessage"
         android:gravity="center"
-        android:text="설정된 스케줄 정보가 없습니다.\n우측 상단 플러스 버튼을 클릭해서 새로운 스케줄을 추가하세요."
+        android:text="@string/schedule_empty_message"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
