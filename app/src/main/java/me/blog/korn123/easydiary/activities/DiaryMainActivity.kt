@@ -270,7 +270,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 applyFontToMenuItem(menu.findItem(R.id.settings))
                 menu.findItem(R.id.devConsole).run {
                     applyFontToMenuItem(this)
-                    if (BuildConfig.DEBUG) this.setVisible(true) else this.setVisible(false)
+                    if (config.enableDebugMode) this.setVisible(true) else this.setVisible(false)
                 }
             }
             DiaryMode.DELETE -> {

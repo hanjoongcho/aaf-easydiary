@@ -132,4 +132,8 @@ class Config(context: Context) : BaseConfig(context) {
     var summaryMaxLines: Int
         get() = prefs.getInt(SETTING_SUMMARY_MAX_LINES, SETTING_SUMMARY_MAX_LINES_DEFAULT)
         set(summaryMaxLines) = prefs.edit().putInt(SETTING_SUMMARY_MAX_LINES, summaryMaxLines).apply()
+
+    var enableDebugMode: Boolean
+        get() = prefs.getBoolean(SETTING_ENABLE_DEBUG_CONSOLE, false)
+        set(enableDebugMode) = prefs.edit().putBoolean(SETTING_ENABLE_DEBUG_CONSOLE, enableDebugMode).apply()
 }

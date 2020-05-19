@@ -8,11 +8,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.simplemobiletools.commons.extensions.toast
 import kotlinx.android.synthetic.main.layout_settings_app_info.*
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.MarkDownViewActivity
 import me.blog.korn123.easydiary.activities.SettingsActivity
+import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.openGooglePlayBy
 import me.blog.korn123.easydiary.extensions.updateFragmentUI
 import me.blog.korn123.easydiary.helper.TransitionHelper
@@ -98,6 +100,20 @@ class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
         faq.setOnClickListener(mOnClickListener)
         privacyPolicy.setOnClickListener(mOnClickListener)
         setupInvite()
+
+        licenseView.setOnLongClickListener {
+            when (mContext.config.enableDebugMode) {
+                true -> {
+                    mContext.config.enableDebugMode = false
+                    mContext.toast("Debug console is disabled.")
+                }
+                false -> {
+                    mContext.config.enableDebugMode = true
+                    mContext.toast("Debug console is enabled.")
+                }
+            }
+            true
+        }
     }
 
     private fun initPreference() {

@@ -496,6 +496,7 @@ const val SETTING_CONTENTS_SUMMARY = "setting_contents_summary"
 const val SETTING_CLEAR_LEGACY_TOKEN = "setting_clear_legacy_token"
 const val SETTING_SUMMARY_MAX_LINES = "setting_summary_max_lines"
 const val SETTING_SUMMARY_MAX_LINES_DEFAULT = 3
+const val SETTING_ENABLE_DEBUG_CONSOLE = "setting_enable_debug_console"
 const val HOLD_POSITION_ENTER_EDIT_SCREEN = "hold_position_enter_edit_screen"
 const val FINGERPRINT_ENCRYPT_DATA = "fingerprint_encrypt_data"
 const val FINGERPRINT_ENCRYPT_DATA_IV = "fingerprint_encrypt_data_iv"

@@ -15,6 +15,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.preferencesContains
+import me.blog.korn123.easydiary.extensions.rescheduleEnabledAlarms
 import me.blog.korn123.easydiary.helper.*
 import java.util.*
 
@@ -27,6 +28,7 @@ class IntroActivity : AppCompatActivity(), Handler.Callback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_intro)
+        rescheduleEnabledAlarms()
 
         // determine device language
         if (!Locale.getDefault().language.matches(CUSTOM_FONTS_SUPPORT_LANGUAGE.toRegex())) {
