@@ -106,7 +106,7 @@ class DevActivity : EasyDiaryActivity() {
                 val animY = ObjectAnimator.ofFloat(popupView, "y", 0f)
                 AnimatorSet().apply {
                     playTogether(animX, animY)
-                    duration = 350
+                    duration = 150
                     start()
                 }
             }
