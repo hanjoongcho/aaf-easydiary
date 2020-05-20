@@ -9,14 +9,20 @@ import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.view.View
+import android.view.*
+import android.widget.LinearLayout
+import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_dev.*
+import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.updateAppViews
+import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
 import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_NAME
@@ -68,6 +74,32 @@ class DevActivity : EasyDiaryActivity() {
                 notify(NOTIFICATION_ID_02, createNotification(NotificationInfo(R.drawable.ic_diary_backup_local, true)))
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.diary_dev, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.devConsole -> {
+                val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                val popupView = (inflater.inflate(R.layout.popup_menu, null) as ViewGroup).apply {
+                    updateAppViews(this)
+                    initTextSize(this)
+                    updateTextColors(this)
+                    FontUtils.setFontsTypeface(applicationContext, assets, null, this, true)
+                }
+                val width = LinearLayout.LayoutParams.WRAP_CONTENT
+                val height = LinearLayout.LayoutParams.WRAP_CONTENT
+                val popup: PopupWindow = PopupWindow(popupView, width, height, true)
+                popup.animationStyle = R.style.text_view_option_animation
+//                popup.showAsDropDown(findViewById(R.id.devConsole), 0, 0)
+                popup.showAtLocation(findViewById(R.id.devConsole), Gravity.TOP or Gravity.RIGHT,0, 0)
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 
