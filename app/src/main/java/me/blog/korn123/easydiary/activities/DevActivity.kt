@@ -1,5 +1,7 @@
 package me.blog.korn123.easydiary.activities
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
@@ -18,6 +20,7 @@ import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_dev.*
+import kotlinx.android.synthetic.main.layout_timeline_filter.*
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.initTextSize
@@ -97,6 +100,15 @@ class DevActivity : EasyDiaryActivity() {
                 popup.animationStyle = R.style.text_view_option_animation
 //                popup.showAsDropDown(findViewById(R.id.devConsole), 0, 0)
                 popup.showAtLocation(findViewById(R.id.devConsole), Gravity.TOP or Gravity.RIGHT,0, 0)
+                popupView.x = 300f
+                popupView.y = -300f
+                val animX = ObjectAnimator.ofFloat(popupView, "x", 0f)
+                val animY = ObjectAnimator.ofFloat(popupView, "y", 0f)
+                AnimatorSet().apply {
+                    playTogether(animX, animY)
+                    duration = 350
+                    start()
+                }
             }
         }
         return super.onOptionsItemSelected(item)

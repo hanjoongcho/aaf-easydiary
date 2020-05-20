@@ -124,8 +124,8 @@
         <item name="android:textSize">17sp</item>
     </style>
     <style name="text_view_option_animation">
-        <item name="android:windowEnterAnimation">@anim/top_right_to_bottom_left</item>
-        <item name="android:windowExitAnimation">@anim/bottom_left_to_top_right</item>
+        <item name="android:windowEnterAnimation">@anim/none</item>
+        <item name="android:windowExitAnimation">@anim/fade_out</item>
     </style>
 
     <!--Caldroid theme-->
