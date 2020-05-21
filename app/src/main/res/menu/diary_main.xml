@@ -26,23 +26,9 @@
         android:title="@string/speech_to_text"
         app:showAsAction="always" />
     <item
-        android:id="@+id/postCard"
+        android:icon="@drawable/ic_options_three_dots"
+        android:id="@+id/popupMenu"
         android:orderInCategory="100"
-        android:title="@string/post_card"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/dashboard"
-        android:orderInCategory="100"
-        android:title="@string/menu_dashboard"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/chart"
-        android:orderInCategory="100"
-        android:title="@string/menu_chart"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/settings"
-        android:orderInCategory="100"
-        android:title="@string/settings"
-        app:showAsAction="never" />
+        android:title="Popup Menu"
+        app:showAsAction="always" />
 </menu>

@@ -12,33 +12,38 @@
         app:cardCornerRadius="5dp"
         app:cardUseCompatPadding="true"
         app:cardElevation="2dp"
-        app:contentPadding="10dp"
+        app:contentPadding="0dp"
         style="@style/AppCard">
         <LinearLayout
+            android:id="@+id/menu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <me.blog.korn123.easydiary.views.FixedTextView
                 style="@style/text_view_option_menu_item"
-                android:text="다이어리 포스트카드"
+                android:id="@+id/postCard"
+                android:text="@string/post_card"
                 app:applyGlobalColor="true"
                 app:applyGlobalSize="false" />
 
             <me.blog.korn123.easydiary.views.FixedTextView
                 style="@style/text_view_option_menu_item"
-                android:text="대시보드"
+                android:id="@+id/dashboard"
+                android:text="@string/menu_dashboard"
                 app:applyGlobalColor="true"
                 app:applyGlobalSize="false" />
 
             <me.blog.korn123.easydiary.views.FixedTextView
                 style="@style/text_view_option_menu_item"
-                android:text="통계"
+                android:id="@+id/chart"
+                android:text="@string/menu_chart"
                 app:applyGlobalColor="true"
                 app:applyGlobalSize="false" />
 
             <me.blog.korn123.easydiary.views.FixedTextView
+                android:id="@+id/settings"
                 style="@style/text_view_option_menu_item"
-                android:text="설정"
+                android:text="@string/settings"
                 app:applyGlobalColor="true"
                 app:applyGlobalSize="false" />
         </LinearLayout>

@@ -21,13 +21,12 @@ import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.simplemobiletools.commons.helpers.BaseConfig
 import io.github.aafactory.commons.extensions.baseConfig
-import io.github.aafactory.commons.extensions.updateAppViews
-import io.github.aafactory.commons.extensions.updateTextColors
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_diary_read.*
 import kotlinx.android.synthetic.main.fragment_diary_read.*
 import kotlinx.android.synthetic.main.layout_bottom_toolbar.*
 import kotlinx.android.synthetic.main.popup_encription.view.*
+import kotlinx.android.synthetic.main.popup_menu_read.view.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createAttachedPhotoView
 import me.blog.korn123.commons.utils.FlavorUtils
@@ -117,14 +116,6 @@ class DiaryReadActivity : EasyDiaryActivity() {
                     //                finish();
                     //                this.overridePendingTransition(R.anim.anim_left_to_center, R.anim.anim_center_to_right);
                     this.onBackPressed()
-                R.id.delete -> {
-                    val positiveListener = DialogInterface.OnClickListener { dialogInterface, i ->
-                        EasyDiaryDbHelper.deleteDiary(fragment.getSequence())
-                        TransitionHelper.finishActivityWithTransition(this@DiaryReadActivity)
-                    }
-                    val negativeListener = DialogInterface.OnClickListener { dialogInterface, i -> }
-                    showAlertDialog(getString(R.string.delete_confirm), positiveListener, negativeListener)
-                }
                 R.id.edit -> {
                     if (fragment.isEncryptContents()) {
                         showEncryptPagePopup(fragment, EDITING) { inputPass ->
@@ -147,6 +138,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 R.id.decryptData -> {
                     showEncryptPagePopup(fragment, DECRYPTION)
                 }
+                R.id.popupMenu -> createCustomOptionMenu()
             }
         }
         return true
@@ -440,6 +432,26 @@ class DiaryReadActivity : EasyDiaryActivity() {
     private fun ttsGreater21(text: String) {
         val utteranceId = this.hashCode().toString() + ""
         mTextToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId)
+    }
+
+    private fun createCustomOptionMenu() {
+        var popupWindow: PopupWindow? = null
+        val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val popupView = (inflater.inflate(R.layout.popup_menu_read, null) as ViewGroup).apply {
+            updateAppViews(this)
+            updateTextColors(this)
+            FontUtils.setFontsTypeface(applicationContext, assets, null, this, true)
+            val fragment = mSectionsPagerAdapter.instantiateItem(diaryViewPager, diaryViewPager.currentItem) as PlaceholderFragment
+            delete.setOnClickListener {
+                val positiveListener = DialogInterface.OnClickListener { _, _ ->
+                    EasyDiaryDbHelper.deleteDiary(fragment.getSequence())
+                    TransitionHelper.finishActivityWithTransition(this@DiaryReadActivity)
+                }
+                showAlertDialog(getString(R.string.delete_confirm), positiveListener, null)
+                popupWindow?.dismiss()
+            }
+        }
+        popupWindow = EasyDiaryUtils.openCustomOptionMenu(popupView, findViewById(R.id.popupMenu))
     }
 
     /**

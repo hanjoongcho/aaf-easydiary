@@ -32,9 +32,9 @@
         android:title="DecryptData"
         app:showAsAction="always" />
     <item
-        android:id="@+id/delete"
-        android:icon="@drawable/delete_w"
+        android:icon="@drawable/ic_options_three_dots"
+        android:id="@+id/popupMenu"
         android:orderInCategory="100"
-        android:title="@string/menu_delete"
-        app:showAsAction="never" />
+        android:title="Popup Menu"
+        app:showAsAction="always" />
 </menu>

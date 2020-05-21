@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.activities
 
 import android.app.Activity
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
@@ -15,8 +16,8 @@ import android.util.Log
 import android.view.*
 import android.widget.AbsListView
 import android.widget.AdapterView
+import android.widget.PopupWindow
 import android.widget.RelativeLayout
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
@@ -24,11 +25,10 @@ import com.github.ksoichiro.android.observablescrollview.ObservableListView
 import io.github.aafactory.commons.utils.CommonUtils
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_diary_main.*
-import kotlinx.android.synthetic.main.activity_diary_main.feelingSymbolButton
-import kotlinx.android.synthetic.main.activity_diary_main.query
+import kotlinx.android.synthetic.main.popup_menu_main.view.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
-import me.blog.korn123.easydiary.BuildConfig
+import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
 import me.blog.korn123.easydiary.enums.DiaryMode
@@ -224,16 +224,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                     }
                 }
             }
-            R.id.settings -> {
-                val settingIntent = Intent(this@DiaryMainActivity, SettingsActivity::class.java)
-                //                startActivity(settingIntent);
-                TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, settingIntent)
-            }
-            R.id.chart -> {
-                val chartIntent = Intent(this@DiaryMainActivity, StatisticsActivity::class.java)
-                //                startActivity(chartIntent);
-                TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, chartIntent)
-            }
             R.id.timeline -> {
                 val timelineIntent = Intent(this@DiaryMainActivity, TimelineActivity::class.java)
                 //                startActivity(timelineIntent);
@@ -245,16 +235,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, calendarIntent)
             }
             R.id.microphone -> showSpeechDialog()
-            R.id.postCard -> {
-                when (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    true -> openPostcardViewer()
-                    false -> {
-                        confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
-                    }
-                }
-            }
-            R.id.dashboard -> TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, Intent(this@DiaryMainActivity, DashboardActivity::class.java))
             R.id.devConsole -> TransitionHelper.startActivityWithTransition(this, Intent(this, DevActivity::class.java))
+            R.id.popupMenu -> createCustomOptionMenu()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -264,10 +246,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             DiaryMode.READ -> {
                 supportActionBar?.setDisplayHomeAsUpEnabled(false)
                 menuInflater.inflate(R.menu.diary_main, menu)
-                applyFontToMenuItem(menu.findItem(R.id.postCard))
-                applyFontToMenuItem(menu.findItem(R.id.dashboard))
-                applyFontToMenuItem(menu.findItem(R.id.chart))
-                applyFontToMenuItem(menu.findItem(R.id.settings))
                 menu.findItem(R.id.devConsole).run {
                     applyFontToMenuItem(this)
                     if (config.enableDebugMode) this.setVisible(true) else this.setVisible(false)
@@ -290,7 +268,38 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     /***************************************************************************************************
      *   etc functions
      *
-     ***************************************************************************************************/    
+     ***************************************************************************************************/
+    private fun createCustomOptionMenu() {
+        var popupWindow: PopupWindow? = null
+        val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val customItemClickListener = View.OnClickListener {
+            when (it.id) {
+                R.id.postCard -> {
+                    when (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                        true -> openPostcardViewer()
+                        false -> {
+                            confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
+                        }
+                    }
+                }
+                R.id.dashboard -> TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, Intent(this@DiaryMainActivity, DashboardActivity::class.java))
+                R.id.chart -> TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, Intent(this@DiaryMainActivity, StatisticsActivity::class.java))
+                R.id.settings -> TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, Intent(this@DiaryMainActivity, SettingsActivity::class.java))
+            }
+            Handler().post { popupWindow?.dismiss() }
+        }
+        val popupView = (inflater.inflate(R.layout.popup_menu_main, null) as ViewGroup).apply {
+            updateAppViews(this)
+            updateTextColors(this)
+            FontUtils.setFontsTypeface(applicationContext, assets, null, this, true)
+            postCard.setOnClickListener(customItemClickListener)
+            dashboard.setOnClickListener(customItemClickListener)
+            chart.setOnClickListener(customItemClickListener)
+            settings.setOnClickListener(customItemClickListener)
+        }
+        popupWindow = EasyDiaryUtils.openCustomOptionMenu(popupView, findViewById(R.id.popupMenu))
+    }
+
     private fun openPostcardViewer() {
         val postCardViewer = Intent(this@DiaryMainActivity, PostCardViewerActivity::class.java)
         TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, postCardViewer)

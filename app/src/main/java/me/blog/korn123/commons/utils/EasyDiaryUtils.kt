@@ -1,5 +1,7 @@
 package me.blog.korn123.commons.utils
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.ContentResolver
 import android.content.Context
 import android.database.Cursor
@@ -16,7 +18,9 @@ import android.text.style.BackgroundColorSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
+import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -372,5 +376,24 @@ object EasyDiaryUtils {
     fun jsonStringToHashMap(jsonString: String): HashMap<String, Any> {
         val type = object : TypeToken<HashMap<String, Any>>(){}.type
         return GsonBuilder().create().fromJson(jsonString, type)
+    }
+
+    fun openCustomOptionMenu(content: View, parent: View): PopupWindow {
+        val width = LinearLayout.LayoutParams.WRAP_CONTENT
+        val height = LinearLayout.LayoutParams.WRAP_CONTENT
+        val popup: PopupWindow = PopupWindow(content, width, height, true)
+        popup.animationStyle = R.style.text_view_option_animation
+//                popup.showAsDropDown(findViewById(R.id.devConsole), 0, 0)
+        popup.showAtLocation(parent, Gravity.TOP or Gravity.RIGHT,0, 0)
+        content.x = 1000f
+        content.y = 0f
+        val animX = ObjectAnimator.ofFloat(content, "x", 0f)
+        val animY = ObjectAnimator.ofFloat(content, "y", 0f)
+        AnimatorSet().apply {
+            playTogether(animX, animY)
+            duration = 390
+            start()
+        }
+        return popup
     }
 }

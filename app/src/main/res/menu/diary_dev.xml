@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:icon="@drawable/bug_2"
+        android:icon="@drawable/ic_options_three_dots"
         android:id="@+id/devConsole"
         android:orderInCategory="100"
         android:title="Dev Console"
