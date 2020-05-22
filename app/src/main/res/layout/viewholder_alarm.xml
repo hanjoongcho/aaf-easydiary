@@ -33,6 +33,7 @@
                 <me.blog.korn123.easydiary.views.FixedTextView
                     app:applyGlobalSize="false"
                     app:applyGlobalColor="true"
+                    android:paddingVertical="10dp"
                     android:id="@+id/edit_alarm_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -43,10 +44,9 @@
                     android:id="@+id/alarm_days"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="true"
                     android:layout_below="@+id/edit_alarm_time"
-                    android:layout_toLeftOf="@+id/alarm_switch"
                     android:ellipsize="end"
-                    android:includeFontPadding="false"
                     android:maxLines="1"
                     android:padding="@dimen/tiny_margin"
                     android:textSize="@dimen/bigger_text_size"
@@ -54,19 +54,22 @@
 
                 <com.simplemobiletools.commons.views.MyTextView
                     android:id="@+id/alarmDescription"
-                    android:layout_below="@id/alarm_days"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                </com.simplemobiletools.commons.views.MyTextView>
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="true"
+                    android:layout_below="@id/alarm_days"
+                    android:padding="@dimen/tiny_margin"
+                    tools:text="Mon, Tue, Wed, Thu, Fri"/>
 
                 <com.simplemobiletools.commons.views.MySwitchCompat
                     android:id="@+id/alarm_switch"
+                    android:checked="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@id/edit_alarm_time"
+                    android:layout_below="@+id/alarmLabel"
+                    android:layout_above="@+id/alarm_days"
                     android:layout_alignParentRight="true"
-                    android:paddingLeft="@dimen/activity_margin"
-                    android:paddingRight="@dimen/medium_margin"/>
+                    android:paddingHorizontal="10dp" />
             </RelativeLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
