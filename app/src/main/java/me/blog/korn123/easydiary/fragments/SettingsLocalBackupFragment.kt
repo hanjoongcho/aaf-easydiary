@@ -19,7 +19,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import io.github.aafactory.commons.extensions.baseConfig
-import io.github.aafactory.commons.extensions.updateTextColors
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.layout_settings_backup_local.*
 import kotlinx.android.synthetic.main.popup_location_selector.view.*
