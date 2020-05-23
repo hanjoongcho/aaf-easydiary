@@ -14,12 +14,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.xw.repo.BubbleSeekBar
-import io.github.aafactory.commons.helpers.BaseConfig
 import kotlinx.android.synthetic.main.layout_settings_font.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.activities.SettingsActivity
 import me.blog.korn123.easydiary.adapters.FontItemAdapter
 import me.blog.korn123.easydiary.adapters.OptionItemAdapter
@@ -71,13 +69,6 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
         super.onResume()
         updateFragmentUI(mRootView)
         initPreference()
-        if (BaseConfig(mContext).isThemeChanged) {
-            BaseConfig(mContext).isThemeChanged = false
-            val readDiaryIntent = Intent(mContext, DiaryMainActivity::class.java)
-            readDiaryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(readDiaryIntent)
-            mActivity.overridePendingTransition(0, 0)
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {

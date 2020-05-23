@@ -19,7 +19,6 @@ import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.FragmentPagerAdapter
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
-import com.simplemobiletools.commons.helpers.BaseConfig
 import io.github.aafactory.commons.extensions.baseConfig
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_diary_read.*
@@ -586,7 +585,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
 
         private fun initBottomContainer() {
             context?.let {
-                mPrimaryColor = BaseConfig(it).primaryColor
+                mPrimaryColor = it.config.primaryColor
             }
         }
 

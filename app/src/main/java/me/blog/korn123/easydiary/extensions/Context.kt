@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
+import android.content.res.Configuration
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -29,7 +30,10 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.google.gson.GsonBuilder
-import com.simplemobiletools.commons.extensions.*
+import com.simplemobiletools.commons.extensions.adjustAlpha
+import com.simplemobiletools.commons.extensions.formatMinutesToTimeString
+import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
+import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.*
 import com.simplemobiletools.commons.views.*
 import io.github.aafactory.commons.extensions.baseConfig
@@ -65,6 +69,12 @@ import kotlin.math.pow
 
 val Context.config: Config get() = Config.newInstance(this)
 
+fun Context.isNightMode() = when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+    Configuration.UI_MODE_NIGHT_YES -> false
+    Configuration.UI_MODE_NIGHT_NO -> false
+    else -> false
+}
+
 fun Context.pauseLock() {
     if (config.aafPinLockEnable || config.fingerprintLockEnable) {
 
@@ -75,6 +85,8 @@ fun Context.pauseLock() {
 }
 
 fun Context.updateTextColors(viewGroup: ViewGroup, tmpTextColor: Int = 0, tmpAccentColor: Int = 0) {
+    if (isNightMode()) return
+
     val textColor = if (tmpTextColor == 0) baseConfig.textColor else tmpTextColor
     val backgroundColor = baseConfig.backgroundColor
     val accentColor = if (tmpAccentColor == 0) {
@@ -115,6 +127,8 @@ fun Context.updateTextColors(viewGroup: ViewGroup, tmpTextColor: Int = 0, tmpAcc
 }
 
 fun Context.updateAppViews(viewGroup: ViewGroup, tmpBackgroundColor: Int = 0) {
+    if (isNightMode()) return
+
     val backgroundColor = if (tmpBackgroundColor == 0) baseConfig.backgroundColor else tmpBackgroundColor
     val cnt = viewGroup.childCount
     (0 until cnt)
@@ -142,6 +156,8 @@ fun Context.updateAppViews(viewGroup: ViewGroup, tmpBackgroundColor: Int = 0) {
 }
 
 fun Context.updateCardViewPolicy(viewGroup: ViewGroup) {
+    if (isNightMode()) return
+
     val cnt = viewGroup.childCount
     (0 until cnt)
             .map { viewGroup.getChildAt(it) }
@@ -164,6 +180,8 @@ fun Context.updateCardViewPolicy(viewGroup: ViewGroup) {
 }
 
 fun Context.updateTextSize(viewGroup: ViewGroup, context: Context, addSize: Int) {
+    if (isNightMode()) return
+
     val cnt = viewGroup.childCount
     val settingFontSize: Float = config.settingFontSize + addSize
     (0 until cnt)
@@ -179,6 +197,8 @@ fun Context.updateTextSize(viewGroup: ViewGroup, context: Context, addSize: Int)
 }
 
 fun Context.initTextSize(viewGroup: ViewGroup) {
+    if (isNightMode()) return
+
     val cnt = viewGroup.childCount
     val defaultFontSize: Float = CommonUtils.dpToPixelFloatValue(this, DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE.toFloat())
     val settingFontSize: Float = config.settingFontSize
@@ -208,6 +228,8 @@ fun Context.initTextSize(viewGroup: ViewGroup) {
 }
 
 fun Context.initTextSize(textView: TextView) {
+    if (isNightMode()) return
+
     val defaultFontSize: Float = CommonUtils.dpToPixelFloatValue(this, DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE.toFloat())
     val settingFontSize: Float = config.settingFontSize
     textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
@@ -232,13 +254,13 @@ fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null,
             }
             false -> setView(customView)
         }
-        window?.setBackgroundDrawable(ColorDrawable(baseConfig.backgroundColor))
+        if (!isNightMode()) window?.setBackgroundDrawable(ColorDrawable(baseConfig.backgroundColor))
         val globalTypeface = FontUtils.getCommonTypeface(this@updateAlertDialog, this@updateAlertDialog.assets)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         customTitle?.let {
             val titleView = TextView(this@updateAlertDialog).apply {
                 text = customTitle
-                setTextColor(baseConfig.textColor)
+                if (!isNightMode()) setTextColor(baseConfig.textColor)
                 typeface = globalTypeface
                 val padding = CommonUtils.dpToPixel(this@updateAlertDialog, 10F)
                 setPadding(padding * 2, padding, padding * 2, padding)
@@ -249,14 +271,14 @@ fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null,
         }
         show()
         getButton(AlertDialog.BUTTON_POSITIVE).run {
-            setTextColor(baseConfig.textColor)
+            if (!isNightMode()) setTextColor(baseConfig.textColor)
             typeface = globalTypeface
         }
         getButton(AlertDialog.BUTTON_NEGATIVE).run {
-            setTextColor(baseConfig.textColor)
+            if (!isNightMode()) setTextColor(baseConfig.textColor)
             typeface = globalTypeface
         }
-        getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(baseConfig.textColor)
+        if (!isNightMode()) getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(baseConfig.textColor)
     }
 }
 

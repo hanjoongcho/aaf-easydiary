@@ -4,10 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import androidx.core.graphics.ColorUtils
-import androidx.appcompat.app.AppCompatActivity
 import android.view.ViewGroup
-import io.github.aafactory.commons.helpers.BaseConfig
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.ColorUtils
 import io.github.aafactory.commons.utils.CommonUtils
 import kotlinx.android.synthetic.main.activity_intro.*
 import me.blog.korn123.commons.utils.FontUtils
@@ -53,7 +52,7 @@ class IntroActivity : AppCompatActivity(), Handler.Callback {
 
     override fun onResume() {
         super.onResume()
-        main_holder.setBackgroundColor(ColorUtils.setAlphaComponent(BaseConfig(this).primaryColor, INTRO_BACKGROUND_ALPHA))
+        main_holder.setBackgroundColor(ColorUtils.setAlphaComponent(config.primaryColor, INTRO_BACKGROUND_ALPHA))
         FontUtils.setFontsTypeface(this, assets, null, findViewById<ViewGroup>(android.R.id.content))
         initTextSize(findViewById<ViewGroup>(android.R.id.content))
     }

@@ -17,7 +17,6 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
-import io.github.aafactory.commons.extensions.updateAppViews
 import io.github.aafactory.commons.extensions.updateTextColors
 import io.github.aafactory.commons.utils.CALCULATION
 import io.github.aafactory.commons.utils.CommonUtils
@@ -31,6 +30,8 @@ import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.updateAppViews
+import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
 import me.blog.korn123.easydiary.models.DiaryDto
@@ -111,6 +112,7 @@ class DiaryMainItemAdapter(
                 context.updateTextColors(it, 0, 0)
                 context.updateAppViews(it)
                 context.initTextSize(it)
+                context.updateCardViewPolicy(it)
             }
 
             when (diaryDto.photoUris?.size ?: 0 > 0) {
@@ -155,17 +157,6 @@ class DiaryMainItemAdapter(
                     Glide.with(context).load(path).listener(listener).apply(options).into(imageView)
                     if (photoViews.childCount >= maxPhotos) return@map
                     photoViews.addView(imageView)
-                }
-            }
-
-            val cardView = item_holder.getChildAt(0)
-            if (cardView is androidx.cardview.widget.CardView) {
-                if (activity.config.enableCardViewPolicy) {
-                    cardView.useCompatPadding = true
-                    cardView.cardElevation = CommonUtils.dpToPixelFloatValue(activity, 2F)
-                } else {
-                    cardView.useCompatPadding = false
-                    cardView.cardElevation = 0F
                 }
             }
 

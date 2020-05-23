@@ -12,7 +12,6 @@ import android.widget.ListView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import io.github.aafactory.commons.helpers.BaseConfig
 import kotlinx.android.synthetic.main.layout_settings_basic.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.CustomizationActivity
@@ -62,8 +61,8 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
         super.onResume()
         updateFragmentUI(mRootView)
         initPreference()
-        if (BaseConfig(mContext).isThemeChanged) {
-            BaseConfig(mContext).isThemeChanged = false
+        if (mContext.config.isThemeChanged) {
+            mContext.config.isThemeChanged = false
             mActivity.startMainActivityWithClearTask()
         }
     }

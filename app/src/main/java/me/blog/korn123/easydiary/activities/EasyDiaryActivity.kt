@@ -1,5 +1,7 @@
 package me.blog.korn123.easydiary.activities
 
+import android.os.Bundle
+import android.os.PersistableBundle
 import android.view.ViewGroup
 import com.simplemobiletools.commons.models.Release
 import io.github.aafactory.commons.activities.BaseSimpleActivity
@@ -19,18 +21,13 @@ open class EasyDiaryActivity : BaseSimpleActivity() {
         findViewById<ViewGroup>(R.id.main_holder)
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        pauseLock()
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-    }
-    
-    override fun onPause() {
-        super.onPause()
-        pauseLock()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        useDynamicTheme = !isNightMode()
+        super.onCreate(savedInstanceState)
     }
 
     override fun onResume() {
+        useDynamicTheme = !isNightMode()
         super.onResume()
         if (config.updatePreference) {
             config.updatePreference = false
@@ -45,6 +42,17 @@ open class EasyDiaryActivity : BaseSimpleActivity() {
             }
             FontUtils.setFontsTypeface(applicationContext, assets, null, findViewById<ViewGroup>(android.R.id.content), mCustomLineSpacing)
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        pauseLock()
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        pauseLock()
     }
 
     override fun getMainViewGroup(): ViewGroup? = mRootView

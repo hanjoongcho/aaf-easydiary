@@ -12,7 +12,6 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import io.github.aafactory.commons.extensions.updateTextColors
-import io.github.aafactory.commons.helpers.BaseConfig
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.item_timeline.view.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
@@ -56,7 +55,7 @@ class TimelineItemAdapter(
             }
         }.run {
             if (mPrimaryColor == 0) {
-                mPrimaryColor = BaseConfig(context).primaryColor
+                mPrimaryColor = context.config.primaryColor
             }
             setFontsTypeface(this)
 
