@@ -165,7 +165,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
     }
 
     private fun showEncryptPagePopup(fragment: PlaceholderFragment, workMode: String, callback: ((inputPass: String) -> Unit)? = null) {
-        EasyDiaryUtils.changeDrawableIconColor(this, config.textColor, R.drawable.delete)
+        updateDrawableColorInnerCardView(R.drawable.delete)
 
         var inputPass = ""
         var confirmPass = ""

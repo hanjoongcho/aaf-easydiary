@@ -21,6 +21,7 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.TimelineItemAdapter
+import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.openFeelingSymbolDialog
@@ -61,7 +62,7 @@ class TimelineActivity : EasyDiaryActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-        EasyDiaryUtils.changeDrawableIconColor(this, config.primaryColor, R.drawable.calendar_4_w)
+        changeDrawableIconColor(config.primaryColor, R.drawable.calendar_4_w)
 
         mTimelineItemAdapter = TimelineItemAdapter(this, R.layout.item_timeline, mDiaryList)
         timelineList.adapter = mTimelineItemAdapter

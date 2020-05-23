@@ -79,13 +79,13 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
 
     override fun onPause() {
         super.onPause()
-        EasyDiaryUtils.changeDrawableIconColor(mActivity, android.R.color.white, R.drawable.delete_w)
+        mActivity.changeDrawableIconColor(android.R.color.white, R.drawable.delete_w)
     }
 
     override fun onResume() {
         super.onResume()
         updateFragmentUI(mRootView)
-        EasyDiaryUtils.changeDrawableIconColor(mActivity, mActivity.config.textColor, R.drawable.delete_w)
+        mActivity.updateDrawableColorInnerCardView(R.drawable.delete_w)
     }
 
 

@@ -13,7 +13,7 @@ import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.werb.pickphotoview.util.PickConfig
 import io.realm.RealmList
-import kotlinx.android.synthetic.main.activity_diary_insert.*
+import kotlinx.android.synthetic.main.activity_diary_edit.*
 import kotlinx.android.synthetic.main.layout_bottom_toolbar.*
 import kotlinx.android.synthetic.main.layout_edit_contents.*
 import kotlinx.android.synthetic.main.layout_edit_photo_container.*
@@ -65,7 +65,7 @@ class DiaryInsertActivity : EditActivity() {
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_diary_insert)
+        setContentView(R.layout.activity_diary_edit)
         setSupportActionBar(toolbar)
         supportActionBar?.run {
             title = getString(R.string.create_diary_title)

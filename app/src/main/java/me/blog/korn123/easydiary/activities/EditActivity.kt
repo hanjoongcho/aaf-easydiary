@@ -85,7 +85,7 @@ abstract class EditActivity : EasyDiaryActivity() {
      ***************************************************************************************************/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        EasyDiaryUtils.changeDrawableIconColor(this, Color.WHITE, R.drawable.calendar_4_w)
+        changeDrawableIconColor(Color.WHITE, R.drawable.calendar_4_w)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

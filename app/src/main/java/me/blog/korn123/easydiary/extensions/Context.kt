@@ -7,8 +7,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.content.res.Configuration
-import android.graphics.BitmapFactory
-import android.graphics.Color
+import android.graphics.*
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
@@ -235,6 +234,12 @@ fun Context.initTextSize(textView: TextView) {
     textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
 }
 
+fun Context.updateDrawableColorInnerCardView(resourceId: Int) {
+    if (isNightMode()) return
+
+    changeDrawableIconColor(config.textColor, resourceId)
+}
+
 fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null, customView: View? = null, customTitle: String? = null) {
     alertDialog.run {
         when (customView == null) {
@@ -279,6 +284,16 @@ fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null,
             typeface = globalTypeface
         }
         if (!isNightMode()) getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(baseConfig.textColor)
+    }
+}
+
+fun Context.changeDrawableIconColor(color: Int, resourceId: Int) {
+    ContextCompat.getDrawable(this, resourceId)?.apply {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            colorFilter = BlendModeColorFilter(color, BlendMode.SRC_IN);
+        } else {
+            setColorFilter(color, PorterDuff.Mode.SRC_IN)
+        }
     }
 }
 
@@ -534,3 +549,5 @@ fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): No
 //    notification.flags = notification.flags or Notification.FLAG_INSISTENT
     return notification
 }
+
+

@@ -57,9 +57,10 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         progressContainer = mActivity.findViewById(R.id.progressContainer)
-
-        EasyDiaryUtils.changeDrawableIconColor(mContext, mContext.config.primaryColor, R.drawable.minus_6)
-        EasyDiaryUtils.changeDrawableIconColor(mContext, mContext.config.primaryColor, R.drawable.plus_6)
+        mContext.run {
+            changeDrawableIconColor(config.primaryColor, R.drawable.minus_6)
+            changeDrawableIconColor(config.primaryColor, R.drawable.plus_6)
+        }
         bindEvent()
         updateFragmentUI(mRootView)
         initPreference()

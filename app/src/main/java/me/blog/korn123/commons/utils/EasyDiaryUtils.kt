@@ -281,16 +281,6 @@ object EasyDiaryUtils {
         FileUtils.copyFile(compressedFile, destFile)
     }
 
-    fun changeDrawableIconColor(context: Context, color: Int, resourceId: Int) {
-        ContextCompat.getDrawable(context, resourceId)?.apply {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                colorFilter = BlendModeColorFilter(color, BlendMode.SRC_IN);
-            } else {
-                setColorFilter(color, PorterDuff.Mode.SRC_IN)
-            }
-        }
-    }
-
     fun summaryDiaryLabel(diaryDto: DiaryDto): String {
         return if (!diaryDto.title.isNullOrEmpty()) diaryDto.title!! else StringUtils.abbreviate(diaryDto.contents, 10)
     }
