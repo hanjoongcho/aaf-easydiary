@@ -6,6 +6,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.database.Cursor
 import android.graphics.*
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Build
@@ -371,10 +372,12 @@ object EasyDiaryUtils {
     fun openCustomOptionMenu(content: View, parent: View): PopupWindow {
         val width = LinearLayout.LayoutParams.WRAP_CONTENT
         val height = LinearLayout.LayoutParams.WRAP_CONTENT
-        val popup: PopupWindow = PopupWindow(content, width, height, true)
-        popup.animationStyle = R.style.text_view_option_animation
-//                popup.showAsDropDown(findViewById(R.id.devConsole), 0, 0)
-        popup.showAtLocation(parent, Gravity.TOP or Gravity.RIGHT,0, 0)
+        val popup: PopupWindow = PopupWindow(content, width, height, true).apply {
+            animationStyle = R.style.text_view_option_animation
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//          showAsDropDown(findViewById(R.id.devConsole), 0, 0)
+            showAtLocation(parent, Gravity.TOP or Gravity.RIGHT,0, CommonUtils.dpToPixel(parent.context, 24F))
+        }
         content.x = 1000f
         content.y = 0f
         val animX = ObjectAnimator.ofFloat(content, "x", 0f)
