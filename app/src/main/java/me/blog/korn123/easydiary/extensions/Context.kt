@@ -69,9 +69,9 @@ import kotlin.math.pow
 val Context.config: Config get() = Config.newInstance(this)
 
 fun Context.isNightMode() = when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-    Configuration.UI_MODE_NIGHT_YES -> true
-    Configuration.UI_MODE_NIGHT_NO -> true
-    else -> true
+    Configuration.UI_MODE_NIGHT_YES -> false
+    Configuration.UI_MODE_NIGHT_NO -> false
+    else -> false
 }
 
 fun Context.pauseLock() {
