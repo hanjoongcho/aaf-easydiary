@@ -2,13 +2,11 @@ package me.blog.korn123.easydiary.adapters
 
 import android.content.Context
 import android.graphics.Color
-import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import me.blog.korn123.commons.utils.FontUtils
-import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_MONDAY
@@ -17,25 +15,17 @@ import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SUNDAY
 
 class WeekdayArrayAdapter(context: Context, private val textViewResourceId: Int,
                                objects: List<String>, themeResource: Int) : com.roomorama.caldroid.WeekdayArrayAdapter(context, textViewResourceId, objects, themeResource) {
-
-    val localInflater: LayoutInflater = getLayoutInflater(getContext(), themeResource);
+    val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         // To customize text size and color
-        val viewGroup = localInflater.inflate(textViewResourceId, null) as ViewGroup
-        val textView = viewGroup.findViewById<TextView>(R.id.label)
-//        textView.setBackgroundColor(Color.WHITE)
+        val textView = inflater.inflate(textViewResourceId, null) as TextView
 
         // Set content
         val item = getItem(position)
         textView.text = item
         FontUtils.setFontsTypeface(context, context.assets, "", parent)
-        context.initTextSize(viewGroup)
-
-//        textView.run {
-//            layoutParams?.width = (textSize * 2).toInt()
-//            layoutParams?.height = (textSize * 2).toInt()
-//        }
+        context.initTextSize(parent)
 
         when (context.config.calendarStartDay) {
             CALENDAR_START_DAY_SUNDAY -> {
@@ -62,11 +52,5 @@ class WeekdayArrayAdapter(context: Context, private val textViewResourceId: Int,
         }
 
         return textView
-    }
-
-    private fun getLayoutInflater(context: Context, themeResource: Int): LayoutInflater {
-        val wrapped = ContextThemeWrapper(context, themeResource)
-        val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        return inflater.cloneInContext(wrapped)
     }
 }

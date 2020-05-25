@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<me.blog.korn123.easydiary.views.CalendarItem
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/label"
+    android:textSize="@dimen/calendar_item_text_default"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:padding="3dp"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-    <me.blog.korn123.easydiary.views.CalendarItem
-        android:id="@+id/label"
-        android:textSize="@dimen/calendar_item_text_default"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="3dp"
-        android:gravity="center"
-        app:applyStroke="false"
-        style="?styleCaldroidWeekdayView"/>
-</LinearLayout>
+    android:gravity="left"
+    app:applyStroke="false"
+    style="?styleCaldroidWeekdayView"/>
