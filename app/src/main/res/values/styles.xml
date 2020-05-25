@@ -103,7 +103,7 @@
         <item name="android:layout_height">20dp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">10dp</item>
-        <item name="android:background">@drawable/ic_star</item>
+        <item name="srcCompat">@drawable/ic_star</item>
         <item name="layout_constraintTop_toTopOf">parent</item>
         <item name="layout_constraintLeft_toLeftOf">parent</item>
     </style>

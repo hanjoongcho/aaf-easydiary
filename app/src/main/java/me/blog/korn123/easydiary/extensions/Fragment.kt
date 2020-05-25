@@ -8,11 +8,13 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.Fragment
 import me.blog.korn123.commons.utils.FontUtils
+import me.blog.korn123.easydiary.R
 
 fun Fragment.updateFragmentUI(rootView: ViewGroup) {
     rootView.let {
@@ -40,7 +42,7 @@ fun Fragment.confirmPermission(permissions: Array<String>, requestCode: Int) {
 }
 
 fun Fragment.scaledDrawable(id: Int, width: Int, height: Int): Drawable? {
-    var drawable = ContextCompat.getDrawable(context!!, id)
+    var drawable = AppCompatResources.getDrawable(context!!, id)
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
         drawable = (DrawableCompat.wrap(drawable!!)).mutate()
     }
