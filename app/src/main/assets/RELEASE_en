@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.131 (date: 2020.05.26)
+  * Fixed an error that caused abnormal termination of some screens in Android 4.4 version
+
 # Changes in 1.4.130 (date: 2020.05.20)
   * Added diary schedule setting feature
 

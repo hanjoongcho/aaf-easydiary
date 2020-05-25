@@ -407,6 +407,10 @@
         v1.4.130 / 2020.05.20\n
         Added diary schedule setting feature
     </string>
+    <string name="release_197">
+        v1.4.131 / 2020.05.26\n
+        Fixed an error that caused abnormal termination of some screens in Android 4.4 version
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->

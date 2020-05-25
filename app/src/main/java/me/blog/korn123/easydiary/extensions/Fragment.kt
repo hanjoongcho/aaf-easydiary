@@ -10,11 +10,9 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.Fragment
 import me.blog.korn123.commons.utils.FontUtils
-import me.blog.korn123.easydiary.R
 
 fun Fragment.updateFragmentUI(rootView: ViewGroup) {
     rootView.let {
