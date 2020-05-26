@@ -35,9 +35,6 @@ import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.services.BackupPhotoService
 import me.blog.korn123.easydiary.services.RecoverPhotoService
-import org.apache.commons.io.FileUtils
-import org.apache.commons.io.FilenameUtils
-import java.io.File
 import java.util.*
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
@@ -52,9 +49,9 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
     private lateinit var progressContainer: ConstraintLayout
     private lateinit var mAccountCallback: (Account) -> Unit
     private lateinit var mRootView: ViewGroup
-    private var mAlertDialog: AlertDialog? = null
     private var mTaskFlag = 0
-    private val mActivity by lazy { activity!! }
+    private val mActivity: Activity
+        get() = activity!!
 
 
     /***************************************************************************************************
@@ -278,6 +275,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
 
             driveServiceHelper.queryFiles("(mimeType = '${EasyDiaryUtils.easyDiaryMimeTypeAll.joinToString("' or mimeType = '")}') and trashed = false", 1000)
                     .addOnSuccessListener {
+                        var alertDialog: AlertDialog? = null
                         val realmFiles: ArrayList<HashMap<String, String>> = arrayListOf()
                         it.files.map { file ->
                             val itemInfo = hashMapOf<String, String>("name" to file.name, "id" to file.id, "createdTime" to file.createdTime.toString())
@@ -285,7 +283,6 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
                         }
                         val builder = AlertDialog.Builder(mActivity)
                         builder.setNegativeButton(getString(android.R.string.cancel)) { _, _ -> mActivity.setScreenOrientationSensor(true) }
-                        builder.setTitle("${getString(R.string.open_realm_file_title)} (Total: ${it.files.size})")
 //                        builder.setMessage(getString(R.string.open_realm_file_message))
                         val inflater = mActivity.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
                         val fontView = inflater.inflate(R.layout.dialog_realm_files, null)
@@ -306,12 +303,10 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
                                 }
 
                             }
-                            mAlertDialog?.cancel()
+                            alertDialog?.cancel()
                         }
 
-                        builder.setView(fontView)
-                        mAlertDialog = builder.create()
-                        mAlertDialog?.show()
+                        alertDialog = builder.create().apply { mActivity.updateAlertDialog(this, null, fontView, "${getString(R.string.open_realm_file_title)} (Total: ${it.files.size})") }
                         progressContainer.visibility = View.GONE
                     }
                     .addOnFailureListener { e ->

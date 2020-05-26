@@ -37,7 +37,6 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
      ***************************************************************************************************/
     private lateinit var progressContainer: ConstraintLayout
     private lateinit var mRootView: ViewGroup
-    private var mAlertDialog: AlertDialog? = null
     private val mContext: Context
         get() { return context!! }
     private val mActivity: Activity
@@ -228,9 +227,9 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
      *  https://stackoverflow.com/questions/44541638/java-lang-numberformatexception-while-executing-in-france-machine
      */
     private fun openCalendarFontScaleDialog() {
+        var alertDialog: AlertDialog? = null
         val builder = AlertDialog.Builder(mContext)
         builder.setNegativeButton(getString(android.R.string.cancel), null)
-        builder.setTitle(getString(R.string.calendar_font_scale_title))
         val inflater = mContext.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val containerView = inflater.inflate(R.layout.dialog_option_item, null)
         val listView = containerView.findViewById<ListView>(R.id.listView)
@@ -254,13 +253,11 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
             fontInfo["optionValue"]?.let {
                 mContext.config.settingCalendarFontScale = it.toFloat()
             }
-            mAlertDialog?.cancel()
+            alertDialog?.cancel()
             initPreference()
         }
 
-        builder.setView(containerView)
-        mAlertDialog = builder.create()
-        mAlertDialog?.show()
+        alertDialog = builder.create().apply { mActivity.updateAlertDialog(this, null, containerView, getString(R.string.calendar_font_scale_title)) }
         listView.setSelection(selectedIndex)
     }
 

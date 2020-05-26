@@ -3,7 +3,6 @@ package me.blog.korn123.easydiary.adapters
 import android.app.Activity
 import android.content.Context
 import android.graphics.BitmapFactory
-import android.graphics.PorterDuff
 import android.graphics.Typeface
 import android.os.AsyncTask
 import android.view.LayoutInflater
@@ -16,7 +15,10 @@ import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.item_check_label.view.*
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
+import me.blog.korn123.easydiary.extensions.updateTextColors
 import org.apache.commons.lang3.StringUtils
 
 /**

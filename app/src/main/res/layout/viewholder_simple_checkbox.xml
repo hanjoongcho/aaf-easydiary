@@ -16,10 +16,11 @@
         android:layout_height="wrap_content" />
 
     <LinearLayout
+        android:layout_marginLeft="5dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <TextView
+        <com.simplemobiletools.commons.views.MyTextView
             tools:text="diary.realm_20190531"
             android:id="@+id/title"
             android:textSize="15dp"
@@ -27,7 +28,7 @@
             android:singleLine="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-        <TextView
+        <com.simplemobiletools.commons.views.MyTextView
             tools:text="2019-05-31"
             android:gravity="right"
             android:ellipsize="end"

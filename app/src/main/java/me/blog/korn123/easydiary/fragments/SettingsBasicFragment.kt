@@ -1,7 +1,6 @@
 package me.blog.korn123.easydiary.fragments
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,10 +15,7 @@ import kotlinx.android.synthetic.main.layout_settings_basic.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.CustomizationActivity
 import me.blog.korn123.easydiary.adapters.OptionItemAdapter
-import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.startMainActivityWithClearTask
-import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
-import me.blog.korn123.easydiary.extensions.updateFragmentUI
+import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import java.util.*
 
@@ -32,9 +28,6 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
      ***************************************************************************************************/
     private lateinit var progressContainer: ConstraintLayout
     private lateinit var mRootView: ViewGroup
-    private var mAlertDialog: AlertDialog? = null
-    private val mContext: Context
-        get() = context!!
     private val mActivity: Activity
         get() = activity!!
 
@@ -61,8 +54,8 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
         super.onResume()
         updateFragmentUI(mRootView)
         initPreference()
-        if (mContext.config.isThemeChanged) {
-            mContext.config.isThemeChanged = false
+        if (mActivity.config.isThemeChanged) {
+            mActivity.config.isThemeChanged = false
             mActivity.startMainActivityWithClearTask()
         }
     }
@@ -80,29 +73,29 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
             }
             R.id.contentsSummary -> {
                 contentsSummarySwitcher.toggle()
-                mContext.config.enableContentsSummary = contentsSummarySwitcher.isChecked
+                mActivity.config.enableContentsSummary = contentsSummarySwitcher.isChecked
                 maxLines.visibility = if (contentsSummarySwitcher.isChecked) View.VISIBLE else View.GONE
             }
             R.id.enableCardViewPolicy -> {
                 enableCardViewPolicySwitcher.toggle()
-                mContext.config.enableCardViewPolicy = enableCardViewPolicySwitcher.isChecked
-                mContext.updateCardViewPolicy(mRootView)
+                mActivity.config.enableCardViewPolicy = enableCardViewPolicySwitcher.isChecked
+                mActivity.updateCardViewPolicy(mRootView)
             }
             R.id.multiPickerOption -> {
                 multiPickerOptionSwitcher.toggle()
-                mContext.config.multiPickerEnable = multiPickerOptionSwitcher.isChecked
+                mActivity.config.multiPickerEnable = multiPickerOptionSwitcher.isChecked
             }
             R.id.sensitiveOption -> {
                 sensitiveOptionSwitcher.toggle()
-                mContext.config.diarySearchQueryCaseSensitive = sensitiveOptionSwitcher.isChecked
+                mActivity.config.diarySearchQueryCaseSensitive = sensitiveOptionSwitcher.isChecked
             }
             R.id.countCharacters -> {
                 countCharactersSwitcher.toggle()
-                mContext.config.enableCountCharacters = countCharactersSwitcher.isChecked
+                mActivity.config.enableCountCharacters = countCharactersSwitcher.isChecked
             }
             R.id.holdPositionEnterEditScreen -> {
                 holdPositionSwitcher.toggle()
-                mContext.config.holdPositionEnterEditScreen = holdPositionSwitcher.isChecked
+                mActivity.config.holdPositionEnterEditScreen = holdPositionSwitcher.isChecked
             }
             R.id.maxLines -> {
                 openMaxLinesSettingDialog()
@@ -119,7 +112,7 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
         sensitiveOption.setOnClickListener(mOnClickListener)
         maxLines.setOnClickListener(mOnClickListener)
         calendarStartDay.setOnCheckedChangeListener { _, i ->
-            mContext.config.calendarStartDay = when (i) {
+            mActivity.config.calendarStartDay = when (i) {
                 R.id.startMonday -> CALENDAR_START_DAY_MONDAY
 //                R.id.startTuesday -> CALENDAR_START_DAY_TUESDAY
 //                R.id.startWednesday -> CALENDAR_START_DAY_WEDNESDAY
@@ -130,7 +123,7 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
             }
         }
         calendarSorting.setOnCheckedChangeListener { _, i ->
-            mContext.config.calendarSorting = when (i) {
+            mActivity.config.calendarSorting = when (i) {
                 R.id.ascending -> CALENDAR_SORTING_ASC
                 else -> CALENDAR_SORTING_DESC
             }
@@ -140,31 +133,31 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
     }
 
     private fun initPreference() {
-        sensitiveOptionSwitcher.isChecked = mContext.config.diarySearchQueryCaseSensitive
-        multiPickerOptionSwitcher.isChecked = mContext.config.multiPickerEnable
-        enableCardViewPolicySwitcher.isChecked = mContext.config.enableCardViewPolicy
-        contentsSummarySwitcher.isChecked = mContext.config.enableContentsSummary
-        countCharactersSwitcher.isChecked = mContext.config.enableCountCharacters
-        when (mContext.config.calendarStartDay) {
+        sensitiveOptionSwitcher.isChecked = mActivity.config.diarySearchQueryCaseSensitive
+        multiPickerOptionSwitcher.isChecked = mActivity.config.multiPickerEnable
+        enableCardViewPolicySwitcher.isChecked = mActivity.config.enableCardViewPolicy
+        contentsSummarySwitcher.isChecked = mActivity.config.enableContentsSummary
+        countCharactersSwitcher.isChecked = mActivity.config.enableCountCharacters
+        when (mActivity.config.calendarStartDay) {
             CALENDAR_START_DAY_MONDAY -> startMonday.isChecked = true
             CALENDAR_START_DAY_SATURDAY -> startSaturday.isChecked = true
             else -> startSunday.isChecked = true
         }
-        when (mContext.config.calendarSorting) {
+        when (mActivity.config.calendarSorting) {
             CALENDAR_SORTING_ASC -> ascending.isChecked = true
             CALENDAR_SORTING_DESC -> descending.isChecked = true
         }
-        holdPositionSwitcher.isChecked = mContext.config.holdPositionEnterEditScreen
-        thumbnailSettingDescription.text = "${mContext.config.settingThumbnailSize.toInt()}dp x ${mContext.config.settingThumbnailSize.toInt()}dp"
+        holdPositionSwitcher.isChecked = mActivity.config.holdPositionEnterEditScreen
+        thumbnailSettingDescription.text = "${mActivity.config.settingThumbnailSize.toInt()}dp x ${mActivity.config.settingThumbnailSize.toInt()}dp"
         maxLines.visibility = if (contentsSummarySwitcher.isChecked) View.VISIBLE else View.GONE
-        maxLinesValue.text = getString(R.string.max_lines_value, mContext.config.summaryMaxLines)
+        maxLinesValue.text = getString(R.string.max_lines_value, mActivity.config.summaryMaxLines)
     }
 
     private fun openThumbnailSettingDialog() {
-        val builder = AlertDialog.Builder(mContext)
+        var alertDialog: AlertDialog? = null
+        val builder = AlertDialog.Builder(mActivity)
         builder.setNegativeButton(getString(android.R.string.cancel), null)
-        builder.setTitle(getString(R.string.thumbnail_setting_title))
-        val inflater = mContext.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val inflater = mActivity.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val containerView = inflater.inflate(R.layout.dialog_option_item, null)
         val listView = containerView.findViewById<ListView>(R.id.listView)
 
@@ -176,31 +169,29 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
 
         listThumbnailSize.mapIndexed { index, map ->
             val size = map["optionValue"] ?: "0"
-            if (mContext.config.settingThumbnailSize == size.toFloat()) selectedIndex = index
+            if (mActivity.config.settingThumbnailSize == size.toFloat()) selectedIndex = index
         }
 
-        val arrayAdapter = OptionItemAdapter(mActivity, R.layout.item_check_label, listThumbnailSize, mContext.config.settingThumbnailSize)
+        val arrayAdapter = OptionItemAdapter(mActivity, R.layout.item_check_label, listThumbnailSize, mActivity.config.settingThumbnailSize)
         listView.adapter = arrayAdapter
         listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             val fontInfo = parent.adapter.getItem(position) as HashMap<String, String>
             fontInfo["optionValue"]?.let {
-                mContext.config.settingThumbnailSize = it.toFloat()
+                mActivity.config.settingThumbnailSize = it.toFloat()
                 initPreference()
             }
-            mAlertDialog?.cancel()
+            alertDialog?.cancel()
         }
+        alertDialog = builder.create().apply { mActivity.updateAlertDialog(this, null, containerView, getString(R.string.thumbnail_setting_title)) }
 
-        builder.setView(containerView)
-        mAlertDialog = builder.create()
-        mAlertDialog?.show()
         listView.setSelection(selectedIndex)
     }
 
     private fun openMaxLinesSettingDialog() {
-        val builder = AlertDialog.Builder(mContext)
+        var alertDialog: AlertDialog? = null
+        val builder = AlertDialog.Builder(mActivity)
         builder.setNegativeButton(getString(android.R.string.cancel), null)
-        builder.setTitle(getString(R.string.max_lines_title))
-        val inflater = mContext.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val inflater = mActivity.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val containerView = inflater.inflate(R.layout.dialog_option_item, null)
         val listView = containerView.findViewById<ListView>(R.id.listView)
 
@@ -212,23 +203,21 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
 
         listMaxLines.mapIndexed { index, map ->
             val size = map["optionValue"] ?: 0
-            if (mContext.config.summaryMaxLines == size) selectedIndex = index
+            if (mActivity.config.summaryMaxLines == size) selectedIndex = index
         }
 
-        val arrayAdapter = OptionItemAdapter(mActivity, R.layout.item_check_label, listMaxLines, mContext.config.summaryMaxLines.toFloat())
+        val arrayAdapter = OptionItemAdapter(mActivity, R.layout.item_check_label, listMaxLines, mActivity.config.summaryMaxLines.toFloat())
         listView.adapter = arrayAdapter
         listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             val optionInfo = parent.adapter.getItem(position) as HashMap<String, String>
             optionInfo["optionValue"]?.let {
-                mContext.config.summaryMaxLines = it.toInt()
+                mActivity.config.summaryMaxLines = it.toInt()
                 initPreference()
             }
-            mAlertDialog?.cancel()
+            alertDialog?.cancel()
         }
 
-        builder.setView(containerView)
-        mAlertDialog = builder.create()
-        mAlertDialog?.show()
+        alertDialog = builder.create().apply { mActivity.updateAlertDialog(this, null, containerView, getString(R.string.max_lines_title)) }
         listView.setSelection(selectedIndex)
     }
 }

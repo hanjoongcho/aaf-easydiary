@@ -18,6 +18,7 @@ import android.text.SpannableString
 import android.text.style.RelativeSizeSpan
 import android.util.TypedValue
 import android.view.*
+import android.widget.CheckBox
 import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
@@ -142,6 +143,16 @@ fun Context.updateAppViews(viewGroup: ViewGroup, tmpBackgroundColor: Int = 0) {
                     is RadioButton -> {
                         it.run {
                             setTextColor(config.textColor)
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                buttonTintList = ColorStateList(arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked)), intArrayOf(
+                                        baseConfig.textColor,
+                                        baseConfig.textColor
+                                ))
+                            }
+                        }
+                    }
+                    is CheckBox -> {
+                        it.run {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                 buttonTintList = ColorStateList(arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked)), intArrayOf(
                                         baseConfig.textColor,

@@ -5,7 +5,11 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.viewholder_simple_checkbox.view.*
+import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.updateAppViews
+import me.blog.korn123.easydiary.extensions.updateTextColors
 
 internal class SimpleCheckboxAdapter (
         private val realmFiles: List<SimpleCheckbox>,
@@ -31,11 +35,19 @@ internal class SimpleCheckboxAdapter (
     }
 }
 
-class SimpleCheckboxViewHolder(viewGroup: ViewGroup) : RecyclerView.ViewHolder(viewGroup)  {
+class SimpleCheckboxViewHolder(val viewGroup: ViewGroup) : RecyclerView.ViewHolder(viewGroup)  {
     fun bindTo(simpleCheckbox: SimpleCheckbox) {
-        itemView.title.text = simpleCheckbox.title
-        itemView.description.text = simpleCheckbox.description
-        itemView.checkbox.isChecked = simpleCheckbox.isChecked
+        itemView.run {
+            title.text = simpleCheckbox.title
+            description.text = simpleCheckbox.description
+            checkbox.isChecked = simpleCheckbox.isChecked
+        }
+        viewGroup.run {
+            this.context.updateTextColors(this)
+            this.context.initTextSize(this)
+            this.context.updateAppViews(this)
+            FontUtils.setFontsTypeface(this.context, this.context.assets, null, this)
+        }
     }
 }
 

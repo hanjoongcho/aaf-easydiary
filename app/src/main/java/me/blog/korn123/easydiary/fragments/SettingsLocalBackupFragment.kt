@@ -52,9 +52,8 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     private lateinit var mRootView: ViewGroup
-    private lateinit var mContext: Context
-    private lateinit var mActivity: Activity
-    private var mAlertDialog: AlertDialog? = null
+    private val mActivity: Activity
+        get() = activity!!
 
 
     /***************************************************************************************************
@@ -68,15 +67,6 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        mContext = context!!
-        mActivity = activity!!
-
-//        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-//            exportExcel.visibility = View.GONE
-//            exportFullBackupFile.visibility = View.GONE
-//        }
-
         bindEvent()
         updateFragmentUI(mRootView)
         initPreference()
@@ -149,7 +139,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
 
     private fun exportRealmFileWithSAF(uri: Uri?) {
         uri?.let {
-            val os = mContext.contentResolver.openOutputStream(it)
+            val os = mActivity.contentResolver.openOutputStream(it)
             val `is` = FileInputStream(EasyDiaryDbHelper.getRealmPath())
             IOUtils.copy(`is`, os)
             os?.close()
@@ -159,13 +149,13 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
     }
 
     private fun importRealmFile() {
-        val files = File(EasyDiaryUtils.getApplicationDataDirectory(mContext) + BACKUP_DB_DIRECTORY).listFiles()
+        val files = File(EasyDiaryUtils.getApplicationDataDirectory(mActivity) + BACKUP_DB_DIRECTORY).listFiles()
         files?.let {
             when (it.isNotEmpty()) {
                 true -> {
-                    val builder = AlertDialog.Builder(mContext)
+                    var alertDialog: AlertDialog? = null
+                    val builder = AlertDialog.Builder(mActivity)
                     builder.setNegativeButton(getString(android.R.string.cancel), null)
-                    builder.setTitle("${getString(R.string.open_realm_file_title)} (Total: ${it.size})")
 //                    builder.setMessage(getString(R.string.open_realm_file_message))
 
                     val realmFiles: ArrayList<HashMap<String, String>> = arrayListOf()
@@ -175,24 +165,22 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
                         realmFiles.add(itemInfo)
                     }
 
-                    val inflater = mContext.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                    val inflater = mActivity.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
                     val rootView = inflater.inflate(R.layout.dialog_realm_files, null)
                     val listView = rootView.findViewById<ListView>(R.id.files)
                     val adapter = RealmFileItemAdapter(mActivity, R.layout.item_realm_file, realmFiles)
                     listView.adapter = adapter
                     listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
                         val itemInfo = parent.adapter.getItem(position) as HashMap<String, String>
-                        val srcFile = File(EasyDiaryUtils.getApplicationDataDirectory(mContext) + BACKUP_DB_DIRECTORY + itemInfo["name"])
+                        val srcFile = File(EasyDiaryUtils.getApplicationDataDirectory(mActivity) + BACKUP_DB_DIRECTORY + itemInfo["name"])
                         val destFile = File(EasyDiaryDbHelper.getRealmPath())
                         EasyDiaryDbHelper.closeInstance()
                         FileUtils.copyFile(srcFile, destFile)
                         mActivity.refreshApp()
-                        mAlertDialog?.cancel()
+                        alertDialog?.cancel()
                     }
 
-                    builder.setView(rootView)
-                    mAlertDialog = builder.create()
-                    mAlertDialog?.show()
+                    alertDialog = builder.create().apply { mActivity.updateAlertDialog(this, null, rootView, "${getString(R.string.open_realm_file_title)} (Total: ${it.size})") }
                 }
                 false -> {}
             }
@@ -201,7 +189,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
 
     private fun importRealmFileWithSAF(uri: Uri?) {
         uri?.let {
-            val inputStream = mContext.contentResolver.openInputStream(it)
+            val inputStream = mActivity.contentResolver.openInputStream(it)
             val outputStream = FileOutputStream(File(EasyDiaryDbHelper.getRealmPath()))
             EasyDiaryDbHelper.closeInstance()
             IOUtils.copy(inputStream, outputStream)
@@ -212,29 +200,27 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
     }
 
     private fun deleteRealmFile() {
-        val files = File(EasyDiaryUtils.getApplicationDataDirectory(mContext) + BACKUP_DB_DIRECTORY).listFiles()
+        val files = File(EasyDiaryUtils.getApplicationDataDirectory(mActivity) + BACKUP_DB_DIRECTORY).listFiles()
         files?.let {
             when (it.isNotEmpty()) {
                 true -> {
                     val realmInfoList: ArrayList<SimpleCheckbox> = arrayListOf()
-                    val builder = AlertDialog.Builder(mContext)
+                    val builder = AlertDialog.Builder(mActivity)
                     builder.setCancelable(false)
                     builder.setPositiveButton(getString(R.string.delete)) { _, _ -> }
                     builder.setNegativeButton(getString(android.R.string.cancel), null)
-                    builder.setTitle("${getString(R.string.delete_realm_title)} (Total: ${it.size})")
-//                    builder.setMessage(getString(R.string.open_realm_file_message))
 
                     it.sortDescending()
                     it.map { file ->
                         realmInfoList.add(SimpleCheckbox(file.name, Date(file.lastModified()).toString()))
                     }
 
-                    val inflater = mContext.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                    val inflater = mActivity.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
                     val rootView = inflater.inflate(R.layout.dialog_delete_realm_files, null)
                     val recyclerView = rootView.findViewById<RecyclerView>(R.id.files)
 
 //                    val spacesItemDecoration = PostCardViewerActivity.SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding))
-                    val gridLayoutManager = androidx.recyclerview.widget.GridLayoutManager(mContext, 1)
+                    val gridLayoutManager = androidx.recyclerview.widget.GridLayoutManager(mActivity, 1)
 
                     recyclerView.apply {
                         adapter = SimpleCheckboxAdapter(realmInfoList, AdapterView.OnItemClickListener { parent, view, position, id ->
@@ -245,24 +231,21 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
 //                        addItemDecoration(spacesItemDecoration)
                     }
 
-                    builder.setView(rootView)
-                    mAlertDialog = builder.create()
-                    mAlertDialog?.let { dialog ->
-                        dialog.show()
-                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                    builder.create().apply {
+                        mActivity.updateAlertDialog(this, null, rootView, "${getString(R.string.delete_realm_title)} (Total: ${it.size})")
+                        getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
                             val checkedList = mutableListOf<String>()
                             realmInfoList.forEach { item ->
                                 if (item.isChecked) checkedList.add(item.title)
                             }
                             mActivity.showAlertDialog(getString(R.string.delete_confirm), DialogInterface.OnClickListener { _, _ ->
                                 checkedList.map { filename ->
-                                    File(EasyDiaryUtils.getApplicationDataDirectory(mContext) + BACKUP_DB_DIRECTORY + filename).delete()
+                                    File(EasyDiaryUtils.getApplicationDataDirectory(mActivity) + BACKUP_DB_DIRECTORY + filename).delete()
                                 }
-                                dialog.dismiss()
+                                this.dismiss()
                             } , null)
                         }
                     }
-
                 }
                 false -> {}
             }
@@ -271,13 +254,13 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
     
     private fun sendEmailWithExcel() {
         val exportFileName = "aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}"
-        val builder = AlertDialog.Builder(mContext)
+        val builder = AlertDialog.Builder(mActivity)
         builder.setTitle(getString(R.string.export_excel_title))
-        builder.setIcon(ContextCompat.getDrawable(mContext, R.drawable.excel_3))
+        builder.setIcon(ContextCompat.getDrawable(mActivity, R.drawable.excel_3))
         builder.setCancelable(false)
 //        builder.setPositiveButton(getString(R.string.ok), null)
         val alert = builder.create()
-        val inflater = mContext.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val inflater = mActivity.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val containerView = inflater.inflate(R.layout.dialog_export_progress_excel, null)
         val progressInfo = containerView.findViewById<TextView>(R.id.progressInfo)
         alert.setView(containerView)
@@ -285,21 +268,21 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
 
         Thread(Runnable {
             val workBook = createWorkBook(progressInfo, "Create excel file...")
-            val outputStream = FileOutputStream("${EasyDiaryUtils.getApplicationDataDirectory(mContext) + BACKUP_EXCEL_DIRECTORY + exportFileName}.xls")
+            val outputStream = FileOutputStream("${EasyDiaryUtils.getApplicationDataDirectory(mActivity) + BACKUP_EXCEL_DIRECTORY + exportFileName}.xls")
             workBook.write(outputStream)
             outputStream.close()
             mActivity.runOnUiThread {
                 alert.cancel()
             }
 
-            val destFile = File(File(EasyDiaryUtils.getApplicationDataDirectory(mContext) + BACKUP_EXCEL_DIRECTORY), "$exportFileName.xls")
+            val destFile = File(File(EasyDiaryUtils.getApplicationDataDirectory(mActivity) + BACKUP_EXCEL_DIRECTORY), "$exportFileName.xls")
             // test code for attach file to email
             val emailIntent: Intent = Intent(Intent.ACTION_SEND)
             emailIntent.type = "text/plain"
 //            emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("email@example.com"))
 //            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "subject here")
 //            emailIntent.putExtra(Intent.EXTRA_TEXT, "body text")
-            emailIntent.putExtra(Intent.EXTRA_STREAM, mContext.getUriForFile(destFile))
+            emailIntent.putExtra(Intent.EXTRA_STREAM, mActivity.getUriForFile(destFile))
             startActivity(Intent.createChooser(emailIntent, "Pick an Email provider"))
         }).start()
     }
@@ -309,15 +292,15 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
     }
 
     private fun exportExcel(uri: Uri?) {
-//        EasyDiaryUtils.initLegacyWorkingDirectory(mContext)
+//        EasyDiaryUtils.initLegacyWorkingDirectory(mActivity)
         val exportFileName = "aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}"
-        val builder = AlertDialog.Builder(mContext)
+        val builder = AlertDialog.Builder(mActivity)
         builder.setTitle(getString(R.string.export_excel_title))
-        builder.setIcon(ContextCompat.getDrawable(mContext, R.drawable.excel_3))
+        builder.setIcon(ContextCompat.getDrawable(mActivity, R.drawable.excel_3))
         builder.setCancelable(false)
 //        builder.setPositiveButton(getString(R.string.ok), null)
         val alert = builder.create()
-        val inflater = mContext.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val inflater = mActivity.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val containerView = inflater.inflate(R.layout.dialog_export_progress_excel, null)
         val progressInfo = containerView.findViewById<TextView>(R.id.progressInfo)
         val confirmButton = containerView.findViewById<TextView>(R.id.confirm)
@@ -328,7 +311,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
         Thread(Runnable {
             val workBook = createWorkBook(progressInfo, "$exportFileName.xls")
 //            val outputStream = FileOutputStream("${EasyDiaryUtils.getExternalStorageDirectory().absolutePath + BACKUP_EXCEL_DIRECTORY + exportFileName}.xls")
-            val outputStream = mContext.contentResolver.openOutputStream(uri!!)
+            val outputStream = mActivity.contentResolver.openOutputStream(uri!!)
             workBook.write(outputStream)
             outputStream?.close()
             mActivity.runOnUiThread {
@@ -393,7 +376,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
         sheet.setColumnWidth(WRITE_TIME_MILLIS, 256 * 60)
         sheet.setColumnWidth(SYMBOL, 256 * 10)
         sheet.setColumnWidth(IS_ALL_DAY, 256 * 30)
-        val diarySymbolMap = FlavorUtils.getDiarySymbolMap(mContext)
+        val diarySymbolMap = FlavorUtils.getDiarySymbolMap(mActivity)
         diaryList.forEachIndexed { index, diaryDto ->
             val row = sheet.createRow(index + 1)
             val photoNames = StringBuffer()
@@ -456,13 +439,13 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
 
     private fun exportFullBackupFile(uri: Uri?) {
         exportRealmFile(false)
-        BackupOperations.Builder(mContext, uri.toString(), BackupOperations.WORK_MODE_BACKUP).build().apply {
+        BackupOperations.Builder(mActivity, uri.toString(), BackupOperations.WORK_MODE_BACKUP).build().apply {
             continuation.enqueue()
         }
     }
 
     private fun importFullBackupFile(uri: Uri?) {
-        BackupOperations.Builder(mContext, uri.toString(), BackupOperations.WORK_MODE_RECOVERY).build().apply {
+        BackupOperations.Builder(mActivity, uri.toString(), BackupOperations.WORK_MODE_RECOVERY).build().apply {
             continuation.enqueue()
         }
     }
@@ -527,17 +510,17 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
 
     private fun showLocationSelectionPopup(popupMode: Int, internalTitle: String, internalDescription: String, externalTitle: String, externalDescription: String) {
         var dialog: AlertDialog? = null
-        val builder = AlertDialog.Builder(mContext).apply {
+        val builder = AlertDialog.Builder(mActivity).apply {
             setNegativeButton(getString(android.R.string.cancel), null)
         }
-        val inflater = mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val inflater = mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val popupView = (inflater.inflate(R.layout.popup_location_selector, null) as ViewGroup).apply {
             modeInternalTitle.text = internalTitle
             modeInternalDescription.text = internalDescription
             modeExternalTitle.text = externalTitle
             modeExternalDescription.text = externalDescription
 
-            setBackgroundColor(mContext.baseConfig.backgroundColor)
+            setBackgroundColor(mActivity.baseConfig.backgroundColor)
             closePopup.setOnClickListener { dialog?.dismiss() }
             modeInternal.setOnClickListener {
                 when (popupMode) {
@@ -554,15 +537,15 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
                 dialog?.dismiss()
             }
         }
-        mContext.run {
+        mActivity.run {
             updateTextColors(popupView)
             initTextSize(popupView)
         }
 
-        FontUtils.setFontsTypeface(mContext, mContext.assets, null, popupView, true)
+        FontUtils.setFontsTypeface(mActivity, mActivity.assets, null, popupView, true)
         builder.setView(popupView)
         dialog = builder.create().apply {
-            mContext.updateAlertDialog(this, null, popupView)
+            mActivity.updateAlertDialog(this, null, popupView)
         }
     }
 
