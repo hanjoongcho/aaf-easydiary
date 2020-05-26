@@ -16,7 +16,7 @@ import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.item_check_label.view.*
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.*
 import org.apache.commons.lang3.StringUtils
 
 /**
@@ -30,6 +30,12 @@ class FontItemAdapter(val activity: Activity, private val layoutResourceId: Int,
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val itemView: View = convertView ?: LayoutInflater.from(parent.context).inflate(this.layoutResourceId, parent, false)
+        if (itemView is ViewGroup) {
+            activity.run {
+                initTextSize(itemView)
+                updateTextColors(itemView)
+            }
+        }
 
         when (itemView.tag is ViewHolder) {
             true -> itemView.tag as ViewHolder
@@ -40,13 +46,14 @@ class FontItemAdapter(val activity: Activity, private val layoutResourceId: Int,
             }
         }.run {
             if (StringUtils.equals(context.config.settingFontName, list[position]["fontName"])) {
-                val drawable = ContextCompat.getDrawable(context, R.drawable.check_mark)
-                drawable?.let {
-                    it.setColorFilter(context.config.primaryColor, PorterDuff.Mode.SRC_IN)
-                    imageView.setImageDrawable(it)
+                activity.updateDrawableColorInnerCardView(R.drawable.check_mark)
+                ContextCompat.getDrawable(context, R.drawable.check_mark).run {
+                    imageView.setImageDrawable(this)
+                    imageView.alpha = 1F
                 }
             } else {
                 imageView.setImageBitmap(BitmapFactory.decodeResource(context.resources, R.drawable.check_mark_off))
+                imageView.alpha = 0.1F
             }
             textView.text = StringUtils.EMPTY
 //        holder.textView?.typeface = FontUtils.getTypeface(context, context.assets, list[position]["fontName"])

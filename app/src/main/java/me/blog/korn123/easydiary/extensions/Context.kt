@@ -266,6 +266,7 @@ fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null,
             val titleView = TextView(this@updateAlertDialog).apply {
                 text = customTitle
                 if (!isNightMode()) setTextColor(baseConfig.textColor)
+//                setBackgroundColor(ContextCompat.getColor(this@updateAlertDialog, R.color.white))
                 typeface = globalTypeface
                 val padding = CommonUtils.dpToPixel(this@updateAlertDialog, 10F)
                 setPadding(padding * 2, padding, padding * 2, padding)

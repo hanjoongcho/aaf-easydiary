@@ -265,10 +265,11 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun openFontSettingDialog() {
+        var alertDialog: AlertDialog? = null
         EasyDiaryUtils.initWorkingDirectory(mContext)
         val builder = AlertDialog.Builder(mContext)
         builder.setNegativeButton(getString(android.R.string.cancel), null)
-        builder.setTitle(getString(R.string.font_setting))
+//        builder.setTitle(getString(R.string.font_setting))
         val inflater = mContext.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val fontView = inflater.inflate(R.layout.dialog_fonts, null)
         val listView = fontView.findViewById<ListView>(R.id.listFont)
@@ -315,12 +316,10 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
                     updateUI()
                 }
             }
-            mAlertDialog?.cancel()
+            alertDialog?.cancel()
         }
 
-        builder.setView(fontView)
-        mAlertDialog = builder.create()
-        mAlertDialog?.show()
+        alertDialog = builder.create().apply { mActivity.updateAlertDialog(this, null, fontView, getString(R.string.font_setting)) }
         listView.setSelection(selectedIndex)
     }
 
