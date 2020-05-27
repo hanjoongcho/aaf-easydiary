@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.fragments
 
 import android.accounts.Account
 import android.app.Activity
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -133,6 +134,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
             mActivity.makeSnackBar(mActivity.findViewById(android.R.id.content), getString(R.string.guide_message_3))
         }
     }
+
 
     /***************************************************************************************************
      *   backup and recovery
@@ -404,4 +406,15 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
     }
 
     private fun initPreference() {}
+}
+
+class GoogleOAuthHelper {
+    companion object {
+
+        private lateinit var mAccountCallback: (Account) -> Unit
+
+        fun isValidGoogleSignAccount(context: Context): Boolean = GoogleSignIn.getLastSignedInAccount(context) != null
+
+        fun getGoogleSignAccount(context: Context) = GoogleSignIn.getLastSignedInAccount(context)
+    }
 }
