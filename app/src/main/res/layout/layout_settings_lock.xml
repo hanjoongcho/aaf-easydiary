@@ -22,7 +22,7 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         style="@style/SettingsTitle" />
-                    <Switch
+                    <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/appLockSettingSwitcher"
                         android:clickable="false"
                         android:layout_width="wrap_content"
@@ -48,7 +48,7 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         style="@style/SettingsTitle" />
-                    <Switch
+                    <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/fingerprintSwitcher"
                         android:clickable="false"
                         android:layout_width="wrap_content"

@@ -57,8 +57,8 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
 
         progressContainer = mActivity.findViewById(R.id.progressContainer)
         mContext.run {
-            changeDrawableIconColor(config.primaryColor, R.drawable.minus_6)
-            changeDrawableIconColor(config.primaryColor, R.drawable.plus_6)
+            changeDrawableIconColor(config.textColor, R.drawable.minus_6)
+            changeDrawableIconColor(config.textColor, R.drawable.plus_6)
         }
         bindEvent()
         updateFragmentUI(mRootView)
@@ -166,6 +166,8 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
                 .max(1.8F)
                 .progress(mContext.config.lineSpacingScaleFactor)
                 .floatType()
+                .secondTrackColor(config.textColor)
+                .trackColor(config.textColor)
                 .sectionCount(16)
                 .sectionTextInterval(2)
                 .showSectionText()

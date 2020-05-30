@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.extensions
 
 import android.Manifest
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
@@ -13,6 +14,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.Fragment
 import me.blog.korn123.commons.utils.FontUtils
+import me.blog.korn123.easydiary.helper.Config
+
+val Fragment.config: Config get() = Config.newInstance(context!!)
 
 fun Fragment.updateFragmentUI(rootView: ViewGroup) {
     rootView.let {
