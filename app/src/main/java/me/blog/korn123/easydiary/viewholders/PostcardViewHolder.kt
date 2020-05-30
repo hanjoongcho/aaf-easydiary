@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.viewholders
 import android.app.Activity
 import android.util.TypedValue
 import android.view.View
+import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -13,12 +14,15 @@ import kotlinx.android.synthetic.main.viewholder_post_card.view.*
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.PostCardViewerActivity
+import me.blog.korn123.easydiary.extensions.updateAppViews
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.floor
 
 internal class PostcardViewHolder(itemView: View, val activity: Activity) : ViewHolder(itemView) {
     fun bindTo(postCard: PostCardViewerActivity.PostCard) {
+        if (itemView is ViewGroup) activity.updateAppViews(itemView)
+
         val timeStampView = itemView.createdDate
         timeStampView.setTextSize(TypedValue.COMPLEX_UNIT_PX, CommonUtils.dpToPixelFloatValue(activity, 10F))
         FontUtils.setFontsTypeface(activity, activity.assets, "", itemView.imageContainer)

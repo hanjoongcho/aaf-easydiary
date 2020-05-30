@@ -167,11 +167,11 @@ fun Context.updateAppViews(viewGroup: ViewGroup, tmpBackgroundColor: Int = 0) {
                         it.run {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                 trackTintList = ColorStateList(arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked)), intArrayOf(
-                                        config.textColor,
+                                        ColorUtils.setAlphaComponent(config.textColor, 190),
                                         config.textColor
                                 ))
                                 thumbTintList = ColorStateList(arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked)), intArrayOf(
-                                        ColorUtils.setAlphaComponent(config.textColor, 250),
+                                        ColorUtils.setAlphaComponent(config.textColor, 255),
                                         config.textColor
                                 ))
                             }
