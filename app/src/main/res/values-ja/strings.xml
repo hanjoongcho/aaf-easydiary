@@ -411,6 +411,10 @@
         v1.4.131 / 2020.05.26\n
         Android4.4のバージョンで一部の機能が異常終了するバグを修正
     </string>
+    <string name="release_198">
+        v1.4.132 / 2020.05.xx\n
+        Fixed an issue where some buttons were not visible when using a custom theme
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
