@@ -165,7 +165,7 @@ fun Context.updateAppViews(viewGroup: ViewGroup, tmpBackgroundColor: Int = 0) {
                     }
                     is SwitchCompat -> {
                         it.run {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && config.primaryColor == config.backgroundColor) {
                                 trackTintList = ColorStateList(arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked)), intArrayOf(
                                         ColorUtils.setAlphaComponent(config.textColor, 190),
                                         config.textColor
