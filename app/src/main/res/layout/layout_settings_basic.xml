@@ -196,19 +196,19 @@
                         android:orientation="horizontal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
-                        <RadioButton
+                        <androidx.appcompat.widget.AppCompatRadioButton
                             android:alpha="0.7"
                             android:id="@+id/startSaturday"
                             android:text="@string/calendar_start_day_saturday"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
-                        <RadioButton
+                        <androidx.appcompat.widget.AppCompatRadioButton
                             android:alpha="0.7"
                             android:id="@+id/startSunday"
                             android:text="@string/calendar_start_day_sunday"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
-                        <RadioButton
+                        <androidx.appcompat.widget.AppCompatRadioButton
                             android:alpha="0.7"
                             android:id="@+id/startMonday"
                             android:text="@string/calendar_start_day_monday"
@@ -245,13 +245,13 @@
                         android:orientation="horizontal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
-                        <RadioButton
+                        <androidx.appcompat.widget.AppCompatRadioButton
                             android:alpha="0.7"
                             android:id="@+id/ascending"
                             android:text="@string/calendar_sort_ascending"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
-                        <RadioButton
+                        <androidx.appcompat.widget.AppCompatRadioButton
                             android:alpha="0.7"
                             android:id="@+id/descending"
                             android:text="@string/calendar_sort_descending"
