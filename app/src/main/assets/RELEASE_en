@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.132 (date: 2020.05.31)
+  * Fixed an issue where buttons included inside the card view could not be identified when the theme color and the card view background color were set to the same color
+
 # Changes in 1.4.131 (date: 2020.05.26)
   * Fixed an error that caused abnormal termination of some screens in Android 4.4 version
 

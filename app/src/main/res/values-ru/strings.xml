@@ -412,8 +412,8 @@
         Fixed an error that caused abnormal termination of some screens in Android 4.4 version
     </string>
     <string name="release_198">
-        v1.4.132 / 2020.05.xx\n
-        Fixed an issue where some buttons were not visible when using a custom theme
+        v1.4.132 / 2020.05.31\n
+        Fixed an issue where buttons included inside the card view could not be identified when the theme color and the card view background color were set to the same color
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
