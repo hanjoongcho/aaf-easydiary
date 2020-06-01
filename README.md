@@ -131,7 +131,7 @@ Step8. Define OAuth 2.0 Client ID in the '/app/src/gms/res/values/keys.xml' file
        </resources>          
 Step9. Build 'aaf-easydiary' project with android studio.
        a. Build > Select Build Variant
-       b. Select 'gmsRelease' from the Build Variant setting and run
+       b. Select 'gmsDevRelease' from the Build Variant setting and run
 ```
 [Download 'weather-set-2' svg images from Flaticon](https://www.flaticon.com/packs/weather-set-2)
 
