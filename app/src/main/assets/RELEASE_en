@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.133 (date: 2020.06.02)
+  * Fixed an issue where the lock screen icon was not identified when the screen background color was set to white
+
 # Changes in 1.4.132 (date: 2020.05.31)
   * Fixed an issue where buttons included inside the card view could not be identified when the theme color and the card view background color were set to the same color
 
