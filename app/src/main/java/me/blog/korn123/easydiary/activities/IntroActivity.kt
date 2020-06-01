@@ -4,9 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.graphics.ColorUtils
 import io.github.aafactory.commons.utils.CommonUtils
 import kotlinx.android.synthetic.main.activity_intro.*
 import me.blog.korn123.commons.utils.FontUtils
@@ -52,9 +50,11 @@ class IntroActivity : AppCompatActivity(), Handler.Callback {
 
     override fun onResume() {
         super.onResume()
-        main_holder.setBackgroundColor(ColorUtils.setAlphaComponent(config.primaryColor, INTRO_BACKGROUND_ALPHA))
-        FontUtils.setFontsTypeface(this, assets, null, findViewById<ViewGroup>(android.R.id.content))
-        initTextSize(findViewById<ViewGroup>(android.R.id.content))
+        main_holder?.run {
+            FontUtils.setFontsTypeface(this@IntroActivity, assets, null, this)
+            initTextSize(this)
+            setBackgroundColor(config.primaryColor)
+        }
     }
 
     override fun handleMessage(message: Message): Boolean {

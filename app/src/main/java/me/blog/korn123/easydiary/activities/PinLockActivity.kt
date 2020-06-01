@@ -3,10 +3,9 @@ package me.blog.korn123.easydiary.activities
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import androidx.core.app.ActivityCompat
 import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.app.ActivityCompat
 import io.github.aafactory.commons.activities.BaseSimpleActivity
 import kotlinx.android.synthetic.main.activity_pin_lock.*
 import me.blog.korn123.commons.utils.FontUtils
@@ -57,8 +56,6 @@ class PinLockActivity : BaseSimpleActivity() {
         FontUtils.setFontsTypeface(applicationContext, assets, null, container)
         infoMessage.text = if (activityMode == ACTIVITY_SETTING) getString(R.string.pin_setting_guide_message) else getString(R.string.pin_unlock_guide_message) 
     }
-
-    override fun getMainViewGroup(): ViewGroup? = container
 
     override fun onBackPressed() {
         super.onBackPressed()

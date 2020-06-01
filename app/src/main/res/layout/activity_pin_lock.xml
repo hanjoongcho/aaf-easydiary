@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/container"
-    android:background="@color/colorPrimary"
+    android:background="?attr/colorPrimary"
     android:orientation="vertical"
     android:gravity="center"
     android:layout_width="match_parent"

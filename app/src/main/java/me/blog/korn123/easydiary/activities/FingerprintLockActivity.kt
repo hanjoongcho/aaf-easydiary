@@ -157,8 +157,6 @@ class FingerprintLockActivity : BaseSimpleActivity() {
         mCancellationSignal?.cancel()
     }
 
-    override fun getMainViewGroup(): ViewGroup? = container
-
     override fun onBackPressed() {
         super.onBackPressed()
         ActivityCompat.finishAffinity(this)
