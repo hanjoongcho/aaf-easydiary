@@ -217,12 +217,12 @@ class DiaryUpdateActivity : EditActivity() {
             false
         }
 
-        allDayContainer.setOnClickListener {
-            allDay.isChecked = allDay.isChecked.not()
+        togglePhoto.setOnClickListener {
             toggleSimpleLayout()
         }
 
-        allDay.setOnClickListener { _ ->
+        allDayContainer.setOnClickListener {
+            allDay.isChecked = allDay.isChecked.not()
             toggleTimePickerTool()
         }
 
