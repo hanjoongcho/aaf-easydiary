@@ -14,6 +14,7 @@
         <androidx.appcompat.widget.AppCompatCheckBox
             app:buttonTint="@android:color/white"
             android:id="@+id/allDay"
+            android:clickable="false"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
