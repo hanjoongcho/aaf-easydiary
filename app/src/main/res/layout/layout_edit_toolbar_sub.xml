@@ -4,19 +4,24 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="50dp">
-    <androidx.appcompat.widget.AppCompatCheckBox
-        app:buttonTint="@android:color/white"
-        android:id="@+id/allDay"
+    <LinearLayout
+        android:id="@+id/allDayContainer"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="@dimen/toolbar_icon_margin_side"
+        android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:text="@string/all_day"
-        android:textColor="@android:color/white"
-        android:layout_gravity="center_vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content">
+        <androidx.appcompat.widget.AppCompatCheckBox
+            app:buttonTint="@android:color/white"
+            android:id="@+id/allDay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:text="@string/all_day"
+            android:textColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
         android:gravity="right|center_vertical"

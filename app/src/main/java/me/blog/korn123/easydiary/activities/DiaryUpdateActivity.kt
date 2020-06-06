@@ -217,7 +217,8 @@ class DiaryUpdateActivity : EditActivity() {
             false
         }
 
-        togglePhoto.setOnClickListener {
+        allDayContainer.setOnClickListener {
+            allDay.isChecked = allDay.isChecked.not()
             toggleSimpleLayout()
         }
 

@@ -243,8 +243,9 @@ class DiaryInsertActivity : EditActivity() {
             toggleSimpleLayout()
         }
 
-        allDay.setOnClickListener { view ->
-            toggleTimePickerTool()
+        allDayContainer.setOnClickListener {
+            allDay.isChecked = allDay.isChecked.not()
+            toggleSimpleLayout()
         }
 
         feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog(getString(R.string.diary_symbol_guide_message)) { symbolSequence ->

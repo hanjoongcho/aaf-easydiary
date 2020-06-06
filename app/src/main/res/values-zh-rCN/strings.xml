@@ -419,6 +419,10 @@
         v1.4.133 / 2020.06.02\n
         Fixed an issue where the lock screen icon was not identified when the screen background color was set to white
     </string>
+    <string name="release_200">
+        v1.4.134 / 2020.06.xx\n
+        User Experience (UX) Optimization
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
