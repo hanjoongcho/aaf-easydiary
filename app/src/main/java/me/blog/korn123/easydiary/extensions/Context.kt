@@ -295,9 +295,9 @@ fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null,
                 if (!isNightMode()) setTextColor(baseConfig.textColor)
 //                setBackgroundColor(ContextCompat.getColor(this@updateAlertDialog, R.color.white))
                 typeface = globalTypeface
-                val padding = CommonUtils.dpToPixel(this@updateAlertDialog, 10F)
+                val padding = CommonUtils.dpToPixel(this@updateAlertDialog, 15F)
                 setPadding(padding * 2, padding, padding * 2, padding)
-                setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20F)
+                setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18F)
 //                        setBackgroundColor(resources.getColor(android.R.color.white))
             }
             setCustomTitle(titleView)

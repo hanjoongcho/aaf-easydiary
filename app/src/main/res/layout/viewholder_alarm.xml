@@ -33,7 +33,6 @@
                 <me.blog.korn123.easydiary.views.FixedTextView
                     app:applyGlobalSize="false"
                     app:applyGlobalColor="true"
-                    android:paddingVertical="10dp"
                     android:id="@+id/edit_alarm_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
