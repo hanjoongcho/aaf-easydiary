@@ -9,6 +9,7 @@ import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.*
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
@@ -286,7 +287,13 @@ fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null,
             }
             false -> setView(customView)
         }
-        if (!isNightMode()) window?.setBackgroundDrawable(ColorDrawable(baseConfig.backgroundColor))
+//        if (!isNightMode()) window?.setBackgroundDrawable(ColorDrawable(baseConfig.backgroundColor))
+        if (!isNightMode()) window?.setBackgroundDrawable(GradientDrawable().apply {
+            shape = GradientDrawable.RECTANGLE
+            setColor(config.backgroundColor)
+            cornerRadius = CommonUtils.dpToPixelFloatValue(this@updateAlertDialog, 3F)
+        })
+
         val globalTypeface = FontUtils.getCommonTypeface(this@updateAlertDialog, this@updateAlertDialog.assets)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         customTitle?.let {
