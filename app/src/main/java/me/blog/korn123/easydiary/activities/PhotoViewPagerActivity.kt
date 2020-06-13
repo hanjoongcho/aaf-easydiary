@@ -107,7 +107,7 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
                     textView.gravity = Gravity.CENTER
                     val padding = CommonUtils.dpToPixel(container.context, 10F)
                     textView.setPadding(padding, padding, padding, padding)
-                    textView.typeface = FontUtils.getCommonTypeface(container.context, container.context.assets)
+                    textView.typeface = FontUtils.getCommonTypeface(container.context)
                     textView.text = container.context.getString(R.string.photo_view_error_info)
                     textView.setTextColor(container.context.config.textColor)
                     viewHolder.addView(textView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)

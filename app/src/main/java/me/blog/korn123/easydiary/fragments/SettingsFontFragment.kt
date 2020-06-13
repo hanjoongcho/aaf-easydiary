@@ -306,7 +306,7 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
             val fontInfo = parent.adapter.getItem(position) as HashMap<String, String>
             fontInfo["fontName"]?.let {
                 mContext.config.settingFontName = it
-                FontUtils.setCommonTypeface(mContext, mContext.assets)
+                FontUtils.setCommonTypeface(mContext)
                 initPreference()
                 setFontsStyle()
 

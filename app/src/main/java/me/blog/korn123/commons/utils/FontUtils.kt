@@ -9,7 +9,6 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT
 import me.blog.korn123.easydiary.helper.USER_CUSTOM_FONTS_DIRECTORY
-import me.blog.korn123.easydiary.views.FixedTextView
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang3.StringUtils
 import java.io.File
@@ -49,9 +48,9 @@ object FontUtils {
         return result
     }
 
-    fun getCommonTypeface(context: Context, assetManager: AssetManager): Typeface? {
+    fun getCommonTypeface(context: Context): Typeface? {
         if (sTypeface == null) {
-            setCommonTypeface(context, assetManager)
+            setCommonTypeface(context)
         }
         return sTypeface
     }
@@ -60,9 +59,9 @@ object FontUtils {
         view.typeface = Typeface.DEFAULT
     }
 
-    fun setCommonTypeface(context: Context, assetManager: AssetManager) {
+    fun setCommonTypeface(context: Context) {
         val commonFontName = context.config.settingFontName
-        sTypeface = getTypeface(context, assetManager, commonFontName)
+        sTypeface = getTypeface(context, context.assets, commonFontName)
     }
 
     fun setFontsTypeface(context: Context, assetManager: AssetManager, customFontName: String?, rootView: ViewGroup?) {
@@ -70,7 +69,7 @@ object FontUtils {
     }
 
     fun setFontsTypeface(context: Context, assetManager: AssetManager, customFontName: String?, rootView: ViewGroup?, customLineSpacing: Boolean) {
-        val typeface = if (StringUtils.isNotEmpty(customFontName)) getTypeface(context, assetManager, customFontName) else getCommonTypeface(context, assetManager)
+        val typeface = if (StringUtils.isNotEmpty(customFontName)) getTypeface(context, assetManager, customFontName) else getCommonTypeface(context)
         rootView?.let {
             setTypeface(context, it, typeface, customLineSpacing)
         }

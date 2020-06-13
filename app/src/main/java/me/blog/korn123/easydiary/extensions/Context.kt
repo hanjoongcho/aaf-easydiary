@@ -293,7 +293,7 @@ fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null,
             cornerRadius = CommonUtils.dpToPixelFloatValue(this@updateAlertDialog, 3F)
         })
 
-        val globalTypeface = FontUtils.getCommonTypeface(this@updateAlertDialog, this@updateAlertDialog.assets)
+        val globalTypeface = FontUtils.getCommonTypeface(this@updateAlertDialog)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         customTitle?.let {
             val titleView = TextView(this@updateAlertDialog).apply {
@@ -345,7 +345,7 @@ fun Context.preferencesContains(key: String): Boolean {
 
 fun Context.applyFontToMenuItem(mi: MenuItem) {
     val mNewTitle = SpannableString(mi.title)
-    mNewTitle.setSpan(CustomTypefaceSpan("", FontUtils.getCommonTypeface(this, assets)!!), 0, mNewTitle.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+    mNewTitle.setSpan(CustomTypefaceSpan("", FontUtils.getCommonTypeface(this)!!), 0, mNewTitle.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
     mi.title = mNewTitle
 }
 
