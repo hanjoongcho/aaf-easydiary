@@ -27,7 +27,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
-import io.github.aafactory.commons.activities.BaseSimpleActivity
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.activities.FingerprintLockActivity
@@ -81,14 +80,12 @@ fun Activity.openGooglePlayBy(targetAppId: String) {
 }
 
 fun Activity.confirmPermission(permissions: Array<String>, requestCode: Int) {
-    // 처음 권한을 요청하는경우에 이 함수는 항상 false
-    // 사용자가 '다시 묻지 않기'를 체크하지 않고, 1번이상 권한요청에 대해 거부한 경우에만 true
     if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
             || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
         AlertDialog.Builder(this)
-                .setMessage("Easy Diary 사용을 위해서는 권한승인이 필요합니다.")
-                .setTitle("권한승인 요청")
-                .setPositiveButton("확인") { _, _ -> ActivityCompat.requestPermissions(this, permissions, requestCode) }
+                .setMessage(getString(R.string.permission_confirmation_dialog_message))
+                .setTitle(getString(R.string.permission_confirmation_dialog_title))
+                .setPositiveButton(getString(R.string.ok)) { _, _ -> ActivityCompat.requestPermissions(this, permissions, requestCode) }
                 .show()
     } else {
         ActivityCompat.requestPermissions(this, permissions, requestCode)

@@ -640,5 +640,7 @@
     <string name="schedule_description_hint">通知メッセージに使用されたラベル情報を入力してください。</string>
     <string name="schedule_diary_writing_description">日記を書く\n日記作成スケジュールを登録します。\nスケジュールが登録されると、設定された日時に応じて通知メッセージが表示されます。</string>
     <string name="schedule_backup_local_description">日記のバックアップ (デバイスストレージ)\nスケジュールを登録すると、添付された画像を除くデータベースファイルが、設定された日時に従ってデバイスのローカルストレージにバックアップされ、操作の結果が通知メッセージとして提供されます。</string>
-    <string name="schedule_empty_message">There is no set schedule information.\nClick the plus button on the top right to add a new schedule.</string>
+    <string name="schedule_empty_message">設定されているスケジュール情報はありません。\n右上のプラスボタンをクリックして、新しいスケジュールを追加します。</string>
+    <string name="permission_confirmation_dialog_title">承認をリクエスト</string>
+    <string name="permission_confirmation_dialog_message">Easy Diaryを使用するには認証が必要です。</string>
 </resources>
