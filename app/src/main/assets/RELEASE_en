@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.134 (date: 2020.06.14)
+  * User Experience (UX) Optimization
+
 # Changes in 1.4.133 (date: 2020.06.02)
   * Fixed an issue where the lock screen icon was not identified when the screen background color was set to white
 

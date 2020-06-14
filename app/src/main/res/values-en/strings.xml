@@ -420,7 +420,7 @@
         Fixed an issue where the lock screen icon was not identified when the screen background color was set to white
     </string>
     <string name="release_200">
-        v1.4.134 / 2020.06.xx\n
+        v1.4.134 / 2020.06.14\n
         User Experience (UX) Optimization
     </string>
 
