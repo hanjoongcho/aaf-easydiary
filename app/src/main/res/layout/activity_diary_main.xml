@@ -40,7 +40,7 @@
                     <ImageView
                         android:id="@+id/symbol"
                         app:srcCompat="@drawable/ic_select_symbol"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"
                         android:layout_width="@dimen/diary_symbol_width"
                         android:layout_height="@dimen/diary_symbol_height" />
                     <com.simplemobiletools.commons.views.MyTextView
@@ -48,7 +48,7 @@
                         android:layout_gravity="center_vertical"
                         android:text="▼"
                         android:textSize="10dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
@@ -68,7 +68,7 @@
                 <ImageView
                     android:id="@+id/clearQuery"
                     android:src="@drawable/delete"
-                    android:layout_gravity="right|center_vertical"
+                    android:layout_gravity="end|center_vertical"
                     android:padding="3dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:layout_width="wrap_content"
@@ -127,7 +127,7 @@
             android:layout_height="20dp" />
         <com.simplemobiletools.commons.views.MyTextView
             android:id="@+id/progressInfo"
-            android:layout_gravity="right"
+            android:layout_gravity="end"
             android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

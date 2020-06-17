@@ -9,10 +9,10 @@
     <TextView
         tools:text="123/1011"
         android:id="@+id/message"
-        android:gravity="left"
+        android:gravity="start"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </androidx.constraintlayout.widget.ConstraintLayout>

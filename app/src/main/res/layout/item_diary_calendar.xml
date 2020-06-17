@@ -10,7 +10,7 @@
             style="@style/LinearLayoutHorizontal">
             <ImageView
                 android:id="@+id/weather"
-                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
                 android:layout_width="@dimen/diary_symbol_width_s"
                 android:layout_height="@dimen/diary_symbol_height_s" />
             

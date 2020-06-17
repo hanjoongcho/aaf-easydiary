@@ -50,7 +50,7 @@
                 android:layout_weight="4"
                 android:layout_height="match_parent">
                 <ListView
-                    android:layout_marginLeft="@dimen/card_layout_margin"
+                    android:layout_marginStart="@dimen/card_layout_margin"
                     android:dividerHeight="@dimen/card_layout_padding"
                     android:divider="@null"
                     android:id="@+id/selectedList"

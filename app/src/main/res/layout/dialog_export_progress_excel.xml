@@ -9,7 +9,7 @@
     <TextView
         tools:text="123/1011"
         android:id="@+id/progressInfo"
-        android:gravity="left"
+        android:gravity="start"
         android:layout_marginBottom="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -17,7 +17,7 @@
     <TextView
         tools:visibility="visible"
         android:background="?attr/selectableItemBackground"
-        android:layout_gravity="right"
+        android:layout_gravity="end"
         android:id="@+id/confirm"
         android:text="@string/ok"
         android:textColor="?attr/colorPrimary"

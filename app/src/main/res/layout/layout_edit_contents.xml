@@ -6,8 +6,8 @@
     android:layout_height="match_parent">
     <androidx.cardview.widget.CardView
         android:layout_marginTop="@dimen/card_layout_margin"
-        android:layout_marginLeft="@dimen/card_layout_margin"
-        android:layout_marginRight="@dimen/card_layout_margin"
+        android:layout_marginStart="@dimen/card_layout_margin"
+        android:layout_marginEnd="@dimen/card_layout_margin"
         style="@style/AppCard.EditTitle">
         <LinearLayout
             style="@style/LinearLayoutHorizontal">
@@ -22,20 +22,20 @@
                 <ImageView
                     android:visibility="gone"
                     android:id="@+id/symbol"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_width="@dimen/diary_symbol_width"
                     android:layout_height="@dimen/diary_symbol_height" />
                 <com.simplemobiletools.commons.views.MyTextView
                     android:id="@+id/symbolText"
                     android:text="@string/diary_symbol"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <com.simplemobiletools.commons.views.MyTextView
                     android:id="@+id/symbolTextArrow"
                     android:text="▼"
                     android:textSize="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />    
             </LinearLayout>
@@ -56,8 +56,8 @@
         android:layout_weight="1"
         android:layout_marginTop="@dimen/card_layout_margin"
         android:layout_marginBottom="@dimen/card_layout_margin"
-        android:layout_marginLeft="@dimen/card_layout_margin"
-        android:layout_marginRight="@dimen/card_layout_margin"
+        android:layout_marginStart="@dimen/card_layout_margin"
+        android:layout_marginEnd="@dimen/card_layout_margin"
         style="@style/AppCard">
         <FrameLayout
             android:layout_width="match_parent"
@@ -71,7 +71,7 @@
                     android:id="@+id/diaryContents"
                     style="@style/edit_text_diary_edit_inner_contents"
                     android:background="@android:color/transparent"
-                    android:gravity="top"
+                    android:gravity="top|start"
                     android:hint="@string/contents_text_hint"
                     android:inputType="text|textCapSentences|textAutoCorrect|textMultiLine|textLongMessage" />
             </ScrollView>

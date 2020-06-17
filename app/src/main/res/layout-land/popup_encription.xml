@@ -92,7 +92,7 @@
         android:layout_height="match_parent">
         <ImageView
             style="@style/image_view_custom_toolbar_icon"
-            android:layout_gravity="right"
+            android:layout_gravity="end"
             android:id="@+id/closePopup"
             android:theme="@style/AppTheme.AppBarOverlay"
             android:contentDescription=""

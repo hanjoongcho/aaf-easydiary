@@ -10,7 +10,7 @@
         android:layout_height="wrap_content">
         <LinearLayout
             android:id="@+id/photoContainer"
-            android:layout_marginRight="3dp"
+            android:layout_marginEnd="3dp"
             android:gravity="center"
             android:orientation="horizontal"
             android:layout_width="wrap_content"

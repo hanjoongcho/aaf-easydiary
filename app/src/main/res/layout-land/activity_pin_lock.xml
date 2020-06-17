@@ -60,7 +60,7 @@
             <TextView
                 android:id="@+id/pass4"
                 tools:text="0"
-                android:layout_marginRight="0dp"
+                android:layout_marginEnd="0dp"
                 style="@style/text_view_lock_number_input" />
         </LinearLayout>
         <LinearLayout
@@ -80,7 +80,7 @@
                     android:text="2" />
                 <TextView
                     style="@style/text_view_lock_number_button"
-                    android:layout_marginRight="0dp"
+                    android:layout_marginEnd="0dp"
                     android:id="@+id/num3"
                     android:text="3"/>
             </LinearLayout>
@@ -101,7 +101,7 @@
                     android:id="@+id/num6"
                     style="@style/text_view_lock_number_button"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="0dp"
+                    android:layout_marginEnd="0dp"
                     android:text="6"/>
             </LinearLayout>
 
@@ -117,7 +117,7 @@
                     android:text="8" />
                 <TextView
                     style="@style/text_view_lock_number_button"
-                    android:layout_marginRight="0dp"
+                    android:layout_marginEnd="0dp"
                     android:id="@+id/num9"
                     android:text="9" />
             </LinearLayout>
@@ -145,7 +145,7 @@
                     style="@style/text_view_lock_number_button"
                     android:id="@+id/delete"
                     android:text="←"
-                    android:layout_marginRight="0dp"/>
+                    android:layout_marginEnd="0dp"/>
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>

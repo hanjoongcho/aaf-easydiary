@@ -13,8 +13,8 @@
         app:cardBackgroundColor="?attr/colorPrimary"
         android:gravity="center"
         android:id="@+id/titleContainer"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <RelativeLayout
-            android:layout_marginLeft="34dp"
+            android:layout_marginStart="34dp"
             android:layout_width="20dp"
             android:layout_height="wrap_content">
             <TextView
@@ -45,12 +45,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <FrameLayout
-                android:layout_marginLeft="30dp"
+                android:layout_marginStart="30dp"
                 android:layout_width="20dp"
                 android:layout_height="match_parent">
                 <TextView
-                    android:layout_gravity="left"
-                    android:layout_marginLeft="4dp"
+                    android:layout_gravity="start"
+                    android:layout_marginStart="4dp"
                     android:background="@android:color/white"
                     android:layout_width="3dp"
                     android:layout_height="match_parent">
@@ -58,7 +58,7 @@
                 <TextView
                     android:id="@+id/horizontalLine2"
                     android:layout_marginTop="10dp"
-                    android:layout_marginLeft="4dp"
+                    android:layout_marginStart="4dp"
                     android:layout_gravity="center_horizontal"
                     android:background="@android:color/white"
                     android:layout_width="20dp"
@@ -66,20 +66,20 @@
                 <ImageView
                     android:id="@+id/circle"
                     android:layout_marginTop="7dp"
-                    android:layout_gravity="left"
+                    android:layout_gravity="start"
                     android:src="@drawable/bg_card_timeline_circle"
                     android:layout_width="10dp"
                     android:layout_height="10dp" />
             </FrameLayout>
             <androidx.cardview.widget.CardView
                 style="@style/AppCard.Timeline"
-                android:layout_marginRight="34dp">
+                android:layout_marginEnd="34dp">
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <ImageView
-                        android:layout_marginRight="5dp"
+                        android:layout_marginEnd="5dp"
                         android:id="@+id/diarySymbol"
                         android:layout_width="@dimen/diary_symbol_width_s"
                         android:layout_height="@dimen/diary_symbol_height_s" />
@@ -95,7 +95,7 @@
         </LinearLayout>
         
         <RelativeLayout
-            android:layout_marginLeft="34dp"
+            android:layout_marginStart="34dp"
             android:layout_width="20dp"
             android:layout_height="wrap_content">
             <TextView

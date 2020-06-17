@@ -42,7 +42,7 @@
                     android:ellipsize="end"
                     android:includeFontPadding="false"
                     android:maxLines="1"
-                    android:paddingLeft="@dimen/tiny_margin"
+                    android:paddingStart="@dimen/tiny_margin"
                     android:textSize="@dimen/bigger_text_size"
                     tools:text="Mon, Tue, Wed, Thu, Fri"/>
 
@@ -60,7 +60,7 @@
                     android:gravity="center_vertical"
                     android:layout_alignTop="@+id/edit_alarm_time"
                     android:layout_alignBottom="@id/edit_alarm_time"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <ImageView
@@ -73,8 +73,8 @@
                         android:id="@+id/alarm_switch"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:paddingLeft="@dimen/activity_margin"
-                        android:paddingRight="@dimen/medium_margin"/>
+                        android:paddingStart="@dimen/activity_margin"
+                        android:paddingEnd="@dimen/medium_margin"/>
                 </LinearLayout>
             </RelativeLayout>
             <View

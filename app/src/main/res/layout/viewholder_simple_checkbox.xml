@@ -4,8 +4,8 @@
     android:gravity="center_vertical"
     android:foreground="?attr/selectableItemBackground"
     android:orientation="horizontal"
-    android:paddingLeft="15dp"
-    android:paddingRight="20dp"
+    android:paddingStart="15dp"
+    android:paddingEnd="20dp"
     android:paddingTop="15dp"
     android:paddingBottom="15dp"
     android:layout_width="match_parent"
@@ -16,7 +16,7 @@
         android:layout_height="wrap_content" />
 
     <LinearLayout
-        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -30,12 +30,12 @@
             android:layout_height="wrap_content" />
         <com.simplemobiletools.commons.views.MyTextView
             tools:text="2019-05-31"
-            android:gravity="right"
+            android:gravity="end"
             android:ellipsize="end"
             android:singleLine="true"
             android:id="@+id/description"
             android:textSize="12dp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>

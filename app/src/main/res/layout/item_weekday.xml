@@ -7,6 +7,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="3dp"
-    android:gravity="left"
+    android:gravity="start"
     app:applyStroke="false"
     style="?styleCaldroidWeekdayView"/>

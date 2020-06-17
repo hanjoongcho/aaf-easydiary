@@ -16,7 +16,7 @@
 
                 <ImageView
                     android:id="@+id/weather"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_width="@dimen/diary_symbol_width"
                     android:layout_height="@dimen/diary_symbol_width" />
                 
@@ -31,7 +31,7 @@
                     
                     <com.simplemobiletools.commons.views.MyTextView
                         android:id="@+id/text3"
-                        android:gravity="right"
+                        android:gravity="end"
                         style="@style/text_view_diary_main_item_inner_contents"/>
                 </LinearLayout>
             </LinearLayout>
@@ -40,7 +40,7 @@
                 android:id="@+id/text2"
                 android:layout_marginTop="@dimen/card_contents_padding"
                 android:maxLines="3"
-                android:gravity="left"
+                android:gravity="start"
                 style="@style/text_view_diary_main_item_inner_contents"/>
 
             <TextView
@@ -60,7 +60,7 @@
                 android:layout_height="28dp">
                 <LinearLayout
                     android:id="@+id/photoViews"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:orientation="horizontal"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent">

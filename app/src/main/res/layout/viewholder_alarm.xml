@@ -24,7 +24,7 @@
                     android:textSize="11dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:background="@drawable/bg_card_stamp"
                     android:padding="5dp"
                     android:text="Diary Writing"
@@ -67,7 +67,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/alarmLabel"
                     android:layout_above="@+id/alarm_days"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:paddingHorizontal="10dp" />
             </RelativeLayout>
         </LinearLayout>

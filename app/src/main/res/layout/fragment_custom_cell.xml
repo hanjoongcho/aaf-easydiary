@@ -15,7 +15,7 @@
         <me.blog.korn123.easydiary.views.CalendarItem
             tools:text="11"
             tools:background="@drawable/bg_calendar_circle"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:applyStroke="false"
             android:gravity="center"
@@ -27,7 +27,7 @@
 
         <me.blog.korn123.easydiary.views.CalendarItem
             tools:text="3"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:applyStroke="false"
             android:textSize="@dimen/calendar_item_text_default"

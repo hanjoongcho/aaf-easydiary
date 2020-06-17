@@ -17,7 +17,7 @@
                 android:layout_height="wrap_content">
                 <ImageView
                     app:srcCompat="@drawable/ic_drive"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:layout_width="35dp"
                     android:layout_height="35dp"/>
                 <me.blog.korn123.easydiary.views.FixedTextView
@@ -88,7 +88,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <ImageView
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     app:srcCompat="@drawable/ic_server"
                     android:layout_width="40dp"
                     android:layout_height="40dp"/>

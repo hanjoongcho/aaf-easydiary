@@ -31,7 +31,7 @@
         <TextView
             android:id="@+id/pass4"
             tools:text="0"
-            android:layout_marginRight="0dp"
+            android:layout_marginEnd="0dp"
             style="@style/text_view_lock_number_input" />
     </LinearLayout>
 
@@ -43,15 +43,15 @@
                 android:id="@+id/launcherIcon"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 android:src="@drawable/intro"
                 android:layout_width="60dp"
                 android:layout_height="60dp" />
             <TextView
                 android:id="@+id/infoMessage"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/launcherIcon"
                 android:padding="10dp"
                 android:layout_width="wrap_content"
@@ -80,7 +80,7 @@
                 android:text="2" />
             <TextView
                 style="@style/text_view_lock_number_button"
-                android:layout_marginRight="0dp"
+                android:layout_marginEnd="0dp"
                 android:id="@+id/num3"
                 android:text="3"/>
         </LinearLayout>
@@ -102,7 +102,7 @@
                 android:id="@+id/num6"
                 style="@style/text_view_lock_number_button"
                 android:layout_height="match_parent"
-                android:layout_marginRight="0dp"
+                android:layout_marginEnd="0dp"
                 android:text="6"/>
         </LinearLayout>
 
@@ -118,7 +118,7 @@
                 android:text="8" />
             <TextView
                 style="@style/text_view_lock_number_button"
-                android:layout_marginRight="0dp"
+                android:layout_marginEnd="0dp"
                 android:id="@+id/num9"
                 android:text="9" />
         </LinearLayout>
@@ -146,7 +146,7 @@
                 style="@style/text_view_lock_number_button"
                 android:id="@+id/delete"
                 android:text="←"
-                android:layout_marginRight="0dp"/>
+                android:layout_marginEnd="0dp"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

@@ -5,7 +5,7 @@
     android:id="@+id/alarm_day_textview"
     android:layout_width="30dp"
     android:layout_height="30dp"
-    android:layout_marginRight="@dimen/small_margin"
+    android:layout_marginEnd="@dimen/small_margin"
     android:clickable="true"
     android:focusable="true"
     android:gravity="center"

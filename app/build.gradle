@@ -26,7 +26,7 @@ android {
     
     defaultConfig {
         applicationId "me.blog.korn123.easydiary"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion versions.compileSdk
         versionCode 200
         versionName '1.4.134'

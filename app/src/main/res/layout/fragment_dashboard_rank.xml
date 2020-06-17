@@ -18,7 +18,7 @@
                 app:applyGlobalSize="false"
                 app:applyGlobalColor="false"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 android:id="@+id/dashboardTitle"
                 tools:text="Lifetime"
                 android:layout_width="wrap_content"
@@ -28,7 +28,7 @@
                 app:applyGlobalSize="false"
                 app:applyGlobalColor="false"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 tools:text="1578"
                 android:id="@+id/diaryCount"
                 android:padding="5dp"
@@ -39,8 +39,8 @@
                 app:applyGlobalSize="false"
                 app:applyGlobalColor="false"
                 app:layout_constraintTop_toBottomOf="@+id/dashboardTitle"
-                app:layout_constraintRight_toLeftOf="@+id/diaryCount"
-                app:layout_constraintLeft_toRightOf="@+id/dashboardTitle"
+                app:layout_constraintEnd_toStartOf="@+id/diaryCount"
+                app:layout_constraintStart_toEndOf="@+id/dashboardTitle"
                 tools:text="2019.01.01 ~ 2019.12.08"
                 android:id="@+id/period"
                 android:layout_width="wrap_content"
@@ -67,8 +67,8 @@
                 style="@style/card_view_dashboard"
                 android:id="@+id/rank1"
                 android:layout_width="0dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/rank2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/rank2"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintHorizontal_weight="1">
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -79,7 +79,7 @@
                         android:layout_width="@dimen/dashboard_symbol_default"
                         android:layout_height="@dimen/dashboard_symbol_default"
                         android:padding="@dimen/dashboard_symbol_padding"
-                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/markRank1"
                         app:srcCompat="@drawable/ic_clouds_and_sun" />
 
@@ -101,8 +101,8 @@
                         android:gravity="center_vertical"
                         android:textSize="@dimen/dashboard_text_large"
                         app:layout_constraintBottom_toBottomOf="@+id/symbolRank1"
-                        app:layout_constraintLeft_toRightOf="@+id/symbolRank1"
-                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/symbolRank1"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/symbolRank1"
                         tools:text="100" />
 
@@ -117,7 +117,7 @@
                         android:gravity="center_vertical"
                         android:textSize="@dimen/dashboard_text_default"
                         app:layout_constraintBottom_toBottomOf="@+id/markRank1"
-                        app:layout_constraintLeft_toRightOf="@+id/markRank1"
+                        app:layout_constraintStart_toEndOf="@+id/markRank1"
                         app:layout_constraintTop_toTopOf="@+id/markRank1"
                         tools:text="Awesome day" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -127,8 +127,8 @@
                 style="@style/card_view_dashboard"
                 android:id="@+id/rank2"
                 android:layout_width="0dp"
-                app:layout_constraintLeft_toRightOf="@+id/rank1"
-                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/rank1"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintHorizontal_weight="1">
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -139,7 +139,7 @@
                         android:layout_width="@dimen/dashboard_symbol_default"
                         android:layout_height="@dimen/dashboard_symbol_default"
                         android:padding="@dimen/dashboard_symbol_padding"
-                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/markRank2"
                         app:srcCompat="@drawable/ic_clouds_and_sun" />
 
@@ -161,8 +161,8 @@
                         android:gravity="center_vertical"
                         android:textSize="@dimen/dashboard_text_large"
                         app:layout_constraintBottom_toBottomOf="@+id/symbolRank2"
-                        app:layout_constraintLeft_toRightOf="@+id/symbolRank2"
-                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/symbolRank2"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/symbolRank2"
                         tools:text="100" />
 
@@ -177,7 +177,7 @@
                         android:gravity="center_vertical"
                         android:textSize="@dimen/dashboard_text_default"
                         app:layout_constraintBottom_toBottomOf="@+id/markRank2"
-                        app:layout_constraintLeft_toRightOf="@+id/markRank2"
+                        app:layout_constraintStart_toEndOf="@+id/markRank2"
                         app:layout_constraintTop_toTopOf="@+id/markRank2"
                         tools:text="Awesome day" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -187,8 +187,8 @@
                 style="@style/card_view_dashboard"
                 android:id="@+id/rank3"
                 android:layout_width="0dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/rank4"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/rank4"
                 app:layout_constraintTop_toBottomOf="@+id/rank1"
                 app:layout_constraintHorizontal_weight="1">
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -200,7 +200,7 @@
                         android:layout_width="@dimen/dashboard_symbol_default"
                         android:layout_height="@dimen/dashboard_symbol_default"
                         android:padding="@dimen/dashboard_symbol_padding"
-                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/markRank3"
                         app:srcCompat="@drawable/ic_clouds_and_sun" />
 
@@ -222,8 +222,8 @@
                         android:gravity="center_vertical"
                         android:textSize="@dimen/dashboard_text_large"
                         app:layout_constraintBottom_toBottomOf="@+id/symbolRank3"
-                        app:layout_constraintLeft_toRightOf="@+id/symbolRank3"
-                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/symbolRank3"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/symbolRank3"
                         tools:text="100" />
 
@@ -238,7 +238,7 @@
                         android:gravity="center_vertical"
                         android:textSize="@dimen/dashboard_text_default"
                         app:layout_constraintBottom_toBottomOf="@+id/markRank3"
-                        app:layout_constraintLeft_toRightOf="@+id/markRank3"
+                        app:layout_constraintStart_toEndOf="@+id/markRank3"
                         app:layout_constraintTop_toTopOf="@+id/markRank3"
                         tools:text="Awesome day" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -248,8 +248,8 @@
                 style="@style/card_view_dashboard"
                 android:id="@+id/rank4"
                 android:layout_width="0dp"
-                app:layout_constraintLeft_toRightOf="@+id/rank3"
-                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/rank3"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rank2"
                 app:layout_constraintHorizontal_weight="1">
 
@@ -261,7 +261,7 @@
                         android:layout_width="@dimen/dashboard_symbol_default"
                         android:layout_height="@dimen/dashboard_symbol_default"
                         android:padding="@dimen/dashboard_symbol_padding"
-                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/markRank4"
                         app:srcCompat="@drawable/ic_clouds_and_sun" />
 
@@ -283,8 +283,8 @@
                         android:gravity="center_vertical"
                         android:textSize="@dimen/dashboard_text_large"
                         app:layout_constraintBottom_toBottomOf="@+id/symbolRank4"
-                        app:layout_constraintLeft_toRightOf="@+id/symbolRank4"
-                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/symbolRank4"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/symbolRank4"
                         tools:text="100" />
 
@@ -299,7 +299,7 @@
                         android:gravity="center_vertical"
                         android:textSize="@dimen/dashboard_text_default"
                         app:layout_constraintBottom_toBottomOf="@+id/markRank4"
-                        app:layout_constraintLeft_toRightOf="@+id/markRank4"
+                        app:layout_constraintStart_toEndOf="@+id/markRank4"
                         app:layout_constraintTop_toTopOf="@+id/markRank4"
                         tools:text="Awesome day" />
                 </androidx.constraintlayout.widget.ConstraintLayout>

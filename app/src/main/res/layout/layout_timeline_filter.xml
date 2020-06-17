@@ -133,7 +133,7 @@
         </LinearLayout>
         <LinearLayout
             android:orientation="horizontal"
-            android:gravity="right"
+            android:gravity="end"
             android:layout_weight="7"
             android:layout_width="0dp"
             android:layout_height="wrap_content">
@@ -147,14 +147,14 @@
                 <ImageView
                     android:id="@+id/symbol"
                     app:srcCompat="@drawable/ic_select_symbol"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_width="@dimen/diary_symbol_width"
                     android:layout_height="@dimen/diary_symbol_height" />
                 <TextView
                     android:id="@+id/symbolTextArrow"
                     android:text="▼"
                     android:textSize="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -162,7 +162,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:gravity="right"
+        android:gravity="end"
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -175,7 +175,7 @@
             android:layout_height="wrap_content"/>
         <TextView
             android:id="@+id/closeToolbar"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:textColor="@android:color/white"
             android:background="@drawable/bg_card_button"
             android:text="@string/filter_close"

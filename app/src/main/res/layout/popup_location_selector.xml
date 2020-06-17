@@ -10,8 +10,8 @@
     <ImageView
         style="@style/image_view_custom_toolbar_icon"
         android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_gravity="right"
+        android:layout_marginEnd="10dp"
+        android:layout_gravity="end"
         android:id="@+id/closePopup"
         android:theme="@style/AppTheme.AppBarOverlay"
         android:contentDescription=""

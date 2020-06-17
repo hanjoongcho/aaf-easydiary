@@ -7,7 +7,7 @@
     <LinearLayout
         android:id="@+id/allDayContainer"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="@dimen/toolbar_icon_margin_side"
+        android:layout_marginStart="@dimen/toolbar_icon_margin_side"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -25,11 +25,11 @@
     </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
-        android:gravity="right|center_vertical"
+        android:gravity="end|center_vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ImageView
-            android:layout_marginRight="@dimen/toolbar_icon_margin_right"
+            android:layout_marginEnd="@dimen/toolbar_icon_margin_right"
             android:id="@+id/datePicker"
             android:contentDescription="@string/date_picker"
             android:src="@drawable/calendar_4_w"
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             style="@style/image_view_custom_toolbar_icon"/>
         <ImageView
-            android:layout_marginRight="@dimen/toolbar_icon_margin_right"
+            android:layout_marginEnd="@dimen/toolbar_icon_margin_right"
             android:id="@+id/timePicker"
             android:contentDescription="@string/time_picker"
             android:src="@drawable/time_8_w"
@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             style="@style/image_view_custom_toolbar_icon"/>
         <ImageView
-            android:layout_marginRight="@dimen/toolbar_icon_margin_right"
+            android:layout_marginEnd="@dimen/toolbar_icon_margin_right"
             android:id="@+id/secondsPicker"
             android:contentDescription="@string/seconds_picker"
             android:src="@drawable/time_w"
@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
             style="@style/image_view_custom_toolbar_icon"/>
         <ImageView
-            android:layout_marginRight="@dimen/toolbar_icon_margin_right"
+            android:layout_marginEnd="@dimen/toolbar_icon_margin_right"
             android:id="@+id/microphone"
             android:contentDescription="@string/speech_to_text"
             android:src="@drawable/microphone"
@@ -61,11 +61,11 @@
             android:layout_height="wrap_content"
             style="@style/image_view_custom_toolbar_icon"/>
         <ImageView
-            android:layout_marginRight="@dimen/toolbar_icon_margin_side"
+            android:layout_marginEnd="@dimen/toolbar_icon_margin_side"
             android:id="@+id/saveContents"
             android:contentDescription="@string/save_diary"
             android:src="@drawable/save_w"
-            android:layout_gravity="right|center_vertical"
+            android:layout_gravity="end|center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/image_view_custom_toolbar_icon"/>

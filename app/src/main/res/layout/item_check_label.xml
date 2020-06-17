@@ -6,15 +6,15 @@
     android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/checkIcon"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <com.simplemobiletools.commons.views.MyTextView
         android:gravity="center_vertical"
         android:id="@+id/textView"
-        android:paddingRight="20dp"
+        android:paddingEnd="20dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:layout_weight="1"

@@ -15,7 +15,7 @@
                 app:applyGlobalSize="false"
                 app:applyGlobalColor="false"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 android:layout_margin="@dimen/dashboard_title_padding"
                 android:visibility="gone"
                 android:id="@+id/chartTitle"
