@@ -71,7 +71,7 @@
                     android:id="@+id/diaryContents"
                     style="@style/edit_text_diary_edit_inner_contents"
                     android:background="@android:color/transparent"
-                    android:gravity="top|start"
+                    android:gravity="top"
                     android:hint="@string/contents_text_hint"
                     android:inputType="text|textCapSentences|textAutoCorrect|textMultiLine|textLongMessage" />
             </ScrollView>
