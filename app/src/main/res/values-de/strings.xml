@@ -423,6 +423,10 @@
         v1.4.134 / 2020.06.14\n
         User Experience (UX) Optimization
     </string>
+    <string name="release_201">
+        v1.4.135 / 2020.06.18\n
+        Added RTL language support
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
