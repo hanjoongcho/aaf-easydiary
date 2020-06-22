@@ -27,8 +27,8 @@ class DiaryMainWidget : AppWidgetProvider() {
     }
 
     private fun getProperLayout(context: Context) = if (isOreoPlus()) {
-        R.layout.simple_app_widget
+        R.layout.widget_diary_main
     } else {
-        R.layout.simple_app_widget
+        R.layout.widget_diary_main
     }
 }
