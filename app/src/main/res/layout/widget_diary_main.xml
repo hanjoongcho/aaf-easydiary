@@ -1,17 +1,17 @@
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/bg_card_diary"
+    android:padding="10dp"
     android:orientation="horizontal"
-    android:background="@android:color/white"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
         <LinearLayout
+            android:layout_alignParentStart="true"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/symbol"
-                app:srcCompat="@drawable/ic_select_symbol"
                 android:layout_marginEnd="10dp"
                 android:layout_width="@dimen/diary_symbol_width"
                 android:layout_height="@dimen/diary_symbol_height" />
@@ -23,7 +23,12 @@
                 android:layout_marginEnd="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+        </LinearLayout>
 
+        <LinearLayout
+            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/clearQuery"
                 android:src="@drawable/delete"
@@ -31,4 +36,4 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
-</LinearLayout>
+</RelativeLayout>
