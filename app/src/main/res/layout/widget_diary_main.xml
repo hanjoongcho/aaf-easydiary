@@ -1,0 +1,61 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_holder"
+    android:padding="@dimen/card_layout_padding"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/searchCard"
+        app:cardElevation="3dp"
+        style="@style/AppCard">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:id="@+id/feelingSymbolButton"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/symbol"
+                    app:srcCompat="@drawable/ic_select_symbol"
+                    android:layout_marginEnd="10dp"
+                    android:layout_width="@dimen/diary_symbol_width"
+                    android:layout_height="@dimen/diary_symbol_height" />
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:id="@+id/symbolTextArrow"
+                    android:layout_gravity="center_vertical"
+                    android:text="▼"
+                    android:textSize="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <com.simplemobiletools.commons.views.MyEditText
+                android:id="@+id/query"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:gravity="center_vertical"
+                android:layout_gravity="center_vertical"
+                android:hint="@string/guide_message_2"
+                android:inputType="text|textAutoCorrect|textAutoComplete"
+                android:imeOptions="actionDone"
+                android:maxLines="1" />
+
+            <ImageView
+                android:id="@+id/clearQuery"
+                android:src="@drawable/delete"
+                android:layout_gravity="end|center_vertical"
+                android:padding="3dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>
