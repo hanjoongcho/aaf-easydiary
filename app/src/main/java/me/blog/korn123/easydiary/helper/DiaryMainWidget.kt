@@ -4,6 +4,7 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Build
@@ -38,7 +39,8 @@ class DiaryMainWidget : AppWidgetProvider() {
                     drawable.draw(c)
                     setImageViewBitmap(R.id.symbol, b)
                 }
-
+                val intentService = Intent(context, DiaryMainWidgetService::class.java)
+                setRemoteAdapter(R.id.diaryListView, intentService)
                 appWidgetManager.updateAppWidget(it, this)
             }
         }

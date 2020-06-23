@@ -62,6 +62,7 @@
         <service android:name=".services.NotificationService" />
         <service android:name=".services.RecoverPhotoService" />
         <service android:name=".services.BackupPhotoService" />
+        <service android:name=".helper.DiaryMainWidgetService" />
         <receiver android:name=".receivers.AlarmReceiver" />
         <receiver android:name=".receivers.BootCompletedReceiver">
             <intent-filter>
