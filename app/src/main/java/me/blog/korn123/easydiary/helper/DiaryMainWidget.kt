@@ -17,13 +17,6 @@ import me.blog.korn123.easydiary.R
 class DiaryMainWidget : AppWidgetProvider() {
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
-        super.onUpdate(context, appWidgetManager, appWidgetIds)
-        performUpdate(context)
-    }
-
-    private fun getComponentName(context: Context) = ComponentName(context, this::class.java)
-
-    private fun performUpdate(context: Context) {
         val appWidgetManager = AppWidgetManager.getInstance(context)
         appWidgetManager.getAppWidgetIds(getComponentName(context)).forEach {
             RemoteViews(context.packageName, getProperLayout(context)).apply {
@@ -44,6 +37,14 @@ class DiaryMainWidget : AppWidgetProvider() {
                 appWidgetManager.updateAppWidget(it, this)
             }
         }
+
+        super.onUpdate(context, appWidgetManager, appWidgetIds)
+    }
+
+    private fun getComponentName(context: Context) = ComponentName(context, this::class.java)
+
+    private fun performUpdate(context: Context) {
+
     }
 
     private fun getProperLayout(context: Context) = if (isOreoPlus()) {
