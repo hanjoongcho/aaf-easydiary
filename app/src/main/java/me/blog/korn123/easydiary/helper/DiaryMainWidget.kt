@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.net.Uri
 import android.os.Build
 import android.widget.RemoteViews
 import androidx.core.content.ContextCompat
@@ -32,9 +33,13 @@ class DiaryMainWidget : AppWidgetProvider() {
                     drawable.draw(c)
                     setImageViewBitmap(R.id.symbol, b)
                 }
-                val intentService = Intent(context, DiaryMainWidgetService::class.java)
-                setRemoteAdapter(R.id.diaryListView, intentService)
+
+                Intent(context, DiaryMainWidgetService::class.java).apply {
+                    setRemoteAdapter(R.id.diaryListView, this)
+                }
+                setEmptyView(R.id.diaryListView, R.id.widget_event_list_empty)
                 appWidgetManager.updateAppWidget(it, this)
+                appWidgetManager.notifyAppWidgetViewDataChanged(it, R.id.diaryListView)
             }
         }
 
