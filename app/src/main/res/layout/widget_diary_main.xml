@@ -1,7 +1,6 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@drawable/bg_card_diary"
-    android:padding="5dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -11,26 +10,6 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <LinearLayout
-            android:layout_alignParentStart="true"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/symbol"
-                android:layout_marginEnd="10dp"
-                android:layout_width="@dimen/diary_symbol_width"
-                android:layout_height="@dimen/diary_symbol_height" />
-            <TextView
-                android:id="@+id/symbolTextArrow"
-                android:layout_gravity="center_vertical"
-                android:text="▼"
-                android:textSize="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
         <LinearLayout
             android:layout_alignParentEnd="true"
             android:layout_width="wrap_content"
@@ -56,6 +35,8 @@
 
     <ListView
         android:id="@+id/diaryListView"
+        android:fastScrollEnabled="true"
+        android:padding="5dp"
         android:clipToPadding="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
