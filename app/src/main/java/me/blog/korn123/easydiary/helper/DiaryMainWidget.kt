@@ -29,7 +29,7 @@ class DiaryMainWidget : AppWidgetProvider() {
     override fun onReceive(context: Context, intent: Intent) {
         when (intent.action) {
             OPEN_WRITE_PAGE -> {
-                context.startActivity(Intent(context, DiaryInsertActivity::class.java))
+                context.startActivity(Intent(context, DiaryInsertActivity::class.java).apply { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) })
             }
             else -> super.onReceive(context, intent)
         }
