@@ -35,7 +35,6 @@
 
     <ListView
         android:id="@+id/diaryListView"
-        android:fastScrollEnabled="true"
         android:padding="5dp"
         android:clipToPadding="true"
         android:layout_width="match_parent"
