@@ -1,10 +1,12 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@drawable/bg_card_diary"
+    android:padding="5dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
     <RelativeLayout
+        android:background="#C6C6C6"
         android:padding="10dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -34,8 +36,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <ImageView
-                android:id="@+id/clearQuery"
-                android:src="@drawable/delete"
+                android:id="@+id/openWritePage"
+                android:src="@drawable/edit"
                 android:padding="3dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -54,6 +56,7 @@
 
     <ListView
         android:id="@+id/diaryListView"
+        android:clipToPadding="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </ListView>
