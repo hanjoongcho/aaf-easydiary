@@ -15,15 +15,15 @@
             android:layout_alignParentStart="true"
             android:id="@+id/updateWidget"
             android:src="@drawable/update"
-            android:layout_width="32dp"
-            android:layout_height="32dp" />
+            android:layout_width="28dp"
+            android:layout_height="28dp" />
 
         <ImageView
             android:layout_alignParentEnd="true"
             android:id="@+id/openWritePage"
             android:src="@drawable/edit"
-            android:layout_width="32dp"
-            android:layout_height="32dp" />
+            android:layout_width="28dp"
+            android:layout_height="28dp" />
     </RelativeLayout>
 
     <TextView
