@@ -7,17 +7,14 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
-import android.graphics.*
-import android.os.Build
+import android.graphics.Color
 import android.widget.RemoteViews
-import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.content.ContextCompat
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryInsertActivity
+import me.blog.korn123.easydiary.extensions.changeBitmapColor
 import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.getColorResCompat
 
 
 class DiaryMainWidget : AppWidgetProvider() {
@@ -38,8 +35,8 @@ class DiaryMainWidget : AppWidgetProvider() {
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         val iconColor = when (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_YES -> Color.parseColor("#FFFFFFFF")
-            Configuration.UI_MODE_NIGHT_NO -> Color.parseColor("#FF000000")
-            else -> Color.parseColor("#FF000000")
+            Configuration.UI_MODE_NIGHT_NO -> Color.parseColor("#FF545454")
+            else -> Color.parseColor("#FF545454")
         }
         context.run {
             changeDrawableIconColor(config.textColor, R.drawable.edit)
@@ -47,19 +44,8 @@ class DiaryMainWidget : AppWidgetProvider() {
         val appWidgetManager = AppWidgetManager.getInstance(context)
         appWidgetManager.getAppWidgetIds(getComponentName(context)).forEach {
             RemoteViews(context.packageName, getProperLayout(context)).apply {
-                var drawable = AppCompatResources.getDrawable(context!!, R.drawable.edit)
-                val bitmap = Bitmap.createBitmap(drawable!!.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
-                val canvas = Canvas(bitmap)
-                drawable.run {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        colorFilter = BlendModeColorFilter(iconColor, BlendMode.SRC_IN);
-                    } else {
-                        setColorFilter(iconColor, PorterDuff.Mode.SRC_IN)
-                    }
-                }
-                drawable.setBounds(0, 0, canvas.width, canvas.height)
-                drawable.draw(canvas)
-                setImageViewBitmap(R.id.openWritePage, bitmap)
+                setImageViewBitmap(R.id.openWritePage, context.changeBitmapColor(R.drawable.edit, iconColor))
+                setImageViewBitmap(R.id.updateWidget, context.changeBitmapColor(R.drawable.update, iconColor))
 
                 setupIntent(context, this, OPEN_WRITE_PAGE, R.id.openWritePage)
 

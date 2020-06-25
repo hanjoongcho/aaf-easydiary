@@ -10,17 +10,19 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <LinearLayout
+        <ImageView
+            android:layout_alignParentStart="true"
+            android:id="@+id/updateWidget"
+            android:src="@drawable/update"
+            android:layout_width="32dp"
+            android:layout_height="32dp" />
+
+        <ImageView
             android:layout_alignParentEnd="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/openWritePage"
-                android:src="@drawable/edit"
-                android:padding="3dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+            android:id="@+id/openWritePage"
+            android:src="@drawable/edit"
+            android:layout_width="32dp"
+            android:layout_height="32dp" />
     </RelativeLayout>
 
     <TextView

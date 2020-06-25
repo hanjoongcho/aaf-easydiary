@@ -26,6 +26,7 @@ import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SwitchCompat
 import androidx.cardview.widget.CardView
 import androidx.core.app.AlarmManagerCompat
@@ -593,4 +594,20 @@ fun Context.getColorResCompat(@AttrRes id: Int): Int {
     theme.resolveAttribute(id, resolvedAttr, true)
     val colorRes = resolvedAttr.run { if (resourceId != 0) resourceId else data }
     return ContextCompat.getColor(this, colorRes)
+}
+
+fun Context.changeBitmapColor(drawableResourceId: Int, color: Int): Bitmap {
+    val drawable = AppCompatResources.getDrawable(this, drawableResourceId)
+    val bitmap = Bitmap.createBitmap(drawable!!.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+    val canvas = Canvas(bitmap)
+    drawable.run {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            colorFilter = BlendModeColorFilter(color, BlendMode.SRC_IN)
+        } else {
+            setColorFilter(color, PorterDuff.Mode.SRC_IN)
+        }
+        setBounds(0, 0, canvas.width, canvas.height)
+        draw(canvas)
+    }
+    return bitmap
 }
