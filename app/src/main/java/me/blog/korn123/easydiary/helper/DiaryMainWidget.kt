@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.*
 import android.os.Build
 import android.widget.RemoteViews
@@ -16,6 +17,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryInsertActivity
 import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.getColorResCompat
 
 
 class DiaryMainWidget : AppWidgetProvider() {
@@ -34,6 +36,11 @@ class DiaryMainWidget : AppWidgetProvider() {
     }
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
+        val iconColor = when (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+            Configuration.UI_MODE_NIGHT_YES -> Color.parseColor("#FFFFFFFF")
+            Configuration.UI_MODE_NIGHT_NO -> Color.parseColor("#FF000000")
+            else -> Color.parseColor("#FF000000")
+        }
         context.run {
             changeDrawableIconColor(config.textColor, R.drawable.edit)
         }
@@ -45,9 +52,9 @@ class DiaryMainWidget : AppWidgetProvider() {
                 val canvas = Canvas(bitmap)
                 drawable.run {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        colorFilter = BlendModeColorFilter(android.R.attr.textColorPrimary, BlendMode.SRC_IN);
+                        colorFilter = BlendModeColorFilter(iconColor, BlendMode.SRC_IN);
                     } else {
-                        setColorFilter(android.R.attr.textColorPrimary, PorterDuff.Mode.SRC_IN)
+                        setColorFilter(iconColor, PorterDuff.Mode.SRC_IN)
                     }
                 }
                 drawable.setBounds(0, 0, canvas.width, canvas.height)

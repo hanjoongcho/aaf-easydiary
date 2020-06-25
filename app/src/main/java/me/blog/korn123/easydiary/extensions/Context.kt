@@ -22,6 +22,8 @@ import android.widget.CheckBox
 import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
@@ -584,4 +586,11 @@ fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): No
     return notification
 }
 
-
+@ColorInt
+@SuppressLint("ResourceAsColor")
+fun Context.getColorResCompat(@AttrRes id: Int): Int {
+    val resolvedAttr = TypedValue()
+    theme.resolveAttribute(id, resolvedAttr, true)
+    val colorRes = resolvedAttr.run { if (resourceId != 0) resourceId else data }
+    return ContextCompat.getColor(this, colorRes)
+}
