@@ -21,6 +21,7 @@ class DiaryMainWidget : AppWidgetProvider() {
 
     companion object {
         const val OPEN_WRITE_PAGE = "open_write_page"
+        const val UPDATE_WIDGET = "update_widget"
     }
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -28,15 +29,32 @@ class DiaryMainWidget : AppWidgetProvider() {
             OPEN_WRITE_PAGE -> {
                 context.startActivity(Intent(context, DiaryInsertActivity::class.java).apply { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) })
             }
+            UPDATE_WIDGET -> {
+                performUpdate(context)
+            }
             else -> super.onReceive(context, intent)
         }
     }
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
-        val iconColor = when (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-            Configuration.UI_MODE_NIGHT_YES -> Color.parseColor("#FFFFFFFF")
-            Configuration.UI_MODE_NIGHT_NO -> Color.parseColor("#FF545454")
-            else -> Color.parseColor("#FF545454")
+        super.onUpdate(context, appWidgetManager, appWidgetIds)
+        performUpdate(context)
+    }
+
+    private fun getComponentName(context: Context) = ComponentName(context, this::class.java)
+
+    private fun performUpdate(context: Context) {
+        var iconColor = 0
+        var toolbarColor = 0
+        when (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+                toolbarColor = Color.parseColor("#ff121212")
+                iconColor = Color.parseColor("#ffffffff")
+            }
+            else -> {
+                toolbarColor = Color.parseColor("#ffa3a3a3")
+                iconColor = Color.parseColor("#ffffffff")
+            }
         }
         context.run {
             changeDrawableIconColor(config.textColor, R.drawable.edit)
@@ -44,10 +62,12 @@ class DiaryMainWidget : AppWidgetProvider() {
         val appWidgetManager = AppWidgetManager.getInstance(context)
         appWidgetManager.getAppWidgetIds(getComponentName(context)).forEach {
             RemoteViews(context.packageName, getProperLayout(context)).apply {
+                setInt(R.id.widgetToolbar, "setBackgroundColor", toolbarColor)
                 setImageViewBitmap(R.id.openWritePage, context.changeBitmapColor(R.drawable.edit, iconColor))
                 setImageViewBitmap(R.id.updateWidget, context.changeBitmapColor(R.drawable.update, iconColor))
 
                 setupIntent(context, this, OPEN_WRITE_PAGE, R.id.openWritePage)
+                setupIntent(context, this, UPDATE_WIDGET, R.id.updateWidget)
 
                 Intent(context, DiaryMainWidgetService::class.java).apply {
                     setRemoteAdapter(R.id.diaryListView, this)
@@ -57,14 +77,6 @@ class DiaryMainWidget : AppWidgetProvider() {
                 appWidgetManager.notifyAppWidgetViewDataChanged(it, R.id.diaryListView)
             }
         }
-
-        super.onUpdate(context, appWidgetManager, appWidgetIds)
-    }
-
-    private fun getComponentName(context: Context) = ComponentName(context, this::class.java)
-
-    private fun performUpdate(context: Context) {
-
     }
 
     private fun setupIntent(context: Context, views: RemoteViews, action: String, id: Int) {
