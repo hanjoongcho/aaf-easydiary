@@ -6,13 +6,11 @@ import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.net.Uri
+import android.graphics.*
 import android.os.Build
 import android.widget.RemoteViews
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryInsertActivity
@@ -42,18 +40,19 @@ class DiaryMainWidget : AppWidgetProvider() {
         val appWidgetManager = AppWidgetManager.getInstance(context)
         appWidgetManager.getAppWidgetIds(getComponentName(context)).forEach {
             RemoteViews(context.packageName, getProperLayout(context)).apply {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    setImageViewResource(R.id.symbol, R.drawable.ic_select_symbol)
-                } else {
-                    val drawable = ContextCompat.getDrawable(context, R.drawable.ic_select_symbol)
-                    val b = Bitmap.createBitmap(drawable!!.intrinsicWidth,
-                            drawable.intrinsicHeight,
-                            Bitmap.Config.ARGB_8888)
-                    val c = Canvas(b)
-                    drawable.setBounds(0, 0, c.width, c.height)
-                    drawable.draw(c)
-                    setImageViewBitmap(R.id.symbol, b)
+                var drawable = AppCompatResources.getDrawable(context!!, R.drawable.edit)
+                val bitmap = Bitmap.createBitmap(drawable!!.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+                val canvas = Canvas(bitmap)
+                drawable.run {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        colorFilter = BlendModeColorFilter(android.R.attr.textColorPrimary, BlendMode.SRC_IN);
+                    } else {
+                        setColorFilter(android.R.attr.textColorPrimary, PorterDuff.Mode.SRC_IN)
+                    }
                 }
+                drawable.setBounds(0, 0, canvas.width, canvas.height)
+                drawable.draw(canvas)
+                setImageViewBitmap(R.id.openWritePage, bitmap)
 
                 setupIntent(context, this, OPEN_WRITE_PAGE, R.id.openWritePage)
 
