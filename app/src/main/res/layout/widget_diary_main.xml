@@ -13,17 +13,21 @@
         android:layout_height="wrap_content">
         <ImageView
             android:layout_alignParentStart="true"
+            android:padding="3dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:id="@+id/updateWidget"
             android:src="@drawable/update"
-            android:layout_width="28dp"
-            android:layout_height="28dp" />
+            android:layout_width="32dp"
+            android:layout_height="32dp" />
 
         <ImageView
             android:layout_alignParentEnd="true"
+            android:padding="3dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:id="@+id/openWritePage"
             android:src="@drawable/edit"
-            android:layout_width="28dp"
-            android:layout_height="28dp" />
+            android:layout_width="32dp"
+            android:layout_height="32dp" />
     </RelativeLayout>
 
     <TextView
