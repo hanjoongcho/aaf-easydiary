@@ -1,4 +1,4 @@
-package me.blog.korn123.easydiary.helper
+package me.blog.korn123.easydiary.widgets
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
@@ -12,15 +12,17 @@ import android.widget.RemoteViews
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryInsertActivity
+import me.blog.korn123.easydiary.activities.DiaryReadActivity
 import me.blog.korn123.easydiary.extensions.changeBitmapColor
-import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
-import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
+import me.blog.korn123.easydiary.services.DiaryMainWidgetService
 
 
 class DiaryMainWidget : AppWidgetProvider() {
 
     companion object {
         const val OPEN_WRITE_PAGE = "open_write_page"
+        const val OPEN_READ_PAGE = "open_read_page"
         const val UPDATE_WIDGET = "update_widget"
     }
 
@@ -28,6 +30,12 @@ class DiaryMainWidget : AppWidgetProvider() {
         when (intent.action) {
             OPEN_WRITE_PAGE -> {
                 context.startActivity(Intent(context, DiaryInsertActivity::class.java).apply { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) })
+            }
+            OPEN_READ_PAGE -> {
+                context.startActivity(Intent(context, DiaryReadActivity::class.java).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    putExtra(DIARY_SEQUENCE, intent.getIntExtra(DIARY_SEQUENCE, -1))
+                })
             }
             UPDATE_WIDGET -> {
                 performUpdate(context)
@@ -52,7 +60,7 @@ class DiaryMainWidget : AppWidgetProvider() {
                 iconColor = Color.parseColor("#ffffffff")
             }
             else -> {
-                toolbarColor = Color.parseColor("#ffa3a3a3")
+                toolbarColor = Color.parseColor("#ffd6d6d6")
                 iconColor = Color.parseColor("#ffffffff")
             }
         }
@@ -70,6 +78,19 @@ class DiaryMainWidget : AppWidgetProvider() {
                     setRemoteAdapter(R.id.diaryListView, this)
                 }
                 setEmptyView(R.id.diaryListView, R.id.widget_event_list_empty)
+
+
+                val pendingIntent: PendingIntent = Intent(
+                        context,
+                        DiaryMainWidget::class.java
+                ).run {
+                    action = OPEN_READ_PAGE
+                    putExtra(DIARY_SEQUENCE, getIntExtra(DIARY_SEQUENCE, -1))
+                    PendingIntent.getBroadcast(context, 0, this, PendingIntent.FLAG_UPDATE_CURRENT)
+                }
+                setPendingIntentTemplate(R.id.diaryListView, pendingIntent)
+
+
                 appWidgetManager.updateAppWidget(it, this)
                 appWidgetManager.notifyAppWidgetViewDataChanged(it, R.id.diaryListView)
             }

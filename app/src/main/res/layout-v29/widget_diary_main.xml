@@ -7,7 +7,8 @@
     android:orientation="vertical">
     <RelativeLayout
         android:id="@+id/widgetToolbar"
-        android:padding="10dp"
+        android:paddingVertical="5dp"
+        android:paddingHorizontal="10dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -17,8 +18,8 @@
             android:id="@+id/updateWidget"
             android:src="@drawable/update"
             android:padding="3dp"
-            android:layout_width="30dp"
-            android:layout_height="30dp" />
+            android:layout_width="33dp"
+            android:layout_height="33dp" />
 
         <ImageView
             android:background="?attr/selectableItemBackgroundBorderless"
@@ -26,8 +27,8 @@
             android:id="@+id/openWritePage"
             android:src="@drawable/edit"
             android:padding="3dp"
-            android:layout_width="30dp"
-            android:layout_height="30dp" />
+            android:layout_width="33dp"
+            android:layout_height="33dp" />
     </RelativeLayout>
 
     <TextView

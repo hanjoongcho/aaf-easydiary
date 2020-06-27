@@ -1,6 +1,7 @@
-package me.blog.korn123.easydiary.helper
+package me.blog.korn123.easydiary.widgets
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Build
@@ -10,6 +11,8 @@ import androidx.appcompat.content.res.AppCompatResources
 import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.DiaryDto
 
 
@@ -31,10 +34,10 @@ class DiaryMainWidgetFactory(private val context: Context) : RemoteViewsService.
     override fun hasStableIds() = true
 
     override fun getViewAt(position: Int): RemoteViews {
-        val listViewWidget = RemoteViews(context.packageName, R.layout.widget_item_diary_main)
+        val widgetItem = RemoteViews(context.packageName, R.layout.widget_item_diary_main)
         val diaryDto = diaryItems[position]
 
-        listViewWidget.run {
+        widgetItem.run {
             setTextViewText(R.id.text1, diaryDto.title)
             setTextViewText(R.id.text2, diaryDto.contents)
             setTextViewText(R.id.text3, when (diaryDto.isAllDay) {
@@ -56,11 +59,12 @@ class DiaryMainWidgetFactory(private val context: Context) : RemoteViewsService.
             }
         }
 
-//        val dataIntent = Intent()
-//        dataIntent.putExtra("item_id", arrayList.get(position)._id)
-//        dataIntent.putExtra("item_data", arrayList.get(position).content)
-//        listViewWidget.setOnClickFillInIntent(R.id.text1, dataIntent)
-        return listViewWidget
+        Intent().apply {
+            putExtra(DIARY_SEQUENCE, diaryDto.sequence)
+            widgetItem.setOnClickFillInIntent(R.id.widgetItem, this)
+        }
+
+        return widgetItem
     }
 
     override fun getCount(): Int = diaryItems.size

@@ -3,6 +3,7 @@
     android:padding="5dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/widgetItem"
     style="@style/LinearLayoutVertical">
     <LinearLayout
         style="@style/LinearLayoutHorizontal">
