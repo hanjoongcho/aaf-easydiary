@@ -325,7 +325,7 @@ fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null,
 }
 
 fun Context.changeDrawableIconColor(color: Int, resourceId: Int) {
-    ContextCompat.getDrawable(this, resourceId)?.apply {
+    AppCompatResources.getDrawable(this, resourceId)?.apply {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             colorFilter = BlendModeColorFilter(color, BlendMode.SRC_IN);
         } else {

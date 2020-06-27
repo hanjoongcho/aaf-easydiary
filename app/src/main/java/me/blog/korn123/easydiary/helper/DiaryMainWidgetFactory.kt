@@ -6,7 +6,7 @@ import android.graphics.Canvas
 import android.os.Build
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
-import androidx.core.content.ContextCompat
+import androidx.appcompat.content.res.AppCompatResources
 import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
@@ -45,7 +45,7 @@ class DiaryMainWidgetFactory(private val context: Context) : RemoteViewsService.
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 setImageViewResource(R.id.diarySymbol, FlavorUtils.sequenceToSymbolResourceId(diaryDto.weather))
             } else {
-                val drawable = ContextCompat.getDrawable(context, FlavorUtils.sequenceToSymbolResourceId(diaryDto.weather))
+                val drawable = AppCompatResources.getDrawable(context, FlavorUtils.sequenceToSymbolResourceId(diaryDto.weather))
                 val b = Bitmap.createBitmap(drawable!!.intrinsicWidth,
                         drawable.intrinsicHeight,
                         Bitmap.Config.ARGB_8888)

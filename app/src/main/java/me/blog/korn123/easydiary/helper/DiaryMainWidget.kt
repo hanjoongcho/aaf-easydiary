@@ -56,9 +56,6 @@ class DiaryMainWidget : AppWidgetProvider() {
                 iconColor = Color.parseColor("#ffffffff")
             }
         }
-        context.run {
-            changeDrawableIconColor(config.textColor, R.drawable.edit)
-        }
         val appWidgetManager = AppWidgetManager.getInstance(context)
         appWidgetManager.getAppWidgetIds(getComponentName(context)).forEach {
             RemoteViews(context.packageName, getProperLayout(context)).apply {
