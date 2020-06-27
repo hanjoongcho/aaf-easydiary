@@ -1,33 +1,33 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:theme="@style/Theme.AppCompat.DayNight"
-    android:background="?android:attr/colorBackground"
+    android:background="@drawable/bg_card_widget"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
     <RelativeLayout
         android:id="@+id/widgetToolbar"
-        android:padding="5dp"
+        android:padding="10dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
             android:background="?attr/selectableItemBackgroundBorderless"
             android:layout_alignParentStart="true"
-            android:padding="3dp"
             android:id="@+id/updateWidget"
             android:src="@drawable/update"
-            android:layout_width="32dp"
-            android:layout_height="32dp" />
+            android:padding="3dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
 
         <ImageView
             android:background="?attr/selectableItemBackgroundBorderless"
             android:layout_alignParentEnd="true"
-            android:padding="3dp"
             android:id="@+id/openWritePage"
             android:src="@drawable/edit"
-            android:layout_width="32dp"
-            android:layout_height="32dp" />
+            android:padding="3dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
     </RelativeLayout>
 
     <TextView
