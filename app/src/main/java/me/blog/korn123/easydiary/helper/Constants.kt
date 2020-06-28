@@ -429,11 +429,9 @@ const val REQUEST_CODE_FONT_PICK = 103
  *   Diary execution mode
  *
  ***************************************************************************************************/
-const val DIARY_INSERT_MODE = "mode_default"
-const val MODE_DEFAULT = "mode_default"
-const val MODE_REMINDER = "mode_reminder"
+const val DIARY_EXECUTION_MODE = "diary_execution_mode"
+const val EXECUTION_MODE_ACCESS_FROM_OUTSIDE = "execution_mode_access_from_outside"
 const val START_MAIN_ACTIVITY = 0
-const val START_DIARY_INSERT_ACTIVITY = 1
 
 
 /***************************************************************************************************

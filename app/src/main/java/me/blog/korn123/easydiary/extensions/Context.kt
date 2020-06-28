@@ -472,7 +472,7 @@ fun Context.getOpenAlarmTabIntent(alarm: Alarm): PendingIntent {
     val intent: Intent? = when (alarm.workMode) {
         Alarm.WORK_MODE_DIARY_WRITING -> {
             Intent(this, DiaryInsertActivity::class.java).apply {
-                putExtra(DIARY_INSERT_MODE, MODE_REMINDER)
+                putExtra(DIARY_EXECUTION_MODE, EXECUTION_MODE_ACCESS_FROM_OUTSIDE)
             }
         }
         Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> {

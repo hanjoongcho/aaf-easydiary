@@ -112,9 +112,11 @@ class DiaryReadActivity : EasyDiaryActivity() {
         if (fragment is PlaceholderFragment) {
             when (item.itemId) {
                 android.R.id.home ->
-                    //                finish();
-                    //                this.overridePendingTransition(R.anim.anim_left_to_center, R.anim.anim_center_to_right);
-                    this.onBackPressed()
+                    if (isAccessFromOutside()) {
+                        startMainActivityWithClearTask()
+                    } else {
+                        this.onBackPressed()
+                    }
                 R.id.edit -> {
                     if (fragment.isEncryptContents()) {
                         showEncryptPagePopup(fragment, EDITING) { inputPass ->

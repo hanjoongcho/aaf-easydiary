@@ -33,8 +33,8 @@ import me.blog.korn123.easydiary.activities.FingerprintLockActivity
 import me.blog.korn123.easydiary.activities.PinLockActivity
 import me.blog.korn123.easydiary.adapters.SymbolPagerAdapter
 import me.blog.korn123.easydiary.dialogs.WhatsNewDialog
-import me.blog.korn123.easydiary.helper.DIARY_INSERT_MODE
-import me.blog.korn123.easydiary.helper.MODE_REMINDER
+import me.blog.korn123.easydiary.helper.DIARY_EXECUTION_MODE
+import me.blog.korn123.easydiary.helper.EXECUTION_MODE_ACCESS_FROM_OUTSIDE
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.views.SlidingTabLayout
 import kotlin.system.exitProcess
@@ -239,7 +239,7 @@ fun Activity.startMainActivityWithClearTask() {
     this.overridePendingTransition(0, 0)
 }
 
-fun Activity.isReminderMode(): Boolean = intent.getStringExtra(DIARY_INSERT_MODE) == MODE_REMINDER
+fun Activity.isAccessFromOutside(): Boolean = intent.getStringExtra(DIARY_EXECUTION_MODE) == EXECUTION_MODE_ACCESS_FROM_OUTSIDE
 
 fun Activity.openFeelingSymbolDialog(guideMessage: String, callback: (Int) -> Unit) {
     var dialog: Dialog? = null

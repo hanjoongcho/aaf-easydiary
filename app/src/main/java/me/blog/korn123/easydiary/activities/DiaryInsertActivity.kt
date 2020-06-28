@@ -55,7 +55,7 @@ class DiaryInsertActivity : EditActivity() {
             diaryDto.photoUris = mPhotoUris
             EasyDiaryDbHelper.insertDiary(diaryDto)
             config.previousActivity = PREVIOUS_ACTIVITY_CREATE
-            if (isReminderMode()) {
+            if (isAccessFromOutside()) {
                 startMainActivityWithClearTask()
             } else {
                 TransitionHelper.finishActivityWithTransition(this)

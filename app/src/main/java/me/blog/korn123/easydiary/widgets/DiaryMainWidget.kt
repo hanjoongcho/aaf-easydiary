@@ -14,7 +14,9 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryInsertActivity
 import me.blog.korn123.easydiary.activities.DiaryReadActivity
 import me.blog.korn123.easydiary.extensions.changeBitmapColor
+import me.blog.korn123.easydiary.helper.DIARY_EXECUTION_MODE
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
+import me.blog.korn123.easydiary.helper.EXECUTION_MODE_ACCESS_FROM_OUTSIDE
 import me.blog.korn123.easydiary.services.DiaryMainWidgetService
 
 
@@ -29,11 +31,15 @@ class DiaryMainWidget : AppWidgetProvider() {
     override fun onReceive(context: Context, intent: Intent) {
         when (intent.action) {
             OPEN_WRITE_PAGE -> {
-                context.startActivity(Intent(context, DiaryInsertActivity::class.java).apply { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) })
+                context.startActivity(Intent(context, DiaryInsertActivity::class.java).apply {
+                    putExtra(DIARY_EXECUTION_MODE, EXECUTION_MODE_ACCESS_FROM_OUTSIDE)
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                })
             }
             OPEN_READ_PAGE -> {
                 context.startActivity(Intent(context, DiaryReadActivity::class.java).apply {
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    putExtra(DIARY_EXECUTION_MODE, EXECUTION_MODE_ACCESS_FROM_OUTSIDE)
                     putExtra(DIARY_SEQUENCE, intent.getIntExtra(DIARY_SEQUENCE, -1))
                 })
             }

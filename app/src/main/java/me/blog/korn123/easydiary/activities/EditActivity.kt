@@ -31,7 +31,6 @@ import com.bumptech.glide.Priority
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.werb.pickphotoview.PickPhotoView
-import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.CALCULATION
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
@@ -102,7 +101,7 @@ abstract class EditActivity : EasyDiaryActivity() {
     override fun onBackPressed() {
         showAlertDialog(getString(R.string.back_pressed_confirm),
                 DialogInterface.OnClickListener { _, _ ->
-                    if (isReminderMode()) {
+                    if (isAccessFromOutside()) {
                         startMainActivityWithClearTask()
                     } else {
                         super.onBackPressed()
