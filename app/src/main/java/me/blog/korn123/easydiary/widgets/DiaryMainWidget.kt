@@ -85,7 +85,6 @@ class DiaryMainWidget : AppWidgetProvider() {
                         DiaryMainWidget::class.java
                 ).run {
                     action = OPEN_READ_PAGE
-                    putExtra(DIARY_SEQUENCE, getIntExtra(DIARY_SEQUENCE, -1))
                     PendingIntent.getBroadcast(context, 0, this, PendingIntent.FLAG_UPDATE_CURRENT)
                 }
                 setPendingIntentTemplate(R.id.diaryListView, pendingIntent)
