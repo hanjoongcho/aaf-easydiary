@@ -8,6 +8,7 @@ import android.os.Build
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import androidx.appcompat.content.res.AppCompatResources
+import com.simplemobiletools.commons.extensions.setVisibleIf
 import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
@@ -57,6 +58,9 @@ class DiaryMainWidgetFactory(private val context: Context) : RemoteViewsService.
                 drawable.draw(c)
                 setImageViewBitmap(R.id.diarySymbol, b)
             }
+
+            setVisibleIf(R.id.text1, diaryDto.title.isNullOrEmpty().not())
+            setVisibleIf(R.id.diarySymbol, diaryDto.weather > 0)
         }
 
         Intent().apply {
