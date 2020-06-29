@@ -427,6 +427,10 @@
         v1.4.135 / 2020.06.18\n
         Added RTL language support
     </string>
+    <string name="release_202">
+        v1.4.136 / 2020.06.29\n
+        Added diary list widget feature
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
