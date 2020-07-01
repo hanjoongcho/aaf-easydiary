@@ -1,7 +1,6 @@
 package me.blog.korn123.easydiary.extensions
 
 import android.Manifest
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
@@ -14,6 +13,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.Fragment
 import me.blog.korn123.commons.utils.FontUtils
+import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.helper.Config
 
 val Fragment.config: Config get() = Config.newInstance(context!!)
@@ -34,9 +34,9 @@ fun Fragment.confirmPermission(permissions: Array<String>, requestCode: Int) {
     if (ActivityCompat.shouldShowRequestPermissionRationale(activity!!, Manifest.permission.WRITE_EXTERNAL_STORAGE)
             || ActivityCompat.shouldShowRequestPermissionRationale(activity!!, Manifest.permission.READ_EXTERNAL_STORAGE)) {
         AlertDialog.Builder(context!!)
-                .setMessage("Easy Diary 사용을 위해서는 권한승인이 필요합니다.")
-                .setTitle("권한승인 요청")
-                .setPositiveButton("확인") { _, _ -> requestPermissions(permissions, requestCode) }
+                .setMessage(getString(R.string.permission_confirmation_dialog_message))
+                .setTitle(getString(R.string.permission_confirmation_dialog_title))
+                .setPositiveButton(getString(R.string.ok)) { _, _ -> requestPermissions(permissions, requestCode) }
                 .show()
     } else {
         requestPermissions(permissions, requestCode)
