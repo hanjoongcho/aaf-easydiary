@@ -17,7 +17,7 @@ This is a diary application optimized to user experience.
 
 # Demo videos
 ## Basic function preview
-[![Video Label](http://img.youtube.com/vi/7Lg8o-RHFhY/0.jpg)](https://youtu.be/7Lg8o-RHFhY)
+[![Video Label](screenshots/001_Preview.png)](https://youtu.be/7Lg8o-RHFhY)
 
 # Support Features
 ```
