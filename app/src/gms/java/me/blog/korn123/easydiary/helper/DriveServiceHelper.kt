@@ -19,11 +19,10 @@ import android.accounts.Account
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
-import android.database.Cursor
 import android.net.Uri
 import android.provider.OpenableColumns
-import androidx.core.util.Pair
 import android.util.Log
+import androidx.core.util.Pair
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.api.client.extensions.android.http.AndroidHttp
@@ -35,13 +34,10 @@ import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.File
 import com.google.api.services.drive.model.FileList
 import me.blog.korn123.easydiary.R
-import org.apache.commons.io.FileUtils
-import org.apache.commons.io.FilenameUtils
 import org.apache.commons.io.IOUtils
 import java.io.*
-import java.util.Collections
+import java.util.*
 import java.util.concurrent.Callable
-import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
 /**

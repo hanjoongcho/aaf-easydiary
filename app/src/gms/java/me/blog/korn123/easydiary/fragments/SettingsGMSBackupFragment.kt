@@ -70,7 +70,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
         progressContainer = mActivity.findViewById(R.id.progressContainer)
 
         // Clear google OAuth token generated prior to version 1.4.80
-        if (!mActivity.config.clearLegacyToken) signOutGoogleOAuth(false)
+        if (!mActivity.config.clearLegacyToken) GoogleOAuthHelper.signOutGoogleOAuth(mActivity, false)
 
         bindEvent()
         updateFragmentUI(mRootView)
@@ -140,20 +140,6 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
      *   backup and recovery
      *
      ***************************************************************************************************/
-    private fun signOutGoogleOAuth(showCompleteMessage: Boolean = true) {
-        // Configure sign-in to request the user's ID, email address, and basic
-        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-        val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.oauth_requerst_id_token))
-                .requestEmail()
-                .build()
-        val client = GoogleSignIn.getClient(mActivity, gso)
-        client.signOut().addOnCompleteListener {
-            mActivity.config.clearLegacyToken = true
-            if (showCompleteMessage) mActivity.makeSnackBar("Sign out complete:)")
-        }
-    }
-
     private fun initGoogleSignAccount(callback: (account: Account) -> Unit) {
         mAccountCallback = callback
 
@@ -392,7 +378,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
                 }
             }
             R.id.signOutGoogleOAuth -> {
-                signOutGoogleOAuth()
+                GoogleOAuthHelper.signOutGoogleOAuth(mActivity)
             }
         }
     }
@@ -406,15 +392,4 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
     }
 
     private fun initPreference() {}
-}
-
-class GoogleOAuthHelper {
-    companion object {
-
-        private lateinit var mAccountCallback: (Account) -> Unit
-
-        fun isValidGoogleSignAccount(context: Context): Boolean = GoogleSignIn.getLastSignedInAccount(context) != null
-
-        fun getGoogleSignAccount(context: Context) = GoogleSignIn.getLastSignedInAccount(context)
-    }
 }
