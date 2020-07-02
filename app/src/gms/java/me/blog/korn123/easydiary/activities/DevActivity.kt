@@ -12,15 +12,18 @@ import android.provider.Settings
 import android.view.View
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_dev.*
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.helper.GoogleOAuthHelper
-import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
-import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
-import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_NAME
+import me.blog.korn123.easydiary.extensions.makeSnackBar
+import me.blog.korn123.easydiary.extensions.pauseLock
+import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.services.NotificationService
 
 
@@ -71,16 +74,39 @@ class DevActivity : EasyDiaryActivity() {
         }
 
         checkGoogleOauthToken.setOnClickListener {
-            if (GoogleOAuthHelper.isValidGoogleSignAccount(this)) {
-                GoogleOAuthHelper.getGoogleSignAccount(this)?.run {
-                    val sb = StringBuilder()
-                    sb.append(this.displayName + "\n")
-                    sb.append(this.email + "\n")
-                    sb.append(this.id + "\n")
-                    sb.append(this.isExpired.toString() + "\n")
-                    accountInfo.text = sb.toString()
+            when (GoogleOAuthHelper.isValidGoogleSignAccount(this)) {
+                true -> determineAccountInfo()
+                false -> {
+                    GoogleOAuthHelper.initGoogleSignAccount(this) {
+                        determineAccountInfo()
+                    }
                 }
+            }
+        }
+    }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
+        pauseLock()
+
+        when (resultCode == Activity.RESULT_OK && intent != null) {
+            true -> {
+                when (requestCode) {
+                    REQUEST_CODE_GOOGLE_SIGN_IN -> {
+                        val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(intent)
+                        val googleSignAccount = task.getResult(ApiException::class.java)
+                        googleSignAccount?.account?.let {
+                            GoogleOAuthHelper.callAccountCallback(it)
+                        }
+                    }
+                }
+            }
+            false -> {
+                when (requestCode) {
+                    REQUEST_CODE_GOOGLE_SIGN_IN -> {
+                        makeSnackBar("Google account verification failed.")
+                    }
+                }
             }
         }
     }
@@ -91,6 +117,17 @@ class DevActivity : EasyDiaryActivity() {
      *
      ***************************************************************************************************/
     private fun initDevUI() { }
+
+    private fun determineAccountInfo() {
+        GoogleOAuthHelper.getGoogleSignAccount(this)?.run {
+            val sb = StringBuilder()
+            sb.append(this.displayName + "\n")
+            sb.append(this.email + "\n")
+            sb.append(this.id + "\n")
+            sb.append(this.isExpired.toString() + "\n")
+            accountInfo.text = sb.toString()
+        }
+    }
 
     @SuppressLint("NewApi")
     private fun createNotification(notificationInfo: NotificationInfo): Notification {
