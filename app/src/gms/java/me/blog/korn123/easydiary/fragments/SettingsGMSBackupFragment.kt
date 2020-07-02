@@ -2,7 +2,6 @@ package me.blog.korn123.easydiary.fragments
 
 import android.accounts.Account
 import android.app.Activity
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -16,17 +15,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.google.android.gms.tasks.Tasks
-import com.google.api.client.extensions.android.http.AndroidHttp
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
-import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
-import com.google.api.client.json.gson.GsonFactory
-import com.google.api.services.drive.Drive
-import com.google.api.services.drive.DriveScopes
-import com.google.api.services.drive.model.FileList
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.layout_settings_backup_gms.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
@@ -34,11 +24,11 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.RealmFileItemAdapter
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.helper.GoogleOAuthHelper.Companion.callAccountCallback
+import me.blog.korn123.easydiary.helper.GoogleOAuthHelper.Companion.initGoogleSignAccount
 import me.blog.korn123.easydiary.services.BackupPhotoService
 import me.blog.korn123.easydiary.services.RecoverPhotoService
 import java.util.*
-import java.util.concurrent.Callable
-import java.util.concurrent.Executors
 
 class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
 
@@ -48,7 +38,6 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     private lateinit var progressContainer: ConstraintLayout
-    private lateinit var mAccountCallback: (Account) -> Unit
     private lateinit var mRootView: ViewGroup
     private var mTaskFlag = 0
     private val mActivity: Activity
@@ -97,11 +86,8 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
                         val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(intent)
                         val googleSignAccount = task.getResult(ApiException::class.java)
                         googleSignAccount?.account?.let {
-                            requestDrivePermissions(it) { mAccountCallback.invoke(it) }
+                            callAccountCallback(it)
                         }
-                    }
-                    REQUEST_CODE_GOOGLE_DRIVE_PERMISSIONS -> {
-                        mPermissionCallback.invoke()
                     }
                 }
             }
@@ -140,51 +126,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
      *   backup and recovery
      *
      ***************************************************************************************************/
-    private fun initGoogleSignAccount(callback: (account: Account) -> Unit) {
-        mAccountCallback = callback
 
-        // Check for existing Google Sign In account, if the user is already signed in
-        // the GoogleSignInAccount will be non-null.
-        val googleSignInAccount: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(mActivity)
-
-        if (googleSignInAccount == null) {
-            // Configure sign-in to request the user's ID, email address, and basic
-            // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-            val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(getString(R.string.oauth_requerst_id_token))
-                    .requestEmail()
-                    .build()
-            val client = GoogleSignIn.getClient(mActivity, gso)
-            startActivityForResult(client.signInIntent, REQUEST_CODE_GOOGLE_SIGN_IN)
-        } else {
-            googleSignInAccount.account?.let {
-                requestDrivePermissions(it) { mAccountCallback.invoke(it) }
-            }
-        }
-    }
-
-    // FIXME: workaround
-    private lateinit var mPermissionCallback: () -> Unit
-    private fun requestDrivePermissions(account: Account, permissionCallback: () -> Unit) {
-        mPermissionCallback = permissionCallback
-        val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(mActivity, Collections.singleton(DriveScopes.DRIVE_FILE))
-        credential.selectedAccount = account
-        val googleDriveService: Drive = Drive.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
-                .setApplicationName(getString(R.string.app_name))
-                .build()
-
-        val executor = Executors.newSingleThreadExecutor()
-        Tasks.call(executor, Callable<FileList> {
-            try {
-                var r = googleDriveService.files().list().setQ("'root' in parents and name = '${DriveServiceHelper.AAF_ROOT_FOLDER_NAME}' and trashed = false").setSpaces("drive").execute()
-                mPermissionCallback.invoke()
-                r
-            } catch (e: UserRecoverableAuthIOException) {
-                startActivityForResult(e.intent, REQUEST_CODE_GOOGLE_DRIVE_PERMISSIONS)
-                null
-            }
-        })
-    }
 
     private fun initDriveWorkingDirectory(account: Account, workingFolderName: String, callback: (workingFolderId: String) -> Unit) {
         val driveServiceHelper = DriveServiceHelper(mActivity, account)
@@ -228,7 +170,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
 //            if (EasyDiaryDbHelper.countPhotoUriBy(FILE_URI_PREFIX + it.absolutePath) == 0) it.delete()
 //        }
         val realmPath = EasyDiaryDbHelper.getRealmPath()
-        initGoogleSignAccount { account ->
+        initGoogleSignAccount(this) { account ->
             initDriveWorkingDirectory(account, DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME) {
                 val driveServiceHelper = DriveServiceHelper(mActivity, account)
                 driveServiceHelper.createFile(
@@ -256,7 +198,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
     }
 
     private fun openRealmFilePickerDialog() {
-        initGoogleSignAccount { account ->
+        initGoogleSignAccount(this) { account ->
             val driveServiceHelper = DriveServiceHelper(mActivity, account)
 
 //            driveServiceHelper.queryFiles("mimeType contains 'text/aaf_v' and name contains '$DIARY_DB_NAME'", 1000)
@@ -308,7 +250,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
     private fun recoverDiaryPhoto() {
         mActivity.setScreenOrientationSensor(false)
         progressContainer.visibility = View.VISIBLE
-        initGoogleSignAccount { _ ->
+        initGoogleSignAccount(this) { _ ->
             mActivity.runOnUiThread {
                 progressContainer.visibility = View.GONE
                 mActivity.run {
@@ -325,7 +267,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
     private fun backupDiaryPhoto() {
         mActivity.setScreenOrientationSensor(false)
         progressContainer.visibility = View.VISIBLE
-        initGoogleSignAccount { account ->
+        initGoogleSignAccount(this) { account ->
             initDriveWorkingDirectory(account, DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
                 progressContainer.visibility = View.GONE
                 mActivity.run {
