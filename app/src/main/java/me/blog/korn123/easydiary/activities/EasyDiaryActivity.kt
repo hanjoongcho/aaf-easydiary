@@ -1,7 +1,6 @@
 package me.blog.korn123.easydiary.activities
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.ViewGroup
 import com.simplemobiletools.commons.models.Release
 import io.github.aafactory.commons.activities.BaseSimpleActivity
@@ -9,7 +8,6 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.*
-import me.blog.korn123.easydiary.helper.APP_BACKGROUND_ALPHA
 
 /**
  * Created by hanjoong on 2017-05-03.

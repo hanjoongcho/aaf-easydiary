@@ -83,6 +83,10 @@ class DevActivity : EasyDiaryActivity() {
                 }
             }
         }
+
+        clearGoogleOauthToken.setOnClickListener {
+            GoogleOAuthHelper.signOutGoogleOAuth(this, true)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
