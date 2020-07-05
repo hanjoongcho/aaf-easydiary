@@ -431,6 +431,10 @@
         v1.4.136 / 2020.06.29\n
         Added diary list widget feature
     </string>
+    <string name="release_203">
+        v1.4.137 / 2020.07.05\n
+        Applied Google Play security policy
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
