@@ -12,6 +12,8 @@ import android.provider.Settings
 import android.view.View
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
@@ -130,6 +132,10 @@ class DevActivity : EasyDiaryActivity() {
             sb.append(this.id + "\n")
             sb.append(this.isExpired.toString() + "\n")
             accountInfo.text = sb.toString()
+            Glide.with(this@DevActivity)
+                    .load(this.photoUrl)
+                    .apply(RequestOptions().circleCrop())
+                    .into(profilePhoto)
         }
     }
 
