@@ -435,6 +435,10 @@
         v1.4.137 / 2020.07.05\n
         Googleのプレイセキュリティポリシーの適用
     </string>
+    <string name="release_204">
+        v1.4.138 / 2020.07.09\n
+        Googleのドライブに接続されたアカウント情報の表示機能を追加
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -655,4 +659,6 @@
     <string name="schedule_empty_message">設定されているスケジュール情報はありません。\n右上のプラスボタンをクリックして、新しいスケジュールを追加します。</string>
     <string name="permission_confirmation_dialog_title">承認をリクエスト</string>
     <string name="permission_confirmation_dialog_message">Easy Diaryを使用するには認証が必要です。</string>
+    <string name="google_drive_account_information_title">Googleのドライブ連動アカウント情報</string>
+    <string name="google_drive_account_information_guide_message">Googleのドライブに連動されたアカウント情報が存在しません。</string>
 </resources>

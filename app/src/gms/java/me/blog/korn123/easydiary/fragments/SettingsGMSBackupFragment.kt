@@ -360,7 +360,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
             }
             false -> {
                 profilePhoto.visibility = View.GONE
-                accountInfo.text = "No linked Google account information"
+                accountInfo.text = getString(R.string.google_drive_account_information_guide_message)
             }
         }
     }

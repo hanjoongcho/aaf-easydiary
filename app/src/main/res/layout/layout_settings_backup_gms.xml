@@ -4,7 +4,6 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-
     <LinearLayout
         android:orientation="vertical"
         android:padding="@dimen/card_layout_padding"
@@ -18,7 +17,7 @@
                 <com.simplemobiletools.commons.views.MyTextView
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:text="Linked Google account information"
+                    android:text="@string/google_drive_account_information_title"
                     android:id="@+id/accountInfoTitle"
                     style="@style/SettingsTitle" />
 
