@@ -76,19 +76,31 @@
                 android:id="@+id/checkGoogleOauthToken"
                 android:orientation="vertical"
                 style="@style/AppCard.Settings">
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     style="@style/LinearLayoutVertical">
                     <com.simplemobiletools.commons.views.MyTextView
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
                         android:text="Google OAuth"
+                        android:id="@+id/accountInfoTitle"
                         style="@style/SettingsTitle" />
-                    <com.simplemobiletools.commons.views.MyTextView
-                        android:id="@+id/accountInfo"
-                        style="@style/SettingsSummary" />
+
                     <ImageView
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/accountInfoTitle"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         android:id="@+id/profilePhoto"
                         android:layout_width="50dp"
                         android:layout_height="50dp"/>
-                </LinearLayout>
+
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:id="@+id/accountInfo"
+                        android:layout_marginLeft="10dp"
+                        app:layout_constraintLeft_toRightOf="@+id/profilePhoto"
+                        app:layout_constraintTop_toBottomOf="@+id/accountInfoTitle"
+                        android:layout_width="wrap_content"
+                        style="@style/SettingsSummary" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
             <androidx.cardview.widget.CardView
                 android:id="@+id/clearGoogleOauthToken"

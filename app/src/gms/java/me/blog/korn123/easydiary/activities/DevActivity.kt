@@ -49,6 +49,7 @@ class DevActivity : EasyDiaryActivity() {
             title = "Easy-Diary Dev Mode"
             setDisplayHomeAsUpEnabled(true)
         }
+        determineAccountInfo()
 
         nextAlarm.setOnClickListener {
             val nextAlarm = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -127,10 +128,8 @@ class DevActivity : EasyDiaryActivity() {
     private fun determineAccountInfo() {
         GoogleOAuthHelper.getGoogleSignAccount(this)?.run {
             val sb = StringBuilder()
-            sb.append(this.displayName + "\n")
-            sb.append(this.email + "\n")
-            sb.append(this.id + "\n")
-            sb.append(this.isExpired.toString() + "\n")
+            sb.append(this.displayName +  System.getProperty("line.separator"))
+            sb.append(this.email)
             accountInfo.text = sb.toString()
             Glide.with(this@DevActivity)
                     .load(this.photoUrl)

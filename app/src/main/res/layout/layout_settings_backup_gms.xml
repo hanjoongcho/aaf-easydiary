@@ -1,5 +1,5 @@
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -9,6 +9,52 @@
         android:padding="@dimen/card_layout_padding"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <androidx.cardview.widget.CardView
+            android:orientation="vertical"
+            style="@style/AppCard.Settings">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                style="@style/LinearLayoutVertical">
+                <com.simplemobiletools.commons.views.MyTextView
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:text="Linked Google account information"
+                    android:id="@+id/accountInfoTitle"
+                    style="@style/SettingsTitle" />
+
+                <ImageView
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/accountInfoTitle"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:id="@+id/profilePhoto"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"/>
+
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:id="@+id/accountInfo"
+                    app:layout_constraintLeft_toRightOf="@+id/profilePhoto"
+                    app:layout_constraintTop_toBottomOf="@+id/accountInfoTitle"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_width="wrap_content"
+                    style="@style/SettingsSummary" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/signOutGoogleOAuth"
+            style="@style/AppCard.Settings">
+            <LinearLayout
+                style="@style/LinearLayoutVertical">
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="@string/google_drive_account_sign_out_title"
+                    style="@style/SettingsTitle" />
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="@string/google_drive_account_sign_out_description"
+                    style="@style/SettingsSummary" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
         <androidx.cardview.widget.CardView
             android:id="@+id/backupSetting"
             style="@style/AppCard.Settings">
@@ -61,20 +107,6 @@
                     style="@style/SettingsTitle" />
                 <com.simplemobiletools.commons.views.MyTextView
                     android:text="@string/recover_attach_photo_summary"
-                    style="@style/SettingsSummary" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/signOutGoogleOAuth"
-            style="@style/AppCard.Settings">
-            <LinearLayout
-                style="@style/LinearLayoutVertical">
-                <com.simplemobiletools.commons.views.MyTextView
-                    android:text="@string/google_drive_account_sign_out_title"
-                    style="@style/SettingsTitle" />
-                <com.simplemobiletools.commons.views.MyTextView
-                    android:text="@string/google_drive_account_sign_out_description"
                     style="@style/SettingsSummary" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>

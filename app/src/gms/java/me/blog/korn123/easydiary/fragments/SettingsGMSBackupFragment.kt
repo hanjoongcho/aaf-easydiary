@@ -13,12 +13,17 @@ import android.widget.ListView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import io.github.aafactory.commons.utils.DateUtils
+import kotlinx.android.synthetic.main.activity_dev.*
 import kotlinx.android.synthetic.main.layout_settings_backup_gms.*
+import kotlinx.android.synthetic.main.layout_settings_backup_gms.accountInfo
+import kotlinx.android.synthetic.main.layout_settings_backup_gms.profilePhoto
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.RealmFileItemAdapter
@@ -321,6 +326,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
             }
             R.id.signOutGoogleOAuth -> {
                 GoogleOAuthHelper.signOutGoogleOAuth(mActivity)
+                determineAccountInfo()
             }
         }
     }
@@ -333,5 +339,29 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
         signOutGoogleOAuth.setOnClickListener(mOnClickListener)
     }
 
-    private fun initPreference() {}
+    private fun initPreference() {
+        determineAccountInfo()
+    }
+
+    private fun determineAccountInfo() {
+        when (GoogleOAuthHelper.isValidGoogleSignAccount(mActivity)) {
+            true -> {
+                profilePhoto.visibility = View.VISIBLE
+                GoogleOAuthHelper.getGoogleSignAccount(mActivity)?.run {
+                    val sb = StringBuilder()
+                    sb.append(this.displayName +  System.getProperty("line.separator"))
+                    sb.append(this.email)
+                    accountInfo.text = sb.toString()
+                    Glide.with(mActivity)
+                            .load(this.photoUrl)
+                            .apply(RequestOptions().circleCrop())
+                            .into(profilePhoto)
+                }
+            }
+            false -> {
+                profilePhoto.visibility = View.GONE
+                accountInfo.text = "No linked Google account information"
+            }
+        }
+    }
 }
