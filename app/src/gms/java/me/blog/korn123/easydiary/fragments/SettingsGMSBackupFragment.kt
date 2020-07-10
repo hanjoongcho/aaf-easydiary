@@ -1,6 +1,5 @@
 package me.blog.korn123.easydiary.fragments
 
-import android.accounts.Account
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
@@ -20,10 +19,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import io.github.aafactory.commons.utils.DateUtils
-import kotlinx.android.synthetic.main.activity_dev.*
 import kotlinx.android.synthetic.main.layout_settings_backup_gms.*
-import kotlinx.android.synthetic.main.layout_settings_backup_gms.accountInfo
-import kotlinx.android.synthetic.main.layout_settings_backup_gms.profilePhoto
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.RealmFileItemAdapter
@@ -131,66 +127,27 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
      *   backup and recovery
      *
      ***************************************************************************************************/
-
-
-    private fun initDriveWorkingDirectory(account: Account, workingFolderName: String, callback: (workingFolderId: String) -> Unit) {
-        val driveServiceHelper = DriveServiceHelper(mActivity, account)
-        // 01. AAF 폴더 검색
-        driveServiceHelper.queryFiles("'root' in parents and name = '${DriveServiceHelper.AAF_ROOT_FOLDER_NAME}' and trashed = false").run {
-            addOnSuccessListener { result ->
-                when (result.files.size) {
-                    // 02. AAF 폴더 없으면 생성
-                    0 -> driveServiceHelper.createFolder(DriveServiceHelper.AAF_ROOT_FOLDER_NAME).addOnSuccessListener { aafFolderId ->
-                        // 02-01. workingFolder 생성
-                        driveServiceHelper.createFolder(workingFolderName, aafFolderId).addOnSuccessListener { workingFolderId ->
-                            callback(workingFolderId)
-                        }
-                    }
-                    // 03. workingFolder 검색
-                    1 -> {
-                        val parentId = result.files[0].id
-                        driveServiceHelper.queryFiles("'$parentId' in parents and name = '$workingFolderName' and trashed = false").addOnSuccessListener {
-                            when (it.files.size) {
-                                // 03-01. workingFolder 생성
-                                0 -> driveServiceHelper.createFolder(workingFolderName, parentId).addOnSuccessListener { workingFolderId ->
-                                    callback(workingFolderId)
-                                }
-                                1 -> {
-                                    callback(it.files[0].id)
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     private fun backupDiaryRealm() {
         mActivity.setScreenOrientationSensor(false)
         progressContainer.visibility = View.VISIBLE
-        // delete unused compressed photo file
-//        File(Environment.getExternalStorageDirectory().absolutePath + DIARY_PHOTO_DIRECTORY).listFiles()?.map {
-//            Log.i("PHOTO-URI", "${it.absolutePath} | ${EasyDiaryDbHelper.countPhotoUriBy(FILE_URI_PREFIX + it.absolutePath)}")
-//            if (EasyDiaryDbHelper.countPhotoUriBy(FILE_URI_PREFIX + it.absolutePath) == 0) it.delete()
-//        }
         val realmPath = EasyDiaryDbHelper.getRealmPath()
         initGoogleSignAccount(this) { account ->
-            initDriveWorkingDirectory(account, DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME) {
-                val driveServiceHelper = DriveServiceHelper(mActivity, account)
-                driveServiceHelper.createFile(
-                        it, realmPath,
-                        DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"),
-                        EasyDiaryUtils.easyDiaryMimeType
-                ).addOnSuccessListener {
-                    progressContainer.visibility = View. GONE
-                    mActivity.makeSnackBar(getString(R.string.backup_completed_message))
-                    mActivity.config.diaryBackupGoogle = System.currentTimeMillis()
-                    mActivity.setScreenOrientationSensor(true)
-                }.addOnFailureListener { e ->
-                    mActivity.makeSnackBar(e.message ?: "Please try again later.")
-                    progressContainer.visibility = View.GONE
-                    mActivity.setScreenOrientationSensor(true)
+            DriveServiceHelper(mActivity, account).run {
+                initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME) {
+                    createFile(
+                            it, realmPath,
+                            DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"),
+                            EasyDiaryUtils.easyDiaryMimeType
+                    ).addOnSuccessListener {
+                        progressContainer.visibility = View. GONE
+                        mActivity.makeSnackBar(getString(R.string.backup_completed_message))
+                        mActivity.config.diaryBackupGoogle = System.currentTimeMillis()
+                        mActivity.setScreenOrientationSensor(true)
+                    }.addOnFailureListener { e ->
+                        mActivity.makeSnackBar(e.message ?: "Please try again later.")
+                        progressContainer.visibility = View.GONE
+                        mActivity.setScreenOrientationSensor(true)
+                    }
                 }
             }
         }
@@ -273,15 +230,17 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
         mActivity.setScreenOrientationSensor(false)
         progressContainer.visibility = View.VISIBLE
         initGoogleSignAccount(this) { account ->
-            initDriveWorkingDirectory(account, DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
-                progressContainer.visibility = View.GONE
-                mActivity.run {
-                    showAlertDialog(getString(R.string.backup_confirm_message), DialogInterface.OnClickListener { _, _ ->
-                        val backupPhotoService = Intent(this, BackupPhotoService::class.java)
-                        backupPhotoService.putExtra(DriveServiceHelper.WORKING_FOLDER_ID, photoFolderId)
-                        startService(backupPhotoService)
-                        finish()
-                    }, DialogInterface.OnClickListener { _, _ -> setScreenOrientationSensor(true) })
+            DriveServiceHelper(mActivity, account).run {
+                initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
+                    progressContainer.visibility = View.GONE
+                    mActivity.run {
+                        showAlertDialog(getString(R.string.backup_confirm_message), DialogInterface.OnClickListener { _, _ ->
+                            val backupPhotoService = Intent(this, BackupPhotoService::class.java)
+                            backupPhotoService.putExtra(DriveServiceHelper.WORKING_FOLDER_ID, photoFolderId)
+                            startService(backupPhotoService)
+                            finish()
+                        }, DialogInterface.OnClickListener { _, _ -> setScreenOrientationSensor(true) })
+                    }
                 }
             }
         }

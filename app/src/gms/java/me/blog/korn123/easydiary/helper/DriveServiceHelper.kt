@@ -73,6 +73,38 @@ class DriveServiceHelper() {
         const val WORKING_FOLDER_ID = "working-folder-id"
     }
 
+    fun initDriveWorkingDirectory(workingFolderName: String, callback: (workingFolderId: String) -> Unit) {
+        // 01. AAF 폴더 검색
+        queryFiles("'root' in parents and name = '${DriveServiceHelper.AAF_ROOT_FOLDER_NAME}' and trashed = false").run {
+            addOnSuccessListener { result ->
+                when (result.files.size) {
+                    // 02. AAF 폴더 없으면 생성
+                    0 -> createFolder(DriveServiceHelper.AAF_ROOT_FOLDER_NAME).addOnSuccessListener { aafFolderId ->
+                        // 02-01. workingFolder 생성
+                        createFolder(workingFolderName, aafFolderId).addOnSuccessListener { workingFolderId ->
+                            callback(workingFolderId)
+                        }
+                    }
+                    // 03. workingFolder 검색
+                    1 -> {
+                        val parentId = result.files[0].id
+                        queryFiles("'$parentId' in parents and name = '$workingFolderName' and trashed = false").addOnSuccessListener {
+                            when (it.files.size) {
+                                // 03-01. workingFolder 생성
+                                0 -> createFolder(workingFolderName, parentId).addOnSuccessListener { workingFolderId ->
+                                    callback(workingFolderId)
+                                }
+                                1 -> {
+                                    callback(it.files[0].id)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     fun createFolder(folderName: String, parentId: String = "root"): Task<String> {
         return Tasks.call(mExecutor, Callable<String> {
             val metadata = File()

@@ -106,6 +106,12 @@
                     android:text="@string/schedule_backup_local_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/diaryBackupGMS"
+                    android:gravity="top"
+                    android:text="GMS"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
             </RadioGroup>
 
             <View

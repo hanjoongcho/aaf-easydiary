@@ -527,24 +527,7 @@ fun Context.showRemainingTimeMessage(totalMinutes: Int) {
 }
 
 fun Context.showAlarmNotification(alarm: Alarm) {
-    val pendingIntent = getOpenAlarmTabIntent(alarm)
-    val notification = getAlarmNotification(pendingIntent, alarm)
-    val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-    notificationManager.notify(alarm.id, notification)
-
-    when (alarm.workMode) {
-        Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> exportRealmFile()
-    }
-
-    val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
-    if (isScreenOn()) {
-        scheduleNextAlarm(alarm, true)
-    } else {
-        scheduleNextAlarm(alarm, false)
-        powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.ON_AFTER_RELEASE, "myApp:notificationLock").apply {
-            acquire(3000)
-        }
-    }
+    AlarmWorkExecutor(this).run { executeWork(alarm) }
 }
 
 fun Context.rescheduleEnabledAlarms() {

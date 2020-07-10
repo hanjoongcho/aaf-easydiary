@@ -165,11 +165,13 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
                 when (temporaryAlarm.workMode) {
                     Alarm.WORK_MODE_DIARY_WRITING -> diaryWriting.isChecked = true
                     Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> diaryBackupLocal.isChecked = true
+                    Alarm.WORK_MODE_DIARY_BACKUP_GMS -> diaryBackupGMS.isChecked = true
                 }
                 workModeGroup.setOnCheckedChangeListener { _, i ->
                     when (i) {
                         R.id.diaryWriting -> temporaryAlarm.workMode = Alarm.WORK_MODE_DIARY_WRITING
                         R.id.diaryBackupLocal -> temporaryAlarm.workMode = Alarm.WORK_MODE_DIARY_BACKUP_LOCAL
+                        R.id.diaryBackupGMS -> temporaryAlarm.workMode = Alarm.WORK_MODE_DIARY_BACKUP_GMS
                     }
                 }
 
