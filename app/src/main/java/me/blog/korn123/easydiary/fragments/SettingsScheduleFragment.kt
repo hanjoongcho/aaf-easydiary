@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.dialog_alarm.view.*
 import kotlinx.android.synthetic.main.layout_settings_schedule.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
+import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.SpacesItemDecoration
 import me.blog.korn123.easydiary.adapters.AlarmAdapter
@@ -182,6 +183,8 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
                     updateAppViews(this)
                     FontUtils.setFontsTypeface(this@run, this@run.assets, null, this)
                 }
+
+                if (BuildConfig.FLAVOR == "foss") diaryBackupGMS.visibility = View.GONE
             }
 
             alertDialog = builder.create().apply {

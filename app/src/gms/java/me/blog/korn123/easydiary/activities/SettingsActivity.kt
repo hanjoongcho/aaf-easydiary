@@ -2,36 +2,16 @@ package me.blog.korn123.easydiary.activities
 
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.android.synthetic.main.layout_settings_progress.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DotIndicatorPager2Adapter
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.fragments.*
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 
-class SettingsActivity : EasyDiaryActivity() {
-
-    /***************************************************************************************************
-     *   global properties
-     *
-     ***************************************************************************************************/
-    lateinit var mDotIndicatorPager2Adapter: DotIndicatorPager2Adapter
-    private var mCurrentPosition = 0
-
-    /***************************************************************************************************
-     *   override functions
-     *
-     ***************************************************************************************************/
+class SettingsActivity : BaseSettingsActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
-        setSupportActionBar(toolbar)
-        supportActionBar?.run {
-            setTitle(R.string.preferences_category_settings)
-            setDisplayHomeAsUpEnabled(true)
-        }
 
         val fragmentList = arrayListOf(
                 SettingsBasicFragment(), SettingsFontFragment(),
@@ -87,33 +67,11 @@ class SettingsActivity : EasyDiaryActivity() {
         })
         dots_indicator.setViewPager(viewPager)
         progressContainer.setOnTouchListener { _, _ -> true }
-
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.diary_settings_schedule, menu)
         if (mCurrentPosition == 5) menu.findItem(R.id.addSchedule).isVisible = true
         return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val scheduleFragment = mDotIndicatorPager2Adapter.instantiateItem(viewPager, viewPager.currentItem)
-        when (item.itemId) {
-            R.id.addSchedule -> {
-                if (scheduleFragment is SettingsScheduleFragment) {
-                    scheduleFragment.openAlarmDialog(EasyDiaryDbHelper.createTemporaryAlarm())
-                }
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    /***************************************************************************************************
-     *   etc functions
-     *
-     ***************************************************************************************************/
-    fun updateUI() {
-        super.onResume()
     }
 }
