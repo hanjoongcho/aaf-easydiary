@@ -655,10 +655,11 @@
     <string name="schedule_description">Schedule description</string>
     <string name="schedule_description_hint">Alarm description</string>
     <string name="schedule_diary_writing_description">Diary writing\nRegister the diary writing schedule.\nWhen the schedule is registered, a notification message is provided according to the set day and time.</string>
-    <string name="schedule_backup_local_description">Diary backup (Device storage)\nRegistering the schedule backs up the database files excluding attached pictures to the device local storage according to the set day and time and provides the result of the operation as a notification message.</string>
+    <string name="schedule_backup_local_description">Diary backup (Device storage)\nRegistering the schedule backs up the database files excluding attached photos to the device local storage according to the set day and time and provides the result of the operation as a notification message.</string>
     <string name="schedule_empty_message">There is no set schedule information.\nClick the plus button on the top right to add a new schedule.</string>
     <string name="permission_confirmation_dialog_title">Request authorization</string>
     <string name="permission_confirmation_dialog_message">Authorization is required to use Easy Diary.</string>
     <string name="google_drive_account_information_title">Linked Google account information</string>
     <string name="google_drive_account_information_guide_message">No linked Google account information</string>
+    <string name="schedule_backup_gms_description">Diary backup (Google Drive)\nRegistering the schedule backs up the database files excluding attached photos to the Google Drive according to the set day and time and provides the result of the operation as a notification message.</string>
 </resources>

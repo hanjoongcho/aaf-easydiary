@@ -661,4 +661,5 @@
     <string name="permission_confirmation_dialog_message">Easy Diary 사용을 위해서는 권한승인이 필요합니다.</string>
     <string name="google_drive_account_information_title">구글드라이브 연동계정 정보</string>
     <string name="google_drive_account_information_guide_message">구글드라이브에 연동된 계정 정보가 존재하지 않습니다.</string>
+    <string name="schedule_backup_gms_description">Diary backup (Google Drive)\nRegistering the schedule backs up the database files excluding attached photos to the Google Drive according to the set day and time and provides the result of the operation as a notification message.</string>
 </resources>

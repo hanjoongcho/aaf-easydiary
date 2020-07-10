@@ -23,7 +23,8 @@ class AlarmViewHolder(itemView: View, val activity: Activity) : RecyclerView.Vie
         itemView.alarmLabel.text = when (alarm.workMode) {
             Alarm.WORK_MODE_DIARY_WRITING -> "diary-writing"
             Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> "diary-backup-local"
-            else -> ""
+            Alarm.WORK_MODE_DIARY_BACKUP_GMS -> "diary-backup-gms"
+            else -> "unclassified"
         }
         itemView.alarm_switch.setOnCheckedChangeListener { _, isChecked ->
             EasyDiaryDbHelper.beginTransaction()

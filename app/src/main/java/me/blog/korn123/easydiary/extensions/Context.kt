@@ -475,7 +475,7 @@ fun Context.getOpenAlarmTabIntent(alarm: Alarm): PendingIntent {
                 putExtra(DIARY_EXECUTION_MODE, EXECUTION_MODE_ACCESS_FROM_OUTSIDE)
             }
         }
-        Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> {
+        Alarm.WORK_MODE_DIARY_BACKUP_LOCAL, Alarm.WORK_MODE_DIARY_BACKUP_GMS -> {
             Intent(this, DiaryMainActivity::class.java)
         }
         else -> null
@@ -555,7 +555,7 @@ fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): No
             .setSmallIcon(R.drawable.ic_easydiary)
             .setLargeIcon(when (alarm.workMode) {
                 Alarm.WORK_MODE_DIARY_WRITING -> BitmapFactory.decodeResource(resources, R.drawable.ic_diary_writing)
-                Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> BitmapFactory.decodeResource(resources, R.drawable.ic_diary_backup_local)
+                Alarm.WORK_MODE_DIARY_BACKUP_LOCAL, Alarm.WORK_MODE_DIARY_BACKUP_GMS -> BitmapFactory.decodeResource(resources, R.drawable.ic_diary_backup_local)
                 else -> null
             })
             .setOngoing(false)
