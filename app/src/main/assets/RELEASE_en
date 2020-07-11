@@ -4,7 +4,7 @@
 
 ---------------------------------------------------
 
-# Changes in 1.4.138 (date: 2020.07.11)
+# Changes in 1.4.139 (date: 2020.07.11)
   * Added feature to display the information of the connected Google account
   * Added Google Drive backup feature using scheduler
 
