@@ -35,6 +35,7 @@ open class BaseAlarmWorkExecutor(val context: Context?) {
                     exportRealmFile()
                     openNotification(alarm)
                 }
+                Alarm.WORK_MODE_DIARY_WRITING -> openNotification(alarm)
             }
         }
     }
