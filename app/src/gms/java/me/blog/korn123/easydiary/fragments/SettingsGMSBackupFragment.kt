@@ -283,6 +283,15 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
                     false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
                 }
             }
+            R.id.signInGoogleOAuth -> {
+                when (GoogleOAuthHelper.isValidGoogleSignAccount(mActivity)) {
+                    false -> {
+                        initGoogleSignAccount(this) { _ ->
+                            determineAccountInfo()
+                        }
+                    }
+                }
+            }
             R.id.signOutGoogleOAuth -> {
                 GoogleOAuthHelper.signOutGoogleOAuth(mActivity)
                 determineAccountInfo()
@@ -295,6 +304,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
         backupSetting.setOnClickListener(mOnClickListener)
         backupAttachPhoto.setOnClickListener(mOnClickListener)
         recoverAttachPhoto.setOnClickListener(mOnClickListener)
+        signInGoogleOAuth.setOnClickListener(mOnClickListener)
         signOutGoogleOAuth.setOnClickListener(mOnClickListener)
     }
 
@@ -306,7 +316,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
         when (GoogleOAuthHelper.isValidGoogleSignAccount(mActivity)) {
             true -> {
                 profilePhoto.visibility = View.VISIBLE
-                signInGoogleOAuth.text = getString(R.string.google_drive_account_sign_in_title)
+                signInGoogleOAuthTitle.text = getString(R.string.google_drive_account_sign_in_title)
                 GoogleOAuthHelper.getGoogleSignAccount(mActivity)?.run {
                     val sb = StringBuilder()
                     sb.append(this.displayName +  System.getProperty("line.separator"))
@@ -320,7 +330,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
             }
             false -> {
                 profilePhoto.visibility = View.GONE
-                signInGoogleOAuth.text = getString(R.string.google_drive_account_information_title)
+                signInGoogleOAuthTitle.text = getString(R.string.google_drive_account_information_title)
                 accountInfo.text = getString(R.string.google_drive_account_information_guide_message)
             }
         }

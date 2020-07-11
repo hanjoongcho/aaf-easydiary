@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <androidx.cardview.widget.CardView
+            android:id="@+id/signInGoogleOAuth"
             android:orientation="vertical"
             style="@style/AppCard.Settings">
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,13 +19,13 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     android:text="@string/google_drive_account_sign_in_title"
-                    android:id="@+id/signInGoogleOAuth"
+                    android:id="@+id/signInGoogleOAuthTitle"
                     style="@style/SettingsTitle" />
 
                 <ImageView
                     android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/signInGoogleOAuth"
+                    app:layout_constraintTop_toBottomOf="@+id/signInGoogleOAuthTitle"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_marginTop="10dp"
                     android:id="@+id/profilePhoto"
@@ -37,7 +38,7 @@
                     android:layout_marginStart="10dp"
                     app:layout_goneMarginLeft="0dp"
                     app:layout_constraintLeft_toRightOf="@+id/profilePhoto"
-                    app:layout_constraintTop_toBottomOf="@+id/signInGoogleOAuth"
+                    app:layout_constraintTop_toBottomOf="@+id/signInGoogleOAuthTitle"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_width="wrap_content"
                     style="@style/SettingsSummary" />
