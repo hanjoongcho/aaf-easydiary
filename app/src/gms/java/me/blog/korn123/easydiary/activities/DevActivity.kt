@@ -12,8 +12,6 @@ import android.provider.Settings
 import android.view.View
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
@@ -49,7 +47,6 @@ class DevActivity : EasyDiaryActivity() {
             title = "Easy-Diary Dev Mode"
             setDisplayHomeAsUpEnabled(true)
         }
-        determineAccountInfo()
 
         nextAlarm.setOnClickListener {
             val nextAlarm = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -73,17 +70,6 @@ class DevActivity : EasyDiaryActivity() {
         notification2.setOnClickListener {
             (applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).apply {
                 notify(NOTIFICATION_ID_02, createNotification(NotificationInfo(R.drawable.ic_diary_backup_local, true)))
-            }
-        }
-
-        checkGoogleOauthToken.setOnClickListener {
-            when (GoogleOAuthHelper.isValidGoogleSignAccount(this)) {
-                true -> determineAccountInfo()
-                false -> {
-                    GoogleOAuthHelper.initGoogleSignAccount(this) {
-                        determineAccountInfo()
-                    }
-                }
             }
         }
 
@@ -124,19 +110,6 @@ class DevActivity : EasyDiaryActivity() {
      *
      ***************************************************************************************************/
     private fun initDevUI() { }
-
-    private fun determineAccountInfo() {
-        GoogleOAuthHelper.getGoogleSignAccount(this)?.run {
-            val sb = StringBuilder()
-            sb.append(this.displayName +  System.getProperty("line.separator"))
-            sb.append(this.email)
-            accountInfo.text = sb.toString()
-            Glide.with(this@DevActivity)
-                    .load(this.photoUrl)
-                    .apply(RequestOptions().circleCrop())
-                    .into(profilePhoto)
-        }
-    }
 
     @SuppressLint("NewApi")
     private fun createNotification(notificationInfo: NotificationInfo): Notification {

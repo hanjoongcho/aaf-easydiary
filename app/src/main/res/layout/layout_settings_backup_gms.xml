@@ -17,13 +17,14 @@
                 <com.simplemobiletools.commons.views.MyTextView
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:text="@string/google_drive_account_information_title"
-                    android:id="@+id/accountInfoTitle"
+                    android:text="@string/google_drive_account_sign_in_title"
+                    android:id="@+id/signInGoogleOAuth"
                     style="@style/SettingsTitle" />
 
                 <ImageView
+                    android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/accountInfoTitle"
+                    app:layout_constraintTop_toBottomOf="@+id/signInGoogleOAuth"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_marginTop="10dp"
                     android:id="@+id/profilePhoto"
@@ -32,10 +33,11 @@
 
                 <com.simplemobiletools.commons.views.MyTextView
                     android:id="@+id/accountInfo"
+                    android:text="@string/google_drive_account_sign_in_description"
                     android:layout_marginStart="10dp"
                     app:layout_goneMarginLeft="0dp"
                     app:layout_constraintLeft_toRightOf="@+id/profilePhoto"
-                    app:layout_constraintTop_toBottomOf="@+id/accountInfoTitle"
+                    app:layout_constraintTop_toBottomOf="@+id/signInGoogleOAuth"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_width="wrap_content"
                     style="@style/SettingsSummary" />

@@ -306,6 +306,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
         when (GoogleOAuthHelper.isValidGoogleSignAccount(mActivity)) {
             true -> {
                 profilePhoto.visibility = View.VISIBLE
+                signInGoogleOAuth.text = getString(R.string.google_drive_account_sign_in_title)
                 GoogleOAuthHelper.getGoogleSignAccount(mActivity)?.run {
                     val sb = StringBuilder()
                     sb.append(this.displayName +  System.getProperty("line.separator"))
@@ -319,6 +320,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
             }
             false -> {
                 profilePhoto.visibility = View.GONE
+                signInGoogleOAuth.text = getString(R.string.google_drive_account_information_title)
                 accountInfo.text = getString(R.string.google_drive_account_information_guide_message)
             }
         }

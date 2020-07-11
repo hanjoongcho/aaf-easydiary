@@ -1,6 +1,5 @@
 package me.blog.korn123.easydiary.helper
 
-import android.app.Activity
 import android.app.NotificationManager
 import android.content.Context
 import android.os.PowerManager

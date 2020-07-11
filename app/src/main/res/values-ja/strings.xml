@@ -661,5 +661,7 @@
     <string name="permission_confirmation_dialog_message">Easy Diaryを使用するには認証が必要です。</string>
     <string name="google_drive_account_information_title">Googleのドライブ連動アカウント情報</string>
     <string name="google_drive_account_information_guide_message">Googleのドライブに連動されたアカウント情報が存在しません。</string>
-    <string name="schedule_backup_gms_description">Diary backup (Google Drive)\nRegistering the schedule backs up the database files excluding attached photos to the Google Drive according to the set day and time and provides the result of the operation as a notification message.</string>
+    <string name="schedule_backup_gms_description">日記のバックアップ（Googleドライブ）\nスケジュールを登録すると、設定された日付と時刻に合わせて添付写真を除いて、データベースファイルを、Googleドライブにバックアップして操作の結果を通知メッセージとして提供します。</string>
+    <string name="google_drive_account_sign_in_title">Googleのドライブアカウント接続</string>
+    <string name="google_drive_account_sign_in_description">イージーダイアリーデータのバックアップのために、Googleドライブアカウントを接続します。</string>
 </resources>
