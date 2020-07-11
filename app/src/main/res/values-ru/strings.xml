@@ -436,8 +436,9 @@
         Applied Google Play security policy
     </string>
     <string name="release_204">
-        v1.4.138 / 2020.07.09\n
-        Added feature to display the information of the connected Google account
+        v1.4.138 / 2020.07.11\n
+        Added feature to display the information of the connected Google account\n
+        Added Google Drive backup feature using scheduler
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->

@@ -4,6 +4,10 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.138 (date: 2020.07.11)
+  * Added feature to display the information of the connected Google account
+  * Added Google Drive backup feature using scheduler
+
 # Changes in 1.4.137 (date: 2020.07.05)
   * Applied Google Play security policy
 
