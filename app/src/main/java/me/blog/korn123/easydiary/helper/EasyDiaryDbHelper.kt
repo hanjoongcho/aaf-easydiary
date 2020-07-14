@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.helper
 
 import io.realm.*
+import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.models.DiaryDto
 import me.blog.korn123.easydiary.models.PhotoUriDto
@@ -14,7 +15,7 @@ object EasyDiaryDbHelper {
     private val mDiaryConfig: RealmConfiguration by lazy {
         RealmConfiguration.Builder()
                 .name("diary.realm")
-                .schemaVersion(15)
+                .schemaVersion(17)
                 .migration(EasyDiaryMigration())
                 .modules(Realm.getDefaultModule()!!)
                 .build()
@@ -222,6 +223,31 @@ object EasyDiaryDbHelper {
         val sequence = getInstance().where(Alarm::class.java).max("sequence") ?: 0
         alarm.sequence = sequence.toInt().plus(1)
         return alarm
+    }
+
+
+    /***************************************************************************************************
+     *   Manage ActionLog model
+     *
+     ***************************************************************************************************/
+    fun insertActionLog(actionLog: ActionLog) {
+        getTemporaryInstance().executeTransaction { realm ->
+            var sequence = 1
+            if (realm.where(ActionLog::class.java).count() > 0L) {
+                val number = realm.where(ActionLog::class.java).max("sequence")
+                sequence += number?.toInt()?.plus(1) ?: 0
+            }
+            actionLog.sequence = sequence
+            realm.insert(actionLog)
+            realm.close()
+        }
+    }
+
+    fun readActionLogAll(): List<ActionLog> {
+        val results = getInstance().where(ActionLog::class.java).findAll().sort("sequence", Sort.DESCENDING)
+        val list = mutableListOf<ActionLog>()
+        list.addAll(results.subList(0, results.size))
+        return list
     }
 }
 

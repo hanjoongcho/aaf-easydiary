@@ -85,6 +85,26 @@
                         style="@style/SettingsSummary" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:orientation="vertical"
+                style="@style/AppCard.Settings">
+                <LinearLayout
+                    style="@style/LinearLayoutVertical">
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:text="Action Log"
+                        style="@style/SettingsTitle" />
+                    <ScrollView
+                        android:fillViewport="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp">
+                        <com.simplemobiletools.commons.views.MyTextView
+                            android:id="@+id/actionLog"
+                            android:layout_height="wrap_content"
+                            style="@style/SettingsSummary" />
+                    </ScrollView>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
     </ScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

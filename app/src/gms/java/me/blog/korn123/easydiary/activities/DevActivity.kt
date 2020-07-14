@@ -24,7 +24,9 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.services.NotificationService
+import java.lang.StringBuilder
 
 
 class DevActivity : EasyDiaryActivity() {
@@ -47,6 +49,13 @@ class DevActivity : EasyDiaryActivity() {
             title = "Easy-Diary Dev Mode"
             setDisplayHomeAsUpEnabled(true)
         }
+
+        val actionLogs: List<ActionLog> = EasyDiaryDbHelper.readActionLogAll()
+        val sb = StringBuilder()
+        actionLogs.map {
+            sb.append("${it.className}-${it.signature}-${it.key}: ${it.value}\n")
+        }
+        actionLog.text = sb.toString()
 
         nextAlarm.setOnClickListener {
             val nextAlarm = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
