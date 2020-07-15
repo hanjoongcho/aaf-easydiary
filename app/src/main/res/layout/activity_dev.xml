@@ -94,6 +94,11 @@
                     <com.simplemobiletools.commons.views.MyTextView
                         android:text="Action Log"
                         style="@style/SettingsTitle" />
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:id="@+id/clearLog"
+                        android:gravity="end"
+                        android:text="Clear log"
+                        style="@style/SettingsTitle" />
                     <ScrollView
                         android:fillViewport="true"
                         android:layout_width="match_parent"

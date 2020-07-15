@@ -171,14 +171,6 @@ object EasyDiaryDbHelper {
         return realmInstance.where(Alarm::class.java).equalTo("sequence", sequence).findFirst()
     }
 
-    fun insertAlarm(alarm: Alarm) {
-        getInstance().executeTransaction { realm ->
-            val sequence = realm.where(Alarm::class.java).max("sequence") ?: 0
-            alarm.sequence = sequence
-            realm.insert(alarm)
-        }
-    }
-
     fun deleteAlarm(sequence: Int) {
         readAlarmBy(sequence)?.let {
             getInstance().run {
@@ -238,6 +230,12 @@ object EasyDiaryDbHelper {
         val list = mutableListOf<ActionLog>()
         list.addAll(results.subList(0, results.size))
         return list
+    }
+
+    fun deleteActionLogAll() {
+        getInstance().executeTransaction { realm ->
+            realm.where(ActionLog::class.java).findAll().deleteAllFromRealm()
+        }
     }
 }
 

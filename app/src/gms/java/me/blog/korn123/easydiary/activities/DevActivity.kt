@@ -50,12 +50,7 @@ class DevActivity : EasyDiaryActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-        val actionLogs: List<ActionLog> = EasyDiaryDbHelper.readActionLogAll()
-        val sb = StringBuilder()
-        actionLogs.map {
-            sb.append("${it.className}-${it.signature}-${it.key}: ${it.value}\n")
-        }
-        actionLog.text = sb.toString()
+        updateActionLog()
 
         nextAlarm.setOnClickListener {
             val nextAlarm = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -84,6 +79,11 @@ class DevActivity : EasyDiaryActivity() {
 
         clearGoogleOauthToken.setOnClickListener {
             GoogleOAuthHelper.signOutGoogleOAuth(this, true)
+        }
+
+        clearLog.setOnClickListener {
+            EasyDiaryDbHelper.deleteActionLogAll()
+            updateActionLog()
         }
     }
 
@@ -119,6 +119,15 @@ class DevActivity : EasyDiaryActivity() {
      *
      ***************************************************************************************************/
     private fun initDevUI() { }
+
+    private fun updateActionLog() {
+        val actionLogs: List<ActionLog> = EasyDiaryDbHelper.readActionLogAll()
+        val sb = StringBuilder()
+        actionLogs.map {
+            sb.append("${it.className}-${it.signature}-${it.key}: ${it.value}\n")
+        }
+        actionLog.text = sb.toString()
+    }
 
     @SuppressLint("NewApi")
     private fun createNotification(notificationInfo: NotificationInfo): Notification {
