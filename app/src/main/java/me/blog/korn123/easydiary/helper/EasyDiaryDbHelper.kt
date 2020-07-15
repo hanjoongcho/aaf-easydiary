@@ -173,13 +173,7 @@ object EasyDiaryDbHelper {
 
     fun insertAlarm(alarm: Alarm) {
         getInstance().executeTransaction { realm ->
-            var sequence = 1
-            if (realm.where(Alarm::class.java).count() > 0L) {
-                val number = realm.where(Alarm::class.java).max("sequence")
-                number?.let {
-                    sequence = it.toInt().plus(1)
-                }
-            }
+            val sequence = realm.where(Alarm::class.java).max("sequence") ?: 0
             alarm.sequence = sequence
             realm.insert(alarm)
         }
@@ -232,12 +226,8 @@ object EasyDiaryDbHelper {
      ***************************************************************************************************/
     fun insertActionLog(actionLog: ActionLog) {
         getTemporaryInstance().executeTransaction { realm ->
-            var sequence = 1
-            if (realm.where(ActionLog::class.java).count() > 0L) {
-                val number = realm.where(ActionLog::class.java).max("sequence")
-                sequence += number?.toInt()?.plus(1) ?: 0
-            }
-            actionLog.sequence = sequence
+            val sequence = realm.where(ActionLog::class.java).max("sequence") ?: 0                                       
+            actionLog.sequence = sequence.toInt().plus(1)
             realm.insert(actionLog)
             realm.close()
         }
