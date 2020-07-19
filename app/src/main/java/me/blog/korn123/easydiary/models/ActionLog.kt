@@ -18,7 +18,7 @@ open class ActionLog : RealmObject {
 
     constructor(className: String?, signature: String?, key: String?, value: String?) : super() {
         this.sequence = sequence
-        this.className = "[${DateUtils.getDateStringFromTimeMillis(System.currentTimeMillis(), SimpleDateFormat.MEDIUM)}] $className"
+        this.className = "[${DateUtils.getFullPatternDateWithTimeAndSeconds(System.currentTimeMillis())}] $className"
         this.signature = signature
         this.key = key
         this.value = value

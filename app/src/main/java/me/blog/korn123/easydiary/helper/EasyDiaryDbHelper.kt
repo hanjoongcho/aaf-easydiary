@@ -1,6 +1,8 @@
 package me.blog.korn123.easydiary.helper
 
+import android.content.Context
 import io.realm.*
+import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.models.DiaryDto
@@ -216,11 +218,13 @@ object EasyDiaryDbHelper {
      *   Manage ActionLog model
      *
      ***************************************************************************************************/
-    fun insertActionLog(actionLog: ActionLog) {
-        getInstance().executeTransaction { realm ->
-            val sequence = realm.where(ActionLog::class.java).max("sequence") ?: 0                                       
-            actionLog.sequence = sequence.toInt().plus(1)
-            realm.insert(actionLog)
+    fun insertActionLog(actionLog: ActionLog, context: Context) {
+        if (context.config.enableDebugMode) {
+            getInstance().executeTransaction { realm ->
+                val sequence = realm.where(ActionLog::class.java).max("sequence") ?: 0
+                actionLog.sequence = sequence.toInt().plus(1)
+                realm.insert(actionLog)
+            }
         }
     }
 
