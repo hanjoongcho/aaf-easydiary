@@ -3,7 +3,6 @@ package me.blog.korn123.easydiary.models
 import io.github.aafactory.commons.utils.DateUtils
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
-import java.text.SimpleDateFormat
 
 open class ActionLog : RealmObject {
 
