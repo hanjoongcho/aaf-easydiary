@@ -217,11 +217,10 @@ object EasyDiaryDbHelper {
      *
      ***************************************************************************************************/
     fun insertActionLog(actionLog: ActionLog) {
-        getTemporaryInstance().executeTransaction { realm ->
+        getInstance().executeTransaction { realm ->
             val sequence = realm.where(ActionLog::class.java).max("sequence") ?: 0                                       
             actionLog.sequence = sequence.toInt().plus(1)
             realm.insert(actionLog)
-            realm.close()
         }
     }
 
