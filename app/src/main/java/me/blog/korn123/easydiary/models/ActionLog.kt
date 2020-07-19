@@ -1,7 +1,9 @@
 package me.blog.korn123.easydiary.models
 
+import io.github.aafactory.commons.utils.DateUtils
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
+import java.text.SimpleDateFormat
 
 open class ActionLog : RealmObject {
 
@@ -16,7 +18,7 @@ open class ActionLog : RealmObject {
 
     constructor(className: String?, signature: String?, key: String?, value: String?) : super() {
         this.sequence = sequence
-        this.className = className
+        this.className = "[${DateUtils.getDateStringFromTimeMillis(System.currentTimeMillis(), SimpleDateFormat.MEDIUM)}] $className"
         this.signature = signature
         this.key = key
         this.value = value

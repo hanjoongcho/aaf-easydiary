@@ -13,7 +13,7 @@ class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val alarmId = intent.getIntExtra(SettingsScheduleFragment.ALARM_ID, -1)
         EasyDiaryDbHelper.readAlarmBy(alarmId)?.let {
-            EasyDiaryDbHelper.insertActionLog(ActionLog("[${DateUtils.getCurrentDateTime(DateUtils.TIME_PATTERN_WITH_SECONDS)}] AlarmReceiver", "onReceive", "label", it.label))
+            EasyDiaryDbHelper.insertActionLog(ActionLog("AlarmReceiver", "onReceive", "label", it.label))
             context.showAlarmNotification(it)
         }
     }
