@@ -155,6 +155,7 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
                     true -> { deleteAlarm.visibility = View.GONE }
                     false -> {
                         deleteAlarm.setOnClickListener {
+                            cancelAlarmClock(temporaryAlarm)
                             alertDialog?.dismiss()
                             EasyDiaryDbHelper.beginTransaction()
                             storedAlarm.deleteFromRealm()
