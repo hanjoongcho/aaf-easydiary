@@ -3,7 +3,6 @@ package me.blog.korn123.easydiary.receivers
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.easydiary.extensions.showAlarmNotification
 import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper

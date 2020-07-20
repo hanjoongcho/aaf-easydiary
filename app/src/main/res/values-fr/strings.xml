@@ -440,6 +440,10 @@
         Added feature to display the information of the connected Google account\n
         Added Google Drive backup feature using scheduler
     </string>
+    <string name="release_206">
+        v1.4.140 / 2020.07.20\n
+        Fixed an error that the scheduler did not work in the application termination state
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->

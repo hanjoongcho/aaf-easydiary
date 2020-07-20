@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.140 (date: 2020.07.20)
+  * Fixed an error that the scheduler did not work in the application termination state
+
 # Changes in 1.4.139 (date: 2020.07.11)
   * Added feature to display the information of the connected Google account
   * Added Google Drive backup feature using scheduler
