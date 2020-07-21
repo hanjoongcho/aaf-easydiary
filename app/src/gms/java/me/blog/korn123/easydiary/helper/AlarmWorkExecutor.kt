@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.helper
 import android.content.Context
 import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.models.Alarm
 
 class AlarmWorkExecutor(context: Context) : BaseAlarmWorkExecutor(context) {
@@ -24,7 +25,7 @@ class AlarmWorkExecutor(context: Context) : BaseAlarmWorkExecutor(context) {
                                 ).addOnSuccessListener {
                                     openNotification(alarm)
                                 }.addOnFailureListener { e ->
-
+                                    EasyDiaryDbHelper.insertActionLog(ActionLog("AlarmWorkExecutor", "executeWork", "error", e.message), context)
                                 }
                             }
                         }

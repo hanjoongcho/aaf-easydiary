@@ -4,12 +4,14 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.PowerManager
 import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.models.Alarm
 
 open class BaseAlarmWorkExecutor(val context: Context?) {
 
     fun openNotification(alarm: Alarm) {
         context?.run {
+            EasyDiaryDbHelper.insertActionLog(ActionLog("BaseAlarmWorkExecutor", "openNotification", "label", alarm.label), this)
             val pendingIntent = getOpenAlarmTabIntent(alarm)
             val notification = getAlarmNotification(pendingIntent, alarm)
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
