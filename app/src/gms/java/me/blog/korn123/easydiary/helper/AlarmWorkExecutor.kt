@@ -15,6 +15,7 @@ class AlarmWorkExecutor(context: Context) : BaseAlarmWorkExecutor(context) {
             when (alarm.workMode) {
                 Alarm.WORK_MODE_DIARY_BACKUP_GMS -> {
                     val realmPath = EasyDiaryDbHelper.getRealmPath()
+                    EasyDiaryDbHelper.insertActionLog(ActionLog("AlarmWorkExecutor", "executeWork", "isValidGoogleSignAccount", GoogleOAuthHelper.isValidGoogleSignAccount(context).toString()), context)
                     GoogleOAuthHelper.getGoogleSignAccount(context)?.account?.let { account ->
                         DriveServiceHelper(context, account).run {
                             initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME) {
