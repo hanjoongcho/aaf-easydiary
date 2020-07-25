@@ -135,7 +135,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
             DriveServiceHelper(mActivity, account).run {
                 initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME) {
                     createFile(
-                            it, realmPath,
+                            it!!, realmPath,
                             DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"),
                             EasyDiaryUtils.easyDiaryMimeType
                     ).addOnSuccessListener {

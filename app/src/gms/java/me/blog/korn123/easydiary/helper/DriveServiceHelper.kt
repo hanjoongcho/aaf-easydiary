@@ -34,6 +34,7 @@ import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.File
 import com.google.api.services.drive.model.FileList
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.models.ActionLog
 import org.apache.commons.io.IOUtils
 import java.io.*
 import java.util.*
@@ -44,10 +45,10 @@ import java.util.concurrent.Executors
  * A utility for performing read/write operations on Drive files via the REST API and opening a
  * file picker UI via Storage Access Framework.
  */
-class DriveServiceHelper() {
+class DriveServiceHelper(val context: Context) {
     lateinit var mDriveService: Drive
     
-    constructor(context: Context, account: Account) : this() {
+    constructor(context: Context, account: Account) : this(context) {
         val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(context, Collections.singleton(DriveScopes.DRIVE_FILE))
         credential.selectedAccount = account
         val googleDriveService: Drive = Drive.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
@@ -56,7 +57,7 @@ class DriveServiceHelper() {
         mDriveService = googleDriveService
     }
 
-    constructor(driveService: Drive) : this() {
+    constructor(context: Context, driveService: Drive) : this(context) {
         this.mDriveService = driveService
     }
     
@@ -73,7 +74,7 @@ class DriveServiceHelper() {
         const val WORKING_FOLDER_ID = "working-folder-id"
     }
 
-    fun initDriveWorkingDirectory(workingFolderName: String, callback: (workingFolderId: String) -> Unit) {
+    fun initDriveWorkingDirectory(workingFolderName: String, callback: (workingFolderId: String?) -> Unit) {
         // 01. AAF 폴더 검색
         queryFiles("'root' in parents and name = '${DriveServiceHelper.AAF_ROOT_FOLDER_NAME}' and trashed = false").run {
             addOnSuccessListener { result ->
@@ -101,6 +102,10 @@ class DriveServiceHelper() {
                         }
                     }
                 }
+            }
+            addOnFailureListener { e ->
+                EasyDiaryDbHelper.insertActionLog(ActionLog("DriveServiceHelper", "initDriveWorkingDirectory", "error", e.message), context)
+                callback(null)
             }
         }
     }

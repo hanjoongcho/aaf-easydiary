@@ -44,7 +44,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
         val googleDriveService: Drive = Drive.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
                 .setApplicationName(getString(R.string.app_name))
                 .build()
-        mDriveServiceHelper = DriveServiceHelper(googleDriveService)
+        mDriveServiceHelper = DriveServiceHelper(applicationContext, googleDriveService)
 
         notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationBuilder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_download")

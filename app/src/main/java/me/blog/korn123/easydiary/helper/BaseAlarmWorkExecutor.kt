@@ -7,10 +7,10 @@ import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.models.Alarm
 
-open class BaseAlarmWorkExecutor(val context: Context?) {
+open class BaseAlarmWorkExecutor(val context: Context) {
 
     fun openNotification(alarm: Alarm) {
-        context?.run {
+        context.run {
             EasyDiaryDbHelper.insertActionLog(ActionLog("BaseAlarmWorkExecutor", "openNotification", "label", alarm.label), this)
             val pendingIntent = getOpenAlarmTabIntent(alarm)
             val notification = getAlarmNotification(pendingIntent, alarm)
@@ -30,7 +30,7 @@ open class BaseAlarmWorkExecutor(val context: Context?) {
     }
 
     open fun executeWork(alarm: Alarm) {
-        context?.run {
+        context.run {
             when (alarm.workMode) {
                 Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> {
                     exportRealmFile()

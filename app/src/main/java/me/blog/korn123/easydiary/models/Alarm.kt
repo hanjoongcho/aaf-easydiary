@@ -14,6 +14,7 @@ open class Alarm : RealmObject {
     var soundUri: String? = null
     var label: String? = null
     var workMode: Int = WORK_MODE_DIARY_WRITING /* 0: Diary write alarm, 1: Auto backup with google drive, 2: Auto backup with application storage */
+    var retryCount: Int = 0
     val id: Int
         get() = this.sequence
 
