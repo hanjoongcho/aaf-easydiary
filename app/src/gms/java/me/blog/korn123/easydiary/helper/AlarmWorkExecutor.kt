@@ -41,7 +41,7 @@ class AlarmWorkExecutor(context: Context) : BaseAlarmWorkExecutor(context) {
                     } else {
                         if (alarm.retryCount < 3) {
                             EasyDiaryDbHelper.beginTransaction()
-                            alarm.retryCount.plus(1)
+                            alarm.retryCount = alarm.retryCount.plus(1)
                             EasyDiaryDbHelper.commitTransaction()
                             context.setupAlarmClock(alarm, 5)
                         } else {
