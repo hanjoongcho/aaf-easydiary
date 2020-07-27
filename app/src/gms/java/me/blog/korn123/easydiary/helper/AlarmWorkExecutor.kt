@@ -1,11 +1,15 @@
 package me.blog.korn123.easydiary.helper
 
 import android.content.Context
+import android.content.Intent
+import android.os.Build
 import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.easydiary.extensions.setupAlarmClock
+import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.models.Alarm
+import me.blog.korn123.easydiary.services.AlarmWorkService
+
 
 class AlarmWorkExecutor(context: Context) : BaseAlarmWorkExecutor(context) {
 
@@ -39,15 +43,16 @@ class AlarmWorkExecutor(context: Context) : BaseAlarmWorkExecutor(context) {
                             EasyDiaryDbHelper.insertActionLog(ActionLog("AlarmWorkExecutor", "executeWork", "error", e.message), context)
                         }
                     } else {
-                        if (alarm.retryCount < 3) {
-                            EasyDiaryDbHelper.beginTransaction()
-                            alarm.retryCount = alarm.retryCount.plus(1)
-                            EasyDiaryDbHelper.commitTransaction()
-                            context.setupAlarmClock(alarm, 5)
-                        } else {
-                            EasyDiaryDbHelper.beginTransaction()
-                            alarm.retryCount = 0
-                            EasyDiaryDbHelper.commitTransaction()
+                        val alarmWorkService = Intent(context, AlarmWorkService::class.java).apply {
+                            putExtra(SettingsScheduleFragment.ALARM_ID, alarm.id)
+                        }
+                        context.run {
+                            if (Build.VERSION.SDK_INT >= 26) {
+                                startForegroundService(alarmWorkService)
+                            }
+                            else {
+                                startService(alarmWorkService)
+                            }
                         }
                     }
                 }
