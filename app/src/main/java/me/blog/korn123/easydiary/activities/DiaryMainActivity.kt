@@ -22,6 +22,7 @@ import androidx.core.app.ActivityCompat
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.github.ksoichiro.android.observablescrollview.ObservableListView
+import com.simplemobiletools.commons.extensions.toast
 import io.github.aafactory.commons.utils.CommonUtils
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_diary_main.*
@@ -73,9 +74,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             Realm.init(this)
         }
 
-        // application finish 확인insertDiaryButton
-        if (intent.getBooleanExtra(APP_FINISH_FLAG, false)) {
-            finish()
+        when {
+            intent.getBooleanExtra(APP_FINISH_FLAG, false) -> finish() // application finish 확인 insertDiaryButton
+            intent.getBooleanExtra(DOZE_SCHEDULE, false) -> toast("Hello doze mode!!!")
         }
 
         setSupportActionBar(toolbar)

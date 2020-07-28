@@ -1,9 +1,6 @@
 package me.blog.korn123.easydiary.services
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.Service
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -21,6 +18,7 @@ import com.google.api.services.drive.DriveScopes
 import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.extensions.getAlarmNotification
 import me.blog.korn123.easydiary.extensions.getOpenAlarmTabIntent
 import me.blog.korn123.easydiary.extensions.isScreenOn
@@ -99,32 +97,59 @@ class AlarmWorkService : Service() {
         GoogleOAuthHelper.getGoogleSignAccount(this)?.account?.let { account ->
             DriveServiceHelper(this, account).run {
                 initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME) { id ->
-                    id?.let {
-                        createFile(
-                                it, EasyDiaryDbHelper.getRealmPath(),
-                                DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"),
-                                EasyDiaryUtils.easyDiaryMimeType
-                        ).addOnSuccessListener {
-                            val pendingIntent = getOpenAlarmTabIntent(alarm)
-                            val notification = getAlarmNotification(pendingIntent, alarm)
-                            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                            notificationManager.notify(alarm.id, notification)
+                    when (id != null) {
+                        true -> {
+                            createFile(
+                                    id, EasyDiaryDbHelper.getRealmPath(),
+                                    DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"),
+                                    EasyDiaryUtils.easyDiaryMimeType
+                            ).addOnSuccessListener {
+                                val pendingIntent = getOpenAlarmTabIntent(alarm)
+                                val notification = getAlarmNotification(pendingIntent, alarm)
+                                val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                                notificationManager.notify(alarm.id, notification)
 
-                            val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
-                            if (isScreenOn()) {
-                                scheduleNextAlarm(alarm, true)
-                            } else {
-                                scheduleNextAlarm(alarm, false)
-                                powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.ON_AFTER_RELEASE, "myApp:notificationLock").apply {
-                                    acquire(3000)
+                                val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
+                                if (isScreenOn()) {
+                                    scheduleNextAlarm(alarm, true)
+                                } else {
+                                    scheduleNextAlarm(alarm, false)
+                                    powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.ON_AFTER_RELEASE, "myApp:notificationLock").apply {
+                                        acquire(3000)
+                                    }
                                 }
+                                stopSelf()
+                            }.addOnFailureListener { e ->
+                                stopSelf()
+                                EasyDiaryDbHelper.insertActionLog(ActionLog("AlarmWorkService", "executeWork", "error", e.message), context)
                             }
-                            stopSelf()
-                        }.addOnFailureListener { e ->
-                            stopSelf()
-                            EasyDiaryDbHelper.insertActionLog(ActionLog("AlarmWorkService", "executeJob", "error", e.message), context)
                         }
-                    } ?: stopSelf()
+                        false -> {
+                            stopSelf()
+
+                            val title = "Fail!!!"
+                            val message = "The device entered doze mode and the backup operation using the network failed. If you touch the notification window, the backup operation will resume."
+                            EasyDiaryDbHelper.insertActionLog(ActionLog("AlarmWorkService", "executeWork", "INFO", "Snooze"), context)
+                            val snoozeNotificationBuilder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_upload")
+                            snoozeNotificationBuilder
+                                    .setDefaults(Notification.DEFAULT_ALL)
+                                    .setWhen(System.currentTimeMillis())
+                                    .setSmallIcon(R.drawable.ic_easydiary)
+                                    .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_googledrive_upload))
+                                    .setOngoing(false)
+                                    .setAutoCancel(true)
+                                    .setContentTitle(title)
+                                    .setContentText(message)
+                                    .setStyle(NotificationCompat.BigTextStyle().bigText(message).setSummaryText(title))
+                                    .setContentIntent(
+                                        PendingIntent.getActivity(this@AlarmWorkService, 0, Intent(this@AlarmWorkService, DiaryMainActivity::class.java).apply {
+                                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                            putExtra(DOZE_SCHEDULE, true)
+                                        }, PendingIntent.FLAG_UPDATE_CURRENT)
+                                    )
+                            notificationManager.notify(NOTIFICATION_GMS_BACKUP_COMPLETE_ID, snoozeNotificationBuilder.build())
+                        }
+                    }
                 }
             }
         }
