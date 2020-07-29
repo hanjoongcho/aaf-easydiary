@@ -43,17 +43,18 @@ class AlarmWorkExecutor(context: Context) : BaseAlarmWorkExecutor(context) {
                             EasyDiaryDbHelper.insertActionLog(ActionLog("AlarmWorkExecutor", "executeWork", "error", e.message), context)
                         }
                     } else {
-                        val alarmWorkService = Intent(context, AlarmWorkService::class.java).apply {
-                            putExtra(SettingsScheduleFragment.ALARM_ID, alarm.id)
-                        }
-                        context.run {
-                            if (Build.VERSION.SDK_INT >= 26) {
-                                startForegroundService(alarmWorkService)
-                            }
-                            else {
-                                startService(alarmWorkService)
-                            }
-                        }
+                        openSnoozeNotification(alarm)
+//                        val alarmWorkService = Intent(context, AlarmWorkService::class.java).apply {
+//                            putExtra(SettingsScheduleFragment.ALARM_ID, alarm.id)
+//                        }
+//                        context.run {
+//                            if (Build.VERSION.SDK_INT >= 26) {
+//                                startForegroundService(alarmWorkService)
+//                            }
+//                            else {
+//                                startService(alarmWorkService)
+//                            }
+//                        }
                     }
                 }
             }

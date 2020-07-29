@@ -34,6 +34,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
 import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.io.FileUtils
@@ -76,7 +77,13 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
 
         when {
             intent.getBooleanExtra(APP_FINISH_FLAG, false) -> finish() // application finish 확인 insertDiaryButton
-            intent.getBooleanExtra(DOZE_SCHEDULE, false) -> toast("Hello doze mode!!!")
+            intent.getBooleanExtra(DOZE_SCHEDULE, false) -> {
+                val alarmId =
+                toast("Execute the waiting schedule.")
+                EasyDiaryDbHelper.readAlarmBy(intent.getIntExtra(SettingsScheduleFragment.ALARM_ID, -1))?.let {
+                    AlarmWorkExecutor(this).run { executeWork(it) }
+                }
+            }
         }
 
         setSupportActionBar(toolbar)
