@@ -555,7 +555,8 @@ fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): No
             .setSmallIcon(R.drawable.ic_easydiary)
             .setLargeIcon(when (alarm.workMode) {
                 Alarm.WORK_MODE_DIARY_WRITING -> BitmapFactory.decodeResource(resources, R.drawable.ic_diary_writing)
-                Alarm.WORK_MODE_DIARY_BACKUP_LOCAL, Alarm.WORK_MODE_DIARY_BACKUP_GMS -> BitmapFactory.decodeResource(resources, R.drawable.ic_diary_backup_local)
+                Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> BitmapFactory.decodeResource(resources, R.drawable.ic_diary_backup_local)
+                Alarm.WORK_MODE_DIARY_BACKUP_GMS -> BitmapFactory.decodeResource(resources, R.drawable.ic_googledrive_upload)
                 else -> null
             })
             .setOngoing(false)

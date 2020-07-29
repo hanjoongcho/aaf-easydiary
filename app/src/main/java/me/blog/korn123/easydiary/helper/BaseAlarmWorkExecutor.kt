@@ -58,7 +58,7 @@ open class BaseAlarmWorkExecutor(val context: Context) {
                     .setDefaults(Notification.DEFAULT_ALL)
                     .setWhen(System.currentTimeMillis())
                     .setSmallIcon(R.drawable.ic_easydiary)
-                    .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_googledrive_upload))
+                    .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_schedule_error))
                     .setOngoing(false)
                     .setAutoCancel(true)
                     .setContentTitle(title)
