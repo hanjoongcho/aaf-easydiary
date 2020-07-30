@@ -52,8 +52,6 @@ open class BaseAlarmWorkExecutor(val context: Context) {
                 notificationManager.createNotificationChannel(channel)
             }
 
-            val title = "Fail!!!"
-            val message = "The device entered doze mode and the backup operation using the network failed. If you touch the notification window, the backup operation will resume."
             val builder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_alarm")
                     .setDefaults(Notification.DEFAULT_ALL)
                     .setWhen(System.currentTimeMillis())
@@ -61,9 +59,9 @@ open class BaseAlarmWorkExecutor(val context: Context) {
                     .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_schedule_error))
                     .setOngoing(false)
                     .setAutoCancel(true)
-                    .setContentTitle(title)
-                    .setContentText(message)
-                    .setStyle(NotificationCompat.BigTextStyle().bigText(message).setSummaryText(title))
+                    .setContentTitle(getString(R.string.schedule_gms_error_title))
+                    .setContentText(getString(R.string.schedule_gms_error_message))
+                    .setStyle(NotificationCompat.BigTextStyle().bigText(getString(R.string.schedule_gms_error_message)).setSummaryText(getString(R.string.schedule_gms_error_title)))
                     .setContentIntent(
                             PendingIntent.getActivity(this, 0, Intent(this, DiaryMainActivity::class.java).apply {
                                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

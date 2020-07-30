@@ -668,4 +668,7 @@
     <string name="schedule_backup_gms_description">Diary backup (Google Drive)\nRegistering the schedule backs up the database files excluding attached photos to the Google Drive according to the set day and time and provides the result of the operation as a notification message.</string>
     <string name="google_drive_account_sign_in_title">Link Google Drive account</string>
     <string name="google_drive_account_sign_in_description">Connect your account to Google Drive for easy diary data backup.</string>
+    <string name="schedule_gms_error_title">Waiting for scheduled work</string>
+    <string name="schedule_gms_error_message">The device entered doze mode and the backup operation using the network failed. If you touch the notification window, the backup operation will resume.</string>
+    <string name="schedule_pending_guide_message">The waiting schedule starts.</string>
 </resources>

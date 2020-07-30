@@ -442,7 +442,7 @@
     </string>
     <string name="release_206">
         v1.4.140 / 2020.07.20\n
-        アプリケーションが最近使用アプリ一覧から削除された場合、スケジューラが動作しなかったエラーを修正する
+        Fixed an error that the scheduler did not work in the application termination state
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -668,4 +668,7 @@
     <string name="schedule_backup_gms_description">日記のバックアップ（Googleドライブ）\nスケジュールを登録すると、設定された日付と時刻に合わせて添付写真を除いて、データベースファイルを、Googleドライブにバックアップして操作の結果を通知メッセージとして提供します。</string>
     <string name="google_drive_account_sign_in_title">Googleのドライブアカウント接続</string>
     <string name="google_drive_account_sign_in_description">イージーダイアリーデータのバックアップのために、Googleドライブアカウントを接続します。</string>
+    <string name="schedule_gms_error_title">Waiting for scheduled work</string>
+    <string name="schedule_gms_error_message">The device entered doze mode and the backup operation using the network failed. If you touch the notification window, the backup operation will resume.</string>
+    <string name="schedule_pending_guide_message">The waiting schedule starts.</string>
 </resources>
