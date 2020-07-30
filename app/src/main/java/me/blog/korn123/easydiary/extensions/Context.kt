@@ -574,7 +574,7 @@ fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): No
             .setAutoCancel(true)
             .setContentTitle(alarm.label)
             .setContentText(description)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(description).setSummaryText(alarm.label))
+            .setStyle(NotificationCompat.BigTextStyle().bigText(description)/*.setSummaryText(alarm.label)*/)
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
 
