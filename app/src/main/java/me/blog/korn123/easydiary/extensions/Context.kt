@@ -549,20 +549,32 @@ fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): No
         notificationManager.createNotificationChannel(channel)
     }
 
+    var largeIcon: Bitmap? = null
+    var description: String? = null
+    when (alarm.workMode) {
+        Alarm.WORK_MODE_DIARY_WRITING -> {
+            largeIcon = BitmapFactory.decodeResource(resources, R.drawable.ic_diary_writing)
+            description = "Touch the notification window to go to the diary screen."
+        }
+        Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> {
+            largeIcon = BitmapFactory.decodeResource(resources, R.drawable.ic_diary_backup_local)
+            description = "Diary backup completed on local device."
+        }
+        Alarm.WORK_MODE_DIARY_BACKUP_GMS -> {
+            largeIcon = BitmapFactory.decodeResource(resources, R.drawable.ic_googledrive_upload)
+            description = "Diary backup completed on Google Drive."
+        }
+    }
     val builder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_alarm")
             .setDefaults(Notification.DEFAULT_ALL)
             .setWhen(System.currentTimeMillis())
             .setSmallIcon(R.drawable.ic_easydiary)
-            .setLargeIcon(when (alarm.workMode) {
-                Alarm.WORK_MODE_DIARY_WRITING -> BitmapFactory.decodeResource(resources, R.drawable.ic_diary_writing)
-                Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> BitmapFactory.decodeResource(resources, R.drawable.ic_diary_backup_local)
-                Alarm.WORK_MODE_DIARY_BACKUP_GMS -> BitmapFactory.decodeResource(resources, R.drawable.ic_googledrive_upload)
-                else -> null
-            })
+            .setLargeIcon(largeIcon)
             .setOngoing(false)
             .setAutoCancel(true)
-            .setContentTitle("Easy Diary schedule notification")
-            .setContentText(alarm.label)
+            .setContentTitle(alarm.label)
+            .setContentText(description)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(description).setSummaryText(alarm.label))
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
 
