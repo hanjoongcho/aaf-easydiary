@@ -38,6 +38,9 @@ class AlarmWorkExecutor(context: Context) : BaseAlarmWorkExecutor(context) {
                             EasyDiaryDbHelper.insertActionLog(ActionLog("AlarmWorkExecutor", "executeWork", "error", e.message), context)
                         }
                     } else {
+                        EasyDiaryDbHelper.beginTransaction()
+                        alarm.retryCount = alarm.retryCount.plus(1)
+                        EasyDiaryDbHelper.commitTransaction()
                         openSnoozeNotification(alarm)
                     }
                 }

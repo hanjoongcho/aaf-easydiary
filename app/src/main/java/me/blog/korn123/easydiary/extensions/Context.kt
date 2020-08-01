@@ -572,7 +572,7 @@ fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): No
             .setLargeIcon(largeIcon)
             .setOngoing(false)
             .setAutoCancel(true)
-            .setContentTitle("[${alarm.id}]" + alarm.label)
+            .setContentTitle(alarm.label)
             .setContentText(description)
             .setStyle(NotificationCompat.BigTextStyle().bigText(description)/*.setSummaryText(alarm.label)*/)
             .setContentIntent(pendingIntent)

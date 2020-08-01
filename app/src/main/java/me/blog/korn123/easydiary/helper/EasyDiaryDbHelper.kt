@@ -213,6 +213,13 @@ object EasyDiaryDbHelper {
         return alarm
     }
 
+    fun readSnoozeAlarms(): List<Alarm> {
+        val results = getInstance().where(Alarm::class.java).greaterThan("retryCount", 0).findAll()
+        val list = mutableListOf<Alarm>()
+        list.addAll(results.subList(0, results.size))
+        return list
+    }
+
 
     /***************************************************************************************************
      *   Manage ActionLog model

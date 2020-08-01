@@ -61,12 +61,12 @@ open class BaseAlarmWorkExecutor(val context: Context) {
                     .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_schedule_error))
                     .setOngoing(false)
                     .setAutoCancel(true)
-                    .setContentTitle("[${alarm.id}]" + getString(R.string.schedule_gms_error_title))
+                    .setContentTitle(getString(R.string.schedule_gms_error_title))
                     .setContentText(getString(R.string.schedule_gms_error_message))
                     .setStyle(NotificationCompat.BigTextStyle().bigText(getString(R.string.schedule_gms_error_message)).setSummaryText(getString(R.string.schedule_gms_error_title)))
                     .setContentIntent(
                             PendingIntent.getBroadcast(this, 0, Intent(this, AlarmReceiver::class.java).apply {
-                                putExtra(SettingsScheduleFragment.ALARM_ID, alarm.id)
+                                putExtra(DOZE_SCHEDULE, true)
                             }, PendingIntent.FLAG_UPDATE_CURRENT)
                     )
             notificationManager.notify(alarm.id, builder.build())
