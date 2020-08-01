@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.fragments
 import android.app.Activity
 import android.app.TimePickerDialog
 import android.content.Context.INPUT_METHOD_SERVICE
+import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.format.DateFormat
@@ -15,15 +16,12 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.*
 import kotlinx.android.synthetic.main.dialog_alarm.view.*
 import kotlinx.android.synthetic.main.layout_settings_schedule.*
-import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.activities.SpacesItemDecoration
 import me.blog.korn123.easydiary.adapters.AlarmAdapter
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.extensions.updateTextColors
@@ -247,5 +245,15 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
 
     companion object {
         const val ALARM_ID = "alarm_id"
+    }
+
+    class SpacesItemDecoration(private val space: Int) : androidx.recyclerview.widget.RecyclerView.ItemDecoration() {
+        override fun getItemOffsets(outRect: Rect, view: View, parent: androidx.recyclerview.widget.RecyclerView, state: androidx.recyclerview.widget.RecyclerView.State) {
+            val position = parent.getChildAdapterPosition(view)
+            when (position == 0) {
+                true -> outRect.top = 0
+                false -> outRect.top = space
+            }
+        }
     }
 }
