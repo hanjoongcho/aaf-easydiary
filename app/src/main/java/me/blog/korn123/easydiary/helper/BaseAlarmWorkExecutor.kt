@@ -61,7 +61,7 @@ open class BaseAlarmWorkExecutor(val context: Context) {
                     .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_schedule_error))
                     .setOngoing(false)
                     .setAutoCancel(true)
-                    .setContentTitle(getString(R.string.schedule_gms_error_title))
+                    .setContentTitle("[${alarm.id}]" + getString(R.string.schedule_gms_error_title))
                     .setContentText(getString(R.string.schedule_gms_error_message))
                     .setStyle(NotificationCompat.BigTextStyle().bigText(getString(R.string.schedule_gms_error_message)).setSummaryText(getString(R.string.schedule_gms_error_title)))
                     .setContentIntent(
