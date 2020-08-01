@@ -18,6 +18,8 @@ import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.models.Alarm
+import me.blog.korn123.easydiary.receivers.AlarmReceiver
+import me.blog.korn123.easydiary.services.NotificationService
 
 open class BaseAlarmWorkExecutor(val context: Context) {
 
@@ -63,9 +65,7 @@ open class BaseAlarmWorkExecutor(val context: Context) {
                     .setContentText(getString(R.string.schedule_gms_error_message))
                     .setStyle(NotificationCompat.BigTextStyle().bigText(getString(R.string.schedule_gms_error_message)).setSummaryText(getString(R.string.schedule_gms_error_title)))
                     .setContentIntent(
-                            PendingIntent.getActivity(this, 0, Intent(this, DiaryMainActivity::class.java).apply {
-                                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                putExtra(DOZE_SCHEDULE, true)
+                            PendingIntent.getBroadcast(this, 0, Intent(this, AlarmReceiver::class.java).apply {
                                 putExtra(SettingsScheduleFragment.ALARM_ID, alarm.id)
                             }, PendingIntent.FLAG_UPDATE_CURRENT)
                     )

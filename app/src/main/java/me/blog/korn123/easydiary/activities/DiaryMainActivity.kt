@@ -77,13 +77,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
 
         when {
             intent.getBooleanExtra(APP_FINISH_FLAG, false) -> finish() // application finish 확인 insertDiaryButton
-            intent.getBooleanExtra(DOZE_SCHEDULE, false) -> {
-                val alarmId =
-                toast("Execute the waiting schedule.")
-                EasyDiaryDbHelper.readAlarmBy(intent.getIntExtra(SettingsScheduleFragment.ALARM_ID, -1))?.let {
-                    AlarmWorkExecutor(this).run { executeWork(it) }
-                }
-            }
         }
 
         setSupportActionBar(toolbar)
