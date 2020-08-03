@@ -444,6 +444,11 @@
         v1.4.140 / 2020.07.20\n
         Fixed an error that the scheduler did not work in the application termination state
     </string>
+    <string name="release_207">
+        v1.4.141 / 2020.08.03\n
+        ユーザーエクスペリエンス（UX）の最適化\n
+        フランス語翻訳の更新
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->

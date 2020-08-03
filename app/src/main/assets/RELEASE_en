@@ -4,6 +4,10 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.141 (date: 2020.08.03)
+  * User Experience (UX) Optimization
+  * French translation updates
+
 # Changes in 1.4.140 (date: 2020.07.20)
   * Fixed an error that the scheduler did not work in the application termination state
 

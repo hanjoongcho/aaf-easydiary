@@ -444,6 +444,11 @@
         v1.4.140 / 2020.07.20\n
         Fixed an error that the scheduler did not work in the application termination state
     </string>
+    <string name="release_207">
+        v1.4.141 / 2020.08.03\n
+        User Experience (UX) Optimization\n
+        French translation updates
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -619,10 +624,10 @@
     <string name="last_diary_backup_time">Dernière sauvegarde du journal :</string>
     <string name="last_photo_backup_time">Dernière sauvegarde des photos jointes :</string>
     <string name="export_full_backup_title">[BETA] Sauvegarde intégrale des données</string>
-    <string name="export_full_backup_description">Compresser et sauvegarder dans un seul fichier toutes les données relatives au journal telles que la base de données, les photos jointes, les cartes postales, les polices, etc. Il s\'agit d'\une fonction bêta qui peut donc ne pas fonctionner correctement sur certains appareils.</string>
+    <string name="export_full_backup_description">Compresser et sauvegarder dans un seul fichier toutes les données relatives au journal telles que la base de données, les photos jointes, les cartes postales, les polices, etc. Il s\'agit d\'une fonction bêta qui peut donc ne pas fonctionner correctement sur certains appareils.</string>
     <string name="diary_symbol_search_message">Sélectionner le symbole du journal que vous souhaitez filtrer.</string>
     <string name="import_full_backup_title">[BETA] Restauration intégrale des données</string>
-    <string name="import_full_backup_description">Décompresser et récupérer toutes les données relatives au journal telles que la base de données, les photos jointes, les cartes postales, les polices, etc. Il s\'agit d'\une fonction bêta qui peut donc ne pas fonctionner correctement sur certains appareils.</string>
+    <string name="import_full_backup_description">Décompresser et récupérer toutes les données relatives au journal telles que la base de données, les photos jointes, les cartes postales, les polices, etc. Il s\'agit d\'une fonction bêta qui peut donc ne pas fonctionner correctement sur certains appareils.</string>
     <string name="calendar_sort_ascending">Croissant</string>
     <string name="calendar_sort_descending">Décroissant</string>
     <string name="calendar_sort_title">Option de tri du calendrier</string>
@@ -660,12 +665,12 @@
     <string name="schedule_description">Description de la planification</string>
     <string name="schedule_description_hint">Description de l\'alarme</string>
     <string name="schedule_diary_writing_description">Sauvegarde du journal\nEnregistrer la planification de la sauvegarde du journal.\nQuand la planification est paramétrée, un message de notification est envoyé en fonction du jour et de l\'heure fixés.</string>
-    <string name="schedule_backup_local_description">Sauvegarde du journal (Stockage de l\'appareil)\nParamétrer la planification permet de sauvegarder les fichiers de la base de données, à l\'exclusion des photos jointes, sur le stockage local de l'appareil en fonction du jour et de l'heure fixés et d\'afficher le résultat de l\'opération sous la forme d\'une notification.</string>
+    <string name="schedule_backup_local_description">Sauvegarde du journal (Stockage de l\'appareil)\nParamétrer la planification permet de sauvegarder les fichiers de la base de données, à l\'exclusion des photos jointes, sur le stockage local de l\'appareil en fonction du jour et de l\'heure fixés et d\'afficher le résultat de l\'opération sous la forme d\'une notification.</string>
     <string name="schedule_empty_message">Aucune planification n\'est paramétrée.\nCliquer sur le bouton "plus" en haut à droite pour ajouter une nouvelle planification.</string>
     <string name="permission_confirmation_dialog_title">Demande d\'autorisation</string>
     <string name="permission_confirmation_dialog_message">Une autorisation est nécessaire pour utiliser Easy Diary.</string>
     <string name="google_drive_account_information_title">Informations liées au compte Google</string>
-    <string name="schedule_backup_gms_description">Sauvegarde du journal (Google Drive)\nParamétrer la planification permet de sauvegarder les fichiers de la base de données, à l\'exclusion des photos jointes, dans Google Drive en fonction du jour et de l'\heure fixés et d\'afficher le résultat de l\'opération sous la forme d\'une notification.</string>
+    <string name="schedule_backup_gms_description">Sauvegarde du journal (Google Drive)\nParamétrer la planification permet de sauvegarder les fichiers de la base de données, à l\'exclusion des photos jointes, dans Google Drive en fonction du jour et de l\'heure fixés et d\'afficher le résultat de l\'opération sous la forme d\'une notification.</string>
     <string name="google_drive_account_sign_in_title">Lier le compte à Google Drive</string>
     <string name="google_drive_account_sign_in_description">Connecter votre compte à Google Drive pour une sauvegarde simplifiée des données du journal.</string>
     <string name="schedule_gms_error_title">Waiting for scheduled work</string>
