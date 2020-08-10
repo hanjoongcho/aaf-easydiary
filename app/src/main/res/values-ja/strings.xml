@@ -673,7 +673,7 @@
     <string name="schedule_backup_gms_description">日記のバックアップ（Googleドライブ）\nスケジュールを登録すると、設定された日付と時刻に合わせて添付写真を除いて、データベースファイルを、Googleドライブにバックアップして操作の結果を通知メッセージとして提供します。</string>
     <string name="google_drive_account_sign_in_title">Googleのドライブアカウント接続</string>
     <string name="google_drive_account_sign_in_description">イージーダイアリーデータのバックアップのために、Googleドライブアカウントを接続します。</string>
-    <string name="schedule_gms_error_title">Waiting for scheduled work</string>
-    <string name="schedule_gms_error_message">The device entered doze mode and the backup operation using the network failed. If you touch the notification window, the backup operation will resume.</string>
-    <string name="schedule_pending_guide_message">The waiting schedule starts.</string>
+    <string name="schedule_gms_error_title">スケジュール作業待機中</string>
+    <string name="schedule_gms_error_message">デバイスがDozeモードに入り、ネットワークを使用したバックアップ操作が失敗しました。 通知ウィンドウをタッチすると、バックアップが再開されます。</string>
+    <string name="schedule_pending_guide_message">待機中のスケジュールジョブが開始されました。</string>
 </resources>

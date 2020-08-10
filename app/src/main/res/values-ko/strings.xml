@@ -673,7 +673,7 @@
     <string name="schedule_backup_gms_description">다이어리 백업 (구글드라이브)\n스케줄을 등록하면 설정된 날짜와 시간에 맞춰 첨부사진을 제외한 데이터베이스 파일을 구글드라이브에 백업하고 작업 결과를 알림 메시지로 제공합니다.</string>
     <string name="google_drive_account_sign_in_title">구글드라이브 계정 연결</string>
     <string name="google_drive_account_sign_in_description">이지 다이어리 데이터 백업을 위해 구글드라이브 계정을 연결합니다.</string>
-    <string name="schedule_gms_error_title">Waiting for scheduled work</string>
-    <string name="schedule_gms_error_message">The device entered doze mode and the backup operation using the network failed. If you touch the notification window, the backup operation will resume.</string>
-    <string name="schedule_pending_guide_message">The waiting schedule starts.</string>
+    <string name="schedule_gms_error_title">스케줄 작업 대기중</string>
+    <string name="schedule_gms_error_message">디바이스가 잠자기 모드로 전환되어 네트워크를 이용한 스케줄 작업이 중단되었습니다. 알림창을 터치 하시면 예약된 스케줄 작업이 시작됩니다.</string>
+    <string name="schedule_pending_guide_message">대기중인 스케줄 작업이 시작되었습니다.</string>
 </resources>
