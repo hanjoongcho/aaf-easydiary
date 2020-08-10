@@ -21,9 +21,9 @@ class AlarmViewHolder(itemView: View, val activity: Activity) : RecyclerView.Vie
         itemView.alarmDescription.text = alarm.label
         itemView.edit_alarm_time.text = activity.getFormattedTime(alarm.timeInMinutes * 60, false, true)
         itemView.alarmLabel.text = when (alarm.workMode) {
-            Alarm.WORK_MODE_DIARY_WRITING -> "diary-writing"
-            Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> "diary-backup-local"
-            Alarm.WORK_MODE_DIARY_BACKUP_GMS -> "diary-backup-gms"
+            Alarm.WORK_MODE_DIARY_WRITING -> "[${alarm.sequence}] diary-writing"
+            Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> "[${alarm.sequence}] diary-backup-local"
+            Alarm.WORK_MODE_DIARY_BACKUP_GMS -> "[${alarm.sequence}] diary-backup-gms"
             else -> "unclassified"
         }
         itemView.alarm_switch.setOnCheckedChangeListener { _, isChecked ->
