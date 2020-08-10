@@ -676,4 +676,7 @@
     <string name="schedule_gms_error_title">Waiting for scheduled work</string>
     <string name="schedule_gms_error_message">The device entered doze mode and the backup operation using the network failed. If you touch the notification window, the backup operation will resume.</string>
     <string name="schedule_pending_guide_message">The waiting schedule starts.</string>
+    <string name="schedule_diary_writing_complete">Touch the notification window to go to the diary screen.</string>
+    <string name="schedule_backup_local_complete">Diary backup completed on local device.</string>
+    <string name="schedule_backup_gms_complete">Diary backup completed on Google Drive.</string>
 </resources>

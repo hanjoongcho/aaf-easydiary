@@ -3,6 +3,8 @@ package me.blog.korn123.easydiary.receivers
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import com.simplemobiletools.commons.extensions.toast
+import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.showAlarmNotification
 import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.DOZE_SCHEDULE
@@ -14,11 +16,14 @@ class AlarmReceiver : BroadcastReceiver() {
 
         when (intent.getBooleanExtra(DOZE_SCHEDULE, false)) {
             true -> {
-                EasyDiaryDbHelper.readSnoozeAlarms().forEach { alarm ->
-                    EasyDiaryDbHelper.beginTransaction()
-                    alarm.retryCount = 0
-                    EasyDiaryDbHelper.commitTransaction()
-                    context.showAlarmNotification(alarm)
+                context.run {
+                    EasyDiaryDbHelper.readSnoozeAlarms().forEach { alarm ->
+                        EasyDiaryDbHelper.beginTransaction()
+                        alarm.retryCount = 0
+                        EasyDiaryDbHelper.commitTransaction()
+                        showAlarmNotification(alarm)
+                    }
+                    toast(getString(R.string.schedule_pending_guide_message))
                 }
             }
             false -> {

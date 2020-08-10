@@ -676,4 +676,7 @@
     <string name="schedule_gms_error_title">スケジュール作業待機中</string>
     <string name="schedule_gms_error_message">デバイスがDozeモードに入り、ネットワークを使用したバックアップ操作が失敗しました。 通知ウィンドウをタッチすると、バックアップが再開されます。</string>
     <string name="schedule_pending_guide_message">待機中のスケジュールジョブが開始されました。</string>
+    <string name="schedule_diary_writing_complete">通知ウィンドウをタッチして日記画面に移動します。</string>
+    <string name="schedule_backup_local_complete">ローカルデバイスで日記のバックアップが完了しました。</string>
+    <string name="schedule_backup_gms_complete">Googleドライブで日記のバックアップが完了しました。</string>
 </resources>

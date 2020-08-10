@@ -676,4 +676,7 @@
     <string name="schedule_gms_error_title">스케줄 작업 대기중</string>
     <string name="schedule_gms_error_message">디바이스가 잠자기 모드로 전환되어 네트워크를 이용한 스케줄 작업이 중단되었습니다. 알림창을 터치 하시면 예약된 스케줄 작업이 시작됩니다.</string>
     <string name="schedule_pending_guide_message">대기중인 스케줄 작업이 시작되었습니다.</string>
+    <string name="schedule_diary_writing_complete">알림창을 터치 하시면 일기쓰기 화면으로 이동합니다.</string>
+    <string name="schedule_backup_local_complete">다이어리 백업 파일이 디바이스 로컬 저장소에 저장되었습니다.</string>
+    <string name="schedule_backup_gms_complete">다이어리 백업 파일이 구글드라이브에 저장되었습니다.</string>
 </resources>

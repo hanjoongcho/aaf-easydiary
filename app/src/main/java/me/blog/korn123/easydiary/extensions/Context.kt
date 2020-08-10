@@ -554,15 +554,15 @@ fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): No
     when (alarm.workMode) {
         Alarm.WORK_MODE_DIARY_WRITING -> {
             largeIcon = BitmapFactory.decodeResource(resources, R.drawable.ic_diary_writing)
-            description = "Touch the notification window to go to the diary screen."
+            description = getString(R.string.schedule_diary_writing_complete)
         }
         Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> {
             largeIcon = BitmapFactory.decodeResource(resources, R.drawable.ic_diary_backup_local)
-            description = "Diary backup completed on local device."
+            description = getString(R.string.schedule_backup_local_complete)
         }
         Alarm.WORK_MODE_DIARY_BACKUP_GMS -> {
             largeIcon = BitmapFactory.decodeResource(resources, R.drawable.ic_googledrive_upload)
-            description = "Diary backup completed on Google Drive."
+            description = getString(R.string.schedule_backup_gms_complete)
         }
     }
     val builder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_alarm")
