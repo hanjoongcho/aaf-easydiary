@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.view.View
+import androidx.core.content.ContextCompat
 import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
@@ -28,34 +29,45 @@ class AlarmWorkExecutor(context: Context) : BaseAlarmWorkExecutor(context) {
         }
     }
 
+    private fun reExecuteGmsBackup(alarm: Alarm) {
+        EasyDiaryDbHelper.beginTransaction()
+        alarm.retryCount = alarm.retryCount.plus(1)
+        EasyDiaryDbHelper.commitTransaction()
+        openSnoozeNotification(alarm)
+    }
+
     private fun executeGmsBackup(alarm: Alarm) {
         val realmPath = EasyDiaryDbHelper.getRealmPath()
-        EasyDiaryDbHelper.insertActionLog(ActionLog("AlarmWorkExecutor", "executeWork", "isValidGoogleSignAccount", GoogleOAuthHelper.isValidGoogleSignAccount(context).toString()), context)
+        EasyDiaryDbHelper.insertActionLog(ActionLog("AlarmWorkExecutor", "executeGmsBackup", "isValidGoogleSignAccount", GoogleOAuthHelper.isValidGoogleSignAccount(context).toString()), context)
         GoogleOAuthHelper.getGoogleSignAccount(context)?.account?.let { account ->
             DriveServiceHelper(context, account).run {
                 initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
-                    Intent(context, BackupPhotoService::class.java).apply {
-                        putExtra(DriveServiceHelper.WORKING_FOLDER_ID, photoFolderId)
-                        context.startService(this)
+                    EasyDiaryDbHelper.insertActionLog(ActionLog("AlarmWorkExecutor", "executeGmsBackup", "photoFolderId", photoFolderId), context)
+                    if (photoFolderId != null) {
+                        Intent(context, BackupPhotoService::class.java).apply {
+                            putExtra(DriveServiceHelper.WORKING_FOLDER_ID, photoFolderId)
+                            ContextCompat.startForegroundService(context, this)
+                            context.startService(this)
+                        }
+                    } else {
+                        reExecuteGmsBackup(alarm)
                     }
                 }
 
-                initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME) { id ->
-                    if (id != null) {
+                initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME) { realmFolderId ->
+                    EasyDiaryDbHelper.insertActionLog(ActionLog("AlarmWorkExecutor", "executeGmsBackup", "realmFolderId", realmFolderId), context)
+                    if (realmFolderId != null) {
                         createFile(
-                                id, realmPath,
+                                realmFolderId, realmPath,
                                 DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"),
                                 EasyDiaryUtils.easyDiaryMimeType
                         ).addOnSuccessListener {
                             openNotification(alarm)
                         }.addOnFailureListener { e ->
-                            EasyDiaryDbHelper.insertActionLog(ActionLog("AlarmWorkExecutor", "executeWork", "error", e.message), context)
+                            EasyDiaryDbHelper.insertActionLog(ActionLog("AlarmWorkExecutor", "executeGmsBackup", "error", e.message), context)
                         }
                     } else {
-                        EasyDiaryDbHelper.beginTransaction()
-                        alarm.retryCount = alarm.retryCount.plus(1)
-                        EasyDiaryDbHelper.commitTransaction()
-                        openSnoozeNotification(alarm)
+                        reExecuteGmsBackup(alarm)
                     }
                 }
             }

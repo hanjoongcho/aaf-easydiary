@@ -76,7 +76,6 @@ class BackupPhotoService : Service() {
         mInProcessJob = false
     }
 
-    var stopWatch = StopWatch()
     private fun backupPhoto() {
         notificationBuilder.setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
@@ -96,9 +95,6 @@ class BackupPhotoService : Service() {
                         }, 0)
                 )
         startForeground(NOTIFICATION_FOREGROUND_GMS_BACKUP_ID, notificationBuilder.build())
-
-        stopWatch.reset()
-        stopWatch.start()
 
         // step01. 전체 파일 목록을 조회
         determineRemoteDrivePhotos(null)
@@ -120,11 +116,6 @@ class BackupPhotoService : Service() {
                                 targetFilenames.add(photo.name)
                             }
                         }
-                        stopWatch.stop()
-                        Log.i("GSuite", "determineRemoteDrivePhotos: ${remoteDriveFileNames.size}")
-                        Log.i("GSuite", "targetFilenames: ${targetFilenames.size}")
-                        Log.i("GSuite", stopWatch.toString())
-
                         localDeviceFileCount = localPhotos.size
                         duplicateFileCount = localDeviceFileCount - targetFilenames.size
                         if (targetFilenames.size == 0) {
