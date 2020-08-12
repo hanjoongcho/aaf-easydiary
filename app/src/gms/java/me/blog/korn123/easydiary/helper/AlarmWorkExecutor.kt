@@ -38,16 +38,13 @@ class AlarmWorkExecutor(context: Context) : BaseAlarmWorkExecutor(context) {
 
     private fun executeGmsBackup(alarm: Alarm) {
         val realmPath = EasyDiaryDbHelper.getRealmPath()
-        EasyDiaryDbHelper.insertActionLog(ActionLog("AlarmWorkExecutor", "executeGmsBackup", "isValidGoogleSignAccount", GoogleOAuthHelper.isValidGoogleSignAccount(context).toString()), context)
         GoogleOAuthHelper.getGoogleSignAccount(context)?.account?.let { account ->
             DriveServiceHelper(context, account).run {
                 initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
-                    EasyDiaryDbHelper.insertActionLog(ActionLog("AlarmWorkExecutor", "executeGmsBackup", "photoFolderId", photoFolderId), context)
                     if (photoFolderId != null) {
                         Intent(context, BackupPhotoService::class.java).apply {
                             putExtra(DriveServiceHelper.WORKING_FOLDER_ID, photoFolderId)
                             ContextCompat.startForegroundService(context, this)
-                            context.startService(this)
                         }
                     } else {
                         reExecuteGmsBackup(alarm)
@@ -55,7 +52,6 @@ class AlarmWorkExecutor(context: Context) : BaseAlarmWorkExecutor(context) {
                 }
 
                 initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME) { realmFolderId ->
-                    EasyDiaryDbHelper.insertActionLog(ActionLog("AlarmWorkExecutor", "executeGmsBackup", "realmFolderId", realmFolderId), context)
                     if (realmFolderId != null) {
                         createFile(
                                 realmFolderId, realmPath,
@@ -64,7 +60,6 @@ class AlarmWorkExecutor(context: Context) : BaseAlarmWorkExecutor(context) {
                         ).addOnSuccessListener {
                             openNotification(alarm)
                         }.addOnFailureListener { e ->
-                            EasyDiaryDbHelper.insertActionLog(ActionLog("AlarmWorkExecutor", "executeGmsBackup", "error", e.message), context)
                         }
                     } else {
                         reExecuteGmsBackup(alarm)

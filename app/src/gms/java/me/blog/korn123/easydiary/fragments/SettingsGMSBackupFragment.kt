@@ -12,6 +12,7 @@ import android.widget.ListView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -237,7 +238,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
                         showAlertDialog(getString(R.string.backup_confirm_message), DialogInterface.OnClickListener { _, _ ->
                             val backupPhotoService = Intent(this, BackupPhotoService::class.java)
                             backupPhotoService.putExtra(DriveServiceHelper.WORKING_FOLDER_ID, photoFolderId)
-                            startService(backupPhotoService)
+                            ContextCompat.startForegroundService(context, backupPhotoService)
                             finish()
                         }, DialogInterface.OnClickListener { _, _ -> setScreenOrientationSensor(true) })
                     }

@@ -29,7 +29,6 @@ class AlarmReceiver : BroadcastReceiver() {
             false -> {
                 val alarmId = intent.getIntExtra(SettingsScheduleFragment.ALARM_ID, -1)
                 EasyDiaryDbHelper.readAlarmBy(alarmId)?.let {
-                    EasyDiaryDbHelper.insertActionLog(ActionLog("AlarmReceiver", "onReceive", "label", it.label), context)
                     context.showAlarmNotification(it)
                 }
             }

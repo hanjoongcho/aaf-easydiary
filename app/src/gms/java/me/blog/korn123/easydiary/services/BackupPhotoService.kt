@@ -20,6 +20,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.models.ActionLog
 import org.apache.commons.lang3.time.StopWatch
 import java.io.File
 import java.util.*
@@ -66,6 +67,7 @@ class BackupPhotoService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        EasyDiaryDbHelper.insertActionLog(ActionLog("BackupPhotoService", "onStartCommand", "flags", flags.toString()), applicationContext)
         mWorkingFolderId = intent?.getStringExtra(DriveServiceHelper.WORKING_FOLDER_ID) ?: ""
         backupPhoto()
         return super.onStartCommand(intent, flags, startId)

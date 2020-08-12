@@ -25,7 +25,6 @@ open class BaseAlarmWorkExecutor(val context: Context) {
 
     fun openNotification(alarm: Alarm) {
         context.run {
-            EasyDiaryDbHelper.insertActionLog(ActionLog("BaseAlarmWorkExecutor", "openNotification", "label", alarm.label), this)
             val pendingIntent = getOpenAlarmTabIntent(alarm)
             val notification = getAlarmNotification(pendingIntent, alarm)
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

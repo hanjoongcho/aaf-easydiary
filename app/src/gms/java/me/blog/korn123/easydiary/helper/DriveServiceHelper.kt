@@ -104,7 +104,6 @@ class DriveServiceHelper(val context: Context) {
                 }
             }
             addOnFailureListener { e ->
-                EasyDiaryDbHelper.insertActionLog(ActionLog("DriveServiceHelper", "initDriveWorkingDirectory", "error", e.message), context)
                 callback(null)
             }
         }
