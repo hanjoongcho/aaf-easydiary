@@ -13,13 +13,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.extensions.*
-import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
-import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.receivers.AlarmReceiver
-import me.blog.korn123.easydiary.services.NotificationService
 
 open class BaseAlarmWorkExecutor(val context: Context) {
 

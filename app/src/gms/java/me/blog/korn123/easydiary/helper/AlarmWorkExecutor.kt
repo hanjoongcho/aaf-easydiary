@@ -1,16 +1,10 @@
 package me.blog.korn123.easydiary.helper
 
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
-import android.view.View
 import androidx.core.content.ContextCompat
 import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.extensions.setScreenOrientationSensor
-import me.blog.korn123.easydiary.extensions.showAlertDialog
-import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.services.BackupPhotoService
 
