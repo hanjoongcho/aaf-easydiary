@@ -209,7 +209,20 @@ object EasyDiaryDbHelper {
     fun createTemporaryAlarm(workMode: Int = Alarm.WORK_MODE_DIARY_WRITING): Alarm {
         val alarm = Alarm().apply { this.workMode = workMode }
         val sequence = getInstance().where(Alarm::class.java).max("sequence") ?: 0
-        alarm.sequence = sequence.toInt().plus(1)
+        when (sequence.toInt() == countAlarmAll().toInt()) {
+            true ->  alarm.sequence = sequence.toInt().plus(1)
+            false -> {
+                run loop@ {
+                    readAlarmAll().forEachIndexed { index, item ->
+                        val validSequence = index.plus(1)
+                        if (item.sequence != validSequence) {
+                            alarm.sequence = validSequence
+                            return@loop
+                        }
+                    }
+                }
+            }
+        }
         return alarm
     }
 

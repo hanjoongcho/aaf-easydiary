@@ -20,11 +20,13 @@ class AlarmViewHolder(itemView: View, val activity: Activity) : RecyclerView.Vie
         itemView.alarm_switch.isChecked = alarm.isEnabled
         itemView.alarmDescription.text = alarm.label
         itemView.edit_alarm_time.text = activity.getFormattedTime(alarm.timeInMinutes * 60, false, true)
+
+        val prefix = if (activity.config.enableDebugMode) "[${alarm.sequence}] " else ""
         itemView.alarmLabel.text = when (alarm.workMode) {
-            Alarm.WORK_MODE_DIARY_WRITING -> "[${alarm.sequence}] diary-writing"
-            Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> "[${alarm.sequence}] diary-backup-local"
-            Alarm.WORK_MODE_DIARY_BACKUP_GMS -> "[${alarm.sequence}] diary-backup-gms"
-            else -> "unclassified"
+            Alarm.WORK_MODE_DIARY_WRITING -> "${prefix}diary-writing"
+            Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> "${prefix}diary-backup-local"
+            Alarm.WORK_MODE_DIARY_BACKUP_GMS -> "${prefix}diary-backup-gms"
+            else -> "${prefix}unclassified"
         }
         itemView.alarm_switch.setOnCheckedChangeListener { _, isChecked ->
             EasyDiaryDbHelper.beginTransaction()
