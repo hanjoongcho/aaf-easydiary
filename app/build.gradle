@@ -79,7 +79,8 @@ android {
             applicationVariants.all { variant ->
                 variant.outputs.each { output ->
                     def releaseFileName = "easy_diary-$versionName-${new Date().format('yyyyMMddHHmmss')}.apk"
-                    println("test message: $releaseFileName")
+                    println(output.outputFileName)
+                    println("releaseFileName: $releaseFileName")
                     output.outputFileName = releaseFileName
                 }
             }

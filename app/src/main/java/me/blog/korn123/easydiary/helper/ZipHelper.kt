@@ -15,7 +15,7 @@ import androidx.core.app.NotificationCompat
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.services.NotificationService
+import me.blog.korn123.easydiary.services.BaseNotificationService
 import org.apache.commons.io.IOUtils
 import java.io.*
 import java.util.zip.ZipEntry
@@ -56,7 +56,7 @@ class ZipHelper(val context: Context) {
                 .addAction(
                         R.drawable.ic_easydiary,
                         context.getString(R.string.cancel),
-                        PendingIntent.getService(context, 0, Intent(context, NotificationService::class.java).apply {
+                        PendingIntent.getService(context, 0, Intent(context, BaseNotificationService::class.java).apply {
                             action = actionString
                         }, 0)
                 )
@@ -89,7 +89,7 @@ class ZipHelper(val context: Context) {
     @SuppressLint("RestrictedApi")
     fun updateNotification(notificationId: Int, title: String, message: String) {
         if (isOnProgress) {
-            val actionFlag = if (notificationId == NOTIFICATION_COMPRESS_ID) NotificationService.ACTION_DISMISS_COMPRESS else NotificationService.ACTION_DISMISS_DECOMPRESS
+            val actionFlag = if (notificationId == NOTIFICATION_COMPRESS_ID) BaseNotificationService.ACTION_DISMISS_COMPRESS else BaseNotificationService.ACTION_DISMISS_DECOMPRESS
             val notificationManager = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
             mBuilder.mActions.clear()
             mBuilder/*.setProgress(0, 0, false)*/
@@ -99,7 +99,7 @@ class ZipHelper(val context: Context) {
                     .addAction(
                             R.drawable.ic_easydiary,
                             context.getString(R.string.dismiss),
-                            PendingIntent.getService(context, 0, Intent(context, NotificationService::class.java).apply {
+                            PendingIntent.getService(context, 0, Intent(context, BaseNotificationService::class.java).apply {
                                 action = actionFlag
                             }, 0)
                     )
@@ -129,7 +129,7 @@ class ZipHelper(val context: Context) {
     }
 
     fun compress(destFile: File) {
-        showNotification(NOTIFICATION_COMPRESS_ID, "Full data backup", "Preparing to backup all data ...", NotificationService.ACTION_FULL_BACKUP_CANCEL)
+        showNotification(NOTIFICATION_COMPRESS_ID, "Full data backup", "Preparing to backup all data ...", BaseNotificationService.ACTION_FULL_BACKUP_CANCEL)
         val zipOutputStream: ZipOutputStream
         try {
             zipOutputStream = ZipOutputStream(FileOutputStream(destFile))
@@ -174,7 +174,7 @@ class ZipHelper(val context: Context) {
     }
 
     fun decompress(uri: Uri?) {
-        showNotification(NOTIFICATION_DECOMPRESS_ID, "Full data recovery", "Recovery of all data is in progress.", NotificationService.ACTION_FULL_RECOVERY_CANCEL)
+        showNotification(NOTIFICATION_DECOMPRESS_ID, "Full data recovery", "Recovery of all data is in progress.", BaseNotificationService.ACTION_FULL_RECOVERY_CANCEL)
         val fileCount = countFileEntry(uri)
         val uriStream = context.contentResolver.openInputStream(uri!!)
         val buffer = ByteArray(1024)

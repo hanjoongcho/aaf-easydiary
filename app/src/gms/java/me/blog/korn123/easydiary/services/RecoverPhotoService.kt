@@ -5,9 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Build
-import androidx.core.app.NotificationCompat
-import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.api.client.extensions.android.http.AndroidHttp
@@ -84,7 +84,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
                         R.drawable.ic_easydiary,
                         getString(R.string.cancel),
                         PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
-                            action = NotificationService.ACTION_RECOVER_CANCEL
+                            action = BaseNotificationService.ACTION_RECOVER_CANCEL
                         }, 0)
                 )
         startForeground(NOTIFICATION_FOREGROUND_GMS_RECOVERY_ID, notificationBuilder.build())
@@ -228,7 +228,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
                         R.drawable.ic_easydiary,
                         getString(R.string.dismiss),
                         PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
-                            action = NotificationService.ACTION_DISMISS_GMS_RECOVERY_COMPLETE
+                            action = BaseNotificationService.ACTION_DISMISS_GMS_RECOVERY_COMPLETE
                         }, 0)
                 )
         notificationManager.notify(NOTIFICATION_GMS_RECOVERY_COMPLETE_ID, resultNotificationBuilder.build())

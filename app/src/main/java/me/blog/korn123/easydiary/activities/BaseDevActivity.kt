@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_dev.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.ActionLog
-import me.blog.korn123.easydiary.services.NotificationService
+import me.blog.korn123.easydiary.services.BaseNotificationService
 
 
 open class BaseDevActivity : EasyDiaryActivity() {
@@ -124,8 +124,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
             notificationBuilder.addAction(
                     R.drawable.ic_easydiary,
                     getString(R.string.dismiss),
-                    PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
-                        action = NotificationService.ACTION_DISMISS_DEV
+                    PendingIntent.getService(this, 0, Intent(this, BaseNotificationService::class.java).apply {
+                        action = BaseNotificationService.ACTION_DISMISS_DEV
                     }, 0)
             )
         }

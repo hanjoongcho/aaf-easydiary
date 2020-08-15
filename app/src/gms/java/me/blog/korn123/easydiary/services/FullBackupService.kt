@@ -23,7 +23,7 @@ import me.blog.korn123.easydiary.models.ActionLog
 import java.io.File
 import java.util.*
 
-class BackupPhotoService : Service() {
+class FullBackupService : Service() {
     private lateinit var notificationBuilder: NotificationCompat.Builder
     private lateinit var notificationManager: NotificationManager
     private lateinit var mDriveServiceHelper: DriveServiceHelper

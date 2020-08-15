@@ -34,16 +34,16 @@ class AlarmWorkExecutor(context: Context) : BaseAlarmWorkExecutor(context) {
         val realmPath = EasyDiaryDbHelper.getRealmPath()
         GoogleOAuthHelper.getGoogleSignAccount(context)?.account?.let { account ->
             DriveServiceHelper(context, account).run {
-                initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
-                    if (photoFolderId != null) {
-                        Intent(context, BackupPhotoService::class.java).apply {
-                            putExtra(DriveServiceHelper.WORKING_FOLDER_ID, photoFolderId)
-                            ContextCompat.startForegroundService(context, this)
-                        }
-                    } else {
-                        reExecuteGmsBackup(alarm)
-                    }
-                }
+//                initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
+//                    if (photoFolderId != null) {
+//                        Intent(context, BackupPhotoService::class.java).apply {
+//                            putExtra(DriveServiceHelper.WORKING_FOLDER_ID, photoFolderId)
+//                            ContextCompat.startForegroundService(context, this)
+//                        }
+//                    } else {
+//                        reExecuteGmsBackup(alarm)
+//                    }
+//                }
 
                 initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME) { realmFolderId ->
                     if (realmFolderId != null) {

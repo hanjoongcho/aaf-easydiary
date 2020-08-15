@@ -8,7 +8,7 @@ import me.blog.korn123.easydiary.activities.BaseDevActivity
 import me.blog.korn123.easydiary.helper.*
 
 
-class NotificationService(name: String = "EasyDiaryNotificationService") : IntentService(name) {
+open class BaseNotificationService(name: String = "EasyDiaryNotificationService") : IntentService(name) {
     override fun onHandleIntent(intent: Intent?) {
         intent?.let {
             when (it.action) {
@@ -18,8 +18,6 @@ class NotificationService(name: String = "EasyDiaryNotificationService") : Inten
                 ACTION_DISMISS_DECOMPRESS -> NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_DECOMPRESS_ID)
                 ACTION_DISMISS_DEV -> NotificationManagerCompat.from(applicationContext).cancel(BaseDevActivity.NOTIFICATION_ID_02)
                 ACTION_SNOOZE -> handleActionSnooze()
-                ACTION_RECOVER_CANCEL -> handleActionRecoverCancel()
-                ACTION_BACKUP_CANCEL -> handleActionBackupCancel()
                 ACTION_FULL_BACKUP_CANCEL -> handleActionFullBackupCancel()
                 ACTION_FULL_RECOVERY_CANCEL -> handleActionFullRecoveryCancel()
             }
@@ -27,16 +25,6 @@ class NotificationService(name: String = "EasyDiaryNotificationService") : Inten
     }
 
     private fun handleActionSnooze() {}
-
-    private fun handleActionRecoverCancel() {
-        val recoverPhotoService = Intent(this, RecoverPhotoService::class.java)
-        stopService(recoverPhotoService)
-    }
-
-    private fun handleActionBackupCancel() {
-        val recoverPhotoService = Intent(this, BackupPhotoService::class.java)
-        stopService(recoverPhotoService)
-    }
 
     private fun handleActionFullBackupCancel() {
         WorkManager.getInstance(this).cancelUniqueWork(WORK_MANAGER_BACKUP)

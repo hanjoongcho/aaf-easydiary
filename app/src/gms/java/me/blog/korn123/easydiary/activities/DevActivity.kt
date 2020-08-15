@@ -3,15 +3,18 @@ package me.blog.korn123.easydiary.activities
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import androidx.core.content.ContextCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import kotlinx.android.synthetic.main.activity_dev.*
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.pauseLock
+import me.blog.korn123.easydiary.helper.DriveServiceHelper
 import me.blog.korn123.easydiary.helper.GoogleOAuthHelper
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_GOOGLE_SIGN_IN
-import kotlinx.android.synthetic.main.activity_dev.*
+import me.blog.korn123.easydiary.services.BackupPhotoService
 
 class DevActivity : BaseDevActivity() {
 
@@ -23,6 +26,22 @@ class DevActivity : BaseDevActivity() {
         super.onCreate(savedInstanceState)
         clearGoogleOauthToken.setOnClickListener {
             GoogleOAuthHelper.signOutGoogleOAuth(this, true)
+        }
+        fullBackupService.setOnClickListener {
+            GoogleOAuthHelper.getGoogleSignAccount(this)?.account?.let { account ->
+                DriveServiceHelper(this, account).run {
+                    initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
+                        if (photoFolderId != null) {
+                            Intent(context, BackupPhotoService::class.java).apply {
+                                putExtra(DriveServiceHelper.WORKING_FOLDER_ID, photoFolderId)
+                                ContextCompat.startForegroundService(context, this)
+                            }
+                        } else {
+                            makeSnackBar("Failed start a service.")
+                        }
+                    }
+                }
+            }
         }
     }
 
