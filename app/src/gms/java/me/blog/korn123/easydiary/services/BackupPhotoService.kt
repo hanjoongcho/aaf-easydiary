@@ -91,7 +91,7 @@ class BackupPhotoService : Service() {
                         R.drawable.ic_easydiary,
                         getString(R.string.cancel),
                         PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
-                            action = BaseNotificationService.ACTION_BACKUP_CANCEL
+                            action = NotificationService.ACTION_BACKUP_CANCEL
                         }, 0)
                 )
         startForeground(NOTIFICATION_FOREGROUND_GMS_BACKUP_ID, notificationBuilder.build())
@@ -201,7 +201,7 @@ class BackupPhotoService : Service() {
                         R.drawable.ic_easydiary,
                         getString(R.string.dismiss),
                         PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
-                            action = BaseNotificationService.ACTION_DISMISS_GMS_BACKUP_COMPLETE
+                            action = NotificationService.ACTION_DISMISS_GMS_BACKUP_COMPLETE
                         }, 0)
                 )
         notificationManager.notify(NOTIFICATION_GMS_BACKUP_COMPLETE_ID, resultNotificationBuilder.build())

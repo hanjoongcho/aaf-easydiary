@@ -15,6 +15,7 @@ import me.blog.korn123.easydiary.helper.DriveServiceHelper
 import me.blog.korn123.easydiary.helper.GoogleOAuthHelper
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_GOOGLE_SIGN_IN
 import me.blog.korn123.easydiary.services.BackupPhotoService
+import me.blog.korn123.easydiary.services.FullBackupService
 
 class DevActivity : BaseDevActivity() {
 
@@ -32,7 +33,7 @@ class DevActivity : BaseDevActivity() {
                 DriveServiceHelper(this, account).run {
                     initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
                         if (photoFolderId != null) {
-                            Intent(context, BackupPhotoService::class.java).apply {
+                            Intent(context, FullBackupService::class.java).apply {
                                 putExtra(DriveServiceHelper.WORKING_FOLDER_ID, photoFolderId)
                                 ContextCompat.startForegroundService(context, this)
                             }

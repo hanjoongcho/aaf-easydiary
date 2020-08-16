@@ -91,7 +91,7 @@ class FullBackupService : Service() {
                         R.drawable.ic_easydiary,
                         getString(R.string.cancel),
                         PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
-                            action = BaseNotificationService.ACTION_BACKUP_CANCEL
+                            action = NotificationService.ACTION_FULL_BACKUP_GMS_CANCEL
                         }, 0)
                 )
         startForeground(NOTIFICATION_FOREGROUND_GMS_BACKUP_ID, notificationBuilder.build())
@@ -172,7 +172,6 @@ class FullBackupService : Service() {
                 launchCompleteNotification(getString(R.string.notification_msg_upload_complete))
             }
         }
-//        if (currentCount == targetFilenames.size) stopSelf()
     }
 
     private fun launchCompleteNotification(contentText: String) {
@@ -201,7 +200,7 @@ class FullBackupService : Service() {
                         R.drawable.ic_easydiary,
                         getString(R.string.dismiss),
                         PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
-                            action = BaseNotificationService.ACTION_DISMISS_GMS_BACKUP_COMPLETE
+                            action = NotificationService.ACTION_DISMISS_GMS_BACKUP_COMPLETE
                         }, 0)
                 )
         notificationManager.notify(NOTIFICATION_GMS_BACKUP_COMPLETE_ID, resultNotificationBuilder.build())
@@ -210,7 +209,7 @@ class FullBackupService : Service() {
         successCount = 0
         failCount = 0
         targetFilenames.clear()
-//        stopForeground(true)
+        stopForeground(true)
         stopSelf()
     }
 }

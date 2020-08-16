@@ -12,19 +12,14 @@ open class BaseNotificationService(name: String = "EasyDiaryNotificationService"
     override fun onHandleIntent(intent: Intent?) {
         intent?.let {
             when (it.action) {
-                ACTION_DISMISS_GMS_RECOVERY_COMPLETE -> NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_GMS_RECOVERY_COMPLETE_ID)
-                ACTION_DISMISS_GMS_BACKUP_COMPLETE -> NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_GMS_BACKUP_COMPLETE_ID)
                 ACTION_DISMISS_COMPRESS -> NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_COMPRESS_ID)
                 ACTION_DISMISS_DECOMPRESS -> NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_DECOMPRESS_ID)
                 ACTION_DISMISS_DEV -> NotificationManagerCompat.from(applicationContext).cancel(BaseDevActivity.NOTIFICATION_ID_02)
-                ACTION_SNOOZE -> handleActionSnooze()
                 ACTION_FULL_BACKUP_CANCEL -> handleActionFullBackupCancel()
                 ACTION_FULL_RECOVERY_CANCEL -> handleActionFullRecoveryCancel()
             }
         }
     }
-
-    private fun handleActionSnooze() {}
 
     private fun handleActionFullBackupCancel() {
         WorkManager.getInstance(this).cancelUniqueWork(WORK_MANAGER_BACKUP)
@@ -35,14 +30,12 @@ open class BaseNotificationService(name: String = "EasyDiaryNotificationService"
     }
 
     companion object {
-        const val ACTION_DISMISS_GMS_BACKUP_COMPLETE = "me.blog.korn123.easydiary.services.action.ACTION_DISMISS_GMS_BACKUP_COMPLETE"
-        const val ACTION_DISMISS_GMS_RECOVERY_COMPLETE = "me.blog.korn123.easydiary.services.action.ACTION_DISMISS_GMS_RECOVERY_COMPLETE"
+        /*BaseDevActivity*/
+        const val ACTION_DISMISS_DEV = "me.blog.korn123.easydiary.services.action.ACTION_DISMISS_DEV"
+
+        /*ZipHelper*/
         const val ACTION_DISMISS_COMPRESS = "me.blog.korn123.easydiary.services.action.ACTION_DISMISS_COMPRESS"
         const val ACTION_DISMISS_DECOMPRESS = "me.blog.korn123.easydiary.services.action.ACTION_DISMISS_DECOMPRESS"
-        const val ACTION_DISMISS_DEV = "me.blog.korn123.easydiary.services.action.ACTION_DISMISS_DEV"
-        const val ACTION_SNOOZE = "me.blog.korn123.easydiary.services.ACTION_SNOOZE"
-        const val ACTION_BACKUP_CANCEL = "me.blog.korn123.easydiary.services.ACTION_BACKUP_CANCEL"
-        const val ACTION_RECOVER_CANCEL = "me.blog.korn123.easydiary.services.ACTION_RECOVER_CANCEL"
         const val ACTION_FULL_BACKUP_CANCEL = "me.blog.korn123.easydiary.services.ACTION_FULL_BACKUP_CANCEL"
         const val ACTION_FULL_RECOVERY_CANCEL = "me.blog.korn123.easydiary.services.ACTION_FULL_RECOVERY_CANCEL"
     }
