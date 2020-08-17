@@ -65,7 +65,6 @@ class BackupPhotoService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        EasyDiaryDbHelper.insertActionLog(ActionLog("BackupPhotoService", "onStartCommand", "flags", flags.toString()), applicationContext)
         mWorkingFolderId = intent?.getStringExtra(DriveServiceHelper.WORKING_FOLDER_ID) ?: ""
         backupPhoto()
         return super.onStartCommand(intent, flags, startId)
@@ -91,7 +90,7 @@ class BackupPhotoService : Service() {
                         R.drawable.ic_easydiary,
                         getString(R.string.cancel),
                         PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
-                            action = NotificationService.ACTION_BACKUP_CANCEL
+                            action = NotificationService.ACTION_PHOTO_BACKUP_GMS_CANCEL
                         }, 0)
                 )
         startForeground(NOTIFICATION_FOREGROUND_GMS_BACKUP_ID, notificationBuilder.build())
@@ -201,7 +200,7 @@ class BackupPhotoService : Service() {
                         R.drawable.ic_easydiary,
                         getString(R.string.dismiss),
                         PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
-                            action = NotificationService.ACTION_DISMISS_GMS_BACKUP_COMPLETE
+                            action = NotificationService.ACTION_PHOTO_BACKUP_GMS_DISMISS
                         }, 0)
                 )
         notificationManager.notify(NOTIFICATION_GMS_BACKUP_COMPLETE_ID, resultNotificationBuilder.build())

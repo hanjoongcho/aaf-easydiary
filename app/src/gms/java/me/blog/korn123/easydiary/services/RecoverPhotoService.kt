@@ -84,7 +84,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
                         R.drawable.ic_easydiary,
                         getString(R.string.cancel),
                         PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
-                            action = NotificationService.ACTION_RECOVER_CANCEL
+                            action = NotificationService.ACTION_PHOTO_RECOVER_GMS_CANCEL
                         }, 0)
                 )
         startForeground(NOTIFICATION_FOREGROUND_GMS_RECOVERY_ID, notificationBuilder.build())
@@ -228,7 +228,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
                         R.drawable.ic_easydiary,
                         getString(R.string.dismiss),
                         PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
-                            action = NotificationService.ACTION_DISMISS_GMS_RECOVERY_COMPLETE
+                            action = NotificationService.ACTION_PHOTO_RECOVER_GMS_DISMISS
                         }, 0)
                 )
         notificationManager.notify(NOTIFICATION_GMS_RECOVERY_COMPLETE_ID, resultNotificationBuilder.build())

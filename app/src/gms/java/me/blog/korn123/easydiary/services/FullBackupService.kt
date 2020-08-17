@@ -14,6 +14,7 @@ import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.DriveScopes
+import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
@@ -65,7 +66,7 @@ class FullBackupService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        EasyDiaryDbHelper.insertActionLog(ActionLog("BackupPhotoService", "onStartCommand", "flags", flags.toString()), applicationContext)
+        EasyDiaryDbHelper.insertActionLog(ActionLog("FullBackupService", "onStartCommand", "INFO", "stop-01"), applicationContext)
         mWorkingFolderId = intent?.getStringExtra(DriveServiceHelper.WORKING_FOLDER_ID) ?: ""
         backupPhoto()
         return super.onStartCommand(intent, flags, startId)
@@ -77,6 +78,7 @@ class FullBackupService : Service() {
     }
 
     private fun backupPhoto() {
+        EasyDiaryDbHelper.insertActionLog(ActionLog("FullBackupService", "backupPhoto", "INFO", "stop-02"), applicationContext)
         notificationBuilder.setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setStyle(NotificationCompat.InboxStyle())
@@ -101,6 +103,7 @@ class FullBackupService : Service() {
     }
 
     private fun determineRemoteDrivePhotos(nextPageToken: String?) {
+        EasyDiaryDbHelper.insertActionLog(ActionLog("FullBackupService", "determineRemoteDrivePhotos", "INFO", "stop-03"), applicationContext)
         mDriveServiceHelper.queryFiles("mimeType = '${DriveServiceHelper.MIME_TYPE_AAF_EASY_DIARY_PHOTO}' and trashed = false",  1000, nextPageToken).run {
             addOnSuccessListener { result ->
                 result.files.map { photoFile ->
@@ -127,7 +130,9 @@ class FullBackupService : Service() {
                     false -> determineRemoteDrivePhotos(result.nextPageToken)
                 }
             }
-            addOnFailureListener { exception -> exception.printStackTrace() }
+            addOnFailureListener { exception ->
+                EasyDiaryDbHelper.insertActionLog(ActionLog("FullBackupService", "determineRemoteDrivePhotos", "ERROR", exception.message), applicationContext)
+            }
         }
     }
 
@@ -149,7 +154,7 @@ class FullBackupService : Service() {
 
     private fun updateNotification() {
         if (targetFilenames.size == 0) {
-            launchCompleteNotification(getString(R.string.notification_msg_upload_invalid))
+            launchCompleteNotification(getString(R.string.notification_msg_upload_invalid), "FIXME!!!")
         } else {
             notificationBuilder
                     .setStyle(NotificationCompat.InboxStyle()
@@ -168,13 +173,29 @@ class FullBackupService : Service() {
                     false -> notificationManager.cancel(NOTIFICATION_FOREGROUND_GMS_BACKUP_ID)
                 }
             } else {
-                config.photoBackupGoogle = System.currentTimeMillis()
-                launchCompleteNotification(getString(R.string.notification_msg_upload_complete))
+                GoogleOAuthHelper.getGoogleSignAccount(applicationContext)?.account?.let { account ->
+                    DriveServiceHelper(applicationContext, account).run {
+                        initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME) { realmFolderId ->
+                            val dbFileName = DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
+                            if (realmFolderId != null) {
+                                createFile(
+                                        realmFolderId, EasyDiaryDbHelper.getRealmPath(),
+                                        dbFileName,
+                                        EasyDiaryUtils.easyDiaryMimeType
+                                ).addOnSuccessListener {
+                                    config.photoBackupGoogle = System.currentTimeMillis()
+                                    launchCompleteNotification(getString(R.string.notification_msg_upload_complete), dbFileName)
+                                }
+                            } else {
+                            }
+                        }
+                    }
+                }
             }
         }
     }
 
-    private fun launchCompleteNotification(contentText: String) {
+    private fun launchCompleteNotification(contentText: String, savedFileName: String) {
         val resultNotificationBuilder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_upload")
         resultNotificationBuilder
                 .setDefaults(Notification.DEFAULT_ALL)
@@ -183,6 +204,7 @@ class FullBackupService : Service() {
                         .addLine("${getString(R.string.notification_msg_duplicate_file_count)}: $duplicateFileCount")
                         .addLine("${getString(R.string.notification_msg_upload_success)}: $successCount")
                         .addLine("${getString(R.string.notification_msg_upload_fail)}: $failCount")
+                        .addLine("Saved file name: $savedFileName")
                 )
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.ic_easydiary)
@@ -200,7 +222,7 @@ class FullBackupService : Service() {
                         R.drawable.ic_easydiary,
                         getString(R.string.dismiss),
                         PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
-                            action = NotificationService.ACTION_DISMISS_GMS_BACKUP_COMPLETE
+                            action = NotificationService.ACTION_PHOTO_BACKUP_GMS_DISMISS
                         }, 0)
                 )
         notificationManager.notify(NOTIFICATION_GMS_BACKUP_COMPLETE_ID, resultNotificationBuilder.build())
