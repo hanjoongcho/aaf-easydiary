@@ -526,7 +526,7 @@ fun Context.showRemainingTimeMessage(totalMinutes: Int) {
     toast(fullString, Toast.LENGTH_LONG)
 }
 
-fun Context.showAlarmNotification(alarm: Alarm) {
+fun Context.executeScheduledTask(alarm: Alarm) {
     AlarmWorkExecutor(this).run { executeWork(alarm) }
 }
 

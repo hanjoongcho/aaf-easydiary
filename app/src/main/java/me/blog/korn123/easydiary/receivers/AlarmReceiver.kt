@@ -5,11 +5,10 @@ import android.content.Context
 import android.content.Intent
 import com.simplemobiletools.commons.extensions.toast
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.extensions.showAlarmNotification
+import me.blog.korn123.easydiary.extensions.executeScheduledTask
 import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.DOZE_SCHEDULE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
-import me.blog.korn123.easydiary.models.ActionLog
 
 class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
@@ -21,7 +20,7 @@ class AlarmReceiver : BroadcastReceiver() {
                         EasyDiaryDbHelper.beginTransaction()
                         alarm.retryCount = 0
                         EasyDiaryDbHelper.commitTransaction()
-                        showAlarmNotification(alarm)
+                        executeScheduledTask(alarm)
                     }
                     toast(getString(R.string.schedule_pending_guide_message))
                 }
@@ -29,7 +28,7 @@ class AlarmReceiver : BroadcastReceiver() {
             false -> {
                 val alarmId = intent.getIntExtra(SettingsScheduleFragment.ALARM_ID, -1)
                 EasyDiaryDbHelper.readAlarmBy(alarmId)?.let {
-                    context.showAlarmNotification(it)
+                    context.executeScheduledTask(it)
                 }
             }
         }
