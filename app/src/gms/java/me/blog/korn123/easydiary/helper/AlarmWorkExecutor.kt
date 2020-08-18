@@ -29,19 +29,20 @@ class AlarmWorkExecutor(context: Context) : BaseAlarmWorkExecutor(context) {
                                         ContextCompat.startForegroundService(context, this)
                                     }
                                 } else {
-                                    reExecuteGmsBackup(alarm)
-                                    EasyDiaryDbHelper.insertActionLog(ActionLog("AlarmWorkExecutor", "executeWork", "ERROR", "Failed start a service."), applicationContext)
+                                    reExecuteGmsBackup(alarm, "The photo folder ID not valid.")
                                 }
                             }
                         }
-                    }
+                    } ?: reExecuteGmsBackup(alarm, "Authentication token is not valid.")
+
                 }
                 else -> {}
             }
         }
     }
 
-    private fun reExecuteGmsBackup(alarm: Alarm) {
+    private fun reExecuteGmsBackup(alarm: Alarm, errorMessage: String) {
+        EasyDiaryDbHelper.insertActionLog(ActionLog("AlarmWorkExecutor", "reExecuteGmsBackup", "ERROR", errorMessage), context)
         EasyDiaryDbHelper.beginTransaction()
         alarm.retryCount = alarm.retryCount.plus(1)
         EasyDiaryDbHelper.commitTransaction()
@@ -63,7 +64,7 @@ class AlarmWorkExecutor(context: Context) : BaseAlarmWorkExecutor(context) {
                         }.addOnFailureListener { e ->
                         }
                     } else {
-                        reExecuteGmsBackup(alarm)
+                        reExecuteGmsBackup(alarm, "The realm folder ID is not valid.")
                     }
                 }
             }
