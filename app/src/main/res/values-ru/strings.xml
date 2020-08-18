@@ -489,8 +489,8 @@
     <string name="notification_msg_upload_empty">Файл для резервного копирования не существует.</string>
     <string name="notification_msg_upload_progress">Загружается…</string>
     <string name="notification_msg_upload_complete">Загрузка завершена</string>
-    <string name="notification_msg_upload_success">%s Загрузка выполнена успешно %d%s</string>
-    <string name="notification_msg_upload_fail">%s Ошибка загрузки %d%s</string>
+    <string name="notification_msg_upload_success">%s Загрузка выполнена успешно: %d%s</string>
+    <string name="notification_msg_upload_fail">%s Ошибка загрузки: %d%s</string>
     <string name="notification_msg_google_drive_file_count">Количество восстановленных файлов</string>
     <string name="notification_msg_download_file_count">Количество файлов для скачивания</string>
     <string name="notification_msg_download_invalid">Все целевые файлы восстановления уже существуют.</string>

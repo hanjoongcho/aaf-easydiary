@@ -490,7 +490,7 @@
     <string name="notification_msg_upload_progress">Uploading…</string>
     <string name="notification_msg_upload_complete">Upload Complete</string>
     <string name="notification_msg_upload_success">%s Upload Success: %d%s</string>
-    <string name="notification_msg_upload_fail">%s Upload Fail %d%s</string>
+    <string name="notification_msg_upload_fail">%s Upload Fail: %d%s</string>
     <string name="notification_msg_google_drive_file_count">Number of recover files</string>
     <string name="notification_msg_download_file_count">Number of files to download</string>
     <string name="notification_msg_download_invalid">All recovery target files already exist.</string>
