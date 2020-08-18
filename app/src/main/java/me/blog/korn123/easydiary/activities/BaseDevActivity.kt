@@ -15,14 +15,15 @@ import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_dev.*
+import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
-import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_DESCRIPTION
-import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_ID
-import me.blog.korn123.easydiary.helper.NOTIFICATION_CHANNEL_NAME
+import me.blog.korn123.easydiary.extensions.showAlertDialog
+import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.services.BaseNotificationService
 import me.blog.korn123.easydiary.services.NotificationService
+import org.apache.commons.io.FilenameUtils
+import java.io.File
 
 
 open class BaseDevActivity : EasyDiaryActivity() {
@@ -76,6 +77,21 @@ open class BaseDevActivity : EasyDiaryActivity() {
         clearLog.setOnClickListener {
             EasyDiaryDbHelper.deleteActionLogAll()
             updateActionLog()
+        }
+
+        clearUnusedPhoto.setOnClickListener {
+            val localPhotoBaseNames = arrayListOf<String>()
+            val unUsedPhotos = arrayListOf<String>()
+            File(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY).listFiles().map {
+                localPhotoBaseNames.add(it.name)
+            }
+
+            EasyDiaryDbHelper.selectPhotoUriAll().map { photoUriDto ->
+                if (!localPhotoBaseNames.contains(FilenameUtils.getBaseName(photoUriDto.getFilePath()))) {
+                    unUsedPhotos.add(FilenameUtils.getBaseName(photoUriDto.getFilePath()))
+                }
+            }
+            showAlertDialog(unUsedPhotos.size.toString(), null, true)
         }
     }
 

@@ -129,6 +129,20 @@
                             style="@style/SettingsSummary" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/clearUnusedPhoto"
+                    android:orientation="vertical"
+                    style="@style/AppCard.Settings">
+                    <LinearLayout
+                        style="@style/LinearLayoutVertical">
+                        <com.simplemobiletools.commons.views.MyTextView
+                            android:text="Clear unused photo"
+                            style="@style/SettingsTitle" />
+                        <com.simplemobiletools.commons.views.MyTextView
+                            style="@style/SettingsSummary" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
