@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.core.content.ContextCompat
 import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.services.FullBackupService
@@ -24,9 +25,11 @@ class AlarmWorkExecutor(context: Context) : BaseAlarmWorkExecutor(context) {
                                 if (photoFolderId != null) {
                                     Intent(context, FullBackupService::class.java).apply {
                                         putExtra(DriveServiceHelper.WORKING_FOLDER_ID, photoFolderId)
+                                        putExtra(SettingsScheduleFragment.ALARM_ID, alarm.id)
                                         ContextCompat.startForegroundService(context, this)
                                     }
                                 } else {
+                                    reExecuteGmsBackup(alarm)
                                     EasyDiaryDbHelper.insertActionLog(ActionLog("AlarmWorkExecutor", "executeWork", "ERROR", "Failed start a service."), applicationContext)
                                 }
                             }

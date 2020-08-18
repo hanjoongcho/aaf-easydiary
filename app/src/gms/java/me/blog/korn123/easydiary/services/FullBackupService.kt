@@ -19,8 +19,10 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.ActionLog
+import me.blog.korn123.easydiary.models.Alarm
 import java.io.File
 import java.util.*
 
@@ -68,7 +70,12 @@ class FullBackupService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         EasyDiaryDbHelper.insertActionLog(ActionLog("FullBackupService", "onStartCommand", "INFO", "stop-01"), applicationContext)
         mWorkingFolderId = intent?.getStringExtra(DriveServiceHelper.WORKING_FOLDER_ID) ?: ""
-        backupPhoto()
+
+        // test alarm sequence is 5
+        val alarmId = intent?.getIntExtra(SettingsScheduleFragment.ALARM_ID, 5) ?: 5
+        EasyDiaryDbHelper.readAlarmBy(alarmId)?.let {
+            backupPhoto(it)
+        }
         return super.onStartCommand(intent, flags, startId)
     }
     
@@ -77,7 +84,7 @@ class FullBackupService : Service() {
         mInProcessJob = false
     }
 
-    private fun backupPhoto() {
+    private fun backupPhoto(alarm: Alarm) {
         EasyDiaryDbHelper.insertActionLog(ActionLog("FullBackupService", "backupPhoto", "INFO", "stop-02"), applicationContext)
         notificationBuilder.setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
@@ -99,10 +106,10 @@ class FullBackupService : Service() {
         startForeground(NOTIFICATION_FOREGROUND_GMS_BACKUP_ID, notificationBuilder.build())
 
         // step01. 전체 파일 목록을 조회
-        determineRemoteDrivePhotos(null)
+        determineRemoteDrivePhotos(null, alarm)
     }
 
-    private fun determineRemoteDrivePhotos(nextPageToken: String?) {
+    private fun determineRemoteDrivePhotos(nextPageToken: String?, alarm: Alarm) {
         EasyDiaryDbHelper.insertActionLog(ActionLog("FullBackupService", "determineRemoteDrivePhotos", "INFO", "stop-03"), applicationContext)
         mDriveServiceHelper.queryFiles("mimeType = '${DriveServiceHelper.MIME_TYPE_AAF_EASY_DIARY_PHOTO}' and trashed = false",  1000, nextPageToken).run {
             addOnSuccessListener { result ->
@@ -122,12 +129,12 @@ class FullBackupService : Service() {
                         localDeviceFileCount = localPhotos.size
                         duplicateFileCount = localDeviceFileCount - targetFilenames.size
                         if (targetFilenames.size == 0) {
-                            updateNotification()
+                            updateNotification(alarm)
                         } else {
-                            uploadDiaryPhoto()
+                            uploadDiaryPhoto(alarm)
                         }
                     }
-                    false -> determineRemoteDrivePhotos(result.nextPageToken)
+                    false -> determineRemoteDrivePhotos(result.nextPageToken, alarm)
                 }
             }
             addOnFailureListener { exception ->
@@ -136,25 +143,25 @@ class FullBackupService : Service() {
         }
     }
 
-    private fun uploadDiaryPhoto() {
+    private fun uploadDiaryPhoto(alarm: Alarm) {
         val fileName =  targetFilenames[targetFilenamesCursor]
         mDriveServiceHelper.createFile(mWorkingFolderId, mPhotoPath + fileName, fileName, DriveServiceHelper.MIME_TYPE_AAF_EASY_DIARY_PHOTO).run {
             addOnSuccessListener { _ ->
                 targetFilenamesCursor++
                 successCount++
-                updateNotification()
+                updateNotification(alarm)
             }
             addOnFailureListener {
                 targetFilenamesCursor++
                 failCount++
-                updateNotification()
+                updateNotification(alarm)
             }
         }
     }
 
-    private fun updateNotification() {
+    private fun updateNotification(alarm: Alarm) {
         if (targetFilenames.size == 0) {
-            backupDiaryRealm(getString(R.string.notification_msg_upload_invalid))
+            backupDiaryRealm(alarm)
         } else {
             notificationBuilder
                     .setStyle(NotificationCompat.InboxStyle()
@@ -169,17 +176,17 @@ class FullBackupService : Service() {
 
             if (successCount + failCount < targetFilenames.size) {
                 when (mInProcessJob) {
-                    true -> uploadDiaryPhoto()
+                    true -> uploadDiaryPhoto(alarm)
                     false -> notificationManager.cancel(NOTIFICATION_FOREGROUND_GMS_BACKUP_ID)
                 }
             } else {
                 config.photoBackupGoogle = System.currentTimeMillis()
-                backupDiaryRealm(getString(R.string.notification_msg_upload_complete))
+                backupDiaryRealm(alarm)
             }
         }
     }
 
-    private fun backupDiaryRealm(contentText: String) {
+    private fun backupDiaryRealm(alarm: Alarm) {
         GoogleOAuthHelper.getGoogleSignAccount(applicationContext)?.account?.let { account ->
             DriveServiceHelper(applicationContext, account).run {
                 initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME) { realmFolderId ->
@@ -191,7 +198,7 @@ class FullBackupService : Service() {
                                 EasyDiaryUtils.easyDiaryMimeType
                         ).addOnSuccessListener {
                             config.diaryBackupGoogle = System.currentTimeMillis()
-                            launchCompleteNotification(contentText, dbFileName)
+                            launchCompleteNotification(alarm, dbFileName)
                         }
                     } else {
                         EasyDiaryDbHelper.insertActionLog(ActionLog("FullBackupService", "backupDiaryRealm", "ERROR", "realmFolderId is null"), applicationContext)
@@ -201,7 +208,7 @@ class FullBackupService : Service() {
         }
     }
 
-    private fun launchCompleteNotification(contentText: String, savedFileName: String) {
+    private fun launchCompleteNotification(alarm: Alarm, savedFileName: String) {
         val resultNotificationBuilder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_upload")
         resultNotificationBuilder
                 .setDefaults(Notification.DEFAULT_ALL)
@@ -217,8 +224,8 @@ class FullBackupService : Service() {
                 .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_googledrive_upload))
                 .setOngoing(false)
                 .setAutoCancel(true)
-                .setContentTitle(getString(R.string.backup_attach_photo_title))
-                .setContentText(contentText)
+                .setContentTitle(alarm.label)
+                .setContentText(getString(R.string.schedule_backup_gms_complete))
                 .setContentIntent(
                         PendingIntent.getActivity(this, 0, Intent(this, DiaryMainActivity::class.java).apply {
                             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
