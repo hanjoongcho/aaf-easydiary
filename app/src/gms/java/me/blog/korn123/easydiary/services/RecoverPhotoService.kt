@@ -124,7 +124,6 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
     private fun determineAttachPhoto(nextPageToken: String?) {
         mDriveServiceHelper.queryFiles("mimeType = '${DriveServiceHelper.MIME_TYPE_AAF_EASY_DIARY_PHOTO}' and trashed = false",  1000, nextPageToken).run {
             addOnSuccessListener { result ->
-                val basePath = EasyDiaryUtils.getApplicationDataDirectory(this@RecoverPhotoService) + DIARY_PHOTO_DIRECTORY
                 result.files.map { photoFile ->
                     remoteDriveFileCount++
                     if (!File("$mPhotoPath${photoFile.name}").exists()) {
@@ -135,11 +134,10 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
 
                 when (result.nextPageToken == null) {
                     true -> {
-                        Log.i("GSuite", targetItems.size.toString())
+                        duplicateFileCount = remoteDriveFileCount - targetItems.size
                         if (targetItems.size == 0) {
                             updateNotification()
                         } else {
-                            duplicateFileCount = remoteDriveFileCount - targetItems.size
                             downloadAttachPhoto()
                         }
                     }
@@ -203,6 +201,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
 
     private fun launchCompleteNotification(contentText: String) {
         val stringBuilder = createBackupContentText(remoteDriveFileCount, duplicateFileCount, successCount, failCount)
+                .insert(0, "$contentText<br>")
 
         val resultNotificationBuilder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_download")
         resultNotificationBuilder

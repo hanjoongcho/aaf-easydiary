@@ -97,7 +97,6 @@ class BackupPhotoService : Service() {
                 )
         startForeground(NOTIFICATION_FOREGROUND_GMS_BACKUP_ID, notificationBuilder.build())
 
-        // step01. 전체 파일 목록을 조회
         determineRemoteDrivePhotos(null)
     }
 
@@ -110,7 +109,6 @@ class BackupPhotoService : Service() {
 
                 when (result.nextPageToken == null) {
                     true -> {
-                        // step02. upload 대상 첨부사진 필터링
                         val localPhotos = File(mPhotoPath).listFiles()
                         localPhotos.map { photo ->
                             if (!remoteDriveFileNames.contains(photo.name)) {
@@ -176,6 +174,7 @@ class BackupPhotoService : Service() {
 
     private fun launchCompleteNotification(contentText: String) {
         val stringBuilder = createBackupContentText(localDeviceFileCount, duplicateFileCount, successCount, failCount)
+                .insert(0, "$contentText<br>")
 
         val resultNotificationBuilder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_upload")
         resultNotificationBuilder
