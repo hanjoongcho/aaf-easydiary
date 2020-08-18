@@ -105,7 +105,7 @@ class FullBackupService : Service() {
                             action = NotificationService.ACTION_FULL_BACKUP_GMS_CANCEL
                         }, 0)
                 )
-        startForeground(NOTIFICATION_FOREGROUND_GMS_BACKUP_ID, notificationBuilder.build())
+        startForeground(alarm.id, notificationBuilder.build())
 
         // step01. 전체 파일 목록을 조회
         determineRemoteDrivePhotos(null, alarm)
@@ -172,12 +172,12 @@ class FullBackupService : Service() {
                     )
                     .setContentTitle("${getString(R.string.notification_msg_upload_progress)}  ${successCount + failCount}/${targetFilenames.size}")
                     .setProgress(targetFilenames.size, successCount + failCount, false)
-            notificationManager.notify(NOTIFICATION_FOREGROUND_GMS_BACKUP_ID, notificationBuilder.build())
+            notificationManager.notify(alarm.id, notificationBuilder.build())
 
             if (successCount + failCount < targetFilenames.size) {
                 when (mInProcessJob) {
                     true -> uploadDiaryPhoto(alarm)
-                    false -> notificationManager.cancel(NOTIFICATION_FOREGROUND_GMS_BACKUP_ID)
+                    false -> notificationManager.cancel(alarm.id)
                 }
             } else {
                 config.photoBackupGoogle = System.currentTimeMillis()
@@ -209,6 +209,8 @@ class FullBackupService : Service() {
     }
 
     private fun launchCompleteNotification(alarm: Alarm, savedFileName: String) {
+        stopForeground(true)
+
         val stringBuilder = createBackupContentText(localDeviceFileCount, duplicateFileCount, successCount, failCount)
                 .insert(0, getString(R.string.schedule_backup_gms_complete, "<br>"))
                 .append("<b>\uD83D\uDCC1 Database</b><br>")
@@ -239,13 +241,12 @@ class FullBackupService : Service() {
                             action = NotificationService.ACTION_PHOTO_BACKUP_GMS_DISMISS
                         }, 0)
                 )
-        notificationManager.notify(NOTIFICATION_GMS_BACKUP_COMPLETE_ID, resultNotificationBuilder.build())
+        notificationManager.notify(alarm.id, resultNotificationBuilder.build())
         localDeviceFileCount = 0
         duplicateFileCount = 0
         successCount = 0
         failCount = 0
         targetFilenames.clear()
-        stopForeground(true)
         stopSelf()
     }
 }
