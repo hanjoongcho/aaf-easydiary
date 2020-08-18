@@ -14,7 +14,7 @@ open class BaseNotificationService(name: String = "EasyDiaryNotificationService"
             when (it.action) {
                 ACTION_DISMISS_COMPRESS -> NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_COMPRESS_ID)
                 ACTION_DISMISS_DECOMPRESS -> NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_DECOMPRESS_ID)
-                ACTION_DISMISS_DEV -> NotificationManagerCompat.from(applicationContext).cancel(BaseDevActivity.NOTIFICATION_ID_01)
+                ACTION_DISMISS_DEV -> NotificationManagerCompat.from(applicationContext).cancel(BaseDevActivity.NOTIFICATION_ID_DEV)
                 ACTION_FULL_BACKUP_CANCEL -> handleActionFullBackupCancel()
                 ACTION_FULL_RECOVERY_CANCEL -> handleActionFullRecoveryCancel()
             }
