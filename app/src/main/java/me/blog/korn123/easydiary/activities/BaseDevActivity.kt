@@ -137,6 +137,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             notificationBuilder
                     .setStyle(NotificationCompat.BigTextStyle().bigText(text).setSummaryText(title))
         }
+
         if (notificationInfo.useActionButton) {
             notificationBuilder.addAction(
                     R.drawable.ic_easydiary,
@@ -146,6 +147,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     }, 0)
             )
         }
+
         return notificationBuilder.build()
     }
 

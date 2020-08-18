@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.IBinder
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
+import androidx.core.text.HtmlCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.api.client.extensions.android.http.AndroidHttp
@@ -68,7 +69,7 @@ class FullBackupService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        EasyDiaryDbHelper.insertActionLog(ActionLog("FullBackupService", "onStartCommand", "INFO", "stop-01"), applicationContext)
+        EasyDiaryDbHelper.insertActionLog(ActionLog("FullBackupService", "onStartCommand", "INFO", "step-01"), applicationContext)
         mWorkingFolderId = intent?.getStringExtra(DriveServiceHelper.WORKING_FOLDER_ID) ?: ""
 
         // test alarm sequence is 5
@@ -85,7 +86,7 @@ class FullBackupService : Service() {
     }
 
     private fun backupPhoto(alarm: Alarm) {
-        EasyDiaryDbHelper.insertActionLog(ActionLog("FullBackupService", "backupPhoto", "INFO", "stop-02"), applicationContext)
+        EasyDiaryDbHelper.insertActionLog(ActionLog("FullBackupService", "backupPhoto", "INFO", "step-02"), applicationContext)
         notificationBuilder.setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setStyle(NotificationCompat.InboxStyle())
@@ -110,7 +111,7 @@ class FullBackupService : Service() {
     }
 
     private fun determineRemoteDrivePhotos(nextPageToken: String?, alarm: Alarm) {
-        EasyDiaryDbHelper.insertActionLog(ActionLog("FullBackupService", "determineRemoteDrivePhotos", "INFO", "stop-03"), applicationContext)
+        EasyDiaryDbHelper.insertActionLog(ActionLog("FullBackupService", "determineRemoteDrivePhotos", "INFO", "step-03"), applicationContext)
         mDriveServiceHelper.queryFiles("mimeType = '${DriveServiceHelper.MIME_TYPE_AAF_EASY_DIARY_PHOTO}' and trashed = false",  1000, nextPageToken).run {
             addOnSuccessListener { result ->
                 result.files.map { photoFile ->
@@ -165,6 +166,7 @@ class FullBackupService : Service() {
         } else {
             notificationBuilder
                     .setStyle(NotificationCompat.InboxStyle()
+                            .addLine("[Attached Photos]")
                             .addLine("${getString(R.string.notification_msg_device_file_count)}: $localDeviceFileCount")
                             .addLine("${getString(R.string.notification_msg_duplicate_file_count)}: $duplicateFileCount")
                             .addLine("${getString(R.string.notification_msg_upload_success)}: $successCount")
@@ -209,23 +211,29 @@ class FullBackupService : Service() {
     }
 
     private fun launchCompleteNotification(alarm: Alarm, savedFileName: String) {
+        val stringBuilder = StringBuilder()
+                .append("구글드라이브를 이용한 백업 작업이 완료되었습니다.<br>")
+                .append("<b>\uD83D\uDCF7 Attached Photos</b><br>")
+                .append("* ${getString(R.string.notification_msg_device_file_count)}: $localDeviceFileCount<br>")
+                .append("* ${getString(R.string.notification_msg_duplicate_file_count)}: $duplicateFileCount<br>")
+                .append("* ${getString(R.string.notification_msg_upload_success)}: $successCount<br>")
+                .append("* ${getString(R.string.notification_msg_upload_fail)}: $failCount<br>")
+                .append("<b>\uD83D\uDCC1 Database</b><br>")
+                .append("* Saved file name: $savedFileName")
         val resultNotificationBuilder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_upload")
         resultNotificationBuilder
                 .setDefaults(Notification.DEFAULT_ALL)
-                .setStyle(NotificationCompat.InboxStyle()
-                        .addLine("${getString(R.string.notification_msg_device_file_count)}: $localDeviceFileCount")
-                        .addLine("${getString(R.string.notification_msg_duplicate_file_count)}: $duplicateFileCount")
-                        .addLine("${getString(R.string.notification_msg_upload_success)}: $successCount")
-                        .addLine("${getString(R.string.notification_msg_upload_fail)}: $failCount")
-                        .addLine("Saved file name: $savedFileName")
-                )
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.ic_easydiary)
                 .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_googledrive_upload))
                 .setOngoing(false)
                 .setAutoCancel(true)
                 .setContentTitle(alarm.label)
-                .setContentText(getString(R.string.schedule_backup_gms_complete))
+//                .setContentText(getString(R.string.schedule_backup_gms_complete))
+                .setStyle(NotificationCompat.BigTextStyle()
+                        .bigText(HtmlCompat.fromHtml(stringBuilder.toString(), HtmlCompat.FROM_HTML_MODE_LEGACY))
+                )
+
                 .setContentIntent(
                         PendingIntent.getActivity(this, 0, Intent(this, DiaryMainActivity::class.java).apply {
                             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
