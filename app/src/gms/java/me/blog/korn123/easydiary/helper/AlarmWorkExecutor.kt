@@ -5,8 +5,9 @@ import android.content.Intent
 import androidx.core.content.ContextCompat
 import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.models.Alarm
-import me.blog.korn123.easydiary.services.BackupPhotoService
+import me.blog.korn123.easydiary.services.FullBackupService
 
 class AlarmWorkExecutor(context: Context) : BaseAlarmWorkExecutor(context) {
 
@@ -16,7 +17,21 @@ class AlarmWorkExecutor(context: Context) : BaseAlarmWorkExecutor(context) {
         context.run {
             when (alarm.workMode) {
                 Alarm.WORK_MODE_DIARY_BACKUP_GMS -> {
-                    executeGmsBackup(alarm)
+//                    executeGmsBackup(alarm)
+                    GoogleOAuthHelper.getGoogleSignAccount(this)?.account?.let { account ->
+                        DriveServiceHelper(this, account).run {
+                            initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
+                                if (photoFolderId != null) {
+                                    Intent(context, FullBackupService::class.java).apply {
+                                        putExtra(DriveServiceHelper.WORKING_FOLDER_ID, photoFolderId)
+                                        ContextCompat.startForegroundService(context, this)
+                                    }
+                                } else {
+                                    EasyDiaryDbHelper.insertActionLog(ActionLog("AlarmWorkExecutor", "executeWork", "ERROR", "Failed start a service."), applicationContext)
+                                }
+                            }
+                        }
+                    }
                 }
                 else -> {}
             }
@@ -34,17 +49,6 @@ class AlarmWorkExecutor(context: Context) : BaseAlarmWorkExecutor(context) {
         val realmPath = EasyDiaryDbHelper.getRealmPath()
         GoogleOAuthHelper.getGoogleSignAccount(context)?.account?.let { account ->
             DriveServiceHelper(context, account).run {
-//                initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
-//                    if (photoFolderId != null) {
-//                        Intent(context, BackupPhotoService::class.java).apply {
-//                            putExtra(DriveServiceHelper.WORKING_FOLDER_ID, photoFolderId)
-//                            ContextCompat.startForegroundService(context, this)
-//                        }
-//                    } else {
-//                        reExecuteGmsBackup(alarm)
-//                    }
-//                }
-
                 initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME) { realmFolderId ->
                     if (realmFolderId != null) {
                         createFile(

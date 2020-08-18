@@ -193,7 +193,9 @@ class FullBackupService : Service() {
                             config.diaryBackupGoogle = System.currentTimeMillis()
                             launchCompleteNotification(contentText, dbFileName)
                         }
-                    } else {}
+                    } else {
+                        EasyDiaryDbHelper.insertActionLog(ActionLog("FullBackupService", "backupDiaryRealm", "ERROR", "realmFolderId is null"), applicationContext)
+                    }
                 }
             }
         }
