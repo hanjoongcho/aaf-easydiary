@@ -154,7 +154,7 @@ class FullBackupService : Service() {
 
     private fun updateNotification() {
         if (targetFilenames.size == 0) {
-            launchCompleteNotification(getString(R.string.notification_msg_upload_invalid), "FIXME!!!")
+            backupDiaryRealm(getString(R.string.notification_msg_upload_invalid))
         } else {
             notificationBuilder
                     .setStyle(NotificationCompat.InboxStyle()
@@ -173,23 +173,27 @@ class FullBackupService : Service() {
                     false -> notificationManager.cancel(NOTIFICATION_FOREGROUND_GMS_BACKUP_ID)
                 }
             } else {
-                GoogleOAuthHelper.getGoogleSignAccount(applicationContext)?.account?.let { account ->
-                    DriveServiceHelper(applicationContext, account).run {
-                        initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME) { realmFolderId ->
-                            val dbFileName = DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
-                            if (realmFolderId != null) {
-                                createFile(
-                                        realmFolderId, EasyDiaryDbHelper.getRealmPath(),
-                                        dbFileName,
-                                        EasyDiaryUtils.easyDiaryMimeType
-                                ).addOnSuccessListener {
-                                    config.photoBackupGoogle = System.currentTimeMillis()
-                                    launchCompleteNotification(getString(R.string.notification_msg_upload_complete), dbFileName)
-                                }
-                            } else {
-                            }
+                config.photoBackupGoogle = System.currentTimeMillis()
+                backupDiaryRealm(getString(R.string.notification_msg_upload_complete))
+            }
+        }
+    }
+
+    private fun backupDiaryRealm(contentText: String) {
+        GoogleOAuthHelper.getGoogleSignAccount(applicationContext)?.account?.let { account ->
+            DriveServiceHelper(applicationContext, account).run {
+                initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME) { realmFolderId ->
+                    val dbFileName = DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss")
+                    if (realmFolderId != null) {
+                        createFile(
+                                realmFolderId, EasyDiaryDbHelper.getRealmPath(),
+                                dbFileName,
+                                EasyDiaryUtils.easyDiaryMimeType
+                        ).addOnSuccessListener {
+                            config.diaryBackupGoogle = System.currentTimeMillis()
+                            launchCompleteNotification(contentText, dbFileName)
                         }
-                    }
+                    } else {}
                 }
             }
         }
