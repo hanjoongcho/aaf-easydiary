@@ -164,15 +164,18 @@ class FullBackupService : Service() {
         if (targetFilenames.size == 0) {
             backupDiaryRealm(alarm)
         } else {
+            val stringBuilder = StringBuilder()
+                    .append("<b>\uD83D\uDCF7 Attached Photos</b><br>")
+                    .append("* ${getString(R.string.notification_msg_device_file_count)}: $localDeviceFileCount<br>")
+                    .append("* ${getString(R.string.notification_msg_duplicate_file_count)}: $duplicateFileCount<br>")
+                    .append("* ${getString(R.string.notification_msg_upload_success)}: $successCount<br>")
+                    .append("* ${getString(R.string.notification_msg_upload_fail)}: $failCount<br>")
             notificationBuilder
-                    .setStyle(NotificationCompat.InboxStyle()
-                            .addLine("[Attached Photos]")
-                            .addLine("${getString(R.string.notification_msg_device_file_count)}: $localDeviceFileCount")
-                            .addLine("${getString(R.string.notification_msg_duplicate_file_count)}: $duplicateFileCount")
-                            .addLine("${getString(R.string.notification_msg_upload_success)}: $successCount")
-                            .addLine("${getString(R.string.notification_msg_upload_fail)}: $failCount")
+                    .setStyle(NotificationCompat.BigTextStyle()
+                            .bigText(HtmlCompat.fromHtml(stringBuilder.toString(), HtmlCompat.FROM_HTML_MODE_LEGACY))
                     )
                     .setContentTitle("${getString(R.string.notification_msg_upload_progress)}  ${successCount + failCount}/${targetFilenames.size}")
+                    .setContentText("999999999")
                     .setProgress(targetFilenames.size, successCount + failCount, false)
             notificationManager.notify(NOTIFICATION_FOREGROUND_GMS_BACKUP_ID, notificationBuilder.build())
 
@@ -233,7 +236,6 @@ class FullBackupService : Service() {
                 .setStyle(NotificationCompat.BigTextStyle()
                         .bigText(HtmlCompat.fromHtml(stringBuilder.toString(), HtmlCompat.FROM_HTML_MODE_LEGACY))
                 )
-
                 .setContentIntent(
                         PendingIntent.getActivity(this, 0, Intent(this, DiaryMainActivity::class.java).apply {
                             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

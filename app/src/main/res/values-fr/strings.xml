@@ -670,7 +670,7 @@
     <string name="permission_confirmation_dialog_title">Demande d\'autorisation</string>
     <string name="permission_confirmation_dialog_message">Une autorisation est nécessaire pour utiliser Easy Diary.</string>
     <string name="google_drive_account_information_title">Informations liées au compte Google</string>
-    <string name="schedule_backup_gms_description">Sauvegarde du journal (Google Drive)\nParamétrer la planification permet de sauvegarder les fichiers de la base de données, à l\'exclusion des photos jointes, dans Google Drive en fonction du jour et de l\'heure fixés et d\'afficher le résultat de l\'opération sous la forme d\'une notification.</string>
+    <string name="schedule_backup_gms_description">Diary backup (Google Drive)\nRegistering the schedule backs up the database files and attached photos to the Google Drive according to the set day and time and provides the result of the operation as a notification message.</string>
     <string name="google_drive_account_sign_in_title">Lier le compte à Google Drive</string>
     <string name="google_drive_account_sign_in_description">Connecter votre compte à Google Drive pour une sauvegarde simplifiée des données du journal.</string>
     <string name="schedule_gms_error_title">Waiting for scheduled work</string>

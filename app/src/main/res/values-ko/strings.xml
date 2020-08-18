@@ -670,7 +670,7 @@
     <string name="permission_confirmation_dialog_title">권한승인 요청</string>
     <string name="permission_confirmation_dialog_message">Easy Diary 사용을 위해서는 권한승인이 필요합니다.</string>
     <string name="google_drive_account_information_title">구글드라이브 연동계정 정보</string>
-    <string name="schedule_backup_gms_description">다이어리 백업 (구글드라이브)\n스케줄을 등록하면 설정된 날짜와 시간에 맞춰 첨부사진을 제외한 데이터베이스 파일을 구글드라이브에 백업하고 작업 결과를 알림 메시지로 제공합니다.</string>
+    <string name="schedule_backup_gms_description">다이어리 백업 (구글드라이브)\n스케줄을 등록하면 설정된 날짜와 시간에 맞춰 첨부사진된 사진과 데이터베이스 파일을 구글드라이브에 백업하고 작업 결과를 알림 메시지로 제공합니다.</string>
     <string name="google_drive_account_sign_in_title">구글드라이브 계정 연결</string>
     <string name="google_drive_account_sign_in_description">이지 다이어리 데이터 백업을 위해 구글드라이브 계정을 연결합니다.</string>
     <string name="schedule_gms_error_title">스케줄 작업 대기중</string>
