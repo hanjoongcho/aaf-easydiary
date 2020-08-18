@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.IBinder
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
+import androidx.core.text.HtmlCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.api.client.extensions.android.http.AndroidHttp
@@ -18,6 +19,7 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.createBackupContentText
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.ActionLog
 import java.io.File
@@ -150,12 +152,10 @@ class BackupPhotoService : Service() {
         if (targetFilenames.size == 0) {
             launchCompleteNotification(getString(R.string.notification_msg_upload_invalid))
         } else {
+            val stringBuilder = createBackupContentText(localDeviceFileCount, duplicateFileCount, successCount, failCount)
             notificationBuilder
-                    .setStyle(NotificationCompat.InboxStyle()
-                            .addLine("${getString(R.string.notification_msg_device_file_count)}: $localDeviceFileCount")
-                            .addLine("${getString(R.string.notification_msg_duplicate_file_count)}: $duplicateFileCount")
-                            .addLine("${getString(R.string.notification_msg_upload_success)}: $successCount")
-                            .addLine("${getString(R.string.notification_msg_upload_fail)}: $failCount")
+                    .setStyle(NotificationCompat.BigTextStyle()
+                            .bigText(HtmlCompat.fromHtml(stringBuilder.toString(), HtmlCompat.FROM_HTML_MODE_LEGACY))
                     )
                     .setContentTitle("${getString(R.string.notification_msg_upload_progress)}  ${successCount + failCount}/${targetFilenames.size}")
                     .setProgress(targetFilenames.size, successCount + failCount, false)
@@ -175,22 +175,20 @@ class BackupPhotoService : Service() {
     }
 
     private fun launchCompleteNotification(contentText: String) {
+        val stringBuilder = createBackupContentText(localDeviceFileCount, duplicateFileCount, successCount, failCount)
+
         val resultNotificationBuilder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_upload")
         resultNotificationBuilder
                 .setDefaults(Notification.DEFAULT_ALL)
-                .setStyle(NotificationCompat.InboxStyle()
-                        .addLine("${getString(R.string.notification_msg_device_file_count)}: $localDeviceFileCount")
-                        .addLine("${getString(R.string.notification_msg_duplicate_file_count)}: $duplicateFileCount")
-                        .addLine("${getString(R.string.notification_msg_upload_success)}: $successCount")
-                        .addLine("${getString(R.string.notification_msg_upload_fail)}: $failCount")
-                )
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.ic_easydiary)
                 .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_googledrive_upload))
                 .setOngoing(false)
                 .setAutoCancel(true)
                 .setContentTitle(getString(R.string.backup_attach_photo_title))
-                .setContentText(contentText)
+                .setStyle(NotificationCompat.BigTextStyle()
+                        .bigText(HtmlCompat.fromHtml(stringBuilder.toString(), HtmlCompat.FROM_HTML_MODE_LEGACY))
+                )
                 .setContentIntent(
                         PendingIntent.getActivity(this, 0, Intent(this, DiaryMainActivity::class.java).apply {
                             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

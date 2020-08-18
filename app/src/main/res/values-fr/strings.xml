@@ -483,14 +483,14 @@
     <string name="backup_attach_photo_summary">Sauvegarder vos photos jointes sur Google Drive. Cette fonctionnalité peut ne pas fonctionner sur certains périphériques en raison du service bêta.</string>
     <string name="recover_attach_photo_title">Restaurer les photos jointes</string>
     <string name="recover_attach_photo_summary">Restaurer les photos jointes sauvegardées sur Google Drive. Cette fonctionnalité peut ne pas fonctionner sur certains périphériques en raison du service bêta.</string>
-    <string name="notification_msg_device_file_count">Nombre de fichiers à sauvegarder</string>
+    <string name="notification_msg_device_file_count">%s Nombre de fichiers à sauvegarder: %d%s</string>
     <string name="notification_msg_upload_file_count">Nombre de fichiers à télécharger</string>
     <string name="notification_msg_upload_invalid">Tous les fichiers cibles de sauvegarde existent déjà.</string>
     <string name="notification_msg_upload_empty">Le fichier à sauvegarder n\'existe pas.</string>
     <string name="notification_msg_upload_progress">Envoi…</string>
     <string name="notification_msg_upload_complete">Envoi terminé</string>
-    <string name="notification_msg_upload_success">Réussite de l\'envoi</string>
-    <string name="notification_msg_upload_fail">Échec de l\'envoi</string>
+    <string name="notification_msg_upload_success">%s Réussite de l\'envoi %d%s</string>
+    <string name="notification_msg_upload_fail">%s Échec de l\'envoi %d%s</string>
     <string name="notification_msg_google_drive_file_count">Nombre de fichiers restaurés</string>
     <string name="notification_msg_download_file_count">Nombre de fichiers à télécharger</string>
     <string name="notification_msg_download_invalid">Tous les fichiers cibles de restauration existent déjà.</string>
@@ -499,7 +499,7 @@
     <string name="notification_msg_download_complete">Téléchargement terminé</string>
     <string name="notification_msg_download_success">Téléchargement réussi</string>
     <string name="notification_msg_download_fail">Échec du téléchargement</string>
-    <string name="notification_msg_duplicate_file_count">Nombre de fichiers existants</string>
+    <string name="notification_msg_duplicate_file_count">%s Nombre de fichiers existants: %d%s</string>
     <string name="preferences_category_lock">Réglage du verrouillage de l\'application</string>
     <string name="fingerprint_lock_title">Verrouillage par empreinte digitale</string>
     <string name="fingerprint_lock_summary">Si le périphérique prend en charge la reconnaissance d\'empreintes digitales et possède une empreinte digitale enregistrée, verrouiller l\'application avec l\'empreinte digitale enregistrée.</string>

@@ -607,3 +607,17 @@ fun Context.changeBitmapColor(drawableResourceId: Int, color: Int): Bitmap {
     }
     return bitmap
 }
+
+fun Context.createBackupContentText(localDeviceFileCount: Int, duplicateFileCount: Int, successCount: Int, failCount: Int): StringBuilder = StringBuilder()
+        .append("<b>\uD83D\uDCF7 Attached Photos</b><br>")
+        .append(getString(R.string.notification_msg_device_file_count, "*", localDeviceFileCount, "<br>"))
+        .append(getString(R.string.notification_msg_duplicate_file_count, "*", duplicateFileCount, "<br>"))
+        .append(getString(R.string.notification_msg_upload_success, "*", successCount, "<br>"))
+        .append(getString(R.string.notification_msg_upload_fail, "*", failCount, "<br>"))
+
+fun Context.createRecoveryContentText(remoteDriveFileCount: Int, duplicateFileCount: Int, successCount: Int, failCount: Int): StringBuilder = StringBuilder()
+        .append("<b>\uD83D\uDCF7 Attached Photos</b><br>")
+        .append(getString(R.string.notification_msg_device_file_count, "*", remoteDriveFileCount, "<br>"))
+        .append(getString(R.string.notification_msg_duplicate_file_count, "*", duplicateFileCount, "<br>"))
+        .append(getString(R.string.notification_msg_upload_success, "*", successCount, "<br>"))
+        .append(getString(R.string.notification_msg_upload_fail, "*", failCount, "<br>"))

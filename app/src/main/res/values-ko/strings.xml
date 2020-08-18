@@ -483,14 +483,14 @@
     <string name="backup_attach_photo_summary">다이어리에 첨부된 모든 사진을 구글 드라이브에 백업합니다.</string>
     <string name="recover_attach_photo_title">다이어리 첨부사진 복구하기</string>
     <string name="recover_attach_photo_summary">구글 드라이브에 백업된 데이터를 이용하여 첨부사진을 복구합니다.</string>
-    <string name="notification_msg_device_file_count">백업대상 파일</string>
+    <string name="notification_msg_device_file_count">%s 백업대상 파일: %d%s</string>
     <string name="notification_msg_upload_file_count">업로드 대상 파일</string>
     <string name="notification_msg_upload_invalid">백업 대상 파일이 드라이브에 모두 존재합니다.</string>
     <string name="notification_msg_upload_empty">백업 대상 파일이 존재하지 않습니다.</string>
     <string name="notification_msg_upload_progress">파일 업로드 진행중…</string>
     <string name="notification_msg_upload_complete">파일 업로드 완료</string>
-    <string name="notification_msg_upload_success">업로드 성공</string>
-    <string name="notification_msg_upload_fail">업로드 실패</string>
+    <string name="notification_msg_upload_success">%s 업로드 성공 %d%s</string>
+    <string name="notification_msg_upload_fail">%s 업로드 실패 %d%s</string>
     <string name="notification_msg_google_drive_file_count">복구대상 파일</string>
     <string name="notification_msg_download_file_count">다운로드 대상 파일</string>
     <string name="notification_msg_download_invalid">복구 대상 파일이 디바이스에 모두 존재합니다.</string>
@@ -499,7 +499,7 @@
     <string name="notification_msg_download_complete">파일 다운로드 완료</string>
     <string name="notification_msg_download_success">다운로드 성공</string>
     <string name="notification_msg_download_fail">다운로드 실패</string>
-    <string name="notification_msg_duplicate_file_count">중복 파일</string>
+    <string name="notification_msg_duplicate_file_count">%s 중복 파일: %d%s</string>
     <string name="preferences_category_lock">애플리케이션 잠금설정</string>
     <string name="fingerprint_lock_title">지문인식 잠금</string>
     <string name="fingerprint_lock_summary">디바이스가 지문인식 기능을 지원하고 등록된 지문이 있는경우 등록된 지문으로 애플리케이션을 잠금니다.</string>

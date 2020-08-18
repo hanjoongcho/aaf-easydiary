@@ -483,14 +483,14 @@
     <string name="backup_attach_photo_summary">Сделайте резервную копию всех фотографий, прикрепленных к дневнику, на Google Диск. Эта функция может не работать на некоторых устройствах.</string>
     <string name="recover_attach_photo_title">Восстановить прикрепленные фотографии</string>
     <string name="recover_attach_photo_summary">Восстанавливает прикрепленные фотографии сохраненные на Google Диске. Эта функция может не работать на некоторых устройствах.</string>
-    <string name="notification_msg_device_file_count">Количество файлов для резервной копии</string>
+    <string name="notification_msg_device_file_count">%s Количество файлов для резервной копии: %d%s</string>
     <string name="notification_msg_upload_file_count">Количество загружаемых файлов</string>
     <string name="notification_msg_upload_invalid">Все файлы для восстановления уже существуют.</string>
     <string name="notification_msg_upload_empty">Файл для резервного копирования не существует.</string>
     <string name="notification_msg_upload_progress">Загружается…</string>
     <string name="notification_msg_upload_complete">Загрузка завершена</string>
-    <string name="notification_msg_upload_success">Загрузка выполнена успешно</string>
-    <string name="notification_msg_upload_fail">Ошибка загрузки</string>
+    <string name="notification_msg_upload_success">%s Загрузка выполнена успешно %d%s</string>
+    <string name="notification_msg_upload_fail">%s Ошибка загрузки %d%s</string>
     <string name="notification_msg_google_drive_file_count">Количество восстановленных файлов</string>
     <string name="notification_msg_download_file_count">Количество файлов для скачивания</string>
     <string name="notification_msg_download_invalid">Все целевые файлы восстановления уже существуют.</string>
@@ -499,7 +499,7 @@
     <string name="notification_msg_download_complete">Загрузка завершена</string>
     <string name="notification_msg_download_success">Скачивание выполнена успешно</string>
     <string name="notification_msg_download_fail">Ошибка скачивания</string>
-    <string name="notification_msg_duplicate_file_count">Количество существующих файлов</string>
+    <string name="notification_msg_duplicate_file_count">%s Количество существующих файлов: %d%s</string>
     <string name="preferences_category_lock">Настройка блокировки приложения</string>
     <string name="fingerprint_lock_title">Блокировка отпечатком пальца</string>
     <string name="fingerprint_lock_summary">Если устройство поддерживает распознавание отпечатков пальцев и имеет зарегистрированный отпечаток пальца, заблокируйте приложение с зарегистрированным отпечатком пальца.</string>

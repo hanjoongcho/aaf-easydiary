@@ -8,6 +8,7 @@ import android.os.Build
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
+import androidx.core.text.HtmlCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.api.client.extensions.android.http.AndroidHttp
@@ -18,6 +19,7 @@ import com.google.api.services.drive.DriveScopes
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
+import me.blog.korn123.easydiary.extensions.createBackupContentText
 import me.blog.korn123.easydiary.helper.*
 import java.io.File
 import java.util.*
@@ -178,12 +180,10 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
         if (targetItems.size == 0) {
             launchCompleteNotification(getString(R.string.notification_msg_download_invalid))
         } else {
+            val stringBuilder = createBackupContentText(remoteDriveFileCount, duplicateFileCount, successCount, failCount)
             notificationBuilder
-                    .setStyle(NotificationCompat.InboxStyle()
-                        .addLine("${getString(R.string.notification_msg_google_drive_file_count)}: $remoteDriveFileCount")
-                        .addLine("${getString(R.string.notification_msg_duplicate_file_count)}: $duplicateFileCount")
-                        .addLine("${getString(R.string.notification_msg_download_success)}: $successCount")
-                        .addLine("${getString(R.string.notification_msg_download_fail)}: $failCount")
+                    .setStyle(NotificationCompat.BigTextStyle()
+                            .bigText(HtmlCompat.fromHtml(stringBuilder.toString(), HtmlCompat.FROM_HTML_MODE_LEGACY))
                     )
                     .setContentTitle("${getString(R.string.notification_msg_download_progress)}  ${successCount + failCount}/${targetItems.size}")
                     .setProgress(targetItems.size, successCount + failCount, false)
@@ -202,14 +202,13 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
     }
 
     private fun launchCompleteNotification(contentText: String) {
+        val stringBuilder = createBackupContentText(remoteDriveFileCount, duplicateFileCount, successCount, failCount)
+
         val resultNotificationBuilder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_download")
         resultNotificationBuilder
                 .setDefaults(Notification.DEFAULT_ALL)
-                .setStyle(NotificationCompat.InboxStyle()
-                        .addLine("${getString(R.string.notification_msg_google_drive_file_count)}: $remoteDriveFileCount")
-                        .addLine("${getString(R.string.notification_msg_duplicate_file_count)}: $duplicateFileCount")
-                        .addLine("${getString(R.string.notification_msg_download_success)}: $successCount")
-                        .addLine("${getString(R.string.notification_msg_download_fail)}: $failCount")
+                .setStyle(NotificationCompat.BigTextStyle()
+                        .bigText(HtmlCompat.fromHtml(stringBuilder.toString(), HtmlCompat.FROM_HTML_MODE_LEGACY))
                 )
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.ic_easydiary)
@@ -218,7 +217,6 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
                 .setOngoing(false)
                 .setAutoCancel(true)
                 .setContentTitle(getString(R.string.recover_attach_photo_title))
-                .setContentText(contentText)
                 .setContentIntent(
                         PendingIntent.getActivity(this, 0, Intent(this, DiaryMainActivity::class.java).apply {
                             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

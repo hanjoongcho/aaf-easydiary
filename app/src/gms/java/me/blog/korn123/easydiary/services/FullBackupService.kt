@@ -20,6 +20,7 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.createBackupContentText
 import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.ActionLog
@@ -164,7 +165,7 @@ class FullBackupService : Service() {
         if (targetFilenames.size == 0) {
             backupDiaryRealm(alarm)
         } else {
-            val stringBuilder = createContentText()
+            val stringBuilder = createBackupContentText(localDeviceFileCount, duplicateFileCount, successCount, failCount)
             notificationBuilder
                     .setStyle(NotificationCompat.BigTextStyle()
                             .bigText(HtmlCompat.fromHtml(stringBuilder.toString(), HtmlCompat.FROM_HTML_MODE_LEGACY))
@@ -207,18 +208,12 @@ class FullBackupService : Service() {
         }
     }
 
-    private fun createContentText(): StringBuilder = StringBuilder()
-                .append(getString(R.string.schedule_backup_gms_complete, "<br>"))
-                .append("<b>\uD83D\uDCF7 Attached Photos</b><br>")
-                .append("* ${getString(R.string.notification_msg_device_file_count)}: $localDeviceFileCount<br>")
-                .append("* ${getString(R.string.notification_msg_duplicate_file_count)}: $duplicateFileCount<br>")
-                .append("* ${getString(R.string.notification_msg_upload_success)}: $successCount<br>")
-                .append("* ${getString(R.string.notification_msg_upload_fail)}: $failCount<br>")
-
     private fun launchCompleteNotification(alarm: Alarm, savedFileName: String) {
-        val stringBuilder = createContentText()
+        val stringBuilder = createBackupContentText(localDeviceFileCount, duplicateFileCount, successCount, failCount)
+                .insert(0, getString(R.string.schedule_backup_gms_complete, "<br>"))
                 .append("<b>\uD83D\uDCC1 Database</b><br>")
                 .append("* Saved file name: $savedFileName")
+
         val resultNotificationBuilder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_upload")
         resultNotificationBuilder
                 .setDefaults(Notification.DEFAULT_ALL)
