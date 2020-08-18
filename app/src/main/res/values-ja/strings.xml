@@ -678,5 +678,5 @@
     <string name="schedule_pending_guide_message">待機中のスケジュールジョブが開始されました。</string>
     <string name="schedule_diary_writing_complete">通知ウィンドウをタッチして日記画面に移動します。</string>
     <string name="schedule_backup_local_complete">ローカルデバイスで日記のバックアップが完了しました。</string>
-    <string name="schedule_backup_gms_complete">Googleドライブで日記のバックアップが完了しました。</string>
+    <string name="schedule_backup_gms_complete">ダイアリーバックアップファイルと添付写真は、Googleドライブに保存されました。%s</string>
 </resources>

@@ -164,18 +164,12 @@ class FullBackupService : Service() {
         if (targetFilenames.size == 0) {
             backupDiaryRealm(alarm)
         } else {
-            val stringBuilder = StringBuilder()
-                    .append("<b>\uD83D\uDCF7 Attached Photos</b><br>")
-                    .append("* ${getString(R.string.notification_msg_device_file_count)}: $localDeviceFileCount<br>")
-                    .append("* ${getString(R.string.notification_msg_duplicate_file_count)}: $duplicateFileCount<br>")
-                    .append("* ${getString(R.string.notification_msg_upload_success)}: $successCount<br>")
-                    .append("* ${getString(R.string.notification_msg_upload_fail)}: $failCount<br>")
+            val stringBuilder = createContentText()
             notificationBuilder
                     .setStyle(NotificationCompat.BigTextStyle()
                             .bigText(HtmlCompat.fromHtml(stringBuilder.toString(), HtmlCompat.FROM_HTML_MODE_LEGACY))
                     )
                     .setContentTitle("${getString(R.string.notification_msg_upload_progress)}  ${successCount + failCount}/${targetFilenames.size}")
-                    .setContentText("999999999")
                     .setProgress(targetFilenames.size, successCount + failCount, false)
             notificationManager.notify(NOTIFICATION_FOREGROUND_GMS_BACKUP_ID, notificationBuilder.build())
 
@@ -213,14 +207,16 @@ class FullBackupService : Service() {
         }
     }
 
-    private fun launchCompleteNotification(alarm: Alarm, savedFileName: String) {
-        val stringBuilder = StringBuilder()
-                .append("구글드라이브를 이용한 백업 작업이 완료되었습니다.<br>")
+    private fun createContentText(): StringBuilder = StringBuilder()
+                .append(getString(R.string.schedule_backup_gms_complete, "<br>"))
                 .append("<b>\uD83D\uDCF7 Attached Photos</b><br>")
                 .append("* ${getString(R.string.notification_msg_device_file_count)}: $localDeviceFileCount<br>")
                 .append("* ${getString(R.string.notification_msg_duplicate_file_count)}: $duplicateFileCount<br>")
                 .append("* ${getString(R.string.notification_msg_upload_success)}: $successCount<br>")
                 .append("* ${getString(R.string.notification_msg_upload_fail)}: $failCount<br>")
+
+    private fun launchCompleteNotification(alarm: Alarm, savedFileName: String) {
+        val stringBuilder = createContentText()
                 .append("<b>\uD83D\uDCC1 Database</b><br>")
                 .append("* Saved file name: $savedFileName")
         val resultNotificationBuilder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_upload")
