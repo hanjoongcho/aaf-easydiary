@@ -21,7 +21,6 @@ import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.createBackupContentText
 import me.blog.korn123.easydiary.helper.*
-import me.blog.korn123.easydiary.models.ActionLog
 import java.io.File
 import java.util.*
 
@@ -95,7 +94,7 @@ class BackupPhotoService : Service() {
                             action = NotificationService.ACTION_PHOTO_BACKUP_GMS_CANCEL
                         }, 0)
                 )
-        startForeground(NOTIFICATION_FOREGROUND_GMS_BACKUP_ID, notificationBuilder.build())
+        startForeground(NOTIFICATION_FOREGROUND_PHOTO_BACKUP_GMS_ID, notificationBuilder.build())
 
         determineRemoteDrivePhotos(null)
     }
@@ -157,12 +156,12 @@ class BackupPhotoService : Service() {
                     )
                     .setContentTitle("${getString(R.string.notification_msg_upload_progress)}  ${successCount + failCount}/${targetFilenames.size}")
                     .setProgress(targetFilenames.size, successCount + failCount, false)
-            notificationManager.notify(NOTIFICATION_FOREGROUND_GMS_BACKUP_ID, notificationBuilder.build())
+            notificationManager.notify(NOTIFICATION_FOREGROUND_PHOTO_BACKUP_GMS_ID, notificationBuilder.build())
 
             if (successCount + failCount < targetFilenames.size) {
                 when (mInProcessJob) {
                     true -> uploadDiaryPhoto()
-                    false -> notificationManager.cancel(NOTIFICATION_FOREGROUND_GMS_BACKUP_ID)
+                    false -> notificationManager.cancel(NOTIFICATION_FOREGROUND_PHOTO_BACKUP_GMS_ID)
                 }
             } else {
                 config.photoBackupGoogle = System.currentTimeMillis()

@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.services
 
+import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
 import android.content.Intent
@@ -35,10 +36,12 @@ class FullBackupService : Service() {
     private lateinit var mNotificationManager: NotificationManager
     private lateinit var mDriveServiceHelper: DriveServiceHelper
     private var mInProcessJob = true
+    private var workStatusList = arrayListOf<WorkStatus>()
 
     data class WorkStatus(
             var localDeviceFileCount: Int = 0, var duplicateFileCount: Int = 0, var successCount: Int = 0, var failCount: Int = 0,
-            var targetFilenamesCursor: Int = 0, var remoteDriveFileNames: ArrayList<String> = arrayListOf(), var targetFilenames: ArrayList<String> = arrayListOf()
+            var targetFilenamesCursor: Int = 0, var remoteDriveFileNames: ArrayList<String> = arrayListOf(), var targetFilenames: ArrayList<String> = arrayListOf(),
+            var isDone: Boolean = false
     )
 
     override fun onBind(intent: Intent?): IBinder? = null
@@ -74,7 +77,9 @@ class FullBackupService : Service() {
         // test alarm sequence is 5
         val alarmId = intent?.getIntExtra(SettingsScheduleFragment.ALARM_ID, 5) ?: 5
         EasyDiaryDbHelper.readAlarmBy(alarmId)?.let {
-            backupPhoto(it, WorkStatus())
+            val workStatus = WorkStatus()
+            workStatusList.add(workStatus)
+            backupPhoto(it, workStatus)
         }
         return super.onStartCommand(intent, flags, startId)
     }
@@ -84,8 +89,10 @@ class FullBackupService : Service() {
         mInProcessJob = false
     }
 
+    @SuppressLint("RestrictedApi")
     private fun backupPhoto(alarm: Alarm, workStatus: WorkStatus) {
         EasyDiaryDbHelper.insertActionLog(ActionLog("FullBackupService", "backupPhoto", "INFO", "step-02"), applicationContext)
+        mNotificationBuilder.mActions.clear()
         mNotificationBuilder.setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setStyle(NotificationCompat.InboxStyle())
@@ -103,7 +110,7 @@ class FullBackupService : Service() {
                             action = NotificationService.ACTION_FULL_BACKUP_GMS_CANCEL
                         }, 0)
                 )
-        startForeground(alarm.id, mNotificationBuilder.build())
+        startForeground(NOTIFICATION_FOREGROUND_FULL_BACKUP_GMS_ID, mNotificationBuilder.build())
 
         determineRemoteDrivePhotos(null, alarm, workStatus)
     }
@@ -165,17 +172,14 @@ class FullBackupService : Service() {
                 val stringBuilder = createBackupContentText(workStatus.localDeviceFileCount, workStatus.duplicateFileCount, workStatus.successCount, workStatus.failCount)
                 mNotificationBuilder
                         .setStyle(NotificationCompat.BigTextStyle()
-                                .bigText(HtmlCompat.fromHtml(stringBuilder.toString(), HtmlCompat.FROM_HTML_MODE_LEGACY))
+                                .bigText(HtmlCompat.fromHtml(stringBuilder.toString(), HtmlCompat.FROM_HTML_MODE_LEGACY)).setSummaryText(alarm.label)
                         )
                         .setContentTitle("${getString(R.string.notification_msg_upload_progress)}  ${workStatus.successCount + workStatus.failCount}/${workStatus.targetFilenames.size}")
                         .setProgress(workStatus.targetFilenames.size, workStatus.successCount + workStatus.failCount, false)
                 mNotificationManager.notify(alarm.id, mNotificationBuilder.build())
 
                 if (workStatus.successCount + workStatus.failCount < workStatus.targetFilenames.size) {
-                    when (mInProcessJob) {
-                        true -> uploadDiaryPhoto(alarm, workStatus)
-                        false -> mNotificationManager.cancel(alarm.id)
-                    }
+                    if (mInProcessJob) uploadDiaryPhoto(alarm, workStatus)
                 } else {
                     config.photoBackupGoogle = System.currentTimeMillis()
                     backupDiaryRealm(alarm, workStatus)
@@ -208,7 +212,7 @@ class FullBackupService : Service() {
 
     private fun launchCompleteNotification(alarm: Alarm, savedFileName: String, workStatus: WorkStatus) {
         if (mInProcessJob) {
-            stopForeground(true)
+//            stopForeground(true)
 
             val stringBuilder = createBackupContentText(workStatus.localDeviceFileCount, workStatus.duplicateFileCount, workStatus.successCount, workStatus.failCount)
                     .insert(0, getString(R.string.schedule_backup_gms_complete, "<br>"))
@@ -242,7 +246,8 @@ class FullBackupService : Service() {
                             }, PendingIntent.FLAG_UPDATE_CURRENT)
                     )
             mNotificationManager.notify(alarm.id, resultNotificationBuilder.build())
-            stopSelf()
+            workStatus.isDone = true
+            if (workStatusList.filter { item -> item.isDone }.size == workStatusList.size) stopSelf()
         }
     }
 }

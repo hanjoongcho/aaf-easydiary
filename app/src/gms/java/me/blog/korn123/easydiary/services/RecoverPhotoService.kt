@@ -89,7 +89,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
                             action = NotificationService.ACTION_PHOTO_RECOVER_GMS_CANCEL
                         }, 0)
                 )
-        startForeground(NOTIFICATION_FOREGROUND_GMS_RECOVERY_ID, notificationBuilder.build())
+        startForeground(NOTIFICATION_FOREGROUND_PHOTO_RECOVERY_GMS_ID, notificationBuilder.build())
 
         intent?.let {
             recoverPhoto()
@@ -185,12 +185,12 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
                     )
                     .setContentTitle("${getString(R.string.notification_msg_download_progress)}  ${successCount + failCount}/${targetItems.size}")
                     .setProgress(targetItems.size, successCount + failCount, false)
-            notificationManager.notify(NOTIFICATION_FOREGROUND_GMS_RECOVERY_ID, notificationBuilder.build())
+            notificationManager.notify(NOTIFICATION_FOREGROUND_PHOTO_RECOVERY_GMS_ID, notificationBuilder.build())
 
             if (successCount + failCount < targetItems.size) {
                 when (mInProcessJob) {
                     true -> {}
-                    false -> notificationManager.cancel(NOTIFICATION_FOREGROUND_GMS_RECOVERY_ID)
+                    false -> notificationManager.cancel(NOTIFICATION_FOREGROUND_PHOTO_RECOVERY_GMS_ID)
                 }
             } else {
                 launchCompleteNotification(getString(R.string.notification_msg_download_complete))
