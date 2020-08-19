@@ -98,13 +98,13 @@ class FullBackupService : Service() {
                 .setContentTitle(getString(R.string.task_progress_message))
 //                .setContentText(getString(R.string.task_progress_message))
                 .setProgress(0, 0, true)
-                .addAction(
-                        R.drawable.ic_easydiary,
-                        getString(R.string.cancel),
-                        PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
-                            action = NotificationService.ACTION_FULL_BACKUP_GMS_CANCEL
-                        }, 0)
-                )
+//                .addAction(
+//                        R.drawable.ic_easydiary,
+//                        getString(R.string.cancel),
+//                        PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
+//                            action = NotificationService.ACTION_FULL_BACKUP_GMS_CANCEL
+//                        }, 0)
+//                )
         startForeground(alarm.id, notificationBuilder.build())
 
         // step01. 전체 파일 목록을 조회
@@ -234,13 +234,14 @@ class FullBackupService : Service() {
                             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         }, PendingIntent.FLAG_UPDATE_CURRENT)
                 )
-                .addAction(
-                        R.drawable.ic_easydiary,
-                        getString(R.string.dismiss),
-                        PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
-                            action = NotificationService.ACTION_PHOTO_BACKUP_GMS_DISMISS
-                        }, 0)
-                )
+//                .addAction(
+//                        R.drawable.ic_easydiary,
+//                        getString(R.string.dismiss),
+//                        PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
+//                            action = NotificationService.ACTION_PHOTO_BACKUP_GMS_DISMISS
+//
+//                        }, 0)
+//                )
         notificationManager.notify(alarm.id, resultNotificationBuilder.build())
         localDeviceFileCount = 0
         duplicateFileCount = 0
