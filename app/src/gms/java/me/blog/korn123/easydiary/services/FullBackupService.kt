@@ -239,7 +239,7 @@ class FullBackupService : Service() {
                             PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
                                 action = NotificationService.ACTION_FULL_BACKUP_GMS_DISMISS
                                 putExtra(SettingsScheduleFragment.ALARM_ID, alarm.id)
-                            }, 0)
+                            }, PendingIntent.FLAG_UPDATE_CURRENT)
                     )
             mNotificationManager.notify(alarm.id, resultNotificationBuilder.build())
             stopSelf()

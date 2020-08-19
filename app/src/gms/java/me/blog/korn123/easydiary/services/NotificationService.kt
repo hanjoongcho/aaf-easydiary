@@ -40,7 +40,7 @@ class NotificationService : BaseNotificationService() {
 
     companion object {
         /*FullBackupService*/
-        const val ACTION_FULL_BACKUP_GMS_CANCEL = "me.blog.korn123.easydiary.services.ACTION_FULL_BACKUP_GMS_CANCEL"
+        const val ACTION_FULL_BACKUP_GMS_CANCEL  = "me.blog.korn123.easydiary.services.ACTION_FULL_BACKUP_GMS_CANCEL"
         const val ACTION_FULL_BACKUP_GMS_DISMISS = "me.blog.korn123.easydiary.services.ACTION_FULL_BACKUP_GMS_DISMISS"
 
         /*BackupPhotoService*/
