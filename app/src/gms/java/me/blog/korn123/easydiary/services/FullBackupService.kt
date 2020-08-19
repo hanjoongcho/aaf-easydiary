@@ -99,7 +99,7 @@ class FullBackupService : Service() {
                 .addAction(
                         R.drawable.ic_easydiary,
                         getString(R.string.cancel),
-                        PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
+                        PendingIntent.getService(this, alarm.id, Intent(this, NotificationService::class.java).apply {
                             action = NotificationService.ACTION_FULL_BACKUP_GMS_CANCEL
                         }, 0)
                 )
@@ -229,14 +229,14 @@ class FullBackupService : Service() {
                             .bigText(HtmlCompat.fromHtml(stringBuilder.toString(), HtmlCompat.FROM_HTML_MODE_LEGACY))
                     )
                     .setContentIntent(
-                            PendingIntent.getActivity(this, 0, Intent(this, DiaryMainActivity::class.java).apply {
+                            PendingIntent.getActivity(this, alarm.id, Intent(this, DiaryMainActivity::class.java).apply {
                                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             }, PendingIntent.FLAG_UPDATE_CURRENT)
                     )
                     .addAction(
                             R.drawable.ic_easydiary,
                             getString(R.string.dismiss),
-                            PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
+                            PendingIntent.getService(this, alarm.id, Intent(this, NotificationService::class.java).apply {
                                 action = NotificationService.ACTION_FULL_BACKUP_GMS_DISMISS
                                 putExtra(SettingsScheduleFragment.ALARM_ID, alarm.id)
                             }, PendingIntent.FLAG_UPDATE_CURRENT)
