@@ -449,6 +449,10 @@
         User Experience (UX) Optimization\n
         French translation updates
     </string>
+    <string name="release_208">
+        v1.4.142 / 2020.08.22\n
+        Fixed an issue where some devices were abnormally terminated in the setting screen
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->

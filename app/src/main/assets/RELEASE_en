@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.142 (date: 2020.08.22)
+  * Fixed an issue where some devices were abnormally terminated in the setting screen
+
 # Changes in 1.4.141 (date: 2020.08.03)
   * User Experience (UX) Optimization
   * French translation updates

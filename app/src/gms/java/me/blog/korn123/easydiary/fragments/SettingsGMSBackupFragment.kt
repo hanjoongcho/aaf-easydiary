@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.fragments
 
 import android.app.Activity
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -41,15 +42,17 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
      ***************************************************************************************************/
     private lateinit var progressContainer: ConstraintLayout
     private lateinit var mRootView: ViewGroup
+    private lateinit var mContext: Context
     private var mTaskFlag = 0
     private val mActivity: Activity
         get() = activity!!
 
 
-    /***************************************************************************************************
-     *   override functions
-     *
-     ***************************************************************************************************/
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        this.mContext = context
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mRootView = inflater.inflate(R.layout.layout_settings_backup_gms, container, false) as ViewGroup
         return mRootView
@@ -133,7 +136,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
         progressContainer.visibility = View.VISIBLE
         val realmPath = EasyDiaryDbHelper.getRealmPath()
         initGoogleSignAccount(this) { account ->
-            DriveServiceHelper(mActivity, account).run {
+            DriveServiceHelper(mContext, account).run {
                 initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME) {
                     createFile(
                             it!!, realmPath,
@@ -162,7 +165,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
 
     private fun openRealmFilePickerDialog() {
         initGoogleSignAccount(this) { account ->
-            val driveServiceHelper = DriveServiceHelper(mActivity, account)
+            val driveServiceHelper = DriveServiceHelper(mContext, account)
 
 //            driveServiceHelper.queryFiles("mimeType contains 'text/aaf_v' and name contains '$DIARY_DB_NAME'", 1000)
 
@@ -231,7 +234,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
         mActivity.setScreenOrientationSensor(false)
         progressContainer.visibility = View.VISIBLE
         initGoogleSignAccount(this) { account ->
-            DriveServiceHelper(mActivity, account).run {
+            DriveServiceHelper(mContext, account).run {
                 initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
                     progressContainer.visibility = View.GONE
                     mActivity.run {

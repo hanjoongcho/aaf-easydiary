@@ -442,12 +442,16 @@
     </string>
     <string name="release_206">
         v1.4.140 / 2020.07.20\n
-        Fixed an error that the scheduler did not work in the application termination state
+        アプリケーションが最近使用アプリ一覧から削除された場合、スケジューラが動作しなかったエラーを修正する
     </string>
     <string name="release_207">
         v1.4.141 / 2020.08.03\n
         ユーザーエクスペリエンス（UX）の最適化\n
         フランス語翻訳の更新
+    </string>
+    <string name="release_208">
+        v1.4.142 / 2020.08.22\n
+        一部のデバイスが設定画面で異常終了する問題を修正しました
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
