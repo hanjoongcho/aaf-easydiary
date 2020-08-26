@@ -12,4 +12,4 @@ app/release
 app/src/gmsDev/res/drawable/ic_*
 app/src/gmsProd/res/drawable/ic_*
 app/src/gmsProd/res/values/keys.xml
-app/gmsProd/release/*.aab
+app/gmsProd/release/*
