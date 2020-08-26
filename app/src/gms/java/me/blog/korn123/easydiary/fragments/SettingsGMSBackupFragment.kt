@@ -173,23 +173,21 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
         progressContainer.visibility = View.VISIBLE
         val realmPath = EasyDiaryDbHelper.getRealmPath()
         initGoogleSignAccount(this) { account ->
-            requestDrivePermissions(account) {
-                DriveServiceHelper(mContext, account).run {
-                    initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME) {
-                        createFile(
-                                it!!, realmPath,
-                                DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"),
-                                EasyDiaryUtils.easyDiaryMimeType
-                        ).addOnSuccessListener {
-                            progressContainer.visibility = View. GONE
-                            mActivity.makeSnackBar(getString(R.string.backup_completed_message))
-                            mActivity.config.diaryBackupGoogle = System.currentTimeMillis()
-                            mActivity.setScreenOrientationSensor(true)
-                        }.addOnFailureListener { e ->
-                            mActivity.makeSnackBar(e.message ?: "Please try again later.")
-                            progressContainer.visibility = View.GONE
-                            mActivity.setScreenOrientationSensor(true)
-                        }
+            DriveServiceHelper(mContext, account).run {
+                initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME) {
+                    createFile(
+                            it!!, realmPath,
+                            DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"),
+                            EasyDiaryUtils.easyDiaryMimeType
+                    ).addOnSuccessListener {
+                        progressContainer.visibility = View. GONE
+                        mActivity.makeSnackBar(getString(R.string.backup_completed_message))
+                        mActivity.config.diaryBackupGoogle = System.currentTimeMillis()
+                        mActivity.setScreenOrientationSensor(true)
+                    }.addOnFailureListener { e ->
+                        mActivity.makeSnackBar(e.message ?: "Please try again later.")
+                        progressContainer.visibility = View.GONE
+                        mActivity.setScreenOrientationSensor(true)
                     }
                 }
             }
@@ -369,6 +367,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
                             .load(this.photoUrl)
                             .apply(RequestOptions().circleCrop())
                             .into(profilePhoto)
+                    requestDrivePermissions(this.account!!) {}
                 }
             }
             false -> {
