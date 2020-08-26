@@ -173,21 +173,23 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
         progressContainer.visibility = View.VISIBLE
         val realmPath = EasyDiaryDbHelper.getRealmPath()
         initGoogleSignAccount(this) { account ->
-            DriveServiceHelper(mContext, account).run {
-                initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME) {
-                    createFile(
-                            it!!, realmPath,
-                            DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"),
-                            EasyDiaryUtils.easyDiaryMimeType
-                    ).addOnSuccessListener {
-                        progressContainer.visibility = View. GONE
-                        mActivity.makeSnackBar(getString(R.string.backup_completed_message))
-                        mActivity.config.diaryBackupGoogle = System.currentTimeMillis()
-                        mActivity.setScreenOrientationSensor(true)
-                    }.addOnFailureListener { e ->
-                        mActivity.makeSnackBar(e.message ?: "Please try again later.")
-                        progressContainer.visibility = View.GONE
-                        mActivity.setScreenOrientationSensor(true)
+            requestDrivePermissions(account) {
+                DriveServiceHelper(mContext, account).run {
+                    initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME) {
+                        createFile(
+                                it!!, realmPath,
+                                DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"),
+                                EasyDiaryUtils.easyDiaryMimeType
+                        ).addOnSuccessListener {
+                            progressContainer.visibility = View. GONE
+                            mActivity.makeSnackBar(getString(R.string.backup_completed_message))
+                            mActivity.config.diaryBackupGoogle = System.currentTimeMillis()
+                            mActivity.setScreenOrientationSensor(true)
+                        }.addOnFailureListener { e ->
+                            mActivity.makeSnackBar(e.message ?: "Please try again later.")
+                            progressContainer.visibility = View.GONE
+                            mActivity.setScreenOrientationSensor(true)
+                        }
                     }
                 }
             }
@@ -202,66 +204,68 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
 
     private fun openRealmFilePickerDialog() {
         initGoogleSignAccount(this) { account ->
-            val driveServiceHelper = DriveServiceHelper(mContext, account)
-
+            requestDrivePermissions(account) {
+                val driveServiceHelper = DriveServiceHelper(mContext, account)
 //            driveServiceHelper.queryFiles("mimeType contains 'text/aaf_v' and name contains '$DIARY_DB_NAME'", 1000)
-
-            driveServiceHelper.queryFiles("(mimeType = '${EasyDiaryUtils.easyDiaryMimeTypeAll.joinToString("' or mimeType = '")}') and trashed = false", 1000)
-                    .addOnSuccessListener {
-                        var alertDialog: AlertDialog? = null
-                        val realmFiles: ArrayList<HashMap<String, String>> = arrayListOf()
-                        it.files.map { file ->
-                            val itemInfo = hashMapOf<String, String>("name" to file.name, "id" to file.id, "createdTime" to file.createdTime.toString())
-                            realmFiles.add(itemInfo)
-                        }
-                        val builder = AlertDialog.Builder(mActivity)
-                        builder.setNegativeButton(getString(android.R.string.cancel)) { _, _ -> mActivity.setScreenOrientationSensor(true) }
-//                        builder.setMessage(getString(R.string.open_realm_file_message))
-                        val inflater = mActivity.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-                        val fontView = inflater.inflate(R.layout.dialog_realm_files, null)
-                        val listView = fontView.findViewById<ListView>(R.id.files)
-                        val adapter = RealmFileItemAdapter(mActivity, R.layout.item_realm_file, realmFiles)
-                        listView.adapter = adapter
-                        listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-                            val itemInfo = parent.adapter.getItem(position) as HashMap<String, String>
-                            itemInfo["id"]?.let { realmFileId ->
-                                progressContainer.visibility = View.VISIBLE
-                                val realmPath = EasyDiaryDbHelper.getRealmPath()
-                                EasyDiaryDbHelper.closeInstance()
-                                driveServiceHelper.downloadFile(realmFileId, realmPath).run {
-                                    addOnSuccessListener {
-                                        mActivity.refreshApp()
-                                    }
-                                    addOnFailureListener {  }
-                                }
-
+                driveServiceHelper.queryFiles("(mimeType = '${EasyDiaryUtils.easyDiaryMimeTypeAll.joinToString("' or mimeType = '")}') and trashed = false", 1000)
+                        .addOnSuccessListener {
+                            var alertDialog: AlertDialog? = null
+                            val realmFiles: ArrayList<HashMap<String, String>> = arrayListOf()
+                            it.files.map { file ->
+                                val itemInfo = hashMapOf<String, String>("name" to file.name, "id" to file.id, "createdTime" to file.createdTime.toString())
+                                realmFiles.add(itemInfo)
                             }
-                            alertDialog?.cancel()
-                        }
+                            val builder = AlertDialog.Builder(mActivity)
+                            builder.setNegativeButton(getString(android.R.string.cancel)) { _, _ -> mActivity.setScreenOrientationSensor(true) }
+//                        builder.setMessage(getString(R.string.open_realm_file_message))
+                            val inflater = mActivity.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                            val fontView = inflater.inflate(R.layout.dialog_realm_files, null)
+                            val listView = fontView.findViewById<ListView>(R.id.files)
+                            val adapter = RealmFileItemAdapter(mActivity, R.layout.item_realm_file, realmFiles)
+                            listView.adapter = adapter
+                            listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+                                val itemInfo = parent.adapter.getItem(position) as HashMap<String, String>
+                                itemInfo["id"]?.let { realmFileId ->
+                                    progressContainer.visibility = View.VISIBLE
+                                    val realmPath = EasyDiaryDbHelper.getRealmPath()
+                                    EasyDiaryDbHelper.closeInstance()
+                                    driveServiceHelper.downloadFile(realmFileId, realmPath).run {
+                                        addOnSuccessListener {
+                                            mActivity.refreshApp()
+                                        }
+                                        addOnFailureListener {  }
+                                    }
 
-                        alertDialog = builder.create().apply { mActivity.updateAlertDialog(this, null, fontView, "${getString(R.string.open_realm_file_title)} (Total: ${it.files.size})") }
-                        progressContainer.visibility = View.GONE
-                    }
-                    .addOnFailureListener { e ->
-                        e.printStackTrace()
-                        mActivity.makeSnackBar(e.message ?: "Please try again later.")
-                        progressContainer.visibility = View.GONE
-                    }
+                                }
+                                alertDialog?.cancel()
+                            }
+
+                            alertDialog = builder.create().apply { mActivity.updateAlertDialog(this, null, fontView, "${getString(R.string.open_realm_file_title)} (Total: ${it.files.size})") }
+                            progressContainer.visibility = View.GONE
+                        }
+                        .addOnFailureListener { e ->
+                            e.printStackTrace()
+                            mActivity.makeSnackBar(e.message ?: "Please try again later.")
+                            progressContainer.visibility = View.GONE
+                        }
+            }
         }
     }
 
     private fun recoverDiaryPhoto() {
         mActivity.setScreenOrientationSensor(false)
         progressContainer.visibility = View.VISIBLE
-        initGoogleSignAccount(this) { _ ->
-            mActivity.runOnUiThread {
-                progressContainer.visibility = View.GONE
-                mActivity.run {
-                    showAlertDialog(getString(R.string.recover_confirm_attached_photo), DialogInterface.OnClickListener { _, _ ->
-                        val recoverPhotoService = Intent(this, RecoverPhotoService::class.java)
-                        startService(recoverPhotoService)
-                        finish()
-                    }, DialogInterface.OnClickListener { _, _ -> setScreenOrientationSensor(true) })
+        initGoogleSignAccount(this) { account ->
+            requestDrivePermissions(account) {
+                mActivity.runOnUiThread {
+                    progressContainer.visibility = View.GONE
+                    mActivity.run {
+                        showAlertDialog(getString(R.string.recover_confirm_attached_photo), DialogInterface.OnClickListener { _, _ ->
+                            val recoverPhotoService = Intent(this, RecoverPhotoService::class.java)
+                            startService(recoverPhotoService)
+                            finish()
+                        }, DialogInterface.OnClickListener { _, _ -> setScreenOrientationSensor(true) })
+                    }
                 }
             }
         }
@@ -271,16 +275,18 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
         mActivity.setScreenOrientationSensor(false)
         progressContainer.visibility = View.VISIBLE
         initGoogleSignAccount(this) { account ->
-            DriveServiceHelper(mContext, account).run {
-                initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
-                    progressContainer.visibility = View.GONE
-                    mActivity.run {
-                        showAlertDialog(getString(R.string.backup_confirm_message), DialogInterface.OnClickListener { _, _ ->
-                            val backupPhotoService = Intent(this, BackupPhotoService::class.java)
-                            backupPhotoService.putExtra(DriveServiceHelper.WORKING_FOLDER_ID, photoFolderId)
-                            ContextCompat.startForegroundService(context, backupPhotoService)
-                            finish()
-                        }, DialogInterface.OnClickListener { _, _ -> setScreenOrientationSensor(true) })
+            requestDrivePermissions(account) {
+                DriveServiceHelper(mContext, account).run {
+                    initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
+                        progressContainer.visibility = View.GONE
+                        mActivity.run {
+                            showAlertDialog(getString(R.string.backup_confirm_message), DialogInterface.OnClickListener { _, _ ->
+                                val backupPhotoService = Intent(this, BackupPhotoService::class.java)
+                                backupPhotoService.putExtra(DriveServiceHelper.WORKING_FOLDER_ID, photoFolderId)
+                                ContextCompat.startForegroundService(context, backupPhotoService)
+                                finish()
+                            }, DialogInterface.OnClickListener { _, _ -> setScreenOrientationSensor(true) })
+                        }
                     }
                 }
             }
@@ -327,8 +333,10 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
             R.id.signInGoogleOAuth -> {
                 when (GoogleOAuthHelper.isValidGoogleSignAccount(mActivity)) {
                     false -> {
-                        initGoogleSignAccount(this) { _ ->
-                            determineAccountInfo()
+                        initGoogleSignAccount(this) { account ->
+                            requestDrivePermissions(account) {
+                                determineAccountInfo()
+                            }
                         }
                     }
                 }
@@ -367,7 +375,6 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
                             .load(this.photoUrl)
                             .apply(RequestOptions().circleCrop())
                             .into(profilePhoto)
-                    requestDrivePermissions(this.account!!) {}
                 }
             }
             false -> {
