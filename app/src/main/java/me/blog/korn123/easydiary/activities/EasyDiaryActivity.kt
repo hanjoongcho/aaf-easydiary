@@ -126,4 +126,6 @@ open class EasyDiaryActivity : BaseSimpleActivity() {
             checkWhatsNew(this, BuildConfig.VERSION_CODE, applyFilter)
         }
     }
+
+
 }

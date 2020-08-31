@@ -1,10 +1,15 @@
 package me.blog.korn123.easydiary.activities
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.location.Address
+import android.location.Geocoder
+import android.location.Location
+import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -13,10 +18,13 @@ import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.isOreoPlus
+import io.github.aafactory.commons.helpers.PERMISSION_ACCESS_COARSE_LOCATION
+import io.github.aafactory.commons.helpers.PERMISSION_ACCESS_FINE_LOCATION
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_dev.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.ActionLog
@@ -24,6 +32,7 @@ import me.blog.korn123.easydiary.services.BaseNotificationService
 import me.blog.korn123.easydiary.services.NotificationService
 import org.apache.commons.io.FilenameUtils
 import java.io.File
+import java.util.*
 
 
 open class BaseDevActivity : EasyDiaryActivity() {
@@ -93,6 +102,15 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
             showAlertDialog(unUsedPhotos.size.toString(), null, true)
         }
+
+        locationManager.setOnClickListener {
+            getLocationWithGPSProvider { location ->
+                location?.let {
+                    val info = "Longitude: ${it.longitude}\n, Latitude: ${it.latitude}"
+                    locationManagerInfo.text = info
+                }
+            }
+        }
     }
 
 
@@ -100,8 +118,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
      *   etc functions
      *
      ***************************************************************************************************/
-    private fun initDevUI() { }
-
     private fun updateActionLog() {
         val actionLogs: List<ActionLog> = EasyDiaryDbHelper.readActionLogAll()
         val sb = StringBuilder()
@@ -184,6 +200,47 @@ data class NotificationInfo(var largeIconResourceId: Int, var useActionButton: B
  *   extensions
  *
  ***************************************************************************************************/
+fun EasyDiaryActivity.getLocationWithGPSProvider(callback: (location: Location?) -> Unit) {
+    when (checkPermission(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,  Manifest.permission.ACCESS_COARSE_LOCATION))) {
+        true -> {
+            val gpsProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            val networkProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            callback(gpsProvider.getLastKnownLocation(LocationManager.GPS_PROVIDER) ?: networkProvider.getLastKnownLocation(LocationManager.NETWORK_PROVIDER))
+        }
+        false -> {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            handlePermission(PERMISSION_ACCESS_COARSE_LOCATION) { hasCoarseLocation ->
+                if (hasCoarseLocation) {
+                    handlePermission(PERMISSION_ACCESS_FINE_LOCATION) { hasFineLocation ->
+                        if (hasFineLocation) {
+                            val gpsProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                            val networkProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                            callback(gpsProvider.getLastKnownLocation(LocationManager.GPS_PROVIDER) ?: networkProvider.getLastKnownLocation(LocationManager.NETWORK_PROVIDER))
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+fun Context.getFromLocation(latitude: Double, longitude: Double, maxResults: Int): List<Address>? {
+//    val lat = java.lang.Double.parseDouble(String.format("%.6f", latitude))
+//    val lon = java.lang.Double.parseDouble(String.format("%.7f", longitude))
+    val addressList = arrayListOf<Address>()
+    try {
+        addressList.addAll(Geocoder(this, Locale.getDefault()).getFromLocation(latitude, longitude, maxResults))
+    } catch (e: Exception) {
+        toast(e.message ?: "Error")
+    }
+    return addressList
+}
 
 
 

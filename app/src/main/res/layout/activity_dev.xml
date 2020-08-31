@@ -59,6 +59,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/locationManager"
+                    android:orientation="vertical"
+                    style="@style/AppCard.Settings">
+                    <LinearLayout
+                        style="@style/LinearLayoutVertical">
+                        <com.simplemobiletools.commons.views.MyTextView
+                            android:text="Location Manager"
+                            style="@style/SettingsTitle" />
+                        <com.simplemobiletools.commons.views.MyTextView
+                            android:id="@+id/locationManagerInfo"
+                            android:text=""
+                            style="@style/SettingsSummary" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
                     android:id="@+id/nextAlarm"
                     android:orientation="vertical"
                     style="@style/AppCard.Settings">
@@ -70,34 +86,6 @@
                         <com.simplemobiletools.commons.views.MyTextView
                             android:id="@+id/nextAlarmSummary"
                             android:text=""
-                            style="@style/SettingsSummary" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/notification1"
-                    android:orientation="vertical"
-                    style="@style/AppCard.Settings">
-                    <LinearLayout
-                        style="@style/LinearLayoutVertical">
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:text="Notification"
-                            style="@style/SettingsTitle" />
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:text="Basic + Action"
-                            style="@style/SettingsSummary" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/notification2"
-                    android:orientation="vertical"
-                    style="@style/AppCard.Settings">
-                    <LinearLayout
-                        style="@style/LinearLayoutVertical">
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:text="Notification"
-                            style="@style/SettingsTitle" />
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:text="Basic + Action + CustomContentView"
                             style="@style/SettingsSummary" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
@@ -140,6 +128,35 @@
                             android:text="Clear unused photo"
                             style="@style/SettingsTitle" />
                         <com.simplemobiletools.commons.views.MyTextView
+                            style="@style/SettingsSummary" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/notification1"
+                    android:orientation="vertical"
+                    style="@style/AppCard.Settings">
+                    <LinearLayout
+                        style="@style/LinearLayoutVertical">
+                        <com.simplemobiletools.commons.views.MyTextView
+                            android:text="Notification"
+                            style="@style/SettingsTitle" />
+                        <com.simplemobiletools.commons.views.MyTextView
+                            android:text="Basic + Action"
+                            style="@style/SettingsSummary" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/notification2"
+                    android:orientation="vertical"
+                    style="@style/AppCard.Settings">
+                    <LinearLayout
+                        style="@style/LinearLayoutVertical">
+                        <com.simplemobiletools.commons.views.MyTextView
+                            android:text="Notification"
+                            style="@style/SettingsTitle" />
+                        <com.simplemobiletools.commons.views.MyTextView
+                            android:text="Basic + Action + CustomContentView"
                             style="@style/SettingsSummary" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
