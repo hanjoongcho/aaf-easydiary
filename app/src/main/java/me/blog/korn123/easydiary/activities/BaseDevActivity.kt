@@ -106,7 +106,12 @@ open class BaseDevActivity : EasyDiaryActivity() {
         locationManager.setOnClickListener {
             getLocationWithGPSProvider { location ->
                 location?.let {
-                    val info = "Longitude: ${it.longitude}\n, Latitude: ${it.latitude}"
+                    var info = "Longitude: ${it.longitude}\nLatitude: ${it.latitude}\n"
+                    getFromLocation(it.latitude, it.longitude, 1)?.let { address ->
+                        if (address.isNotEmpty()) {
+                            info += fullAddress(address[0])
+                        }
+                    }
                     locationManagerInfo.text = info
                 }
             }
@@ -118,6 +123,17 @@ open class BaseDevActivity : EasyDiaryActivity() {
      *   etc functions
      *
      ***************************************************************************************************/
+    private fun fullAddress(address: Address): String {
+        val sb = StringBuilder()
+        if (address.countryName != null) sb.append(address.countryName).append(" ")
+        if (address.adminArea != null) sb.append(address.adminArea).append(" ")
+        if (address.locality != null) sb.append(address.locality).append(" ")
+        if (address.subLocality != null) sb.append(address.subLocality).append(" ")
+        if (address.thoroughfare != null) sb.append(address.thoroughfare).append(" ")
+        if (address.featureName != null) sb.append(address.featureName).append(" ")
+        return sb.toString()
+    }
+
     private fun updateActionLog() {
         val actionLogs: List<ActionLog> = EasyDiaryDbHelper.readActionLogAll()
         val sb = StringBuilder()
