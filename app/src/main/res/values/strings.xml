@@ -453,6 +453,10 @@
         v1.4.143 / 2020.08.26\n
         Fixed an issue where some devices were abnormally terminated in the setting screen
     </string>
+    <string name="release_210">
+        v1.4.144 / 2020.09.xx\n
+        German translation updates
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
