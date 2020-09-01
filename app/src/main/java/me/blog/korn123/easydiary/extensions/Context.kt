@@ -45,6 +45,7 @@ import io.github.aafactory.commons.extensions.baseConfig
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import io.github.aafactory.commons.views.ModalView
+import io.realm.Realm
 import kotlinx.android.synthetic.main.dialog_message.view.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
@@ -621,3 +622,10 @@ fun Context.createRecoveryContentText(remoteDriveFileCount: Int, duplicateFileCo
         .append(getString(R.string.notification_msg_duplicate_file_count, "*", duplicateFileCount, "<br>"))
         .append(getString(R.string.notification_msg_upload_success, "*", successCount, "<br>"))
         .append(getString(R.string.notification_msg_upload_fail, "*", failCount, "<br>"))
+
+fun Context.forceInitRealmInMarshmallow() {
+    // android marshmallow minor version bug workaround
+    if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
+        Realm.init(this)
+    }
+}

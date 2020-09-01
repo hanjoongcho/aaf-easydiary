@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.speech.RecognizerIntent
@@ -22,9 +21,7 @@ import androidx.core.app.ActivityCompat
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.github.ksoichiro.android.observablescrollview.ObservableListView
-import com.simplemobiletools.commons.extensions.toast
 import io.github.aafactory.commons.utils.CommonUtils
-import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_diary_main.*
 import kotlinx.android.synthetic.main.popup_menu_main.view.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
@@ -34,7 +31,6 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
 import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.extensions.*
-import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.io.FileUtils
@@ -57,8 +53,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     private var mDiaryList: ArrayList<DiaryDto>? = null
     private var mShowcaseIndex = 0
     private var mShowcaseView: ShowcaseView? = null
-    private var mClearQueryClickCount = 0
-    private var mClearQueryFirstClickMillis = 0L
     private var mSymbolSequence = SYMBOL_SELECT_ALL
     var mDiaryMode = DiaryMode.READ
 
@@ -69,11 +63,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
      ***************************************************************************************************/
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // android marshmallow minor version bug workaround
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
-            Realm.init(this)
-        }
+        forceInitRealmInMarshmallow()
 
         when {
             intent.getBooleanExtra(APP_FINISH_FLAG, false) -> finish() // application finish 확인 insertDiaryButton
