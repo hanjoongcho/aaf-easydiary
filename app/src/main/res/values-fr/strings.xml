@@ -547,16 +547,6 @@
     <string name="export_excel_header_weather">Météo</string>
     <string name="export_excel_header_symbol">Symbole</string>
     <string name="export_excel_header_is_all_day">Journée entière</string>
-    <string name="weather_sunny">Ensoleillé</string>
-    <string name="weather_cloud_and_sun">Nuage et soleil</string>
-    <string name="weather_rain_drops">Gouttes de pluie</string>
-    <string name="weather_bolt">Grêle</string>
-    <string name="weather_snowing">Neige</string>
-    <string name="weather_rainbow">Arc-en-ciel</string>
-    <string name="weather_umbrella">Parapluie</string>
-    <string name="weather_stars">Étoiles</string>
-    <string name="weather_moon">Lune</string>
-    <string name="weather_night_rain">Pluie nocturne</string>
     <string name="faq_title">Foire aux questions</string>
     <string name="faq_description">Vous pouvez consulter les questions fréquemment posées et les réponses.</string>
     <string name="faq_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/FAQs.md</string>

@@ -547,16 +547,6 @@
     <string name="export_excel_header_weather">Погода</string>
     <string name="export_excel_header_symbol">Символ</string>
     <string name="export_excel_header_is_all_day">ВесьДень</string>
-    <string name="weather_sunny">Солнечно</string>
-    <string name="weather_cloud_and_sun">Облачно</string>
-    <string name="weather_rain_drops">Небольшой дождь</string>
-    <string name="weather_bolt">Молния</string>
-    <string name="weather_snowing">Снег</string>
-    <string name="weather_rainbow">Радуга</string>
-    <string name="weather_umbrella">Зонтик</string>
-    <string name="weather_stars">Звезды</string>
-    <string name="weather_moon">Луна</string>
-    <string name="weather_night_rain">Ночной дождь</string>
     <string name="faq_title">FAQs</string>
     <string name="faq_description">Здесь вы можете найти ответы на часто задаваемые вопросы.</string>
     <string name="faq_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/FAQs.md</string>

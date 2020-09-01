@@ -547,16 +547,6 @@
     <string name="export_excel_header_weather">날씨</string>
     <string name="export_excel_header_symbol">다이어리 심벌</string>
     <string name="export_excel_header_is_all_day">AllDay\n(작성일자 시간표기 유무)</string>
-    <string name="weather_sunny">맑음</string>
-    <string name="weather_cloud_and_sun">흐림</string>
-    <string name="weather_rain_drops">비</string>
-    <string name="weather_bolt">번개</string>
-    <string name="weather_snowing">눈</string>
-    <string name="weather_rainbow">무지개</string>
-    <string name="weather_umbrella">우산</string>
-    <string name="weather_stars">별</string>
-    <string name="weather_moon">달</string>
-    <string name="weather_night_rain">밤비</string>
     <string name="faq_title">자주 묻는 질문</string>
     <string name="faq_description">이지 다이어리 사용자들이 자주 묻는 질문과 그에 대한 답변 내용을 확인할 수 있습니다.</string>
     <string name="faq_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/FAQs_ko.md</string>

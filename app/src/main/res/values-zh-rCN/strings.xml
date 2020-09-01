@@ -547,16 +547,6 @@
     <string name="export_excel_header_weather">Weather</string>
     <string name="export_excel_header_symbol">Symbol</string>
     <string name="export_excel_header_is_all_day">AllDay</string>
-    <string name="weather_sunny">Sunny</string>
-    <string name="weather_cloud_and_sun">Cloud and Sun</string>
-    <string name="weather_rain_drops">Rain drops</string>
-    <string name="weather_bolt">Bolt</string>
-    <string name="weather_snowing">Snowing</string>
-    <string name="weather_rainbow">Rainbow</string>
-    <string name="weather_umbrella">Umbrella</string>
-    <string name="weather_stars">Stars</string>
-    <string name="weather_moon">Moon</string>
-    <string name="weather_night_rain">Night rain</string>
     <string name="faq_title">FAQs</string>
     <string name="faq_description">You can check frequently asked questions and answers.</string>
     <string name="faq_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/FAQs.md</string>
