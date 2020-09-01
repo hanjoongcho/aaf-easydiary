@@ -141,7 +141,7 @@
     <string name="google_drive_connect_message">Synchronisiere mit Google Drive …</string>
     <string name="diary_count"></string>
     <string name="menu_calendar">Kalender</string>
-    <string name="menu_chart">Statistics</string>
+    <string name="menu_chart">Statistik</string>
     <string name="menu_timeline">Zeitleiste</string>
     <string name="post_card">Tagebuch-Postkarten</string>
     <string name="menu_delete">Löschen</string>
@@ -615,7 +615,7 @@
     <string name="dashboard_guide_message">Es gibt nicht genügend Daten, um Ranglistendaten zu generieren. Sie müssen ein Tagebuch mit mindestens 4 Symbolen schreiben, um das Dashboard-Ranking zu aktivieren.</string>
     <string name="delete_realm_title">Sicherungsdatei löschen</string>
     <string name="delete_realm_description">Löschen Sie die im Speicher gespeicherte Sicherungsdatei.</string>
-    <string name="menu_dashboard">Dashboard</string>
+    <string name="menu_dashboard">Instrumententafel</string>
     <string name="dashboard_title_backup_drive">Google Drive-Sicherungsverlauf</string>
     <string name="dashboard_title_backup_local">Sicherungshistorie für lokale Geräte</string>
     <string name="dashboard_backup_guide_message">Keine Sicherungsinformationen</string>
