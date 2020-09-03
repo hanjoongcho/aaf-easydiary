@@ -623,9 +623,9 @@ fun Context.createRecoveryContentText(remoteDriveFileCount: Int, duplicateFileCo
         .append(getString(R.string.notification_msg_upload_success, "*", successCount, "<br>"))
         .append(getString(R.string.notification_msg_upload_fail, "*", failCount, "<br>"))
 
-fun Context.forceInitRealmInMarshmallow() {
+fun Context.forceInitRealmLessThenOreo() {
     // android marshmallow minor version bug workaround
-    if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
         Realm.init(this)
     }
 }

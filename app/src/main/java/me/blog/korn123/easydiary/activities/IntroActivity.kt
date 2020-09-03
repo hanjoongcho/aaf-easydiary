@@ -21,7 +21,7 @@ class IntroActivity : AppCompatActivity(), Handler.Callback {
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        forceInitRealmInMarshmallow()
+        forceInitRealmLessThenOreo()
         setContentView(R.layout.activity_intro)
         rescheduleEnabledAlarms()
 
