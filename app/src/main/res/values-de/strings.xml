@@ -599,7 +599,7 @@
     <string name="copy_diary_item">Möchten Sie das ausgewählte Tagebuch kopieren?</string>
     <string name="diary_contents_length">Zeichen: %d</string>
     <string name="count_characters_title">Zählen von Text</string>
-    <string name="count_characters_summary">Zählen Sie die Anzahl der Zeichen im Körper des Tagebuchs.</string>
+    <string name="count_characters_summary">Die Anschläge im Textfeld des Tagebuchs werden angezeigt.</string>
     <string name="send_email_attach_excel_title">Erstellung von Excel-Dateien und E-Mail-Versand</string>
     <string name="send_email_attach_excel_description">Alle Inhalte mit Ausnahme der angehängten Fotos werden als Excel-Datei erstellt und an die E-Mail angehängt.</string>
     <string name="storage_migration_message">Änderungen des Speicherorts werden in Übereinstimmung mit der Richtlinie für Android 10 Scoped Storage vorgenommen. Dieser Job wird nur einmal ausgeführt.</string>
