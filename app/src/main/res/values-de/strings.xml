@@ -480,11 +480,11 @@
     <string name="release_notes_title">Anmerkungen zur Veröffentlichung</string>
     <string name="release_notes_summary">Suche nach neuen Funktionen nach Release-Version.</string>
     <string name="attached_photo_count">%d Angehängte Fotos</string>
-    <string name="all_day">Den ganzen Tag</string>
+    <string name="all_day">Ganztägig</string>
     <string name="bold_style_option_title">Fettschrift-Konfiguration</string>
-    <string name="bold_style_option_summary">Legen Sie den Titel des Tagebuchs und die Zeitleiste fest, die in Fettdruck angezeigt werden sollen.</string>
+    <string name="bold_style_option_summary">Titel, Datum und Zeitangabe des Tagebucheintrags werden in Fettdruck angezeigt.</string>
     <string name="multi_picker_option_title">Einstellung für mehrere Picker</string>
-    <string name="multi_picker_option_summary">Wenn ich ein Tagebuchfoto anhänge, verwende ich die im Tagebuch vorgesehene Mehrfachauswahl, ohne die Galerie-App zu verwenden. Wenn die Mehrfachauswahl aktiviert ist, können Sie mehrere Bilder auf einmal anhängen.</string>
+    <string name="multi_picker_option_summary">Beim Anhängen von Bildern wird die vom Tagebuch vorgesehene Mehrfachauswahl verwendet, ohne eine Galerie-App zu öffnen. Wenn die Mehrfachauswahl aktiviert ist, können mehrere Bilder auf einmal angehängt werden.</string>
     <string name="preferences_category_backup_restore">Sicherung und Wiederherstellung von Anwendungen</string>
     <string name="preferences_category_backup_restore_sub">Google Drive</string>
     <string name="backup_attach_photo_title">Angehängte Fotos sichern</string>
@@ -535,7 +535,7 @@
     <string name="contents_summary_description">Fassen Sie den Inhalt des Tagebuchs zusammen, das im Kalender, auf der Zeitachse, in der Suchmaske usw. zur Verfügung gestellt wird.</string>
     <string name="init_cipher_error_guide_message">Die Fingerabdruckinformationen des Geräts wurden geändert. Ändern Sie den PIN-Sperrmodus zum Entsperren, entsperren Sie dann die Fingerabdrucksperre und stellen Sie sie erneut ein.</string>
     <string name="export_excel_title">Excel exportieren</string>
-    <string name="export_excel_description">Speichern Sie den gesamten Inhalt mit Ausnahme des angehängten Fotos als Excel-Datei.</string>
+    <string name="export_excel_description">Speichern Sie den gesamten Inhalt mit Ausnahme der angehängten Fotos als Excel-Datei.</string>
     <string name="export_excel_xls_location">Standort</string>
     <string name="export_excel_header_seq">Sequenz</string>
     <string name="export_excel_header_write_date">Datum schreiben</string>
@@ -576,7 +576,7 @@
     <string name="preferences_category_backup_restore_device">Sicherung und Wiederherstellung von Anwendungen</string>
     <string name="preferences_category_backup_restore_device_sub">Gerätespeicherung</string>
     <string name="export_realm_title">Tagebuch sichern</string>
-    <string name="export_realm_description">Sichern Sie Datenbankdateien mit Ausnahme des angehängten Fotos auf dem Gerätespeicher.\nDa die im internen Speicher gesicherten Dateien beim Löschen der Anwendung gelöscht werden, verwenden Sie den externen öffentlichen Speicher oder die Sicherungsfunktion von Google Drive, um die erstellten Daten dauerhaft zu speichern.</string>
+    <string name="export_realm_description">Sichern Sie Datenbankdateien mit Ausnahme der angehängten Fotos auf dem Gerätespeicher.\nDa die im internen Speicher gesicherten Dateien beim Löschen der Anwendung gelöscht werden, verwenden Sie den externen öffentlichen Speicher oder die Sicherungsfunktion von Google Drive, um die erstellten Daten dauerhaft zu speichern.</string>
     <string name="export_realm_guide_message">Die Datenbankdatei wurde im Gerätespeicher unter dem unten angegebenen Pfad gespeichert.</string>
     <string name="import_realm_title">Tagebuch wiederherstellen</string>
     <string name="import_realm_description">Stellt Datenbankdateien aus dem Gerätespeicher mit Ausnahme von Anhängen wieder her.</string>
@@ -601,7 +601,7 @@
     <string name="count_characters_title">Zählen von Text</string>
     <string name="count_characters_summary">Zählen Sie die Anzahl der Zeichen im Körper des Tagebuchs.</string>
     <string name="send_email_attach_excel_title">Erstellung von Excel-Dateien und E-Mail-Versand</string>
-    <string name="send_email_attach_excel_description">Alle Inhalte mit Ausnahme des angehängten Fotos werden als Excel-Datei erstellt und an die E-Mail angehängt.</string>
+    <string name="send_email_attach_excel_description">Alle Inhalte mit Ausnahme der angehängten Fotos werden als Excel-Datei erstellt und an die E-Mail angehängt.</string>
     <string name="storage_migration_message">Änderungen des Speicherorts werden in Übereinstimmung mit der Richtlinie für Android 10 Scoped Storage vorgenommen. Dieser Job wird nur einmal ausgeführt.</string>
     <string name="google_drive_account_sign_out_title">Verknüpftes Google Drive-Konto zurücksetzen</string>
     <string name="google_drive_account_sign_out_description">Entfernen von Token-Informationen, die von Easy Diary über ein verlinktes Google Drive-Konto veröffentlicht wurden.</string>
@@ -615,7 +615,7 @@
     <string name="dashboard_guide_message">Es gibt nicht genügend Daten, um Ranglistendaten zu generieren. Sie müssen ein Tagebuch mit mindestens 4 Symbolen schreiben, um das Dashboard-Ranking zu aktivieren.</string>
     <string name="delete_realm_title">Sicherungsdatei löschen</string>
     <string name="delete_realm_description">Löschen Sie die im Speicher gespeicherte Sicherungsdatei.</string>
-    <string name="menu_dashboard">Instrumententafel</string>
+    <string name="menu_dashboard">Dashboard</string>
     <string name="dashboard_title_backup_drive">Google Drive-Sicherungsverlauf</string>
     <string name="dashboard_title_backup_local">Sicherungshistorie für lokale Geräte</string>
     <string name="dashboard_backup_guide_message">Keine Sicherungsinformationen</string>
@@ -677,4 +677,7 @@
     <string name="schedule_diary_writing_complete">Berühren Sie das Benachrichtigungsfenster, um zum Tagebuchbildschirm zu gelangen.</string>
     <string name="schedule_backup_local_complete">Tagebuchsicherung auf lokalem Gerät abgeschlossen.</string>
     <string name="schedule_backup_gms_complete">Die Sicherungsdatei des Tagebuchs und das angehängte Foto wurden in Google Drive gespeichert.%s</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Abruch</string>
+    <string name="settings">Einstellungen</string>
 </resources>

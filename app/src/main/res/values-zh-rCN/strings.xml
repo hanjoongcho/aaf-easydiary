@@ -677,4 +677,7 @@
     <string name="schedule_diary_writing_complete">Touch the notification window to go to the diary screen.</string>
     <string name="schedule_backup_local_complete">Diary backup completed on local device.</string>
     <string name="schedule_backup_gms_complete">The diary backup file and attached photo were saved in Google Drive.%s</string>
+    <string name="ok">确认</string>
+    <string name="cancel">取消</string>
+    <string name="settings">设置</string>
 </resources>

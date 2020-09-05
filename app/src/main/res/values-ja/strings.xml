@@ -677,4 +677,7 @@
     <string name="schedule_diary_writing_complete">通知ウィンドウをタッチして日記画面に移動します。</string>
     <string name="schedule_backup_local_complete">ローカルデバイスで日記のバックアップが完了しました。</string>
     <string name="schedule_backup_gms_complete">ダイアリーバックアップファイルと添付写真は、Googleドライブに保存されました。%s</string>
+    <string name="ok">OK</string>
+    <string name="cancel">キャンセル</string>
+    <string name="settings">設定</string>
 </resources>

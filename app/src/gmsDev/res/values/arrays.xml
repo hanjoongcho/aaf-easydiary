@@ -1,16 +1,16 @@
 <resources>
     <string-array name="weather_item_array">
         <item>0|Not selected</item>
-        <item>1|Sunny</item>
-        <item>2|Cloud and Sun</item>
-        <item>3|RAIN Drops</item>
-        <item>4|BOLT</item>
-        <item>5|Snowing</item>
-        <item>6|Rainbow</item>
-        <item>7|Umbrella</item>
-        <item>8|Stars</item>
+        <item>1|Sonnig</item>
+        <item>2|Sonnig mit Wolken</item>
+        <item>3|Regen</item>
+        <item>5|Schnee</item>
+        <item>4|Gewitter</item>
         <item>9|Moon</item>
         <item>10|Night Rain</item>
+        <item>7|Umbrella</item>
+        <item>6|Rainbow</item>
+        <item>8|Stars</item>
     </string-array>
 
     <string-array name="pref_list_fonts_title">
