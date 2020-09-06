@@ -13,9 +13,15 @@ import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.view.View
 import android.widget.RemoteViews
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
+import androidx.core.location.LocationManagerCompat
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import io.github.aafactory.commons.helpers.PERMISSION_ACCESS_COARSE_LOCATION
@@ -25,6 +31,8 @@ import kotlinx.android.synthetic.main.activity_dev.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.checkPermission
+import me.blog.korn123.easydiary.extensions.makeSnackBar
+import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.ActionLog
@@ -114,6 +122,24 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     }
                     locationManagerInfo.text = info
                 }
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
+        pauseLock()
+
+        when (resultCode == Activity.RESULT_OK && intent != null) {
+            true -> {
+                when (requestCode) {
+                    REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS -> {
+                        makeSnackBar("GPS provider setting is activated.")
+                    }
+                }
+            }
+            false -> {
+                makeSnackBar("The request operation did not complete normally.")
             }
         }
     }
@@ -216,12 +242,21 @@ data class NotificationInfo(var largeIconResourceId: Int, var useActionButton: B
  *   extensions
  *
  ***************************************************************************************************/
+fun isLocationEnabled(context: Context): Boolean {
+    val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    return LocationManagerCompat.isLocationEnabled(locationManager)
+}
+
 fun EasyDiaryActivity.getLocationWithGPSProvider(callback: (location: Location?) -> Unit) {
+    val gpsProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    val networkProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
     when (checkPermission(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,  Manifest.permission.ACCESS_COARSE_LOCATION))) {
         true -> {
-            val gpsProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            val networkProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            callback(gpsProvider.getLastKnownLocation(LocationManager.GPS_PROVIDER) ?: networkProvider.getLastKnownLocation(LocationManager.NETWORK_PROVIDER))
+            if (isLocationEnabled(this)) {
+                callback(gpsProvider.getLastKnownLocation(LocationManager.GPS_PROVIDER) ?: networkProvider.getLastKnownLocation(LocationManager.NETWORK_PROVIDER))
+            } else {
+                startActivityForResult(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS)
+            }
         }
         false -> {
             // TODO: Consider calling
@@ -235,9 +270,11 @@ fun EasyDiaryActivity.getLocationWithGPSProvider(callback: (location: Location?)
                 if (hasCoarseLocation) {
                     handlePermission(PERMISSION_ACCESS_FINE_LOCATION) { hasFineLocation ->
                         if (hasFineLocation) {
-                            val gpsProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-                            val networkProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-                            callback(gpsProvider.getLastKnownLocation(LocationManager.GPS_PROVIDER) ?: networkProvider.getLastKnownLocation(LocationManager.NETWORK_PROVIDER))
+                            if (isLocationEnabled(this)) {
+                                callback(gpsProvider.getLastKnownLocation(LocationManager.GPS_PROVIDER) ?: networkProvider.getLastKnownLocation(LocationManager.NETWORK_PROVIDER))
+                            } else {
+                                startActivityForResult(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS)
+                            }
                         }
                     }
                 }
