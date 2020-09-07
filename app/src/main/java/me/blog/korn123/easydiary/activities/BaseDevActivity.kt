@@ -130,16 +130,9 @@ open class BaseDevActivity : EasyDiaryActivity() {
         super.onActivityResult(requestCode, resultCode, intent)
         pauseLock()
 
-        when (resultCode == Activity.RESULT_OK && intent != null) {
-            true -> {
-                when (requestCode) {
-                    REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS -> {
-                        makeSnackBar("GPS provider setting is activated.")
-                    }
-                }
-            }
-            false -> {
-                makeSnackBar("The request operation did not complete normally.")
+        when (requestCode) {
+            REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS -> {
+                makeSnackBar(if (isLocationEnabled(this)) "GPS provider setting is activated." else "The request operation did not complete normally.")
             }
         }
     }
