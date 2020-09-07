@@ -1,5 +1,6 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_holder"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -76,6 +77,9 @@
                     android:inputType="text|textCapSentences|textAutoCorrect|textMultiLine|textLongMessage" />
             </ScrollView>
             <TextView
+                tools:visibility="visible"
+                tools:text="100"
+                android:alpha="0.5"
                 android:id="@+id/contentsLength"
                 android:visibility="gone"
                 android:padding="5dp"
