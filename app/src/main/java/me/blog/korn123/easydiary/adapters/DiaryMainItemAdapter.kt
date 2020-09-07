@@ -56,12 +56,16 @@ class DiaryMainItemAdapter(
                         itemView.photoContainer, itemView.photoViews,
                         itemView.text1, itemView.text2, itemView.text3,
                         itemView.contentsLength, itemView.weather, itemView.item_holder,
-                        itemView.selection
+                        itemView.selection, itemView.locationSymbol
                 )
                 itemView.tag = viewHolder
                 viewHolder
             }
         }.run {
+            activity.run {
+                changeDrawableIconColor(config.primaryColor, R.drawable.map_marker_2)
+            }
+
             val diaryDto = list[position]
             selection.setOnCheckedChangeListener { _, isChecked ->
                 EasyDiaryDbHelper.beginTransaction()
@@ -187,6 +191,6 @@ class DiaryMainItemAdapter(
             val photoContainer: RelativeLayout, val photoViews: LinearLayout,
             val textView1: TextView, val textView2: TextView, val textView3: TextView,
             val contentsLength: TextView, val imageView: ImageView, val item_holder: ViewGroup,
-            val selection: CheckBox
+            val selection: CheckBox, val locationSymbol:ImageView
     )
 }

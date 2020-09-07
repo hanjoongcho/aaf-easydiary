@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_holder"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -7,6 +9,28 @@
         style="@style/AppCard">
         <LinearLayout
             style="@style/LinearLayoutVertical">
+            <LinearLayout
+                android:layout_marginBottom="@dimen/card_contents_padding"
+                android:padding="5dp"
+                android:layout_gravity="end"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:background="@drawable/bg_card_stamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_marginRight="3dp"
+                    android:id="@+id/locationSymbol"
+                    android:src="@drawable/map_marker_2"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"/>
+                <TextView
+                    android:id="@+id/location"
+                    android:text="경기도 성남시 수정구"
+                    android:textColor="?attr/colorPrimary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
             <LinearLayout
                 style="@style/LinearLayoutHorizontal">
                 <androidx.appcompat.widget.AppCompatCheckBox
