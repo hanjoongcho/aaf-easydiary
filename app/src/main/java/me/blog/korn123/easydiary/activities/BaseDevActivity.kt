@@ -30,10 +30,7 @@ import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_dev.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.extensions.checkPermission
-import me.blog.korn123.easydiary.extensions.makeSnackBar
-import me.blog.korn123.easydiary.extensions.pauseLock
-import me.blog.korn123.easydiary.extensions.showAlertDialog
+import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.services.BaseNotificationService
@@ -132,7 +129,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
         when (requestCode) {
             REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS -> {
-                makeSnackBar(if (isLocationEnabled(this)) "GPS provider setting is activated." else "The request operation did not complete normally.")
+                makeSnackBar(if (isLocationEnabled()) "GPS provider setting is activated." else "The request operation did not complete normally.")
             }
         }
     }
@@ -142,17 +139,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
      *   etc functions
      *
      ***************************************************************************************************/
-    private fun fullAddress(address: Address): String {
-        val sb = StringBuilder()
-        if (address.countryName != null) sb.append(address.countryName).append(" ")
-        if (address.adminArea != null) sb.append(address.adminArea).append(" ")
-        if (address.locality != null) sb.append(address.locality).append(" ")
-        if (address.subLocality != null) sb.append(address.subLocality).append(" ")
-        if (address.thoroughfare != null) sb.append(address.thoroughfare).append(" ")
-        if (address.featureName != null) sb.append(address.featureName).append(" ")
-        return sb.toString()
-    }
-
     private fun updateActionLog() {
         val actionLogs: List<ActionLog> = EasyDiaryDbHelper.readActionLogAll()
         val sb = StringBuilder()
@@ -235,17 +221,12 @@ data class NotificationInfo(var largeIconResourceId: Int, var useActionButton: B
  *   extensions
  *
  ***************************************************************************************************/
-fun isLocationEnabled(context: Context): Boolean {
-    val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-    return LocationManagerCompat.isLocationEnabled(locationManager)
-}
-
 fun EasyDiaryActivity.getLocationWithGPSProvider(callback: (location: Location?) -> Unit) {
     val gpsProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
     val networkProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
     when (checkPermission(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,  Manifest.permission.ACCESS_COARSE_LOCATION))) {
         true -> {
-            if (isLocationEnabled(this)) {
+            if (isLocationEnabled()) {
                 callback(gpsProvider.getLastKnownLocation(LocationManager.GPS_PROVIDER) ?: networkProvider.getLastKnownLocation(LocationManager.NETWORK_PROVIDER))
             } else {
                 startActivityForResult(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS)
@@ -263,7 +244,7 @@ fun EasyDiaryActivity.getLocationWithGPSProvider(callback: (location: Location?)
                 if (hasCoarseLocation) {
                     handlePermission(PERMISSION_ACCESS_FINE_LOCATION) { hasFineLocation ->
                         if (hasFineLocation) {
-                            if (isLocationEnabled(this)) {
+                            if (isLocationEnabled()) {
                                 callback(gpsProvider.getLastKnownLocation(LocationManager.GPS_PROVIDER) ?: networkProvider.getLastKnownLocation(LocationManager.NETWORK_PROVIDER))
                             } else {
                                 startActivityForResult(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS)

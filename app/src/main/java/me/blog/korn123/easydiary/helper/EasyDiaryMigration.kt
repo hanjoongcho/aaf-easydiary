@@ -6,6 +6,7 @@ import io.realm.FieldAttribute
 import io.realm.RealmMigration
 import io.realm.RealmObjectSchema
 import me.blog.korn123.easydiary.models.Alarm
+import me.blog.korn123.easydiary.models.Location
 
 /**
  * Created by hanjoong on 2017-03-25.
@@ -140,6 +141,15 @@ class EasyDiaryMigration : RealmMigration {
 
             if (currentVersion == 17L) {
                 schema.get("Alarm")?.addField("retryCount", Int::class.java)
+                currentVersion++
+            }
+
+            if (currentVersion == 18L) {
+                val location = schema.create("Location")
+                        .addField("address", String::class.java)
+                        .addField("latitude", Double::class.java)
+                        .addField("longitude", Double::class.java)
+                it.addRealmObjectField("location", location)
                 currentVersion++
             }
 

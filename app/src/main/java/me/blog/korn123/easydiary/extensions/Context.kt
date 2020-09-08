@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.extensions
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
@@ -9,6 +10,9 @@ import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.*
 import android.graphics.drawable.GradientDrawable
+import android.location.Address
+import android.location.Location
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
@@ -34,6 +38,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.graphics.ColorUtils
+import androidx.core.location.LocationManagerCompat
 import com.google.gson.GsonBuilder
 import com.simplemobiletools.commons.extensions.adjustAlpha
 import com.simplemobiletools.commons.extensions.formatMinutesToTimeString
@@ -246,7 +251,7 @@ fun Context.initTextSize(viewGroup: ViewGroup) {
                     }
                     is TextView -> { 
                         when (it.id) {
-                            R.id.contentsLength, R.id.location -> it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize * 0.8F)
+                            R.id.contentsLength, R.id.locationLabel -> it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize * 0.8F)
                             R.id.symbolTextArrow -> {}
                             R.id.createdDate -> {}
                             else -> it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
@@ -628,4 +633,32 @@ fun Context.forceInitRealmLessThenOreo() {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
         Realm.init(this)
     }
+}
+
+fun Context.isLocationEnabled(): Boolean {
+    val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    return LocationManagerCompat.isLocationEnabled(locationManager)
+}
+
+fun Context.getLastKnownLocation(): Location? {
+    val gpsProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    val networkProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+    return when (checkPermission(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,  Manifest.permission.ACCESS_COARSE_LOCATION)) && isLocationEnabled()) {
+        true -> {
+            gpsProvider.getLastKnownLocation(LocationManager.GPS_PROVIDER) ?: networkProvider.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+        }
+        false -> null
+    }
+}
+
+fun Context.fullAddress(address: Address): String {
+    val sb = StringBuilder()
+    if (address.countryName != null) sb.append(address.countryName).append(" ")
+    if (address.adminArea != null) sb.append(address.adminArea).append(" ")
+    if (address.locality != null) sb.append(address.locality).append(" ")
+    if (address.subLocality != null) sb.append(address.subLocality).append(" ")
+    if (address.thoroughfare != null) sb.append(address.thoroughfare).append(" ")
+    if (address.featureName != null) sb.append(address.featureName).append(" ")
+    return sb.toString()
 }

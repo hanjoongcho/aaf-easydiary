@@ -64,6 +64,7 @@ class DiaryUpdateActivity : EditActivity() {
                     }
                 }
 
+                if (mLocation != null) diaryDto.location = mLocation
                 diaryDto.weather = mSelectedItemPosition
                 diaryDto.isAllDay = allDay.isChecked
                 applyRemoveIndex()
@@ -195,6 +196,9 @@ class DiaryUpdateActivity : EditActivity() {
 
 //        initSpinner()
         selectFeelingSymbol(mWeather)
+        diaryDto.location?.let {
+            locationLabel.text = it.address
+        }
     }
 
     private fun bindEvent() {
@@ -205,7 +209,8 @@ class DiaryUpdateActivity : EditActivity() {
         timePicker.setOnClickListener(mEditListener)
         secondsPicker.setOnClickListener(mEditListener)
         microphone.setOnClickListener(mEditListener)
-        
+        locationContainer.setOnClickListener(mEditListener)
+
         diaryTitle.setOnTouchListener { view, motionEvent ->
             mCurrentCursor = 0
             false

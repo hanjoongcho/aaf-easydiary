@@ -229,8 +229,9 @@ class DiaryInsertActivity : EditActivity() {
         timePicker.setOnClickListener(mEditListener)
         secondsPicker.setOnClickListener(mEditListener)
         microphone.setOnClickListener(mEditListener)
+        locationContainer.setOnClickListener(mEditListener)
 
-        diaryTitle.setOnTouchListener { _, _ ->
+        diaryTitle.setOnTouchListener { view, _ ->
             mCurrentCursor = 0
             false
         }

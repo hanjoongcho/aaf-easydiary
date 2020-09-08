@@ -10,28 +10,6 @@
         <LinearLayout
             style="@style/LinearLayoutVertical">
             <LinearLayout
-                android:layout_marginBottom="@dimen/card_contents_padding"
-                android:padding="5dp"
-                android:layout_gravity="end"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:background="@drawable/bg_card_stamp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:layout_marginRight="3dp"
-                    android:id="@+id/locationSymbol"
-                    android:src="@drawable/map_marker_2"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"/>
-                <TextView
-                    android:id="@+id/location"
-                    android:text="경기도 성남시 수정구"
-                    android:textColor="?attr/colorPrimary"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
-            <LinearLayout
                 style="@style/LinearLayoutHorizontal">
                 <androidx.appcompat.widget.AppCompatCheckBox
                     android:id="@+id/selection"
@@ -67,16 +45,6 @@
                 android:gravity="start"
                 style="@style/text_view_diary_main_item_inner_contents"/>
 
-            <TextView
-                android:id="@+id/contentsLength"
-                android:visibility="gone"
-                android:padding="5dp"
-                android:textColor="?attr/colorPrimary"
-                android:background="@drawable/bg_card_stamp"
-                android:layout_gravity="bottom|end"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
             <RelativeLayout
                 android:id="@+id/photoContainer"
                 android:layout_marginTop="@dimen/card_contents_padding"
@@ -89,7 +57,48 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent">
                 </LinearLayout>
-            </RelativeLayout>    
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_marginTop="@dimen/card_contents_padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_marginRight="10dp"
+                    android:layout_toStartOf="@id/contentsLength"
+                    android:padding="5dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_card_stamp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_marginRight="3dp"
+                        android:id="@+id/locationSymbol"
+                        android:src="@drawable/map_marker_2"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"/>
+                    <TextView
+                        android:id="@+id/locationLabel"
+                        android:text="There is no location information. Click to update location information."
+                        android:textColor="?attr/colorPrimary"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+                <TextView
+                    android:layout_alignParentEnd="true"
+                    tools:visibility="visible"
+                    tools:text="100"
+                    android:id="@+id/contentsLength"
+                    android:visibility="gone"
+                    android:padding="5dp"
+                    android:textColor="?attr/colorPrimary"
+                    android:background="@drawable/bg_card_stamp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </RelativeLayout>    

@@ -8,6 +8,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -61,10 +62,11 @@ abstract class EditActivity : EasyDiaryActivity() {
     protected lateinit var mDatePickerDialog: DatePickerDialog
     protected lateinit var mTimePickerDialog: TimePickerDialog
     protected lateinit var mSecondsPickerDialog: AlertDialog
+    private val mCalendar = Calendar.getInstance(Locale.getDefault())
     protected val mRemoveIndexes = ArrayList<Int>()
     protected var mCurrentTimeMillis: Long = 0
-    private val mCalendar = Calendar.getInstance(Locale.getDefault())
     protected var mYear = mCalendar.get(Calendar.YEAR)
+    protected var mLocation: me.blog.korn123.easydiary.models.Location? = null
 
     /**
      * mMonth is not Calendar.MONTH
@@ -194,9 +196,25 @@ abstract class EditActivity : EasyDiaryActivity() {
                 mSecondsPickerDialog.show()
             }
             R.id.microphone -> showSpeechDialog()
+            R.id.locationContainer -> {
+                locationProgress.visibility = View.VISIBLE
+                getLastKnownLocation()?.let { knownLocation ->
+                    var locationInfo: String? = null
+                    getFromLocation(knownLocation.latitude, knownLocation.longitude, 1)?.let { address ->
+                        if (address.isNotEmpty()) {
+                            locationInfo = fullAddress(address[0])
+                            mLocation = me.blog.korn123.easydiary.models.Location(locationInfo, knownLocation.latitude, knownLocation.longitude)
+                        }
+                    }
+                    locationLabel.text = locationInfo
+                } ?: {
+                    makeToast("Location information cannot be received.")
+                } ()
+                locationProgress.visibility = View.GONE
+            }
         }
     }
-    
+
     protected var mStartDateListener: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
         mYear = year
         mMonth = month + 1
