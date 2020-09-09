@@ -5,14 +5,11 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import io.noties.markwon.Markwon
 import kotlinx.android.synthetic.main.activity_markdown_view.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.extensions.checkPermission
-import me.blog.korn123.easydiary.extensions.confirmPermission
-import me.blog.korn123.easydiary.extensions.pauseLock
+import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
 import me.blog.korn123.easydiary.helper.MARKDOWN_DIRECTORY
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE_WITH_MARKDOWN
@@ -20,11 +17,9 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import java.io.File
 import java.io.FileInputStream
+import java.io.FileNotFoundException
 import java.net.HttpURLConnection
 import java.net.URL
-import io.noties.markwon.Markwon
-import me.blog.korn123.easydiary.extensions.makeSnackBar
-import java.io.FileNotFoundException
 
 
 class MarkDownViewActivity : EasyDiaryActivity() {
@@ -75,21 +70,28 @@ class MarkDownViewActivity : EasyDiaryActivity() {
 
 
     private fun openMarkdownFileAfterDownload(fileURL: String, saveFilePath: String) {
-        val url = URL(fileURL)
-        val httpConn = url.openConnection() as HttpURLConnection
-        val responseCode = httpConn.responseCode
-        // always check HTTP response code first
-        if (responseCode == HttpURLConnection.HTTP_OK) {
-            // opens input stream from the HTTP connection
-            val inputStream = httpConn.inputStream
-            FileUtils.copyInputStreamToFile(inputStream, File(saveFilePath))
-            inputStream.close()
-        }
-        httpConn.disconnect()
+        if (isConnectedOrConnecting()) {
+            val url = URL(fileURL)
+            val httpConn = url.openConnection() as HttpURLConnection
+            val responseCode = httpConn.responseCode
+            // always check HTTP response code first
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                // opens input stream from the HTTP connection
+                val inputStream = httpConn.inputStream
+                FileUtils.copyInputStreamToFile(inputStream, File(saveFilePath))
+                inputStream.close()
+            }
+            httpConn.disconnect()
 
-        runOnUiThread {
-            progressBar.visibility = View.GONE
-            mMarkDown.setMarkdown(markdownView, readSavedFile())
+            runOnUiThread {
+                progressBar.visibility = View.GONE
+                mMarkDown.setMarkdown(markdownView, readSavedFile())
+            }
+        } else {
+            runOnUiThread {
+                progressBar.visibility = View.GONE
+                makeToast("Network is not available.")
+            }
         }
     }
 

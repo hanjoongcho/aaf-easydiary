@@ -14,6 +14,8 @@ import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
@@ -678,4 +680,10 @@ fun Context.fullAddress(address: Address): String {
     if (address.thoroughfare != null) sb.append(address.thoroughfare).append(" ")
     if (address.featureName != null) sb.append(address.featureName).append(" ")
     return sb.toString()
+}
+
+fun Context.isConnectedOrConnecting(): Boolean {
+    val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
+    return activeNetwork?.isConnectedOrConnecting == true
 }
