@@ -197,20 +197,7 @@ abstract class EditActivity : EasyDiaryActivity() {
             }
             R.id.microphone -> showSpeechDialog()
             R.id.locationContainer -> {
-                locationProgress.visibility = View.VISIBLE
-                getLastKnownLocation()?.let { knownLocation ->
-                    var locationInfo: String? = null
-                    getFromLocation(knownLocation.latitude, knownLocation.longitude, 1)?.let { address ->
-                        if (address.isNotEmpty()) {
-                            locationInfo = fullAddress(address[0])
-                            mLocation = me.blog.korn123.easydiary.models.Location(locationInfo, knownLocation.latitude, knownLocation.longitude)
-                        }
-                    }
-                    locationLabel.text = locationInfo
-                } ?: {
-                    makeToast("Location information cannot be received.")
-                } ()
-                locationProgress.visibility = View.GONE
+                setLocationInfo()
             }
         }
     }
@@ -226,6 +213,25 @@ abstract class EditActivity : EasyDiaryActivity() {
         mHourOfDay = hourOfDay
         mMinute = minute
         setDateTime()
+    }
+
+    fun setLocationInfo() {
+        if (config.enableLocationInfo) {
+            locationProgress.visibility = View.VISIBLE
+            getLastKnownLocation()?.let { knownLocation ->
+                var locationInfo: String? = null
+                getFromLocation(knownLocation.latitude, knownLocation.longitude, 1)?.let { address ->
+                    if (address.isNotEmpty()) {
+                        locationInfo = fullAddress(address[0])
+                        mLocation = me.blog.korn123.easydiary.models.Location(locationInfo, knownLocation.latitude, knownLocation.longitude)
+                    }
+                }
+                locationLabel.text = locationInfo
+            } ?: {
+                makeToast("Location information cannot be received.")
+            } ()
+            locationProgress.visibility = View.GONE
+        }
     }
 
     protected fun applyRemoveIndex() {

@@ -14,6 +14,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import kotlinx.android.synthetic.main.layout_settings_basic.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.CustomizationActivity
+import me.blog.korn123.easydiary.activities.EasyDiaryActivity
 import me.blog.korn123.easydiary.adapters.OptionItemAdapter
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
@@ -93,6 +94,32 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
                 countCharactersSwitcher.toggle()
                 mActivity.config.enableCountCharacters = countCharactersSwitcher.isChecked
             }
+            R.id.locationInfo -> {
+                locationInfoSwitcher.toggle()
+                when (locationInfoSwitcher.isChecked) {
+                    true -> {
+                        mActivity.run {
+                            when (hasGPSPermissions()) {
+                                true -> {
+                                    mActivity.config.enableLocationInfo = locationInfoSwitcher.isChecked
+                                }
+                                false -> {
+                                    locationInfoSwitcher.isChecked = false
+                                    if (this is EasyDiaryActivity) {
+                                        acquireGPSPermissions {
+                                            locationInfoSwitcher.isChecked = true
+                                            mActivity.config.enableLocationInfo = locationInfoSwitcher.isChecked
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    false -> {
+                        mActivity.config.enableLocationInfo = locationInfoSwitcher.isChecked
+                    }
+                }
+            }
             R.id.holdPositionEnterEditScreen -> {
                 holdPositionSwitcher.toggle()
                 mActivity.config.holdPositionEnterEditScreen = holdPositionSwitcher.isChecked
@@ -129,6 +156,7 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
             }
         }
         countCharacters.setOnClickListener(mOnClickListener)
+        locationInfo.setOnClickListener(mOnClickListener)
         holdPositionEnterEditScreen.setOnClickListener(mOnClickListener)
     }
 
@@ -138,6 +166,7 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
         enableCardViewPolicySwitcher.isChecked = mActivity.config.enableCardViewPolicy
         contentsSummarySwitcher.isChecked = mActivity.config.enableContentsSummary
         countCharactersSwitcher.isChecked = mActivity.config.enableCountCharacters
+        locationInfoSwitcher.isChecked = mActivity.config.enableLocationInfo
         when (mActivity.config.calendarStartDay) {
             CALENDAR_START_DAY_MONDAY -> startMonday.isChecked = true
             CALENDAR_START_DAY_SATURDAY -> startSaturday.isChecked = true

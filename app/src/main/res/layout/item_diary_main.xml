@@ -64,6 +64,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <LinearLayout
+                    android:id="@+id/locationContainer"
                     android:layout_marginRight="10dp"
                     android:layout_toStartOf="@id/contentsLength"
                     android:padding="5dp"

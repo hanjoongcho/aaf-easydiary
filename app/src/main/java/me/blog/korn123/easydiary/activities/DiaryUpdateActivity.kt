@@ -196,8 +196,11 @@ class DiaryUpdateActivity : EditActivity() {
 
 //        initSpinner()
         selectFeelingSymbol(mWeather)
-        diaryDto.location?.let {
-            locationLabel.text = it.address
+        if (config.enableLocationInfo) {
+            diaryDto.location?.let {
+                locationContainer.visibility = View.VISIBLE
+                locationLabel.text = it.address
+            }
         }
     }
 

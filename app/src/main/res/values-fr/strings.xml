@@ -684,4 +684,6 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="settings">Settings</string>
+    <string name="location_info_title">Location information display</string>
+    <string name="location_info_description">The location information is displayed in the diary using GPS information.</string>
 </resources>

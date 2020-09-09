@@ -11,6 +11,7 @@ import android.content.res.Configuration
 import android.graphics.*
 import android.graphics.drawable.GradientDrawable
 import android.location.Address
+import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
@@ -640,6 +641,8 @@ fun Context.isLocationEnabled(): Boolean {
     return LocationManagerCompat.isLocationEnabled(locationManager)
 }
 
+fun Context.hasGPSPermissions() = checkPermission(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,  Manifest.permission.ACCESS_COARSE_LOCATION)) && isLocationEnabled()
+
 fun Context.getLastKnownLocation(): Location? {
     val gpsProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
     val networkProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -651,6 +654,20 @@ fun Context.getLastKnownLocation(): Location? {
         false -> null
     }
 }
+
+
+fun Context.getFromLocation(latitude: Double, longitude: Double, maxResults: Int): List<Address>? {
+//    val lat = java.lang.Double.parseDouble(String.format("%.6f", latitude))
+//    val lon = java.lang.Double.parseDouble(String.format("%.7f", longitude))
+    val addressList = arrayListOf<Address>()
+    try {
+        addressList.addAll(Geocoder(this, Locale.getDefault()).getFromLocation(latitude, longitude, maxResults))
+    } catch (e: Exception) {
+        toast(e.message ?: "Error")
+    }
+    return addressList
+}
+
 
 fun Context.fullAddress(address: Address): String {
     val sb = StringBuilder()

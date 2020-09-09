@@ -83,8 +83,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <LinearLayout
+                    tools:visibility="visible"
                     android:id="@+id/locationContainer"
-                    android:layout_marginRight="10dp"
+                    android:visibility="gone"
+                    android:layout_marginEnd="10dp"
                     android:layout_toStartOf="@id/contentsLength"
                     android:padding="5dp"
                     android:gravity="center"

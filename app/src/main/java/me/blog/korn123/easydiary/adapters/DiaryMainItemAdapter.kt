@@ -21,7 +21,6 @@ import io.github.aafactory.commons.utils.CALCULATION
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.item_diary_main.view.*
-import kotlinx.android.synthetic.main.layout_edit_contents.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
@@ -57,20 +56,26 @@ class DiaryMainItemAdapter(
                         itemView.photoContainer, itemView.photoViews,
                         itemView.text1, itemView.text2, itemView.text3,
                         itemView.contentsLength, itemView.weather, itemView.item_holder,
-                        itemView.selection, itemView.locationSymbol, itemView.locationLabel
+                        itemView.selection, itemView.locationSymbol, itemView.locationLabel,
+                        itemView.locationContainer
                 )
                 itemView.tag = viewHolder
                 viewHolder
             }
         }.run {
+            val diaryDto = list[position]
             activity.run {
                 changeDrawableIconColor(config.primaryColor, R.drawable.map_marker_2)
+                if (config.enableLocationInfo) {
+                    diaryDto.location?.let {
+                        locationLabel.text = it.address
+                        locationContainer.visibility = View.VISIBLE
+                    } ?: { locationContainer.visibility = View.GONE } ()
+                } else {
+                    locationContainer.visibility = View.GONE
+                }
             }
 
-            val diaryDto = list[position]
-            diaryDto.location?.let {
-                locationLabel.text = it.address
-            }
             selection.setOnCheckedChangeListener { _, isChecked ->
                 EasyDiaryDbHelper.beginTransaction()
                 diaryDto.isSelected = isChecked
@@ -195,6 +200,7 @@ class DiaryMainItemAdapter(
             val photoContainer: RelativeLayout, val photoViews: LinearLayout,
             val textView1: TextView, val textView2: TextView, val textView3: TextView,
             val contentsLength: TextView, val imageView: ImageView, val item_holder: ViewGroup,
-            val selection: CheckBox, val locationSymbol:ImageView, val locationLabel: TextView
+            val selection: CheckBox, val locationSymbol:ImageView, val locationLabel: TextView,
+            val locationContainer: LinearLayout
     )
 }

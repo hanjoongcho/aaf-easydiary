@@ -38,7 +38,7 @@ class DiaryInsertActivity : EditActivity() {
 
     private val mOnClickListener = View.OnClickListener { view ->
         hideSoftInputFromWindow()
-
+        setLocationInfo()
         if (StringUtils.isEmpty(diaryContents.text)) {
             diaryContents.requestFocus()
             makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
@@ -51,6 +51,7 @@ class DiaryInsertActivity : EditActivity() {
                     mSelectedItemPosition,
                     allDay.isChecked
             )
+            if (mLocation != null) diaryDto.location = mLocation
             applyRemoveIndex()
             diaryDto.photoUris = mPhotoUris
             EasyDiaryDbHelper.insertDiary(diaryDto)
@@ -229,7 +230,6 @@ class DiaryInsertActivity : EditActivity() {
         timePicker.setOnClickListener(mEditListener)
         secondsPicker.setOnClickListener(mEditListener)
         microphone.setOnClickListener(mEditListener)
-        locationContainer.setOnClickListener(mEditListener)
 
         diaryTitle.setOnTouchListener { view, _ ->
             mCurrentCursor = 0

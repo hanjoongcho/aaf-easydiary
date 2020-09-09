@@ -136,4 +136,8 @@ class Config(context: Context) : BaseConfig(context) {
     var enableDebugMode: Boolean
         get() = prefs.getBoolean(SETTING_ENABLE_DEBUG_CONSOLE, false)
         set(enableDebugMode) = prefs.edit().putBoolean(SETTING_ENABLE_DEBUG_CONSOLE, enableDebugMode).apply()
+
+    var enableLocationInfo: Boolean
+        get() = prefs.getBoolean(SETTING_LOCATION_INFO, false)
+        set(enableLocationInfo) = prefs.edit().putBoolean(SETTING_LOCATION_INFO, enableLocationInfo).apply()
 }

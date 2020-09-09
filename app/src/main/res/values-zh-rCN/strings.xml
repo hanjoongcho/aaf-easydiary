@@ -684,4 +684,6 @@
     <string name="ok">确认</string>
     <string name="cancel">取消</string>
     <string name="settings">设置</string>
+    <string name="location_info_title">Location information display</string>
+    <string name="location_info_description">The location information is displayed in the diary using GPS information.</string>
 </resources>

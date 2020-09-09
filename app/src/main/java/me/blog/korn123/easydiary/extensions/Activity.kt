@@ -13,7 +13,10 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.graphics.Point
+import android.location.Location
+import android.location.LocationManager
 import android.net.Uri
+import android.provider.Settings
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -27,14 +30,18 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
+import io.github.aafactory.commons.helpers.PERMISSION_ACCESS_COARSE_LOCATION
+import io.github.aafactory.commons.helpers.PERMISSION_ACCESS_FINE_LOCATION
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
+import me.blog.korn123.easydiary.activities.EasyDiaryActivity
 import me.blog.korn123.easydiary.activities.FingerprintLockActivity
 import me.blog.korn123.easydiary.activities.PinLockActivity
 import me.blog.korn123.easydiary.adapters.SymbolPagerAdapter
 import me.blog.korn123.easydiary.dialogs.WhatsNewDialog
 import me.blog.korn123.easydiary.helper.DIARY_EXECUTION_MODE
 import me.blog.korn123.easydiary.helper.EXECUTION_MODE_ACCESS_FROM_OUTSIDE
+import me.blog.korn123.easydiary.helper.REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.views.SlidingTabLayout
 import kotlin.system.exitProcess
@@ -292,6 +299,58 @@ fun Activity.addCategory(itemList: ArrayList<Array<String>>, categoryList: Array
     if (resourceId != 0) {
         itemList.add(resources.getStringArray(resourceId))
         categoryList.add(categoryName)
+    }
+}
+
+fun EasyDiaryActivity.acquireGPSPermissions(callback: () -> Unit) {
+    handlePermission(PERMISSION_ACCESS_COARSE_LOCATION) { hasCoarseLocation ->
+        if (hasCoarseLocation) {
+            handlePermission(PERMISSION_ACCESS_FINE_LOCATION) { hasFineLocation ->
+                if (hasFineLocation) {
+                    if (isLocationEnabled()) {
+                        callback()
+                    } else {
+                        startActivityForResult(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS)
+                    }
+                }
+            }
+        }
+    }
+}
+
+fun EasyDiaryActivity.getLocationWithGPSProvider(callback: (location: Location?) -> Unit) {
+    val gpsProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    val networkProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    when (checkPermission(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,  Manifest.permission.ACCESS_COARSE_LOCATION))) {
+        true -> {
+            if (isLocationEnabled()) {
+                callback(gpsProvider.getLastKnownLocation(LocationManager.GPS_PROVIDER) ?: networkProvider.getLastKnownLocation(LocationManager.NETWORK_PROVIDER))
+            } else {
+                startActivityForResult(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS)
+            }
+        }
+        false -> {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            handlePermission(PERMISSION_ACCESS_COARSE_LOCATION) { hasCoarseLocation ->
+                if (hasCoarseLocation) {
+                    handlePermission(PERMISSION_ACCESS_FINE_LOCATION) { hasFineLocation ->
+                        if (hasFineLocation) {
+                            if (isLocationEnabled()) {
+                                callback(gpsProvider.getLastKnownLocation(LocationManager.GPS_PROVIDER) ?: networkProvider.getLastKnownLocation(LocationManager.NETWORK_PROVIDER))
+                            } else {
+                                startActivityForResult(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS)
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
