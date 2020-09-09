@@ -200,7 +200,13 @@ class DiaryUpdateActivity : EditActivity() {
             diaryDto.location?.let {
                 locationContainer.visibility = View.VISIBLE
                 locationLabel.text = it.address
-            }
+            } ?: {
+                setLocationInfo()
+                mLocation?.let {
+                    locationContainer.visibility = View.VISIBLE
+                    locationLabel.text = it.address
+                }
+            } ()
         }
     }
 

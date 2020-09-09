@@ -522,6 +522,16 @@ class DiaryReadActivity : EasyDiaryActivity() {
 
         private fun initContents() {
             val diaryDto = EasyDiaryDbHelper.readDiaryBy(getSequence())
+
+            if (config.enableLocationInfo) {
+                diaryDto.location?.let {
+                    locationLabel.text = it.address
+                    locationContainer.visibility = View.VISIBLE
+                } ?: { locationContainer.visibility = View.GONE } ()
+            } else {
+                locationContainer.visibility = View.GONE
+            }
+
             if (StringUtils.isEmpty(diaryDto.title)) {
                 diaryTitle.visibility = View.GONE
             }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -52,15 +53,50 @@
                         style="@style/text_view_diary_read_fragment_inner_contents"/>
                 </LinearLayout>
             </ScrollView>
-            <TextView
-                android:id="@+id/contentsLength"
-                android:visibility="gone"
-                android:padding="5dp"
-                android:textColor="?attr/colorPrimary"
-                android:background="@drawable/bg_card_stamp"
-                android:layout_gravity="bottom|end"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+            <RelativeLayout
+                android:layout_gravity="bottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    tools:visibility="visible"
+                    android:id="@+id/locationContainer"
+                    android:visibility="gone"
+                    android:layout_marginEnd="10dp"
+                    android:layout_toStartOf="@id/contentsLength"
+                    android:padding="5dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_card_stamp"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_marginRight="3dp"
+                        android:id="@+id/locationSymbol"
+                        android:src="@drawable/map_marker_2"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"/>
+                    <TextView
+                        android:id="@+id/locationLabel"
+                        android:text="There is no location information. Click to update location information."
+                        android:textColor="?attr/colorPrimary"
+                        android:layout_width="wrap_content"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+                <TextView
+                    tools:visibility="visible"
+                    tools:text="100"
+                    android:layout_alignParentEnd="true"
+                    android:id="@+id/contentsLength"
+                    android:visibility="gone"
+                    android:padding="5dp"
+                    android:textColor="?attr/colorPrimary"
+                    android:background="@drawable/bg_card_stamp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
         </FrameLayout>
     </androidx.cardview.widget.CardView>
 
