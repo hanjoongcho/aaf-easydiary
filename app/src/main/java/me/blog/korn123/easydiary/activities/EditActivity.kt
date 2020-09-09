@@ -228,7 +228,7 @@ abstract class EditActivity : EasyDiaryActivity() {
                 }
                 locationLabel.text = locationInfo
             } ?: {
-                makeToast("Location information cannot be received.")
+                makeToast(getString(R.string.location_info_error_message))
             } ()
             locationProgress.visibility = View.GONE
         }

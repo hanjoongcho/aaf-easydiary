@@ -459,7 +459,8 @@
     </string>
     <string name="release_212">
         v1.4.146 / 2020.09.xx\n
-        German translation updates
+        German translation updates\n
+        Added location information display option
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -684,6 +685,7 @@
     <string name="ok">OK</string>
     <string name="cancel">Abruch</string>
     <string name="settings">Einstellungen</string>
-    <string name="location_info_title">Location information display</string>
-    <string name="location_info_description">The location information is displayed in the diary using GPS information.</string>
+    <string name="location_info_title">Anzeige der Standortinformationen</string>
+    <string name="location_info_description">Die Standortinformationen werden mithilfe von GPS-Informationen im Tagebuch angezeigt.</string>
+    <string name="location_info_error_message">Standortinformationen können nicht empfangen werden.</string>
 </resources>

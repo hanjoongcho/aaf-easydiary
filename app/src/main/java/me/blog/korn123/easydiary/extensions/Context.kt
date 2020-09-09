@@ -252,7 +252,7 @@ fun Context.initTextSize(viewGroup: ViewGroup) {
                     }
                     is TextView -> { 
                         when (it.id) {
-                            R.id.contentsLength, R.id.locationLabel -> it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize * 0.8F)
+                            R.id.contentsLength, R.id.locationLabel -> it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize * 0.7F)
                             R.id.symbolTextArrow -> {}
                             R.id.createdDate -> {}
                             else -> it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
