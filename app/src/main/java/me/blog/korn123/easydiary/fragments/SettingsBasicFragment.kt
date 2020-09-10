@@ -61,6 +61,19 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
+        mActivity.run {
+            pauseLock()
+
+            when (requestCode) {
+                REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS -> {
+                    makeSnackBar(if (isLocationEnabled()) "GPS provider setting is activated." else "The request operation did not complete normally.")
+                }
+            }
+        }
+    }
+
 
     /***************************************************************************************************
      *   etc functions
@@ -101,14 +114,14 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
                         mActivity.run {
                             when (hasGPSPermissions()) {
                                 true -> {
-                                    mActivity.config.enableLocationInfo = locationInfoSwitcher.isChecked
+                                    config.enableLocationInfo = locationInfoSwitcher.isChecked
                                 }
                                 false -> {
                                     locationInfoSwitcher.isChecked = false
                                     if (this is EasyDiaryActivity) {
                                         acquireGPSPermissions {
                                             locationInfoSwitcher.isChecked = true
-                                            mActivity.config.enableLocationInfo = locationInfoSwitcher.isChecked
+                                            config.enableLocationInfo = locationInfoSwitcher.isChecked
                                         }
                                     }
                                 }
