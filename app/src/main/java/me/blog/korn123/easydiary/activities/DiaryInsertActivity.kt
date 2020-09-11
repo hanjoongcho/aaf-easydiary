@@ -32,38 +32,19 @@ import java.util.*
  */
 
 class DiaryInsertActivity : EditActivity() {
+    /***************************************************************************************************
+     *   global properties
+     *
+     ***************************************************************************************************/
     private lateinit var mShowcaseView: ShowcaseView
     private var mCurrentCursor = 0
     private var mShowcaseIndex = 2
 
-    private val mOnClickListener = View.OnClickListener { view ->
-        hideSoftInputFromWindow()
-        setLocationInfo()
-        if (StringUtils.isEmpty(diaryContents.text)) {
-            diaryContents.requestFocus()
-            makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
-        } else {
-            val diaryDto = DiaryDto(
-                    -1,
-                    mCurrentTimeMillis,
-                    this@DiaryInsertActivity.diaryTitle.text.toString(),
-                    this@DiaryInsertActivity.diaryContents.text.toString(),
-                    mSelectedItemPosition,
-                    allDay.isChecked
-            )
-            if (mLocation != null) diaryDto.location = mLocation
-            applyRemoveIndex()
-            diaryDto.photoUris = mPhotoUris
-            EasyDiaryDbHelper.insertDiary(diaryDto)
-            config.previousActivity = PREVIOUS_ACTIVITY_CREATE
-            if (isAccessFromOutside()) {
-                startMainActivityWithClearTask()
-            } else {
-                TransitionHelper.finishActivityWithTransition(this)
-            }
-        }
-    }
-    
+
+    /***************************************************************************************************
+     *   override functions
+     *
+     ***************************************************************************************************/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_diary_edit)
@@ -150,7 +131,12 @@ class DiaryInsertActivity : EditActivity() {
             false -> photoProgress.visibility = View.GONE
         }
     }
-    
+
+
+    /***************************************************************************************************
+     *   etc functions
+     *
+     ***************************************************************************************************/
     private fun setupShowcase() {
         val margin = ((resources.displayMetrics.density * 12) as Number).toInt()
 
@@ -223,7 +209,34 @@ class DiaryInsertActivity : EditActivity() {
     }
 
     private fun bindEvent() {
-        saveContents.setOnClickListener(mOnClickListener)
+        saveContents.setOnClickListener {
+            hideSoftInputFromWindow()
+            setLocationInfo()
+            if (StringUtils.isEmpty(diaryContents.text)) {
+                diaryContents.requestFocus()
+                makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
+            } else {
+                val diaryDto = DiaryDto(
+                        -1,
+                        mCurrentTimeMillis,
+                        this@DiaryInsertActivity.diaryTitle.text.toString(),
+                        this@DiaryInsertActivity.diaryContents.text.toString(),
+                        mSelectedItemPosition,
+                        allDay.isChecked
+                )
+                if (mLocation != null) diaryDto.location = mLocation
+                applyRemoveIndex()
+                diaryDto.photoUris = mPhotoUris
+                EasyDiaryDbHelper.insertDiary(diaryDto)
+                config.previousActivity = PREVIOUS_ACTIVITY_CREATE
+                if (isAccessFromOutside()) {
+                    startMainActivityWithClearTask()
+                } else {
+                    TransitionHelper.finishActivityWithTransition(this)
+                }
+            }
+        }
+
         photoView.setOnClickListener(mEditListener)
         captureCamera.setOnClickListener(mEditListener)
         datePicker.setOnClickListener(mEditListener)

@@ -8,7 +8,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
-import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -57,27 +56,80 @@ abstract class EditActivity : EasyDiaryActivity() {
      *   global properties
      *
      ***************************************************************************************************/
-    protected lateinit var mRecognizerIntent: Intent
-    protected lateinit var mPhotoUris: RealmList<PhotoUriDto>
-    protected lateinit var mDatePickerDialog: DatePickerDialog
-    protected lateinit var mTimePickerDialog: TimePickerDialog
-    protected lateinit var mSecondsPickerDialog: AlertDialog
+    lateinit var mRecognizerIntent: Intent
+    lateinit var mPhotoUris: RealmList<PhotoUriDto>
+    lateinit var mDatePickerDialog: DatePickerDialog
+    lateinit var mTimePickerDialog: TimePickerDialog
+    lateinit var mSecondsPickerDialog: AlertDialog
+
     private val mCalendar = Calendar.getInstance(Locale.getDefault())
-    protected val mRemoveIndexes = ArrayList<Int>()
-    protected var mCurrentTimeMillis: Long = 0
-    protected var mYear = mCalendar.get(Calendar.YEAR)
-    protected var mLocation: me.blog.korn123.easydiary.models.Location? = null
+    val mRemoveIndexes = ArrayList<Int>()
+    var mCurrentTimeMillis: Long = 0
+    var mYear = mCalendar.get(Calendar.YEAR)
+    var mLocation: me.blog.korn123.easydiary.models.Location? = null
 
     /**
      * mMonth is not Calendar.MONTH
      * mMonth range is 1 ~ 12
      */
-    protected var mMonth = mCalendar.get(Calendar.MONTH).plus(1)
-    protected var mDayOfMonth = mCalendar.get(Calendar.DAY_OF_MONTH)
-    protected var mHourOfDay = mCalendar.get(Calendar.HOUR_OF_DAY)
-    protected var mMinute = mCalendar.get(Calendar.MINUTE)
-    protected var mSecond = mCalendar.get(Calendar.SECOND)
-    protected var mSelectedItemPosition = 0
+    var mMonth = mCalendar.get(Calendar.MONTH).plus(1)
+    var mDayOfMonth = mCalendar.get(Calendar.DAY_OF_MONTH)
+    var mHourOfDay = mCalendar.get(Calendar.HOUR_OF_DAY)
+    var mMinute = mCalendar.get(Calendar.MINUTE)
+    var mSecond = mCalendar.get(Calendar.SECOND)
+    var mSelectedItemPosition = 0
+
+    val mEditListener = View.OnClickListener { view ->
+        hideSoftInputFromWindow()
+
+        when (view.id) {
+            R.id.photoView -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                callImagePicker()
+            } else {
+                confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
+            }
+            R.id.captureCamera -> {
+                val captureFile = createTemporaryPhotoFile()
+                val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, getUriForFile(captureFile))
+                startActivityForResult(intent, REQUEST_CODE_CAPTURE_CAMERA)
+            }
+            R.id.datePicker -> {
+                mDatePickerDialog.show()
+            }
+            R.id.timePicker -> {
+                mTimePickerDialog.show()
+            }
+            R.id.secondsPicker -> {
+                val itemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+                    val itemMap = parent.adapter.getItem(position) as HashMap<String, String>
+                    mSecond = Integer.valueOf(itemMap["value"]!!)
+                    setDateTime()
+                    mSecondsPickerDialog.cancel()
+                }
+                val builder = EasyDiaryUtils.createSecondsPickerBuilder(this, itemClickListener, mSecond)
+                mSecondsPickerDialog = builder.create()
+                mSecondsPickerDialog.show()
+            }
+            R.id.microphone -> showSpeechDialog()
+            R.id.locationContainer -> {
+                setLocationInfo()
+            }
+        }
+    }
+
+    var mStartDateListener: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+        mYear = year
+        mMonth = month + 1
+        mDayOfMonth = dayOfMonth
+        setDateTime()
+    }
+
+    var mTimeSetListener: TimePickerDialog.OnTimeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+        mHourOfDay = hourOfDay
+        mMinute = minute
+        setDateTime()
+    }
 
 
     /***************************************************************************************************
@@ -131,6 +183,45 @@ abstract class EditActivity : EasyDiaryActivity() {
      *   etc functions
      *
      ***************************************************************************************************/
+    private fun showSpeechDialog() {
+        try {
+            startActivityForResult(mRecognizerIntent, REQUEST_CODE_SPEECH_INPUT)
+        } catch (e: ActivityNotFoundException) {
+            showAlertDialog(getString(R.string.recognizer_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
+        }
+    }
+
+    private fun callImagePicker() {
+        when (config.multiPickerEnable) {
+            true -> {
+                var colorPrimaryDark: TypedValue = TypedValue()
+                var colorPrimary: TypedValue = TypedValue()
+                theme.resolveAttribute(R.attr.colorPrimaryDark, colorPrimaryDark, true)
+                theme.resolveAttribute(R.attr.colorPrimary, colorPrimary, true)
+                PickPhotoView.Builder(this)
+                        .setShowCamera(false)
+                        .setHasPhotoSize(0)
+                        .setPickPhotoSize(15)
+                        .setAllPhotoSize(15)
+                        .setSpanCount(4)
+                        .setLightStatusBar(false)
+                        .setStatusBarColor(colorPrimaryDark.resourceId)
+                        .setToolbarColor(colorPrimary.resourceId)
+                        .setToolbarTextColor(R.color.white)
+                        .setSelectIconColor(colorPrimary.resourceId)
+                        .start()
+            }
+            false -> {
+                val pickImageIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                //                pickIntent.setType("image/*");
+                try {
+                    startActivityForResult(pickImageIntent, REQUEST_CODE_IMAGE_PICKER)
+                } catch (e: ActivityNotFoundException) {
+                    showAlertDialog(getString(R.string.gallery_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
+                }
+            }
+        }
+    }
 
     fun addTextWatcher() {
         if (config.enableCountCharacters) {
@@ -163,58 +254,6 @@ abstract class EditActivity : EasyDiaryActivity() {
         }
     }
 
-    internal val mEditListener = View.OnClickListener { view ->
-        hideSoftInputFromWindow()
-
-        when (view.id) {
-            R.id.photoView -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                callImagePicker()
-            } else {
-                confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
-            }
-            R.id.captureCamera -> {
-                val captureFile = createTemporaryPhotoFile()
-                val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, getUriForFile(captureFile))
-                startActivityForResult(intent, REQUEST_CODE_CAPTURE_CAMERA)
-            }
-            R.id.datePicker -> {
-                mDatePickerDialog.show()
-            }
-            R.id.timePicker -> {
-                mTimePickerDialog.show()
-            }
-            R.id.secondsPicker -> {
-                val itemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-                    val itemMap = parent.adapter.getItem(position) as HashMap<String, String>
-                    mSecond = Integer.valueOf(itemMap["value"]!!)
-                    setDateTime()
-                    mSecondsPickerDialog.cancel()
-                }
-                val builder = EasyDiaryUtils.createSecondsPickerBuilder(this, itemClickListener, mSecond)
-                mSecondsPickerDialog = builder.create()
-                mSecondsPickerDialog.show()
-            }
-            R.id.microphone -> showSpeechDialog()
-            R.id.locationContainer -> {
-                setLocationInfo()
-            }
-        }
-    }
-
-    protected var mStartDateListener: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-        mYear = year
-        mMonth = month + 1
-        mDayOfMonth = dayOfMonth
-        setDateTime()
-    }
-
-    protected var mTimeSetListener: TimePickerDialog.OnTimeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-        mHourOfDay = hourOfDay
-        mMinute = minute
-        setDateTime()
-    }
-
     fun setLocationInfo() {
         if (config.enableLocationInfo) {
             locationProgress.visibility = View.VISIBLE
@@ -234,7 +273,7 @@ abstract class EditActivity : EasyDiaryActivity() {
         }
     }
 
-    protected fun applyRemoveIndex() {
+    fun applyRemoveIndex() {
         Collections.sort(mRemoveIndexes, Collections.reverseOrder())
         for (index in mRemoveIndexes) {
             mPhotoUris.removeAt(index)
@@ -242,7 +281,7 @@ abstract class EditActivity : EasyDiaryActivity() {
         mRemoveIndexes.clear()
     }
     
-    protected fun toggleTimePickerTool() {
+    fun toggleTimePickerTool() {
         when (allDay.isChecked) {
             true -> {
                 timePicker.visibility = View.GONE
@@ -259,27 +298,21 @@ abstract class EditActivity : EasyDiaryActivity() {
         setDateTime()
     }
     
-    protected fun setupPhotoView() {
+    fun setupPhotoView() {
         val thumbnailSize = config.settingThumbnailSize
         val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(applicationContext, thumbnailSize), CommonUtils.dpToPixel(applicationContext, thumbnailSize))
         photoView.layoutParams = layoutParams
         captureCamera.layoutParams = layoutParams
     }
 
-//    protected fun setupSpinner() {
-//        val weatherArr = resources.getStringArray(R.array.weather_item_array)
-//        val arrayAdapter = DiaryWeatherItemAdapter(this, R.layout.item_weather, Arrays.asList(*weatherArr))
-//        weatherSpinner.adapter = arrayAdapter
-//    }
-
-    protected fun setupRecognizer() {
+    fun setupRecognizer() {
         mRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
             putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
             putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
         }
     }
     
-    protected fun hideSoftInputFromWindow() {
+    fun hideSoftInputFromWindow() {
         val currentView = this.currentFocus
         if (currentView != null) {
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -287,20 +320,12 @@ abstract class EditActivity : EasyDiaryActivity() {
         }
     }
 
-    protected fun setupDialog() {
+    fun setupDialog() {
         mDatePickerDialog = DatePickerDialog(this, mStartDateListener, mYear, mMonth - 1, mDayOfMonth)
         mTimePickerDialog = TimePickerDialog(this, mTimeSetListener, mHourOfDay, mMinute, DateFormat.is24HourFormat(this))
     }
-    
-    protected fun showSpeechDialog() {
-        try {
-            startActivityForResult(mRecognizerIntent, REQUEST_CODE_SPEECH_INPUT)
-        } catch (e: ActivityNotFoundException) {
-            showAlertDialog(getString(R.string.recognizer_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
-        }
-    }
-    
-    protected fun setDateTime() {
+
+    fun setDateTime() {
         try {
             mCurrentTimeMillis = EasyDiaryUtils.datePickerToTimeMillis(
                     mDayOfMonth, mMonth - 1, mYear,
@@ -315,39 +340,7 @@ abstract class EditActivity : EasyDiaryActivity() {
             e.printStackTrace()
         }
     }
-    
-    protected fun callImagePicker() {
-        when (config.multiPickerEnable) {
-            true -> {
-                var colorPrimaryDark: TypedValue = TypedValue()
-                var colorPrimary: TypedValue = TypedValue()
-                theme.resolveAttribute(R.attr.colorPrimaryDark, colorPrimaryDark, true)
-                theme.resolveAttribute(R.attr.colorPrimary, colorPrimary, true)
-                PickPhotoView.Builder(this)
-                        .setShowCamera(false)
-                        .setHasPhotoSize(0)
-                        .setPickPhotoSize(15)
-                        .setAllPhotoSize(15)
-                        .setSpanCount(4)
-                        .setLightStatusBar(false)
-                        .setStatusBarColor(colorPrimaryDark.resourceId)
-                        .setToolbarColor(colorPrimary.resourceId)
-                        .setToolbarTextColor(R.color.white)
-                        .setSelectIconColor(colorPrimary.resourceId)
-                        .start()
-            }
-            false -> {
-                val pickImageIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                //                pickIntent.setType("image/*");
-                try {
-                    startActivityForResult(pickImageIntent, REQUEST_CODE_IMAGE_PICKER)
-                } catch (e: ActivityNotFoundException) {
-                    showAlertDialog(getString(R.string.gallery_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
-                }
-            }
-        }
-    }
-    
+
     fun attachPhotos(selectPaths: ArrayList<String>, isUriString: Boolean) {
         setVisiblePhotoProgress(true)
         Thread(Runnable {
@@ -398,11 +391,11 @@ abstract class EditActivity : EasyDiaryActivity() {
         }).start()
     }
 
-    protected fun initBottomToolbar() {
+    fun initBottomToolbar() {
         bottomTitle.text = String.format(getString(R.string.attached_photo_count), photoContainer.childCount -1)
     }
 
-    protected fun selectFeelingSymbol(index: Int) {
+    fun selectFeelingSymbol(index: Int) {
         mSelectedItemPosition = index
         when (mSelectedItemPosition == 0) {
             true -> symbolText.visibility = View.VISIBLE
@@ -423,7 +416,7 @@ abstract class EditActivity : EasyDiaryActivity() {
      *   inner class
      *
      ***************************************************************************************************/
-    internal inner class PhotoClickListener(var index: Int) : View.OnClickListener {
+    inner class PhotoClickListener(var index: Int) : View.OnClickListener {
         override fun onClick(v: View) {
             val targetIndex = index
             showAlertDialog(

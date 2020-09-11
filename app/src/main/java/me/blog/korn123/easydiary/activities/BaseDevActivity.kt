@@ -1,13 +1,10 @@
 package me.blog.korn123.easydiary.activities
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
-import android.location.Location
-import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -16,8 +13,6 @@ import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.isOreoPlus
-import io.github.aafactory.commons.helpers.PERMISSION_ACCESS_COARSE_LOCATION
-import io.github.aafactory.commons.helpers.PERMISSION_ACCESS_FINE_LOCATION
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_dev.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
@@ -220,8 +215,17 @@ data class NotificationInfo(var largeIconResourceId: Int, var useActionButton: B
  *   extensions
  *
  ***************************************************************************************************/
+fun fun1(param1: String, block: (responseData: String) -> String): String {
+    println(param1)
+    return block("")
+}
 
-
+fun test1() {
+    val result = fun1("banana") { responseData ->
+        "data: $responseData"
+    }
+    println(result)
+}
 
 
 
