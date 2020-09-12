@@ -50,7 +50,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
      ***************************************************************************************************/
     private var mRecognizerIntent: Intent? = null
     private var mDiaryMainItemAdapter: DiaryMainItemAdapter? = null
-    private var mDiaryList: ArrayList<DiaryDto>? = null
+    private var mDiaryList: ArrayList<DiaryDto> = arrayListOf()
     private var mShowcaseIndex = 0
     private var mShowcaseView: ShowcaseView? = null
     private var mSymbolSequence = SYMBOL_SELECT_ALL
@@ -79,10 +79,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
         }
 
-        mDiaryList = EasyDiaryDbHelper.readDiary(null)
-        mDiaryList?.let {
-            mDiaryMainItemAdapter = DiaryMainItemAdapter(this, R.layout.item_diary_main, it)
-        }
+        mDiaryList.addAll(EasyDiaryDbHelper.readDiary(null))
+        mDiaryMainItemAdapter = DiaryMainItemAdapter(this, R.layout.item_diary_main, mDiaryList)
         diaryListView.adapter = mDiaryMainItemAdapter
 
         if (!config.isInitDummyData) {
@@ -552,8 +550,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     }
 
     fun refreshList(query: String) {
-        mDiaryList?.clear()
-        mDiaryList?.addAll(EasyDiaryDbHelper.readDiary(query, config.diarySearchQueryCaseSensitive, 0, 0, mSymbolSequence))
+        mDiaryList.clear()
+        mDiaryList.addAll(EasyDiaryDbHelper.readDiary(query, config.diarySearchQueryCaseSensitive, 0, 0, mSymbolSequence))
         mDiaryMainItemAdapter?.currentQuery = query
         mDiaryMainItemAdapter?.notifyDataSetChanged()
     }

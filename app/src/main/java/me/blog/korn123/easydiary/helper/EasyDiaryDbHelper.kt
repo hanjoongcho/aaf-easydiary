@@ -93,7 +93,7 @@ object EasyDiaryDbHelper {
         return getInstance().where(DiaryDto::class.java).count()
     }
 
-    fun readDiary(query: String?, isSensitive: Boolean = false, startTimeMillis: Long = 0, endTimeMillis: Long = 0, symbolSequence: Int = 0, realmInstance: Realm = getInstance()): ArrayList<DiaryDto> {
+    fun readDiary(query: String?, isSensitive: Boolean = false, startTimeMillis: Long = 0, endTimeMillis: Long = 0, symbolSequence: Int = 0, realmInstance: Realm = getInstance()): List<DiaryDto> {
         var results: RealmResults<DiaryDto> = when (StringUtils.isEmpty(query)) {
             true -> {
                 realmInstance.where(DiaryDto::class.java).findAll().sort(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
@@ -121,9 +121,7 @@ object EasyDiaryDbHelper {
             results = results.where().equalTo("weather", symbolSequence).findAll()
         }
 
-        val list = ArrayList<DiaryDto>()
-        list.addAll(results.subList(0, results.size))
-        return list
+        return results.toList()
     }
 
     fun readDiaryBy(sequence: Int, realmInstance: Realm = getInstance()): DiaryDto {
@@ -156,11 +154,12 @@ object EasyDiaryDbHelper {
     }
 
     fun deleteDiary(sequence: Int, realmInstance: Realm = getInstance()) {
-        val diaryDto = realmInstance.where(DiaryDto::class.java).equalTo("sequence", sequence).findFirst()
-        if (diaryDto != null) {
-            realmInstance.beginTransaction()
-            diaryDto.deleteFromRealm()
-            realmInstance.commitTransaction()
+        realmInstance.run {
+            where(DiaryDto::class.java).equalTo("sequence", sequence).findFirst()?.let {
+                beginTransaction()
+                it.deleteFromRealm()
+                commitTransaction()
+            }
         }
     }
 
@@ -187,12 +186,7 @@ object EasyDiaryDbHelper {
         return getInstance().where(Alarm::class.java).count()
     }
 
-    fun readAlarmAll(): List<Alarm> {
-        val results = getInstance().where(Alarm::class.java).findAll().sort("sequence", Sort.ASCENDING)
-        val list = mutableListOf<Alarm>()
-        list.addAll(results.subList(0, results.size))
-        return list
-    }
+    fun readAlarmAll(): List<Alarm> = getInstance().where(Alarm::class.java).findAll().sort("sequence", Sort.ASCENDING)
 
     fun readAlarmBy(sequence: Int): Alarm? {
         return readAlarmBy(getInstance(), sequence)
@@ -226,12 +220,7 @@ object EasyDiaryDbHelper {
         return alarm
     }
 
-    fun readSnoozeAlarms(): List<Alarm> {
-        val results = getInstance().where(Alarm::class.java).greaterThan("retryCount", 0).findAll()
-        val list = mutableListOf<Alarm>()
-        list.addAll(results.subList(0, results.size))
-        return list
-    }
+    fun readSnoozeAlarms(): List<Alarm> = getInstance().where(Alarm::class.java).greaterThan("retryCount", 0).findAll().toList()
 
 
     /***************************************************************************************************
@@ -248,12 +237,7 @@ object EasyDiaryDbHelper {
         }
     }
 
-    fun readActionLogAll(): List<ActionLog> {
-        val results = getInstance().where(ActionLog::class.java).findAll().sort("sequence", Sort.DESCENDING)
-        val list = mutableListOf<ActionLog>()
-        list.addAll(results.subList(0, results.size))
-        return list
-    }
+    fun readActionLogAll(): List<ActionLog> = getInstance().where(ActionLog::class.java).findAll().sort("sequence", Sort.DESCENDING)
 
     fun deleteActionLogAll() {
         getInstance().executeTransaction { realm ->

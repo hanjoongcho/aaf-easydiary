@@ -91,20 +91,6 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/clearGoogleOauthToken"
-                    android:orientation="vertical"
-                    style="@style/AppCard.Settings">
-                    <LinearLayout
-                        style="@style/LinearLayoutVertical">
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:text="Clear OAuth token"
-                            style="@style/SettingsTitle" />
-                        <com.simplemobiletools.commons.views.MyTextView
-                            style="@style/SettingsSummary" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
                     android:id="@+id/fullBackupService"
                     android:orientation="vertical"
                     style="@style/AppCard.Settings">

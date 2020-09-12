@@ -14,7 +14,6 @@ import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.helper.DriveServiceHelper
 import me.blog.korn123.easydiary.helper.GoogleOAuthHelper
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_GOOGLE_SIGN_IN
-import me.blog.korn123.easydiary.services.BackupPhotoService
 import me.blog.korn123.easydiary.services.FullBackupService
 
 class DevActivity : BaseDevActivity() {
@@ -25,9 +24,6 @@ class DevActivity : BaseDevActivity() {
      ***************************************************************************************************/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        clearGoogleOauthToken.setOnClickListener {
-            GoogleOAuthHelper.signOutGoogleOAuth(this, true)
-        }
         fullBackupService.setOnClickListener {
             GoogleOAuthHelper.getGoogleSignAccount(this)?.account?.let { account ->
                 DriveServiceHelper(this, account).run {

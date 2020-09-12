@@ -75,7 +75,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
         }
 
         val query = intent.getStringExtra(DIARY_SEARCH_QUERY)
-        val diaryList: ArrayList<DiaryDto> = EasyDiaryDbHelper.readDiary(query, config.diarySearchQueryCaseSensitive)
+        val diaryList: List<DiaryDto> = EasyDiaryDbHelper.readDiary(query, config.diarySearchQueryCaseSensitive)
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager, diaryList, query)
         val startPageIndex = when(savedInstanceState == null) {
             true -> mSectionsPagerAdapter.sequenceToPageIndex(intent.getIntExtra(DIARY_SEQUENCE, -1))
@@ -684,7 +684,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
      */
     inner class SectionsPagerAdapter(
             fm: androidx.fragment.app.FragmentManager,
-            private val diaryList: ArrayList<DiaryDto>,
+            private val diaryList: List<DiaryDto>,
             private val query: String?
     ) : androidx.fragment.app.FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 

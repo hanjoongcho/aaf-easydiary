@@ -297,7 +297,7 @@ object EasyDiaryUtils {
         return cal.timeInMillis
     }
 
-    fun sequenceToPageIndex(diaryList: ArrayList<DiaryDto>, sequence: Int): Int {
+    fun sequenceToPageIndex(diaryList: List<DiaryDto>, sequence: Int): Int {
         var pageIndex = 0
         if (sequence > -1) {
             for (i in diaryList.indices) {
