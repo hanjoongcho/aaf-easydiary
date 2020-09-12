@@ -17,6 +17,7 @@ import android.text.TextWatcher
 import android.text.format.DateFormat
 import android.util.TypedValue
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
@@ -78,8 +79,9 @@ abstract class EditActivity : EasyDiaryActivity() {
     var mMinute = mCalendar.get(Calendar.MINUTE)
     var mSecond = mCalendar.get(Calendar.SECOND)
     var mSelectedItemPosition = 0
+    var mCurrentCursor = 0
 
-    val mEditListener = View.OnClickListener { view ->
+    val mClickListener = View.OnClickListener { view ->
         hideSoftInputFromWindow()
 
         when (view.id) {
@@ -116,6 +118,15 @@ abstract class EditActivity : EasyDiaryActivity() {
                 setLocationInfo()
             }
         }
+    }
+
+    val mTouchListener = View.OnTouchListener { view, motionEvent ->
+        when (motionEvent.action) {
+            MotionEvent.ACTION_UP -> view.performClick()
+        }
+
+        mCurrentCursor = if (view.id == R.id.diaryTitle) FOCUS_TITLE else FOCUS_CONTENTS
+        false
     }
 
     var mStartDateListener: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
@@ -429,5 +440,10 @@ abstract class EditActivity : EasyDiaryActivity() {
                     DialogInterface.OnClickListener { dialog, which -> }
             )
         }
+    }
+
+    companion object {
+        const val FOCUS_TITLE = 0
+        const val FOCUS_CONTENTS = 1
     }
 }

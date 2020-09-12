@@ -37,7 +37,6 @@ class DiaryInsertActivity : EditActivity() {
      *
      ***************************************************************************************************/
     private lateinit var mShowcaseView: ShowcaseView
-    private var mCurrentCursor = 0
     private var mShowcaseIndex = 2
 
 
@@ -94,7 +93,7 @@ class DiaryInsertActivity : EditActivity() {
         when (requestCode) {
             REQUEST_CODE_SPEECH_INPUT -> if (resultCode == Activity.RESULT_OK && intent != null) {
                 val result = intent.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-                if (mCurrentCursor == 0) { // edit title
+                if (mCurrentCursor == FOCUS_TITLE) { // edit title
                     val title = diaryTitle.text.toString()
                     val sb = StringBuilder(title)
                     sb.insert(diaryTitle.selectionStart, result[0])
@@ -237,21 +236,14 @@ class DiaryInsertActivity : EditActivity() {
             }
         }
 
-        photoView.setOnClickListener(mEditListener)
-        captureCamera.setOnClickListener(mEditListener)
-        datePicker.setOnClickListener(mEditListener)
-        timePicker.setOnClickListener(mEditListener)
-        secondsPicker.setOnClickListener(mEditListener)
-        microphone.setOnClickListener(mEditListener)
-
-        diaryTitle.setOnTouchListener { view, _ ->
-            mCurrentCursor = 0
-            false
-        }
-        diaryContents.setOnTouchListener { _, _ ->
-            mCurrentCursor = 1
-            false
-        }
+        photoView.setOnClickListener(mClickListener)
+        captureCamera.setOnClickListener(mClickListener)
+        datePicker.setOnClickListener(mClickListener)
+        timePicker.setOnClickListener(mClickListener)
+        secondsPicker.setOnClickListener(mClickListener)
+        microphone.setOnClickListener(mClickListener)
+        diaryTitle.setOnTouchListener(mTouchListener)
+        diaryContents.setOnTouchListener(mTouchListener)
 
         togglePhoto.setOnClickListener {
             toggleSimpleLayout()

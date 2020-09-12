@@ -29,9 +29,12 @@ import java.util.*
  */
 
 class DiaryUpdateActivity : EditActivity() {
+    /***************************************************************************************************
+     *   global properties
+     *
+     ***************************************************************************************************/
     private var mSequence: Int = 0
     private var mWeather: Int = 0
-    private var mCurrentCursor = 1
 
     private val mOnClickListener = View.OnClickListener { view ->
         hideSoftInputFromWindow()
@@ -74,8 +77,13 @@ class DiaryUpdateActivity : EditActivity() {
             }
         }
     }
-    
-    public override fun onCreate(savedInstanceState: Bundle?) {
+
+
+    /***************************************************************************************************
+     *   override functions
+     *
+     ***************************************************************************************************/
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_diary_edit)
         setSupportActionBar(toolbar)
@@ -104,7 +112,7 @@ class DiaryUpdateActivity : EditActivity() {
         when (requestCode) {
             REQUEST_CODE_SPEECH_INPUT -> if (resultCode == Activity.RESULT_OK && intent != null) {
                 val result = intent.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-                if (mCurrentCursor == 0) { // edit title
+                if (mCurrentCursor == FOCUS_TITLE) { // edit title
                     val title = diaryTitle.text.toString()
                     val sb = StringBuilder(title)
                     sb.insert(diaryTitle.selectionStart, result[0])
@@ -142,10 +150,11 @@ class DiaryUpdateActivity : EditActivity() {
         }
     }
     
-//    private fun initSpinner() {
-//        weatherSpinner.setSelection(mWeather)
-//    }
 
+    /***************************************************************************************************
+     *   etc functions
+     *
+     ***************************************************************************************************/
     private fun initData() {
         val intent = intent
         mSequence = intent.getIntExtra(DIARY_SEQUENCE, 0)
@@ -212,24 +221,15 @@ class DiaryUpdateActivity : EditActivity() {
 
     private fun bindEvent() {
         saveContents.setOnClickListener(mOnClickListener)
-        photoView.setOnClickListener(mEditListener)
-        captureCamera.setOnClickListener(mEditListener)
-        datePicker.setOnClickListener(mEditListener)
-        timePicker.setOnClickListener(mEditListener)
-        secondsPicker.setOnClickListener(mEditListener)
-        microphone.setOnClickListener(mEditListener)
-        locationContainer.setOnClickListener(mEditListener)
-
-        diaryTitle.setOnTouchListener { view, motionEvent ->
-            mCurrentCursor = 0
-            false
-        }
-
-        diaryContents.setOnTouchListener { view, motionEvent ->
-            mCurrentCursor = 1
-            diaryContents.requestFocus()
-            false
-        }
+        photoView.setOnClickListener(mClickListener)
+        captureCamera.setOnClickListener(mClickListener)
+        datePicker.setOnClickListener(mClickListener)
+        timePicker.setOnClickListener(mClickListener)
+        secondsPicker.setOnClickListener(mClickListener)
+        microphone.setOnClickListener(mClickListener)
+        locationContainer.setOnClickListener(mClickListener)
+        diaryTitle.setOnTouchListener(mTouchListener)
+        diaryContents.setOnTouchListener(mTouchListener)
 
         togglePhoto.setOnClickListener {
             toggleSimpleLayout()
