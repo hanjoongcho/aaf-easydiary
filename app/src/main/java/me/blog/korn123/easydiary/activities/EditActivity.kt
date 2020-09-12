@@ -81,6 +81,19 @@ abstract class EditActivity : EasyDiaryActivity() {
     var mSelectedItemPosition = 0
     var mCurrentCursor = 0
 
+    private var mStartDateListener: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+        mYear = year
+        mMonth = month + 1
+        mDayOfMonth = dayOfMonth
+        setDateTime()
+    }
+
+    private var mTimeSetListener: TimePickerDialog.OnTimeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+        mHourOfDay = hourOfDay
+        mMinute = minute
+        setDateTime()
+    }
+
     val mClickListener = View.OnClickListener { view ->
         hideSoftInputFromWindow()
 
@@ -128,20 +141,6 @@ abstract class EditActivity : EasyDiaryActivity() {
         mCurrentCursor = if (view.id == R.id.diaryTitle) FOCUS_TITLE else FOCUS_CONTENTS
         false
     }
-
-    var mStartDateListener: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-        mYear = year
-        mMonth = month + 1
-        mDayOfMonth = dayOfMonth
-        setDateTime()
-    }
-
-    var mTimeSetListener: TimePickerDialog.OnTimeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-        mHourOfDay = hourOfDay
-        mMinute = minute
-        setDateTime()
-    }
-
 
     /***************************************************************************************************
      *   override functions
@@ -234,7 +233,7 @@ abstract class EditActivity : EasyDiaryActivity() {
         }
     }
 
-    fun addTextWatcher() {
+    protected fun addTextWatcher() {
         if (config.enableCountCharacters) {
             contentsLength.visibility = View.VISIBLE
             contentsLength.text = getString(R.string.diary_contents_length, 0)
@@ -249,7 +248,7 @@ abstract class EditActivity : EasyDiaryActivity() {
         }
     }
 
-    fun toggleSimpleLayout() {
+    protected fun toggleSimpleLayout() {
         when (photoContainerScrollView.visibility) {
             View.VISIBLE -> {
                 photoContainerScrollView.visibility = View.GONE
@@ -265,7 +264,7 @@ abstract class EditActivity : EasyDiaryActivity() {
         }
     }
 
-    fun setLocationInfo() {
+    protected fun setLocationInfo() {
         if (config.enableLocationInfo) {
             locationProgress.visibility = View.VISIBLE
             getLastKnownLocation()?.let { knownLocation ->
@@ -284,15 +283,15 @@ abstract class EditActivity : EasyDiaryActivity() {
         }
     }
 
-    fun applyRemoveIndex() {
+    protected fun applyRemoveIndex() {
         Collections.sort(mRemoveIndexes, Collections.reverseOrder())
         for (index in mRemoveIndexes) {
             mPhotoUris.removeAt(index)
         }
         mRemoveIndexes.clear()
     }
-    
-    fun toggleTimePickerTool() {
+
+    protected fun toggleTimePickerTool() {
         when (allDay.isChecked) {
             true -> {
                 timePicker.visibility = View.GONE
@@ -308,22 +307,22 @@ abstract class EditActivity : EasyDiaryActivity() {
         }
         setDateTime()
     }
-    
-    fun setupPhotoView() {
+
+    protected fun setupPhotoView() {
         val thumbnailSize = config.settingThumbnailSize
         val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(applicationContext, thumbnailSize), CommonUtils.dpToPixel(applicationContext, thumbnailSize))
         photoView.layoutParams = layoutParams
         captureCamera.layoutParams = layoutParams
     }
 
-    fun setupRecognizer() {
+    protected fun setupRecognizer() {
         mRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
             putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
             putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
         }
     }
-    
-    fun hideSoftInputFromWindow() {
+
+    protected fun hideSoftInputFromWindow() {
         val currentView = this.currentFocus
         if (currentView != null) {
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -331,12 +330,12 @@ abstract class EditActivity : EasyDiaryActivity() {
         }
     }
 
-    fun setupDialog() {
+    protected fun setupDialog() {
         mDatePickerDialog = DatePickerDialog(this, mStartDateListener, mYear, mMonth - 1, mDayOfMonth)
         mTimePickerDialog = TimePickerDialog(this, mTimeSetListener, mHourOfDay, mMinute, DateFormat.is24HourFormat(this))
     }
 
-    fun setDateTime() {
+    protected fun setDateTime() {
         try {
             mCurrentTimeMillis = EasyDiaryUtils.datePickerToTimeMillis(
                     mDayOfMonth, mMonth - 1, mYear,
@@ -352,7 +351,7 @@ abstract class EditActivity : EasyDiaryActivity() {
         }
     }
 
-    fun attachPhotos(selectPaths: ArrayList<String>, isUriString: Boolean) {
+    protected fun attachPhotos(selectPaths: ArrayList<String>, isUriString: Boolean) {
         setVisiblePhotoProgress(true)
         Thread(Runnable {
             selectPaths.map { item ->
@@ -402,11 +401,11 @@ abstract class EditActivity : EasyDiaryActivity() {
         }).start()
     }
 
-    fun initBottomToolbar() {
+    protected fun initBottomToolbar() {
         bottomTitle.text = String.format(getString(R.string.attached_photo_count), photoContainer.childCount -1)
     }
 
-    fun selectFeelingSymbol(index: Int) {
+    protected fun selectFeelingSymbol(index: Int) {
         mSelectedItemPosition = index
         when (mSelectedItemPosition == 0) {
             true -> symbolText.visibility = View.VISIBLE
