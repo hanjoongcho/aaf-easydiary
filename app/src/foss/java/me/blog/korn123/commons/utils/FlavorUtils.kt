@@ -22,6 +22,12 @@ object FlavorUtils {
         WEATHER_RAIN_DROPS -> R.drawable.ic_raindrops
         WEATHER_BOLT -> R.drawable.ic_bolt
         WEATHER_SNOWING -> R.drawable.ic_snowing
+
+        DAILY_TODO -> R.drawable.ic_todo
+        DAILY_DOING -> R.drawable.ic_doing
+        DAILY_DONE -> R.drawable.ic_done
+        DAILY_CANCEL -> R.drawable.ic_cancel
+
         else -> 0
     }
 

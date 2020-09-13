@@ -258,6 +258,7 @@ fun Activity.openFeelingSymbolDialog(guideMessage: String, callback: (Int) -> Un
     addCategory(itemList, categoryList, "weather_item_array", getString(R.string.category_weather))
     addCategory(itemList, categoryList, "emotion_item_array", getString(R.string.category_emotion))
     addCategory(itemList, categoryList, "daily_item_array", getString(R.string.category_daily))
+    addCategory(itemList, categoryList, "tasks_item_array", getString(R.string.category_tasks))
     addCategory(itemList, categoryList, "food_item_array", getString(R.string.category_food))
     addCategory(itemList, categoryList, "leisure_item_array", getString(R.string.category_leisure))
     addCategory(itemList, categoryList, "landscape_item_array", getString(R.string.category_landscape))

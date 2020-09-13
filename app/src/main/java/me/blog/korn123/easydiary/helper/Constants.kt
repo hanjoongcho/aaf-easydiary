@@ -37,7 +37,8 @@ const val WEATHER_TEMPERATURE_H = 13
 const val WEATHER_DUST = 14
 const val WEATHER_DUST_STORM = 15
 
-//  Daily 40 ~ 99
+// Daily 40 ~ 99
+// Symbols 80 to 83 are separated into task categories and managed
 const val DAILY_WORKING = 41
 const val DAILY_WALLET = 42
 const val DAILY_VITAMINS = 43
@@ -77,15 +78,16 @@ const val DAILY_CAR_REPAIR = 76
 const val DAILY_TOOL_BOX = 77
 const val DAILY_TRAIN = 78
 const val DAILY_BUS = 79
-const val DAILY_TODO = 80
-const val DAILY_DOING = 81
-const val DAILY_DONE = 82
-const val DAILY_CANCEL = 83
 const val DAILY_RECIPE = 84
 const val DAILY_STOCK = 85
 const val DAILY_CONTRACT = 86
 const val DAILY_PIN_CODE = 87
 
+// Tasks 80 ~ 83
+const val DAILY_TODO = 80
+const val DAILY_DOING = 81
+const val DAILY_DONE = 82
+const val DAILY_CANCEL = 83
 
 // Emotion 100 ~ 199
 const val EMOTION_HAPPY = 100

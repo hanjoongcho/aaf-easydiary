@@ -49,6 +49,12 @@ object FlavorUtils {
         WEATHER_STARS -> R.drawable.ic_stars_2
         WEATHER_MOON -> R.drawable.ic_moon_9
         WEATHER_NIGHT_RAIN -> R.drawable.ic_night_rain
+
+        DAILY_TODO -> R.drawable.ic_todo
+        DAILY_DOING -> R.drawable.ic_doing
+        DAILY_DONE -> R.drawable.ic_done
+        DAILY_CANCEL -> R.drawable.ic_cancel
+
         else -> 0
     }
 
@@ -62,8 +68,8 @@ object FlavorUtils {
     fun getDiarySymbolMap(context: Context): HashMap<Int, String> {
         val symbolMap = hashMapOf<Int, String>()
         val symbolArray = arrayOf(
-                *context.resources.getStringArray(R.array.weather_item_array)
-
+                *context.resources.getStringArray(R.array.weather_item_array),
+                *context.resources.getStringArray(R.array.tasks_item_array)
         )
 
         symbolArray.map { item ->

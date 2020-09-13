@@ -106,14 +106,17 @@
         <item>64|Dumbbell</item>
         <item>46|Garbage</item>
         <item>69|Scale</item>
-        <item>80|Todo</item>
-        <item>81|Doing</item>
-        <item>82|Done</item>
-        <item>83|Cancel</item>
         <item>84|Recipe</item>
         <item>85|Stock</item>
         <item>86|Contract</item>
         <item>87|Pin Code</item>
+    </string-array>
+
+    <string-array name="tasks_item_array">
+        <item>80|Todo</item>
+        <item>81|Doing</item>
+        <item>82|Done</item>
+        <item>83|Cancel</item>
     </string-array>
 
     <string-array name="food_item_array">

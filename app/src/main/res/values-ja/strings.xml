@@ -688,4 +688,5 @@
     <string name="location_info_title">位置情報表示</string>
     <string name="location_info_description">GPS情報を利用して位置情報を日記に表示します。</string>
     <string name="location_info_error_message">位置情報を受信できません。</string>
+    <string name="category_tasks">Tasks</string>
 </resources>
