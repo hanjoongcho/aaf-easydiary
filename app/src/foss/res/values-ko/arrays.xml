@@ -1,6 +1,6 @@
 <resources>
     <string-array name="weather_item_array">
-        <item>0|None</item>
+        <item>0|선택안함</item>
         <item>1|Sunny</item>
         <item>2|Cloud and Sun</item>
         <item>3|RAIN Drops</item>
