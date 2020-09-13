@@ -302,7 +302,7 @@ object FlavorUtils {
                 *context.resources.getStringArray(R.array.weather_item_array),
                 *context.resources.getStringArray(R.array.emotion_item_array),
                 *context.resources.getStringArray(R.array.daily_item_array),
-                *context.resources.getStringArray(R.array.task_item_array),
+                *context.resources.getStringArray(R.array.tasks_item_array),
                 *context.resources.getStringArray(R.array.food_item_array),
                 *context.resources.getStringArray(R.array.leisure_item_array),
                 *context.resources.getStringArray(R.array.landscape_item_array),
