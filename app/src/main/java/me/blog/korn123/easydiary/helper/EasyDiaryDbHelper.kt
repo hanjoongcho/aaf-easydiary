@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.helper
 
 import android.content.Context
+import android.util.Log
 import io.realm.*
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.models.ActionLog
@@ -121,7 +122,24 @@ object EasyDiaryDbHelper {
             results = results.where().equalTo("weather", symbolSequence).findAll()
         }
 
-        return results.toList()
+        return when (EasyDiaryApplication.context?.config?.enableDebugMode ?: false) {
+            true -> {
+                val sortedList = realmInstance.copyFromRealm(results)
+                sortedList.sortWith(kotlin.Comparator { item1, item2 ->
+//                    Log.i("EDD", "${sortedList.indexOf(item1)} to ${sortedList.indexOf(item2)} ${item1.weather}, ${item2.weather}")
+                    when {
+                        item1.weather in 80..81 && item2.weather in 80..81 -> 0
+                        item1.weather in 80..81 -> -1
+                        item2.weather in 80..81 -> 1
+                        else -> 0
+                    }
+                })
+                sortedList
+            }
+            else -> {
+                results.toList()
+            }
+        }
     }
 
     fun readDiaryBy(sequence: Int, realmInstance: Realm = getInstance()): DiaryDto {
