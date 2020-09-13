@@ -126,7 +126,7 @@ object EasyDiaryDbHelper {
             true -> {
                 val sortedList = realmInstance.copyFromRealm(results)
                 sortedList.sortWith(kotlin.Comparator { item1, item2 ->
-//                    Log.i("EDD", "${sortedList.indexOf(item1)} to ${sortedList.indexOf(item2)} ${item1.weather}, ${item2.weather}")
+//                    Log.i("EDD", "${sortedList.indexOf(item1)}(${item1.sequence}) to ${sortedList.indexOf(item2)}(${item2.sequence}) ${item1.weather}, ${item2.weather}")
                     when {
                         item1.weather in 80..81 && item2.weather in 80..81 -> 0
                         item1.weather in 80..81 -> -1
