@@ -51,7 +51,8 @@ object FlavorUtils {
     fun getDiarySymbolMap(context: Context): HashMap<Int, String> {
         val symbolMap = hashMapOf<Int, String>()
         val symbolArray = arrayOf(
-                *context.resources.getStringArray(R.array.weather_item_array)
+                *context.resources.getStringArray(R.array.weather_item_array),
+                *context.resources.getStringArray(R.array.tasks_item_array)
         )
 
         symbolArray.map { item ->

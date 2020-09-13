@@ -1,11 +1,18 @@
 <resources>
     <string-array name="weather_item_array">
-        <item>0|None</item>
-        <item>1|Sunny</item>
-        <item>2|Cloud and Sun</item>
-        <item>3|RAIN Drops</item>
-        <item>4|BOLT</item>
-        <item>5|Snowing</item>
+        <item>0|Not selected</item>
+        <item>1|Sonnig</item>
+        <item>2|Sonnig mit Wolken</item>
+        <item>3|Regen</item>
+        <item>5|Schnee</item>
+        <item>4|Gewitter</item>
+    </string-array>
+
+    <string-array name="tasks_item_array">
+        <item>80|Todo</item>
+        <item>81|Doing</item>
+        <item>82|Done</item>
+        <item>83|Cancel</item>
     </string-array>
 
     <string-array name="pref_list_fonts_title">
