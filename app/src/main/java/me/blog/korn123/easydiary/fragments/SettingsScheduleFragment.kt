@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.fragments
 import android.app.Activity
 import android.app.TimePickerDialog
 import android.content.Context.INPUT_METHOD_SERVICE
+import android.content.DialogInterface
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -153,12 +154,14 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
                     true -> { deleteAlarm.visibility = View.GONE }
                     false -> {
                         deleteAlarm.setOnClickListener {
-                            cancelAlarmClock(temporaryAlarm)
-                            alertDialog?.dismiss()
-                            EasyDiaryDbHelper.beginTransaction()
-                            storedAlarm.deleteFromRealm()
-                            EasyDiaryDbHelper.commitTransaction()
-                            updateAlarmList()
+                            showAlertDialog("Are you sure you want to delete the selected schedule?", DialogInterface.OnClickListener { _, _ ->
+                                cancelAlarmClock(temporaryAlarm)
+                                alertDialog?.dismiss()
+                                EasyDiaryDbHelper.beginTransaction()
+                                storedAlarm.deleteFromRealm()
+                                EasyDiaryDbHelper.commitTransaction()
+                                updateAlarmList()
+                            }, null)
                         }
                     }
                 }
