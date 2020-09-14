@@ -5,8 +5,6 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'realm-android'
 
 ext.versions = [
-    /* Temporarily apply 'requestLegacyExternalStorage' options respond to Android Q 'Scoped Storage' policy */
-    /* Scoped Storage issue of 'com.werb.pickphotoview: pickphotoview' library needs to be resolved */
     compileSdk: 29
 ]
 

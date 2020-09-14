@@ -140,4 +140,8 @@ class Config(context: Context) : BaseConfig(context) {
     var enableLocationInfo: Boolean
         get() = prefs.getBoolean(SETTING_LOCATION_INFO, false)
         set(enableLocationInfo) = prefs.edit().putBoolean(SETTING_LOCATION_INFO, enableLocationInfo).apply()
+
+    var enableTaskSymbolTopOrder: Boolean
+        get() = prefs.getBoolean(SETTING_TASK_SYMBOL_TOP_ORDER, false)
+        set(enableTaskSymbolTopOrder) = prefs.edit().putBoolean(SETTING_TASK_SYMBOL_TOP_ORDER, enableTaskSymbolTopOrder).apply()
 }

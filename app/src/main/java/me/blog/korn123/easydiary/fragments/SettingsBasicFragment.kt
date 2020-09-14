@@ -80,65 +80,71 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     private val mOnClickListener = View.OnClickListener { view ->
-        when (view.id) {
-            R.id.primaryColor -> TransitionHelper.startActivityWithTransition(mActivity, Intent(mActivity, CustomizationActivity::class.java))
-            R.id.thumbnailSetting -> {
-                openThumbnailSettingDialog()
-            }
-            R.id.contentsSummary -> {
-                contentsSummarySwitcher.toggle()
-                mActivity.config.enableContentsSummary = contentsSummarySwitcher.isChecked
-                maxLines.visibility = if (contentsSummarySwitcher.isChecked) View.VISIBLE else View.GONE
-            }
-            R.id.enableCardViewPolicy -> {
-                enableCardViewPolicySwitcher.toggle()
-                mActivity.config.enableCardViewPolicy = enableCardViewPolicySwitcher.isChecked
-                mActivity.updateCardViewPolicy(mRootView)
-            }
-            R.id.multiPickerOption -> {
-                multiPickerOptionSwitcher.toggle()
-                mActivity.config.multiPickerEnable = multiPickerOptionSwitcher.isChecked
-            }
-            R.id.sensitiveOption -> {
-                sensitiveOptionSwitcher.toggle()
-                mActivity.config.diarySearchQueryCaseSensitive = sensitiveOptionSwitcher.isChecked
-            }
-            R.id.countCharacters -> {
-                countCharactersSwitcher.toggle()
-                mActivity.config.enableCountCharacters = countCharactersSwitcher.isChecked
-            }
-            R.id.locationInfo -> {
-                locationInfoSwitcher.toggle()
-                when (locationInfoSwitcher.isChecked) {
-                    true -> {
-                        mActivity.run {
-                            when (hasGPSPermissions()) {
-                                true -> {
-                                    config.enableLocationInfo = locationInfoSwitcher.isChecked
-                                }
-                                false -> {
-                                    locationInfoSwitcher.isChecked = false
-                                    if (this is EasyDiaryActivity) {
-                                        acquireGPSPermissions {
-                                            locationInfoSwitcher.isChecked = true
-                                            config.enableLocationInfo = locationInfoSwitcher.isChecked
+        mActivity.run {
+            when (view.id) {
+                R.id.primaryColor -> TransitionHelper.startActivityWithTransition(this, Intent(this, CustomizationActivity::class.java))
+                R.id.thumbnailSetting -> {
+                    openThumbnailSettingDialog()
+                }
+                R.id.contentsSummary -> {
+                    contentsSummarySwitcher.toggle()
+                    config.enableContentsSummary = contentsSummarySwitcher.isChecked
+                    maxLines.visibility = if (contentsSummarySwitcher.isChecked) View.VISIBLE else View.GONE
+                }
+                R.id.enableCardViewPolicy -> {
+                    enableCardViewPolicySwitcher.toggle()
+                    config.enableCardViewPolicy = enableCardViewPolicySwitcher.isChecked
+                    updateCardViewPolicy(mRootView)
+                }
+                R.id.multiPickerOption -> {
+                    multiPickerOptionSwitcher.toggle()
+                    config.multiPickerEnable = multiPickerOptionSwitcher.isChecked
+                }
+                R.id.sensitiveOption -> {
+                    sensitiveOptionSwitcher.toggle()
+                    config.diarySearchQueryCaseSensitive = sensitiveOptionSwitcher.isChecked
+                }
+                R.id.countCharacters -> {
+                    countCharactersSwitcher.toggle()
+                    config.enableCountCharacters = countCharactersSwitcher.isChecked
+                }
+                R.id.locationInfo -> {
+                    locationInfoSwitcher.toggle()
+                    when (locationInfoSwitcher.isChecked) {
+                        true -> {
+                            run {
+                                when (hasGPSPermissions()) {
+                                    true -> {
+                                        config.enableLocationInfo = locationInfoSwitcher.isChecked
+                                    }
+                                    false -> {
+                                        locationInfoSwitcher.isChecked = false
+                                        if (this is EasyDiaryActivity) {
+                                            acquireGPSPermissions {
+                                                locationInfoSwitcher.isChecked = true
+                                                config.enableLocationInfo = locationInfoSwitcher.isChecked
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
-                    }
-                    false -> {
-                        mActivity.config.enableLocationInfo = locationInfoSwitcher.isChecked
+                        false -> {
+                            config.enableLocationInfo = locationInfoSwitcher.isChecked
+                        }
                     }
                 }
-            }
-            R.id.holdPositionEnterEditScreen -> {
-                holdPositionSwitcher.toggle()
-                mActivity.config.holdPositionEnterEditScreen = holdPositionSwitcher.isChecked
-            }
-            R.id.maxLines -> {
-                openMaxLinesSettingDialog()
+                R.id.holdPositionEnterEditScreen -> {
+                    holdPositionSwitcher.toggle()
+                    config.holdPositionEnterEditScreen = holdPositionSwitcher.isChecked
+                }
+                R.id.maxLines -> {
+                    openMaxLinesSettingDialog()
+                }
+                R.id.taskSymbolTopOrder -> {
+                    taskSymbolTopOrderSwitcher.toggle()
+                    config.enableTaskSymbolTopOrder = taskSymbolTopOrderSwitcher.isChecked
+                }
             }
         }
     }
@@ -171,6 +177,7 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
         countCharacters.setOnClickListener(mOnClickListener)
         locationInfo.setOnClickListener(mOnClickListener)
         holdPositionEnterEditScreen.setOnClickListener(mOnClickListener)
+        taskSymbolTopOrder.setOnClickListener(mOnClickListener)
     }
 
     private fun initPreference() {
@@ -180,6 +187,8 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
         contentsSummarySwitcher.isChecked = mActivity.config.enableContentsSummary
         countCharactersSwitcher.isChecked = mActivity.config.enableCountCharacters
         locationInfoSwitcher.isChecked = mActivity.config.enableLocationInfo
+        taskSymbolTopOrderSwitcher.isChecked = mActivity.config.enableTaskSymbolTopOrder
+
         when (mActivity.config.calendarStartDay) {
             CALENDAR_START_DAY_MONDAY -> startMonday.isChecked = true
             CALENDAR_START_DAY_SATURDAY -> startSaturday.isChecked = true
