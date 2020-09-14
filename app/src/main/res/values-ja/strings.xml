@@ -462,6 +462,10 @@
         ドイツ語翻訳の更新\n
         位置情報表示オプションを追加
     </string>
+    <string name="release_213">
+        v1.4.147 / 2020.09.xx\n
+        Added task symbol sorting option
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -689,4 +693,6 @@
     <string name="location_info_description">GPS情報を利用して位置情報を日記に表示します。</string>
     <string name="location_info_error_message">位置情報を受信できません。</string>
     <string name="category_tasks">Task</string>
+    <string name="task_symbol_top_order_title">Align the task symbol to the top</string>
+    <string name="task_symbol_top_order_description">If the type of Task Symbol is TODO or DOING among the diaries to which the task symbol is applied, it is arranged at the top of the list.</string>
 </resources>

@@ -462,6 +462,10 @@
         German translation updates\n
         Added location information display option
     </string>
+    <string name="release_213">
+        v1.4.147 / 2020.09.xx\n
+        Added task symbol sorting option
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -689,4 +693,6 @@
     <string name="location_info_description">Die Standortinformationen werden mithilfe von GPS-Informationen im Tagebuch angezeigt.</string>
     <string name="location_info_error_message">Standortinformationen können nicht empfangen werden.</string>
     <string name="category_tasks">Task</string>
+    <string name="task_symbol_top_order_title">Align the task symbol to the top</string>
+    <string name="task_symbol_top_order_description">If the type of Task Symbol is TODO or DOING among the diaries to which the task symbol is applied, it is arranged at the top of the list.</string>
 </resources>

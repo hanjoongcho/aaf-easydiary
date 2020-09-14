@@ -462,6 +462,10 @@
         독일어 번역 업데이트\n
         위치정보 표시옵션 추가
     </string>
+    <string name="release_213">
+        v1.4.147 / 2020.09.xx\n
+        Added task symbol sorting option
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -688,5 +692,7 @@
     <string name="location_info_title">위치정보 표시</string>
     <string name="location_info_description">GPS를 이용하여 다이어리에 위치정보를 표시합니다.</string>
     <string name="location_info_error_message">위치 정보를 수신할 수 없습니다.</string>
-    <string name="category_tasks">Task</string>
+    <string name="category_tasks">테스크</string>
+    <string name="task_symbol_top_order_title">테스크 심벌 최상단 정렬</string>
+    <string name="task_symbol_top_order_description">테스크 심벌이 적용된 다이어리 중 심벌의 종류가 TODO 또는 DOING인 경우 해당 다이어리를 목록의 최상단에 노출 시킵니다.</string>
 </resources>
