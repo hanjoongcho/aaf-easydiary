@@ -25,6 +25,45 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/taskSymbolTopOrder"
+            style="@style/AppCard.Settings">
+            <LinearLayout
+                style="@style/LinearLayoutVertical">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:id="@+id/taskSymbolTopOrderTitle"
+                        android:text="테스크 심볼 최상단 정렬"
+                        android:layout_centerVertical="true"
+                        android:layout_width="wrap_content"
+                        style="@style/SettingsTitle" />
+                    <ImageView
+                        android:layout_marginStart="5dp"
+                        android:layout_toEndOf="@+id/taskSymbolTopOrderTitle"
+                        android:id="@+id/doingSymbol"
+                        android:src="@drawable/ic_todo"
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"/>
+                    <ImageView
+                        android:layout_toEndOf="@+id/doingSymbol"
+                        android:src="@drawable/ic_doing"
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"/>
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/taskSymbolTopOrderSwitcher"
+                        android:layout_alignParentRight="true"
+                        android:clickable="false"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </RelativeLayout>
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="@string/location_info_description"
+                    style="@style/SettingsSummary" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
             android:id="@+id/locationInfo"
             style="@style/AppCard.Settings">
             <LinearLayout

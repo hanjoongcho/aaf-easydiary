@@ -688,5 +688,5 @@
     <string name="location_info_title">Anzeige der Standortinformationen</string>
     <string name="location_info_description">Die Standortinformationen werden mithilfe von GPS-Informationen im Tagebuch angezeigt.</string>
     <string name="location_info_error_message">Standortinformationen können nicht empfangen werden.</string>
-    <string name="category_tasks">Tasks</string>
+    <string name="category_tasks">Task</string>
 </resources>

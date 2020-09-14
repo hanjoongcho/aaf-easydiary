@@ -688,5 +688,5 @@
     <string name="location_info_title">위치정보 표시</string>
     <string name="location_info_description">GPS를 이용하여 다이어리에 위치정보를 표시합니다.</string>
     <string name="location_info_error_message">위치 정보를 수신할 수 없습니다.</string>
-    <string name="category_tasks">Tasks</string>
+    <string name="category_tasks">Task</string>
 </resources>
