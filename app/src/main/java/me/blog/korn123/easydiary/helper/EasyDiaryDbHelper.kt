@@ -122,7 +122,7 @@ object EasyDiaryDbHelper {
             results = results.where().equalTo("weather", symbolSequence).findAll()
         }
 
-        return when (EasyDiaryApplication.context?.config?.enableDebugMode ?: false) {
+        return when (EasyDiaryApplication.context?.config?.enableTaskSymbolTopOrder ?: false) {
             true -> {
                 val sortedList = realmInstance.copyFromRealm(results)
                 sortedList.sortWith(kotlin.Comparator { item1, item2 ->
