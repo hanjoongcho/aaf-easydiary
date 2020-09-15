@@ -370,7 +370,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
                     val sb = StringBuilder()
                     sb.append(this.displayName +  System.getProperty("line.separator"))
                     sb.append(this.email)
-                    accountInfo.text = sb.toString()
+                    mActivity.runOnUiThread { accountInfo.text = sb.toString() }
                     Glide.with(mActivity)
                             .load(this.photoUrl)
                             .apply(RequestOptions().circleCrop())

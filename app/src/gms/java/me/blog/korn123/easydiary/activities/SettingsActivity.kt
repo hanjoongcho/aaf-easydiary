@@ -81,6 +81,5 @@ class SettingsActivity : BaseSettingsActivity() {
         mDotIndicatorPager2Adapter.instantiateItem(viewPager, viewPager.currentItem).run {
             if (this is SettingsBasicFragment) onActivityResult(requestCode, resultCode, intent)
         }
-
     }
 }
