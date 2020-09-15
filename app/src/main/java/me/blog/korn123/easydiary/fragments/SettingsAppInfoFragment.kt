@@ -96,17 +96,17 @@ class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
         privacyPolicy.setOnClickListener(mOnClickListener)
         setupInvite()
 
-        when (mActivity.config.enableDebugMode) {
-            true -> {
-                mActivity.config.enableDebugMode = false
-                mActivity.toast("Debug console is disabled.")
-            }
-            false -> {
-                mActivity.config.enableDebugMode = true
-                mActivity.toast("Debug console is enabled.")
-            }
-        }
         licenseView.setOnLongClickListener {
+            when (mActivity.config.enableDebugMode) {
+                true -> {
+                    mActivity.config.enableDebugMode = false
+                    mActivity.toast("Debug console is disabled.")
+                }
+                false -> {
+                    mActivity.config.enableDebugMode = true
+                    mActivity.toast("Debug console is enabled.")
+                }
+            }
             true
         }
     }
