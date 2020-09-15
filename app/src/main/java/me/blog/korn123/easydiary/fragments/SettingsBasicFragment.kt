@@ -226,7 +226,7 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
         val arrayAdapter = OptionItemAdapter(mActivity, R.layout.item_check_label, listThumbnailSize, mActivity.config.settingThumbnailSize)
         listView.adapter = arrayAdapter
         listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-            val fontInfo = parent.adapter.getItem(position) as HashMap<String, String>
+            @Suppress("UNCHECKED_CAST") val fontInfo = parent.adapter.getItem(position) as HashMap<String, String>
             fontInfo["optionValue"]?.let {
                 mActivity.config.settingThumbnailSize = it.toFloat()
                 initPreference()
@@ -260,7 +260,7 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
         val arrayAdapter = OptionItemAdapter(mActivity, R.layout.item_check_label, listMaxLines, mActivity.config.summaryMaxLines.toFloat())
         listView.adapter = arrayAdapter
         listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-            val optionInfo = parent.adapter.getItem(position) as HashMap<String, String>
+            @Suppress("UNCHECKED_CAST") val optionInfo = parent.adapter.getItem(position) as HashMap<String, String>
             optionInfo["optionValue"]?.let {
                 mActivity.config.summaryMaxLines = it.toInt()
                 initPreference()

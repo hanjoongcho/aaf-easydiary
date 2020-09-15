@@ -30,7 +30,7 @@ import java.util.*
 
 class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
     private val mContext: Context
-        get() { return context!! }
+        get() = context!!
     val mSequences = arrayListOf<Int>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

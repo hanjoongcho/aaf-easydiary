@@ -1,7 +1,6 @@
 package me.blog.korn123.easydiary.fragments
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -24,8 +23,8 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     private lateinit var mRootView: ViewGroup
-    private lateinit var mContext: Context
-    private lateinit var mActivity: Activity
+    private val mActivity: Activity
+        get() = activity!!
 
 
     /***************************************************************************************************
@@ -39,9 +38,6 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        mContext = context!!
-        mActivity = activity!!
 
         bindEvent()
         updateFragmentUI(mRootView)
@@ -60,48 +56,50 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     private val mOnClickListener = View.OnClickListener { view ->
-        when (view.id) {
-            R.id.appLockSetting -> {
-                when (mContext.config.aafPinLockEnable) {
-                    true -> {
-                        if (mContext.config.fingerprintLockEnable) {
-                            mActivity.showAlertDialog(getString(R.string.pin_release_need_fingerprint_disable), null)
-                        } else {
-                            appLockSettingSwitcher.isChecked = false
-                            mContext.config.aafPinLockEnable = false
-                            mActivity.showAlertDialog(getString(R.string.pin_setting_release), null)
-                        }
-                    }
-                    false -> {
-                        startActivity(Intent(mContext, PinLockActivity::class.java).apply {
-                            putExtra(FingerprintLockActivity.LAUNCHING_MODE, PinLockActivity.ACTIVITY_SETTING)
-                        })
-                    }
-                }
-            }
-            R.id.fingerprint -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    when (mContext.config.fingerprintLockEnable) {
+        mActivity.run {
+            when (view.id) {
+                R.id.appLockSetting -> {
+                    when (config.aafPinLockEnable) {
                         true -> {
-                            fingerprintSwitcher.isChecked = false
-                            mContext.config.fingerprintLockEnable = false
-                            mActivity.showAlertDialog(getString(R.string.fingerprint_setting_release), null)
+                            if (config.fingerprintLockEnable) {
+                                showAlertDialog(getString(R.string.pin_release_need_fingerprint_disable), null)
+                            } else {
+                                appLockSettingSwitcher.isChecked = false
+                                config.aafPinLockEnable = false
+                                showAlertDialog(getString(R.string.pin_setting_release), null)
+                            }
                         }
                         false -> {
-                            when (mContext.config.aafPinLockEnable) {
-                                true -> {
-                                    startActivity(Intent(mContext, FingerprintLockActivity::class.java).apply {
-                                        putExtra(FingerprintLockActivity.LAUNCHING_MODE, FingerprintLockActivity.ACTIVITY_SETTING)
-                                    })
-                                }
-                                false -> {
-                                    mActivity.showAlertDialog(getString(R.string.fingerprint_lock_need_pin_setting), null)
+                            startActivity(Intent(this, PinLockActivity::class.java).apply {
+                                putExtra(FingerprintLockActivity.LAUNCHING_MODE, PinLockActivity.ACTIVITY_SETTING)
+                            })
+                        }
+                    }
+                }
+                R.id.fingerprint -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        when (config.fingerprintLockEnable) {
+                            true -> {
+                                fingerprintSwitcher.isChecked = false
+                                config.fingerprintLockEnable = false
+                                showAlertDialog(getString(R.string.fingerprint_setting_release), null)
+                            }
+                            false -> {
+                                when (config.aafPinLockEnable) {
+                                    true -> {
+                                        startActivity(Intent(this, FingerprintLockActivity::class.java).apply {
+                                            putExtra(FingerprintLockActivity.LAUNCHING_MODE, FingerprintLockActivity.ACTIVITY_SETTING)
+                                        })
+                                    }
+                                    false -> {
+                                        mActivity.showAlertDialog(getString(R.string.fingerprint_lock_need_pin_setting), null)
+                                    }
                                 }
                             }
                         }
+                    } else {
+                        mActivity.showAlertDialog(getString(R.string.fingerprint_not_available), null)
                     }
-                } else {
-                    mActivity.showAlertDialog(getString(R.string.fingerprint_not_available), null)
                 }
             }
         }
@@ -113,7 +111,7 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun initPreference() {
-        appLockSettingSwitcher.isChecked = mContext.config.aafPinLockEnable
-        fingerprintSwitcher.isChecked = mContext.config.fingerprintLockEnable
+        appLockSettingSwitcher.isChecked = mActivity.config.aafPinLockEnable
+        fingerprintSwitcher.isChecked = mActivity.config.fingerprintLockEnable
     }
 }

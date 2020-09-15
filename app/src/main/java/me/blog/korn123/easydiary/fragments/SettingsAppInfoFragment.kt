@@ -1,7 +1,6 @@
 package me.blog.korn123.easydiary.fragments
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -27,8 +26,8 @@ class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     private lateinit var mRootView: ViewGroup
-    private lateinit var mContext: Context
-    private lateinit var mActivity: Activity
+    private val mActivity: Activity
+        get() = activity!!
 
 
     /***************************************************************************************************
@@ -42,10 +41,6 @@ class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        mContext = context!!
-        mActivity = activity!!
-
         bindEvent()
         updateFragmentUI(mRootView)
         initPreference()
@@ -72,20 +67,20 @@ class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
                 }
             }
             R.id.licenseView -> {
-                TransitionHelper.startActivityWithTransition(mActivity, Intent(mContext, MarkDownViewActivity::class.java).apply {
+                TransitionHelper.startActivityWithTransition(mActivity, Intent(mActivity, MarkDownViewActivity::class.java).apply {
                     putExtra(MarkDownViewActivity.OPEN_URL_INFO, "https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/THIRDPARTY.md")
                     putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, getString(R.string.preferences_information_licenses))
                 })
             }
             R.id.releaseNotes -> (mActivity as SettingsActivity).checkWhatsNewDialog(false)
             R.id.faq -> {
-                TransitionHelper.startActivityWithTransition(mActivity, Intent(mContext, MarkDownViewActivity::class.java).apply {
+                TransitionHelper.startActivityWithTransition(mActivity, Intent(mActivity, MarkDownViewActivity::class.java).apply {
                     putExtra(MarkDownViewActivity.OPEN_URL_INFO, getString(R.string.faq_url))
                     putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, getString(R.string.faq_title))
                 })
             }
             R.id.privacyPolicy -> {
-                TransitionHelper.startActivityWithTransition(mActivity, Intent(mContext, MarkDownViewActivity::class.java).apply {
+                TransitionHelper.startActivityWithTransition(mActivity, Intent(mActivity, MarkDownViewActivity::class.java).apply {
                     putExtra(MarkDownViewActivity.OPEN_URL_INFO, getString(R.string.privacy_policy_url))
                     putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, getString(R.string.privacy_policy_title))
                 })
@@ -101,17 +96,17 @@ class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
         privacyPolicy.setOnClickListener(mOnClickListener)
         setupInvite()
 
-        licenseView.setOnLongClickListener {
-            when (mContext.config.enableDebugMode) {
-                true -> {
-                    mContext.config.enableDebugMode = false
-                    mContext.toast("Debug console is disabled.")
-                }
-                false -> {
-                    mContext.config.enableDebugMode = true
-                    mContext.toast("Debug console is enabled.")
-                }
+        when (mActivity.config.enableDebugMode) {
+            true -> {
+                mActivity.config.enableDebugMode = false
+                mActivity.toast("Debug console is disabled.")
             }
+            false -> {
+                mActivity.config.enableDebugMode = true
+                mActivity.toast("Debug console is enabled.")
+            }
+        }
+        licenseView.setOnLongClickListener {
             true
         }
     }
@@ -135,6 +130,6 @@ class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
     }
 
     private fun getStoreUrl(): String {
-        return if (BuildConfig.FLAVOR == "foss") "https://f-droid.org/packages/${mContext.packageName}/" else "https://play.google.com/store/apps/details?id=${mContext.packageName}"
+        return if (BuildConfig.FLAVOR == "foss") "https://f-droid.org/packages/${mActivity.packageName}/" else "https://play.google.com/store/apps/details?id=${mActivity.packageName}"
     }
 }
