@@ -48,7 +48,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
      *   global properties
      *
      ***************************************************************************************************/
-    private var mRecognizerIntent: Intent? = null
     private var mDiaryMainItemAdapter: DiaryMainItemAdapter? = null
     private var mDiaryList: ArrayList<DiaryDto> = arrayListOf()
     private var mShowcaseIndex = 0
@@ -65,18 +64,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         super.onCreate(savedInstanceState)
         forceInitRealmLessThenOreo()
 
-        when {
-            intent.getBooleanExtra(APP_FINISH_FLAG, false) -> finish() // application finish 확인 insertDiaryButton
-        }
-
         setSupportActionBar(toolbar)
         supportActionBar?.run {
             title = getString(R.string.read_diary_title)
-        }
-
-        mRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
-            putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-            putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
         }
 
         mDiaryList.addAll(EasyDiaryDbHelper.readDiary(null))
@@ -498,20 +488,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             mDiaryMode = DiaryMode.DELETE
             invalidateOptionsMenu()
             mDiaryMainItemAdapter?.notifyDataSetChanged()
-//            val diaryDto = adapterView.adapter.getItem(i) as DiaryDto
-//            showAlertDialog(getString(R.string.copy_diary_item),
-//                    DialogInterface.OnClickListener { _, _ ->
-//                        val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
-//                        val copyItem = realmInstance.copyFromRealm(diaryDto)
-//                        realmInstance.close()
-//                        copyItem.currentTimeMillis = System.currentTimeMillis()
-//                        copyItem.updateDateString()
-//                        EasyDiaryDbHelper.insertDiary(copyItem)
-//                        refreshList()
-//                        Handler().post { diaryListView.setSelection(0) }
-//                    },
-//                    null
-//            )
             true
         }
 
@@ -537,7 +513,10 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
 
     private fun showSpeechDialog() {
         try {
-            startActivityForResult(mRecognizerIntent, REQUEST_CODE_SPEECH_INPUT)
+            Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+                putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+                putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+            }.run { startActivityForResult(this, REQUEST_CODE_SPEECH_INPUT) }
         } catch (e: ActivityNotFoundException) {
             showAlertDialog(getString(R.string.recognizer_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
         }

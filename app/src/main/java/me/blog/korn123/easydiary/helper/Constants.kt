@@ -457,7 +457,6 @@ val EXTERNAL_STORAGE_PERMISSIONS = arrayOf(Manifest.permission.WRITE_EXTERNAL_ST
 
 const val INIT_DUMMY_DATA_FLAG = "init_dummy_data"
 
-const val APP_FINISH_FLAG = "app_finish"
 const val APP_LOCK_ENABLE = "application_lock"
 const val APP_LOCK_REQUEST_PASSWORD = "lock_password"
 const val APP_LOCK_SAVED_PASSWORD = "application_lock_password"
