@@ -1,15 +1,21 @@
 package me.blog.korn123.easydiary.activities
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.widget.RemoteViews
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.isOreoPlus
@@ -94,26 +100,9 @@ open class BaseDevActivity : EasyDiaryActivity() {
             showAlertDialog(unUsedPhotos.size.toString(), null, true)
         }
 
+
         locationManager.setOnClickListener {
-            fun setLocationInfo() {
-                getLastKnownLocation()?.let {
-                    var info = "Longitude: ${it.longitude}\nLatitude: ${it.latitude}\n"
-                    getFromLocation(it.latitude, it.longitude, 1)?.let { address ->
-                        if (address.isNotEmpty()) {
-                            info += fullAddress(address[0])
-                        }
-                    }
-                    locationManagerInfo.text = info
-                }
-            }
-            when (hasGPSPermissions()) {
-                true -> setLocationInfo()
-                false -> {
-                    acquireGPSPermissions() {
-                        setLocationInfo()
-                    }
-                }
-            }
+            updateLocation()
         }
     }
 
@@ -133,6 +122,42 @@ open class BaseDevActivity : EasyDiaryActivity() {
      *   etc functions
      *
      ***************************************************************************************************/
+    @SuppressLint("MissingPermission")
+    private fun updateLocation() {
+        fun setLocationInfo() {
+            getLastKnownLocation()?.let {
+//                val gpsProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+//                val listener = object : LocationListener {
+//                    override fun onLocationChanged(p0: Location?) {
+//                        makeToast("Location information has been updated")
+//                        gpsProvider.removeUpdates(this)
+//                    }
+//                    override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {}
+//                    override fun onProviderEnabled(p0: String?) {}
+//                    override fun onProviderDisabled(p0: String?) {}
+//
+//                }
+//                gpsProvider.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0F, listener)
+
+                var info = "Longitude: ${it.longitude}\nLatitude: ${it.latitude}\n"
+                getFromLocation(it.latitude, it.longitude, 1)?.let { address ->
+                    if (address.isNotEmpty()) {
+                        info += fullAddress(address[0])
+                    }
+                }
+                locationManagerInfo.text = info
+            }
+        }
+        when (hasGPSPermissions()) {
+            true -> setLocationInfo()
+            false -> {
+                acquireGPSPermissions() {
+                    setLocationInfo()
+                }
+            }
+        }
+    }
+
     private fun updateActionLog() {
         val actionLogs: List<ActionLog> = EasyDiaryDbHelper.readActionLogAll()
         val sb = StringBuilder()
