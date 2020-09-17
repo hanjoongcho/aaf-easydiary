@@ -1,11 +1,9 @@
 package me.blog.korn123.easydiary.activities
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.location.Location
 import android.location.LocationListener
@@ -15,7 +13,6 @@ import android.os.Bundle
 import android.provider.Settings
 import android.widget.RemoteViews
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.isOreoPlus
@@ -280,6 +277,7 @@ fun test1() {
     }
     println(result)
 }
+
 
 
 
