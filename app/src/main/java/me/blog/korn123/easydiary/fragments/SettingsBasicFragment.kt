@@ -29,8 +29,7 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
      ***************************************************************************************************/
     private lateinit var progressContainer: ConstraintLayout
     private lateinit var mRootView: ViewGroup
-    private val mActivity: Activity
-        get() = activity!!
+    private val mActivity: Activity get() = activity!!
 
 
     /***************************************************************************************************
