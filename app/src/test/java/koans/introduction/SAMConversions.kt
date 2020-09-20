@@ -9,8 +9,8 @@ import java.util.*
  * https://play.kotlinlang.org/koans/Introduction/SAM%20conversions/Task.kt
  */
 class SAMConversions {
-    fun getList(list: List<Int>): List<Int> {
-        Collections.sort(list, { x, y -> y- x })
+    private fun getList(list: List<Int>): List<Int> {
+        Collections.sort(list) { x, y -> y- x }
         return list
     }
 
