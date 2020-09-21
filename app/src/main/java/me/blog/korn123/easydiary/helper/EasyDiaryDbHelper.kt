@@ -137,7 +137,7 @@ object EasyDiaryDbHelper {
                 sortedList
             }
             else -> {
-                results.toList()
+                realmInstance.copyFromRealm(results)
             }
         }
     }
