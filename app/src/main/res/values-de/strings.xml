@@ -466,6 +466,10 @@
         v1.4.148 / 2020.09.15\n
         Option zum Sortieren von Aufgabensymbolen hinzugefügt
     </string>
+    <string name="release_215">
+        v1.4.149 / 2020.09.22\n
+        Fixed a bug where the widget was not displayed normally
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->

@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.149 (date: 2020.09.22)
+  * Fixed a bug where the widget was not displayed normally
+
 # Changes in 1.4.148 (date: 2020.09.15)
   * Added task symbol sorting option
 
