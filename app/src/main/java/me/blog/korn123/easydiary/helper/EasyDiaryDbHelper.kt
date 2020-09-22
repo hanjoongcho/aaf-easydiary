@@ -1,7 +1,6 @@
 package me.blog.korn123.easydiary.helper
 
 import android.content.Context
-import android.util.Log
 import io.realm.*
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.models.ActionLog
@@ -9,7 +8,7 @@ import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.models.DiaryDto
 import me.blog.korn123.easydiary.models.PhotoUriDto
 import org.apache.commons.lang3.StringUtils
-import java.util.*
+
 /**
  * Created by CHO HANJOONG on 2017-03-16.
  */
@@ -51,25 +50,24 @@ object EasyDiaryDbHelper {
         getInstance().commitTransaction()
     }
 
-    fun duplicateDiary(diaryDto: DiaryDto, realmInstance: Realm = getInstance()) {
-        val copyItem = realmInstance.copyFromRealm(diaryDto)
-        copyItem.currentTimeMillis = System.currentTimeMillis()
-        copyItem.updateDateString()
-        insertDiary(copyItem)
-    }
-
     fun clearSelectedStatus() {
-        beginTransaction()
-        readDiary(null).map {
-            if (it.isSelected) it.isSelected = false
+        getInstance().executeTransaction { realm ->
+            realm.where(DiaryDto::class.java).equalTo("isSelected", true).findAll().forEach { diaryDto ->
+                diaryDto.isSelected = false
+            }
         }
-        commitTransaction()
     }
 
     /***************************************************************************************************
      *   Manage DiaryDto model
      *
      ***************************************************************************************************/
+    fun duplicateDiary(diaryDto: DiaryDto) {
+        diaryDto.currentTimeMillis = System.currentTimeMillis()
+        diaryDto.updateDateString()
+        insertDiary(diaryDto)
+    }
+
     fun insertDiary(diaryDto: DiaryDto) {
         getInstance().executeTransaction { realm ->
             var sequence = 1
@@ -94,6 +92,11 @@ object EasyDiaryDbHelper {
         return getInstance().where(DiaryDto::class.java).count()
     }
 
+    /**
+     * Makes an unmanaged in-memory copy of already persisted RealmObjects
+     *
+     * @return an in-memory detached copy of managed RealmObjects.
+     */
     fun readDiary(query: String?, isSensitive: Boolean = false, startTimeMillis: Long = 0, endTimeMillis: Long = 0, symbolSequence: Int = 0, realmInstance: Realm = getInstance()): List<DiaryDto> {
         var results: RealmResults<DiaryDto> = when (StringUtils.isEmpty(query)) {
             true -> {
@@ -147,17 +150,11 @@ object EasyDiaryDbHelper {
     }
 
     fun readDiaryByDateString(dateString: String?, sort: Sort = Sort.DESCENDING): List<DiaryDto> {
-        val results: RealmResults<DiaryDto> = getInstance().where(DiaryDto::class.java).equalTo("dateString", dateString).findAll().sort("sequence", sort)
-        val list = ArrayList<DiaryDto>()
-        list.addAll(results.subList(0, results.size))
-        return list
+        return getInstance().where(DiaryDto::class.java).equalTo("dateString", dateString).findAll().sort("sequence", sort).toList()
     }
 
     fun selectPhotoUriAll(realmInstance: Realm = getInstance()): List<PhotoUriDto> {
-        val results = realmInstance.where(PhotoUriDto::class.java).findAll().sort("photoUri", Sort.ASCENDING)
-        val list = ArrayList<PhotoUriDto>()
-        list.addAll(results.subList(0, results.size))
-        return list
+        return realmInstance.where(PhotoUriDto::class.java).findAll().sort("photoUri", Sort.ASCENDING).toList()
     }
 
     fun countPhotoUriBy(uriString: String): Int {

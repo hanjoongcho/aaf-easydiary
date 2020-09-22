@@ -167,11 +167,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                     when (this.isNotEmpty()) {
                         true -> {
                             showAlertDialog(getString(R.string.delete_selected_items_confirm, this.size), DialogInterface.OnClickListener { _, _ ->
-                                EasyDiaryDbHelper.beginTransaction()
-                                this.map {
-                                    it.deleteFromRealm()
-                                }
-                                EasyDiaryDbHelper.commitTransaction()
+                                this.forEach { EasyDiaryDbHelper.deleteDiary(it.sequence) }
                                 refreshList()
                             }, null)
                         }
@@ -187,9 +183,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                         true -> {
                             showAlertDialog(getString(R.string.duplicate_selected_items_confirm, this.size), DialogInterface.OnClickListener { _, _ ->
                                 this.reversed().map {
-                                    EasyDiaryDbHelper.beginTransaction()
                                     it.isSelected = false
-                                    EasyDiaryDbHelper.commitTransaction()
+                                    EasyDiaryDbHelper.updateDiary(it)
                                     EasyDiaryDbHelper.duplicateDiary(it)
                                 }
                                 refreshList()
@@ -487,7 +482,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             EasyDiaryDbHelper.clearSelectedStatus()
             mDiaryMode = DiaryMode.DELETE
             invalidateOptionsMenu()
-            mDiaryMainItemAdapter?.notifyDataSetChanged()
+            refreshList()
+//            mDiaryMainItemAdapter?.notifyDataSetChanged()
             true
         }
 

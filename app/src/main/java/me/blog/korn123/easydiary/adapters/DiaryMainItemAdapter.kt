@@ -77,9 +77,8 @@ class DiaryMainItemAdapter(
             }
 
             selection.setOnCheckedChangeListener { _, isChecked ->
-                EasyDiaryDbHelper.beginTransaction()
                 diaryDto.isSelected = isChecked
-                EasyDiaryDbHelper.commitTransaction()
+                EasyDiaryDbHelper.updateDiary(diaryDto)
             }
 
             when ((activity as DiaryMainActivity).mDiaryMode) {
