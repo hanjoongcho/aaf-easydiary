@@ -271,6 +271,12 @@ fun fun1(param1: String, block: (responseData: String) -> String): String {
     return block("")
 }
 
+fun fun2(param1: String, block: (responseData: String) -> Boolean): String {
+    println(param1)
+    var blockReturn = block(param1)
+    return param1
+}
+
 fun test1() {
     val result = fun1("banana") { responseData ->
         "data: $responseData"
