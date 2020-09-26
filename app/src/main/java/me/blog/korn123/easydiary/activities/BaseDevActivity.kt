@@ -35,7 +35,25 @@ open class BaseDevActivity : EasyDiaryActivity() {
      *   global properties
      *
      ***************************************************************************************************/
-
+    private val mLocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    private val mNetworkLocationListener = object : LocationListener {
+        override fun onLocationChanged(p0: Location?) {
+            makeToast("Network location has been updated")
+            mLocationManager.removeUpdates(this)
+        }
+        override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {}
+        override fun onProviderEnabled(p0: String?) {}
+        override fun onProviderDisabled(p0: String?) {}
+    }
+    private val mGPSLocationListener = object : LocationListener {
+        override fun onLocationChanged(p0: Location?) {
+            makeToast("GPS location has been updated")
+            mLocationManager.removeUpdates(this)
+        }
+        override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {}
+        override fun onProviderEnabled(p0: String?) {}
+        override fun onProviderDisabled(p0: String?) {}
+    }
 
     /***************************************************************************************************
      *   override functions
@@ -98,26 +116,14 @@ open class BaseDevActivity : EasyDiaryActivity() {
             showAlertDialog(unUsedPhotos.size.toString(), null, true)
         }
 
-
         requestLastLocation.setOnClickListener {
             updateLocation()
         }
 
         updateGPSProvider.setOnClickListener {
-            val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            when (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            when (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 true -> {
-                    val listener = object : LocationListener {
-                        override fun onLocationChanged(p0: Location?) {
-                            makeToast("Location information has been updated")
-                            locationManager.removeUpdates(this)
-                        }
-                        override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {}
-                        override fun onProviderEnabled(p0: String?) {}
-                        override fun onProviderDisabled(p0: String?) {}
-
-                    }
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0F, listener)
+                    mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0F, mGPSLocationListener)
                 }
                 false -> makeSnackBar("GPS Provider is not available.")
             }
@@ -127,21 +133,17 @@ open class BaseDevActivity : EasyDiaryActivity() {
             val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
             when (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
                 true -> {
-                    val listener = object : LocationListener {
-                        override fun onLocationChanged(p0: Location?) {
-                            makeToast("Location information has been updated")
-                            locationManager.removeUpdates(this)
-                        }
-                        override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {}
-                        override fun onProviderEnabled(p0: String?) {}
-                        override fun onProviderDisabled(p0: String?) {}
-
-                    }
-                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0F, listener)
+                    mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0F, mNetworkLocationListener)
                 }
                 false -> makeSnackBar("Network Provider is not available.")
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mLocationManager.removeUpdates(mGPSLocationListener)
+        mLocationManager.removeUpdates(mNetworkLocationListener)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
