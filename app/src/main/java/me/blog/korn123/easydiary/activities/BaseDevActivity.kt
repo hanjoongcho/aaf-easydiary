@@ -107,18 +107,17 @@ open class BaseDevActivity : EasyDiaryActivity() {
             val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
             when (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 true -> {
-                    val gpsProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
                     val listener = object : LocationListener {
                         override fun onLocationChanged(p0: Location?) {
                             makeToast("Location information has been updated")
-                            gpsProvider.removeUpdates(this)
+                            locationManager.removeUpdates(this)
                         }
                         override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {}
                         override fun onProviderEnabled(p0: String?) {}
                         override fun onProviderDisabled(p0: String?) {}
 
                     }
-                    gpsProvider.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0F, listener)
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0F, listener)
                 }
                 false -> makeSnackBar("GPS Provider is not available.")
             }
@@ -128,18 +127,17 @@ open class BaseDevActivity : EasyDiaryActivity() {
             val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
             when (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
                 true -> {
-                    val gpsProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
                     val listener = object : LocationListener {
                         override fun onLocationChanged(p0: Location?) {
                             makeToast("Location information has been updated")
-                            gpsProvider.removeUpdates(this)
+                            locationManager.removeUpdates(this)
                         }
                         override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {}
                         override fun onProviderEnabled(p0: String?) {}
                         override fun onProviderDisabled(p0: String?) {}
 
                     }
-                    gpsProvider.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0F, listener)
+                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0F, listener)
                 }
                 false -> makeSnackBar("Network Provider is not available.")
             }

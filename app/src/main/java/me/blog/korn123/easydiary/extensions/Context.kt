@@ -23,6 +23,7 @@ import android.preference.PreferenceManager
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.RelativeSizeSpan
+import android.util.Log
 import android.util.TypedValue
 import android.view.*
 import android.widget.CheckBox
@@ -646,12 +647,25 @@ fun Context.isLocationEnabled(): Boolean {
 fun Context.hasGPSPermissions() = checkPermission(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,  Manifest.permission.ACCESS_COARSE_LOCATION)) && isLocationEnabled()
 
 fun Context.getLastKnownLocation(): Location? {
-    val gpsProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-    val networkProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
+    val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
     return when (checkPermission(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,  Manifest.permission.ACCESS_COARSE_LOCATION)) && isLocationEnabled()) {
         true -> {
-            gpsProvider.getLastKnownLocation(LocationManager.GPS_PROVIDER) ?: networkProvider.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+            val gpsLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+            val networkLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+            when {
+                gpsLocation != null && networkLocation != null -> {
+                    if (gpsLocation.elapsedRealtimeNanos - networkLocation.elapsedRealtimeNanos > 0) {
+                        if (config.enableDebugMode) toast("GPS Location")
+                        gpsLocation
+                    } else {
+                        if (config.enableDebugMode) toast("Network Location")
+                        networkLocation
+                    }
+                }
+                gpsLocation != null -> gpsLocation
+                networkLocation != null -> networkLocation
+                else -> null
+            }
         }
         false -> null
     }
