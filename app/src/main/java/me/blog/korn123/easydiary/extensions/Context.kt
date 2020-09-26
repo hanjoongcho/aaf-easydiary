@@ -655,15 +655,21 @@ fun Context.getLastKnownLocation(): Location? {
             when {
                 gpsLocation != null && networkLocation != null -> {
                     if (gpsLocation.elapsedRealtimeNanos - networkLocation.elapsedRealtimeNanos > 0) {
-                        if (config.enableDebugMode) toast("GPS Location")
+                        if (config.enableDebugMode) toast("GPS Location > Network Location")
                         gpsLocation
                     } else {
-                        if (config.enableDebugMode) toast("Network Location")
+                        if (config.enableDebugMode) toast("Network Location > GPS Location")
                         networkLocation
                     }
                 }
-                gpsLocation != null -> gpsLocation
-                networkLocation != null -> networkLocation
+                gpsLocation != null -> {
+                    if (config.enableDebugMode) toast("GPS Location")
+                    gpsLocation
+                }
+                networkLocation != null -> {
+                    if (config.enableDebugMode) toast("Network Location")
+                    networkLocation
+                }
                 else -> null
             }
         }
