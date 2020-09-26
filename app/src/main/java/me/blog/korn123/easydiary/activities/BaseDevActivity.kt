@@ -35,7 +35,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
      *   global properties
      *
      ***************************************************************************************************/
-    private val mLocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    private val mLocationManager by lazy { getSystemService(Context.LOCATION_SERVICE) as LocationManager }
     private val mNetworkLocationListener = object : LocationListener {
         override fun onLocationChanged(p0: Location?) {
             makeToast("Network location has been updated")
