@@ -142,8 +142,10 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        mLocationManager.removeUpdates(mGPSLocationListener)
-        mLocationManager.removeUpdates(mNetworkLocationListener)
+        mLocationManager.run {
+            removeUpdates(mGPSLocationListener)
+            removeUpdates(mNetworkLocationListener)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
