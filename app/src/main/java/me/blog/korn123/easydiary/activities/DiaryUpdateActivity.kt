@@ -209,6 +209,7 @@ class DiaryUpdateActivity : EditActivity() {
             diaryDto.location?.let {
                 locationContainer.visibility = View.VISIBLE
                 locationLabel.text = it.address
+                mLocation = it
             } ?: {
                 setLocationInfo()
                 mLocation?.let {
