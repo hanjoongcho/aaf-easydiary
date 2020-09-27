@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.activities
 
+import android.Manifest
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.ActivityNotFoundException
@@ -8,6 +9,9 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -31,6 +35,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.simplemobiletools.commons.extensions.toast
 import com.werb.pickphotoview.PickPhotoView
 import io.github.aafactory.commons.utils.CALCULATION
 import io.github.aafactory.commons.utils.CommonUtils
@@ -57,17 +62,36 @@ abstract class EditActivity : EasyDiaryActivity() {
      *   global properties
      *
      ***************************************************************************************************/
-    lateinit var mRecognizerIntent: Intent
-    lateinit var mPhotoUris: RealmList<PhotoUriDto>
-    lateinit var mDatePickerDialog: DatePickerDialog
-    lateinit var mTimePickerDialog: TimePickerDialog
-    lateinit var mSecondsPickerDialog: AlertDialog
-
+    private lateinit var mRecognizerIntent: Intent
+    private lateinit var mDatePickerDialog: DatePickerDialog
+    private lateinit var mTimePickerDialog: TimePickerDialog
+    private lateinit var mSecondsPickerDialog: AlertDialog
     private val mCalendar = Calendar.getInstance(Locale.getDefault())
-    val mRemoveIndexes = ArrayList<Int>()
-    var mCurrentTimeMillis: Long = 0
-    var mYear = mCalendar.get(Calendar.YEAR)
-    var mLocation: me.blog.korn123.easydiary.models.Location? = null
+    private val mRemoveIndexes = ArrayList<Int>()
+    private val mLocationManager by lazy { getSystemService(Context.LOCATION_SERVICE) as LocationManager }
+    private val mNetworkLocationListener = object : LocationListener {
+        override fun onLocationChanged(p0: Location?) {
+            if (config.enableDebugMode) makeToast("Network location has been updated")
+            mLocationManager.removeUpdates(this)
+        }
+        override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {}
+        override fun onProviderEnabled(p0: String?) {}
+        override fun onProviderDisabled(p0: String?) {}
+    }
+    private val mGPSLocationListener = object : LocationListener {
+        override fun onLocationChanged(p0: Location?) {
+            if (config.enableDebugMode) makeToast("GPS location has been updated")
+            mLocationManager.removeUpdates(this)
+        }
+        override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {}
+        override fun onProviderEnabled(p0: String?) {}
+        override fun onProviderDisabled(p0: String?) {}
+    }
+
+    protected lateinit var mPhotoUris: RealmList<PhotoUriDto>
+    protected var mCurrentTimeMillis: Long = 0
+    protected var mYear = mCalendar.get(Calendar.YEAR)
+    protected var mLocation: me.blog.korn123.easydiary.models.Location? = null
 
     /**
      * mMonth is not Calendar.MONTH
@@ -149,6 +173,13 @@ abstract class EditActivity : EasyDiaryActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         changeDrawableIconColor(Color.WHITE, R.drawable.calendar_4_w)
+
+        if (config.enableLocationInfo && checkPermission(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,  Manifest.permission.ACCESS_COARSE_LOCATION))) {
+            mLocationManager.run {
+                if (isProviderEnabled(LocationManager.GPS_PROVIDER)) requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0F, mGPSLocationListener)
+                if (isProviderEnabled(LocationManager.NETWORK_PROVIDER)) requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0F, mNetworkLocationListener)
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -184,6 +215,16 @@ abstract class EditActivity : EasyDiaryActivity() {
                 makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3))
             }
             else -> {
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (config.enableLocationInfo) {
+            mLocationManager.run {
+                removeUpdates(mGPSLocationListener)
+                removeUpdates(mNetworkLocationListener)
             }
         }
     }
