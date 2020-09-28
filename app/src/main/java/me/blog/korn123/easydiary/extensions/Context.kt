@@ -203,8 +203,14 @@ fun Context.updateCardViewPolicy(viewGroup: ViewGroup) {
             .map { viewGroup.getChildAt(it) }
             .forEach {
                 when (it) {
+                    is FixedCardView -> {
+                        if (it.fixedAppcompatPadding) {
+                            it.useCompatPadding = true
+                            it.cardElevation = CommonUtils.dpToPixelFloatValue(this, 2F)
+                        }
+                    }
                     is CardView -> {
-                        if (config.enableCardViewPolicy || (it is FixedCardView && it.fixedAppcompatPadding)) {
+                        if (config.enableCardViewPolicy) {
                             it.useCompatPadding = true
                             it.cardElevation = CommonUtils.dpToPixelFloatValue(this, 2F)
                         } else {

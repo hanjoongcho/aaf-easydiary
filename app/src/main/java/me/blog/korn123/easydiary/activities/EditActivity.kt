@@ -277,9 +277,8 @@ abstract class EditActivity : EasyDiaryActivity() {
         if (config.enableCountCharacters) {
             contentsLength?.run {
                 setTextColor(config.textColor)
-                background = getLabelBackground()
-
-                visibility = View.VISIBLE
+//                background = getLabelBackground()
+//                visibility = View.VISIBLE
                 text = getString(R.string.diary_contents_length, 0)
             }
             diaryContents.addTextChangedListener(object : TextWatcher {
@@ -290,6 +289,9 @@ abstract class EditActivity : EasyDiaryActivity() {
                     contentsLength.text = getString(R.string.diary_contents_length, p0?.length ?: 0)
                 }
             })
+            contentsLengthContainer.visibility = View.VISIBLE
+        } else {
+            contentsLengthContainer.visibility = View.GONE
         }
     }
 

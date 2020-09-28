@@ -17,7 +17,6 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
-import io.github.aafactory.commons.extensions.dpToPixel
 import io.github.aafactory.commons.utils.CALCULATION
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
@@ -58,7 +57,7 @@ class DiaryMainItemAdapter(
                         itemView.text1, itemView.text2, itemView.text3,
                         itemView.contentsLength, itemView.weather, itemView.item_holder,
                         itemView.selection, itemView.locationSymbol, itemView.locationLabel,
-                        itemView.locationContainer
+                        itemView.locationContainer, itemView.contentsLengthContainer
                 )
                 itemView.tag = viewHolder
                 viewHolder
@@ -70,7 +69,7 @@ class DiaryMainItemAdapter(
                     diaryDto.location?.let {
                         changeDrawableIconColor(config.textColor, R.drawable.map_marker_2)
                         locationLabel.setTextColor(config.textColor)
-                        locationContainer.background = getLabelBackground()
+//                        locationContainer.background = getLabelBackground()
 
                         locationLabel.text = it.address
                         locationContainer.visibility = View.VISIBLE
@@ -82,12 +81,12 @@ class DiaryMainItemAdapter(
                 if (config.enableCountCharacters) {
                     contentsLength.run {
                         setTextColor(config.textColor)
-                        background = getLabelBackground()
-                        visibility = View.VISIBLE
+//                        background = getLabelBackground()
                         text = context.getString(R.string.diary_contents_length, diaryDto.contents?.length ?: 0)
                     }
+                    contentsLengthContainer.visibility = View.VISIBLE
                 } else {
-                    contentsLength.visibility = View.GONE
+                    contentsLengthContainer.visibility = View.GONE
                 }
             }
 
@@ -205,6 +204,6 @@ class DiaryMainItemAdapter(
             val textView1: TextView, val textView2: TextView, val textView3: TextView,
             val contentsLength: TextView, val imageView: ImageView, val item_holder: ViewGroup,
             val selection: CheckBox, val locationSymbol:ImageView, val locationLabel: TextView,
-            val locationContainer: LinearLayout
+            val locationContainer: LinearLayout, val contentsLengthContainer: me.blog.korn123.easydiary.views.FixedCardView
     )
 }

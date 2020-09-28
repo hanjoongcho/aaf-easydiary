@@ -577,7 +577,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 if (config.enableLocationInfo) {
                     diaryDto.location?.let {
                         locationLabel.setTextColor(config.textColor)
-                        locationContainer.background = getLabelBackground()
+//                        locationContainer.background = getLabelBackground()
 
                         locationLabel.text = it.address
                         locationContainer.visibility = View.VISIBLE
@@ -589,10 +589,12 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 if (config.enableCountCharacters) {
                     contentsLength.run {
                         setTextColor(config.textColor)
-                        background = getLabelBackground()
-                        visibility = View.VISIBLE
+//                        background = getLabelBackground()
                         text = getString(R.string.diary_contents_length, diaryDto.contents?.length ?: 0)
                     }
+                    contentsLengthContainer.visibility = View.VISIBLE
+                } else {
+                    contentsLengthContainer.visibility = View.GONE
                 }
 
                 (this as DiaryReadActivity).run {
