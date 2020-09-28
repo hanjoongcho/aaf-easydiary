@@ -35,7 +35,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
-import com.simplemobiletools.commons.extensions.toast
 import com.werb.pickphotoview.PickPhotoView
 import io.github.aafactory.commons.utils.CALCULATION
 import io.github.aafactory.commons.utils.CommonUtils
@@ -276,8 +275,13 @@ abstract class EditActivity : EasyDiaryActivity() {
 
     protected fun addTextWatcher() {
         if (config.enableCountCharacters) {
-            contentsLength.visibility = View.VISIBLE
-            contentsLength.text = getString(R.string.diary_contents_length, 0)
+            contentsLength?.run {
+                setTextColor(config.textColor)
+                background = getLabelBackground()
+
+                visibility = View.VISIBLE
+                text = getString(R.string.diary_contents_length, 0)
+            }
             diaryContents.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(p0: Editable?) {}
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}

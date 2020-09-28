@@ -51,6 +51,7 @@ import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.*
 import com.simplemobiletools.commons.views.*
 import io.github.aafactory.commons.extensions.baseConfig
+import io.github.aafactory.commons.extensions.dpToPixel
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import io.github.aafactory.commons.views.ModalView
@@ -706,4 +707,14 @@ fun Context.isConnectedOrConnecting(): Boolean {
     val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
     return activeNetwork?.isConnectedOrConnecting == true
+}
+
+fun Context.getLabelBackground(): GradientDrawable {
+    val strokeWidth = dpToPixel(1F)
+    val strokeColor: Int = config.textColor
+    return GradientDrawable().apply {
+        shape = GradientDrawable.RECTANGLE
+        cornerRadius = dpToPixel(5F).toFloat()
+        setStroke(strokeWidth, strokeColor)
+    }
 }

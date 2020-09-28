@@ -17,6 +17,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
+import io.github.aafactory.commons.extensions.dpToPixel
 import io.github.aafactory.commons.utils.CALCULATION
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
@@ -65,14 +66,28 @@ class DiaryMainItemAdapter(
         }.run {
             val diaryDto = list[position]
             activity.run {
-                changeDrawableIconColor(config.primaryColor, R.drawable.map_marker_2)
                 if (config.enableLocationInfo) {
                     diaryDto.location?.let {
+                        changeDrawableIconColor(config.textColor, R.drawable.map_marker_2)
+                        locationLabel.setTextColor(config.textColor)
+                        locationContainer.background = getLabelBackground()
+
                         locationLabel.text = it.address
                         locationContainer.visibility = View.VISIBLE
                     } ?: { locationContainer.visibility = View.GONE } ()
                 } else {
                     locationContainer.visibility = View.GONE
+                }
+
+                if (config.enableCountCharacters) {
+                    contentsLength.run {
+                        setTextColor(config.textColor)
+                        background = getLabelBackground()
+                        visibility = View.VISIBLE
+                        text = context.getString(R.string.diary_contents_length, diaryDto.contents?.length ?: 0)
+                    }
+                } else {
+                    contentsLength.visibility = View.GONE
                 }
             }
 
@@ -171,16 +186,6 @@ class DiaryMainItemAdapter(
             textView2.maxLines = when (activity.config.enableContentsSummary) {
                 true -> activity.config.summaryMaxLines
                 false -> Integer.MAX_VALUE
-            }
-
-            if (context.config.enableCountCharacters) {
-                contentsLength.run {
-                    visibility = View.VISIBLE
-                    text = context.getString(R.string.diary_contents_length, diaryDto.contents?.length
-                            ?: 0)
-                }
-            } else {
-                contentsLength.visibility = View.GONE
             }
         }
 
