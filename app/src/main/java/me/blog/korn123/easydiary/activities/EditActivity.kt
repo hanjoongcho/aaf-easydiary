@@ -276,7 +276,7 @@ abstract class EditActivity : EasyDiaryActivity() {
     protected fun addTextWatcher() {
         if (config.enableCountCharacters) {
             contentsLength?.run {
-                setTextColor(config.textColor)
+//                setTextColor(config.textColor)
 //                background = getLabelBackground()
 //                visibility = View.VISIBLE
                 text = getString(R.string.diary_contents_length, 0)

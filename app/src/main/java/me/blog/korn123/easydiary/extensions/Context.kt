@@ -720,7 +720,7 @@ fun Context.getLabelBackground(): GradientDrawable {
     val strokeColor: Int = config.textColor
     return GradientDrawable().apply {
         shape = GradientDrawable.RECTANGLE
-        cornerRadius = dpToPixel(5F).toFloat()
+//        cornerRadius = dpToPixel(5F).toFloat()
         setStroke(strokeWidth, strokeColor)
     }
 }

@@ -206,7 +206,7 @@ class DiaryUpdateActivity : EditActivity() {
 //        initSpinner()
         selectFeelingSymbol(mWeather)
         if (config.enableLocationInfo) {
-            locationLabel.setTextColor(config.textColor)
+//            locationLabel.setTextColor(config.textColor)
 //            locationContainer.background = getLabelBackground()
             diaryDto.location?.let {
                 locationContainer.visibility = View.VISIBLE

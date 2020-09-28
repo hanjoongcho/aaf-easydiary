@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
@@ -67,8 +68,8 @@ class DiaryMainItemAdapter(
             activity.run {
                 if (config.enableLocationInfo) {
                     diaryDto.location?.let {
-                        changeDrawableIconColor(config.textColor, R.drawable.map_marker_2)
-                        locationLabel.setTextColor(config.textColor)
+                        changeDrawableIconColor(config.primaryColor, R.drawable.map_marker_2)
+//                        locationLabel.setTextColor(config.textColor)
 //                        locationContainer.background = getLabelBackground()
 
                         locationLabel.text = it.address
@@ -80,8 +81,9 @@ class DiaryMainItemAdapter(
 
                 if (config.enableCountCharacters) {
                     contentsLength.run {
-                        setTextColor(config.textColor)
+//                        setTextColor(config.textColor)
 //                        background = getLabelBackground()
+
                         text = context.getString(R.string.diary_contents_length, diaryDto.contents?.length ?: 0)
                     }
                     contentsLengthContainer.visibility = View.VISIBLE
@@ -204,6 +206,6 @@ class DiaryMainItemAdapter(
             val textView1: TextView, val textView2: TextView, val textView3: TextView,
             val contentsLength: TextView, val imageView: ImageView, val item_holder: ViewGroup,
             val selection: CheckBox, val locationSymbol:ImageView, val locationLabel: TextView,
-            val locationContainer: LinearLayout, val contentsLengthContainer: me.blog.korn123.easydiary.views.FixedCardView
+            val locationContainer: me.blog.korn123.easydiary.views.FixedCardView, val contentsLengthContainer: me.blog.korn123.easydiary.views.FixedCardView
     )
 }

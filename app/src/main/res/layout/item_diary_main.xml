@@ -65,12 +65,12 @@
                 android:layout_height="wrap_content">
                 <me.blog.korn123.easydiary.views.FixedCardView
                     app:fixedAppcompatPadding="true"
+                    android:id="@+id/locationContainer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toStartOf="@id/contentsLengthContainer"
                     android:layout_alignWithParentIfMissing="true">
                     <LinearLayout
-                        android:id="@+id/locationContainer"
                         android:padding="5dp"
                         android:gravity="center"
                         android:orientation="horizontal"
@@ -93,10 +93,10 @@
                     </LinearLayout>
                 </me.blog.korn123.easydiary.views.FixedCardView>
                 <me.blog.korn123.easydiary.views.FixedCardView
+                    app:fixedAppcompatPadding="true"
                     android:id="@+id/contentsLengthContainer"
                     android:layout_marginStart="10dp"
                     android:layout_alignParentEnd="true"
-                    app:fixedAppcompatPadding="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <TextView
