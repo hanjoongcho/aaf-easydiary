@@ -461,6 +461,17 @@ abstract class EditActivity : EasyDiaryActivity() {
         FlavorUtils.initWeatherView(this, symbol, mSelectedItemPosition, false)
     }
 
+    protected fun initDateTime() {
+        val calendar = Calendar.getInstance(Locale.getDefault())
+        calendar.timeInMillis = mCurrentTimeMillis
+        mYear = calendar.get(Calendar.YEAR)
+        mMonth = calendar.get(Calendar.MONTH).plus(1)
+        mDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
+        mHourOfDay = calendar.get(Calendar.HOUR_OF_DAY)
+        mMinute = calendar.get(Calendar.MINUTE)
+        mSecond = calendar.get(Calendar.SECOND)
+    }
+
 
     /***************************************************************************************************
      *   abstract functions

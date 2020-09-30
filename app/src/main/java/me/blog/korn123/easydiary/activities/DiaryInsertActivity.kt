@@ -39,7 +39,6 @@ class DiaryInsertActivity : EditActivity() {
     private lateinit var mShowcaseView: ShowcaseView
     private var mShowcaseIndex = 2
 
-
     /***************************************************************************************************
      *   override functions
      *
@@ -52,21 +51,23 @@ class DiaryInsertActivity : EditActivity() {
             title = getString(R.string.create_diary_title)
             setDisplayHomeAsUpEnabled(true)
         }
-//        mCustomLineSpacing = false
+        intent?.run {
+            if (hasExtra(INITIALIZE_TIME_MILLIS)) {
+                mCurrentTimeMillis = getLongExtra(INITIALIZE_TIME_MILLIS, 0)
+            }
+        }
 
         addTextWatcher()
         setupRecognizer()
-//        setupSpinner()
         setupShowcase()
+        initDateTime()
         setupDialog()
         setupPhotoView()
         initBottomToolbar()
         setDateTime()
         bindEvent()
-
         setupKeypad()
         restoreContents(savedInstanceState)
-
         toggleSimpleLayout()
     }
 
@@ -279,5 +280,10 @@ class DiaryInsertActivity : EditActivity() {
                 photoContainer.addView(imageView, photoContainer.childCount - 1)
             }
         }
+        System.currentTimeMillis()
+    }
+
+    companion object {
+        const val INITIALIZE_TIME_MILLIS = "initialize_time_millis"
     }
 }
