@@ -51,11 +51,6 @@ class DiaryInsertActivity : EditActivity() {
             title = getString(R.string.create_diary_title)
             setDisplayHomeAsUpEnabled(true)
         }
-        intent?.run {
-            if (hasExtra(INITIALIZE_TIME_MILLIS)) {
-                mCurrentTimeMillis = getLongExtra(INITIALIZE_TIME_MILLIS, 0)
-            }
-        }
 
         addTextWatcher()
         setupRecognizer()
