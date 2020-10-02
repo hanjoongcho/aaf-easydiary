@@ -71,7 +71,6 @@ class FullBackupService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        EasyDiaryDbHelper.insertActionLog(ActionLog("FullBackupService", "onStartCommand", "INFO", "step-01"), applicationContext)
         mWorkingFolderId = intent?.getStringExtra(DriveServiceHelper.WORKING_FOLDER_ID) ?: ""
 
         // test alarm sequence is 5
@@ -91,7 +90,6 @@ class FullBackupService : Service() {
 
     @SuppressLint("RestrictedApi")
     private fun backupPhoto(alarm: Alarm, workStatus: WorkStatus) {
-        EasyDiaryDbHelper.insertActionLog(ActionLog("FullBackupService", "backupPhoto", "INFO", "step-02"), applicationContext)
         mNotificationBuilder.mActions.clear()
         mNotificationBuilder.setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
@@ -116,7 +114,6 @@ class FullBackupService : Service() {
     }
 
     private fun determineRemoteDrivePhotos(nextPageToken: String?, alarm: Alarm, workStatus: WorkStatus) {
-        EasyDiaryDbHelper.insertActionLog(ActionLog("FullBackupService", "determineRemoteDrivePhotos", "INFO", "step-03"), applicationContext)
         mDriveServiceHelper.queryFiles("mimeType = '${DriveServiceHelper.MIME_TYPE_AAF_EASY_DIARY_PHOTO}' and trashed = false",  1000, nextPageToken).run {
             addOnSuccessListener { result ->
                 result.files.map { photoFile ->

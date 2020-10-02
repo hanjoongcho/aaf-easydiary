@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
@@ -57,7 +58,7 @@ class DiaryMainItemAdapter(
                         itemView.text1, itemView.text2, itemView.text3,
                         itemView.contentsLength, itemView.weather, itemView.item_holder,
                         itemView.selection, itemView.locationSymbol, itemView.locationLabel,
-                        itemView.locationContainer
+                        itemView.locationContainer, itemView.contentsLengthContainer
                 )
                 itemView.tag = viewHolder
                 viewHolder
@@ -65,14 +66,29 @@ class DiaryMainItemAdapter(
         }.run {
             val diaryDto = list[position]
             activity.run {
-                changeDrawableIconColor(config.primaryColor, R.drawable.map_marker_2)
                 if (config.enableLocationInfo) {
                     diaryDto.location?.let {
+                        changeDrawableIconColor(config.primaryColor, R.drawable.map_marker_2)
+//                        locationLabel.setTextColor(config.textColor)
+//                        locationContainer.background = getLabelBackground()
+
                         locationLabel.text = it.address
                         locationContainer.visibility = View.VISIBLE
                     } ?: { locationContainer.visibility = View.GONE } ()
                 } else {
                     locationContainer.visibility = View.GONE
+                }
+
+                if (config.enableCountCharacters) {
+                    contentsLength.run {
+//                        setTextColor(config.textColor)
+//                        background = getLabelBackground()
+
+                        text = context.getString(R.string.diary_contents_length, diaryDto.contents?.length ?: 0)
+                    }
+                    contentsLengthContainer.visibility = View.VISIBLE
+                } else {
+                    contentsLengthContainer.visibility = View.GONE
                 }
             }
 
@@ -172,16 +188,6 @@ class DiaryMainItemAdapter(
                 true -> activity.config.summaryMaxLines
                 false -> Integer.MAX_VALUE
             }
-
-            if (context.config.enableCountCharacters) {
-                contentsLength.run {
-                    visibility = View.VISIBLE
-                    text = context.getString(R.string.diary_contents_length, diaryDto.contents?.length
-                            ?: 0)
-                }
-            } else {
-                contentsLength.visibility = View.GONE
-            }
         }
 
         return itemView
@@ -200,6 +206,6 @@ class DiaryMainItemAdapter(
             val textView1: TextView, val textView2: TextView, val textView3: TextView,
             val contentsLength: TextView, val imageView: ImageView, val item_holder: ViewGroup,
             val selection: CheckBox, val locationSymbol:ImageView, val locationLabel: TextView,
-            val locationContainer: LinearLayout
+            val locationContainer: me.blog.korn123.easydiary.views.FixedCardView, val contentsLengthContainer: me.blog.korn123.easydiary.views.FixedCardView
     )
 }

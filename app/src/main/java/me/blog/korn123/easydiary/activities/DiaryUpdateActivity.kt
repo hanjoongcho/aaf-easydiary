@@ -206,9 +206,12 @@ class DiaryUpdateActivity : EditActivity() {
 //        initSpinner()
         selectFeelingSymbol(mWeather)
         if (config.enableLocationInfo) {
+//            locationLabel.setTextColor(config.textColor)
+//            locationContainer.background = getLabelBackground()
             diaryDto.location?.let {
                 locationContainer.visibility = View.VISIBLE
                 locationLabel.text = it.address
+                mLocation = it
             } ?: {
                 setLocationInfo()
                 mLocation?.let {
@@ -243,16 +246,5 @@ class DiaryUpdateActivity : EditActivity() {
         feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog(getString(R.string.diary_symbol_guide_message)) { symbolSequence ->
             selectFeelingSymbol(symbolSequence)
         }}
-    }
-
-    private fun initDateTime() {
-        val calendar = Calendar.getInstance(Locale.getDefault())
-        calendar.timeInMillis = mCurrentTimeMillis
-        mYear = calendar.get(Calendar.YEAR)
-        mMonth = calendar.get(Calendar.MONTH).plus(1)
-        mDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
-        mHourOfDay = calendar.get(Calendar.HOUR_OF_DAY)
-        mMinute = calendar.get(Calendar.MINUTE)
-        mSecond = calendar.get(Calendar.SECOND)
     }
 }

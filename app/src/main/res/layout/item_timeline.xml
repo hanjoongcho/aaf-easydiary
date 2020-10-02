@@ -101,7 +101,7 @@
             <TextView
                 android:background="@android:color/white"
                 android:layout_width="3dp"
-                android:layout_height="5dp" />
+                android:layout_height="6dp" />
         </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

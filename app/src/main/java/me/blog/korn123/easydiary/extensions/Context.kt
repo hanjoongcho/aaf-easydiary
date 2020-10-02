@@ -23,6 +23,7 @@ import android.preference.PreferenceManager
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.RelativeSizeSpan
+import android.util.Log
 import android.util.TypedValue
 import android.view.*
 import android.widget.CheckBox
@@ -50,6 +51,7 @@ import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.*
 import com.simplemobiletools.commons.views.*
 import io.github.aafactory.commons.extensions.baseConfig
+import io.github.aafactory.commons.extensions.dpToPixel
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import io.github.aafactory.commons.views.ModalView
@@ -201,8 +203,14 @@ fun Context.updateCardViewPolicy(viewGroup: ViewGroup) {
             .map { viewGroup.getChildAt(it) }
             .forEach {
                 when (it) {
+                    is FixedCardView -> {
+                        if (it.fixedAppcompatPadding) {
+                            it.useCompatPadding = true
+                            it.cardElevation = CommonUtils.dpToPixelFloatValue(this, 2F)
+                        }
+                    }
                     is CardView -> {
-                        if (config.enableCardViewPolicy || (it is FixedCardView && it.fixedAppcompatPadding)) {
+                        if (config.enableCardViewPolicy) {
                             it.useCompatPadding = true
                             it.cardElevation = CommonUtils.dpToPixelFloatValue(this, 2F)
                         } else {
@@ -646,12 +654,31 @@ fun Context.isLocationEnabled(): Boolean {
 fun Context.hasGPSPermissions() = checkPermission(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,  Manifest.permission.ACCESS_COARSE_LOCATION)) && isLocationEnabled()
 
 fun Context.getLastKnownLocation(): Location? {
-    val gpsProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-    val networkProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
+    val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
     return when (checkPermission(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,  Manifest.permission.ACCESS_COARSE_LOCATION)) && isLocationEnabled()) {
         true -> {
-            gpsProvider.getLastKnownLocation(LocationManager.GPS_PROVIDER) ?: networkProvider.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+            val gpsLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+            val networkLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+            when {
+                gpsLocation != null && networkLocation != null -> {
+                    if (gpsLocation.elapsedRealtimeNanos - networkLocation.elapsedRealtimeNanos > 0) {
+                        if (config.enableDebugMode) toast("GPS Location > Network Location")
+                        gpsLocation
+                    } else {
+                        if (config.enableDebugMode) toast("Network Location > GPS Location")
+                        networkLocation
+                    }
+                }
+                gpsLocation != null -> {
+                    if (config.enableDebugMode) toast("GPS Location")
+                    gpsLocation
+                }
+                networkLocation != null -> {
+                    if (config.enableDebugMode) toast("Network Location")
+                    networkLocation
+                }
+                else -> null
+            }
         }
         false -> null
     }
@@ -686,4 +713,14 @@ fun Context.isConnectedOrConnecting(): Boolean {
     val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
     return activeNetwork?.isConnectedOrConnecting == true
+}
+
+fun Context.getLabelBackground(): GradientDrawable {
+    val strokeWidth = dpToPixel(1F)
+    val strokeColor: Int = config.textColor
+    return GradientDrawable().apply {
+        shape = GradientDrawable.RECTANGLE
+//        cornerRadius = dpToPixel(5F).toFloat()
+        setStroke(strokeWidth, strokeColor)
+    }
 }

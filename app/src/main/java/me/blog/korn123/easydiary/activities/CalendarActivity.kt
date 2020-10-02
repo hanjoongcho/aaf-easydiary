@@ -17,6 +17,7 @@ import io.github.aafactory.commons.utils.DateUtils
 import io.realm.Sort
 import kotlinx.android.synthetic.main.activity_calendar.*
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.DiaryInsertActivity.Companion.INITIALIZE_TIME_MILLIS
 import me.blog.korn123.easydiary.adapters.DiaryCalendarItemAdapter
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.fragments.CalendarFragment
@@ -131,6 +132,12 @@ class CalendarActivity : EasyDiaryActivity() {
             }
             override fun onLongClickDate(date: Date?, view: View?) { }
             override fun onCaldroidViewCreated() { }
+        }
+
+        writeDiary.setOnClickListener {
+            TransitionHelper.startActivityWithTransition(this, Intent(this, DiaryInsertActivity::class.java).apply {
+                putExtra(INITIALIZE_TIME_MILLIS, mCalendar.timeInMillis)
+            })
         }
     }
 

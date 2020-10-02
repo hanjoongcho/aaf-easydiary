@@ -17,10 +17,7 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.initTextSize
-import me.blog.korn123.easydiary.extensions.updateAppViews
-import me.blog.korn123.easydiary.extensions.updateTextColors
+import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
 
@@ -81,6 +78,7 @@ class TimelineItemAdapter(
             item_holder.let {
                 context.updateTextColors(it, 0, 0)
                 context.updateAppViews(it)
+                context.updateCardViewPolicy(it)
                 context.initTextSize(it)
             }
 

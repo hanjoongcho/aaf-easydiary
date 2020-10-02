@@ -523,15 +523,6 @@ class DiaryReadActivity : EasyDiaryActivity() {
         private fun initContents() {
             val diaryDto = EasyDiaryDbHelper.readDiaryBy(getSequence())
 
-            if (config.enableLocationInfo) {
-                diaryDto.location?.let {
-                    locationLabel.text = it.address
-                    locationContainer.visibility = View.VISIBLE
-                } ?: { locationContainer.visibility = View.GONE } ()
-            } else {
-                locationContainer.visibility = View.GONE
-            }
-
             if (StringUtils.isEmpty(diaryDto.title)) {
                 diaryTitle.visibility = View.GONE
             }
@@ -582,16 +573,34 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 photoContainerScrollView.visibility = View.GONE
             }
 
-            context?.let {
-                if (it.config.enableCountCharacters) {
-                    contentsLength.visibility = View.VISIBLE
-                    contentsLength.text = getString(R.string.diary_contents_length, diaryDto.contents?.length ?: 0)
-                }
-            }
+            context?.run {
+                if (config.enableLocationInfo) {
+                    diaryDto.location?.let {
+//                        locationLabel.setTextColor(config.textColor)
+//                        locationContainer.background = getLabelBackground()
 
-            (activity as DiaryReadActivity).run {
-                mIsEncryptData = diaryDto.isEncrypt
-                invalidateOptionsMenu()
+                        locationLabel.text = it.address
+                        locationContainer.visibility = View.VISIBLE
+                    } ?: { locationContainer.visibility = View.GONE } ()
+                } else {
+                    locationContainer.visibility = View.GONE
+                }
+
+                if (config.enableCountCharacters) {
+                    contentsLength.run {
+//                        setTextColor(config.textColor)
+//                        background = getLabelBackground()
+                        text = getString(R.string.diary_contents_length, diaryDto.contents?.length ?: 0)
+                    }
+                    contentsLengthContainer.visibility = View.VISIBLE
+                } else {
+                    contentsLengthContainer.visibility = View.GONE
+                }
+
+                (this as DiaryReadActivity).run {
+                    mIsEncryptData = diaryDto.isEncrypt
+                    invalidateOptionsMenu()
+                }
             }
         }
 

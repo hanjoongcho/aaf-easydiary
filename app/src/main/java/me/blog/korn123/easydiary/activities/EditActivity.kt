@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.activities
 
+import android.Manifest
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.ActivityNotFoundException
@@ -8,6 +9,9 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -57,17 +61,36 @@ abstract class EditActivity : EasyDiaryActivity() {
      *   global properties
      *
      ***************************************************************************************************/
-    lateinit var mRecognizerIntent: Intent
-    lateinit var mPhotoUris: RealmList<PhotoUriDto>
-    lateinit var mDatePickerDialog: DatePickerDialog
-    lateinit var mTimePickerDialog: TimePickerDialog
-    lateinit var mSecondsPickerDialog: AlertDialog
-
+    private lateinit var mRecognizerIntent: Intent
+    private lateinit var mDatePickerDialog: DatePickerDialog
+    private lateinit var mTimePickerDialog: TimePickerDialog
+    private lateinit var mSecondsPickerDialog: AlertDialog
     private val mCalendar = Calendar.getInstance(Locale.getDefault())
-    val mRemoveIndexes = ArrayList<Int>()
-    var mCurrentTimeMillis: Long = 0
-    var mYear = mCalendar.get(Calendar.YEAR)
-    var mLocation: me.blog.korn123.easydiary.models.Location? = null
+    private val mRemoveIndexes = ArrayList<Int>()
+    private val mLocationManager by lazy { getSystemService(Context.LOCATION_SERVICE) as LocationManager }
+    private val mNetworkLocationListener = object : LocationListener {
+        override fun onLocationChanged(p0: Location?) {
+            if (config.enableDebugMode) makeToast("Network location has been updated")
+            mLocationManager.removeUpdates(this)
+        }
+        override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {}
+        override fun onProviderEnabled(p0: String?) {}
+        override fun onProviderDisabled(p0: String?) {}
+    }
+    private val mGPSLocationListener = object : LocationListener {
+        override fun onLocationChanged(p0: Location?) {
+            if (config.enableDebugMode) makeToast("GPS location has been updated")
+            mLocationManager.removeUpdates(this)
+        }
+        override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {}
+        override fun onProviderEnabled(p0: String?) {}
+        override fun onProviderDisabled(p0: String?) {}
+    }
+
+    protected lateinit var mPhotoUris: RealmList<PhotoUriDto>
+    protected var mCurrentTimeMillis: Long = 0
+    protected var mYear = mCalendar.get(Calendar.YEAR)
+    protected var mLocation: me.blog.korn123.easydiary.models.Location? = null
 
     /**
      * mMonth is not Calendar.MONTH
@@ -149,6 +172,13 @@ abstract class EditActivity : EasyDiaryActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         changeDrawableIconColor(Color.WHITE, R.drawable.calendar_4_w)
+
+        if (config.enableLocationInfo && checkPermission(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,  Manifest.permission.ACCESS_COARSE_LOCATION))) {
+            mLocationManager.run {
+                if (isProviderEnabled(LocationManager.GPS_PROVIDER)) requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0F, mGPSLocationListener)
+                if (isProviderEnabled(LocationManager.NETWORK_PROVIDER)) requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0F, mNetworkLocationListener)
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -184,6 +214,16 @@ abstract class EditActivity : EasyDiaryActivity() {
                 makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3))
             }
             else -> {
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (config.enableLocationInfo) {
+            mLocationManager.run {
+                removeUpdates(mGPSLocationListener)
+                removeUpdates(mNetworkLocationListener)
             }
         }
     }
@@ -235,8 +275,12 @@ abstract class EditActivity : EasyDiaryActivity() {
 
     protected fun addTextWatcher() {
         if (config.enableCountCharacters) {
-            contentsLength.visibility = View.VISIBLE
-            contentsLength.text = getString(R.string.diary_contents_length, 0)
+            contentsLength?.run {
+//                setTextColor(config.textColor)
+//                background = getLabelBackground()
+//                visibility = View.VISIBLE
+                text = getString(R.string.diary_contents_length, 0)
+            }
             diaryContents.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(p0: Editable?) {}
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -245,6 +289,9 @@ abstract class EditActivity : EasyDiaryActivity() {
                     contentsLength.text = getString(R.string.diary_contents_length, p0?.length ?: 0)
                 }
             })
+            contentsLengthContainer.visibility = View.VISIBLE
+        } else {
+            contentsLengthContainer.visibility = View.GONE
         }
     }
 
@@ -412,6 +459,17 @@ abstract class EditActivity : EasyDiaryActivity() {
             false -> symbolText.visibility = View.GONE
         }
         FlavorUtils.initWeatherView(this, symbol, mSelectedItemPosition, false)
+    }
+
+    protected fun initDateTime() {
+        val calendar = Calendar.getInstance(Locale.getDefault())
+        calendar.timeInMillis = mCurrentTimeMillis
+        mYear = calendar.get(Calendar.YEAR)
+        mMonth = calendar.get(Calendar.MONTH).plus(1)
+        mDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
+        mHourOfDay = calendar.get(Calendar.HOUR_OF_DAY)
+        mMinute = calendar.get(Calendar.MINUTE)
+        mSecond = calendar.get(Calendar.SECOND)
     }
 
 

@@ -35,7 +35,25 @@ open class BaseDevActivity : EasyDiaryActivity() {
      *   global properties
      *
      ***************************************************************************************************/
-
+    private val mLocationManager by lazy { getSystemService(Context.LOCATION_SERVICE) as LocationManager }
+    private val mNetworkLocationListener = object : LocationListener {
+        override fun onLocationChanged(p0: Location?) {
+            makeToast("Network location has been updated")
+            mLocationManager.removeUpdates(this)
+        }
+        override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {}
+        override fun onProviderEnabled(p0: String?) {}
+        override fun onProviderDisabled(p0: String?) {}
+    }
+    private val mGPSLocationListener = object : LocationListener {
+        override fun onLocationChanged(p0: Location?) {
+            makeToast("GPS location has been updated")
+            mLocationManager.removeUpdates(this)
+        }
+        override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {}
+        override fun onProviderEnabled(p0: String?) {}
+        override fun onProviderDisabled(p0: String?) {}
+    }
 
     /***************************************************************************************************
      *   override functions
@@ -98,27 +116,14 @@ open class BaseDevActivity : EasyDiaryActivity() {
             showAlertDialog(unUsedPhotos.size.toString(), null, true)
         }
 
-
         requestLastLocation.setOnClickListener {
             updateLocation()
         }
 
         updateGPSProvider.setOnClickListener {
-            val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            when (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            when (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 true -> {
-                    val gpsProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-                    val listener = object : LocationListener {
-                        override fun onLocationChanged(p0: Location?) {
-                            makeToast("Location information has been updated")
-                            gpsProvider.removeUpdates(this)
-                        }
-                        override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {}
-                        override fun onProviderEnabled(p0: String?) {}
-                        override fun onProviderDisabled(p0: String?) {}
-
-                    }
-                    gpsProvider.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0F, listener)
+                    mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0F, mGPSLocationListener)
                 }
                 false -> makeSnackBar("GPS Provider is not available.")
             }
@@ -128,21 +133,18 @@ open class BaseDevActivity : EasyDiaryActivity() {
             val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
             when (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
                 true -> {
-                    val gpsProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-                    val listener = object : LocationListener {
-                        override fun onLocationChanged(p0: Location?) {
-                            makeToast("Location information has been updated")
-                            gpsProvider.removeUpdates(this)
-                        }
-                        override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {}
-                        override fun onProviderEnabled(p0: String?) {}
-                        override fun onProviderDisabled(p0: String?) {}
-
-                    }
-                    gpsProvider.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0F, listener)
+                    mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0F, mNetworkLocationListener)
                 }
                 false -> makeSnackBar("Network Provider is not available.")
             }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mLocationManager.run {
+            removeUpdates(mGPSLocationListener)
+            removeUpdates(mNetworkLocationListener)
         }
     }
 
@@ -269,6 +271,12 @@ data class NotificationInfo(var largeIconResourceId: Int, var useActionButton: B
 fun fun1(param1: String, block: (responseData: String) -> String): String {
     println(param1)
     return block("")
+}
+
+fun fun2(param1: String, block: (responseData: String) -> Boolean): String {
+    println(param1)
+    var blockReturn = block(param1)
+    return param1
 }
 
 fun test1() {

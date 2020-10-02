@@ -1,6 +1,6 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_holder"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -82,45 +82,54 @@
                 android:layout_gravity="bottom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <LinearLayout
-                    tools:visibility="visible"
-                    android:id="@+id/locationContainer"
-                    android:visibility="gone"
-                    android:layout_marginEnd="10dp"
-                    android:layout_toStartOf="@id/contentsLength"
-                    android:padding="5dp"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:background="@drawable/bg_card_stamp"
-                    android:foreground="?attr/selectableItemBackgroundBorderless"
+
+                <me.blog.korn123.easydiary.views.FixedCardView
+                    app:fixedAppcompatPadding="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toStartOf="@id/contentsLengthContainer"
+                    android:layout_alignWithParentIfMissing="true">
+                    <LinearLayout
+                        android:id="@+id/locationContainer"
+                        tools:visibility="visible"
+                        android:visibility="gone"
+                        android:padding="5dp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:foreground="?attr/selectableItemBackgroundBorderless"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:layout_marginRight="3dp"
+                            android:id="@+id/locationSymbol"
+                            android:src="@drawable/map_marker_2"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"/>
+                        <TextView
+                            android:id="@+id/locationLabel"
+                            android:text="There is no location information. Click to update location information."
+                            android:textColor="?attr/colorPrimary"
+                            android:layout_width="wrap_content"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+                </me.blog.korn123.easydiary.views.FixedCardView>
+                <me.blog.korn123.easydiary.views.FixedCardView
+                    android:id="@+id/contentsLengthContainer"
+                    android:layout_marginStart="10dp"
+                    android:layout_alignParentEnd="true"
+                    app:fixedAppcompatPadding="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
-                    <ImageView
-                        android:layout_marginRight="3dp"
-                        android:id="@+id/locationSymbol"
-                        android:src="@drawable/map_marker_2"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"/>
                     <TextView
-                        android:id="@+id/locationLabel"
-                        android:text="There is no location information. Click to update location information."
+                        tools:text="100"
+                        android:id="@+id/contentsLength"
+                        android:padding="5dp"
                         android:textColor="?attr/colorPrimary"
                         android:layout_width="wrap_content"
-                        android:ellipsize="end"
-                        android:singleLine="true"
                         android:layout_height="wrap_content"/>
-                </LinearLayout>
-                <TextView
-                    tools:visibility="visible"
-                    tools:text="100"
-                    android:layout_alignParentEnd="true"
-                    android:id="@+id/contentsLength"
-                    android:visibility="gone"
-                    android:padding="5dp"
-                    android:textColor="?attr/colorPrimary"
-                    android:background="@drawable/bg_card_stamp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                </me.blog.korn123.easydiary.views.FixedCardView>
             </RelativeLayout>
             <androidx.core.widget.ContentLoadingProgressBar
                 style="?android:progressBarStyleLarge"
