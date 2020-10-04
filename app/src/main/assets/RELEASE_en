@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.151 (date: 2020.10.05)
+  * Diary creation button added to the calendar screen
+
 # Changes in 1.4.150 (date: 2020.09.22)
   * Fixed a bug where the widget was not displayed normally
 
