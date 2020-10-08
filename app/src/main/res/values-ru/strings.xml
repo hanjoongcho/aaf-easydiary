@@ -69,13 +69,13 @@
     <string name="read_diary_detail_showcase_title_1">Листайте страницы</string>
     <string name="read_diary_detail_showcase_title_2">Редактируйте Дневник</string>
     <string name="read_diary_detail_showcase_title_3">Прочитать вслух</string>
-    <string name="read_diary_detail_showcase_title_4">Почтовая марка</string>
+    <string name="read_diary_detail_showcase_title_4">Открытка</string>
     <string name="read_diary_detail_showcase_title_5">Удалить запись</string>
     <string name="read_diary_detail_showcase_message_0">Просмотрите сохраненный дневник. Вы можете изменить сохраненный дневник или создать карточку дневника, указав собственный цвет.</string>
     <string name="read_diary_detail_showcase_message_1">Перетащите экран влево или вправо, чтобы просмотреть дневники, созданные до или после.</string>
     <string name="read_diary_detail_showcase_message_2">Вы можете перейти в режим редактирования дневника, чтобы отредактировать просматриваемый дневник.</string>
     <string name="read_diary_detail_showcase_message_3">Вы можете прослушать написанное вами, используя синтезатор речи Google TTS.</string>
-    <string name="read_diary_detail_showcase_message_4">Используйте дневник, чтобы создавать почтовые марки и делиться ими с другими.</string>
+    <string name="read_diary_detail_showcase_message_4">Используйте дневник, чтобы создавать открытки и делиться ими с другими.</string>
     <string name="read_diary_detail_showcase_message_5">Вы можете удалить текущий дневник и перейти на экран поиска.</string>
     <string name="update_diary_title">Редактировать Дневник</string>
     <string name="back_pressed_confirm">Нажмите \'OK\', чтобы перейти в предыдущий экран, не сохраняя текущую запись.</string>
@@ -91,7 +91,7 @@
     <string name="add_ttf_fonts_title">Добавить шрифт TTF</string>
     <string name="add_ttf_fonts_summary">Добавьте свои собственные шрифты формата TTF в Easy Diary.\nЕсли шрифты добавлены, вы можете использовать добавленные шрифты вместе со встроенными шрифтами.\nПри выборе файла TTF с помощью диспетчера файлов шрифт автоматически регистрируется в Easy Diary и активируется в меню настройки шрифта.</string>
     <string name="add_ttf_fonts_info_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/MANUAL_ru.md</string>
-    <string name="diary_search_keyword_case_sensitive_title">Case sensitive</string>
+    <string name="diary_search_keyword_case_sensitive_title">Чувствительность к регистру</string>
     <string name="diary_search_keyword_case_sensitive_summary">Когда данная опция активирована, она проверяет соотносится ли ключевое слово с заданным регистром.</string>
     <string name="setting_primary_color_title">Тема</string>
     <string name="setting_primary_color_summary">Установите основной цвет приложения.</string>
@@ -123,27 +123,27 @@
     <string name="diary_card_export_error_message">Произошла ошибка при создании карточки дневника. Пожалуйста, попробуйте еще раз.</string>
     <string name="post_card_showcase_button_1">Далее</string>
     <string name="post_card_showcase_button_2">Закрыть</string>
-    <string name="post_card_showcase_title_0">Почтовая Марка</string>
+    <string name="post_card_showcase_title_0">Открытка</string>
     <string name="post_card_showcase_title_1">Цвет текста</string>
     <string name="post_card_showcase_title_2">Цвет фона</string>
-    <string name="post_card_showcase_title_3">Создать Почтовую Марку</string>
-    <string name="post_card_showcase_title_4">Поделиться Почтовой Маркой</string>
+    <string name="post_card_showcase_title_3">Создать открытку</string>
+    <string name="post_card_showcase_title_4">Поделиться открыткой</string>
     <string name="post_card_showcase_title_5">Выйти из редактирования</string>
-    <string name="post_card_showcase_message_0">Вы можете использовать сохраненную запись для создания и сохранения пользовательских почтовых марок.</string>
-    <string name="post_card_showcase_message_1">Измените цвет текста почтовой марки. Вы можете выбрать нужный цвет с помощью палитры цветов.</string>
-    <string name="post_card_showcase_message_2">Измените цвет фона почтовой марки. Вы можете выбрать нужный цвет с помощью палитры цветов.</string>
-    <string name="post_card_showcase_message_3">Созданная почтовая марка может быть сохранена в виде изображения.</string>
-    <string name="post_card_showcase_message_4">Созданная почтовая марка может быть отправлена друзьям. Поделись своей почтовой маркой с помощью электронной почты, MMS, мессенджеров и т. д.</string>
-    <string name="post_card_showcase_message_5">Выйдите из экрана редактирования почтовой марки и вернитесь к предыдущему экрану.</string>
+    <string name="post_card_showcase_message_0">Вы можете использовать сохраненную запись для создания и сохранения пользовательских открыток.</string>
+    <string name="post_card_showcase_message_1">Измените цвет текста открытки. Вы можете выбрать нужный цвет с помощью палитры цветов.</string>
+    <string name="post_card_showcase_message_2">Измените цвет фона открытки. Вы можете выбрать нужный цвет с помощью палитры цветов.</string>
+    <string name="post_card_showcase_message_3">Созданная открытка может быть сохранена в виде изображения.</string>
+    <string name="post_card_showcase_message_4">Созданная открытка может быть отправлена друзьям. Поделись своей открыткой с помощью электронной почты, MMS, мессенджеров и т. д.</string>
+    <string name="post_card_showcase_message_5">Выйдите из экрана редактирования открытки и вернитесь к предыдущему экрану.</string>
     <string name="timeline_title">Лента</string>
-    <string name="postcard_viewer_title">Почтовая Марка</string>
-    <string name="postcard_viewer_no_cards_saved">Нет почтовых марок.</string>
+    <string name="postcard_viewer_title">Открытка</string>
+    <string name="postcard_viewer_no_cards_saved">Нет открыток.</string>
     <string name="google_drive_connect_message">Google Диск синхронизируется...</string>
     <string name="diary_count"></string>
     <string name="menu_calendar">Календарь</string>
     <string name="menu_chart">Статистика</string>
     <string name="menu_timeline">Лента</string>
-    <string name="post_card">Почтовая Марка</string>
+    <string name="post_card">Открытка</string>
     <string name="menu_delete">Удалить</string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -152,7 +152,7 @@
     <string name="preferences_category_settings">Настройки приложения</string>
     <string name="preferences_category_information">Информация о приложении</string>
     <string name="preferences_information_licenses">Open Source Licenses</string>
-    <string name="preferences_information_licenses_summary">Open source software notices</string>
+    <string name="preferences_information_licenses_summary">Уведомления об открытом программном обеспечении</string>
     <string name="preferences_category_aaf">AAF Easy Series</string>
     <string name="invite_friends">Пригласить друзей</string>
     <string name="invite_friends_summary">Поделись приложением %s со своими друзьями.</string>
@@ -162,317 +162,317 @@
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <string name="release_103">
         v1.4.41 / 2018.05.28\n
-        Fixed a bug that abnormally terminated in Postcard browse mode when there is no working directory
+        Исправлена ​​ошибка, которая аварийно завершала работу в режиме просмотра открытки, при отсутствии рабочего каталога
     </string>
     <string name="release_105">
         v1.4.42 / 2018.06.27\n
-        User Experience (UX) Optimization
+        Оптимизация взаимодействия с пользователем (UX)
     </string>
     <string name="release_110">
         v1.4.47 / 2018.08.29\n
-        Added post card deletion function
+        Добавлена ​​функция удаления открытки
     </string>
     <string name="release_114">
         v1.4.51 / 2018.09.29\n
-        AAF common module update\n
-        Change app packaging environment to Android 9 Pie
+        Обновление общего модуля AAF\n
+        Изменена среда упаковки приложений на Android 9 Pie
     </string>
     <string name="release_116">
         v1.4.53 / 2018.10.13\n
-        Added preview photo size setting function\n
-        Added preview photo toggle function(fold or unfold)
+        Добавлена ​​функция настройки размера фото для предварительного просмотра\n
+        Добавлена ​​функция переключения предварительного просмотра фотографий (складывание или развёртывание)
     </string>
     <string name="release_118">
         v1.4.55 / 2018.11.01\n
-        Improving the time expression of diary writing\n
-        Boldface setting function added to diary title and timeline time information
+        Улучшение выражения времени при написании дневника\n
+        Добавлена ​​функция настройки жирным шрифтом в заголовок дневника и информацию о времени на временной шкале
     </string>
     <string name="release_120">
         v1.4.57 / 2018.11.12\n
-        Added multi-picker setting function to attach multiple pictures at one time
+        Добавлена ​​функция настройки множественного выбора для одновременного прикрепления нескольких изображений
     </string>
     <string name="release_126">
         v1.4.63 / 2018.11.25\n
-        Added attached photos backup and recovery function using Google Drive
+        Добавлена ​​функция настройки множественного выбора для одновременного прикрепления нескольких изображений
     </string>
     <string name="release_128">
         v1.4.65 / 2018.12.19\n
-        Added lock function using fingerprint sensor
+        Добавлена ​​функция блокировки с помощью датчика отпечатков пальцев
     </string>
     <string name="release_130">
         v1.4.67 / 2019.01.01\n
-        Improved the ability to view attached photos on the postcard screen
+        Улучшена возможность просмотра прикреплённых фотографий на экране открытки
     </string>
     <string name="release_131">
         v1.4.68 / 2019.01.06\n
-        Solved security considerations for some items that are reported with low confidence in Sophos vaccine(Notification listener, Trigger installation)\n
-        Add Postcard font size adjustment function
+        Решены вопросы безопасности для некоторых элементов, о которых сообщается с низкой степенью достоверности в Sophos vaccine (Приём уведомлений, установка триггера)\n
+        Добавлена функция регулировки размера шрифта открытки
     </string>
     <string name="release_132">
         v1.4.69 / 2019.01.16\n
-        User Experience (UX) Optimization\n
-        Fixed an error that screen transition is not normal in Android 9 Pie version\n
-        Add timeline diary creation button
+        Оптимизация взаимодействия с пользователем (UX)\n
+        Исправлена ​​ошибка, из-за которой переход экрана не работал нормально в версии Android 9 Pie\n
+        Добавлена кнопка создания дневника на временной шкале
     </string>
     <string name="release_133">
         v1.4.70 / 2019.01.25\n
-        Added option to view summary of diary content
+        Добавлена ​​возможность просмотра сводки дневника
     </string>
     <string name="release_134">
         v1.4.71 / 2019.01.26\n
-        Fixed an error that the application terminated abnormally when changing device fingerprint information
+        Исправлена ​​ошибка, из-за которой приложение аварийно завершало работу при изменении информации об отпечатке пальца устройства
     </string>
     <string name="release_136">
         v1.4.73 / 2019.02.11\n
-        Improved the ability to correct input digits when PIN is set and unlocked
+        Улучшена возможность правильного ввода цифр, когда PIN установлен и разблокирован.
     </string>
     <string name="release_137">
         v1.4.74 / 2019.03.06\n
-        Improved the ability to apply filters to postcard images\n
-        Added ability to export diary to Excel file
+        Улучшена возможность применения фильтров к изображениям открыток\n
+        Добавлена ​​возможность экспорта дневника в файл Excel
     </string>
     <string name="release_138">
         v1.4.75 / 2019.03.22\n
-        Add application-specific information pages, including FAQs and privacy policies\n
-        Improved pin and fingerprint unlock toggle
+        Добавлена страница с информацией о приложении, включая ответы на часто задаваемые вопросы и политику конфиденциальности\n
+        Улучшенный переключатель разблокировки PIN-кодом и отпечатком пальца
     </string>
     <string name="release_139">
         v1.4.76 / 2019.04.24\n
-        Add 50 kinds of diary symbol icons
+        Добавлено 50 видов значков символов дневника
     </string>
     <string name="release_140">
         v1.4.77 / 2019.05.11\n
-        Add diary symbols and apply categories
+        Добавлены символы дневника и применение категорий
     </string>
     <string name="release_141">
         v1.4.78 / 2019.05.13\n
-        Fixed an error that ended abnormally if some function of the setting screen does not have access to device storage
+        Исправлена ​​ошибка, которая приводила к завершению, если какая-либо функция экрана настроек не имела доступа к хранилищу устройства
     </string>
     <string name="release_143">
         v1.4.80 / 2019.06.07\n
-        Changed Google Drive Android API to Google Drive REST API (Google Drive Android API will be shut down on December 6, 2019)
+        Google Drive Android API заменен на Google Drive REST API (Google Drive Android API будет закрыт 6 декабря 2019 г.)
     </string>
     <string name="release_147">
         v1.4.83 / 2019.06.09\n
-        Apply Android App Bundle to reduce and optimize installation file size
+        Применён Android App Bundle, чтобы уменьшить и оптимизировать размер установочного файла
     </string>
     <string name="release_149">
         v1.4.84 / 2019.06.15\n
-        Improved diary statistics
+        Улучшена статистика дневника
     </string>
     <string name="release_150">
         v1.4.85 / 2019.06.18\n
-        Google Drive(REST API) user rights acquisition error correction
+        Исправление ошибок получения прав пользователя на Google Drive(REST API)
     </string>
     <string name="release_151">
         v1.4.86 / 2019.06.19\n
-        Google Drive(REST API) Recovering photos with diary Fixing errors
+        Исправление ошибок восстановления изображений с дневником на Google Drive(REST API)
     </string>
     <string name="release_152">
         v1.4.87 / 2019.06.20\n
-        Fixed authentication token error for users authenticated to use Google Drive in v1.4.80 earlier
+        Исправлена ​​ошибка токена аутентификации для пользователей, прошедших аутентификацию для использования Google Диска в версии 1.4.80 и ранее
     </string>
     <string name="release_154">
         v1.4.88 / 2019.07.16\n
-        Migrated Android support library to AndroidX version\n
-        Add diary symbol icon
+        Библиотека поддержки Android перенесена на версию AndroidX\n
+        Добавлен значок символа дневника
     </string>
     <string name="release_157">
         v1.4.91 / 2019.08.12\n
-        Added backup and recovery function using device storage\n
-        Fixed an issue that caused some text to be truncated on calendars on some devices
+        Добавлена ​​функция резервного копирования и восстановления с использованием хранилища устройства\n
+        Исправлена ​​проблема, из-за которой на некоторых устройствах в календарях обрезался текст
     </string>
     <string name="release_159">
         v1.4.93 / 2019.08.29\n
-        User Experience (UX) Optimization\n
-        Bug fixes that crash abnormally when entering the configuration screen on older OS
+        Оптимизация взаимодействия с пользователем (UX)\n
+        Исправлены ошибки, вызывающие аварийный сбой при открытии экрана конфигурации в более старых ОС
     </string>
     <string name="release_160">
         v1.4.94 / 2019.09.03\n
-        Added calendar weekday start setting\n
-        Fixed an issue that prevented the calendar from showing in tablet landscape
+        Добавлена ​​настройка начала дня недели календаря\n
+        Исправлена ​​проблема, из-за которой календарь не отображался в горизонтальной ориентации планшета
     </string>
     <string name="release_163">
         v1.4.97 / 2019.09.17\n
-        Improved timeline search filter\n
-        Diary copy function added
+        Улучшенный фильтр поиска по временной шкале\n
+        Добавлена ​​функция копирования дневника
     </string>
     <string name="release_165">
         v1.4.99 / 2019.09.26\n
-        Diary text counting function added
+        Добавлена ​​функция подсчёта текста дневника
     </string>
     <string name="release_167">
         v1.4.101 / 2019.10.03\n
-        Respond to Android 10 storage access issues (targetSdkVersion temporary downgrade to avoid scoped storage policy)
+        Решение проблем с доступом к хранилищу Android 10 (временное понижение версии targetSdkVersion, чтобы избежать политики хранилища с ограниченным объемом)
     </string>
     <string name="release_169">
         v1.4.103 / 2019.10.09\n
-        Change storage location and migrate to respond to Android 10 Scoped Storage policies
+        Изменено местоположение хранилища и выполнена миграция в соответствии с политиками Android 10 Scoped Storage.
     </string>
     <string name="release_170">
         v1.4.104 / 2019.10.19\n
-        Added calendar font scale setting\n
-        Apply sliding page to setting screen
+        Добавлена ​​настройка масштаба шрифта календаря\n
+        Применена скользящая страница к экрану настроек
     </string>
     <string name="release_171">
         v1.4.105 / 2019.10.20\n
-        Fixed an error that occurred when using the Excel file device saving function\n
-        Fixed error when deleting diary from timeline
+        Исправлена ​​ошибка, возникавшая при использовании функции сохранения файлов Excel на устройстве\n
+        Исправлена ​​ошибка при удалении дневника с шкалы времени
     </string>
     <string name="release_172">
         v1.4.106 / 2019.10.25\n
-        Fixed the error that the changed contents are not immediately visible after editing the diary\n
-        Remediation for Vulnerable Libraries with known Security Issues
+        Исправлена ​​ошибка, из-за которой измененное содержимое не было видно сразу после редактирования дневника\n
+        Исправление уязвимых библиотек с известными проблемами безопасности
     </string>
     <string name="release_173">
         v1.4.107 / 2019.10.31\n
-        User Experience (UX) Optimization
+        Оптимизация взаимодействия с пользователем (UX)
     </string>
     <string name="release_174">
         v1.4.108 / 2019.11.18\n
-        Fixed an error that occurred when setting the calendar font scale on a device set to French
+        Исправлена ​​ошибка, возникавшая при установке шкалы шрифта календаря на устройстве с французским языком.
     </string>
     <string name="release_176">
         v1.4.110 / 2019.12.13\n
-        Added Diary Dashboard feature\n
-        Added the ability to delete the diary backup file stored in the device
+        Добавлена ​​функция панели управления дневником\n
+        Добавлена ​​возможность удалить файл резервной копии дневника, хранящийся на устройстве
     </string>
     <string name="release_178">
         v1.4.112 / 2019.12.31\n
-        Add photo attachment function through camera app integration\n
-        Diary Dashboard Improvements
+        Добавлена функция прикрепления фотографий с помощью интеграции приложения камеры\n
+        Улучшение панели управления дневником
     </string>
     <string name="release_179">
         v1.4.113 / 2020.01.04\n
-        Added date movement function using date picker on calendar screen
+        Добавлена ​​функция перемещения даты с помощью выбора даты на экране календаря
     </string>
     <string name="release_180">
         v1.4.114 / 2020.01.15\n
-        Added diary symbol icon\n
-        Added French support
+        Добавлен значок символа дневника\n
+        Добавлена ​​поддержка французского языка
     </string>
     <string name="release_182">
         v1.4.116 / 2020.01.21\n
-        License policy changed from 「Apache License 2.0」 to 「GNU General Public License v3.0」
+        Лицензионная политика изменена с 「Apache License 2.0」 на 「GNU General Public License v3.0」
     </string>
     <string name="release_184">
         v1.4.118 / 2020.02.11\n
-        [BETA] Added full data backup feature
+        [BETA] Добавлена ​​функция полного резервного копирования данных
     </string>
     <string name="release_185">
         v1.4.119 / 2020.02.15\n
-        Added diary symbol icon
+        Добавлен значок символа дневника
     </string>
     <string name="release_186">
         v1.4.120 / 2020.02.19\n
-        Added diary symbol icon\n
-        Added search function using diary symbol
+        Добавлен значок символа дневника\n
+        Добавлена ​​функция поиска по символу дневника
     </string>
 	<string name="release_187">
         v1.4.121 / 2020.03.02\n
-        Improved the speed of the calendar screen(1st improvement)
+        Увеличена скорость экрана календаря (1-е улучшение)
     </string>
     <string name="release_188">
         v1.4.122 / 2020.03.09\n
-        [BETA] Added full data recovery feature\n
-        Some symbols appear unusually large in dashboard statistics\n
-        Added sort option of the diary list in the calendar screen
+        [BETA] Добавлена ​​функция полного восстановления данных\n
+        Некоторые символы в статистике панели инструментов выглядят необычно большими\n
+        Добавлена ​​опция сортировки списка дневников на экране календаря
     </string>
     <string name="release_190">
         v1.4.124 / 2020.03.15\n
-        Separate font-related setting option from basic setting screen
+        Отдельный параметр настройки шрифта на экране основных настроек
     </string>
     <string name="release_191">
         v1.4.125 / 2020.03.23\n
-        Added cursor position setting option when entering diary edit screen\n
-        Added the function to set the maximum number of lines in the content summary view option\n
-        Fixed an issue where the day of the week was cut off on the calendar screen
+        Добавлена ​​опция настройки положения курсора при входе в экран редактирования дневника\n
+        Добавлена ​​функция для установки максимального количества строк в опции просмотра сводки содержимого\n
+        Исправлена ​​ошибка, из-за которой день недели был обрезан на экране календаря
     </string>
     <string name="release_192">
         v1.4.126 / 2020.04.05\n
-        Added diary encryption feature using pin number\n
-        Temporarily apply the requestLegacyExternalStorage option to respond to multi-picker scoped storage issues in Android 10
+        Добавлена ​​функция шифрования дневника с использованием пин-кода\n
+        Временно применён параметр requestLegacyExternalStorage для ответа на проблемы с хранилищем с несколькими средствами выбора в Android 10
     </string>
     <string name="release_193">
         v1.4.127 / 2020.04.12\n
-        Removed requestLegacyExternalStorage option\n
-        Adding database file backup and recovery feature using SAF (Storage Access Framework)
+        Удалён параметр requestLegacyExternalStorage\n
+        Добавление функции резервного копирования и восстановления файлов базы данных с помощью SAF (Storage Access Framework)
     </string>
     <string name="release_195">
         v1.4.129 / 2020.04.21\n
-        Added feature to attach animated GIF files\n
-        Added diary multiple copy and delete feature
+        Добавлена ​​возможность прикреплять анимированные файлы GIF\n
+        Добавлена ​​функция многократного копирования и удаления дневника
     </string>
     <string name="release_196">
         v1.4.130 / 2020.05.20\n
-        Added diary schedule setting feature
+        Добавлена ​​функция настройки расписания дневника
     </string>
     <string name="release_197">
         v1.4.131 / 2020.05.26\n
-        Fixed an error that caused abnormal termination of some screens in Android 4.4 version
+        Исправлена ​​ошибка, приводившая к аварийному завершению работы некоторых экранов в версии Android 4.4.
     </string>
     <string name="release_198">
         v1.4.132 / 2020.05.31\n
-        Fixed an issue where buttons included inside the card view could not be identified when the theme color and the card view background color were set to the same color
+        Исправлена ​​проблема, когда кнопки, включённые в представление карты, не могли быть идентифицированы, когда цвет темы и цвет фона представления карты были установлены на один и тот же цвет
     </string>
     <string name="release_199">
         v1.4.133 / 2020.06.02\n
-        Fixed an issue where the lock screen icon was not identified when the screen background color was set to white
+        Исправлена ​​проблема, из-за которой значок экрана блокировки не определялся, когда цвет фона экрана был установлен на белый
     </string>
     <string name="release_200">
         v1.4.134 / 2020.06.14\n
-        User Experience (UX) Optimization
+        Оптимизация взаимодействия с пользователем (UX)
     </string>
     <string name="release_201">
         v1.4.135 / 2020.06.18\n
-        Added RTL language support
+        Добавлена ​​поддержка языка RTL
     </string>
     <string name="release_202">
         v1.4.136 / 2020.06.29\n
-        Added diary list widget feature
+        Добавлена ​​функция виджета списка дневников
     </string>
     <string name="release_203">
         v1.4.137 / 2020.07.05\n
-        Applied Google Play security policy
+        Применена политика безопасности Google Play
     </string>
     <string name="release_205">
         v1.4.139 / 2020.07.11\n
-        Added feature to display the information of the connected Google account\n
-        Added Google Drive backup feature using scheduler
+        Добавлена ​​возможность отображения информации о подключённой учётной записи Google\n
+        Добавлена ​​функция резервного копирования в Google Диск с использованием планировщика
     </string>
     <string name="release_206">
         v1.4.140 / 2020.07.20\n
-        Fixed an error that the scheduler did not work in the application termination state
+        Исправлена ​​ошибка, из-за которой планировщик не работал в состоянии завершённого приложения
     </string>
     <string name="release_207">
         v1.4.141 / 2020.08.03\n
-        User Experience (UX) Optimization\n
-        French translation updates
+        Оптимизация взаимодействия с пользователем (UX)\n
+        Обновление французского перевода
     </string>
     <string name="release_209">
         v1.4.143 / 2020.08.26\n
-        Fixed an issue where some devices were abnormally terminated in the setting screen
+        Исправлена ​​ошибка, из-за которой некоторые устройства аварийно завершали работу на экране настроек
     </string>
     <string name="release_211">
         v1.4.145 / 2020.09.04\n
-        German translation updates
+        Обновление немецкого перевода
     </string>
     <string name="release_212">
         v1.4.146 / 2020.09.10\n
-        German translation updates\n
-        Added location information display option
+        Обновление немецкого перевода\n
+        Добавлена ​​опция отображения информации о местоположении
     </string>
     <string name="release_214">
         v1.4.148 / 2020.09.15\n
-        Added task symbol sorting option
+        Добавлена ​​опция сортировки символов задач
     </string>
     <string name="release_216">
         v1.4.150 / 2020.09.22\n
-        Fixed a bug where the widget was not displayed normally
+        Исправлена ошибка, при которой виджет не отображался нормально
     </string>
     <string name="release_217">
         v1.4.151 / 2020.10.05\n
-        Diary creation button added to the calendar screen
+        На экран календаря добавлена кнопка создания дневника
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -489,13 +489,13 @@
     <string name="zoom_out">Отдалить</string>
     <string name="edit_diary">Редактировать дневник</string>
     <string name="text_to_speech">Произнести</string>
-    <string name="diary_postcard">Почтовая Марка</string>
+    <string name="diary_postcard">Открытка</string>
     <string name="thumbnail_setting_title">Размер миниатюры</string>
     <string name="thumbnail_setting_summary">Устанавливает размер миниатюры фотографии, прикрепленной к дневнику. Заданный размер применяется только к экрану создания и изменения дневника, но не к экрану поиска.</string>
     <string name="collapse_attached_photo">Свернуть прикрепленное фото</string>
     <string name="expand_attached_photo">Развернуть прикрепленное фото</string>
-    <string name="release_notes_title">Release Notes</string>
-    <string name="release_notes_summary">Check for new features by release version.</string>
+    <string name="release_notes_title">Примечания к выпуску</string>
+    <string name="release_notes_summary">Проверить наличие новых функций по версии выпуска.</string>
     <string name="attached_photo_count">%d Приложенные Фотографии</string>
     <string name="all_day">Весь день</string>
     <string name="bold_style_option_title">Сделать текст жирным</string>
@@ -564,7 +564,7 @@
     <string name="export_excel_header_weather">Погода</string>
     <string name="export_excel_header_symbol">Символ</string>
     <string name="export_excel_header_is_all_day">ВесьДень</string>
-    <string name="faq_title">FAQs</string>
+    <string name="faq_title">Часто задаваемые вопросы</string>
     <string name="faq_description">Здесь вы можете найти ответы на часто задаваемые вопросы.</string>
     <string name="faq_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/FAQs.md</string>
     <string name="privacy_policy_title">Политика конфиденциальности</string>
@@ -639,10 +639,10 @@
     <string name="last_diary_backup_time">Время последнего резервного копирования дневника:</string>
     <string name="last_photo_backup_time">Время последнего резервного копирования прикрепленных фотографий:</string>
     <string name="export_full_backup_title">[BETA] Резервное копирование всех данных</string>
-    <string name="export_full_backup_description">Сжатие и сохранение всех данных, относящихся к дневнику, таких как база данных, прикрепленные фотографии, почтовые марки, шрифты и т.д. в один файл.\nДанная функция находится в бета-разработке, поэтому она может работать некорректно на некоторых устройствах.\nМесто сохранения: /AAFactory/EasyDiary/xxx.zip</string>
+    <string name="export_full_backup_description">Сжатие и сохранение всех данных, относящихся к дневнику, таких как база данных, прикрепленные фотографии, открытки, шрифты и т.д. в один файл.\nДанная функция находится в бета-разработке, поэтому она может работать некорректно на некоторых устройствах.\nМесто сохранения: /AAFactory/EasyDiary/xxx.zip</string>
     <string name="diary_symbol_search_message">Выберите символ с которым вы хотите отфильтровать записи.</string>
     <string name="import_full_backup_title">[BETA] Восстановление всех данных</string>
-    <string name="import_full_backup_description">Распаковка и восстановление всех данных, относящиеся к дневнику, такие как база данных, прикрепленные фотографии, почтовые марки, шрифты и т.д. \nДанная функция находится в бета-разработке, поэтому она может работать некорректно на некоторых устройствах.</string>
+    <string name="import_full_backup_description">Распаковка и восстановление всех данных, относящиеся к дневнику, такие как база данных, прикрепленные фотографии, открытки, шрифты и т.д. \nДанная функция находится в бета-разработке, поэтому она может работать некорректно на некоторых устройствах.</string>
     <string name="calendar_sort_ascending">По возрастанию</string>
     <string name="calendar_sort_descending">По убыванию</string>
     <string name="calendar_sort_title">Опция сортировки Календаря</string>
@@ -674,33 +674,33 @@
     <string name="delete_selected_items_confirm">Вы уверены, что хотите удалить %d выбранных элементов?</string>
     <string name="duplicate_selected_items_confirm">Вы уверены, что хотите сделать дубликат %d выбранных элементов?</string>
     <string name="no_items_warning">Нет выбранных элементов.</string>
-    <string name="preferences_category_schedule">[Beta] Schedule setting</string>
-    <string name="schedule_time">Day and time</string>
-    <string name="schedule_type">Schedule type</string>
-    <string name="schedule_description">Schedule description</string>
-    <string name="schedule_description_hint">Alarm description</string>
-    <string name="schedule_diary_writing_description">Diary writing\nRegister the diary writing schedule.\nWhen the schedule is registered, a notification message is provided according to the set day and time.</string>
-    <string name="schedule_backup_local_description">Diary backup (Device storage)\nRegistering the schedule backs up the database files excluding attached photos to the device local storage according to the set day and time and provides the result of the operation as a notification message.</string>
-    <string name="schedule_empty_message">There is no set schedule information.\nClick the plus button on the top right to add a new schedule.</string>
-    <string name="permission_confirmation_dialog_title">Request authorization</string>
-    <string name="permission_confirmation_dialog_message">Authorization is required to use Easy Diary.</string>
-    <string name="google_drive_account_information_title">Linked Google account information</string>
-    <string name="schedule_backup_gms_description">Diary backup (Google Drive)\nRegistering the schedule backs up the database files and attached photos to the Google Drive according to the set day and time and provides the result of the operation as a notification message.</string>
-    <string name="google_drive_account_sign_in_title">Link Google Drive account</string>
-    <string name="google_drive_account_sign_in_description">Connect your account to Google Drive for easy diary data backup.</string>
-    <string name="schedule_gms_error_title">Waiting for scheduled work</string>
-    <string name="schedule_gms_error_message">The device entered doze mode and the backup operation using the network failed. If you touch the notification window, the backup operation will resume.</string>
-    <string name="schedule_pending_guide_message">The waiting schedule starts.</string>
-    <string name="schedule_diary_writing_complete">Touch the notification window to go to the diary screen.</string>
-    <string name="schedule_backup_local_complete">Diary backup completed on local device.</string>
-    <string name="schedule_backup_gms_complete">The diary backup file and attached photo were saved in Google Drive.%s</string>
-    <string name="ok">OK</string>
-    <string name="cancel">Cancel</string>
-    <string name="settings">Settings</string>
-    <string name="location_info_title">Location information display</string>
-    <string name="location_info_description">The location information is displayed in the diary using GPS information.</string>
-    <string name="location_info_error_message">Location information cannot be received.</string>
-    <string name="category_tasks">Task</string>
-    <string name="task_symbol_top_order_title">Align the task symbol to the top</string>
-    <string name="task_symbol_top_order_description">If the type of Task Symbol is TODO or DOING among the diaries to which the task symbol is applied, it is arranged at the top of the list.</string>
+    <string name="preferences_category_schedule">[BETA] Настройка расписания</string>
+    <string name="schedule_time">День и время</string>
+    <string name="schedule_type">Тип расписания</string>
+    <string name="schedule_description">Описание расписания</string>
+    <string name="schedule_description_hint">Описание уведомления</string>
+    <string name="schedule_diary_writing_description">Ведение дневника\nЗарегистрируйте расписание ведения дневника.\nКогда расписание зарегистрировано, уведомление появится в соответствии с установленным днём и временем.</string>
+    <string name="schedule_backup_local_description">Резервное копирование дневника (Хранилище устройства)\nПри регистрации расписания выполняется резервное копирование файлов базы данных, за исключением прикреплённых фотографий, в локальное хранилище устройства в соответствии с установленным днём и временем, результат операции отобразится в виде уведомления.</string>
+    <string name="schedule_empty_message">Информация о расписании отсутствует.\nНажмите кнопку с плюсом в правом верхнем углу, чтобы добавить новое расписание.</string>
+    <string name="permission_confirmation_dialog_title">Требуется авторизация</string>
+    <string name="permission_confirmation_dialog_message">Для использования Easy Diary требуется авторизация.</string>
+    <string name="google_drive_account_information_title">Информация о связанной учётной записи Google</string>
+    <string name="schedule_backup_gms_description">Резервное копирование дневника (Google Диск)\nПри регистрации расписания выполняется резервное копирование файлов базы данных и прикреплённых фотографий на Google Диск в соответствии с установленным днём и временем, результат операции отобразится в виде уведомления.</string>
+    <string name="google_drive_account_sign_in_title">Связать учётную запись Google Диска</string>
+    <string name="google_drive_account_sign_in_description">Подключите свою учётную запись к Google Диску для удобного резервного копирования данных дневника.</string>
+    <string name="schedule_gms_error_title">Ожидание работы расписания</string>
+    <string name="schedule_gms_error_message">Устройство перешло в спящий режим, и операция резервного копирования по сети не удалась. Если коснуться окна уведомления, операция резервного копирования возобновится.</string>
+    <string name="schedule_pending_guide_message">Начинается ожидание расписания.</string>
+    <string name="schedule_diary_writing_complete">Коснитесь окна уведомления, чтобы перейти к экрану дневника.</string>
+    <string name="schedule_backup_local_complete">Резервное копирование дневника выполнено на локальное устройство.</string>
+    <string name="schedule_backup_gms_complete">Файл резервной копии дневника и прикреплённая фотография были сохранены на Google Диске.%s</string>
+    <string name="ok">ОК</string>
+    <string name="cancel">Отмена</string>
+    <string name="settings">Настройки</string>
+    <string name="location_info_title">Отображение информации о местоположении</string>
+    <string name="location_info_description">Информация о местоположении отображается в дневнике с использованием GPS.</string>
+    <string name="location_info_error_message">Информация о местоположении не может быть получена.</string>
+    <string name="category_tasks">Задачи</string>
+    <string name="task_symbol_top_order_title">Выравнивать символ задачи вверху</string>
+    <string name="task_symbol_top_order_description">Если типом символа задачи является TODO или DOING среди дневников, к которым применяется символ задачи, то он располагается вверху списка.</string>
 </resources>
