@@ -474,6 +474,10 @@
         v1.4.151 / 2020.10.05\n
         캘린더 화면에 다이어리 쓰기 버튼 추가
     </string>
+    <string name="release_218">
+        v1.4.152 / 2020.10.xx\n
+        Russian translation updates
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
