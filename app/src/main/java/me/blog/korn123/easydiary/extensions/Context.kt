@@ -700,12 +700,17 @@ fun Context.getFromLocation(latitude: Double, longitude: Double, maxResults: Int
 
 fun Context.fullAddress(address: Address): String {
     val sb = StringBuilder()
-    if (address.countryName != null) sb.append(address.countryName).append(" ")
-    if (address.adminArea != null) sb.append(address.adminArea).append(" ")
-    if (address.locality != null) sb.append(address.locality).append(" ")
-    if (address.subLocality != null) sb.append(address.subLocality).append(" ")
-    if (address.thoroughfare != null) sb.append(address.thoroughfare).append(" ")
-    if (address.featureName != null) sb.append(address.featureName).append(" ")
+    when (address.getAddressLine(0) != null) {
+        true -> sb.append(address.getAddressLine(0))
+        false -> {
+            if (address.countryName != null) sb.append(address.countryName).append(" ")
+            if (address.adminArea != null) sb.append(address.adminArea).append(" ")
+            if (address.locality != null) sb.append(address.locality).append(" ")
+            if (address.subLocality != null) sb.append(address.subLocality).append(" ")
+            if (address.thoroughfare != null) sb.append(address.thoroughfare).append(" ")
+            if (address.featureName != null) sb.append(address.featureName).append(" ")
+        }
+    }
     return sb.toString()
 }
 
