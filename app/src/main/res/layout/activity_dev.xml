@@ -59,6 +59,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/openMarkdownViewer"
+                    android:orientation="vertical"
+                    style="@style/AppCard.Settings">
+                    <LinearLayout
+                        style="@style/LinearLayoutVertical">
+                        <com.simplemobiletools.commons.views.MyTextView
+                            android:text="Markdown Viewer"
+                            style="@style/SettingsTitle" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
                     android:orientation="vertical"
                     style="@style/AppCard.Settings">
                     <LinearLayout
@@ -113,10 +124,6 @@
                         <com.simplemobiletools.commons.views.MyTextView
                             android:text="Next Alarm"
                             style="@style/SettingsTitle" />
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:id="@+id/nextAlarmSummary"
-                            android:text=""
-                            style="@style/SettingsSummary" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -129,8 +136,6 @@
                         <com.simplemobiletools.commons.views.MyTextView
                             android:text="Full Backup Service"
                             style="@style/SettingsTitle" />
-                        <com.simplemobiletools.commons.views.MyTextView
-                            style="@style/SettingsSummary" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -143,8 +148,6 @@
                         <com.simplemobiletools.commons.views.MyTextView
                             android:text="Clear unused photo"
                             style="@style/SettingsTitle" />
-                        <com.simplemobiletools.commons.views.MyTextView
-                            style="@style/SettingsSummary" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 

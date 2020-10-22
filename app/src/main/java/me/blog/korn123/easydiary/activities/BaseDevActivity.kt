@@ -138,6 +138,13 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 false -> makeSnackBar("Network Provider is not available.")
             }
         }
+
+        openMarkdownViewer.setOnClickListener {
+            TransitionHelper.startActivityWithTransition(this, Intent(this, MarkDownViewActivity::class.java).apply {
+                putExtra(MarkDownViewActivity.OPEN_URL_INFO, "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/kotlin/Standard.md")
+                putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, "Permutation_01")
+            })
+        }
     }
 
     override fun onDestroy() {
