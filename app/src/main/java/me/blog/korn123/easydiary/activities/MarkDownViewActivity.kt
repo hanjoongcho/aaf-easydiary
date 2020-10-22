@@ -21,7 +21,6 @@ import java.io.FileNotFoundException
 import java.net.HttpURLConnection
 import java.net.URL
 
-
 class MarkDownViewActivity : EasyDiaryActivity() {
     private lateinit var savedFilePath: String
     private lateinit var markdownUrl: String
@@ -60,6 +59,11 @@ class MarkDownViewActivity : EasyDiaryActivity() {
         when (File(savedFilePath).exists()) {
             true -> {
                 runOnUiThread { progressBar.visibility = View.GONE }
+//                val prism4j = Prism4j(GrammarLocator)
+//                mMarkDown.setParsedMarkdown(markdownView, Markwon.builder(this)
+//                        .usePlugin(SyntaxHighlightPlugin.create(prism4j, Prism4jThemeDefault.create(0)))
+//                        .build().toMarkdown(readSavedFile())
+//                )
                 mMarkDown.setMarkdown(markdownView, readSavedFile())
             }
             false -> {

@@ -26,8 +26,8 @@ android {
         applicationId "me.blog.korn123.easydiary"
         minSdkVersion 19
         targetSdkVersion versions.compileSdk
-        versionCode 218
-        versionName '1.4.152'
+        versionCode 219
+        versionName '1.4.153'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -161,7 +161,7 @@ dependencies {
     implementation "jp.co.cyberagent.android:gpuimage:2.0.3"
     implementation group: 'org.apache.poi', name: 'poi', version: '3.9'
     implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:4.0'
-    implementation 'io.noties.markwon:core:4.1.2'
+    implementation 'io.noties.markwon:core:4.2.0'
     implementation group: 'org.jasypt', name: 'jasypt', version: '1.9.2'
 
     // test
