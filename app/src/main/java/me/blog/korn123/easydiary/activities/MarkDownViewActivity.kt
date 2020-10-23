@@ -6,6 +6,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import io.noties.markwon.Markwon
+import io.noties.markwon.syntax.Prism4jThemeDefault
+import io.noties.markwon.syntax.SyntaxHighlightPlugin
 import kotlinx.android.synthetic.main.activity_markdown_view.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
@@ -28,6 +30,7 @@ class MarkDownViewActivity : EasyDiaryActivity() {
     private lateinit var savedFilePath: String
     private lateinit var markdownUrl: String
     private lateinit var mMarkDown: Markwon
+    private val mPrism4j = Prism4j(GrammarLocatorSourceCode())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,13 +65,10 @@ class MarkDownViewActivity : EasyDiaryActivity() {
         when (File(savedFilePath).exists()) {
             true -> {
                 runOnUiThread { progressBar.visibility = View.GONE }
-                  val prism4j = Prism4j(GrammarLocatorSourceCode())
-               
-//                mMarkDown.setParsedMarkdown(markdownView, Markwon.builder(this)
-//                        .usePlugin(SyntaxHighlightPlugin.create(prism4j, Prism4jThemeDefault.create(0)))
-//                        .build().toMarkdown(readSavedFile())
-//                )
-                mMarkDown.setMarkdown(markdownView, readSavedFile())
+                mMarkDown.setParsedMarkdown(markdownView, Markwon.builder(this)
+                        .usePlugin(SyntaxHighlightPlugin.create(mPrism4j, Prism4jThemeDefault.create(0)))
+                        .build().toMarkdown(readSavedFile())
+                )
             }
             false -> {
                 Thread(Runnable { openMarkdownFileAfterDownload(markdownUrl, savedFilePath) }).start()
@@ -93,7 +93,10 @@ class MarkDownViewActivity : EasyDiaryActivity() {
 
             runOnUiThread {
                 progressBar.visibility = View.GONE
-                mMarkDown.setMarkdown(markdownView, readSavedFile())
+                mMarkDown.setParsedMarkdown(markdownView, Markwon.builder(this)
+                        .usePlugin(SyntaxHighlightPlugin.create(mPrism4j, Prism4jThemeDefault.create(0)))
+                        .build().toMarkdown(readSavedFile())
+                )
             }
         } else {
             runOnUiThread {

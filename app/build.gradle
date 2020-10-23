@@ -168,7 +168,7 @@ dependencies {
     implementation 'com.nineoldandroids:library:2.4.0'
     implementation 'jp.wasabeef:glide-transformations:4.0.0'
     implementation "jp.co.cyberagent.android:gpuimage:2.0.3"
-    implementation group: 'org.apache.poi', name: 'poi', version: '3.9'
+    implementation group: 'org.apache.poi', name: 'poi', version: '3.13'
     implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:4.0'
     implementation 'io.noties.markwon:core:4.2.0'
     implementation 'io.noties.markwon:syntax-highlight:4.2.0'
