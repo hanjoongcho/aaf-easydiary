@@ -20,7 +20,10 @@ import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.net.HttpURLConnection
 import java.net.URL
+import io.noties.prism4j.Prism4j
+import io.noties.prism4j.annotations.PrismBundle
 
+@PrismBundle(include = ["java", "kotlin"], grammarLocatorClassName = ".GrammarLocatorSourceCode")
 class MarkDownViewActivity : EasyDiaryActivity() {
     private lateinit var savedFilePath: String
     private lateinit var markdownUrl: String
@@ -59,7 +62,8 @@ class MarkDownViewActivity : EasyDiaryActivity() {
         when (File(savedFilePath).exists()) {
             true -> {
                 runOnUiThread { progressBar.visibility = View.GONE }
-//                val prism4j = Prism4j(GrammarLocator)
+                  val prism4j = Prism4j(GrammarLocatorSourceCode())
+               
 //                mMarkDown.setParsedMarkdown(markdownView, Markwon.builder(this)
 //                        .usePlugin(SyntaxHighlightPlugin.create(prism4j, Prism4jThemeDefault.create(0)))
 //                        .build().toMarkdown(readSavedFile())
