@@ -139,10 +139,16 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
         }
 
-        openMarkdownViewer.setOnClickListener {
+        markdown1.setOnClickListener {
             TransitionHelper.startActivityWithTransition(this, Intent(this, MarkDownViewActivity::class.java).apply {
-                putExtra(MarkDownViewActivity.OPEN_URL_INFO, "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/kotlin/Standard.md")
-                putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, "Permutation_01")
+                putExtra(MarkDownViewActivity.OPEN_URL_INFO, "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/kotlin/kotlin.md")
+                putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, "kotlin")
+            })
+        }
+        markdown2.setOnClickListener {
+            TransitionHelper.startActivityWithTransition(this, Intent(this, MarkDownViewActivity::class.java).apply {
+                putExtra(MarkDownViewActivity.OPEN_URL_INFO, "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/kotlin/kotlin.collections.md")
+                putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, "kotlin.collections")
             })
         }
     }

@@ -59,13 +59,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/openMarkdownViewer"
+                    android:id="@+id/markdown1"
                     android:orientation="vertical"
                     style="@style/AppCard.Settings">
                     <LinearLayout
                         style="@style/LinearLayoutVertical">
                         <com.simplemobiletools.commons.views.MyTextView
-                            android:text="Markdown Viewer"
+                            android:text="package kotlin"
+                            style="@style/SettingsTitle" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/markdown2"
+                    android:orientation="vertical"
+                    style="@style/AppCard.Settings">
+                    <LinearLayout
+                        style="@style/LinearLayoutVertical">
+                        <com.simplemobiletools.commons.views.MyTextView
+                            android:text="package kotlin.collections"
                             style="@style/SettingsTitle" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
