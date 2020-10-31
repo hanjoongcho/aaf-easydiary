@@ -1,0 +1,614 @@
+<resources>
+    <string name="app_name">Easy Diary</string>
+    <string name="common_create_seconds">सेकंड लगे</string>
+    <string name="create_diary_title">डायरी लिखें</string>
+    <string name="write_date">तारीख</string>
+    <string name="request_title_message">कृपया एक शीर्षक दर्ज करें।</string>
+    <string name="request_content_message">कृपया अपनी सामग्री दर्ज करें।</string>
+    <string name="guide_message">शीर्षक टाइप करें या बोलें।</string>
+    <string name="contents_text_hint">सामग्री टाइप या बोलें।</string>
+    <string name="delete_photo_confirm_message">क्या आप निश्चित हैं कि आप इस फ़ोटो को हटाना चाहते हैं?</string>
+    <string name="gallery_intent_not_found_message">गैलरी एप्लिकेशन इंस्टॉल नहीं है या अक्षम है।</string>
+    <string name="create_diary_showcase_button_1">आगे</string>
+    <string name="create_diary_showcase_button_2">बंद करे</string>
+    <string name="create_diary_showcase_title_1">मौसम</string>
+    <string name="create_diary_showcase_title_2">शीर्षक</string>
+    <string name="create_diary_showcase_title_3">अंतर्वस्तु</string>
+    <string name="create_diary_showcase_title_4">फोटो संलग्न करें</string>
+    <string name="create_diary_showcase_title_5">फ़ॉन्ट का पैमाना बढ़ना</string>
+    <string name="create_diary_showcase_title_6">फ़ॉन्ट का पैमाना कम करना</string>
+    <string name="create_diary_showcase_title_7">तारीख चुनें</string>
+    <string name="create_diary_showcase_title_8">समय उठाओ</string>
+    <string name="create_diary_showcase_title_9">सहेजें</string>
+    <string name="create_diary_showcase_message_1">डायरी निर्माण समय के लिए मौसम का चयन करें। मौसम का चयन अनिवार्य नहीं है।</string>
+    <string name="create_diary_showcase_message_2">डायरी का शीर्षक टाइप करें। किसी विषय को दर्ज करना अनिवार्य नहीं है।</string>
+    <string name="create_diary_showcase_message_3">डायरी, नोट्स, सारांश नोट और बहुत कुछ दर्ज करें।</string>
+    <string name="create_diary_showcase_message_4">डायरी में एक तस्वीर संलग्न करें।</string>
+    <string name="create_diary_showcase_message_5">डायरी में उपयोग किए गए पाठ को बढ़ाएँ।</string>
+    <string name="create_diary_showcase_message_6">डायरी में उपयोग किए गए फ़ॉन्ट को कम करें।</string>
+    <string name="create_diary_showcase_message_7">डायरी निर्माण समय के लिए मौसम का चयन करें। डायरी निर्माण तिथि का चयन करें। यदि आप पिछली तारीख के लिए डायरी बनाना चाहते हैं, तो आप तारीख बदल सकते हैं।</string>
+    <string name="create_diary_showcase_message_8">डायरी निर्माण समय के लिए समय का चयन करें। यदि आप पिछली बार डायरी बनाना चाहते हैं तो आप समय बदल सकते हैं।</string>
+    <string name="create_diary_showcase_message_9">पूर्ण डायरी को सहेजें।</string>
+    <string name="read_diary_title">खोज</string>
+    <string name="input_mode_a">भाषण मोड</string>
+    <string name="input_mode_c">कीपैड मोड</string>
+    <string name="guide_message_2">विषय लिखें या बोलें।</string>
+    <string name="recognizer_intent_not_found_message">वाक् पहचान मॉड्यूल स्थापित नहीं है या अक्षम है।</string>
+    <string name="sample_diary_title_1">सावधान रहने के बजाय खतरनाक हो।</string>
+    <string name="sample_diary_title_2">जब मैं दोहराता हूं की मैं वही बोलता हूं जो मैं जानता हूं।</string>
+    <string name="sample_diary_title_3">जितनी बुरी खबरें हम सुनते हैं, उतनी ही हमें खुश होना चाहिए।</string>
+    <string name="sample_diary_title_4">बहुतायत आराम कहती है, बाधा रचनात्मकता कहती है।</string>
+    <string name="sample_diary_1">जब आप अपने पिछले जीवन को देखते हैं, तो आप निश्चित रूप से जान पाएंगे कि आप अपने जीवन को नुकसान पहुंचा रहे हैं क्योंकि आप बहुत सावधान हैं कि आप खतरे में न हों। \nखतरे का खतरा। \nसावधान रहने के बजाय। का कानून</string>
+    <string name="sample_diary_2">जब आप बात करते हैं, तो आप केवल वही जानते हैं जो आप पहले से जानते हैं। \nलेकिन यदि आप सुनते हैं, तो आप कुछ नया सीख सकते हैं। \n-दलाई लामा</string>
+    <string name="sample_diary_3">यह बुरी खबर है जो आपको एक नेता के रूप में सबसे ज्यादा सुनने की जरूरत है। &lt; \ n अच्छी खबर कल अच्छी है, लेकिन बुरी खबर कल और भी बुरी होगी। \ n यह इसलिए है क्योंकि भले ही तथ्य हृदयविदारक हों, इसीलिए यह कहना सुरक्षित है। \ n- एरिक श्मिट, गूगल के अध्यक्ष, \ &quot;Google कैसे काम करता है?&quot;</string>
+    <string name="sample_diary_4">बाधाएं रचनात्मकता के लिए बाधा नहीं हैं, लेकिन बाधाओं को दूर करने के लिए रचनात्मकता का उपयोग किया जाता है। &lt; \ n सभी महान कार्य या रचनात्मक समाधान वे होते हैं जिनमें बहुत समय की कमी, शारीरिक बाधाएँ और अन्य बाधाएँ होती हैं। &lt;। रचनात्मकता एक विवश वातावरण में पैदा होती है। &lt; \ n- प्रतिनिधि किम बोंग-जिन</string>
+    <string name="read_diary_showcase_button_1">आगे</string>
+    <string name="read_diary_showcase_button_2">बंद करे</string>
+    <string name="read_diary_showcase_title_1">डायरी लिखें</string>
+    <string name="read_diary_showcase_title_2">खोज</string>
+    <string name="read_diary_showcase_title_3">वाक् पहचान</string>
+    <string name="read_diary_showcase_title_4">पंचांग</string>
+    <string name="read_diary_showcase_title_5">समय</string>
+    <string name="read_diary_showcase_title_6">चार्ट</string>
+    <string name="read_diary_showcase_title_7">उन्नत व्यवस्था</string>
+    <string name="read_diary_showcase_title_8">डायरी देखें</string>
+    <string name="read_diary_showcase_message_1">आप समय के प्रवाह के अनुसार विभिन्न डायरी जैसे डायरी, मेमो, सारांश नोट आदि बना सकते हैं।</string>
+    <string name="read_diary_showcase_message_2">आप कीवर्ड का उपयोग करके डायरी खोज सकते हैं। जब कोई कीवर्ड दर्ज किया जाता है, तो मिलान डायरी खोजी जाती है और कीवर्ड को हाइलाइट किया जाता है।</string>
+    <string name="read_diary_showcase_message_3">आप बिना कीपैड के खोज कीवर्ड दर्ज करने के लिए वाक् पहचान सुविधा का उपयोग कर सकते हैं।</string>
+    <string name="read_diary_showcase_message_4">बनाई गई डायरी को कैलेंडर का उपयोग करके तारीख तक एकत्र किया जा सकता है।</string>
+    <string name="read_diary_showcase_message_5">बनाई गई डायरी एक समयरेखा के रूप में प्रदान की जाती है।</string>
+    <string name="read_diary_showcase_message_6">आप पूरी अवधि के लिए डायरी प्रविष्टियों के चार्ट देख सकते हैं।</string>
+    <string name="read_diary_showcase_message_7">आप फोंट बदलने, लॉक नंबर सेट करने, बैकअप और डायरी को पुनर्स्थापित करने के लिए उन्नत सेटिंग्स का उपयोग कर सकते हैं।</string>
+    <string name="read_diary_showcase_message_8">डायरी देखने के लिए सूची में डायरी कार्ड पर क्लिक करें।</string>
+    <string name="diary_photo_migration_message">ईज़ीड्रायर की छवि अटैचमेंट विधि को बदल दिया जाता है ताकि मौजूदा लिंक की जानकारी ईज़ी-डीयर फ़ोल्डर में संपीड़ित और संग्रहीत हो जाए। \nकृपया ऑपरेशन समाप्त होने की प्रतीक्षा करें।</string>
+    <string name="read_diary_detail_title">डायरी पढ़ें</string>
+    <string name="delete_confirm">क्या आप पक्का इसे हटाना चाहते हैं?</string>
+    <string name="read_diary_detail_showcase_button_1">आगे</string>
+    <string name="read_diary_detail_showcase_button_2">बंद करे</string>
+    <string name="read_diary_detail_showcase_title_0">डायरी का दृश्य</string>
+    <string name="read_diary_detail_showcase_title_1">पृष्ठ को स्थानांतरित करें</string>
+    <string name="read_diary_detail_showcase_title_2">डायरी संपादित करें</string>
+    <string name="read_diary_detail_showcase_title_3">टीटीएस</string>
+    <string name="read_diary_detail_showcase_title_4">पोस्टकार्ड</string>
+    <string name="read_diary_detail_showcase_title_5">डायरी हटाओ</string>
+    <string name="read_diary_detail_showcase_message_0">डायरी बचाओ सहेजी गई डायरी ब्राउज़ करें। आप एक कस्टम रंग निर्दिष्ट करके एक सहेजी गई डायरी को संशोधित कर सकते हैं या एक डायरी कार्ड बना सकते हैं।</string>
+    <string name="read_diary_detail_showcase_message_1">पहले या बाद में बनाई गई डायरी देखने के लिए स्क्रीन को बाएं या दाएं खींचें।</string>
+    <string name="read_diary_detail_showcase_message_2">आप देखी जा रही डायरी को संपादित करने के लिए डायरी संपादन स्क्रीन पर जा सकते हैं।</string>
+    <string name="read_diary_detail_showcase_message_3">Google TTS सुविधा का उपयोग करके आप डायरी पाठ को आवाज से सुन सकते हैं।</string>
+    <string name="read_diary_detail_showcase_message_4">पोस्ट कार्ड बनाने और उन्हें दूसरों के साथ साझा करने के लिए डायरी का उपयोग करें।</string>
+    <string name="read_diary_detail_showcase_message_5">आप वर्तमान डायरी को हटा सकते हैं और खोज स्क्रीन पर जा सकते हैं।</string>
+    <string name="update_diary_title">डायरी संपादित करें</string>
+    <string name="back_pressed_confirm">वर्तमान डायरी को सहेजे बिना पिछली स्क्रीन पर जाने के लिए \'ओके\' बटन पर क्लिक करें।</string>
+    <string name="rate_app">एप्लिकेशन का मूल्यांकन करें</string>
+    <string name="guide_message_3">अनुरोध सुविधा के लिए अपर्याप्त अनुमति।</string>
+    <string name="restore_diary">डायरी बरामद</string>
+    <string name="restore_diary_summary">Google ड्राइव पर समर्थित डेटा का उपयोग करके अनुलग्नकों को छोड़कर सभी सामग्री पुनर्प्राप्त करें।</string>
+    <string name="restore_photo">डायरी फ़ोटो पुनर्प्राप्त करें (मैनुअल)</string>
+    <string name="restore_photo_summary">उपयोगकर्ता सीधे डायरी से जुड़ी तस्वीरों को पुनर्प्राप्त करते हैं।</string>
+    <string name="backup_diary">बैकअप डायरी</string>
+    <string name="backup_diary_summary">Google डिस्क में अनुलग्नकों को छोड़कर सभी सामग्री का बैकअप लें।</string>
+    <string name="font_setting">फ़ॉन्ट सेटिंग</string>
+    <string name="add_ttf_fonts_title">TTF फ़ॉन्ट जोड़ें</string>
+    <string name="add_ttf_fonts_summary">ईज़ी डायरी में अपने खुद के TTF फोंट जोड़ें। \nअगर फोंट जोड़े जाते हैं, तो आप बिल्ट-इन फोंट के साथ जोड़े गए फोंट का उपयोग कर सकते हैं। जब आप फ़ाइल एक्सप्लोरर का उपयोग करके टीटीएफ फ़ाइल का चयन करते हैं, तो फॉन्ट स्वचालित रूप से ईज़ी डायरी में पंजीकृत हो जाता है। और फ़ॉन्ट सेटिंग मेनू में सक्रिय।</string>
+    <string name="add_ttf_fonts_info_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/MANUAL_hi.md</string>
+    <string name="diary_search_keyword_case_sensitive_title">अक्षर संवेदनशील</string>
+    <string name="diary_search_keyword_case_sensitive_summary">जब विकल्प सक्रिय होता है, तो यह जांचता है कि क्या डायरी मैच का मामला है।</string>
+    <string name="setting_primary_color_title">विषय</string>
+    <string name="setting_primary_color_summary">एप्लिकेशन का प्राथमिक रंग सेट करें।</string>
+    <string name="pick_text_color_guide_message">वर्तमान संस्करण केवल विषय रंग परिवर्तनों का समर्थन करता है। भविष्य में \n रंग परिवर्तन उपलब्ध होंगे।</string>
+    <string name="pick_background_color_guide_message">वर्तमान संस्करण केवल थीम रंग परिवर्तनों का समर्थन करता है। भविष्य में \nबैकग्राउंड रंग परिवर्तन उपलब्ध होंगे।</string>
+    <string name="easy_photo_map_title">आसान फोटो मैप</string>
+    <string name="easy_photo_map_summary">आसान फोटो मैप एक फोटोमैप एप्लिकेशन है जो फोटो में शामिल स्थान की जानकारी का उपयोग करके मानचित्र पर फोटो के स्थान को प्रदर्शित करता है।</string>
+    <string name="easy_password_title">आसान पासवर्ड</string>
+    <string name="easy_password_summary">आसान पासवर्ड एक ऐसा एप्लिकेशन है जो आपको उपयोगकर्ता द्वारा निर्धारित एक पैटर्न लॉक का उपयोग करके लॉगिन, दस्तावेज़ सुरक्षा, दरवाज़ा बंद, ताला, क्रेडिट कार्ड, खाता प्रबंधन आदि के लिए उपयोग किए जाने वाले पासवर्ड का प्रबंधन करने में मदद करता है।</string>
+    <string name="font_line_spacing">फ़ॉन्ट पंक्ति रिक्ति</string>
+    <string name="font_line_spacing_summary">फ़ॉन्ट की पंक्ति रिक्ति को सेट अनुपात में बदलें।</string>
+    <string name="calendar_title">पंचांग</string>
+    <string name="guide_message_4">उस दिन कोई डायरी नहीं बनाई गई है।</string>
+    <string name="bar_chart_title">चार्ट</string>
+    <string name="bar_chart_status">समय डायरी निर्माण की स्थिति</string>
+    <string name="range_a">0घंटा~3घंटा</string>
+    <string name="range_b">4घंटा~7घंटा</string>
+    <string name="range_c">8घंटा~11घंटा</string>
+    <string name="range_d">12घंटा~15घंटा</string>
+    <string name="range_e">16घंटा~19घंटा</string>
+    <string name="range_f">20घंटा~23घंटा</string>
+    <string name="range_g">1घंटा~24घंटा</string>
+    <string name="write_time">समय लिखो</string>
+    <string name="write_count">गिनती लिखना</string>
+    <string name="unlock_guide_message">कृपया अपना लॉक नंबर दर्ज करें</string>
+    <string name="photo_view_error_info">कोई फ़ोटो नहीं मिला। गैलरी से \nचिपकाया गया फ़ोटो हटा दी गईं या स्थानांतरित कर दी गईं।</string>
+    <string name="diary_card_export_info">डायरी कार्ड ने बचाया रास्ता</string>
+    <string name="diary_card_share_info">डायरी कार्ड साझा करें</string>
+    <string name="diary_card_export_error_message">डायरी कार्ड बनाते समय एक त्रुटि हुई। कृपया पुन: प्रयास करें। कृपया पुनः प्रयास करें।</string>
+    <string name="post_card_showcase_button_1">आगे</string>
+    <string name="post_card_showcase_button_2">बंद करे</string>
+    <string name="post_card_showcase_title_0">डायरी पोस्ट कार्ड</string>
+    <string name="post_card_showcase_title_1">लिखावट का रंग</string>
+    <string name="post_card_showcase_title_2">पीछे का रंग</string>
+    <string name="post_card_showcase_title_3">पोस्टकार्ड बनाएं</string>
+    <string name="post_card_showcase_title_4">पोस्टकार्ड साझा करें</string>
+    <string name="post_card_showcase_title_5">संपादन से बाहर निकलें</string>
+    <string name="post_card_showcase_message_0">आप कस्टम पोस्टकार्ड बनाने और सहेजने के लिए सहेजी गई डायरी का उपयोग कर सकते हैं।</string>
+    <string name="post_card_showcase_message_1">पोस्टकार्ड टेक्स्ट का रंग बदलें। आप रंग बीनने वाले का उपयोग करके वांछित रंग का चयन कर सकते हैं।</string>
+    <string name="post_card_showcase_message_2">पोस्टकार्ड पृष्ठभूमि रंग बदलें। आप रंग बीनने वाले का उपयोग करके वांछित रंग का चयन कर सकते हैं।</string>
+    <string name="post_card_showcase_message_3">बनाए गए पोस्टकार्ड को छवि फ़ाइलों के रूप में सहेजा जा सकता है।</string>
+    <string name="post_card_showcase_message_4">बनाया गया पोस्टकार्ड दोस्तों के साथ साझा किया जा सकता है। ईमेल, एमएमएस, मैसेंजर और अधिक के साथ अपने पोस्टकार्ड साझा करें।</string>
+    <string name="post_card_showcase_message_5">पोस्टकार्ड संपादन स्क्रीन से बाहर निकलें और पिछली स्क्रीन पर लौटें।</string>
+    <string name="timeline_title">समय</string>
+    <string name="postcard_viewer_title">डायरी पोस्टकार्ड</string>
+    <string name="postcard_viewer_no_cards_saved">कोई सहेजी गई डायरी पोस्ट कार्ड नहीं।</string>
+    <string name="google_drive_connect_message">सिंक में Google ड्राइव ...</string>
+    <string name="diary_count">चाभी</string>
+    <string name="menu_calendar">पंचांग</string>
+    <string name="menu_chart">आंकड़े</string>
+    <string name="menu_timeline">समय</string>
+    <string name="post_card">डायरी पोस्टकार्ड</string>
+    <string name="menu_delete">हटाएं</string>
+
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <!--  Resources added since version 1.4.41 here.                                                      -->
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <string name="preferences_category_settings">अनुप्रयोग सेटिंग</string>
+    <string name="preferences_category_information">आवेदन की सूचना</string>
+    <string name="preferences_information_licenses">ओपन सोर्स लाइसेंस</string>
+    <string name="preferences_information_licenses_summary">ओपन सोर्स सॉफ्टवेयर नोटिस</string>
+    <string name="preferences_category_aaf">AAF आसान श्रृंखला</string>
+    <string name="invite_friends">मित्रों को आमंत्रित करें</string>
+    <string name="invite_friends_summary">% S एप्लिकेशन को अपने दोस्तों के साथ साझा करें।</string>
+
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <!--  Release notes here.                                                      -->
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <string name="release_103">v1.4.41 / 2018.05.28 \ n फिक्स्ड एक बग है जो असामान्य रूप से पोस्टकार्ड ब्राउज़ मोड में समाप्त हो गया है जब कोई निरीक्षण निर्देशिका नहीं है</string>
+    <string name="release_105">v1.4.42 / 2018.06.27\n उपयोगकर्ता अनुभव (UX) अनुकूलन</string>
+    <string name="release_110">v1.4.47 / 2018.08.29\n जोड़ा गया पोस्ट कार्ड विलोपन समारोह</string>
+    <string name="release_114">v1.4.51 / 2018.09.29\n AAF सामान्य मॉड्यूल अपडेट \n एंड्रॉइड 9 पाई के लिए ऐप पैकेजिंग वातावरण बदलें</string>
+    <string name="release_116">v1.4.53 / 2018.10.13\n जोड़ा गया पूर्वावलोकन फोटो आकार सेटिंग फ़ंक्शन \n जोड़ा गया पूर्वावलोकन फोटो टॉगल फ़ंक्शन (गुना या सामने)</string>
+    <string name="release_118">v1.4.55 / 2018.11.01\n डायरी लेखन की समय अभिव्यक्ति में सुधार \n बोल्डफेस सेटिंग फ़ंक्शन को डायरी शीर्षक और समय की जानकारी में जोड़ा गया</string>
+    <string name="release_120">v1.4.57 / 2018.11.12\n एक समय में कई चित्रों को संलग्न करने के लिए बहु-पिकर सेटिंग फ़ंक्शन जोड़ा गया</string>
+    <string name="release_126">v1.4.63 / 2018.11.25\n Google ड्राइव का उपयोग करके जोड़े गए फ़ोटो बैकअप और रिकवरी फ़ंक्शन जोड़े</string>
+    <string name="release_128">v1.4.65 / 2018.12.19\n फिंगरप्रिंट सेंसर का उपयोग करके जोड़ा गया फ़ंक्शन</string>
+    <string name="release_130">v1.4.67 / 2019.01.01\n पोस्टकार्ड स्क्रीन पर संलग्न तस्वीरों को देखने की क्षमता में सुधार</string>
+    <string name="release_131">v1.4.68 / 2019.01.06\n सोफोस वैक्सीन (अधिसूचना श्रोता, ट्रिगर इंस्टॉलेशन) में कम आत्मविश्वास के साथ रिपोर्ट की गई कुछ वस्तुओं के लिए सुरक्षित सुरक्षा विचार \n पोस्टकार्ड फ़ॉन्ट आकार समायोजन फ़ंक्शन जोड़ें</string>
+    <string name="release_132">v1.4.69 / 2019.01.16\n उपयोगकर्ता अनुभव (UX) ऑप्टिमाइज़ेशन \n फिक्स्ड एक त्रुटि है जो स्क्रीन संक्रमण एंड्रॉइड 9 में सामान्य नहीं है पाई संस्करण \n समयरेखा भिन्नता बटन जोड़ें</string>
+    <string name="release_133">v1.4.70 /2019.01.25 \n डायरी सामग्री का सारांश देखने के लिए जोड़ा गया विकल्प</string>
+    <string name="release_134">v1.4.71 /2019.01.26 \n डिवाइस फिंगरप्रिंट जानकारी को बदलते समय एक त्रुटि जिसे एप्लिकेशन ने असामान्य रूप से समाप्त कर दिया है</string>
+    <string name="release_136">v1.4.73 /2019.02.11 \n जब पिन सेट और अनलॉक किया जाता है तो इनपुट अंकों को सही करने की क्षमता में सुधार होता है</string>
+    <string name="release_137">v1.4.74 / 2019.03.06\n उपयोगकर्ता अनुभव (UX) ऑप्टिमाइज़ेशन \n फिक्स्ड एक त्रुटि है जो स्क्रीन संक्रमण एंड्रॉइड 9 में सामान्य नहीं है पाई संस्करण \n समयरेखा भिन्नता बटन जोड़ें</string>
+    <string name="release_138">v1.4.75 / 2019.03.22\n एफएक्यू और प्राइवेसी पॉलिसीज सहित \n एप्लिकेशन-विशिष्ट सूचना पृष्ठ जोड़ें, बेहतर पिन और फिंगरप्रिंट अनलॉक टॉगल</string>
+    <string name="release_139">v1.4.76 / 2019.04.24\n डायरी के प्रतीक चिह्न के 50 प्रकार जोड़ें</string>
+    <string name="release_140">v1.4.77 /2019.05.11 \n डायरी प्रतीक जोड़ें और श्रेणियां लागू करें</string>
+    <string name="release_141">v1.4.78 /2019.05.13 \n एक त्रुटि जो असामान्य रूप से समाप्त हो गई अगर सेटिंग स्क्रीन के कुछ फ़ंक्शन के पास डिवाइस भंडारण तक पहुंच नहीं है</string>
+    <string name="release_143">v1.4.80 / 2019.06.07\n Google डिस्क पर Google डिस्क Android API REST API (Google ड्राइव Android API 6 दिसंबर, 2019 को बंद हो जाएगा)</string>
+    <string name="release_147">v1.4.83 /2019.06.09 \n स्थापना फ़ाइल आकार को कम करने और अनुकूलित करने के लिए एंड्रॉइड ऐप बंडल लागू करें</string>
+    <string name="release_149">v1.4.84 /2019.06.15 \n बेहतर डायरी के आंकड़े</string>
+    <string name="release_150">v1.4.85 /2019.06.18 \n Google ड्राइव (REST API) उपयोगकर्ता अधिकार प्राप्ति त्रुटि सुधार</string>
+    <string name="release_151">v1.4.86 /2019.06.19 \n Google ड्राइव (REST API) डायरी फिक्सिंग त्रुटियों के साथ फ़ोटो पुनर्प्राप्त कर रहा है</string>
+    <string name="release_152">v1.4.87 /2019.06.20 \n पहले v1.4.80 में Google ड्राइव का उपयोग करने के लिए प्रमाणित उपयोगकर्ताओं के लिए निश्चित प्रमाणीकरण टोकन त्रुटि</string>
+    <string name="release_154">v1.4.88 / 2019.07.16\n AndroidX संस्करण के लिए माइग्रेट किए गए Android समर्थन लाइब्रेरी संस्करण \n डायरी प्रतीक चिह्न जोड़ें</string>
+    <string name="release_157">v1.4.91 /2019.08.12 \n डिवाइस भंडारण \nका उपयोग करके बैकअप और रिकवरी फ़ंक्शन जोड़ा गया कुछ उपकरणों पर कुछ पाठ को कैलेंडर पर छोटा करने के कारण एक समस्या को ठीक किया गया</string>
+    <string name="release_159">v1.4.93 /2019.08.29 \n उपयोगकर्ता अनुभव (UX) अनुकूलन \n बग फिक्स करता है जो पुराने ओएस पर कॉन्फ़िगरेशन स्क्रीन में प्रवेश करते समय असामान्य रूप से दुर्घटनाग्रस्त हो जाता है</string>
+    <string name="release_160">
+        v1.4.94 / 2019.09.03\n
+        जोड़ा गया कैलेंडर कार्यदिवस सेटिंग \ n प्रारंभ करें
+        एक ऐसा मुद्दा फिक्स्ड जो कैलेंडर परिदृश्य को टैबलेट परिदृश्य में दिखाने से रोकता है
+    </string>
+    <string name="release_163">
+        v1.4.97 / 2019.09.17 \ n
+        बेहतर टाइमलाइन खोज फ़िल्टर \ n
+        डायरी की प्रतिलिपि समारोह गयी
+    </string>
+    <string name="release_165">
+        v1.4.99 / 2019.09.26\n
+        डायरी पाठ गिनती समारोह जोड़ा
+    </string>
+    <string name="release_167">
+        v1.4.101 / 2019.10.03\n
+        एंड्रॉइड 10 स्टोरेज एक्सेस मुद्दों के जवाब में (लक्षित स्कैप्ड स्टोरेज पॉलिसी से बचने के लिए अस्थायी डाउनग्रेड को लक्षित करें)
+    </string>
+    <string name="release_169">
+        v1.4.103 / 2019.10.09\n
+        संग्रहण स्थान बदलें और Android 10 स्कोप्ड संग्रहण नीतियों पर प्रतिक्रिया देने के लिए माइग्रेट करें
+    </string>
+    <string name="release_170">
+        v1.4.104 / 2019.10.19\n
+        जोड़ा गया कैलेंडर फ़ॉन्ट स्केल सेटिंग \ n
+        स्क्रीन सेट करने के लिए स्लाइडिंग पेज लागू करें
+    </string>
+    <string name="release_171">
+        v1.4.105 / 2019.10.20\n
+        Excel फ़ाइल डिवाइस सेविंग फंक्शन \ n का उपयोग करते समय हुई एक त्रुटि
+        डायरी को समय से हटाते समय फिक्स्ड त्रुटि
+    </string>
+    <string name="release_172">
+        v1.4.106 / 2019.10.25\n
+        निश्चित त्रुटि कि परिवर्तित सामग्री डायरी \ n के संपादन के तुरंत बाद दिखाई नहीं दे रही है
+        ज्ञात सुरक्षा मुद्दों के साथ कमजोर पुस्तकालयों के लिए उपचार
+    </string>
+    <string name="release_173">
+        v1.4.107 / 2019.10.31\n
+        उपयोगकर्ता अनुभव (UX) अनुकूलन
+    </string>
+    <string name="release_174">
+        v1.4.108 / 2019.11.18\n
+        कैलेंडर पर सेट किए गए कैलेंडर फ़ॉन्ट स्केल को फ़्रेंच पर सेट करते समय एक त्रुटि हुई
+    </string>
+    <string name="release_176">
+        v1.4.110 / 2019.12.13\n
+        जोड़ा गया डायरी डैशबोर्ड फीचर \ n
+        डिवाइस में संग्रहीत डायरी बैकअप फ़ाइल को हटाने की क्षमता जोड़ा गया
+    </string>
+    <string name="release_178">
+        v1.4.112 / 2019.12.31\n
+        कैमरा ऐप इंटीग्रेशन \ n के माध्यम से फोटो अटैचमेंट फंक्शन जोड़ें
+        डायरी डैशबोर्ड सुधार
+    </string>
+    <string name="release_179">
+        v1.4.113 / 2020.01.04\n
+        कैलेंडर स्क्रीन पर तारीख पिकर का उपयोग करके जोड़ा गया आंदोलन आंदोलन
+    </string>
+    <string name="release_180">
+        v1.4.114 / 2020.01.15\n
+        डायरी प्रतीक चिह्न \ n जोड़ा गया
+        फ्रेंच समर्थन जोड़ा गया
+    </string>
+    <string name="release_182">
+        v1.4.116 / 2020.01.21\n
+        लाइसेंस नीति ache अपाचे लाइसेंस 2.0 License से बदलकर GNU जनरल पब्लिक लाइसेंस v3.0 「हो गई
+    </string>
+    <string name="release_184">
+        v1.4.118 / 2020.02.11\n
+        [बीटा] पूर्ण डेटा बैकअप सुविधा जोड़ा गया
+    </string>
+    <string name="release_185">
+        v1.4.119 / 2020.02.15\n
+       डायरी प्रतीक चिह्न जोड़ा गया
+    </string>
+    <string name="release_186">
+        v1.4.120 / 2020.02.19\n
+        डायरी प्रतीक चिह्न \ n जोड़ा गया
+        डायरी प्रतीक का उपयोग करके खोज फ़ंक्शन जोड़ा गया
+    </string>
+    <string name="release_187">
+        v1.4.121 / 2020.03.02\n
+        कैलेंडर स्क्रीन की गति में सुधार (पहला सुधार)
+    </string>
+    <string name="release_188">
+        v1.4.122 / 2020.03.09\n
+        [बीटा] ने पूर्ण डेटा रिकवरी सुविधा \ n जोड़ी
+        डैशबोर्ड के आँकड़ों में कुछ चिन्ह असामान्य रूप से बड़े दिखाई देते हैं
+        कैलेंडर स्क्रीन में डायरी सूची का जोड़ा गया विकल्प
+    </string>
+    <string name="release_190">
+        v1.4.124 / 2020.03.15\n
+        मूल सेटिंग स्क्रीन से अलग फ़ॉन्ट-संबंधित सेटिंग विकल्प
+    </string>
+    <string name="release_191">
+        v1.4.125 / 2020.03.23 \ n
+        डायरी संपादित स्क्रीन \ n दर्ज करते समय कर्सर स्थिति सेटिंग विकल्प जोड़ा गया
+        सामग्री सारांश दृश्य विकल्प \ n में अधिकतम संख्या में लाइनें सेट करने के लिए फ़ंक्शन को जोड़ा गया
+        कैलेंडर स्क्रीन पर सप्ताह का दिन काट दिया गया था, जहां एक समस्या का समाधान किया गया
+    </string>
+    <string name="release_192">
+        v1.4.126 / 2020.04.05 \ n
+        पिन नंबर \ n का उपयोग करके डायरी एन्क्रिप्शन सुविधा को जोड़ा गया
+        एंड्रॉइड 10 में मल्टी-पिकर स्कॉप्ड स्टोरेज मुद्दों का जवाब देने के लिए अस्थायी रूप से requestLegacyExternalStorage विकल्प लागू करें
+    </string>
+    <string name="release_193">
+        v1.4.127 / 2020.04.12 \ n
+        हटाया गया अनुरोध
+        SAF (स्टोरेज एक्सेस फ्रेमवर्क) का उपयोग करके डेटाबेस फ़ाइल बैकअप और रिकवरी सुविधा जोड़ना
+    </string>
+    <string name="release_195">
+        v1.4.129 / 2020.04.21 \ n
+        जोड़ा गया एनिमेटेड GIF फ़ाइलें \ n संलग्न करने के लिए सुविधा
+        जोड़ा गया डायरी एकाधिक कॉपी और सुविधा को हटा दें
+    </string>
+    <string name="release_196">
+        v1.4.130 / 2020.05.20 \ n
+        जोड़ा गया डायरी अनुसूची सेटिंग सुविधा
+    </string>
+    <string name="release_197">
+        v1.4.131 / 2020.05.26 \ n
+        एक त्रुटि जो Android 4.4 संस्करण में कुछ स्क्रीन की असामान्य समाप्ति का कारण बनी
+    </string>
+    <string name="release_198">
+        v1.4.132 / 2020.05.31 \ n
+        एक मुद्दा जहां कार्ड दृश्य के अंदर शामिल बटन की पहचान नहीं की जा सकती है जब थीम रंग और कार्ड दृश्य पृष्ठभूमि रंग एक ही रंग में सेट किए गए थे
+    </string>
+    <string name="release_199">
+        v1.4.133 / 2020.06.02 \ n
+        स्क्रीन बैकग्राउंड का रंग सफ़ेद होने पर लॉक स्क्रीन आइकन की पहचान नहीं किए जाने पर एक समस्या ठीक की गई
+    </string>
+    <string name="release_200">
+        v1.4.134 / 2020.06.14 \ n
+        उपयोगकर्ता अनुभव (UX) अनुकूलन
+    </string>
+    <string name="release_201">
+        v1.4.135 / 2020.06.18 \ n
+        जोड़ा गया RTL भाषा समर्थन
+    </string>
+    <string name="release_202">
+        v1.4.136 / 2020.06.29 \ n
+        जोड़ा गया डायरी सूची विजेट सुविधा
+    </string>
+    <string name="release_203">
+        v1.4.137 / 2020.07.05 \ n
+        एप्लाइड Google Play सुरक्षा नीति
+    </string>
+    <string name="release_205">
+        v1.4.139 / 2020.07.11 \ n
+        कनेक्ट किए गए Google खाते की जानकारी प्रदर्शित करने के लिए जोड़ा गया सुविधा \ n
+        शेड्यूलर का उपयोग करके Google ड्राइव बैकअप सुविधा को जोड़ा गया
+    </string>
+    <string name="release_206">
+        v1.4.140 / 2020.07.20 \ n
+        एक त्रुटि है कि अनुसूचक आवेदन समाप्ति राज्य में काम नहीं किया
+    </string>
+    <string name="release_207">
+        v1.4.141 / 2020.08.03 \ n
+        उपयोगकर्ता अनुभव (UX) अनुकूलन \ n
+        फ्रेंच अनुवाद अद्यतन
+    </string>
+    <string name="release_209">
+        v1.4.143 / 2020.08.26 \ n
+        कुछ डिवाइसों को सेटिंग स्क्रीन में असामान्य रूप से समाप्त किए जाने पर एक समस्या को ठीक किया गया
+    </string>
+    <string name="release_211">
+        v1.4.145 / 2020.09.04 \ n
+        जर्मन अनुवाद अपडेट
+    </string>
+    <string name="release_212">
+        v1.4.146 / 2020.09.10 \ n
+        जर्मन अनुवाद अपडेट \ n
+        स्थान जानकारी प्रदर्शन विकल्प जोड़ा गया
+    </string>
+    <string name="release_214">
+        v1.4.148 / 2020.09.15 \ n
+        जोड़ा गया कार्य प्रतीक छँटाई विकल्प
+    </string>
+    <string name="release_216">
+        v1.4.150 / 2020.09.22 \ n
+        एक बग फिक्स्ड जहां विजेट सामान्य रूप से प्रदर्शित नहीं किया गया था
+    </string>
+    <string name="release_217">
+        v1.4.152 / 2020.10.19 \ n
+        रूसी अद्यतन \ n
+        उपयोगकर्ता अनुभव (UX) अनुकूलन
+    </string>
+    <string name="release_218">
+        v1.4.152 / 2020.10.19 \ n
+        रूसी अनुवाद अपडेट \ n
+        उपयोगकर्ता अनुभव (UX) अनुकूलन
+    </string>
+
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <!--  Resources added since version 1.4.47 here.                                                      -->
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <string name="speech_to_text">आवाज़ डालना</string>
+    <string name="write_diary">डायरी लिखें</string>
+    <string name="date_picker">तारीख़ चुनें</string>
+    <string name="time_picker">समय का चयन करें</string>
+    <string name="seconds_picker">सेकंड चुनें</string>
+    <string name="save_diary">डायरी बचाओ</string>
+    <string name="photo_registration">फोटो पंजीकरण</string>
+    <string name="zoom_in">ज़ूम इन</string>
+    <string name="zoom_out">ज़ूम आउट</string>
+    <string name="edit_diary">डायरी संपादित करें</string>
+    <string name="text_to_speech">भाषण से डायरी</string>
+    <string name="diary_postcard">डायरी पोस्टकार्ड</string>
+    <string name="thumbnail_setting_title">थंबनेल का आकार</string>
+    <string name="thumbnail_setting_summary">डायरी से जुड़े फोटो के थंबनेल आकार को सेट करता है। सेट आकार केवल डायरी निर्माण और संशोधन स्क्रीन पर लागू होता है, खोज स्क्रीन पर नहीं।</string>
+    <string name="collapse_attached_photo">संलग्न फोटो को संक्षिप्त करें</string>
+    <string name="expand_attached_photo">संलग्न फोटो का विस्तार करें</string>
+    <string name="release_notes_title">रिलीज नोट्स</string>
+    <string name="release_notes_summary">रिलीज़ संस्करण द्वारा नई सुविधाओं के लिए जाँच करें।</string>
+    <string name="attached_photo_count">%d संलग्न तस्वीरें</string>
+    <string name="all_day">पूरे दिन</string>
+    <string name="bold_style_option_title">बोल्डफेस कॉन्फ़िगरेशन</string>
+    <string name="bold_style_option_summary">डायरी शीर्षक और समयरेखा को बोल्ड में प्रदर्शित करने के लिए सेट करें।</string>
+    <string name="multi_picker_option_title">मल्टी पिकर सेटिंग</string>
+    <string name="multi_picker_option_summary">डायरी फोटो संलग्न करते समय, मैं गैलरी ऐप का उपयोग किए बिना डायरी में दिए गए बहु-पिकर का उपयोग करता हूं। जब मल्टी-पिकर सक्षम किया जाता है, तो आप एक साथ कई चित्र संलग्न कर सकते हैं।</string>
+    <string name="preferences_category_backup_restore">एप्लिकेशन बैकअप और पुनर्स्थापित करें</string>
+    <string name="preferences_category_backup_restore_sub">गूगल ड्राइव</string>
+    <string name="backup_attach_photo_title">बैकअप संलग्न तस्वीरें</string>
+    <string name="backup_attach_photo_summary">अपनी संलग्न तस्वीरों को Google डिस्क पर बैकअप दें। बीटा सेवा के कारण कुछ उपकरणों पर यह सुविधा काम नहीं कर सकती है।</string>
+    <string name="recover_attach_photo_title">संलग्न तस्वीरें पुनर्प्राप्त करें</string>
+    <string name="recover_attach_photo_summary">पुनर्प्राप्त संलग्न फ़ोटो Google ड्राइव पर समर्थित हैं। बीटा सेवा के कारण कुछ उपकरणों पर यह सुविधा काम नहीं कर सकती है।</string>
+    <string name="notification_msg_device_file_count">%s बैकअप फ़ाइलों की संख्या: %d%s</string>
+    <string name="notification_msg_upload_file_count">अपलोड करने के लिए फ़ाइलों की संख्या</string>
+    <string name="notification_msg_upload_invalid">सभी बैकअप लक्ष्य फाइलें पहले से मौजूद हैं।</string>
+    <string name="notification_msg_upload_empty">बैकअप की जाने वाली फ़ाइल मौजूद नहीं है।</string>
+    <string name="notification_msg_upload_progress">अपलोड हो रहा है…</string>
+    <string name="notification_msg_upload_complete">अपलोड पूरा हुआ</string>
+    <string name="notification_msg_upload_success">%s सफलतापूर्वक अपलोड हो गया: %d%s</string>
+    <string name="notification_msg_upload_fail">%s फेल अपलोड करें: %d%s</string>
+    <string name="notification_msg_google_drive_file_count">पुनर्प्राप्त फ़ाइलों की संख्या</string>
+    <string name="notification_msg_download_file_count">डाउनलोड करने के लिए फ़ाइलों की संख्या</string>
+    <string name="notification_msg_download_invalid">सभी पुनर्प्राप्ति लक्ष्य फ़ाइलें पहले से मौजूद हैं।</string>
+    <string name="notification_msg_download_empty">पुनर्प्राप्त की जाने वाली फ़ाइल मौजूद नहीं है।</string>
+    <string name="notification_msg_download_progress">डाउनलोड कर रहा है…</string>
+    <string name="notification_msg_download_complete">डाउनलोड सम्पन्न हुआ</string>
+    <string name="notification_msg_download_success">डाउनलोड सफलता</string>
+    <string name="notification_msg_download_fail">डाउनलोड विफल</string>
+    <string name="notification_msg_duplicate_file_count">%sमौजूद फ़ाइलों की संख्या: %d%s</string>
+    <string name="preferences_category_lock">एप्लिकेशन लॉक सेटिंग</string>
+    <string name="fingerprint_lock_title">फिंगरप्रिंट लॉक</string>
+    <string name="fingerprint_lock_summary">यदि डिवाइस फिंगरप्रिंट पहचान का समर्थन करता है और उसके पास एक पंजीकृत फिंगरप्रिंट है, तो पंजीकृत फिंगरप्रिंट के साथ एप्लिकेशन को लॉक करें।</string>
+    <string name="fingerprint_not_available">डिवाइस पर स्थापित ऑपरेटिंग सिस्टम फिंगरप्रिंट पहचान का समर्थन नहीं करता है।</string>
+    <string name="fingerprint_setting_complete">फिंगरप्रिंट लॉक सेटिंग पूरी हो गई है।</string>
+    <string name="fingerprint_setting_release">फिंगरप्रिंट लॉक बंद है।</string>
+    <string name="fingerprint_lock_need_pin_setting">फिंगरप्रिंट लॉक का उपयोग करने के लिए, आपको पहले पिन सेट करना होगा।</string>
+    <string name="fingerprint_authentication_fail_try_again">फिंगरप्रिंट प्रमाणीकरण विफल। कृपया पुन: प्रयास करें।</string>
+    <string name="fingerprint_authentication_info_changed">डिवाइस की फिंगरप्रिंट प्रमाणीकरण जानकारी बदल गई है और पहले से सेट प्रमाणीकरण जानकारी का उपयोग नहीं किया जा सकता है।</string>
+    <string name="pin_lock_title">पिन लॉक सेटिंग</string>
+    <string name="pin_lock_summary">एप्लिकेशन को लॉक करने के लिए पिन सेट करें।</string>
+    <string name="pin_setting_complete">पिन सेटिंग पूरी हो गई है।</string>
+    <string name="pin_setting_release">पिन लॉक अक्षम।</string>
+    <string name="pin_release_need_fingerprint_disable">पिन लॉक को अक्षम करने के लिए, आपको फिंगरप्रिंट लॉक को बंद करना होगा।</string>
+    <string name="pin_setting_guide_message">पिन के रूप में उपयोग करने के लिए कृपया एक नंबर दर्ज करें।</string>
+    <string name="pin_unlock_guide_message">कृपया पिन दर्ज करें।</string>
+    <string name="pin_verification_fail">पिन सत्यापन विफल रहा।</string>
+    <string name="change_pin_lock_mode">पिन लॉक मोड में बदलाव करना</string>
+    <string name="diary_creation_time_disable_message">कोई समय की जानकारी नहीं</string>
+    <string name="enable_card_view_policy_title">डिवाइस के लिए कार्ड व्यू डिज़ाइन का अनुकूलन करें।</string>
+    <string name="enable_card_view_policy_summary">डिवाइस के लिए कार्ड व्यू डिज़ाइन का अनुकूलन करें।</string>
+    <string name="font_size_title">फ़ॉन्ट आकार सेट करें</string>
+    <string name="font_size_summary">फ़ॉन्ट आकार कम या बड़ा करना।</string>
+    <string name="contents_summary_title">डायरी सामग्री सारांश</string>
+    <string name="contents_summary_description">कैलेंडर, समय, खोज स्क्रीन, और इसी तरह प्रदान की गई डायरी की सामग्री को संक्षेप में लिखें।</string>
+    <string name="init_cipher_error_guide_message">डिवाइस की फिंगरप्रिंट जानकारी को बदल दिया गया है। अनलॉक करने के लिए पिन लॉक मोड बदलें, फिर फिंगरप्रिंट लॉक अनलॉक करें और इसे फिर से सेट करें।</string>
+    <string name="export_excel_title">एक्सपोर्ट एक्सेल</string>
+    <string name="export_excel_description">Excel फ़ाइल के रूप में संलग्न फ़ोटो को छोड़कर सभी सामग्री को सहेजें।</string>
+    <string name="export_excel_xls_location">स्थान</string>
+    <string name="export_excel_header_seq">अनुक्रम</string>
+    <string name="export_excel_header_write_date">तारीख लिखें</string>
+    <string name="export_excel_header_title">डायरी का शीर्षक</string>
+    <string name="export_excel_header_contents">डायरी सामग्री</string>
+    <string name="export_excel_header_attach_photo_path">संलग्न फोटो पथ</string>
+    <string name="export_excel_header_attach_photo_size">संलग्न फोटो का आकार</string>
+    <string name="export_excel_header_write_time_millis">दिनांक लिखें \n (1 जनवरी 1970 से मिलीसेकंड में।)</string>
+    <string name="export_excel_header_weather">मौसम</string>
+    <string name="export_excel_header_symbol">प्रतीक</string>
+    <string name="export_excel_header_is_all_day">पूरे दिन</string>
+    <string name="faq_title">FAQs</string>
+    <string name="faq_description">आप अक्सर पूछे जाने वाले प्रश्नों और उत्तरों की जांच कर सकते हैं।</string>
+    <string name="faq_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/FAQs.md</string>
+    <string name="privacy_policy_title">गोपनीयता नीति</string>
+    <string name="privacy_policy_description">आसान डायरी गोपनीयता नीति।</string>
+    <string name="privacy_policy_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/Privacy.md</string>
+    <string name="diary_symbol">डायरी प्रतीक</string>
+    <string name="diary_symbol_guide_message">वर्तमान मौसम या डायरी सामग्री से मेल खाने वाला प्रतीक चुनें।</string>
+    <string name="category_weather">मौसम</string>
+    <string name="category_emotion">भावना</string>
+    <string name="category_daily">दैनिक जीवन&amp;चीज़ें</string>
+    <string name="category_food">खाना&amp;पेय पदार्थ</string>
+    <string name="category_leisure">आराम की जिंदगी</string>
+    <string name="category_landscape">परिदृश्य&amp;इमारत</string>
+    <string name="rotate_photo">घुमाएँ</string>
+    <string name="task_progress_message">प्रक्रिया में काम का अनुरोध करें…</string>
+    <string name="open_realm_file_title">डायरी वसूली</string>
+    <string name="open_realm_file_message">कृपया पुनर्प्राप्ति लक्ष्य फ़ाइल चुनें।</string>
+    <string name="backup_completed_message">डायरी बैकअप का काम पूरा हो गया है।</string>
+    <string name="backup_confirm_message">क्या आप संलग्न फोटो बैकअप कार्य शुरू करना चाहते हैं?</string>
+    <string name="recover_confirm_attached_photo">क्या आप संलग्न फोटो वसूली कार्य शुरू करना चाहते हैं?</string>
+    <string name="category_symbol">प्रतीक</string>
+    <string name="statistics_creation_time">सृजन काल के आँकड़े</string>
+    <string name="statistics_symbol_all">प्रतीक द्वारा सभी आँकड़े</string>
+    <string name="statistics_symbol_top_ten">प्रतीक द्वारा शीर्ष 10 आँकड़े</string>
+    <string name="category_flag">झंडा</string>
+    <string name="preferences_category_backup_restore_device">एप्लिकेशन बैकअप और पुनर्स्थापित करें</string>
+    <string name="preferences_category_backup_restore_device_sub">डिवाइस स्टोरेज</string>
+    <string name="export_realm_title">बैकअप डायरी</string>
+    <string name="export_realm_description">डिवाइस स्टोरेज के लिए अटैच फोटो को छोड़कर डेटाबेस फाइल्स का बैकअप लें। एप्लिकेशन को डिलीट करने पर इंटरनल स्टोरेज में बैकअप की गई \n फाइलें डिलीट हो जाती हैं, बाहरी डेटा को स्टोर करने के लिए एक्सटर्नल पब्लिक स्टोरेज या गूगल ड्राइव बैकअप फंक्शन का इस्तेमाल करें।</string>
+    <string name="export_realm_guide_message">डेटाबेस फ़ाइल को नीचे दिए गए पथ पर डिवाइस संग्रहण में सहेजा गया है।</string>
+    <string name="import_realm_title">डायरी बरामद</string>
+    <string name="import_realm_description">संलग्नक को छोड़कर डिवाइस भंडारण से डेटाबेस फ़ाइलों को पुनर्प्राप्त करता है।</string>
+    <string name="diary_item_count">+%d</string>
+    <string name="calendar_start_day_title">कैलेंडर का दिन शुरू</string>
+    <string name="calendar_start_day_summary">सप्ताह का प्रारंभ दिन निर्धारित करें।</string>
+    <string name="calendar_start_day_sunday">रविवार</string>
+    <string name="calendar_start_day_monday">सोमवार</string>
+    <string name="calendar_start_day_saturday">शनिवार</string>
+    <string name="calendar_menu_previous">पिछला</string>
+    <string name="calendar_menu_next">आगे</string>
+    <string name="filter_start_date">आरंभ करने की तिथि</string>
+    <string name="filter_start_date_hint">कृपया प्रारंभ तिथि दर्ज करें।</string>
+    <string name="filter_end_date">अंतिम तिथि</string>
+    <string name="filter_end_date_hint">कृपया अंतिम तिथि प्रविष्ट करें।</string>
+    <string name="filter_search_word">खोज शब्द</string>
+    <string name="filter_search_word_hint">कृपया अपना खोज शब्द दर्ज करें।</string>
+    <string name="filter_clear">फ़िल्टर रीसेट करें</string>
+    <string name="filter_close">बंद करे</string>
+    <string name="copy_diary_item">क्या आप चयनित डायरी की प्रतिलिपि बनाना चाहते हैं?</string>
+    <string name="diary_contents_length">वर्ण: %d</string>
+    <string name="count_characters_title">पाठ की गिनती</string>
+    <string name="count_characters_summary">डायरी के शरीर में वर्णों की संख्या गिनें।</string>
+    <string name="send_email_attach_excel_title">एक्सेल फ़ाइल निर्माण और ईमेल भेजना</string>
+    <string name="send_email_attach_excel_description">संलग्न फोटो को छोड़कर सभी सामग्री एक एक्सेल फाइल के रूप में बनाई गई है और ईमेल से जुड़ी हुई है।</string>
+    <string name="storage_migration_message">स्टोरेज लोकेशन में बदलाव एंड्रॉइड 10 स्कॉप्ड स्टोरेज पॉलिसी के अनुसार किया जाएगा।  यह नौकरी केवल एक बार चलती है।</string>
+    <string name="google_drive_account_sign_out_title">Google डिस्क लिंक किए गए खाते को रीसेट करें</string>
+    <string name="google_drive_account_sign_out_description">Google ड्राइव से जुड़े खाते का उपयोग करके आसान डायरी द्वारा प्रकाशित टोकन जानकारी निकालें।</string>
+    <string name="calendar_font_scale_title">कैलेंडर फ़ॉन्ट आकार सेट करें</string>
+    <string name="calendar_font_scale_description">सेट वैश्विक फ़ॉन्ट आकार के आधार पर कैलेंडर के अंदर फ़ॉन्ट आकार को मापता है।</string>
+    <string name="calendar_font_scale_disable">प्रयोग नहीं करें</string>
+    <string name="calendar_font_scale_factor">वैश्विक फ़ॉन्ट आकार x% .1f</string>
+    <string name="dashboard_title_lifetime">जीवन काल</string>
+    <string name="dashboard_title_last_month">पिछले महीने</string>
+    <string name="dashboard_title_last_week">पिछले सप्ताह</string>
+    <string name="dashboard_guide_message">रैंकिंग डेटा उत्पन्न करने के लिए पर्याप्त डेटा नहीं है। डैश बोर्ड रैंकिंग को सक्रिय करने के लिए आपको कम से कम 4 प्रतीकों का उपयोग करके एक डायरी लिखने की आवश्यकता है।</string>
+    <string name="delete_realm_title">बैकअप फ़ाइल हटाएँ</string>
+    <string name="delete_realm_description">स्टोरेज में रखी बैकअप फाइल को डिलीट कर दें।</string>
+    <string name="menu_dashboard">डैशबोर्ड</string>
+    <string name="dashboard_title_backup_drive">Google ड्राइव बैकअप इतिहास</string>
+    <string name="dashboard_title_backup_local">स्थानीय डिवाइस बैकअप इतिहास</string>
+    <string name="dashboard_backup_guide_message">कोई बैकअप जानकारी नहीं</string>
+    <string name="last_diary_backup_time">डायरी अंतिम बैकअप समय:</string>
+    <string name="last_photo_backup_time">संलग्न फोटो अंतिम बैकअप समय:</string>
+    <string name="export_full_backup_title">[बीटा] बैकअप पूर्ण डेटा</string>
+    <string name="export_full_backup_description">डायरी से संबंधित सभी डेटा जैसे कि डेटाबेस, संलग्न फोटो, पोस्ट कार्ड, फ़ॉन्ट, आदि को एक फ़ाइल में कंप्रेस और बैक अप करें।\nयह सुविधा एक बीटा सुविधा है, इसलिए हो सकता है कि कुछ उपकरणों पर ठीक से काम न करें।</string>
+    <string name="diary_symbol_search_message">उस डायरी के सिंबल को चुनें जिसे आप फ़िल्टर करना चाहते हैं।</string>
+    <string name="import_full_backup_title">[बीटा] पूर्ण डेटा पुनर्प्राप्त करें</string>
+    <string name="import_full_backup_description">डीकंप्रेस और डायरी से संबंधित सभी डेटा जैसे डेटाबेस, संलग्न फोटो, पोस्ट कार्ड, फ़ॉन्ट, आदि को पुनर्प्राप्त करना।\nयह एक बीटा सुविधा है, इसलिए हो सकता है कि कुछ उपकरणों पर ठीक से काम न करें।</string>
+    <string name="calendar_sort_ascending">आरोही</string>
+    <string name="calendar_sort_descending">अवरोही</string>
+    <string name="calendar_sort_title">कैलेंडर सॉर्ट विकल्प</string>
+    <string name="calendar_sort_summary">कैलेंडर स्क्रीन में दैनिक डायरी सूची के क्रम को सेट करें।</string>
+    <string name="preferences_category_font">एप्लिकेशन फ़ॉन्ट सेटिंग</string>
+    <string name="hold_position_title">स्क्रॉल स्थिति सेटिंग</string>
+    <string name="hold_position_summary">जब संपादन स्क्रीन शुरू होती है, तो ब्राउज़ स्क्रीन पर स्क्रॉल स्थिति बनाए रखी जाती है। यदि यह सेटिंग सेट नहीं है, तो स्क्रॉल पाठ की अंतिम स्थिति में चला जाता है।</string>
+    <string name="max_lines_title">मैक्स लाइन्स</string>
+    <string name="max_lines_summary">सामग्री सारांश विकल्प सक्रिय होने पर प्रदर्शित होने वाली अधिकतम पंक्तियों को सेट करें।</string>
+    <string name="max_lines_value">%d पंक्तियां</string>
+    <string name="diary_encryption_title">डायरी एन्क्रिप्शन</string>
+    <string name="diary_encryption_guide">कृपया डायरी एन्क्रिप्शन के लिए उपयोग किए जाने वाले पिन नंबर को दर्ज करें। \n पिन कोड का उपयोग करके वर्तमान में चयनित डायरी के शीर्षक और शरीर को एन्क्रिप्ट करें। \ n पिन नंबर पुनर्प्राप्त नहीं किया जा सकता है, इसलिए सावधान रहें कि सेट पिन नंबर को न भूलें।</string>
+    <string name="diary_decryption_title">डायरी डिक्रिप्शन</string>
+    <string name="diary_decryption_guide">डायरी डिकोडिंग के लिए उपयोग किए जाने वाले पिन नंबर को दर्ज करें।\nदर्ज पिन नंबर का उपयोग करके डायरी के शीर्षक और शरीर की सामग्री को हटाएं।</string>
+    <string name="diary_pin_number_confirm_guide">एक बार फिर डायरी एन्क्रिप्शन के लिए उपयोग किए जाने वाले पिन नंबर दर्ज करें।</string>
+    <string name="diary_pin_number_confirm_error">पहले दर्ज किया गया पिन नंबर पुष्टि पिन नंबर से मेल नहीं खाता।\n कृपया फिर से पिन नंबर दर्ज करें।</string>
+    <string name="diary_pin_number_verification_error">पिन नंबर मेल नहीं खाते।\n कृपया डायरी को एन्क्रिप्ट करते समय आपके द्वारा निर्धारित पिन नंबर दर्ज करें।</string>
+    <string name="diary_decryption_guide_before_editing">डायरी को एन्क्रिप्ट करते समय आपके द्वारा निर्धारित पिन नंबर दर्ज करें।\nडायरी को संपादित करने के बाद, इसे मौजूदा पासवर्ड के साथ फिर से एन्क्रिप्ट किया गया है।</string>
+    <string name="diary_decryption_mode_once">एक बार देखने के लिए डिक्रिप्ट करें</string>
+    <string name="diary_decryption_mode_permanent">डिक्रिप्शन के बाद पिन नंबर सेटिंग को हटा दें</string>
+    <string name="backup_internal_title">आंतरिक भंडारण के लिए बैकअप</string>
+    <string name="backup_internal_description">बैकअप फ़ाइल को आसान डायरी आंतरिक भंडारण में सहेजा गया है। आसान डायरी के अलावा अन्य अनुप्रयोगों का उपयोग करके समर्थित फ़ाइलों को एक्सेस नहीं किया जा सकता।</string>
+    <string name="backup_external_title">बाह्य भंडारण के लिए बैकअप</string>
+    <string name="backup_external_description">बैकअप फ़ाइल को बाहरी सार्वजनिक संग्रहण में संग्रहीत किया जाता है। फ़ाइल एक्सप्लोरर का उपयोग करके समर्थित फ़ाइलों को एक्सेस किया जा सकता है।</string>
+    <string name="recovery_internal_title">आंतरिक संग्रहण से पुनर्स्थापित करें</string>
+    <string name="recovery_internal_description">आसान डायरी आंतरिक भंडारण में संग्रहीत डेटाबेस बैकअप फ़ाइल का उपयोग करके डायरी सामग्री को पुनर्स्थापित किया जाता है।</string>
+    <string name="recovery_external_title">बाहरी भंडारण से पुनर्स्थापित करें</string>
+    <string name="recovery_external_description">बाहरी सार्वजनिक संग्रहण में संग्रहीत डेटाबेस बैकअप फ़ाइल का उपयोग करके डायरी सामग्री को पुनर्स्थापित किया जाता है।</string>
+    <string name="delete_selected_items_confirm">क्या आप वाकई%d चयनित आइटम हटाना चाहते हैं?</string>
+    <string name="duplicate_selected_items_confirm">क्या आप सुनिश्चित हैं कि आप%d चयनित वस्तुओं की नकल करना चाहते हैं?</string>
+    <string name="no_items_warning">कोई आइटम चयनित नहीं हैं।</string>
+    <string name="preferences_category_schedule">[बीटा] अनुसूची सेटिंग</string>
+    <string name="schedule_time">दिन और समय</string>
+    <string name="schedule_type">अनुसूची प्रकार</string>
+    <string name="schedule_description">अनुसूची का विवरण</string>
+    <string name="schedule_description_hint">अलार्म विवरण</string>
+    <string name="schedule_diary_writing_description">डायरी लेखन \n डायरी लेखन अनुसूची का अवलोकन करें। शेड्यूल पंजीकृत होने के बाद, निर्धारित दिन और समय के अनुसार एक अधिसूचना संदेश प्रदान किया जाता है।</string>
+    <string name="schedule_backup_local_description">डायरी बैकअप (डिवाइस भंडारण) \n शेड्यूलिंग समय और समय के अनुसार डिवाइस के स्थानीय स्टोरेज के लिए संलग्न तस्वीरों को छोड़कर डेटाबेस फाइलों को शेड्यूल करता है और ऑपरेशन के परिणाम को अधिसूचना संदेश के रूप में प्रदान करता है।</string>
+    <string name="schedule_empty_message">कोई शेड्यूल जानकारी नहीं है। नया शेड्यूल जोड़ने के लिए ऊपर दाईं ओर प्लस बटन क्लिक करें।</string>
+    <string name="permission_confirmation_dialog_title">प्राधिकरण से अनुरोध करें</string>
+    <string name="permission_confirmation_dialog_message">इजी डायरी का उपयोग करने के लिए प्राधिकरण की आवश्यकता है।</string>
+    <string name="google_drive_account_information_title">Google खाते की जानकारी लिंक की गई</string>
+    <string name="schedule_backup_gms_description">डायरी बैकअप (Google ड्राइव) \ n शेड्यूलिंग डेटाबेस फ़ाइलों और संलग्न फ़ोटो को निर्धारित दिन और समय के अनुसार Google ड्राइव पर बैकअप देता है और ऑपरेशन के परिणाम को सूचना संदेश के रूप में प्रदान करता है।</string>
+    <string name="google_drive_account_sign_in_title">Google ड्राइव खाता लिंक करें</string>
+    <string name="google_drive_account_sign_in_description">आसान डायरी डेटा बैकअप के लिए अपने खाते को Google ड्राइव से कनेक्ट करें।</string>
+    <string name="schedule_gms_error_title">निर्धारित कार्य की प्रतीक्षा की जा रही है</string>
+    <string name="schedule_gms_error_message">डिवाइस ने डोज़ मोड में प्रवेश किया और नेटवर्क का उपयोग करके बैकअप ऑपरेशन विफल हो गया। यदि आप सूचना विंडो को स्पर्श करते हैं, तो बैकअप ऑपरेशन फिर से शुरू होगा।</string>
+    <string name="schedule_pending_guide_message">वेटिंग शेड्यूल शुरू होता है।</string>
+    <string name="schedule_diary_writing_complete">डायरी स्क्रीन पर जाने के लिए अधिसूचना विंडो को स्पर्श करें।</string>
+    <string name="schedule_backup_local_complete">स्थानीय डिवाइस पर डायरी बैकअप पूरा।</string>
+    <string name="schedule_backup_gms_complete">डायरी बैकअप फ़ाइल और संलग्न फोटो Google ड्राइव में सहेजे गए।%s</string>
+    <string name="ok">ठीक है</string>
+    <string name="cancel">रद्द करना</string>
+    <string name="settings">समायोजन</string>
+    <string name="location_info_title">स्थान की जानकारी प्रदर्शित</string>
+    <string name="location_info_description">जीपीएस जानकारी का उपयोग करके डायरी में स्थान की जानकारी प्रदर्शित की जाती है।</string>
+    <string name="location_info_error_message">स्थान की जानकारी प्राप्त नहीं की जा सकती।</string>
+    <string name="category_tasks">कार्य</string>
+    <string name="task_symbol_top_order_title">शीर्ष पर कार्य प्रतीक संरेखित करें</string>
+    <string name="task_symbol_top_order_description">यदि टास्क सिंबल का प्रकार TODO है या डायरियों के बीच है जिसमें कार्य चिन्ह लगाया गया है, तो यह सूची के शीर्ष पर व्यवस्थित होता है।</string>
+</resources>
