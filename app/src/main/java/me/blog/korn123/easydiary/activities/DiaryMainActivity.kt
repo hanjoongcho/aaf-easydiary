@@ -62,7 +62,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
      ***************************************************************************************************/
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        forceInitRealmLessThenOreo()
+        forceInitRealmLessThanOreo()
 
         setSupportActionBar(toolbar)
         supportActionBar?.run {
