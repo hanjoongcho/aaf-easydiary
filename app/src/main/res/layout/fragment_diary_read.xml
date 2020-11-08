@@ -91,7 +91,7 @@
                 </me.blog.korn123.easydiary.views.FixedCardView>
                 <me.blog.korn123.easydiary.views.FixedCardView
                     android:id="@+id/contentsLengthContainer"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="5dp"
                     android:layout_alignParentEnd="true"
                     app:fixedAppcompatPadding="true"
                     android:layout_width="wrap_content"
