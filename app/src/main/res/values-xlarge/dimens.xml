@@ -19,4 +19,5 @@
     <!--override dimens-->
     <dimen name="card_layout_padding">1dp</dimen>
     <dimen name="card_layout_margin">1dp</dimen>
+    <dimen name="card_contents_padding">15dp</dimen>
 </resources>

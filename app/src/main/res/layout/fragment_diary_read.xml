@@ -77,8 +77,8 @@
                             android:layout_marginRight="3dp"
                             android:id="@+id/locationSymbol"
                             android:src="@drawable/map_marker_2"
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"/>
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"/>
                         <TextView
                             android:id="@+id/locationLabel"
                             android:text="There is no location information. Click to update location information."

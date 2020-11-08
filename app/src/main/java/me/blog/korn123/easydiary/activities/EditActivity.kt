@@ -299,11 +299,13 @@ abstract class EditActivity : EasyDiaryActivity() {
         when (photoContainerScrollView.visibility) {
             View.VISIBLE -> {
                 photoContainerScrollView.visibility = View.GONE
+                titleCard.visibility = View.VISIBLE
                 togglePhoto.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.expand))
                 supportActionBar?.hide()
             }
             View.GONE -> {
                 photoContainerScrollView.visibility = View.VISIBLE
+                titleCard.visibility = View.GONE
                 togglePhoto.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.collapse))
                 supportActionBar?.show()
             }

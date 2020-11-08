@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <androidx.cardview.widget.CardView
+        android:id="@+id/titleCard"
         android:layout_marginTop="@dimen/card_layout_margin"
         android:layout_marginStart="@dimen/card_layout_margin"
         android:layout_marginEnd="@dimen/card_layout_margin"
@@ -63,74 +64,78 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <ScrollView
-                android:id="@+id/contentsContainer"
-                android:fillViewport="true"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <com.simplemobiletools.commons.views.MyEditText
-                    android:id="@+id/diaryContents"
-                    style="@style/edit_text_diary_edit_inner_contents"
-                    android:background="@android:color/transparent"
-                    android:gravity="top"
-                    android:hint="@string/contents_text_hint"
-                    android:inputType="text|textCapSentences|textAutoCorrect|textMultiLine|textLongMessage" />
-            </ScrollView>
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <ScrollView
+                    android:id="@+id/contentsContainer"
+                    android:fillViewport="true"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="0dp">
+                    <com.simplemobiletools.commons.views.MyEditText
+                        android:id="@+id/diaryContents"
+                        style="@style/edit_text_diary_edit_inner_contents"
+                        android:background="@android:color/transparent"
+                        android:gravity="top"
+                        android:hint="@string/contents_text_hint"
+                        android:inputType="text|textCapSentences|textAutoCorrect|textMultiLine|textLongMessage" />
+                </ScrollView>
 
-            <RelativeLayout
-                android:alpha="0.5"
-                android:layout_gravity="bottom"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <me.blog.korn123.easydiary.views.FixedCardView
-                    app:fixedAppcompatPadding="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toStartOf="@id/contentsLengthContainer"
-                    android:layout_alignWithParentIfMissing="true">
-                    <LinearLayout
-                        android:id="@+id/locationContainer"
-                        tools:visibility="visible"
-                        android:visibility="gone"
-                        android:padding="5dp"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:foreground="?attr/selectableItemBackgroundBorderless"
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <me.blog.korn123.easydiary.views.FixedCardView
+                        app:fixedAppcompatPadding="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toStartOf="@id/contentsLengthContainer"
+                        android:layout_alignWithParentIfMissing="true">
+                        <LinearLayout
+                            android:id="@+id/locationContainer"
+                            tools:visibility="visible"
+                            android:visibility="gone"
+                            android:padding="5dp"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:foreground="?attr/selectableItemBackgroundBorderless"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <ImageView
+                                android:layout_marginRight="3dp"
+                                android:id="@+id/locationSymbol"
+                                android:src="@drawable/map_marker_2"
+                                android:layout_width="10dp"
+                                android:layout_height="10dp"/>
+                            <TextView
+                                android:id="@+id/locationLabel"
+                                android:text="There is no location information. Click to update location information."
+                                android:textColor="?attr/colorPrimary"
+                                android:layout_width="wrap_content"
+                                android:ellipsize="end"
+                                android:singleLine="true"
+                                android:layout_height="wrap_content"/>
+                        </LinearLayout>
+                    </me.blog.korn123.easydiary.views.FixedCardView>
+                    <me.blog.korn123.easydiary.views.FixedCardView
+                        android:id="@+id/contentsLengthContainer"
+                        android:layout_marginStart="10dp"
+                        android:layout_alignParentEnd="true"
+                        app:fixedAppcompatPadding="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
-                        <ImageView
-                            android:layout_marginRight="3dp"
-                            android:id="@+id/locationSymbol"
-                            android:src="@drawable/map_marker_2"
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"/>
                         <TextView
-                            android:id="@+id/locationLabel"
-                            android:text="There is no location information. Click to update location information."
+                            tools:text="100"
+                            android:id="@+id/contentsLength"
+                            android:padding="5dp"
                             android:textColor="?attr/colorPrimary"
                             android:layout_width="wrap_content"
-                            android:ellipsize="end"
-                            android:singleLine="true"
                             android:layout_height="wrap_content"/>
-                    </LinearLayout>
-                </me.blog.korn123.easydiary.views.FixedCardView>
-                <me.blog.korn123.easydiary.views.FixedCardView
-                    android:id="@+id/contentsLengthContainer"
-                    android:layout_marginStart="10dp"
-                    android:layout_alignParentEnd="true"
-                    app:fixedAppcompatPadding="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        tools:text="100"
-                        android:id="@+id/contentsLength"
-                        android:padding="5dp"
-                        android:textColor="?attr/colorPrimary"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-                </me.blog.korn123.easydiary.views.FixedCardView>
-            </RelativeLayout>
+                    </me.blog.korn123.easydiary.views.FixedCardView>
+                </RelativeLayout>
+            </LinearLayout>
+
             <androidx.core.widget.ContentLoadingProgressBar
                 style="?android:progressBarStyleLarge"
                 tools:visibility="visible"
