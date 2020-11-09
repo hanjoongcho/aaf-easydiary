@@ -151,6 +151,12 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, "kotlin.collections")
             })
         }
+        markdown3.setOnClickListener {
+            TransitionHelper.startActivityWithTransition(this, Intent(this, MarkDownViewActivity::class.java).apply {
+                putExtra(MarkDownViewActivity.OPEN_URL_INFO, "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/README.md")
+                putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, "Cheat Sheet")
+            })
+        }
     }
 
     override fun onDestroy() {
