@@ -145,9 +145,10 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         when (requestCode) {
             REQUEST_CODE_SPEECH_INPUT -> {
                 if (resultCode == Activity.RESULT_OK && data != null) {
-                    val result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-                    query.setText(result[0])
-                    query.setSelection(result[0].length)
+                    data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.let {
+                        query.setText(it[0])
+                        query.setSelection(it[0].length)
+                    }
                 }
                 pauseLock()
             }

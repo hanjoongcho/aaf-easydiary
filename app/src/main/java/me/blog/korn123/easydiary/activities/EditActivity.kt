@@ -69,22 +69,22 @@ abstract class EditActivity : EasyDiaryActivity() {
     private val mRemoveIndexes = ArrayList<Int>()
     private val mLocationManager by lazy { getSystemService(Context.LOCATION_SERVICE) as LocationManager }
     private val mNetworkLocationListener = object : LocationListener {
-        override fun onLocationChanged(p0: Location?) {
+        override fun onLocationChanged(p0: Location) {
             if (config.enableDebugMode) makeToast("Network location has been updated")
             mLocationManager.removeUpdates(this)
         }
         override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {}
-        override fun onProviderEnabled(p0: String?) {}
-        override fun onProviderDisabled(p0: String?) {}
+        override fun onProviderEnabled(p0: String) {}
+        override fun onProviderDisabled(p0: String) {}
     }
     private val mGPSLocationListener = object : LocationListener {
-        override fun onLocationChanged(p0: Location?) {
+        override fun onLocationChanged(p0: Location) {
             if (config.enableDebugMode) makeToast("GPS location has been updated")
             mLocationManager.removeUpdates(this)
         }
         override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {}
-        override fun onProviderEnabled(p0: String?) {}
-        override fun onProviderDisabled(p0: String?) {}
+        override fun onProviderEnabled(p0: String) {}
+        override fun onProviderDisabled(p0: String) {}
     }
 
     protected lateinit var mPhotoUris: RealmList<PhotoUriDto>

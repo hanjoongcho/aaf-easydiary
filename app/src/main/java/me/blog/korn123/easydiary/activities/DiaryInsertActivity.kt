@@ -88,21 +88,22 @@ class DiaryInsertActivity : EditActivity() {
         pauseLock()
         when (requestCode) {
             REQUEST_CODE_SPEECH_INPUT -> if (resultCode == Activity.RESULT_OK && intent != null) {
-                val result = intent.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-                if (mCurrentCursor == FOCUS_TITLE) { // edit title
-                    val title = diaryTitle.text.toString()
-                    val sb = StringBuilder(title)
-                    sb.insert(diaryTitle.selectionStart, result[0])
-                    val cursorPosition = diaryTitle.selectionStart + result[0].length
-                    diaryTitle.setText(sb.toString())
-                    diaryTitle.setSelection(cursorPosition)
-                } else {                   // edit contents
-                    val contents = diaryContents.text.toString()
-                    val sb = StringBuilder(contents)
-                    sb.insert(diaryContents.selectionStart, result[0])
-                    val cursorPosition = diaryContents.selectionStart + result[0].length
-                    diaryContents.setText(sb.toString())
-                    diaryContents.setSelection(cursorPosition)
+                intent.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.let {
+                    if (mCurrentCursor == FOCUS_TITLE) { // edit title
+                        val title = diaryTitle.text.toString()
+                        val sb = StringBuilder(title)
+                        sb.insert(diaryTitle.selectionStart, it[0])
+                        val cursorPosition = diaryTitle.selectionStart + it[0].length
+                        diaryTitle.setText(sb.toString())
+                        diaryTitle.setSelection(cursorPosition)
+                    } else {                   // edit contents
+                        val contents = diaryContents.text.toString()
+                        val sb = StringBuilder(contents)
+                        sb.insert(diaryContents.selectionStart, it[0])
+                        val cursorPosition = diaryContents.selectionStart + it[0].length
+                        diaryContents.setText(sb.toString())
+                        diaryContents.setSelection(cursorPosition)
+                    }
                 }
             }
             REQUEST_CODE_IMAGE_PICKER -> if (resultCode == Activity.RESULT_OK && intent != null) {

@@ -45,7 +45,7 @@ class MarkDownViewActivity : EasyDiaryActivity() {
 
         mMarkDown = Markwon.create(this)
         savedFilePath = "${EasyDiaryUtils.getApplicationDataDirectory(this) + MARKDOWN_DIRECTORY + pageTitle}.md"
-        markdownUrl = intent.getStringExtra(OPEN_URL_INFO)
+        markdownUrl = intent.getStringExtra(OPEN_URL_INFO)!!
 //        markdownView.run {
 //            webViewClient =  object : WebViewClient() {
 //                override fun onPageFinished(view: WebView, url: String) {
