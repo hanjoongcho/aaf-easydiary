@@ -58,6 +58,68 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+                <me.blog.korn123.easydiary.views.FixedCardView
+                    style="@style/card_view_dashboard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="11월 20일 금요일"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <com.google.android.flexbox.FlexboxLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:alignContent="stretch"
+                            app:alignItems="stretch"
+                            app:flexWrap="wrap"
+                            app:layout_constraintTop_toBottomOf="@id/title">
+
+                            <ImageView
+                                android:layout_margin="10dp"
+                                android:layout_width="45dp"
+                                android:layout_height="45dp"
+                                app:srcCompat="@drawable/ic_003_wallet" />
+                            <ImageView
+                                android:layout_margin="10dp"
+                                android:layout_width="45dp"
+                                android:layout_height="45dp"
+                                app:srcCompat="@drawable/ic_001_coffee" />
+                            <ImageView
+                                android:layout_margin="10dp"
+                                android:layout_width="45dp"
+                                android:layout_height="45dp"
+                                app:srcCompat="@drawable/ic_010_water" />
+                            <ImageView
+                                android:layout_margin="10dp"
+                                android:layout_width="45dp"
+                                android:layout_height="45dp"
+                                app:srcCompat="@drawable/ic_008_shirt" />
+                            <ImageView
+                                android:layout_margin="10dp"
+                                android:layout_width="45dp"
+                                android:layout_height="45dp"
+                                app:srcCompat="@drawable/ic_009_uganda" />
+                            <ImageView
+                                android:layout_margin="10dp"
+                                android:layout_width="45dp"
+                                android:layout_height="45dp"
+                                app:srcCompat="@drawable/ic_010_embarrassed" />
+                            <ImageView
+                                android:layout_margin="10dp"
+                                android:layout_width="45dp"
+                                android:layout_height="45dp"
+                                app:srcCompat="@drawable/ic_005_gamepad" />
+                        </com.google.android.flexbox.FlexboxLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </me.blog.korn123.easydiary.views.FixedCardView>
                 <androidx.cardview.widget.CardView
                     android:id="@+id/markdown1"
                     android:orientation="vertical"
