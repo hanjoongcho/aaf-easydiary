@@ -66,21 +66,57 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <TextView
+                        <LinearLayout
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:id="@+id/leftLabel"
+                            android:orientation="vertical"
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content">
+                            <me.blog.korn123.easydiary.views.FixedTextView
+                                app:applyGlobalSize="false"
+                                app:applyGlobalColor="false"
+                                android:id="@+id/dateLabel"
+                                android:gravity="center"
+                                android:text="20"
+                                android:textStyle="bold"
+                                android:textSize="20sp"
+                                android:layout_width="50dp"
+                                android:layout_height="wrap_content"/>
+
+                            <me.blog.korn123.easydiary.views.FixedTextView
+                                app:applyGlobalSize="false"
+                                app:applyGlobalColor="false"
+                                android:id="@+id/dayLabel"
+                                android:gravity="center"
+                                android:text="토"
+                                android:textStyle="bold"
+                                android:textSize="20sp"
+                                android:layout_width="50dp"
+                                android:layout_height="wrap_content"/>
+                        </LinearLayout>
+
+                        <me.blog.korn123.easydiary.views.FixedTextView
+                            app:applyGlobalSize="false"
+                            app:applyGlobalColor="false"
                             android:id="@+id/title"
-                            android:layout_width="match_parent"
+                            android:textSize="20sp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="11월 20일 금요일"
-                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/leftLabel"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <com.google.android.flexbox.FlexboxLayout
-                            android:layout_width="match_parent"
+                            app:layout_constraintTop_toBottomOf="@id/title"
+                            app:layout_constraintStart_toEndOf="@+id/leftLabel"
+                            app:layout_constraintEnd_toEndOf="parent"
                             android:layout_height="wrap_content"
+                            android:layout_width="0dp"
                             app:alignContent="stretch"
                             app:alignItems="stretch"
-                            app:flexWrap="wrap"
-                            app:layout_constraintTop_toBottomOf="@id/title">
+                            app:flexWrap="wrap">
 
                             <ImageView
                                 android:layout_margin="10dp"
