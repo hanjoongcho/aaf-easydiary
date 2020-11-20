@@ -9,7 +9,9 @@ import com.simplemobiletools.commons.helpers.SETTING_CARD_VIEW_BACKGROUND_COLOR
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.preferenceToJsonString
 import me.blog.korn123.easydiary.helper.AAF_TEST
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.SETTING_THUMBNAIL_SIZE
+import me.blog.korn123.easydiary.models.DiaryDto
 import me.blog.korn123.easydiary.models.DiarySymbol
 import org.junit.Assert.*
 import org.junit.Test
