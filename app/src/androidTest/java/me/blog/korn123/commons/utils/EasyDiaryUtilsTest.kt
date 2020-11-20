@@ -81,4 +81,18 @@ class EasyDiaryUtilsTest {
         assertEquals(screenBackgroundColor, -13882581)
         assertEquals(settingThumbnailSize, 50.0F)
     }
+
+    @Test
+    fun test_05() {
+        Log.i(AAF_TEST, "Start")
+        var count = 0
+        EasyDiaryDbHelper.getTemporaryInstance().let {
+            EasyDiaryDbHelper.readDiary(null, realmInstance = it).forEach { diary ->
+                Log.i(AAF_TEST, diary.title ?: "")
+                count++
+            }
+        }
+        Log.i(AAF_TEST, "End")
+        assertEquals(count, 200)
+    }
 }
