@@ -77,20 +77,19 @@
                             <me.blog.korn123.easydiary.views.FixedTextView
                                 app:applyGlobalSize="false"
                                 app:applyGlobalColor="false"
-                                android:id="@+id/dateLabel"
-                                android:gravity="center"
-                                android:text="20"
-                                android:textStyle="bold"
-                                android:textSize="20sp"
-                                android:layout_width="50dp"
-                                android:layout_height="wrap_content"/>
-
-                            <me.blog.korn123.easydiary.views.FixedTextView
-                                app:applyGlobalSize="false"
-                                app:applyGlobalColor="false"
                                 android:id="@+id/dayLabel"
                                 android:gravity="center"
                                 android:text="토"
+                                android:textStyle="bold"
+                                android:textSize="12sp"
+                                android:layout_width="50dp"
+                                android:layout_height="wrap_content"/>
+                            <me.blog.korn123.easydiary.views.FixedTextView
+                                app:applyGlobalSize="false"
+                                app:applyGlobalColor="false"
+                                android:id="@+id/dateLabel"
+                                android:gravity="center"
+                                android:text="20"
                                 android:textStyle="bold"
                                 android:textSize="20sp"
                                 android:layout_width="50dp"
@@ -101,11 +100,12 @@
                             app:applyGlobalSize="false"
                             app:applyGlobalColor="false"
                             android:id="@+id/title"
-                            android:textSize="20sp"
+                            android:textSize="15sp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="11월 20일 금요일"
-                            app:layout_constraintStart_toEndOf="@+id/leftLabel"
+                            android:text="2020년 11월"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <com.google.android.flexbox.FlexboxLayout
@@ -118,41 +118,39 @@
                             app:alignItems="stretch"
                             app:flexWrap="wrap">
 
-                            <ImageView
-                                android:layout_margin="10dp"
-                                android:layout_width="45dp"
-                                android:layout_height="45dp"
-                                app:srcCompat="@drawable/ic_003_wallet" />
-                            <ImageView
-                                android:layout_margin="10dp"
-                                android:layout_width="45dp"
-                                android:layout_height="45dp"
-                                app:srcCompat="@drawable/ic_001_coffee" />
-                            <ImageView
-                                android:layout_margin="10dp"
-                                android:layout_width="45dp"
-                                android:layout_height="45dp"
-                                app:srcCompat="@drawable/ic_010_water" />
-                            <ImageView
-                                android:layout_margin="10dp"
-                                android:layout_width="45dp"
-                                android:layout_height="45dp"
-                                app:srcCompat="@drawable/ic_008_shirt" />
-                            <ImageView
-                                android:layout_margin="10dp"
-                                android:layout_width="45dp"
-                                android:layout_height="45dp"
-                                app:srcCompat="@drawable/ic_009_uganda" />
-                            <ImageView
-                                android:layout_margin="10dp"
-                                android:layout_width="45dp"
-                                android:layout_height="45dp"
-                                app:srcCompat="@drawable/ic_010_embarrassed" />
-                            <ImageView
-                                android:layout_margin="10dp"
-                                android:layout_width="45dp"
-                                android:layout_height="45dp"
-                                app:srcCompat="@drawable/ic_005_gamepad" />
+                            <me.blog.korn123.easydiary.views.FixedCardView
+                                app:contentPadding="5dp"
+                                app:fixedAppcompatPadding="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+                                <ImageView
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    app:srcCompat="@drawable/ic_003_wallet" />
+                            </me.blog.korn123.easydiary.views.FixedCardView>
+
+                            <me.blog.korn123.easydiary.views.FixedCardView
+                                app:contentPadding="5dp"
+                                app:fixedAppcompatPadding="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+                                <ImageView
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    app:srcCompat="@drawable/ic_003_wallet" />
+                            </me.blog.korn123.easydiary.views.FixedCardView>
+
+                            <me.blog.korn123.easydiary.views.FixedCardView
+                                app:contentPadding="5dp"
+                                app:fixedAppcompatPadding="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+                                <ImageView
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    app:srcCompat="@drawable/ic_003_wallet" />
+                            </me.blog.korn123.easydiary.views.FixedCardView>
+
                         </com.google.android.flexbox.FlexboxLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </me.blog.korn123.easydiary.views.FixedCardView>
