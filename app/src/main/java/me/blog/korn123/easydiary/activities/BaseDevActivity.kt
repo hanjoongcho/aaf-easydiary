@@ -85,9 +85,10 @@ open class BaseDevActivity : EasyDiaryActivity() {
         val cal = Calendar.getInstance()
         cal.time = Date()
         for (num in 1..100) {
-           val df: DateFormat = SimpleDateFormat.getDateInstance(SimpleDateFormat.DATE_FIELD, Locale.getDefault())
-           mLeisureList.add(Leisure(df.format(cal.time)))
-           cal.add(Calendar.DATE, num.unaryMinus())
+           val date: DateFormat = SimpleDateFormat.getDateInstance(SimpleDateFormat.DATE_FIELD, Locale.getDefault())
+            val dayOfMonth: DateFormat = SimpleDateFormat("dd")
+           mLeisureList.add(Leisure("토", dayOfMonth.format(cal.time), date.format(cal.time)))
+           cal.add(Calendar.DATE, -1)
         }
         mLeisureAdapter = LeisureAdapter(
                 this,
@@ -311,7 +312,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
  ***************************************************************************************************/
 data class NotificationInfo(var largeIconResourceId: Int, var useActionButton: Boolean = false, var useCustomContentView: Boolean = false)
 
-data class Leisure(var date: String)
+data class Leisure(var dayOfWeek: String, var dayOfMonth: String, var date: String)
 
 /***************************************************************************************************
  *   extensions
