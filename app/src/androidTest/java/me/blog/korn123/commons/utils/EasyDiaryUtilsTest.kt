@@ -87,10 +87,24 @@ class EasyDiaryUtilsTest {
         Log.i(AAF_TEST, "Start")
         var count = 0
         EasyDiaryDbHelper.getTemporaryInstance().let {
-            EasyDiaryDbHelper.readDiary(null, realmInstance = it).forEach { diary ->
+            var items = EasyDiaryDbHelper.readDiary(null, realmInstance = it)
+            items.forEach { diary ->
                 Log.i(AAF_TEST, diary.title ?: "")
                 count++
             }
+
+            val symbolList = mutableListOf<DiarySymbol>()
+            InstrumentationRegistry.getInstrumentation().targetContext.resources.getStringArray(R.array.leisure_item_array).map {
+                val symbolItem = DiarySymbol(it)
+                symbolList.add(symbolItem)
+            }
+
+            val pair = items.partition { item ->
+                symbolList.find { it.sequence == item.weather } != null
+            }
+
+            Log.i(AAF_TEST, pair.first.size.toString())
+            Log.i(AAF_TEST, pair.second.size.toString())
         }
         Log.i(AAF_TEST, "End")
         assertEquals(count, 200)

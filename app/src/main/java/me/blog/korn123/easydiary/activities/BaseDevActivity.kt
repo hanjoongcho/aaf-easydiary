@@ -11,6 +11,7 @@ import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.widget.AdapterView
 import android.widget.RemoteViews
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
@@ -20,13 +21,21 @@ import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_dev.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.adapters.AlarmAdapter
+import me.blog.korn123.easydiary.adapters.LeisureAdapter
 import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.ActionLog
+import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.services.BaseNotificationService
 import me.blog.korn123.easydiary.services.NotificationService
 import org.apache.commons.io.FilenameUtils
 import java.io.File
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.util.*
 
 
 open class BaseDevActivity : EasyDiaryActivity() {
@@ -35,6 +44,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
      *   global properties
      *
      ***************************************************************************************************/
+    private lateinit var mLeisureAdapter: LeisureAdapter
+    private var mLeisureList: ArrayList<Leisure> = arrayListOf()
     private val mLocationManager by lazy { getSystemService(Context.LOCATION_SERVICE) as LocationManager }
     private val mNetworkLocationListener = object : LocationListener {
         override fun onLocationChanged(p0: Location) {
@@ -70,6 +81,24 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
 
         updateActionLog()
+
+        val cal = Calendar.getInstance()
+        cal.time = Date()
+        for (num in 1..100) {
+           val df: DateFormat = SimpleDateFormat.getDateInstance(SimpleDateFormat.DATE_FIELD, Locale.getDefault())
+           mLeisureList.add(Leisure(df.format(cal.time)))
+           cal.add(Calendar.DATE, num.unaryMinus())
+        }
+        mLeisureAdapter = LeisureAdapter(
+                this,
+                mLeisureList,
+               null
+        )
+        leisureRecyclerView?.apply {
+            layoutManager = androidx.recyclerview.widget.GridLayoutManager(this@BaseDevActivity, 1)
+            addItemDecoration(SettingsScheduleFragment.SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding)))
+            adapter = mLeisureAdapter
+        }
 
         nextAlarm.setOnClickListener {
             val nextAlarm = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -282,6 +311,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
  ***************************************************************************************************/
 data class NotificationInfo(var largeIconResourceId: Int, var useActionButton: Boolean = false, var useCustomContentView: Boolean = false)
 
+data class Leisure(var date: String)
 
 /***************************************************************************************************
  *   extensions

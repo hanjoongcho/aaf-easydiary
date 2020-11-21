@@ -40,7 +40,7 @@
                 <ScrollView
                     android:fillViewport="true"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp">
+                    android:layout_height="60dp">
                     <com.simplemobiletools.commons.views.MyTextView
                         android:id="@+id/actionLog"
                         android:layout_height="wrap_content"
@@ -48,6 +48,11 @@
                 </ScrollView>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:id="@+id/leisureRecyclerView" />
 
         <ScrollView
             android:fillViewport="true"
@@ -58,102 +63,7 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <me.blog.korn123.easydiary.views.FixedCardView
-                    style="@style/card_view_dashboard"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
 
-                        <LinearLayout
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            android:id="@+id/leftLabel"
-                            android:orientation="vertical"
-                            android:layout_width="50dp"
-                            android:layout_height="wrap_content">
-                            <me.blog.korn123.easydiary.views.FixedTextView
-                                app:applyGlobalSize="false"
-                                app:applyGlobalColor="false"
-                                android:id="@+id/dayLabel"
-                                android:gravity="center"
-                                android:text="토"
-                                android:textStyle="bold"
-                                android:textSize="12sp"
-                                android:layout_width="50dp"
-                                android:layout_height="wrap_content"/>
-                            <me.blog.korn123.easydiary.views.FixedTextView
-                                app:applyGlobalSize="false"
-                                app:applyGlobalColor="false"
-                                android:id="@+id/dateLabel"
-                                android:gravity="center"
-                                android:text="20"
-                                android:textStyle="bold"
-                                android:textSize="20sp"
-                                android:layout_width="50dp"
-                                android:layout_height="wrap_content"/>
-                        </LinearLayout>
-
-                        <me.blog.korn123.easydiary.views.FixedTextView
-                            app:applyGlobalSize="false"
-                            app:applyGlobalColor="false"
-                            android:id="@+id/title"
-                            android:textSize="15sp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="2020년 11월"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <com.google.android.flexbox.FlexboxLayout
-                            app:layout_constraintTop_toBottomOf="@id/title"
-                            app:layout_constraintStart_toEndOf="@+id/leftLabel"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            android:layout_height="wrap_content"
-                            android:layout_width="0dp"
-                            app:alignContent="stretch"
-                            app:alignItems="stretch"
-                            app:flexWrap="wrap">
-
-                            <me.blog.korn123.easydiary.views.FixedCardView
-                                app:contentPadding="5dp"
-                                app:fixedAppcompatPadding="true"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content">
-                                <ImageView
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
-                                    app:srcCompat="@drawable/ic_003_wallet" />
-                            </me.blog.korn123.easydiary.views.FixedCardView>
-
-                            <me.blog.korn123.easydiary.views.FixedCardView
-                                app:contentPadding="5dp"
-                                app:fixedAppcompatPadding="true"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content">
-                                <ImageView
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
-                                    app:srcCompat="@drawable/ic_003_wallet" />
-                            </me.blog.korn123.easydiary.views.FixedCardView>
-
-                            <me.blog.korn123.easydiary.views.FixedCardView
-                                app:contentPadding="5dp"
-                                app:fixedAppcompatPadding="true"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content">
-                                <ImageView
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
-                                    app:srcCompat="@drawable/ic_003_wallet" />
-                            </me.blog.korn123.easydiary.views.FixedCardView>
-
-                        </com.google.android.flexbox.FlexboxLayout>
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </me.blog.korn123.easydiary.views.FixedCardView>
                 <androidx.cardview.widget.CardView
                     android:id="@+id/markdown1"
                     android:orientation="vertical"
