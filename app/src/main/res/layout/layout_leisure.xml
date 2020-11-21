@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<me.blog.korn123.easydiary.views.FixedCardView
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+app:contentPadding="5dp"
+app:fixedAppcompatPadding="true"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content">
+<ImageView
+    android:id="@+id/leisureSymbol"
+    android:layout_width="30dp"
+    android:layout_height="30dp"
+    app:srcCompat="@drawable/ic_003_wallet" />
+</me.blog.korn123.easydiary.views.FixedCardView>
+

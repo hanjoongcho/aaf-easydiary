@@ -81,13 +81,11 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
 
         updateActionLog()
-
+        val dayOfMonth = SimpleDateFormat("dd")
         val cal = Calendar.getInstance()
         cal.time = Date()
         for (num in 1..100) {
-           val date: DateFormat = SimpleDateFormat.getDateInstance(SimpleDateFormat.DATE_FIELD, Locale.getDefault())
-            val dayOfMonth: DateFormat = SimpleDateFormat("dd")
-           mLeisureList.add(Leisure("토", dayOfMonth.format(cal.time), date.format(cal.time)))
+           mLeisureList.add(Leisure(cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())!!, dayOfMonth.format(cal.time), cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())!!))
            cal.add(Calendar.DATE, -1)
         }
         mLeisureAdapter = LeisureAdapter(
