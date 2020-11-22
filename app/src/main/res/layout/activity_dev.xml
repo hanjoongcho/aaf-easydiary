@@ -46,7 +46,7 @@
                             android:gravity="end"
                             android:text="Clear log"
                             style="@style/SettingsTitle" />
-                        <ScrollView
+                        <androidx.core.widget.NestedScrollView
                             android:fillViewport="true"
                             android:layout_width="match_parent"
                             android:layout_height="60dp">
@@ -54,7 +54,7 @@
                                 android:id="@+id/actionLog"
                                 android:layout_height="wrap_content"
                                 style="@style/SettingsSummary" />
-                        </ScrollView>
+                        </androidx.core.widget.NestedScrollView>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
