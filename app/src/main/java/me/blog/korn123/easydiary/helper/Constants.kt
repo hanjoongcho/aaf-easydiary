@@ -207,6 +207,7 @@ const val LEISURE_TENNIS_M = 318
 const val LEISURE_TENNIS_W = 319
 const val LEISURE_VIDEO_PLAYER = 320
 const val LEISURE_PARTY = 321
+const val LEISURE_STRETCHING = 322
 
 // Symbol 350 ~ 449
 const val SYMBOL_YOUTUBE = 350
@@ -501,6 +502,8 @@ const val SETTING_ENABLE_DEBUG_CONSOLE = "setting_enable_debug_console"
 const val SETTING_COUNT_CHARACTERS = "setting_count_characters"
 const val SETTING_LOCATION_INFO = "setting_location_info"
 const val SETTING_TASK_SYMBOL_TOP_ORDER = "setting_task_symbol_top_order"
+const val SETTING_SELECTED_SYMBOLS = "setting_selected_symbols"
+const val SELECTED_SYMBOLS_DEFAULT = "269,301,320,50,322"
 const val HOLD_POSITION_ENTER_EDIT_SCREEN = "hold_position_enter_edit_screen"
 const val FINGERPRINT_ENCRYPT_DATA = "fingerprint_encrypt_data"
 const val FINGERPRINT_ENCRYPT_DATA_IV = "fingerprint_encrypt_data_iv"

@@ -303,6 +303,10 @@ fun Activity.addCategory(itemList: ArrayList<Array<String>>, categoryList: Array
     }
 }
 
+fun Activity.getLayoutLayoutInflater(): LayoutInflater{
+    return getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+}
+
 fun EasyDiaryActivity.acquireGPSPermissions(callback: () -> Unit) {
     handlePermission(PERMISSION_ACCESS_COARSE_LOCATION) { hasCoarseLocation ->
         if (hasCoarseLocation) {

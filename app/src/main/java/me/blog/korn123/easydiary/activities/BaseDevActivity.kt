@@ -11,7 +11,6 @@ import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.widget.AdapterView
 import android.widget.RemoteViews
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
@@ -19,22 +18,20 @@ import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_dev.*
+import kotlinx.android.synthetic.main.layout_leisure_s.view.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.adapters.AlarmAdapter
 import me.blog.korn123.easydiary.adapters.LeisureAdapter
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.ActionLog
-import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.services.BaseNotificationService
 import me.blog.korn123.easydiary.services.NotificationService
 import org.apache.commons.io.FilenameUtils
 import java.io.File
-import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.util.*
 
 
@@ -81,6 +78,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
 
         updateActionLog()
+
         val dayOfMonth = SimpleDateFormat("dd", Locale.getDefault())
         val dateFormat = SimpleDateFormat(DateUtils.DATE_PATTERN_DASH, Locale.getDefault())
         val cal = Calendar.getInstance()
@@ -98,6 +96,12 @@ open class BaseDevActivity : EasyDiaryActivity() {
             layoutManager = androidx.recyclerview.widget.GridLayoutManager(this@BaseDevActivity, 1)
             addItemDecoration(SettingsScheduleFragment.SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding)))
             adapter = mLeisureAdapter
+        }
+
+        config.selectedSymbols.split(",").map { sequence ->
+            val symbolCard = getLayoutLayoutInflater().inflate(R.layout.layout_leisure_s, null)
+            FlavorUtils.initWeatherView(this, symbolCard.leisureSymbol, sequence.toInt())
+            selectedSymbolFlexBox.addView(symbolCard)
         }
 
         nextAlarm.setOnClickListener {

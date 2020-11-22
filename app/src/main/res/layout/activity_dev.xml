@@ -24,33 +24,6 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <androidx.cardview.widget.CardView
-            android:orientation="vertical"
-            style="@style/AppCard.Settings">
-            <LinearLayout
-                style="@style/LinearLayoutVertical">
-                <com.simplemobiletools.commons.views.MyTextView
-                    android:text="Action Log"
-                    style="@style/SettingsTitle" />
-                <com.simplemobiletools.commons.views.MyTextView
-                    android:id="@+id/clearLog"
-                    android:gravity="end"
-                    android:text="Clear log"
-                    style="@style/SettingsTitle" />
-                <ScrollView
-                    android:fillViewport="true"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp">
-                    <com.simplemobiletools.commons.views.MyTextView
-                        android:id="@+id/actionLog"
-                        android:layout_height="wrap_content"
-                        style="@style/SettingsSummary" />
-                </ScrollView>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-
-
         <androidx.core.widget.NestedScrollView
             android:fillViewport="true"
             android:layout_width="match_parent"
@@ -60,10 +33,43 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+                <androidx.cardview.widget.CardView
+                    android:orientation="vertical"
+                    style="@style/AppCard.Settings">
+                    <LinearLayout
+                        style="@style/LinearLayoutVertical">
+                        <com.simplemobiletools.commons.views.MyTextView
+                            android:text="Action Log"
+                            style="@style/SettingsTitle" />
+                        <com.simplemobiletools.commons.views.MyTextView
+                            android:id="@+id/clearLog"
+                            android:gravity="end"
+                            android:text="Clear log"
+                            style="@style/SettingsTitle" />
+                        <ScrollView
+                            android:fillViewport="true"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:id="@+id/actionLog"
+                                android:layout_height="wrap_content"
+                                style="@style/SettingsSummary" />
+                        </ScrollView>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <com.google.android.flexbox.FlexboxLayout
+                    android:id="@+id/selectedSymbolFlexBox"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    app:alignContent="stretch"
+                    app:alignItems="stretch"
+                    app:flexWrap="wrap">
+                </com.google.android.flexbox.FlexboxLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="300dp"
                     android:id="@+id/leisureRecyclerView" />
 
                 <androidx.cardview.widget.CardView
