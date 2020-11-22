@@ -81,11 +81,12 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
 
         updateActionLog()
-        val dayOfMonth = SimpleDateFormat("dd")
+        val dayOfMonth = SimpleDateFormat("dd", Locale.getDefault())
+        val dateFormat = SimpleDateFormat(DateUtils.DATE_PATTERN_DASH, Locale.getDefault())
         val cal = Calendar.getInstance()
         cal.time = Date()
         for (num in 1..100) {
-           mLeisureList.add(Leisure(cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())!!, dayOfMonth.format(cal.time), cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())!!))
+           mLeisureList.add(Leisure(dateFormat.format(cal.time), cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())!!, dayOfMonth.format(cal.time), cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())!!))
            cal.add(Calendar.DATE, -1)
         }
         mLeisureAdapter = LeisureAdapter(
@@ -310,7 +311,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
  ***************************************************************************************************/
 data class NotificationInfo(var largeIconResourceId: Int, var useActionButton: Boolean = false, var useCustomContentView: Boolean = false)
 
-data class Leisure(var dayOfWeek: String, var dayOfMonth: String, var date: String)
+data class Leisure(var dateString: String, var dayOfWeek: String, var dayOfMonth: String, var date: String)
 
 /***************************************************************************************************
  *   extensions

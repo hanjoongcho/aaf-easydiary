@@ -49,12 +49,9 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:id="@+id/leisureRecyclerView" />
 
-        <ScrollView
+
+        <androidx.core.widget.NestedScrollView
             android:fillViewport="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -63,6 +60,11 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:id="@+id/leisureRecyclerView" />
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/markdown1"
@@ -208,6 +210,6 @@
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
             </LinearLayout>
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
     </LinearLayout>
 </LinearLayout>

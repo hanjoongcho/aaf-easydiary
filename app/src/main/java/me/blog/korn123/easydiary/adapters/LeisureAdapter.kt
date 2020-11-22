@@ -5,14 +5,18 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.recyclerview.widget.RecyclerView
+import io.github.aafactory.commons.utils.DateUtils
+import io.realm.Sort
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.Leisure
-import me.blog.korn123.easydiary.extensions.initTextSize
-import me.blog.korn123.easydiary.extensions.updateAppViews
-import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
-import me.blog.korn123.easydiary.extensions.updateTextColors
+import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.helper.CALENDAR_SORTING_ASC
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.models.DiarySymbol
 import me.blog.korn123.easydiary.viewholders.LeisureViewHolder
+import java.text.SimpleDateFormat
+import java.util.*
 
 internal class LeisureAdapter(
         val activity: Activity,
@@ -36,6 +40,7 @@ internal class LeisureAdapter(
                 FontUtils.setFontsTypeface(activity, activity.assets, null, this)
             }
         }
+
         holder.bindTo(items[position])
     }
 
