@@ -266,7 +266,9 @@ fun Activity.openFeelingSymbolDialog(guideMessage: String, callback: (Int) -> Un
     addCategory(itemList, categoryList, "flag_item_array", getString(R.string.category_flag))
 
     val viewPager = symbolDialog.findViewById(R.id.viewpager) as androidx.viewpager.widget.ViewPager
-    symbolDialog.findViewById<TextView>(R.id.diarySymbolGuide).text = guideMessage
+    symbolDialog.findViewById<TextView>(R.id.diarySymbolGuide)?.let {
+        it.text = guideMessage
+    }
     val symbolPagerAdapter = SymbolPagerAdapter(this, itemList, categoryList) { symbolSequence ->
         callback.invoke(symbolSequence)
         dialog?.dismiss()
