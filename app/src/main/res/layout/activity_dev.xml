@@ -79,6 +79,7 @@
                         app:fixedAppcompatPadding="true">
 
                         <ImageView
+                            android:foreground="?attr/selectableItemBackgroundBorderless"
                             android:id="@+id/editSymbolFilter"
                             android:layout_width="30dp"
                             android:layout_height="30dp"

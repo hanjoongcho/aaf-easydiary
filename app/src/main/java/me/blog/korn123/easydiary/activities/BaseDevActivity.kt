@@ -190,6 +190,10 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, "Cheat Sheet")
             })
         }
+
+        editSymbolFilter.setOnClickListener {
+            TransitionHelper.startActivityWithTransition(this, Intent(this, SymbolFilterPickerActivity::class.java))
+        }
     }
 
     override fun onDestroy() {
