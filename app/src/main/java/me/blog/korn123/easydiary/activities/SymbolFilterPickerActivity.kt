@@ -1,6 +1,8 @@
 package me.blog.korn123.easydiary.activities
 
 import android.os.Bundle
+import android.util.Log
+import android.widget.AdapterView
 import kotlinx.android.synthetic.main.activity_symbol_filter_picker.*
 import kotlinx.android.synthetic.main.activity_symbol_filter_picker.toolbar
 import me.blog.korn123.easydiary.R
@@ -10,6 +12,7 @@ import me.blog.korn123.easydiary.extensions.addCategory
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
+import me.blog.korn123.easydiary.helper.AAF_TEST
 import java.util.*
 
 /**
@@ -41,14 +44,17 @@ class SymbolFilterPickerActivity : EasyDiaryActivity() {
             setHomeAsUpIndicator(R.drawable.ic_cross)
         }
 
-        config.selectedSymbols.split(",").map { sequence ->
-            mSymbolFilterList.add(SymbolFilterAdapter.SymbolFilter(sequence.toInt()))
-        }
-
         mSymbolFilterAdapter = SymbolFilterAdapter(
-                this,
-                mSymbolFilterList,
-                null
+            this,
+            mSymbolFilterList,
+            AdapterView.OnItemClickListener { _, _, position, _ ->
+                val filteredList =  config.selectedSymbols.split(",")
+                        .filter { sequence ->  sequence.toInt() != mSymbolFilterList[position].sequence}
+                if (filteredList.isNotEmpty()) {
+                    config.selectedSymbols = filteredList.joinToString(",")
+                    updateSymbolFilter()
+                }
+            }
         )
 
         recyclerView?.apply {
@@ -56,6 +62,7 @@ class SymbolFilterPickerActivity : EasyDiaryActivity() {
             addItemDecoration(SettingsScheduleFragment.SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding)))
             adapter = mSymbolFilterAdapter
         }
+        updateSymbolFilter()
 
 
         val itemList = arrayListOf<Array<String>>()
@@ -71,10 +78,21 @@ class SymbolFilterPickerActivity : EasyDiaryActivity() {
         addCategory(itemList, categoryList, "flag_item_array", getString(R.string.category_flag))
 
         val symbolPagerAdapter = SymbolPagerAdapter(this, itemList, categoryList) { symbolSequence ->
-            makeSnackBar(symbolSequence.toString())
+            if (symbolSequence > 0) {
+                config.selectedSymbols = config.selectedSymbols + "," + symbolSequence
+                updateSymbolFilter()
+            }
         }
         viewpager.adapter = symbolPagerAdapter
         sliding_tabs.setViewPager(viewpager)
+    }
+
+    private fun updateSymbolFilter() {
+        mSymbolFilterList.clear()
+        config.selectedSymbols.split(",").map { sequence ->
+            mSymbolFilterList.add(SymbolFilterAdapter.SymbolFilter(sequence.toInt()))
+            mSymbolFilterAdapter.notifyDataSetChanged()
+        }
     }
 
     /***************************************************************************************************

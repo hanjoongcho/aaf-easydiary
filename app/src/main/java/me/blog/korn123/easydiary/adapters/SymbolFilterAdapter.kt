@@ -16,7 +16,7 @@ import me.blog.korn123.easydiary.viewholders.SymbolFilterViewHolder
 class SymbolFilterAdapter(
         val activity: Activity,
         private val items: List<SymbolFilter>,
-        private val onItemClickListener: AdapterView.OnItemClickListener?
+        private val onItemClickListener: AdapterView.OnItemClickListener
 ) : RecyclerView.Adapter<SymbolFilterViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SymbolFilterViewHolder {
         val view = LayoutInflater.from(activity)
@@ -35,6 +35,9 @@ class SymbolFilterAdapter(
             }
         }
 
+        holder.itemView.setOnClickListener {
+            onItemClickListener.onItemClick(null, it, holder.adapterPosition, holder.itemId)
+        }
         holder.bindTo(items[position])
     }
 
