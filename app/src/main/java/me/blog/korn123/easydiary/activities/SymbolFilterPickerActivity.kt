@@ -91,8 +91,8 @@ class SymbolFilterPickerActivity : EasyDiaryActivity() {
         mSymbolFilterList.clear()
         config.selectedSymbols.split(",").map { sequence ->
             mSymbolFilterList.add(SymbolFilterAdapter.SymbolFilter(sequence.toInt()))
-            mSymbolFilterAdapter.notifyDataSetChanged()
         }
+        mSymbolFilterAdapter.notifyDataSetChanged()
     }
 
     /***************************************************************************************************

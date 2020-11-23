@@ -97,11 +97,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
             addItemDecoration(SettingsScheduleFragment.SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding)))
             adapter = mLeisureAdapter
         }
-        config.selectedSymbols.split(",").map { sequence ->
-            val symbolCard = getLayoutLayoutInflater().inflate(R.layout.layout_leisure_s, null)
-            FlavorUtils.initWeatherView(this, symbolCard.leisureSymbol, sequence.toInt())
-            selectedSymbolFlexBox.addView(symbolCard)
-        }
 
         nextAlarm.setOnClickListener {
             val nextAlarm = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -214,6 +209,16 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        mLeisureAdapter.notifyDataSetChanged()
+        selectedSymbolFlexBox.removeAllViews()
+        config.selectedSymbols.split(",").map { sequence ->
+            val symbolCard = getLayoutLayoutInflater().inflate(R.layout.layout_leisure_s, null)
+            FlavorUtils.initWeatherView(this, symbolCard.leisureSymbol, sequence.toInt())
+            selectedSymbolFlexBox.addView(symbolCard)
+        }
+    }
 
     /***************************************************************************************************
      *   etc functions
