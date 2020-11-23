@@ -39,7 +39,7 @@ class SymbolFilterPickerActivity : EasyDiaryActivity() {
         setContentView(R.layout.activity_symbol_filter_picker)
         setSupportActionBar(toolbar)
         supportActionBar?.run {
-            title = "Dashboard"
+            title = "Symbol Picker"
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_cross)
         }
