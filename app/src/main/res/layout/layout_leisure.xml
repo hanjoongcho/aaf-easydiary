@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/leisureSymbol"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         app:srcCompat="@drawable/ic_003_wallet" />
 </me.blog.korn123.easydiary.views.FixedCardView>
 
