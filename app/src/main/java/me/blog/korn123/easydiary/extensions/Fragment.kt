@@ -25,7 +25,7 @@ fun Fragment.updateFragmentUI(rootView: ViewGroup) {
             updateTextColors(it,0,0)
             updateAppViews(it)
             updateCardViewPolicy(it)
-            FontUtils.setFontsTypeface(this, assets, null, it, true)
+            FontUtils.setFontsTypeface(this, null, it, true)
         }
     }
 }

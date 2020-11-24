@@ -311,7 +311,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
             updateAppViews(this)
             updateCardViewPolicy(this)
         }
-        FontUtils.setFontsTypeface(applicationContext, assets, null, popupView, true)
+        FontUtils.setFontsTypeface(applicationContext, null, popupView, true)
     }
 
     private fun setupViewPager() {
@@ -441,7 +441,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
         val popupView = (inflater.inflate(R.layout.popup_menu_read, null) as ViewGroup).apply {
             updateAppViews(this)
             updateTextColors(this)
-            FontUtils.setFontsTypeface(applicationContext, assets, null, this, true)
+            FontUtils.setFontsTypeface(applicationContext, null, this, true)
             val fragment = mSectionsPagerAdapter.instantiateItem(diaryViewPager, diaryViewPager.currentItem) as PlaceholderFragment
             delete.setOnClickListener {
                 val positiveListener = DialogInterface.OnClickListener { _, _ ->

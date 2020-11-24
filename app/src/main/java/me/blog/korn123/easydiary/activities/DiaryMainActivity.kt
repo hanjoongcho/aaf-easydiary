@@ -265,7 +265,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         val popupView = (inflater.inflate(R.layout.popup_menu_main, null) as ViewGroup).apply {
             updateAppViews(this)
             updateTextColors(this)
-            FontUtils.setFontsTypeface(applicationContext, assets, null, this, true)
+            FontUtils.setFontsTypeface(applicationContext, null, this, true)
             postCard.setOnClickListener(customItemClickListener)
             dashboard.setOnClickListener(customItemClickListener)
             chart.setOnClickListener(customItemClickListener)

@@ -35,7 +35,7 @@ class PostCardViewerActivity : EasyDiaryActivity() {
         setContentView(R.layout.activity_post_card_viewer)
         toolbar.setNavigationOnClickListener { onBackPressed() }
 //        setSupportActionBar(toolbar)
-        FontUtils.getTypeface(this, assets, config.settingFontName)?.let {
+        FontUtils.getTypeface(this, config.settingFontName)?.let {
             toolbar_layout.setCollapsedTitleTypeface(it)
             toolbar_layout.setExpandedTitleTypeface(it)
         }

@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.viewholders
 
 import android.app.Activity
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -17,8 +18,12 @@ class LeisureViewHolder(itemView: View, val activity: Activity) : RecyclerView.V
     fun bindTo(leisure: Leisure) {
         itemView.date.text = leisure.date
         itemView.dayOfMonth.text = leisure.dayOfMonth
-        itemView.dayOfWeek.text = leisure.dayOfWeek
-
+        itemView.dayOfWeek.text = leisure.dayOfWeekStr
+        itemView.dayOfWeek.setTextColor(when (leisure.dayOfWeekNum) {
+            5 -> Color.BLUE
+            6 -> Color.RED
+            else -> Color.BLACK
+        })
         val pair = EasyDiaryDbHelper.readDiaryByDateString(leisure.dateString).partition { item ->
             activity.config.selectedSymbols.split(",").find { it.toInt() == item.weather } != null
         }

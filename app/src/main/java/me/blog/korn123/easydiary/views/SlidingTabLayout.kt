@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.views
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Build
 import android.util.AttributeSet
@@ -12,6 +13,8 @@ import android.widget.FrameLayout
 import android.widget.HorizontalScrollView
 import android.widget.TextView
 import androidx.viewpager.widget.ViewPager
+import me.blog.korn123.commons.utils.FontUtils
+import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.views.SlidingTabLayout.TabColorizer
 
 
@@ -210,9 +213,15 @@ class SlidingTabLayout @JvmOverloads constructor(context: Context, attrs: Attrib
                 tabTitleView = tabView as TextView?
             }
 
-            tabTitleView!!.text = adapter.getPageTitle(i)
+            tabTitleView?.let {
+                it.text = adapter.getPageTitle(i)
+                it.setTextColor(context.config.textColor)
+                it.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.config.settingFontSize)
+                FontUtils.setFontsTypeface(context, null, this, true)
+            }
             tabView.setOnClickListener(tabClickListener)
-
+            mTabStrip.setBackgroundColor(context.config.backgroundColor)
+            mTabStrip.setDividerColors(context.config.primaryColor)
             mTabStrip.addView(tabView)
         }
     }

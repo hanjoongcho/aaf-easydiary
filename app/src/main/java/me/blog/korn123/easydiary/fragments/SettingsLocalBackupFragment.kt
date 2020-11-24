@@ -542,7 +542,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
             initTextSize(popupView)
         }
 
-        FontUtils.setFontsTypeface(mActivity, mActivity.assets, null, popupView, true)
+        FontUtils.setFontsTypeface(mActivity, null, popupView, true)
         builder.setView(popupView)
         dialog = builder.create().apply {
             mActivity.updateAlertDialog(this, null, popupView)
