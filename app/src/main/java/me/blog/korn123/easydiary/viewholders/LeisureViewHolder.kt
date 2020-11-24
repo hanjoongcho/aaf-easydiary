@@ -13,6 +13,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.Leisure
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import java.util.*
 
 class LeisureViewHolder(itemView: View, val activity: Activity) : RecyclerView.ViewHolder(itemView) {
     fun bindTo(leisure: Leisure) {
@@ -20,8 +21,8 @@ class LeisureViewHolder(itemView: View, val activity: Activity) : RecyclerView.V
         itemView.dayOfMonth.text = leisure.dayOfMonth
         itemView.dayOfWeek.text = leisure.dayOfWeekStr
         itemView.dayOfWeek.setTextColor(when (leisure.dayOfWeekNum) {
-            5 -> Color.BLUE
-            6 -> Color.RED
+            Calendar.SATURDAY -> Color.BLUE
+            Calendar.SUNDAY -> Color.RED
             else -> Color.BLACK
         })
         val pair = EasyDiaryDbHelper.readDiaryByDateString(leisure.dateString).partition { item ->

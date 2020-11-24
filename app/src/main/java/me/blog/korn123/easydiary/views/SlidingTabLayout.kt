@@ -1,9 +1,7 @@
 package me.blog.korn123.easydiary.views
 
 import android.content.Context
-import android.graphics.Color
 import android.graphics.Typeface
-import android.os.Build
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
@@ -15,8 +13,9 @@ import android.widget.TextView
 import androidx.viewpager.widget.ViewPager
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.views.SlidingTabLayout.TabColorizer
-
+import android.util.Log
 
 /*
  * Copyright (C) 2013 The Android Open Source Project
@@ -217,7 +216,8 @@ class SlidingTabLayout @JvmOverloads constructor(context: Context, attrs: Attrib
                 it.text = adapter.getPageTitle(i)
                 it.setTextColor(context.config.textColor)
                 it.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.config.settingFontSize)
-                FontUtils.setFontsTypeface(context, null, this, true)
+                it.typeface = FontUtils.getTypeface(context, context.config.settingFontName)
+                Log.i(AAF_TEST, adapter.getPageTitle(i).toString())
             }
             tabView.setOnClickListener(tabClickListener)
             mTabStrip.setBackgroundColor(context.config.backgroundColor)
