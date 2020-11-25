@@ -11,6 +11,7 @@ import me.blog.korn123.easydiary.adapters.SymbolPagerAdapter
 import me.blog.korn123.easydiary.extensions.addCategory
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.makeSnackBar
+import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.AAF_TEST
 import java.util.*
@@ -53,6 +54,8 @@ class SymbolFilterPickerActivity : EasyDiaryActivity() {
                 if (filteredList.isNotEmpty()) {
                     config.selectedSymbols = filteredList.joinToString(",")
                     updateSymbolFilter()
+                } else {
+                    showAlertDialog("At least one symbol must be selected.", null)
                 }
             }
         )
@@ -79,8 +82,12 @@ class SymbolFilterPickerActivity : EasyDiaryActivity() {
 
         val symbolPagerAdapter = SymbolPagerAdapter(this, itemList, categoryList) { symbolSequence ->
             if (symbolSequence > 0) {
-                config.selectedSymbols = config.selectedSymbols + "," + symbolSequence
-                updateSymbolFilter()
+                config.selectedSymbols.split(",").find { it.toInt() == symbolSequence }?.let {
+                    showAlertDialog("The selected symbol already exists in the filter list.", null)
+                } ?: run {
+                    config.selectedSymbols = config.selectedSymbols + "," + symbolSequence
+                    updateSymbolFilter()
+                }
             }
         }
         viewpager.adapter = symbolPagerAdapter

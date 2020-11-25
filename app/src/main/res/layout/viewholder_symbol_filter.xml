@@ -12,6 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
-        app:srcCompat="@drawable/ic_003_wallet" />
+        app:srcCompat="@drawable/ic_sunny" />
 </me.blog.korn123.easydiary.views.FixedCardView>
 
