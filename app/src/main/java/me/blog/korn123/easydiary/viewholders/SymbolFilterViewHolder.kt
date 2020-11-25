@@ -9,6 +9,8 @@ import me.blog.korn123.easydiary.adapters.SymbolFilterAdapter
 
 class SymbolFilterViewHolder(itemView: View, val activity: Activity) : RecyclerView.ViewHolder(itemView) {
     fun bindTo(symbolFilter: SymbolFilterAdapter.SymbolFilter) {
-        FlavorUtils.initWeatherView(activity, itemView.symbol, symbolFilter.sequence)
+        itemView.run {
+            FlavorUtils.initWeatherView(activity, symbol, symbolFilter.sequence)
+        }
     }
 }

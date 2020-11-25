@@ -221,7 +221,7 @@ class SlidingTabLayout @JvmOverloads constructor(context: Context, attrs: Attrib
             }
             tabView.setOnClickListener(tabClickListener)
             mTabStrip.setBackgroundColor(context.config.backgroundColor)
-            mTabStrip.setDividerColors(context.config.primaryColor)
+            mTabStrip.setDividerColors(context.config.textColor)
             mTabStrip.addView(tabView)
         }
     }

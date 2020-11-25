@@ -1,17 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<me.blog.korn123.easydiary.views.FixedCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:contentPadding="3dp"
-    app:fixedAppcompatPadding="true">
-
-    <ImageView
-        android:id="@+id/symbol"
+    android:layout_height="wrap_content">
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        app:srcCompat="@drawable/ic_sunny" />
-</me.blog.korn123.easydiary.views.FixedCardView>
+        app:contentPadding="5dp">
+        <ImageView
+            android:id="@+id/symbol"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            app:srcCompat="@drawable/ic_sunny" />
+
+        <ImageView
+            android:id="@+id/removeSymbol"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/delete"
+            android:layout_gravity="end"
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
+    </androidx.cardview.widget.CardView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 

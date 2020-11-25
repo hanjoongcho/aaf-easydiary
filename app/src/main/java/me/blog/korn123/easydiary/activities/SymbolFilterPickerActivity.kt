@@ -1,19 +1,17 @@
 package me.blog.korn123.easydiary.activities
 
+import android.graphics.Rect
 import android.os.Bundle
-import android.util.Log
+import android.os.Handler
+import android.view.View
 import android.widget.AdapterView
 import kotlinx.android.synthetic.main.activity_symbol_filter_picker.*
-import kotlinx.android.synthetic.main.activity_symbol_filter_picker.toolbar
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.SymbolFilterAdapter
 import me.blog.korn123.easydiary.adapters.SymbolPagerAdapter
 import me.blog.korn123.easydiary.extensions.addCategory
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.showAlertDialog
-import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
-import me.blog.korn123.easydiary.helper.AAF_TEST
 import java.util.*
 
 /**
@@ -61,8 +59,8 @@ class SymbolFilterPickerActivity : EasyDiaryActivity() {
         )
 
         recyclerView?.apply {
-            layoutManager = androidx.recyclerview.widget.GridLayoutManager(this@SymbolFilterPickerActivity, 5)
-            addItemDecoration(SettingsScheduleFragment.SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding)))
+            layoutManager = androidx.recyclerview.widget.GridLayoutManager(this@SymbolFilterPickerActivity, 4)
+            addItemDecoration(SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding)))
             adapter = mSymbolFilterAdapter
         }
         updateSymbolFilter()
@@ -86,7 +84,7 @@ class SymbolFilterPickerActivity : EasyDiaryActivity() {
                     showAlertDialog("The selected symbol already exists in the filter list.", null)
                 } ?: run {
                     config.selectedSymbols = config.selectedSymbols + "," + symbolSequence
-                    updateSymbolFilter()
+                    updateSymbolFilter(true)
                 }
             }
         }
@@ -94,16 +92,38 @@ class SymbolFilterPickerActivity : EasyDiaryActivity() {
         sliding_tabs.setViewPager(viewpager)
     }
 
-    private fun updateSymbolFilter() {
+    private fun updateSymbolFilter(scrollToBottom: Boolean = false) {
         mSymbolFilterList.clear()
         config.selectedSymbols.split(",").map { sequence ->
             mSymbolFilterList.add(SymbolFilterAdapter.SymbolFilter(sequence.toInt()))
         }
         mSymbolFilterAdapter.notifyDataSetChanged()
+        if (scrollToBottom) recyclerView.smoothScrollToPosition(mSymbolFilterList.size.minus(1))
     }
 
     /***************************************************************************************************
      *   etc functions
      *
      ***************************************************************************************************/
+    class SpacesItemDecoration(private val space: Int) : androidx.recyclerview.widget.RecyclerView.ItemDecoration() {
+        override fun getItemOffsets(outRect: Rect, view: View, parent: androidx.recyclerview.widget.RecyclerView, state: androidx.recyclerview.widget.RecyclerView.State) {
+//            val position = parent.getChildAdapterPosition(view)
+//            when (position % 4) {
+//                3  -> {
+//                    outRect.right = 0
+//                }
+//                else -> outRect.right = 50
+//            }
+//            when (position < 4) {
+//                true -> outRect.top = 0
+//                false -> outRect.top = 50
+//            }
+            outRect.top = space
+            outRect.bottom = space
+            outRect.left = space
+            outRect.right = space
+        }
+    }
 }
+
+
