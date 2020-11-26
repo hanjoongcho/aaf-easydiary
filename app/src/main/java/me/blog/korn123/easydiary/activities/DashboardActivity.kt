@@ -41,7 +41,6 @@ class DashboardActivity : EasyDiaryActivity() {
         supportActionBar?.run {
             title = "Dashboard"
             setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(R.drawable.ic_cross)
         }
 
         supportFragmentManager.beginTransaction().run {
