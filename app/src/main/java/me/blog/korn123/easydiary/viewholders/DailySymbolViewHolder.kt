@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.layout_leisure.view.*
-import kotlinx.android.synthetic.main.viewholder_leisure.view.*
+import kotlinx.android.synthetic.main.layout_daily_symbol.view.*
+import kotlinx.android.synthetic.main.viewholder_daily_symbol.view.*
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.Leisure
@@ -15,7 +15,7 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import java.util.*
 
-class LeisureViewHolder(itemView: View, val activity: Activity) : RecyclerView.ViewHolder(itemView) {
+class DailySymbolViewHolder(itemView: View, val activity: Activity) : RecyclerView.ViewHolder(itemView) {
     fun bindTo(leisure: Leisure) {
         itemView.date.text = leisure.date
         itemView.dayOfMonth.text = leisure.dayOfMonth
@@ -37,8 +37,8 @@ class LeisureViewHolder(itemView: View, val activity: Activity) : RecyclerView.V
         itemView.symbolFlexbox.removeAllViews()
         (activity.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater).let {
             pair.first.map { diary ->
-                val symbolCard = it.inflate(R.layout.layout_leisure, null)
-                FlavorUtils.initWeatherView(activity, symbolCard.leisureSymbol, diary.weather)
+                val symbolCard = it.inflate(R.layout.layout_daily_symbol, null)
+                FlavorUtils.initWeatherView(activity, symbolCard.dailySymbol, diary.weather)
                 itemView.symbolFlexbox.addView(symbolCard)
             }
         }

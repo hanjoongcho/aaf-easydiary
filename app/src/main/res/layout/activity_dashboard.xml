@@ -16,7 +16,7 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:background="@color/colorPrimary"
         android:id="@+id/main_holder"
@@ -32,6 +32,50 @@
                 android:id="@+id/summary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
+
+            <me.blog.korn123.easydiary.views.FixedCardView
+                style="@style/card_view_dashboard"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <com.google.android.flexbox.FlexboxLayout
+                            android:id="@+id/selectedSymbolFlexBox"
+                            android:layout_height="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            app:alignContent="stretch"
+                            app:alignItems="stretch"
+                            app:flexWrap="wrap">
+                        </com.google.android.flexbox.FlexboxLayout>
+
+                        <me.blog.korn123.easydiary.views.FixedCardView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:contentPadding="3dp"
+                            app:fixedAppcompatPadding="true">
+
+                            <ImageView
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:id="@+id/editSymbolFilter"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                app:srcCompat="@drawable/ic_select_symbol" />
+                        </me.blog.korn123.easydiary.views.FixedCardView>
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:id="@+id/leisureRecyclerView" />
+                </LinearLayout>
+            </me.blog.korn123.easydiary.views.FixedCardView>
 
             <LinearLayout
                 android:orientation="vertical"
@@ -69,5 +113,5 @@
                 android:layout_width="match_parent"
                 android:layout_height="500dp"/>
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

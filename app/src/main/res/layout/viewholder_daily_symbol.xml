@@ -7,39 +7,41 @@
     android:layout_height="wrap_content">
     <me.blog.korn123.easydiary.views.FixedCardView
         style="@style/card_view_dashboard"
+        app:contentPadding="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
             <LinearLayout
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:id="@+id/leftLabel"
+                android:gravity="center"
+                android:padding="10dp"
                 android:orientation="vertical"
-                android:layout_width="50dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <me.blog.korn123.easydiary.views.FixedTextView
                     app:applyGlobalSize="false"
                     app:applyGlobalColor="false"
                     android:id="@+id/dayOfWeek"
                     android:gravity="center"
-                    android:text="토"
+                    tools:text="토"
                     android:textStyle="bold"
                     android:textSize="12sp"
-                    android:layout_width="50dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <me.blog.korn123.easydiary.views.FixedTextView
                     app:applyGlobalSize="false"
                     app:applyGlobalColor="false"
                     android:id="@+id/dayOfMonth"
                     android:gravity="center"
-                    android:text="20"
+                    tools:text="20"
                     android:textStyle="bold"
                     android:textSize="20sp"
-                    android:layout_width="50dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
 
@@ -69,14 +71,14 @@
 
             <TextView
                 app:layout_constraintTop_toBottomOf="@id/date"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/leftLabel"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:id="@+id/noItemMessage"
                 android:gravity="center"
-                android:text="There is no leisure activity."
-                android:layout_width="match_parent"
+                android:text="There is no diary written with the symbol selected as a filter."
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"/>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </me.blog.korn123.easydiary.views.FixedCardView>
 </LinearLayout>

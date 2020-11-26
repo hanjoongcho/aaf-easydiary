@@ -18,11 +18,11 @@ import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_dev.*
-import kotlinx.android.synthetic.main.layout_leisure_s.view.*
+import kotlinx.android.synthetic.main.layout_daily_symbol_s.view.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.adapters.LeisureAdapter
+import me.blog.korn123.easydiary.adapters.DailySymbolAdapter
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.*
@@ -41,7 +41,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var mLeisureAdapter: LeisureAdapter
+    private lateinit var mLeisureAdapter: DailySymbolAdapter
     private var mLeisureList: ArrayList<Leisure> = arrayListOf()
     private val mLocationManager by lazy { getSystemService(Context.LOCATION_SERVICE) as LocationManager }
     private val mNetworkLocationListener = object : LocationListener {
@@ -87,7 +87,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
            mLeisureList.add(Leisure(dateFormat.format(cal.time), cal.get(Calendar.DAY_OF_WEEK), cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())!!, dayOfMonth.format(cal.time), cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())!!))
            cal.add(Calendar.DATE, -1)
         }
-        mLeisureAdapter = LeisureAdapter(
+        mLeisureAdapter = DailySymbolAdapter(
                 this,
                 mLeisureList,
                null
@@ -214,8 +214,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
         mLeisureAdapter.notifyDataSetChanged()
         selectedSymbolFlexBox.removeAllViews()
         config.selectedSymbols.split(",").map { sequence ->
-            val symbolCard = getLayoutLayoutInflater().inflate(R.layout.layout_leisure_s, null)
-            FlavorUtils.initWeatherView(this, symbolCard.leisureSymbol, sequence.toInt())
+            val symbolCard = getLayoutLayoutInflater().inflate(R.layout.layout_daily_symbol_s, null)
+            FlavorUtils.initWeatherView(this, symbolCard.dailySymbol, sequence.toInt())
             selectedSymbolFlexBox.addView(symbolCard)
         }
     }

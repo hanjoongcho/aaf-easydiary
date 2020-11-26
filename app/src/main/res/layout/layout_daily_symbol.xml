@@ -8,9 +8,9 @@
     app:fixedAppcompatPadding="true">
 
     <ImageView
-        android:id="@+id/leisureSymbol"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
+        android:id="@+id/dailySymbol"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         app:srcCompat="@drawable/ic_sunny" />
 </me.blog.korn123.easydiary.views.FixedCardView>
 
