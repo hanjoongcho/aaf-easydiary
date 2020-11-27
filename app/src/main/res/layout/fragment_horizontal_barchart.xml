@@ -16,12 +16,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:applyGlobalSize="false"
                 app:applyGlobalColor="false"
+                app:applyHighLight="true"
                 android:layout_margin="@dimen/dashboard_title_padding"
                 android:visibility="gone"
                 android:id="@+id/chartTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/dashboard_text_default"/>
+                android:textSize="@dimen/dashboard_title_h1"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.github.mikephil.charting.charts.HorizontalBarChart

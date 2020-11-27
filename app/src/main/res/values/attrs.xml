@@ -9,5 +9,6 @@
     <declare-styleable name="FixedTextView">
         <attr name="applyGlobalSize" format="boolean" />
         <attr name="applyGlobalColor" format="boolean" />
+        <attr name="applyHighLight" format="boolean" />
     </declare-styleable>
 </resources>

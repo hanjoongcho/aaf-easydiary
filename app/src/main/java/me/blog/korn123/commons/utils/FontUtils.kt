@@ -9,6 +9,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT
 import me.blog.korn123.easydiary.helper.USER_CUSTOM_FONTS_DIRECTORY
+import me.blog.korn123.easydiary.views.FixedTextView
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang3.StringUtils
 import java.io.File
@@ -29,6 +30,8 @@ object FontUtils {
                     if (customLineSpacing) {
                         targetView.setLineSpacing(0F, context.config.lineSpacingScaleFactor)
                     }
+
+                    if (targetView is FixedTextView && targetView.applyHighLight) EasyDiaryUtils.highlightString(targetView)
                 }
                 else -> {}
             }

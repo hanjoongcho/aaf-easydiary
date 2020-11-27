@@ -152,6 +152,14 @@ object EasyDiaryUtils {
         }
     }
 
+    fun highlightString(textView: TextView) {
+        val spannableString = SpannableString(textView.text)
+        spannableString.setSpan(BackgroundColorSpan(HIGHLIGHT_COLOR), 0, textView.text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+//        spannableString.setSpan(UnderlineSpan(), 0, textView.text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+//        spannableString.setSpan(StyleSpan(Typeface.ITALIC), 0, textView.text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        textView.text = spannableString
+    }
+
     fun warningString(textView: TextView) {
         val spannableString = SpannableString(textView.text)
         spannableString.setSpan(UnderlineSpan(), 0, textView.text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)

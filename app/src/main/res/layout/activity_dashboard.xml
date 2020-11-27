@@ -41,6 +41,16 @@
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+                    <me.blog.korn123.easydiary.views.FixedTextView
+                        app:applyGlobalSize="false"
+                        app:applyGlobalColor="false"
+                        app:applyHighLight="true"
+                        android:padding="10dp"
+                        android:text="1년기준 일별 심벌사용 현황 필터링"
+                        android:textSize="@dimen/dashboard_title_h1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
                     <LinearLayout
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
@@ -79,12 +89,6 @@
 
             <LinearLayout
                 android:orientation="vertical"
-                android:id="@+id/statistics1"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"/>
-
-            <LinearLayout
-                android:orientation="vertical"
                 android:id="@+id/lifetime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
@@ -100,6 +104,12 @@
                 android:id="@+id/lastWeek"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:id="@+id/statistics1"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"/>
 
             <LinearLayout
                 android:orientation="vertical"
