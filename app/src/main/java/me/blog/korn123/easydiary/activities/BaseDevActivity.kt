@@ -18,13 +18,10 @@ import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_dev.*
-import kotlinx.android.synthetic.main.layout_daily_symbol_s.view.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DailySymbolAdapter
 import me.blog.korn123.easydiary.extensions.*
-import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.services.BaseNotificationService
@@ -92,11 +89,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 mLeisureList,
                null
         )
-        leisureRecyclerView?.apply {
-            layoutManager = androidx.recyclerview.widget.GridLayoutManager(this@BaseDevActivity, 1)
-            addItemDecoration(SettingsScheduleFragment.SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding)))
-            adapter = mLeisureAdapter
-        }
 
         nextAlarm.setOnClickListener {
             val nextAlarm = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -184,10 +176,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, "Cheat Sheet")
             })
         }
-
-        editSymbolFilter.setOnClickListener {
-            TransitionHelper.startActivityWithTransition(this, Intent(this, SymbolFilterPickerActivity::class.java))
-        }
     }
 
     override fun onDestroy() {
@@ -206,17 +194,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
             REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS -> {
                 makeSnackBar(if (isLocationEnabled()) "GPS provider setting is activated." else "The request operation did not complete normally.")
             }
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        mLeisureAdapter.notifyDataSetChanged()
-        selectedSymbolFlexBox.removeAllViews()
-        config.selectedSymbols.split(",").map { sequence ->
-            val symbolCard = getLayoutLayoutInflater().inflate(R.layout.layout_daily_symbol_s, null)
-            FlavorUtils.initWeatherView(this, symbolCard.dailySymbol, sequence.toInt())
-            selectedSymbolFlexBox.addView(symbolCard)
         }
     }
 

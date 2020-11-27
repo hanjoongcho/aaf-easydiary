@@ -3,7 +3,7 @@ package me.blog.korn123.easydiary.activities
 import android.content.Intent
 import android.os.Bundle
 import io.github.aafactory.commons.utils.DateUtils
-import kotlinx.android.synthetic.main.activity_dev.*
+import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.activity_diary_main.toolbar
 import kotlinx.android.synthetic.main.layout_daily_symbol_s.view.*
 import me.blog.korn123.commons.utils.FlavorUtils
