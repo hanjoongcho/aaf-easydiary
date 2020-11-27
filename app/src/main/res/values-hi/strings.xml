@@ -472,8 +472,7 @@
     </string>
     <string name="release_217">
         v1.4.152 / 2020.10.19\n
-        रूसी अद्यतन\n
-        उपयोगकर्ता अनुभव (UX) अनुकूलन
+        डायरी निर्माण बटन कैलेंडर स्क्रीन में जोड़ा गया
     </string>
     <string name="release_218">
         v1.4.152 / 2020.10.19\n
@@ -484,6 +483,11 @@
         v1.4.153 / 2020.11.10\n
         Hindi translation added\n
         User Experience (UX) Optimization
+    </string>
+    <string name="release_220">
+        v1.4.154 / 2020.11.28\n
+        Add diary symbols\n
+        Added daily symbol usage filtering function to dashboard
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -714,4 +718,5 @@
     <string name="category_tasks">कार्य</string>
     <string name="task_symbol_top_order_title">शीर्ष पर कार्य प्रतीक संरेखित करें</string>
     <string name="task_symbol_top_order_description">यदि टास्क सिंबल का प्रकार TODO है या डायरियों के बीच है जिसमें कार्य चिन्ह लगाया गया है, तो यह सूची के शीर्ष पर व्यवस्थित होता है।</string>
+    <string name="dashboard_title_daily_symbol_tile">Filtering of symbol usage by day based on a year</string>
 </resources>

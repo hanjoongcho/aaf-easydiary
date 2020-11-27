@@ -484,6 +484,11 @@
         ヒンディー語の翻訳が追加されました\n
         ユーザーエクスペリエンス（UX）の最適化
     </string>
+    <string name="release_220">
+        v1.4.154 / 2020.11.28\n
+        ダイアリーシンボルを追加\n
+        ダッシュボードに日付別シンボルの使用状況のフィルタリング機能を追加
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -713,4 +718,5 @@
     <string name="category_tasks">タスク</string>
     <string name="task_symbol_top_order_title">タスクシンボル最上段の並べ替え</string>
     <string name="task_symbol_top_order_description">タスクシンボルのタイプがタスクシンボルが適用される日記の中でTODOまたはDOINGの場合、リストの上部に配置されます。</string>
+    <string name="dashboard_title_daily_symbol_tile">1年あたり一日シンボルの使用状況のフィルタリング</string>
 </resources>

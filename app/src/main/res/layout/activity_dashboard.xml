@@ -46,9 +46,9 @@
                         app:applyGlobalColor="false"
                         app:applyHighLight="true"
                         android:padding="10dp"
-                        android:text="1년기준 일별 심벌사용 현황 필터링"
+                        android:text="@string/dashboard_title_daily_symbol_tile"
                         android:textSize="@dimen/dashboard_title_h1"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
                     <LinearLayout

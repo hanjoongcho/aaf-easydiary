@@ -20,7 +20,6 @@ import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_dev.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.adapters.DailySymbolAdapter
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.ActionLog
@@ -28,8 +27,6 @@ import me.blog.korn123.easydiary.services.BaseNotificationService
 import me.blog.korn123.easydiary.services.NotificationService
 import org.apache.commons.io.FilenameUtils
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.*
 
 
 open class BaseDevActivity : EasyDiaryActivity() {
@@ -38,8 +35,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var mLeisureAdapter: DailySymbolAdapter
-    private var mLeisureList: ArrayList<Leisure> = arrayListOf()
     private val mLocationManager by lazy { getSystemService(Context.LOCATION_SERVICE) as LocationManager }
     private val mNetworkLocationListener = object : LocationListener {
         override fun onLocationChanged(p0: Location) {
@@ -75,20 +70,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
 
         updateActionLog()
-
-        val dayOfMonth = SimpleDateFormat("dd", Locale.getDefault())
-        val dateFormat = SimpleDateFormat(DateUtils.DATE_PATTERN_DASH, Locale.getDefault())
-        val cal = Calendar.getInstance()
-        cal.time = Date()
-        for (num in 1..100) {
-           mLeisureList.add(Leisure(dateFormat.format(cal.time), cal.get(Calendar.DAY_OF_WEEK), cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())!!, dayOfMonth.format(cal.time), cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())!!))
-           cal.add(Calendar.DATE, -1)
-        }
-        mLeisureAdapter = DailySymbolAdapter(
-                this,
-                mLeisureList,
-               null
-        )
 
         nextAlarm.setOnClickListener {
             val nextAlarm = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -300,7 +281,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
  ***************************************************************************************************/
 data class NotificationInfo(var largeIconResourceId: Int, var useActionButton: Boolean = false, var useCustomContentView: Boolean = false)
 
-data class Leisure(var dateString: String, var dayOfWeekNum:Int, var dayOfWeekStr: String, var dayOfMonth: String, var date: String)
 
 /***************************************************************************************************
  *   extensions

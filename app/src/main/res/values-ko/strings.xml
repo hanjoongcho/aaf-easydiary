@@ -484,6 +484,11 @@
         힌디어 번역 추가\n
         사용자경험(UX) 최적화
     </string>
+    <string name="release_220">
+        v1.4.154 / 2020.11.28\n
+        다이어리 심벌 추가\n
+        대시보드에 일별 심벌사용 현황 필터링 기능 추가
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -713,4 +718,5 @@
     <string name="category_tasks">태스크</string>
     <string name="task_symbol_top_order_title">태스크 심벌 최상단 정렬</string>
     <string name="task_symbol_top_order_description">태스크 심벌이 적용된 다이어리 중 심벌의 종류가 TODO 또는 DOING인 경우 해당 다이어리를 목록의 최상단에 노출 시킵니다.</string>
+    <string name="dashboard_title_daily_symbol_tile">1년기준 일별 심벌사용 현황 필터링</string>
 </resources>

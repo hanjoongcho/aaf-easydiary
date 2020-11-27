@@ -10,21 +10,20 @@ import kotlinx.android.synthetic.main.layout_daily_symbol.view.*
 import kotlinx.android.synthetic.main.viewholder_daily_symbol.view.*
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.activities.Leisure
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import java.util.*
 
 class DailySymbolViewHolder(itemView: View, val activity: Activity) : RecyclerView.ViewHolder(itemView) {
-    fun bindTo(leisure: Leisure) {
-        itemView.dayOfMonth.text = leisure.dayOfMonth
-        itemView.dayOfWeek.text = leisure.dayOfWeekStr
-        itemView.dayOfWeek.setTextColor(when (leisure.dayOfWeekNum) {
+    fun bindTo(dailySymbol: DailySymbol) {
+        itemView.dayOfMonth.text = dailySymbol.dayOfMonth
+        itemView.dayOfWeek.text = dailySymbol.dayOfWeekStr
+        itemView.dayOfWeek.setTextColor(when (dailySymbol.dayOfWeekNum) {
             Calendar.SATURDAY -> Color.BLUE
             Calendar.SUNDAY -> Color.RED
             else -> Color.BLACK
         })
-        val pair = EasyDiaryDbHelper.readDiaryByDateString(leisure.dateString).partition { item ->
+        val pair = EasyDiaryDbHelper.readDiaryByDateString(dailySymbol.dateString).partition { item ->
             activity.config.selectedSymbols.split(",").find { it.toInt() == item.weather } != null
         }
 
@@ -42,4 +41,6 @@ class DailySymbolViewHolder(itemView: View, val activity: Activity) : RecyclerVi
             }
         }
     }
+
+    data class DailySymbol(var dateString: String, var dayOfWeekNum:Int, var dayOfWeekStr: String, var dayOfMonth: String, var date: String)
 }

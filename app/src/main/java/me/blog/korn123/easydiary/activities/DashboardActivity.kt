@@ -2,8 +2,6 @@ package me.blog.korn123.easydiary.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.AbsListView
-import androidx.annotation.NonNull
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.github.aafactory.commons.utils.DateUtils
@@ -17,6 +15,7 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.getLayoutLayoutInflater
 import me.blog.korn123.easydiary.fragments.*
 import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.viewholders.DailySymbolViewHolder
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -31,7 +30,7 @@ class DashboardActivity : EasyDiaryActivity() {
      *
      ***************************************************************************************************/
     private lateinit var mDailySymbolAdapter: DailySymbolAdapter
-    private var mDailySymbolList: ArrayList<Leisure> = arrayListOf()
+    private var mDailySymbolList: ArrayList<DailySymbolViewHolder.DailySymbol> = arrayListOf()
 
     /***************************************************************************************************
      *   override functions
@@ -137,7 +136,7 @@ class DashboardActivity : EasyDiaryActivity() {
         val cal = Calendar.getInstance()
         cal.time = Date()
         for (num in 1..365) {
-            mDailySymbolList.add(Leisure(dateFormat.format(cal.time), cal.get(Calendar.DAY_OF_WEEK), cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())!!, dayOfMonth.format(cal.time), cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())!!))
+            mDailySymbolList.add(DailySymbolViewHolder.DailySymbol(dateFormat.format(cal.time), cal.get(Calendar.DAY_OF_WEEK), cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())!!, dayOfMonth.format(cal.time), cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())!!))
             cal.add(Calendar.DATE, -1)
         }
         mDailySymbolAdapter = DailySymbolAdapter(

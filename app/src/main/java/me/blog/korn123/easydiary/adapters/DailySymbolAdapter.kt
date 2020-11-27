@@ -7,7 +7,6 @@ import android.widget.AdapterView
 import androidx.recyclerview.widget.RecyclerView
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.activities.Leisure
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
@@ -16,7 +15,7 @@ import me.blog.korn123.easydiary.viewholders.DailySymbolViewHolder
 
 internal class DailySymbolAdapter(
         val activity: Activity,
-        private val items: List<Leisure>,
+        private val items: List<DailySymbolViewHolder.DailySymbol>,
         private val onItemClickListener: AdapterView.OnItemClickListener?
 ) : RecyclerView.Adapter<DailySymbolViewHolder>() {
 

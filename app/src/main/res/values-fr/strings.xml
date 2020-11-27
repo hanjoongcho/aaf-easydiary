@@ -484,6 +484,11 @@
         Hindi translation added\n
         User Experience (UX) Optimization
     </string>
+    <string name="release_220">
+        v1.4.154 / 2020.11.28\n
+        Add diary symbols\n
+        Added daily symbol usage filtering function to dashboard
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -713,4 +718,5 @@
     <string name="category_tasks">Task</string>
     <string name="task_symbol_top_order_title">Align the task symbol to the top</string>
     <string name="task_symbol_top_order_description">If the type of Task Symbol is TODO or DOING among the diaries to which the task symbol is applied, it is arranged at the top of the list.</string>
+    <string name="dashboard_title_daily_symbol_tile">Filtering of symbol usage by day based on a year</string>
 </resources>

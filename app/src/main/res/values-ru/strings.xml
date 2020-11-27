@@ -484,6 +484,11 @@
         Hindi translation added\n
         User Experience (UX) Optimization
     </string>
+    <string name="release_220">
+        v1.4.154 / 2020.11.28\n
+        Add diary symbols\n
+        Added daily symbol usage filtering function to dashboard
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -713,4 +718,5 @@
     <string name="category_tasks">Задачи</string>
     <string name="task_symbol_top_order_title">Выравнивать символ задачи вверху</string>
     <string name="task_symbol_top_order_description">Если типом символа задачи является TODO или DOING среди дневников, к которым применяется символ задачи, то он располагается вверху списка.</string>
+    <string name="dashboard_title_daily_symbol_tile">Filtering of symbol usage by day based on a year</string>
 </resources>
