@@ -3,81 +3,67 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content">
     <me.blog.korn123.easydiary.views.FixedCardView
         style="@style/card_view_dashboard"
         app:contentPadding="5dp"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-            <LinearLayout
+            <me.blog.korn123.easydiary.views.FixedTextView
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:id="@+id/leftLabel"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:applyGlobalSize="false"
+                app:applyGlobalColor="false"
+                android:id="@+id/dayOfWeek"
                 android:gravity="center"
-                android:padding="10dp"
-                android:orientation="vertical"
+                tools:text="토"
+                android:textStyle="bold"
+                android:textSize="12sp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <me.blog.korn123.easydiary.views.FixedTextView
-                    app:applyGlobalSize="false"
-                    app:applyGlobalColor="false"
-                    android:id="@+id/dayOfWeek"
-                    android:gravity="center"
-                    tools:text="토"
-                    android:textStyle="bold"
-                    android:textSize="12sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <me.blog.korn123.easydiary.views.FixedTextView
-                    app:applyGlobalSize="false"
-                    app:applyGlobalColor="false"
-                    android:id="@+id/dayOfMonth"
-                    android:gravity="center"
-                    tools:text="20"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
+                android:layout_height="wrap_content"/>
+            <me.blog.korn123.easydiary.views.FixedTextView
+                app:layout_constraintTop_toBottomOf="@+id/dayOfWeek"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:applyGlobalSize="false"
+                app:applyGlobalColor="false"
+                android:id="@+id/dayOfMonth"
+                android:gravity="center"
+                tools:text="20"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/symbolFlexbox"
+                app:layout_constraintTop_toBottomOf="@id/dayOfMonth"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                app:alignContent="stretch"
+                app:alignItems="center"
+                app:flexDirection="column"
+                app:flexWrap="wrap">
+            </com.google.android.flexbox.FlexboxLayout>
 
             <me.blog.korn123.easydiary.views.FixedTextView
                 app:applyGlobalSize="false"
                 app:applyGlobalColor="false"
-                android:id="@+id/date"
-                android:textSize="15sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2020년 11월"
+                app:layout_constraintTop_toBottomOf="@id/symbolFlexbox"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <com.google.android.flexbox.FlexboxLayout
-                android:id="@+id/symbolFlexbox"
-                app:layout_constraintTop_toBottomOf="@id/date"
-                app:layout_constraintStart_toEndOf="@+id/leftLabel"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                app:alignContent="stretch"
-                app:alignItems="stretch"
-                app:flexWrap="wrap">
-            </com.google.android.flexbox.FlexboxLayout>
-
-            <TextView
-                app:layout_constraintTop_toBottomOf="@id/date"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/leftLabel"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:id="@+id/noItemMessage"
                 android:gravity="center"
-                android:text="There is no diary written with the symbol selected as a filter."
-                android:layout_width="0dp"
+                android:text="N/A"
+                android:textSize="12sp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </me.blog.korn123.easydiary.views.FixedCardView>

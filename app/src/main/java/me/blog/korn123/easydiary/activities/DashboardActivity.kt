@@ -2,6 +2,10 @@ package me.blog.korn123.easydiary.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.AbsListView
+import androidx.annotation.NonNull
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.activity_diary_main.toolbar
@@ -132,7 +136,7 @@ class DashboardActivity : EasyDiaryActivity() {
         val dateFormat = SimpleDateFormat(DateUtils.DATE_PATTERN_DASH, Locale.getDefault())
         val cal = Calendar.getInstance()
         cal.time = Date()
-        for (num in 1..100) {
+        for (num in 1..365) {
             mDailySymbolList.add(Leisure(dateFormat.format(cal.time), cal.get(Calendar.DAY_OF_WEEK), cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())!!, dayOfMonth.format(cal.time), cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())!!))
             cal.add(Calendar.DATE, -1)
         }
@@ -141,10 +145,18 @@ class DashboardActivity : EasyDiaryActivity() {
                 mDailySymbolList,
                 null
         )
+        month.text = cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())
+
         leisureRecyclerView?.apply {
-            layoutManager = androidx.recyclerview.widget.GridLayoutManager(this@DashboardActivity, 1)
-            addItemDecoration(SettingsScheduleFragment.SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding)))
+//            layoutManager = androidx.recyclerview.widget.GridLayoutManager(this@DashboardActivity, 1)
+            layoutManager = LinearLayoutManager(this@DashboardActivity, LinearLayoutManager.HORIZONTAL, false)
+//            addItemDecoration(SettingsScheduleFragment.SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding)))
             adapter = mDailySymbolAdapter
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    month.text = mDailySymbolList[(leisureRecyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()].date
+                }
+            })
         }
     }
 }

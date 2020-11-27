@@ -17,7 +17,6 @@ import java.util.*
 
 class DailySymbolViewHolder(itemView: View, val activity: Activity) : RecyclerView.ViewHolder(itemView) {
     fun bindTo(leisure: Leisure) {
-        itemView.date.text = leisure.date
         itemView.dayOfMonth.text = leisure.dayOfMonth
         itemView.dayOfWeek.text = leisure.dayOfWeekStr
         itemView.dayOfWeek.setTextColor(when (leisure.dayOfWeekNum) {

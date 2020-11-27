@@ -79,10 +79,18 @@
                                 app:srcCompat="@drawable/ic_select_symbol" />
                         </me.blog.korn123.easydiary.views.FixedCardView>
                     </LinearLayout>
-
+                    <me.blog.korn123.easydiary.views.FixedTextView
+                        app:applyGlobalSize="false"
+                        app:applyGlobalColor="false"
+                        android:id="@+id/month"
+                        android:gravity="center"
+                        tools:text="11월"
+                        android:textSize="@dimen/dashboard_title_h2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
                     <androidx.recyclerview.widget.RecyclerView
                         android:layout_width="match_parent"
-                        android:layout_height="300dp"
+                        android:layout_height="wrap_content"
                         android:id="@+id/leisureRecyclerView" />
                 </LinearLayout>
             </me.blog.korn123.easydiary.views.FixedCardView>
