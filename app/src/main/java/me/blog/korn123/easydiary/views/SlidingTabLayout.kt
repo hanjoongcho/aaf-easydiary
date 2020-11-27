@@ -213,6 +213,7 @@ class SlidingTabLayout @JvmOverloads constructor(context: Context, attrs: Attrib
             }
 
             tabTitleView?.let {
+                it.tag = "tabTitle"
                 it.text = adapter.getPageTitle(i)
                 it.setTextColor(context.config.textColor)
                 it.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.config.settingFontSize.times(0.7).toFloat())

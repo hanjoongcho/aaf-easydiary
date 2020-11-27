@@ -261,6 +261,7 @@ fun Context.initTextSize(viewGroup: ViewGroup) {
                         if (it.applyGlobalSize) it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
                     }
                     is TextView -> { 
+                        if (it.tag == "tabTitle") return
                         when (it.id) {
                             R.id.contentsLength, R.id.locationLabel -> it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize * 0.7F)
                             R.id.symbolTextArrow -> {}
