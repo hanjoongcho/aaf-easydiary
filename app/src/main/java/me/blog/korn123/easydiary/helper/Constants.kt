@@ -208,6 +208,9 @@ const val LEISURE_TENNIS_W = 319
 const val LEISURE_VIDEO_PLAYER = 320
 const val LEISURE_PARTY = 321
 const val LEISURE_STRETCHING = 322
+const val LEISURE_SPORTS_1 = 323
+const val LEISURE_SPORTS_2 = 324
+const val LEISURE_RUNNING = 325
 
 // Symbol 350 ~ 449
 const val SYMBOL_YOUTUBE = 350

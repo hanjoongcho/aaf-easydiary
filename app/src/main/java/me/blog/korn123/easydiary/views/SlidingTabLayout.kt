@@ -215,9 +215,8 @@ class SlidingTabLayout @JvmOverloads constructor(context: Context, attrs: Attrib
             tabTitleView?.let {
                 it.text = adapter.getPageTitle(i)
                 it.setTextColor(context.config.textColor)
-                it.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.config.settingFontSize)
+                it.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.config.settingFontSize.times(0.7).toFloat())
                 it.typeface = FontUtils.getTypeface(context, context.config.settingFontName)
-                Log.i(AAF_TEST, adapter.getPageTitle(i).toString())
             }
             tabView.setOnClickListener(tabClickListener)
             mTabStrip.setBackgroundColor(context.config.backgroundColor)

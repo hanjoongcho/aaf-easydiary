@@ -189,6 +189,9 @@ object FlavorUtils {
         LEISURE_VIDEO_PLAYER -> R.drawable.ic_video_player
         LEISURE_PARTY -> R.drawable.ic_party
         LEISURE_STRETCHING -> R.drawable.ic_stretching
+        LEISURE_SPORTS_1 -> R.drawable.ic_sport
+        LEISURE_SPORTS_2 -> R.drawable.ic_sports
+        LEISURE_RUNNING -> R.drawable.ic_running_shoes
 
         SYMBOL_YOUTUBE -> R.drawable.ic_youtube
         SYMBOL_DROPBOX -> R.drawable.ic_dropbox
