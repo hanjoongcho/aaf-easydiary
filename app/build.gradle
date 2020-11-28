@@ -178,10 +178,10 @@ dependencies {
     kapt 'io.noties:prism4j-bundler:2.0.0'
 
     // android test
-    androidTestImplementation 'androidx.test:core:1.3.1-alpha02'
-    androidTestImplementation 'androidx.test:core-ktx:1.3.1-alpha02'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3-alpha02'
-    androidTestImplementation 'androidx.test.ext:junit-ktx:1.1.3-alpha02'
+    androidTestImplementation 'androidx.test:core:1.3.0'
+    androidTestImplementation 'androidx.test:core-ktx:1.3.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.ext:junit-ktx:1.1.2'
     androidTestImplementation 'androidx.test:runner:1.3.1-alpha02'
     androidTestImplementation('androidx.test.espresso:espresso-core:3.4.0-alpha02', {
         exclude group: 'com.android.support', module: 'support-annotations'
