@@ -4,6 +4,10 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.154 (date: 2020.11.28)
+  * Add diary symbols
+  * Added daily symbol usage filtering function to dashboard
+
 # Changes in 1.4.153 (date: 2020.11.10)
   * Hindi translation added
   * User Experience (UX) Optimization

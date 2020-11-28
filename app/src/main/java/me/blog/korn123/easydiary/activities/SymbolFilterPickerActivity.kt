@@ -52,7 +52,7 @@ class SymbolFilterPickerActivity : EasyDiaryActivity() {
                     config.selectedSymbols = filteredList.joinToString(",")
                     updateSymbolFilter()
                 } else {
-                    showAlertDialog("At least one symbol must be selected.", null)
+                    showAlertDialog(getString(R.string.symbol_filter_picker_remove_guide_message), null)
                 }
             }
         )

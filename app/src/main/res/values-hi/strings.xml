@@ -719,4 +719,5 @@
     <string name="task_symbol_top_order_title">शीर्ष पर कार्य प्रतीक संरेखित करें</string>
     <string name="task_symbol_top_order_description">यदि टास्क सिंबल का प्रकार TODO है या डायरियों के बीच है जिसमें कार्य चिन्ह लगाया गया है, तो यह सूची के शीर्ष पर व्यवस्थित होता है।</string>
     <string name="dashboard_title_daily_symbol_tile">Filtering of symbol usage by day based on a year</string>
+    <string name="symbol_filter_picker_remove_guide_message">At least one symbol must be selected.</string>
 </resources>

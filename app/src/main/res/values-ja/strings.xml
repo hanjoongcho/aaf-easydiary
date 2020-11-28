@@ -719,4 +719,5 @@
     <string name="task_symbol_top_order_title">タスクシンボル最上段の並べ替え</string>
     <string name="task_symbol_top_order_description">タスクシンボルのタイプがタスクシンボルが適用される日記の中でTODOまたはDOINGの場合、リストの上部に配置されます。</string>
     <string name="dashboard_title_daily_symbol_tile">1年あたり一日シンボルの使用状況のフィルタリング</string>
+    <string name="symbol_filter_picker_remove_guide_message">少なくとも1つのシンボルを選択する必要があります。</string>
 </resources>
