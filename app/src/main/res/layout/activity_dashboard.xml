@@ -89,9 +89,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                     <androidx.recyclerview.widget.RecyclerView
+                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/leisureRecyclerView" />
+                        android:id="@+id/dailyCardRecyclerView" />
+                    <androidx.core.widget.ContentLoadingProgressBar
+                        style="?android:progressBarStyleLarge"
+                        android:layout_gravity="center"
+                        android:id="@+id/dailyCardProgressBar"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"/>
                 </LinearLayout>
             </me.blog.korn123.easydiary.views.FixedCardView>
 

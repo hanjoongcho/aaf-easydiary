@@ -58,6 +58,20 @@
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
                 <androidx.cardview.widget.CardView
+                    android:orientation="vertical"
+                    style="@style/AppCard.Settings">
+                    <LinearLayout
+                        android:id="@+id/coroutine1"
+                        style="@style/LinearLayoutVertical">
+                        <com.simplemobiletools.commons.views.MyTextView
+                            android:text="Coroutine"
+                            style="@style/SettingsTitle" />
+                        <com.simplemobiletools.commons.views.MyTextView
+                            android:id="@+id/coroutineConsole1"
+                            style="@style/SettingsSummary" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
                     android:id="@+id/markdown1"
                     android:orientation="vertical"
                     style="@style/AppCard.Settings">

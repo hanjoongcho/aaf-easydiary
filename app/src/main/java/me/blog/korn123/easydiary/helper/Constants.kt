@@ -431,6 +431,7 @@ const val REQUEST_CODE_SPEECH_INPUT = 100
 const val REQUEST_CODE_GOOGLE_SIGN_IN = 101
 const val REQUEST_CODE_GOOGLE_DRIVE_PERMISSIONS = 102
 const val REQUEST_CODE_FONT_PICK = 103
+const val REQUEST_CODE_UPDATE_DAILY_SYMBOL_FILTER = 104
 
 
 /***************************************************************************************************

@@ -1,7 +1,9 @@
 package me.blog.korn123.easydiary.activities
 
+import android.app.Activity
 import android.graphics.Rect
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import kotlinx.android.synthetic.main.activity_symbol_filter_picker.*
@@ -91,6 +93,25 @@ class SymbolFilterPickerActivity : EasyDiaryActivity() {
         sliding_tabs.setViewPager(viewpager)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                this.onBackPressed()
+            }
+        }
+        return true
+    }
+
+    override fun onBackPressed() {
+        setResult(Activity.RESULT_OK)
+        super.onBackPressed()
+    }
+
+
+    /***************************************************************************************************
+     *   etc functions
+     *
+     ***************************************************************************************************/
     private fun updateSymbolFilter(scrollToBottom: Boolean = false) {
         mSymbolFilterList.clear()
         config.selectedSymbols.split(",").map { sequence ->
@@ -100,10 +121,6 @@ class SymbolFilterPickerActivity : EasyDiaryActivity() {
         if (scrollToBottom) recyclerView.smoothScrollToPosition(mSymbolFilterList.size.minus(1))
     }
 
-    /***************************************************************************************************
-     *   etc functions
-     *
-     ***************************************************************************************************/
     class SpacesItemDecoration(private val space: Int) : androidx.recyclerview.widget.RecyclerView.ItemDecoration() {
         override fun getItemOffsets(outRect: Rect, view: View, parent: androidx.recyclerview.widget.RecyclerView, state: androidx.recyclerview.widget.RecyclerView.State) {
 //            val position = parent.getChildAdapterPosition(view)

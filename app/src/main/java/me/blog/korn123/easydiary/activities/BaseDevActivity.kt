@@ -18,6 +18,7 @@ import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_dev.*
+import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.*
@@ -36,6 +37,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
      *
      ***************************************************************************************************/
     private val mLocationManager by lazy { getSystemService(Context.LOCATION_SERVICE) as LocationManager }
+    private var mCoroutineJob1: Job? = null
     private val mNetworkLocationListener = object : LocationListener {
         override fun onLocationChanged(p0: Location) {
             makeToast("Network location has been updated")
@@ -156,6 +158,28 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 putExtra(MarkDownViewActivity.OPEN_URL_INFO, "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/README.md")
                 putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, "Cheat Sheet")
             })
+        }
+        coroutine1.setOnClickListener {
+            mCoroutineJob1?.run {
+                if (mCoroutineJob1?.isActive == true) {
+                    runOnUiThread { makeToast("Cancel") }
+                    runBlocking { mCoroutineJob1?.cancelAndJoin() }
+                } else {
+                    runOnUiThread { makeToast("Job is destroyed") }
+                }
+            } ?: run {
+                makeToast("Start")
+                mCoroutineJob1 = GlobalScope.launch { // launch a new coroutine and keep a reference to its Job
+                    for (i in 1..100) {
+                        if (isActive) {
+                            coroutineConsole1.text = "$i"
+                            runBlocking {
+                                delay(100)
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
