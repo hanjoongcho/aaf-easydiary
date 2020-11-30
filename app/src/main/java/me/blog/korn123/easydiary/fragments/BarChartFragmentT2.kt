@@ -102,8 +102,8 @@ class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
             }
         }
 
-        setData(6, 20f)
-        barChart.animateY(2000)
+//        setData(6, 20f)
+//        barChart.animateY(2000)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

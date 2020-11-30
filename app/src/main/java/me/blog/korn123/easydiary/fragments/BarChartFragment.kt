@@ -14,6 +14,8 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.fragment_barchart.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.chart.DayAxisValueFormatter
 import me.blog.korn123.easydiary.chart.IValueFormatterExt
@@ -93,8 +95,13 @@ class BarChartFragment : androidx.fragment.app.Fragment() {
             }
         }
 
-        setData(6, 20f)
-        barChart.animateY(2000)
+        GlobalScope.launch {
+            setData(6, 20f)
+            activity?.runOnUiThread {
+                barChart.animateY(2000)
+                barChartProgressBar.visibility = View.GONE
+            }
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -102,7 +109,9 @@ class BarChartFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun setData(count: Int, range: Float) {
-        val listDiary = EasyDiaryDbHelper.readDiary(null)
+        val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
+        val listDiary = EasyDiaryDbHelper.readDiary(null, realmInstance = realmInstance)
+        realmInstance.close()
         val map = hashMapOf<Int, Int>()
         listDiary.map { diaryDto ->
             val writeHour = DateUtils.timeMillisToDateTime(diaryDto.currentTimeMillis, "HH")

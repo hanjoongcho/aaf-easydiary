@@ -113,6 +113,7 @@ class DashboardActivity : EasyDiaryActivity() {
         }
 
         initializeDailySymbol()
+
         editSymbolFilter.setOnClickListener {
             startActivityForResult(Intent(this, SymbolFilterPickerActivity::class.java), REQUEST_CODE_UPDATE_DAILY_SYMBOL_FILTER)
 //            TransitionHelper.startActivityWithTransition(this, Intent(this, SymbolFilterPickerActivity::class.java))
@@ -175,6 +176,7 @@ class DashboardActivity : EasyDiaryActivity() {
     }
 
     private fun updateDailyCard() {
+        month.visibility = View.GONE
         dailyCardRecyclerView.visibility = View.GONE
         dailyCardProgressBar.visibility = View.VISIBLE
         selectedSymbolFlexBox.removeAllViews()
@@ -182,11 +184,14 @@ class DashboardActivity : EasyDiaryActivity() {
         GlobalScope.launch {
             config.selectedSymbols.split(",").map { sequence ->
                 val symbolCard = getLayoutLayoutInflater().inflate(R.layout.layout_daily_symbol_s, null)
-                runOnUiThread { FlavorUtils.initWeatherView(this@DashboardActivity, symbolCard.dailySymbol, sequence.toInt()) }
-                selectedSymbolFlexBox.addView(symbolCard)
+                runOnUiThread {
+                    FlavorUtils.initWeatherView(this@DashboardActivity, symbolCard.dailySymbol, sequence.toInt())
+                    selectedSymbolFlexBox.addView(symbolCard)
+                }
             }
             runOnUiThread {
                 mDailySymbolAdapter.notifyDataSetChanged()
+                month.visibility = View.VISIBLE
                 dailyCardRecyclerView.visibility = View.VISIBLE
                 dailyCardProgressBar.visibility = View.GONE
             }
