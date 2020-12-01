@@ -59,7 +59,7 @@ class BarChartFragment : androidx.fragment.app.Fragment() {
         val custom = MyAxisValueFormatter(context)
 
         val leftAxis = barChart.axisLeft
-//        leftAxis.typeface = mTfLight
+        leftAxis.typeface = FontUtils.getCommonTypeface(context!!)
         leftAxis.setLabelCount(8, false)
         leftAxis.valueFormatter = custom
         leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
@@ -68,13 +68,14 @@ class BarChartFragment : androidx.fragment.app.Fragment() {
 
         val rightAxis = barChart.axisRight
         rightAxis.setDrawGridLines(false)
-//        rightAxis.typeface = mTfLight
+        rightAxis.typeface = FontUtils.getCommonTypeface(context!!)
         rightAxis.setLabelCount(8, false)
         rightAxis.valueFormatter = custom
         rightAxis.spaceTop = 15f
         rightAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
 
         val l = barChart.legend
+        l.typeface = FontUtils.getCommonTypeface(context!!)
         l.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
         l.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
         l.orientation = Legend.LegendOrientation.HORIZONTAL
@@ -148,7 +149,7 @@ class BarChartFragment : androidx.fragment.app.Fragment() {
 
         val barData = BarData(dataSets)
         barData.setValueTextSize(10f)
-//        barData.setValueTypeface(mTfLight)
+        barData.setValueTypeface(FontUtils.getCommonTypeface(context!!))
         barData.barWidth = 0.9f
 
         barChart.data = barData

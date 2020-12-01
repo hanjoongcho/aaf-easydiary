@@ -113,6 +113,7 @@ class DashboardActivity : EasyDiaryActivity() {
             commit()
         }
 
+        supportFragmentManager.executePendingTransactions()
         initializeDailySymbol()
 
         editSymbolFilter.setOnClickListener {
