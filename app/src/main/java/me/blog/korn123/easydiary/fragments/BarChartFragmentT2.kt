@@ -19,6 +19,8 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import io.github.aafactory.commons.utils.CommonUtils
 import kotlinx.android.synthetic.main.fragment_barchart.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.ChartUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
@@ -102,15 +104,20 @@ class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
             }
         }
 
-//        setData(6, 20f)
-//        barChart.animateY(2000)
+        GlobalScope.launch {
+            setData()
+            activity?.runOnUiThread {
+                barChart.animateY(2000)
+                barChartProgressBar.visibility = View.GONE
+            }
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_barchart, container, false)
     }
 
-    private fun setData(count: Int, range: Float) {
+    private fun setData() {
         val sortedMap = ChartUtils.getSortedMapBySymbol(true)
 
         val barEntries = ArrayList<BarEntry>()
@@ -148,7 +155,10 @@ class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
     inner class AxisValueFormatter(private var context: Context?, private val chart: BarLineChartBase<*>) : IAxisValueFormatter {
         override fun getFormattedValue(value: Float, axis: AxisBase?): String {
             val symbolMap = FlavorUtils.getDiarySymbolMap(context!!)
-            return symbolMap[mSequences[value.toInt() - 1]] ?: "None"
+            return when  {
+                value > 0 -> symbolMap[mSequences[value.toInt() - 1]] ?: "None"
+                else -> "None"
+            }
         }
     }
 }
