@@ -41,7 +41,8 @@ class DashboardActivity : EasyDiaryActivity() {
      *
      ***************************************************************************************************/
     public override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        // FIXME: Fixed a background thread processing error inside fragment when rotating the screen
+        super.onCreate(null)
 
         setContentView(R.layout.activity_dashboard)
         setSupportActionBar(toolbar)

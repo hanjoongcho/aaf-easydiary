@@ -17,7 +17,8 @@ import me.blog.korn123.easydiary.fragments.HorizontalBarChartFragment
 
 class StatisticsActivity : ChartBase() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        // FIXME: Fixed a background thread processing error inside fragment when rotating the screen
+        super.onCreate(null)
         setContentView(R.layout.activity_barchart)
         setSupportActionBar(toolbar)
         supportActionBar?.run {
