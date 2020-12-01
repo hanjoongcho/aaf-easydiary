@@ -124,13 +124,13 @@
                 android:orientation="vertical"
                 android:id="@+id/statistics1"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"/>
+                android:layout_height="450dp"/>
 
             <LinearLayout
                 android:orientation="vertical"
                 android:id="@+id/statistics2"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"/>
+                android:layout_height="450dp"/>
 
             <LinearLayout
                 android:orientation="vertical"

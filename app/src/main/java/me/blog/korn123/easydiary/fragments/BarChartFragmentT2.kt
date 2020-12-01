@@ -23,6 +23,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.ChartUtils
 import me.blog.korn123.commons.utils.FlavorUtils
+import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.chart.IValueFormatterExt
 import me.blog.korn123.easydiary.chart.MyAxisValueFormatter
@@ -57,12 +58,12 @@ class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
 
         val xAxis = barChart.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
-//        xAxis.typeface = mTfLight
+        xAxis.typeface = FontUtils.getCommonTypeface(context!!)
+        xAxis.labelRotationAngle = -45F
         xAxis.setDrawGridLines(false)
         xAxis.granularity = 1f // only intervals of 1 day
         xAxis.labelCount = 7
         xAxis.valueFormatter = xAxisFormatter
-
         val custom = MyAxisValueFormatter(context)
 
         val leftAxis = barChart.axisLeft

@@ -16,6 +16,7 @@ import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.fragment_barchart.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.chart.DayAxisValueFormatter
 import me.blog.korn123.easydiary.chart.IValueFormatterExt
@@ -48,7 +49,8 @@ class BarChartFragment : androidx.fragment.app.Fragment() {
 
         val xAxis = barChart.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
-//        xAxis.typeface = mTfLight
+        xAxis.typeface = FontUtils.getCommonTypeface(context!!)
+        xAxis.labelRotationAngle = -45F
         xAxis.setDrawGridLines(false)
         xAxis.granularity = 1f // only intervals of 1 day
         xAxis.labelCount = 7
