@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.fragments
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -32,9 +33,11 @@ import me.blog.korn123.easydiary.extensions.scaledDrawable
 import java.util.*
 
 class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
+    private val mSequences = arrayListOf<Int>()
     private val mContext: Context
         get() = context!!
-    val mSequences = arrayListOf<Int>()
+    private val mTypeface: Typeface
+        get() = FontUtils.getCommonTypeface(mContext)!!
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -58,7 +61,7 @@ class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
 
         val xAxis = barChart.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
-        xAxis.typeface = FontUtils.getCommonTypeface(context!!)
+        xAxis.typeface = mTypeface
         xAxis.labelRotationAngle = -45F
         xAxis.setDrawGridLines(false)
         xAxis.granularity = 1f // only intervals of 1 day
@@ -67,7 +70,7 @@ class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
         val custom = MyAxisValueFormatter(context)
 
         val leftAxis = barChart.axisLeft
-//        leftAxis.typeface = mTfLight
+        leftAxis.typeface = mTypeface
         leftAxis.setLabelCount(8, false)
         leftAxis.valueFormatter = custom
         leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
@@ -76,7 +79,7 @@ class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
 
         val rightAxis = barChart.axisRight
         rightAxis.setDrawGridLines(false)
-//        rightAxis.typeface = mTfLight
+        rightAxis.typeface = mTypeface
         rightAxis.setLabelCount(8, false)
         rightAxis.valueFormatter = custom
         rightAxis.spaceTop = 15f
@@ -147,7 +150,7 @@ class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
 
         val barData = BarData(dataSets)
         barData.setValueTextSize(10f)
-//        barData.setValueTypeface(mTfLight)
+        barData.setValueTypeface(mTypeface)
         barData.barWidth = 0.9f
         barChart.zoom((sortedMap.size / 6.0F), 0F, 0F, 0F)
         barChart.data = barData
