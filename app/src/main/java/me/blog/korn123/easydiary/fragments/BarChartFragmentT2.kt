@@ -94,6 +94,7 @@ class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
         legend.formSize = 9f
         legend.textSize = 11f
         legend.xEntrySpace = 4f
+        legend.typeface = mTypeface
 
         val mv = XYMarkerView(context!!, xAxisFormatter)
         mv.chartView = barChart // For bounds control
