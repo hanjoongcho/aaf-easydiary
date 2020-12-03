@@ -889,8 +889,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ```
 ### Icon Packs: international-flags
-<div>Icons made by <a href="https://www.freepik.com/?__hstc=57440181.a5ab1a2645099117daea41f465cabd51.1556414046547.1561060081027.1561062947566.40&__hssc=57440181.9.1561062947566&__hsfp=2985574471" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-https://www.flaticon.com/packs/international-flags<br />
+Icons made by [Freepik](https://www.freepik.com/?__hstc=57440181.a5ab1a2645099117daea41f465cabd51.1556414046547.1561060081027.1561062947566.40&__hssc=57440181.9.1561062947566&__hsfp=2985574471) from [www.flaticon.com](https://www.flaticon.com) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)
+https://www.flaticon.com/packs/international-flags    
 Used in Easy Diary version 1.4.88 or higher
 
 ### Icon Packs: linear-color-emoticons
