@@ -889,27 +889,27 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ```
 ### Icon Packs: international-flags
-Icons made by [Freepik](https://www.freepik.com/?__hstc=57440181.a5ab1a2645099117daea41f465cabd51.1556414046547.1561060081027.1561062947566.40&__hssc=57440181.9.1561062947566&__hsfp=2985574471) from [www.flaticon.com](https://www.flaticon.com) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)
-https://www.flaticon.com/packs/international-flags    
+Icons made by [Freepik](https://www.freepik.com/?__hstc=57440181.a5ab1a2645099117daea41f465cabd51.1556414046547.1561060081027.1561062947566.40&__hssc=57440181.9.1561062947566&__hsfp=2985574471) from [www.flaticon.com](https://www.flaticon.com) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)  
+https://www.flaticon.com/packs/international-flags  
 Used in Easy Diary version 1.4.88 or higher
 
 ### Icon Packs: linear-color-emoticons
-Icons made by [Freepik](https://www.freepik.com/?__hstc=57440181.a5ab1a2645099117daea41f465cabd51.1556414046547.1556812502237.1556933273215.4&__hssc=57440181.5.1556933273215&__hsfp=625471252) from [www.flaticon.com](https://www.flaticon.com)  is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)
+Icons made by [Freepik](https://www.freepik.com/?__hstc=57440181.a5ab1a2645099117daea41f465cabd51.1556414046547.1556812502237.1556933273215.4&__hssc=57440181.5.1556933273215&__hsfp=625471252) from [www.flaticon.com](https://www.flaticon.com)  is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)  
 https://www.flaticon.com/packs/linear-color-emoticons  
 Used in Easy Diary version 1.4.76 or higher
 
 ### Icon Packs: food-and-drink-9
-Icons made by [Twitter](https://www.flaticon.com/authors/twitter)  from [www.flaticon.com](https://www.flaticon.com/) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)
+Icons made by [Twitter](https://www.flaticon.com/authors/twitter)  from [www.flaticon.com](https://www.flaticon.com/) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)  
 https://www.flaticon.com/packs/food-and-drink-9  
 Used in Easy Diary version 1.4.76 or higher
 
 ### Icon Packs: landscapes-collection
-Icons made by [Freepik](https://www.freepik.com/?__hstc=57440181.a5ab1a2645099117daea41f465cabd51.1556414046547.1556636949228.1556812502237.3&__hssc=57440181.6.1556812502237&__hsfp=825133012)  from [www.flaticon.com](https://www.flaticon.com/) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)
+Icons made by [Freepik](https://www.freepik.com/?__hstc=57440181.a5ab1a2645099117daea41f465cabd51.1556414046547.1556636949228.1556812502237.3&__hssc=57440181.6.1556812502237&__hsfp=825133012)  from [www.flaticon.com](https://www.flaticon.com/) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)  
 https://www.flaticon.com/packs/landscapes-collection  
 Used in Easy Diary version 1.4.76 or higher
 
 ### Icon Packs: emoji-17
-Icons made by [Freepik](https://www.freepik.com/) from [www.flaticon.com](https://www.flaticon.com/) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)
+Icons made by [Freepik](https://www.freepik.com/) from [www.flaticon.com](https://www.flaticon.com/) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)  
 https://www.flaticon.com/packs/emoji-17  
 Used in Easy Diary version 1.4.76 or higher
 
