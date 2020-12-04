@@ -50,7 +50,7 @@
                 app:alignContent="stretch"
                 app:alignItems="center"
                 app:flexDirection="column"
-                app:flexWrap="wrap">
+                app:flexWrap="nowrap">
             </com.google.android.flexbox.FlexboxLayout>
 
             <me.blog.korn123.easydiary.views.FixedTextView
