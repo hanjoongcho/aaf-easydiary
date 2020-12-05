@@ -165,6 +165,7 @@
         <item>307|Festival</item>
         <item>308|Hair Salon</item>
         <item>309|Hair Salon</item>
+        <item>326|Golf</item>
         <item>323|Sports</item>
         <item>324|Sports</item>
         <item>325|Running</item>
@@ -178,7 +179,6 @@
         <item>317|Swimming</item>
         <item>318|Tennis</item>
         <item>319|Tennis</item>
-        <item>326|Golf</item>
     </string-array>
 
     <string-array name="landscape_item_array">
