@@ -1,7 +1,6 @@
 package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
-import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
@@ -18,6 +17,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
+import com.google.android.flexbox.FlexboxLayout
 import io.github.aafactory.commons.utils.CALCULATION
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
@@ -54,7 +54,7 @@ class DiaryMainItemAdapter(
             true -> itemView.tag as ViewHolder
             false -> {
                 val viewHolder = ViewHolder(
-                        itemView.photoContainer, itemView.photoViews,
+                        itemView.photoViews,
                         itemView.text1, itemView.text2, itemView.text3,
                         itemView.contentsLength, itemView.weather, itemView.item_holder,
                         itemView.selection, itemView.locationSymbol, itemView.locationLabel,
@@ -141,9 +141,9 @@ class DiaryMainItemAdapter(
 
             when (diaryDto.photoUris?.size ?: 0 > 0) {
                 true -> {
-                    photoContainer.visibility = View.VISIBLE
+                    photoViews.visibility = View.VISIBLE
                 }
-                false -> photoContainer.visibility = View.GONE
+                false -> photoViews.visibility = View.GONE
             }
             FontUtils.setFontsTypeface(context, context.assets, null, item_holder)
             photoViews.removeAllViews()
@@ -179,7 +179,7 @@ class DiaryMainItemAdapter(
                             .priority(Priority.HIGH)
                             .centerCrop()
                     Glide.with(context).load(path).listener(listener).apply(options).into(imageView)
-                    if (photoViews.childCount >= maxPhotos) return@map
+//                    if (photoViews.childCount >= maxPhotos) return@map
                     photoViews.addView(imageView)
                 }
             }
@@ -202,7 +202,7 @@ class DiaryMainItemAdapter(
     }
 
     private class ViewHolder(
-            val photoContainer: RelativeLayout, val photoViews: LinearLayout,
+            val photoViews: FlexboxLayout,
             val textView1: TextView, val textView2: TextView, val textView3: TextView,
             val contentsLength: TextView, val imageView: ImageView, val item_holder: ViewGroup,
             val selection: CheckBox, val locationSymbol:ImageView, val locationLabel: TextView,
