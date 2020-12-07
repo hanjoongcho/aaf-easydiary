@@ -153,7 +153,7 @@ class DiaryMainItemAdapter(
                     val path = EasyDiaryUtils.getApplicationDataDirectory(context) + it.getFilePath()
                     val imageView = ImageView(activity)
                     val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(activity, 28F), CommonUtils.dpToPixel(activity, 28F))
-                    layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(activity, 3F), 0)
+                    layoutParams.setMargins(0, CommonUtils.dpToPixel(activity, 1F), CommonUtils.dpToPixel(activity, 3F), 0)
                     imageView.layoutParams = layoutParams
                     val drawable = ContextCompat.getDrawable(activity, R.drawable.bg_card_thumbnail)
                     val gradient = drawable as GradientDrawable

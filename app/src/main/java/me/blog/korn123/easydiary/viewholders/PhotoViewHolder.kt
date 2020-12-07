@@ -19,6 +19,9 @@ import kotlinx.android.synthetic.main.activity_post_card.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.actionBarHeight
 import me.blog.korn123.easydiary.extensions.statusBarHeight
+import kotlin.math.ceil
+import kotlin.math.roundToInt
+import kotlin.math.sqrt
 
 class PhotoViewHolder(
         itemView: View, 
@@ -57,12 +60,13 @@ class PhotoViewHolder(
                     imageView.layoutParams.height = size / 2
                 }
                 else -> {
-                    imageView.layoutParams.width = (size / Math.round(Math.sqrt(itemCount.toDouble())).toInt())
-                    imageView.layoutParams.height = (size / Math.round(Math.sqrt(itemCount.toDouble())).toInt())
+                    size.div(ceil(sqrt(itemCount.toFloat()))).toInt().run {
+                        imageView.layoutParams.width = this
+                        imageView.layoutParams.height = this
+                    }
                 }
             }
         }
-
 
         when (glideOption) {
             GLIDE_CROP_TOP -> Glide
