@@ -2,25 +2,21 @@ package me.blog.korn123.easydiary.viewholders
 
 import android.app.Activity
 import android.graphics.Bitmap
-import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.RequestOptions.bitmapTransform
-import com.bumptech.glide.request.RequestOptions.overrideOf
 import io.github.aafactory.commons.utils.CommonUtils
-import jp.wasabeef.glide.transformations.*
+import jp.wasabeef.glide.transformations.CropTransformation
+import jp.wasabeef.glide.transformations.GrayscaleTransformation
 import jp.wasabeef.glide.transformations.gpu.ToonFilterTransformation
 import kotlinx.android.synthetic.main.activity_post_card.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.actionBarHeight
 import me.blog.korn123.easydiary.extensions.statusBarHeight
 import kotlin.math.ceil
-import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
 class PhotoViewHolder(
@@ -39,6 +35,10 @@ class PhotoViewHolder(
             imageView.visibility = View.VISIBLE
             imageView.layoutParams.width = size
             imageView.layoutParams.height = size
+            Glide.with(imageView.context)
+                    .load(photoPath)
+                    .apply(RequestOptions().fitCenter())
+                    .into(imageView)
         } else {
             when (itemCount) {
                 1 -> {
@@ -66,73 +66,75 @@ class PhotoViewHolder(
                     }
                 }
             }
+
+            when (glideOption) {
+                GLIDE_CROP_TOP -> Glide
+                        .with(imageView.context)
+                        .load(photoPath)
+                        .apply(bitmapTransform(CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.TOP)))
+                        .into(imageView)
+                GLIDE_CROP_CENTER -> Glide
+                        .with(imageView.context)
+                        .load(photoPath)
+                        .apply(bitmapTransform(CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.CENTER)))
+                        .into(imageView)
+                GLIDE_CROP_BOTTOM -> Glide
+                        .with(imageView.context)
+                        .load(photoPath)
+                        .apply(bitmapTransform(CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.BOTTOM)))
+                        .into(imageView)
+                GLIDE_CROP_TOP_GRAY_SCALE -> Glide
+                        .with(imageView.context)
+                        .load(photoPath)
+                        .apply(bitmapTransform(MultiTransformation<Bitmap>(
+                                CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.TOP),
+                                GrayscaleTransformation()
+                        )))
+                        .into(imageView)
+                GLIDE_CROP_CENTER_GRAY_SCALE -> Glide
+                        .with(imageView.context)
+                        .load(photoPath)
+                        .apply(bitmapTransform(MultiTransformation<Bitmap>(
+                                CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.CENTER),
+                                GrayscaleTransformation()
+                        )))
+                        .into(imageView)
+                GLIDE_CROP_BOTTOM_GRAY_SCALE -> Glide
+                        .with(imageView.context)
+                        .load(photoPath)
+                        .apply(bitmapTransform(MultiTransformation<Bitmap>(
+                                CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.BOTTOM),
+                                GrayscaleTransformation()
+                        )))
+                        .into(imageView)
+                GLIDE_CROP_TOP_CARTOON -> Glide
+                        .with(imageView.context)
+                        .load(photoPath)
+                        .apply(bitmapTransform(MultiTransformation<Bitmap>(
+                                CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.TOP),
+                                ToonFilterTransformation()
+                        )))
+                        .into(imageView)
+                GLIDE_CROP_CENTER_CARTOON -> Glide
+                        .with(imageView.context)
+                        .load(photoPath)
+                        .apply(bitmapTransform(MultiTransformation<Bitmap>(
+                                CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.CENTER),
+                                ToonFilterTransformation()
+                        )))
+                        .into(imageView)
+                GLIDE_CROP_BOTTOM_CARTOON -> Glide
+                        .with(imageView.context)
+                        .load(photoPath)
+                        .apply(bitmapTransform(MultiTransformation<Bitmap>(
+                                CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.BOTTOM),
+                                ToonFilterTransformation()
+                        )))
+                        .into(imageView)
+            }
         }
 
-        when (glideOption) {
-            GLIDE_CROP_TOP -> Glide
-                    .with(imageView.context)
-                    .load(photoPath)
-                    .apply(bitmapTransform(CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.TOP)))
-                    .into(imageView)
-            GLIDE_CROP_CENTER -> Glide
-                    .with(imageView.context)
-                    .load(photoPath)
-                    .apply(bitmapTransform(CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.CENTER)))
-                    .into(imageView)
-            GLIDE_CROP_BOTTOM -> Glide
-                    .with(imageView.context)
-                    .load(photoPath)
-                    .apply(bitmapTransform(CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.BOTTOM)))
-                    .into(imageView)
-            GLIDE_CROP_TOP_GRAY_SCALE -> Glide
-                    .with(imageView.context)
-                    .load(photoPath)
-                    .apply(bitmapTransform(MultiTransformation<Bitmap>(
-                            CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.TOP),
-                            GrayscaleTransformation()
-                    )))
-                    .into(imageView)
-            GLIDE_CROP_CENTER_GRAY_SCALE -> Glide
-                    .with(imageView.context)
-                    .load(photoPath)
-                    .apply(bitmapTransform(MultiTransformation<Bitmap>(
-                            CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.CENTER),
-                            GrayscaleTransformation()
-                    )))
-                    .into(imageView)
-            GLIDE_CROP_BOTTOM_GRAY_SCALE -> Glide
-                    .with(imageView.context)
-                    .load(photoPath)
-                    .apply(bitmapTransform(MultiTransformation<Bitmap>(
-                            CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.BOTTOM),
-                            GrayscaleTransformation()
-                    )))
-                    .into(imageView)
-            GLIDE_CROP_TOP_CARTOON -> Glide
-                    .with(imageView.context)
-                    .load(photoPath)
-                    .apply(bitmapTransform(MultiTransformation<Bitmap>(
-                            CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.TOP),
-                            ToonFilterTransformation()
-                    )))
-                    .into(imageView)
-            GLIDE_CROP_CENTER_CARTOON -> Glide
-                    .with(imageView.context)
-                    .load(photoPath)
-                    .apply(bitmapTransform(MultiTransformation<Bitmap>(
-                            CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.CENTER),
-                            ToonFilterTransformation()
-                    )))
-                    .into(imageView)
-            GLIDE_CROP_BOTTOM_CARTOON -> Glide
-                    .with(imageView.context)
-                    .load(photoPath)
-                    .apply(bitmapTransform(MultiTransformation<Bitmap>(
-                            CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.BOTTOM),
-                            ToonFilterTransformation()
-                    )))
-                    .into(imageView)
-        }
+
 
 //        Glide.with(imageView.context)
 //                .load(photoPath)
