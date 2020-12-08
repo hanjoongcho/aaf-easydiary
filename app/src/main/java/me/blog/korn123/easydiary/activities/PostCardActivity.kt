@@ -113,7 +113,10 @@ class PostCardActivity : EasyDiaryActivity() {
                             true -> {
                                 when (it.size) {
                                     1, 3, 4, 5, 6 -> layoutParams.height = CommonUtils.getDefaultDisplay(this@PostCardActivity).x
-                                    2 -> layoutParams.height = CommonUtils.getDefaultDisplay(this@PostCardActivity).x / 2
+                                    2 -> {
+                                        layoutParams.height = CommonUtils.getDefaultDisplay(this@PostCardActivity).x
+
+                                    }
                                     else -> layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
                                 }
                             }

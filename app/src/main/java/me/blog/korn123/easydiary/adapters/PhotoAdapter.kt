@@ -5,6 +5,7 @@ import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexboxLayoutManager
 import io.realm.RealmList
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
@@ -27,6 +28,20 @@ class PhotoAdapter(
 
     override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
         photoUris[position]?.let { photoUri ->
+
+            if (itemCount == 2) {
+                holder.itemView.layoutParams = (holder.itemView.layoutParams as FlexboxLayoutManager.LayoutParams).apply {
+                    if (position == 0) {
+                        isWrapBefore = false
+                        flexGrow = 1F
+                    } else {
+                        isWrapBefore = true
+                        flexGrow = 0F
+                    }
+                }
+            }
+
+
             holder.itemView.setOnClickListener { _ ->
                 when (glideOptionMap[position]) {
                     null -> glideOptionMap[position] = 1
