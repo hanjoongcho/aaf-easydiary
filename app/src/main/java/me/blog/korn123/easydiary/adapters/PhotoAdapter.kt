@@ -4,16 +4,19 @@ import android.app.Activity
 import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import io.realm.RealmList
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.makeToast
+import me.blog.korn123.easydiary.fragments.PhotoFlexItemOptionFragment
 import me.blog.korn123.easydiary.models.PhotoUriDto
 import me.blog.korn123.easydiary.viewholders.PhotoViewHolder
 
 class PhotoAdapter(
-        val activity: Activity,
+        val activity: AppCompatActivity,
         val photoUris: RealmList<PhotoUriDto>,
         private val longClickCallback: (position: Int) -> Unit
 ) : androidx.recyclerview.widget.RecyclerView.Adapter<PhotoViewHolder>() {
@@ -52,6 +55,10 @@ class PhotoAdapter(
                 } else {
                     holder.bindTo(EasyDiaryUtils.getApplicationDataDirectory(activity) + photoUri.getFilePath(), position, glideOptionMap[position]?.rem(9) ?: 0)
                 }
+
+                PhotoFlexItemOptionFragment.newInstance(position).apply {
+                    positiveCallback = { itemIndex -> activity?.makeToast("$itemIndex") }
+                }.show(activity.supportFragmentManager, "")
             }
 
             holder.itemView.setOnLongClickListener { _ ->

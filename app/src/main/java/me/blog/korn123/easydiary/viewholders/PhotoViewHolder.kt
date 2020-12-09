@@ -9,6 +9,7 @@ import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.RequestOptions.bitmapTransform
 import io.github.aafactory.commons.utils.CommonUtils
+import jp.wasabeef.glide.transformations.CropSquareTransformation
 import jp.wasabeef.glide.transformations.CropTransformation
 import jp.wasabeef.glide.transformations.GrayscaleTransformation
 import jp.wasabeef.glide.transformations.gpu.ToonFilterTransformation
@@ -35,10 +36,15 @@ class PhotoViewHolder(
             imageView.visibility = View.VISIBLE
             imageView.layoutParams.width = size
             imageView.layoutParams.height = size
+            val transformation = when (glideOption.rem(2)) {
+                0 -> GrayscaleTransformation()
+                else -> ToonFilterTransformation()
+            }
             Glide.with(imageView.context)
                     .load(photoPath)
-                    .apply(RequestOptions().fitCenter())
+                    .apply(bitmapTransform(transformation))
                     .into(imageView)
+
         } else {
             when (itemCount) {
                 1 -> {
