@@ -34,6 +34,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.PhotoAdapter
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.viewholders.PhotoViewHolder
 import java.io.File
 
 /**
@@ -87,7 +88,11 @@ class PostCardActivity : EasyDiaryActivity() {
                     photoContainer.visibility = View.VISIBLE
 
                     // FIXME remove duplicate code
-                    mPhotoAdapter = PhotoAdapter(this, it) { _ ->
+                    val postCardPhotoItems = arrayListOf<PhotoViewHolder.PostCardPhotoItem>()
+                    it.forEachIndexed { index, photoUriDto ->
+                        postCardPhotoItems.add(PhotoViewHolder.PostCardPhotoItem(EasyDiaryUtils.getApplicationDataDirectory(this) + photoUriDto.getFilePath(), index,0, 0))
+                    }
+                    mPhotoAdapter = PhotoAdapter(this, postCardPhotoItems) { _ ->
                         photoGrid.run {
                             when (resources.configuration.orientation == ORIENTATION_PORTRAIT) {
                                 true -> {
@@ -100,6 +105,7 @@ class PostCardActivity : EasyDiaryActivity() {
                         }
                         mPhotoAdapter.notifyDataSetChanged()
                     }
+
 
                     photoGrid.run {
                         layoutManager = FlexboxLayoutManager(this@PostCardActivity).apply {

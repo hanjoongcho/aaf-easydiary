@@ -2,16 +2,12 @@ package me.blog.korn123.easydiary.viewholders
 
 import android.app.Activity
 import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.MultiTransformation
-import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.RequestOptions.bitmapTransform
 import io.github.aafactory.commons.utils.CommonUtils
-import jp.wasabeef.glide.transformations.CropSquareTransformation
 import jp.wasabeef.glide.transformations.CropTransformation
 import jp.wasabeef.glide.transformations.GrayscaleTransformation
 import jp.wasabeef.glide.transformations.gpu.ToonFilterTransformation
@@ -36,7 +32,7 @@ class PhotoViewHolder(
         else -> null
     }
 
-    fun bindTo(photoPath: String, position: Int, viewMode: Int,  filterMode: Int, forceSinglePhotoPosition: Int = -1) {
+    fun bindTo(postCardPhotoItem: PostCardPhotoItem, forceSinglePhotoPosition: Int = -1) {
         val point =  CommonUtils.getDefaultDisplay(activity)
         val height = point.y - activity.actionBarHeight() - activity.statusBarHeight() - activity.seekBarContainer.height
         val size = if (point.x > point.y) height else point.x
@@ -73,23 +69,23 @@ class PhotoViewHolder(
             }
         }
 
-        val rb = Glide.with(imageView.context).load(photoPath)
-        when (viewMode) {
+        val rb = Glide.with(imageView.context).load(postCardPhotoItem.photoUri)
+        when (postCardPhotoItem.viewMode) {
             0 -> {
-                if (filterMode == 0) {
+                if (postCardPhotoItem.filterMode == 0) {
                     rb.into(imageView)
                 } else {
-                    rb.apply(bitmapTransform(if (filterMode == 1) ToonFilterTransformation() else GrayscaleTransformation())).into(imageView)
+                    rb.apply(bitmapTransform(if (postCardPhotoItem.filterMode == 1) ToonFilterTransformation() else GrayscaleTransformation())).into(imageView)
                 }
 
             }
             else -> {
-                if (filterMode == 0) {
-                    rb.apply(bitmapTransform(CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, getCropType(viewMode)))).into(imageView)
+                if (postCardPhotoItem.filterMode == 0) {
+                    rb.apply(bitmapTransform(CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, getCropType(postCardPhotoItem.viewMode)))).into(imageView)
                 } else {
                     rb.apply(bitmapTransform(MultiTransformation<Bitmap>(
-                            CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, getCropType(viewMode)),
-                            if (filterMode == 1) ToonFilterTransformation() else GrayscaleTransformation()
+                            CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, getCropType(postCardPhotoItem.viewMode)),
+                            if (postCardPhotoItem.filterMode == 1) ToonFilterTransformation() else GrayscaleTransformation()
                     ))).into(imageView)
                 }
             }
@@ -239,4 +235,6 @@ class PhotoViewHolder(
         const val GLIDE_CROP_CENTER_CARTOON = 7
         const val GLIDE_CROP_BOTTOM_CARTOON = 8
     }
+
+    data class PostCardPhotoItem(val photoUri: String, val position: Int, var viewMode: Int, var filterMode: Int)
 }

@@ -1,23 +1,18 @@
 package me.blog.korn123.easydiary.adapters
 
-import android.app.Activity
 import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
-import io.realm.RealmList
-import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.fragments.PhotoFlexItemOptionFragment
-import me.blog.korn123.easydiary.models.PhotoUriDto
 import me.blog.korn123.easydiary.viewholders.PhotoViewHolder
 
 class PhotoAdapter(
         val activity: AppCompatActivity,
-        val photoUris: RealmList<PhotoUriDto>,
+        val postCardPhotoItems: List<PhotoViewHolder.PostCardPhotoItem>,
         private val longClickCallback: (position: Int) -> Unit
 ) : androidx.recyclerview.widget.RecyclerView.Adapter<PhotoViewHolder>() {
     private val glideOptionMap = hashMapOf<Int, Int>()
@@ -30,7 +25,7 @@ class PhotoAdapter(
     }
 
     override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
-        photoUris[position]?.let { photoUri ->
+        postCardPhotoItems[position].let { postCardPhotoItem ->
 
             if (itemCount == 2) {
                 holder.itemView.layoutParams = (holder.itemView.layoutParams as FlexboxLayoutManager.LayoutParams).apply {
@@ -56,9 +51,11 @@ class PhotoAdapter(
 //                    holder.bindTo(EasyDiaryUtils.getApplicationDataDirectory(activity) + photoUri.getFilePath(), position, glideOptionMap[position]?.rem(9) ?: 0)
 //                }
 
-                PhotoFlexItemOptionFragment.newInstance(position).apply {
+                PhotoFlexItemOptionFragment.newInstance(postCardPhotoItem).apply {
                     positiveCallback = { viewMode, filterMode ->
-                        holder.bindTo(EasyDiaryUtils.getApplicationDataDirectory(requireActivity()) + photoUri.getFilePath(), position, viewMode, filterMode, forceSinglePhotoPosition)
+                        postCardPhotoItem.viewMode = viewMode
+                        postCardPhotoItem.filterMode = filterMode
+                        holder.bindTo(postCardPhotoItem, forceSinglePhotoPosition)
                     }
                 }.show(activity.supportFragmentManager, "")
             }
@@ -70,14 +67,14 @@ class PhotoAdapter(
             }
 
             if (forceSinglePhotoPosition > -1) {
-                holder.bindTo(EasyDiaryUtils.getApplicationDataDirectory(activity) + photoUri.getFilePath(), position, 0, forceSinglePhotoPosition)
+                holder.bindTo(postCardPhotoItem.photoUri, position, 0, forceSinglePhotoPosition)
             } else {
-                holder.bindTo(EasyDiaryUtils.getApplicationDataDirectory(activity) + photoUri.getFilePath(), position)
+                holder.bindTo(postCardPhotoItem.photoUri, position)
             }
         }
     }
 
-    override fun getItemCount() = photoUris.size
+    override fun getItemCount() = postCardPhotoItems.size
     
     fun getFlexDirection(): Int = when (activity.resources.configuration.orientation == ORIENTATION_PORTRAIT) {
         true -> {
