@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.DialogFragment
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_photo_item_option.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.viewholders.PhotoViewHolder
@@ -16,6 +17,7 @@ class PhotoFlexItemOptionFragment : DialogFragment() {
     private var itemIndex: Int = -1
     private var viewMode = 0
     private var filterMode = 0
+    private var photoUri: String? = null
     lateinit var positiveCallback: (Int, Int) -> Unit
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,11 +31,12 @@ class PhotoFlexItemOptionFragment : DialogFragment() {
             itemIndex = it.getInt(ITEM_INDEX)
             viewMode = it.getInt(VIEW_MODE)
             filterMode = it.getInt(FILTER_MODE)
+            photoUri = it.getString(PHOTO_URI)
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        dialog?.setTitle("Selected item is $itemIndex")
+        dialog?.setTitle("Option setting")
         return inflater.inflate(R.layout.fragment_photo_item_option, container, false)
     }
 
@@ -53,6 +56,8 @@ class PhotoFlexItemOptionFragment : DialogFragment() {
 //            }
         }
 
+        Glide.with(requireContext()).load(photoUri).into(preview)
+
         spinner_filter_mode.run {
             val arrayAdapter = ArrayAdapter<String>(requireContext(), R.layout.item_spinner, arrayListOf("No Filter", "Cartoon", "Gray Scale"))
             adapter = arrayAdapter
@@ -70,12 +75,14 @@ class PhotoFlexItemOptionFragment : DialogFragment() {
         private const val ITEM_INDEX = "item_index"
         private const val VIEW_MODE = "view_index"
         private const val FILTER_MODE = "filter_index"
+        private const val PHOTO_URI = "photo_uri"
 
         fun newInstance(postCardPhotoItem: PhotoViewHolder.PostCardPhotoItem) = PhotoFlexItemOptionFragment().apply {
             arguments = Bundle().apply {
                 putInt(ITEM_INDEX, postCardPhotoItem.position)
                 putInt(VIEW_MODE, postCardPhotoItem.viewMode)
                 putInt(FILTER_MODE, postCardPhotoItem.filterMode)
+                putString(PHOTO_URI, postCardPhotoItem.photoUri)
             }
         }
     }
