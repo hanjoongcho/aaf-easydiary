@@ -16,62 +16,76 @@ limitations under the License.
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <ImageView
-        android:id="@+id/preview"
-        android:layout_width="100dp"
-        android:layout_height="100dp"/>
     <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <Spinner
-            android:id="@+id/spinner_view_mode"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:gravity="end" />
+        android:padding="5dp"
+        android:gravity="center"
+        android:layout_weight="4"
+        android:layout_width="0dp"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/preview"
+            android:layout_width="100dp"
+            android:layout_height="100dp"/>
     </LinearLayout>
-
     <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="6"
+        android:layout_width="0dp"
         android:layout_height="wrap_content">
-        <Spinner
-            android:id="@+id/spinner_filter_mode"
+
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:gravity="end" />
-    </LinearLayout>
+            android:layout_height="wrap_content">
+            <Spinner
+                android:id="@+id/spinner_view_mode"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="end" />
+        </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/button_panel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="bottom"
-        android:orientation="horizontal"
-        android:paddingBottom="8dp"
-        android:paddingTop="8dp">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Spinner
+                android:id="@+id/spinner_filter_mode"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="end" />
+        </LinearLayout>
 
-        <View
-            android:id="@+id/spacer"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:visibility="invisible" />
-
-        <Button
-            android:id="@+id/button_cancel"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/button_panel"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/cancel" />
+            android:gravity="bottom"
+            android:orientation="horizontal"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp">
 
-        <Button
-            android:id="@+id/button_ok"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/ok" />
+            <View
+                android:id="@+id/spacer"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/button_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cancel" />
+
+            <Button
+                android:id="@+id/button_ok"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ok" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>
 

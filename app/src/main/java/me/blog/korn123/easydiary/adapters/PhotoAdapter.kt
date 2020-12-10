@@ -66,11 +66,7 @@ class PhotoAdapter(
                 true
             }
 
-            if (forceSinglePhotoPosition > -1) {
-                holder.bindTo(postCardPhotoItem.photoUri, position, 0, forceSinglePhotoPosition)
-            } else {
-                holder.bindTo(postCardPhotoItem.photoUri, position)
-            }
+            holder.bindTo(postCardPhotoItem, forceSinglePhotoPosition)
         }
     }
 

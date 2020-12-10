@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.DialogFragment
 import com.bumptech.glide.Glide
@@ -48,20 +49,32 @@ class PhotoFlexItemOptionFragment : DialogFragment() {
             val arrayAdapter = ArrayAdapter<String>(requireContext(), R.layout.item_spinner, viewOptions)
             adapter = arrayAdapter
             setSelection(viewMode)
-//            onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-//                override fun onItemSelected(parent: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-//                    requireActivity().makeToast(parent?.getItemAtPosition(position) as String)
-//                }
-//                override fun onNothingSelected(parent: AdapterView<*>) {}
-//            }
+
+            onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
+                    viewMode = position
+                    PhotoViewHolder.applyOption(requireContext(), photoUri!!, viewMode, filterMode, preview)
+                }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {}
+            }
         }
 
-        Glide.with(requireContext()).load(photoUri).into(preview)
+        PhotoViewHolder.applyOption(requireContext(), photoUri!!, viewMode, filterMode, preview)
 
         spinner_filter_mode.run {
             val arrayAdapter = ArrayAdapter<String>(requireContext(), R.layout.item_spinner, arrayListOf("No Filter", "Cartoon", "Gray Scale"))
             adapter = arrayAdapter
             setSelection(filterMode)
+
+            onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
+                    filterMode = position
+                    PhotoViewHolder.applyOption(requireContext(), photoUri!!, viewMode, filterMode, preview)
+                }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {}
+            }
         }
 
         button_ok.setOnClickListener {

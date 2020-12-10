@@ -90,7 +90,7 @@ class PostCardActivity : EasyDiaryActivity() {
                     // FIXME remove duplicate code
                     val postCardPhotoItems = arrayListOf<PhotoViewHolder.PostCardPhotoItem>()
                     it.forEachIndexed { index, photoUriDto ->
-                        postCardPhotoItems.add(PhotoViewHolder.PostCardPhotoItem(EasyDiaryUtils.getApplicationDataDirectory(this) + photoUriDto.getFilePath(), index,0, 0))
+                        postCardPhotoItems.add(PhotoViewHolder.PostCardPhotoItem(EasyDiaryUtils.getApplicationDataDirectory(this) + photoUriDto.getFilePath(), index,2, 0))
                     }
                     mPhotoAdapter = PhotoAdapter(this, postCardPhotoItems) { _ ->
                         photoGrid.run {

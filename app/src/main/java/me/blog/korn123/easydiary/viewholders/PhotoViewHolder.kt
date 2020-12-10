@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.viewholders
 
 import android.app.Activity
+import android.content.Context
 import android.graphics.Bitmap
 import android.view.View
 import android.widget.ImageView
@@ -24,13 +25,6 @@ class PhotoViewHolder(
         private val itemCount: Int 
 ) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
     private val imageView: ImageView = itemView.findViewById(R.id.photo)
-
-    private fun getCropType(viewMode: Int): CropTransformation.CropType? = when (viewMode) {
-        1 -> CropTransformation.CropType.TOP
-        2 -> CropTransformation.CropType.CENTER
-        3 -> CropTransformation.CropType.BOTTOM
-        else -> null
-    }
 
     fun bindTo(postCardPhotoItem: PostCardPhotoItem, forceSinglePhotoPosition: Int = -1) {
         val point =  CommonUtils.getDefaultDisplay(activity)
@@ -69,141 +63,121 @@ class PhotoViewHolder(
             }
         }
 
-        val rb = Glide.with(imageView.context).load(postCardPhotoItem.photoUri)
-        when (postCardPhotoItem.viewMode) {
-            0 -> {
-                if (postCardPhotoItem.filterMode == 0) {
-                    rb.into(imageView)
-                } else {
-                    rb.apply(bitmapTransform(if (postCardPhotoItem.filterMode == 1) ToonFilterTransformation() else GrayscaleTransformation())).into(imageView)
-                }
-
-            }
-            else -> {
-                if (postCardPhotoItem.filterMode == 0) {
-                    rb.apply(bitmapTransform(CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, getCropType(postCardPhotoItem.viewMode)))).into(imageView)
-                } else {
-                    rb.apply(bitmapTransform(MultiTransformation<Bitmap>(
-                            CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, getCropType(postCardPhotoItem.viewMode)),
-                            if (postCardPhotoItem.filterMode == 1) ToonFilterTransformation() else GrayscaleTransformation()
-                    ))).into(imageView)
-                }
-            }
-        }
+        applyOption(imageView.context, postCardPhotoItem.photoUri, postCardPhotoItem.viewMode, postCardPhotoItem.filterMode, imageView)
     }
 
-    fun bindTo(photoPath: String, position: Int, glideOption: Int = GLIDE_CROP_TOP, forceSinglePhotoPosition: Int = -1) {
-        val point =  CommonUtils.getDefaultDisplay(activity)
-        val height = point.y - activity.actionBarHeight() - activity.statusBarHeight() - activity.seekBarContainer.height
-        val size = if (point.x > point.y) height else point.x
-
-        if (forceSinglePhotoPosition > -1) {
-            imageView.visibility = View.VISIBLE
-            imageView.layoutParams.width = size
-            imageView.layoutParams.height = size
-            val transformation = when (glideOption.rem(2)) {
-                0 -> GrayscaleTransformation()
-                else -> ToonFilterTransformation()
-            }
-            Glide.with(imageView.context)
-                    .load(photoPath)
-                    .apply(bitmapTransform(transformation))
-                    .into(imageView)
-
-        } else {
-            when (itemCount) {
-                1 -> {
-                    imageView.layoutParams.width = size
-                    imageView.layoutParams.height = size
-
-                }
-                3, 5, 6 -> {
-                    if (position < 1) {
-                        imageView.layoutParams.width = (size * 0.8).toInt()
-                        imageView.layoutParams.height = size
-                    } else {
-                        imageView.layoutParams.width = (size * 0.2).toInt()
-                        imageView.layoutParams.height = (size * 0.2).toInt()
-                    }
-                }
-                2, 4 -> {
-                    imageView.layoutParams.width = size / 2
-                    imageView.layoutParams.height = size / 2
-                }
-                else -> {
-                    size.div(ceil(sqrt(itemCount.toFloat()))).toInt().run {
-                        imageView.layoutParams.width = this
-                        imageView.layoutParams.height = this
-                    }
-                }
-            }
-
-            when (glideOption) {
-                GLIDE_CROP_TOP -> Glide
-                        .with(imageView.context)
-                        .load(photoPath)
-                        .apply(bitmapTransform(CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.TOP)))
-                        .into(imageView)
-                GLIDE_CROP_CENTER -> Glide
-                        .with(imageView.context)
-                        .load(photoPath)
-                        .apply(bitmapTransform(CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.CENTER)))
-                        .into(imageView)
-                GLIDE_CROP_BOTTOM -> Glide
-                        .with(imageView.context)
-                        .load(photoPath)
-                        .apply(bitmapTransform(CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.BOTTOM)))
-                        .into(imageView)
-                GLIDE_CROP_TOP_GRAY_SCALE -> Glide
-                        .with(imageView.context)
-                        .load(photoPath)
-                        .apply(bitmapTransform(MultiTransformation<Bitmap>(
-                                CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.TOP),
-                                GrayscaleTransformation()
-                        )))
-                        .into(imageView)
-                GLIDE_CROP_CENTER_GRAY_SCALE -> Glide
-                        .with(imageView.context)
-                        .load(photoPath)
-                        .apply(bitmapTransform(MultiTransformation<Bitmap>(
-                                CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.CENTER),
-                                GrayscaleTransformation()
-                        )))
-                        .into(imageView)
-                GLIDE_CROP_BOTTOM_GRAY_SCALE -> Glide
-                        .with(imageView.context)
-                        .load(photoPath)
-                        .apply(bitmapTransform(MultiTransformation<Bitmap>(
-                                CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.BOTTOM),
-                                GrayscaleTransformation()
-                        )))
-                        .into(imageView)
-                GLIDE_CROP_TOP_CARTOON -> Glide
-                        .with(imageView.context)
-                        .load(photoPath)
-                        .apply(bitmapTransform(MultiTransformation<Bitmap>(
-                                CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.TOP),
-                                ToonFilterTransformation()
-                        )))
-                        .into(imageView)
-                GLIDE_CROP_CENTER_CARTOON -> Glide
-                        .with(imageView.context)
-                        .load(photoPath)
-                        .apply(bitmapTransform(MultiTransformation<Bitmap>(
-                                CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.CENTER),
-                                ToonFilterTransformation()
-                        )))
-                        .into(imageView)
-                GLIDE_CROP_BOTTOM_CARTOON -> Glide
-                        .with(imageView.context)
-                        .load(photoPath)
-                        .apply(bitmapTransform(MultiTransformation<Bitmap>(
-                                CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.BOTTOM),
-                                ToonFilterTransformation()
-                        )))
-                        .into(imageView)
-            }
-        }
+//    fun bindTo(photoPath: String, position: Int, glideOption: Int = GLIDE_CROP_TOP, forceSinglePhotoPosition: Int = -1) {
+//        val point =  CommonUtils.getDefaultDisplay(activity)
+//        val height = point.y - activity.actionBarHeight() - activity.statusBarHeight() - activity.seekBarContainer.height
+//        val size = if (point.x > point.y) height else point.x
+//
+//        if (forceSinglePhotoPosition > -1) {
+//            imageView.visibility = View.VISIBLE
+//            imageView.layoutParams.width = size
+//            imageView.layoutParams.height = size
+//            val transformation = when (glideOption.rem(2)) {
+//                0 -> GrayscaleTransformation()
+//                else -> ToonFilterTransformation()
+//            }
+//            Glide.with(imageView.context)
+//                    .load(photoPath)
+//                    .apply(bitmapTransform(transformation))
+//                    .into(imageView)
+//
+//        } else {
+//            when (itemCount) {
+//                1 -> {
+//                    imageView.layoutParams.width = size
+//                    imageView.layoutParams.height = size
+//
+//                }
+//                3, 5, 6 -> {
+//                    if (position < 1) {
+//                        imageView.layoutParams.width = (size * 0.8).toInt()
+//                        imageView.layoutParams.height = size
+//                    } else {
+//                        imageView.layoutParams.width = (size * 0.2).toInt()
+//                        imageView.layoutParams.height = (size * 0.2).toInt()
+//                    }
+//                }
+//                2, 4 -> {
+//                    imageView.layoutParams.width = size / 2
+//                    imageView.layoutParams.height = size / 2
+//                }
+//                else -> {
+//                    size.div(ceil(sqrt(itemCount.toFloat()))).toInt().run {
+//                        imageView.layoutParams.width = this
+//                        imageView.layoutParams.height = this
+//                    }
+//                }
+//            }
+//
+//            when (glideOption) {
+//                GLIDE_CROP_TOP -> Glide
+//                        .with(imageView.context)
+//                        .load(photoPath)
+//                        .apply(bitmapTransform(CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.TOP)))
+//                        .into(imageView)
+//                GLIDE_CROP_CENTER -> Glide
+//                        .with(imageView.context)
+//                        .load(photoPath)
+//                        .apply(bitmapTransform(CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.CENTER)))
+//                        .into(imageView)
+//                GLIDE_CROP_BOTTOM -> Glide
+//                        .with(imageView.context)
+//                        .load(photoPath)
+//                        .apply(bitmapTransform(CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.BOTTOM)))
+//                        .into(imageView)
+//                GLIDE_CROP_TOP_GRAY_SCALE -> Glide
+//                        .with(imageView.context)
+//                        .load(photoPath)
+//                        .apply(bitmapTransform(MultiTransformation<Bitmap>(
+//                                CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.TOP),
+//                                GrayscaleTransformation()
+//                        )))
+//                        .into(imageView)
+//                GLIDE_CROP_CENTER_GRAY_SCALE -> Glide
+//                        .with(imageView.context)
+//                        .load(photoPath)
+//                        .apply(bitmapTransform(MultiTransformation<Bitmap>(
+//                                CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.CENTER),
+//                                GrayscaleTransformation()
+//                        )))
+//                        .into(imageView)
+//                GLIDE_CROP_BOTTOM_GRAY_SCALE -> Glide
+//                        .with(imageView.context)
+//                        .load(photoPath)
+//                        .apply(bitmapTransform(MultiTransformation<Bitmap>(
+//                                CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.BOTTOM),
+//                                GrayscaleTransformation()
+//                        )))
+//                        .into(imageView)
+//                GLIDE_CROP_TOP_CARTOON -> Glide
+//                        .with(imageView.context)
+//                        .load(photoPath)
+//                        .apply(bitmapTransform(MultiTransformation<Bitmap>(
+//                                CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.TOP),
+//                                ToonFilterTransformation()
+//                        )))
+//                        .into(imageView)
+//                GLIDE_CROP_CENTER_CARTOON -> Glide
+//                        .with(imageView.context)
+//                        .load(photoPath)
+//                        .apply(bitmapTransform(MultiTransformation<Bitmap>(
+//                                CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.CENTER),
+//                                ToonFilterTransformation()
+//                        )))
+//                        .into(imageView)
+//                GLIDE_CROP_BOTTOM_CARTOON -> Glide
+//                        .with(imageView.context)
+//                        .load(photoPath)
+//                        .apply(bitmapTransform(MultiTransformation<Bitmap>(
+//                                CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, CropTransformation.CropType.BOTTOM),
+//                                ToonFilterTransformation()
+//                        )))
+//                        .into(imageView)
+//            }
+//        }
 
 
 
@@ -213,7 +187,7 @@ class PhotoViewHolder(
 //                .apply(RequestOptions().transforms(bitmapTransformation))
 ////                .apply(RequestOptions().transforms(CenterCrop(), RoundedCorners(CommonUtils.dpToPixel(imageView.context, roundCornerDpUnit))))
 //                .into(imageView)
-    }
+//    }
 
     fun getStatusBarHeight(): Int {
         var result = 0
@@ -234,6 +208,37 @@ class PhotoViewHolder(
         const val GLIDE_CROP_TOP_CARTOON = 6
         const val GLIDE_CROP_CENTER_CARTOON = 7
         const val GLIDE_CROP_BOTTOM_CARTOON = 8
+
+        fun getCropType(viewMode: Int): CropTransformation.CropType? = when (viewMode) {
+            1 -> CropTransformation.CropType.TOP
+            2 -> CropTransformation.CropType.CENTER
+            3 -> CropTransformation.CropType.BOTTOM
+            else -> null
+        }
+
+        fun applyOption(context: Context, photoUri: String, viewMode: Int, filterMode: Int, imageView: ImageView) {
+            val rb = Glide.with(context).load(photoUri)
+            when (viewMode) {
+                0 -> {
+                    if (filterMode == 0) {
+                        rb.into(imageView)
+                    } else {
+                        rb.apply(bitmapTransform(if (filterMode == 1) ToonFilterTransformation() else GrayscaleTransformation())).into(imageView)
+                    }
+
+                }
+                else -> {
+                    if (filterMode == 0) {
+                        rb.apply(bitmapTransform(CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, getCropType(viewMode)))).into(imageView)
+                    } else {
+                        rb.apply(bitmapTransform(MultiTransformation<Bitmap>(
+                                CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, getCropType(viewMode)),
+                                if (filterMode == 1) ToonFilterTransformation() else GrayscaleTransformation()
+                        ))).into(imageView)
+                    }
+                }
+            }
+        }
     }
 
     data class PostCardPhotoItem(val photoUri: String, val position: Int, var viewMode: Int, var filterMode: Int)
