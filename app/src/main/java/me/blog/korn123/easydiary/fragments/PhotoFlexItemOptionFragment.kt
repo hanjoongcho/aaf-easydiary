@@ -7,13 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.DialogFragment
+import kotlinx.android.synthetic.main.fragment_photo_item_option.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.makeToast
 
 class PhotoFlexItemOptionFragment : DialogFragment() {
 
     private var itemIndex: Int = -1
-    lateinit var positiveCallback: (Int) -> Unit
+    lateinit var positiveCallback: (Int, Int) -> Unit
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,29 +26,39 @@ class PhotoFlexItemOptionFragment : DialogFragment() {
         arguments?.let {
             itemIndex = it.getInt(ITEM_INDEX)
         }
+
+       dialog?.setTitle("Selected item is $itemIndex")
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_photo_item_option, container, false)
-        val spinner: Spinner = view.findViewById(R.id.spinner_view_mode)
-        val viewOptions = arrayListOf("TOP", "BOTTOM")
-        val arrayAdapter = ArrayAdapter<String>(requireContext(), R.layout.item_spinner, viewOptions)
-        spinner.adapter = arrayAdapter
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-                requireActivity().makeToast(parent?.getItemAtPosition(position) as String)
-            }
+        return inflater.inflate(R.layout.fragment_photo_item_option, container, false)
+    }
 
-            override fun onNothingSelected(parent: AdapterView<*>) {}
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        spinner_view_mode.run {
+            val viewOptions = arrayListOf("Fit Center", "Crop Top", "Crop Center", "Crop Bottom")
+            val arrayAdapter = ArrayAdapter<String>(requireContext(), R.layout.item_spinner, viewOptions)
+            adapter = arrayAdapter
+//            onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+//                override fun onItemSelected(parent: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
+//                    requireActivity().makeToast(parent?.getItemAtPosition(position) as String)
+//                }
+//                override fun onNothingSelected(parent: AdapterView<*>) {}
+//            }
         }
 
-        val okButton: Button = view.findViewById(R.id.button_ok)
-        okButton.setOnClickListener(View.OnClickListener {
-            dismiss()
-            positiveCallback.invoke(itemIndex)
-        })
+        spinner_filter_mode.run {
+            val arrayAdapter = ArrayAdapter<String>(requireContext(), R.layout.item_spinner, arrayListOf("No Filter", "Cartoon", "Gray Scale"))
+            adapter = arrayAdapter
+        }
 
-        return view
+        button_ok.setOnClickListener {
+            dismiss()
+            positiveCallback.invoke(spinner_view_mode.selectedItemPosition, spinner_filter_mode.selectedItemPosition)
+        }
+        button_cancel.setOnClickListener { dismiss() }
     }
 
     companion object {

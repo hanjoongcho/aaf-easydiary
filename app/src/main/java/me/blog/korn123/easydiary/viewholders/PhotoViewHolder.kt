@@ -2,9 +2,11 @@ package me.blog.korn123.easydiary.viewholders
 
 import android.app.Activity
 import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.RequestOptions.bitmapTransform
@@ -26,8 +28,75 @@ class PhotoViewHolder(
         private val itemCount: Int 
 ) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
     private val imageView: ImageView = itemView.findViewById(R.id.photo)
-    
-    internal fun bindTo(photoPath: String, position: Int, glideOption: Int = GLIDE_CROP_TOP, forceSinglePhotoPosition: Int = -1) {
+
+    private fun getCropType(viewMode: Int): CropTransformation.CropType? = when (viewMode) {
+        1 -> CropTransformation.CropType.TOP
+        2 -> CropTransformation.CropType.CENTER
+        3 -> CropTransformation.CropType.BOTTOM
+        else -> null
+    }
+
+    fun bindTo(photoPath: String, position: Int, viewMode: Int,  filterMode: Int, forceSinglePhotoPosition: Int = -1) {
+        val point =  CommonUtils.getDefaultDisplay(activity)
+        val height = point.y - activity.actionBarHeight() - activity.statusBarHeight() - activity.seekBarContainer.height
+        val size = if (point.x > point.y) height else point.x
+
+        if (forceSinglePhotoPosition > -1) {
+            imageView.layoutParams.width = size
+            imageView.layoutParams.height = size
+        } else {
+            when (itemCount) {
+                1 -> {
+                    imageView.layoutParams.width = size
+                    imageView.layoutParams.height = size
+
+                }
+                3, 5, 6 -> {
+                    if (position < 1) {
+                        imageView.layoutParams.width = (size * 0.8).toInt()
+                        imageView.layoutParams.height = size
+                    } else {
+                        imageView.layoutParams.width = (size * 0.2).toInt()
+                        imageView.layoutParams.height = (size * 0.2).toInt()
+                    }
+                }
+                2, 4 -> {
+                    imageView.layoutParams.width = size / 2
+                    imageView.layoutParams.height = size / 2
+                }
+                else -> {
+                    size.div(ceil(sqrt(itemCount.toFloat()))).toInt().run {
+                        imageView.layoutParams.width = this
+                        imageView.layoutParams.height = this
+                    }
+                }
+            }
+        }
+
+        val rb = Glide.with(imageView.context).load(photoPath)
+        when (viewMode) {
+            0 -> {
+                if (filterMode == 0) {
+                    rb.into(imageView)
+                } else {
+                    rb.apply(bitmapTransform(if (filterMode == 1) ToonFilterTransformation() else GrayscaleTransformation())).into(imageView)
+                }
+
+            }
+            else -> {
+                if (filterMode == 0) {
+                    rb.apply(bitmapTransform(CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, getCropType(viewMode)))).into(imageView)
+                } else {
+                    rb.apply(bitmapTransform(MultiTransformation<Bitmap>(
+                            CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, getCropType(viewMode)),
+                            if (filterMode == 1) ToonFilterTransformation() else GrayscaleTransformation()
+                    ))).into(imageView)
+                }
+            }
+        }
+    }
+
+    fun bindTo(photoPath: String, position: Int, glideOption: Int = GLIDE_CROP_TOP, forceSinglePhotoPosition: Int = -1) {
         val point =  CommonUtils.getDefaultDisplay(activity)
         val height = point.y - activity.actionBarHeight() - activity.statusBarHeight() - activity.seekBarContainer.height
         val size = if (point.x > point.y) height else point.x

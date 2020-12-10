@@ -46,18 +46,20 @@ class PhotoAdapter(
 
 
             holder.itemView.setOnClickListener { _ ->
-                when (glideOptionMap[position]) {
-                    null -> glideOptionMap[position] = 1
-                    else -> glideOptionMap[position] = glideOptionMap[position]?.plus(1) ?: 0
-                }
-                if (forceSinglePhotoPosition > -1) {
-                    holder.bindTo(EasyDiaryUtils.getApplicationDataDirectory(activity) + photoUri.getFilePath(), position, glideOptionMap[position]?.rem(9) ?: 0, forceSinglePhotoPosition)
-                } else {
-                    holder.bindTo(EasyDiaryUtils.getApplicationDataDirectory(activity) + photoUri.getFilePath(), position, glideOptionMap[position]?.rem(9) ?: 0)
-                }
+//                when (glideOptionMap[position]) {
+//                    null -> glideOptionMap[position] = 1
+//                    else -> glideOptionMap[position] = glideOptionMap[position]?.plus(1) ?: 0
+//                }
+//                if (forceSinglePhotoPosition > -1) {
+//                    holder.bindTo(EasyDiaryUtils.getApplicationDataDirectory(activity) + photoUri.getFilePath(), position, glideOptionMap[position]?.rem(9) ?: 0, forceSinglePhotoPosition)
+//                } else {
+//                    holder.bindTo(EasyDiaryUtils.getApplicationDataDirectory(activity) + photoUri.getFilePath(), position, glideOptionMap[position]?.rem(9) ?: 0)
+//                }
 
                 PhotoFlexItemOptionFragment.newInstance(position).apply {
-                    positiveCallback = { itemIndex -> activity?.makeToast("$itemIndex") }
+                    positiveCallback = { viewMode, filterMode ->
+                        holder.bindTo(EasyDiaryUtils.getApplicationDataDirectory(requireActivity()) + photoUri.getFilePath(), position, viewMode, filterMode, forceSinglePhotoPosition)
+                    }
                 }.show(activity.supportFragmentManager, "")
             }
 
