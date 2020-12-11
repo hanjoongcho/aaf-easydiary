@@ -217,18 +217,20 @@ class PhotoViewHolder(
             else -> null
         }
 
-        private fun createBitmapTransformation(filterMode: Int) : BitmapTransformation = when (filterMode) {
-            1 -> ToonFilterTransformation()
-            2 -> SepiaFilterTransformation()
-            3 -> ContrastFilterTransformation()
-            4 -> InvertFilterTransformation()
-            5 -> PixelationFilterTransformation()
-            6 -> SketchFilterTransformation()
-            7 -> SwirlFilterTransformation()
-            8 -> BrightnessFilterTransformation()
-            9 -> KuwaharaFilterTransformation()
-            10 -> VignetteFilterTransformation()
-            else -> GrayscaleTransformation()
+        private fun createBitmapTransformation(filterMode: Int) : BitmapTransformation {
+            return when (filterMode) {
+                1 -> ToonFilterTransformation()
+                2 -> SepiaFilterTransformation()
+                3 -> ContrastFilterTransformation()
+                4 -> InvertFilterTransformation()
+                5 -> PixelationFilterTransformation()
+                6 -> SketchFilterTransformation()
+                7 -> SwirlFilterTransformation()
+                8 -> BrightnessFilterTransformation()
+                9 -> KuwaharaFilterTransformation()
+                10 -> VignetteFilterTransformation()
+                else -> GrayscaleTransformation()
+            }
         }
 
         fun applyOption(context: Context, photoUri: String, viewMode: Int, filterMode: Int, imageView: ImageView) {
