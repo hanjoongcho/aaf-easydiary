@@ -75,12 +75,14 @@ limitations under the License.
                 android:visibility="invisible" />
 
             <Button
+                style="@style/DialogButton"
                 android:id="@+id/button_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/cancel" />
 
             <Button
+                style="@style/DialogButton"
                 android:id="@+id/button_ok"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

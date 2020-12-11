@@ -37,7 +37,7 @@ class PhotoFlexItemOptionFragment : DialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        dialog?.setTitle("Option setting")
+        dialog?.setTitle("Crop and filter settings")
         return inflater.inflate(R.layout.fragment_photo_item_option, container, false)
     }
 
