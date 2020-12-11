@@ -720,4 +720,6 @@
     <string name="task_symbol_top_order_description">태스크 심벌이 적용된 다이어리 중 심벌의 종류가 TODO 또는 DOING인 경우 해당 다이어리를 목록의 최상단에 노출 시킵니다.</string>
     <string name="dashboard_title_daily_symbol_tile">1년기준 일별 심벌사용 현황 필터링</string>
     <string name="symbol_filter_picker_remove_guide_message">적어도 1개 이상의 심벌을 선택해야 합니다.</string>
+    <string name="title_dialog_postcard_photo_option">사진 크롭 및 필터 설정</string>
+    <string name="msg_check_force_single_photo">포스트 카드 사진 영영에 1개의 사진만 노출합니다.\n2개 이상의 사진이 등록되어 있는경우 스와이프 하여 다른 사진을 볼 수 있습니다.</string>
 </resources>

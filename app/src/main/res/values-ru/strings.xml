@@ -720,4 +720,6 @@
     <string name="task_symbol_top_order_description">Если типом символа задачи является TODO или DOING среди дневников, к которым применяется символ задачи, то он располагается вверху списка.</string>
     <string name="dashboard_title_daily_symbol_tile">Filtering of symbol usage by day based on a year</string>
     <string name="symbol_filter_picker_remove_guide_message">At least one symbol must be selected.</string>
+    <string name="title_dialog_postcard_photo_option">Photo crop and filter settings</string>
+    <string name="msg_check_force_single_photo">Change to expose only one photo in the photo area of the post card.\nIf more than one photo is registered, you can swipe to view other photos.</string>
 </resources>

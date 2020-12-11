@@ -1,4 +1,16 @@
 <resources>
+    <string-array name="options_spinner_view_mode">
+        <item>중앙에 맞춤</item>
+        <item>상단을 기준으로 Crop</item>
+        <item>중앙을 기준으로 Crop</item>
+        <item>하단을 기준으로 Crop</item>
+    </string-array>
+    <string-array name="options_spinner_filter_mode">
+        <item>필터 없음</item>
+        <item>만화</item>
+        <item>그레이 스케일</item>
+    </string-array>
+
     <string-array name="weather_item_array">
         <item>0|선택안함</item>
         <item>1|Sunny</item>

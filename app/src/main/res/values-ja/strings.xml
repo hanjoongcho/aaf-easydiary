@@ -720,4 +720,6 @@
     <string name="task_symbol_top_order_description">タスクシンボルのタイプがタスクシンボルが適用される日記の中でTODOまたはDOINGの場合、リストの上部に配置されます。</string>
     <string name="dashboard_title_daily_symbol_tile">1年あたり一日シンボルの使用状況のフィルタリング</string>
     <string name="symbol_filter_picker_remove_guide_message">少なくとも1つのシンボルを選択する必要があります。</string>
+    <string name="title_dialog_postcard_photo_option">写真のトリミングとフィルターの設定</string>
+    <string name="msg_check_force_single_photo">はがきの写真領域に写真を1枚だけ表示するように変更します。\n複数の写真が登録されている場合は、スワイプして他の写真を表示できます。</string>
 </resources>

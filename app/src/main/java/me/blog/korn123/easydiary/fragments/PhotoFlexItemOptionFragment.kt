@@ -38,7 +38,7 @@ class PhotoFlexItemOptionFragment : DialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        dialog?.setTitle("Crop and filter settings")
+        dialog?.setTitle(getString(R.string.title_dialog_postcard_photo_option))
         return inflater.inflate(R.layout.dialog_postcard_photo_option, container, false)
     }
 
@@ -46,8 +46,7 @@ class PhotoFlexItemOptionFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         spinner_view_mode.run {
-            val viewOptions = arrayListOf("Fit Center", "Crop Top", "Crop Center", "Crop Bottom")
-            val arrayAdapter = ArrayAdapter<String>(requireContext(), R.layout.item_spinner, viewOptions)
+            val arrayAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.options_spinner_view_mode, R.layout.item_spinner)
             adapter = arrayAdapter
             setSelection(viewMode)
 
@@ -64,7 +63,7 @@ class PhotoFlexItemOptionFragment : DialogFragment() {
         PhotoViewHolder.applyOption(requireContext(), photoUri!!, viewMode, filterMode, image_preview)
 
         spinner_filter_mode.run {
-            val arrayAdapter = ArrayAdapter<String>(requireContext(), R.layout.item_spinner, arrayListOf("No Filter", "Cartoon", "Gray Scale"))
+            val arrayAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.options_spinner_filter_mode, R.layout.item_spinner)
             adapter = arrayAdapter
             setSelection(filterMode)
 

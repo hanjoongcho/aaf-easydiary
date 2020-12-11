@@ -33,7 +33,7 @@ limitations under the License.
                 android:layout_height="wrap_content">
                 <androidx.appcompat.widget.AppCompatCheckBox
                     android:id="@+id/check_force_single_photo"
-                    android:text="Changed to expose only one photo in the photo area of the post card"
+                    android:text="@string/msg_check_force_single_photo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
