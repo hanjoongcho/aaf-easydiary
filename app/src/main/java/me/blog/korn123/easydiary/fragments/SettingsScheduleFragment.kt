@@ -19,7 +19,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.simplemobiletools.commons.extensions.*
 import kotlinx.android.synthetic.main.dialog_alarm.view.*
-import kotlinx.android.synthetic.main.layout_settings_schedule.*
+import kotlinx.android.synthetic.main.partial_settings_schedule.*
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
@@ -51,7 +51,7 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mRootView = inflater.inflate(R.layout.layout_settings_schedule, container, false) as ViewGroup
+        mRootView = inflater.inflate(R.layout.partial_settings_schedule, container, false) as ViewGroup
         return mRootView
     }
 

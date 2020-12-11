@@ -274,7 +274,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
         if (notificationInfo.useCustomContentView) {
             notificationBuilder
                     .setStyle(NotificationCompat.DecoratedCustomViewStyle())
-                    .setCustomContentView(RemoteViews(applicationContext.packageName, R.layout.layout_notification))
+                    .setCustomContentView(RemoteViews(applicationContext.packageName, R.layout.partial_notification))
         } else {
             notificationBuilder
                     .setStyle(NotificationCompat.BigTextStyle().bigText(text).setSummaryText(title))

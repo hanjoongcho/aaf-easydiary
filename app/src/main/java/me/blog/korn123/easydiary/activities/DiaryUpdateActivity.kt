@@ -10,10 +10,10 @@ import android.view.ViewGroup
 import com.werb.pickphotoview.util.PickConfig
 import io.realm.RealmList
 import kotlinx.android.synthetic.main.activity_diary_edit.*
-import kotlinx.android.synthetic.main.layout_bottom_toolbar.*
-import kotlinx.android.synthetic.main.layout_edit_contents.*
-import kotlinx.android.synthetic.main.layout_edit_photo_container.*
-import kotlinx.android.synthetic.main.layout_edit_toolbar_sub.*
+import kotlinx.android.synthetic.main.partial_bottom_toolbar.*
+import kotlinx.android.synthetic.main.partial_edit_contents.*
+import kotlinx.android.synthetic.main.partial_edit_photo_container.*
+import kotlinx.android.synthetic.main.partial_edit_toolbar_sub.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.JasyptUtils
 import me.blog.korn123.easydiary.R

@@ -23,7 +23,7 @@ import io.github.aafactory.commons.extensions.baseConfig
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_diary_read.*
 import kotlinx.android.synthetic.main.fragment_diary_read.*
-import kotlinx.android.synthetic.main.layout_bottom_toolbar.*
+import kotlinx.android.synthetic.main.partial_bottom_toolbar.*
 import kotlinx.android.synthetic.main.popup_encription.view.*
 import kotlinx.android.synthetic.main.popup_menu_read.view.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils

@@ -16,7 +16,6 @@ class PhotoAdapter(
         private val longClickCallback: (position: Int) -> Unit
 ) : androidx.recyclerview.widget.RecyclerView.Adapter<PhotoViewHolder>() {
     private val glideOptionMap = hashMapOf<Int, Int>()
-    private var forceSinglePhotoPosition: Int = -1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -52,21 +51,16 @@ class PhotoAdapter(
 //                }
 
                 PhotoFlexItemOptionFragment.newInstance(postCardPhotoItem).apply {
-                    positiveCallback = { viewMode, filterMode ->
+                    positiveCallback = { viewMode, filterMode, forceSinglePhotoPosition ->
                         postCardPhotoItem.viewMode = viewMode
                         postCardPhotoItem.filterMode = filterMode
-                        holder.bindTo(postCardPhotoItem, forceSinglePhotoPosition)
+                        postCardPhotoItem.forceSinglePhotoPosition = forceSinglePhotoPosition
+                        holder.bindTo(postCardPhotoItem)
                     }
                 }.show(activity.supportFragmentManager, "")
             }
 
-            holder.itemView.setOnLongClickListener { _ ->
-                longClickCallback.invoke(position)
-                forceSinglePhotoPosition = position
-                true
-            }
-
-            holder.bindTo(postCardPhotoItem, forceSinglePhotoPosition)
+            holder.bindTo(postCardPhotoItem)
         }
     }
 

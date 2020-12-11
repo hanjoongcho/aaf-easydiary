@@ -20,7 +20,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import io.github.aafactory.commons.extensions.baseConfig
 import io.github.aafactory.commons.utils.DateUtils
-import kotlinx.android.synthetic.main.layout_settings_backup_local.*
+import kotlinx.android.synthetic.main.partial_settings_backup_local.*
 import kotlinx.android.synthetic.main.popup_location_selector.view.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
@@ -61,7 +61,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mRootView = inflater.inflate(R.layout.layout_settings_backup_local, container, false) as ViewGroup
+        mRootView = inflater.inflate(R.layout.partial_settings_backup_local, container, false) as ViewGroup
         return mRootView
     }
 

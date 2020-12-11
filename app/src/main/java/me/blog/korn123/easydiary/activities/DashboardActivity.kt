@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.activity_diary_main.toolbar
-import kotlinx.android.synthetic.main.layout_daily_symbol_s.view.*
+import kotlinx.android.synthetic.main.partial_daily_symbol_s.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.FlavorUtils
@@ -185,7 +185,7 @@ class DashboardActivity : EasyDiaryActivity() {
 
         GlobalScope.launch {
             config.selectedSymbols.split(",").map { sequence ->
-                val symbolCard = getLayoutLayoutInflater().inflate(R.layout.layout_daily_symbol_s, null)
+                val symbolCard = getLayoutLayoutInflater().inflate(R.layout.partial_daily_symbol_s, null)
                 runOnUiThread {
                     FlavorUtils.initWeatherView(this@DashboardActivity, symbolCard.dailySymbol, sequence.toInt())
                     selectedSymbolFlexBox.addView(symbolCard)

@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.layout_settings_lock.*
+import kotlinx.android.synthetic.main.partial_settings_lock.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.FingerprintLockActivity
 import me.blog.korn123.easydiary.activities.PinLockActivity
@@ -32,7 +32,7 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mRootView = inflater.inflate(R.layout.layout_settings_lock, container, false) as ViewGroup
+        mRootView = inflater.inflate(R.layout.partial_settings_lock, container, false) as ViewGroup
         return mRootView
     }
 

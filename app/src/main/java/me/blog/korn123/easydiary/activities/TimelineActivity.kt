@@ -16,7 +16,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_timeline_diary.*
-import kotlinx.android.synthetic.main.layout_timeline_filter.*
+import kotlinx.android.synthetic.main.partial_timeline_filter.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R

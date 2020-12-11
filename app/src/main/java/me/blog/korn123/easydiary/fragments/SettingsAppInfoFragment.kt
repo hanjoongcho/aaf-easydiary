@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.simplemobiletools.commons.extensions.toast
-import kotlinx.android.synthetic.main.layout_settings_app_info.*
+import kotlinx.android.synthetic.main.partial_settings_app_info.*
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.MarkDownViewActivity
@@ -35,7 +35,7 @@ class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mRootView = inflater.inflate(R.layout.layout_settings_app_info, container, false) as ViewGroup
+        mRootView = inflater.inflate(R.layout.partial_settings_app_info, container, false) as ViewGroup
         return mRootView
     }
 

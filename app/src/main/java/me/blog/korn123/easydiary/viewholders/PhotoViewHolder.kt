@@ -26,12 +26,12 @@ class PhotoViewHolder(
 ) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
     private val imageView: ImageView = itemView.findViewById(R.id.photo)
 
-    fun bindTo(postCardPhotoItem: PostCardPhotoItem, forceSinglePhotoPosition: Int = -1) {
+    fun bindTo(postCardPhotoItem: PostCardPhotoItem) {
         val point =  CommonUtils.getDefaultDisplay(activity)
         val height = point.y - activity.actionBarHeight() - activity.statusBarHeight() - activity.seekBarContainer.height
         val size = if (point.x > point.y) height else point.x
 
-        if (forceSinglePhotoPosition > -1) {
+        if (postCardPhotoItem.forceSinglePhotoPosition) {
             imageView.layoutParams.width = size
             imageView.layoutParams.height = size
         } else {
@@ -241,5 +241,5 @@ class PhotoViewHolder(
         }
     }
 
-    data class PostCardPhotoItem(val photoUri: String, val position: Int, var viewMode: Int, var filterMode: Int)
+    data class PostCardPhotoItem(val photoUri: String, val position: Int, var viewMode: Int, var filterMode: Int, var forceSinglePhotoPosition: Boolean = false)
 }

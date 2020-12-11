@@ -13,7 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.xw.repo.BubbleSeekBar
-import kotlinx.android.synthetic.main.layout_settings_font.*
+import kotlinx.android.synthetic.main.partial_settings_font.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
@@ -45,7 +45,7 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mRootView = inflater.inflate(R.layout.layout_settings_font, container, false) as ViewGroup
+        mRootView = inflater.inflate(R.layout.partial_settings_font, container, false) as ViewGroup
         return mRootView
     }
 
