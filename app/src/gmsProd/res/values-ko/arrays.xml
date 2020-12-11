@@ -6,9 +6,18 @@
         <item>하단을 기준으로 Crop</item>
     </string-array>
     <string-array name="options_spinner_filter_mode">
-        <item>필터 없음</item>
-        <item>만화</item>
-        <item>그레이 스케일</item>
+        <item>No Filter</item>
+        <item>Cartoon</item>
+        <item>Sepia</item>
+        <item>Contrast</item>
+        <item>Invert</item>
+        <item>Pixelation</item>
+        <item>Sketch</item>
+        <item>Swirl</item>
+        <item>Brightness</item>
+        <item>Kuwahara</item>
+        <item>Vignette</item>
+        <item>Gray Scale</item>
     </string-array>
 
     <string-array name="weather_item_array">

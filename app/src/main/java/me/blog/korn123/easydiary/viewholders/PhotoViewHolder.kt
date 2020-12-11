@@ -9,9 +9,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.request.RequestOptions.bitmapTransform
 import io.github.aafactory.commons.utils.CommonUtils
+import jp.wasabeef.glide.transformations.BitmapTransformation
 import jp.wasabeef.glide.transformations.CropTransformation
 import jp.wasabeef.glide.transformations.GrayscaleTransformation
-import jp.wasabeef.glide.transformations.gpu.ToonFilterTransformation
+import jp.wasabeef.glide.transformations.gpu.*
 import kotlinx.android.synthetic.main.activity_post_card.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.actionBarHeight
@@ -216,6 +217,20 @@ class PhotoViewHolder(
             else -> null
         }
 
+        private fun createBitmapTransformation(filterMode: Int) : BitmapTransformation = when (filterMode) {
+            1 -> ToonFilterTransformation()
+            2 -> SepiaFilterTransformation()
+            3 -> ContrastFilterTransformation()
+            4 -> InvertFilterTransformation()
+            5 -> PixelationFilterTransformation()
+            6 -> SketchFilterTransformation()
+            7 -> SwirlFilterTransformation()
+            8 -> BrightnessFilterTransformation()
+            9 -> KuwaharaFilterTransformation()
+            10 -> VignetteFilterTransformation()
+            else -> GrayscaleTransformation()
+        }
+
         fun applyOption(context: Context, photoUri: String, viewMode: Int, filterMode: Int, imageView: ImageView) {
             val rb = Glide.with(context).load(photoUri)
             when (viewMode) {
@@ -223,7 +238,7 @@ class PhotoViewHolder(
                     if (filterMode == 0) {
                         rb.into(imageView)
                     } else {
-                        rb.apply(bitmapTransform(if (filterMode == 1) ToonFilterTransformation() else GrayscaleTransformation())).into(imageView)
+                        rb.apply(bitmapTransform(createBitmapTransformation(filterMode))).into(imageView)
                     }
 
                 }
@@ -233,7 +248,7 @@ class PhotoViewHolder(
                     } else {
                         rb.apply(bitmapTransform(MultiTransformation<Bitmap>(
                                 CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, getCropType(viewMode)),
-                                if (filterMode == 1) ToonFilterTransformation() else GrayscaleTransformation()
+                                createBitmapTransformation(filterMode)
                         ))).into(imageView)
                     }
                 }

@@ -8,6 +8,15 @@
     <string-array name="options_spinner_filter_mode">
         <item>No Filter</item>
         <item>Cartoon</item>
+        <item>Sepia</item>
+        <item>Contrast</item>
+        <item>Invert</item>
+        <item>Pixelation</item>
+        <item>Sketch</item>
+        <item>Swirl</item>
+        <item>Brightness</item>
+        <item>Kuwahara</item>
+        <item>Vignette</item>
         <item>Gray Scale</item>
     </string-array>
 
