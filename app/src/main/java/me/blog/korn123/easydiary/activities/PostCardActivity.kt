@@ -83,50 +83,27 @@ class PostCardActivity : EasyDiaryActivity() {
             setTextColor(it.getInt(POSTCARD_TEXT_COLOR, POSTCARD_TEXT_COLOR_VALUE))
         }
 
-        Handler().post {
-            diaryDto.photoUris?.let {
-                if (/*resources.configuration.orientation == ORIENTATION_PORTRAIT && */it.size > 0) {
-                    photoContainer.visibility = View.VISIBLE
+        diaryDto.photoUris?.let {
+            if (/*resources.configuration.orientation == ORIENTATION_PORTRAIT && */it.size > 0) {
+                photoContainer.visibility = View.VISIBLE
 
-                    // FIXME remove duplicate code
-                    val postCardPhotoItems = arrayListOf<PhotoViewHolder.PostCardPhotoItem>()
-                    it.forEachIndexed { index, photoUriDto ->
-                        postCardPhotoItems.add(PhotoViewHolder.PostCardPhotoItem(EasyDiaryUtils.getApplicationDataDirectory(this) + photoUriDto.getFilePath(), index,2, 0))
-                    }
-                    mPhotoAdapter = PhotoAdapter(this, postCardPhotoItems) { _ ->
-                        photoGrid.run {
-                            when (resources.configuration.orientation == ORIENTATION_PORTRAIT) {
-                                true -> {
-                                    layoutParams.height = CommonUtils.getDefaultDisplay(this@PostCardActivity).x
-                                }
-                                false -> {
-                                    layoutParams.width = CommonUtils.getDefaultDisplay(this@PostCardActivity).y - actionBarHeight() - statusBarHeight() - seekBarContainer.height
-                                }
-                            }
-                        }
-                        mPhotoAdapter.notifyDataSetChanged()
-                    }
-
-
-                    photoGrid.run {
-                        layoutManager = FlexboxLayoutManager(this@PostCardActivity).apply {
-                            flexWrap = FlexWrap.WRAP
-                            flexDirection = FlexDirection.ROW
-                            alignItems = AlignItems.STRETCH
-                        }
-                        adapter = mPhotoAdapter
-
-                        when (resources.configuration.orientation == ORIENTATION_PORTRAIT) {
-                            true -> {
-                                layoutParams.height = CommonUtils.getDefaultDisplay(this@PostCardActivity).x
-                            }
-                            false -> {
-                                val height = CommonUtils.getDefaultDisplay(this@PostCardActivity).y - actionBarHeight() - statusBarHeight() - seekBarContainer.height
-                                layoutParams.width = height
-                            }
-                        }
-                    }
+                val postCardPhotoItems = arrayListOf<PhotoViewHolder.PostCardPhotoItem>()
+                it.forEachIndexed { index, photoUriDto ->
+                    postCardPhotoItems.add(PhotoViewHolder.PostCardPhotoItem(EasyDiaryUtils.getApplicationDataDirectory(this) + photoUriDto.getFilePath(), index,2, 0))
                 }
+                mPhotoAdapter = PhotoAdapter(this, postCardPhotoItems) {
+                    resizePhotoGrid()
+                }
+
+                photoGrid.run {
+                    layoutManager = FlexboxLayoutManager(this@PostCardActivity).apply {
+                        flexWrap = FlexWrap.WRAP
+                        flexDirection = FlexDirection.ROW
+//                            alignItems = AlignItems.STRETCH
+                    }
+                    adapter = mPhotoAdapter
+                }
+                resizePhotoGrid()
             }
         }
 
@@ -143,6 +120,20 @@ class PostCardActivity : EasyDiaryActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
             }
         })
+    }
+
+    private fun resizePhotoGrid() {
+        photoGrid.run {
+            when (resources.configuration.orientation == ORIENTATION_PORTRAIT) {
+                true -> {
+                    layoutParams.height = CommonUtils.getDefaultDisplay(this@PostCardActivity).x
+                }
+                false -> {
+                    val height = CommonUtils.getDefaultDisplay(this@PostCardActivity).y - actionBarHeight() - statusBarHeight() - seekBarContainer.height
+                    layoutParams.width = height
+                }
+            }
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

@@ -13,7 +13,7 @@ import me.blog.korn123.easydiary.viewholders.PhotoViewHolder
 class PhotoAdapter(
         val activity: AppCompatActivity,
         val postCardPhotoItems: List<PhotoViewHolder.PostCardPhotoItem>,
-        private val longClickCallback: (position: Int) -> Unit
+        private val dialogPositiveCallback: () -> Unit
 ) : androidx.recyclerview.widget.RecyclerView.Adapter<PhotoViewHolder>() {
     private val glideOptionMap = hashMapOf<Int, Int>()
 
@@ -40,22 +40,14 @@ class PhotoAdapter(
 
 
             holder.itemView.setOnClickListener { _ ->
-//                when (glideOptionMap[position]) {
-//                    null -> glideOptionMap[position] = 1
-//                    else -> glideOptionMap[position] = glideOptionMap[position]?.plus(1) ?: 0
-//                }
-//                if (forceSinglePhotoPosition > -1) {
-//                    holder.bindTo(EasyDiaryUtils.getApplicationDataDirectory(activity) + photoUri.getFilePath(), position, glideOptionMap[position]?.rem(9) ?: 0, forceSinglePhotoPosition)
-//                } else {
-//                    holder.bindTo(EasyDiaryUtils.getApplicationDataDirectory(activity) + photoUri.getFilePath(), position, glideOptionMap[position]?.rem(9) ?: 0)
-//                }
-
                 PhotoFlexItemOptionFragment.newInstance(postCardPhotoItem).apply {
                     positiveCallback = { viewMode, filterMode, forceSinglePhotoPosition ->
                         postCardPhotoItem.viewMode = viewMode
                         postCardPhotoItem.filterMode = filterMode
                         postCardPhotoItem.forceSinglePhotoPosition = forceSinglePhotoPosition
                         holder.bindTo(postCardPhotoItem)
+                        dialogPositiveCallback.invoke()
+                        notifyDataSetChanged()
                     }
                 }.show(activity.supportFragmentManager, "")
             }
@@ -66,13 +58,13 @@ class PhotoAdapter(
 
     override fun getItemCount() = postCardPhotoItems.size
     
-    fun getFlexDirection(): Int = when (activity.resources.configuration.orientation == ORIENTATION_PORTRAIT) {
-        true -> {
-            when (itemCount) {
-                3, 5, 6 -> FlexDirection.COLUMN
-                else -> FlexDirection.ROW    
-            }
-        }
-        false -> FlexDirection.COLUMN
-    }
+//    fun getFlexDirection(): Int = when (activity.resources.configuration.orientation == ORIENTATION_PORTRAIT) {
+//        true -> {
+//            when (itemCount) {
+//                3, 5, 6 -> FlexDirection.COLUMN
+//                else -> FlexDirection.ROW
+//            }
+//        }
+//        false -> FlexDirection.COLUMN
+//    }
 }
