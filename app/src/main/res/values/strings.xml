@@ -489,6 +489,10 @@
         Add diary symbols\n
         Added daily symbol usage filtering function to dashboard
     </string>
+    <string name="release_221">
+        v1.4.155 / 2020.12.xx\n
+        When creating a post card, the function has been improved so that the attached photo can be cropped or a filter can be applied
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
