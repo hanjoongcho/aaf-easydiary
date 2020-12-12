@@ -1,10 +1,8 @@
 package me.blog.korn123.easydiary.adapters
 
-import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.fragments.PhotoFlexItemOptionFragment

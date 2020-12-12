@@ -26,6 +26,7 @@ import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import io.github.aafactory.commons.utils.BitmapUtils
+import io.github.aafactory.commons.utils.CALCULATION
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_post_card.*
@@ -126,10 +127,15 @@ class PostCardActivity : EasyDiaryActivity() {
         photoGrid.run {
             when (resources.configuration.orientation == ORIENTATION_PORTRAIT) {
                 true -> {
-                    layoutParams.height = CommonUtils.getDefaultDisplay(this@PostCardActivity).x
+                    if (mPhotoAdapter.postCardPhotoItems.none { item -> item.forceSinglePhotoPosition }) {
+                        layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                    } else {
+                        layoutParams.height = CommonUtils.getDefaultDisplay(this@PostCardActivity).x
+                    }
+
                 }
                 false -> {
-                    val height = CommonUtils.getDefaultDisplay(this@PostCardActivity).y - actionBarHeight() - statusBarHeight() - seekBarContainer.height
+                    val height = calcPhotoGridHeight(this@PostCardActivity)
                     layoutParams.width = height
                 }
             }
@@ -373,5 +379,12 @@ class PostCardActivity : EasyDiaryActivity() {
             canvas.drawBitmap(second, first.width.toFloat(), 0f, null)    
         }
         return bitmap
+    }
+
+    companion object {
+        fun calcPhotoGridHeight(activity: Activity): Int {
+            val point =  CommonUtils.getDefaultDisplay(activity)
+            return point.y - activity.actionBarHeight() - activity.statusBarHeight() - CommonUtils.dpToPixel(activity, 30F, CALCULATION.CEIL)
+        }
     }
 }

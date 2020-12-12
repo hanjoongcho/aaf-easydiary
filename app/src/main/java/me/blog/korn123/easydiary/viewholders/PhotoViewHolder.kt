@@ -3,11 +3,13 @@ package me.blog.korn123.easydiary.viewholders
 import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.request.RequestOptions.bitmapTransform
+import io.github.aafactory.commons.utils.CALCULATION
 import io.github.aafactory.commons.utils.CommonUtils
 import jp.wasabeef.glide.transformations.BitmapTransformation
 import jp.wasabeef.glide.transformations.CropTransformation
@@ -15,8 +17,10 @@ import jp.wasabeef.glide.transformations.GrayscaleTransformation
 import jp.wasabeef.glide.transformations.gpu.*
 import kotlinx.android.synthetic.main.activity_post_card.*
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.PostCardActivity
 import me.blog.korn123.easydiary.extensions.actionBarHeight
 import me.blog.korn123.easydiary.extensions.statusBarHeight
+import me.blog.korn123.easydiary.helper.AAF_TEST
 import kotlin.math.ceil
 import kotlin.math.sqrt
 
@@ -29,8 +33,10 @@ class PhotoViewHolder(
 
     fun bindTo(postCardPhotoItem: PostCardPhotoItem) {
         val point =  CommonUtils.getDefaultDisplay(activity)
-        val height = point.y - activity.actionBarHeight() - activity.statusBarHeight() - activity.seekBarContainer.height
+        val height = PostCardActivity.calcPhotoGridHeight(activity)
         val size = if (point.x > point.y) height else point.x
+
+        Log.i(AAF_TEST, "$height ${activity.actionBarHeight()} ${activity.statusBarHeight()} ${activity.seekBarContainer.height} ${CommonUtils.dpToPixel(activity, 30F, CALCULATION.CEIL)}")
 
         if (postCardPhotoItem.forceSinglePhotoPosition) {
             imageView.layoutParams.width = size

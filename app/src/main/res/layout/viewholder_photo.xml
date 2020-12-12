@@ -22,7 +22,7 @@ limitations under the License.
         android:layout_gravity="right"
         android:background="?attr/selectableItemBackground"
         android:id="@+id/photo"
-        android:padding="1dp"
+        android:padding="2dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
