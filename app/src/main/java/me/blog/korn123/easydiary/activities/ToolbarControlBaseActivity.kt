@@ -27,6 +27,7 @@ import com.nineoldandroids.animation.ValueAnimator
 import com.nineoldandroids.view.ViewHelper
 import io.github.aafactory.commons.utils.CommonUtils
 import kotlinx.android.synthetic.main.activity_diary_main.*
+import me.blog.korn123.easydiary.extensions.config
 
 
 abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(), ObservableScrollViewCallbacks {
@@ -82,10 +83,12 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
 
     private fun showToolbar() {
         moveToolbar(0F)
+        if (config.enableCardViewPolicy) searchCard.useCompatPadding = true
     }
 
     private fun hideToolbar() {
         moveToolbar(-appBar.height.toFloat())
+        searchCard.useCompatPadding = false
     }
 
     private fun moveToolbar(toTranslationY: Float) {
