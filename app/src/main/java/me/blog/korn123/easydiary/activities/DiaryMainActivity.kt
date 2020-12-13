@@ -21,6 +21,7 @@ import androidx.core.app.ActivityCompat
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.github.ksoichiro.android.observablescrollview.ObservableListView
+import com.nineoldandroids.view.ViewHelper
 import io.github.aafactory.commons.utils.CommonUtils
 import kotlinx.android.synthetic.main.activity_diary_main.*
 import kotlinx.android.synthetic.main.popup_menu_main.view.*
@@ -104,12 +105,13 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         initTextSize(progressDialog)
         invalidateOptionsMenu()
 
-        val previousActivity = config.previousActivity
-        if (previousActivity == PREVIOUS_ACTIVITY_CREATE) {
+        if (config.previousActivity == PREVIOUS_ACTIVITY_CREATE) {
 //            diaryListView.smoothScrollToPosition(0)
             diaryListView.setSelection(0)
             config.previousActivity = -1
         }
+
+        if (ViewHelper.getTranslationY(appBar) < 0) searchCard.useCompatPadding = false
     }
 
     override fun getLayoutResId(): Int {
