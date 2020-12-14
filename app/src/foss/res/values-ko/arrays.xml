@@ -1,4 +1,25 @@
 <resources>
+    <string-array name="options_spinner_view_mode">
+        <item>Fit Center</item>
+        <item>Crop Top</item>
+        <item>Crop Center</item>
+        <item>Crop Bottom</item>
+    </string-array>
+    <string-array name="options_spinner_filter_mode">
+        <item>No Filter</item>
+        <item>Cartoon</item>
+        <item>Sepia</item>
+        <item>Contrast</item>
+        <item>Invert</item>
+        <item>Pixelation</item>
+        <item>Sketch</item>
+        <item>Swirl</item>
+        <item>Brightness</item>
+        <item>Kuwahara</item>
+        <item>Vignette</item>
+        <item>Gray Scale</item>
+    </string-array>
+
     <string-array name="weather_item_array">
         <item>0|선택안함</item>
         <item>1|Sunny</item>
