@@ -31,8 +31,7 @@ class CaldroidItemAdapter(
 ) : CaldroidGridAdapter(activity, month, year, caldroidData, extraData) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
-        val inflater = context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         var cellView = convertView
 
         if (convertView == null) {
