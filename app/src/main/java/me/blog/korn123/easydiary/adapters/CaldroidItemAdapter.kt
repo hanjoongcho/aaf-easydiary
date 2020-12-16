@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.adapters
 import android.app.Activity
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,7 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.CALENDAR_SORTING_ASC
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 
@@ -66,6 +68,7 @@ class CaldroidItemAdapter(
             }
 
             text = "${datetimeList[position].day}"
+            Log.i(AAF_TEST, "AA: ${textSize}")
             layoutParams?.width = (textSize * 2).toInt()
             layoutParams?.height = (textSize * 2).toInt()
         }
