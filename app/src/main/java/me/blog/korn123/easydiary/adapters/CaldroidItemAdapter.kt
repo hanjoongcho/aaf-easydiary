@@ -44,11 +44,6 @@ class CaldroidItemAdapter(
                 }
             }
         }
-        
-        val topPadding = cellView?.paddingTop ?: 0
-        val leftPadding = cellView?.paddingLeft ?: 0
-        val bottomPadding = cellView?.paddingBottom ?: 0
-        val rightPadding = cellView?.paddingRight ?: 0
 
         // Get dateTime of this cell
         val dateTime = this.datetimeList[position]
@@ -79,33 +74,32 @@ class CaldroidItemAdapter(
             calendarDate?.alpha = 1.0F
         }
 
-        // Customize for selected dates
-        if (selectedDates != null && selectedDates.indexOf(dateTime) != -1) {
-            cellView?.run {
-                setBackgroundResource(R.drawable.bg_card_cell_select)
-                (item1.getChildAt(1) as TextView).setTextColor(Color.BLACK)
-                (item2.getChildAt(1) as TextView).setTextColor(Color.BLACK)
-                (item3.getChildAt(1) as TextView).setTextColor(Color.BLACK)
-            }
-        } else {
-            cellView?.run {
-                setBackgroundColor(context.config.backgroundColor)
-                (item1.getChildAt(1) as TextView).setTextColor(context.config.textColor)
-                (item2.getChildAt(1) as TextView).setTextColor(context.config.textColor)
-                (item3.getChildAt(1) as TextView).setTextColor(context.config.textColor)
-            }
-        }
-
         cellView?.run {
-
-            // Somehow after setBackgroundResource, the padding collapse.
-            // This is to recover the padding
-            setPadding(leftPadding, topPadding, rightPadding, bottomPadding)
-
             GlobalScope.launch {
                 activity.runOnUiThread {
                     val dateString = dateTime.format("YYYY-MM-DD")
                     val count = EasyDiaryDbHelper.countDiaryBy(dateString)
+                    val topPadding = paddingTop ?: 0
+                    val leftPadding = paddingLeft ?: 0
+                    val bottomPadding = paddingBottom ?: 0
+                    val rightPadding = paddingRight ?: 0
+
+                    // Customize for selected dates
+                    if (selectedDates != null && selectedDates.indexOf(dateTime) != -1) {
+                        setBackgroundResource(R.drawable.bg_card_cell_select)
+                        (item1.getChildAt(1) as TextView).setTextColor(Color.BLACK)
+                        (item2.getChildAt(1) as TextView).setTextColor(Color.BLACK)
+                        (item3.getChildAt(1) as TextView).setTextColor(Color.BLACK)
+                    } else {
+                        setBackgroundColor(context.config.backgroundColor)
+                        (item1.getChildAt(1) as TextView).setTextColor(context.config.textColor)
+                        (item2.getChildAt(1) as TextView).setTextColor(context.config.textColor)
+                        (item3.getChildAt(1) as TextView).setTextColor(context.config.textColor)
+                    }
+
+                    // Somehow after setBackgroundResource, the padding collapse.
+                    // This is to recover the padding
+                    setPadding(leftPadding, topPadding, rightPadding, bottomPadding)
 
                     val sort: Sort = if (context.config.calendarSorting == CALENDAR_SORTING_ASC) Sort.ASCENDING else Sort.DESCENDING
                     val mDiaryList = EasyDiaryDbHelper.readDiaryByDateString(dateString, sort)
