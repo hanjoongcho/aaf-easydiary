@@ -41,6 +41,7 @@ class CaldroidItemAdapter(
                 if (this is ViewGroup) {
                     context?.initTextSize(this)
                     FontUtils.setFontsTypeface(context, context.assets, null, this)
+                    setBackgroundColor(context.config.backgroundColor)
                 }
             }
         }
