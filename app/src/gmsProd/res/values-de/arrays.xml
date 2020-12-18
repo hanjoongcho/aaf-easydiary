@@ -162,6 +162,7 @@
         <item>57|Coffee</item>
         <item>254|Water</item>
         <item>255|Milk</item>
+        <item>276|Beverage</item>
         <item>258|Beverage</item>
         <item>259|Beverage</item>
         <item>261|Beverage</item>
@@ -222,6 +223,7 @@
 
     <string-array name="symbol_item_array">
         <item>350|Youtube</item>
+        <item>370|Netflix</item>
         <item>351|Dropbox</item>
         <item>352|PayPal</item>
         <item>353|HTML5</item>

@@ -157,6 +157,7 @@ object FlavorUtils {
         FOOD_BEVERAGE01 -> R.drawable.ic_beverage01
         FOOD_SUSHI -> R.drawable.ic_sushi
         FOOD_BEVERAGE06 -> R.drawable.ic_beverage06
+        FOOD_BEVERAGE07 -> R.drawable.ic_plastic_bottle
         FOOD_RICE -> R.drawable.ic_rice
         FOOD_FRIED_CHICKEN -> R.drawable.ic_fried_chicken
         FOOD_CAKE_1 -> R.drawable.ic_cake
@@ -195,6 +196,7 @@ object FlavorUtils {
         LEISURE_GOLF -> R.drawable.ic_golf_stick
 
         SYMBOL_YOUTUBE -> R.drawable.ic_youtube
+        SYMBOL_NETFLIX -> R.drawable.ic_netflix
         SYMBOL_DROPBOX -> R.drawable.ic_dropbox
         SYMBOL_PAYPAL -> R.drawable.ic_paypal
         SYMBOL_HTML5 -> R.drawable.ic_html5
