@@ -1,5 +1,6 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -28,35 +29,42 @@
             android:id="@+id/taskSymbolTopOrder"
             style="@style/AppCard.Settings">
             <LinearLayout
+                android:orientation="vertical"
+                android:layout_height="wrap_content"
                 style="@style/LinearLayoutVertical">
-                <RelativeLayout
+                <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                    <com.simplemobiletools.commons.views.MyTextView
-                        android:id="@+id/taskSymbolTopOrderTitle"
-                        android:text="@string/task_symbol_top_order_title"
-                        android:layout_centerVertical="true"
-                        android:layout_width="wrap_content"
-                        style="@style/SettingsTitle" />
-                    <ImageView
-                        android:layout_marginStart="5dp"
-                        android:layout_toEndOf="@+id/taskSymbolTopOrderTitle"
-                        android:id="@+id/doingSymbol"
-                        android:src="@drawable/ic_todo"
-                        android:layout_width="26dp"
-                        android:layout_height="26dp"/>
-                    <ImageView
-                        android:layout_toEndOf="@+id/doingSymbol"
-                        android:src="@drawable/ic_doing"
-                        android:layout_width="26dp"
-                        android:layout_height="26dp"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content">
+                        <com.simplemobiletools.commons.views.MyTextView
+                            android:id="@+id/taskSymbolTopOrderTitle"
+                            android:text="@string/task_symbol_top_order_title"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            style="@style/SettingsTitle" />
+                        <ImageView
+                            android:layout_marginStart="5dp"
+                            android:id="@+id/doingSymbol"
+                            android:src="@drawable/ic_todo"
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"/>
+                        <ImageView
+                            android:src="@drawable/ic_doing"
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"/>
+                    </LinearLayout>
+
                     <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/taskSymbolTopOrderSwitcher"
-                        android:layout_alignParentRight="true"
                         android:clickable="false"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
-                </RelativeLayout>
+                </LinearLayout>
                 <com.simplemobiletools.commons.views.MyTextView
                     android:text="@string/task_symbol_top_order_description"
                     style="@style/SettingsSummary" />

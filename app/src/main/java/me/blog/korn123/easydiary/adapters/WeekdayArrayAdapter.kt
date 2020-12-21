@@ -7,11 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.item_weekday.view.*
 import me.blog.korn123.commons.utils.FontUtils
+import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_MONDAY
 import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SATURDAY
 import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_SUNDAY
+import java.util.*
 
 class WeekdayArrayAdapter(context: Context, private val textViewResourceId: Int,
                                objects: List<String>, themeResource: Int) : com.roomorama.caldroid.WeekdayArrayAdapter(context, textViewResourceId, objects, themeResource) {
@@ -24,8 +26,10 @@ class WeekdayArrayAdapter(context: Context, private val textViewResourceId: Int,
             context.initTextSize(this)
             text_weekday.run {
                 text = getItem(position)
-                layoutParams?.width = (textSize * 2).toInt()
-                layoutParams?.height = (textSize * 2).toInt()
+                if (Locale.getDefault().language.matches("ko|ja".toRegex())) {
+                    layoutParams?.width = (textSize * 2).toInt()
+                    layoutParams?.height = (textSize * 2).toInt()
+                }
             }
 
             when (context.config.calendarStartDay) {
