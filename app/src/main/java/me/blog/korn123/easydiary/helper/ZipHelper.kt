@@ -187,7 +187,6 @@ class ZipHelper(val context: Context) {
             while (zipEntry != null) {
                 if (!isOnProgress) break
                 val fileName = zipEntry.name
-                Log.i(AAF_TEST, fileName)
                 val newFile = File(workingPath + fileName)
 
                 File(newFile.parent).mkdirs()

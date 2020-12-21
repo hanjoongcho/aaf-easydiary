@@ -36,8 +36,6 @@ class PhotoViewHolder(
         val height = PostCardActivity.calcPhotoGridHeight(activity)
         val size = if (point.x > point.y) height else point.x
 
-        Log.i(AAF_TEST, "$height ${activity.actionBarHeight()} ${activity.statusBarHeight()} ${activity.seekBarContainer.height} ${CommonUtils.dpToPixel(activity, 30F, CALCULATION.CEIL)}")
-
         if (postCardPhotoItem.forceSinglePhotoPosition) {
             imageView.layoutParams.width = size
             imageView.layoutParams.height = size

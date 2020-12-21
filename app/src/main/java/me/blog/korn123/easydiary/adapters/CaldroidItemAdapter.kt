@@ -64,7 +64,6 @@ class CaldroidItemAdapter(
             }
 
             text = "${datetimeList[position].day}"
-            Log.i(AAF_TEST, "AA: ${textSize}")
             layoutParams?.width = (textSize * 2).toInt()
             layoutParams?.height = (textSize * 2).toInt()
         }
@@ -77,6 +76,8 @@ class CaldroidItemAdapter(
 
         cellView?.run {
             GlobalScope.launch {
+                Log.i(AAF_TEST, "current thread: ${Thread.currentThread().name}")
+
                 activity.runOnUiThread {
                     val dateString = dateTime.format("YYYY-MM-DD")
                     val count = EasyDiaryDbHelper.countDiaryBy(dateString)
