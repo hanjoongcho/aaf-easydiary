@@ -38,8 +38,10 @@
                     android:layout_height="wrap_content">
                     <LinearLayout
                         android:orientation="horizontal"
+                        android:gravity="center|center_vertical"
                         android:layout_width="0dp"
                         android:layout_weight="1"
+                        android:layout_marginEnd="5p"
                         android:layout_height="wrap_content">
                         <com.simplemobiletools.commons.views.MyTextView
                             android:id="@+id/taskSymbolTopOrderTitle"
