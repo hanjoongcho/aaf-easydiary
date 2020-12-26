@@ -11,9 +11,11 @@ import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.widget.AdapterView
 import android.widget.RemoteViews
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import io.github.aafactory.commons.utils.DateUtils
@@ -21,11 +23,13 @@ import kotlinx.android.synthetic.main.activity_dev.*
 import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.adapters.CheatSheetAdapter
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.services.BaseNotificationService
 import me.blog.korn123.easydiary.services.NotificationService
+import me.blog.korn123.easydiary.viewholders.CheatSheetViewHolder
 import org.apache.commons.io.FilenameUtils
 import java.io.File
 
@@ -36,6 +40,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
      *   global properties
      *
      ***************************************************************************************************/
+    private var mCheatSheetList = arrayListOf<CheatSheetViewHolder.CheatSheet>()
     private val mLocationManager by lazy { getSystemService(Context.LOCATION_SERVICE) as LocationManager }
     private var mCoroutineJob1: Job? = null
     private val mNetworkLocationListener = object : LocationListener {
@@ -141,24 +146,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
         }
 
-        markdown1.setOnClickListener {
-            TransitionHelper.startActivityWithTransition(this, Intent(this, MarkDownViewActivity::class.java).apply {
-                putExtra(MarkDownViewActivity.OPEN_URL_INFO, "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/kotlin/kotlin.md")
-                putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, "kotlin")
-            })
-        }
-        markdown2.setOnClickListener {
-            TransitionHelper.startActivityWithTransition(this, Intent(this, MarkDownViewActivity::class.java).apply {
-                putExtra(MarkDownViewActivity.OPEN_URL_INFO, "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/kotlin/kotlin.collections.md")
-                putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, "kotlin.collections")
-            })
-        }
-        markdown3.setOnClickListener {
-            TransitionHelper.startActivityWithTransition(this, Intent(this, MarkDownViewActivity::class.java).apply {
-                putExtra(MarkDownViewActivity.OPEN_URL_INFO, "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/README.md")
-                putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, "Cheat Sheet")
-            })
-        }
         coroutine1.setOnClickListener {
             mCoroutineJob1?.run {
                 if (mCoroutineJob1?.isActive == true) {
@@ -180,6 +167,28 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     }
                 }
             }
+        }
+
+        mCheatSheetList.run {
+            add(CheatSheetViewHolder.CheatSheet("Package kotlin", "Explanation of kotlin basic functions", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/kotlin/kotlin.md"))
+            add(CheatSheetViewHolder.CheatSheet("Package kotlin.collections", "Explanation of kotlin collection functions", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/kotlin/kotlin.collections.md"))
+            add(CheatSheetViewHolder.CheatSheet("Cheat Sheet", "This page is a collection of useful link information such as open source projects and development related guides.", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/README.md"))
+        }
+
+        recycler_cheat_Sheet?.apply {
+            layoutManager = LinearLayoutManager(this@BaseDevActivity, LinearLayoutManager.VERTICAL, false)
+//            addItemDecoration(SettingsScheduleFragment.SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding)))
+            adapter =  CheatSheetAdapter(
+                this@BaseDevActivity,
+                mCheatSheetList,
+                AdapterView.OnItemClickListener { _, _, position, _ ->
+                    val item = mCheatSheetList[position]
+                    TransitionHelper.startActivityWithTransition(this@BaseDevActivity, Intent(this@BaseDevActivity, MarkDownViewActivity::class.java).apply {
+                        putExtra(MarkDownViewActivity.OPEN_URL_INFO, item.url)
+                        putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, item.title)
+                    })
+                }
+            )
         }
     }
 

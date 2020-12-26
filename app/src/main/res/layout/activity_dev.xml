@@ -46,17 +46,32 @@
                             android:gravity="end"
                             android:text="Clear log"
                             style="@style/SettingsTitle" />
-                        <androidx.core.widget.NestedScrollView
+                        <ScrollView
                             android:fillViewport="true"
                             android:layout_width="match_parent"
-                            android:layout_height="60dp">
+                            android:layout_height="150dp">
                             <com.simplemobiletools.commons.views.MyTextView
                                 android:id="@+id/actionLog"
                                 android:layout_height="wrap_content"
                                 style="@style/SettingsSummary" />
-                        </androidx.core.widget.NestedScrollView>
+                        </ScrollView>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    style="@style/AppCard.Settings">
+                    <LinearLayout
+                        style="@style/LinearLayoutVertical">
+                        <com.simplemobiletools.commons.views.MyTextView
+                            android:text="GitHub Pages"
+                            style="@style/SettingsTitle" />
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            android:id="@+id/recycler_cheat_Sheet" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
                 <androidx.cardview.widget.CardView
                     android:orientation="vertical"
                     style="@style/AppCard.Settings">
@@ -69,39 +84,6 @@
                         <com.simplemobiletools.commons.views.MyTextView
                             android:id="@+id/coroutineConsole1"
                             style="@style/SettingsSummary" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/markdown1"
-                    android:orientation="vertical"
-                    style="@style/AppCard.Settings">
-                    <LinearLayout
-                        style="@style/LinearLayoutVertical">
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:text="package kotlin"
-                            style="@style/SettingsTitle" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/markdown2"
-                    android:orientation="vertical"
-                    style="@style/AppCard.Settings">
-                    <LinearLayout
-                        style="@style/LinearLayoutVertical">
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:text="package kotlin.collections"
-                            style="@style/SettingsTitle" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/markdown3"
-                    android:orientation="vertical"
-                    style="@style/AppCard.Settings">
-                    <LinearLayout
-                        style="@style/LinearLayoutVertical">
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:text="Cheat Sheet"
-                            style="@style/SettingsTitle" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
                 <androidx.cardview.widget.CardView
