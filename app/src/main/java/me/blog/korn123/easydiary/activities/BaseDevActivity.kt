@@ -173,6 +173,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             add(CheatSheetViewHolder.CheatSheet("Package kotlin", "Explanation of kotlin basic functions", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/kotlin/kotlin.md"))
             add(CheatSheetViewHolder.CheatSheet("Package kotlin.collections", "Explanation of kotlin collection functions", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/kotlin/kotlin.collections.md"))
             add(CheatSheetViewHolder.CheatSheet("Cheat Sheet", "This page is a collection of useful link information such as open source projects and development related guides.", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/README.md"))
+            add(CheatSheetViewHolder.CheatSheet("Spring Annotation", "Describes annotations mainly used in Spring Framework", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/annotations/spring.md"))
         }
 
         recycler_cheat_Sheet?.apply {
