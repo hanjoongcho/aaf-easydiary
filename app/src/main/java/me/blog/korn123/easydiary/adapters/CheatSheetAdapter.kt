@@ -23,20 +23,10 @@ class CheatSheetAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CheatSheetViewHolder {
         val view = LayoutInflater.from(activity)
                 .inflate(R.layout.viewholder_cheat_sheet, parent, false)
-        return CheatSheetViewHolder(view, this)
+        return CheatSheetViewHolder(activity, view, this)
     }
 
     override fun onBindViewHolder(holder: CheatSheetViewHolder, position: Int) {
-        if (holder.itemView is ViewGroup) {
-            holder.itemView.run {
-                activity.initTextSize(this)
-                activity.updateTextColors(this)
-                activity.updateAppViews(this)
-                activity.updateCardViewPolicy(this)
-                FontUtils.setFontsTypeface(activity, activity.assets, null, this)
-            }
-        }
-
         holder.bindTo(items[position])
     }
 
@@ -48,9 +38,18 @@ class CheatSheetAdapter(
 
     override fun getItemCount() = items.size
 
-    class CheatSheetViewHolder(itemView: View, val adapter: CheatSheetAdapter) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    class CheatSheetViewHolder(activity: Activity, itemView: View, val adapter: CheatSheetAdapter) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         init {
-            itemView.setOnClickListener(this)
+            if (itemView is ViewGroup) {
+                itemView.run {
+                    activity.initTextSize(this)
+                    activity.updateTextColors(this)
+                    activity.updateAppViews(this)
+                    activity.updateCardViewPolicy(this)
+                    FontUtils.setFontsTypeface(activity, activity.assets, null, this)
+                    setOnClickListener(this@CheatSheetViewHolder)
+                }
+            }
         }
 
         fun bindTo(cheatSheet: CheatSheet) {
