@@ -27,7 +27,6 @@ import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.RealmFileItemAdapter
-import me.blog.korn123.easydiary.adapters.SimpleCheckbox
 import me.blog.korn123.easydiary.adapters.SimpleCheckboxAdapter
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
@@ -204,7 +203,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
         files?.let {
             when (it.isNotEmpty()) {
                 true -> {
-                    val realmInfoList: ArrayList<SimpleCheckbox> = arrayListOf()
+                    val realmInfoList: ArrayList<SimpleCheckboxAdapter.SimpleCheckbox> = arrayListOf()
                     val builder = AlertDialog.Builder(mActivity)
                     builder.setCancelable(false)
                     builder.setPositiveButton(getString(R.string.delete)) { _, _ -> }
@@ -212,7 +211,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
 
                     it.sortDescending()
                     it.map { file ->
-                        realmInfoList.add(SimpleCheckbox(file.name, Date(file.lastModified()).toString()))
+                        realmInfoList.add(SimpleCheckboxAdapter.SimpleCheckbox(file.name, Date(file.lastModified()).toString()))
                     }
 
                     val inflater = mActivity.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -223,10 +222,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
                     val gridLayoutManager = androidx.recyclerview.widget.GridLayoutManager(mActivity, 1)
 
                     recyclerView.apply {
-                        adapter = SimpleCheckboxAdapter(realmInfoList, AdapterView.OnItemClickListener { parent, view, position, id ->
-                            val realmInfo = parent.adapter.getItem(position) as SimpleCheckbox
-                            mActivity.makeSnackBar("${realmInfo.isChecked}")
-                        })
+                        adapter = SimpleCheckboxAdapter(requireActivity(), realmInfoList)
                         layoutManager = gridLayoutManager
 //                        addItemDecoration(spacesItemDecoration)
                     }
