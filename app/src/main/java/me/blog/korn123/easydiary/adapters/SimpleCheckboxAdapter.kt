@@ -38,7 +38,9 @@ class SimpleCheckboxAdapter (
         realmFiles[position].isChecked = isChecked
     }
 
-    class SimpleCheckboxViewHolder(activity: Activity, itemView: View, val adapter: SimpleCheckboxAdapter) : RecyclerView.ViewHolder(itemView), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+    class SimpleCheckboxViewHolder(
+            activity: Activity, itemView: View, val adapter: SimpleCheckboxAdapter
+    ) : RecyclerView.ViewHolder(itemView), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
         init {
             if (itemView is ViewGroup) {
                 itemView.run {

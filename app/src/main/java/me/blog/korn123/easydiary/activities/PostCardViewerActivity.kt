@@ -27,7 +27,7 @@ import java.io.File
  */
 
 class PostCardViewerActivity : EasyDiaryActivity() {
-    private var mListPostcard: ArrayList<PostCardViewerActivity.PostCard> = arrayListOf()
+    private var mListPostcard: ArrayList<PostcardAdapter.PostCard> = arrayListOf()
     private lateinit var mPostcardAdapter: PostcardAdapter 
     
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,7 +72,7 @@ class PostCardViewerActivity : EasyDiaryActivity() {
         initPostCard()
         toolbarImage.setColorFilter(ColorUtils.adjustAlpha(config.primaryColor, 0.5F))
         deletePostCard.setOnClickListener {
-            val selectedItems = arrayListOf<PostCardViewerActivity.PostCard>()
+            val selectedItems = arrayListOf<PostcardAdapter.PostCard>()
             mListPostcard.forEachIndexed { _, item ->
                 if (item.isItemChecked) selectedItems.add(item)
             }
@@ -98,7 +98,7 @@ class PostCardViewerActivity : EasyDiaryActivity() {
                 .listFiles()
                 .filter { it.extension.equals("jpg", true)}
                 .sortedDescending()
-                .map { file -> PostCard(file, false) }
+                .map { file -> PostcardAdapter.PostCard(file, false) }
 
         mListPostcard.clear()
         mListPostcard.addAll(listPostcard)
@@ -126,6 +126,4 @@ class PostCardViewerActivity : EasyDiaryActivity() {
             }
         }
     }
-    
-    data class PostCard(val file: File, var isItemChecked: Boolean)
 }

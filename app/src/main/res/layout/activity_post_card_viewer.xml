@@ -26,7 +26,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/london"
-                android:tint="#BB3E50B4"
+                app:tint="#BB3E50B4"
                 android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax"
                 />
