@@ -19,7 +19,6 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.getLayoutLayoutInflater
 import me.blog.korn123.easydiary.fragments.*
 import me.blog.korn123.easydiary.helper.REQUEST_CODE_UPDATE_DAILY_SYMBOL_FILTER
-import me.blog.korn123.easydiary.viewholders.DailySymbolViewHolder
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -34,7 +33,7 @@ class DashboardActivity : EasyDiaryActivity() {
      *
      ***************************************************************************************************/
     private lateinit var mDailySymbolAdapter: DailySymbolAdapter
-    private var mDailySymbolList: ArrayList<DailySymbolViewHolder.DailySymbol> = arrayListOf()
+    private var mDailySymbolList: ArrayList<DailySymbolAdapter.DailySymbol> = arrayListOf()
 
     /***************************************************************************************************
      *   override functions
@@ -151,8 +150,7 @@ class DashboardActivity : EasyDiaryActivity() {
 
         mDailySymbolAdapter = DailySymbolAdapter(
                 this,
-                mDailySymbolList,
-                null
+                mDailySymbolList
         )
         dailyCardRecyclerView?.apply {
 //            layoutManager = androidx.recyclerview.widget.GridLayoutManager(this@DashboardActivity, 1)
@@ -168,7 +166,7 @@ class DashboardActivity : EasyDiaryActivity() {
 
         GlobalScope.launch { // launch a new coroutine and keep a reference to its Job
             for (num in 1..365) {
-                mDailySymbolList.add(DailySymbolViewHolder.DailySymbol(dateFormat.format(cal.time), cal.get(Calendar.DAY_OF_WEEK), cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())!!, dayOfMonth.format(cal.time), cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())!!))
+                mDailySymbolList.add(DailySymbolAdapter.DailySymbol(dateFormat.format(cal.time), cal.get(Calendar.DAY_OF_WEEK), cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())!!, dayOfMonth.format(cal.time), cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())!!))
                 cal.add(Calendar.DATE, -1)
             }
             runOnUiThread {

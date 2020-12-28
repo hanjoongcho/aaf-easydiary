@@ -10,7 +10,8 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.DialogFragment
 import kotlinx.android.synthetic.main.dialog_postcard_photo_option.*
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.viewholders.PhotoViewHolder
+import me.blog.korn123.easydiary.adapters.PhotoAdapter
+import me.blog.korn123.easydiary.adapters.PhotoAdapter.PhotoViewHolder.Companion.applyOption
 
 class PhotoFlexItemOptionFragment : DialogFragment() {
 
@@ -53,14 +54,14 @@ class PhotoFlexItemOptionFragment : DialogFragment() {
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
                     viewMode = position
-                    PhotoViewHolder.applyOption(requireContext(), photoUri!!, viewMode, filterMode, image_preview)
+                    applyOption(requireContext(), photoUri!!, viewMode, filterMode, image_preview)
                 }
 
                 override fun onNothingSelected(p0: AdapterView<*>?) {}
             }
         }
 
-        PhotoViewHolder.applyOption(requireContext(), photoUri!!, viewMode, filterMode, image_preview)
+        applyOption(requireContext(), photoUri!!, viewMode, filterMode, image_preview)
 
         spinner_filter_mode.run {
             val arrayAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.options_spinner_filter_mode, R.layout.item_spinner)
@@ -70,7 +71,7 @@ class PhotoFlexItemOptionFragment : DialogFragment() {
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
                     filterMode = position
-                    PhotoViewHolder.applyOption(requireContext(), photoUri!!, viewMode, filterMode, image_preview)
+                    applyOption(requireContext(), photoUri!!, viewMode, filterMode, image_preview)
                 }
 
                 override fun onNothingSelected(p0: AdapterView<*>?) {}
@@ -93,7 +94,7 @@ class PhotoFlexItemOptionFragment : DialogFragment() {
         private const val PHOTO_URI = "photo_uri"
         private const val FORCE_SINGLE_PHOTO_POSITION = "force_single_photo_position"
 
-        fun newInstance(postCardPhotoItem: PhotoViewHolder.PostCardPhotoItem) = PhotoFlexItemOptionFragment().apply {
+        fun newInstance(postCardPhotoItem: PhotoAdapter.PostCardPhotoItem) = PhotoFlexItemOptionFragment().apply {
             arguments = Bundle().apply {
                 putInt(ITEM_INDEX, postCardPhotoItem.position)
                 putInt(VIEW_MODE, postCardPhotoItem.viewMode)

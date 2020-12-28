@@ -21,7 +21,6 @@ import com.flask.colorpicker.ColorPickerView
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
-import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
@@ -36,7 +35,6 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.PhotoAdapter
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
-import me.blog.korn123.easydiary.viewholders.PhotoViewHolder
 import java.io.File
 
 /**
@@ -88,9 +86,9 @@ class PostCardActivity : EasyDiaryActivity() {
             if (/*resources.configuration.orientation == ORIENTATION_PORTRAIT && */it.size > 0) {
                 photoContainer.visibility = View.VISIBLE
 
-                val postCardPhotoItems = arrayListOf<PhotoViewHolder.PostCardPhotoItem>()
+                val postCardPhotoItems = arrayListOf<PhotoAdapter.PostCardPhotoItem>()
                 it.forEachIndexed { index, photoUriDto ->
-                    postCardPhotoItems.add(PhotoViewHolder.PostCardPhotoItem(EasyDiaryUtils.getApplicationDataDirectory(this) + photoUriDto.getFilePath(), index,2, 0))
+                    postCardPhotoItems.add(PhotoAdapter.PostCardPhotoItem(EasyDiaryUtils.getApplicationDataDirectory(this) + photoUriDto.getFilePath(), index, 2, 0))
                 }
                 mPhotoAdapter = PhotoAdapter(this, postCardPhotoItems) {
                     resizePhotoGrid()

@@ -30,13 +30,13 @@ class CheatSheetAdapter(
         holder.bindTo(items[position])
     }
 
+    override fun getItemCount() = items.size
+
     fun onItemHolderClick(itemHolder: CheatSheetViewHolder) {
         onItemClickListener?.run {
             onItemClick(null, itemHolder.itemView, itemHolder.adapterPosition, itemHolder.itemId)
         }
     }
-
-    override fun getItemCount() = items.size
 
     class CheatSheetViewHolder(activity: Activity, itemView: View, val adapter: CheatSheetAdapter) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         init {
