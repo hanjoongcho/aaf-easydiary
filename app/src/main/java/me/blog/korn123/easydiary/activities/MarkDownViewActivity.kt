@@ -31,12 +31,15 @@ class MarkDownViewActivity : EasyDiaryActivity() {
     private lateinit var markdownUrl: String
     private lateinit var mMarkDown: Markwon
     private val mPrism4j = Prism4j(GrammarLocatorSourceCode())
+    private var mForceAppendCodeBlock = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_markdown_view)
         setSupportActionBar(toolbar)
         val pageTitle = intent.getStringExtra(OPEN_URL_DESCRIPTION)
+        mForceAppendCodeBlock = intent.getBooleanExtra(FORCE_APPEND_CODE_BLOCK, true)
+
         supportActionBar?.run {
             title = pageTitle
             setDisplayHomeAsUpEnabled(true)
@@ -86,7 +89,12 @@ class MarkDownViewActivity : EasyDiaryActivity() {
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 // opens input stream from the HTTP connection
                 val inputStream = httpConn.inputStream
-                FileUtils.copyInputStreamToFile(inputStream, File(saveFilePath))
+                val lines = IOUtils.readLines(inputStream, "UTF-8")
+                if (mForceAppendCodeBlock) {
+                    lines.add(0, "```java")
+                    lines.add("```")
+                }
+                FileUtils.writeLines(File(saveFilePath), "UTF-8", lines)
                 inputStream.close()
             }
             httpConn.disconnect()
@@ -159,5 +167,6 @@ class MarkDownViewActivity : EasyDiaryActivity() {
     companion object {
         const val OPEN_URL_INFO = "open_url_info"
         const val OPEN_URL_DESCRIPTION = "open_url_description"
+        const val FORCE_APPEND_CODE_BLOCK = "force_append_code_block"
     }
 }

@@ -64,5 +64,5 @@ class CheatSheetAdapter(
         }
     }
 
-    data class CheatSheet(val title: String, val description: String, val url: String)
+    data class CheatSheet(val title: String, val description: String, val url: String, val forceAppendCodeBlock: Boolean = false)
 }

@@ -173,6 +173,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
             add(CheatSheetAdapter.CheatSheet("Package kotlin.collections", "Explanation of kotlin collection functions", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/kotlin/kotlin.collections.md"))
             add(CheatSheetAdapter.CheatSheet("Cheat Sheet", "This page is a collection of useful link information such as open source projects and development related guides.", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/README.md"))
             add(CheatSheetAdapter.CheatSheet("Spring Annotation", "Describes annotations mainly used in Spring Framework", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/annotations/spring.md"))
+            add(CheatSheetAdapter.CheatSheet("Java 8 - Lambda Expression", "", "https://raw.githubusercontent.com/alexandregama/java8-guides-tutorials/master/src/test/java/lambda/LambdaExpressionTest.java", true))
+            add(CheatSheetAdapter.CheatSheet("Java 8 - Default Methods", "", "https://raw.githubusercontent.com/alexandregama/java8-guides-tutorials/master/src/test/java/defaultmethod/DefaultMethodTest.java", true))
         }
 
         recycler_cheat_Sheet?.apply {
@@ -186,6 +188,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     TransitionHelper.startActivityWithTransition(this@BaseDevActivity, Intent(this@BaseDevActivity, MarkDownViewActivity::class.java).apply {
                         putExtra(MarkDownViewActivity.OPEN_URL_INFO, item.url)
                         putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, item.title)
+                        putExtra(MarkDownViewActivity.FORCE_APPEND_CODE_BLOCK, item.forceAppendCodeBlock)
                     })
                 }
             )
