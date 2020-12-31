@@ -173,11 +173,11 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
     @SuppressLint("MissingPermission")
     private fun setupLocation() {
-        mBinding.requestLastLocation.setOnClickListener {
+        mBinding.buttonRequestLastLocation.setOnClickListener {
             updateLocation()
         }
 
-        mBinding.updateGPSProvider.setOnClickListener {
+        mBinding.buttonUpdateGpsProvider.setOnClickListener {
             when (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 true -> {
                     mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0F, mGPSLocationListener)
@@ -186,7 +186,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
         }
 
-        mBinding.updateNetworkProvider.setOnClickListener {
+        mBinding.buttonUpdateNetworkProvider.setOnClickListener {
             val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
             when (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
                 true -> {
@@ -271,8 +271,71 @@ open class BaseDevActivity : EasyDiaryActivity() {
             add(CheatSheetAdapter.CheatSheet("Package kotlin.collections", "Explanation of kotlin collection functions", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/kotlin/kotlin.collections.md"))
             add(CheatSheetAdapter.CheatSheet("Cheat Sheet", "This page is a collection of useful link information such as open source projects and development related guides.", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/README.md"))
             add(CheatSheetAdapter.CheatSheet("Spring Annotation", "Describes annotations mainly used in Spring Framework", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/annotations/spring.md"))
-            add(CheatSheetAdapter.CheatSheet("Java 8 - Lambda Expression", "", "https://raw.githubusercontent.com/alexandregama/java8-guides-tutorials/master/src/test/java/lambda/LambdaExpressionTest.java", true))
-            add(CheatSheetAdapter.CheatSheet("Java 8 - Default Methods", "", "https://raw.githubusercontent.com/alexandregama/java8-guides-tutorials/master/src/test/java/defaultmethod/DefaultMethodTest.java", true))
+            add(CheatSheetAdapter.CheatSheet(
+                    "Java 8 - Lambda Expression",
+                    "",
+                    "https://raw.githubusercontent.com/hanjoongcho/java8-guides-tutorials/master/src/test/java/lambda/LambdaExpressionTest.java", true
+            ))
+            add(CheatSheetAdapter.CheatSheet(
+                    "Java 8 - Default Methods",
+                    "",
+                    "https://raw.githubusercontent.com/hanjoongcho/java8-guides-tutorials/master/src/test/java/defaultmethod/DefaultMethodTest.java", true
+            ))
+            add(CheatSheetAdapter.CheatSheet(
+                    "Java 8 - Functions",
+                    "",
+                    "https://raw.githubusercontent.com/hanjoongcho/java8-guides-tutorials/master/src/test/java/functions/FunctionFunctionalInterfaceTest.java", true
+            ))
+            add(CheatSheetAdapter.CheatSheet(
+                    "Java 8 - Stream Count",
+                    "",
+                    "https://raw.githubusercontent.com/hanjoongcho/java8-guides-tutorials/master/src/test/java/streams/StreamWithCountTest.java", true
+            ))
+            add(CheatSheetAdapter.CheatSheet(
+                    "Java 8 - Stream with Filter",
+                    "",
+                    "https://raw.githubusercontent.com/hanjoongcho/java8-guides-tutorials/master/src/test/java/streams/StreamWithFilterTest.java", true
+            ))
+            add(CheatSheetAdapter.CheatSheet(
+                    "Java 8 - Stream with Map",
+                    "",
+                    "https://raw.githubusercontent.com/hanjoongcho/java8-guides-tutorials/master/src/test/java/streams/StreamWithMapTest.java", true
+            ))
+            add(CheatSheetAdapter.CheatSheet(
+                    "Java 8 - Stream with Sorted",
+                    "",
+                    "https://raw.githubusercontent.com/hanjoongcho/java8-guides-tutorials/master/src/test/java/streams/StreamWithSortedTest.java", true
+            ))
+            add(CheatSheetAdapter.CheatSheet(
+                    "Java 8 - Stream with Match",
+                    "",
+                    "https://raw.githubusercontent.com/hanjoongcho/java8-guides-tutorials/master/src/test/java/streams/StreamWithMatchTest.java", true
+            ))
+            add(CheatSheetAdapter.CheatSheet(
+                    "Java 8 - Stream Reduce",
+                    "",
+                    "https://raw.githubusercontent.com/hanjoongcho/java8-guides-tutorials/master/src/test/java/streams/StreamReduceTest.java", true
+            ))
+            add(CheatSheetAdapter.CheatSheet(
+                    "Java 8 - Stream Consumer",
+                    "",
+                    "https://raw.githubusercontent.com/hanjoongcho/java8-guides-tutorials/master/src/test/java/consumer/ConsumerFunctionalInterfaceTest.java", true
+            ))
+            add(CheatSheetAdapter.CheatSheet(
+                    "Java 8 - Predicate",
+                    "",
+                    "https://raw.githubusercontent.com/hanjoongcho/java8-guides-tutorials/master/src/test/java/predicate/PredicateFunctionalInterfaceTest.java", true
+            ))
+            add(CheatSheetAdapter.CheatSheet(
+                    "Java 8 - Comparator",
+                    "",
+                    "https://raw.githubusercontent.com/hanjoongcho/java8-guides-tutorials/master/src/test/java/comparator/ComparatorFunctionalInterfaceTest.java", true
+            ))
+            add(CheatSheetAdapter.CheatSheet(
+                    "Java 8 - Suppliers",
+                    "",
+                    "https://raw.githubusercontent.com/hanjoongcho/java8-guides-tutorials/master/src/test/java/suppliers/SupplierFunctionalInterfaceTest.java", true
+            ))
         }
 
         mBinding.recyclerCheatSheet.apply {
@@ -307,7 +370,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                         info += fullAddress(address[0])
                     }
                 }
-                mBinding.locationManagerInfo.text = info
+                mBinding.textLocationConsole.text = info
             }
         }
         when (hasGPSPermissions()) {

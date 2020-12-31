@@ -137,41 +137,33 @@
                         <com.simplemobiletools.commons.views.MyTextView
                             android:text="Location Manager"
                             style="@style/SettingsTitle" />
-                        <RelativeLayout
+                        <com.google.android.flexbox.FlexboxLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
-                            <LinearLayout
-                                android:id="@+id/locationToolbar"
-                                android:orientation="horizontal"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-                                <com.simplemobiletools.commons.views.MyTextView
-                                    android:background="?attr/selectableItemBackgroundBorderless"
-                                    android:id="@+id/requestLastLocation"
-                                    android:text="Last-Location"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"/>
-                                <com.simplemobiletools.commons.views.MyTextView
-                                    android:background="?attr/selectableItemBackgroundBorderless"
-                                    android:layout_marginStart="10dp"
-                                    android:id="@+id/updateGPSProvider"
-                                    android:text="Update-GPS"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"/>
-                                <com.simplemobiletools.commons.views.MyTextView
-                                    android:background="?attr/selectableItemBackgroundBorderless"
-                                    android:layout_marginStart="10dp"
-                                    android:id="@+id/updateNetworkProvider"
-                                    android:text="Update-Network"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"/>
-                            </LinearLayout>
-                            <com.simplemobiletools.commons.views.MyTextView
-                                android:layout_below="@+id/locationToolbar"
-                                android:id="@+id/locationManagerInfo"
-                                tools:text="Korea Seoul..."
-                                style="@style/SettingsSummary" />
-                        </RelativeLayout>
+                            <Button
+                                android:id="@+id/button_request_lastLocation"
+                                android:text="Last-Location"
+                                app:layout_flexGrow="1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                            <Button
+                                android:id="@+id/button_update_gps_provider"
+                                android:text="Update-GPS"
+                                app:layout_flexGrow="1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                            <Button
+                                android:id="@+id/button_update_network_provider"
+                                android:text="Update-Network"
+                                app:layout_flexGrow="1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                        </com.google.android.flexbox.FlexboxLayout>
+                        <com.simplemobiletools.commons.views.MyTextView
+                            android:layout_below="@+id/locationToolbar"
+                            android:id="@+id/text_location_console"
+                            tools:text="Korea Seoul..."
+                            style="@style/SettingsSummary" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
