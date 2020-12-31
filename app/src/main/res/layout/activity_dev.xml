@@ -24,7 +24,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <androidx.core.widget.NestedScrollView
+        <ScrollView
             android:fillViewport="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -46,7 +46,7 @@
                             android:gravity="end"
                             android:text="Clear log"
                             style="@style/SettingsTitle" />
-                        <ScrollView
+                        <androidx.core.widget.NestedScrollView
                             android:fillViewport="true"
                             android:layout_width="match_parent"
                             android:layout_height="150dp">
@@ -54,7 +54,7 @@
                                 android:id="@+id/actionLog"
                                 android:layout_height="wrap_content"
                                 style="@style/SettingsSummary" />
-                        </ScrollView>
+                        </androidx.core.widget.NestedScrollView>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -76,14 +76,57 @@
                     android:orientation="vertical"
                     style="@style/AppCard.Settings">
                     <LinearLayout
-                        android:id="@+id/coroutine1"
+                        android:id="@+id/linear_coroutine1"
                         style="@style/LinearLayoutVertical">
                         <com.simplemobiletools.commons.views.MyTextView
                             android:text="Coroutine"
                             style="@style/SettingsTitle" />
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:id="@+id/coroutineConsole1"
-                            style="@style/SettingsSummary" />
+                        <com.google.android.flexbox.FlexboxLayout
+                            app:flexWrap="wrap"
+                            app:flexDirection="row"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <Button
+                                app:layout_flexGrow="1"
+                                android:id="@+id/button_coroutine_basic_start"
+                                android:text="[T1] Start"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                            <Button
+                                app:layout_flexGrow="1"
+                                android:id="@+id/button_coroutine_basic_stop"
+                                android:text="[T1] Stop"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                            <Button
+                                app:layout_flexGrow="1"
+                                android:id="@+id/button_coroutine_basic_status"
+                                android:text="[T1] Job Status"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                            <Button
+                                app:layout_flexGrow="1"
+                                android:id="@+id/button_coroutine_multiple"
+                                android:text="[T2] Multiple"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                            <Button
+                                app:layout_flexGrow="1"
+                                android:id="@+id/button_coroutine_blocking"
+                                android:text="[T3] Blocking"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                        </com.google.android.flexbox.FlexboxLayout>
+
+                        <androidx.core.widget.NestedScrollView
+                            android:id="@+id/scroll_coroutine"
+                            android:fillViewport="true"
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:id="@+id/text_coroutine1_console"
+                                style="@style/SettingsSummary" />
+                        </androidx.core.widget.NestedScrollView>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
                 <androidx.cardview.widget.CardView
@@ -133,7 +176,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/nextAlarm"
+                    android:id="@+id/card_next_alarm"
                     android:orientation="vertical"
                     style="@style/AppCard.Settings">
                     <LinearLayout
@@ -169,7 +212,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/notification1"
+                    android:id="@+id/card_notification1"
                     android:orientation="vertical"
                     style="@style/AppCard.Settings">
                     <LinearLayout
@@ -183,7 +226,7 @@
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/notification2"
+                    android:id="@+id/card_notification2"
                     android:orientation="vertical"
                     style="@style/AppCard.Settings">
                     <LinearLayout
@@ -197,6 +240,6 @@
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
             </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
+        </ScrollView>
     </LinearLayout>
 </LinearLayout>

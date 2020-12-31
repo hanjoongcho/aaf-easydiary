@@ -11,6 +11,7 @@ import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.view.View
 import android.widget.AdapterView
 import android.widget.RemoteViews
 import android.widget.Toast
@@ -41,7 +42,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
      ***************************************************************************************************/
     private var mCheatSheetList = arrayListOf<CheatSheetAdapter.CheatSheet>()
     private val mLocationManager by lazy { getSystemService(Context.LOCATION_SERVICE) as LocationManager }
-    private var mCoroutineJob1: Job? = null
     private val mNetworkLocationListener = object : LocationListener {
         override fun onLocationChanged(p0: Location) {
             makeToast("Network location has been updated")
@@ -65,7 +65,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
      *   override functions
      *
      ***************************************************************************************************/
-    @SuppressLint("MissingPermission")
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dev)
@@ -75,9 +74,41 @@ open class BaseDevActivity : EasyDiaryActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-        updateActionLog()
+        setupActionLog()
+        setupNextAlarm()
+        setupNotification()
+        setupClearUnusedPhoto()
+        setupLocation()
+        setupCoroutine()
+        setupCheatSheet()
+    }
 
-        nextAlarm.setOnClickListener {
+    override fun onDestroy() {
+        super.onDestroy()
+        mLocationManager.run {
+            removeUpdates(mGPSLocationListener)
+            removeUpdates(mNetworkLocationListener)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
+        pauseLock()
+
+        when (requestCode) {
+            REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS -> {
+                makeSnackBar(if (isLocationEnabled()) "GPS provider setting is activated." else "The request operation did not complete normally.")
+            }
+        }
+    }
+
+
+    /***************************************************************************************************
+     *   test functions
+     *
+     ***************************************************************************************************/
+    private fun setupNextAlarm() {
+        card_next_alarm.setOnClickListener {
             val nextAlarm = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val triggerTimeMillis = (getSystemService(Context.ALARM_SERVICE) as AlarmManager).nextAlarmClock?.triggerTime ?: 0
                 when (triggerTimeMillis > 0) {
@@ -90,23 +121,39 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
             toast(nextAlarm, Toast.LENGTH_LONG)
         }
+    }
 
-        notification1.setOnClickListener {
+    private fun setupNotification() {
+        card_notification1.setOnClickListener {
             (applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).apply {
                 notify(NOTIFICATION_ID_DEV, createNotification(NotificationInfo(R.drawable.ic_diary_writing, true)))
             }
         }
-        notification2.setOnClickListener {
+        card_notification2.setOnClickListener {
             (applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).apply {
                 notify(NOTIFICATION_ID_DEV, createNotification(NotificationInfo(R.drawable.ic_diary_backup_local, useActionButton = true, useCustomContentView = true)))
             }
         }
+    }
 
+    private fun setupActionLog() {
         clearLog.setOnClickListener {
             EasyDiaryDbHelper.deleteActionLogAll()
             updateActionLog()
         }
+        updateActionLog()
+    }
 
+    private fun updateActionLog() {
+        val actionLogs: List<ActionLog> = EasyDiaryDbHelper.readActionLogAll()
+        val sb = StringBuilder()
+        actionLogs.map {
+            sb.append("${it.className}-${it.signature}-${it.key}: ${it.value}\n")
+        }
+        actionLog.text = sb.toString()
+    }
+
+    private fun setupClearUnusedPhoto() {
         clearUnusedPhoto.setOnClickListener {
             val localPhotoBaseNames = arrayListOf<String>()
             val unUsedPhotos = arrayListOf<String>()
@@ -121,7 +168,10 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
             showAlertDialog(unUsedPhotos.size.toString(), null, true)
         }
+    }
 
+    @SuppressLint("MissingPermission")
+    private fun setupLocation() {
         requestLastLocation.setOnClickListener {
             updateLocation()
         }
@@ -144,21 +194,27 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 false -> makeSnackBar("Network Provider is not available.")
             }
         }
+    }
 
-        coroutine1.setOnClickListener {
-            mCoroutineJob1?.run {
-                if (mCoroutineJob1?.isActive == true) {
-                    runOnUiThread { makeToast("Cancel") }
-                    runBlocking { mCoroutineJob1?.cancelAndJoin() }
-                } else {
-                    runOnUiThread { makeToast("Job is destroyed") }
-                }
-            } ?: run {
-                makeToast("Start")
+    private var mCoroutineJob1: Job? = null
+    private fun setupCoroutine() {
+        fun updateConsole(message: String, tag: String = Thread.currentThread().name) {
+            text_coroutine1_console.append("$tag: $message\n")
+            scroll_coroutine.post { scroll_coroutine.fullScroll(View.FOCUS_DOWN) }
+        }
+        suspend fun doWorld() {
+            delay(1000)
+        }
+
+        button_coroutine_basic_start.setOnClickListener {
+            if (mCoroutineJob1?.isActive == true) {
+                updateConsole("Job has already started.")
+            } else {
                 mCoroutineJob1 = GlobalScope.launch { // launch a new coroutine and keep a reference to its Job
-                    for (i in 1..100) {
+                    for (i in 1..50) {
                         if (isActive) {
-                            coroutineConsole1.text = "$i"
+                            val currentThreadName = Thread.currentThread().name
+                            runOnUiThread { updateConsole(i.toString(), currentThreadName) }
                             runBlocking {
                                 delay(100)
                             }
@@ -168,6 +224,47 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
         }
 
+        button_coroutine_basic_stop.setOnClickListener {
+            if (mCoroutineJob1?.isActive == true) {
+                runBlocking { mCoroutineJob1?.cancelAndJoin() }
+            } else {
+                updateConsole("The job has been canceled")
+            }
+        }
+
+        button_coroutine_basic_status.setOnClickListener {
+            mCoroutineJob1?.let {
+                when (it.isActive) {
+                    true -> updateConsole("On")
+                    false -> updateConsole("Off")
+                }
+            } ?: run {
+                updateConsole("Coroutine is not initialized.")
+            }
+        }
+
+        button_coroutine_multiple.setOnClickListener {
+            for (k in 1..3) {
+                GlobalScope.launch { // launch a new coroutine and keep a reference to its Job
+                    for (i in 1..10) {
+                        val currentThreadName = Thread.currentThread().name
+                        runOnUiThread { updateConsole(i.toString(), currentThreadName) }
+                        runBlocking {
+                            delay(100)
+                        }
+                    }
+                }
+            }
+        }
+
+        button_coroutine_blocking.setOnClickListener {
+            runBlocking {
+                updateConsole("runBlocking block")
+            }
+        }
+    }
+
+    private fun setupCheatSheet() {
         mCheatSheetList.run {
             add(CheatSheetAdapter.CheatSheet("Package kotlin", "Explanation of kotlin basic functions", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/kotlin/kotlin.md"))
             add(CheatSheetAdapter.CheatSheet("Package kotlin.collections", "Explanation of kotlin collection functions", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/kotlin/kotlin.collections.md"))
@@ -181,38 +278,20 @@ open class BaseDevActivity : EasyDiaryActivity() {
             layoutManager = LinearLayoutManager(this@BaseDevActivity, LinearLayoutManager.VERTICAL, false)
 //            addItemDecoration(SettingsScheduleFragment.SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding)))
             adapter =  CheatSheetAdapter(
-                this@BaseDevActivity,
-                mCheatSheetList,
-                AdapterView.OnItemClickListener { _, _, position, _ ->
-                    val item = mCheatSheetList[position]
-                    TransitionHelper.startActivityWithTransition(this@BaseDevActivity, Intent(this@BaseDevActivity, MarkDownViewActivity::class.java).apply {
-                        putExtra(MarkDownViewActivity.OPEN_URL_INFO, item.url)
-                        putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, item.title)
-                        putExtra(MarkDownViewActivity.FORCE_APPEND_CODE_BLOCK, item.forceAppendCodeBlock)
-                    })
-                }
+                    this@BaseDevActivity,
+                    mCheatSheetList,
+                    AdapterView.OnItemClickListener { _, _, position, _ ->
+                        val item = mCheatSheetList[position]
+                        TransitionHelper.startActivityWithTransition(this@BaseDevActivity, Intent(this@BaseDevActivity, MarkDownViewActivity::class.java).apply {
+                            putExtra(MarkDownViewActivity.OPEN_URL_INFO, item.url)
+                            putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, item.title)
+                            putExtra(MarkDownViewActivity.FORCE_APPEND_CODE_BLOCK, item.forceAppendCodeBlock)
+                        })
+                    }
             )
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        mLocationManager.run {
-            removeUpdates(mGPSLocationListener)
-            removeUpdates(mNetworkLocationListener)
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        super.onActivityResult(requestCode, resultCode, intent)
-        pauseLock()
-
-        when (requestCode) {
-            REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS -> {
-                makeSnackBar(if (isLocationEnabled()) "GPS provider setting is activated." else "The request operation did not complete normally.")
-            }
-        }
-    }
 
     /***************************************************************************************************
      *   etc functions
@@ -238,15 +317,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 }
             }
         }
-    }
-
-    private fun updateActionLog() {
-        val actionLogs: List<ActionLog> = EasyDiaryDbHelper.readActionLogAll()
-        val sb = StringBuilder()
-        actionLogs.map {
-            sb.append("${it.className}-${it.signature}-${it.key}: ${it.value}\n")
-        }
-        actionLog.text = sb.toString()
     }
 
     @SuppressLint("NewApi")

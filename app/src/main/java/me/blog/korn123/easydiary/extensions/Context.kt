@@ -26,10 +26,7 @@ import android.text.style.RelativeSizeSpan
 import android.util.Log
 import android.util.TypedValue
 import android.view.*
-import android.widget.CheckBox
-import android.widget.RadioButton
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AlertDialog
@@ -260,6 +257,7 @@ fun Context.initTextSize(viewGroup: ViewGroup) {
                     is FixedTextView -> {
                         if (it.applyGlobalSize) it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
                     }
+                    is Button -> {}
                     is TextView -> { 
                         if (it.tag == "tabTitle") return
                         when (it.id) {
