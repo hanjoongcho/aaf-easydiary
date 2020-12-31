@@ -48,7 +48,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var popupMenuBinding: PopupMenuMainBinding
+    private lateinit var mPopupMenuBinding: PopupMenuMainBinding
     private var mDiaryMainItemAdapter: DiaryMainItemAdapter? = null
     private var mDiaryList: ArrayList<DiaryDto> = arrayListOf()
     private var mShowcaseIndex = 0
@@ -64,7 +64,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
      ***************************************************************************************************/
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        popupMenuBinding = PopupMenuMainBinding.inflate(layoutInflater)
+        mPopupMenuBinding = PopupMenuMainBinding.inflate(layoutInflater)
         forceInitRealmLessThanOreo()
 
         supportActionBar?.run {
@@ -73,7 +73,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
 
         mDiaryList.addAll(EasyDiaryDbHelper.readDiary(null))
         mDiaryMainItemAdapter = DiaryMainItemAdapter(this, R.layout.item_diary_main, mDiaryList)
-        binding.diaryListView.adapter = mDiaryMainItemAdapter
+        mBinding.diaryListView.adapter = mDiaryMainItemAdapter
 
         if (!config.isInitDummyData) {
             initSampleData()
@@ -104,28 +104,28 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         super.onResume()
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
         refreshList()
-        initTextSize(binding.progressDialog)
+        initTextSize(mBinding.progressDialog)
         invalidateOptionsMenu()
 
         if (config.previousActivity == PREVIOUS_ACTIVITY_CREATE) {
 //            diaryListView.smoothScrollToPosition(0)
-            binding.diaryListView.setSelection(0)
+            mBinding.diaryListView.setSelection(0)
             config.previousActivity = -1
         }
 
-        if (ViewHelper.getTranslationY(binding.appBar) < 0) binding.searchCard.useCompatPadding = false
+        if (ViewHelper.getTranslationY(mBinding.appBar) < 0) mBinding.searchCard.useCompatPadding = false
     }
 
     override fun createScrollable(): ObservableListView {
         // ObservableListView uses setOnScrollListener, but it still works.
-        binding.diaryListView.setOnScrollListener(object : AbsListView.OnScrollListener {
+        mBinding.diaryListView.setOnScrollListener(object : AbsListView.OnScrollListener {
             override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
             }
 
             override fun onScroll(view: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
             }
         })
-        return binding.diaryListView
+        return mBinding.diaryListView
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -146,8 +146,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             REQUEST_CODE_SPEECH_INPUT -> {
                 if (resultCode == Activity.RESULT_OK && data != null) {
                     data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.let {
-                        binding.query.setText(it[0])
-                        binding.query.setSelection(it[0].length)
+                        mBinding.query.setText(it[0])
+                        mBinding.query.setSelection(it[0].length)
                     }
                 }
                 pauseLock()
@@ -189,7 +189,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                                     EasyDiaryDbHelper.duplicateDiary(it)
                                 }
                                 refreshList()
-                                Handler().post { binding.diaryListView.setSelection(0) }
+                                Handler().post { mBinding.diaryListView.setSelection(0) }
                             }, null)
                         }
                         false -> {
@@ -235,7 +235,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     }
 
     override fun onBackPressed() {
-        if (binding.progressDialog.visibility == View.GONE) ActivityCompat.finishAffinity(this@DiaryMainActivity)
+        if (mBinding.progressDialog.visibility == View.GONE) ActivityCompat.finishAffinity(this@DiaryMainActivity)
     }
 
 
@@ -261,7 +261,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             Handler(Looper.getMainLooper()).post { popupWindow?.dismiss() }
         }
 
-        popupMenuBinding.run {
+        mPopupMenuBinding.run {
             updateAppViews(this.root)
             updateTextColors(this.root)
             FontUtils.setFontsTypeface(applicationContext, null, this.root, true)
@@ -273,7 +273,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     }
 
     private fun openCustomOptionMenu() {
-        popupWindow = EasyDiaryUtils.openCustomOptionMenu(popupMenuBinding.root, findViewById(R.id.popupMenu))
+        popupWindow = EasyDiaryUtils.openCustomOptionMenu(mPopupMenuBinding.root, findViewById(R.id.popupMenu))
     }
 
     private fun openPostcardViewer() {
@@ -295,7 +295,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                     dto.photoUri = FILE_URI_PREFIX + photoPath
                     realmInstance.commitTransaction()
                     runOnUiThread {
-                        binding.progressInfo.text = "Converting... ($index/${listPhotoUri.size})"
+                        mBinding.progressInfo.text = "Converting... ($index/${listPhotoUri.size})"
                     }
                 }
             }
@@ -320,8 +320,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                         }
                         FileUtils.copyFileToDirectory(file, photoDestDir)
                         runOnUiThread {
-                            binding.migrationMessage.text = getString(R.string.storage_migration_message)
-                            binding.progressInfo.text = "$index/${it.size} (Photo)"
+                            mBinding.migrationMessage.text = getString(R.string.storage_migration_message)
+                            mBinding.progressInfo.text = "$index/${it.size} (Photo)"
                         }
                     }
                     photoSrcDir.renameTo(File(photoSrcDir.absolutePath + "_migration"))
@@ -340,7 +340,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                         }
                         FileUtils.copyFileToDirectory(file, postCardDestDir)
                         runOnUiThread {
-                            binding.progressInfo.text = "$index/${it.size} (Postcard)"
+                            mBinding.progressInfo.text = "$index/${it.size} (Postcard)"
                         }
                     }
                     postCardSrcDir.renameTo(File(postCardSrcDir.absolutePath + "_migration"))
@@ -356,7 +356,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                         }
                         FileUtils.copyFileToDirectory(file, fontDestDir)
                         runOnUiThread {
-                            binding.progressInfo.text = "$index/${it.size} (Font)"
+                            mBinding.progressInfo.text = "$index/${it.size} (Font)"
                         }
                     }
                     fontSrcDir.renameTo(File(fontSrcDir.absolutePath + "_migration"))
@@ -373,7 +373,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                         }
                         FileUtils.copyFileToDirectory(file, dbDestDir)
                         runOnUiThread {
-                            binding.progressInfo.text = "$index/${it.size} (Database)"
+                            mBinding.progressInfo.text = "$index/${it.size} (Database)"
                         }
                     }
                     dbSrcDir.renameTo(File(dbSrcDir.absolutePath + "_migration"))
@@ -382,8 +382,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
 
             realmInstance.close()
             runOnUiThread {
-                binding.progressDialog.visibility = View.GONE
-                binding.modalContainer.visibility = View.GONE
+                mBinding.progressDialog.visibility = View.GONE
+                mBinding.modalContainer.visibility = View.GONE
                 if (isFontDirMigrate) {
                     showAlertDialog("Font 리소스가 변경되어 애플리케이션을 다시 시작합니다.", DialogInterface.OnClickListener { _, _ ->
                         restartApp()
@@ -410,13 +410,13 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 when (mShowcaseIndex) {
                     0 -> {
                         setButtonPosition(centerParams)
-                        setShowcase(ViewTarget(binding.query), true)
+                        setShowcase(ViewTarget(mBinding.query), true)
                         setContentTitle(getString(R.string.read_diary_showcase_title_2))
                         setContentText(getString(R.string.read_diary_showcase_message_2))
                     }
                     1 -> {
                         setButtonPosition(centerParams)
-                        setShowcase(ViewTarget(binding.diaryListView), true)
+                        setShowcase(ViewTarget(mBinding.diaryListView), true)
                         setContentTitle(getString(R.string.read_diary_showcase_title_8))
                         setContentText(getString(R.string.read_diary_showcase_message_8))
                     }
@@ -446,7 +446,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
 
         mShowcaseView = ShowcaseView.Builder(this)
                 .withMaterialShowcase()
-                .setTarget(ViewTarget(binding.insertDiaryButton))
+                .setTarget(ViewTarget(mBinding.insertDiaryButton))
                 .setContentTitle(getString(R.string.read_diary_showcase_title_1))
                 .setContentText(getString(R.string.read_diary_showcase_message_1))
                 .setStyle(R.style.ShowcaseTheme)
@@ -458,7 +458,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     }
 
     private fun bindEvent() {
-        binding.query.addTextChangedListener(object : TextWatcher {
+        mBinding.query.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
 
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
@@ -468,12 +468,12 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             override fun afterTextChanged(editable: Editable) {}
         })
 
-        binding.clearQuery.setOnClickListener { _ ->
+        mBinding.clearQuery.setOnClickListener { _ ->
             selectFeelingSymbol()
-            binding.query.text = null
+            mBinding.query.text = null
         }
 
-        binding.diaryListView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
+        mBinding.diaryListView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
             val diaryDto = adapterView.adapter.getItem(i) as DiaryDto
             val detailIntent = Intent(this@DiaryMainActivity, DiaryReadActivity::class.java)
             detailIntent.putExtra(DIARY_SEQUENCE, diaryDto.sequence)
@@ -481,7 +481,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, detailIntent)
         }
 
-        binding.diaryListView.setOnItemLongClickListener { adapterView, _, i, _ ->
+        mBinding.diaryListView.setOnItemLongClickListener { adapterView, _, i, _ ->
             EasyDiaryDbHelper.clearSelectedStatus()
             mDiaryMode = DiaryMode.DELETE
             invalidateOptionsMenu()
@@ -490,16 +490,16 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             true
         }
 
-        binding.modalContainer.setOnTouchListener { _, _ -> true }
+        mBinding.modalContainer.setOnTouchListener { _, _ -> true }
 
-        binding.insertDiaryButton.setOnClickListener{
+        mBinding.insertDiaryButton.setOnClickListener{
             val createDiary = Intent(this@DiaryMainActivity, DiaryInsertActivity::class.java)
             //                startActivity(createDiary);
             //                DiaryMainActivity.this.overridePendingTransition(R.anim.anim_right_to_center, R.anim.anim_center_to_left);
             TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, createDiary)
         }
 
-        binding.feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog(getString(R.string.diary_symbol_search_message)) { symbolSequence ->
+        mBinding.feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog(getString(R.string.diary_symbol_search_message)) { symbolSequence ->
             selectFeelingSymbol(symbolSequence)
             refreshList()
         }}
@@ -507,7 +507,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
 
     private fun selectFeelingSymbol(index: Int = 9999) {
         mSymbolSequence = if (index == 0) 9999 else index
-        FlavorUtils.initWeatherView(this, binding.symbol, mSymbolSequence, false)
+        FlavorUtils.initWeatherView(this, mBinding.symbol, mSymbolSequence, false)
     }
 
     private fun showSpeechDialog() {
@@ -523,7 +523,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
 
     private fun refreshList() {
         var queryString = ""
-        if (StringUtils.isNotEmpty(binding.query.text)) queryString = binding.query.text.toString()
+        if (StringUtils.isNotEmpty(mBinding.query.text)) queryString = mBinding.query.text.toString()
         refreshList(queryString)
     }
 

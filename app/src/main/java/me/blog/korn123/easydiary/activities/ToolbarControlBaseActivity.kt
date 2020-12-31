@@ -31,14 +31,14 @@ import me.blog.korn123.easydiary.extensions.config
 
 
 abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(), ObservableScrollViewCallbacks {
-    protected lateinit var binding: ActivityDiaryMainBinding
+    protected lateinit var mBinding: ActivityDiaryMainBinding
     private var mScrollable: S? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityDiaryMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        setSupportActionBar(binding.toolbar)
+        mBinding = ActivityDiaryMainBinding.inflate(layoutInflater)
+        setContentView(mBinding.root)
+        setSupportActionBar(mBinding.toolbar)
         mScrollable = createScrollable()
         mScrollable?.setScrollViewCallbacks(this)
     }
@@ -71,35 +71,35 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
     }
 
     private fun toolbarIsShown(): Boolean {
-        return ViewHelper.getTranslationY(binding.appBar).toInt() == 0
+        return ViewHelper.getTranslationY(mBinding.appBar).toInt() == 0
     }
 
     private fun toolbarIsHidden(): Boolean {
-        return ViewHelper.getTranslationY(binding.appBar).toInt() == -binding.appBar.height
+        return ViewHelper.getTranslationY(mBinding.appBar).toInt() == -mBinding.appBar.height
     }
 
     private fun showToolbar() {
         moveToolbar(0F)
-        if (config.enableCardViewPolicy) binding.searchCard.useCompatPadding = true
+        if (config.enableCardViewPolicy) mBinding.searchCard.useCompatPadding = true
     }
 
     private fun hideToolbar() {
-        moveToolbar(-binding.appBar.height.toFloat())
-        binding.searchCard.useCompatPadding = false
+        moveToolbar(-mBinding.appBar.height.toFloat())
+        mBinding.searchCard.useCompatPadding = false
     }
 
     private fun moveToolbar(toTranslationY: Float) {
-        if (ViewHelper.getTranslationY(binding.appBar) == toTranslationY) {
+        if (ViewHelper.getTranslationY(mBinding.appBar) == toTranslationY) {
             return
         }
-        val animator = ValueAnimator.ofFloat(ViewHelper.getTranslationY(binding.appBar), toTranslationY).setDuration(500)
+        val animator = ValueAnimator.ofFloat(ViewHelper.getTranslationY(mBinding.appBar), toTranslationY).setDuration(500)
         animator.addUpdateListener { animation ->
             val translationY = animation.animatedValue as Float
-            ViewHelper.setTranslationY(binding.appBar, translationY)
-            ViewHelper.setTranslationY(binding.mainHolder as View?, translationY)
-            val lp = (binding.mainHolder as View).layoutParams as FrameLayout.LayoutParams
+            ViewHelper.setTranslationY(mBinding.appBar, translationY)
+            ViewHelper.setTranslationY(mBinding.mainHolder as View?, translationY)
+            val lp = (mBinding.mainHolder as View).layoutParams as FrameLayout.LayoutParams
             lp.height = (-translationY).toInt() + getScreenHeight() - lp.topMargin
-            (binding.mainHolder as View).requestLayout()
+            (mBinding.mainHolder as View).requestLayout()
         }
         animator.start()
     }

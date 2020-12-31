@@ -68,7 +68,7 @@
                         <androidx.recyclerview.widget.RecyclerView
                             android:layout_width="match_parent"
                             android:layout_height="150dp"
-                            android:id="@+id/recycler_cheat_Sheet" />
+                            android:id="@+id/recycler_cheat_sheet" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 

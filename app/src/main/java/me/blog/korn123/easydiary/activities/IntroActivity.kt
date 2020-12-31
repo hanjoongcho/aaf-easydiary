@@ -17,13 +17,13 @@ import java.util.*
  */
 
 class IntroActivity : AppCompatActivity(), Handler.Callback {
-    private lateinit var binding: ActivityIntroBinding
+    private lateinit var mBinding: ActivityIntroBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityIntroBinding.inflate(layoutInflater)
+        mBinding = ActivityIntroBinding.inflate(layoutInflater)
         forceInitRealmLessThanOreo()
-        setContentView(binding.root)
+        setContentView(mBinding.root)
         rescheduleEnabledAlarms()
 
         // determine device language
@@ -49,7 +49,7 @@ class IntroActivity : AppCompatActivity(), Handler.Callback {
 
     override fun onResume() {
         super.onResume()
-        binding.root.run {
+        mBinding.root.run {
             FontUtils.setFontsTypeface(this@IntroActivity, assets, null, this)
             initTextSize(this)
             setBackgroundColor(config.primaryColor)

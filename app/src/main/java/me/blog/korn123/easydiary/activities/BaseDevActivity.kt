@@ -20,11 +20,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import io.github.aafactory.commons.utils.DateUtils
-import kotlinx.android.synthetic.main.activity_dev.*
 import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.CheatSheetAdapter
+import me.blog.korn123.easydiary.databinding.ActivityDevBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.ActionLog
@@ -33,13 +33,13 @@ import me.blog.korn123.easydiary.services.NotificationService
 import org.apache.commons.io.FilenameUtils
 import java.io.File
 
-
 open class BaseDevActivity : EasyDiaryActivity() {
 
     /***************************************************************************************************
      *   global properties
      *
      ***************************************************************************************************/
+    private lateinit var mBinding: ActivityDevBinding
     private var mCheatSheetList = arrayListOf<CheatSheetAdapter.CheatSheet>()
     private val mLocationManager by lazy { getSystemService(Context.LOCATION_SERVICE) as LocationManager }
     private val mNetworkLocationListener = object : LocationListener {
@@ -67,8 +67,9 @@ open class BaseDevActivity : EasyDiaryActivity() {
      ***************************************************************************************************/
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_dev)
-        setSupportActionBar(toolbar)
+        mBinding = ActivityDevBinding.inflate(layoutInflater)
+        setContentView(mBinding.root)
+        setSupportActionBar(mBinding.toolbar)
         supportActionBar?.run {
             title = "Easy-Diary Dev Mode"
             setDisplayHomeAsUpEnabled(true)
@@ -108,7 +109,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
      *
      ***************************************************************************************************/
     private fun setupNextAlarm() {
-        card_next_alarm.setOnClickListener {
+        mBinding.cardNextAlarm.setOnClickListener {
             val nextAlarm = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val triggerTimeMillis = (getSystemService(Context.ALARM_SERVICE) as AlarmManager).nextAlarmClock?.triggerTime ?: 0
                 when (triggerTimeMillis > 0) {
@@ -124,12 +125,12 @@ open class BaseDevActivity : EasyDiaryActivity() {
     }
 
     private fun setupNotification() {
-        card_notification1.setOnClickListener {
+        mBinding.cardNotification1.setOnClickListener {
             (applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).apply {
                 notify(NOTIFICATION_ID_DEV, createNotification(NotificationInfo(R.drawable.ic_diary_writing, true)))
             }
         }
-        card_notification2.setOnClickListener {
+        mBinding.cardNotification2.setOnClickListener {
             (applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).apply {
                 notify(NOTIFICATION_ID_DEV, createNotification(NotificationInfo(R.drawable.ic_diary_backup_local, useActionButton = true, useCustomContentView = true)))
             }
@@ -137,7 +138,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
     }
 
     private fun setupActionLog() {
-        clearLog.setOnClickListener {
+        mBinding.clearLog.setOnClickListener {
             EasyDiaryDbHelper.deleteActionLogAll()
             updateActionLog()
         }
@@ -150,11 +151,11 @@ open class BaseDevActivity : EasyDiaryActivity() {
         actionLogs.map {
             sb.append("${it.className}-${it.signature}-${it.key}: ${it.value}\n")
         }
-        actionLog.text = sb.toString()
+        mBinding.actionLog.text = sb.toString()
     }
 
     private fun setupClearUnusedPhoto() {
-        clearUnusedPhoto.setOnClickListener {
+        mBinding.clearUnusedPhoto.setOnClickListener {
             val localPhotoBaseNames = arrayListOf<String>()
             val unUsedPhotos = arrayListOf<String>()
             File(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY).listFiles().map {
@@ -172,11 +173,11 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
     @SuppressLint("MissingPermission")
     private fun setupLocation() {
-        requestLastLocation.setOnClickListener {
+        mBinding.requestLastLocation.setOnClickListener {
             updateLocation()
         }
 
-        updateGPSProvider.setOnClickListener {
+        mBinding.updateGPSProvider.setOnClickListener {
             when (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 true -> {
                     mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0F, mGPSLocationListener)
@@ -185,7 +186,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
         }
 
-        updateNetworkProvider.setOnClickListener {
+        mBinding.updateNetworkProvider.setOnClickListener {
             val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
             when (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
                 true -> {
@@ -199,14 +200,14 @@ open class BaseDevActivity : EasyDiaryActivity() {
     private var mCoroutineJob1: Job? = null
     private fun setupCoroutine() {
         fun updateConsole(message: String, tag: String = Thread.currentThread().name) {
-            text_coroutine1_console.append("$tag: $message\n")
-            scroll_coroutine.post { scroll_coroutine.fullScroll(View.FOCUS_DOWN) }
+            mBinding.textCoroutine1Console.append("$tag: $message\n")
+            mBinding.scrollCoroutine.post { mBinding.scrollCoroutine.fullScroll(View.FOCUS_DOWN) }
         }
         suspend fun doWorld() {
             delay(1000)
         }
 
-        button_coroutine_basic_start.setOnClickListener {
+        mBinding.buttonCoroutineBasicStart.setOnClickListener {
             if (mCoroutineJob1?.isActive == true) {
                 updateConsole("Job has already started.")
             } else {
@@ -224,7 +225,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
         }
 
-        button_coroutine_basic_stop.setOnClickListener {
+        mBinding.buttonCoroutineBasicStop.setOnClickListener {
             if (mCoroutineJob1?.isActive == true) {
                 runBlocking { mCoroutineJob1?.cancelAndJoin() }
             } else {
@@ -232,7 +233,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
         }
 
-        button_coroutine_basic_status.setOnClickListener {
+        mBinding.buttonCoroutineBasicStatus.setOnClickListener {
             mCoroutineJob1?.let {
                 when (it.isActive) {
                     true -> updateConsole("On")
@@ -243,7 +244,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
         }
 
-        button_coroutine_multiple.setOnClickListener {
+        mBinding.buttonCoroutineMultiple.setOnClickListener {
             for (k in 1..3) {
                 GlobalScope.launch { // launch a new coroutine and keep a reference to its Job
                     for (i in 1..10) {
@@ -257,7 +258,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
         }
 
-        button_coroutine_blocking.setOnClickListener {
+        mBinding.buttonCoroutineBlocking.setOnClickListener {
             runBlocking {
                 updateConsole("runBlocking block")
             }
@@ -274,7 +275,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             add(CheatSheetAdapter.CheatSheet("Java 8 - Default Methods", "", "https://raw.githubusercontent.com/alexandregama/java8-guides-tutorials/master/src/test/java/defaultmethod/DefaultMethodTest.java", true))
         }
 
-        recycler_cheat_Sheet?.apply {
+        mBinding.recyclerCheatSheet.apply {
             layoutManager = LinearLayoutManager(this@BaseDevActivity, LinearLayoutManager.VERTICAL, false)
 //            addItemDecoration(SettingsScheduleFragment.SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding)))
             adapter =  CheatSheetAdapter(
@@ -306,7 +307,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                         info += fullAddress(address[0])
                     }
                 }
-                locationManagerInfo.text = info
+                mBinding.locationManagerInfo.text = info
             }
         }
         when (hasGPSPermissions()) {
