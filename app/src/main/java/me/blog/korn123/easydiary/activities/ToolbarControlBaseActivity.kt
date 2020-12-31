@@ -26,20 +26,19 @@ import com.github.ksoichiro.android.observablescrollview.Scrollable
 import com.nineoldandroids.animation.ValueAnimator
 import com.nineoldandroids.view.ViewHelper
 import io.github.aafactory.commons.utils.CommonUtils
-import kotlinx.android.synthetic.main.activity_diary_main.*
+import me.blog.korn123.easydiary.databinding.ActivityDiaryMainBinding
 import me.blog.korn123.easydiary.extensions.config
 
 
 abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(), ObservableScrollViewCallbacks {
-
+    protected lateinit var binding: ActivityDiaryMainBinding
     private var mScrollable: S? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(getLayoutResId())
-
-        setSupportActionBar(toolbar)
-
+        binding = ActivityDiaryMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         mScrollable = createScrollable()
         mScrollable?.setScrollViewCallbacks(this)
     }
@@ -71,38 +70,36 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
         }
     }
 
-    protected abstract fun getLayoutResId(): Int
-
     private fun toolbarIsShown(): Boolean {
-        return ViewHelper.getTranslationY(appBar).toInt() == 0
+        return ViewHelper.getTranslationY(binding.appBar).toInt() == 0
     }
 
     private fun toolbarIsHidden(): Boolean {
-        return ViewHelper.getTranslationY(appBar).toInt() == -appBar.height
+        return ViewHelper.getTranslationY(binding.appBar).toInt() == -binding.appBar.height
     }
 
     private fun showToolbar() {
         moveToolbar(0F)
-        if (config.enableCardViewPolicy) searchCard.useCompatPadding = true
+        if (config.enableCardViewPolicy) binding.searchCard.useCompatPadding = true
     }
 
     private fun hideToolbar() {
-        moveToolbar(-appBar.height.toFloat())
-        searchCard.useCompatPadding = false
+        moveToolbar(-binding.appBar.height.toFloat())
+        binding.searchCard.useCompatPadding = false
     }
 
     private fun moveToolbar(toTranslationY: Float) {
-        if (ViewHelper.getTranslationY(appBar) == toTranslationY) {
+        if (ViewHelper.getTranslationY(binding.appBar) == toTranslationY) {
             return
         }
-        val animator = ValueAnimator.ofFloat(ViewHelper.getTranslationY(appBar), toTranslationY).setDuration(500)
+        val animator = ValueAnimator.ofFloat(ViewHelper.getTranslationY(binding.appBar), toTranslationY).setDuration(500)
         animator.addUpdateListener { animation ->
             val translationY = animation.animatedValue as Float
-            ViewHelper.setTranslationY(appBar, translationY)
-            ViewHelper.setTranslationY(main_holder as View?, translationY)
-            val lp = (main_holder as View).layoutParams as FrameLayout.LayoutParams
+            ViewHelper.setTranslationY(binding.appBar, translationY)
+            ViewHelper.setTranslationY(binding.mainHolder as View?, translationY)
+            val lp = (binding.mainHolder as View).layoutParams as FrameLayout.LayoutParams
             lp.height = (-translationY).toInt() + getScreenHeight() - lp.topMargin
-            (main_holder as View).requestLayout()
+            (binding.mainHolder as View).requestLayout()
         }
         animator.start()
     }

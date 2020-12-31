@@ -35,6 +35,9 @@ android {
         renderscriptSupportModeEnabled true
         signingConfig signingConfigs.config
     }
+    viewBinding {
+        enabled = true
+    }
     flavorDimensions "buildType"
     productFlavors {
         gmsProd {
