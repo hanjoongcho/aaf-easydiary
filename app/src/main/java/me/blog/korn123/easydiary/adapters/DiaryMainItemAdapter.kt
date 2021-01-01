@@ -3,10 +3,11 @@ package me.blog.korn123.easydiary.adapters
 import android.app.Activity
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import com.bumptech.glide.Glide
@@ -17,16 +18,15 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
-import com.google.android.flexbox.FlexboxLayout
 import io.github.aafactory.commons.utils.CALCULATION
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
-import kotlinx.android.synthetic.main.item_diary_main.view.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
+import me.blog.korn123.easydiary.databinding.ItemDiaryMainBinding
 import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
@@ -42,28 +42,25 @@ import org.apache.commons.lang3.StringUtils
 
 class DiaryMainItemAdapter(
         private val activity: Activity,
-        private val layoutResourceId: Int,
+        layoutResourceId: Int,
         private val list: List<DiaryDto>
 ) : ArrayAdapter<DiaryDto>(activity, layoutResourceId, list) {
     var currentQuery: String? = null
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val itemView: View = convertView ?: LayoutInflater.from(parent.context).inflate(this.layoutResourceId, parent, false)
-
-        when (itemView.tag is ViewHolder) {
-            true -> itemView.tag as ViewHolder
-            false -> {
-                val viewHolder = ViewHolder(
-                        itemView.photoViews,
-                        itemView.text1, itemView.text2, itemView.text3,
-                        itemView.contentsLength, itemView.weather, itemView.item_holder,
-                        itemView.selection, itemView.locationSymbol, itemView.locationLabel,
-                        itemView.locationContainer, itemView.contentsLengthContainer
-                )
-                itemView.tag = viewHolder
-                viewHolder
+        val itemView: View = convertView ?: run {
+            val binding = ItemDiaryMainBinding.inflate(activity.layoutInflater)
+            binding.root.apply {
+                tag = binding
+                context.updateTextColors(this, 0, 0)
+                context.updateAppViews(this)
+                context.initTextSize(this)
+                context.updateCardViewPolicy(this)
+                FontUtils.setFontsTypeface(context, context.assets, null, this)
             }
-        }.run {
+        }
+
+        (itemView.tag as ItemDiaryMainBinding).run {
             val diaryDto = list[position]
             activity.run {
                 if (config.enableLocationInfo) {
@@ -106,38 +103,31 @@ class DiaryMainItemAdapter(
             }
 
             if (StringUtils.isEmpty(diaryDto.title)) {
-                textView1.visibility = View.GONE
+                textTitle.visibility = View.GONE
             } else {
-                textView1.visibility = View.VISIBLE
+                textTitle.visibility = View.VISIBLE
             }
-            textView1.text = diaryDto.title
-            textView2.text = diaryDto.contents
+            textTitle.text = diaryDto.title
+            textContents.text = diaryDto.contents
 
             // highlight current query
             if (StringUtils.isNotEmpty(currentQuery)) {
                 if (context.config.diarySearchQueryCaseSensitive) {
-                    EasyDiaryUtils.highlightString(textView1, currentQuery)
-                    EasyDiaryUtils.highlightString(textView2, currentQuery)
+                    EasyDiaryUtils.highlightString(textTitle, currentQuery)
+                    EasyDiaryUtils.highlightString(textContents, currentQuery)
                 } else {
-                    EasyDiaryUtils.highlightStringIgnoreCase(textView1, currentQuery)
-                    EasyDiaryUtils.highlightStringIgnoreCase(textView2, currentQuery)
+                    EasyDiaryUtils.highlightStringIgnoreCase(textTitle, currentQuery)
+                    EasyDiaryUtils.highlightStringIgnoreCase(textContents, currentQuery)
                 }
 
             }
-            EasyDiaryUtils.boldString(context, textView1)
+            EasyDiaryUtils.boldString(context, textTitle)
 
-            textView3.text = when (diaryDto.isAllDay) {
+            textDateTime.text = when (diaryDto.isAllDay) {
                 true -> DateUtils.getFullPatternDate(diaryDto.currentTimeMillis)
                 false -> DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis)
             }
-            FlavorUtils.initWeatherView(context, imageView, diaryDto.weather)
-
-            item_holder.let {
-                context.updateTextColors(it, 0, 0)
-                context.updateAppViews(it)
-                context.initTextSize(it)
-                context.updateCardViewPolicy(it)
-            }
+            FlavorUtils.initWeatherView(context, imageSymbol, diaryDto.weather)
 
             when (diaryDto.photoUris?.size ?: 0 > 0) {
                 true -> {
@@ -145,7 +135,7 @@ class DiaryMainItemAdapter(
                 }
                 false -> photoViews.visibility = View.GONE
             }
-            FontUtils.setFontsTypeface(context, context.assets, null, item_holder)
+
             photoViews.removeAllViews()
             if (diaryDto.photoUris?.size ?: 0 > 0) {
                 val maxPhotos = CommonUtils.getDefaultDisplay(activity).x / CommonUtils.dpToPixel(activity, 40F)
@@ -184,7 +174,7 @@ class DiaryMainItemAdapter(
                 }
             }
 
-            textView2.maxLines = when (activity.config.enableContentsSummary) {
+            textContents.maxLines = when (activity.config.enableContentsSummary) {
                 true -> activity.config.summaryMaxLines
                 false -> Integer.MAX_VALUE
             }
@@ -200,12 +190,4 @@ class DiaryMainItemAdapter(
         }
         return selectedItems
     }
-
-    private class ViewHolder(
-            val photoViews: FlexboxLayout,
-            val textView1: TextView, val textView2: TextView, val textView3: TextView,
-            val contentsLength: TextView, val imageView: ImageView, val item_holder: ViewGroup,
-            val selection: CheckBox, val locationSymbol:ImageView, val locationLabel: TextView,
-            val locationContainer: me.blog.korn123.easydiary.views.FixedCardView, val contentsLengthContainer: me.blog.korn123.easydiary.views.FixedCardView
-    )
 }
