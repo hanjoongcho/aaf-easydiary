@@ -15,7 +15,9 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.RemoteViews
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.core.app.NotificationCompat
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.isOreoPlus
@@ -30,6 +32,7 @@ import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.services.BaseNotificationService
 import me.blog.korn123.easydiary.services.NotificationService
+import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 import org.apache.commons.io.FilenameUtils
 import java.io.File
 
@@ -40,8 +43,9 @@ open class BaseDevActivity : EasyDiaryActivity() {
      *
      ***************************************************************************************************/
     private lateinit var mBinding: ActivityDevBinding
-    private var mCheatSheetList = arrayListOf<CheatSheetAdapter.CheatSheet>()
+    private val mViewModel: BaseDevViewModel by viewModels()
     private val mLocationManager by lazy { getSystemService(Context.LOCATION_SERVICE) as LocationManager }
+    private var mCheatSheetList = arrayListOf<CheatSheetAdapter.CheatSheet>()
     private val mNetworkLocationListener = object : LocationListener {
         override fun onLocationChanged(p0: Location) {
             makeToast("Network location has been updated")
@@ -67,8 +71,10 @@ open class BaseDevActivity : EasyDiaryActivity() {
      ***************************************************************************************************/
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityDevBinding.inflate(layoutInflater)
-        setContentView(mBinding.root)
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_dev)
+        mBinding.lifecycleOwner = this
+        mBinding.viewModel = mViewModel
+
         setSupportActionBar(mBinding.toolbar)
         supportActionBar?.run {
             title = "Easy-Diary Dev Mode"

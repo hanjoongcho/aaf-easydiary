@@ -38,6 +38,9 @@ android {
     viewBinding {
         enabled = true
     }
+    dataBinding {
+        enabled = true
+    }
     flavorDimensions "buildType"
     productFlavors {
         gmsProd {
@@ -130,6 +133,9 @@ dependencies {
     implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
     implementation 'androidx.biometric:biometric:1.0.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    implementation 'androidx.activity:activity-ktx:1.1.0'
     implementation 'com.google.android.material:material:1.2.1'
     implementation ('androidx.work:work-runtime-ktx:2.4.0') { exclude group: 'com.google.guava', module: 'listenablefuture' }
 
