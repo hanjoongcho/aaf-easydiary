@@ -65,6 +65,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
         override fun onProviderDisabled(p0: String) {}
     }
 
+
     /***************************************************************************************************
      *   override functions
      *

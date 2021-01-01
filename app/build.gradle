@@ -131,7 +131,7 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.biometric:biometric:1.0.1'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
@@ -140,12 +140,12 @@ dependencies {
     implementation ('androidx.work:work-runtime-ktx:2.4.0') { exclude group: 'com.google.guava', module: 'listenablefuture' }
 
     // google gms api
-    gmsDevImplementation "com.google.android.gms:play-services-auth:18.1.0"
+    gmsDevImplementation "com.google.android.gms:play-services-auth:19.0.0"
     gmsDevImplementation 'com.google.http-client:google-http-client-gson:1.26.0'
     gmsDevImplementation('com.google.api-client:google-api-client-android:1.26.0') { exclude group: 'org.apache.httpcomponents' }
     gmsDevImplementation('com.google.apis:google-api-services-drive:v3-rev136-1.25.0') { exclude group: 'org.apache.httpcomponents' }
 
-    gmsProdImplementation "com.google.android.gms:play-services-auth:18.1.0"
+    gmsProdImplementation "com.google.android.gms:play-services-auth:19.0.0"
     gmsProdImplementation 'com.google.http-client:google-http-client-gson:1.26.0'
     gmsProdImplementation('com.google.api-client:google-api-client-android:1.26.0') { exclude group: 'org.apache.httpcomponents' }
     gmsProdImplementation('com.google.apis:google-api-services-drive:v3-rev136-1.25.0') { exclude group: 'org.apache.httpcomponents' }
@@ -172,7 +172,7 @@ dependencies {
     implementation 'com.github.amlcurran.showcaseview:library:5.4.3'
     implementation 'id.zelory:compressor:2.1.0'
     implementation 'com.xw.repo:bubbleseekbar:3.17'
-    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
     implementation 'com.github.ksoichiro:android-observablescrollview:1.5.2'
     implementation 'com.nineoldandroids:library:2.4.0'
     implementation 'jp.wasabeef:glide-transformations:4.0.0'
