@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class BaseDevViewModel : ViewModel()  {
-    val currentNumber: MutableLiveData<Int> = MutableLiveData(0)
+    val symbol: MutableLiveData<Int> = MutableLiveData(1)
 
     fun plus() {
         // Launch a coroutine that reads from a remote data source and updates cache
@@ -16,7 +16,7 @@ class BaseDevViewModel : ViewModel()  {
 
             // Force Main thread
             withContext(Dispatchers.Main) {
-                currentNumber.value = currentNumber.value?.plus(1) ?: 1
+                symbol.value = symbol.value?.plus(1) ?: 1
             }
         }
     }

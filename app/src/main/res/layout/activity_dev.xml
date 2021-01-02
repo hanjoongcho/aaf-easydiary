@@ -73,8 +73,12 @@
                             <com.simplemobiletools.commons.views.MyTextView
                                 android:text="Live Data"
                                 style="@style/SettingsTitle" />
+                            <ImageView
+                                app:symbolId="@{view_model.symbol}"
+                                android:layout_width="@dimen/diary_symbol_width"
+                                android:layout_height="@dimen/diary_symbol_height" />
                             <com.simplemobiletools.commons.views.MyTextView
-                                android:text="@{Long.toString(view_model.currentNumber)}"
+                                android:text="@{Long.toString(view_model.symbol)}"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content" />
                         </LinearLayout>
