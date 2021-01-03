@@ -227,24 +227,24 @@
         <item>350|Youtube</item>
         <item>370|Netflix</item>
         <item>351|Dropbox</item>
-        <item>352|PayPal</item>
         <item>353|HTML5</item>
+        <item>361|Reddit</item>
         <item>354|Snapchat</item>
         <item>355|Android</item>
         <item>356|Linkedin</item>
-        <item>357|Twitter</item>
-        <item>358|Instagram</item>
         <item>359|Facebook</item>
-        <item>360|Flickr</item>
-        <item>361|Reddit</item>
         <item>362|Trello</item>
+        <item>365|GitHub</item>
+        <item>369|SlideShare</item>
+        <item>368|Java</item>
+        <item>358|Instagram</item>
+        <item>367|Ubuntu</item>
+        <item>352|PayPal</item>
+        <item>357|Twitter</item>
+        <item>360|Flickr</item>
         <item>363|Quora</item>
         <item>364|Line</item>
-        <item>365|GitHub</item>
         <item>366|Linux</item>
-        <item>367|Ubuntu</item>
-        <item>368|Java</item>
-        <item>369|SlideShare</item>
     </string-array>
 
     <string-array name="flag_item_array">
