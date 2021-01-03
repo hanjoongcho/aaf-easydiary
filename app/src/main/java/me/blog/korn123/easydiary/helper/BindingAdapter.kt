@@ -5,10 +5,9 @@ import androidx.databinding.BindingAdapter
 import me.blog.korn123.commons.utils.FlavorUtils
 
 object BindingAdapter {
-    @BindingAdapter("symbolId")
+    @BindingAdapter("symbolSequence")
     @JvmStatic
-    fun bindSrcCompat(imageView: ImageView, symbolId: Int) {
-        imageView.setImageResource(FlavorUtils.sequenceToSymbolResourceId(symbolId))
-        android.util.Log.i(AAF_TEST, "symbolId: $symbolId, imageView: $imageView")
+    fun bindSrcCompat(imageView: ImageView, symbolSequence: Int) {
+        imageView.setImageResource(FlavorUtils.sequenceToSymbolResourceId(symbolSequence))
     }
 }

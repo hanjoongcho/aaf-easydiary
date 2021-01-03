@@ -74,7 +74,7 @@
                                 android:text="Live Data"
                                 style="@style/SettingsTitle" />
                             <ImageView
-                                app:symbolId="@{view_model.symbol}"
+                                app:symbolSequence="@{view_model.symbol}"
                                 android:layout_width="@dimen/diary_symbol_width"
                                 android:layout_height="@dimen/diary_symbol_height" />
                             <com.simplemobiletools.commons.views.MyTextView
