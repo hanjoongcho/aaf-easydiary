@@ -265,7 +265,7 @@ fun Activity.openFeelingSymbolDialog(guideMessage: String, callback: (Int) -> Un
     addCategory(itemList, categoryList, "symbol_item_array", getString(R.string.category_symbol))
     addCategory(itemList, categoryList, "flag_item_array", getString(R.string.category_flag))
 
-    val viewPager = symbolDialog.findViewById(R.id.viewpager) as androidx.viewpager.widget.ViewPager
+    val viewPager = symbolDialog.findViewById<androidx.viewpager.widget.ViewPager>(R.id.viewpager).apply { setBackgroundColor(config.backgroundColor) }
     symbolDialog.findViewById<TextView>(R.id.diarySymbolGuide)?.let {
         it.text = guideMessage
     }
@@ -275,7 +275,7 @@ fun Activity.openFeelingSymbolDialog(guideMessage: String, callback: (Int) -> Un
     }
     viewPager.adapter = symbolPagerAdapter
 
-    val slidingTabLayout = symbolDialog.findViewById(R.id.sliding_tabs) as SlidingTabLayout
+    val slidingTabLayout = symbolDialog.findViewById<SlidingTabLayout>(R.id.sliding_tabs).apply { setBackgroundColor(config.backgroundColor) }
     slidingTabLayout.setViewPager(viewPager)
 
     val dismissButton = symbolDialog.findViewById(R.id.closeBottomSheet) as ImageView

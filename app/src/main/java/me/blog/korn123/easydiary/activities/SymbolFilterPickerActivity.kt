@@ -89,8 +89,11 @@ class SymbolFilterPickerActivity : EasyDiaryActivity() {
                 }
             }
         }
-        viewpager.adapter = symbolPagerAdapter
-        sliding_tabs.setViewPager(viewpager)
+        viewpager.run {
+            setBackgroundColor(config.backgroundColor)
+            adapter = symbolPagerAdapter
+            sliding_tabs.setViewPager(this)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

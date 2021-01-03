@@ -11,6 +11,7 @@ import android.widget.TextView
 import kotlinx.android.synthetic.main.item_weather.view.*
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
+import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.models.DiarySymbol
 
 /**
@@ -44,20 +45,11 @@ class DiaryWeatherItemAdapter(
                 viewHolder
             }
         }.run {
+            textView1.setTextColor(context.config.textColor)
             FontUtils.setFontsTypeface(context, context.assets, null, item_holder)
             FlavorUtils.initWeatherView(context, imageView1, mList[position].sequence, false)
-            textView1.let {
-                it.text = mList[position].description
-//            context.initTextSize(it, context)
-            }
-
-            imageView1.let {
-                if (mList[position].sequence == 0) {
-                    it.visibility = View.GONE
-                } else {
-                    it.visibility = View.VISIBLE
-                }
-            }
+            textView1.text = mList[position].description
+            imageView1.visibility = if (mList[position].sequence == 0) View.GONE else View.VISIBLE
         }
 
         return itemView
