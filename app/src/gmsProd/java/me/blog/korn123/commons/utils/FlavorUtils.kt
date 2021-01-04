@@ -138,6 +138,10 @@ object FlavorUtils {
         EMOTION_AMAZE -> R.drawable.ic_amaze
         EMOTION_DELIGHT -> R.drawable.ic_delight
         EMOTION_EMBARRASSED2 -> R.drawable.ic_embarrassed_1
+        EMOTION_FRUSTRATED -> R.drawable.ic_frustrated
+        EMOTION_CRAZY -> R.drawable.ic_crazy
+        EMOTION_TIRED -> R.drawable.ic_tired
+        EMOTION_FEAR -> R.drawable.ic_fear
 
         FOOD_BURGER -> R.drawable.ic_burger
         FOOD_PIZZA -> R.drawable.ic_pizza

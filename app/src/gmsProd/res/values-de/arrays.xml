@@ -89,6 +89,10 @@
         <item>116|Skull</item>
         <item>118|Alien</item>
         <item>117|Poo</item>
+        <item>148|Frustrated</item>
+        <item>149|Crazy</item>
+        <item>150|Tired</item>
+        <item>151|Fear</item>
     </string-array>
 
     <string-array name="daily_item_array">

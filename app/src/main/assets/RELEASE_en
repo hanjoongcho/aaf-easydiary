@@ -4,6 +4,10 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.156 (date: 2021.01.05)
+  * Add diary symbols
+  * Improved calendar screen UX
+
 # Changes in 1.4.155 (date: 2020.12.14)
   * Add diary symbols
   * When creating a post card, the function has been improved so that the attached photo can be cropped or a filter can be applied

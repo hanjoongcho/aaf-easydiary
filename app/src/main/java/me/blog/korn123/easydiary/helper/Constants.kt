@@ -138,6 +138,10 @@ const val EMOTION_SMILE2 = 144
 const val EMOTION_AMAZE = 145
 const val EMOTION_DELIGHT = 146
 const val EMOTION_EMBARRASSED2 = 147
+const val EMOTION_FRUSTRATED = 148
+const val EMOTION_CRAZY = 149
+const val EMOTION_TIRED = 150
+const val EMOTION_FEAR = 151
 
 // Landscape & Buildings 200 ~ 249
 const val LANDSCAPE_BEACH = 200

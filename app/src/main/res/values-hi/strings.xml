@@ -494,6 +494,11 @@
         Add diary symbols\n
         When creating a post card, the function has been improved so that the attached photo can be cropped or a filter can be applied
     </string>
+    <string name="release_222">
+        v1.4.156 / 2021.01.05\n
+        Add diary symbols\n
+        Improved calendar screen UX
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
