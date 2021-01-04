@@ -160,7 +160,7 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.7'
 
     // AAFactory
-    implementation 'io.github.aafactory:commons:1.0.7'
+    implementation 'io.github.aafactory:commons:1.0.8'
 //    implementation project(":aafactory-commons")
 
     // etc.
