@@ -1,135 +1,142 @@
-<FrameLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <LinearLayout
-        android:id="@+id/main_holder"
-        android:padding="@dimen/card_layout_padding"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="view_model"
+            type="me.blog.korn123.easydiary.viewmodels.DiaryMainViewModel" />
+    </data>
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <androidx.cardview.widget.CardView
-            android:id="@+id/searchCard"
-            app:cardElevation="3dp"
-            style="@style/AppCard">
-            <LinearLayout
-                android:orientation="horizontal"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <LinearLayout
+            android:id="@+id/main_holder"
+            android:padding="@dimen/card_layout_padding"
+            android:layout_marginTop="?attr/actionBarSize"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <androidx.cardview.widget.CardView
+                android:id="@+id/searchCard"
+                app:cardElevation="3dp"
+                style="@style/AppCard">
                 <LinearLayout
-                    android:id="@+id/feelingSymbolButton"
-                    android:background="?attr/selectableItemBackgroundBorderless"
                     android:orientation="horizontal"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                    <ImageView
-                        android:id="@+id/symbol"
-                        app:srcCompat="@drawable/ic_select_symbol"
-                        android:layout_marginEnd="10dp"
-                        android:layout_width="@dimen/diary_symbol_width"
-                        android:layout_height="@dimen/diary_symbol_height" />
-                    <com.simplemobiletools.commons.views.MyTextView
-                        android:id="@+id/symbolTextArrow"
+                    <LinearLayout
+                        android:id="@+id/feelingSymbolButton"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            app:symbolSequence="@{view_model.symbol}"
+                            android:layout_marginEnd="10dp"
+                            android:layout_width="@dimen/diary_symbol_width"
+                            android:layout_height="@dimen/diary_symbol_height" />
+                        <com.simplemobiletools.commons.views.MyTextView
+                            android:id="@+id/symbolTextArrow"
+                            android:layout_gravity="center_vertical"
+                            android:text="▼"
+                            android:textSize="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                    <com.simplemobiletools.commons.views.MyEditText
+                        android:id="@+id/query"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:gravity="center_vertical"
                         android:layout_gravity="center_vertical"
-                        android:text="▼"
-                        android:textSize="10dp"
-                        android:layout_marginEnd="10dp"
+                        android:hint="@string/guide_message_2"
+                        android:inputType="text|textAutoCorrect|textAutoComplete"
+                        android:imeOptions="actionDone"
+                        android:maxLines="1" />
+
+                    <ImageView
+                        android:id="@+id/clearQuery"
+                        android:src="@drawable/delete"
+                        android:layout_gravity="end|center_vertical"
+                        android:padding="3dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
-                <com.simplemobiletools.commons.views.MyEditText
-                    android:id="@+id/query"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:gravity="center_vertical"
-                    android:layout_gravity="center_vertical"
-                    android:hint="@string/guide_message_2"
-                    android:inputType="text|textAutoCorrect|textAutoComplete"
-                    android:imeOptions="actionDone"
-                    android:maxLines="1" />
+            </androidx.cardview.widget.CardView>
 
-                <ImageView
-                    android:id="@+id/clearQuery"
-                    android:src="@drawable/delete"
-                    android:layout_gravity="end|center_vertical"
-                    android:padding="3dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+            <com.github.ksoichiro.android.observablescrollview.ObservableListView
+                android:id="@+id/diaryListView"
+                android:layout_marginTop="@dimen/card_layout_padding"
+                android:fastScrollAlwaysVisible="false"
+                android:fastScrollEnabled="true"
+                android:dividerHeight="@dimen/card_layout_margin"
+                android:divider="@null"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </com.github.ksoichiro.android.observablescrollview.ObservableListView>
+        </LinearLayout>
 
-        <com.github.ksoichiro.android.observablescrollview.ObservableListView
-            android:id="@+id/diaryListView"
-            android:layout_marginTop="@dimen/card_layout_padding"
-            android:fastScrollAlwaysVisible="false"
-            android:fastScrollEnabled="true"
-            android:dividerHeight="@dimen/card_layout_margin"
-            android:divider="@null"
+        <com.simplemobiletools.commons.views.MyFloatingActionButton
+            android:id="@+id/insertDiaryButton"
+            android:contentDescription="@string/write_diary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            app:srcCompat="@drawable/edit" />
+
+        <LinearLayout
+            android:id="@+id/modalContainer"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:alpha="0.3"
+            android:background="?attr/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        </com.github.ksoichiro.android.observablescrollview.ObservableListView>
-    </LinearLayout>
+        </LinearLayout>
 
-    <com.simplemobiletools.commons.views.MyFloatingActionButton
-        android:id="@+id/insertDiaryButton"
-        android:contentDescription="@string/write_diary"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/edit" />
-
-    <LinearLayout
-        android:id="@+id/modalContainer"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:alpha="0.3"
-        android:background="?attr/colorPrimary"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/progressDialog"
-        android:padding="20dp"
-        android:background="@android:color/white"
-        android:orientation="vertical"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <com.simplemobiletools.commons.views.MyTextView
-            android:id="@+id/migrationMessage"
-            android:text="@string/diary_photo_migration_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <ProgressBar
-            android:layout_marginTop="10dp"
-            android:layout_width="20dp"
-            android:layout_height="20dp" />
-        <com.simplemobiletools.commons.views.MyTextView
-            android:id="@+id/progressInfo"
-            android:layout_gravity="end"
-            android:layout_marginTop="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-</FrameLayout>
+        <LinearLayout
+            android:id="@+id/progressDialog"
+            android:padding="20dp"
+            android:background="@android:color/white"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.simplemobiletools.commons.views.MyTextView
+                android:id="@+id/migrationMessage"
+                android:text="@string/diary_photo_migration_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <ProgressBar
+                android:layout_marginTop="10dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
+            <com.simplemobiletools.commons.views.MyTextView
+                android:id="@+id/progressInfo"
+                android:layout_gravity="end"
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </FrameLayout>
+</layout>

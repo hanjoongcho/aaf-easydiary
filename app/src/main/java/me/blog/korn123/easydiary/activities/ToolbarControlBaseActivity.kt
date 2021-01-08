@@ -20,24 +20,30 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
+import androidx.activity.viewModels
+import androidx.databinding.DataBindingUtil
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks
 import com.github.ksoichiro.android.observablescrollview.ScrollState
 import com.github.ksoichiro.android.observablescrollview.Scrollable
 import com.nineoldandroids.animation.ValueAnimator
 import com.nineoldandroids.view.ViewHelper
 import io.github.aafactory.commons.utils.CommonUtils
+import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityDiaryMainBinding
 import me.blog.korn123.easydiary.extensions.config
-
+import me.blog.korn123.easydiary.viewmodels.DiaryMainViewModel
 
 abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(), ObservableScrollViewCallbacks {
     protected lateinit var mBinding: ActivityDiaryMainBinding
+    protected val viewModel: DiaryMainViewModel by viewModels()
     private var mScrollable: S? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityDiaryMainBinding.inflate(layoutInflater)
-        setContentView(mBinding.root)
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_diary_main)
+        mBinding.lifecycleOwner = this
+        mBinding.viewModel = viewModel
+
         setSupportActionBar(mBinding.toolbar)
         mScrollable = createScrollable()
         mScrollable?.setScrollViewCallbacks(this)
@@ -118,5 +124,9 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
         Log.i("keypadIsShown", "$heightDiff, ${CommonUtils.dpToPixel(this, 200F)}")
 
         return isShow
+    }
+
+    fun updateSymbolSequence(symbolSequence: Int) {
+        viewModel.updateSymbolSequence(symbolSequence)
     }
 }
