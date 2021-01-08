@@ -58,11 +58,11 @@ class DiaryInsertActivity : EditActivity() {
         initDateTime()
         setupDialog()
         setupPhotoView()
-        initBottomToolbar()
         setDateTime()
         bindEvent()
         setupKeypad()
         restoreContents(savedInstanceState)
+        initBottomToolbar()
         toggleSimpleLayout()
     }
 
@@ -276,7 +276,6 @@ class DiaryInsertActivity : EditActivity() {
                 photoContainer.addView(imageView, photoContainer.childCount - 1)
             }
         }
-        System.currentTimeMillis()
     }
 
     companion object {
