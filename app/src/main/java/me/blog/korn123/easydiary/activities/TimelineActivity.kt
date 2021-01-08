@@ -218,7 +218,7 @@ class TimelineActivity : EasyDiaryActivity() {
             startDate.text = null
             endDate.text = null
             query.text = null
-            mSymbolSequence = 9999
+            mSymbolSequence = SYMBOL_SELECT_ALL
             FlavorUtils.initWeatherView(this, symbol, mSymbolSequence, false)
             refreshList()
         }
@@ -232,8 +232,8 @@ class TimelineActivity : EasyDiaryActivity() {
         }}
     }
 
-    private fun selectFeelingSymbol(index: Int = 9999) {
-        mSymbolSequence = if (index == 0) 9999 else index
+    private fun selectFeelingSymbol(index: Int = SYMBOL_SELECT_ALL) {
+        mSymbolSequence = if (index == 0) SYMBOL_SELECT_ALL else index
         FlavorUtils.initWeatherView(this, symbol, mSymbolSequence, false)
     }
 
