@@ -36,11 +36,8 @@ class DiaryUpdateActivity : EditActivity() {
      *
      ***************************************************************************************************/
     private var mSequence: Int = 0
-    private var mWeather: Int = 0
-
     private val mOnClickListener = View.OnClickListener { view ->
         hideSoftInputFromWindow()
-
         when (view.id) {
             R.id.saveContents -> if (StringUtils.isEmpty(diaryContents.text)) {
                 diaryContents.requestFocus()
@@ -163,7 +160,6 @@ class DiaryUpdateActivity : EditActivity() {
         val intent = intent
         mSequence = intent.getIntExtra(DIARY_SEQUENCE, 0)
         val diaryDto = EasyDiaryDbHelper.readDiaryBy(mSequence)
-        mWeather = diaryDto.weather
         if (diaryDto.isAllDay) {
             allDay.isChecked = true
             toggleTimePickerTool()
@@ -207,7 +203,7 @@ class DiaryUpdateActivity : EditActivity() {
         }
 
 //        initSpinner()
-        selectFeelingSymbol(mWeather)
+        selectFeelingSymbol(diaryDto.weather)
         if (config.enableLocationInfo) {
 //            locationLabel.setTextColor(config.textColor)
 //            locationContainer.background = getLabelBackground()

@@ -195,6 +195,7 @@ abstract class EditActivity : EasyDiaryActivity() {
             putInt(SELECTED_HOUR, mHourOfDay)
             putInt(SELECTED_MINUTE, mMinute)
             putInt(SELECTED_SECOND, mSecond)
+            putInt(SYMBOL_SEQUENCE, mSelectedItemPosition)
         }
         super.onSaveInstanceState(outState)
     }
@@ -501,27 +502,29 @@ abstract class EditActivity : EasyDiaryActivity() {
     }
 
     protected fun restoreContents(savedInstanceState: Bundle?) {
-        savedInstanceState?.let {
+        savedInstanceState?.run {
             mPhotoUris.clear()
             val attachView = photoContainer.getChildAt(photoContainer.childCount.minus(1))
             photoContainer.removeAllViews()
             photoContainer.addView(attachView)
 
-            it.getStringArrayList(LIST_URI_STRING)?.map { uriString ->
+            getStringArrayList(LIST_URI_STRING)?.map { uriString ->
                 mPhotoUris.add(PhotoUriDto(uriString))
             }
-            mYear = it.getInt(SELECTED_YEAR, mYear)
-            mMonth = it.getInt(SELECTED_MONTH, mMonth)
-            mDayOfMonth = it.getInt(SELECTED_DAY, mDayOfMonth)
-            mHourOfDay = it.getInt(SELECTED_HOUR, mHourOfDay)
-            mMinute = it.getInt(SELECTED_MINUTE, mMinute)
-            mSecond = it.getInt(SELECTED_SECOND, mSecond)
+            mYear = getInt(SELECTED_YEAR, mYear)
+            mMonth = getInt(SELECTED_MONTH, mMonth)
+            mDayOfMonth = getInt(SELECTED_DAY, mDayOfMonth)
+            mHourOfDay = getInt(SELECTED_HOUR, mHourOfDay)
+            mMinute = getInt(SELECTED_MINUTE, mMinute)
+            mSecond = getInt(SELECTED_SECOND, mSecond)
 
             mPhotoUris.forEachIndexed { index, photoUriDto ->
-                val imageView = EasyDiaryUtils.createAttachedPhotoView(this, photoUriDto, index)
+                val imageView = EasyDiaryUtils.createAttachedPhotoView(this@EditActivity, photoUriDto, index)
                 imageView.setOnClickListener(PhotoClickListener(index))
                 photoContainer.addView(imageView, photoContainer.childCount - 1)
             }
+            
+            selectFeelingSymbol(getInt(SYMBOL_SEQUENCE, 0))
         }
     }
 
