@@ -8,7 +8,6 @@ import android.speech.RecognizerIntent
 import android.view.View
 import android.view.ViewGroup
 import com.werb.pickphotoview.util.PickConfig
-import io.realm.RealmList
 import kotlinx.android.synthetic.main.activity_diary_edit.*
 import kotlinx.android.synthetic.main.partial_bottom_toolbar.*
 import kotlinx.android.synthetic.main.partial_edit_contents.*
@@ -17,7 +16,10 @@ import kotlinx.android.synthetic.main.partial_edit_toolbar_sub.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.JasyptUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.makeSnackBar
+import me.blog.korn123.easydiary.extensions.openFeelingSymbolDialog
+import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
@@ -34,11 +36,8 @@ class DiaryUpdateActivity : EditActivity() {
      *
      ***************************************************************************************************/
     private var mSequence: Int = 0
-    private var mWeather: Int = 0
-
     private val mOnClickListener = View.OnClickListener { view ->
         hideSoftInputFromWindow()
-
         when (view.id) {
             R.id.saveContents -> if (StringUtils.isEmpty(diaryContents.text)) {
                 diaryContents.requestFocus()
@@ -100,9 +99,10 @@ class DiaryUpdateActivity : EditActivity() {
         initDateTime()
         setupDialog()
         setupPhotoView()
-        initBottomToolbar()
         setDateTime()
         bindEvent()
+        restoreContents(savedInstanceState)
+        initBottomToolbar()
         toggleSimpleLayout()
     }
 
@@ -160,7 +160,6 @@ class DiaryUpdateActivity : EditActivity() {
         val intent = intent
         mSequence = intent.getIntExtra(DIARY_SEQUENCE, 0)
         val diaryDto = EasyDiaryDbHelper.readDiaryBy(mSequence)
-        mWeather = diaryDto.weather
         if (diaryDto.isAllDay) {
             allDay.isChecked = true
             toggleTimePickerTool()
@@ -190,7 +189,6 @@ class DiaryUpdateActivity : EditActivity() {
         }
 
         // TODO fixme elegance
-        mPhotoUris = RealmList()
         diaryDto.photoUris?.let {
             mPhotoUris.addAll(it)
         }
@@ -205,7 +203,7 @@ class DiaryUpdateActivity : EditActivity() {
         }
 
 //        initSpinner()
-        selectFeelingSymbol(mWeather)
+        selectFeelingSymbol(diaryDto.weather)
         if (config.enableLocationInfo) {
 //            locationLabel.setTextColor(config.textColor)
 //            locationContainer.background = getLabelBackground()

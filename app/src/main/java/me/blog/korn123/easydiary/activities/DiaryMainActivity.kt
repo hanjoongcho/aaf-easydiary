@@ -24,7 +24,6 @@ import com.github.ksoichiro.android.observablescrollview.ObservableListView
 import com.nineoldandroids.view.ViewHelper
 import io.github.aafactory.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
@@ -53,7 +52,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     private var mDiaryList: ArrayList<DiaryDto> = arrayListOf()
     private var mShowcaseIndex = 0
     private var mShowcaseView: ShowcaseView? = null
-    private var mSymbolSequence = SYMBOL_SELECT_ALL
     private var popupWindow: PopupWindow? = null
     var mDiaryMode = DiaryMode.READ
 
@@ -505,9 +503,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         }}
     }
 
-    private fun selectFeelingSymbol(index: Int = 9999) {
-        mSymbolSequence = if (index == 0) 9999 else index
-        FlavorUtils.initWeatherView(this, mBinding.symbol, mSymbolSequence, false)
+    private fun selectFeelingSymbol(index: Int = SYMBOL_SELECT_ALL) {
+        updateSymbolSequence(if (index == 0) SYMBOL_SELECT_ALL else index)
     }
 
     private fun showSpeechDialog() {
@@ -529,7 +526,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
 
     fun refreshList(query: String) {
         mDiaryList.clear()
-        mDiaryList.addAll(EasyDiaryDbHelper.readDiary(query, config.diarySearchQueryCaseSensitive, 0, 0, mSymbolSequence))
+        mDiaryList.addAll(EasyDiaryDbHelper.readDiary(query, config.diarySearchQueryCaseSensitive, 0, 0, viewModel.symbol.value ?: 0))
         mDiaryMainItemAdapter?.currentQuery = query
         mDiaryMainItemAdapter?.notifyDataSetChanged()
     }

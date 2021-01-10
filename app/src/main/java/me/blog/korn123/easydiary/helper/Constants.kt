@@ -330,6 +330,7 @@ const val FLAG_THAILAND = 710
  *
  ***************************************************************************************************/
 const val LIST_URI_STRING = "list_uri_string"
+const val SYMBOL_SEQUENCE = "symbol_sequence"
 const val SELECTED_YEAR = "selected_year"
 const val SELECTED_MONTH = "selected_month"
 const val SELECTED_DAY = "selected_day"

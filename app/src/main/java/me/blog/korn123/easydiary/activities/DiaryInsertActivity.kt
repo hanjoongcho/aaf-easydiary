@@ -12,7 +12,6 @@ import android.widget.RelativeLayout
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.werb.pickphotoview.util.PickConfig
-import io.realm.RealmList
 import kotlinx.android.synthetic.main.activity_diary_edit.*
 import kotlinx.android.synthetic.main.partial_bottom_toolbar.*
 import kotlinx.android.synthetic.main.partial_edit_contents.*
@@ -23,7 +22,6 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
-import me.blog.korn123.easydiary.models.PhotoUriDto
 import org.apache.commons.lang3.StringUtils
 import java.util.*
 
@@ -58,29 +56,12 @@ class DiaryInsertActivity : EditActivity() {
         initDateTime()
         setupDialog()
         setupPhotoView()
-        initBottomToolbar()
         setDateTime()
         bindEvent()
         setupKeypad()
         restoreContents(savedInstanceState)
+        initBottomToolbar()
         toggleSimpleLayout()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.let {
-            val listUriString = arrayListOf<String>()
-            mPhotoUris.map { model ->
-                listUriString.add(model.photoUri ?: "")
-            }
-            it.putStringArrayList(LIST_URI_STRING, listUriString)
-            it.putInt(SELECTED_YEAR, mYear)
-            it.putInt(SELECTED_MONTH, mMonth)
-            it.putInt(SELECTED_DAY, mDayOfMonth)
-            it.putInt(SELECTED_HOUR, mHourOfDay)
-            it.putInt(SELECTED_MINUTE, mMinute)
-            it.putInt(SELECTED_SECOND, mSecond)
-        }
-        super.onSaveInstanceState(outState)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
@@ -254,29 +235,6 @@ class DiaryInsertActivity : EditActivity() {
         feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog(getString(R.string.diary_symbol_guide_message)) { symbolSequence ->
             selectFeelingSymbol(symbolSequence)
         }}
-    }
-    
-    private fun restoreContents(savedInstanceState: Bundle?) {
-        mPhotoUris = RealmList()
-        savedInstanceState?.let {
-            it.getStringArrayList(LIST_URI_STRING)?.map { uriString ->
-                mPhotoUris.add(PhotoUriDto(uriString))
-            }
-            mYear = it.getInt(SELECTED_YEAR, mYear)
-            mMonth = it.getInt(SELECTED_MONTH, mMonth)
-            mDayOfMonth = it.getInt(SELECTED_DAY, mDayOfMonth)
-            mHourOfDay = it.getInt(SELECTED_HOUR, mHourOfDay)
-            mMinute = it.getInt(SELECTED_MINUTE, mMinute)
-            mSecond = it.getInt(SELECTED_SECOND, mSecond)
-            val thumbnailSize = config.settingThumbnailSize
-
-            mPhotoUris.forEachIndexed { index, photoUriDto ->
-                val imageView = EasyDiaryUtils.createAttachedPhotoView(this, photoUriDto, index)
-                imageView.setOnClickListener(PhotoClickListener(index))
-                photoContainer.addView(imageView, photoContainer.childCount - 1)
-            }
-        }
-        System.currentTimeMillis()
     }
 
     companion object {
