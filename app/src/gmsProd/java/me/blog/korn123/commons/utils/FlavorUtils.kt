@@ -73,6 +73,7 @@ object FlavorUtils {
         DAILY_STOCK -> R.drawable.ic_dollar
         DAILY_CONTRACT -> R.drawable.ic_contract
         DAILY_PIN_CODE -> R.drawable.ic_pin_code
+        DAILY_DICTIONARY -> R.drawable.ic_dictionary
 
         LANDSCAPE_BEACH -> R.drawable.ic_beach
         LANDSCAPE_BRIDGE -> R.drawable.ic_bridge
