@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<me.blog.korn123.easydiary.views.FixedCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:contentPadding="3dp"
+    app:fixedAppcompatPadding="true">
+
+    <ImageView
+        android:id="@+id/dailySymbol"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        app:srcCompat="@drawable/ic_sunny" />
+</me.blog.korn123.easydiary.views.FixedCardView>
+

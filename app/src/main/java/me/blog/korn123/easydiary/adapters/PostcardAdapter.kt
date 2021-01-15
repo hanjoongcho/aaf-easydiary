@@ -1,36 +1,99 @@
 package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
+import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.CompoundButton
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import io.github.aafactory.commons.utils.CommonUtils
+import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.viewholder_post_card.view.*
+import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.activities.PostCardViewerActivity
-import me.blog.korn123.easydiary.viewholders.PostcardViewHolder
+import me.blog.korn123.easydiary.extensions.updateAppViews
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.math.floor
 
 internal class PostcardAdapter(
         val activity: Activity,
-        private val listPostcard: List<PostCardViewerActivity.PostCard>,
+        private val listPostcard: List<PostCard>,
         private val onItemClickListener: AdapterView.OnItemClickListener
-) : RecyclerView.Adapter<PostcardViewHolder>() {
+) : RecyclerView.Adapter<PostcardAdapter.PostcardViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostcardViewHolder {
         val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.viewholder_post_card, parent, false)
-        return PostcardViewHolder(view, activity)
+        return PostcardViewHolder(activity, view, this)
     }
 
     override fun onBindViewHolder(holder: PostcardViewHolder, position: Int) {
-        holder.itemView.itemCheck.setOnCheckedChangeListener { _, isChecked ->
-            listPostcard[position].isItemChecked = isChecked
-        }
-        holder.itemView.setOnClickListener {
-            onItemClickListener.onItemClick(null, it, holder.adapterPosition, holder.itemId)
-        }
         holder.bindTo(listPostcard[position])
     }
 
     override fun getItemCount() = listPostcard.size
+
+    fun onItemHolderClick(itemHolder: PostcardViewHolder) {
+        onItemClickListener.onItemClick(null, itemHolder.itemView, itemHolder.adapterPosition, itemHolder.itemId)
+    }
+
+    fun onItemCheckedChange(position: Int, isChecked: Boolean) {
+        listPostcard[position].isItemChecked = isChecked
+    }
+
+    class PostcardViewHolder(
+            val activity: Activity, itemView: View, val adapter: PostcardAdapter
+    ) : RecyclerView.ViewHolder(itemView), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+        init {
+            if (itemView is ViewGroup) {
+                itemView.run {
+                    activity.updateAppViews(itemView)
+                    FontUtils.setFontsTypeface(activity, activity.assets, null, imageContainer)
+                    setOnClickListener(this@PostcardViewHolder)
+                    check_item.setOnCheckedChangeListener(this@PostcardViewHolder)
+                }
+            }
+        }
+
+        fun bindTo(postCard: PostCard) {
+            val timeStampView = itemView.createdDate
+            timeStampView.setTextSize(TypedValue.COMPLEX_UNIT_PX, CommonUtils.dpToPixelFloatValue(activity, 10F))
+            itemView.check_item.isChecked = postCard.isItemChecked
+            try {
+                val format = SimpleDateFormat(POSTCARD_DATE_FORMAT, Locale.getDefault())
+                timeStampView.text = DateUtils.getFullPatternDate(format.parse(postCard.file.name.split("_")[0]).time)
+            } catch (e: Exception) {
+                timeStampView.text = GUIDE_MESSAGE
+            }
+
+            val point =  CommonUtils.getDefaultDisplay(activity)
+            val targetX = floor((point.x - CommonUtils.dpToPixelFloatValue(itemView.imageview.context, 9F)) / 2.0)
+            itemView.imageContainer.layoutParams.height = targetX.toInt()
+            itemView.imageview.layoutParams.height = targetX.toInt()
+            Glide.with(itemView.imageview.context)
+                    .load(postCard.file)
+//                .apply(RequestOptions().placeholder(R.drawable.ic_aaf_photos).fitCenter())
+                    .into(itemView.imageview)
+        }
+
+        override fun onClick(p0: View?) {
+            adapter.onItemHolderClick(this)
+        }
+
+        override fun onCheckedChanged(p0: CompoundButton?, p1: Boolean) {
+            adapter.onItemCheckedChange(this.adapterPosition, p1)
+        }
+
+        companion object {
+            const val GUIDE_MESSAGE = "No information"
+            const val POSTCARD_DATE_FORMAT = "yyyyMMddHHmmss"
+        }
+    }
+
+    data class PostCard(val file: File, var isItemChecked: Boolean)
 }

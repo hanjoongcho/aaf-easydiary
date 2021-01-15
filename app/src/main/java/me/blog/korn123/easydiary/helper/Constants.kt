@@ -138,6 +138,10 @@ const val EMOTION_SMILE2 = 144
 const val EMOTION_AMAZE = 145
 const val EMOTION_DELIGHT = 146
 const val EMOTION_EMBARRASSED2 = 147
+const val EMOTION_FRUSTRATED = 148
+const val EMOTION_CRAZY = 149
+const val EMOTION_TIRED = 150
+const val EMOTION_FEAR = 151
 
 // Landscape & Buildings 200 ~ 249
 const val LANDSCAPE_BEACH = 200
@@ -183,6 +187,7 @@ const val FOOD_NOODLES = 272
 const val FOOD_FRIED_RICE = 273
 const val FOOD_GRILL = 274
 const val FOOD_PIZZA = 275
+const val FOOD_BEVERAGE07 = 276
 
 // Leisure 300 ~ 349
 const val LEISURE_PICNIC = 300
@@ -207,6 +212,13 @@ const val LEISURE_TENNIS_M = 318
 const val LEISURE_TENNIS_W = 319
 const val LEISURE_VIDEO_PLAYER = 320
 const val LEISURE_PARTY = 321
+const val LEISURE_STRETCHING = 322
+const val LEISURE_SPORTS_1 = 323
+const val LEISURE_SPORTS_2 = 324
+const val LEISURE_RUNNING = 325
+const val LEISURE_GOLF = 326
+const val LEISURE_WALKING = 327
+const val LEISURE_TRAINING = 328
 
 // Symbol 350 ~ 449
 const val SYMBOL_YOUTUBE = 350
@@ -229,6 +241,7 @@ const val SYMBOL_LINUX = 366
 const val SYMBOL_UBUNTU = 367
 const val SYMBOL_JAVA = 368
 const val SYMBOL_SLIDESHARE = 369
+const val SYMBOL_NETFLIX = 370
 
 // FLAGS 450 ~ 749
 // 001 ~ 010
@@ -317,6 +330,7 @@ const val FLAG_THAILAND = 710
  *
  ***************************************************************************************************/
 const val LIST_URI_STRING = "list_uri_string"
+const val SYMBOL_SEQUENCE = "symbol_sequence"
 const val SELECTED_YEAR = "selected_year"
 const val SELECTED_MONTH = "selected_month"
 const val SELECTED_DAY = "selected_day"
@@ -427,6 +441,7 @@ const val REQUEST_CODE_SPEECH_INPUT = 100
 const val REQUEST_CODE_GOOGLE_SIGN_IN = 101
 const val REQUEST_CODE_GOOGLE_DRIVE_PERMISSIONS = 102
 const val REQUEST_CODE_FONT_PICK = 103
+const val REQUEST_CODE_UPDATE_DAILY_SYMBOL_FILTER = 104
 
 
 /***************************************************************************************************
@@ -501,6 +516,8 @@ const val SETTING_ENABLE_DEBUG_CONSOLE = "setting_enable_debug_console"
 const val SETTING_COUNT_CHARACTERS = "setting_count_characters"
 const val SETTING_LOCATION_INFO = "setting_location_info"
 const val SETTING_TASK_SYMBOL_TOP_ORDER = "setting_task_symbol_top_order"
+const val SETTING_SELECTED_SYMBOLS = "setting_selected_symbols"
+const val SELECTED_SYMBOLS_DEFAULT = "1,2,3,4,5"
 const val HOLD_POSITION_ENTER_EDIT_SCREEN = "hold_position_enter_edit_screen"
 const val FINGERPRINT_ENCRYPT_DATA = "fingerprint_encrypt_data"
 const val FINGERPRINT_ENCRYPT_DATA_IV = "fingerprint_encrypt_data_iv"

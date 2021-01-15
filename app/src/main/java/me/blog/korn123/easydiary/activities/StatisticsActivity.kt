@@ -25,9 +25,13 @@ class StatisticsActivity : ChartBase() {
             setDisplayHomeAsUpEnabled(true)    
         }
 
-        val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.chartView, BarChartFragment())
-        fragmentTransaction.commit()
+        supportFragmentManager.run {
+            beginTransaction().run {
+                replace(R.id.chartView, BarChartFragment())
+                commit()
+            }
+            executePendingTransactions()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -48,21 +52,24 @@ class StatisticsActivity : ChartBase() {
             android.R.id.home -> finish()
             R.id.barChart -> {
                 supportActionBar?.title = getString(R.string.statistics_creation_time)
-                val fragmentTransaction = supportFragmentManager.beginTransaction()
-                fragmentTransaction.replace(R.id.chartView, BarChartFragment())
-                fragmentTransaction.commit()
+                supportFragmentManager.beginTransaction().run {
+                    replace(R.id.chartView, BarChartFragment())
+                    commit()
+                }
             }
             R.id.barChart2 -> {
                 supportActionBar?.title = getString(R.string.statistics_symbol_all)
-                val fragmentTransaction = supportFragmentManager.beginTransaction()
-                fragmentTransaction.replace(R.id.chartView, BarChartFragmentT2())
-                fragmentTransaction.commit()
+                supportFragmentManager.beginTransaction().run {
+                    replace(R.id.chartView, BarChartFragmentT2())
+                    commit()
+                }
             }
             R.id.barChart3 -> {
                 supportActionBar?.title = getString(R.string.statistics_symbol_top_ten)
-                val fragmentTransaction = supportFragmentManager.beginTransaction()
-                fragmentTransaction.replace(R.id.chartView, HorizontalBarChartFragment())
-                fragmentTransaction.commit()
+                supportFragmentManager.beginTransaction().run {
+                    replace(R.id.chartView, HorizontalBarChartFragment())
+                    commit()
+                }
             }
         }
         return super.onOptionsItemSelected(item)

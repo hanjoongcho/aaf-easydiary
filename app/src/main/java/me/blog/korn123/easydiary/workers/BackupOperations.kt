@@ -1,13 +1,12 @@
-package me.blog.korn123.easydiary.viewmodels
+package me.blog.korn123.easydiary.workers
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.work.*
 import me.blog.korn123.easydiary.helper.WORK_MANAGER_BACKUP
 import me.blog.korn123.easydiary.helper.WORK_MANAGER_RECOVERY
-import me.blog.korn123.easydiary.workers.FullBackupWorker
-import me.blog.korn123.easydiary.workers.FullRecoveryWorker
 
-class BackupOperations(val continuation: WorkContinuation) {
+internal class BackupOperations private constructor(val continuation: WorkContinuation) {
     companion object {
         const val URI_STRING = "uri_string"
         const val WORK_MODE_BACKUP = "work_mode_backup"
@@ -15,6 +14,8 @@ class BackupOperations(val continuation: WorkContinuation) {
     }
 
     internal class Builder(private val context: Context, private val uriString: String, val workMode: String) {
+
+        @SuppressLint("EnqueueWork")
         fun build(): BackupOperations {
             val data = Data.Builder()
             data.putString(URI_STRING, uriString)

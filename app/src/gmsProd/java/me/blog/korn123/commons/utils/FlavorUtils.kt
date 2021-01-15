@@ -138,6 +138,10 @@ object FlavorUtils {
         EMOTION_AMAZE -> R.drawable.ic_amaze
         EMOTION_DELIGHT -> R.drawable.ic_delight
         EMOTION_EMBARRASSED2 -> R.drawable.ic_embarrassed_1
+        EMOTION_FRUSTRATED -> R.drawable.ic_frustrated
+        EMOTION_CRAZY -> R.drawable.ic_crazy
+        EMOTION_TIRED -> R.drawable.ic_tired
+        EMOTION_FEAR -> R.drawable.ic_fear
 
         FOOD_BURGER -> R.drawable.ic_burger
         FOOD_PIZZA -> R.drawable.ic_pizza
@@ -157,6 +161,7 @@ object FlavorUtils {
         FOOD_BEVERAGE01 -> R.drawable.ic_beverage01
         FOOD_SUSHI -> R.drawable.ic_sushi
         FOOD_BEVERAGE06 -> R.drawable.ic_beverage06
+        FOOD_BEVERAGE07 -> R.drawable.ic_plastic_bottle
         FOOD_RICE -> R.drawable.ic_rice
         FOOD_FRIED_CHICKEN -> R.drawable.ic_fried_chicken
         FOOD_CAKE_1 -> R.drawable.ic_cake
@@ -188,8 +193,16 @@ object FlavorUtils {
         LEISURE_TENNIS_W -> R.drawable.ic_tennis_player_w
         LEISURE_VIDEO_PLAYER -> R.drawable.ic_video_player
         LEISURE_PARTY -> R.drawable.ic_party
+        LEISURE_STRETCHING -> R.drawable.ic_stretching
+        LEISURE_SPORTS_1 -> R.drawable.ic_sport
+        LEISURE_SPORTS_2 -> R.drawable.ic_sports
+        LEISURE_RUNNING -> R.drawable.ic_running_shoes
+        LEISURE_GOLF -> R.drawable.ic_golf_stick
+        LEISURE_WALKING -> R.drawable.ic_walking
+        LEISURE_TRAINING -> R.drawable.ic_checklist
 
         SYMBOL_YOUTUBE -> R.drawable.ic_youtube
+        SYMBOL_NETFLIX -> R.drawable.ic_netflix
         SYMBOL_DROPBOX -> R.drawable.ic_dropbox
         SYMBOL_PAYPAL -> R.drawable.ic_paypal
         SYMBOL_HTML5 -> R.drawable.ic_html5

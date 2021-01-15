@@ -20,18 +20,17 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import io.github.aafactory.commons.extensions.baseConfig
 import io.github.aafactory.commons.utils.DateUtils
-import kotlinx.android.synthetic.main.layout_settings_backup_local.*
+import kotlinx.android.synthetic.main.partial_settings_backup_local.*
 import kotlinx.android.synthetic.main.popup_location_selector.view.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.RealmFileItemAdapter
-import me.blog.korn123.easydiary.adapters.SimpleCheckbox
 import me.blog.korn123.easydiary.adapters.SimpleCheckboxAdapter
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
-import me.blog.korn123.easydiary.viewmodels.BackupOperations
+import me.blog.korn123.easydiary.workers.BackupOperations
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.io.IOUtils
@@ -61,7 +60,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mRootView = inflater.inflate(R.layout.layout_settings_backup_local, container, false) as ViewGroup
+        mRootView = inflater.inflate(R.layout.partial_settings_backup_local, container, false) as ViewGroup
         return mRootView
     }
 
@@ -204,7 +203,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
         files?.let {
             when (it.isNotEmpty()) {
                 true -> {
-                    val realmInfoList: ArrayList<SimpleCheckbox> = arrayListOf()
+                    val realmInfoList: ArrayList<SimpleCheckboxAdapter.SimpleCheckbox> = arrayListOf()
                     val builder = AlertDialog.Builder(mActivity)
                     builder.setCancelable(false)
                     builder.setPositiveButton(getString(R.string.delete)) { _, _ -> }
@@ -212,7 +211,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
 
                     it.sortDescending()
                     it.map { file ->
-                        realmInfoList.add(SimpleCheckbox(file.name, Date(file.lastModified()).toString()))
+                        realmInfoList.add(SimpleCheckboxAdapter.SimpleCheckbox(file.name, Date(file.lastModified()).toString()))
                     }
 
                     val inflater = mActivity.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -223,10 +222,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
                     val gridLayoutManager = androidx.recyclerview.widget.GridLayoutManager(mActivity, 1)
 
                     recyclerView.apply {
-                        adapter = SimpleCheckboxAdapter(realmInfoList, AdapterView.OnItemClickListener { parent, view, position, id ->
-                            val realmInfo = parent.adapter.getItem(position) as SimpleCheckbox
-                            mActivity.makeSnackBar("${realmInfo.isChecked}")
-                        })
+                        adapter = SimpleCheckboxAdapter(requireActivity(), realmInfoList)
                         layoutManager = gridLayoutManager
 //                        addItemDecoration(spacesItemDecoration)
                     }
@@ -542,7 +538,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
             initTextSize(popupView)
         }
 
-        FontUtils.setFontsTypeface(mActivity, mActivity.assets, null, popupView, true)
+        FontUtils.setFontsTypeface(mActivity, null, popupView, true)
         builder.setView(popupView)
         dialog = builder.create().apply {
             mActivity.updateAlertDialog(this, null, popupView)

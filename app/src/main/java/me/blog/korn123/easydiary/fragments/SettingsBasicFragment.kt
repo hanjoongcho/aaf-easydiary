@@ -11,7 +11,7 @@ import android.widget.ListView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import kotlinx.android.synthetic.main.layout_settings_basic.*
+import kotlinx.android.synthetic.main.partial_settings_basic.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.CustomizationActivity
 import me.blog.korn123.easydiary.activities.EasyDiaryActivity
@@ -37,7 +37,7 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mRootView = inflater.inflate(R.layout.layout_settings_basic, container, false) as ViewGroup
+        mRootView = inflater.inflate(R.layout.partial_settings_basic, container, false) as ViewGroup
         return mRootView
     }
 

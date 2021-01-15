@@ -8,7 +8,6 @@ import androidx.work.WorkerParameters
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.extensions.preferenceToJsonString
 import me.blog.korn123.easydiary.helper.*
-import me.blog.korn123.easydiary.viewmodels.BackupOperations
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import java.io.File

@@ -2,12 +2,12 @@ package me.blog.korn123.easydiary.activities
 
 import android.app.Activity
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
@@ -21,14 +21,13 @@ import androidx.core.app.ActivityCompat
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.github.ksoichiro.android.observablescrollview.ObservableListView
+import com.nineoldandroids.view.ViewHelper
 import io.github.aafactory.commons.utils.CommonUtils
-import kotlinx.android.synthetic.main.activity_diary_main.*
-import kotlinx.android.synthetic.main.popup_menu_main.view.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
+import me.blog.korn123.easydiary.databinding.PopupMenuMainBinding
 import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
@@ -48,11 +47,12 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
      *   global properties
      *
      ***************************************************************************************************/
+    private lateinit var mPopupMenuBinding: PopupMenuMainBinding
     private var mDiaryMainItemAdapter: DiaryMainItemAdapter? = null
     private var mDiaryList: ArrayList<DiaryDto> = arrayListOf()
     private var mShowcaseIndex = 0
     private var mShowcaseView: ShowcaseView? = null
-    private var mSymbolSequence = SYMBOL_SELECT_ALL
+    private var popupWindow: PopupWindow? = null
     var mDiaryMode = DiaryMode.READ
 
 
@@ -62,16 +62,16 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
      ***************************************************************************************************/
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        forceInitRealmLessThenOreo()
+        mPopupMenuBinding = PopupMenuMainBinding.inflate(layoutInflater)
+        forceInitRealmLessThanOreo()
 
-        setSupportActionBar(toolbar)
         supportActionBar?.run {
             title = getString(R.string.read_diary_title)
         }
 
         mDiaryList.addAll(EasyDiaryDbHelper.readDiary(null))
         mDiaryMainItemAdapter = DiaryMainItemAdapter(this, R.layout.item_diary_main, mDiaryList)
-        diaryListView.adapter = mDiaryMainItemAdapter
+        mBinding.diaryListView.adapter = mDiaryMainItemAdapter
 
         if (!config.isInitDummyData) {
             initSampleData()
@@ -83,6 +83,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         initShowcase()
         EasyDiaryUtils.initWorkingDirectory(this@DiaryMainActivity)
         migrateData()
+        setupPopupMenu()
 
         when (savedInstanceState == null) {
             true -> checkWhatsNewDialog()
@@ -101,31 +102,28 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         super.onResume()
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
         refreshList()
-        initTextSize(progressDialog)
+        initTextSize(mBinding.progressDialog)
         invalidateOptionsMenu()
 
-        val previousActivity = config.previousActivity
-        if (previousActivity == PREVIOUS_ACTIVITY_CREATE) {
+        if (config.previousActivity == PREVIOUS_ACTIVITY_CREATE) {
 //            diaryListView.smoothScrollToPosition(0)
-            diaryListView.setSelection(0)
+            mBinding.diaryListView.setSelection(0)
             config.previousActivity = -1
         }
-    }
 
-    override fun getLayoutResId(): Int {
-        return R.layout.activity_diary_main
+        if (ViewHelper.getTranslationY(mBinding.appBar) < 0) mBinding.searchCard.useCompatPadding = false
     }
 
     override fun createScrollable(): ObservableListView {
         // ObservableListView uses setOnScrollListener, but it still works.
-        diaryListView.setOnScrollListener(object : AbsListView.OnScrollListener {
+        mBinding.diaryListView.setOnScrollListener(object : AbsListView.OnScrollListener {
             override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
             }
 
             override fun onScroll(view: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
             }
         })
-        return diaryListView
+        return mBinding.diaryListView
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -145,9 +143,10 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         when (requestCode) {
             REQUEST_CODE_SPEECH_INPUT -> {
                 if (resultCode == Activity.RESULT_OK && data != null) {
-                    val result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-                    query.setText(result[0])
-                    query.setSelection(result[0].length)
+                    data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.let {
+                        mBinding.query.setText(it[0])
+                        mBinding.query.setSelection(it[0].length)
+                    }
                 }
                 pauseLock()
             }
@@ -188,7 +187,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                                     EasyDiaryDbHelper.duplicateDiary(it)
                                 }
                                 refreshList()
-                                Handler().post { diaryListView.setSelection(0) }
+                                Handler().post { mBinding.diaryListView.setSelection(0) }
                             }, null)
                         }
                         false -> {
@@ -209,7 +208,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             }
             R.id.microphone -> showSpeechDialog()
             R.id.devConsole -> TransitionHelper.startActivityWithTransition(this, Intent(this, DevActivity::class.java))
-            R.id.popupMenu -> createCustomOptionMenu()
+            R.id.popupMenu -> openCustomOptionMenu()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -234,7 +233,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     }
 
     override fun onBackPressed() {
-        if (progressDialog.visibility == View.GONE) ActivityCompat.finishAffinity(this@DiaryMainActivity)
+        if (mBinding.progressDialog.visibility == View.GONE) ActivityCompat.finishAffinity(this@DiaryMainActivity)
     }
 
 
@@ -242,9 +241,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
      *   etc functions
      *
      ***************************************************************************************************/
-    private fun createCustomOptionMenu() {
-        var popupWindow: PopupWindow? = null
-        val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+    private fun setupPopupMenu() {
         val customItemClickListener = View.OnClickListener {
             when (it.id) {
                 R.id.postCard -> {
@@ -259,18 +256,22 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 R.id.chart -> TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, Intent(this@DiaryMainActivity, StatisticsActivity::class.java))
                 R.id.settings -> TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, Intent(this@DiaryMainActivity, SettingsActivity::class.java))
             }
-            Handler().post { popupWindow?.dismiss() }
+            Handler(Looper.getMainLooper()).post { popupWindow?.dismiss() }
         }
-        val popupView = (inflater.inflate(R.layout.popup_menu_main, null) as ViewGroup).apply {
-            updateAppViews(this)
-            updateTextColors(this)
-            FontUtils.setFontsTypeface(applicationContext, assets, null, this, true)
+
+        mPopupMenuBinding.run {
+            updateAppViews(this.root)
+            updateTextColors(this.root)
+            FontUtils.setFontsTypeface(applicationContext, null, this.root, true)
             postCard.setOnClickListener(customItemClickListener)
             dashboard.setOnClickListener(customItemClickListener)
             chart.setOnClickListener(customItemClickListener)
             settings.setOnClickListener(customItemClickListener)
         }
-        popupWindow = EasyDiaryUtils.openCustomOptionMenu(popupView, findViewById(R.id.popupMenu))
+    }
+
+    private fun openCustomOptionMenu() {
+        popupWindow = EasyDiaryUtils.openCustomOptionMenu(mPopupMenuBinding.root, findViewById(R.id.popupMenu))
     }
 
     private fun openPostcardViewer() {
@@ -292,7 +293,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                     dto.photoUri = FILE_URI_PREFIX + photoPath
                     realmInstance.commitTransaction()
                     runOnUiThread {
-                        progressInfo.text = "Converting... ($index/${listPhotoUri.size})"
+                        mBinding.progressInfo.text = "Converting... ($index/${listPhotoUri.size})"
                     }
                 }
             }
@@ -317,8 +318,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                         }
                         FileUtils.copyFileToDirectory(file, photoDestDir)
                         runOnUiThread {
-                            migrationMessage.text = getString(R.string.storage_migration_message)
-                            progressInfo.text = "$index/${it.size} (Photo)"
+                            mBinding.migrationMessage.text = getString(R.string.storage_migration_message)
+                            mBinding.progressInfo.text = "$index/${it.size} (Photo)"
                         }
                     }
                     photoSrcDir.renameTo(File(photoSrcDir.absolutePath + "_migration"))
@@ -337,7 +338,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                         }
                         FileUtils.copyFileToDirectory(file, postCardDestDir)
                         runOnUiThread {
-                            progressInfo.text = "$index/${it.size} (Postcard)"
+                            mBinding.progressInfo.text = "$index/${it.size} (Postcard)"
                         }
                     }
                     postCardSrcDir.renameTo(File(postCardSrcDir.absolutePath + "_migration"))
@@ -353,7 +354,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                         }
                         FileUtils.copyFileToDirectory(file, fontDestDir)
                         runOnUiThread {
-                            progressInfo.text = "$index/${it.size} (Font)"
+                            mBinding.progressInfo.text = "$index/${it.size} (Font)"
                         }
                     }
                     fontSrcDir.renameTo(File(fontSrcDir.absolutePath + "_migration"))
@@ -370,7 +371,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                         }
                         FileUtils.copyFileToDirectory(file, dbDestDir)
                         runOnUiThread {
-                            progressInfo.text = "$index/${it.size} (Database)"
+                            mBinding.progressInfo.text = "$index/${it.size} (Database)"
                         }
                     }
                     dbSrcDir.renameTo(File(dbSrcDir.absolutePath + "_migration"))
@@ -379,8 +380,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
 
             realmInstance.close()
             runOnUiThread {
-                progressDialog.visibility = View.GONE
-                modalContainer.visibility = View.GONE
+                mBinding.progressDialog.visibility = View.GONE
+                mBinding.modalContainer.visibility = View.GONE
                 if (isFontDirMigrate) {
                     showAlertDialog("Font 리소스가 변경되어 애플리케이션을 다시 시작합니다.", DialogInterface.OnClickListener { _, _ ->
                         restartApp()
@@ -407,13 +408,13 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 when (mShowcaseIndex) {
                     0 -> {
                         setButtonPosition(centerParams)
-                        setShowcase(ViewTarget(query), true)
+                        setShowcase(ViewTarget(mBinding.query), true)
                         setContentTitle(getString(R.string.read_diary_showcase_title_2))
                         setContentText(getString(R.string.read_diary_showcase_message_2))
                     }
                     1 -> {
                         setButtonPosition(centerParams)
-                        setShowcase(ViewTarget(diaryListView), true)
+                        setShowcase(ViewTarget(mBinding.diaryListView), true)
                         setContentTitle(getString(R.string.read_diary_showcase_title_8))
                         setContentText(getString(R.string.read_diary_showcase_message_8))
                     }
@@ -443,7 +444,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
 
         mShowcaseView = ShowcaseView.Builder(this)
                 .withMaterialShowcase()
-                .setTarget(ViewTarget(insertDiaryButton))
+                .setTarget(ViewTarget(mBinding.insertDiaryButton))
                 .setContentTitle(getString(R.string.read_diary_showcase_title_1))
                 .setContentText(getString(R.string.read_diary_showcase_message_1))
                 .setStyle(R.style.ShowcaseTheme)
@@ -455,7 +456,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     }
 
     private fun bindEvent() {
-        query.addTextChangedListener(object : TextWatcher {
+        mBinding.query.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
 
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
@@ -465,12 +466,12 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             override fun afterTextChanged(editable: Editable) {}
         })
 
-        clearQuery.setOnClickListener { _ ->
+        mBinding.clearQuery.setOnClickListener { _ ->
             selectFeelingSymbol()
-            query.text = null
+            mBinding.query.text = null
         }
 
-        diaryListView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
+        mBinding.diaryListView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
             val diaryDto = adapterView.adapter.getItem(i) as DiaryDto
             val detailIntent = Intent(this@DiaryMainActivity, DiaryReadActivity::class.java)
             detailIntent.putExtra(DIARY_SEQUENCE, diaryDto.sequence)
@@ -478,7 +479,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, detailIntent)
         }
 
-        diaryListView.setOnItemLongClickListener { adapterView, _, i, _ ->
+        mBinding.diaryListView.setOnItemLongClickListener { adapterView, _, i, _ ->
             EasyDiaryDbHelper.clearSelectedStatus()
             mDiaryMode = DiaryMode.DELETE
             invalidateOptionsMenu()
@@ -487,24 +488,23 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             true
         }
 
-        modalContainer.setOnTouchListener { _, _ -> true }
+        mBinding.modalContainer.setOnTouchListener { _, _ -> true }
 
-        insertDiaryButton.setOnClickListener{
+        mBinding.insertDiaryButton.setOnClickListener{
             val createDiary = Intent(this@DiaryMainActivity, DiaryInsertActivity::class.java)
             //                startActivity(createDiary);
             //                DiaryMainActivity.this.overridePendingTransition(R.anim.anim_right_to_center, R.anim.anim_center_to_left);
             TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, createDiary)
         }
 
-        feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog(getString(R.string.diary_symbol_search_message)) { symbolSequence ->
+        mBinding.feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog(getString(R.string.diary_symbol_search_message)) { symbolSequence ->
             selectFeelingSymbol(symbolSequence)
             refreshList()
         }}
     }
 
-    private fun selectFeelingSymbol(index: Int = 9999) {
-        mSymbolSequence = if (index == 0) 9999 else index
-        FlavorUtils.initWeatherView(this, symbol, mSymbolSequence, false)
+    private fun selectFeelingSymbol(index: Int = SYMBOL_SELECT_ALL) {
+        updateSymbolSequence(if (index == 0) SYMBOL_SELECT_ALL else index)
     }
 
     private fun showSpeechDialog() {
@@ -520,13 +520,13 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
 
     private fun refreshList() {
         var queryString = ""
-        if (StringUtils.isNotEmpty(query.text)) queryString = query.text.toString()
+        if (StringUtils.isNotEmpty(mBinding.query.text)) queryString = mBinding.query.text.toString()
         refreshList(queryString)
     }
 
     fun refreshList(query: String) {
         mDiaryList.clear()
-        mDiaryList.addAll(EasyDiaryDbHelper.readDiary(query, config.diarySearchQueryCaseSensitive, 0, 0, mSymbolSequence))
+        mDiaryList.addAll(EasyDiaryDbHelper.readDiary(query, config.diarySearchQueryCaseSensitive, 0, 0, viewModel.symbol.value ?: 0))
         mDiaryMainItemAdapter?.currentQuery = query
         mDiaryMainItemAdapter?.notifyDataSetChanged()
     }

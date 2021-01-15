@@ -144,4 +144,8 @@ class Config(context: Context) : BaseConfig(context) {
     var enableTaskSymbolTopOrder: Boolean
         get() = prefs.getBoolean(SETTING_TASK_SYMBOL_TOP_ORDER, false)
         set(enableTaskSymbolTopOrder) = prefs.edit().putBoolean(SETTING_TASK_SYMBOL_TOP_ORDER, enableTaskSymbolTopOrder).apply()
+
+    var selectedSymbols: String
+        get() = prefs.getString(SETTING_SELECTED_SYMBOLS, SELECTED_SYMBOLS_DEFAULT)!!
+        set(selectedSymbols) = prefs.edit().putString(SETTING_SELECTED_SYMBOLS, selectedSymbols).apply()
 }

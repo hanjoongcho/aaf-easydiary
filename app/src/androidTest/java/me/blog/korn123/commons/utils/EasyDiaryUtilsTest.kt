@@ -4,12 +4,14 @@ import android.text.SpannedString
 import android.text.style.BackgroundColorSpan
 import android.util.Log
 import android.widget.TextView
-import androidx.test.InstrumentationRegistry
+import androidx.test.platform.app.InstrumentationRegistry
 import com.simplemobiletools.commons.helpers.SETTING_CARD_VIEW_BACKGROUND_COLOR
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.preferenceToJsonString
 import me.blog.korn123.easydiary.helper.AAF_TEST
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.SETTING_THUMBNAIL_SIZE
+import me.blog.korn123.easydiary.models.DiaryDto
 import me.blog.korn123.easydiary.models.DiarySymbol
 import org.junit.Assert.*
 import org.junit.Test
@@ -21,7 +23,7 @@ import org.junit.Test
 class EasyDiaryUtilsTest {
     @Test
     fun test_01() {
-        val textView = TextView(InstrumentationRegistry.getTargetContext())
+        val textView = TextView(InstrumentationRegistry.getInstrumentation().targetContext)
         textView.text = "apple banana pineapple"
         EasyDiaryUtils.highlightString(textView, "APPLE")
 
@@ -32,7 +34,7 @@ class EasyDiaryUtilsTest {
 
     @Test
     fun test_02() {
-        val textView = TextView(InstrumentationRegistry.getTargetContext())
+        val textView = TextView(InstrumentationRegistry.getInstrumentation().targetContext)
         textView.text = "apple banana pineapple"
         EasyDiaryUtils.highlightStringIgnoreCase(textView, "APPLE")
 
@@ -46,7 +48,7 @@ class EasyDiaryUtilsTest {
         val symbolList = mutableListOf<DiarySymbol>()
         val symbolMap = hashMapOf<Int, String>()
         var symbolArray: Array<String>? = null
-        InstrumentationRegistry.getTargetContext()?.let {
+        InstrumentationRegistry.getInstrumentation().targetContext?.let {
             symbolArray = arrayOf(
                     *it.resources.getStringArray(R.array.weather_item_array),
                     *it.resources.getStringArray(R.array.emotion_item_array),
@@ -68,7 +70,7 @@ class EasyDiaryUtilsTest {
 
     @Test
     fun test_04() {
-        val jsonString = InstrumentationRegistry.getTargetContext().preferenceToJsonString()
+        val jsonString = InstrumentationRegistry.getInstrumentation().targetContext.preferenceToJsonString()
         Log.i(AAF_TEST, jsonString)
         val map = EasyDiaryUtils.jsonStringToHashMap(jsonString)
         Log.i(AAF_TEST, map.toString())
@@ -78,5 +80,33 @@ class EasyDiaryUtilsTest {
 
         assertEquals(screenBackgroundColor, -13882581)
         assertEquals(settingThumbnailSize, 50.0F)
+    }
+
+    @Test
+    fun test_05() {
+        Log.i(AAF_TEST, "Start")
+        var count = 0
+        EasyDiaryDbHelper.getTemporaryInstance().let {
+            var items = EasyDiaryDbHelper.readDiary(null, realmInstance = it)
+            items.forEach { diary ->
+                Log.i(AAF_TEST, diary.title ?: "")
+                count++
+            }
+
+            val symbolList = mutableListOf<DiarySymbol>()
+            InstrumentationRegistry.getInstrumentation().targetContext.resources.getStringArray(R.array.leisure_item_array).map {
+                val symbolItem = DiarySymbol(it)
+                symbolList.add(symbolItem)
+            }
+
+            val pair = items.partition { item ->
+                symbolList.find { it.sequence == item.weather } != null
+            }
+
+            Log.i(AAF_TEST, pair.first.size.toString())
+            Log.i(AAF_TEST, pair.second.size.toString())
+        }
+        Log.i(AAF_TEST, "End")
+        assertEquals(count, 200)
     }
 }

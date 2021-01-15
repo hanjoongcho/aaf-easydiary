@@ -17,13 +17,14 @@
             <me.blog.korn123.easydiary.views.FixedTextView
                 app:applyGlobalSize="false"
                 app:applyGlobalColor="false"
+                app:applyHighLight="true"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:id="@+id/dashboardTitle"
                 tools:text="Lifetime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/dashboard_text_default"/>
+                android:textSize="@dimen/dashboard_title_h1"/>
             <me.blog.korn123.easydiary.views.FixedTextView
                 app:applyGlobalSize="false"
                 app:applyGlobalColor="false"

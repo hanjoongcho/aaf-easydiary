@@ -22,7 +22,7 @@
         </ListView>
     </LinearLayout>
 
-    <include layout="@layout/layout_timeline_filter"/>
+    <include layout="@layout/partial_timeline_filter"/>
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"

@@ -1,6 +1,6 @@
 package me.blog.korn123.commons.utils
 
-import androidx.test.InstrumentationRegistry
+import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -11,11 +11,11 @@ import org.junit.Test
 class FontUtilsTest {
     @Test
     fun test_03() {
-        assertEquals("NanumPen", FontUtils.fontFileNameToDisplayName(InstrumentationRegistry.getTargetContext(), "NanumPen.ttf"))
+        assertEquals("NanumPen", FontUtils.fontFileNameToDisplayName(InstrumentationRegistry.getInstrumentation().targetContext, "NanumPen.ttf"))
     }
 
     @Test
     fun test_04() {
-        assertEquals("consola", FontUtils.fontFileNameToDisplayName(InstrumentationRegistry.getTargetContext(), "consola.ttf"))
+        assertEquals("consola", FontUtils.fontFileNameToDisplayName(InstrumentationRegistry.getInstrumentation().targetContext, "consola.ttf"))
     }
 }

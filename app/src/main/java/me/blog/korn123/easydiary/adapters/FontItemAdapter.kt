@@ -74,7 +74,7 @@ class FontItemAdapter(val activity: Activity, private val layoutResourceId: Int,
         override fun doInBackground(vararg param: String?): Typeface? {
             var typeface: Typeface? = null
             if (position == holder.position) {
-                typeface = FontUtils.getTypeface(context, context.assets, list[position]["fontName"])
+                typeface = FontUtils.getTypeface(context, list[position]["fontName"])
             } else {
                 this.cancel(true)
             }

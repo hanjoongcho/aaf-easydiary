@@ -21,7 +21,6 @@
             android:gravity="center"
             android:textSize="@dimen/calendar_item_text_default"
             android:id="@+id/calendarDate"
-            android:padding="3dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

@@ -40,10 +40,10 @@ import io.github.aafactory.commons.utils.CALCULATION
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import io.realm.RealmList
-import kotlinx.android.synthetic.main.layout_bottom_toolbar.*
-import kotlinx.android.synthetic.main.layout_edit_contents.*
-import kotlinx.android.synthetic.main.layout_edit_photo_container.*
-import kotlinx.android.synthetic.main.layout_edit_toolbar_sub.*
+import kotlinx.android.synthetic.main.partial_bottom_toolbar.*
+import kotlinx.android.synthetic.main.partial_edit_contents.*
+import kotlinx.android.synthetic.main.partial_edit_photo_container.*
+import kotlinx.android.synthetic.main.partial_edit_toolbar_sub.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
@@ -69,25 +69,25 @@ abstract class EditActivity : EasyDiaryActivity() {
     private val mRemoveIndexes = ArrayList<Int>()
     private val mLocationManager by lazy { getSystemService(Context.LOCATION_SERVICE) as LocationManager }
     private val mNetworkLocationListener = object : LocationListener {
-        override fun onLocationChanged(p0: Location?) {
+        override fun onLocationChanged(p0: Location) {
             if (config.enableDebugMode) makeToast("Network location has been updated")
             mLocationManager.removeUpdates(this)
         }
         override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {}
-        override fun onProviderEnabled(p0: String?) {}
-        override fun onProviderDisabled(p0: String?) {}
+        override fun onProviderEnabled(p0: String) {}
+        override fun onProviderDisabled(p0: String) {}
     }
     private val mGPSLocationListener = object : LocationListener {
-        override fun onLocationChanged(p0: Location?) {
+        override fun onLocationChanged(p0: Location) {
             if (config.enableDebugMode) makeToast("GPS location has been updated")
             mLocationManager.removeUpdates(this)
         }
         override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {}
-        override fun onProviderEnabled(p0: String?) {}
-        override fun onProviderDisabled(p0: String?) {}
+        override fun onProviderEnabled(p0: String) {}
+        override fun onProviderDisabled(p0: String) {}
     }
 
-    protected lateinit var mPhotoUris: RealmList<PhotoUriDto>
+    protected val mPhotoUris: RealmList<PhotoUriDto> = RealmList()
     protected var mCurrentTimeMillis: Long = 0
     protected var mYear = mCalendar.get(Calendar.YEAR)
     protected var mLocation: me.blog.korn123.easydiary.models.Location? = null
@@ -179,6 +179,25 @@ abstract class EditActivity : EasyDiaryActivity() {
                 if (isProviderEnabled(LocationManager.NETWORK_PROVIDER)) requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0F, mNetworkLocationListener)
             }
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        applyRemoveIndex()
+        outState.run {
+            val listUriString = arrayListOf<String>()
+            mPhotoUris.map { model ->
+                listUriString.add(model.photoUri ?: "")
+            }
+            putStringArrayList(LIST_URI_STRING, listUriString)
+            putInt(SELECTED_YEAR, mYear)
+            putInt(SELECTED_MONTH, mMonth)
+            putInt(SELECTED_DAY, mDayOfMonth)
+            putInt(SELECTED_HOUR, mHourOfDay)
+            putInt(SELECTED_MINUTE, mMinute)
+            putInt(SELECTED_SECOND, mSecond)
+            putInt(SYMBOL_SEQUENCE, mSelectedItemPosition)
+        }
+        super.onSaveInstanceState(outState)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -299,11 +318,13 @@ abstract class EditActivity : EasyDiaryActivity() {
         when (photoContainerScrollView.visibility) {
             View.VISIBLE -> {
                 photoContainerScrollView.visibility = View.GONE
+                titleCard.visibility = View.VISIBLE
                 togglePhoto.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.expand))
                 supportActionBar?.hide()
             }
             View.GONE -> {
                 photoContainerScrollView.visibility = View.VISIBLE
+                titleCard.visibility = View.GONE
                 togglePhoto.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.collapse))
                 supportActionBar?.show()
             }
@@ -477,6 +498,33 @@ abstract class EditActivity : EasyDiaryActivity() {
             mHourOfDay = calendar.get(Calendar.HOUR_OF_DAY)
             mMinute = calendar.get(Calendar.MINUTE)
             mSecond = calendar.get(Calendar.SECOND)
+        }
+    }
+
+    protected fun restoreContents(savedInstanceState: Bundle?) {
+        savedInstanceState?.run {
+            mPhotoUris.clear()
+            val attachView = photoContainer.getChildAt(photoContainer.childCount.minus(1))
+            photoContainer.removeAllViews()
+            photoContainer.addView(attachView)
+
+            getStringArrayList(LIST_URI_STRING)?.map { uriString ->
+                mPhotoUris.add(PhotoUriDto(uriString))
+            }
+            mYear = getInt(SELECTED_YEAR, mYear)
+            mMonth = getInt(SELECTED_MONTH, mMonth)
+            mDayOfMonth = getInt(SELECTED_DAY, mDayOfMonth)
+            mHourOfDay = getInt(SELECTED_HOUR, mHourOfDay)
+            mMinute = getInt(SELECTED_MINUTE, mMinute)
+            mSecond = getInt(SELECTED_SECOND, mSecond)
+
+            mPhotoUris.forEachIndexed { index, photoUriDto ->
+                val imageView = EasyDiaryUtils.createAttachedPhotoView(this@EditActivity, photoUriDto, index)
+                imageView.setOnClickListener(PhotoClickListener(index))
+                photoContainer.addView(imageView, photoContainer.childCount - 1)
+            }
+            
+            selectFeelingSymbol(getInt(SYMBOL_SEQUENCE, 0))
         }
     }
 

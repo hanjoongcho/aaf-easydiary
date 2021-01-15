@@ -479,6 +479,26 @@
         Russian translation updates\n
         User Experience (UX) Optimization
     </string>
+    <string name="release_219">
+        v1.4.153 / 2020.11.10\n
+        Hindi translation added\n
+        User Experience (UX) Optimization
+    </string>
+    <string name="release_220">
+        v1.4.154 / 2020.11.28\n
+        Add diary symbols\n
+        Added daily symbol usage filtering function to dashboard
+    </string>
+    <string name="release_221">
+        v1.4.155 / 2020.12.14\n
+        Add diary symbols\n
+        When creating a post card, the function has been improved so that the attached photo can be cropped or a filter can be applied
+    </string>
+    <string name="release_222">
+        v1.4.156 / 2021.01.11\n
+        Add diary symbols\n
+        Improved calendar screen UX
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -708,4 +728,8 @@
     <string name="category_tasks">Task</string>
     <string name="task_symbol_top_order_title">Align the task symbol to the top</string>
     <string name="task_symbol_top_order_description">If the type of Task Symbol is TODO or DOING among the diaries to which the task symbol is applied, it is arranged at the top of the list.</string>
+    <string name="dashboard_title_daily_symbol_tile">Filtering of symbol usage by day based on a year</string>
+    <string name="symbol_filter_picker_remove_guide_message">At least one symbol must be selected.</string>
+    <string name="title_dialog_postcard_photo_option">Photo crop and filter settings</string>
+    <string name="msg_check_force_single_photo">Change to expose only one photo in the photo area of the post card.\nIf more than one photo is registered, you can swipe to view other photos.</string>
 </resources>

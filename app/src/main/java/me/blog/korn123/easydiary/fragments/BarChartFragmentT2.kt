@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.fragments
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,8 +20,11 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import io.github.aafactory.commons.utils.CommonUtils
 import kotlinx.android.synthetic.main.fragment_barchart.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.ChartUtils
 import me.blog.korn123.commons.utils.FlavorUtils
+import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.chart.IValueFormatterExt
 import me.blog.korn123.easydiary.chart.MyAxisValueFormatter
@@ -29,9 +33,11 @@ import me.blog.korn123.easydiary.extensions.scaledDrawable
 import java.util.*
 
 class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
+    private val mSequences = arrayListOf<Int>()
     private val mContext: Context
         get() = context!!
-    val mSequences = arrayListOf<Int>()
+    private val mTypeface: Typeface
+        get() = FontUtils.getCommonTypeface(mContext)!!
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -55,16 +61,16 @@ class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
 
         val xAxis = barChart.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
-//        xAxis.typeface = mTfLight
+        xAxis.typeface = mTypeface
+        xAxis.labelRotationAngle = -45F
         xAxis.setDrawGridLines(false)
         xAxis.granularity = 1f // only intervals of 1 day
         xAxis.labelCount = 7
         xAxis.valueFormatter = xAxisFormatter
-
         val custom = MyAxisValueFormatter(context)
 
         val leftAxis = barChart.axisLeft
-//        leftAxis.typeface = mTfLight
+        leftAxis.typeface = mTypeface
         leftAxis.setLabelCount(8, false)
         leftAxis.valueFormatter = custom
         leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
@@ -73,7 +79,7 @@ class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
 
         val rightAxis = barChart.axisRight
         rightAxis.setDrawGridLines(false)
-//        rightAxis.typeface = mTfLight
+        rightAxis.typeface = mTypeface
         rightAxis.setLabelCount(8, false)
         rightAxis.valueFormatter = custom
         rightAxis.spaceTop = 15f
@@ -88,6 +94,7 @@ class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
         legend.formSize = 9f
         legend.textSize = 11f
         legend.xEntrySpace = 4f
+        legend.typeface = mTypeface
 
         val mv = XYMarkerView(context!!, xAxisFormatter)
         mv.chartView = barChart // For bounds control
@@ -102,15 +109,20 @@ class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
             }
         }
 
-        setData(6, 20f)
-        barChart.animateY(2000)
+        GlobalScope.launch {
+            setData()
+            activity?.runOnUiThread {
+                barChart.animateY(2000)
+                barChartProgressBar.visibility = View.GONE
+            }
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_barchart, container, false)
     }
 
-    private fun setData(count: Int, range: Float) {
+    private fun setData() {
         val sortedMap = ChartUtils.getSortedMapBySymbol(true)
 
         val barEntries = ArrayList<BarEntry>()
@@ -139,7 +151,7 @@ class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
 
         val barData = BarData(dataSets)
         barData.setValueTextSize(10f)
-//        barData.setValueTypeface(mTfLight)
+        barData.setValueTypeface(mTypeface)
         barData.barWidth = 0.9f
         barChart.zoom((sortedMap.size / 6.0F), 0F, 0F, 0F)
         barChart.data = barData
@@ -148,7 +160,10 @@ class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
     inner class AxisValueFormatter(private var context: Context?, private val chart: BarLineChartBase<*>) : IAxisValueFormatter {
         override fun getFormattedValue(value: Float, axis: AxisBase?): String {
             val symbolMap = FlavorUtils.getDiarySymbolMap(context!!)
-            return symbolMap[mSequences[value.toInt() - 1]] ?: "None"
+            return when  {
+                value > 0 -> symbolMap[mSequences[value.toInt() - 1]] ?: "None"
+                else -> "None"
+            }
         }
     }
 }

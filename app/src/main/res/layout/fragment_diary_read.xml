@@ -13,13 +13,15 @@
         android:layout_marginStart="@dimen/card_layout_margin"
         android:layout_marginEnd="@dimen/card_layout_margin"
         style="@style/AppCard">
-        <FrameLayout
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <ScrollView
                 android:fillViewport="true"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_weight="1"
+                android:layout_height="0dp">
                 <LinearLayout
                     style="@style/LinearLayoutVertical">
                     <LinearLayout
@@ -77,8 +79,8 @@
                             android:layout_marginRight="3dp"
                             android:id="@+id/locationSymbol"
                             android:src="@drawable/map_marker_2"
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"/>
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"/>
                         <TextView
                             android:id="@+id/locationLabel"
                             android:text="There is no location information. Click to update location information."
@@ -91,7 +93,7 @@
                 </me.blog.korn123.easydiary.views.FixedCardView>
                 <me.blog.korn123.easydiary.views.FixedCardView
                     android:id="@+id/contentsLengthContainer"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="5dp"
                     android:layout_alignParentEnd="true"
                     app:fixedAppcompatPadding="true"
                     android:layout_width="wrap_content"
@@ -105,10 +107,10 @@
                         android:layout_height="wrap_content"/>
                 </me.blog.korn123.easydiary.views.FixedCardView>
             </RelativeLayout>
-        </FrameLayout>
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <include layout="@layout/layout_bottom_toolbar" />
+    <include layout="@layout/partial_bottom_toolbar" />
     
     <HorizontalScrollView
         android:id="@+id/photoContainerScrollView"

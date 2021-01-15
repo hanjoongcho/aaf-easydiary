@@ -26,10 +26,7 @@ import android.text.style.RelativeSizeSpan
 import android.util.Log
 import android.util.TypedValue
 import android.view.*
-import android.widget.CheckBox
-import android.widget.RadioButton
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AlertDialog
@@ -260,7 +257,9 @@ fun Context.initTextSize(viewGroup: ViewGroup) {
                     is FixedTextView -> {
                         if (it.applyGlobalSize) it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
                     }
+                    is Button -> {}
                     is TextView -> { 
+                        if (it.tag == "tabTitle") return
                         when (it.id) {
                             R.id.contentsLength, R.id.locationLabel -> it.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize * 0.7F)
                             R.id.symbolTextArrow -> {}
@@ -639,7 +638,7 @@ fun Context.createRecoveryContentText(remoteDriveFileCount: Int, duplicateFileCo
         .append(getString(R.string.notification_msg_upload_success, "*", successCount, "<br>"))
         .append(getString(R.string.notification_msg_upload_fail, "*", failCount, "<br>"))
 
-fun Context.forceInitRealmLessThenOreo() {
+fun Context.forceInitRealmLessThanOreo() {
     // android marshmallow minor version bug workaround
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
         Realm.init(this)

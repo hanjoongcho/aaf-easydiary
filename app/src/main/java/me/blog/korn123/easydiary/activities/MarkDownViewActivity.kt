@@ -6,6 +6,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import io.noties.markwon.Markwon
+import io.noties.markwon.syntax.Prism4jThemeDefault
+import io.noties.markwon.syntax.SyntaxHighlightPlugin
 import kotlinx.android.synthetic.main.activity_markdown_view.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
@@ -20,18 +22,24 @@ import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.net.HttpURLConnection
 import java.net.URL
+import io.noties.prism4j.Prism4j
+import io.noties.prism4j.annotations.PrismBundle
 
-
+@PrismBundle(include = ["java", "kotlin"], grammarLocatorClassName = ".GrammarLocatorSourceCode")
 class MarkDownViewActivity : EasyDiaryActivity() {
     private lateinit var savedFilePath: String
     private lateinit var markdownUrl: String
     private lateinit var mMarkDown: Markwon
+    private val mPrism4j = Prism4j(GrammarLocatorSourceCode())
+    private var mForceAppendCodeBlock = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_markdown_view)
         setSupportActionBar(toolbar)
         val pageTitle = intent.getStringExtra(OPEN_URL_DESCRIPTION)
+        mForceAppendCodeBlock = intent.getBooleanExtra(FORCE_APPEND_CODE_BLOCK, true)
+
         supportActionBar?.run {
             title = pageTitle
             setDisplayHomeAsUpEnabled(true)
@@ -40,7 +48,7 @@ class MarkDownViewActivity : EasyDiaryActivity() {
 
         mMarkDown = Markwon.create(this)
         savedFilePath = "${EasyDiaryUtils.getApplicationDataDirectory(this) + MARKDOWN_DIRECTORY + pageTitle}.md"
-        markdownUrl = intent.getStringExtra(OPEN_URL_INFO)
+        markdownUrl = intent.getStringExtra(OPEN_URL_INFO)!!
 //        markdownView.run {
 //            webViewClient =  object : WebViewClient() {
 //                override fun onPageFinished(view: WebView, url: String) {
@@ -60,7 +68,10 @@ class MarkDownViewActivity : EasyDiaryActivity() {
         when (File(savedFilePath).exists()) {
             true -> {
                 runOnUiThread { progressBar.visibility = View.GONE }
-                mMarkDown.setMarkdown(markdownView, readSavedFile())
+                mMarkDown.setParsedMarkdown(markdownView, Markwon.builder(this)
+                        .usePlugin(SyntaxHighlightPlugin.create(mPrism4j, Prism4jThemeDefault.create(0)))
+                        .build().toMarkdown(readSavedFile())
+                )
             }
             false -> {
                 Thread(Runnable { openMarkdownFileAfterDownload(markdownUrl, savedFilePath) }).start()
@@ -78,14 +89,22 @@ class MarkDownViewActivity : EasyDiaryActivity() {
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 // opens input stream from the HTTP connection
                 val inputStream = httpConn.inputStream
-                FileUtils.copyInputStreamToFile(inputStream, File(saveFilePath))
+                val lines = IOUtils.readLines(inputStream, "UTF-8")
+                if (mForceAppendCodeBlock) {
+                    lines.add(0, "```java")
+                    lines.add("```")
+                }
+                FileUtils.writeLines(File(saveFilePath), "UTF-8", lines)
                 inputStream.close()
             }
             httpConn.disconnect()
 
             runOnUiThread {
                 progressBar.visibility = View.GONE
-                mMarkDown.setMarkdown(markdownView, readSavedFile())
+                mMarkDown.setParsedMarkdown(markdownView, Markwon.builder(this)
+                        .usePlugin(SyntaxHighlightPlugin.create(mPrism4j, Prism4jThemeDefault.create(0)))
+                        .build().toMarkdown(readSavedFile())
+                )
             }
         } else {
             runOnUiThread {
@@ -148,5 +167,6 @@ class MarkDownViewActivity : EasyDiaryActivity() {
     companion object {
         const val OPEN_URL_INFO = "open_url_info"
         const val OPEN_URL_DESCRIPTION = "open_url_description"
+        const val FORCE_APPEND_CODE_BLOCK = "force_append_code_block"
     }
 }

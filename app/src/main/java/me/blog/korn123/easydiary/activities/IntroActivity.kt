@@ -6,9 +6,8 @@ import android.os.Handler
 import android.os.Message
 import androidx.appcompat.app.AppCompatActivity
 import io.github.aafactory.commons.utils.CommonUtils
-import kotlinx.android.synthetic.main.activity_intro.*
 import me.blog.korn123.commons.utils.FontUtils
-import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.databinding.ActivityIntroBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import java.util.*
@@ -18,11 +17,13 @@ import java.util.*
  */
 
 class IntroActivity : AppCompatActivity(), Handler.Callback {
-    
+    private lateinit var mBinding: ActivityIntroBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        forceInitRealmLessThenOreo()
-        setContentView(R.layout.activity_intro)
+        mBinding = ActivityIntroBinding.inflate(layoutInflater)
+        forceInitRealmLessThanOreo()
+        setContentView(mBinding.root)
         rescheduleEnabledAlarms()
 
         // determine device language
@@ -48,7 +49,7 @@ class IntroActivity : AppCompatActivity(), Handler.Callback {
 
     override fun onResume() {
         super.onResume()
-        main_holder?.run {
+        mBinding.root.run {
             FontUtils.setFontsTypeface(this@IntroActivity, assets, null, this)
             initTextSize(this)
             setBackgroundColor(config.primaryColor)

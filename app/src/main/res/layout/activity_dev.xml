@@ -1,182 +1,265 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-    </com.google.android.material.appbar.AppBarLayout>
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="view_model"
+            type="me.blog.korn123.easydiary.viewmodels.BaseDevViewModel" />
+    </data>
 
     <LinearLayout
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:id="@+id/main_holder"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <androidx.cardview.widget.CardView
-            android:orientation="vertical"
-            style="@style/AppCard.Settings">
-            <LinearLayout
-                style="@style/LinearLayoutVertical">
-                <com.simplemobiletools.commons.views.MyTextView
-                    android:text="Action Log"
-                    style="@style/SettingsTitle" />
-                <com.simplemobiletools.commons.views.MyTextView
-                    android:id="@+id/clearLog"
-                    android:gravity="end"
-                    android:text="Clear log"
-                    style="@style/SettingsTitle" />
-                <ScrollView
-                    android:fillViewport="true"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp">
-                    <com.simplemobiletools.commons.views.MyTextView
-                        android:id="@+id/actionLog"
-                        android:layout_height="wrap_content"
-                        style="@style/SettingsSummary" />
-                </ScrollView>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+        </com.google.android.material.appbar.AppBarLayout>
 
-        <ScrollView
-            android:fillViewport="true"
+        <LinearLayout
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:id="@+id/main_holder"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <LinearLayout
-                android:padding="@dimen/card_layout_padding"
-                android:orientation="vertical"
+            <ScrollView
+                android:fillViewport="true"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <androidx.cardview.widget.CardView
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:padding="@dimen/card_layout_padding"
                     android:orientation="vertical"
-                    style="@style/AppCard.Settings">
-                    <LinearLayout
-                        style="@style/LinearLayoutVertical">
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:text="Location Manager"
-                            style="@style/SettingsTitle" />
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-                            <LinearLayout
-                                android:id="@+id/locationToolbar"
-                                android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <androidx.cardview.widget.CardView
+                        android:orientation="vertical"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="Action Log"
+                                style="@style/SettingsTitle" />
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:id="@+id/clearLog"
+                                android:gravity="end"
+                                android:text="Clear log"
+                                style="@style/SettingsTitle" />
+                            <androidx.core.widget.NestedScrollView
+                                android:fillViewport="true"
+                                android:layout_width="match_parent"
+                                android:layout_height="150dp">
+                                <com.simplemobiletools.commons.views.MyTextView
+                                    android:id="@+id/actionLog"
+                                    android:layout_height="wrap_content"
+                                    style="@style/SettingsSummary" />
+                            </androidx.core.widget.NestedScrollView>
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:onClick="@{() -> view_model.plus()}"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="Live Data"
+                                style="@style/SettingsTitle" />
+                            <ImageView
+                                app:symbolSequence="@{view_model.symbol}"
+                                android:layout_width="@dimen/diary_symbol_width"
+                                android:layout_height="@dimen/diary_symbol_height" />
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="@{Long.toString(view_model.symbol)}"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="GitHub Pages"
+                                style="@style/SettingsTitle" />
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:layout_width="match_parent"
+                                android:layout_height="150dp"
+                                android:id="@+id/recycler_cheat_sheet" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:orientation="vertical"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            android:id="@+id/linear_coroutine1"
+                            style="@style/LinearLayoutVertical">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="Coroutine"
+                                style="@style/SettingsTitle" />
+                            <com.google.android.flexbox.FlexboxLayout
+                                app:flexWrap="wrap"
+                                app:flexDirection="row"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
+                                <Button
+                                    app:layout_flexGrow="1"
+                                    android:id="@+id/button_coroutine_basic_start"
+                                    android:text="[T1] Start"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"/>
+                                <Button
+                                    app:layout_flexGrow="1"
+                                    android:id="@+id/button_coroutine_basic_stop"
+                                    android:text="[T1] Stop"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"/>
+                                <Button
+                                    app:layout_flexGrow="1"
+                                    android:id="@+id/button_coroutine_basic_status"
+                                    android:text="[T1] Job Status"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"/>
+                                <Button
+                                    app:layout_flexGrow="1"
+                                    android:id="@+id/button_coroutine_multiple"
+                                    android:text="[T2] Multiple"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"/>
+                                <Button
+                                    app:layout_flexGrow="1"
+                                    android:id="@+id/button_coroutine_blocking"
+                                    android:text="[T3] Blocking"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"/>
+                            </com.google.android.flexbox.FlexboxLayout>
+
+                            <androidx.core.widget.NestedScrollView
+                                android:id="@+id/scroll_coroutine"
+                                android:fillViewport="true"
+                                android:layout_width="match_parent"
+                                android:layout_height="100dp">
                                 <com.simplemobiletools.commons.views.MyTextView
-                                    android:background="?attr/selectableItemBackgroundBorderless"
-                                    android:id="@+id/requestLastLocation"
+                                    android:id="@+id/text_coroutine1_console"
+                                    style="@style/SettingsSummary" />
+                            </androidx.core.widget.NestedScrollView>
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                    <androidx.cardview.widget.CardView
+                        android:orientation="vertical"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="Location Manager"
+                                style="@style/SettingsTitle" />
+                            <com.google.android.flexbox.FlexboxLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <Button
+                                    android:id="@+id/button_request_lastLocation"
                                     android:text="Last-Location"
+                                    app:layout_flexGrow="1"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"/>
-                                <com.simplemobiletools.commons.views.MyTextView
-                                    android:background="?attr/selectableItemBackgroundBorderless"
-                                    android:layout_marginStart="10dp"
-                                    android:id="@+id/updateGPSProvider"
+                                <Button
+                                    android:id="@+id/button_update_gps_provider"
                                     android:text="Update-GPS"
+                                    app:layout_flexGrow="1"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"/>
-                                <com.simplemobiletools.commons.views.MyTextView
-                                    android:background="?attr/selectableItemBackgroundBorderless"
-                                    android:layout_marginStart="10dp"
-                                    android:id="@+id/updateNetworkProvider"
+                                <Button
+                                    android:id="@+id/button_update_network_provider"
                                     android:text="Update-Network"
+                                    app:layout_flexGrow="1"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"/>
-                            </LinearLayout>
+                            </com.google.android.flexbox.FlexboxLayout>
                             <com.simplemobiletools.commons.views.MyTextView
                                 android:layout_below="@+id/locationToolbar"
-                                android:id="@+id/locationManagerInfo"
+                                android:id="@+id/text_location_console"
                                 tools:text="Korea Seoul..."
                                 style="@style/SettingsSummary" />
-                        </RelativeLayout>
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/nextAlarm"
-                    android:orientation="vertical"
-                    style="@style/AppCard.Settings">
-                    <LinearLayout
-                        style="@style/LinearLayoutVertical">
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:text="Next Alarm"
-                            style="@style/SettingsTitle" />
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:id="@+id/nextAlarmSummary"
-                            android:text=""
-                            style="@style/SettingsSummary" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_next_alarm"
+                        android:orientation="vertical"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="Next Alarm"
+                                style="@style/SettingsTitle" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/fullBackupService"
-                    android:orientation="vertical"
-                    style="@style/AppCard.Settings">
-                    <LinearLayout
-                        style="@style/LinearLayoutVertical">
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:text="Full Backup Service"
-                            style="@style/SettingsTitle" />
-                        <com.simplemobiletools.commons.views.MyTextView
-                            style="@style/SettingsSummary" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/fullBackupService"
+                        android:orientation="vertical"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="Full Backup Service"
+                                style="@style/SettingsTitle" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/clearUnusedPhoto"
-                    android:orientation="vertical"
-                    style="@style/AppCard.Settings">
-                    <LinearLayout
-                        style="@style/LinearLayoutVertical">
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:text="Clear unused photo"
-                            style="@style/SettingsTitle" />
-                        <com.simplemobiletools.commons.views.MyTextView
-                            style="@style/SettingsSummary" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/clearUnusedPhoto"
+                        android:orientation="vertical"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="Clear unused photo"
+                                style="@style/SettingsTitle" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/notification1"
-                    android:orientation="vertical"
-                    style="@style/AppCard.Settings">
-                    <LinearLayout
-                        style="@style/LinearLayoutVertical">
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:text="Notification"
-                            style="@style/SettingsTitle" />
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:text="Basic + Action"
-                            style="@style/SettingsSummary" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/notification2"
-                    android:orientation="vertical"
-                    style="@style/AppCard.Settings">
-                    <LinearLayout
-                        style="@style/LinearLayoutVertical">
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:text="Notification"
-                            style="@style/SettingsTitle" />
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:text="Basic + Action + CustomContentView"
-                            style="@style/SettingsSummary" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-            </LinearLayout>
-        </ScrollView>
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_notification1"
+                        android:orientation="vertical"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="Notification"
+                                style="@style/SettingsTitle" />
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="Basic + Action"
+                                style="@style/SettingsSummary" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_notification2"
+                        android:orientation="vertical"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="Notification"
+                                style="@style/SettingsTitle" />
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:text="Basic + Action + CustomContentView"
+                                style="@style/SettingsSummary" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</layout>
+

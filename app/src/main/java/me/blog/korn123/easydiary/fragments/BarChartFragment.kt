@@ -14,6 +14,9 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.fragment_barchart.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.chart.DayAxisValueFormatter
 import me.blog.korn123.easydiary.chart.IValueFormatterExt
@@ -46,7 +49,8 @@ class BarChartFragment : androidx.fragment.app.Fragment() {
 
         val xAxis = barChart.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
-//        xAxis.typeface = mTfLight
+        xAxis.typeface = FontUtils.getCommonTypeface(context!!)
+        xAxis.labelRotationAngle = -45F
         xAxis.setDrawGridLines(false)
         xAxis.granularity = 1f // only intervals of 1 day
         xAxis.labelCount = 7
@@ -55,7 +59,7 @@ class BarChartFragment : androidx.fragment.app.Fragment() {
         val custom = MyAxisValueFormatter(context)
 
         val leftAxis = barChart.axisLeft
-//        leftAxis.typeface = mTfLight
+        leftAxis.typeface = FontUtils.getCommonTypeface(context!!)
         leftAxis.setLabelCount(8, false)
         leftAxis.valueFormatter = custom
         leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
@@ -64,13 +68,14 @@ class BarChartFragment : androidx.fragment.app.Fragment() {
 
         val rightAxis = barChart.axisRight
         rightAxis.setDrawGridLines(false)
-//        rightAxis.typeface = mTfLight
+        rightAxis.typeface = FontUtils.getCommonTypeface(context!!)
         rightAxis.setLabelCount(8, false)
         rightAxis.valueFormatter = custom
         rightAxis.spaceTop = 15f
         rightAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
 
         val l = barChart.legend
+        l.typeface = FontUtils.getCommonTypeface(context!!)
         l.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
         l.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
         l.orientation = Legend.LegendOrientation.HORIZONTAL
@@ -93,8 +98,13 @@ class BarChartFragment : androidx.fragment.app.Fragment() {
             }
         }
 
-        setData(6, 20f)
-        barChart.animateY(2000)
+        GlobalScope.launch {
+            setData(6, 20f)
+            activity?.runOnUiThread {
+                barChart.animateY(2000)
+                barChartProgressBar.visibility = View.GONE
+            }
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -102,7 +112,9 @@ class BarChartFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun setData(count: Int, range: Float) {
-        val listDiary = EasyDiaryDbHelper.readDiary(null)
+        val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
+        val listDiary = EasyDiaryDbHelper.readDiary(null, realmInstance = realmInstance)
+        realmInstance.close()
         val map = hashMapOf<Int, Int>()
         listDiary.map { diaryDto ->
             val writeHour = DateUtils.timeMillisToDateTime(diaryDto.currentTimeMillis, "HH")
@@ -137,7 +149,7 @@ class BarChartFragment : androidx.fragment.app.Fragment() {
 
         val barData = BarData(dataSets)
         barData.setValueTextSize(10f)
-//        barData.setValueTypeface(mTfLight)
+        barData.setValueTypeface(FontUtils.getCommonTypeface(context!!))
         barData.barWidth = 0.9f
 
         barChart.data = barData

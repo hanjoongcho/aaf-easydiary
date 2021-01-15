@@ -1,4 +1,25 @@
 <resources>
+    <string-array name="options_spinner_view_mode">
+        <item>Fit Center</item>
+        <item>Crop Top</item>
+        <item>Crop Center</item>
+        <item>Crop Bottom</item>
+    </string-array>
+    <string-array name="options_spinner_filter_mode">
+        <item>No Filter</item>
+        <item>Cartoon</item>
+        <item>Sepia</item>
+        <item>Contrast</item>
+        <item>Invert</item>
+        <item>Pixelation</item>
+        <item>Sketch</item>
+        <item>Swirl</item>
+        <item>Brightness</item>
+        <item>Kuwahara</item>
+        <item>Vignette</item>
+        <item>Gray Scale</item>
+    </string-array>
+
     <string-array name="weather_item_array">
         <item>0|Not selected</item>
         <item>1|Sonnig</item>
@@ -35,6 +56,10 @@
         <item>145|Amaze</item>
         <item>146|Delight</item>
         <item>147|Embarrassed</item>
+        <item>148|Frustrated</item>
+        <item>149|Crazy</item>
+        <item>150|Tired</item>
+        <item>151|Fear</item>
         <item>140|Idea</item>
         <item>141|Confusion</item>
         <item>142|Memory</item>
@@ -141,6 +166,7 @@
         <item>57|Coffee</item>
         <item>254|Water</item>
         <item>255|Milk</item>
+        <item>276|Beverage</item>
         <item>258|Beverage</item>
         <item>259|Beverage</item>
         <item>261|Beverage</item>
@@ -165,6 +191,13 @@
         <item>307|Festival</item>
         <item>308|Hair Salon</item>
         <item>309|Hair Salon</item>
+        <item>328|Training</item>
+        <item>326|Golf</item>
+        <item>323|Sports</item>
+        <item>324|Sports</item>
+        <item>327|Walking</item>
+        <item>325|Running</item>
+        <item>322|Stretching</item>
         <item>311|Baseball</item>
         <item>312|Basketball</item>
         <item>313|Basketball</item>
@@ -196,25 +229,26 @@
 
     <string-array name="symbol_item_array">
         <item>350|Youtube</item>
+        <item>370|Netflix</item>
         <item>351|Dropbox</item>
-        <item>352|PayPal</item>
         <item>353|HTML5</item>
+        <item>361|Reddit</item>
         <item>354|Snapchat</item>
         <item>355|Android</item>
         <item>356|Linkedin</item>
-        <item>357|Twitter</item>
-        <item>358|Instagram</item>
         <item>359|Facebook</item>
-        <item>360|Flickr</item>
-        <item>361|Reddit</item>
         <item>362|Trello</item>
+        <item>365|GitHub</item>
+        <item>369|SlideShare</item>
+        <item>368|Java</item>
+        <item>358|Instagram</item>
+        <item>367|Ubuntu</item>
+        <item>352|PayPal</item>
+        <item>357|Twitter</item>
+        <item>360|Flickr</item>
         <item>363|Quora</item>
         <item>364|Line</item>
-        <item>365|GitHub</item>
         <item>366|Linux</item>
-        <item>367|Ubuntu</item>
-        <item>368|Java</item>
-        <item>369|SlideShare</item>
     </string-array>
 
     <string-array name="flag_item_array">

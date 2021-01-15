@@ -21,10 +21,11 @@ import com.flask.colorpicker.ColorPickerView
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
-import com.google.android.flexbox.AlignItems
+import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import io.github.aafactory.commons.utils.BitmapUtils
+import io.github.aafactory.commons.utils.CALCULATION
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_post_card.*
@@ -81,53 +82,27 @@ class PostCardActivity : EasyDiaryActivity() {
             setTextColor(it.getInt(POSTCARD_TEXT_COLOR, POSTCARD_TEXT_COLOR_VALUE))
         }
 
-        Handler().post {
-            diaryDto.photoUris?.let {
-                if (/*resources.configuration.orientation == ORIENTATION_PORTRAIT && */it.size > 0) {
-                    photoContainer.visibility = View.VISIBLE
+        diaryDto.photoUris?.let {
+            if (/*resources.configuration.orientation == ORIENTATION_PORTRAIT && */it.size > 0) {
+                photoContainer.visibility = View.VISIBLE
 
-                    // FIXME remove duplicate code
-                    mPhotoAdapter = PhotoAdapter(this, it) { _ ->
-                        photoGrid.run {
-                            when (resources.configuration.orientation == ORIENTATION_PORTRAIT) {
-                                true -> {
-                                    layoutParams.height = CommonUtils.getDefaultDisplay(this@PostCardActivity).x
-                                }
-                                false -> {
-                                    layoutParams.width = CommonUtils.getDefaultDisplay(this@PostCardActivity).y - actionBarHeight() - statusBarHeight() - seekBarContainer.height
-                                }
-                            }
-                        }
-                        mPhotoAdapter.notifyDataSetChanged()
-                    }
-
-                    photoGrid.run {
-                        layoutManager = FlexboxLayoutManager(this@PostCardActivity).apply {
-                            flexWrap = FlexWrap.WRAP
-                            flexDirection = mPhotoAdapter.getFlexDirection()
-                            alignItems = AlignItems.STRETCH
-                        }
-                        adapter = mPhotoAdapter
-
-                        when (resources.configuration.orientation == ORIENTATION_PORTRAIT) {
-                            true -> {
-                                when (it.size) {
-                                    1, 3, 4, 5, 6 -> layoutParams.height = CommonUtils.getDefaultDisplay(this@PostCardActivity).x
-                                    2 -> layoutParams.height = CommonUtils.getDefaultDisplay(this@PostCardActivity).x / 2
-                                    else -> layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-                                }
-                            }
-                            false -> {
-                                val height = CommonUtils.getDefaultDisplay(this@PostCardActivity).y - actionBarHeight() - statusBarHeight() - seekBarContainer.height
-                                when (it.size) {
-                                    1, 3, 4, 5, 6 -> layoutParams.width = height
-                                    2 -> layoutParams.width = height / 2
-                                    else -> layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT
-                                }
-                            }
-                        }
-                    }
+                val postCardPhotoItems = arrayListOf<PhotoAdapter.PostCardPhotoItem>()
+                it.forEachIndexed { index, photoUriDto ->
+                    postCardPhotoItems.add(PhotoAdapter.PostCardPhotoItem(EasyDiaryUtils.getApplicationDataDirectory(this) + photoUriDto.getFilePath(), index, 2, 0))
                 }
+                mPhotoAdapter = PhotoAdapter(this, postCardPhotoItems) {
+                    resizePhotoGrid()
+                }
+
+                photoGrid.run {
+                    layoutManager = FlexboxLayoutManager(this@PostCardActivity).apply {
+                        flexWrap = FlexWrap.WRAP
+                        flexDirection = FlexDirection.ROW
+//                            alignItems = AlignItems.STRETCH
+                    }
+                    adapter = mPhotoAdapter
+                }
+                resizePhotoGrid()
             }
         }
 
@@ -144,6 +119,25 @@ class PostCardActivity : EasyDiaryActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
             }
         })
+    }
+
+    private fun resizePhotoGrid() {
+        photoGrid.run {
+            when (resources.configuration.orientation == ORIENTATION_PORTRAIT) {
+                true -> {
+                    if (mPhotoAdapter.postCardPhotoItems.none { item -> item.forceSinglePhotoPosition }) {
+                        layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                    } else {
+                        layoutParams.height = CommonUtils.getDefaultDisplay(this@PostCardActivity).x
+                    }
+
+                }
+                false -> {
+                    val height = calcPhotoGridHeight(this@PostCardActivity)
+                    layoutParams.width = height
+                }
+            }
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -383,5 +377,12 @@ class PostCardActivity : EasyDiaryActivity() {
             canvas.drawBitmap(second, first.width.toFloat(), 0f, null)    
         }
         return bitmap
+    }
+
+    companion object {
+        fun calcPhotoGridHeight(activity: Activity): Int {
+            val point =  CommonUtils.getDefaultDisplay(activity)
+            return point.y - activity.actionBarHeight() - activity.statusBarHeight() - CommonUtils.dpToPixel(activity, 30F, CALCULATION.CEIL)
+        }
     }
 }

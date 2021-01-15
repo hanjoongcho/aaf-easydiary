@@ -20,25 +20,31 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
+import androidx.activity.viewModels
+import androidx.databinding.DataBindingUtil
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks
 import com.github.ksoichiro.android.observablescrollview.ScrollState
 import com.github.ksoichiro.android.observablescrollview.Scrollable
 import com.nineoldandroids.animation.ValueAnimator
 import com.nineoldandroids.view.ViewHelper
 import io.github.aafactory.commons.utils.CommonUtils
-import kotlinx.android.synthetic.main.activity_diary_main.*
-
+import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.databinding.ActivityDiaryMainBinding
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.viewmodels.DiaryMainViewModel
 
 abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(), ObservableScrollViewCallbacks {
-
+    protected lateinit var mBinding: ActivityDiaryMainBinding
+    protected val viewModel: DiaryMainViewModel by viewModels()
     private var mScrollable: S? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(getLayoutResId())
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_diary_main)
+        mBinding.lifecycleOwner = this
+        mBinding.viewModel = viewModel
 
-        setSupportActionBar(toolbar)
-
+        setSupportActionBar(mBinding.toolbar)
         mScrollable = createScrollable()
         mScrollable?.setScrollViewCallbacks(this)
     }
@@ -70,36 +76,36 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
         }
     }
 
-    protected abstract fun getLayoutResId(): Int
-
     private fun toolbarIsShown(): Boolean {
-        return ViewHelper.getTranslationY(appBar).toInt() == 0
+        return ViewHelper.getTranslationY(mBinding.appBar).toInt() == 0
     }
 
     private fun toolbarIsHidden(): Boolean {
-        return ViewHelper.getTranslationY(appBar).toInt() == -appBar.height
+        return ViewHelper.getTranslationY(mBinding.appBar).toInt() == -mBinding.appBar.height
     }
 
     private fun showToolbar() {
         moveToolbar(0F)
+        if (config.enableCardViewPolicy) mBinding.searchCard.useCompatPadding = true
     }
 
     private fun hideToolbar() {
-        moveToolbar(-appBar.height.toFloat())
+        moveToolbar(-mBinding.appBar.height.toFloat())
+        mBinding.searchCard.useCompatPadding = false
     }
 
     private fun moveToolbar(toTranslationY: Float) {
-        if (ViewHelper.getTranslationY(appBar) == toTranslationY) {
+        if (ViewHelper.getTranslationY(mBinding.appBar) == toTranslationY) {
             return
         }
-        val animator = ValueAnimator.ofFloat(ViewHelper.getTranslationY(appBar), toTranslationY).setDuration(500)
+        val animator = ValueAnimator.ofFloat(ViewHelper.getTranslationY(mBinding.appBar), toTranslationY).setDuration(500)
         animator.addUpdateListener { animation ->
             val translationY = animation.animatedValue as Float
-            ViewHelper.setTranslationY(appBar, translationY)
-            ViewHelper.setTranslationY(main_holder as View?, translationY)
-            val lp = (main_holder as View).layoutParams as FrameLayout.LayoutParams
+            ViewHelper.setTranslationY(mBinding.appBar, translationY)
+            ViewHelper.setTranslationY(mBinding.mainHolder as View?, translationY)
+            val lp = (mBinding.mainHolder as View).layoutParams as FrameLayout.LayoutParams
             lp.height = (-translationY).toInt() + getScreenHeight() - lp.topMargin
-            (main_holder as View).requestLayout()
+            (mBinding.mainHolder as View).requestLayout()
         }
         animator.start()
     }
@@ -118,5 +124,9 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
         Log.i("keypadIsShown", "$heightDiff, ${CommonUtils.dpToPixel(this, 200F)}")
 
         return isShow
+    }
+
+    fun updateSymbolSequence(symbolSequence: Int) {
+        viewModel.updateSymbolSequence(symbolSequence)
     }
 }

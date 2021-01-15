@@ -9,6 +9,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT
 import me.blog.korn123.easydiary.helper.USER_CUSTOM_FONTS_DIRECTORY
+import me.blog.korn123.easydiary.views.FixedTextView
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang3.StringUtils
 import java.io.File
@@ -29,6 +30,8 @@ object FontUtils {
                     if (customLineSpacing) {
                         targetView.setLineSpacing(0F, context.config.lineSpacingScaleFactor)
                     }
+
+                    if (targetView is FixedTextView && targetView.applyHighLight) EasyDiaryUtils.highlightString(targetView)
                 }
                 else -> {}
             }
@@ -61,21 +64,21 @@ object FontUtils {
 
     fun setCommonTypeface(context: Context) {
         val commonFontName = context.config.settingFontName
-        sTypeface = getTypeface(context, context.assets, commonFontName)
+        sTypeface = getTypeface(context, commonFontName)
     }
 
     fun setFontsTypeface(context: Context, assetManager: AssetManager, customFontName: String?, rootView: ViewGroup?) {
-        setFontsTypeface(context, assetManager, customFontName, rootView, true)
+        setFontsTypeface(context, customFontName, rootView, true)
     }
 
-    fun setFontsTypeface(context: Context, assetManager: AssetManager, customFontName: String?, rootView: ViewGroup?, customLineSpacing: Boolean) {
-        val typeface = if (StringUtils.isNotEmpty(customFontName)) getTypeface(context, assetManager, customFontName) else getCommonTypeface(context)
+    fun setFontsTypeface(context: Context, customFontName: String?, rootView: ViewGroup?, customLineSpacing: Boolean) {
+        val typeface = if (StringUtils.isNotEmpty(customFontName)) getTypeface(context, customFontName) else getCommonTypeface(context)
         rootView?.let {
             setTypeface(context, it, typeface, customLineSpacing)
         }
     }
 
-    fun getTypeface(context: Context, assetManager: AssetManager, fontName: String?): Typeface? {
+    fun getTypeface(context: Context, fontName: String?): Typeface? {
         val assetsFonts = context.resources.getStringArray(R.array.pref_list_fonts_values)
         val userFonts = File(EasyDiaryUtils.getApplicationDataDirectory(context) + USER_CUSTOM_FONTS_DIRECTORY).list()
         return when {
@@ -83,7 +86,7 @@ object FontUtils {
                 if (StringUtils.equals(fontName, CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT)) {
                     Typeface.DEFAULT
                 } else {
-                    Typeface.createFromAsset(assetManager, "fonts/" + fontName)
+                    Typeface.createFromAsset(context.assets, "fonts/" + fontName)
                 }
             }
             isValidTypeface(userFonts, fontName) -> Typeface.createFromFile(EasyDiaryUtils.getApplicationDataDirectory(context) + USER_CUSTOM_FONTS_DIRECTORY + fontName)

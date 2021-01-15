@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import kotlinx.android.synthetic.main.activity_settings.*
-import kotlinx.android.synthetic.main.layout_settings_progress.*
+import kotlinx.android.synthetic.main.partial_settings_progress.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DotIndicatorPager2Adapter
 import me.blog.korn123.easydiary.extensions.pauseLock

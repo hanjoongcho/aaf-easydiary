@@ -889,33 +889,33 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ```
 ### Icon Packs: international-flags
-<div>Icons made by <a href="https://www.freepik.com/?__hstc=57440181.a5ab1a2645099117daea41f465cabd51.1556414046547.1561060081027.1561062947566.40&__hssc=57440181.9.1561062947566&__hsfp=2985574471" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-https://www.flaticon.com/packs/international-flags<br />
+Icons made by [Freepik](https://www.freepik.com/?__hstc=57440181.a5ab1a2645099117daea41f465cabd51.1556414046547.1561060081027.1561062947566.40&__hssc=57440181.9.1561062947566&__hsfp=2985574471) from [www.flaticon.com](https://www.flaticon.com) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)  
+https://www.flaticon.com/packs/international-flags  
 Used in Easy Diary version 1.4.88 or higher
 
 ### Icon Packs: linear-color-emoticons
-<div>Icons made by <a href="https://www.freepik.com/?__hstc=57440181.a5ab1a2645099117daea41f465cabd51.1556414046547.1556812502237.1556933273215.4&__hssc=57440181.5.1556933273215&__hsfp=625471252" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-https://www.flaticon.com/packs/linear-color-emoticons<br />
+Icons made by [Freepik](https://www.freepik.com/?__hstc=57440181.a5ab1a2645099117daea41f465cabd51.1556414046547.1556812502237.1556933273215.4&__hssc=57440181.5.1556933273215&__hsfp=625471252) from [www.flaticon.com](https://www.flaticon.com)  is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)  
+https://www.flaticon.com/packs/linear-color-emoticons  
 Used in Easy Diary version 1.4.76 or higher
 
 ### Icon Packs: food-and-drink-9
-<div>Icons made by <a href="https://www.flaticon.com/authors/twitter" title="Twitter">Twitter</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-https://www.flaticon.com/packs/food-and-drink-9<br />
+Icons made by [Twitter](https://www.flaticon.com/authors/twitter)  from [www.flaticon.com](https://www.flaticon.com/) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)  
+https://www.flaticon.com/packs/food-and-drink-9  
 Used in Easy Diary version 1.4.76 or higher
 
 ### Icon Packs: landscapes-collection
-<div>Icons made by <a href="https://www.freepik.com/?__hstc=57440181.a5ab1a2645099117daea41f465cabd51.1556414046547.1556636949228.1556812502237.3&__hssc=57440181.6.1556812502237&__hsfp=825133012" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-https://www.flaticon.com/packs/landscapes-collection<br />
+Icons made by [Freepik](https://www.freepik.com/?__hstc=57440181.a5ab1a2645099117daea41f465cabd51.1556414046547.1556636949228.1556812502237.3&__hssc=57440181.6.1556812502237&__hsfp=825133012)  from [www.flaticon.com](https://www.flaticon.com/) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)  
+https://www.flaticon.com/packs/landscapes-collection  
 Used in Easy Diary version 1.4.76 or higher
 
 ### Icon Packs: emoji-17
-<div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>   
-https://www.flaticon.com/packs/emoji-17<br />
+Icons made by [Freepik](https://www.freepik.com/) from [www.flaticon.com](https://www.flaticon.com/) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)  
+https://www.flaticon.com/packs/emoji-17  
 Used in Easy Diary version 1.4.76 or higher
 
 ### Icon Packs: daily-routine-objects-actions-3
-<div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>   
-https://www.flaticon.com/packs/daily-routine-objects-actions-3<br />
+Icons made by [Freepik](https://www.freepik.com/) from [www.flaticon.com](https://www.flaticon.com/) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/) 
+https://www.flaticon.com/packs/daily-routine-objects-actions-3  
 Used in Easy Diary version 1.4.76 or higher   
 
 ### Icon Packs: weather-set-2  

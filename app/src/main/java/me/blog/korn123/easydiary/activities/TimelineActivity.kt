@@ -16,7 +16,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.activity_timeline_diary.*
-import kotlinx.android.synthetic.main.layout_timeline_filter.*
+import kotlinx.android.synthetic.main.partial_timeline_filter.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
@@ -218,7 +218,7 @@ class TimelineActivity : EasyDiaryActivity() {
             startDate.text = null
             endDate.text = null
             query.text = null
-            mSymbolSequence = 9999
+            mSymbolSequence = SYMBOL_SELECT_ALL
             FlavorUtils.initWeatherView(this, symbol, mSymbolSequence, false)
             refreshList()
         }
@@ -232,8 +232,8 @@ class TimelineActivity : EasyDiaryActivity() {
         }}
     }
 
-    private fun selectFeelingSymbol(index: Int = 9999) {
-        mSymbolSequence = if (index == 0) 9999 else index
+    private fun selectFeelingSymbol(index: Int = SYMBOL_SELECT_ALL) {
+        mSymbolSequence = if (index == 0) SYMBOL_SELECT_ALL else index
         FlavorUtils.initWeatherView(this, symbol, mSymbolSequence, false)
     }
 

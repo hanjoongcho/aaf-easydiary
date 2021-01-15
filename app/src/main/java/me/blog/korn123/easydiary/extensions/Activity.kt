@@ -265,15 +265,17 @@ fun Activity.openFeelingSymbolDialog(guideMessage: String, callback: (Int) -> Un
     addCategory(itemList, categoryList, "symbol_item_array", getString(R.string.category_symbol))
     addCategory(itemList, categoryList, "flag_item_array", getString(R.string.category_flag))
 
-    val viewPager = symbolDialog.findViewById(R.id.viewpager) as androidx.viewpager.widget.ViewPager
-    symbolDialog.findViewById<TextView>(R.id.diarySymbolGuide).text = guideMessage
+    val viewPager = symbolDialog.findViewById<androidx.viewpager.widget.ViewPager>(R.id.viewpager).apply { setBackgroundColor(config.backgroundColor) }
+    symbolDialog.findViewById<TextView>(R.id.diarySymbolGuide)?.let {
+        it.text = guideMessage
+    }
     val symbolPagerAdapter = SymbolPagerAdapter(this, itemList, categoryList) { symbolSequence ->
         callback.invoke(symbolSequence)
         dialog?.dismiss()
     }
     viewPager.adapter = symbolPagerAdapter
 
-    val slidingTabLayout = symbolDialog.findViewById(R.id.sliding_tabs) as SlidingTabLayout
+    val slidingTabLayout = symbolDialog.findViewById<SlidingTabLayout>(R.id.sliding_tabs).apply { setBackgroundColor(config.backgroundColor) }
     slidingTabLayout.setViewPager(viewPager)
 
     val dismissButton = symbolDialog.findViewById(R.id.closeBottomSheet) as ImageView
@@ -301,6 +303,10 @@ fun Activity.addCategory(itemList: ArrayList<Array<String>>, categoryList: Array
         itemList.add(resources.getStringArray(resourceId))
         categoryList.add(categoryName)
     }
+}
+
+fun Activity.getLayoutLayoutInflater(): LayoutInflater{
+    return getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 }
 
 fun EasyDiaryActivity.acquireGPSPermissions(callback: () -> Unit) {

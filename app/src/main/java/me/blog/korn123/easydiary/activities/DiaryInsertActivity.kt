@@ -12,18 +12,16 @@ import android.widget.RelativeLayout
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.werb.pickphotoview.util.PickConfig
-import io.realm.RealmList
 import kotlinx.android.synthetic.main.activity_diary_edit.*
-import kotlinx.android.synthetic.main.layout_bottom_toolbar.*
-import kotlinx.android.synthetic.main.layout_edit_contents.*
-import kotlinx.android.synthetic.main.layout_edit_photo_container.*
-import kotlinx.android.synthetic.main.layout_edit_toolbar_sub.*
+import kotlinx.android.synthetic.main.partial_bottom_toolbar.*
+import kotlinx.android.synthetic.main.partial_edit_contents.*
+import kotlinx.android.synthetic.main.partial_edit_photo_container.*
+import kotlinx.android.synthetic.main.partial_edit_toolbar_sub.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
-import me.blog.korn123.easydiary.models.PhotoUriDto
 import org.apache.commons.lang3.StringUtils
 import java.util.*
 
@@ -58,29 +56,12 @@ class DiaryInsertActivity : EditActivity() {
         initDateTime()
         setupDialog()
         setupPhotoView()
-        initBottomToolbar()
         setDateTime()
         bindEvent()
         setupKeypad()
         restoreContents(savedInstanceState)
+        initBottomToolbar()
         toggleSimpleLayout()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.let {
-            val listUriString = arrayListOf<String>()
-            mPhotoUris.map { model ->
-                listUriString.add(model.photoUri ?: "")
-            }
-            it.putStringArrayList(LIST_URI_STRING, listUriString)
-            it.putInt(SELECTED_YEAR, mYear)
-            it.putInt(SELECTED_MONTH, mMonth)
-            it.putInt(SELECTED_DAY, mDayOfMonth)
-            it.putInt(SELECTED_HOUR, mHourOfDay)
-            it.putInt(SELECTED_MINUTE, mMinute)
-            it.putInt(SELECTED_SECOND, mSecond)
-        }
-        super.onSaveInstanceState(outState)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
@@ -88,21 +69,22 @@ class DiaryInsertActivity : EditActivity() {
         pauseLock()
         when (requestCode) {
             REQUEST_CODE_SPEECH_INPUT -> if (resultCode == Activity.RESULT_OK && intent != null) {
-                val result = intent.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-                if (mCurrentCursor == FOCUS_TITLE) { // edit title
-                    val title = diaryTitle.text.toString()
-                    val sb = StringBuilder(title)
-                    sb.insert(diaryTitle.selectionStart, result[0])
-                    val cursorPosition = diaryTitle.selectionStart + result[0].length
-                    diaryTitle.setText(sb.toString())
-                    diaryTitle.setSelection(cursorPosition)
-                } else {                   // edit contents
-                    val contents = diaryContents.text.toString()
-                    val sb = StringBuilder(contents)
-                    sb.insert(diaryContents.selectionStart, result[0])
-                    val cursorPosition = diaryContents.selectionStart + result[0].length
-                    diaryContents.setText(sb.toString())
-                    diaryContents.setSelection(cursorPosition)
+                intent.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.let {
+                    if (mCurrentCursor == FOCUS_TITLE) { // edit title
+                        val title = diaryTitle.text.toString()
+                        val sb = StringBuilder(title)
+                        sb.insert(diaryTitle.selectionStart, it[0])
+                        val cursorPosition = diaryTitle.selectionStart + it[0].length
+                        diaryTitle.setText(sb.toString())
+                        diaryTitle.setSelection(cursorPosition)
+                    } else {                   // edit contents
+                        val contents = diaryContents.text.toString()
+                        val sb = StringBuilder(contents)
+                        sb.insert(diaryContents.selectionStart, it[0])
+                        val cursorPosition = diaryContents.selectionStart + it[0].length
+                        diaryContents.setText(sb.toString())
+                        diaryContents.setSelection(cursorPosition)
+                    }
                 }
             }
             REQUEST_CODE_IMAGE_PICKER -> if (resultCode == Activity.RESULT_OK && intent != null) {
@@ -253,29 +235,6 @@ class DiaryInsertActivity : EditActivity() {
         feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog(getString(R.string.diary_symbol_guide_message)) { symbolSequence ->
             selectFeelingSymbol(symbolSequence)
         }}
-    }
-    
-    private fun restoreContents(savedInstanceState: Bundle?) {
-        mPhotoUris = RealmList()
-        savedInstanceState?.let {
-            it.getStringArrayList(LIST_URI_STRING)?.map { uriString ->
-                mPhotoUris.add(PhotoUriDto(uriString))
-            }
-            mYear = it.getInt(SELECTED_YEAR, mYear)
-            mMonth = it.getInt(SELECTED_MONTH, mMonth)
-            mDayOfMonth = it.getInt(SELECTED_DAY, mDayOfMonth)
-            mHourOfDay = it.getInt(SELECTED_HOUR, mHourOfDay)
-            mMinute = it.getInt(SELECTED_MINUTE, mMinute)
-            mSecond = it.getInt(SELECTED_SECOND, mSecond)
-            val thumbnailSize = config.settingThumbnailSize
-
-            mPhotoUris.forEachIndexed { index, photoUriDto ->
-                val imageView = EasyDiaryUtils.createAttachedPhotoView(this, photoUriDto, index)
-                imageView.setOnClickListener(PhotoClickListener(index))
-                photoContainer.addView(imageView, photoContainer.childCount - 1)
-            }
-        }
-        System.currentTimeMillis()
     }
 
     companion object {

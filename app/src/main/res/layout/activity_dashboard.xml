@@ -16,7 +16,7 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:background="@color/colorPrimary"
         android:id="@+id/main_holder"
@@ -33,11 +33,74 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-            <LinearLayout
-                android:orientation="vertical"
-                android:id="@+id/statistics1"
+            <me.blog.korn123.easydiary.views.FixedCardView
+                style="@style/card_view_dashboard"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"/>
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <me.blog.korn123.easydiary.views.FixedTextView
+                        app:applyGlobalSize="false"
+                        app:applyGlobalColor="false"
+                        app:applyHighLight="true"
+                        android:padding="10dp"
+                        android:text="@string/dashboard_title_daily_symbol_tile"
+                        android:textSize="@dimen/dashboard_title_h1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <com.google.android.flexbox.FlexboxLayout
+                            android:id="@+id/selectedSymbolFlexBox"
+                            android:layout_height="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            app:alignContent="stretch"
+                            app:alignItems="stretch"
+                            app:flexWrap="wrap">
+                        </com.google.android.flexbox.FlexboxLayout>
+
+                        <me.blog.korn123.easydiary.views.FixedCardView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:contentPadding="3dp"
+                            app:fixedAppcompatPadding="true">
+
+                            <ImageView
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:id="@+id/editSymbolFilter"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                app:srcCompat="@drawable/ic_select_symbol" />
+                        </me.blog.korn123.easydiary.views.FixedCardView>
+                    </LinearLayout>
+                    <me.blog.korn123.easydiary.views.FixedTextView
+                        app:applyGlobalSize="false"
+                        app:applyGlobalColor="false"
+                        android:id="@+id/month"
+                        android:gravity="center"
+                        tools:text="11월"
+                        android:textSize="@dimen/dashboard_title_h2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/dailyCardRecyclerView" />
+                    <androidx.core.widget.ContentLoadingProgressBar
+                        style="?android:progressBarStyleLarge"
+                        android:layout_gravity="center"
+                        android:id="@+id/dailyCardProgressBar"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"/>
+                </LinearLayout>
+            </me.blog.korn123.easydiary.views.FixedCardView>
 
             <LinearLayout
                 android:orientation="vertical"
@@ -59,9 +122,15 @@
 
             <LinearLayout
                 android:orientation="vertical"
+                android:id="@+id/statistics1"
+                android:layout_width="match_parent"
+                android:layout_height="450dp"/>
+
+            <LinearLayout
+                android:orientation="vertical"
                 android:id="@+id/statistics2"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"/>
+                android:layout_height="450dp"/>
 
             <LinearLayout
                 android:orientation="vertical"
@@ -69,5 +138,5 @@
                 android:layout_width="match_parent"
                 android:layout_height="500dp"/>
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
