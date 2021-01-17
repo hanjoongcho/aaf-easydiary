@@ -1,0 +1,735 @@
+<resources>
+    <string name="app_name">ᱥᱚᱦᱚᱡᱽ ᱰᱟᱭᱨᱤ</string>
+    <string name="common_create_seconds">ᱛᱮᱭᱟᱨ ᱴᱤᱡ</string>
+    <string name="create_diary_title">ᱰᱟᱭᱨᱤ ᱚᱞ ᱢᱮ</string>
+    <string name="write_date">ᱢᱟᱦᱤᱛ</string>
+    <string name="request_title_message">ᱫᱚᱭᱟᱠᱟᱛᱮ ᱴᱟᱭᱴᱟᱹᱞ ᱟᱫᱮᱨ ᱢᱮ ᱾</string>
+    <string name="request_content_message">ᱫᱚᱭᱟᱠᱟᱛᱮ ᱟᱢᱟᱜᱽ ᱡᱤᱱᱤᱥ ᱟᱫᱮᱨ ᱢᱮ ᱾</string>
+    <string name="guide_message">ᱴᱟᱭᱴᱟᱹᱞ ᱫᱚ ᱴᱟᱭᱤᱯ ᱟᱨ ᱵᱟᱝ ᱢᱮᱱ ᱢᱮ ᱾</string>
+    <string name="contents_text_hint">ᱡᱤᱱᱤᱥ ᱫᱚ ᱴᱟᱭᱤᱯ ᱟᱨ ᱵᱟᱝ ᱢᱮᱱ ᱢᱮ ᱾</string>
+    <string name="delete_photo_confirm_message">ᱟᱢ ᱥᱟᱹᱨᱤ ᱛᱮ ᱱᱚᱶᱟ ᱯᱷᱚᱴᱚ ᱢᱮᱴᱟᱣ ᱥᱮᱱᱟᱢ ᱠᱟᱱᱟ?</string>
+    <string name="gallery_intent_not_found_message">ᱜᱮᱞᱨᱭ ᱮᱯ ᱫᱚ ᱵᱟᱝ ᱟᱹᱛᱩᱨ ᱟᱠᱟᱱᱟ ᱟᱨ ᱵᱟᱝ ᱵᱚᱸᱫ ᱠᱟᱱᱟ ᱾</string>
+    <string name="create_diary_showcase_button_1">ᱤᱱᱟᱹ ᱛᱟᱭᱚᱢ</string>
+    <string name="create_diary_showcase_button_2">ᱵᱚᱸᱫ</string>
+    <string name="create_diary_showcase_title_1">ᱟᱛᱟᱥ</string>
+    <string name="create_diary_showcase_title_2">ᱧᱩᱛᱩᱢ</string>
+    <string name="create_diary_showcase_title_3">ᱡᱤᱱᱤᱥ</string>
+    <string name="create_diary_showcase_title_4">ᱪᱤᱛᱟᱹᱨ ᱞᱟᱴᱷᱟᱭ ᱢᱮ</string>
+    <string name="create_diary_showcase_title_5">ᱪᱤᱠᱤ ᱢᱟᱨᱟᱝ ᱢᱮ</string>
+    <string name="create_diary_showcase_title_6">ᱪᱤᱠᱤ ᱦᱚᱯᱚᱱ ᱪᱷᱚ</string>
+    <string name="create_diary_showcase_title_7">ᱢᱟᱦᱤᱛ ᱪᱚᱭᱚᱱ ᱢᱮ</string>
+    <string name="create_diary_showcase_title_8">ᱥᱚᱢᱚᱭ ᱪᱚᱭᱚᱱ ᱢᱮ</string>
+    <string name="create_diary_showcase_title_9">ᱥᱟᱸᱪᱚᱣ</string>
+    <string name="create_diary_showcase_message_1">ᱰᱟᱭᱨᱤ ᱛᱮᱭᱟᱨ ᱥᱚᱢᱚᱭ ᱨᱭᱟᱜᱽ ᱟᱛᱟᱥ ᱪᱚᱭᱚᱱ ᱢᱮ ᱾ ᱟᱛᱟᱥ ᱪᱚᱭᱚᱱ ᱫᱚ ᱡᱟᱹᱨᱩᱨᱤ ᱵᱟᱝ ᱠᱟᱱᱟ ᱾</string>
+    <string name="create_diary_showcase_message_2">ᱰᱟᱭᱨᱤ ᱨᱮᱭᱟᱜᱽ ᱧᱩᱛᱩᱢ ᱚᱞ ᱢᱮ ᱾ ᱵᱤᱥᱚᱭ ᱚᱞ ᱫᱚ ᱡᱟᱹᱨᱩᱨᱤ ᱵᱟᱧ ᱠᱟᱱᱟ ᱾</string>
+    <string name="create_diary_showcase_message_3">ᱰᱟᱭᱨᱤ ᱠᱚ, ᱱᱚᱴ ᱠᱚ, ᱠᱷᱟᱴᱚ ᱚᱞ ᱟᱨ ᱟᱨᱦᱚᱸ ᱡᱤᱱᱤᱥ ᱠᱚ ᱟᱫᱮᱨ ᱢᱮ ᱾</string>
+    <string name="create_diary_showcase_message_4">ᱰᱟᱭᱨᱤ ᱨᱮ ᱪᱤᱛᱟᱹᱨ ᱞᱟᱴᱷᱟᱭ ᱢᱮ ᱾</string>
+    <string name="create_diary_showcase_message_5">ᱰᱟᱭᱨᱤ ᱨᱮ ᱵᱮᱵᱷᱟᱨ ᱟᱠᱟᱱ ᱚᱞ ᱠᱚ ᱢᱟᱨᱟᱧ ᱢᱮ ᱾</string>
+    <string name="create_diary_showcase_message_6">ᱰᱟᱭᱨᱤ ᱨᱮ ᱵᱮᱵᱷᱟᱨ ᱟᱠᱟᱱ ᱪᱤᱠᱤ ᱠᱷᱟᱴᱚᱭ ᱢᱮ ᱾</string>
+    <string name="create_diary_showcase_message_7">ᱰᱟᱭᱭᱨᱤ ᱛᱮᱭᱟᱨ ᱢᱟᱦᱟ ᱠᱚ ᱪᱚᱭᱚᱱ ᱢᱮ ᱾ ᱛᱟᱭᱚᱢ ᱢᱟᱦᱟ ᱨᱮᱭᱟᱜᱽ ᱰᱟᱭᱨᱤ ᱛᱮᱭᱟᱨ ᱥᱟᱱᱟᱢ ᱠᱷᱟᱱ, ᱚᱢ ᱢᱟᱦᱟ ᱵᱚᱫᱚᱞ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ ᱾</string>
+    <string name="create_diary_showcase_message_8">ᱰᱟᱭᱭᱨᱤ ᱛᱮᱭᱟᱨ ᱢᱟᱦᱟ ᱠᱚ ᱪᱚᱭᱚᱱ ᱢᱮ ᱾ ᱟᱢ ᱥᱚᱢᱚᱭ ᱠᱚ ᱵᱚᱫᱚᱞ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ ᱡᱩᱫᱤ ᱟᱢ ᱢᱟᱲᱟᱝ ᱚᱠᱛᱚ ᱞᱟᱫᱜᱤᱫᱽ ᱰᱟᱭᱨᱤ ᱛᱮᱭᱟᱨ ᱥᱟᱱᱟᱢ ᱠᱟᱱ ᱠᱷᱟᱱ ᱾</string>
+    <string name="create_diary_showcase_message_9">ᱪᱟᱵᱟ ᱟᱠᱟᱱ ᱰᱟᱭᱨᱤ ᱥᱟᱺᱪᱟᱣ ᱢᱮ ᱾</string>
+    <string name="read_diary_title">ᱥᱮᱸᱫᱽᱨᱟ</string>
+    <string name="input_mode_a">ᱵᱷᱟᱥᱚᱬ ᱢᱳᱰ</string>
+    <string name="input_mode_c">ᱠᱤᱭᱯᱮᱰ ᱢᱳᱰ</string>
+    <string name="guide_message_2">ᱵᱤᱥᱚᱭ ᱠᱚ ᱴᱭᱤᱯ ᱟᱨ ᱵᱟᱝ ᱢᱮᱱ ᱢᱮ ᱾</string>
+    <string name="recognizer_intent_not_found_message">ᱵᱷᱟᱥᱚᱬ ᱪᱤᱱᱦᱟᱹᱣ ᱢᱳᱰᱭᱩᱞ ᱵᱟᱝ ᱟᱹᱛᱩᱨ ᱟᱨ ᱵᱟᱝ ᱵᱚᱸᱫᱽ ᱟᱠᱟᱱᱟ ᱾</string>
+    <string name="sample_diary_title_1">ᱥᱚᱛᱨᱚᱠ ᱛᱟᱦᱮᱸ ᱢᱮ ᱚᱱᱟ ᱥᱟᱞᱟᱜᱽ ᱛᱮ ᱪᱮᱛᱱᱟ ᱦᱚᱸ᱾</string>
+    <string name="sample_diary_title_2">ᱤᱧ ᱫᱩᱦᱲᱟᱹ ᱮᱢᱱᱮᱫᱟᱹᱧ ᱚᱠᱟ ᱤᱧ ᱵᱟᱲᱟᱭᱟᱹᱧ ᱡᱟᱦᱟᱺ ᱤᱧ ᱢᱮᱱᱮᱫᱽᱟᱹᱧ ᱾</string>
+    <string name="sample_diary_title_3">ᱟᱨᱦᱚᱸ ᱠᱷᱟᱨᱟᱯ ᱠᱷᱚᱵᱚᱨ ᱟᱧᱡᱚᱢ ᱛᱮ ᱦᱩᱭᱩᱜᱼᱟ, ᱟᱨᱦᱚᱸ ᱟᱞᱮ ᱨᱟᱹᱥᱠᱟᱹ ᱞᱮ ᱛᱟᱦᱮᱸᱱᱟ ᱾</string>
+    <string name="sample_diary_title_4">ᱮᱵᱩᱱᱰᱮᱱᱥ ᱠᱚᱞ ᱠᱚᱢᱯᱷᱚᱨᱴ, ᱠᱚᱱᱥᱴᱨᱮᱸᱴ ᱠᱚᱞ ᱠᱨᱤᱮᱴᱤᱵᱷᱤᱴᱭ ᱾</string>
+    <string name="sample_diary_1">ᱚᱠᱟ ᱡᱷᱚᱜ ᱟᱢ ᱟᱢᱟᱜ ᱵᱷᱩᱛ ᱠᱟᱞ ᱥᱮᱱ ᱮᱢ ᱠᱚᱭᱚᱜᱼᱟ, ᱟᱢ ᱯᱩᱨᱟᱹ ᱦᱤᱥᱟᱹᱵ ᱨᱮ ᱡᱤᱣᱚᱱ ᱮᱢ ᱵᱚᱨᱟᱫ ᱮᱫ ᱞᱮᱠᱷᱟᱢ ᱵᱩᱡᱷᱟᱣ ᱮᱫᱼᱟ ᱪᱮᱫᱟᱜ ᱥᱮ ᱟᱢ ᱟᱢᱟᱜ ᱡᱤᱣᱚᱱ ᱵᱟᱝ ᱵᱚᱨᱵᱟᱫ ᱥᱮᱱᱟᱢ ᱠᱟᱱᱟ ᱾\nᱠᱷᱚᱛᱨᱟ ᱨᱮᱭᱟᱜ ᱠᱷᱚᱛᱨᱟ\nᱥᱚᱛᱚᱨᱠ ᱠᱟᱛᱮ ᱠᱷᱚᱛᱨᱟ ᱨᱮᱭᱟᱜ ᱥᱟᱢᱱᱟ\n- ᱯᱩᱭᱥᱟᱹ ᱠᱷᱚᱡᱽ, ᱠᱟᱫᱱᱩᱱ ᱦᱤᱥᱟᱹᱵ ᱛᱮ</string>
+    <string name="sample_diary_2">ᱚᱠᱟ ᱡᱷᱚᱜ ᱮᱢ ᱨᱚᱲᱟ, ᱟᱢ ᱡᱟᱦᱟ ᱵᱟᱲᱟᱭᱟᱢ ᱚᱱᱟ ᱜᱮᱢ ᱫᱩᱦᱲᱟᱹ ᱢᱮᱱ ᱮᱫ ᱟᱢ ᱾\nᱡᱩᱫᱤ ᱢᱟ ᱟᱸᱡᱚᱢ ᱮᱫ ᱟᱢ, ᱟᱢ ᱱᱟᱶᱟ ᱡᱤᱱᱥ ᱵᱟᱲᱟᱭ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ ᱾\n-The Dalai Lama</string>
+    <string name="sample_diary_3">ᱱᱚᱶᱟ ᱠᱷᱟᱨᱟᱯ ᱠᱟᱛᱷᱟ ᱠᱟᱱᱟ ᱡᱮ ᱟᱢ ᱡᱷᱚᱛᱚ ᱞᱤᱰᱟᱹᱨ ᱠᱷᱚᱱ ᱮᱢ ᱡᱤᱱᱤᱥ ᱮᱢ ᱟᱸᱡᱚᱢ ᱮᱫᱼᱟ ᱾\nᱵᱮᱥ ᱠᱷᱚᱵᱚᱨ ᱫᱚ ᱵᱮᱥ ᱜᱟᱯᱟ, ᱠᱷᱟᱨᱟᱯ ᱠᱷᱚᱵᱚᱨ ᱫᱚ ᱠᱷᱟᱨᱟᱯ ᱜᱟᱯᱟ ᱾\nᱪᱚᱫᱟᱜ ᱥᱮ ᱡᱩᱫᱤ ᱠᱟᱛᱷᱟ ᱠᱚ ᱠᱷᱟᱨᱟᱯ ᱮ ᱛᱟᱦᱮᱸᱱ ᱛᱩᱞᱩᱡ, ᱱᱚᱶᱟ ᱠᱷᱟᱛᱤᱨ ᱱᱚᱶᱟ ᱢᱮᱱ ᱨᱮ ᱵᱮᱥ ᱟ\n- Eric Schmidt, Google ᱨᱤᱱᱤᱡ ᱯᱨᱮᱥᱤᱰᱮᱸᱴ, \"How does Google work?\"</string>
+    <string name="sample_diary_4">ᱠᱚᱱᱥᱴᱨᱮᱱᱥ ᱫᱚ ᱠᱨᱤᱮᱴᱤᱵᱷᱤᱴᱭ ᱨᱮᱭᱟᱜ ᱵᱟᱹᱰ ᱵᱟᱝ ᱠᱟᱱᱟ, ᱦᱮᱞᱮ ᱠᱨᱤᱭᱮᱴᱤᱵᱷᱤᱴᱭ ᱫᱚ ᱵᱟᱹᱰ ᱠᱚ ᱦᱚᱴᱟ ᱞᱟᱹᱜᱤᱫ ᱵᱮᱵᱷᱟᱨᱚᱜ ᱠᱟᱱᱟ ᱾ \nᱡᱷᱚᱛᱚ ᱢᱟᱨᱟᱝ ᱠᱟᱹᱢᱤ ᱠᱚ ᱟᱭᱢᱟ ᱵᱟᱫᱷᱟ ᱛᱮ ᱠᱚᱨᱟᱣ ᱠᱟᱱᱟ, ᱠᱨᱤᱭᱮᱴᱤᱵᱷᱤᱴᱭ ᱫᱚ ᱵᱟᱹᱰ ᱡᱟᱭᱜᱟ ᱨᱮ ᱛᱮᱭᱟᱨ ᱟᱠᱱᱟ C\n- ᱨᱤᱯᱨᱮᱡᱮᱱᱴᱮᱴᱤᱵᱷ Kim Bong-Jin</string>
+    <string name="read_diary_showcase_button_1">ᱤᱱᱟ ᱛᱟᱭᱚᱢ</string>
+    <string name="read_diary_showcase_button_2">ᱵᱚᱸᱫ</string>
+    <string name="read_diary_showcase_title_1">ᱰᱟᱭᱨᱤ ᱚᱞ ᱢᱮ</string>
+    <string name="read_diary_showcase_title_2">ᱥᱮᱸᱫᱽᱨᱟ</string>
+    <string name="read_diary_showcase_title_3">ᱵᱷᱟᱥᱚᱬ ᱪᱤᱱᱦᱟᱹᱣ</string>
+    <string name="read_diary_showcase_title_4">ᱯᱟᱸᱡᱤ</string>
+    <string name="read_diary_showcase_title_5">ᱴᱟᱭᱤᱢᱞᱟᱭᱤᱱ</string>
+    <string name="read_diary_showcase_title_6">ᱪᱟᱨᱴ</string>
+    <string name="read_diary_showcase_title_7">ᱮᱰᱵᱷᱟᱸᱥᱼᱰ ᱥᱟᱡᱟᱣᱠᱚ</string>
+    <string name="read_diary_showcase_title_8">ᱰᱟᱭᱨᱤ ᱫᱮᱠᱷᱟᱣᱢᱮ</string>
+    <string name="read_diary_showcase_message_1">ᱟᱢ ᱟᱭᱢᱟ ᱰᱟᱭᱨᱤ, ᱢᱮᱢᱚ, ᱥᱟᱹᱢᱟᱨᱭ ᱱᱚᱴ, ᱟᱫᱤ ᱠᱚ ᱛᱮᱭᱟᱨ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ ᱾ ᱠᱟᱹᱢᱤ ᱥᱚᱭᱲᱤ ᱦᱤᱥᱟᱹᱵ ᱛᱮ ᱾</string>
+    <string name="read_diary_showcase_message_2">ᱟᱢ ᱥᱟᱭᱨᱤ ᱨᱮ ᱠᱷᱟᱴᱚᱚᱞ ᱛᱮ ᱥᱮᱸᱫᱽᱨᱟ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ ᱾ ᱚᱠᱟ ᱡᱷᱚᱜ ᱠᱷᱟᱴᱚᱼᱚᱞ ᱟᱫᱮᱨ ᱟᱢ, ᱢᱮᱪ ᱟᱠᱟᱱ ᱠᱷᱟᱴᱚᱼᱚᱞ ᱠᱚ ᱪᱤᱱᱦᱟᱹᱜᱼᱟ ᱾</string>
+    <string name="read_diary_showcase_message_3">ᱟᱢ ᱵᱤᱱᱟᱹ ᱠᱤᱭᱯᱮᱰ ᱨᱮᱭᱟᱜ ᱵᱮᱵᱷᱟᱨ ᱛᱮ ᱵᱷᱟᱥᱚᱬ ᱪᱤᱱᱟᱹᱯ ᱯᱷᱤᱪᱚᱨ ᱛᱮ ᱥᱮᱸᱫᱽᱨᱟ ᱠᱷᱟᱴᱚᱼᱚᱞ ᱵᱮᱵᱷᱟᱨ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ ᱾</string>
+    <string name="read_diary_showcase_message_4">ᱛᱮᱭᱟᱨ ᱟᱠᱟᱱᱟ ᱰᱟᱭᱨᱤ ᱫᱚ ᱰᱮᱴ ᱦᱤᱥᱟᱹᱵ ᱛᱮ ᱠᱮᱞᱮᱱᱰᱟᱹᱨ ᱠᱷᱚᱱ ᱛᱮᱭᱟᱨ ᱜᱟᱱᱚᱜᱼᱟ ᱾</string>
+    <string name="read_diary_showcase_message_5">ᱛᱮᱭᱟᱨ ᱟᱠᱟᱱᱟ ᱰᱟᱭᱨᱤ ᱫᱚ ᱴᱟᱭᱤᱢᱞᱟᱭᱤᱱ ᱞᱮᱠᱷᱟ ᱵᱮᱵᱷᱟᱨᱚᱜᱼᱟ ᱾</string>
+    <string name="read_diary_showcase_message_6">ᱡᱷᱚᱛᱚ ᱥᱚᱢᱚᱭ ᱞᱟᱹᱜᱤᱫ ᱰᱟᱭᱨᱤ ᱟᱫᱮᱨ ᱠᱚ ᱧᱮᱞ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ ᱾</string>
+    <string name="read_diary_showcase_message_7">ᱪᱤᱠᱤ ᱠᱚ, ᱠᱩᱞᱩᱯ ᱱᱚᱢᱵᱚᱨ ᱥᱮᱴ, ᱵᱮᱠᱟᱹᱯ ᱟᱨ ᱰᱟᱭᱨᱤ ᱨᱤᱥᱴᱚᱨ ᱠᱚ ᱮᱰᱵᱷᱟᱸᱥ ᱥᱟᱡᱟᱣ ᱠᱚᱨᱮ ᱵᱮᱵᱷᱟᱨ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ ᱾</string>
+    <string name="read_diary_showcase_message_8">ᱰᱟᱭᱨᱤ ᱧᱮᱞ ᱞᱟᱹᱜᱤᱫ ᱞᱤᱥᱴ ᱨᱮᱭᱟᱜ ᱰᱟᱭᱨᱤ ᱨᱮ ᱚᱛᱟᱭ ᱢᱮ ᱾</string>
+    <string name="diary_photo_migration_message">ᱪᱤᱛᱟᱹᱨ ᱫᱚᱦᱚ ᱛᱚᱨᱠᱟ EasyDiary ᱨᱮ ᱵᱚᱫᱚᱞᱮᱱᱟ, ᱢᱟᱲᱟᱝ ᱞᱤᱸᱠ ᱵᱤᱵᱨᱚᱬ ᱫᱚ ᱪᱮᱯᱟᱣᱜᱼᱟ ᱟᱨ EasyDiary ᱯᱚᱴᱚᱢ ᱨᱮ ᱫᱚᱦᱚᱜᱼᱟ ᱾\nᱫᱚᱭᱚᱠᱟᱛᱮ ᱠᱟᱹᱢᱤ ᱪᱟᱵᱟᱜ ᱵᱷᱩᱨ ᱛᱟᱸᱜᱤ ᱠᱟᱜ ᱯᱮ ᱾</string>
+    <string name="read_diary_detail_title">ᱰᱟᱭᱨᱤ ᱯᱟᱲᱦᱟᱣ ᱢᱮ</string>
+    <string name="delete_confirm">ᱟᱢ ᱡᱷᱚᱛᱚ ᱞᱮᱠᱷᱟᱛᱮ ᱢᱮᱴᱟᱣ ᱥᱟᱵᱟᱢ ᱠᱟᱱᱟ ᱥᱮ?</string>
+    <string name="read_diary_detail_showcase_button_1">ᱤᱱᱟ ᱛᱟᱭᱚᱢ</string>
+    <string name="read_diary_detail_showcase_button_2">ᱵᱚᱸᱫ</string>
+    <string name="read_diary_detail_showcase_title_0">ᱰᱟᱭᱨᱤ ᱧᱮᱞ ᱢᱮ</string>
+    <string name="read_diary_detail_showcase_title_1">ᱥᱟᱦᱴᱟ ᱩᱪᱟᱹᱲ ᱢᱮ</string>
+    <string name="read_diary_detail_showcase_title_2">ᱰᱟᱭᱨᱤ ᱥᱟᱯᱲᱟᱣ ᱢᱮ</string>
+    <string name="read_diary_detail_showcase_title_3">TTS</string>
+    <string name="read_diary_detail_showcase_title_4">ᱯᱚᱥᱴᱠᱟᱰ</string>
+    <string name="read_diary_detail_showcase_title_5">ᱰᱟᱭᱨᱤ ᱢᱮᱴᱟᱣ ᱢᱮ</string>
+    <string name="read_diary_detail_showcase_message_0">ᱥᱟᱸᱪᱟᱣ ᱟᱠᱟᱱᱟ ᱰᱟᱭᱨᱤ ᱵᱨᱟᱩᱡᱽ ᱢᱮ ᱾ ᱠᱚᱥᱴᱚᱢ ᱨᱚᱝ ᱫᱮᱠᱷᱟᱣ ᱠᱟᱛᱮ ᱟᱢ ᱥᱟᱸᱪᱟᱣ ᱟᱠᱟᱱ ᱰᱟᱭᱨᱤ ᱵᱚᱫᱚᱞ ᱟᱨ ᱵᱟᱝ ᱰᱟᱭᱨᱤ ᱠᱟᱰ ᱛᱮᱭᱟᱨ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ ᱾</string>
+    <string name="read_diary_detail_showcase_message_1">ᱢᱟᱲᱟᱝ ᱟᱨ ᱵᱟᱝ ᱛᱟᱭᱚᱢ ᱛᱮ ᱛᱮᱭᱟᱨ ᱟᱠᱟᱟᱱ ᱰᱟᱭᱨᱤ ᱧᱮᱞ ᱞᱟᱹᱜᱤᱫ ᱥᱠᱨᱤᱱ ᱞᱮᱸᱜᱟ ᱟᱨ ᱵᱟᱝ ᱡᱚᱡᱚᱢ ᱥᱮᱫ ᱚᱨ ᱢᱮ ᱾</string>
+    <string name="read_diary_detail_showcase_message_2">ᱧᱮᱞ ᱵᱤᱲᱟᱹᱣ ᱞᱮᱠᱷᱟ ᱰᱟᱭᱨᱤ ᱠᱚ ᱥᱟᱯᱲᱟᱣ ᱞᱟᱹᱜᱤᱫ ᱟᱢ ᱰᱟᱭᱨᱤ ᱥᱟᱯᱲᱟᱣ ᱥᱠᱨᱤᱱ ᱛᱮ ᱪᱟᱞᱟᱣ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ ᱾</string>
+    <string name="read_diary_detail_showcase_message_3">ᱟᱢ Google TTS ᱯᱷᱤᱪᱚᱨ ᱵᱮᱵᱷᱨ ᱠᱟᱛᱮ ᱟᱢ ᱰᱟᱭᱨᱤ ᱟᱹᱲᱟᱹ ᱠᱚ ᱟᱸᱡᱚᱢ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ ᱾</string>
+    <string name="read_diary_detail_showcase_message_4">ᱟᱢ ᱰᱟᱭᱨᱤ ᱯᱚᱥᱴ ᱠᱟᱰᱠᱚ ᱵᱮᱵᱷᱟᱨ ᱟᱨ ᱦᱟᱹᱴᱤᱧ ᱞᱟᱹᱜᱤᱫ ᱵᱮᱵᱷᱟᱨ ᱫᱟᱲᱮᱭᱟᱜ ᱟᱢ ᱾</string>
+    <string name="read_diary_detail_showcase_message_5">ᱟᱢ ᱱᱤᱛᱚᱜᱼᱟᱜ ᱰᱟᱭᱨᱤ ᱢᱮᱴᱟᱣ ᱠᱟᱛᱮ ᱟᱨ ᱥᱮᱸᱫᱽᱨᱟ ᱥᱠᱨᱤᱱ ᱛᱮ ᱪᱟᱞᱟᱣ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ ᱾</string>
+    <string name="update_diary_title">ᱰᱟᱭᱨᱤ ᱥᱟᱯᱲᱟᱣ ᱢᱮ</string>
+    <string name="back_pressed_confirm">ᱱᱤᱛᱚᱜᱼᱟᱜ ᱰᱟᱭᱨᱤ ᱵᱤᱱᱟᱹ ᱥᱟᱸᱪᱟᱣ ᱠᱟᱛᱮ ᱢᱟᱲᱟᱝ ᱥᱠᱨᱤᱱ ᱛᱮ ᱪᱟᱞᱟᱜ ᱞᱟᱹᱜᱤᱫ \'ᱴᱷᱤᱠ\' ᱨᱮ ᱚᱛᱟᱭ ᱢᱮ ᱾</string>
+    <string name="rate_app">ᱮᱯ ᱨᱮᱴ ᱢᱮ</string>
+    <string name="guide_message_3">ᱱᱮᱦᱚᱨ ᱟᱠᱟᱱ ᱯᱷᱤᱪᱟᱨ ᱠᱚ ᱞᱟᱹᱜᱤᱫ ᱟᱫᱮᱨ ᱯᱟᱹᱨᱢᱤᱥᱟᱱ ᱵᱟᱹᱱᱩᱜᱼᱟ ᱾</string>
+    <string name="restore_diary">ᱰᱟᱭᱨᱤ ᱨᱤᱠᱟᱹᱣᱟᱹᱨ ᱢᱮ</string>
+    <string name="restore_diary_summary">Google Drive ᱠᱷᱟᱱ ᱞᱟᱴᱷᱟ ᱠᱚ ᱟᱲᱟᱜ ᱠᱟᱛᱮ ᱡᱷᱚᱛᱚ ᱡᱤᱱᱤᱥ ᱠᱚ ᱟᱹᱜᱩ ᱨᱩᱟᱹᱲ ᱢᱮ ᱾</string>
+    <string name="restore_photo">ᱰᱟᱭᱨᱤ ᱪᱤᱛᱟᱹᱨᱠᱚ ᱨᱤᱠᱟᱹᱣᱟᱹᱨ ᱢᱮ (ᱢᱮᱱᱩᱟᱞ)</string>
+    <string name="restore_photo_summary">ᱰᱟᱭᱨᱤ ᱥᱟᱞᱟᱜ ᱞᱟᱴᱷᱟ ᱠᱟᱱ ᱪᱤᱛᱟᱹᱨ ᱠᱚ ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱠᱚ ᱨᱩᱟᱹᱲ ᱟᱹᱜᱩ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱾</string>
+    <string name="backup_diary">ᱰᱟᱭᱨᱤ ᱵᱮᱠᱟᱹᱯ</string>
+    <string name="backup_diary_summary">Google Drive ᱛᱮ ᱞᱟᱴᱷᱟ ᱠᱚ ᱟᱲᱟᱜ ᱠᱟᱛᱮ ᱡᱷᱚᱛᱚ ᱡᱤᱱᱤᱥ ᱠᱚ ᱟᱹᱜᱩ ᱨᱩᱟᱹᱲ ᱢᱮ ᱾</string>
+    <string name="font_setting">ᱪᱤᱠᱤ ᱥᱟᱡᱟᱣ</string>
+    <string name="add_ttf_fonts_title">TTF ᱪᱤᱠᱤ ᱥᱟᱡᱟᱣᱢᱮ</string>
+    <string name="add_ttf_fonts_summary">ᱟᱢᱟᱜ TTF ᱪᱤᱠᱤᱠᱚ ᱱᱤᱡᱮᱛᱮ Easy Diary ᱨᱮ ᱥᱮᱞᱮᱫ ᱢᱮ ᱾\nᱡᱩᱫᱤ ᱟᱢ ᱪᱤᱠᱤ ᱠᱚ ᱥᱮᱞᱮᱫᱟᱢ, ᱢᱮᱱᱠᱷᱟᱱ ᱟᱢ ᱢᱟᱲᱟᱝ ᱠᱷᱚᱱ ᱢᱮᱱᱟᱜ ᱪᱤᱠᱤ ᱠᱚ ᱥᱟᱞᱟᱜ ᱵᱮᱵᱷᱟᱨ ᱫᱟᱲᱮᱭᱟᱜ ᱟᱢ ᱾\nᱚᱠᱟ ᱡᱷᱚᱜ ᱟᱢ ᱨᱮᱫ ᱮᱠᱥᱯᱞᱚᱨᱟᱹᱨ ᱛᱮ ᱪᱤᱠᱤ ᱠᱚ ᱵᱟᱪᱷᱟᱣ ᱟᱢ, ᱚᱱᱟ ᱨᱮᱫ ᱠᱚ ᱫᱚ Easy Diary ᱨᱮ ᱨᱮᱡᱤᱥᱴᱚᱨᱚᱜᱼᱟ ᱟᱨ ᱪᱤᱠᱤ ᱥᱟᱡᱟᱣ ᱢᱮᱱᱩ ᱨᱮ ᱮᱠᱴᱤᱵᱷᱚᱜᱼᱟ ᱾</string>
+    <string name="add_ttf_fonts_info_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/MANUAL.md</string>
+    <string name="diary_search_keyword_case_sensitive_title">ᱠᱮᱥ ᱥᱮᱱᱥᱤᱴᱤᱵᱷ</string>
+    <string name="diary_search_keyword_case_sensitive_summary">ᱱᱚᱶᱟ ᱚᱯᱥᱚᱱ ᱮᱠᱴᱤᱵᱷ ᱞᱮᱠᱷᱟᱱ, ᱰᱟᱭᱨᱤ ᱠᱮᱥ ᱠᱚ ᱢᱮᱪ ᱮᱱᱟ ᱥᱮ ᱵᱟᱝᱟ ᱧᱮᱞ ᱵᱤᱲᱟᱹᱣ ᱟᱭ ᱾</string>
+    <string name="setting_primary_color_title">ᱛᱷᱤᱢ</string>
+    <string name="setting_primary_color_summary">ᱮᱯᱞᱤᱠᱮᱥᱚᱱ ᱨᱮᱭᱟᱜ ᱢᱩᱞ ᱨᱚᱸᱝ ᱥᱮᱴ ᱢᱮ ᱾</string>
+    <string name="pick_text_color_guide_message">ᱱᱤᱛᱚᱜᱼᱟᱜ ᱵᱷᱟᱹᱨᱥᱟᱹᱱ ᱫᱚ ᱛᱷᱤᱢ ᱨᱚᱝ ᱵᱚᱫᱚᱞ ᱠᱚ ᱥᱟᱯᱚᱴᱟᱭ ᱾\n ᱟᱞ ᱨᱚᱝ ᱵᱚᱫᱚᱞ ᱠᱚ ᱫᱚ ᱵᱷᱚᱵᱤᱥᱭᱚᱛ ᱨᱮ ᱦᱟᱹᱡᱩᱜᱼᱟ ᱾</string>
+    <string name="pick_background_color_guide_message">ᱱᱤᱛᱚᱜᱼᱟᱜ ᱵᱷᱟᱹᱨᱥᱟᱹᱱ ᱫᱚ ᱛᱷᱤᱢ ᱨᱚᱝ ᱵᱚᱫᱚᱞ ᱠᱚ ᱥᱟᱯᱚᱴᱟᱭ ᱾\n ᱵᱽᱮᱠᱜᱽᱨᱟᱩᱸᱰ ᱨᱚᱝ ᱵᱚᱫᱚᱞ ᱠᱚ ᱫᱚ ᱵᱷᱚᱵᱤᱥᱭᱚᱛ ᱨᱮ ᱦᱟᱹᱡᱩᱜᱼᱟ ᱾</string>
+    <string name="easy_photo_map_title">Easy PhotoMap</string>
+    <string name="easy_photo_map_summary">Easy ᱪᱤᱛᱟᱹᱨ ᱢᱮᱯ ᱫᱚ ᱪᱤᱛᱟᱹᱨ ᱢᱮᱯ ᱮᱯᱞᱤᱠᱮᱥᱚᱱ ᱠᱟᱱᱟ ᱚᱠᱟ ᱫᱚ ᱪᱤᱛᱟᱹᱨ ᱨᱮ ᱢᱮᱱᱟᱜ ᱡᱟᱭᱜᱟ ᱵᱤᱵᱨᱚᱬ ᱛᱮ ᱡᱟᱭᱜᱟ ᱠᱟ ᱮᱢᱟᱱ ᱢᱮᱯ ᱨᱮ ᱫᱮᱠᱷᱟᱣ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱭ ᱾</string>
+    <string name="easy_password_title">ᱪᱟᱨᱴ</string>
+    <string name="easy_password_summary">Easy ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ ᱫᱚ ᱱᱚ ᱱᱚᱝᱠᱟᱱ ᱮᱯᱞᱤᱠᱮᱥᱚᱱ ᱠᱟᱱᱟ ᱠᱟᱠᱟ ᱛᱮ ᱫᱚ ᱞᱚᱜᱤᱱ, ᱰᱚᱠᱭᱩᱢᱮᱴ ᱥᱮᱠᱭᱚᱨᱤᱴᱭ, ᱫᱩᱟᱹᱨ ᱠᱩᱞᱩᱯ, ᱠᱩᱞᱩᱯ, ᱠᱨᱮᱰᱤᱴ ᱠᱟᱰ, ᱮᱠᱟᱩᱸᱴ ᱢᱮᱱᱮᱡᱽᱢᱮᱴ ᱟᱫᱤ ᱠᱚᱨᱮ ᱵᱮᱵᱷᱟᱨᱼᱚᱜ ᱠᱟᱱ ᱢᱤᱫᱴᱟᱹᱝ ᱯᱮᱴᱟᱹᱨᱱ ᱠᱩᱞᱩᱯ ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱥᱮᱴ ᱛᱮ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ ᱠᱚ ᱮᱢᱟᱱ ᱢᱮᱱᱮᱡᱽ ᱞᱟᱹᱜᱤᱫ ᱵᱮᱵᱷᱟᱨ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱾</string>
+    <string name="font_line_spacing">ᱪᱤᱠᱤ ᱞᱟᱹᱭᱤᱱ ᱡᱟᱭᱜᱟ</string>
+    <string name="font_line_spacing_summary">ᱨᱮᱥᱤᱭᱚ ᱠᱚ ᱥᱮᱴ ᱞᱟᱹᱜᱤᱫ ᱪᱤᱠᱤ ᱨᱮᱭᱟᱜ ᱞᱟᱹᱭᱤᱱ ᱪᱷᱟᱲ ᱠᱚ ᱵᱚᱫᱚᱞ ᱢᱮ ᱾</string>
+    <string name="calendar_title">ᱯᱟᱸᱡᱤ</string>
+    <string name="guide_message_4">ᱚᱱᱟ ᱫᱤᱱ ᱨᱮ ᱚᱠᱟ ᱰᱟᱭᱨᱤ ᱦᱚᱸ ᱵᱟᱝ ᱛᱮᱭᱟᱨ ᱟᱠᱟᱱᱟ ᱾</string>
+    <string name="bar_chart_title">ᱪᱟᱨᱴ</string>
+    <string name="bar_chart_status">ᱚᱠᱛᱚ ᱰᱟᱭᱨᱤ ᱛᱮᱭᱟᱨ ᱥᱴᱟᱴᱟᱹᱥᱠᱚ</string>
+    <string name="range_a">0h~3h</string>
+    <string name="range_b">4h~7h</string>
+    <string name="range_c">8h~11h</string>
+    <string name="range_d">12h~15h</string>
+    <string name="range_e">16h~19h</string>
+    <string name="range_f">20h~23h</string>
+    <string name="range_g">1h~24h</string>
+    <string name="write_time">ᱚᱞ ᱚᱠᱛᱚ</string>
+    <string name="write_count">ᱚᱞ ᱦᱤᱥᱟᱹᱵ</string>
+    <string name="unlock_guide_message">ᱫᱚᱭᱟᱠᱟᱛᱮ ᱟᱢᱟᱜ ᱠᱩᱞᱩᱯ ᱞᱮᱠᱷᱟ ᱟᱫᱮᱨ ᱢᱮ</string>
+    <string name="photo_view_error_info">ᱚᱠᱟ ᱪᱤᱛᱟᱹᱨ ᱦᱚᱸ ᱵᱟᱭ ᱧᱟᱢ ᱞᱮᱱᱟ ᱾\nᱜᱮᱞᱨᱭ ᱠᱷᱟᱱ ᱞᱟᱴᱷᱟ ᱟᱠᱟᱱ ᱪᱤᱛᱟᱹᱨ ᱫᱚ ᱯᱟᱪᱮ ᱢᱮᱴᱟᱣ ᱟᱠᱟᱱᱟ ᱟᱨ ᱵᱟᱝ ᱩᱪᱟᱹᱲ ᱠᱚᱜᱼᱟ ᱾</string>
+    <string name="diary_card_export_info">ᱰᱟᱭᱨᱤ ᱠᱟᱰ ᱥᱟᱸᱪᱟᱣ ᱡᱟᱭᱜᱟ</string>
+    <string name="diary_card_share_info">ᱦᱟᱹᱴᱤᱧ ᱟᱠᱟᱱ ᱰᱟᱭᱨᱤ ᱠᱟᱰ</string>
+    <string name="diary_card_export_error_message">ᱰᱟᱭᱨᱤ ᱠᱟᱰ ᱛᱮᱭᱟᱨ ᱡᱷᱚᱜ ᱰᱤᱜᱟᱹᱣ ᱮᱱᱟ ᱾ ᱫᱚᱭᱟᱠᱟᱛᱮ ᱫᱩᱦᱲᱟᱹ ᱪᱮᱥᱴᱟᱭ ᱢᱮ ᱾</string>
+    <string name="post_card_showcase_button_1">ᱤᱱᱟ ᱛᱟᱭᱚᱢ</string>
+    <string name="post_card_showcase_button_2">ᱵᱚᱸᱫ</string>
+    <string name="post_card_showcase_title_0">ᱰᱟᱭᱨᱤ ᱰᱟᱠ ᱠᱟᱰ</string>
+    <string name="post_card_showcase_title_1">ᱚᱞ ᱨᱚᱝ</string>
+    <string name="post_card_showcase_title_2">ᱩᱱᱩᱨᱩᱢ ᱨᱚᱝ</string>
+    <string name="post_card_showcase_title_3">ᱰᱟᱠᱠᱟᱰ ᱛᱮᱭᱟᱨ ᱢᱮ</string>
+    <string name="post_card_showcase_title_4">ᱰᱟᱠᱼᱠᱟᱰ ᱦᱟᱹᱴᱤᱧ ᱢᱮ</string>
+    <string name="post_card_showcase_title_5">ᱥᱟᱯᱲᱟᱣ ᱵᱚᱸᱫᱚᱭ ᱢᱮ</string>
+    <string name="post_card_showcase_message_0">ᱠᱟᱹᱥᱴᱚᱢ ᱰᱟᱠᱼᱠᱟᱰ ᱠᱚ ᱛᱮᱭᱟᱨ ᱟᱨ ᱥᱟᱸᱪᱟᱣ ᱞᱟᱹᱜᱤᱫ ᱟᱢ ᱥᱟᱸᱪᱟᱣ ᱟᱠᱟᱱ ᱰᱟᱭᱨᱤ ᱠᱚ ᱵᱮᱵᱷᱟᱨ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ ᱾</string>
+    <string name="post_card_showcase_message_1">ᱵᱟᱠᱼᱠᱟᱰ ᱚᱞ ᱨᱚᱝ ᱵᱚᱫᱟᱞ ᱾ ᱟᱢ ᱨᱚᱝ ᱵᱟᱪᱷᱟᱣᱤᱭᱟᱹ ᱛᱮ ᱠᱩᱥᱤ ᱨᱚᱝ ᱠᱚ ᱵᱟᱪᱷᱟᱣ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ ᱾</string>
+    <string name="post_card_showcase_message_2">ᱰᱟᱠᱼᱠᱟᱰ ᱵᱽᱮᱠᱜᱽᱨᱟᱩᱸᱰ ᱨᱚᱝ ᱵᱚᱫᱟᱞ ᱢᱮ ᱾ ᱟᱢ ᱨᱚᱝ ᱵᱟᱪᱷᱟᱣᱤᱭᱟᱹ ᱛᱮ ᱠᱩᱥᱤ ᱨᱚᱝ ᱠᱚ ᱵᱟᱪᱷᱟᱣ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ ᱾ </string>
+    <string name="post_card_showcase_message_3">ᱛᱮᱭᱟᱨ ᱟᱠᱟᱱ ᱰᱟᱠᱼᱠᱟᱰ ᱫᱟ ᱪᱤᱛᱟᱹᱨ ᱨᱮᱫᱠᱚ ᱞᱮᱠᱷᱟ ᱛᱮ ᱥᱟᱸᱪᱟᱣ ᱜᱟᱱᱚᱜᱼᱟ ᱾</string>
+    <string name="post_card_showcase_message_4">ᱛᱮᱭᱟᱨ ᱟᱠᱟᱱ ᱰᱟᱠᱼᱠᱟᱰ ᱜᱟᱛᱮ ᱠᱚ ᱥᱟᱞᱟᱜ ᱦᱟᱹᱴᱤᱧ ᱦᱚᱸ ᱜᱟᱱᱟᱜᱼᱟ ᱾ ᱟᱢᱟᱜ ᱰᱟᱠᱼᱠᱟᱰ ᱤᱼᱢᱮᱞ, ᱮᱢᱮᱢᱮᱥ, ᱢᱮᱥᱮᱸᱡᱚᱨ, ᱟᱨ ᱟᱨᱦᱚᱸ ᱛᱮ ᱦᱟᱹᱴᱤᱧ ᱢᱮ ᱾</string>
+    <string name="post_card_showcase_message_5">ᱰᱟᱠᱼᱠᱟᱰ ᱥᱟᱯᱲᱟᱣ ᱥᱠᱨᱤᱱ ᱵᱚᱸᱫᱚᱭ ᱢᱮ ᱟᱨ ᱢᱟᱲᱟᱝ ᱥᱠᱨᱤᱱ ᱛᱮ ᱪᱟᱞᱟᱜ ᱢᱮ ᱾</string>
+    <string name="timeline_title">ᱴᱟᱭᱤᱢᱞᱟᱭᱤᱱ</string>
+    <string name="postcard_viewer_title">ᱰᱟᱭᱨᱤ ᱰᱟᱠᱼᱠᱟᱰ</string>
+    <string name="postcard_viewer_no_cards_saved">ᱰᱟᱭᱨᱤ ᱰᱟᱠᱼᱠᱟᱰ ᱵᱟᱝ ᱥᱟᱸᱪᱟᱣ ᱟᱠᱟᱱᱟ ᱾</string>
+    <string name="google_drive_connect_message">Google Drive ᱫᱚ ᱥᱭᱸᱠ ᱨᱮ ᱢᱮᱱᱟᱜᱼᱟ…</string>
+    <string name="diary_count"></string>
+    <string name="menu_calendar">ᱯᱟᱸᱡᱤ</string>
+    <string name="menu_chart">ᱥᱴᱟᱴᱤᱥᱴᱤ ᱠᱚ</string>
+    <string name="menu_timeline">ᱴᱟᱭᱤᱢᱞᱟᱭᱤᱱ</string>
+    <string name="post_card">ᱰᱟᱭᱨᱤ ᱰᱟᱠᱼᱠᱟᱰ</string>
+    <string name="menu_delete">ᱢᱮᱴᱟᱣ ᱢᱮ</string>
+    
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <!--  Resources added since version 1.4.41 here.                                                      -->
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <string name="preferences_category_settings">ᱮᱯᱞᱤᱠᱮᱥᱚᱱ ᱥᱟᱡᱟᱣᱠᱚ</string>
+    <string name="preferences_category_information">ᱮᱯᱞᱤᱠᱮᱥᱚᱱ ᱵᱤᱵᱨᱚᱬ</string>
+    <string name="preferences_information_licenses">ᱠᱷᱩᱞᱟᱹ ᱥᱨᱚᱛ ᱞᱟᱭᱥᱮᱸᱱᱥᱠᱚ</string>
+    <string name="preferences_information_licenses_summary">ᱠᱷᱩᱞᱟᱹ ᱥᱨᱚᱛ ᱞᱟᱭᱥᱮᱸᱱᱥᱠᱚ ᱨᱮᱭᱟᱜ ᱱᱚᱴᱤᱥᱠᱚ</string>
+    <string name="preferences_category_aaf">AAF Easy ᱥᱤᱨᱤᱡᱽ</string>
+    <string name="invite_friends">ᱜᱟᱛᱮ ᱠᱚ ᱱᱮᱣᱛᱟ ᱮᱢᱟ ᱠᱚᱢ</string>
+    <string name="invite_friends_summary">%s ᱮᱯᱞᱤᱠᱮᱥᱚᱱ ᱟᱢ ᱨᱤᱱ ᱜᱟᱛᱮ ᱟᱠ ᱥᱟᱞᱟᱜ ᱦᱟᱹᱴᱤᱧ ᱢᱮ ᱾</string>
+    
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <!--  Release notes here.                                                      -->
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <string name="release_103">        
+        v1.4.41 / 2018.05.28\n
+        ᱵᱟᱝ ᱠᱟᱹᱢᱤᱮᱫ ᱰᱟᱭᱨᱤᱠᱴᱚᱨᱭ ᱨᱮ ᱟᱡ ᱛᱮ ᱰᱟᱠᱼᱠᱟᱰ ᱵᱨᱟᱩᱡᱽ ᱢᱳᱰ ᱵᱚᱸᱫᱟᱜ ᱵᱟᱹᱜ ᱠᱚ ᱴᱷᱤᱠ ᱮᱱᱟ
+    </string>
+    <string name="release_105">        
+        v1.4.42 / 2018.06.27\n
+        ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱮᱠᱥᱯᱤᱨᱤᱮᱸᱱᱥ (UX) ᱚᱯᱴᱤᱢᱟᱭᱡᱮᱥᱚᱱ
+    </string>
+    <string name="release_110">        
+        v1.4.47 / 2018.08.29\n
+        ᱰᱟᱠᱼᱠᱟᱰ ᱠᱮᱴᱟᱣ ᱯᱷᱟᱸᱠᱥᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
+    </string>
+    <string name="release_114">        
+        v1.4.51 / 2018.09.29\n
+        AAF ᱠᱚᱢᱚᱱ ᱢᱳᱰᱭᱩᱞ ᱟᱹᱯᱰᱮᱴ\n
+        ᱮᱯ ᱯᱮᱠᱤᱝ ᱡᱟᱭᱜᱟ Android 9 Pie ᱛᱮ ᱵᱚᱫᱚᱞ ᱢᱮ
+    </string>
+    <string name="release_116">        
+        v1.4.53 / 2018.10.13\n
+        ᱪᱤᱛᱟᱹᱨ ᱧᱮᱞ ᱵᱤᱲᱟᱹᱣ ᱥᱟᱡᱟᱣ ᱯᱷᱟᱸᱠᱥᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ\n
+        ᱧᱮᱞ ᱵᱤᱲᱟᱹᱣ ᱪᱤᱛᱟᱹᱨ ᱴᱚᱜᱟᱹᱞ ᱯᱷᱟᱸᱠᱥᱚᱱ ᱥᱮᱞᱮᱫᱮᱱᱟ(ᱨᱟᱹᱯᱩᱫ ᱟᱨ ᱵᱟᱝ ᱠᱷᱩᱞᱟᱹ)
+    </string>
+    <string name="release_118">        
+        v1.4.55 / 2018.11.01\n
+        ᱰᱟᱭᱨᱤ ᱚᱞᱟᱜ ᱚᱠᱛᱚ ᱮᱞᱥᱯᱨᱮᱥᱚᱱ ᱵᱮᱥ ᱪᱷᱚ\n
+        ᱰᱟᱭᱨᱤ ᱴᱟᱭᱴᱟᱹᱞ ᱟᱨ ᱴᱟᱭᱤᱢᱞᱟᱭᱤᱱ ᱚᱠᱛᱚ ᱵᱤᱵᱨᱚᱬ ᱨᱮ ᱵᱚᱞᱼᱰᱯᱷᱮᱥ ᱥᱟᱡᱟᱣ ᱯᱷᱟᱸᱠᱥᱚᱱ ᱠᱚ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
+    </string>
+    <string name="release_120">        
+        v1.4.57 / 2018.11.12\n
+        ᱟᱭᱢᱟ ᱪᱤᱛᱟᱹᱨ ᱠᱚ ᱢᱤᱫ ᱡᱮᱠᱷᱟ ᱛᱮ ᱞᱟᱴᱷᱟ ᱪᱷᱚ ᱞᱟᱹᱜᱤᱫ ᱟᱭᱠᱟᱼᱵᱟᱪᱷᱱᱟᱣ ᱯᱷᱟᱸᱠᱥᱚᱱ ᱠᱚ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
+    </string>
+    <string name="release_126">        
+        v1.4.63 / 2018.11.25\n
+        Google Drive ᱨᱮᱭᱟᱜ ᱵᱮᱵᱷᱟᱨ ᱛᱮ ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ ᱵᱮᱠᱟᱹᱯ ᱟᱨ ᱨᱤᱠᱟᱹᱣᱨᱤ ᱯᱷᱟᱠᱥᱚᱱ ᱠᱚ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
+    </string>
+    <string name="release_128">        
+        v1.4.65 / 2018.12.19\n
+        ᱛᱤᱠᱟᱹᱴᱤᱵᱪᱷᱟᱯᱟ ᱥᱮᱱᱥᱚᱨ ᱵᱮᱵᱷᱟᱨ ᱠᱟᱛᱮ ᱠᱩᱞᱩᱯ ᱯᱷᱟᱸᱠᱥᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
+    </string>
+    <string name="release_130">        
+        v1.4.67 / 2019.01.01\n
+        ᱰᱟᱠᱼᱠᱟᱰ ᱥᱠᱨᱤᱱ ᱨᱮ ᱵᱮᱥ ᱪᱚᱨᱚᱠ ᱪᱤᱛᱟᱹᱨ ᱧᱮᱞ ᱫᱟᱲᱮ ᱨᱮᱭᱟᱜ ᱠᱟᱹᱢᱤ ᱦᱩᱭᱮᱱᱟ
+    </string>
+    <string name="release_131">        
+        v1.4.68 / 2019.01.06\n
+        ᱥᱚᱯᱷᱚᱥ ᱣᱮᱠᱥᱤᱱ ᱨᱮ ᱛᱤᱱᱟᱹᱝᱜᱟᱱ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱡᱤᱱᱤᱥ ᱠᱚ ᱠᱚᱢ ᱠᱚᱱᱯᱷᱤᱰᱮᱱᱥ ᱛᱮ ᱨᱤᱯᱚᱴᱚᱜ ᱠᱟᱱ ᱛᱟᱦᱮᱸᱡ ᱚᱱᱟ ᱠᱚ ᱴᱷᱤᱠ ᱮᱱᱟ(ᱱᱚᱴᱤᱯᱷᱤᱠᱮᱥᱚᱱ ᱟᱸᱡᱚᱢᱤᱭᱟᱹ, ᱵᱚᱦᱟᱞ ᱴᱨᱤᱜᱚᱨ)\n
+        ᱯᱚᱥᱴᱼᱠᱟᱰ ᱢᱟᱯ ᱮᱰᱡᱟᱹᱥᱴᱢᱮᱴ ᱯᱷᱟᱸᱠᱥᱚᱱ
+    </string>
+    <string name="release_132">        
+        v1.4.69 / 2019.01.16\n
+        ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱮᱠᱥᱯᱤᱨᱤᱮᱸᱥ (UX) ᱚᱯᱴᱤᱢᱟᱭᱡᱮᱥᱚᱱ\n
+        Android 9 Pie ᱵᱷᱟᱹᱨᱥᱚᱱ ᱨᱮ ᱥᱠᱨᱤᱱ ᱴᱨᱟᱱᱡᱮᱠᱥᱚᱱ ᱴᱷᱤᱠ ᱵᱟᱝ ᱛᱟᱦᱮᱸᱱ ᱠᱚ ᱴᱷᱤᱠ ᱮᱱᱟ\n
+        ᱰᱟᱭᱨᱤ ᱴᱟᱭᱤᱢᱞᱟᱭᱤᱱ ᱛᱮᱭᱟᱨ ᱵᱩᱛᱟᱹᱢ ᱠᱚ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
+    </string>
+    <string name="release_133">        
+        v1.4.70 / 2019.01.25\n
+        ᱰᱟᱭᱨᱤ ᱨᱮᱭᱟᱜ ᱥᱟᱹᱟᱨᱭ ᱠᱚ ᱧᱮᱞ ᱫᱟᱲᱮᱭᱟᱜ ᱚᱯᱥᱚᱱ ᱠᱚ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
+    </string>
+    <string name="release_134">        
+        v1.4.71 / 2019.01.26\n
+        ᱥᱟᱫᱷᱚᱱ ᱨᱮᱭᱟᱜ ᱛᱤᱠᱟᱹᱴᱩᱵ ᱪᱷᱟᱯᱟ ᱵᱤᱵᱨᱚᱬ ᱠᱚ ᱵᱚᱫᱚᱞ ᱡᱷᱚᱜ ᱮᱯᱞᱤᱠᱮᱥᱚᱱ ᱟᱡ ᱛᱮ ᱵᱚᱸᱫᱚᱜ ᱠᱚ ᱴᱷᱤᱠ ᱮᱱᱟ
+    </string>
+    <string name="release_136">        
+        v1.4.73 / 2019.02.11\n
+        ᱯᱤᱱ ᱥᱮᱴ ᱟᱨ ᱠᱷᱩᱞᱟᱹ ᱡᱷᱚᱜ ᱴᱷᱤᱠ ᱰᱤᱡᱤᱴ ᱠᱚ ᱛᱟᱦᱮᱱ ᱨᱮᱭᱟᱜ ᱠᱚ ᱥᱮᱴ ᱮᱱᱟ
+    </string>
+    <string name="release_137">        
+        v1.4.74 / 2019.03.06\n
+        ᱰᱟᱠᱼᱠᱟᱰ ᱪᱤᱛᱟᱹᱨ ᱨᱮ ᱯᱷᱤᱞᱴᱚᱨ ᱠᱚ ᱮᱢ ᱪᱷᱚ ᱨᱮᱭᱟᱜ ᱠᱟᱹᱢᱤ ᱠᱚ ᱥᱩᱫᱷᱨᱟᱹᱣ ᱮᱱᱟ\n
+        ᱰᱟᱭᱨᱤ ᱠᱚ Excel ᱨᱮᱫ ᱛᱮ ᱵᱷᱮᱡᱟ ᱫᱟᱲᱮᱭᱟᱜ ᱯᱷᱤᱪᱚᱨ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
+    </string>
+    <string name="release_138">        
+        v1.4.75 / 2019.03.22\n
+        ᱮᱯ ᱜᱟᱠᱷᱩᱲᱟᱱ ᱵᱤᱵᱨᱚᱬ ᱥᱟᱦᱴᱟ, ᱥᱟᱶ FAQs ᱟᱨ ᱱᱤᱡᱮᱨᱟᱜ ᱱᱤᱛᱤ\n
+        ᱯᱤᱱ ᱟᱨ ᱛᱤᱠᱟᱹᱴᱩᱵᱪᱷᱟᱯᱟ ᱠᱷᱩᱞᱟᱹ ᱴᱚᱜᱟᱹᱞ ᱥᱩᱫᱷᱨᱟᱹᱣ ᱮᱱᱟ
+    </string>
+    <string name="release_139">        
+        v1.4.76 / 2019.04.24\n
+        ᱕᱐ ᱯᱨᱚᱠᱟᱨᱟᱜ ᱰᱟᱭᱨᱤ ᱪᱤᱱᱦᱟᱹ ᱟᱭᱠᱚᱱ ᱵᱟᱪᱷᱟᱣ ᱢᱮ
+    </string>
+    <string name="release_140">        
+        v1.4.77 / 2019.05.11\n
+        ᱰᱟᱭᱨᱤ ᱪᱤᱱᱦᱟᱹ ᱟᱨ ᱮᱢ ᱴᱩᱢᱟᱹᱞ ᱠᱚ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
+    </string>
+    <string name="release_141">        
+        v1.4.78 / 2019.05.13\n
+        ᱰᱤᱜᱟᱹᱣ ᱠᱚ ᱴᱷᱤᱠ ᱪᱷᱚᱭ ᱮᱱᱟ, ᱚᱠᱟ ᱞᱟᱹᱜᱤᱫ ᱥᱟᱡᱟᱣ ᱥᱠᱨᱤᱱ ᱨᱮᱭᱟᱜ ᱯᱷᱟᱸᱠᱥᱚᱱ ᱥᱟᱫᱷᱚᱱ ᱫᱚᱦᱚ ᱡᱟᱭᱜᱟ ᱨᱮᱭᱟᱜ ᱟᱫᱮᱨ ᱵᱟᱭ ᱧᱟᱢ ᱞᱮᱠᱷᱟᱱ ᱫᱚ ᱟᱡ ᱛᱮ ᱵᱚᱸᱫᱚᱜ ᱠᱟᱱ ᱛᱟᱦᱮᱸᱡ
+    </string>
+    <string name="release_143">        
+        v1.4.80 / 2019.06.07\n
+        Google Drive Android API ᱵᱚᱫᱚᱞ ᱛᱮ Google Drive REST API ᱛᱮ ᱵᱚᱫᱚᱞ ᱮᱱᱟ (Google Drive Android API ᱫᱚ ᱰᱤᱥᱮᱢᱵᱚᱨ ᱖, ᱒᱐᱑᱙ ᱨᱮ ᱵᱚᱸᱫᱚᱜᱼᱟ)
+    </string>
+    <string name="release_147">        
+        v1.4.83 / 2019.06.09\n
+        ᱵᱚᱦᱟᱞ ᱨᱮᱫ ᱢᱟᱯ ᱠᱚ ᱦᱚᱯᱚᱱ ᱪᱷᱚ ᱞᱟᱹᱜᱤᱫ ᱟᱨ ᱚᱯᱴᱤᱢᱟᱭᱤᱡᱽ ᱞᱟᱹᱜᱤᱫ ᱮᱱᱰᱨᱚᱭᱮᱰ ᱮᱯ ᱵᱟᱹᱱᱰᱟᱹᱞ ᱮᱢ ᱪᱷᱚᱭ ᱢᱮ
+    </string>
+    <string name="release_149">        
+        v1.4.84 / 2019.06.15\n
+        ᱰᱟᱭᱨᱤ ᱥᱴᱟᱴᱤᱥᱴᱤᱠᱥ ᱵᱮᱥ ᱪᱷᱚ
+    </string>
+    <string name="release_150">        
+        v1.4.85 / 2019.06.18\n
+        Google Drive(ᱨᱤᱥᱮᱴ API) ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱦᱚᱠ ᱟᱛᱩᱨ ᱵᱷᱩᱞ ᱴᱷᱤᱠ ᱪᱷᱚ
+    </string>
+    <string name="release_151">        
+        v1.4.86 / 2019.06.19\n
+        Google Drive(ᱨᱤᱥᱮᱴ API) ᱰᱟᱭᱨᱤ ᱥᱟᱞᱟᱜ ᱪᱤᱛᱟᱹᱨᱠᱚ ᱨᱤᱠᱟᱹᱣᱟᱹᱨ ᱵᱷᱩᱞ ᱥᱩᱫᱽᱷᱨᱟᱹᱣ
+    </string>
+    <string name="release_152">        
+        v1.4.87 / 2019.06.20\n
+        ᱢᱟᱲᱟᱝ Google Drive in v1.4.80 ᱨᱮᱭᱟᱜ ᱵᱮᱵᱷᱟᱨ ᱵᱷᱩᱞ ᱠᱚ ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱨᱮᱭᱟᱜ ᱚᱛᱷᱮᱱᱴᱤᱠᱮᱚᱱ ᱴᱚᱠᱮᱱ ᱵᱷᱩᱞ ᱥᱩᱫᱽᱷᱨᱟᱹᱣᱮᱱᱟ 
+    </string>
+    <string name="release_154">        
+        v1.4.88 / 2019.07.16\n
+        Android support library ᱫᱚ AndroidX ᱵᱷᱟᱹᱨᱥᱚᱱ ᱛᱮ ᱩᱪᱟᱹᱲ ᱮᱱᱟ\n
+        ᱰᱟᱭᱨᱤ ᱪᱤᱱᱦᱟᱹ ᱟᱭᱠᱚᱱ ᱠᱚ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
+    </string>
+    <string name="release_157">        
+        v1.4.91 / 2019.08.12\n
+        ᱥᱟᱫᱷᱚᱱ ᱫᱚᱦᱚᱟᱜ ᱛᱮ ᱵᱮᱠᱟᱹᱯ ᱟᱨ ᱨᱤᱠᱟᱹᱣᱨᱤ ᱯᱷᱟᱸᱠᱥᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ\n
+        ᱛᱤᱱᱟᱹᱝ ᱦᱟᱱ ᱥᱟᱫᱷᱚᱱ ᱠᱚᱨᱮ ᱠᱮᱞᱮᱱᱰᱚᱨ ᱨᱮ ᱚᱞ ᱠᱚ ᱴᱷᱤᱠ ᱥᱮ ᱵᱟᱝ ᱫᱮᱠᱟᱣᱜ ᱠᱚ ᱴᱷᱤᱠ ᱮᱱᱟ
+    </string>
+    <string name="release_159">        
+        v1.4.93 / 2019.08.29\n
+        ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱮᱠᱥᱯᱤᱨᱤᱮᱸᱥ (UX) ᱚᱯᱴᱤᱢᱟᱭᱡᱮᱥᱚᱱ\n
+        ᱢᱟᱨᱮ OS ᱨᱮ ᱠᱚᱱᱯᱷᱤᱜᱽᱭᱩᱨᱮᱥᱚᱱ ᱥᱠᱨᱤᱱ ᱨᱮ ᱟᱪᱮᱨ ᱡᱷᱚᱜ ᱟᱡ ᱦᱩᱠᱼᱟ ᱠᱨᱟᱥᱚᱜ ᱨᱮᱭᱟᱜ ᱵᱟᱹᱜ ᱴᱷᱮᱠ ᱦᱩᱭ ᱮᱱᱟ
+    </string>
+    <string name="release_160">        
+        v1.4.94 / 2019.09.03\n
+        ᱠᱮᱞᱮᱱᱰᱚᱨ ᱦᱟᱴᱫᱤᱱ ᱠᱚ ᱨᱮᱭᱟᱜ ᱥᱟᱡᱟᱣ ᱥᱮᱞᱮᱫ ᱮᱱᱟ\n
+        ᱴᱮᱵᱽᱞᱮᱴ ᱞᱮᱸᱰᱥᱠᱮᱯ ᱨᱮ ᱠᱮᱞᱮᱱᱰᱚᱨ ᱠᱚ ᱴᱷᱤᱠ ᱥᱮ ᱵᱟᱝ ᱫᱮᱠᱷᱟᱣᱜ ᱠᱚ ᱨᱮᱭᱟᱜ ᱵᱟᱹᱜ ᱠᱚ ᱱᱤᱛᱚᱜ ᱴᱷᱤ ᱦᱩᱭ ᱮᱱᱟ
+    </string>
+    <string name="release_163">        
+        v1.4.97 / 2019.09.17\n
+        ᱴᱟᱭᱤᱢᱞᱟᱭᱤᱱ ᱥᱮᱸᱫᱽᱨᱟ ᱯᱷᱤᱞᱴᱚᱨ ᱥᱩᱫᱽᱷᱨᱟᱹᱣ ᱮᱱᱟ\n
+        ᱰᱟᱭᱨᱤ ᱱᱚᱠᱚᱞ ᱯᱷᱟᱸᱠᱥᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
+    </string>
+    <string name="release_165">        
+        v1.4.99 / 2019.09.26\n
+        ᱰᱟᱭᱨᱤ ᱚᱞ ᱦᱤᱥᱟᱹᱵ ᱯᱷᱟᱸᱠᱥᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
+    </string>
+    <string name="release_167">        
+        v1.4.101 / 2019.10.03\n
+        Android 10 ᱫᱚᱦᱚ ᱟᱫᱮᱨ ᱤᱥᱩ ᱨᱮ ᱨᱮᱲ ᱨᱩᱟᱹᱲ(targetSdkVersion ᱫᱚ ᱥᱠᱚᱯᱼᱰ ᱫᱚᱦᱚ ᱯᱚᱞᱤᱥᱭ ᱵᱟᱹᱰ ᱞᱟᱹᱜᱤᱫ ᱠᱤᱪᱷᱩ ᱚᱠᱛᱚ ᱞᱟᱹᱜᱤᱫ ᱰᱟᱩᱱᱜᱨᱮᱰ ᱠᱟᱱᱟ)
+    </string>
+    <string name="release_169">        
+        v1.4.103 / 2019.10.09\n
+        ᱫᱚᱦᱚ ᱡᱟᱭᱜᱟ ᱵᱚᱫᱚᱞ ᱢᱮ ᱟᱨ Android 10 ᱨᱮ ᱥᱠᱚᱯᱼᱰ ᱫᱚᱦᱚ ᱯᱚᱞᱤᱥᱭ ᱠᱚ ᱨᱮᱲ ᱨᱩᱟᱹᱲ ᱨᱮ ᱵᱚᱫᱚᱞ 
+    </string>
+    <string name="release_170">        
+        v1.4.104 / 2019.10.19\n
+        ᱠᱮᱞᱮᱱᱰᱚᱨ ᱪᱤᱠᱤ ᱢᱟᱯ ᱥᱟᱡᱟᱣᱠᱚ ᱥᱮᱞᱮᱫ ᱮᱱᱟ\n
+        ᱥᱟᱡᱟᱣ ᱥᱠᱨᱤᱱ ᱛᱮ ᱠᱷᱚᱥᱨᱚᱫ ᱥᱟᱦᱴᱟ ᱠᱚ ᱮᱢ ᱪᱷᱚᱭ ᱢᱮ
+    </string>
+    <string name="release_171">        
+        v1.4.105 / 2019.10.20\n
+        ᱥᱟᱫᱷᱚᱱ ᱨᱮ Excel ᱨᱮᱫ ᱥᱟᱸᱪᱟᱣ ᱯᱷᱟᱸᱠᱥᱚᱱ ᱨᱮᱭᱟᱜ ᱦᱩᱲᱟᱹᱜ ᱠᱚ ᱴᱷᱤᱠ ᱮᱱᱟ \n
+        ᱴᱟᱭᱤᱢᱞᱟᱭᱤᱱ ᱠᱷᱚᱱ ᱰᱟᱭᱨᱤ ᱠᱚ ᱢᱮᱴᱟᱣ ᱡᱷᱚᱜ ᱵᱷᱩᱞ ᱠᱚ ᱥᱩᱫᱽᱷᱨᱟᱹᱣ ᱮᱱᱟ
+    </string>
+    <string name="release_172">        
+        v1.4.106 / 2019.10.25\n
+        ᱰᱟᱭᱴᱤ ᱥᱟᱯᱲᱟᱣ ᱯᱚᱨᱮ ᱦᱩᱠᱼᱟ ᱡᱤᱱᱤᱥ ᱠᱚ ᱴᱷᱤᱠ ᱥᱮ ᱵᱟᱝ ᱧᱮᱞ ᱫᱟᱲᱮᱭᱟᱜ ᱨᱮᱭᱟᱜ ᱵᱷᱩᱞ ᱠᱚ ᱥᱩᱫᱽᱷᱨᱟᱹᱣ ᱮᱱᱟ\n
+        ᱵᱟᱲᱟᱭ ᱠᱟᱱ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱠᱚ ᱥᱩᱢᱮᱫᱟᱹᱭ ᱞᱟᱭᱵᱽᱨᱮᱨᱭ ᱞᱟᱹᱜᱤᱫ ᱨᱤᱢᱮᱰᱤᱭᱮᱥᱚᱱ
+    </string>
+    <string name="release_173">        
+        v1.4.107 / 2019.10.31\n
+        ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱮᱠᱥᱯᱤᱨᱤᱮᱸᱱᱥ (UX) ᱚᱯᱴᱤᱢᱟᱭᱡᱮᱥᱚᱱ
+    </string>
+    <string name="release_174">        
+        v1.4.108 / 2019.11.18\n
+        ᱮᱯ ᱯᱷᱨᱮᱸᱪ ᱯᱟᱹᱨᱥᱤ ᱛᱮ ᱥᱮᱴ ᱠᱟᱛᱮ ᱠᱮᱞᱮᱱᱰᱟᱹᱨ ᱪᱤᱠᱤ ᱢᱟᱯ ᱵᱚᱫᱚᱞ ᱡᱷᱚᱜ ᱵᱷᱩᱞ ᱠᱚ ᱥᱩᱫᱽᱷᱨᱟᱹᱣ ᱮᱱᱟ
+    </string>
+    <string name="release_176">        
+        v1.4.110 / 2019.12.13\n
+        ᱰᱟᱭᱨᱤ ᱰᱮᱥᱵᱚᱰ ᱯᱷᱤᱪᱚᱨ ᱠᱚ ᱥᱮᱴ ᱮᱱᱟ\n
+        ᱰᱟᱭᱨᱤ ᱵᱮᱠᱟᱹᱯ ᱨᱮᱫ ᱠᱚ ᱥᱟᱫᱷᱚᱱ ᱠᱷᱚᱱ ᱢᱮᱴᱟᱣ ᱫᱟᱲᱮᱭᱟᱜ ᱨᱮᱭᱟᱜ ᱯᱷᱤᱪᱚᱨ ᱠᱚ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
+    </string>
+    <string name="release_178">        
+        v1.4.112 / 2019.12.31\n
+        ᱠᱮᱢᱨᱟ ᱮᱯ ᱤᱱᱴᱮᱜᱽᱨᱮᱥᱚᱱ ᱥᱟᱞᱟᱜ ᱛᱮ ᱰᱟᱭᱨᱤ ᱨᱮ ᱪᱤᱛᱟᱹᱨ ᱠᱚ ᱥᱮᱞᱮᱫ ᱫᱟᱲᱮᱭᱟᱜ ᱨᱮᱭᱟᱜ ᱯᱷᱤᱪᱟᱹᱨ ᱥᱮᱞᱮᱫ ᱮᱱᱟ\n
+        ᱰᱟᱭᱨᱤ ᱰᱮᱥᱵᱽᱚᱰ ᱨᱮ ᱥᱩᱫᱷᱟᱹᱨ
+    </string>
+    <string name="release_179">        
+        v1.4.113 / 2020.01.04\n
+        ᱠᱮᱞᱮᱱᱰᱚᱨ ᱥᱠᱨᱤᱱ ᱨᱮ ᱢᱟᱦᱟ ᱵᱟᱪᱷᱟᱣᱤᱭᱟᱹ ᱵᱮᱵᱷᱟᱨ ᱠᱟᱛᱮ ᱢᱟᱦᱟ ᱦᱚᱞᱪᱚᱞ ᱯᱷᱟᱸᱠᱥᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
+    </string>
+    <string name="release_180">        
+        v1.4.114 / 2020.01.15\n
+        ᱰᱟᱭᱨᱤ ᱪᱤᱱᱦᱟᱹ ᱟᱭᱠᱚᱱ ᱥᱟᱹᱯᱚᱴ ᱮᱱᱟ\n
+        ᱯᱷᱨᱮᱸᱪ ᱥᱟᱹᱯᱚᱴ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
+    </string>
+    <string name="release_182">        
+        v1.4.116 / 2020.01.21\n
+        ᱞᱟᱭᱥᱮᱱᱥ ᱯᱚᱞᱤᱥᱭ ᱫᱚ 「Apache License 2.0」 ᱠᱷᱚᱱ 「GNU General Public License v3.0」ᱛᱮ ᱵᱚᱫᱚᱞ ᱮᱱᱟ
+    </string>
+    <string name="release_184">        
+        v1.4.118 / 2020.02.11\n
+        [BETA] ᱯᱭᱨᱟᱹ ᱰᱟᱴᱟ ᱵᱮᱠᱟᱹᱯ ᱯᱷᱤᱪᱟᱹᱨ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
+    </string>
+    <string name="release_185">        
+        v1.4.119 / 2020.02.15\n
+        ᱰᱟᱭᱨᱤ ᱪᱤᱱᱦᱟᱹ ᱟᱭᱠᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
+    </string>
+    <string name="release_186">        
+        v1.4.120 / 2020.02.19\n
+        ᱰᱟᱭᱨᱤ ᱪᱤᱱᱦᱟᱹ ᱟᱭᱠᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ\n
+        ᱰᱟᱭᱨᱤ ᱪᱤᱱᱦᱟᱹ ᱨᱮᱭᱟᱜ ᱵᱮᱵᱷᱟᱨ ᱠᱟᱛᱮ ᱥᱮᱸᱫᱽᱨᱟ ᱯᱷᱟᱸᱠᱥᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
+    </string>
+    <string name="release_187">        
+        v1.4.121 / 2020.03.02\n
+        ᱠᱮᱞᱮᱱᱰᱟᱹ ᱥᱠᱨᱤᱱ ᱨᱮᱭᱟᱜ ᱨᱟᱹᱯᱛᱟᱨ ᱠᱚ ᱥᱩᱫᱽᱷᱨᱟᱹᱣ ᱮᱱᱟ(ᱢᱟᱲᱟᱝ ᱥᱩᱫᱽᱷᱨᱟᱹᱣ)
+    </string>
+    <string name="release_188">        
+        v1.4.122 / 2020.03.09\n
+        [BETA] ᱰᱟᱴᱟ ᱨᱤᱠᱟᱹᱣᱨᱤ ᱯᱷᱤᱪᱚᱨ ᱥᱮᱞᱮᱫ ᱮᱱᱟ\n
+        ᱰᱮᱥᱵᱚᱰ ᱥᱴᱟᱴᱤᱥᱴᱤᱠᱥ ᱨᱮ ᱛᱤᱱᱟᱹᱝ ᱜᱟᱱ ᱪᱤᱱᱦᱟᱹ ᱠᱚ ᱢᱟᱨᱟᱝ ᱧᱮᱞᱚᱜ ᱠᱟᱱ ᱛᱟᱦᱮᱸᱡ\n
+        ᱠᱮᱞᱮᱱᱰᱟᱹᱨ ᱥᱠᱨᱤᱱ ᱨᱮᱭᱟᱜ ᱰᱟᱭᱨᱤ ᱞᱤᱥᱴ ᱨᱮ ᱥᱚᱨᱴ ᱚᱯᱥᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
+    </string>
+    <string name="release_190">        
+        v1.4.124 / 2020.03.15\n
+        ᱵᱮᱥᱤᱠ ᱥᱟᱡᱟᱣ ᱥᱠᱨᱤᱱ ᱠᱷᱚᱱ ᱵᱷᱮᱜᱟᱨ ᱨᱮ ᱪᱤᱠᱤ ᱥᱚᱢᱵᱚᱱᱫᱷᱤᱭᱚ ᱥᱟᱡᱟᱣ ᱚᱯᱥᱚᱱ ᱫᱚᱦᱚ ᱮᱱᱟ
+    </string>
+    <string name="release_191">        
+        v1.4.125 / 2020.03.23\n
+        ᱰᱟᱭᱨᱤ ᱥᱟᱯᱲᱟᱣ ᱥᱠᱨᱤᱱ ᱨᱮ ᱟᱫᱮᱨ ᱡᱷᱚᱜ ᱠᱚᱨᱥᱚᱨ ᱡᱟᱭᱜᱟ ᱥᱟᱡᱟᱣ ᱚᱯᱥᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ\n
+        ᱡᱤᱱᱤᱥ ᱥᱟᱹᱢᱟᱨᱭ ᱧᱮᱞ ᱚᱯᱥᱚᱱ ᱨᱮ ᱡᱟᱹᱥᱛᱤ ᱱᱚᱢᱵᱚᱨ ᱞᱟᱹᱭᱤᱱᱠᱚ ᱨᱮᱭᱟ ᱯᱷᱟᱸᱠᱥᱚᱱ ᱠᱚ ᱥᱮᱞᱮᱫ ᱮᱱᱟ\n
+        ᱠᱮᱞᱮᱱᱰᱚᱨ ᱥᱠᱨᱤᱱ ᱨᱮ ᱦᱟᱴ ᱨᱮᱭᱟᱜ ᱢᱟᱦᱟ ᱠᱚ ᱠᱟᱴᱚᱵ ᱤᱥᱩ ᱠᱚ ᱯᱷᱤᱠᱥ ᱮᱱᱟ
+    </string>
+    <string name="release_192">        
+        v1.4.126 / 2020.04.05\n
+        ᱯᱤᱱ ᱱᱚᱢᱵᱚᱨ ᱵᱮᱵᱷᱟᱨ ᱠᱟᱛᱮ ᱰᱟᱭᱨᱤ ᱮᱱᱠᱨᱤᱯᱥᱚᱱ ᱯᱷᱤᱪᱚᱨ ᱥᱮᱞᱮᱫ ᱮᱱᱟ\n
+        Android 10 ᱨᱮ ᱟᱭᱢᱟᱼᱵᱟᱪᱷᱟᱣᱤᱭᱟᱹ ᱫᱚᱦᱚ ᱤᱥᱩ ᱠᱚ ᱴᱷᱤᱠ ᱞᱟᱹᱜᱤᱫ ᱠᱚᱢ ᱥᱚᱢᱚᱭ ᱞᱟᱹᱜᱤᱫ requestLegacyExternalStorage ᱚᱯᱥᱚᱱ ᱮᱢ ᱪᱷᱚ
+    </string>
+    <string name="release_193">        
+        v1.4.127 / 2020.04.12\n
+        requestLegacyExternalStorage ᱚᱯᱥᱚᱱ ᱚᱪᱚᱜ ᱮᱱᱟ\n
+        SAF (Storage Access Framework) ᱨᱮᱭᱟᱜ ᱵᱮᱵᱷᱟᱨ ᱛᱮ ᱰᱟᱴᱟᱵᱮᱥ ᱨᱮᱫ ᱵᱮᱠᱟᱹᱯ ᱟᱨ ᱨᱤᱠᱟᱹᱣᱨᱤ ᱯᱷᱤᱪᱚᱨ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
+    </string>
+    <string name="release_195">        
+        v1.4.129 / 2020.04.21\n
+        ᱮᱱᱤᱢᱮᱴᱮᱰ GIF ᱨᱮᱫ ᱠᱚ ᱞᱟᱴᱷᱟ ᱨᱮᱭᱟᱜ ᱯᱷᱤᱚᱨ ᱥᱮᱞᱮᱫ ᱮᱱᱟ\n
+        ᱰᱟᱭᱨᱤ ᱟᱭᱢᱟ ᱱᱚᱠᱚᱞ ᱟᱨ ᱢᱮᱴᱟᱣ ᱯᱷᱤᱪᱚᱨ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
+    </string>
+    <string name="release_196">        
+        v1.4.130 / 2020.05.20\n
+        ᱰᱟᱭᱨᱤ ᱥᱮᱰᱭᱩᱞ ᱥᱟᱡᱟᱣ ᱯᱷᱤᱪᱚᱨ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
+    </string>
+    <string name="release_197">        
+        v1.4.131 / 2020.05.26\n
+         Android 4.4 ᱵᱷᱟᱹᱨᱥᱚᱱ ᱨᱮ ᱥᱠᱨᱤᱱ ᱠᱚ ᱟᱡ ᱛᱮ ᱵᱚᱸᱫᱚᱜ ᱨᱮᱭᱟᱜ ᱦᱤᱲᱟᱹᱜ ᱠᱚ ᱴᱷᱤᱠ ᱮᱱᱟ
+    </string>
+    <string name="release_198">        
+        v1.4.132 / 2020.05.31\n
+        ᱛᱷᱤᱢ ᱨᱚᱝ ᱵᱚᱫᱚᱞ ᱡᱷᱚᱜ ᱵᱩᱛᱟᱹᱢ ᱠᱚ ᱠᱟᱰ ᱧᱮᱞᱚᱜ ᱥᱟᱞᱟᱜ ᱵᱷᱤᱛᱨᱭ ᱨᱮ ᱛᱟᱦᱮᱸᱱ ᱠᱟᱱ ᱟᱨ ᱠᱟᱰᱣᱤᱣ ᱵᱽᱮᱠᱜᱽᱨᱟᱩᱸᱰ ᱨᱚᱝ ᱠᱚ ᱚᱱᱟ ᱨᱚᱝ ᱛᱮ ᱥᱮᱴ ᱮᱱᱟ 
+    </string>
+    <string name="release_199">        
+        v1.4.133 / 2020.06.02\n
+        ᱥᱠᱨᱤᱱ ᱵᱽᱮᱠᱜᱽᱨᱟᱩᱸᱰ ᱨᱚᱝ ᱯᱩᱸᱰ ᱛᱮ ᱥᱮᱴ ᱡᱷᱚᱜ ᱠᱩᱞᱩᱯᱥᱠᱨᱤᱱ ᱟᱭᱠᱚᱱ ᱵᱟᱝ ᱧᱮᱞ ᱴᱷᱤᱠ ᱨᱮᱭᱟᱜ ᱤᱥᱩ ᱦᱚᱸ ᱴᱷᱤᱠ ᱮᱱᱟ
+    </string>
+    <string name="release_200">        
+        v1.4.134 / 2020.06.14\n
+        ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ (UX) ᱚᱯᱴᱤᱢᱟᱭᱡᱮᱥᱚᱱ
+    </string>
+    <string name="release_201">        
+        v1.4.135 / 2020.06.18\n
+        RTL ᱯᱟᱹᱨᱥᱤ ᱥᱟᱹᱯᱚᱴ ᱮᱱᱟ
+    </string>
+    <string name="release_202">        
+        v1.4.136 / 2020.06.29\n
+        ᱰᱟᱭᱨᱤ ᱞᱤᱥᱴ ᱣᱤᱡᱽᱮᱭ ᱯᱷᱤᱪᱚᱨ ᱥᱮᱞᱮᱫ ᱮᱱᱟ 
+    </string>
+    <string name="release_203">        
+        v1.4.137 / 2020.07.05\n
+        Google Play ᱨᱩᱠᱷᱤᱭᱟᱹ ᱱᱤᱛᱤ ᱮᱢ ᱪᱷᱚᱮᱱᱟ
+    </string>
+    <string name="release_205">        
+        v1.4.139 / 2020.07.11\n
+        ᱡᱩᱲᱟᱹᱣ ᱟᱠᱟᱱ Google ᱠᱷᱟᱛᱟᱟᱜ ᱵᱤᱵᱨᱚᱬ ᱠᱚ ᱫᱮᱠᱷᱟᱣ ᱨᱮᱭᱟᱜ ᱯᱷᱤᱪᱚᱨ ᱠᱚ ᱥᱮᱞᱮᱫ ᱮᱱᱟ \n
+        ᱥᱮᱰᱭᱩᱞᱟᱹᱨ ᱛᱮ Google Drive ᱵᱮᱠᱟᱹᱯ ᱯᱷᱤᱪᱚᱨ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
+    </string>
+    <string name="release_206">        
+        v1.4.140 / 2020.07.20\n
+        ᱮᱯ ᱵᱚᱹ ᱡᱷᱚ ᱥᱮᱰᱭᱩᱞᱟᱹᱨ ᱵᱟᱝ ᱠᱟᱹᱢᱤᱮᱫ ᱵᱷᱩᱞ ᱠᱚ ᱴᱷᱤᱠ ᱮᱱᱟ
+    </string>
+    <string name="release_207">        
+        v1.4.141 / 2020.08.03\n
+        ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱮᱠᱥᱯᱤᱨᱤᱮᱱᱥ (UX) ᱚᱯᱴᱤᱢᱟᱭᱡᱮᱥᱚᱱ\n
+        ᱯᱷᱨᱮᱸᱪ ᱛᱚᱨᱡᱚᱢᱟ ᱟᱹᱯᱰᱮᱴᱠᱚ
+    </string>
+    <string name="release_209">        
+        v1.4.143 / 2020.08.26\n
+        ᱥᱟᱡᱟᱣ ᱥᱠᱨᱤᱱ ᱨᱮ ᱟᱡ ᱛᱮ ᱛᱤᱱᱟᱹᱝ ᱜᱟᱱ ᱥᱟᱫᱷᱚᱱ ᱠᱚ ᱵᱚᱸᱫᱚᱜ ᱠᱟᱱᱟ ᱛᱟᱦᱮᱸᱡ ᱚᱱᱟ ᱠᱚ ᱴᱷᱤᱠ ᱮᱱᱟ
+    </string>
+    <string name="release_211">        
+        v1.4.145 / 2020.09.04\n
+        ᱡᱽᱟᱹᱨᱢᱟᱹᱱ ᱛᱚᱨᱡᱚᱢᱟ ᱟᱹᱯᱰᱮᱴ ᱮᱱᱟ
+    </string>
+    <string name="release_212">        
+        v1.4.146 / 2020.09.10\n
+        ᱡᱽᱟᱹᱨᱢᱟᱹᱱ ᱛᱚᱨᱡᱚᱢᱟ ᱟᱹᱯᱰᱮᱴ ᱮᱱᱟ\n
+        ᱡᱟᱭᱜᱟ ᱵᱤᱵᱨᱚᱬ ᱫᱮᱠᱷᱟᱣ ᱚᱯᱥᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
+    </string>
+    <string name="release_214">        
+        v1.4.148 / 2020.09.15\n
+        ᱠᱟᱫᱢᱤ ᱪᱤᱱᱦᱟᱹ ᱥᱚᱨᱴᱤᱝ ᱚᱯᱥᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
+    </string>
+    <string name="release_216">        
+        v1.4.150 / 2020.09.22\n
+        ᱣᱤᱡᱮᱴ ᱴᱷᱤᱠ ᱥᱮ ᱵᱟᱝ ᱫᱮᱠᱷᱟᱣᱜ ᱠᱟᱱ ᱨᱮᱭᱜ ᱵᱷᱩᱞ ᱠᱚ ᱴᱷᱤᱠ ᱮᱱᱟ
+    </string>
+    <string name="release_217">        
+        v1.4.151 / 2020.10.05\n
+        ᱠᱮᱞᱮᱱᱰᱚᱨ ᱥᱠᱨᱤᱱ ᱨᱮ ᱰᱟᱭᱨᱤ ᱛᱮᱭᱟᱨ ᱵᱩᱛᱟᱹᱢ ᱠᱚ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
+    </string>
+    <string name="release_218">        
+        v1.4.152 / 2020.10.19\n
+        ᱨᱟᱹᱥᱤᱭᱟᱹᱱ ᱛᱚᱨᱡᱚᱢᱟ ᱟᱹᱯᱰᱮᱴ\n
+        ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱮᱠᱥᱯᱤᱨᱤᱮᱱᱥ (UX) ᱚᱯᱴᱤᱢᱟᱭᱡᱮᱥᱚᱱ
+    </string>
+    <string name="release_219">        
+        v1.4.153 / 2020.11.10\n
+        ᱦᱤᱱᱫᱤ ᱛᱚᱨᱡᱮᱢᱟ ᱥᱮᱞᱮᱫ ᱮᱱᱟ\n
+        ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱮᱠᱥᱯᱤᱨᱤᱮᱱᱥ (UX) ᱚᱯᱴᱤᱢᱟᱭᱡᱮᱥᱚᱱ
+    </string>
+    <string name="release_220">        
+        v1.4.154 / 2020.11.28\n
+        ᱰᱟᱭᱨᱤ ᱪᱤᱱᱦᱟᱹ ᱥᱮᱞᱮᱫᱮᱱᱟ\n
+        ᱰᱮᱥᱵᱚᱰ ᱨᱮ ᱰᱟᱭᱨᱤ ᱪᱤᱱᱦᱟᱹ ᱵᱮᱵᱷᱟᱨ ᱨᱮᱭᱟᱜ ᱯᱷᱤᱞᱴᱚᱨ ᱠᱚ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
+    </string>
+    <string name="release_221">        
+        v1.4.155 / 2020.12.14\n
+        ᱰᱟᱭᱨᱤ ᱪᱤᱱᱦᱟᱹ ᱠᱚ ᱥᱮᱞᱮᱫ ᱮᱱᱟ\n
+        ᱰᱟᱠᱼᱠᱟᱰ ᱛᱮᱭᱟᱨ ᱡᱷᱚᱜ, ᱯᱷᱟᱸᱠᱥᱚᱱ ᱫᱚ ᱞᱟᱦᱟ ᱦᱚᱪᱚ ᱠᱟᱱᱟ ᱚᱠᱟ ᱛᱮ ᱞᱟᱴᱷᱟ ᱟᱠᱟᱱ ᱪᱤᱛᱟᱹᱨ ᱠᱚ ᱱᱚᱠᱚᱞ ᱟᱨ ᱵᱟᱝ ᱯᱷᱤᱞᱴᱚᱨ ᱮᱢ ᱮᱢ ᱪᱷᱚ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ
+    </string>
+    <string name="release_222">        
+        v1.4.156 / 2021.01.11\n
+        ᱰᱟᱭᱨᱤ ᱪᱤᱱᱦᱟᱹ ᱥᱮᱞᱮᱫ ᱮᱱᱟ\n
+        ᱠᱮᱞᱮᱱᱰᱚᱨ ᱥᱠᱨᱤᱱ UX ᱞᱟᱦᱟ ᱦᱚ ᱪᱷᱚ ᱮᱱᱟ
+    </string>
+    
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <!--  Resources added since version 1.4.47 here.                                                      -->
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <string name="speech_to_text">ᱨᱚᱲ ᱟᱫᱮᱨ</string>
+    <string name="write_diary">ᱰᱟᱭᱨᱤ ᱚᱞ ᱢᱮ</string>
+    <string name="date_picker">ᱢᱟᱦᱟ ᱵᱟᱪᱷᱟᱣ ᱢᱮ</string>
+    <string name="time_picker">ᱚᱠᱛᱚ ᱵᱟᱪᱷᱟᱣ ᱢᱮ  </string>
+    <string name="seconds_picker">ᱴᱤᱡ ᱵᱟᱪᱷᱟᱣ ᱢᱮ</string>
+    <string name="save_diary">ᱰᱟᱭᱨᱤ ᱥᱟᱸᱪᱟᱣ ᱢᱮ</string>
+    <string name="photo_registration">ᱪᱤᱛᱟᱹᱨ ᱨᱤᱡᱤᱥᱴᱨᱮᱥᱚᱱ</string>
+    <string name="zoom_in">ᱡᱽᱩᱢ ᱤᱱ</string>
+    <string name="zoom_out">ᱡᱽᱩᱢ ᱟᱩᱴ</string>
+    <string name="edit_diary">ᱰᱟᱭᱨᱤ ᱥᱟᱯᱲᱟᱣ ᱢᱮ</string>
+    <string name="text_to_speech">ᱰᱟᱭᱨᱤ ᱠᱷᱚᱱ ᱵᱷᱟᱲᱚᱬ</string>
+    <string name="diary_postcard">ᱰᱟᱭᱨᱤ ᱰᱟᱠᱼᱠᱟᱰ</string>
+    <string name="thumbnail_setting_title">ᱛᱤᱠᱟᱹᱴᱩᱵᱽ ᱢᱟᱯ</string>
+    <string name="thumbnail_setting_summary">ᱰᱟᱭᱨᱤ ᱨᱮᱭᱟᱜ ᱞᱟᱴᱷᱟ ᱛᱷᱟᱸᱵᱽᱱᱮᱞ ᱢᱟᱯ ᱨᱮᱭᱟᱜ ᱪᱤᱛᱟᱹᱨ ᱠᱚ ᱥᱮᱴ ᱟᱭ ᱾ ᱥᱮᱴ ᱢᱟᱯ ᱫᱚ ᱰᱟᱭᱨᱤ ᱛᱮᱭᱟᱨ ᱡᱷᱚᱜ ᱟᱨ ᱥᱟᱯᱲᱟᱣᱮᱱ ᱥᱠᱨᱤᱱ ᱨᱮ ᱥᱮᱴ ᱜᱟᱱᱚᱜᱼᱟ, ᱥᱮᱸᱫᱽᱨᱟ ᱥᱠᱨᱤᱱ ᱨᱮ ᱫᱚ ᱵᱟᱭ ᱜᱟᱱᱚᱜᱼᱟ ᱾</string>
+    <string name="collapse_attached_photo">ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ ᱠᱚ ᱦᱚᱯᱚᱱ ᱪᱷᱚ</string>
+    <string name="expand_attached_photo">ᱞᱟᱴᱷᱟ ᱟᱠᱟᱱ ᱛᱤᱛᱟᱹᱨ ᱢᱟᱨᱟᱝ ᱪᱷᱚᱭ ᱢᱮ</string>
+    <string name="release_notes_title">ᱚᱲᱟᱜ ᱱᱚᱴᱠᱚ</string>
+    <string name="release_notes_summary">ᱚᱲᱚᱠ ᱵᱽᱷᱟᱹᱨᱥᱚᱱ ᱛᱮ ᱱᱟᱶᱟ ᱯᱷᱤᱪᱚᱨ ᱠᱚ ᱧᱮᱞ ᱵᱤᱲᱟᱹᱣ ᱢᱮ ᱾</string>
+    <string name="attached_photo_count">%d ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨᱠᱚ</string>
+    <string name="all_day">ᱡᱷᱚᱛᱚ ᱫᱤᱱ</string>
+    <string name="bold_style_option_title">ᱵᱚᱞᱼᱰ ᱯᱷᱮᱥ ᱠᱚᱱᱯᱷᱤᱜᱽᱭᱩᱨᱮᱥᱚᱱ</string>
+    <string name="bold_style_option_summary">ᱰᱟᱭᱨᱤ ᱴᱟᱭᱴᱟᱹᱞ ᱥᱮᱴ ᱢᱮ ᱟᱨ ᱴᱟᱭᱤᱢᱞᱟᱭᱤᱱ ᱚᱠᱛᱚ ᱠᱚ ᱵᱚᱞᱼᱰ ᱛᱮ ᱫᱮᱠᱷᱟᱣᱢᱮ</string>
+    <string name="multi_picker_option_title">ᱟᱭᱢᱟ ᱵᱟᱪᱷᱟᱣᱤᱭᱟᱹ ᱥᱟᱡᱟᱣᱠᱚ</string>
+    <string name="multi_picker_option_summary">ᱰᱟᱭᱨᱤ ᱪᱤᱛᱟᱹᱨ ᱞᱟᱴᱷᱟ ᱡᱷᱚᱜ, ᱵᱤᱱᱟᱹ ᱜᱮᱞᱨᱭ ᱮᱯ ᱵᱮᱵᱷᱟᱨ ᱠᱟᱛᱮ ᱟᱭᱢᱟᱼᱵᱟᱪᱷᱟᱤᱭᱟᱹ ᱨᱮᱭᱟᱜ ᱵᱮᱵᱷᱟᱨ ᱤᱧ ᱠᱚᱨᱟᱣᱮᱫᱼᱟ ᱾ ᱟᱭᱢᱟᱼᱵᱟᱪᱷᱟᱤᱭᱟᱹ  ᱮᱢ ᱪᱷᱚ ᱞᱮᱠᱷᱟᱱ, ᱟᱢ ᱢᱤᱫ ᱡᱮᱠᱷᱟ ᱛᱮ ᱟᱭᱢᱟ ᱪᱤᱛᱟᱹᱨ ᱥᱮᱞᱮᱫ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ ᱾</string>
+    <string name="preferences_category_backup_restore">ᱮᱯ ᱵᱮᱠᱟᱹᱯ ᱟᱨ ᱨᱤᱥᱴᱚᱨ</string>
+    <string name="preferences_category_backup_restore_sub">Google Drive</string>
+    <string name="backup_attach_photo_title">ᱞᱟᱴᱷᱟ ᱟᱠᱟᱱ ᱪᱤᱛᱟᱹᱨᱠᱚ ᱵᱮᱠᱟᱹᱯ ᱢᱮ</string>
+    <string name="backup_attach_photo_summary">Google Drive ᱨᱮ ᱟᱢᱟᱜ ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ ᱠᱚ ᱵᱮᱠᱟᱹᱯ ᱢᱮ ᱾ ᱱᱚᱶᱟ ᱯᱷᱤᱪᱚᱨ ᱫᱚ ᱛᱤᱱᱟᱹᱝ ᱜᱟᱱ ᱥᱟᱫᱷᱚᱱ ᱨᱮ ᱫᱚ ᱵᱟᱭ ᱠᱟᱢᱤᱟᱭ ᱾ </string>
+    <string name="recover_attach_photo_title">ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ ᱠᱚ ᱨᱤᱠᱟᱣᱟᱹᱨ ᱢᱮ</string>
+    <string name="recover_attach_photo_summary">Google Drive ᱨᱮ ᱵᱮᱠᱟᱹᱯ ᱠᱟᱱ ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ ᱠᱚ ᱨᱤᱠᱟᱹᱣᱟᱹᱨ ᱢᱮ ᱾ ᱵᱮᱴᱟ ᱥᱟᱹᱨᱣᱤᱥ ᱞᱟᱹᱜᱤᱫ ᱡᱷᱚᱛᱚ ᱥᱟᱫᱷᱚᱱ ᱨᱮ ᱫᱚ ᱵᱟᱭ ᱠᱟᱹᱢᱤᱟᱭ ᱾</string>
+    <string name="notification_msg_device_file_count">%s ᱵᱮᱠᱟᱹᱯ ᱨᱮᱫ ᱨᱮᱭᱟᱜ ᱱᱚᱢᱵᱚᱨᱺ %d%s</string>
+    <string name="notification_msg_upload_file_count">ᱞᱟᱫᱮ ᱞᱟᱹᱜᱤᱫ ᱛᱤᱱᱟᱹᱝ ᱜᱟᱱ ᱨᱮᱫ</string>
+    <string name="notification_msg_upload_invalid">ᱡᱷᱚᱛᱚ ᱵᱮᱠᱟᱹᱯ ᱴᱟᱨᱜᱮᱴ ᱨᱮᱫᱠᱚ ᱢᱟᱲᱟᱝ ᱠᱷᱚᱱ ᱢᱮᱱᱟᱜᱼᱟ ᱾</string>
+    <string name="notification_msg_upload_empty">ᱵᱮᱠᱟᱹᱯ ᱛᱟᱦᱮᱸ ᱨᱮᱭᱟᱜ ᱨᱮᱫ ᱫᱚ ᱱᱤᱛᱟᱜ ᱵᱟᱹᱱᱩᱜᱼᱟ ᱾</string>
+    <string name="notification_msg_upload_progress">ᱞᱟᱫᱮᱜ ᱠᱟᱱᱟ</string>
+    <string name="notification_msg_upload_complete">ᱞᱮᱫᱮ ᱪᱟᱵᱟᱮᱱᱟ</string>
+    <string name="notification_msg_upload_success">%s ᱞᱟᱫᱮ ᱦᱩᱭᱺ %d%s</string>
+    <string name="notification_msg_upload_fail">%s ᱟᱹᱯᱞᱚᱰ ᱰᱤᱜᱟᱹᱣᱺ%d%s</string>
+    <string name="notification_msg_google_drive_file_count">ᱨᱤᱠᱟᱹᱣᱟᱹᱨ ᱨᱮᱫᱠᱚ ᱨᱮᱭᱟᱜ ᱱᱚᱢᱵᱚᱨ</string>
+    <string name="notification_msg_download_file_count">ᱛᱤᱱᱟᱹᱝ ᱜᱟᱱ ᱨᱮᱫ ᱠᱚ ᱰᱟᱩᱱᱞᱚᱰ ᱨᱮᱭᱟᱜ ᱱᱚᱢᱵᱚᱨ</string>
+    <string name="notification_msg_download_invalid">ᱡᱷᱚᱛᱚ ᱨᱤᱠᱟᱹᱣᱨᱤ ᱴᱟᱨᱜᱮᱴ ᱨᱮᱫᱠᱚ ᱢᱟᱲᱟᱝ ᱠᱷᱚᱱ ᱢᱮᱱᱟᱜᱼᱟ ᱾</string>
+    <string name="notification_msg_download_empty">ᱨᱮᱠᱟᱹᱣᱟᱹᱨᱚᱜ ᱠᱟᱱ ᱨᱮᱫ ᱫᱚ ᱱᱤᱛᱚᱜ ᱠᱟᱱᱩᱜᱼᱟ ᱾</string>
+    <string name="notification_msg_download_progress">ᱰᱟᱩᱱᱞᱚᱰᱤᱝ…</string>
+    <string name="notification_msg_download_complete">ᱰᱟᱩᱱᱞᱳᱰ ᱪᱟᱵᱟᱮᱱᱟ</string>
+    <string name="notification_msg_download_success">ᱰᱟᱩᱱᱞᱳᱰ ᱦᱩᱭᱮᱱ</string>
+    <string name="notification_msg_download_fail">ᱰᱟᱩᱱᱞᱳᱰ ᱵᱷᱩᱞ</string>
+    <string name="notification_msg_duplicate_file_count">%s ᱜᱚᱴᱟᱝ ᱨᱮᱫᱠᱚ ᱢᱮᱱᱟᱜᱼᱟᱺ %d%s</string>
+    <string name="preferences_category_lock">ᱮᱯᱞᱤᱠᱮᱥᱚᱱ ᱠᱩᱞᱩᱯ ᱥᱟᱡᱟᱣ</string>
+    <string name="fingerprint_lock_title">ᱛᱤᱠᱟᱹᱴᱩᱵᱪᱷᱟᱯᱟ ᱠᱩᱞᱩᱯ</string>
+    <string name="fingerprint_lock_summary">ᱡᱩᱫᱤ ᱥᱟᱫᱷᱚᱱ ᱛᱤᱠᱟᱹᱴᱩᱵᱪᱷᱟᱯᱟ ᱪᱤᱱᱦᱟᱹᱯ ᱥᱟᱯᱚᱴᱟᱭ ᱟᱨ ᱛᱤᱠᱟᱹᱴᱩᱵᱪᱷᱟᱯᱟ ᱨᱮᱡᱤᱥᱴᱚᱨ ᱟᱠᱟᱫᱟᱭ, ᱢᱮᱱᱠᱷᱟᱱ ᱟᱢ ᱨᱮᱡᱤᱥᱴᱚᱨ ᱠᱟᱱ ᱛᱤᱠᱟᱹᱴᱩᱵᱪᱷᱟᱯᱟ ᱛᱮ ᱮᱯᱞᱤᱠᱮᱥᱚᱱ ᱠᱩᱞᱩᱯ ᱢᱮ ᱾</string>
+    <string name="fingerprint_not_available">ᱥᱟᱫᱷᱚᱱ ᱨᱮ ᱵᱚᱦᱟᱞ ᱟᱠᱟᱱ ᱚᱯᱨᱮᱴᱤᱝ ᱥᱭᱥᱴᱟᱹᱢ ᱛᱤᱠᱟᱹᱴᱩᱵᱪᱷᱟᱯᱟ ᱪᱤᱱᱟᱹᱣ ᱵᱟᱭ ᱥᱟᱹᱯᱚᱴᱟᱭ ᱾</string>
+    <string name="fingerprint_setting_complete">ᱛᱤᱠᱟᱹᱴᱩᱵᱪᱷᱟᱯᱟ ᱠᱩᱞᱩᱯ ᱥᱟᱡᱟᱣ ᱪᱟᱵᱟᱮᱱᱟ ᱾</string>
+    <string name="fingerprint_setting_release">ᱛᱤᱠᱟᱹᱴᱩᱵᱪᱷᱟᱯᱟ ᱠᱩᱞᱩᱯ ᱵᱚᱸᱫᱚ ᱜᱮᱭᱟ ᱾</string>
+    <string name="fingerprint_lock_need_pin_setting">ᱛᱤᱠᱟᱹᱴᱩᱵᱪᱷᱟᱯᱟ  ᱠᱩᱞᱩᱯ ᱵᱮᱵᱷᱨᱟ ᱞᱟᱹᱜᱤᱫ, ᱟᱢ PIN ᱥᱮᱴ ᱫᱚᱨᱠᱟᱨ ᱾</string>
+    <string name="fingerprint_authentication_fail_try_again">ᱛᱤᱠᱟᱹᱴᱩᱵᱪᱷᱟᱯᱟ ᱚᱛᱷᱮᱱᱴᱤᱠᱮᱥᱚᱱ ᱦᱩᱲᱟᱹᱜ ᱾ ᱫᱚᱭᱚᱠᱟᱛᱮ ᱫᱩᱦᱲᱟᱹ ᱪᱮᱥᱴᱟᱭ ᱢᱮ ᱾</string>
+    <string name="fingerprint_authentication_info_changed">ᱥᱟᱫᱷᱚᱱ ᱨᱮᱭᱟᱜ ᱛᱤᱠᱟᱹᱴᱩᱵᱪᱷᱟᱯᱟ ᱚᱛᱷᱮᱱᱴᱤᱠᱮᱥᱚᱱ ᱵᱤᱵᱨᱚᱬ ᱵᱚᱫᱚᱞ ᱮᱱᱟ ᱟᱨ ᱢᱟᱲᱟᱝ ᱥᱮᱴ ᱟᱠᱟᱱ ᱚᱛᱷᱮᱱᱴᱤᱠᱮᱥᱚᱱ ᱵᱤᱵᱨᱚᱬ ᱵᱮᱵᱷᱟᱨ ᱵᱟᱭ ᱜᱟᱱᱚᱜᱼᱟ ᱾</string>
+    <string name="pin_lock_title">PIN ᱠᱩᱞᱩᱯ ᱥᱟᱡᱟᱣ</string>
+    <string name="pin_lock_summary">ᱮᱯᱞᱤᱠᱮᱥᱚᱱ ᱠᱩᱞᱩ ᱞᱟᱹᱜᱤᱫ PIN ᱥᱮᱴ ᱢᱮ ᱾</string>
+    <string name="pin_setting_complete">PIN ᱥᱟᱡᱟᱣ ᱫᱚ ᱪᱟᱵᱟᱮᱱᱟ ᱾</string>
+    <string name="pin_setting_release">PIN ᱠᱩᱞᱩᱯ ᱫᱚ ᱵᱚᱸᱫᱚ ᱜᱮᱭᱟ ᱾</string>
+    <string name="pin_release_need_fingerprint_disable">PIN ᱠᱩᱞᱩᱯ ᱵᱚᱸᱫ ᱞᱟᱫᱜᱤᱫ, ᱟᱢ ᱛᱤᱠᱟᱹᱴᱩᱵᱪᱷᱟᱯᱟ ᱠᱩᱞᱩᱯ ᱵᱚᱸᱫ ᱛᱮ ᱦᱩᱭᱟᱢᱟ ᱾</string>
+    <string name="pin_setting_guide_message">PIN ᱵᱮᱵᱷᱟᱨ ᱞᱟᱹᱜᱤᱫ ᱫᱚᱭᱟᱠᱟᱛᱮ ᱱᱚᱢᱵᱚᱨ ᱟᱫᱮᱨ ᱢᱮ ᱾</string>
+    <string name="pin_unlock_guide_message">ᱫᱚᱭᱟᱠᱟᱛᱮ PIN ᱟᱫᱮᱨ ᱢᱮ ᱾</string>
+    <string name="pin_verification_fail">PIN ᱣᱮᱨᱤᱯᱷᱤᱠᱮᱥᱚᱱ ᱦᱩᱲᱟᱹᱜ ᱾</string>
+    <string name="change_pin_lock_mode">PIN ᱠᱩᱞᱩᱯ ᱢᱳᱰ ᱵᱚᱫᱚᱞᱚᱜ ᱠᱟᱱᱟ</string>
+    <string name="diary_creation_time_disable_message">ᱚᱠᱟ ᱚᱠᱛᱚ ᱵᱤᱵᱨᱚᱬ ᱦᱚᱸ ᱵᱟᱹᱱᱩᱜᱼᱟ</string>
+    <string name="enable_card_view_policy_title">ᱠᱟᱰ ᱣᱤᱣ ᱰᱤᱡᱟᱭᱤᱱ ᱚᱯᱴᱤᱢᱟᱭᱤᱡᱽ ᱢᱮ</string>
+    <string name="enable_card_view_policy_summary">ᱥᱟᱫᱷᱚᱱ ᱞᱟᱹᱜᱤᱫ ᱠᱟᱰ ᱣᱤᱣ ᱰᱤᱡᱟᱭᱤᱱ ᱚᱯᱴᱤᱢᱟᱭᱤᱡᱽ ᱢᱮ ᱾</string>
+    <string name="font_size_title">ᱪᱤᱠᱤ ᱢᱟᱯ ᱥᱮᱴ ᱢᱮ</string>
+    <string name="font_size_summary">ᱪᱤᱠᱤ ᱢᱟᱯ ᱦᱚᱯᱚᱱ ᱟᱨ ᱵᱟᱝ ᱢᱟᱨᱟᱝ ᱢᱮ ᱾</string>
+    <string name="contents_summary_title">ᱟᱭᱨᱤ ᱡᱤᱱᱤᱥ ᱥᱟᱹᱢᱟᱨᱭ</string>
+    <string name="contents_summary_description">ᱰᱟᱭᱨᱤ ᱨᱮᱭᱟᱜ ᱠᱮᱞᱮᱱᱰᱚᱨ, ᱴᱚᱭᱤᱢᱞᱟᱭᱤᱱ, ᱥᱮᱸᱫᱽᱨᱟ ᱥᱠᱨᱤᱱ ᱟᱨ ᱚᱞᱜᱟ ᱡᱤᱱᱤᱥ ᱠᱚᱨᱮᱭᱟᱜ ᱡᱤᱱᱤᱥ ᱠᱚ ᱥᱟᱹᱢᱮᱨᱟᱭᱤᱡᱽ ᱢᱮ ᱾ </string>
+    <string name="init_cipher_error_guide_message">ᱥᱟᱫᱷᱚᱱ ᱨᱮᱭᱟᱜ ᱛᱤᱠᱟᱹᱴᱩᱵᱪᱷᱟᱯᱟ ᱵᱤᱵᱨᱚᱬ ᱫᱚ ᱵᱚᱫᱚᱞ ᱮᱱᱟ ᱾ ᱠᱷᱩᱞᱟᱹ ᱞᱟᱹᱜᱤᱫ PIN ᱠᱩᱞᱩᱯ ᱢᱳᱰ ᱵᱚᱫᱚᱞ ᱢᱮ, ᱯᱚᱨᱮ ᱛᱤᱠᱟᱹᱴᱩᱵᱪᱷᱟᱯᱟ  ᱠᱩᱞᱩᱯ ᱠᱷᱩᱞᱟᱹᱭ ᱢᱮ ᱟᱨ ᱟᱨ ᱢᱤᱫ ᱡᱮᱠᱷᱟ ᱥᱮ ᱢᱮ ᱾</string>
+    <string name="export_excel_title">excel ᱵᱷᱮᱡᱟᱭ ᱢᱮ</string>
+    <string name="export_excel_description">ᱞᱟᱴᱷᱟ ᱪᱤᱟᱹᱨ ᱟᱲᱟᱜ ᱠᱟᱛᱮ ᱡᱷᱚᱛᱚ ᱡᱤᱱᱤᱥ ᱠᱚ Excel ᱨᱮᱫ ᱞᱮᱠᱷᱟ ᱥᱟᱸᱪᱟᱣ ᱢᱮ ᱾</string>
+    <string name="export_excel_xls_location">ᱡᱟᱭᱜᱟ</string>
+    <string name="export_excel_header_seq">ᱥᱮᱠᱣᱮᱱᱥ</string>
+    <string name="export_excel_header_write_date">ᱦᱟᱦᱟᱸ ᱚᱞ ᱢᱮ</string>
+    <string name="export_excel_header_title">ᱰᱟᱭᱨᱤ ᱴᱟᱭᱴᱟᱹᱞ</string>
+    <string name="export_excel_header_contents">ᱰᱟᱭᱨᱤ ᱡᱤᱱᱤᱥᱠᱚ</string>
+    <string name="export_excel_header_attach_photo_path">ᱪᱤᱛᱟᱹᱨ ᱡᱟᱭᱜᱟ ᱞᱟᱴᱷᱟᱭ ᱢᱮ</string>
+    <string name="export_excel_header_attach_photo_size">ᱪᱤᱛᱟᱹᱨ ᱢᱟᱯ ᱞᱟᱴᱷᱟᱭ ᱢᱮ</string>
+    <string name="export_excel_header_write_time_millis">ᱢᱟᱦᱟᱸ ᱚᱞ ᱢᱮ\n(ᱡᱟᱱᱩᱟᱨᱭ 1st ᱑᱙᱗᱐ ᱢᱤᱞᱤᱴᱤᱡ ᱠᱷᱚᱱ)</string>
+    <string name="export_excel_header_weather">ᱟᱛᱟᱥ</string>
+    <string name="export_excel_header_symbol">ᱪᱤᱱᱦᱟᱹ</string>
+    <string name="export_excel_header_is_all_day">ᱡᱷᱚᱛᱚᱫᱤᱱ</string>
+    <string name="faq_title">ᱠᱩᱠᱞᱤᱠᱚ</string>
+    <string name="faq_description">ᱟᱢ ᱡᱷᱚᱛᱚ ᱵᱮᱲᱟ ᱠᱩᱠᱞᱤ ᱠᱚ ᱟᱨ ᱚᱱᱟ ᱠᱚᱶᱟᱜ ᱛᱮᱞᱟᱠᱚ ᱧᱮᱞ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ ᱾</string>
+    <string name="faq_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/FAQs.md</string>
+    <string name="privacy_policy_title">ᱯᱨᱭᱵᱷᱮᱥᱤ ᱱᱤᱛᱤ</string>
+    <string name="privacy_policy_description">Easy Diary ᱯᱨᱟᱭᱣᱮᱥᱭ ᱱᱤᱛᱤ ᱾</string>
+    <string name="privacy_policy_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/Privacy.md</string>
+    <string name="diary_symbol">ᱰᱟᱭᱨᱤ ᱪᱤᱱᱦᱟᱹ</string>
+    <string name="diary_symbol_guide_message">ᱱᱤᱛᱚᱜᱟᱜ ᱟᱛᱟᱥ ᱠᱚ ᱥᱟᱞᱟᱜ ᱢᱮᱪ ᱠᱟᱱᱟ ᱪᱤᱱᱦᱟᱹ ᱠᱚ ᱟᱨ ᱵᱟᱝ ᱰᱟᱭᱨᱤ ᱡᱤᱱᱤᱥ ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱾</string>
+    <string name="category_weather">ᱟᱛᱟᱥ</string>
+    <string name="category_emotion">ᱵᱷᱟᱹᱵᱽᱱᱟᱹ</string>
+    <string name="category_daily">ᱫᱤᱱᱠᱤᱭᱟᱹ ᱡᱤᱭᱚᱱ &amp; ᱡᱤᱱᱤᱥᱠᱚ</string>
+    <string name="category_food">ᱡᱚᱢᱟᱜ &amp; ᱯᱟᱹᱶᱨᱟᱹ</string>
+    <string name="category_leisure">ᱡᱤᱭᱚᱱ ᱨᱮᱭᱟᱜ ᱡᱤᱨᱟᱹᱣ ᱚᱠᱛᱚ</string>
+    <string name="category_landscape">ᱞᱮᱸᱰᱥᱠᱮᱯ &amp; ᱯᱟᱠᱟ ᱚᱲᱟᱜ</string>
+    <string name="rotate_photo">ᱟᱹᱪᱩᱨ</string>
+    <string name="task_progress_message">ᱠᱟᱫᱢᱤ ᱪᱟᱹᱞᱩ ᱨᱮᱭᱟᱜ ᱱᱮᱦᱚᱨ…</string>
+    <string name="open_realm_file_title">ᱰᱟᱭᱨᱤ ᱨᱤᱠᱟᱹᱣᱨᱤ</string>
+    <string name="open_realm_file_message">ᱫᱚᱭᱟᱠᱟᱛᱮ ᱨᱤᱠᱟᱹᱣᱨᱤ ᱴᱟᱨᱜᱮᱴ ᱨᱮᱫ ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱾</string>
+    <string name="backup_completed_message">ᱰᱟᱭᱨᱤ ᱵᱮᱠᱟᱹᱯ ᱠᱟᱫᱢᱤ ᱪᱟᱵᱟ ᱮᱱᱟ ᱾</string>
+    <string name="backup_confirm_message">ᱟᱢ ᱪᱮᱫ ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ ᱵᱮᱠᱟᱹᱯ ᱠᱟᱹᱢᱤ ᱮᱛᱦᱚᱵ ᱥᱟᱱᱟᱢ ᱠᱟᱱᱟ ᱥᱮ?</string>
+    <string name="recover_confirm_attached_photo">ᱟᱢ ᱪᱮᱫ ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ ᱨᱤᱠᱟᱹᱣᱨᱤ ᱠᱟᱹᱢᱤ ᱮᱛᱦᱚᱵ ᱥᱟᱱᱟᱢ ᱠᱟᱱᱟ ᱥᱮ?</string>
+    <string name="category_symbol">ᱪᱤᱱᱦᱟᱹ</string>
+    <string name="statistics_creation_time">ᱛᱮᱭᱟᱨ ᱚᱠᱛᱚ ᱨᱮᱭᱟᱜ ᱥᱴᱟᱴᱤᱥᱴᱤᱠᱥ</string>
+    <string name="statistics_symbol_all">ᱪᱤᱛᱟᱹᱨ ᱛᱮ ᱡᱷᱚᱛᱚ ᱥᱴᱟᱴᱤᱥᱴᱤᱪᱥ</string>
+    <string name="statistics_symbol_top_ten">ᱪᱤᱱᱦᱟᱹ ᱛᱮ ᱴᱚᱯ ᱑᱐ ᱥᱴᱟᱴᱤᱥᱴᱤᱠᱠᱚ</string>
+    <string name="category_flag">ᱯᱚᱛᱠᱟ</string>
+    <string name="preferences_category_backup_restore_device">ᱮᱯ ᱵᱮᱠᱟᱹᱯ ᱟᱨ ᱨᱤᱥᱴᱚᱨ</string>
+    <string name="preferences_category_backup_restore_device_sub">ᱥᱟᱫᱷᱚᱱ ᱫᱚᱦᱚ</string>
+    <string name="export_realm_title">ᱰᱟᱭᱨᱤ ᱵᱮᱠᱟᱹᱯ</string>
+    <string name="export_realm_description">ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ ᱪᱷᱟᱲᱤ ᱠᱟᱛᱮ ᱥᱟᱫᱷᱚᱱ ᱨᱮ ᱰᱟᱴᱟᱵᱮᱥ ᱨᱮᱫ ᱠᱚ ᱵᱮᱠᱟᱹᱯ ᱢᱮ ᱾\nᱪᱮᱫᱟᱜ ᱥᱮ ᱡᱩᱫᱤ ᱮᱯ ᱟᱹᱱᱤᱱᱥᱴᱚᱞ ᱞᱮᱠᱷᱟᱱ ᱤᱱᱴᱟᱹᱨᱱᱟᱞ ᱥᱴᱚᱨᱮᱡᱽ ᱨᱮ ᱵᱮᱠᱟᱹᱯ ᱠᱟᱱ ᱨᱮᱫ ᱠᱚ ᱢᱮᱴᱟᱣᱜᱼᱟ, ᱜᱟᱫᱤ ᱞᱮᱠᱷᱟᱛᱮ ᱛᱮᱭᱟᱨ ᱟᱠᱟᱱᱟ ᱰᱟᱴᱟ ᱠᱚ ᱫᱚᱦᱚ ᱞᱟᱹᱜᱤᱫ ᱵᱟᱦᱨᱮ ᱫᱚᱦᱚ ᱡᱟᱭᱜᱟ ᱟᱨ ᱵᱟᱝ Google Drive ᱵᱮᱠᱟᱹᱯ ᱯᱷᱟᱸᱠᱥᱚᱱ ᱨᱮᱭᱟᱜ ᱵᱮᱵᱷᱟᱨ ᱢᱮ ᱾</string>
+    <string name="export_realm_guide_message">ᱞᱟᱛᱟᱨ ᱮᱢ ᱟᱠᱟᱱ ᱡᱟᱭᱜᱟ ᱨᱮ ᱰᱟᱴᱟᱵᱮᱥ ᱨᱮᱫ ᱫᱚ ᱥᱟᱫᱷᱚᱱ ᱨᱮᱭᱟᱜ ᱫᱚᱦᱚ ᱡᱟᱭᱜᱟ ᱨᱮ ᱫᱚᱦᱚ ᱟᱠᱟᱱᱟ ᱾</string>
+    <string name="import_realm_title">ᱰᱟᱭᱨᱤ ᱨᱤᱠᱟᱹᱣᱟᱹᱨ ᱢᱮ</string>
+    <string name="import_realm_description">ᱞᱟᱴᱷᱟ ᱠᱚ ᱟᱲᱟᱜ ᱠᱟᱛᱮ ᱥᱟᱫᱷᱚᱱ ᱫᱚᱦᱚ ᱡᱟᱭᱜᱟ ᱠᱷᱚᱱ ᱰᱟᱴᱟᱵᱮᱥ ᱨᱮᱫᱠᱚ ᱨᱤᱠᱟᱹᱣᱟᱹᱨᱟᱭ ᱾</string>
+    <string name="diary_item_count">+%d</string>
+    <string name="calendar_start_day_title">ᱠᱮᱞᱮᱱᱰᱚᱨ ᱮᱛᱦᱚᱵ ᱫᱤᱱ</string>
+    <string name="calendar_start_day_summary">ᱦᱟᱴ ᱨᱮᱭᱟᱜ ᱮᱛᱦᱚᱵ ᱫᱤᱱ ᱥᱮᱴ ᱢᱮ ᱾</string>
+    <string name="calendar_start_day_sunday">ᱥᱤᱸᱜᱮ</string>
+    <string name="calendar_start_day_monday">ᱚᱛᱮ</string>
+    <string name="calendar_start_day_saturday">ᱧᱩᱦᱩᱢ ᱢᱟᱦᱟᱸ</string>
+    <string name="calendar_menu_previous">ᱢᱟᱲᱟᱝ</string>
+    <string name="calendar_menu_next">ᱤᱱᱟ ᱛᱟᱭᱚᱢ</string>
+    <string name="filter_start_date">ᱮᱛᱦᱚᱵ ᱢᱟᱦᱟᱸ</string>
+    <string name="filter_start_date_hint">ᱫᱚᱭᱟᱠᱟᱛᱮ ᱮᱛᱦᱚᱵ ᱢᱟᱦᱟᱸ ᱟᱫᱮᱨ ᱢᱮ ᱾</string>
+    <string name="filter_end_date">ᱢᱩᱪᱟᱹᱫ ᱢᱟᱦᱟᱸ</string>
+    <string name="filter_end_date_hint">ᱫᱚᱭᱟᱠᱟᱛᱮ ᱢᱩᱪᱟᱹᱫ ᱢᱟᱦᱟᱸ ᱟᱫᱮᱨ ᱢᱮ ᱾</string>
+    <string name="filter_search_word">ᱟᱹᱲᱟᱹ ᱥᱮᱸᱫᱽᱨᱟᱭ ᱢᱮ</string>
+    <string name="filter_search_word_hint">ᱫᱚᱭᱟᱠᱟᱛᱮ ᱟᱢᱟᱜ ᱥᱮᱸᱫᱽᱨᱟ ᱚᱞ ᱟᱫᱮᱨ ᱢᱮ ᱾</string>
+    <string name="filter_clear">ᱯᱷᱤᱞᱴᱚᱨ ᱨᱤᱥᱮᱴ</string>
+    <string name="filter_close">ᱵᱚᱸᱫ</string>
+    <string name="copy_diary_item">ᱵᱟᱪᱟᱣᱟᱠᱟᱱ ᱰᱟᱭᱨᱤ ᱫᱚ ᱪᱮᱫ ᱱᱚᱠᱚᱞ ᱥᱟᱱᱟᱢ ᱠᱟᱱᱟ ᱥᱮ?</string>
+    <string name="diary_contents_length">ᱚᱠᱷᱚᱨᱠᱺ %d</string>
+    <string name="count_characters_title">ᱚᱞ ᱦᱤᱥᱟᱹᱵ</string>
+    <string name="count_characters_summary">ᱰᱟᱭᱨᱤ ᱵᱚᱰᱭ ᱨᱮ ᱚᱠᱷᱚᱨ ᱨᱮᱭᱟᱜ ᱦᱤᱥᱟᱹᱵ ᱫᱚᱦᱚᱭ ᱢᱮ ᱾</string>
+    <string name="send_email_attach_excel_title">ᱮᱠᱥᱮᱞ ᱨᱮᱫ ᱛᱮᱭᱟᱨ ᱟᱨ ᱤᱼᱢᱮᱞ ᱵᱷᱮᱡᱟ</string>
+    <string name="send_email_attach_excel_description">ᱡᱷᱚᱛᱚ ᱡᱤᱱᱤᱥ ᱠᱚ ᱠᱷᱟᱹᱞᱤ ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ ᱟᱲᱟᱜ ᱠᱟᱛᱮ ᱮᱠᱥᱮᱞ ᱨᱮᱫ ᱞᱮᱠᱷᱟ ᱛᱮᱭᱟᱨ ᱠᱟᱛᱮ ᱤᱼᱢᱮᱞ ᱛᱮ ᱞᱟᱴᱷᱟ ᱮᱱᱟ ᱾</string>
+    <string name="storage_migration_message">Android 10 Scoped ᱫᱚᱦᱚ ᱱᱤᱛᱤ ᱦᱤᱥᱟᱹᱵ ᱛᱮ ᱫᱚᱦᱚ ᱡᱟᱭᱜᱟ ᱵᱚᱫᱚᱞ ᱠᱚᱨᱟᱣᱜᱼᱟ ᱾ ᱱᱚᱶᱟ ᱠᱟᱹᱢᱤ ᱫᱚ ᱢᱤᱫᱴᱟᱹᱝ ᱡᱟᱭᱜᱟ ᱨᱮᱜᱮ ᱫᱟᱹᱲᱟᱭ ᱾</string>
+    <string name="google_drive_account_sign_out_title">Google Drive ᱡᱩᱲᱟᱹᱣ ᱠᱷᱟᱛᱟ ᱨᱤᱥᱮᱴ ᱢᱮ</string>
+    <string name="google_drive_account_sign_out_description">Google Drive ᱞᱤᱸᱠ ᱠᱷᱟᱛᱟ ᱵᱮᱵᱷᱟᱨ ᱠᱟᱛᱮ ᱴᱚᱠᱮᱱ ᱵᱤᱵᱨᱚᱬ ᱠᱚ Easy Diary ᱯᱟᱨᱮᱞ ᱠᱟᱱ ᱡᱤᱱᱤᱥ ᱠᱚ ᱚᱪᱚᱜ ᱢᱮ ᱾</string>
+    <string name="calendar_font_scale_title">ᱠᱮᱞᱮᱱᱰᱚᱨ ᱪᱤᱠᱤ ᱢᱟᱯ ᱥᱮᱴ ᱢᱮ</string>
+    <string name="calendar_font_scale_description">ᱥᱮᱴ ᱜᱞᱚᱵᱟᱞ ᱪᱤᱠᱤ ᱢᱟᱯ ᱦᱤᱥᱟᱹᱵ ᱛᱮ ᱠᱮᱞᱮᱱᱰᱚᱨ ᱵᱷᱤᱛᱨᱭ ᱨᱮ ᱪᱤᱠᱤ ᱢᱟᱯ ᱮ ᱢᱟᱯ ᱟᱭ ᱾</string>
+    <string name="calendar_font_scale_disable">ᱟᱞᱚᱢ ᱵᱮᱵᱷᱟᱨ ᱟ</string>
+    <string name="calendar_font_scale_factor">ᱜᱞᱚᱵᱟᱞ ᱪᱤᱠᱤ ᱢᱟᱯ x %.1f</string>
+    <string name="dashboard_title_lifetime">ᱡᱤᱣᱚᱱᱚᱠᱛᱚ</string>
+    <string name="dashboard_title_last_month">ᱢᱟᱲᱟᱝ ᱪᱟᱸᱫᱚ</string>
+    <string name="dashboard_title_last_week">ᱢᱟᱲᱟᱝ ᱦᱟᱴ</string>
+    <string name="dashboard_guide_message">ᱨᱮᱱᱠᱤᱝ ᱰᱟᱴᱟ ᱠᱚ ᱛᱮᱭᱟᱨ ᱞᱟᱹᱜᱤᱫ ᱯᱚᱨᱭᱟᱯᱼᱛ ᱰᱟᱟ ᱵᱟᱹᱱᱩᱜᱼᱟ ᱾ ᱰᱮᱥ ᱵᱚᱰ ᱨᱮᱱᱠᱤᱝ ᱮᱠᱴᱤᱣᱮᱴ ᱞᱟᱹᱜᱤᱫ ᱟᱢ ᱔ ᱪᱤᱱᱦᱟᱹ ᱞᱟᱜᱟᱣ ᱠᱟᱛᱮ ᱰᱟᱭᱨᱤ ᱚᱞ ᱛᱮ ᱦᱩᱭᱟᱢᱟ ᱾</string>
+    <string name="delete_realm_title">ᱵᱮᱠᱟᱹᱯ ᱨᱮᱫ ᱢᱮᱴᱟᱣ ᱢᱮ</string>
+    <string name="delete_realm_description">ᱫᱚᱦᱚ ᱡᱟᱭᱜᱟ ᱨᱮ ᱢᱮᱱᱟᱜ ᱵᱮᱠᱟᱹᱯ ᱨᱮᱫ ᱠᱚ ᱢᱮᱴᱟᱣ ᱢᱮ ᱾</string>
+    <string name="menu_dashboard">ᱰᱮᱥᱵᱳᱨᱰ</string>
+    <string name="dashboard_title_backup_drive">Google Drive ᱵᱮᱠᱟᱹᱯ ᱦᱤᱛᱟᱹᱞ</string>
+    <string name="dashboard_title_backup_local">ᱞᱚᱠᱟᱞ ᱥᱟᱫᱷᱚᱵ ᱵᱮᱠᱟᱹᱯ ᱦᱤᱛᱟᱹᱞ</string>
+    <string name="dashboard_backup_guide_message">ᱚᱠᱟ ᱵᱮᱠᱟᱫᱯ ᱵᱤᱵᱨᱚᱬ ᱦᱚᱸ ᱵᱟᱹᱱᱩᱜᱼᱟ</string>
+    <string name="last_diary_backup_time">ᱢᱟᱲᱟᱝ ᱰᱟᱭᱨᱤ ᱵᱮᱠᱟᱹᱯ ᱚᱠᱛᱚᱺ</string>
+    <string name="last_photo_backup_time">ᱞᱟᱴᱷᱟ ᱤᱛᱟᱹᱨ ᱢᱟᱲᱟᱝ ᱵᱮᱠᱟᱹᱯ ᱚᱠᱛᱚᱺ</string>
+    <string name="export_full_backup_title">[BETA] ᱯᱩᱨᱟᱹ ᱰᱟᱴᱟ ᱵᱮᱠᱟᱹᱯ</string>
+    <string name="export_full_backup_description">ᱰᱟᱴᱟᱵᱮᱥ, ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ, ᱰᱟᱠᱼᱠᱟᱰ, ᱪᱤᱠᱤ, ᱞᱤᱠᱷᱟ ᱰᱟᱭᱨᱤ ᱨᱮᱭᱟᱜ ᱟᱨᱦᱚᱸ ᱡᱤᱱᱤᱥ ᱠᱚ ᱨᱮᱭᱟᱜ ᱡᱷᱚᱛᱚ ᱰᱟᱴᱟ ᱠᱚ ᱢᱤᱫᱴᱟᱹᱝ ᱨᱮᱫ ᱨᱮ ᱠᱚᱢᱯᱨᱮᱥ ᱟᱨ ᱵᱮᱠᱟᱹᱯ ᱢᱮ ᱾\nᱱᱚᱶᱟ ᱯᱷᱤᱪᱚᱨ ᱫᱚ ᱵᱮᱴᱟ ᱯᱷᱤᱪᱚᱨ ᱠᱟᱱᱟ ᱟᱨ ᱛᱤᱱᱟᱝ ᱜᱟᱱ ᱥᱟᱫᱷᱚᱱ ᱨᱮ ᱫᱚ ᱵᱟᱭ ᱠᱟᱹᱢᱤᱟᱭ ᱾</string>
+    <string name="diary_symbol_search_message">ᱟᱢ ᱯᱷᱤᱞᱴᱚᱨ ᱥᱮᱱᱟᱢ ᱠᱟᱱ ᱰᱟᱭᱨᱤ ᱪᱤᱱᱦᱟᱹ ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱾</string>
+    <string name="import_full_backup_title">[BETA] ᱡᱷᱚᱛᱚ ᱰᱟᱴᱟ ᱯᱩᱨᱟᱹ ᱟᱹᱜᱩ ᱨᱩᱟᱹᱲ ᱢᱮ</string>
+    <string name="import_full_backup_description">ᱰᱟᱴᱟᱵᱮᱥ, ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ, ᱰᱟᱠᱼᱠᱟᱰ, ᱪᱤᱠᱤ, ᱞᱤᱠᱷᱟ ᱰᱟᱭᱨᱤ ᱨᱮᱭᱟᱜ ᱟᱨᱦᱚᱸ ᱡᱤᱱᱤᱥ ᱠᱚ ᱨᱮᱭᱟᱜ ᱡᱷᱚᱛᱚ ᱰᱟᱴᱟ ᱠᱚ ᱢᱤᱫᱴᱟᱹᱝ ᱨᱮᱫ ᱨᱮ ᱰᱤᱠᱚᱢᱯᱨᱮᱥ ᱟᱨ ᱨᱤᱠᱟᱹᱣᱟᱹᱨ ᱢᱮ ᱾\nᱱᱚᱶᱟ ᱯᱷᱤᱪᱚᱨ ᱫᱚ ᱵᱮᱴᱟ ᱯᱷᱤᱪᱚᱨ ᱠᱟᱱᱟ ᱟᱨ ᱛᱤᱱᱟᱝ ᱜᱟᱱ ᱥᱟᱫᱷᱚᱱ ᱨᱮ ᱫᱚ ᱵᱟᱭ ᱠᱟᱹᱢᱤᱟᱭ ᱾</string>
+    <string name="calendar_sort_ascending">ᱮᱥᱮᱸᱰᱤᱝ</string>
+    <string name="calendar_sort_descending">ᱰᱤᱥᱮᱸᱰᱤᱝ</string>
+    <string name="calendar_sort_title">ᱠᱮᱞᱮᱸᱰᱟᱹᱨ ᱥᱚᱴ ᱚᱯᱥᱚᱱ</string>
+    <string name="calendar_sort_summary">ᱠᱮᱞᱮᱱᱰᱚᱨ ᱥᱠᱨᱤᱱ ᱨᱮ ᱰᱟᱭᱨᱤ ᱞᱤᱥᱴᱭ ᱠᱚᱣᱟᱜ ᱚᱰᱚᱨ ᱥᱮᱴ ᱢᱮ ᱾</string>
+    <string name="preferences_category_font">ᱮᱯᱞᱤᱠᱮᱥᱚᱱ ᱪᱤᱠᱤ ᱥᱟᱡᱟᱣ</string>
+    <string name="hold_position_title">ᱥᱠᱨᱤᱞ ᱡᱟᱭᱜᱟ ᱥᱟᱡᱟᱣ</string>
+    <string name="hold_position_summary">ᱥᱟᱯᱲᱟᱣ ᱮᱦᱚᱵ ᱞᱮᱠᱷᱟᱱ, ᱵᱨᱟᱩᱡᱽ ᱥᱠᱤᱱ ᱨᱮ ᱥᱠᱨᱚᱞ ᱡᱟᱭᱜᱟ ᱢᱮᱱᱴᱮᱱ ᱛᱟᱦᱮᱸᱱᱟ ᱾ ᱡᱩᱫᱤ ᱥᱟᱡᱟᱣ ᱥᱮᱴ ᱵᱟᱝ ᱛᱟᱦᱮᱸᱱᱟ, ᱥᱠᱨᱚᱞᱤᱝ ᱫᱚ ᱚᱞ ᱨᱮᱭᱟᱜ ᱢᱩᱪᱟᱹᱫ ᱯᱟᱦᱴᱟ ᱛᱮ ᱩᱪᱟᱹᱲᱚᱜᱼᱟ ᱾ </string>
+    <string name="max_lines_title">ᱢᱮᱠᱥ ᱞᱟᱹᱭᱤᱱᱠᱚ</string>
+    <string name="max_lines_summary">ᱡᱤᱱᱤᱥ ᱥᱟᱹᱢᱮᱨᱭ ᱚᱯᱥᱚᱱ ᱮᱠᱴᱤᱣᱮᱴ ᱞᱮᱠᱷᱟᱱ ᱡᱟᱹᱥᱛᱤ ᱱᱚᱢᱵᱚᱨ ᱞᱟᱹᱭᱤᱱᱠᱚ ᱥᱮᱴ ᱢᱮ ᱾</string>
+    <string name="max_lines_value">%d ᱞᱟᱭᱤᱱ ᱠᱚ</string>
+    <string name="diary_encryption_title">ᱰᱟᱭᱨᱤ ᱮᱱᱠᱨᱤᱯᱥᱚᱱ</string>
+    <string name="diary_encryption_guide">ᱫᱚᱭᱟᱠᱟᱛᱮ ᱰᱟᱭᱨᱤ ᱮᱱᱠᱨᱤᱯᱥᱚᱱ ᱞᱟᱜᱤᱫ ᱯᱤᱱ ᱱᱚᱢᱵᱚᱨ ᱟᱫᱮᱨ ᱢᱮ ᱾\n ᱟᱫᱮᱨ ᱠᱟᱱ ᱯᱤᱱ ᱱᱚᱢᱵᱚᱨ ᱛᱮ ᱴᱟᱭᱴᱟᱹᱞ ᱟᱨ ᱵᱚᱰᱤ ᱠᱚ ᱵᱟᱪᱷᱟᱣ ᱟᱠᱟᱱ ᱨᱩᱠᱷᱤᱭᱟᱹᱭ ᱢᱮ ᱾\n ᱯᱤᱱ ᱱᱚᱢᱵᱚᱨ ᱨᱤᱠᱟᱹᱣᱟᱹ ᱵᱟᱝ ᱜᱟᱱᱚᱜᱼᱟ, ᱛᱚ ᱯᱤᱱ ᱥᱮᱴ ᱞᱟᱹᱜᱤᱫ ᱟᱞᱚᱢ ᱦᱤᱲᱤᱧᱼᱟ ᱾ </string>
+    <string name="diary_decryption_title">ᱰᱟᱭᱨᱤ ᱮᱱᱠᱨᱤᱯᱥᱚᱱ</string>
+    <string name="diary_decryption_guide">ᱰᱟᱭᱨᱤ ᱰᱤᱠᱳᱰᱤᱝ ᱞᱟᱹᱜᱤᱫ ᱵᱮᱵᱷᱟᱨᱚᱜ ᱠᱟᱱ ᱯᱱᱱ ᱠᱚ ᱟᱫᱮᱨ ᱢᱮ ᱾\nᱟᱫᱮᱨ ᱠᱟᱱᱟ ᱯᱤᱱ ᱱᱚᱢᱵᱚᱨ ᱵᱮᱵᱷᱟᱨ ᱠᱟᱛᱮ ᱰᱟᱭᱨᱤ ᱴᱟᱭᱴᱟᱹᱞ ᱟᱨ ᱵᱚᱰᱭ ᱨᱮᱭᱟᱜ ᱡᱤᱱᱤᱥ ᱠᱚ ᱰᱤᱠᱨᱤᱯᱼᱴ ᱢᱮ ᱾</string>
+    <string name="diary_pin_number_confirm_guide">ᱰᱟᱭᱨᱤ ᱮᱱᱠᱨᱤᱯᱥᱚᱱ ᱨᱮ ᱵᱮᱵᱷᱟᱨᱚᱜ ᱠᱟᱱ ᱯᱤᱱ ᱱᱚᱢᱵᱚᱨ ᱟᱨ ᱢᱤᱫ ᱡᱮᱠᱷᱟ ᱟᱫᱮᱨ ᱢᱮ ᱾</string>
+    <string name="diary_pin_number_confirm_error">ᱢᱟᱲᱟᱝ ᱟᱫᱮᱨ ᱟᱠᱟᱱ ᱯᱤᱱ ᱱᱚᱢᱵᱚᱨ ᱫᱚ ᱱᱤᱛᱚᱜ ᱠᱚᱢᱯᱷᱚᱨᱢ ᱯᱤᱱ ᱥᱟᱞᱟᱜ ᱵᱟᱭ ᱢᱮᱪᱚᱜ ᱠᱟᱱᱟ ᱾\nᱫᱚᱭᱟᱠᱟᱛᱮ ᱟᱨ ᱢᱤᱫ ᱡᱮᱠᱷᱟ ᱯᱤᱱ ᱱᱚᱢᱵᱚᱨ ᱟᱫᱮᱨ ᱢᱮ ᱾</string>
+    <string name="diary_pin_number_verification_error">ᱯᱤᱱ ᱱᱚᱢᱵᱚᱨ ᱫᱚ ᱵᱟᱭ ᱢᱮᱪᱚᱜ ᱠᱟᱱᱟ ᱾\n ᱰᱟᱭᱟᱠᱟᱛᱮ ᱮᱱᱠᱨᱤᱯᱴ ᱡᱷᱚᱜ ᱯᱤᱱ ᱵᱮᱵᱷᱟᱨ ᱟᱫᱮᱨ ᱱᱚᱵᱚᱨ ᱟᱫᱮᱨ ᱢᱮ ᱾</string>
+    <string name="diary_decryption_guide_before_editing">ᱰᱟᱭᱟᱠᱟᱛᱮ ᱮᱱᱠᱨᱤᱯᱴ ᱡᱷᱚᱜ ᱯᱤᱱ ᱵᱮᱵᱷᱟᱨ ᱟᱫᱮᱨ ᱱᱚᱵᱚᱨ ᱟᱫᱮᱨ ᱢᱮ ᱾\n ᱚᱠᱟ ᱡᱷᱚᱜ ᱰᱟᱭᱨᱤ ᱥᱟᱯᱲᱟᱣᱮᱱᱟ, ᱚᱱᱟ ᱫᱚ ᱨ ᱢᱤᱫ ᱡᱮᱠᱷᱟ ᱮᱱᱠᱨᱤᱯᱴᱤᱝ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫ ᱨᱮ ᱮᱱᱠᱨᱤᱯᱼᱴ ᱟᱠᱟᱱᱟ ᱾</string>
+    <string name="diary_decryption_mode_once">ᱧᱮᱞ ᱞᱟᱹᱜᱤᱫ ᱰᱤᱠᱨᱤᱯᱼᱴ ᱢᱮ</string>
+    <string name="diary_decryption_mode_permanent">ᱰᱤᱠᱨᱤᱯᱥᱚᱱ ᱠᱟᱛᱮ ᱯᱤᱱ ᱱᱚᱢᱵᱚᱨ ᱥᱟᱡᱟᱣ ᱚᱪᱚᱜ ᱢᱮ</string>
+    <string name="backup_internal_title">ᱵᱷᱤᱛᱨᱤ ᱫᱚᱦᱚ ᱡᱟᱭᱜᱟ ᱨᱮ ᱵᱮᱠᱟᱹᱯ ᱢᱮ</string>
+    <string name="backup_internal_description">ᱵᱮᱠᱟᱹᱯ ᱨᱮᱫ ᱫᱚ Easy Diary ᱵᱷᱤᱛᱨᱭ ᱫᱚᱦᱚ ᱡᱟᱭᱜᱟ ᱨᱮ ᱥᱟᱸᱪᱟᱣ ᱟᱠᱟᱱᱟ ᱾ ᱵᱮᱠᱟᱯ ᱨᱮᱫ ᱫᱚ Easy Diary ᱪᱷᱚᱲᱟ ᱚᱨ ᱚᱠᱟ ᱮᱯᱞᱤᱠᱮᱥᱚᱱ ᱛᱮ ᱦᱚᱸ ᱠᱷᱩᱞᱟᱹ ᱵᱟᱭ ᱜᱟᱱᱚᱜᱼᱟ ᱾</string>
+    <string name="backup_external_title">ᱵᱟᱦᱨᱮ ᱫᱚᱦᱚ ᱡᱟᱭᱜᱟ ᱨᱮ ᱵᱮᱠᱟᱹᱯ ᱢᱮ</string>
+    <string name="backup_external_description">ᱵᱟᱦᱨᱮ ᱯᱟᱹᱵᱞᱠ ᱫᱚᱦᱚ ᱡᱟᱭᱜᱟ ᱨᱮ ᱵᱮᱠᱟᱹᱯ ᱨᱮᱫ ᱫᱚ ᱫᱚᱦᱚ ᱟᱠᱟᱱᱟ ᱾ ᱵᱮᱠᱟᱫᱯ ᱨᱮᱫ ᱫᱚ ᱨᱮᱫ ᱮᱠᱥᱯᱞᱚᱨᱟᱹᱨ ᱛᱮ ᱟᱫᱮᱨᱚᱜᱼᱟ ᱾</string>
+    <string name="recovery_internal_title">ᱵᱷᱤᱛᱨᱭ ᱫᱚᱦᱚ ᱡᱟᱭᱜᱟ ᱠᱷᱚᱱ ᱨᱩᱟᱹᱲ ᱟᱹᱜᱩᱭ ᱢᱮ</string>
+    <string name="recovery_internal_description">ᱰᱟᱭᱨᱤ ᱡᱤᱱᱤᱥ ᱠᱚ ᱫᱚ Easy Diary ᱵᱷᱤᱛᱨᱭ ᱫᱚᱦᱚ ᱡᱟᱭᱜᱟ ᱨᱮ ᱫᱚᱦᱚ ᱠᱟᱱᱟ ᱰᱟᱴᱟᱵᱮᱥ ᱵᱮᱠᱟᱹᱯ ᱨᱮᱫ ᱠᱷᱚᱱ ᱨᱤᱥᱴᱚᱨᱚᱜᱼᱟ ᱾</string>
+    <string name="recovery_external_title">ᱵᱟᱦᱨᱮ ᱫᱚᱦᱚ ᱡᱟᱭᱜᱟ ᱠᱷᱚᱱ ᱨᱤᱥᱴᱚᱨ ᱢᱮ</string>
+    <string name="recovery_external_description">ᱵᱟᱦᱨᱮ ᱯᱟᱹᱵᱞᱤᱠ ᱫᱚᱦᱚ ᱡᱟᱭᱜᱟ ᱨᱮ ᱫᱚᱦᱚ ᱠᱟᱱ ᱰᱟᱴᱟᱵᱮᱥ ᱵᱮᱠᱟᱹᱯ ᱨᱮᱫ ᱠᱷᱚᱱ ᱰᱟᱭᱨᱤ ᱨᱮᱭᱟᱜ ᱡᱤᱱᱤᱥ ᱠᱚ ᱨᱩᱟᱹᱲ ᱟᱹᱜᱩᱜᱼᱟ ᱾</string>
+    <string name="delete_selected_items_confirm">ᱟᱢ ᱡᱷᱚᱛᱚ ᱞᱮᱠᱷᱟ ᱛᱮ %d ᱵᱟᱪᱷᱟᱣᱟᱠᱟᱱ ᱡᱤᱱᱤᱥᱠᱚ ᱢᱮᱴᱟᱣ ᱥᱮᱱᱟᱢ ᱠᱟᱱᱟ ᱥᱮ?</string>
+    <string name="duplicate_selected_items_confirm">ᱟᱢ ᱡᱷᱚᱛᱚ ᱞᱮᱠᱷᱟ ᱛᱮ %d ᱵᱟᱪᱷᱟᱣᱟᱠᱟᱱ ᱡᱤᱱᱤᱥᱠᱚ ᱰᱩᱯᱞᱤᱠᱮᱴ ᱥᱮᱱᱟᱢ ᱠᱟᱱᱟ ᱥᱮ?</string>
+    <string name="no_items_warning">ᱱᱚᱰᱮ ᱫᱚ ᱟᱨ ᱚᱠᱟ ᱡᱤᱱᱤᱥ ᱦᱚᱸ ᱵᱟᱝ ᱵᱟᱪᱷᱟᱣ ᱠᱟᱱᱟ ᱾</string>
+    <string name="preferences_category_schedule">[Beta] ᱥᱮᱰᱭᱩᱤᱝ ᱥᱟᱡᱟᱣ</string>
+    <string name="schedule_time">ᱫᱤᱱ ᱟᱨ ᱚᱠᱛᱚ</string>
+    <string name="schedule_type">ᱥᱮᱰᱭᱩᱞ ᱯᱨᱚᱠᱟᱨ</string>
+    <string name="schedule_description">ᱥᱮᱰᱭᱩᱞ ᱵᱤᱵᱨᱚᱬ</string>
+    <string name="schedule_description_hint">ᱮᱞᱟᱢ ᱵᱤᱵᱨᱚᱬ</string>
+    <string name="schedule_diary_writing_description">ᱰᱟᱭᱨᱤ ᱚᱞ\nᱰᱟᱭᱨᱤ ᱚᱞ ᱥᱮᱰᱭᱩᱞ ᱨᱮᱡᱤᱥᱴᱚᱨ ᱢᱮ ᱾\nᱥᱮᱰᱭᱩᱞ ᱨᱮᱡᱤᱥᱴᱚᱨ ᱞᱮᱠᱷᱟᱱ, ᱥᱮᱴ ᱟᱠᱟᱱ ᱫᱤᱱ ᱟᱨ ᱚᱠᱛᱚ ᱦᱤᱥᱟᱹᱵ ᱛᱮ ᱱᱚᱴᱤᱯᱷᱤᱠᱮᱥᱚᱱ ᱠᱷᱚᱵᱚᱨ ᱪᱟᱞᱟᱜᱼᱟ ᱾  </string>
+    <string name="schedule_backup_local_description">ᱰᱟᱭᱨᱤ ᱵᱮᱠᱟᱹᱯ(Device storage)\n\nᱥᱮᱰᱭᱩᱞ ᱨᱮᱡᱤᱥᱴᱚᱨ ᱞᱮᱠᱷᱟᱱ ᱰᱟᱴᱟᱵᱮᱥ ᱨᱮᱫ ᱠᱚ ᱵᱮᱠᱟᱹᱯᱟᱭ ᱠᱷᱟᱹᱞᱤ ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹ ᱪᱷᱟᱲᱤ ᱠᱟᱛᱮ ᱟᱨ ᱚᱱᱟ ᱥᱮᱴ ᱠᱟᱱ ᱫᱤᱱ ᱟᱨ ᱚᱠᱛᱚ ᱨᱮ ᱱᱚᱴᱤᱯᱷᱤᱠᱮᱥᱚᱱ ᱠᱷᱚᱵᱚᱨ ᱪᱟᱞᱟᱜᱼᱟ ᱾</string>
+    <string name="schedule_empty_message">ᱥᱮᱴ ᱥᱮᱰᱭᱩᱞ ᱵᱤᱵᱨᱚᱬ ᱵᱟᱹᱱᱩᱜᱼᱟ ᱾\nᱱᱟᱶᱟ ᱥᱮᱰᱭᱩᱞ ᱥᱮᱞᱮᱫ ᱞᱟᱹᱜᱤᱫ ᱪᱮᱛᱟᱱ ᱡᱚᱡᱚᱢ ᱛᱤ ᱯᱟᱦᱢᱟ ᱨᱮ ᱢᱮᱱᱟᱜ ᱵᱩᱛᱟᱹᱢ ᱨᱮ ᱚᱛᱟᱭ ᱢᱮ ᱾</string>
+    <string name="permission_confirmation_dialog_title">ᱚᱛᱷᱚᱨᱟᱭᱡᱮᱥᱚᱱ ᱱᱮᱦᱚᱨ</string>
+    <string name="permission_confirmation_dialog_message">Easy Diary ᱵᱮᱵᱷᱟᱨ ᱞᱟᱹᱜᱤᱫ ᱚᱛᱷᱚᱨᱟᱭᱡᱮᱥᱚᱱ ᱫᱚᱨᱠᱟᱨ ᱾</string>
+    <string name="google_drive_account_information_title">ᱡᱩᱲᱟᱹᱣ ᱟᱠᱟᱱᱟ Google ᱠᱷᱟᱛᱟ ᱵᱤᱵᱨᱚᱬ</string>
+    <string name="schedule_backup_gms_description">ᱰᱟᱭᱨᱤ ᱵᱮᱠᱟᱹᱯ(Google Drive)\nᱥᱮᱰᱭᱩᱞ ᱵᱮᱠᱟᱹᱯ ᱠᱚ ᱰᱟᱴᱟᱵᱮᱥ ᱨᱮᱫ ᱟᱨ ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ ᱠᱚ Google Drive ᱨᱮ ᱨᱮᱡᱤᱥᱴᱚᱨ ᱟᱭ ᱚᱠᱟ ᱫᱚ ᱥᱮᱴ ᱟᱠᱟᱱᱟ ᱫᱤᱱ ᱟᱨ ᱚᱠᱛᱚ ᱦᱤᱥᱟᱹᱵ ᱨᱮ ᱠᱟᱹᱢᱤᱟᱭ ᱟᱨ ᱛᱮᱞᱟ ᱫᱚ ᱱᱚᱴᱤᱯᱷᱤᱠᱮᱥᱚᱱ ᱠᱷᱚᱵᱚᱨ ᱛᱮ ᱮᱛᱞᱟᱭ ᱢᱮᱟᱭ ᱾</string>
+    <string name="google_drive_account_sign_in_title">Google Drive ᱠᱷᱟᱛᱟ ᱞᱤᱸᱠ ᱢᱮ</string>
+    <string name="google_drive_account_sign_in_description">easy diary ᱰᱟᱴᱟ ᱵᱮᱠᱟᱹᱯ ᱞᱟᱜᱤᱫ ᱟᱢᱟᱜ Google Drive ᱠᱷᱟᱛᱟ ᱡᱩᱲᱟᱹᱣ ᱛᱟᱢ ᱾</string>
+    <string name="schedule_gms_error_title">ᱥᱮᱰᱭᱩᱞ ᱠᱟᱹᱢᱤ ᱞᱟᱹᱜᱤᱫ ᱛᱟᱸᱜᱤ</string>
+    <string name="schedule_gms_error_message">ᱥᱟᱫᱷᱚᱱ ᱫᱚ ᱰᱚᱡᱽ ᱢᱳᱰ ᱮ ᱵᱚᱞᱚ ᱮᱱᱟᱭ  ᱟᱨ ᱱᱮᱴᱣᱟᱨᱠ ᱛᱮ ᱵᱟᱹᱠᱟᱹᱯ ᱠᱚ ᱰᱤᱜᱟᱹᱣᱮᱱᱟ ᱾ ᱟᱢ ᱡᱩᱫᱤ ᱱᱚᱴᱤᱯᱷᱤᱠᱮᱥᱚᱱ ᱡᱷᱚᱨᱠᱟ ᱨᱮ ᱚᱛᱟᱭᱟᱢ, ᱢᱮᱱᱠᱷᱟᱱ ᱵᱮᱠᱟᱹᱢ ᱠᱟᱹᱢᱤ ᱫᱚ ᱞᱟᱦᱟᱜᱼᱟ ᱾</string>
+    <string name="schedule_pending_guide_message">ᱛᱟᱸᱜᱤ ᱥᱮᱰᱭᱩᱞ ᱮᱛᱦᱚᱵᱚᱜᱼᱟ ᱾</string>
+    <string name="schedule_diary_writing_complete">ᱰᱟᱭᱨᱤ ᱥᱠᱨᱤᱱ ᱛᱮ ᱪᱟᱞᱟᱜ ᱞᱟᱹᱜᱤᱫ ᱱᱚᱴᱤᱯᱷᱤᱠᱮᱥᱚᱱ ᱡᱷᱚᱨᱠᱟ ᱚᱛᱟᱭ ᱢᱮ ᱾</string>
+    <string name="schedule_backup_local_complete">ᱞᱚᱠᱟᱞ ᱥᱟᱫᱷᱚᱱ ᱨᱮ ᱰᱟᱭᱨᱤ ᱵᱮᱠᱟᱹᱯ ᱪᱟᱵᱟᱭᱮᱱᱟ ᱾</string>
+    <string name="schedule_backup_gms_complete">ᱰᱟᱭᱨᱤ ᱵᱮᱠᱟᱹᱯ ᱨᱮᱫ ᱟᱨ ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ ᱠᱚ Google Drive ᱨᱮ ᱥᱟᱸᱪᱟᱣ ᱮᱱᱟ ᱾%s</string>
+    <string name="ok">ᱴᱷᱤᱠ</string>
+    <string name="cancel">ᱵᱟᱹᱰᱨᱟᱹ</string>
+    <string name="settings">ᱥᱟᱡᱟᱣ ᱠᱚ</string>
+    <string name="location_info_title">ᱡᱟᱭᱜᱟ ᱵᱤᱵᱨᱚᱬ ᱫᱮᱠᱷᱟᱣ</string>
+    <string name="location_info_description">GPS ᱵᱤᱵᱨᱬ ᱨᱮᱭᱟᱜ ᱵᱮᱵᱷᱟᱨ ᱠᱟᱛᱮ ᱡᱟᱭᱜᱟ ᱵᱤᱵᱨᱚᱬ ᱫᱚ ᱰᱟᱭᱨᱤ ᱨᱮ ᱫᱮᱠᱷᱟᱣᱜ ᱠᱟᱱᱟ ᱾</string>
+    <string name="location_info_error_message">ᱡᱟᱭᱜᱟ ᱵᱤᱵᱨᱚᱬ ᱫᱚ ᱵᱟᱝ ᱦᱮᱡ ᱟᱠᱟᱱᱟ ᱾</string>
+    <string name="category_tasks">ᱠᱟᱹᱢᱤ</string>
+    <string name="task_symbol_top_order_title">ᱪᱚᱛᱟᱱ ᱛᱮ ᱠᱟᱹᱢᱤ ᱪᱤᱱᱦᱟᱫ ᱥᱮᱴ ᱢᱮ</string>
+    <string name="task_symbol_top_order_description">ᱡᱩᱫᱤ ᱠᱟᱹᱢᱤ ᱪᱤᱱᱦᱟᱹ ᱫᱚ TODO ᱟᱨ ᱵᱟᱝDOING ᱠᱟᱱᱟ, ᱢᱮᱱᱠᱷᱟᱱ ᱚᱱᱟ ᱫᱚ ᱞᱤᱥᱴ ᱨᱮᱭᱟᱜ ᱪᱮᱛᱟᱱ ᱯᱟᱦᱴᱟ ᱨᱮ ᱛᱟᱦᱮᱸᱱᱟ ᱾</string>
+    <string name="dashboard_title_daily_symbol_tile">ᱥᱮᱨᱢᱟ ᱨᱮᱭᱟᱜ ᱢᱤᱫ ᱫᱤᱱ ᱦᱤᱥᱟᱹᱵ ᱛᱮ ᱪᱤᱱᱦᱟᱹ ᱵᱮᱵᱷᱟᱨ ᱠᱚ ᱯᱷᱤᱞᱴᱚᱨᱚᱜ ᱠᱟᱱᱟ</string>
+    <string name="symbol_filter_picker_remove_guide_message">ᱚᱛᱤ ᱠᱚᱢ ᱨᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱪᱤᱱᱦᱟᱹ ᱱᱤᱦᱟᱹᱛᱤ ᱵᱟᱪᱷᱟᱣ ᱫᱚᱨᱠᱟᱨ ᱾</string>
+    <string name="title_dialog_postcard_photo_option">ᱯᱷᱚᱴᱚ ᱜᱮᱫ ᱟᱨ ᱯᱷᱤᱞᱴᱚᱨ ᱥᱟᱡᱟᱣᱠᱚ</string>
+    <string name="msg_check_force_single_photo">ᱰᱟᱠᱼᱠᱟᱰ ᱨᱮᱭᱟᱜ ᱪᱤᱛᱟᱹᱨ ᱡᱟᱭᱜᱟ ᱨᱮ ᱠᱷᱟᱹᱞᱤ ᱢᱤᱫᱴᱟᱹᱝ ᱪᱤᱛᱟᱹᱨ ᱛᱮ ᱛᱮ ᱛᱟᱦᱮᱸ ᱪᱷᱚᱭ ᱢᱮ ᱾\nᱡᱩᱫᱤ ᱢᱤᱫᱴᱟᱹᱝ ᱠᱷᱚᱱ ᱡᱟᱹᱥᱛᱤ ᱯᱷᱚᱴᱚ ᱨᱮᱡᱤᱥᱴᱚᱨ ᱞᱮᱠᱷᱟᱱ, ᱟᱢ ᱠᱷᱚᱥᱨᱚᱫ ᱠᱟᱛᱮ ᱚᱞᱜᱟ ᱪᱤᱛᱟᱹᱨ ᱠᱚ ᱧᱮᱞ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ ᱾</string>
+</resources>
