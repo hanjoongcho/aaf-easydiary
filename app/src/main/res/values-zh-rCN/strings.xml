@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Easy Diary</string>
-    <string name="common_create_seconds">Creation Seconds</string>
+    <string name="common_create_seconds">创作时间</string>
     <string name="create_diary_title">写日记</string>
     <string name="write_date">日期</string>
     <string name="request_title_message">请输入一个标题</string>
@@ -34,14 +34,14 @@
     <string name="input_mode_c">键入模式</string>
     <string name="guide_message_2">输入或说出内容</string>
     <string name="recognizer_intent_not_found_message">语音识别模式没有下载或无法使用</string>
-    <string name="sample_diary_title_1">Be dangerous rather than careful.</string>
-    <string name="sample_diary_title_2">I repeat what I know when I speak.</string>
-    <string name="sample_diary_title_3">The more bad news we hear, the more we should be happy.</string>
-    <string name="sample_diary_title_4">Abundance calls comfort, constraint calls creativity.</string>
-    <string name="sample_diary_1">When you look back at your past life, you will surely know that you have been damaging your life because you are too careful not to be in danger.\nDanger of danger.\nDanger rather than being careful.\n- Grant money, In the law of</string>
-    <string name="sample_diary_2">When you talk, you are only repeating what you already know.\nBut if you listen, you may learn something new.\n-The Dalai Lama</string>
-    <string name="sample_diary_3">It is the bad news that you need to hear most as a leader. \nThe good news is good tomorrow, but the bad news will be worse tomorrow. \nThis is because even if the facts are heartbreaking, That\'s why it\'s safe to say. \n- Eric Schmidt, President of Google, \"How does Google work?\"</string>
-    <string name="sample_diary_4">Constraints are not a barrier to creativity, but creativity is used to overcome constraints. \nAll great works or creative solutions are those that have a lot of time constraints, physical constraints, and resource constraints. Creativity is born in a constrained environment. \n- Representative Kim Bong-Jin</string>
+    <string name="sample_diary_title_1">与其说小心，不如说危险。</string>
+    <string name="sample_diary_title_2">当我说话时，我重复我所知道的。</string>
+    <string name="sample_diary_title_3">我们听到的坏消息越多，我们就越应该高兴。</string>
+    <string name="sample_diary_title_4">富足需要安慰，约束需要创造力。</string>
+    <string name="sample_diary_1">当你回顾过去的生活时，你肯定会知道你一直在破坏你的生活，因为你太小心了，以至于没有处于危险之中。\n危险的危险。\n宁可冒险也不要小心。\n- 根据法律赠款</string>
+    <string name="sample_diary_2">当你说话的时候，你只是在重复你已经知道的事情。\n但是如果你听，你可能会学到一些新的东西。\n-达赖喇嘛</string>
+    <string name="sample_diary_3">作为一个领导者，这是你最需要听到的坏消息。\n好消息明天是好消息，但坏消息明天会更坏。\nThis is because even if the facts are heartbreaking, That\'s why it\'s safe to say. \n- Eric Schmidt, President of Google, \"How does Google work?\"</string>
+    <string name="sample_diary_4">约束不是创造力的障碍，但创造力是用来克服约束的。\n所有伟大的作品或创造性的解决方案是那些有很多的时间限制，物理限制和资源限制。创造力是在一个有限的环境中诞生的。\n- 代表 金凤珍</string>
     <string name="read_diary_showcase_button_1">下一个</string>
     <string name="read_diary_showcase_button_2">关闭</string>
     <string name="read_diary_showcase_title_1">写日记</string>
@@ -147,375 +147,375 @@
     <string name="menu_delete">删除</string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
-    <!--  Resources added since version 1.4.41 here.                                                      -->
+    <!--  自1.4.41版本以来添加的资源点击这里。                                                      -->
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
-    <string name="preferences_category_settings">Application Settings</string>
-    <string name="preferences_category_information">Application Information</string>
-    <string name="preferences_information_licenses">Open Source Licenses</string>
-    <string name="preferences_information_licenses_summary">Open source software notices</string>
-    <string name="preferences_category_aaf">AAF Easy Series</string>
-    <string name="invite_friends">Invite friends</string>
-    <string name="invite_friends_summary">Share the %s application with your friends.</string>
+    <string name="preferences_category_settings">应用程式设定</string>
+    <string name="preferences_category_information">申请资料</string>
+    <string name="preferences_information_licenses">开放源码许可证</string>
+    <string name="preferences_information_licenses_summary">开放源码软件注意事项</string>
+    <string name="preferences_category_aaf">AAF Easy 系列</string>
+    <string name="invite_friends">邀请朋友</string>
+    <string name="invite_friends_summary">与您的朋友分享应用程序。</string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
-    <!--  Release notes here.                                                      -->
+    <!--  发行说明在这里。                                                      -->
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <string name="release_103">
         v1.4.41 / 2018.05.28\n
-        Fixed a bug that abnormally terminated in Postcard browse mode when there is no working directory
+        修正了一个在没有工作目录时在 Postcard 浏览模式中异常终止的错误
     </string>
     <string name="release_105">
         v1.4.42 / 2018.06.27\n
-        User Experience (UX) Optimization
+        用户体验(UX)优化
     </string>
     <string name="release_110">
         v1.4.47 / 2018.08.29\n
-        Added post card deletion function
+        增加了明信片删除功能
     </string>
     <string name="release_114">
         v1.4.51 / 2018.09.29\n
-        AAF common module update\n
-        Change app packaging environment to Android 9 Pie
+        AAF 通用模块更新\n
+        将应用程序打包环境更改为 Android 9 Pie
     </string>
     <string name="release_116">
         v1.4.53 / 2018.10.13\n
-        Added preview photo size setting function\n
-        Added preview photo toggle function(fold or unfold)
+        增加了预览照片大小设置功能\n
+        增加了预览照片切换功能(折叠或展开)
     </string>
     <string name="release_118">
         v1.4.55 / 2018.11.01\n
-        Improving the time expression of diary writing\n
-        Boldface setting function added to diary title and timeline time information
+        提高日记写作的时间表达能力\n
+        黑体字设置功能添加到日记标题和时间轴时间信息
     </string>
     <string name="release_120">
         v1.4.57 / 2018.11.12\n
-        Added multi-picker setting function to attach multiple pictures at one time
+        增加了多选择器设置功能，可以一次附加多个图片
     </string>
     <string name="release_126">
         v1.4.63 / 2018.11.25\n
-        Added attached photos backup and recovery function using Google Drive
+        增加了附加的照片备份和恢复功能使用谷歌驱动器
     </string>
     <string name="release_128">
         v1.4.65 / 2018.12.19\n
-        Added lock function using fingerprint sensor
+        增加了锁功能使用指纹传感器
     </string>
     <string name="release_130">
         v1.4.67 / 2019.01.01\n
-        Improved the ability to view attached photos on the postcard screen
+        增强了在明信片屏幕上查看附加照片的能力
     </string>
     <string name="release_131">
         v1.4.68 / 2019.01.06\n
-        Solved security considerations for some items that are reported with low confidence in Sophos vaccine(Notification listener, Trigger installation)\n
-        Add Postcard font size adjustment function
+        解决了某些在 Sophos 疫苗(通知侦听器，触发器安装)中信任度低的报告项目的安全问题\n
+        添加明信片字体大小调整功能
     </string>
     <string name="release_132">
         v1.4.69 / 2019.01.16\n
-        User Experience (UX) Optimization\n
-        Fixed an error that screen transition is not normal in Android 9 Pie version\n
-        Add timeline diary creation button
+        用户体验(UX)优化\n
+        修正了 Android 9 Pie 版本中屏幕转换不正常的错误\n
+        添加时间轴日记创建按钮
     </string>
     <string name="release_133">
         v1.4.70 / 2019.01.25\n
-        Added option to view summary of diary content
+        增加了查看日记内容摘要的选项
     </string>
     <string name="release_134">
         v1.4.71 / 2019.01.26\n
-        Fixed an error that the application terminated abnormally when changing device fingerprint information
+        修正了应用程序在更改设备指纹信息时异常终止的错误
     </string>
     <string name="release_136">
         v1.4.73 / 2019.02.11\n
-        Improved the ability to correct input digits when PIN is set and unlocked
+        改进了在设置和解锁 PIN 时纠正输入数字的能力
     </string>
     <string name="release_137">
         v1.4.74 / 2019.03.06\n
-        Improved the ability to apply filters to postcard images\n
-        Added ability to export diary to Excel file
+        改进了对明信片图像应用过滤器的能力\n
+        增加了导出日记到 Excel 文件的能力
     </string>
     <string name="release_138">
         v1.4.75 / 2019.03.22\n
-        Add application-specific information pages, including FAQs and privacy policies\n
-        Improved pin and fingerprint unlock toggle
+        添加特定于应用程序的信息页面，包括FAQs和隐私策略\n
+        改进PIN和指纹解锁开关
     </string>
     <string name="release_139">
         v1.4.76 / 2019.04.24\n
-        Add 50 kinds of diary symbol icons
+        添加50种日记符号图标
     </string>
     <string name="release_140">
         v1.4.77 / 2019.05.11\n
-        Add diary symbols and apply categories
+        添加日记符号和应用类别添加日记符号和应用类别
     </string>
     <string name="release_141">
         v1.4.78 / 2019.05.13\n
-        Fixed an error that ended abnormally if some function of the setting screen does not have access to device storage
+        修正了一个错误，如果设置屏幕的某些功能无法访问设备存储，错误将不正常终止
     </string>
     <string name="release_143">
         v1.4.80 / 2019.06.07\n
-        Changed Google Drive Android API to Google Drive REST API (Google Drive Android API will be shut down on December 6, 2019)
+        将 Google Drive Android API 改为 Google Drive REST API (Google Drive Android API 将于2019年12月6日关闭)
     </string>
     <string name="release_147">
         v1.4.83 / 2019.06.09\n
-        Apply Android App Bundle to reduce and optimize installation file size
+        应用 Android App Bundle 来减少和优化安装文件大小
     </string>
     <string name="release_149">
         v1.4.84 / 2019.06.15\n
-        Improved diary statistics
+        改进的日记统计
     </string>
     <string name="release_150">
         v1.4.85 / 2019.06.18\n
-        Google Drive(REST API) user rights acquisition error correction
+        Google Drive (REST API)用户权限获取错误纠正
     </string>
     <string name="release_151">
         v1.4.86 / 2019.06.19\n
-        Google Drive(REST API) Recovering photos with diary Fixing errors
+        谷歌驱动器(REST API)恢复照片与日记修复错误
     </string>
     <string name="release_152">
         v1.4.87 / 2019.06.20\n
-        Fixed authentication token error for users authenticated to use Google Drive in v1.4.80 earlier
+        修正了1.4.80版本前认证用户使用 Google Drive 时的认证令牌错误
     </string>
     <string name="release_154">
         v1.4.88 / 2019.07.16\n
-        Migrated Android support library to AndroidX version\n
-        Add diary symbol icon
+        将 Android 支持库迁移到 AndroidX 版本\n
+        添加日记符号图标
     </string>
     <string name="release_157">
         v1.4.91 / 2019.08.12\n
-        Added backup and recovery function using device storage\n
-        Fixed an issue that caused some text to be truncated on calendars on some devices
+        增加了备份和恢复功能使用设备存储\n
+        修正了在某些设备的日历上导致某些文本被截断的问题
     </string>
     <string name="release_159">
         v1.4.93 / 2019.08.29\n
-        User Experience (UX) Optimization\n
-        Bug fixes that crash abnormally when entering the configuration screen on older OS
+        用户体验(UX)优化\n
+        修复了在旧操作系统上进入配置界面时不正常崩溃的问题
     </string>
     <string name="release_160">
         v1.4.94 / 2019.09.03\n
-        Added calendar weekday start setting\n
-        Fixed an issue that prevented the calendar from showing in tablet landscape
+        新增日历周日开始设置\n
+        修正了日历无法在平板电脑上显示的问题
     </string>
     <string name="release_163">
         v1.4.97 / 2019.09.17\n
-        Improved timeline search filter\n
-        Diary copy function added
+        改进的时间线搜索过滤器\n
+        增加日记复制功能
     </string>
     <string name="release_165">
         v1.4.99 / 2019.09.26\n
-        Diary text counting function added
+        增加了日记文本计数功能
     </string>
     <string name="release_167">
         v1.4.101 / 2019.10.03\n
-        Respond to Android 10 storage access issues (targetSdkVersion temporary downgrade to avoid scoped storage policy)
+        应对 android10存储访问问题(targetSdkVersion 临时降级以避免限定存储策略范围)
     </string>
     <string name="release_169">
         v1.4.103 / 2019.10.09\n
-        Change storage location and migrate to respond to Android 10 Scoped Storage policies
+        更改存储位置并迁移以响应 Android 10 Scoped Storage 策略
     </string>
     <string name="release_170">
         v1.4.104 / 2019.10.19\n
-        Added calendar font scale setting\n
-        Apply sliding page to setting screen
+        增加日历字体比例设置\n
+        将滑动页应用于设置屏幕
     </string>
     <string name="release_171">
         v1.4.105 / 2019.10.20\n
-        Fixed an error that occurred when using the Excel file device saving function\n
-        Fixed error when deleting diary from timeline
+        修正了使用 Excel 文件设备保存函数时出现的错误\n
+        修正了从时间线删除日记时的错误
     </string>
     <string name="release_172">
         v1.4.106 / 2019.10.25\n
-        Fixed the error that the changed contents are not immediately visible after editing the diary\n
-        Remediation for Vulnerable Libraries with known Security Issues
+        修正了修改后的内容在编辑日记后不能立即显示的错误\n
+        已知安全问题的易受攻击图书馆的修复
     </string>
     <string name="release_173">
         v1.4.107 / 2019.10.31\n
-        User Experience (UX) Optimization
+        用户体验(UX)优化
     </string>
     <string name="release_174">
         v1.4.108 / 2019.11.18\n
-        Fixed an error that occurred when setting the calendar font scale on a device set to French
+        修正了将设备上的日历字体比例设置为法语时出现的错误
     </string>
     <string name="release_176">
         v1.4.110 / 2019.12.13\n
-        Added Diary Dashboard feature\n
-        Added the ability to delete the diary backup file stored in the device
+        增加了日记仪表盘功能\n
+        增加了删除日记备份文件储存在设备的能力
     </string>
     <string name="release_178">
         v1.4.112 / 2019.12.31\n
-        Add photo attachment function through camera app integration\n
-        Diary Dashboard Improvements
+        添加照片附件功能，通过相机应用程序集成\n
+        日记仪表盘的改进
     </string>
     <string name="release_179">
         v1.4.113 / 2020.01.04\n
-        Added date movement function using date picker on calendar screen
+        增加日期移动功能使用日期选择器在日历屏幕上
     </string>
     <string name="release_180">
         v1.4.114 / 2020.01.15\n
-        Added diary symbol icon\n
-        Added French support
+        新增日记符号图标\n
+        增加了法语支持
     </string>
     <string name="release_182">
         v1.4.116 / 2020.01.21\n
-        License policy changed from 「Apache License 2.0」 to 「GNU General Public License v3.0」
+        许可证政策由“ Apache License 2.0”改为“ GNU通用公共许可协议3.0”
     </string>
     <string name="release_184">
         v1.4.118 / 2020.02.11\n
-        [BETA] Added full data backup feature
+        [BETA] 增加了完整的数据备份功能
     </string>
     <string name="release_185">
         v1.4.119 / 2020.02.15\n
-        Added diary symbol icon
+        增加了日记符号图标
     </string>
     <string name="release_186">
         v1.4.120 / 2020.02.19\n
-        Added diary symbol icon\n
-        Added search function using diary symbol
+        增加了日记符号图标\n
+        增加搜索功能使用日记符号
     </string>
     <string name="release_187">
         v1.4.121 / 2020.03.02\n
-        Improved the speed of the calendar screen(1st improvement)
+        改进了日历屏幕的速度(第一个改进)
     </string>
     <string name="release_188">
         v1.4.122 / 2020.03.09\n
-        [BETA] Added full data recovery feature\n
-        Some symbols appear unusually large in dashboard statistics\n
-        Added sort option of the diary list in the calendar screen
+        [BETA] 增加了完整的数据恢复功能\n
+        有些符号在指示板统计数据中显示得异常大\n
+        在日历屏幕上增加了日记列表的排序选项
     </string>
     <string name="release_190">
         v1.4.124 / 2020.03.15\n
-        Separate font-related setting option from basic setting screen
+        与基本设置屏幕分离的字体相关设置选项
     </string>
     <string name="release_191">
         v1.4.125 / 2020.03.23\n
-        Added cursor position setting option when entering diary edit screen\n
-        Added the function to set the maximum number of lines in the content summary view option\n
-        Fixed an issue where the day of the week was cut off on the calendar screen
+        添加了光标位置设置选项时，进入日记编辑屏幕\n
+        添加了在内容摘要视图选项中设置最大行数的函数\n
+        修正了在日历屏幕上的一周的一天被切断的一个问题
     </string>
     <string name="release_192">
         v1.4.126 / 2020.04.05\n
-        Added diary encryption feature using pin number\n
-        Temporarily apply the requestLegacyExternalStorage option to respond to multi-picker scoped storage issues in Android 10
+        增加日记加密功能使用密码\n
+        临时应用 requestLegacyExternalStorage 选项来响应 Android 10中的多选择器作用域存储问题
     </string>
     <string name="release_193">
         v1.4.127 / 2020.04.12\n
-        Removed requestLegacyExternalStorage option\n
-        Adding database file backup and recovery feature using SAF (Storage Access Framework)
+        删除 requestLegacyExternalStorage 选项\n
+        使用 SAF (存储访问框架)添加数据库文件备份和恢复特性
     </string>
     <string name="release_195">
         v1.4.129 / 2020.04.21\n
-        Added feature to attach animated GIF files\n
-        Added diary multiple copy and delete feature
+        增加了附加动画 GIF 文件的功能\n
+        增加了日记多拷贝和删除功能
     </string>
     <string name="release_196">
         v1.4.130 / 2020.05.20\n
-        Added diary schedule setting feature
+        增加了日程安排功能
     </string>
     <string name="release_197">
         v1.4.131 / 2020.05.26\n
-        Fixed an error that caused abnormal termination of some screens in Android 4.4 version
+        修正了一个在 Android 4.4版本中导致某些屏幕异常终止的错误
     </string>
     <string name="release_198">
         v1.4.132 / 2020.05.31\n
-        Fixed an issue where buttons included inside the card view could not be identified when the theme color and the card view background color were set to the same color
+        修正了当主题颜色和卡片视图背景颜色设置为相同颜色时，卡片视图中的按钮无法识别的问题
     </string>
     <string name="release_199">
         v1.4.133 / 2020.06.02\n
-        Fixed an issue where the lock screen icon was not identified when the screen background color was set to white
+        修正了当屏幕背景颜色设置为白色时锁屏图标无法识别的问题
     </string>
     <string name="release_200">
         v1.4.134 / 2020.06.14\n
-        User Experience (UX) Optimization
+        用户体验(UX)优化
     </string>
     <string name="release_201">
         v1.4.135 / 2020.06.18\n
-        Added RTL language support
+        增加了 RTL 语言支持
     </string>
     <string name="release_202">
         v1.4.136 / 2020.06.29\n
-        Added diary list widget feature
+        添加了日志列表小部件功能
     </string>
     <string name="release_203">
         v1.4.137 / 2020.07.05\n
-        Applied Google Play security policy
+        应用 Google Play 安全策略
     </string>
     <string name="release_205">
         v1.4.139 / 2020.07.11\n
-        Added feature to display the information of the connected Google account\n
-        Added Google Drive backup feature using scheduler
+        增加了显示已连接 Google 帐户信息的功能\n
+        使用调度器增加了 Google Drive 备份功能
     </string>
     <string name="release_206">
         v1.4.140 / 2020.07.20\n
-        Fixed an error that the scheduler did not work in the application termination state
+        修正了计划程序在应用程序终止状态下无法工作的错误
     </string>
     <string name="release_207">
         v1.4.141 / 2020.08.03\n
-        User Experience (UX) Optimization\n
-        French translation updates
+        用户体验(UX)优化\n
+        法语翻译更新
     </string>
     <string name="release_209">
         v1.4.143 / 2020.08.26\n
-        Fixed an issue where some devices were abnormally terminated in the setting screen
+        修正了一些设备在设置屏幕上异常终止的问题
     </string>
     <string name="release_211">
         v1.4.145 / 2020.09.04\n
-        German translation updates
+        德语翻译更新
     </string>
     <string name="release_212">
         v1.4.146 / 2020.09.10\n
-        German translation updates\n
-        Added location information display option
+        德语翻译更新\n
+        添加了位置信息显示选项
     </string>
     <string name="release_214">
         v1.4.148 / 2020.09.15\n
-        Added task symbol sorting option
+        添加了任务符号排序选项
     </string>
     <string name="release_216">
         v1.4.150 / 2020.09.22\n
-        Fixed a bug where the widget was not displayed normally
+        修正了一个小部件不能正常显示的错误
     </string>
     <string name="release_217">
         v1.4.151 / 2020.10.05\n
-        Diary creation button added to the calendar screen
+        日记创建按钮添加到日历屏幕
     </string>
     <string name="release_218">
         v1.4.152 / 2020.10.19\n
-        Russian translation updates\n
-        User Experience (UX) Optimization
+        俄语翻译更新\n
+        用户体验(UX)优化
     </string>
     <string name="release_219">
         v1.4.153 / 2020.11.10\n
-        Hindi translation added\n
-        User Experience (UX) Optimization
+        印地语翻译增加了\n
+        用户体验(UX)优化
     </string>
     <string name="release_220">
         v1.4.154 / 2020.11.28\n
-        Add diary symbols\n
-        Added daily symbol usage filtering function to dashboard
+        添加日记符号\n
+        增加了仪表板每日符号使用过滤功能
     </string>
     <string name="release_221">
         v1.4.155 / 2020.12.14\n
-        Add diary symbols\n
-        When creating a post card, the function has been improved so that the attached photo can be cropped or a filter can be applied
+        添加日记符号\n
+        当创建明信片，功能已经得到改善，以便附加的照片可以裁剪或过滤器可以应用
     </string>
     <string name="release_222">
         v1.4.156 / 2021.01.11\n
-        Add diary symbols\n
-        Improved calendar screen UX
+        添加日记符号\n
+        改进的日历屏幕用户体验
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
-    <!--  Resources added since version 1.4.47 here.                                                      -->
+    <!--  自1.4.47版本以来添加的资源点击这里。                                                      -->
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
-    <string name="speech_to_text">Voice input</string>
-    <string name="write_diary">Write a diary</string>
-    <string name="date_picker">Select date</string>
-    <string name="time_picker">Select time</string>
-    <string name="seconds_picker">Select seconds</string>
-    <string name="save_diary">Save diary</string>
-    <string name="photo_registration">Photo registration</string>
-    <string name="zoom_in">Zoom In</string>
-    <string name="zoom_out">Zoom Out</string>
-    <string name="edit_diary">Edit diary</string>
-    <string name="text_to_speech">Diary to speech</string>
-    <string name="diary_postcard">Diary Postcard</string>
-    <string name="thumbnail_setting_title">Thumbnail size</string>
+    <string name="speech_to_text">语音输入</string>
+    <string name="write_diary">写日记</string>
+    <string name="date_picker">选择日期</string>
+    <string name="time_picker">选择时间</string>
+    <string name="seconds_picker">选择秒数</string>
+    <string name="save_diary">储存日记</string>
+    <string name="photo_registration">相片登记</string>
+    <string name="zoom_in">放大</string>
+    <string name="zoom_out">缩小</string>
+    <string name="edit_diary">编辑日记</string>
+    <string name="text_to_speech">演讲日记</string>
+    <string name="diary_postcard">日记明信片</string>
+    <string name="thumbnail_setting_title">缩略图大小</string>
     <string name="thumbnail_setting_summary">Sets the thumbnail size of the photo attached to the diary. The set size only applies to the diary creation and modification screen, not to the search screen.</string>
     <string name="collapse_attached_photo">Collapse attached photo</string>
     <string name="expand_attached_photo">Expand attached photo</string>
