@@ -50,19 +50,20 @@ class DiaryMainItemAdapter(
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val itemView: View = convertView ?: run {
             val binding = ItemDiaryMainBinding.inflate(activity.layoutInflater)
-            binding.root.apply {
-                tag = binding
-                context.updateTextColors(this, 0, 0)
-                context.updateAppViews(this)
-                context.initTextSize(this)
-                context.updateCardViewPolicy(this)
-                FontUtils.setFontsTypeface(context, context.assets, null, this)
-            }
+            binding.root.apply { tag = binding }
         }
 
         (itemView.tag as ItemDiaryMainBinding).run {
             val diaryDto = list[position]
             activity.run {
+                root.run {
+                    updateTextColors(this, 0, 0)
+                    updateAppViews(this)
+                    initTextSize(this)
+                    updateCardViewPolicy(this)
+                    FontUtils.setFontsTypeface(context, context.assets, null, this)
+                }
+
                 if (config.enableLocationInfo) {
                     diaryDto.location?.let {
                         changeDrawableIconColor(config.primaryColor, R.drawable.map_marker_2)
