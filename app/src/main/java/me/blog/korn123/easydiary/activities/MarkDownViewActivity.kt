@@ -6,8 +6,13 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import io.noties.markwon.Markwon
+import io.noties.markwon.ext.tables.TableAwareMovementMethod
+import io.noties.markwon.ext.tables.TablePlugin
+import io.noties.markwon.movement.MovementMethodPlugin
 import io.noties.markwon.syntax.Prism4jThemeDefault
 import io.noties.markwon.syntax.SyntaxHighlightPlugin
+import io.noties.prism4j.Prism4j
+import io.noties.prism4j.annotations.PrismBundle
 import kotlinx.android.synthetic.main.activity_markdown_view.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
@@ -22,8 +27,6 @@ import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.net.HttpURLConnection
 import java.net.URL
-import io.noties.prism4j.Prism4j
-import io.noties.prism4j.annotations.PrismBundle
 
 @PrismBundle(include = ["java", "kotlin"], grammarLocatorClassName = ".GrammarLocatorSourceCode")
 class MarkDownViewActivity : EasyDiaryActivity() {
@@ -70,6 +73,12 @@ class MarkDownViewActivity : EasyDiaryActivity() {
                 runOnUiThread { progressBar.visibility = View.GONE }
                 mMarkDown.setParsedMarkdown(markdownView, Markwon.builder(this)
                         .usePlugin(SyntaxHighlightPlugin.create(mPrism4j, Prism4jThemeDefault.create(0)))
+                        .usePlugin(TablePlugin.create { builder ->
+                            builder
+                                    .tableBorderWidth(0)
+                                    .tableCellPadding(0)
+                                    .build()
+                        })
                         .build().toMarkdown(readSavedFile())
                 )
             }
