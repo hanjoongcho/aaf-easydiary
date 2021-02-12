@@ -278,6 +278,9 @@ open class BaseDevActivity : EasyDiaryActivity() {
             add(CheatSheetAdapter.CheatSheet("Package kotlin.collections", "Explanation of kotlin collection functions", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/kotlin/kotlin.collections.md"))
             add(CheatSheetAdapter.CheatSheet("Cheat Sheet", "This page is a collection of useful link information such as open source projects and development related guides.", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/README.md"))
             add(CheatSheetAdapter.CheatSheet("Spring Annotation", "Describes annotations mainly used in Spring Framework", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/annotations/spring.md"))
+
+            add(CheatSheetAdapter.CheatSheet("데이터베이스 표준화", "국가상수도데이터베이스표준화지침(20210101 개정)", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/design/database/standardization.md"))
+
             add(CheatSheetAdapter.CheatSheet(
                     "Java 8 - Lambda Expression",
                     "",
