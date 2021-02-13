@@ -85,11 +85,11 @@ class MarkDownViewActivity : EasyDiaryActivity() {
                     val dip: Dip = Dip.create(this)
                     builder
                             .tableBorderWidth(dip.toPx(2))
-                            .tableBorderColor(Color.YELLOW)
+                            .tableBorderColor(Color.BLACK)
                             .tableCellPadding(dip.toPx(4))
-                            .tableHeaderRowBackgroundColor(ColorUtils.applyAlpha(Color.RED, 80))
-                            .tableEvenRowBackgroundColor(ColorUtils.applyAlpha(Color.GREEN, 80))
-                            .tableOddRowBackgroundColor(ColorUtils.applyAlpha(Color.BLUE, 80))
+                            .tableHeaderRowBackgroundColor(ColorUtils.applyAlpha(Color.BLUE, 80))
+//                            .tableEvenRowBackgroundColor(ColorUtils.applyAlpha(Color.GREEN, 80))
+//                            .tableOddRowBackgroundColor(ColorUtils.applyAlpha(Color.BLUE, 80))
                 })
                 .usePlugin(SyntaxHighlightPlugin.create(mPrism4j, Prism4jThemeDefault.create(0)))
                 .build().apply { setMarkdown(markdownView, readSavedFile()) }
