@@ -1,16 +1,18 @@
 package me.blog.korn123.easydiary.activities
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import io.noties.markwon.Markwon
-import io.noties.markwon.ext.tables.TableAwareMovementMethod
 import io.noties.markwon.ext.tables.TablePlugin
-import io.noties.markwon.movement.MovementMethodPlugin
+import io.noties.markwon.ext.tables.TableTheme
 import io.noties.markwon.syntax.Prism4jThemeDefault
 import io.noties.markwon.syntax.SyntaxHighlightPlugin
+import io.noties.markwon.utils.ColorUtils
+import io.noties.markwon.utils.Dip
 import io.noties.prism4j.Prism4j
 import io.noties.prism4j.annotations.PrismBundle
 import kotlinx.android.synthetic.main.activity_markdown_view.*
@@ -32,7 +34,6 @@ import java.net.URL
 class MarkDownViewActivity : EasyDiaryActivity() {
     private lateinit var savedFilePath: String
     private lateinit var markdownUrl: String
-    private lateinit var mMarkDown: Markwon
     private val mPrism4j = Prism4j(GrammarLocatorSourceCode())
     private var mForceAppendCodeBlock = false
 
@@ -49,7 +50,6 @@ class MarkDownViewActivity : EasyDiaryActivity() {
             setHomeAsUpIndicator(R.drawable.ic_cross)
         }
 
-        mMarkDown = Markwon.create(this)
         savedFilePath = "${EasyDiaryUtils.getApplicationDataDirectory(this) + MARKDOWN_DIRECTORY + pageTitle}.md"
         markdownUrl = intent.getStringExtra(OPEN_URL_INFO)!!
 //        markdownView.run {
@@ -71,16 +71,7 @@ class MarkDownViewActivity : EasyDiaryActivity() {
         when (File(savedFilePath).exists()) {
             true -> {
                 runOnUiThread { progressBar.visibility = View.GONE }
-                mMarkDown.setParsedMarkdown(markdownView, Markwon.builder(this)
-                        .usePlugin(SyntaxHighlightPlugin.create(mPrism4j, Prism4jThemeDefault.create(0)))
-                        .usePlugin(TablePlugin.create { builder ->
-                            builder
-                                    .tableBorderWidth(0)
-                                    .tableCellPadding(0)
-                                    .build()
-                        })
-                        .build().toMarkdown(readSavedFile())
-                )
+                initMarkdown()
             }
             false -> {
                 Thread(Runnable { openMarkdownFileAfterDownload(markdownUrl, savedFilePath) }).start()
@@ -88,6 +79,21 @@ class MarkDownViewActivity : EasyDiaryActivity() {
         }
     }
 
+    private fun initMarkdown() {
+        Markwon.builder(this)
+                .usePlugin(TablePlugin.create { builder: TableTheme.Builder ->
+                    val dip: Dip = Dip.create(this)
+                    builder
+                            .tableBorderWidth(dip.toPx(2))
+                            .tableBorderColor(Color.YELLOW)
+                            .tableCellPadding(dip.toPx(4))
+                            .tableHeaderRowBackgroundColor(ColorUtils.applyAlpha(Color.RED, 80))
+                            .tableEvenRowBackgroundColor(ColorUtils.applyAlpha(Color.GREEN, 80))
+                            .tableOddRowBackgroundColor(ColorUtils.applyAlpha(Color.BLUE, 80))
+                })
+                .usePlugin(SyntaxHighlightPlugin.create(mPrism4j, Prism4jThemeDefault.create(0)))
+                .build().apply { setMarkdown(markdownView, readSavedFile()) }
+    }
 
     private fun openMarkdownFileAfterDownload(fileURL: String, saveFilePath: String) {
         if (isConnectedOrConnecting()) {
@@ -110,10 +116,7 @@ class MarkDownViewActivity : EasyDiaryActivity() {
 
             runOnUiThread {
                 progressBar.visibility = View.GONE
-                mMarkDown.setParsedMarkdown(markdownView, Markwon.builder(this)
-                        .usePlugin(SyntaxHighlightPlugin.create(mPrism4j, Prism4jThemeDefault.create(0)))
-                        .build().toMarkdown(readSavedFile())
-                )
+                initMarkdown()
             }
         } else {
             runOnUiThread {
