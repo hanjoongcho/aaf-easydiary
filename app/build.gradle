@@ -27,7 +27,7 @@ android {
         minSdkVersion 19
         targetSdkVersion versions.compileSdk
         versionCode 228
-        versionName '1.4.162'
+        versionName '1.4.162-foss'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -132,12 +132,12 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'androidx.biometric:biometric:1.0.1'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
-    implementation 'androidx.activity:activity-ktx:1.1.0'
-    implementation 'com.google.android.material:material:1.2.1'
-    implementation ('androidx.work:work-runtime-ktx:2.4.0') { exclude group: 'com.google.guava', module: 'listenablefuture' }
+    implementation 'androidx.biometric:biometric:1.1.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0'
+    implementation 'androidx.activity:activity-ktx:1.2.0'
+    implementation 'com.google.android.material:material:1.3.0'
+    implementation ('androidx.work:work-runtime-ktx:2.5.0') { exclude group: 'com.google.guava', module: 'listenablefuture' }
 
     // google gms api
     gmsDevImplementation "com.google.android.gms:play-services-auth:19.0.0"
@@ -152,7 +152,7 @@ dependencies {
 
     // google
     implementation 'com.google.android:flexbox:1.0.0'
-    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.code.gson:gson:2.8.6'
     implementation group: 'com.google.guava', name: 'guava', version: '26.0-android'
 
     // apache commons
@@ -168,7 +168,7 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     implementation 'com.roomorama:caldroid:3.0.1'
     implementation 'com.github.chrisbanes:PhotoView:2.1.3'  
-    implementation 'com.github.QuadFlask:colorpicker:0.0.13'
+    implementation 'com.github.QuadFlask:colorpicker:0.0.15'
     implementation 'com.github.amlcurran.showcaseview:library:5.4.3'
     implementation 'id.zelory:compressor:2.1.0'
     implementation 'com.xw.repo:bubbleseekbar:3.17'
