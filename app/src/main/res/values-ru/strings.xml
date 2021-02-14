@@ -499,6 +499,14 @@
         Add diary symbols\n
         Improved calendar screen UX
     </string>
+    <string name="release_225">
+        v1.4.159 / 2021.01.30\n
+        Chinese translation added
+    </string>
+    <string name="release_227">
+        v1.4.161 / 2021.02.12\n
+        User Experience (UX) Optimization
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
