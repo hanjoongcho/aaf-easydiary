@@ -33,6 +33,15 @@
             transform: translate(-50%, -50%);
         } 
     </style>
+    <script type="text/javascript">
+        window.onload = function() {
+            var width = document.getElementsByClassName('photo-container')[0].clientWidth
+            console.log(width)
+            Array.from(document.getElementsByClassName('photo')).forEach((el) => {
+                el.style.width = (width/4 - 5) + 'px' 
+            });
+        }
+    </script>
 </head>
 <body>
 <div class="title">📘 A diary application optimized for user experience.</div>
