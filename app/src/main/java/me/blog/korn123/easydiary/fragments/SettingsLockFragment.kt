@@ -24,7 +24,7 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
      ***************************************************************************************************/
     private lateinit var mRootView: ViewGroup
     private val mActivity: Activity
-        get() = activity!!
+        get() = requireActivity()
 
 
     /***************************************************************************************************
