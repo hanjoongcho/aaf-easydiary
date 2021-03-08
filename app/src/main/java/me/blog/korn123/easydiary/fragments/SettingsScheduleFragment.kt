@@ -43,7 +43,7 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
     private lateinit var mAlarmAdapter: AlarmAdapter
     private var mAlarmList: ArrayList<Alarm> = arrayListOf()
     private val mActivity: Activity
-        get() = activity!!
+        get() = requireActivity()
 
 
     /***************************************************************************************************
