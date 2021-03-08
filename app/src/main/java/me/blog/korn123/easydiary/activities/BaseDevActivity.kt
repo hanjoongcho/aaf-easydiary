@@ -37,6 +37,7 @@ import me.blog.korn123.easydiary.services.BaseNotificationService
 import me.blog.korn123.easydiary.services.NotificationService
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 import org.apache.commons.io.FilenameUtils
+import org.apache.commons.io.IOUtils
 import java.io.File
 
 open class BaseDevActivity : EasyDiaryActivity() {
@@ -111,10 +112,9 @@ open class BaseDevActivity : EasyDiaryActivity() {
             REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS -> {
                 makeSnackBar(if (isLocationEnabled()) "GPS provider setting is activated." else "The request operation did not complete normally.")
             }
-            REQUEST_CODE_SAF_HTML_BOOK_DIRECTORY -> {
-                val uri: Uri? = intent!!.data
-                uri?.let {
-                    DocumentFile.fromTreeUri(this, it)?.createDirectory("aaa")
+            REQUEST_CODE_SAF_HTML_BOOK -> {
+                intent?.let {
+                    createHtmlBook(it.data)
                 }
             }
         }
@@ -381,123 +381,80 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
     }
 
+    private fun createHtmlBook(uri: Uri?) {
+        val diary = EasyDiaryDbHelper.readDiary(null)[0]
+        val template = "<!DOCTYPE html>\n" +
+                "<html>\n" +
+                "<head>\n" +
+                "<meta charset=\"UTF-8\">\n" +
+                "<title>Insert title here</title>\n" +
+                "    <style type=\"text/css\">\n" +
+                "        body { margin: 5rem; }\n" +
+                "        .title {\n" +
+                "            font-size: 1.5rem;\n" +
+                "        }\n" +
+                "        .datetime {\n" +
+                "            font-size: 1.5rem;\n" +
+                "            text-align: right;\n" +
+                "        }\n" +
+                "        .contents {\n" +
+                "            margin-top: 1rem;\n" +
+                "            font-size: 1rem;\n" +
+                "            white-space: pre-wrap;\n" +
+                "        }\n" +
+                "        .photo-container .photo {\n" +
+                "            width: 20rem;\n" +
+                "            height: 20rem;\n" +
+                "            position: relative;\n" +
+                "            background: #e6ecf3;\n" +
+                "            display: inline-block;\n" +
+                "        }\n" +
+                "        .photo img {\n" +
+                "            max-width: 100%;          \n" +
+                "            max-height: 100%;         \n" +
+                "            position: absolute;\n" +
+                "            top: 50%;\n" +
+                "            left: 50%;\n" +
+                "            transform: translate(-50%, -50%);\n" +
+                "        } \n" +
+                "    </style>\n" +
+                "    <script type=\"text/javascript\">\n" +
+                "        window.onload = function() {\n" +
+                "            var width = document.getElementsByClassName('photo-container')[0].clientWidth\n" +
+                "            console.log(width)\n" +
+                "            Array.from(document.getElementsByClassName('photo')).forEach((el) => {\n" +
+                "                el.style.width = (width/4 - 5) + 'px' \n" +
+                "            });\n" +
+                "        }\n" +
+                "    </script>\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "<div class=\"title\">\uD83D\uDCD8 A diary application optimized for user experience.</div>\n" +
+                "<div class=\"datetime\">2021년 03월 04일 12시 43분 03초</div>\n" +
+                "<pre class=\"contents\">\n" +
+                diary.contents +
+                "</pre>\n" +
+                "<div class=\"photo-container\">\n" +
+                "    <div class=\"photo\"><img src=\"20150905_123617_YJ_compress_50.jpg\" /></div>\n" +
+                "    <div class=\"photo\"><img src=\"20150905_131321_YJ_compress_50.jpg\" /></div>\n" +
+                "    <div class=\"photo\"><img src=\"20150905_133500_YJ_compress_50.jpg\" /></div>\n" +
+                "    <div class=\"photo\"><img src=\"20150905_135259_YJ_compress_50.jpg\" /></div>\n" +
+                "    <div class=\"photo\"><img src=\"20150909_081122_YJ_compress_50.jpg\" /></div>\n" +
+                "    <div class=\"photo\"><img src=\"20150909_120856_YJ_compress_50.jpg\" /></div>\n" +
+                "    <div class=\"photo\"><img src=\"20150909_121339_YJ_compress_50.jpg\" /></div>\n" +
+                "</div>\n" +
+                "</body>\n" +
+                "</html>"
+        uri?.let {
+            val os = contentResolver.openOutputStream(it)
+            IOUtils.write(template, os, "UTF-8")
+            os?.close()
+        }
+    }
+
     private fun setupHtmlBook() {
         mBinding.buttonCreateHtml.setOnClickListener {
-            val template = "<!DOCTYPE html>\n" +
-                    "<html>\n" +
-                    "<head>\n" +
-                    "<meta charset=\"UTF-8\">\n" +
-                    "<title>Insert title here</title>\n" +
-                    "    <style type=\"text/css\">\n" +
-                    "        body { margin: 5rem; }\n" +
-                    "        .title {\n" +
-                    "            font-size: 1.5rem;\n" +
-                    "        }\n" +
-                    "        .datetime {\n" +
-                    "            font-size: 1.5rem;\n" +
-                    "            text-align: right;\n" +
-                    "        }\n" +
-                    "        .contents {\n" +
-                    "            margin-top: 1rem;\n" +
-                    "            font-size: 1rem;\n" +
-                    "            white-space: pre-wrap;\n" +
-                    "        }\n" +
-                    "        .photo-container .photo {\n" +
-                    "            width: 20rem;\n" +
-                    "            height: 20rem;\n" +
-                    "            position: relative;\n" +
-                    "            background: #e6ecf3;\n" +
-                    "            display: inline-block;\n" +
-                    "        }\n" +
-                    "        .photo img {\n" +
-                    "            max-width: 100%;          \n" +
-                    "            max-height: 100%;         \n" +
-                    "            position: absolute;\n" +
-                    "            top: 50%;\n" +
-                    "            left: 50%;\n" +
-                    "            transform: translate(-50%, -50%);\n" +
-                    "        } \n" +
-                    "    </style>\n" +
-                    "    <script type=\"text/javascript\">\n" +
-                    "        window.onload = function() {\n" +
-                    "            var width = document.getElementsByClassName('photo-container')[0].clientWidth\n" +
-                    "            console.log(width)\n" +
-                    "            Array.from(document.getElementsByClassName('photo')).forEach((el) => {\n" +
-                    "                el.style.width = (width/4 - 5) + 'px' \n" +
-                    "            });\n" +
-                    "        }\n" +
-                    "    </script>\n" +
-                    "</head>\n" +
-                    "<body>\n" +
-                    "<div class=\"title\">\uD83D\uDCD8 A diary application optimized for user experience.</div>\n" +
-                    "<div class=\"datetime\">2021년 03월 04일 12시 43분 03초</div>\n" +
-                    "<pre class=\"contents\">\n" +
-                    "\uD83D\uDCE2 <b>All features are free without ads</b>\n" +
-                    "All the features of Easy Diary are free, without ads.\n" +
-                    "\n" +
-                    "\uD83D\uDCE2 <b>Applying improvement opinions using reviews</b>\n" +
-                    "Easy Diary checks users' opinions for improvement and applies them to application development.\n" +
-                    "\n" +
-                    "\uD83D\uDCE2 <b>Support features</b>\n" +
-                    "✍ Diary writing & editing\n" +
-                    "Contents can be created or edited using the keypad and voice recognition function.\n" +
-                    "\n" +
-                    "\uD83D\uDD0D Diary search\n" +
-                    "You can quickly search for saved content. Words matching the searched keywords are highlighted and can be recognized at a glance.\n" +
-                    "\n" +
-                    "\uD83D\uDCC5 Calendar\n" +
-                    "Saved content can be checked by day using the calendar.\n" +
-                    "\n" +
-                    "\uD83D\uDD52 Timeline\n" +
-                    "Saved content can be checked in the form of a timeline according to the created time.\n" +
-                    "\n" +
-                    "\uD83C\uDCCF Diary post card\n" +
-                    "You can create a diary post card using the saved content (including the attached photo) and share it with your friends.\n" +
-                    "Share your anniversary or holiday greetings by making them pretty as a post card.\n" +
-                    "\n" +
-                    "\uD83D\uDD12 Diary lock\n" +
-                    "The application can be locked or unlocked using a PIN (personal identification number) or fingerprint recognition function.\n" +
-                    "\n" +
-                    "\uD83C\uDFA8 Application theme setting\n" +
-                    "You can set the theme of 171 different colors and use the color picker to change the text and text background color to your liking.\n" +
-                    "\n" +
-                    "\uD83D\uDD24 Font setting\n" +
-                    "There are three basic fonts provided by Easy Diary, and fonts set in the device can also be used.\n" +
-                    "In addition, if you have TTF fonts you have, you can add them to the Easy Diary font directory and use them.\n" +
-                    "\n" +
-                    "\uD83D\uDCCA Chart view\n" +
-                    "Diary writing status by time can be viewed at a glance in a bar chart.\n" +
-                    "\n" +
-                    "\uD83D\uDCBE Backup and recovery\n" +
-                    "\n" +
-                    "\uD83D\uDCE2 <b>Welcome Developer</b>\n" +
-                    "Are you a developer?\n" +
-                    "If you click on the visit website link, there is a GitHub link where you can download or fork all the sources of Easy Diary.\n" +
-                    "If it helped a little, please take a star.\n" +
-                    "\n" +
-                    "\uD83D\uDCE2 <b>Request Permissions</b>\n" +
-                    "Request permissions are classified into basic permissions (Normal Permissions) and permissions acquired after user approval (Dangerous Permissions). The types of permissions used in Easy Diary are as follows.\n" +
-                    "\uD83D\uDCCC Normal Permissions\n" +
-                    "1. FOREGROUND_SERVICE\n" +
-                    "2. USE_FINGERPRINT\n" +
-                    "3. INTERNET\n" +
-                    "\n" +
-                    "\uD83D\uDCCC Dangerous Permissions\n" +
-                    "1. READ_EXTERNAL_STORAGE\n" +
-                    "2. WRITE_EXTERNAL_STORAGE\n" +
-                    "</pre>\n" +
-                    "<div class=\"photo-container\">\n" +
-                    "    <div class=\"photo\"><img src=\"20150905_123617_YJ_compress_50.jpg\" /></div>\n" +
-                    "    <div class=\"photo\"><img src=\"20150905_131321_YJ_compress_50.jpg\" /></div>\n" +
-                    "    <div class=\"photo\"><img src=\"20150905_133500_YJ_compress_50.jpg\" /></div>\n" +
-                    "    <div class=\"photo\"><img src=\"20150905_135259_YJ_compress_50.jpg\" /></div>\n" +
-                    "    <div class=\"photo\"><img src=\"20150909_081122_YJ_compress_50.jpg\" /></div>\n" +
-                    "    <div class=\"photo\"><img src=\"20150909_120856_YJ_compress_50.jpg\" /></div>\n" +
-                    "    <div class=\"photo\"><img src=\"20150909_121339_YJ_compress_50.jpg\" /></div>\n" +
-                    "</div>\n" +
-                    "</body>\n" +
-                    "</html>"
-            writeFileWithSAF("EasyDiary_HTMLBook", "*/*", REQUEST_CODE_SAF_HTML_BOOK_DIRECTORY)
+            writeFileWithSAF("EasyDiary_HTMLBook.html", MIME_TYPE_HTML, REQUEST_CODE_SAF_HTML_BOOK)
         }
     }
 
