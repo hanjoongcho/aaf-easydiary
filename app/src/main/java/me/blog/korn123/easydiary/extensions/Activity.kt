@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.extensions
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.annotation.TargetApi
 import android.app.Activity
 import android.app.AlarmManager
 import android.app.Dialog
@@ -16,6 +17,7 @@ import android.graphics.Point
 import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
+import android.os.Build
 import android.provider.Settings
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -307,6 +309,20 @@ fun Activity.addCategory(itemList: ArrayList<Array<String>>, categoryList: Array
 
 fun Activity.getLayoutLayoutInflater(): LayoutInflater{
     return getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+}
+
+@TargetApi(Build.VERSION_CODES.KITKAT)
+fun Activity.writeFileWithSAF(fileName: String, mimeType: String, requestCode: Int) {
+    val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+        // Filter to only show results that can be "opened", such as
+        // a file (as opposed to a list of contacts or timezones).
+        addCategory(Intent.CATEGORY_OPENABLE)
+
+        type = mimeType
+        // Create a file with the requested MIME type.
+        putExtra(Intent.EXTRA_TITLE, fileName)
+    }
+    startActivityForResult(intent, requestCode)
 }
 
 fun EasyDiaryActivity.acquireGPSPermissions(callback: () -> Unit) {
