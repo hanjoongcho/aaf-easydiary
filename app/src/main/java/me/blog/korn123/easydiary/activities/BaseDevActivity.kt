@@ -81,7 +81,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             title = "Easy-Diary Dev Mode"
             setDisplayHomeAsUpEnabled(true)
         }
-1
+
         setupActionLog()
         setupNextAlarm()
         setupNotification()
