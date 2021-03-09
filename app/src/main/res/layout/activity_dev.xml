@@ -48,15 +48,10 @@
                             <com.simplemobiletools.commons.views.MyTextView
                                 android:text="Diary Web-View"
                                 style="@style/SettingsTitle" />
-                            <androidx.core.widget.NestedScrollView
-                                android:fillViewport="true"
+                            <WebView
+                                android:id="@+id/web_diary"
                                 android:layout_width="match_parent"
-                                android:layout_height="150dp">
-                                <WebView
-                                    android:id="@+id/web_diary"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"/>
-                            </androidx.core.widget.NestedScrollView>
+                                android:layout_height="500dp"/>
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 

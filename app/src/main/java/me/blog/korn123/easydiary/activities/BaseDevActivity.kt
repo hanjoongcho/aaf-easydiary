@@ -12,6 +12,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Base64.encodeToString
 import android.view.View
 import android.widget.AdapterView
 import android.widget.RemoteViews
@@ -34,10 +35,12 @@ import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.services.BaseNotificationService
 import me.blog.korn123.easydiary.services.NotificationService
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
+import org.apache.commons.codec.binary.Base64
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.io.IOUtils
+import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.FileOutputStream
+import java.io.FileInputStream
 import java.util.*
 
 open class BaseDevActivity : EasyDiaryActivity() {
@@ -382,6 +385,12 @@ open class BaseDevActivity : EasyDiaryActivity() {
     }
 
     private fun createHtmlString(): String {
+
+
+        val fis = FileInputStream(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY + "546c33aa-39ae-4c68-b08b-c08640e805aa")
+        val bos = ByteArrayOutputStream()
+        IOUtils.copy(fis, bos)
+        val image64: String = Base64.encodeBase64String(bos.toByteArray())
         val diary = EasyDiaryDbHelper.readDiary(null)[0]
         val template = "<!DOCTYPE html>\n" +
                 "<html>\n" +
@@ -389,7 +398,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 "<meta charset=\"UTF-8\">\n" +
                 "<title>Insert title here</title>\n" +
                 "    <style type=\"text/css\">\n" +
-                "        body { margin: 5rem; }\n" +
+//                "        body { margin: 5rem; }\n" +
                 "        .title {\n" +
                 "            font-size: 1.5rem;\n" +
                 "        }\n" +
@@ -402,21 +411,21 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 "            font-size: 1rem;\n" +
                 "            white-space: pre-wrap;\n" +
                 "        }\n" +
-                "        .photo-container .photo {\n" +
-                "            width: 20rem;\n" +
-                "            height: 20rem;\n" +
-                "            position: relative;\n" +
-                "            background: #e6ecf3;\n" +
-                "            display: inline-block;\n" +
-                "        }\n" +
-                "        .photo img {\n" +
-                "            max-width: 100%;          \n" +
-                "            max-height: 100%;         \n" +
-                "            position: absolute;\n" +
-                "            top: 50%;\n" +
-                "            left: 50%;\n" +
-                "            transform: translate(-50%, -50%);\n" +
-                "        } \n" +
+//                "        .photo-container .photo {\n" +
+//                "            width: 20rem;\n" +
+//                "            height: 20rem;\n" +
+//                "            position: relative;\n" +
+//                "            background: #e6ecf3;\n" +
+//                "            display: inline-block;\n" +
+//                "        }\n" +
+//                "        .photo img {\n" +
+//                "            max-width: 100%;          \n" +
+//                "            max-height: 100%;         \n" +
+//                "            position: absolute;\n" +
+//                "            top: 50%;\n" +
+//                "            left: 50%;\n" +
+//                "            transform: translate(-50%, -50%);\n" +
+//                "        } \n" +
                 "    </style>\n" +
                 "    <script type=\"text/javascript\">\n" +
                 "        window.onload = function() {\n" +
@@ -435,13 +444,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 diary.contents +
                 "</pre>\n" +
                 "<div class=\"photo-container\">\n" +
-                "    <div class=\"photo\"><img src=\"546c33aa-39ae-4c68-b08b-c08640e805aa\" /></div>\n" +
-                "    <div class=\"photo\"><img src=\"20150905_131321_YJ_compress_50.jpg\" /></div>\n" +
-                "    <div class=\"photo\"><img src=\"20150905_133500_YJ_compress_50.jpg\" /></div>\n" +
-                "    <div class=\"photo\"><img src=\"20150905_135259_YJ_compress_50.jpg\" /></div>\n" +
-                "    <div class=\"photo\"><img src=\"20150909_081122_YJ_compress_50.jpg\" /></div>\n" +
-                "    <div class=\"photo\"><img src=\"20150909_120856_YJ_compress_50.jpg\" /></div>\n" +
-                "    <div class=\"photo\"><img src=\"20150909_121339_YJ_compress_50.jpg\" /></div>\n" +
+                "    <div class=\"photo\"><img src=\"data:image/png;base64, " + image64 + " \" /></div>\n" +
                 "</div>\n" +
                 "</body>\n" +
                 "</html>"
@@ -455,11 +458,13 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
     }
 
+    @SuppressLint("NewApi")
     private fun setupHtmlBook() {
         mBinding.webDiary.run {
             settings.javaScriptEnabled = true
-//            loadData(createHtmlString(), "text/html; charset=utf-8", "UTF-8");
-            loadUrl("https://developer.android.com/studio/debug/device-file-explorer?hl=ko")
+            isNestedScrollingEnabled = true
+            loadData(createHtmlString(), "text/html; charset=utf-8", "UTF-8");
+//            loadUrl("https://github.com/hanjoongcho/aaf-easydiary")
         }
 
         mBinding.buttonCreateHtml.setOnClickListener {
