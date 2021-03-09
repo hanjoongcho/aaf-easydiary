@@ -46,6 +46,26 @@
                         <LinearLayout
                             style="@style/LinearLayoutVertical">
                             <com.simplemobiletools.commons.views.MyTextView
+                                android:text="Diary Web-View"
+                                style="@style/SettingsTitle" />
+                            <androidx.core.widget.NestedScrollView
+                                android:fillViewport="true"
+                                android:layout_width="match_parent"
+                                android:layout_height="150dp">
+                                <WebView
+                                    android:id="@+id/web_diary"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"/>
+                            </androidx.core.widget.NestedScrollView>
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:orientation="vertical"
+                        style="@style/AppCard.Settings">
+                        <LinearLayout
+                            style="@style/LinearLayoutVertical">
+                            <com.simplemobiletools.commons.views.MyTextView
                                 android:text="Action Log"
                                 style="@style/SettingsTitle" />
                             <com.simplemobiletools.commons.views.MyTextView

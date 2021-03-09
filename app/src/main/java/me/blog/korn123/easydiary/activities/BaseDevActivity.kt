@@ -18,9 +18,7 @@ import android.widget.RemoteViews
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.app.NotificationCompat
-import androidx.core.net.toFile
 import androidx.databinding.DataBindingUtil
-import androidx.documentfile.provider.DocumentFile
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.isOreoPlus
@@ -39,6 +37,8 @@ import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.io.IOUtils
 import java.io.File
+import java.io.FileOutputStream
+import java.util.*
 
 open class BaseDevActivity : EasyDiaryActivity() {
 
@@ -114,7 +114,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
             REQUEST_CODE_SAF_HTML_BOOK -> {
                 intent?.let {
-                    createHtmlBook(it.data)
+                    exportHtmlBook(it.data)
                 }
             }
         }
@@ -381,7 +381,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
     }
 
-    private fun createHtmlBook(uri: Uri?) {
+    private fun createHtmlString(): String {
         val diary = EasyDiaryDbHelper.readDiary(null)[0]
         val template = "<!DOCTYPE html>\n" +
                 "<html>\n" +
@@ -435,7 +435,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 diary.contents +
                 "</pre>\n" +
                 "<div class=\"photo-container\">\n" +
-                "    <div class=\"photo\"><img src=\"20150905_123617_YJ_compress_50.jpg\" /></div>\n" +
+                "    <div class=\"photo\"><img src=\"546c33aa-39ae-4c68-b08b-c08640e805aa\" /></div>\n" +
                 "    <div class=\"photo\"><img src=\"20150905_131321_YJ_compress_50.jpg\" /></div>\n" +
                 "    <div class=\"photo\"><img src=\"20150905_133500_YJ_compress_50.jpg\" /></div>\n" +
                 "    <div class=\"photo\"><img src=\"20150905_135259_YJ_compress_50.jpg\" /></div>\n" +
@@ -445,14 +445,23 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 "</div>\n" +
                 "</body>\n" +
                 "</html>"
+        return template
+    }
+    private fun exportHtmlBook(uri: Uri?) {
         uri?.let {
             val os = contentResolver.openOutputStream(it)
-            IOUtils.write(template, os, "UTF-8")
+            IOUtils.write(createHtmlString(), os, "UTF-8")
             os?.close()
         }
     }
 
     private fun setupHtmlBook() {
+        mBinding.webDiary.run {
+            settings.javaScriptEnabled = true
+//            loadData(createHtmlString(), "text/html; charset=utf-8", "UTF-8");
+            loadUrl("https://developer.android.com/studio/debug/device-file-explorer?hl=ko")
+        }
+
         mBinding.buttonCreateHtml.setOnClickListener {
             writeFileWithSAF("EasyDiary_HTMLBook.html", MIME_TYPE_HTML, REQUEST_CODE_SAF_HTML_BOOK)
         }
