@@ -398,41 +398,32 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 "<meta charset=\"UTF-8\">\n" +
                 "<title>Insert title here</title>\n" +
                 "    <style type=\"text/css\">\n" +
-//                "        body { margin: 5rem; }\n" +
+                "        body { margin: 1rem; }\n" +
                 "        .title {\n" +
-                "            font-size: 1.5rem;\n" +
+                "            font-size: 1rem;\n" +
                 "        }\n" +
                 "        .datetime {\n" +
-                "            font-size: 1.5rem;\n" +
+                "            font-size: 1rem;\n" +
                 "            text-align: right;\n" +
                 "        }\n" +
                 "        .contents {\n" +
                 "            margin-top: 1rem;\n" +
-                "            font-size: 1rem;\n" +
+                "            font-size: 0.8rem;\n" +
                 "            white-space: pre-wrap;\n" +
                 "        }\n" +
 //                "        .photo-container .photo {\n" +
-//                "            width: 20rem;\n" +
-//                "            height: 20rem;\n" +
-//                "            position: relative;\n" +
 //                "            background: #e6ecf3;\n" +
-//                "            display: inline-block;\n" +
 //                "        }\n" +
-//                "        .photo img {\n" +
-//                "            max-width: 100%;          \n" +
-//                "            max-height: 100%;         \n" +
-//                "            position: absolute;\n" +
-//                "            top: 50%;\n" +
-//                "            left: 50%;\n" +
-//                "            transform: translate(-50%, -50%);\n" +
-//                "        } \n" +
+                "        .photo img {\n" +
+                "            width: 100%;\n" +
+                "        } \n" +
                 "    </style>\n" +
                 "    <script type=\"text/javascript\">\n" +
                 "        window.onload = function() {\n" +
                 "            var width = document.getElementsByClassName('photo-container')[0].clientWidth\n" +
                 "            console.log(width)\n" +
                 "            Array.from(document.getElementsByClassName('photo')).forEach((el) => {\n" +
-                "                el.style.width = (width/4 - 5) + 'px' \n" +
+//                "                el.style.width = (width/4 - 5) + 'px' \n" +
                 "            });\n" +
                 "        }\n" +
                 "    </script>\n" +

@@ -51,7 +51,7 @@
                             <WebView
                                 android:id="@+id/web_diary"
                                 android:layout_width="match_parent"
-                                android:layout_height="500dp"/>
+                                android:layout_height="900dp"/>
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
