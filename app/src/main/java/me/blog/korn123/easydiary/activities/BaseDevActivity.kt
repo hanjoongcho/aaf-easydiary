@@ -397,11 +397,11 @@ open class BaseDevActivity : EasyDiaryActivity() {
     private fun createHtmlString(): String {
         val diaryDivision = StringBuilder()
         val diaryList = EasyDiaryDbHelper.readDiary(null)
-        for (i in 1..10) {
+        for (i in 1..30) {
             val html = StringBuilder()
             val diary = diaryList[i]
             html.append("<div class='title'>${diary.title}</div>")
-            html.append("<div class='datetime'>${DateUtils.getFullPatternDate(diary.currentTimeMillis)}</div>")
+            html.append("<div class='datetime'>${DateUtils.getFullPatternDateWithTimeAndSeconds(diary.currentTimeMillis)}</div>")
             html.append("<pre class='contents'>")
             html.append(diary.contents)
             html.append("</pre>")
@@ -422,11 +422,12 @@ open class BaseDevActivity : EasyDiaryActivity() {
         template.append("<meta name='viewport' content='width=device-width, initial-scale=1.0'>")
         template.append("<title>Insert title here</title>")
         template.append("<style type='text/css'>")
-        template.append("body { margin: 1rem; }")
-        template.append(".title { font-size: 1rem; }")
-        template.append(".datetime { font-size: 1rem; text-align: right; }")
-        template.append(".contents { margin-top: 1rem; font-size: 0.8rem; white-space: pre-wrap; }")
-        template.append(".photo-container .photo { background: rgb(128 166 193); padding: 1rem; }")
+        template.append("body { margin: 1rem; font-family: 나눔고딕, monospace; }")
+        template.append("hr { margin: 1.5rem 0 }")
+        template.append(".title { margin-top: 1rem; font-size: 1.3rem; }")
+        template.append(".datetime { font-size: 0.8rem; text-align: right; }")
+        template.append(".contents { margin-top: 1rem; font-size: 0.9rem; font-family: 나눔고딕, monospace; white-space: pre-wrap; }")
+        template.append(".photo-container .photo { background: rgb(31 32 33); padding: 0.5rem; }")
         template.append(".photo img { width: 100%; }")
         template.append("</style>")
         template.append("<body>")
