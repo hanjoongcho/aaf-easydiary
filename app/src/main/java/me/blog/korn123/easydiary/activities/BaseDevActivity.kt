@@ -384,63 +384,59 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
     }
 
-    private fun createHtmlString(): String {
-
-
-        val fis = FileInputStream(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY + "546c33aa-39ae-4c68-b08b-c08640e805aa")
+    private fun photoToBase64(photoPath: String): String {
+        val fis = FileInputStream(photoPath)
         val bos = ByteArrayOutputStream()
         IOUtils.copy(fis, bos)
         val image64: String = Base64.encodeBase64String(bos.toByteArray())
-        val diary = EasyDiaryDbHelper.readDiary(null)[0]
-        val template = "<!DOCTYPE html>\n" +
-                "<html>\n" +
-                "<head>\n" +
-                "<meta charset=\"UTF-8\">\n" +
-                "<title>Insert title here</title>\n" +
-                "    <style type=\"text/css\">\n" +
-                "        body { margin: 1rem; }\n" +
-                "        .title {\n" +
-                "            font-size: 1rem;\n" +
-                "        }\n" +
-                "        .datetime {\n" +
-                "            font-size: 1rem;\n" +
-                "            text-align: right;\n" +
-                "        }\n" +
-                "        .contents {\n" +
-                "            margin-top: 1rem;\n" +
-                "            font-size: 0.8rem;\n" +
-                "            white-space: pre-wrap;\n" +
-                "        }\n" +
-//                "        .photo-container .photo {\n" +
-//                "            background: #e6ecf3;\n" +
-//                "        }\n" +
-                "        .photo img {\n" +
-                "            width: 100%;\n" +
-                "        } \n" +
-                "    </style>\n" +
-                "    <script type=\"text/javascript\">\n" +
-                "        window.onload = function() {\n" +
-                "            var width = document.getElementsByClassName('photo-container')[0].clientWidth\n" +
-                "            console.log(width)\n" +
-                "            Array.from(document.getElementsByClassName('photo')).forEach((el) => {\n" +
-//                "                el.style.width = (width/4 - 5) + 'px' \n" +
-                "            });\n" +
-                "        }\n" +
-                "    </script>\n" +
-                "</head>\n" +
-                "<body>\n" +
-                "<div class=\"title\">\uD83D\uDCD8 A diary application optimized for user experience.</div>\n" +
-                "<div class=\"datetime\">2021년 03월 04일 12시 43분 03초</div>\n" +
-                "<pre class=\"contents\">\n" +
-                diary.contents +
-                "</pre>\n" +
-                "<div class=\"photo-container\">\n" +
-                "    <div class=\"photo\"><img src=\"data:image/png;base64, " + image64 + " \" /></div>\n" +
-                "</div>\n" +
-                "</body>\n" +
-                "</html>"
-        return template
+        bos.close()
+        fis.close()
+        return image64
     }
+
+    private fun createHtmlString(): String {
+        val diaryDivision = StringBuilder()
+        val diaryList = EasyDiaryDbHelper.readDiary(null)
+        for (i in 1..10) {
+            val html = StringBuilder()
+            val diary = diaryList[i]
+            html.append("<div class='title'>${diary.title}</div>")
+            html.append("<div class='datetime'>${DateUtils.getFullPatternDate(diary.currentTimeMillis)}</div>")
+            html.append("<pre class='contents'>")
+            html.append(diary.contents)
+            html.append("</pre>")
+            html.append("<div class='photo-container'>")
+            diary.photoUris?.forEach {
+                html.append("<div class='photo'><img src='data:image/png;base64, ${photoToBase64(EasyDiaryUtils.getApplicationDataDirectory(this) + it.getFilePath())}' /></div>")
+            }
+            html.append("</div>")
+            html.append("<hr>")
+            diaryDivision.append(html.toString())
+        }
+
+        val template = StringBuilder()
+        template.append("<!DOCTYPE html>")
+        template.append("<html>")
+        template.append("<head>")
+        template.append("<meta charset='UTF-8'>")
+        template.append("<meta name='viewport' content='width=device-width, initial-scale=1.0'>")
+        template.append("<title>Insert title here</title>")
+        template.append("<style type='text/css'>")
+        template.append("body { margin: 1rem; }")
+        template.append(".title { font-size: 1rem; }")
+        template.append(".datetime { font-size: 1rem; text-align: right; }")
+        template.append(".contents { margin-top: 1rem; font-size: 0.8rem; white-space: pre-wrap; }")
+        template.append(".photo-container .photo { background: rgb(128 166 193); padding: 1rem; }")
+        template.append(".photo img { width: 100%; }")
+        template.append("</style>")
+        template.append("<body>")
+        template.append(diaryDivision.toString())
+        template.append("</body>")
+        template.append("</html>")
+
+        return template.toString()
+    }
+
     private fun exportHtmlBook(uri: Uri?) {
         uri?.let {
             val os = contentResolver.openOutputStream(it)
@@ -451,13 +447,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
     @SuppressLint("NewApi")
     private fun setupHtmlBook() {
-        mBinding.webDiary.run {
-            settings.javaScriptEnabled = true
-            isNestedScrollingEnabled = true
-            loadData(createHtmlString(), "text/html; charset=utf-8", "UTF-8");
-//            loadUrl("https://github.com/hanjoongcho/aaf-easydiary")
-        }
-
         mBinding.buttonCreateHtml.setOnClickListener {
             writeFileWithSAF("EasyDiary_HTMLBook.html", MIME_TYPE_HTML, REQUEST_CODE_SAF_HTML_BOOK)
         }
