@@ -400,7 +400,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
     private fun resourceToBase64(resourceId: Int): String {
         var image64 = ""
-        val bitmap = scaledDrawable(resourceId, 50, 50)?.toBitmap()
+        val bitmap = scaledDrawable(resourceId, 35, 35)?.toBitmap()
 //        val bitmap = BitmapFactory.decodeResource(resources, resourceId)
         if (bitmap != null) {
             val bos = ByteArrayOutputStream()
@@ -448,8 +448,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
         template.append(".title { margin-top: 1rem; font-size: 1.3rem; }")
         template.append(".datetime { font-size: 0.8rem; text-align: right; }")
         template.append(".contents { margin-top: 1rem; font-size: 0.9rem; font-family: 나눔고딕, monospace; white-space: pre-wrap; }")
-        template.append(".photo-container .photo { background: rgb(31 32 33); padding: 0.5rem; }")
-        template.append(".photo img { width: 100%; }")
+        template.append(".photo-container .photo { background: rgb(31 32 33); padding: 0.2rem; border-radius: 5px; margin-bottom: 0.2rem; }")
+        template.append(".photo img { width: 100%; display: block; }")
         template.append("</style>")
         template.append("<body>")
         template.append(diaryDivision.toString())
