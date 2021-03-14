@@ -424,8 +424,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
             val diary = diaryList[i]
             val resourceId = FlavorUtils.sequenceToSymbolResourceId(diary.weather)
             when (resourceId > 0) {
-                true -> html.append("<div class='title'><img src='data:image/png;base64, ${resourceToBase64(resourceId)}' />${diary.title}</div>")
-                false -> html.append("<div class='title'>${diary.title}</div>")
+                true -> html.append("<div class='title'> <div><img src='data:image/png;base64, ${resourceToBase64(resourceId)}' /></div> <div class='title-right'>${diary.title}</div> </div>")
+                false -> html.append("<div class='title'> <div class='title-right'>${diary.title}</div> </div>")
             }
             html.append("<div class='datetime'>${DateUtils.getFullPatternDateWithTimeAndSeconds(diary.currentTimeMillis)}</div>")
             html.append("<pre class='contents'>")
@@ -451,11 +451,13 @@ open class BaseDevActivity : EasyDiaryActivity() {
         template.append("body { margin: 1rem; font-family: 나눔고딕, monospace; }")
         template.append("hr { margin: 1.5rem 0 }")
         template.append(".title { margin-top: 1rem; font-size: 1.3rem; }")
-        template.append(".title img { width: 30px; margin-right: 1rem; }")
+        template.append(".title img { width: 30px; margin-right: 1rem; display: block; }")
+        template.append(".title-left { display:inline-block; }")
+        template.append(".title-right { display:inline-block; position: absolute; }")
         template.append(".datetime { font-size: 0.8rem; text-align: right; }")
         template.append(".contents { margin-top: 1rem; font-size: 0.9rem; font-family: 나눔고딕, monospace; white-space: pre-wrap; }")
-        template.append(".photo-container .photo { background: rgb(31 32 33); padding: 0.2rem; border-radius: 5px; margin-bottom: 0.2rem; }")
-        template.append(".photo img { width: 100%; display: block; }")
+        template.append(".photo-container .photo { background: rgb(240 239 240); padding: 0.7rem; border-radius: 5px; margin-bottom: 0.2rem; }")
+        template.append(".photo img { width: 100%; display: block; border-radius: 5px; }")
         template.append("</style>")
         template.append("<body>")
         template.append(diaryDivision.toString())
