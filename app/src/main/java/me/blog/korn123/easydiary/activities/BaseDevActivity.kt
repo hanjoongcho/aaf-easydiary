@@ -26,6 +26,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.isOreoPlus
+import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
@@ -389,18 +390,22 @@ open class BaseDevActivity : EasyDiaryActivity() {
     }
 
     private fun photoToBase64(photoPath: String): String {
-        val fis = FileInputStream(photoPath)
-        val bos = ByteArrayOutputStream()
-        IOUtils.copy(fis, bos)
-        val image64: String = Base64.encodeBase64String(bos.toByteArray())
-        bos.close()
-        fis.close()
+        var image64 = ""
+        val bitmap = BitmapUtils.cropCenter(BitmapFactory.decodeFile(photoPath))
+//        val fis = FileInputStream(photoPath)
+//        IOUtils.copy(fis, bos)
+        if (bitmap != null) {
+            val bos = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 60, bos)
+            image64 = Base64.encodeBase64String(bos.toByteArray())
+            bos.close()
+        }
         return image64
     }
 
     private fun resourceToBase64(resourceId: Int): String {
         var image64 = ""
-        val bitmap = scaledDrawable(resourceId, 35, 35)?.toBitmap()
+        val bitmap = scaledDrawable(resourceId, 100, 100)?.toBitmap()
 //        val bitmap = BitmapFactory.decodeResource(resources, resourceId)
         if (bitmap != null) {
             val bos = ByteArrayOutputStream()
@@ -446,6 +451,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
         template.append("body { margin: 1rem; font-family: 나눔고딕, monospace; }")
         template.append("hr { margin: 1.5rem 0 }")
         template.append(".title { margin-top: 1rem; font-size: 1.3rem; }")
+        template.append(".title img { width: 30px; margin-right: 1rem; }")
         template.append(".datetime { font-size: 0.8rem; text-align: right; }")
         template.append(".contents { margin-top: 1rem; font-size: 0.9rem; font-family: 나눔고딕, monospace; white-space: pre-wrap; }")
         template.append(".photo-container .photo { background: rgb(31 32 33); padding: 0.2rem; border-radius: 5px; margin-bottom: 0.2rem; }")
