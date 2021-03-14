@@ -13,7 +13,11 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Point
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
@@ -27,7 +31,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.fragment.app.Fragment
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.baseConfig
@@ -309,6 +316,19 @@ fun Activity.addCategory(itemList: ArrayList<Array<String>>, categoryList: Array
 
 fun Activity.getLayoutLayoutInflater(): LayoutInflater{
     return getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+}
+
+fun Activity.scaledDrawable(id: Int, width: Int, height: Int): Drawable? {
+    var drawable = AppCompatResources.getDrawable(this, id)
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+        drawable = (DrawableCompat.wrap(drawable!!)).mutate()
+    }
+
+    val bitmap = Bitmap.createBitmap(drawable!!.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+    val canvas = Canvas(bitmap)
+    drawable.setBounds(0, 0, canvas.width, canvas.height)
+    drawable.draw(canvas)
+    return BitmapDrawable(resources, Bitmap.createScaledBitmap(bitmap, width, height, false))
 }
 
 @TargetApi(Build.VERSION_CODES.KITKAT)

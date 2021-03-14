@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.location.Location
 import android.location.LocationListener
@@ -18,7 +19,9 @@ import android.widget.AdapterView
 import android.widget.RemoteViews
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.NotificationCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.simplemobiletools.commons.extensions.toast
@@ -26,6 +29,7 @@ import com.simplemobiletools.commons.helpers.isOreoPlus
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.CheatSheetAdapter
 import me.blog.korn123.easydiary.databinding.ActivityDevBinding
@@ -394,13 +398,30 @@ open class BaseDevActivity : EasyDiaryActivity() {
         return image64
     }
 
+    private fun resourceToBase64(resourceId: Int): String {
+        var image64 = ""
+        val bitmap = scaledDrawable(resourceId, 50, 50)?.toBitmap()
+//        val bitmap = BitmapFactory.decodeResource(resources, resourceId)
+        if (bitmap != null) {
+            val bos = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos)
+            image64 = Base64.encodeBase64String(bos.toByteArray())
+            bos.close()
+        }
+        return image64
+    }
+
     private fun createHtmlString(): String {
         val diaryDivision = StringBuilder()
         val diaryList = EasyDiaryDbHelper.readDiary(null)
         for (i in 1..30) {
             val html = StringBuilder()
             val diary = diaryList[i]
-            html.append("<div class='title'>${diary.title}</div>")
+            val resourceId = FlavorUtils.sequenceToSymbolResourceId(diary.weather)
+            when (resourceId > 0) {
+                true -> html.append("<div class='title'><img src='data:image/png;base64, ${resourceToBase64(resourceId)}' />${diary.title}</div>")
+                false -> html.append("<div class='title'>${diary.title}</div>")
+            }
             html.append("<div class='datetime'>${DateUtils.getFullPatternDateWithTimeAndSeconds(diary.currentTimeMillis)}</div>")
             html.append("<pre class='contents'>")
             html.append(diary.contents)
