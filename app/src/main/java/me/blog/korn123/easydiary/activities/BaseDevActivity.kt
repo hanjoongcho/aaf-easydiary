@@ -424,7 +424,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             val diary = diaryList[i]
             val resourceId = FlavorUtils.sequenceToSymbolResourceId(diary.weather)
             when (resourceId > 0) {
-                true -> html.append("<div class='title'> <div><img src='data:image/png;base64, ${resourceToBase64(resourceId)}' /></div> <div class='title-right'>${diary.title}</div> </div>")
+                true -> html.append("<div class='title'> <div class='title-left'><img src='data:image/png;base64, ${resourceToBase64(resourceId)}' /></div> <div class='title-right'>${diary.title}</div> </div>")
                 false -> html.append("<div class='title'> <div class='title-right'>${diary.title}</div> </div>")
             }
             html.append("<div class='datetime'>${DateUtils.getFullPatternDateWithTimeAndSeconds(diary.currentTimeMillis)}</div>")
