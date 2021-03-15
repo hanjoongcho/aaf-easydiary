@@ -478,7 +478,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
     @SuppressLint("NewApi")
     private fun setupHtmlBook() {
         mBinding.buttonCreateHtml.setOnClickListener {
-            writeFileWithSAF("EasyDiary_HTMLBook.html", MIME_TYPE_HTML, REQUEST_CODE_SAF_HTML_BOOK)
+            writeFileWithSAF("${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}.html", MIME_TYPE_HTML, REQUEST_CODE_SAF_HTML_BOOK)
         }
     }
 
