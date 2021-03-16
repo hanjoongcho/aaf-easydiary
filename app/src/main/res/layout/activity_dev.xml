@@ -89,28 +89,6 @@
                         <LinearLayout
                             style="@style/LinearLayoutVertical">
                             <com.simplemobiletools.commons.views.MyTextView
-                                android:text="Html Book"
-                                style="@style/SettingsTitle" />
-                            <com.google.android.flexbox.FlexboxLayout
-                                app:flexWrap="wrap"
-                                app:flexDirection="row"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-                                <Button
-                                    app:layout_flexGrow="1"
-                                    android:id="@+id/button_create_html"
-                                    android:text="Create HTML"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"/>
-                            </com.google.android.flexbox.FlexboxLayout>
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        style="@style/AppCard.Settings">
-                        <LinearLayout
-                            style="@style/LinearLayoutVertical">
-                            <com.simplemobiletools.commons.views.MyTextView
                                 android:text="GitHub Pages"
                                 style="@style/SettingsTitle" />
                             <androidx.recyclerview.widget.RecyclerView

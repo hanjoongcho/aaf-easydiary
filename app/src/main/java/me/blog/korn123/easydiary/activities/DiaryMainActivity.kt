@@ -23,6 +23,7 @@ import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.github.ksoichiro.android.observablescrollview.ObservableListView
 import com.nineoldandroids.view.ViewHelper
 import io.github.aafactory.commons.utils.CommonUtils
+import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
@@ -138,17 +139,24 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            REQUEST_CODE_SPEECH_INPUT -> {
-                if (resultCode == Activity.RESULT_OK && data != null) {
-                    data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.let {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
+        if (resultCode == Activity.RESULT_OK && intent != null) {
+            when (requestCode) {
+                REQUEST_CODE_SPEECH_INPUT -> {
+                    intent.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.let {
                         mBinding.query.setText(it[0])
                         mBinding.query.setSelection(it[0].length)
                     }
+                    pauseLock()
                 }
-                pauseLock()
+                REQUEST_CODE_SAF_HTML_BOOK -> {
+                    intent.let {
+                        mDiaryMainItemAdapter?.getSelectedItems()?.run {
+                            exportHtmlBook(it.data, this)
+                        }
+                    }
+                }
             }
         }
     }
@@ -196,6 +204,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                     }
                 }
             }
+            R.id.saveAsHtml -> {
+                writeFileWithSAF("${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}.html", MIME_TYPE_HTML, REQUEST_CODE_SAF_HTML_BOOK)
+            }
             R.id.timeline -> {
                 val timelineIntent = Intent(this@DiaryMainActivity, TimelineActivity::class.java)
                 //                startActivity(timelineIntent);
@@ -227,6 +238,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 menuInflater.inflate(R.menu.diary_main_delete, menu)
                 applyFontToMenuItem(menu.findItem(R.id.delete))
+                menu.findItem(R.id.saveAsHtml).run {
+                    if (config.enableDebugMode) this.setVisible(true) else this.setVisible(false)
+                }
             }
         }
         return true

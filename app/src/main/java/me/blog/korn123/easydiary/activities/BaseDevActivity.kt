@@ -101,7 +101,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
         setupLocation()
         setupCoroutine()
         setupCheatSheet()
-        setupHtmlBook()
     }
 
     override fun onDestroy() {
@@ -119,11 +118,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
         when (requestCode) {
             REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS -> {
                 makeSnackBar(if (isLocationEnabled()) "GPS provider setting is activated." else "The request operation did not complete normally.")
-            }
-            REQUEST_CODE_SAF_HTML_BOOK -> {
-                intent?.let {
-                    exportHtmlBook(it.data)
-                }
             }
         }
     }
@@ -386,99 +380,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                         })
                     }
             )
-        }
-    }
-
-    private fun photoToBase64(photoPath: String): String {
-        var image64 = ""
-        val bitmap = BitmapUtils.cropCenter(BitmapFactory.decodeFile(photoPath))
-//        val fis = FileInputStream(photoPath)
-//        IOUtils.copy(fis, bos)
-        if (bitmap != null) {
-            val bos = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 60, bos)
-            image64 = Base64.encodeBase64String(bos.toByteArray())
-            bos.close()
-        }
-        return image64
-    }
-
-    private fun resourceToBase64(resourceId: Int): String {
-        var image64 = ""
-        val bitmap = scaledDrawable(resourceId, 100, 100)?.toBitmap()
-//        val bitmap = BitmapFactory.decodeResource(resources, resourceId)
-        if (bitmap != null) {
-            val bos = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos)
-            image64 = Base64.encodeBase64String(bos.toByteArray())
-            bos.close()
-        }
-        return image64
-    }
-
-    private fun createHtmlString(): String {
-        val diaryDivision = StringBuilder()
-        val diaryList = EasyDiaryDbHelper.readDiary(null)
-        for (i in 1..30) {
-            val html = StringBuilder()
-            val diary = diaryList[i]
-            val resourceId = FlavorUtils.sequenceToSymbolResourceId(diary.weather)
-            when (resourceId > 0) {
-                true -> html.append("<div class='title'> <div class='title-left'><img src='data:image/png;base64, ${resourceToBase64(resourceId)}' /></div> <div class='title-right'>${diary.title}</div> </div>")
-                false -> html.append("<div class='title'> <div class='title-right'>${diary.title}</div> </div>")
-            }
-            html.append("<div class='datetime'>${DateUtils.getFullPatternDateWithTimeAndSeconds(diary.currentTimeMillis)}</div>")
-            html.append("<pre class='contents'>")
-            html.append(diary.contents)
-            html.append("</pre>")
-            html.append("<div class='photo-container'>")
-            diary.photoUris?.forEach {
-                html.append("<div class='photo'><img src='data:image/png;base64, ${photoToBase64(EasyDiaryUtils.getApplicationDataDirectory(this) + it.getFilePath())}' /></div>")
-            }
-            html.append("</div>")
-            html.append("<hr>")
-            diaryDivision.append(html.toString())
-        }
-
-        val template = StringBuilder()
-        template.append("<!DOCTYPE html>")
-        template.append("<html>")
-        template.append("<head>")
-        template.append("<meta charset='UTF-8'>")
-        template.append("<meta name='viewport' content='width=device-width, initial-scale=1.0'>")
-        template.append("<title>Insert title here</title>")
-        template.append("<style type='text/css'>")
-        template.append("body { margin: 1rem; font-family: 나눔고딕, monospace; }")
-        template.append("hr { margin: 1.5rem 0 }")
-        template.append(".title { margin-top: 1rem; font-size: 1.3rem; }")
-        template.append(".title img { width: 30px; margin-right: 1rem; display: block; }")
-        template.append(".title-left { display:inline-block; }")
-        template.append(".title-right { display:inline-block; position: absolute; }")
-        template.append(".datetime { font-size: 0.8rem; text-align: right; }")
-        template.append(".contents { margin-top: 1rem; font-size: 0.9rem; font-family: 나눔고딕, monospace; white-space: pre-wrap; }")
-        template.append(".photo-container .photo { background: rgb(240 239 240); padding: 0.7rem; border-radius: 5px; margin-bottom: 0.2rem; }")
-        template.append(".photo img { width: 100%; display: block; border-radius: 5px; }")
-        template.append("</style>")
-        template.append("<body>")
-        template.append(diaryDivision.toString())
-        template.append("</body>")
-        template.append("</html>")
-
-        return template.toString()
-    }
-
-    private fun exportHtmlBook(uri: Uri?) {
-        uri?.let {
-            val os = contentResolver.openOutputStream(it)
-            IOUtils.write(createHtmlString(), os, "UTF-8")
-            os?.close()
-        }
-    }
-
-    @SuppressLint("NewApi")
-    private fun setupHtmlBook() {
-        mBinding.buttonCreateHtml.setOnClickListener {
-            writeFileWithSAF("${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}.html", MIME_TYPE_HTML, REQUEST_CODE_SAF_HTML_BOOK)
         }
     }
 

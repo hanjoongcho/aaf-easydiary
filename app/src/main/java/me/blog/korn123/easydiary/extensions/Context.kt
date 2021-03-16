@@ -39,6 +39,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.graphics.ColorUtils
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.location.LocationManagerCompat
 import com.google.gson.GsonBuilder
 import com.simplemobiletools.commons.extensions.adjustAlpha
@@ -49,12 +50,14 @@ import com.simplemobiletools.commons.helpers.*
 import com.simplemobiletools.commons.views.*
 import io.github.aafactory.commons.extensions.baseConfig
 import io.github.aafactory.commons.extensions.dpToPixel
+import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import io.github.aafactory.commons.views.ModalView
 import io.realm.Realm
 import kotlinx.android.synthetic.main.dialog_message.view.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryInsertActivity
@@ -65,8 +68,10 @@ import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.receivers.AlarmReceiver
 import me.blog.korn123.easydiary.views.FixedCardView
 import me.blog.korn123.easydiary.views.FixedTextView
+import org.apache.commons.codec.binary.Base64
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
@@ -728,3 +733,4 @@ fun Context.getLabelBackground(): GradientDrawable {
         setStroke(strokeWidth, strokeColor)
     }
 }
+
