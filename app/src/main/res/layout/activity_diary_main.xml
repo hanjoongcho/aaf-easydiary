@@ -138,5 +138,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
+        <ProgressBar
+            android:id="@+id/progress_coroutine"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
     </FrameLayout>
 </layout>

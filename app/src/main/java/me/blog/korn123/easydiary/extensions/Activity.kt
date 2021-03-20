@@ -401,7 +401,7 @@ fun Activity.createHtmlString(diaryList: List<DiaryDto>): String {
     template.append("   <style type='text/css'>")
     template.append("       body { margin: 1rem; font-family: 나눔고딕, monospace; }")
     template.append("       hr { margin: 1.5rem 0 }")
-    template.append("       .title { margin-top: 1rem; font-size: 1.3rem; }")
+    template.append("       .title { margin-top: 1rem; font-size: 1.3rem; display: flex; }")
     template.append("       .title img { width: 30px; margin-right: 1rem; display: block; }")
     template.append("       .title-left { display:inline-block; }")
     template.append("       .title-right { display:inline-block; position: absolute; }")

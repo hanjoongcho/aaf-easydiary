@@ -24,6 +24,8 @@ import com.github.ksoichiro.android.observablescrollview.ObservableListView
 import com.nineoldandroids.view.ViewHelper
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
@@ -153,7 +155,19 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 REQUEST_CODE_SAF_HTML_BOOK -> {
                     intent.let {
                         mDiaryMainItemAdapter?.getSelectedItems()?.run {
-                            exportHtmlBook(it.data, this)
+                            mBinding.progressCoroutine.visibility = View.VISIBLE
+                            GlobalScope.launch {
+                                exportHtmlBook(it.data, this@run)
+                                runOnUiThread {
+                                    mBinding.progressCoroutine.visibility = View.GONE
+                                    mDiaryMainItemAdapter?.getSelectedItems()?.forEach {
+                                        it.isSelected = false
+                                        EasyDiaryDbHelper.updateDiary(it)
+                                    }
+                                    mDiaryMainItemAdapter?.notifyDataSetChanged()
+                                }
+                            }
+
                         }
                     }
                 }
@@ -195,7 +209,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                                     EasyDiaryDbHelper.duplicateDiary(it)
                                 }
                                 refreshList()
-                                Handler().post { mBinding.diaryListView.setSelection(0) }
+                                Handler(Looper.getMainLooper()).post { mBinding.diaryListView.setSelection(0) }
                             }, null)
                         }
                         false -> {
