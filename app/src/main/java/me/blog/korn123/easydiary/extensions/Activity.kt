@@ -60,6 +60,7 @@ import me.blog.korn123.easydiary.views.SlidingTabLayout
 import org.apache.commons.codec.binary.Base64
 import org.apache.commons.io.IOUtils
 import java.io.ByteArrayOutputStream
+import java.lang.Exception
 import kotlin.system.exitProcess
 
 
@@ -376,10 +377,10 @@ fun Activity.createHtmlString(diaryList: List<DiaryDto>): String {
         html.append("<div class='photo-container'>")
 
         it.photoUris?.let { photoUriList ->
-            val imageColumn = when {
-                photoUriList.size % 4 == 0 -> 4
-                photoUriList.size % 2 == 0 -> 2
-                else -> 1
+            val imageColumn = when (photoUriList.size) {
+                1 -> 1
+//                photoUriList.size % 2 == 0 -> 2
+                else -> 2
             }
             photoUriList.forEach { photoUriDto ->
             html.append("<div class='photo col${imageColumn}'><img src='data:image/png;base64, ${photoToBase64(EasyDiaryUtils.getApplicationDataDirectory(this) + photoUriDto.getFilePath())}' /></div>")
@@ -410,7 +411,6 @@ fun Activity.createHtmlString(diaryList: List<DiaryDto>): String {
     template.append("       .photo-container .photo { background: rgb(240 239 240); padding: 0.3rem; border-radius: 5px; margin: 0.25rem; box-sizing: border-box; }")
     template.append("       .photo.col1 { width: calc(100% - 0.5rem); }")
     template.append("       .photo.col2 { width: calc(50% - 0.5rem); }")
-    template.append("       .photo.col4 { width: calc(25% - 0.5rem); }")
     template.append("       .photo img { width: 100%; display: block; border-radius: 5px; }")
     template.append("   </style>")
     template.append("<body>")
@@ -423,13 +423,15 @@ fun Activity.createHtmlString(diaryList: List<DiaryDto>): String {
 
 fun Activity.photoToBase64(photoPath: String): String {
     var image64 = ""
-    val bitmap = BitmapUtils.cropCenter(BitmapFactory.decodeFile(photoPath))
+    val bos = ByteArrayOutputStream()
+    try {
+        val bitmap = BitmapUtils.cropCenter(BitmapFactory.decodeFile(photoPath))
 //        val fis = FileInputStream(photoPath)
 //        IOUtils.copy(fis, bos)
-    if (bitmap != null) {
-        val bos = ByteArrayOutputStream()
+
         bitmap.compress(Bitmap.CompressFormat.JPEG, 60, bos)
         image64 = Base64.encodeBase64String(bos.toByteArray())
+    } catch (e: Exception) {
         bos.close()
     }
     return image64
