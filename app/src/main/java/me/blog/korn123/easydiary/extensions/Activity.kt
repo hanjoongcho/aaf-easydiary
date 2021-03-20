@@ -374,8 +374,16 @@ fun Activity.createHtmlString(diaryList: List<DiaryDto>): String {
         html.append(it.contents)
         html.append("</pre>")
         html.append("<div class='photo-container'>")
-        it.photoUris?.forEach {
-            html.append("<div class='photo'><img src='data:image/png;base64, ${photoToBase64(EasyDiaryUtils.getApplicationDataDirectory(this) + it.getFilePath())}' /></div>")
+
+        it.photoUris?.let { photoUriList ->
+            val imageColumn = when {
+                photoUriList.size % 4 == 0 -> 4
+                photoUriList.size % 2 == 0 -> 2
+                else -> 1
+            }
+            photoUriList.forEach { photoUriDto ->
+            html.append("<div class='photo col${imageColumn}'><img src='data:image/png;base64, ${photoToBase64(EasyDiaryUtils.getApplicationDataDirectory(this) + photoUriDto.getFilePath())}' /></div>")
+        }
         }
         html.append("</div>")
         html.append("<hr>")
@@ -386,21 +394,25 @@ fun Activity.createHtmlString(diaryList: List<DiaryDto>): String {
     template.append("<!DOCTYPE html>")
     template.append("<html>")
     template.append("<head>")
-    template.append("<meta charset='UTF-8'>")
-    template.append("<meta name='viewport' content='width=device-width, initial-scale=1.0'>")
-    template.append("<title>Insert title here</title>")
-    template.append("<style type='text/css'>")
-    template.append("body { margin: 1rem; font-family: 나눔고딕, monospace; }")
-    template.append("hr { margin: 1.5rem 0 }")
-    template.append(".title { margin-top: 1rem; font-size: 1.3rem; }")
-    template.append(".title img { width: 30px; margin-right: 1rem; display: block; }")
-    template.append(".title-left { display:inline-block; }")
-    template.append(".title-right { display:inline-block; position: absolute; }")
-    template.append(".datetime { font-size: 0.8rem; text-align: right; }")
-    template.append(".contents { margin-top: 1rem; font-size: 0.9rem; font-family: 나눔고딕, monospace; white-space: pre-wrap; }")
-    template.append(".photo-container .photo { background: rgb(240 239 240); padding: 0.7rem; border-radius: 5px; margin-bottom: 0.2rem; }")
-    template.append(".photo img { width: 100%; display: block; border-radius: 5px; }")
-    template.append("</style>")
+    template.append("   <meta charset='UTF-8'>")
+    template.append("   <meta name='viewport' content='width=device-width, initial-scale=1.0'>")
+    template.append("   <title>Insert title here</title>")
+    template.append("   <style type='text/css'>")
+    template.append("       body { margin: 1rem; font-family: 나눔고딕, monospace; }")
+    template.append("       hr { margin: 1.5rem 0 }")
+    template.append("       .title { margin-top: 1rem; font-size: 1.3rem; }")
+    template.append("       .title img { width: 30px; margin-right: 1rem; display: block; }")
+    template.append("       .title-left { display:inline-block; }")
+    template.append("       .title-right { display:inline-block; position: absolute; }")
+    template.append("       .datetime { font-size: 0.8rem; text-align: right; }")
+    template.append("       .contents { margin-top: 1rem; font-size: 0.9rem; font-family: 나눔고딕, monospace; white-space: pre-wrap; }")
+    template.append("       .photo-container { display: flex; flex-wrap: wrap; }")
+    template.append("       .photo-container .photo { background: rgb(240 239 240); padding: 0.3rem; border-radius: 5px; margin: 0.25rem; box-sizing: border-box; }")
+    template.append("       .photo.col1 { width: calc(100% - 0.5rem); }")
+    template.append("       .photo.col2 { width: calc(50% - 0.5rem); }")
+    template.append("       .photo.col4 { width: calc(25% - 0.5rem); }")
+    template.append("       .photo img { width: 100%; display: block; border-radius: 5px; }")
+    template.append("   </style>")
     template.append("<body>")
     template.append(diaryDivision.toString())
     template.append("</body>")
