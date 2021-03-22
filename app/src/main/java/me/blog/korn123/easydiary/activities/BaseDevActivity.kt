@@ -4,26 +4,33 @@ import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Base64.encodeToString
 import android.view.View
 import android.widget.AdapterView
 import android.widget.RemoteViews
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.NotificationCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.isOreoPlus
+import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.CheatSheetAdapter
 import me.blog.korn123.easydiary.databinding.ActivityDevBinding
@@ -33,8 +40,13 @@ import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.services.BaseNotificationService
 import me.blog.korn123.easydiary.services.NotificationService
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
+import org.apache.commons.codec.binary.Base64
 import org.apache.commons.io.FilenameUtils
+import org.apache.commons.io.IOUtils
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileInputStream
+import java.util.*
 
 open class BaseDevActivity : EasyDiaryActivity() {
 

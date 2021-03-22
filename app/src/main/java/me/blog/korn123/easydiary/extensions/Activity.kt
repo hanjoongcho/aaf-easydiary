@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.extensions
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.annotation.TargetApi
 import android.app.Activity
 import android.app.AlarmManager
 import android.app.Dialog
@@ -12,10 +13,16 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
 import android.graphics.Point
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
+import android.os.Build
 import android.provider.Settings
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -25,13 +32,21 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.graphics.drawable.toBitmap
+import androidx.fragment.app.Fragment
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
 import io.github.aafactory.commons.helpers.PERMISSION_ACCESS_COARSE_LOCATION
 import io.github.aafactory.commons.helpers.PERMISSION_ACCESS_FINE_LOCATION
+import io.github.aafactory.commons.utils.BitmapUtils
+import io.github.aafactory.commons.utils.DateUtils
+import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.activities.EasyDiaryActivity
@@ -39,11 +54,13 @@ import me.blog.korn123.easydiary.activities.FingerprintLockActivity
 import me.blog.korn123.easydiary.activities.PinLockActivity
 import me.blog.korn123.easydiary.adapters.SymbolPagerAdapter
 import me.blog.korn123.easydiary.dialogs.WhatsNewDialog
-import me.blog.korn123.easydiary.helper.DIARY_EXECUTION_MODE
-import me.blog.korn123.easydiary.helper.EXECUTION_MODE_ACCESS_FROM_OUTSIDE
-import me.blog.korn123.easydiary.helper.REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS
-import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.models.DiaryDto
 import me.blog.korn123.easydiary.views.SlidingTabLayout
+import org.apache.commons.codec.binary.Base64
+import org.apache.commons.io.IOUtils
+import java.io.ByteArrayOutputStream
+import java.lang.Exception
 import kotlin.system.exitProcess
 
 
@@ -307,6 +324,130 @@ fun Activity.addCategory(itemList: ArrayList<Array<String>>, categoryList: Array
 
 fun Activity.getLayoutLayoutInflater(): LayoutInflater{
     return getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+}
+
+fun Activity.scaledDrawable(id: Int, width: Int, height: Int): Drawable? {
+    var drawable = AppCompatResources.getDrawable(this, id)
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+        drawable = (DrawableCompat.wrap(drawable!!)).mutate()
+    }
+
+    val bitmap = Bitmap.createBitmap(drawable!!.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+    val canvas = Canvas(bitmap)
+    drawable.setBounds(0, 0, canvas.width, canvas.height)
+    drawable.draw(canvas)
+    return BitmapDrawable(resources, Bitmap.createScaledBitmap(bitmap, width, height, false))
+}
+
+@TargetApi(Build.VERSION_CODES.KITKAT)
+fun Activity.writeFileWithSAF(fileName: String, mimeType: String, requestCode: Int) {
+    val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+        // Filter to only show results that can be "opened", such as
+        // a file (as opposed to a list of contacts or timezones).
+        addCategory(Intent.CATEGORY_OPENABLE)
+
+        type = mimeType
+        // Create a file with the requested MIME type.
+        putExtra(Intent.EXTRA_TITLE, fileName)
+    }
+    startActivityForResult(intent, requestCode)
+}
+
+fun Activity.exportHtmlBook(uri: Uri?, diaryList: List<DiaryDto>) {
+    uri?.let {
+        val os = contentResolver.openOutputStream(it)
+        IOUtils.write(createHtmlString(diaryList), os, "UTF-8")
+        os?.close()
+    }
+}
+
+fun Activity.createHtmlString(diaryList: List<DiaryDto>): String {
+    val diaryDivision = StringBuilder()
+    diaryList.forEach {
+        val html = StringBuilder()
+        val resourceId = FlavorUtils.sequenceToSymbolResourceId(it.weather)
+        when (resourceId > 0) {
+            true -> html.append("<div class='title'> <div class='title-left'><img src='data:image/png;base64, ${resourceToBase64(resourceId)}' /></div> <div class='title-right'>${it.title}</div> </div>")
+            false -> html.append("<div class='title'> <div class='title-right'>${it.title}</div> </div>")
+        }
+        html.append("<div class='datetime'>${DateUtils.getFullPatternDateWithTimeAndSeconds(it.currentTimeMillis)}</div>")
+        html.append("<pre class='contents'>")
+        html.append(it.contents)
+        html.append("</pre>")
+        html.append("<div class='photo-container'>")
+
+        it.photoUris?.let { photoUriList ->
+            val imageColumn = when (photoUriList.size) {
+                1 -> 1
+//                photoUriList.size % 2 == 0 -> 2
+                else -> 2
+            }
+            photoUriList.forEach { photoUriDto ->
+            html.append("<div class='photo col${imageColumn}'><img src='data:image/png;base64, ${photoToBase64(EasyDiaryUtils.getApplicationDataDirectory(this) + photoUriDto.getFilePath())}' /></div>")
+        }
+        }
+        html.append("</div>")
+        html.append("<hr>")
+        diaryDivision.append(html.toString())
+    }
+
+    val template = StringBuilder()
+    template.append("<!DOCTYPE html>")
+    template.append("<html>")
+    template.append("<head>")
+    template.append("   <meta charset='UTF-8'>")
+    template.append("   <meta name='viewport' content='width=device-width, initial-scale=1.0'>")
+    template.append("   <title>Insert title here</title>")
+    template.append("   <style type='text/css'>")
+    template.append("       body { margin: 1rem; font-family: 나눔고딕, monospace; }")
+    template.append("       hr { margin: 1.5rem 0 }")
+    template.append("       .title { margin-top: 1rem; font-size: 1.3rem; display: flex; }")
+    template.append("       .title img { width: 30px; margin-right: 1rem; display: block; }")
+    template.append("       .title-left { display:inline-block; }")
+    template.append("       .title-right { display:inline-block; white-space: pre-wrap; word-break: break-all; }")
+    template.append("       .datetime { font-size: 0.8rem; text-align: right; }")
+    template.append("       .contents { margin-top: 1rem; font-size: 0.9rem; font-family: 나눔고딕, monospace; white-space: pre-wrap; word-break: break-all; }")
+    template.append("       .photo-container { display: flex; flex-wrap: wrap; }")
+    template.append("       .photo-container .photo { background: rgb(240 239 240); padding: 0.3rem; border-radius: 5px; margin: 0.25rem; box-sizing: border-box; }")
+    template.append("       .photo.col1 { width: calc(100% - 0.5rem); }")
+    template.append("       .photo.col2 { width: calc(50% - 0.5rem); }")
+    template.append("       .photo img { width: 100%; display: block; border-radius: 5px; }")
+    template.append("   </style>")
+    template.append("<body>")
+    template.append(diaryDivision.toString())
+    template.append("</body>")
+    template.append("</html>")
+
+    return template.toString()
+}
+
+fun Activity.photoToBase64(photoPath: String): String {
+    var image64 = ""
+    val bos = ByteArrayOutputStream()
+    try {
+        val bitmap = BitmapUtils.cropCenter(BitmapFactory.decodeFile(photoPath))
+//        val fis = FileInputStream(photoPath)
+//        IOUtils.copy(fis, bos)
+
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 60, bos)
+        image64 = Base64.encodeBase64String(bos.toByteArray())
+    } catch (e: Exception) {
+        bos.close()
+    }
+    return image64
+}
+
+fun Activity.resourceToBase64(resourceId: Int): String {
+    var image64 = ""
+    val bitmap = scaledDrawable(resourceId, 100, 100)?.toBitmap()
+//        val bitmap = BitmapFactory.decodeResource(resources, resourceId)
+    if (bitmap != null) {
+        val bos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos)
+        image64 = Base64.encodeBase64String(bos.toByteArray())
+        bos.close()
+    }
+    return image64
 }
 
 fun EasyDiaryActivity.acquireGPSPermissions(callback: () -> Unit) {
