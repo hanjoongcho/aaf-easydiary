@@ -135,7 +135,7 @@ dependencies {
     implementation 'androidx.biometric:biometric:1.1.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0'
-    implementation 'androidx.activity:activity-ktx:1.2.0'
+    implementation 'androidx.activity:activity-ktx:1.2.1'
     implementation 'com.google.android.material:material:1.3.0'
     implementation ('androidx.work:work-runtime-ktx:2.5.0') { exclude group: 'com.google.guava', module: 'listenablefuture' }
 
@@ -164,7 +164,7 @@ dependencies {
 //    implementation project(":aafactory-commons")
 
     // etc.
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.10'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.30'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     implementation 'com.roomorama:caldroid:3.0.1'
     implementation 'com.github.chrisbanes:PhotoView:2.1.3'  
