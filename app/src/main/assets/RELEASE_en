@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.163 (date: 2021.03.23)
+  * Added function to save diary as HTML
+
 # Changes in 1.4.161 (date: 2021.02.12)
   * User Experience (UX) Optimization
 
