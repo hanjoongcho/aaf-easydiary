@@ -252,9 +252,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 menuInflater.inflate(R.menu.diary_main_delete, menu)
                 applyFontToMenuItem(menu.findItem(R.id.delete))
-                menu.findItem(R.id.saveAsHtml).run {
-                    if (config.enableDebugMode) this.setVisible(true) else this.setVisible(false)
-                }
             }
         }
         return true
