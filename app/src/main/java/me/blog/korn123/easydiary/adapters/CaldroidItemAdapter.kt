@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.roomorama.caldroid.CaldroidGridAdapter
+import hirondelle.date4j.DateTime
 import io.realm.Sort
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -28,6 +29,24 @@ class CaldroidItemAdapter(
         extraData: Map<String, Any>
 ) : CaldroidGridAdapter(activity, month, year, caldroidData, extraData) {
 
+    private fun changeDateColor(binding: FragmentCustomCellBinding, dateTime: DateTime, isSelect: Boolean = false) {
+        binding.calendarDate.run {
+            if (dateTime == getToday()) {
+                setBackgroundResource(R.drawable.bg_calendar_circle)
+                setTextColor(Color.WHITE)
+            } else {
+                setBackgroundResource(0)
+                when (dateTime.weekDay) {
+                    1 -> setTextColor(Color.RED)
+                    7 -> setTextColor(Color.BLUE)
+                    else -> {
+                        if (isSelect) setTextColor(Color.BLACK) else setTextColor(context.config.textColor)
+                    }
+                }
+            }
+        }
+    }
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
         val itemView: View = convertView ?: run {
             val binding = FragmentCustomCellBinding.inflate(activity.layoutInflater)
@@ -45,18 +64,7 @@ class CaldroidItemAdapter(
         val dateTime = this.datetimeList[position]
 
         val calendarDate = binding.calendarDate.apply {
-            // Today's symbol
-            if (dateTime == getToday()) {
-                setBackgroundResource(R.drawable.bg_calendar_circle)
-                setTextColor(Color.WHITE)
-            } else {
-                setBackgroundResource(0)
-                when (dateTime.weekDay) {
-                    1 -> setTextColor(Color.RED)
-                    7 -> setTextColor(Color.BLUE)
-                    else -> setTextColor(Color.BLACK)
-                }
-            }
+            changeDateColor(binding, dateTime)
 
             text = "${datetimeList[position].day}"
             layoutParams?.width = (textSize * 2).toInt()
@@ -81,11 +89,13 @@ class CaldroidItemAdapter(
 
                     // Customize for selected dates
                     if (selectedDates != null && selectedDates.indexOf(dateTime) != -1) {
+                        changeDateColor(binding, dateTime, true)
                         root.setBackgroundResource(R.drawable.bg_card_cell_select)
                         (item1.getChildAt(1) as TextView).setTextColor(Color.BLACK)
                         (item2.getChildAt(1) as TextView).setTextColor(Color.BLACK)
                         (item3.getChildAt(1) as TextView).setTextColor(Color.BLACK)
                     } else {
+                        changeDateColor(binding, dateTime)
                         root.setBackgroundColor(context.config.backgroundColor)
                         (item1.getChildAt(1) as TextView).setTextColor(context.config.textColor)
                         (item2.getChildAt(1) as TextView).setTextColor(context.config.textColor)

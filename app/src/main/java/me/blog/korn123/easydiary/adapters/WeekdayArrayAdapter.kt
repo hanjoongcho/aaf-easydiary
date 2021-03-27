@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.item_weekday.view.*
 import me.blog.korn123.commons.utils.FontUtils
-import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.helper.CALENDAR_START_DAY_MONDAY
@@ -37,21 +36,21 @@ class WeekdayArrayAdapter(context: Context, private val textViewResourceId: Int,
                     when (position) {
                         0 -> text_weekday.setTextColor(Color.RED)
                         6 -> text_weekday.setTextColor(Color.BLUE)
-                        else -> text_weekday.setTextColor(Color.BLACK)
+                        else -> text_weekday.setTextColor(context.config.textColor)
                     }
                 }
                 CALENDAR_START_DAY_MONDAY -> {
                     when (position) {
                         5 -> text_weekday.setTextColor(Color.BLUE)
                         6 -> text_weekday.setTextColor(Color.RED)
-                        else -> text_weekday.setTextColor(Color.BLACK)
+                        else -> text_weekday.setTextColor(context.config.textColor)
                     }
                 }
                 CALENDAR_START_DAY_SATURDAY -> {
                     when (position) {
                         0 -> text_weekday.setTextColor(Color.BLUE)
                         1 -> text_weekday.setTextColor(Color.RED)
-                        else -> text_weekday.setTextColor(Color.BLACK)
+                        else -> text_weekday.setTextColor(context.config.textColor)
                     }
                 }
             }
