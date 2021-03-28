@@ -29,23 +29,6 @@ class CaldroidItemAdapter(
         extraData: Map<String, Any>
 ) : CaldroidGridAdapter(activity, month, year, caldroidData, extraData) {
 
-    private fun changeDateColor(binding: FragmentCustomCellBinding, dateTime: DateTime, isSelect: Boolean = false) {
-        binding.calendarDate.run {
-            if (dateTime == getToday()) {
-                setBackgroundResource(R.drawable.bg_calendar_circle)
-                setTextColor(Color.WHITE)
-            } else {
-                setBackgroundResource(0)
-                when (dateTime.weekDay) {
-                    1 -> setTextColor(Color.RED)
-                    7 -> setTextColor(Color.BLUE)
-                    else -> {
-                        if (isSelect) setTextColor(Color.BLACK) else setTextColor(context.config.textColor)
-                    }
-                }
-            }
-        }
-    }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
         val itemView: View = convertView ?: run {
@@ -64,8 +47,7 @@ class CaldroidItemAdapter(
         val dateTime = this.datetimeList[position]
 
         val calendarDate = binding.calendarDate.apply {
-            changeDateColor(binding, dateTime)
-
+//            changeDateColor(binding, dateTime)
             text = "${datetimeList[position].day}"
             layoutParams?.width = (textSize * 2).toInt()
             layoutParams?.height = (textSize * 2).toInt()
@@ -188,5 +170,23 @@ class CaldroidItemAdapter(
             }
         }
         return itemView
+    }
+
+    private fun changeDateColor(binding: FragmentCustomCellBinding, dateTime: DateTime, isSelect: Boolean = false) {
+        binding.calendarDate.run {
+            if (dateTime == getToday()) {
+                setBackgroundResource(R.drawable.bg_calendar_circle)
+                setTextColor(Color.WHITE)
+            } else {
+                setBackgroundResource(0)
+                when (dateTime.weekDay) {
+                    1 -> setTextColor(Color.RED)
+                    7 -> setTextColor(Color.BLUE)
+                    else -> {
+                        if (isSelect) setTextColor(Color.BLACK) else setTextColor(context.config.textColor)
+                    }
+                }
+            }
+        }
     }
 }

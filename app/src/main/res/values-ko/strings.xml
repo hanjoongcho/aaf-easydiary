@@ -511,6 +511,10 @@
         v1.4.163 / 2021.03.23\n
         다이어리 HTML 저장기능 추가
     </string>
+    <string name="release_230">
+        v1.4.164 / 2021.03.xx\n
+        Fixed an issue where the date on the calendar was not visible when the card view color was black
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
