@@ -85,16 +85,14 @@
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
+                        android:onClick="openCheatSheet"
                         style="@style/AppCard.Settings">
                         <LinearLayout
                             style="@style/LinearLayoutVertical">
                             <com.simplemobiletools.commons.views.MyTextView
                                 android:text="GitHub Pages"
+                                android:id="@+id/text_cheat_sheet"
                                 style="@style/SettingsTitle" />
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:layout_width="match_parent"
-                                android:layout_height="150dp"
-                                android:id="@+id/recycler_cheat_sheet" />
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
