@@ -26,14 +26,10 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <androidx.cardview.widget.CardView
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                style="@style/AppCard.Settings">
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/recycler_cheat_sheet" />
-            </androidx.cardview.widget.CardView>
+                android:id="@+id/recycler_cheat_sheet" />
         </LinearLayout>
     </LinearLayout>
 </layout>
