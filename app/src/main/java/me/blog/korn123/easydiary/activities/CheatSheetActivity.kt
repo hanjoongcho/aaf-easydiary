@@ -3,6 +3,8 @@ package me.blog.korn123.easydiary.activities
 import android.app.*
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.AdapterView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,8 +23,9 @@ open class CheatSheetActivity : EasyDiaryActivity() {
      *
      ***************************************************************************************************/
     private lateinit var mBinding: ActivityCheatSheetBinding
-    private var mCheatSheetList = arrayListOf<CheatSheetAdapter.CheatSheet>()
-
+    private lateinit var mCheatSheetAdapter: CheatSheetAdapter
+    private var mOriginCheatSheetList = arrayListOf<CheatSheetAdapter.CheatSheet>()
+    private var mFilteredCheatSheetList = arrayListOf<CheatSheetAdapter.CheatSheet>()
 
     /***************************************************************************************************
      *   override functions
@@ -40,6 +43,29 @@ open class CheatSheetActivity : EasyDiaryActivity() {
         }
 
         setupCheatSheet()
+        bindEvent()
+    }
+
+    private fun bindEvent() {
+        mBinding.query.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+                refreshList(charSequence.toString())
+            }
+
+            override fun afterTextChanged(editable: Editable) {}
+        })
+
+        mBinding.clearQuery.setOnClickListener { _ ->
+            mBinding.query.text = null
+        }
+    }
+
+    private fun refreshList(query: String?) {
+        mFilteredCheatSheetList.clear()
+        mFilteredCheatSheetList.addAll(if (query.isNullOrEmpty()) mOriginCheatSheetList else mOriginCheatSheetList.filter { cheatSheet -> cheatSheet.title.contains(query) || cheatSheet.description.contains(query) })
+        mCheatSheetAdapter.notifyDataSetChanged()
     }
 
 
@@ -48,7 +74,7 @@ open class CheatSheetActivity : EasyDiaryActivity() {
      *
      ***************************************************************************************************/
     private fun setupCheatSheet() {
-        mCheatSheetList.run {
+        mOriginCheatSheetList.run {
             add(CheatSheetAdapter.CheatSheet("Package kotlin", "Explanation of kotlin basic functions", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/kotlin/kotlin.md"))
             add(CheatSheetAdapter.CheatSheet("Package kotlin.collections", "Explanation of kotlin collection functions", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/kotlin/kotlin.collections.md"))
             add(CheatSheetAdapter.CheatSheet("Cheat Sheet", "This page is a collection of useful link information such as open source projects and development related guides.", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/README.md"))
@@ -131,11 +157,11 @@ open class CheatSheetActivity : EasyDiaryActivity() {
         mBinding.recyclerCheatSheet.apply {
             layoutManager = LinearLayoutManager(this@CheatSheetActivity, LinearLayoutManager.VERTICAL, false)
 //            addItemDecoration(SettingsScheduleFragment.SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding)))
-            adapter =  CheatSheetAdapter(
+            mCheatSheetAdapter =  CheatSheetAdapter(
                     this@CheatSheetActivity,
-                    mCheatSheetList,
+                    mFilteredCheatSheetList,
                     AdapterView.OnItemClickListener { _, _, position, _ ->
-                        val item = mCheatSheetList[position]
+                        val item = mFilteredCheatSheetList[position]
                         TransitionHelper.startActivityWithTransition(this@CheatSheetActivity, Intent(this@CheatSheetActivity, MarkDownViewActivity::class.java).apply {
                             putExtra(MarkDownViewActivity.OPEN_URL_INFO, item.url)
                             putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, item.title)
@@ -143,6 +169,7 @@ open class CheatSheetActivity : EasyDiaryActivity() {
                         })
                     }
             )
+            adapter = mCheatSheetAdapter
         }
     }
 }
