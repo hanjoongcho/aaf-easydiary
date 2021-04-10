@@ -29,6 +29,7 @@
             android:layout_height="match_parent">
             <me.blog.korn123.easydiary.views.FixedCardView
                 app:fixedAppcompatPadding="false"
+                app:applyCardBackgroundColor="true"
                 app:cardElevation="3dp"
                 android:id="@+id/searchCard"
                 style="@style/AppCard">

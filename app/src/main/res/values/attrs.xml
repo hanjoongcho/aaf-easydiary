@@ -5,6 +5,7 @@
     </declare-styleable>
     <declare-styleable name="FixedCardView">
         <attr name="fixedAppcompatPadding" format="boolean" />
+        <attr name="applyCardBackgroundColor" format="boolean" />
     </declare-styleable>
     <declare-styleable name="FixedTextView">
         <attr name="applyGlobalSize" format="boolean" />

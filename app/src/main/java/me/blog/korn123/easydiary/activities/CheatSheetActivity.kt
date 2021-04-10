@@ -66,7 +66,7 @@ open class CheatSheetActivity : EasyDiaryActivity() {
 
     private fun refreshList(query: String?) {
         mFilteredCheatSheetList.clear()
-        mFilteredCheatSheetList.addAll(if (query.isNullOrEmpty()) mOriginCheatSheetList else mOriginCheatSheetList.filter { cheatSheet -> cheatSheet.title.contains(query) || cheatSheet.description.contains(query) })
+        mFilteredCheatSheetList.addAll(if (query.isNullOrEmpty()) mOriginCheatSheetList else mOriginCheatSheetList.filter { cheatSheet -> cheatSheet.title.contains(query, true) || cheatSheet.description.contains(query, true) })
         mCheatSheetAdapter.notifyDataSetChanged()
     }
 
