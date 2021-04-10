@@ -22,6 +22,7 @@
 
         <LinearLayout
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:padding="@dimen/card_layout_padding"
             android:id="@+id/main_holder"
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -58,6 +59,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginTop="@dimen/card_layout_padding"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/recycler_cheat_sheet" />
