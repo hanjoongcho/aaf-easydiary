@@ -511,6 +511,10 @@
         v1.4.163 / 2021.03.23\n
         Added function to save diary as HTML
     </string>
+    <string name="release_230">
+        v1.4.164 / 2021.03.xx\n
+        Fixed an issue where the date on the calendar was not visible when the card view color was black
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  自1.4.47版本以来添加的资源点击这里。                                                      -->
