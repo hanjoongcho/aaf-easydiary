@@ -44,6 +44,7 @@ open class CheatSheetActivity : EasyDiaryActivity() {
 
         setupCheatSheet()
         bindEvent()
+        refreshList(null)
     }
 
     private fun bindEvent() {
