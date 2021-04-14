@@ -3,6 +3,8 @@ package me.blog.korn123.easydiary.activities
 import android.app.*
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.AdapterView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,6 +13,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.CheatSheetAdapter
 import me.blog.korn123.easydiary.databinding.ActivityCheatSheetBinding
 import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.*
 import java.util.*
 
@@ -21,8 +24,9 @@ open class CheatSheetActivity : EasyDiaryActivity() {
      *
      ***************************************************************************************************/
     private lateinit var mBinding: ActivityCheatSheetBinding
-    private var mCheatSheetList = arrayListOf<CheatSheetAdapter.CheatSheet>()
-
+    private lateinit var mCheatSheetAdapter: CheatSheetAdapter
+    private var mOriginCheatSheetList = arrayListOf<CheatSheetAdapter.CheatSheet>()
+    private var mFilteredCheatSheetList = arrayListOf<CheatSheetAdapter.CheatSheet>()
 
     /***************************************************************************************************
      *   override functions
@@ -40,6 +44,30 @@ open class CheatSheetActivity : EasyDiaryActivity() {
         }
 
         setupCheatSheet()
+        bindEvent()
+        refreshList(null)
+    }
+
+    private fun bindEvent() {
+        mBinding.query.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+                refreshList(charSequence.toString())
+            }
+
+            override fun afterTextChanged(editable: Editable) {}
+        })
+
+        mBinding.clearQuery.setOnClickListener { _ ->
+            mBinding.query.text = null
+        }
+    }
+
+    private fun refreshList(query: String?) {
+        mFilteredCheatSheetList.clear()
+        mFilteredCheatSheetList.addAll(if (query.isNullOrEmpty()) mOriginCheatSheetList else mOriginCheatSheetList.filter { cheatSheet -> cheatSheet.title.contains(query, true) || cheatSheet.description.contains(query, true) })
+        mCheatSheetAdapter.notifyDataSetChanged()
     }
 
 
@@ -48,14 +76,13 @@ open class CheatSheetActivity : EasyDiaryActivity() {
      *
      ***************************************************************************************************/
     private fun setupCheatSheet() {
-        mCheatSheetList.run {
+        mOriginCheatSheetList.run {
             add(CheatSheetAdapter.CheatSheet("Package kotlin", "Explanation of kotlin basic functions", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/kotlin/kotlin.md"))
             add(CheatSheetAdapter.CheatSheet("Package kotlin.collections", "Explanation of kotlin collection functions", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/kotlin/kotlin.collections.md"))
             add(CheatSheetAdapter.CheatSheet("Cheat Sheet", "This page is a collection of useful link information such as open source projects and development related guides.", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/README.md"))
             add(CheatSheetAdapter.CheatSheet("Spring Annotation", "Describes annotations mainly used in Spring Framework", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/annotations/spring.md"))
-
+            add(CheatSheetAdapter.CheatSheet("Git", "Git and Git Flow Cheat Sheet", "https://raw.githubusercontent.com/arslanbilal/git-cheat-sheet/master/other-sheets/git-cheat-sheet-ko.md"))
             add(CheatSheetAdapter.CheatSheet("데이터베이스 표준화", "국가상수도데이터베이스표준화지침(20210101 개정)", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/design/database/standardization.md"))
-
             add(CheatSheetAdapter.CheatSheet(
                     "Java 8 - Lambda Expression",
                     "",
@@ -130,12 +157,12 @@ open class CheatSheetActivity : EasyDiaryActivity() {
 
         mBinding.recyclerCheatSheet.apply {
             layoutManager = LinearLayoutManager(this@CheatSheetActivity, LinearLayoutManager.VERTICAL, false)
-//            addItemDecoration(SettingsScheduleFragment.SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding)))
-            adapter =  CheatSheetAdapter(
+            addItemDecoration(SettingsScheduleFragment.SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding)))
+            mCheatSheetAdapter =  CheatSheetAdapter(
                     this@CheatSheetActivity,
-                    mCheatSheetList,
+                    mFilteredCheatSheetList,
                     AdapterView.OnItemClickListener { _, _, position, _ ->
-                        val item = mCheatSheetList[position]
+                        val item = mFilteredCheatSheetList[position]
                         TransitionHelper.startActivityWithTransition(this@CheatSheetActivity, Intent(this@CheatSheetActivity, MarkDownViewActivity::class.java).apply {
                             putExtra(MarkDownViewActivity.OPEN_URL_INFO, item.url)
                             putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, item.title)
@@ -143,6 +170,7 @@ open class CheatSheetActivity : EasyDiaryActivity() {
                         })
                     }
             )
+            adapter = mCheatSheetAdapter
         }
     }
 }
