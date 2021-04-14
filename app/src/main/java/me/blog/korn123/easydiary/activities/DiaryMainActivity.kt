@@ -23,6 +23,9 @@ import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.github.ksoichiro.android.observablescrollview.ObservableListView
 import com.nineoldandroids.view.ViewHelper
 import io.github.aafactory.commons.utils.CommonUtils
+import io.github.aafactory.commons.utils.DateUtils
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
@@ -138,17 +141,36 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            REQUEST_CODE_SPEECH_INPUT -> {
-                if (resultCode == Activity.RESULT_OK && data != null) {
-                    data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.let {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
+        if (resultCode == Activity.RESULT_OK && intent != null) {
+            when (requestCode) {
+                REQUEST_CODE_SPEECH_INPUT -> {
+                    intent.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.let {
                         mBinding.query.setText(it[0])
                         mBinding.query.setSelection(it[0].length)
                     }
+                    pauseLock()
                 }
-                pauseLock()
+                REQUEST_CODE_SAF_HTML_BOOK -> {
+                    intent.let {
+                        mDiaryMainItemAdapter?.getSelectedItems()?.run {
+                            mBinding.progressCoroutine.visibility = View.VISIBLE
+                            GlobalScope.launch {
+                                exportHtmlBook(it.data, this@run)
+                                runOnUiThread {
+                                    mBinding.progressCoroutine.visibility = View.GONE
+                                    mDiaryMainItemAdapter?.getSelectedItems()?.forEach {
+                                        it.isSelected = false
+                                        EasyDiaryDbHelper.updateDiary(it)
+                                    }
+                                    mDiaryMainItemAdapter?.notifyDataSetChanged()
+                                }
+                            }
+
+                        }
+                    }
+                }
             }
         }
     }
@@ -187,7 +209,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                                     EasyDiaryDbHelper.duplicateDiary(it)
                                 }
                                 refreshList()
-                                Handler().post { mBinding.diaryListView.setSelection(0) }
+                                Handler(Looper.getMainLooper()).post { mBinding.diaryListView.setSelection(0) }
                             }, null)
                         }
                         false -> {
@@ -195,6 +217,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                         }
                     }
                 }
+            }
+            R.id.saveAsHtml -> {
+                writeFileWithSAF("${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}.html", MIME_TYPE_HTML, REQUEST_CODE_SAF_HTML_BOOK)
             }
             R.id.timeline -> {
                 val timelineIntent = Intent(this@DiaryMainActivity, TimelineActivity::class.java)

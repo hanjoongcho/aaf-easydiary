@@ -26,8 +26,8 @@ android {
         applicationId "me.blog.korn123.easydiary"
         minSdkVersion 19
         targetSdkVersion versions.compileSdk
-        versionCode 227
-        versionName '1.4.161'
+        versionCode 229
+        versionName '1.4.163'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -132,12 +132,12 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'androidx.biometric:biometric:1.0.1'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
-    implementation 'androidx.activity:activity-ktx:1.1.0'
-    implementation 'com.google.android.material:material:1.2.1'
-    implementation ('androidx.work:work-runtime-ktx:2.4.0') { exclude group: 'com.google.guava', module: 'listenablefuture' }
+    implementation 'androidx.biometric:biometric:1.1.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0'
+    implementation 'androidx.activity:activity-ktx:1.2.1'
+    implementation 'com.google.android.material:material:1.3.0'
+    implementation ('androidx.work:work-runtime-ktx:2.5.0') { exclude group: 'com.google.guava', module: 'listenablefuture' }
 
     // google gms api
     gmsDevImplementation "com.google.android.gms:play-services-auth:19.0.0"
@@ -152,7 +152,7 @@ dependencies {
 
     // google
     implementation 'com.google.android:flexbox:1.0.0'
-    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.code.gson:gson:2.8.6'
     implementation group: 'com.google.guava', name: 'guava', version: '26.0-android'
 
     // apache commons
@@ -164,11 +164,11 @@ dependencies {
 //    implementation project(":aafactory-commons")
 
     // etc.
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.10'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.30'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     implementation 'com.roomorama:caldroid:3.0.1'
     implementation 'com.github.chrisbanes:PhotoView:2.1.3'  
-    implementation 'com.github.QuadFlask:colorpicker:0.0.13'
+    implementation 'com.github.QuadFlask:colorpicker:0.0.15'
     implementation 'com.github.amlcurran.showcaseview:library:5.4.3'
     implementation 'id.zelory:compressor:2.1.0'
     implementation 'com.xw.repo:bubbleseekbar:3.17'
@@ -179,8 +179,9 @@ dependencies {
     implementation "jp.co.cyberagent.android:gpuimage:2.0.3"
     implementation group: 'org.apache.poi', name: 'poi', version: '3.13'
     implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:4.0'
-    implementation 'io.noties.markwon:core:4.2.0'
-    implementation 'io.noties.markwon:syntax-highlight:4.2.0'
+    implementation 'io.noties.markwon:core:4.6.2'
+    implementation 'io.noties.markwon:syntax-highlight:4.6.2'
+    implementation 'io.noties.markwon:ext-tables:4.6.2'
     implementation 'io.noties:prism4j:2.0.0'
     implementation group: 'org.jasypt', name: 'jasypt', version: '1.9.2'
 

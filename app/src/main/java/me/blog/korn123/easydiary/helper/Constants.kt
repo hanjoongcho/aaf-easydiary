@@ -437,6 +437,7 @@ const val REQUEST_CODE_SAF_WRITE_XLS = 41
 const val REQUEST_CODE_SAF_WRITE_REALM = 42
 const val REQUEST_CODE_SAF_READ_ZIP = 43
 const val REQUEST_CODE_SAF_READ_REALM = 44
+const val REQUEST_CODE_SAF_HTML_BOOK = 45
 
 const val REQUEST_CODE_SPEECH_INPUT = 100
 const val REQUEST_CODE_GOOGLE_SIGN_IN = 101
@@ -463,6 +464,7 @@ const val MIME_TYPE_ZIP = "application/zip"
 const val MIME_TYPE_XLS = "application/vnd.ms-excel"
 const val MIME_TYPE_REALM = "application/octet-stream"
 const val MIME_TYPE_JPEG = "image/jpeg"
+const val MIME_TYPE_HTML = "text/html"
 
 
 /***************************************************************************************************

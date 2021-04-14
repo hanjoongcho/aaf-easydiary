@@ -2,15 +2,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:icon="@drawable/html"
+        android:id="@+id/saveAsHtml"
+        android:orderInCategory="100"
+        android:title="HTML"
+        app:showAsAction="always" />
+    <item
         android:icon="@drawable/copy"
         android:id="@+id/duplication"
         android:orderInCategory="100"
-        android:title="@string/menu_calendar"
+        android:title="Duplicate"
         app:showAsAction="always" />
     <item
         android:icon="@drawable/ic_aaf_delete"
         android:id="@+id/delete"
         android:orderInCategory="100"
-        android:title="@string/menu_calendar"
+        android:title="Delete"
         app:showAsAction="always" />
 </menu>
