@@ -122,7 +122,7 @@ object EasyDiaryUtils {
         }
     }
     
-    fun highlightString(textView: TextView?, input: String?) {
+    fun highlightString(textView: TextView?, input: String?, highlightColor: Int = HIGHLIGHT_COLOR) {
         textView?.let { tv ->
             input?.let { targetString ->
                 //Get the text from text view and create a spannable string
@@ -140,7 +140,7 @@ object EasyDiaryUtils {
 
                 while (indexOfKeyword >= 0) {
                     //Create a background color span on the keyword
-                    spannableString.setSpan(BackgroundColorSpan(HIGHLIGHT_COLOR), indexOfKeyword, indexOfKeyword + targetString.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    spannableString.setSpan(BackgroundColorSpan(highlightColor), indexOfKeyword, indexOfKeyword + targetString.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
                     //Get the next index of the keyword
                     indexOfKeyword = spannableString.toString().indexOf(targetString, indexOfKeyword + targetString.length)
@@ -167,7 +167,7 @@ object EasyDiaryUtils {
         textView.text = spannableString
     }
 
-    fun highlightStringIgnoreCase(textView: TextView?, input: String?) {
+    fun highlightStringIgnoreCase(textView: TextView?, input: String?, highlightColor: Int = HIGHLIGHT_COLOR) {
         textView?.let { tv -> 
             input?.let { targetString ->
                 val inputLower = targetString.toLowerCase()
@@ -183,7 +183,7 @@ object EasyDiaryUtils {
                 var indexOfKeyword = contentsLower.indexOf(inputLower)
 
                 while (indexOfKeyword >= 0) {
-                    spannableString.setSpan(BackgroundColorSpan(HIGHLIGHT_COLOR), indexOfKeyword, indexOfKeyword + inputLower.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    spannableString.setSpan(BackgroundColorSpan(highlightColor), indexOfKeyword, indexOfKeyword + inputLower.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
                     indexOfKeyword = contentsLower.indexOf(inputLower, indexOfKeyword + inputLower.length)
                 }
