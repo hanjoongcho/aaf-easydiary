@@ -5,7 +5,10 @@ import android.animation.ObjectAnimator
 import android.content.ContentResolver
 import android.content.Context
 import android.database.Cursor
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
@@ -16,7 +19,7 @@ import android.text.Html
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.BackgroundColorSpan
-import android.text.style.RelativeSizeSpan
+import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
 import android.view.Gravity
@@ -33,9 +36,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.common.reflect.TypeToken
 import com.google.gson.GsonBuilder
 import com.google.gson.stream.JsonReader
-import com.simplemobiletools.commons.extensions.baseConfig
-import com.simplemobiletools.commons.extensions.moveLastItemToFront
-import com.simplemobiletools.commons.helpers.*
 import id.zelory.compressor.Compressor
 import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.CALCULATION
@@ -121,35 +121,12 @@ object EasyDiaryUtils {
             }
         }
     }
-    
-    fun highlightString(textView: TextView?, input: String?, highlightColor: Int = HIGHLIGHT_COLOR) {
-        textView?.let { tv ->
-            input?.let { targetString ->
-                //Get the text from text view and create a spannable string
-                val spannableString = SpannableString(tv.text)
 
-                //Get the previous spans and remove them
-                val backgroundSpans = spannableString.getSpans(0, spannableString.length, BackgroundColorSpan::class.java)
-
-                for (span in backgroundSpans) {
-                    spannableString.removeSpan(span)
-                }
-
-                //Search for all occurrences of the keyword in the string
-                var indexOfKeyword = spannableString.toString().indexOf(targetString)
-
-                while (indexOfKeyword >= 0) {
-                    //Create a background color span on the keyword
-                    spannableString.setSpan(BackgroundColorSpan(highlightColor), indexOfKeyword, indexOfKeyword + targetString.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-                    //Get the next index of the keyword
-                    indexOfKeyword = spannableString.toString().indexOf(targetString, indexOfKeyword + targetString.length)
-                }
-
-                //Set the final text on TextView
-                tv.text = spannableString    
-            }
-        }
+    fun warningString(textView: TextView) {
+        val spannableString = SpannableString(textView.text)
+        spannableString.setSpan(UnderlineSpan(), 0, textView.text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString.setSpan(StyleSpan(Typeface.ITALIC), 0, textView.text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        textView.text = spannableString
     }
 
     fun highlightString(textView: TextView) {
@@ -160,11 +137,28 @@ object EasyDiaryUtils {
         textView.text = spannableString
     }
 
-    fun warningString(textView: TextView) {
-        val spannableString = SpannableString(textView.text)
-        spannableString.setSpan(UnderlineSpan(), 0, textView.text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        spannableString.setSpan(StyleSpan(Typeface.ITALIC), 0, textView.text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        textView.text = spannableString
+    fun highlightString(textView: TextView?, input: String?, highlightColor: Int = HIGHLIGHT_COLOR) {
+        textView?.let { tv ->
+            input?.let { targetString ->
+                //Get the text from text view and create a spannable string
+                val spannableString = SpannableString(tv.text)
+                removeSpans(spannableString)
+
+                //Search for all occurrences of the keyword in the string
+                var indexOfKeyword = spannableString.toString().indexOf(targetString)
+                while (indexOfKeyword >= 0) {
+                    //Create a background color span on the keyword
+                    spannableString.setSpan(BackgroundColorSpan(highlightColor), indexOfKeyword, indexOfKeyword + targetString.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    spannableString.setSpan(ForegroundColorSpan(Color.BLACK), indexOfKeyword, indexOfKeyword + targetString.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+                    //Get the next index of the keyword
+                    indexOfKeyword = spannableString.toString().indexOf(targetString, indexOfKeyword + targetString.length)
+                }
+
+                //Set the final text on TextView
+                tv.text = spannableString
+            }
+        }
     }
 
     fun highlightStringIgnoreCase(textView: TextView?, input: String?, highlightColor: Int = HIGHLIGHT_COLOR) {
@@ -173,23 +167,23 @@ object EasyDiaryUtils {
                 val inputLower = targetString.toLowerCase()
                 val contentsLower = tv.text.toString().toLowerCase()
                 val spannableString = SpannableString(tv.text)
-
-                val backgroundSpans = spannableString.getSpans(0, spannableString.length, BackgroundColorSpan::class.java)
-
-                for (span in backgroundSpans) {
-                    spannableString.removeSpan(span)
-                }
+                removeSpans(spannableString)
 
                 var indexOfKeyword = contentsLower.indexOf(inputLower)
-
                 while (indexOfKeyword >= 0) {
                     spannableString.setSpan(BackgroundColorSpan(highlightColor), indexOfKeyword, indexOfKeyword + inputLower.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    spannableString.setSpan(ForegroundColorSpan(Color.BLACK), indexOfKeyword, indexOfKeyword + targetString.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
                     indexOfKeyword = contentsLower.indexOf(inputLower, indexOfKeyword + inputLower.length)
                 }
                 tv.text = spannableString
             }
         }
+    }
+
+    private fun removeSpans(spannableString: SpannableString) {
+        spannableString.getSpans(0, spannableString.length, BackgroundColorSpan::class.java)?.forEach { spannableString.removeSpan(it) }
+        spannableString.getSpans(0, spannableString.length, ForegroundColorSpan::class.java)?.forEach { spannableString.removeSpan(it) }
     }
 
     fun createSecondsPickerBuilder(context: Context, itemClickListener: AdapterView.OnItemClickListener, second: Int): AlertDialog.Builder {
