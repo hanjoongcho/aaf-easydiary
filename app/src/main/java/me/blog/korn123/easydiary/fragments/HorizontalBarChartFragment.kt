@@ -34,10 +34,8 @@ import java.util.*
 
 class HorizontalBarChartFragment : androidx.fragment.app.Fragment() {
     val mSequences = arrayListOf<Int>()
-    private val mContext: Context
-        get() { return context!! }
     private val mTypeface: Typeface
-        get() = FontUtils.getCommonTypeface(mContext)!!
+        get() = FontUtils.getCommonTypeface(requireContext())!!
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -89,7 +87,7 @@ class HorizontalBarChartFragment : androidx.fragment.app.Fragment() {
         l.xEntrySpace = 4f
         l.typeface = mTypeface
 
-        val mv = XYMarkerView(context!!, xAxisFormatter)
+        val mv = XYMarkerView(requireContext(), xAxisFormatter)
         mv.chartView = barChart // For bounds control
         barChart.marker = mv // Set the marker to the chart
 
@@ -132,7 +130,7 @@ class HorizontalBarChartFragment : androidx.fragment.app.Fragment() {
         mSequences.reverse()
         itemArray.forEachIndexed { index, item ->
             val drawable: Drawable? = when (FlavorUtils.sequenceToSymbolResourceId(item["key"]!!) > 0) {
-                true -> scaledDrawable(FlavorUtils.sequenceToSymbolResourceId(item["key"]!!), CommonUtils.dpToPixel(mContext,24F) , CommonUtils.dpToPixel(mContext,24F))
+                true -> scaledDrawable(FlavorUtils.sequenceToSymbolResourceId(item["key"]!!), CommonUtils.dpToPixel(requireContext(),24F) , CommonUtils.dpToPixel(requireContext(),24F))
                 false -> null
             }
             barEntries.add(BarEntry((index + 1F), item["value"]!!.toFloat(), drawable))
