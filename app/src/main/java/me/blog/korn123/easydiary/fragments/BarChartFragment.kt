@@ -49,7 +49,7 @@ class BarChartFragment : androidx.fragment.app.Fragment() {
 
         val xAxis = barChart.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
-        xAxis.typeface = FontUtils.getCommonTypeface(context!!)
+        xAxis.typeface = FontUtils.getCommonTypeface(requireContext())
         xAxis.labelRotationAngle = -45F
         xAxis.setDrawGridLines(false)
         xAxis.granularity = 1f // only intervals of 1 day
@@ -59,7 +59,7 @@ class BarChartFragment : androidx.fragment.app.Fragment() {
         val custom = MyAxisValueFormatter(context)
 
         val leftAxis = barChart.axisLeft
-        leftAxis.typeface = FontUtils.getCommonTypeface(context!!)
+        leftAxis.typeface = FontUtils.getCommonTypeface(requireContext())
         leftAxis.setLabelCount(8, false)
         leftAxis.valueFormatter = custom
         leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
@@ -68,14 +68,14 @@ class BarChartFragment : androidx.fragment.app.Fragment() {
 
         val rightAxis = barChart.axisRight
         rightAxis.setDrawGridLines(false)
-        rightAxis.typeface = FontUtils.getCommonTypeface(context!!)
+        rightAxis.typeface = FontUtils.getCommonTypeface(requireContext())
         rightAxis.setLabelCount(8, false)
         rightAxis.valueFormatter = custom
         rightAxis.spaceTop = 15f
         rightAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
 
         val l = barChart.legend
-        l.typeface = FontUtils.getCommonTypeface(context!!)
+        l.typeface = FontUtils.getCommonTypeface(requireContext())
         l.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
         l.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
         l.orientation = Legend.LegendOrientation.HORIZONTAL
@@ -85,7 +85,7 @@ class BarChartFragment : androidx.fragment.app.Fragment() {
         l.textSize = 11f
         l.xEntrySpace = 4f
 
-        val mv = XYMarkerView(context!!, xAxisFormatter)
+        val mv = XYMarkerView(requireContext(), xAxisFormatter)
         mv.chartView = barChart // For bounds control
         barChart.marker = mv // Set the marker to the chart
 
@@ -149,7 +149,7 @@ class BarChartFragment : androidx.fragment.app.Fragment() {
 
         val barData = BarData(dataSets)
         barData.setValueTextSize(10f)
-        barData.setValueTypeface(FontUtils.getCommonTypeface(context!!))
+        barData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
         barData.barWidth = 0.9f
 
         barChart.data = barData
