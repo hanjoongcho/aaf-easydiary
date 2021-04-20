@@ -77,6 +77,7 @@ open class CheatSheetActivity : EasyDiaryActivity() {
      ***************************************************************************************************/
     private fun setupCheatSheet() {
         mOriginCheatSheetList.run {
+            add(CheatSheetAdapter.CheatSheet("android-guidelines", "Architecture and code guidelines we use at ribot when developing for Android", "https://raw.githubusercontent.com/hanjoongcho/android-guidelines/master/project_and_code_guidelines.md"))
             add(CheatSheetAdapter.CheatSheet("Package kotlin", "Explanation of kotlin basic functions", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/kotlin/kotlin.md"))
             add(CheatSheetAdapter.CheatSheet("Package kotlin.collections", "Explanation of kotlin collection functions", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/kotlin/kotlin.collections.md"))
             add(CheatSheetAdapter.CheatSheet("Cheat Sheet", "This page is a collection of useful link information such as open source projects and development related guides.", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/README.md"))
