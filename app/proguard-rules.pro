@@ -1,3 +1,4 @@
+#noinspection ShrinkerUnresolvedReference
 -keep class me.blog.korn123.easydiary.** { *; }
 -dontwarn me.blog.korn123.easydiary.**
 
