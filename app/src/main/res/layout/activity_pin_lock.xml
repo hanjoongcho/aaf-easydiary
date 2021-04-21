@@ -130,11 +130,11 @@
                 android:id="@+id/changeFingerprintLock"
                 style="@style/text_view_lock_number_button">
                 <ImageView
-                    android:id="@+id/fingerprint"
                     tools:visibility="visible"
+                    app:tint="@color/pinLockText"
+                    android:id="@+id/fingerprint"
                     android:visibility="gone"
                     android:src="@drawable/ic_fingerprint"
-                    android:tint="@color/pinLockText"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"/>
             </LinearLayout>
