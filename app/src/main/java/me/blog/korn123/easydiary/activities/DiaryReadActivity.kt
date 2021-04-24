@@ -527,7 +527,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 diaryTitle.visibility = View.GONE
             }
             diaryTitle.text = diaryDto.title
-            EasyDiaryUtils.boldString(context!!, diaryTitle)
+            EasyDiaryUtils.boldString(requireContext(), diaryTitle)
             diaryContents.text = diaryDto.contents
             date.text = when (diaryDto.isAllDay) {
                 true -> DateUtils.getFullPatternDate(diaryDto.currentTimeMillis)
@@ -550,7 +550,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
             }
 
             val weatherFlag = diaryDto.weather
-            FlavorUtils.initWeatherView(context!!, weather, weatherFlag)
+            FlavorUtils.initWeatherView(requireContext(), weather, weatherFlag)
 
             // TODO fixme elegance
             val photoCount = diaryDto.photoUris?.size ?: 0 
