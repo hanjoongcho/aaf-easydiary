@@ -512,7 +512,7 @@
         Added function to save diary as HTML
     </string>
     <string name="release_230">
-        v1.4.164 / 2021.03.xx\n
+        v1.4.164 / 2021.04.26\n
         Fixed an issue where the date on the calendar was not visible when the card view color was black
     </string>
 
