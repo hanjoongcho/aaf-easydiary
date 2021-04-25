@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.164 (date: 2021.04.26)
+  * Fixed an issue where the date on the calendar was not visible when the card view color was black
+
 # Changes in 1.4.163 (date: 2021.03.23)
   * Added function to save diary as HTML
 
