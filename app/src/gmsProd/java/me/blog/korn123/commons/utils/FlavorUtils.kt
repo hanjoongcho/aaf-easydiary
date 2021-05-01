@@ -171,6 +171,7 @@ object FlavorUtils {
         FOOD_CURRY -> R.drawable.ic_curry
         FOOD_NOODLES -> R.drawable.ic_noodles
         FOOD_FRIED_RICE -> R.drawable.ic_fried_rice
+        FOOD_SOUP02 -> R.drawable.ic_soup2
 
         LEISURE_PICNIC -> R.drawable.ic_picnic
         LEISURE_MOVIE -> R.drawable.ic_movie
@@ -223,6 +224,7 @@ object FlavorUtils {
         SYMBOL_UBUNTU -> R.drawable.ic_ubuntu
         SYMBOL_JAVA -> R.drawable.ic_java
         SYMBOL_SLIDESHARE -> R.drawable.ic_slideshare
+        SYMBOL_GIT -> R.drawable.ic_git
 
         FLAG_MAURITIUS -> R.drawable.ic_001_mauritius
         FLAG_AUSTRIA -> R.drawable.ic_003_austria
