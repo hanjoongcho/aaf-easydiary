@@ -154,6 +154,11 @@ open class CheatSheetActivity : EasyDiaryActivity() {
                     "var, let, const",
                     "https://gist.githubusercontent.com/hanjoongcho/983fe388a669f1da9df13cf64f63c5f3/raw/d1587f1da1d7ead1ba695e50094dbf52daaf6e1e/var-let-const.md", false
             ))
+            add(CheatSheetAdapter.CheatSheet(
+                    "ES6",
+                    "Promise",
+                    "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/es6/promise.md", false
+            ))
         }
 
         mBinding.recyclerCheatSheet.apply {
