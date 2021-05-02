@@ -715,7 +715,7 @@
     <string name="delete_selected_items_confirm">Sind Sie sicher, dass Sie die %d ausgewählten Elemente löschen möchten?</string>
     <string name="duplicate_selected_items_confirm">Sind Sie sicher, dass Sie die %d ausgewählten Elemente duplizieren möchten?</string>
     <string name="no_items_warning">Es sind keine Elemente ausgewählt.</string>
-    <string name="preferences_category_schedule">[Beta] Zeitplan-Einstellung</string>
+    <string name="preferences_category_schedule">Zeitplan-Einstellung</string>
     <string name="schedule_time">Tag und Uhrzeit</string>
     <string name="schedule_type">Zeitplan-Typ</string>
     <string name="schedule_description">Beschreibung des Zeitplans</string>

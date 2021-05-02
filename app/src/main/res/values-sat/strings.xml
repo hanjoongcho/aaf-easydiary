@@ -715,7 +715,7 @@
     <string name="delete_selected_items_confirm">ᱟᱢ ᱡᱷᱚᱛᱚ ᱞᱮᱠᱷᱟ ᱛᱮ %d ᱵᱟᱪᱷᱟᱣᱟᱠᱟᱱ ᱡᱤᱱᱤᱥᱠᱚ ᱢᱮᱴᱟᱣ ᱥᱮᱱᱟᱢ ᱠᱟᱱᱟ ᱥᱮ?</string>
     <string name="duplicate_selected_items_confirm">ᱟᱢ ᱡᱷᱚᱛᱚ ᱞᱮᱠᱷᱟ ᱛᱮ %d ᱵᱟᱪᱷᱟᱣᱟᱠᱟᱱ ᱡᱤᱱᱤᱥᱠᱚ ᱰᱩᱯᱞᱤᱠᱮᱴ ᱥᱮᱱᱟᱢ ᱠᱟᱱᱟ ᱥᱮ?</string>
     <string name="no_items_warning">ᱱᱚᱰᱮ ᱫᱚ ᱟᱨ ᱚᱠᱟ ᱡᱤᱱᱤᱥ ᱦᱚᱸ ᱵᱟᱝ ᱵᱟᱪᱷᱟᱣ ᱠᱟᱱᱟ ᱾</string>
-    <string name="preferences_category_schedule">[Beta] ᱥᱮᱰᱭᱩᱤᱝ ᱥᱟᱡᱟᱣ</string>
+    <string name="preferences_category_schedule">ᱥᱮᱰᱭᱩᱤᱝ ᱥᱟᱡᱟᱣ</string>
     <string name="schedule_time">ᱫᱤᱱ ᱟᱨ ᱚᱠᱛᱚ</string>
     <string name="schedule_type">ᱥᱮᱰᱭᱩᱞ ᱯᱨᱚᱠᱟᱨ</string>
     <string name="schedule_description">ᱥᱮᱰᱭᱩᱞ ᱵᱤᱵᱨᱚᱬ</string>

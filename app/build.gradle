@@ -27,7 +27,7 @@ android {
         minSdkVersion 19
         targetSdkVersion versions.compileSdk
         versionCode 231
-        versionName '1.4.165'
+        versionName '1.4.165-foss'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true

@@ -715,7 +715,7 @@
     <string name="delete_selected_items_confirm">선택된 %d건의 항목을 삭제 하시겠습니까?</string>
     <string name="duplicate_selected_items_confirm">선택된 %d건의 항목을 복사 하시겠습니까?</string>
     <string name="no_items_warning">선택된 항목이 없습니다.</string>
-    <string name="preferences_category_schedule">[Beta] 스케줄 설정</string>
+    <string name="preferences_category_schedule">스케줄 설정</string>
     <string name="schedule_time">요일 및 시간</string>
     <string name="schedule_type">스케줄 유형</string>
     <string name="schedule_description">스케줄 설명</string>

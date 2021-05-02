@@ -715,7 +715,7 @@
     <string name="delete_selected_items_confirm">Êtes-vous sûr de vouloir supprimer les %d éléments sélectionnés ?</string>
     <string name="duplicate_selected_items_confirm">Êtes-vous sûr de vouloir dupliquer les %d éléments sélectionnés ?</string>
     <string name="no_items_warning">Il n\'y a aucun élément sélectionné.</string>
-    <string name="preferences_category_schedule">[Beta] Paramétrage de la planification</string>
+    <string name="preferences_category_schedule">Paramétrage de la planification</string>
     <string name="schedule_time">Jour et heure</string>
     <string name="schedule_type">Type de planification</string>
     <string name="schedule_description">Description de la planification</string>
