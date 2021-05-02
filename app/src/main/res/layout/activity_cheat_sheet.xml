@@ -17,7 +17,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+                app:popupTheme="@style/AppTheme.PopupOverlay" >
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/query"
+                    android:background="@android:color/transparent"
+                    android:inputType="text|textAutoCorrect|textAutoComplete"
+                    android:imeOptions="actionDone"
+                    android:maxLines="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
         <LinearLayout
@@ -27,39 +36,6 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <me.blog.korn123.easydiary.views.FixedCardView
-                app:fixedAppcompatPadding="false"
-                app:applyCardBackgroundColor="true"
-                app:cardElevation="3dp"
-                android:id="@+id/searchCard"
-                style="@style/AppCard">
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <com.simplemobiletools.commons.views.MyEditText
-                        android:id="@+id/query"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="@android:color/transparent"
-                        android:gravity="center_vertical"
-                        android:layout_gravity="center_vertical"
-                        android:inputType="text|textAutoCorrect|textAutoComplete"
-                        android:imeOptions="actionDone"
-                        android:maxLines="1" />
-
-                    <ImageView
-                        android:id="@+id/clearQuery"
-                        android:src="@drawable/delete"
-                        android:layout_gravity="end|center_vertical"
-                        android:padding="3dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-            </me.blog.korn123.easydiary.views.FixedCardView>
-
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_marginTop="@dimen/card_layout_padding"
                 android:layout_width="match_parent"

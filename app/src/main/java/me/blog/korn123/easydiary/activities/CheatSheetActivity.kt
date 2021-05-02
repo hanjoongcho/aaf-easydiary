@@ -41,6 +41,7 @@ open class CheatSheetActivity : EasyDiaryActivity() {
         supportActionBar?.run {
             title = "Cheat Sheet"
             setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_cross)
         }
 
         setupCheatSheet()
@@ -58,10 +59,6 @@ open class CheatSheetActivity : EasyDiaryActivity() {
 
             override fun afterTextChanged(editable: Editable) {}
         })
-
-        mBinding.clearQuery.setOnClickListener { _ ->
-            mBinding.query.text = null
-        }
     }
 
     private fun refreshList(query: String?) {
