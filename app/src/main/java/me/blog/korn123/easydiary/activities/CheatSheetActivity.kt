@@ -41,6 +41,7 @@ open class CheatSheetActivity : EasyDiaryActivity() {
         supportActionBar?.run {
             title = "Cheat Sheet"
             setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_cross)
         }
 
         setupCheatSheet()
@@ -58,10 +59,6 @@ open class CheatSheetActivity : EasyDiaryActivity() {
 
             override fun afterTextChanged(editable: Editable) {}
         })
-
-        mBinding.clearQuery.setOnClickListener { _ ->
-            mBinding.query.text = null
-        }
     }
 
     private fun refreshList(query: String?) {
@@ -152,8 +149,11 @@ open class CheatSheetActivity : EasyDiaryActivity() {
             add(CheatSheetAdapter.CheatSheet(
                     "ES6",
                     "var, let, const",
-                    "https://gist.githubusercontent.com/hanjoongcho/983fe388a669f1da9df13cf64f63c5f3/raw/d1587f1da1d7ead1ba695e50094dbf52daaf6e1e/var-let-const.md", false
-            ))
+                    "https://gist.githubusercontent.com/hanjoongcho/983fe388a669f1da9df13cf64f63c5f3/raw/d1587f1da1d7ead1ba695e50094dbf52daaf6e1e/var-let-const.md"))
+            add(CheatSheetAdapter.CheatSheet(
+                    "ES6-Promise",
+                    "Promise",
+                    "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/es6/promise.md"))
         }
 
         mBinding.recyclerCheatSheet.apply {
