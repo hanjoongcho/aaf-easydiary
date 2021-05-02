@@ -715,7 +715,7 @@
     <string name="delete_selected_items_confirm">Are you sure you want to delete the %d selected items?</string>
     <string name="duplicate_selected_items_confirm">Are you sure you want to duplicate the %d selected items?</string>
     <string name="no_items_warning">There are no items selected.</string>
-    <string name="preferences_category_schedule">[Beta] Schedule setting</string>
+    <string name="preferences_category_schedule">Schedule setting</string>
     <string name="schedule_time">Day and time</string>
     <string name="schedule_type">Schedule type</string>
     <string name="schedule_description">Schedule description</string>
