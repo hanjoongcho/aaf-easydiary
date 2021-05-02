@@ -154,6 +154,10 @@ open class CheatSheetActivity : EasyDiaryActivity() {
                     "ES6-Promise",
                     "Promise",
                     "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/es6/promise.md"))
+            add(CheatSheetAdapter.CheatSheet(
+                    "Data Structure",
+                    "Unicode",
+                    "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/data-structure/unicode.md"))
         }
 
         mBinding.recyclerCheatSheet.apply {
