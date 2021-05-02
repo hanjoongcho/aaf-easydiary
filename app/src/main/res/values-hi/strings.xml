@@ -715,7 +715,7 @@
     <string name="delete_selected_items_confirm">क्या आप वाकई%d चयनित आइटम हटाना चाहते हैं?</string>
     <string name="duplicate_selected_items_confirm">क्या आप सुनिश्चित हैं कि आप%d चयनित वस्तुओं की नकल करना चाहते हैं?</string>
     <string name="no_items_warning">कोई आइटम चयनित नहीं हैं।</string>
-    <string name="preferences_category_schedule">[बीटा] अनुसूची सेटिंग</string>
+    <string name="preferences_category_schedule">अनुसूची सेटिंग</string>
     <string name="schedule_time">दिन और समय</string>
     <string name="schedule_type">अनुसूची प्रकार</string>
     <string name="schedule_description">अनुसूची का विवरण</string>

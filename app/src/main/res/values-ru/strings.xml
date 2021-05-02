@@ -715,7 +715,7 @@
     <string name="delete_selected_items_confirm">Вы уверены, что хотите удалить %d выбранных элементов?</string>
     <string name="duplicate_selected_items_confirm">Вы уверены, что хотите сделать дубликат %d выбранных элементов?</string>
     <string name="no_items_warning">Нет выбранных элементов.</string>
-    <string name="preferences_category_schedule">[BETA] Настройка расписания</string>
+    <string name="preferences_category_schedule">Настройка расписания</string>
     <string name="schedule_time">День и время</string>
     <string name="schedule_type">Тип расписания</string>
     <string name="schedule_description">Описание расписания</string>

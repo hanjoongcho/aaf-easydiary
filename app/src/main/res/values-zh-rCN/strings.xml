@@ -715,7 +715,7 @@
     <string name="delete_selected_items_confirm">确实要删除 %d 选定的项目吗？</string>
     <string name="duplicate_selected_items_confirm">确实要复制 %d 选定的项目吗？</string>
     <string name="no_items_warning">没有选择项目</string>
-    <string name="preferences_category_schedule">[Beta] 时间表设定</string>
+    <string name="preferences_category_schedule">时间表设定</string>
     <string name="schedule_time">日期及时间</string>
     <string name="schedule_type">附表类别</string>
     <string name="schedule_description">附表说明</string>

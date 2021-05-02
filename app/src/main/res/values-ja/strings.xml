@@ -715,7 +715,7 @@
     <string name="delete_selected_items_confirm">選択した%d個のアイテムを削除してもよろしいですか?</string>
     <string name="duplicate_selected_items_confirm">%d個の選択されたアイテムを複製しますか?</string>
     <string name="no_items_warning">アイテムが選択されていません。</string>
-    <string name="preferences_category_schedule">[Beta] スケジュール設定</string>
+    <string name="preferences_category_schedule">スケジュール設定</string>
     <string name="schedule_time">日時</string>
     <string name="schedule_type">スケジュールタイプ</string>
     <string name="schedule_description">スケジュールの説明</string>
