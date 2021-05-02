@@ -43,6 +43,7 @@ class SettingsActivity : BaseSettingsActivity() {
                         3 -> {
                             title = getString(R.string.preferences_category_backup_restore_device)
                             subtitle = getString(R.string.preferences_category_backup_restore_device_sub)
+                            updateUI()
                         }
                         4 -> {
                             title = getString(R.string.preferences_category_schedule)
