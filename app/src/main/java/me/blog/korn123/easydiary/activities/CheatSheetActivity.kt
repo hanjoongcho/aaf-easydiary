@@ -158,6 +158,10 @@ open class CheatSheetActivity : EasyDiaryActivity() {
                     "Data Structure",
                     "Unicode",
                     "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/data-structure/unicode.md"))
+            add(CheatSheetAdapter.CheatSheet(
+                    "Data Structure",
+                    "ASCII",
+                    "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/data-structure/ascii.md"))
         }
 
         mBinding.recyclerCheatSheet.apply {
