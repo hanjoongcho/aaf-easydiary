@@ -155,11 +155,11 @@ open class CheatSheetActivity : EasyDiaryActivity() {
                     "Promise",
                     "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/es6/promise.md"))
             add(CheatSheetAdapter.CheatSheet(
-                    "Data Structure",
+                    "Data Structure_01",
                     "Unicode",
                     "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/data-structure/unicode.md"))
             add(CheatSheetAdapter.CheatSheet(
-                    "Data Structure",
+                    "Data Structure_02",
                     "ASCII",
                     "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/data-structure/ascii.md"))
         }
