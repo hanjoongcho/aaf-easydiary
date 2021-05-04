@@ -17,10 +17,10 @@
 
     <ScrollView
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView
+            android:padding="10dp"
             android:id="@+id/markdownView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
