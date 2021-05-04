@@ -596,6 +596,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 } else {
                     contentsLengthContainer.visibility = View.GONE
                 }
+                layout_info_label.visibility = if (locationContainer.visibility == View.VISIBLE || contentsLengthContainer.visibility == View.VISIBLE) View.VISIBLE else View.GONE
 
                 (this as DiaryReadActivity).run {
                     mIsEncryptData = diaryDto.isEncrypt

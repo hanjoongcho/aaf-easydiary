@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <androidx.cardview.widget.CardView
+        app:contentPadding="0dp"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_marginTop="@dimen/card_layout_margin"
@@ -13,16 +14,20 @@
         android:layout_marginStart="@dimen/card_layout_margin"
         android:layout_marginEnd="@dimen/card_layout_margin"
         style="@style/AppCard">
-        <LinearLayout
-            android:orientation="vertical"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <ScrollView
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/layout_info_label"
+                android:layout_alignWithParentIfMissing="true"
+                android:id="@+id/scroll_diary_contents"
                 android:fillViewport="true"
                 android:layout_width="match_parent"
                 android:layout_weight="1"
                 android:layout_height="0dp">
                 <LinearLayout
+                    android:padding="@dimen/card_contents_padding"
                     style="@style/LinearLayoutVertical">
                     <LinearLayout
                         android:layout_height="wrap_content"
@@ -57,11 +62,17 @@
                 </LinearLayout>
             </ScrollView>
             <RelativeLayout
-                android:layout_gravity="bottom"
+                app:layout_constraintTop_toBottomOf="@+id/scroll_diary_contents"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:paddingLeft="@dimen/card_contents_padding"
+                android:paddingRight="@dimen/card_contents_padding"
+                android:paddingBottom="@dimen/card_contents_padding"
+                android:id="@+id/layout_info_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <me.blog.korn123.easydiary.views.FixedCardView
                     app:fixedAppcompatPadding="true"
+                    tools:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toStartOf="@id/contentsLengthContainer"
@@ -92,10 +103,11 @@
                     </LinearLayout>
                 </me.blog.korn123.easydiary.views.FixedCardView>
                 <me.blog.korn123.easydiary.views.FixedCardView
+                    app:fixedAppcompatPadding="true"
+                    tools:visibility="gone"
                     android:id="@+id/contentsLengthContainer"
                     android:layout_marginStart="5dp"
                     android:layout_alignParentEnd="true"
-                    app:fixedAppcompatPadding="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <TextView
@@ -107,7 +119,7 @@
                         android:layout_height="wrap_content"/>
                 </me.blog.korn123.easydiary.views.FixedCardView>
             </RelativeLayout>
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
     <include layout="@layout/partial_bottom_toolbar" />
