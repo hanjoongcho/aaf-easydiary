@@ -16,7 +16,9 @@ import android.widget.RelativeLayout
 import android.widget.ScrollView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.viewModels
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import io.github.aafactory.commons.extensions.baseConfig
@@ -32,9 +34,11 @@ import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.commons.utils.JasyptUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.databinding.FragmentDiaryReadBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
+import me.blog.korn123.easydiary.viewmodels.DiaryReadViewModel
 import org.apache.commons.lang3.StringUtils
 import java.util.*
 
@@ -459,16 +463,23 @@ class DiaryReadActivity : EasyDiaryActivity() {
      * A placeholder fragment containing a simple view.
      */
     class PlaceholderFragment : androidx.fragment.app.Fragment() {
-        private var mPrimaryColor = 0
         private lateinit var mRootView: ViewGroup
+        private lateinit var mBinding: FragmentDiaryReadBinding
+        private val mViewModel: DiaryReadViewModel by viewModels()
+        private var mPrimaryColor = 0
 
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
         }
         
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-            mRootView = inflater.inflate(R.layout.fragment_diary_read, container, false) as ViewGroup
+            mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_diary_read, container, false)
+            mBinding.lifecycleOwner = this
+            mBinding.viewModel = mViewModel
+            mRootView = mBinding.mainHolder
             return mRootView
+//            mRootView = inflater.inflate(R.layout.fragment_diary_read, container, false) as ViewGroup
+//            return mRootView
         }
 
         override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -574,29 +585,23 @@ class DiaryReadActivity : EasyDiaryActivity() {
             }
 
             context?.run {
+                mViewModel.isShowAddress.value = config.enableLocationInfo
                 if (config.enableLocationInfo) {
                     diaryDto.location?.let {
 //                        locationLabel.setTextColor(config.textColor)
 //                        locationContainer.background = getLabelBackground()
-
                         locationLabel.text = it.address
-                        locationContainer.visibility = View.VISIBLE
-                    } ?: { locationContainer.visibility = View.GONE } ()
-                } else {
-                    locationContainer.visibility = View.GONE
+                    } ?: { mViewModel.isShowAddress.value = false } ()
                 }
 
+                mViewModel.isShowContentsCounting.value = config.enableCountCharacters
                 if (config.enableCountCharacters) {
                     contentsLength.run {
 //                        setTextColor(config.textColor)
 //                        background = getLabelBackground()
                         text = getString(R.string.diary_contents_length, diaryDto.contents?.length ?: 0)
                     }
-                    contentsLengthContainer.visibility = View.VISIBLE
-                } else {
-                    contentsLengthContainer.visibility = View.GONE
                 }
-                layout_info_label.visibility = if (locationContainer.visibility == View.VISIBLE || contentsLengthContainer.visibility == View.VISIBLE) View.VISIBLE else View.GONE
 
                 (this as DiaryReadActivity).run {
                     mIsEncryptData = diaryDto.isEncrypt
@@ -613,7 +618,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
 
         fun setFontsTypeface() {
             activity?.let { it ->
-                FontUtils.setFontsTypeface(it, it.assets, "", mRootView)    
+                FontUtils.setFontsTypeface(it, it.assets, "", mRootView)
             }
         }
 

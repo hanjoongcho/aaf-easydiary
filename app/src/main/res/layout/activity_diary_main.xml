@@ -44,11 +44,12 @@
                         android:orientation="horizontal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
+
                         <ImageView
-                            app:symbolSequence="@{view_model.symbol}"
+                            android:layout_width="23dp"
+                            android:layout_height="match_parent"
                             android:layout_marginEnd="10dp"
-                            android:layout_width="@dimen/diary_symbol_width"
-                            android:layout_height="@dimen/diary_symbol_height" />
+                            app:symbolSequence="@{view_model.symbol}" />
                         <com.simplemobiletools.commons.views.MyTextView
                             android:id="@+id/symbolTextArrow"
                             android:layout_gravity="center_vertical"
