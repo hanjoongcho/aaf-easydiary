@@ -17,7 +17,7 @@
             app:contentPadding="0dp"
             android:layout_height="match_parent"
             android:layout_width="0dp"
-            android:layout_weight="7"
+            android:layout_weight="1"
             android:layout_marginTop="@dimen/card_layout_margin"
             android:layout_marginBottom="@dimen/card_layout_margin"
             android:layout_marginStart="@dimen/card_layout_margin"
@@ -136,11 +136,10 @@
             <include layout="@layout/partial_bottom_toolbar" />
         </LinearLayout>
 
-        <HorizontalScrollView
+        <ScrollView
             android:id="@+id/photoContainerScrollView"
             android:layout_margin="5dp"
-            android:layout_width="0dp"
-            android:layout_weight="2"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent">
             <LinearLayout
                 android:id="@+id/photoContainer"
@@ -149,6 +148,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
             </LinearLayout>
-        </HorizontalScrollView>
+        </ScrollView>
     </LinearLayout>
 </layout>

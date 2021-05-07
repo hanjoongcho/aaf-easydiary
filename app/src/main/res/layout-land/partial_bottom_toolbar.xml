@@ -10,7 +10,6 @@
     android:layout_height="match_parent">
     <LinearLayout
         android:theme="@style/AppTheme.AppBarOverlay"
-        android:gravity="end"
         android:padding="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -23,7 +22,8 @@
     </LinearLayout>
 
     <TextView
-        tools:text="Count"
+        android:gravity="center"
+        android:text="1"
         android:id="@+id/bottomTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
