@@ -16,10 +16,7 @@ import kotlinx.android.synthetic.main.partial_edit_toolbar_sub.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.JasyptUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.makeSnackBar
-import me.blog.korn123.easydiary.extensions.openFeelingSymbolDialog
-import me.blog.korn123.easydiary.extensions.pauseLock
+import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
@@ -196,7 +193,11 @@ class DiaryUpdateActivity : EditActivity() {
         mPhotoUris.let {
             val thumbnailSize = config.settingThumbnailSize
             it.forEachIndexed { index, photoUriDto ->
-                val imageView = EasyDiaryUtils.createAttachedPhotoView(this, photoUriDto, index)
+                val imageView = when (isLandScape()) {
+                    true -> EasyDiaryUtils.createAttachedPhotoView(this, photoUriDto, index, 0F, 0F, 0F, 3F)
+                    false -> EasyDiaryUtils.createAttachedPhotoView(this, photoUriDto, index, 0F, 0F, 3F, 0F)
+                }
+                
                 imageView.setOnClickListener(PhotoClickListener(index))
                 photoContainer.addView(imageView, photoContainer.childCount - 1)
             }

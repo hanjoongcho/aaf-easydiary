@@ -434,7 +434,7 @@ abstract class EditActivity : EasyDiaryActivity() {
                     val imageView = ImageView(applicationContext)
                     val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(applicationContext, thumbnailSize), CommonUtils.dpToPixel(applicationContext, thumbnailSize))
                     when (isLandScape()) {
-                        true -> layoutParams.setMargins(0, 0, 0, CommonUtils.dpToPixel(applicationContext, 0F))
+                        true -> layoutParams.setMargins(0, 0, 0, CommonUtils.dpToPixel(applicationContext, 3F))
                         false -> layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(applicationContext, 3F), 0)
                     }
 
