@@ -523,7 +523,10 @@ abstract class EditActivity : EasyDiaryActivity() {
             mSecond = getInt(SELECTED_SECOND, mSecond)
 
             mPhotoUris.forEachIndexed { index, photoUriDto ->
-                val imageView = EasyDiaryUtils.createAttachedPhotoView(this@EditActivity, photoUriDto, index)
+                val imageView = when (isLandScape()) {
+                    true -> EasyDiaryUtils.createAttachedPhotoView(this@EditActivity, photoUriDto, index, 0F, 0F, 0F, 3F)
+                    false -> EasyDiaryUtils.createAttachedPhotoView(this@EditActivity, photoUriDto, index, 0F, 0F, 3F, 0F)
+                }
                 imageView.setOnClickListener(PhotoClickListener(index))
                 photoContainer.addView(imageView, photoContainer.childCount - 1)
             }
