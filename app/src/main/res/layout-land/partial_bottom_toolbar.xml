@@ -1,0 +1,32 @@
+<io.github.aafactory.commons.views.LabelLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottomToolbar"
+    android:foreground="?attr/selectableItemBackground"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:background="?attr/colorPrimary"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:gravity="end"
+        android:padding="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
+            style="@style/image_view_custom_toolbar_icon"
+            android:id="@+id/togglePhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/collapse" />
+    </LinearLayout>
+
+    <TextView
+        tools:text="Count"
+        android:id="@+id/bottomTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/SettingsCategory" />
+</io.github.aafactory.commons.views.LabelLayout>
+   
