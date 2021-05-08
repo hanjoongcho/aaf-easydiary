@@ -37,20 +37,17 @@
             android:layout_height="wrap_content">
             <ImageView
                 style="@style/image_view_custom_toolbar_icon"
-                android:id="@+id/image_photo"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/bottomTitle"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:padding="0dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/image_2_w" />
-            <me.blog.korn123.easydiary.views.FixedTextView
+            <TextView
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/image_photo"
-                android:layout_marginBottom="0dp"
-                tools:text="1"
-                android:background="@drawable/circle_background_stroke"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:text="x1"
                 android:padding="0dp"
                 android:id="@+id/bottomTitle"
                 android:textSize="10dp"
