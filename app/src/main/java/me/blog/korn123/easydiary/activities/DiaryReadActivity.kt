@@ -566,7 +566,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
             // TODO fixme elegance
             val photoCount = diaryDto.photoUris?.size ?: 0 
             if (photoCount > 0) {
-                bottomTitle.text = if (!requireActivity().isLandScape()) getString(R.string.attached_photo_count, photoCount) else "$photoCount"
+                bottomTitle.text = if (!requireActivity().isLandScape()) getString(R.string.attached_photo_count, photoCount) else "x$photoCount"
                 bottomToolbar.visibility = View.VISIBLE
                 photoContainerScrollView.visibility = View.VISIBLE
 
