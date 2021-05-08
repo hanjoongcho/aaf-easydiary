@@ -10,10 +10,7 @@ import android.os.Handler
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import android.view.*
-import android.widget.LinearLayout
-import android.widget.PopupWindow
-import android.widget.RelativeLayout
-import android.widget.ScrollView
+import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.databinding.DataBindingUtil
@@ -566,7 +563,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
             // TODO fixme elegance
             val photoCount = diaryDto.photoUris?.size ?: 0 
             if (photoCount > 0) {
-                bottomTitle.text = if (!requireActivity().isLandScape()) getString(R.string.attached_photo_count, photoCount) else "x$photoCount"
+                (bottomTitle as TextView).text = if (requireActivity().isLandScape()) "x$photoCount" else getString(R.string.attached_photo_count, photoCount)
                 bottomToolbar.visibility = View.VISIBLE
                 photoContainerScrollView.visibility = View.VISIBLE
 

@@ -26,6 +26,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import com.bumptech.glide.Glide
@@ -474,7 +475,7 @@ abstract class EditActivity : EasyDiaryActivity() {
     }
 
     protected fun initBottomToolbar() {
-        if (!isLandScape()) bottomTitle.text = String.format(getString(R.string.attached_photo_count), photoContainer.childCount -1)
+        (bottomTitle as TextView).text = if (isLandScape()) "x${photoContainer.childCount.minus(1)}" else getString(R.string.attached_photo_count, photoContainer.childCount.minus(1))
     }
 
     protected fun selectFeelingSymbol(index: Int) {
