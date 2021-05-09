@@ -10,10 +10,7 @@ import android.os.Handler
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import android.view.*
-import android.widget.LinearLayout
-import android.widget.PopupWindow
-import android.widget.RelativeLayout
-import android.widget.ScrollView
+import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.databinding.DataBindingUtil
@@ -566,7 +563,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
             // TODO fixme elegance
             val photoCount = diaryDto.photoUris?.size ?: 0 
             if (photoCount > 0) {
-                bottomTitle.text = String.format(getString(R.string.attached_photo_count), photoCount)
+                (bottomTitle as TextView).text = if (requireActivity().isLandScape()) "x$photoCount" else getString(R.string.attached_photo_count, photoCount)
                 bottomToolbar.visibility = View.VISIBLE
                 photoContainerScrollView.visibility = View.VISIBLE
 
@@ -574,7 +571,10 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 context?.let { appContext ->
                     val thumbnailSize = appContext.config.settingThumbnailSize
                     diaryDto.photoUris?.forEachIndexed { index, item ->
-                       val imageView = createAttachedPhotoView(appContext, item, index)
+                        val imageView = when (requireActivity().isLandScape()) {
+                           true -> createAttachedPhotoView(appContext, item, index, 0F, 0F, 0F, 3F)
+                           false -> createAttachedPhotoView(appContext, item, index, 0F, 0F, 3F, 0F)
+                        }
                         photoContainer.addView(imageView)
                         imageView.setOnClickListener(PhotoClickListener(getSequence(), index))
                     }

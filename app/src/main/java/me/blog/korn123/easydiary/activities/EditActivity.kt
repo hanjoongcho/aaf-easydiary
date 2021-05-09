@@ -24,11 +24,9 @@ import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.AdapterView
-import android.widget.HorizontalScrollView
-import android.widget.ImageView
-import android.widget.LinearLayout
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import com.bumptech.glide.Glide
@@ -436,7 +434,11 @@ abstract class EditActivity : EasyDiaryActivity() {
                     val thumbnailSize = config.settingThumbnailSize
                     val imageView = ImageView(applicationContext)
                     val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(applicationContext, thumbnailSize), CommonUtils.dpToPixel(applicationContext, thumbnailSize))
-                    layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(applicationContext, 3F), 0)
+                    when (isLandScape()) {
+                        true -> layoutParams.setMargins(0, 0, 0, CommonUtils.dpToPixel(applicationContext, 3F))
+                        false -> layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(applicationContext, 3F), 0)
+                    }
+
                     imageView.layoutParams = layoutParams
                     val drawable = ContextCompat.getDrawable(this, R.drawable.bg_card_thumbnail)
                     val gradient = drawable as GradientDrawable
@@ -463,14 +465,17 @@ abstract class EditActivity : EasyDiaryActivity() {
                 }
             }
             runOnUiThread {
-                photoContainer.postDelayed({ photoContainerScrollView.fullScroll(HorizontalScrollView.FOCUS_RIGHT) }, 100L)
+                when (isLandScape()) {
+                    true -> photoContainer.postDelayed({ (photoContainerScrollView as ScrollView).fullScroll(ScrollView.FOCUS_DOWN) }, 100L)
+                    false -> photoContainer.postDelayed({ (photoContainerScrollView as HorizontalScrollView).fullScroll(HorizontalScrollView.FOCUS_RIGHT) }, 100L)
+                }
                 setVisiblePhotoProgress(false)
             }
         }).start()
     }
 
     protected fun initBottomToolbar() {
-        bottomTitle.text = String.format(getString(R.string.attached_photo_count), photoContainer.childCount -1)
+        (bottomTitle as TextView).text = if (isLandScape()) "x${photoContainer.childCount.minus(1)}" else getString(R.string.attached_photo_count, photoContainer.childCount.minus(1))
     }
 
     protected fun selectFeelingSymbol(index: Int) {
@@ -519,7 +524,10 @@ abstract class EditActivity : EasyDiaryActivity() {
             mSecond = getInt(SELECTED_SECOND, mSecond)
 
             mPhotoUris.forEachIndexed { index, photoUriDto ->
-                val imageView = EasyDiaryUtils.createAttachedPhotoView(this@EditActivity, photoUriDto, index)
+                val imageView = when (isLandScape()) {
+                    true -> EasyDiaryUtils.createAttachedPhotoView(this@EditActivity, photoUriDto, index, 0F, 0F, 0F, 3F)
+                    false -> EasyDiaryUtils.createAttachedPhotoView(this@EditActivity, photoUriDto, index, 0F, 0F, 3F, 0F)
+                }
                 imageView.setOnClickListener(PhotoClickListener(index))
                 photoContainer.addView(imageView, photoContainer.childCount - 1)
             }

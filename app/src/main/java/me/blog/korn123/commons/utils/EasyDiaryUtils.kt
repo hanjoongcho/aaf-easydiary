@@ -324,13 +324,13 @@ object EasyDiaryUtils {
         return name ?: UUID.randomUUID().toString()
     }
 
-    fun createAttachedPhotoView(context: Context, photoUriDto: PhotoUriDto, photoIndex: Int): ImageView {
+    fun createAttachedPhotoView(context: Context, photoUriDto: PhotoUriDto, photoIndex: Int, marginLeft:Float = 0F, marginTop:Float = 0F, marginRight:Float = 3F, marginBottom:Float = 0F): ImageView {
         val thumbnailSize = context.config.settingThumbnailSize
 //        val bitmap = photoUriToDownSamplingBitmap(context, photoUriDto, 0, thumbnailSize.toInt() - 5, thumbnailSize.toInt() - 5)
         val imageView = ImageView(context)
         val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(context, thumbnailSize), CommonUtils.dpToPixel(context, thumbnailSize))
 //        val marginLeft = if (photoIndex == 0)  0 else CommonUtils.dpToPixel(context, 3F)
-        layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(context, 3F), 0)
+        layoutParams.setMargins(CommonUtils.dpToPixel(context, marginLeft), CommonUtils.dpToPixel(context, marginTop), CommonUtils.dpToPixel(context, marginRight), CommonUtils.dpToPixel(context, marginBottom))
         imageView.layoutParams = layoutParams
         val drawable = ContextCompat.getDrawable(context, R.drawable.bg_card_thumbnail)
         val gradient = drawable as GradientDrawable
