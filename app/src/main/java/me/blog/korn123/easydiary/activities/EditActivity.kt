@@ -42,6 +42,7 @@ import kotlinx.android.synthetic.main.partial_bottom_toolbar.*
 import kotlinx.android.synthetic.main.partial_edit_contents.*
 import kotlinx.android.synthetic.main.partial_edit_photo_container.*
 import kotlinx.android.synthetic.main.partial_edit_toolbar_sub.*
+import kotlinx.android.synthetic.main.viewholder_photo.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
@@ -430,35 +431,17 @@ abstract class EditActivity : EasyDiaryActivity() {
                             MIME_TYPE_JPEG
                         }
                     }
-                    mPhotoUris.add(PhotoUriDto(FILE_URI_PREFIX + photoPath, mimeType))
-                    val thumbnailSize = config.settingThumbnailSize
-                    val imageView = ImageView(applicationContext)
-                    val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(applicationContext, thumbnailSize), CommonUtils.dpToPixel(applicationContext, thumbnailSize))
-                    when (isLandScape()) {
-                        true -> layoutParams.setMargins(0, 0, 0, CommonUtils.dpToPixel(applicationContext, 3F))
-                        false -> layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(applicationContext, 3F), 0)
-                    }
-
-                    imageView.layoutParams = layoutParams
-                    val drawable = ContextCompat.getDrawable(this, R.drawable.bg_card_thumbnail)
-                    val gradient = drawable as GradientDrawable
-                    gradient.setColor(ColorUtils.setAlphaComponent(config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA))
-                    imageView.background = gradient
-                    imageView.scaleType = ImageView.ScaleType.CENTER_CROP
-                    val padding = (CommonUtils.dpToPixel(applicationContext, 2.5F, CALCULATION.FLOOR))
-                    imageView.setPadding(padding, padding, padding, padding)
+                    val photoUriDto = PhotoUriDto(FILE_URI_PREFIX + photoPath, mimeType)
+                    mPhotoUris.add(photoUriDto)
                     val currentIndex = mPhotoUris.size - 1
-                    imageView.setOnClickListener(PhotoClickListener(currentIndex))
                     runOnUiThread {
+                        val imageView = when (isLandScape()) {
+                            true -> EasyDiaryUtils.createAttachedPhotoView(this, photoUriDto, 0F, 0F, 0F, 3F)
+                            false -> EasyDiaryUtils.createAttachedPhotoView(this, photoUriDto, 0F, 0F, 3F, 0F)
+                        }
+                        imageView.setOnClickListener(PhotoClickListener(currentIndex))
                         photoContainer.addView(imageView, photoContainer.childCount - 1)
-                        val options = RequestOptions()
-//                        .centerCrop()
-                                .error(R.drawable.error_7)
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .priority(Priority.HIGH)
-                        Glide.with(applicationContext).load(photoPath).apply(options).into(imageView)
                         initBottomToolbar()
-
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -525,8 +508,8 @@ abstract class EditActivity : EasyDiaryActivity() {
 
             mPhotoUris.forEachIndexed { index, photoUriDto ->
                 val imageView = when (isLandScape()) {
-                    true -> EasyDiaryUtils.createAttachedPhotoView(this@EditActivity, photoUriDto, index, 0F, 0F, 0F, 3F)
-                    false -> EasyDiaryUtils.createAttachedPhotoView(this@EditActivity, photoUriDto, index, 0F, 0F, 3F, 0F)
+                    true -> EasyDiaryUtils.createAttachedPhotoView(this@EditActivity, photoUriDto, 0F, 0F, 0F, 3F)
+                    false -> EasyDiaryUtils.createAttachedPhotoView(this@EditActivity, photoUriDto, 0F, 0F, 3F, 0F)
                 }
                 imageView.setOnClickListener(PhotoClickListener(index))
                 photoContainer.addView(imageView, photoContainer.childCount - 1)
