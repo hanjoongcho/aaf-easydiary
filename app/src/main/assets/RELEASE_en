@@ -4,6 +4,10 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.166 (date: 2021.05.11)
+  * Italian translation added
+  * Improved landscape screen UX
+
 # Changes in 1.4.164 (date: 2021.04.26)
   * Fixed an issue where the date on the calendar was not visible when the card view color was black
 

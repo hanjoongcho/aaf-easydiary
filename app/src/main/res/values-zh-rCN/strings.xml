@@ -515,6 +515,11 @@
         v1.4.164 / 2021.04.26\n
         Fixed an issue where the date on the calendar was not visible when the card view color was black
     </string>
+    <string name="release_232">
+        v1.4.166 / 2021.05.11\n
+        Italian translation added\n
+        Improved landscape screen UX
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  自1.4.47版本以来添加的资源点击这里。                                                      -->
