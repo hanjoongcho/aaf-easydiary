@@ -368,7 +368,7 @@ abstract class CaldroidFragmentEx : DialogFragment() {
      * provide custom adapter here
      */
     open fun getNewDatesGridAdapter(month: Int, year: Int): CaldroidGridAdapter {
-        return CaldroidGridAdapter(activity!!, month, year,
+        return CaldroidGridAdapter(requireActivity(), month, year,
                 getCaldroidData(), extraData)
     }
 
@@ -1125,7 +1125,7 @@ abstract class CaldroidFragmentEx : DialogFragment() {
         // This is a hack to fix issue localInflater doesn't use the themeResource, make Android
         // complain about layout_width and layout_height missing. I'm unsure about its impact
         // for app that wants to change theme dynamically.
-        activity!!.setTheme(themeResource)
+        requireActivity().setTheme(themeResource)
 
         val view = localInflater.inflate(R.layout.calendar_view, container, false)
         view.setBackgroundColor(getBackgroundColor())

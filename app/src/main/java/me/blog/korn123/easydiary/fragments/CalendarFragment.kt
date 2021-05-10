@@ -13,13 +13,13 @@ class CalendarFragment : CaldroidFragmentEx() {
     }
 
     override fun getNewDatesGridAdapter(month: Int, year: Int): CaldroidGridAdapter {
-        return CaldroidItemAdapter(activity!!, month, year,
+        return CaldroidItemAdapter(requireActivity(), month, year,
                 getCaldroidData(), extraData)
     }
 
     override fun getNewWeekdayAdapter(themeResource: Int): WeekdayArrayAdapter {
         return WeekdayArrayAdapter(
-                activity!!, R.layout.item_weekday,
+                requireActivity(), R.layout.item_weekday,
                 daysOfWeek, themeResource)
     }
 }

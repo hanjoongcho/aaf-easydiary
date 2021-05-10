@@ -4,33 +4,24 @@ import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Base64.encodeToString
 import android.view.View
-import android.widget.AdapterView
 import android.widget.RemoteViews
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.NotificationCompat
-import androidx.core.graphics.drawable.toBitmap
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.isOreoPlus
-import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.CheatSheetAdapter
 import me.blog.korn123.easydiary.databinding.ActivityDevBinding
@@ -40,15 +31,10 @@ import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.services.BaseNotificationService
 import me.blog.korn123.easydiary.services.NotificationService
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
-import org.apache.commons.codec.binary.Base64
 import org.apache.commons.io.FilenameUtils
-import org.apache.commons.io.IOUtils
-import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.FileInputStream
-import java.util.*
 
-open class BaseDevActivity : EasyDiaryActivity() {
+open class BaseDevActivity : EasyDiaryActivity() { 
 
     /***************************************************************************************************
      *   global properties
@@ -100,7 +86,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
         setupClearUnusedPhoto()
         setupLocation()
         setupCoroutine()
-        setupCheatSheet()
     }
 
     override fun onDestroy() {
@@ -284,103 +269,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
     }
 
-    private fun setupCheatSheet() {
-        mCheatSheetList.run {
-            add(CheatSheetAdapter.CheatSheet("Package kotlin", "Explanation of kotlin basic functions", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/kotlin/kotlin.md"))
-            add(CheatSheetAdapter.CheatSheet("Package kotlin.collections", "Explanation of kotlin collection functions", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/kotlin/kotlin.collections.md"))
-            add(CheatSheetAdapter.CheatSheet("Cheat Sheet", "This page is a collection of useful link information such as open source projects and development related guides.", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/README.md"))
-            add(CheatSheetAdapter.CheatSheet("Spring Annotation", "Describes annotations mainly used in Spring Framework", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/annotations/spring.md"))
-
-            add(CheatSheetAdapter.CheatSheet("데이터베이스 표준화", "국가상수도데이터베이스표준화지침(20210101 개정)", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/design/database/standardization.md"))
-
-            add(CheatSheetAdapter.CheatSheet(
-                    "Java 8 - Lambda Expression",
-                    "",
-                    "https://raw.githubusercontent.com/hanjoongcho/java8-guides-tutorials/master/src/test/java/lambda/LambdaExpressionTest.java", true
-            ))
-            add(CheatSheetAdapter.CheatSheet(
-                    "Java 8 - Default Methods",
-                    "",
-                    "https://raw.githubusercontent.com/hanjoongcho/java8-guides-tutorials/master/src/test/java/defaultmethod/DefaultMethodTest.java", true
-            ))
-            add(CheatSheetAdapter.CheatSheet(
-                    "Java 8 - Functions",
-                    "",
-                    "https://raw.githubusercontent.com/hanjoongcho/java8-guides-tutorials/master/src/test/java/functions/FunctionFunctionalInterfaceTest.java", true
-            ))
-            add(CheatSheetAdapter.CheatSheet(
-                    "Java 8 - Stream Count",
-                    "",
-                    "https://raw.githubusercontent.com/hanjoongcho/java8-guides-tutorials/master/src/test/java/streams/StreamWithCountTest.java", true
-            ))
-            add(CheatSheetAdapter.CheatSheet(
-                    "Java 8 - Stream with Filter",
-                    "",
-                    "https://raw.githubusercontent.com/hanjoongcho/java8-guides-tutorials/master/src/test/java/streams/StreamWithFilterTest.java", true
-            ))
-            add(CheatSheetAdapter.CheatSheet(
-                    "Java 8 - Stream with Map",
-                    "",
-                    "https://raw.githubusercontent.com/hanjoongcho/java8-guides-tutorials/master/src/test/java/streams/StreamWithMapTest.java", true
-            ))
-            add(CheatSheetAdapter.CheatSheet(
-                    "Java 8 - Stream with Sorted",
-                    "",
-                    "https://raw.githubusercontent.com/hanjoongcho/java8-guides-tutorials/master/src/test/java/streams/StreamWithSortedTest.java", true
-            ))
-            add(CheatSheetAdapter.CheatSheet(
-                    "Java 8 - Stream with Match",
-                    "",
-                    "https://raw.githubusercontent.com/hanjoongcho/java8-guides-tutorials/master/src/test/java/streams/StreamWithMatchTest.java", true
-            ))
-            add(CheatSheetAdapter.CheatSheet(
-                    "Java 8 - Stream Reduce",
-                    "",
-                    "https://raw.githubusercontent.com/hanjoongcho/java8-guides-tutorials/master/src/test/java/streams/StreamReduceTest.java", true
-            ))
-            add(CheatSheetAdapter.CheatSheet(
-                    "Java 8 - Stream Consumer",
-                    "",
-                    "https://raw.githubusercontent.com/hanjoongcho/java8-guides-tutorials/master/src/test/java/consumer/ConsumerFunctionalInterfaceTest.java", true
-            ))
-            add(CheatSheetAdapter.CheatSheet(
-                    "Java 8 - Predicate",
-                    "",
-                    "https://raw.githubusercontent.com/hanjoongcho/java8-guides-tutorials/master/src/test/java/predicate/PredicateFunctionalInterfaceTest.java", true
-            ))
-            add(CheatSheetAdapter.CheatSheet(
-                    "Java 8 - Comparator",
-                    "",
-                    "https://raw.githubusercontent.com/hanjoongcho/java8-guides-tutorials/master/src/test/java/comparator/ComparatorFunctionalInterfaceTest.java", true
-            ))
-            add(CheatSheetAdapter.CheatSheet(
-                    "Java 8 - Suppliers",
-                    "",
-                    "https://raw.githubusercontent.com/hanjoongcho/java8-guides-tutorials/master/src/test/java/suppliers/SupplierFunctionalInterfaceTest.java", true
-            ))
-            add(CheatSheetAdapter.CheatSheet(
-                    "ES6",
-                    "var, let, const",
-                    "https://gist.githubusercontent.com/hanjoongcho/983fe388a669f1da9df13cf64f63c5f3/raw/d1587f1da1d7ead1ba695e50094dbf52daaf6e1e/var-let-const.md", false
-            ))
-        }
-
-        mBinding.recyclerCheatSheet.apply {
-            layoutManager = LinearLayoutManager(this@BaseDevActivity, LinearLayoutManager.VERTICAL, false)
-//            addItemDecoration(SettingsScheduleFragment.SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding)))
-            adapter =  CheatSheetAdapter(
-                    this@BaseDevActivity,
-                    mCheatSheetList,
-                    AdapterView.OnItemClickListener { _, _, position, _ ->
-                        val item = mCheatSheetList[position]
-                        TransitionHelper.startActivityWithTransition(this@BaseDevActivity, Intent(this@BaseDevActivity, MarkDownViewActivity::class.java).apply {
-                            putExtra(MarkDownViewActivity.OPEN_URL_INFO, item.url)
-                            putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, item.title)
-                            putExtra(MarkDownViewActivity.FORCE_APPEND_CODE_BLOCK, item.forceAppendCodeBlock)
-                        })
-                    }
-            )
-        }
+    fun openCheatSheet(view: View) {
+        TransitionHelper.startActivityWithTransition(this, Intent(this, CheatSheetActivity::class.java))
     }
 
 

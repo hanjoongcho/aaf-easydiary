@@ -154,7 +154,10 @@ fun Context.updateAppViews(viewGroup: ViewGroup, tmpBackgroundColor: Int = 0) {
             .forEach {
                 when (it) {
                     is CardView -> {
-                        if (it !is FixedCardView) it.setCardBackgroundColor(backgroundColor)
+                        when (it is FixedCardView) {
+                            true -> { if (it.applyCardBackgroundColor) it.setCardBackgroundColor(backgroundColor) }
+                            false -> it.setCardBackgroundColor(backgroundColor)
+                        }
                         updateAppViews(it)
                     }
                     is ViewGroup -> updateAppViews(it)

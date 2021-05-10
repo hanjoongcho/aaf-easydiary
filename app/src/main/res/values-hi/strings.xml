@@ -155,7 +155,7 @@
     <string name="preferences_information_licenses_summary">ओपन सोर्स सॉफ्टवेयर नोटिस</string>
     <string name="preferences_category_aaf">AAF आसान श्रृंखला</string>
     <string name="invite_friends">मित्रों को आमंत्रित करें</string>
-    <string name="invite_friends_summary">% S एप्लिकेशन को अपने दोस्तों के साथ साझा करें।</string>
+    <string name="invite_friends_summary">%S एप्लिकेशन को अपने दोस्तों के साथ साझा करें।</string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Release notes here.                                                      -->
@@ -511,6 +511,15 @@
         v1.4.163 / 2021.03.23\n
         Added function to save diary as HTML
     </string>
+    <string name="release_230">
+        v1.4.164 / 2021.04.26\n
+        Fixed an issue where the date on the calendar was not visible when the card view color was black
+    </string>
+    <string name="release_232">
+        v1.4.166 / 2021.05.11\n
+        Italian translation added\n
+        Improved landscape screen UX
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -711,7 +720,7 @@
     <string name="delete_selected_items_confirm">क्या आप वाकई%d चयनित आइटम हटाना चाहते हैं?</string>
     <string name="duplicate_selected_items_confirm">क्या आप सुनिश्चित हैं कि आप%d चयनित वस्तुओं की नकल करना चाहते हैं?</string>
     <string name="no_items_warning">कोई आइटम चयनित नहीं हैं।</string>
-    <string name="preferences_category_schedule">[बीटा] अनुसूची सेटिंग</string>
+    <string name="preferences_category_schedule">अनुसूची सेटिंग</string>
     <string name="schedule_time">दिन और समय</string>
     <string name="schedule_type">अनुसूची प्रकार</string>
     <string name="schedule_description">अनुसूची का विवरण</string>

@@ -299,7 +299,7 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
             if (mActivity.config.settingFontName == map["fontName"]) selectedIndex = index
         }
 
-        val arrayAdapter = FontItemAdapter(activity!!, R.layout.item_check_label, listFont)
+        val arrayAdapter = FontItemAdapter(requireActivity(), R.layout.item_check_label, listFont)
         listView.adapter = arrayAdapter
         listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             val fontInfo = parent.adapter.getItem(position) as HashMap<String, String>

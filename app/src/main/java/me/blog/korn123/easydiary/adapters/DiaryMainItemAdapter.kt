@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.adapters
 
+import android.animation.ArgbEvaluator
 import android.app.Activity
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
@@ -113,6 +114,7 @@ class DiaryMainItemAdapter(
 
             // highlight current query
             if (StringUtils.isNotEmpty(currentQuery)) {
+                val color = ArgbEvaluator().evaluate(0.75F, 0x000000, 0xffffff) as Int
                 if (context.config.diarySearchQueryCaseSensitive) {
                     EasyDiaryUtils.highlightString(textTitle, currentQuery)
                     EasyDiaryUtils.highlightString(textContents, currentQuery)

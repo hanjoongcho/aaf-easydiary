@@ -189,6 +189,7 @@ const val FOOD_FRIED_RICE = 273
 const val FOOD_GRILL = 274
 const val FOOD_PIZZA = 275
 const val FOOD_BEVERAGE07 = 276
+const val FOOD_SOUP02 = 277
 
 // Leisure 300 ~ 349
 const val LEISURE_PICNIC = 300
@@ -243,6 +244,7 @@ const val SYMBOL_UBUNTU = 367
 const val SYMBOL_JAVA = 368
 const val SYMBOL_SLIDESHARE = 369
 const val SYMBOL_NETFLIX = 370
+const val SYMBOL_GIT = 371
 
 // FLAGS 450 ~ 749
 // 001 ~ 010

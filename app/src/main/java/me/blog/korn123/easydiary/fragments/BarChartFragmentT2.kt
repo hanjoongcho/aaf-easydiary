@@ -34,10 +34,8 @@ import java.util.*
 
 class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
     private val mSequences = arrayListOf<Int>()
-    private val mContext: Context
-        get() = context!!
     private val mTypeface: Typeface
-        get() = FontUtils.getCommonTypeface(mContext)!!
+        get() = FontUtils.getCommonTypeface(requireContext())!!
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -96,7 +94,7 @@ class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
         legend.xEntrySpace = 4f
         legend.typeface = mTypeface
 
-        val mv = XYMarkerView(context!!, xAxisFormatter)
+        val mv = XYMarkerView(requireContext(), xAxisFormatter)
         mv.chartView = barChart // For bounds control
         barChart.marker = mv // Set the marker to the chart
 
@@ -129,7 +127,7 @@ class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
         var index = 1.0F
         sortedMap.forEach { (key, value) ->
             val drawable: Drawable? = when (FlavorUtils.sequenceToSymbolResourceId(key) > 0) {
-                true -> scaledDrawable(FlavorUtils.sequenceToSymbolResourceId(key), CommonUtils.dpToPixel(mContext,24F) ,CommonUtils.dpToPixel(mContext,24F))
+                true -> scaledDrawable(FlavorUtils.sequenceToSymbolResourceId(key), CommonUtils.dpToPixel(requireContext(),24F) ,CommonUtils.dpToPixel(requireContext(),24F))
                 false -> null
             }
             mSequences.add(key)

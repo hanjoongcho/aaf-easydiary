@@ -24,11 +24,9 @@ import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.AdapterView
-import android.widget.HorizontalScrollView
-import android.widget.ImageView
-import android.widget.LinearLayout
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import com.bumptech.glide.Glide
@@ -44,6 +42,7 @@ import kotlinx.android.synthetic.main.partial_bottom_toolbar.*
 import kotlinx.android.synthetic.main.partial_edit_contents.*
 import kotlinx.android.synthetic.main.partial_edit_photo_container.*
 import kotlinx.android.synthetic.main.partial_edit_toolbar_sub.*
+import kotlinx.android.synthetic.main.viewholder_photo.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
@@ -432,45 +431,34 @@ abstract class EditActivity : EasyDiaryActivity() {
                             MIME_TYPE_JPEG
                         }
                     }
-                    mPhotoUris.add(PhotoUriDto(FILE_URI_PREFIX + photoPath, mimeType))
-                    val thumbnailSize = config.settingThumbnailSize
-                    val imageView = ImageView(applicationContext)
-                    val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(applicationContext, thumbnailSize), CommonUtils.dpToPixel(applicationContext, thumbnailSize))
-                    layoutParams.setMargins(0, 0, CommonUtils.dpToPixel(applicationContext, 3F), 0)
-                    imageView.layoutParams = layoutParams
-                    val drawable = ContextCompat.getDrawable(this, R.drawable.bg_card_thumbnail)
-                    val gradient = drawable as GradientDrawable
-                    gradient.setColor(ColorUtils.setAlphaComponent(config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA))
-                    imageView.background = gradient
-                    imageView.scaleType = ImageView.ScaleType.CENTER_CROP
-                    val padding = (CommonUtils.dpToPixel(applicationContext, 2.5F, CALCULATION.FLOOR))
-                    imageView.setPadding(padding, padding, padding, padding)
+                    val photoUriDto = PhotoUriDto(FILE_URI_PREFIX + photoPath, mimeType)
+                    mPhotoUris.add(photoUriDto)
                     val currentIndex = mPhotoUris.size - 1
-                    imageView.setOnClickListener(PhotoClickListener(currentIndex))
                     runOnUiThread {
+                        val imageView = when (isLandScape()) {
+                            true -> EasyDiaryUtils.createAttachedPhotoView(this, photoUriDto, 0F, 0F, 0F, 3F)
+                            false -> EasyDiaryUtils.createAttachedPhotoView(this, photoUriDto, 0F, 0F, 3F, 0F)
+                        }
+                        imageView.setOnClickListener(PhotoClickListener(currentIndex))
                         photoContainer.addView(imageView, photoContainer.childCount - 1)
-                        val options = RequestOptions()
-//                        .centerCrop()
-                                .error(R.drawable.error_7)
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .priority(Priority.HIGH)
-                        Glide.with(applicationContext).load(photoPath).apply(options).into(imageView)
                         initBottomToolbar()
-
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
             }
             runOnUiThread {
-                photoContainer.postDelayed({ photoContainerScrollView.fullScroll(HorizontalScrollView.FOCUS_RIGHT) }, 100L)
+                when (isLandScape()) {
+                    true -> photoContainer.postDelayed({ (photoContainerScrollView as ScrollView).fullScroll(ScrollView.FOCUS_DOWN) }, 100L)
+                    false -> photoContainer.postDelayed({ (photoContainerScrollView as HorizontalScrollView).fullScroll(HorizontalScrollView.FOCUS_RIGHT) }, 100L)
+                }
                 setVisiblePhotoProgress(false)
             }
         }).start()
     }
 
     protected fun initBottomToolbar() {
-        bottomTitle.text = String.format(getString(R.string.attached_photo_count), photoContainer.childCount -1)
+        (bottomTitle as TextView).text = if (isLandScape()) "x${photoContainer.childCount.minus(1)}" else getString(R.string.attached_photo_count, photoContainer.childCount.minus(1))
     }
 
     protected fun selectFeelingSymbol(index: Int) {
@@ -519,7 +507,10 @@ abstract class EditActivity : EasyDiaryActivity() {
             mSecond = getInt(SELECTED_SECOND, mSecond)
 
             mPhotoUris.forEachIndexed { index, photoUriDto ->
-                val imageView = EasyDiaryUtils.createAttachedPhotoView(this@EditActivity, photoUriDto, index)
+                val imageView = when (isLandScape()) {
+                    true -> EasyDiaryUtils.createAttachedPhotoView(this@EditActivity, photoUriDto, 0F, 0F, 0F, 3F)
+                    false -> EasyDiaryUtils.createAttachedPhotoView(this@EditActivity, photoUriDto, 0F, 0F, 3F, 0F)
+                }
                 imageView.setOnClickListener(PhotoClickListener(index))
                 photoContainer.addView(imageView, photoContainer.childCount - 1)
             }

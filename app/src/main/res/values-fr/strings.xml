@@ -511,6 +511,15 @@
         v1.4.163 / 2021.03.23\n
         Added function to save diary as HTML
     </string>
+    <string name="release_230">
+        v1.4.164 / 2021.04.26\n
+        Fixed an issue where the date on the calendar was not visible when the card view color was black
+    </string>
+    <string name="release_232">
+        v1.4.166 / 2021.05.11\n
+        Italian translation added\n
+        Improved landscape screen UX
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -711,7 +720,7 @@
     <string name="delete_selected_items_confirm">Êtes-vous sûr de vouloir supprimer les %d éléments sélectionnés ?</string>
     <string name="duplicate_selected_items_confirm">Êtes-vous sûr de vouloir dupliquer les %d éléments sélectionnés ?</string>
     <string name="no_items_warning">Il n\'y a aucun élément sélectionné.</string>
-    <string name="preferences_category_schedule">[Beta] Paramétrage de la planification</string>
+    <string name="preferences_category_schedule">Paramétrage de la planification</string>
     <string name="schedule_time">Jour et heure</string>
     <string name="schedule_type">Type de planification</string>
     <string name="schedule_description">Description de la planification</string>

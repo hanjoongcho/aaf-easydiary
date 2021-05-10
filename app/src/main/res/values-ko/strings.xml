@@ -511,6 +511,15 @@
         v1.4.163 / 2021.03.23\n
         다이어리 HTML 저장기능 추가
     </string>
+    <string name="release_230">
+        v1.4.164 / 2021.04.26\n
+        카드뷰 배경이 검정색인경우 캘린더에서 날짜가 보이지 않던 버그수정
+    </string>
+    <string name="release_232">
+        v1.4.166 / 2021.05.11\n
+        이탈리아어 번역 추가\n
+        가로화면 UX 개선
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -711,7 +720,7 @@
     <string name="delete_selected_items_confirm">선택된 %d건의 항목을 삭제 하시겠습니까?</string>
     <string name="duplicate_selected_items_confirm">선택된 %d건의 항목을 복사 하시겠습니까?</string>
     <string name="no_items_warning">선택된 항목이 없습니다.</string>
-    <string name="preferences_category_schedule">[Beta] 스케줄 설정</string>
+    <string name="preferences_category_schedule">스케줄 설정</string>
     <string name="schedule_time">요일 및 시간</string>
     <string name="schedule_type">스케줄 유형</string>
     <string name="schedule_description">스케줄 설명</string>

@@ -8,10 +8,12 @@ import me.blog.korn123.easydiary.R
 
 open class FixedCardView : CardView {
     var fixedAppcompatPadding: Boolean = false
+    var applyCardBackgroundColor: Boolean = false
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
         fixedAppcompatPadding = context.obtainStyledAttributes(attrs, R.styleable.FixedCardView).getBoolean(R.styleable.FixedCardView_fixedAppcompatPadding, false)
+        applyCardBackgroundColor = context.obtainStyledAttributes(attrs, R.styleable.FixedCardView).getBoolean(R.styleable.FixedCardView_applyCardBackgroundColor, false)
     }
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 

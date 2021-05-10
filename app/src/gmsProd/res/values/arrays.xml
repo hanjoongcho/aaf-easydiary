@@ -155,6 +155,7 @@
         <item>266|Rice</item>
         <item>273|Fried Rice</item>
         <item>270|Soup</item>
+        <item>277|Soup</item>
         <item>271|Curry</item>
         <item>272|Noodles</item>
         <item>264|Sushi</item>
@@ -250,6 +251,7 @@
         <item>363|Quora</item>
         <item>364|Line</item>
         <item>366|Linux</item>
+        <item>371|Git</item>
     </string-array>
 
     <string-array name="flag_item_array">
