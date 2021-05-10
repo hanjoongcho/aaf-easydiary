@@ -161,244 +161,359 @@
     <!--  Release notes here.                                                      -->
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <string name="release_103">
-        v1.4.41 / 2018.05.28\n Corretto un bug che terminava l’app in modo anomalo nella modalità di navigazione delle cartoline quando non c\'è una directory di lavoro
+        v1.4.41 / 2018.05.28\n
+        Corretto un bug che terminava l’app in modo anomalo nella modalità di navigazione delle cartoline quando non c\'è una directory di lavoro
     </string>
     <string name="release_105">
-        v1.4.42 / 2018.06.27\n Ottimizzazione esperienza utente (UX)
+        v1.4.42 / 2018.06.27\n
+        Ottimizzazione esperienza utente (UX)
     </string>
     <string name="release_110">
-        v1.4.47 / 2018.08.29\n Aggiunta funzione per cancellare cartolina
+        v1.4.47 / 2018.08.29\n
+        Aggiunta funzione per cancellare cartolina
     </string>
     <string name="release_114">
-        v1.4.51 / 2018.09.29\n Aggiornamento del modulo comune AAF\n Cambio di ambiente di creazione pacchetti di applicazione in Android 9 Pie
+        v1.4.51 / 2018.09.29\n
+        Aggiornamento del modulo comune AAF\n
+        Cambio di ambiente di creazione pacchetti di applicazione in Android 9 Pie
     </string>
     <string name="release_116">
-        v1.4.53 / 2018.10.13\n Aggiunta funzione di modifica delle dimensioni della foto in anteprima\n Aggiunta funzione per ridurre o espandere le foto in anteprima
+        v1.4.53 / 2018.10.13\n
+        Aggiunta funzione di modifica delle dimensioni della foto in anteprima\n
+        Aggiunta funzione per ridurre o espandere le foto in anteprima
     </string>
     <string name="release_118">
-        v1.4.55 / 2018.11.01\n Miglioramento della visualizzazione dell’orario nella scrittura del diario\n Funzione di impostazione del grassetto aggiunta al titolo del diario e alle informazioni sull’orario nella cronologia
+        v1.4.55 / 2018.11.01\n
+        Miglioramento della visualizzazione dell’orario nella scrittura del diario\n
+        Funzione di impostazione del grassetto aggiunta al titolo del diario e alle informazioni sull’orario nella cronologia
     </string>
     <string name="release_120">
-        v1.4.57 / 2018.11.12\n Aggiunta funzione di selezione multipla per allegare più immagini alla volta
+        v1.4.57 / 2018.11.12\n
+        Aggiunta funzione di selezione multipla per allegare più immagini alla volta
     </string>
     <string name="release_126">
-        v1.4.63 / 2018.11.25\n Aggiunta funzione di backup e ripristino delle foto allegate utilizzando Google Drive
+        v1.4.63 / 2018.11.25\n
+        Aggiunta funzione di backup e ripristino delle foto allegate utilizzando Google Drive
     </string>
     <string name="release_128">
-        v1.4.65 / 2018.12.19\n Aggiunta funzione di blocco con sensore di impronte digitali
+        v1.4.65 / 2018.12.19\n
+        Aggiunta funzione di blocco con sensore di impronte digitali
     </string>
     <string name="release_130">
-        v1.4.67 / 2019.01.01\n Migliorata la visualizzazione delle foto allegate nella schermata delle cartoline
+        v1.4.67 / 2019.01.01\n
+        Migliorata la visualizzazione delle foto allegate nella schermata delle cartoline
     </string>
     <string name="release_131">
-        v1.4.68 / 2019.01.06\n Risolti problemi di sicurezza per alcuni elementi segnalati come a bassa affidabilità dall\'antivirus Sophos (Notification listener, Trigger installation)\n Aggiunta funzione di regolazione delle dimensioni dei caratteri delle cartoline
+        v1.4.68 / 2019.01.06\n
+        Risolti problemi di sicurezza per alcuni elementi segnalati come a bassa affidabilità dall\'antivirus Sophos (Notification listener, Trigger installation)\n
+        Aggiunta funzione di regolazione delle dimensioni dei caratteri delle cartoline
     </string>
     <string name="release_132">
-        v1.4.69 / 2019.01.16\n Ottimizzazione esperienza utente (UX)\n Corretto un errore di transizione dello schermo nella versione Android 9 Pie\n Aggiunto pulsante di creazione del diario alla cronologia
+        v1.4.69 / 2019.01.16\n
+        Ottimizzazione esperienza utente (UX)\n
+        Corretto un errore di transizione dello schermo nella versione Android 9 Pie\n
+        Aggiunto pulsante di creazione del diario alla cronologia
     </string>
     <string name="release_133">
-        v1.4.70 / 2019.01.25\n Aggiunta opzione di visualizzazione del riassunto dei contenuti del diario
+        v1.4.70 / 2019.01.25\n 
+        Aggiunta opzione di visualizzazione del riassunto dei contenuti del diario
     </string>
     <string name="release_134">
-        v1.4.71 / 2019.01.26\n Corretto un errore per cui l\'applicazione terminava in modo anomalo quando si modificava l\'impronta digitale salvata nel dispositivo
+        v1.4.71 / 2019.01.26\n
+        Corretto un errore per cui l\'applicazione terminava in modo anomalo quando si modificava l\'impronta digitale salvata nel dispositivo
     </string>
     <string name="release_136">
-        v1.4.73 / 2019.02.11\n Migliorata la correzione delle cifre inserite quando il PIN è impostato e sbloccato
+        v1.4.73 / 2019.02.11\n
+        Migliorata la correzione delle cifre inserite quando il PIN è impostato e sbloccato
     </string>
     <string name="release_137">
-        v1.4.74 / 2019.03.06\n Migliorata l\’aggiunta di filtri alle immagini delle cartoline\n Aggiunta funzione per esportare il diario in un file Excel
+        v1.4.74 / 2019.03.06\n
+        Migliorata l\’aggiunta di filtri alle immagini delle cartoline\n
+        Aggiunta funzione per esportare il diario in un file Excel
     </string>
     <string name="release_138">
-        v1.4.75 / 2019.03.22\n Aggiunte pagine di informazioni relative all\'applicazione, tra cui le FAQ e l\'informativa sulla privacy\n Migliorato lo sblocco con PIN e impronte digitali
+        v1.4.75 / 2019.03.22\n
+        Aggiunte pagine di informazioni relative all\'applicazione, tra cui le FAQ e l\'informativa sulla privacy\n
+        Migliorato lo sblocco con PIN e impronte digitali
     </string>
     <string name="release_139">
-        v1.4.76 / 2019.04.24\n Aggiunti 50 simboli del diario
+        v1.4.76 / 2019.04.24\n
+        Aggiunti 50 simboli del diario
     </string>
     <string name="release_140">
-        v1.4.77 / 2019.05.11\n Aggiunti simboli del diario e categorie
+        v1.4.77 / 2019.05.11\n
+        Aggiunti simboli del diario e categorie
     </string>
     <string name="release_141">
-        v1.4.78 / 2019.05.13\n Corretto un errore che terminava l\'applicazione in modo anomalo se una funzione della schermata delle impostazioni non aveva accesso alla memoria del dispositivo
+        v1.4.78 / 2019.05.13\n
+        Corretto un errore che terminava l\'applicazione in modo anomalo se una funzione della schermata delle impostazioni non aveva accesso alla memoria del dispositivo
     </string>
     <string name="release_143">
-        v1.4.80 / 2019.06.07\n Cambiato Google Drive Android API in Google Drive REST API (Google Drive Android API verrà sospeso il 6 dicembre 2019)
+        v1.4.80 / 2019.06.07\n
+        Cambiato Google Drive Android API in Google Drive REST API (Google Drive Android API verrà sospeso il 6 dicembre 2019)
     </string>
     <string name="release_147">
-        v1.4.83 / 2019.06.09\n Sfruttamento di Android App Bundle per ridurre e ottimizzare le dimensioni del file di installazione
+        v1.4.83 / 2019.06.09\n
+        Sfruttamento di Android App Bundle per ridurre e ottimizzare le dimensioni del file di installazione
     </string>
     <string name="release_149">
-        v1.4.84 / 2019.06.15\n Migliorate le statistiche del diario
+        v1.4.84 / 2019.06.15\n
+        Migliorate le statistiche del diario
     </string>
     <string name="release_150">
-        v1.4.85 / 2019.06.18\n Google Drive (REST API) - Correzione di un errore nell\'acquisizione dei diritti dell\'utente
+        v1.4.85 / 2019.06.18\n
+        Google Drive (REST API) - Correzione di un errore nell\'acquisizione dei diritti dell\'utente
     </string>
     <string name="release_151">
-        v1.4.86 / 2019.06.19\n Google Drive (REST API) - Ripristino foto del diario Correzione di errori
+        v1.4.86 / 2019.06.19\n
+        Google Drive (REST API) - Ripristino foto del diario Correzione di errori
     </string>
     <string name="release_152">
-        v1.4.87 / 2019.06.20\n Corretto errore del token di autenticazione per gli utenti autenticati con Google Drive nella v1.4.80 o precedente
+        v1.4.87 / 2019.06.20\n
+        Corretto errore del token di autenticazione per gli utenti autenticati con Google Drive nella v1.4.80 o precedente
     </string>
     <string name="release_154">
-        v1.4.88 / 2019.07.16\n Migrata la libreria di supporto Android alla versione AndroidX\n Aggiunto simbolo del diario
+        v1.4.88 / 2019.07.16\n
+        Migrata la libreria di supporto Android alla versione AndroidX\n
+        Aggiunto simbolo del diario
     </string>
     <string name="release_157">
-        v1.4.91 / 2019.08.12\n Aggiunta funzione di backup e ripristino usando la memoria del dispositivo\n Corretto un problema che causava un troncamento di testo nei calendari su alcuni dispositivi
+        v1.4.91 / 2019.08.12\n
+        Aggiunta funzione di backup e ripristino usando la memoria del dispositivo\n
+        Corretto un problema che causava un troncamento di testo nei calendari su alcuni dispositivi
     </string>
     <string name="release_159">
-        v1.4.93 / 2019.08.29\n Ottimizzazione esperienza utente (UX)\n Correzione di bug che arrestava l\'applicazione in modo anomalo all’apertura della schermata di configurazione su sistemi operativi datati
+        v1.4.93 / 2019.08.29\n
+        Ottimizzazione esperienza utente (UX)\n
+        Correzione di bug che arrestava l\'applicazione in modo anomalo all’apertura della schermata di configurazione su sistemi operativi datati
     </string>
     <string name="release_160">
-        v1.4.94 / 2019.09.03\n Aggiunta possibilità di iniziare la settimana con giorni feriali nel calendario\n Risolto problema che impediva al calendario di essere visualizzato in modalità orizzontale su tablet
+        v1.4.94 / 2019.09.03\n
+        Aggiunta possibilità di iniziare la settimana con giorni feriali nel calendario\n
+        Risolto problema che impediva al calendario di essere visualizzato in modalità orizzontale su tablet
     </string>
     <string name="release_163">
-        v1.4.97 / 2019.09.17\n Migliorato il filtro di ricerca nella cronologia\n Aggiunta la funzione di copia del diario
+        v1.4.97 / 2019.09.17\n
+        Migliorato il filtro di ricerca nella cronologia\n
+        Aggiunta la funzione di copia del diario
     </string>
     <string name="release_165">
-        v1.4.99 / 2019.09.26\n Aggiunta funzione di conteggio del testo del diario
+        v1.4.99 / 2019.09.26\n
+        Aggiunta funzione di conteggio del testo del diario
     </string>
     <string name="release_167">
-        v1.4.101 / 2019.10.03\n Risolti i problemi di accesso alla memoria di Android 10 (downgrade temporaneo di targetSdkVersion per evitare i limiti di scoped storage)
+        v1.4.101 / 2019.10.03\n
+        Risolti i problemi di accesso alla memoria di Android 10 (downgrade temporaneo di targetSdkVersion per evitare i limiti di scoped storage)
     </string>
     <string name="release_169">
-        v1.4.103 / 2019.10.09\n Modifica percorso di archiviazione e migrazione per adeguarsi alla funzionalità Scoped Storage di Android 10
+        v1.4.103 / 2019.10.09\n
+        Modifica percorso di archiviazione e migrazione per adeguarsi alla funzionalità Scoped Storage di Android 10
     </string>
     <string name="release_170">
-        v1.4.104 / 2019.10.19\n Aggiunta funzione di modifica dimensioni carattere del calendario\n Aggiunta modalità scorrimento alla schermata delle impostazioni
+        v1.4.104 / 2019.10.19\n
+        Aggiunta funzione di modifica dimensioni carattere del calendario\n
+        Aggiunta modalità scorrimento alla schermata delle impostazioni
     </string>
     <string name="release_171">
-        v1.4.105 / 2019.10.20\n Corretto un errore che si verificava utilizzando la funzione di salvataggio di un file Excel\n Corretto errore che si verificava cancellando un diario dalla cronologia
+        v1.4.105 / 2019.10.20\n
+        Corretto un errore che si verificava utilizzando la funzione di salvataggio di un file Excel\n
+        Corretto errore che si verificava cancellando un diario dalla cronologia
     </string>
     <string name="release_172">
-        v1.4.106 / 2019.10.25\n Corretto l\'errore per cui i contenuti modificati non sono immediatamente visibili dopo la modifica del diario\n Correzione per le librerie vulnerabili con problemi di sicurezza noti
+        v1.4.106 / 2019.10.25\n
+        Corretto l\'errore per cui i contenuti modificati non sono immediatamente visibili dopo la modifica del diario\n
+        Correzione per le librerie vulnerabili con problemi di sicurezza noti
     </string>
     <string name="release_173">
-        v1.4.107 / 2019.10.31\n Ottimizzazione esperienza utente (UX)
+        v1.4.107 / 2019.10.31\n
+        Ottimizzazione esperienza utente (UX)
     </string>
     <string name="release_174">
-        v1.4.108 / 2019.11.18\n Corretto un errore che si verificava impostando le dimensioni carattere del calendario su un dispositivo impostato in francese
+        v1.4.108 / 2019.11.18\n
+        Corretto un errore che si verificava impostando le dimensioni carattere del calendario su un dispositivo impostato in francese
     </string>
     <string name="release_176">
-        v1.4.110 / 2019.12.13\n Aggiunta funzione Dashboard del diario\n Aggiunta la possibilità di cancellare il file di backup del diario presente nella memoria del dispositivo
+        v1.4.110 / 2019.12.13\n
+        Aggiunta funzione Dashboard del diario\n
+        Aggiunta la possibilità di cancellare il file di backup del diario presente nella memoria del dispositivo
     </string>
     <string name="release_178">
-        v1.4.112 / 2019.12.31\n Aggiunta funzione per allegare foto tramite l\'integrazione dell’app fotocamero\n Miglioramento della Dashboard del diario
+        v1.4.112 / 2019.12.31\n
+        Aggiunta funzione per allegare foto tramite l\'integrazione dell’app fotocamero\n
+        Miglioramento della Dashboard del diario
     </string>
     <string name="release_179">
-        v1.4.113 / 2020.01.04\n Aggiunta funzione di spostamento della data usando la selezione data nella schermata del calendario
+        v1.4.113 / 2020.01.04\n
+        Aggiunta funzione di spostamento della data usando la selezione data nella schermata del calendario
     </string>
     <string name="release_180">
-        v1.4.114 / 2020.01.15\n Aggiunto simbolo del diario\n Aggiunto supporto per il francese
+        v1.4.114 / 2020.01.15\n
+        Aggiunto simbolo del diario\n
+        Aggiunto supporto per il francese
     </string>
     <string name="release_182">
-        v1.4.116 / 2020.01.21\n Licenza cambiata da Apache License 2.0 a GNU General Public License v3.0
+        v1.4.116 / 2020.01.21\n
+        Licenza cambiata da Apache License 2.0 a GNU General Public License v3.0
     </string>
     <string name="release_184">
-        v1.4.118 / 2020.02.11\n [BETA] Aggiunta funzione di backup completo dei dati
+        v1.4.118 / 2020.02.11\n
+        [BETA] Aggiunta funzione di backup completo dei dati
     </string>
     <string name="release_185">
-        v1.4.119 / 2020.02.15\n Aggiunto simbolo del diario
+        v1.4.119 / 2020.02.15\n
+        Aggiunto simbolo del diario
     </string>
     <string name="release_186">
-        v1.4.120 / 2020.02.19\n Aggiunto simbolo del diario\n Aggiunta funzione di ricerca per simbolo del diario
+        v1.4.120 / 2020.02.19\n
+        Aggiunto simbolo del diario\n
+        Aggiunta funzione di ricerca per simbolo del diario
     </string>
     <string name="release_187">
-        v1.4.121 / 2020.03.02\n Migliorata la velocità della schermata del calendario (1° miglioramento)
+        v1.4.121 / 2020.03.02\n
+        Migliorata la velocità della schermata del calendario (1° miglioramento)
     </string>
     <string name="release_188">
-        v1.4.122 / 2020.03.09\n [BETA] Aggiunta funzione di ripristino completo dei dati\n Alcuni simboli appaiono insolitamente grandi nelle statistiche della dashboard\n Aggiunta opzione di ordinamento dell\'elenco dei diari nella schermata del calendario
+        v1.4.122 / 2020.03.09\n
+        [BETA] Aggiunta funzione di ripristino completo dei dati\n
+        Alcuni simboli appaiono insolitamente grandi nelle statistiche della dashboard\n
+        Aggiunta opzione di ordinamento dell\'elenco dei diari nella schermata del calendario
     </string>
     <string name="release_190">
-        v1.4.124 / 2020.03.15\n Divisa le impostazioni di carattere dalla schermata di impostazione di base
+        v1.4.124 / 2020.03.15\n
+        Divisa le impostazioni di carattere dalla schermata di impostazione di base
     </string>
     <string name="release_191">
-        v1.4.125 / 2020.03.23\n Aggiunta opzione di posizionamento del cursore quando si entra nella schermata di modifica del diario\n Aggiunta funzione per impostare il numero massimo di righe nell\'opzione di visualizzazione del riassunto dei contenuti\n Risolto un problema per cui il giorno della settimana veniva tagliato nella schermata del calendario
+        v1.4.125 / 2020.03.23\n
+        Aggiunta opzione di posizionamento del cursore quando si entra nella schermata di modifica del diario\n
+        Aggiunta funzione per impostare il numero massimo di righe nell\'opzione di visualizzazione del riassunto dei contenuti\n
+        Risolto un problema per cui il giorno della settimana veniva tagliato nella schermata del calendario
     </string>
     <string name="release_192">
-        v1.4.126 / 2020.04.05\n Aggiunta funzione di crittografia del diario con codice PIN\n Applicata temporaneamente l\'opzione requestLegacyExternalStorage per risolvere i problemi di Scoped Storage di Android 10
+        v1.4.126 / 2020.04.05\n
+        Aggiunta funzione di crittografia del diario con codice PIN\n
+        Applicata temporaneamente l\'opzione requestLegacyExternalStorage per risolvere i problemi di Scoped Storage di Android 10
     </string>
     <string name="release_193">
-        v1.4.127 / 2020.04.12\n Rimossa l\'opzione requestLegacyExternalStorage\n Aggiunta funzione di backup e ripristino dei file di database usando SAF (Storage Access Framework)
+        v1.4.127 / 2020.04.12\n
+        Rimossa l\'opzione requestLegacyExternalStorage\n
+        Aggiunta funzione di backup e ripristino dei file di database usando SAF (Storage Access Framework)
     </string>
     <string name="release_195">
-        v1.4.129 / 2020.04.21\n Aggiunta funzione per allegare file GIF\n Aggiunta funzione di copia ed eliminazione multipla del diario
+        v1.4.129 / 2020.04.21\n
+        Aggiunta funzione per allegare file GIF\n
+        Aggiunta funzione di copia ed eliminazione multipla del diario
     </string>
     <string name="release_196">
-        v1.4.130 / 2020.05.20\n Aggiunta funzione per impostare la pianificazione diario
+        v1.4.130 / 2020.05.20\n
+        Aggiunta funzione per impostare la pianificazione diario
     </string>
     <string name="release_197">
-        v1.4.131 / 2020.05.26\n Corretto un errore che causava la chiusura anomala di alcune schermate nella versione Android 4.4
+        v1.4.131 / 2020.05.26\n
+        Corretto un errore che causava la chiusura anomala di alcune schermate nella versione Android 4.4
     </string>
     <string name="release_198">
-        v1.4.132 / 2020.05.31\n Risolto un problema per cui i pulsanti della visualizzazione scheda non potevano essere visualizzati quando il tema e lo sfondo della visualizzazione scheda erano impostati sullo stesso colore
+        v1.4.132 / 2020.05.31\n
+        Risolto un problema per cui i pulsanti della visualizzazione scheda non potevano essere visualizzati quando il tema e lo sfondo della visualizzazione scheda erano impostati sullo stesso colore
     </string>
     <string name="release_199">
-        v1.4.133 / 2020.06.02\n Risolto un problema per cui l\'icona della schermata di blocco non veniva identificata quando il colore dello sfondo dello schermo era impostato su bianco
+        v1.4.133 / 2020.06.02\n
+        Risolto un problema per cui l\'icona della schermata di blocco non veniva identificata quando il colore dello sfondo dello schermo era impostato su bianco
     </string>
     <string name="release_200">
-        v1.4.134 / 2020.06.14\n Ottimizzazione esperienza utente (UX)
+        v1.4.134 / 2020.06.14\n
+        Ottimizzazione esperienza utente (UX)
     </string>
     <string name="release_201">
-        v1.4.135 / 2020.06.18\n Aggiunto supporto per lingue RTL
+        v1.4.135 / 2020.06.18\n
+        Aggiunto supporto per lingue RTL
     </string>
     <string name="release_202">
-        v1.4.136 / 2020.06.29\n Aggiunta funzione widget dell\'elenco dei diari
+        v1.4.136 / 2020.06.29\n
+        Aggiunta funzione widget dell\'elenco dei diari
     </string>
     <string name="release_203">
-        v1.4.137 / 2020.07.05\n Applicate politiche di sicurezza di Google Play
+        v1.4.137 / 2020.07.05\n
+        Applicate politiche di sicurezza di Google Play
     </string>
     <string name="release_205">
-        v1.4.139 / 2020.07.11\n Aggiunta funzione per visualizzare le informazioni dell\'account Google collegato\n Aggiunta funzione di backup di Google Drive utilizzando pianifica attività
+        v1.4.139 / 2020.07.11\n
+        Aggiunta funzione per visualizzare le informazioni dell\'account Google collegato\n
+        Aggiunta funzione di backup di Google Drive utilizzando pianifica attività
     </string>
     <string name="release_206">
-        v1.4.140 / 2020.07.20\n Corretto un errore per cui pianifica attività non funzionava nello stato di terminazione dell\'applicazione
+        v1.4.140 / 2020.07.20\n
+        Corretto un errore per cui pianifica attività non funzionava nello stato di terminazione dell\'applicazione
     </string>
     <string name="release_207">
-        v1.4.141 / 2020.08.03\n Ottimizzazione esperienza utente\n Aggiornamento della traduzione francese
+        v1.4.141 / 2020.08.03\n
+        Ottimizzazione esperienza utente\n
+        Aggiornamento della traduzione francese
     </string>
     <string name="release_209">
-        v1.4.143 / 2020.08.26\n Risolto un problema per cui alcuni dispositivi si interrompevano in modo anomalo nella schermata delle impostazioni
+        v1.4.143 / 2020.08.26\n
+        Risolto un problema per cui alcuni dispositivi si interrompevano in modo anomalo nella schermata delle impostazioni
     </string>
     <string name="release_211">
-        v1.4.145 / 2020.09.04\n Aggiornamento della traduzione tedesca
+        v1.4.145 / 2020.09.04\n
+        Aggiornamento della traduzione tedesca
     </string>
     <string name="release_212">
-        v1.4.146 / 2020.09.10\n Aggiornamento della traduzione tedesca\n Aggiunta opzione di visualizzazione delle informazioni sulla posizione
+        v1.4.146 / 2020.09.10\n
+        Aggiornamento della traduzione tedesca\n
+        Aggiunta opzione di visualizzazione delle informazioni sulla posizione
     </string>
     <string name="release_214">
-        v1.4.148 / 2020.09.15\n Aggiunta l\'opzione di ordinamento dei simboli delle attività
+        v1.4.148 / 2020.09.15\n
+        Aggiunta l\'opzione di ordinamento dei simboli delle attività
     </string>
     <string name="release_216">
-        v1.4.150 / 2020.09.22\n Risolto un bug per cui il widget non veniva visualizzato normalmente
+        v1.4.150 / 2020.09.22\n
+        Risolto un bug per cui il widget non veniva visualizzato normalmente
     </string>
     <string name="release_217">
-        v1.4.151 / 2020.10.05\n Aggiunto pulsante di creazione del diario alla schermata del calendario
+        v1.4.151 / 2020.10.05\n
+        Aggiunto pulsante di creazione del diario alla schermata del calendario
     </string>
     <string name="release_218">
-        v1.4.152 / 2020.10.19\n Aggiornamento della traduzione in russo\n Ottimizzazione esperienza utente (UX)
+        v1.4.152 / 2020.10.19\n
+        Aggiornamento della traduzione in russo\n
+        Ottimizzazione esperienza utente (UX)
     </string>
     <string name="release_219">
-        v1.4.153 / 2020.11.10\n Aggiunta traduzione in Hindi\n Ottimizzazione esperienza utente (UX)
+        v1.4.153 / 2020.11.10\n
+        Aggiunta traduzione in Hindi\n
+        Ottimizzazione esperienza utente (UX)
     </string>
     <string name="release_220">
-        v1.4.154 / 2020.11.28\n Aggiunti simboli del diario\nAggiunta funzione filtra simboli per giornata alla dashboard
+        v1.4.154 / 2020.11.28\n
+        Aggiunti simboli del diario\n
+        Aggiunta funzione filtra simboli per giornata alla dashboard
     </string>
     <string name="release_221">
-        v1.4.155 / 2020.12.14\n Aggiunti simboli del diario\nLa funzione crea cartolina è stata migliorata in modo che la foto allegata possa essere ritagliata o possa essere applicato un filtro
+        v1.4.155 / 2020.12.14\n
+        Aggiunti simboli del diario\n
+        La funzione crea cartolina è stata migliorata in modo che la foto allegata possa essere ritagliata o possa essere applicato un filtro
     </string>
     <string name="release_222">
-        v1.4.156 / 2021.01.11\n Aggiunti simboli del diario\n Migliorata l’UX della schermata del calendario
+        v1.4.156 / 2021.01.11\n
+        Aggiunti simboli del diario\n
+        Migliorata l’UX della schermata del calendario
     </string>
     <string name="release_225">
-        v1.4.159 / 2021.01.30\n Aggiunta traduzione in cinese
+        v1.4.159 / 2021.01.30\n
+        Aggiunta traduzione in cinese
     </string>
     <string name="release_227">
-        v1.4.161 / 2021.02.12\n Ottimizzazione esperienza utente (UX)
+        v1.4.161 / 2021.02.12\n
+        Ottimizzazione esperienza utente (UX)
     </string>
     <string name="release_229">
-        v1.4.163 / 2021.03.23\n Aggiunta funzione salvataggio diario in HTML
+        v1.4.163 / 2021.03.23\n
+        Aggiunta funzione salvataggio diario in HTML
     </string>
     <string name="release_230">
-        v1.4.164 / 2021.04.26\n Corretto un problema per cui la data del calendario non era visibile quando il colore della visualizzazione cartolina era nero
+        v1.4.164 / 2021.04.26\n
+        Corretto un problema per cui la data del calendario non era visibile quando il colore della visualizzazione cartolina era nero
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
