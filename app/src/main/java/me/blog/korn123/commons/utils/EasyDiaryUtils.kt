@@ -324,7 +324,7 @@ object EasyDiaryUtils {
         return name ?: UUID.randomUUID().toString()
     }
 
-    fun createAttachedPhotoView(context: Context, photoUriDto: PhotoUriDto, photoIndex: Int, marginLeft:Float = 0F, marginTop:Float = 0F, marginRight:Float = 3F, marginBottom:Float = 0F): ImageView {
+    fun createAttachedPhotoView(context: Context, photoUriDto: PhotoUriDto, marginLeft:Float = 0F, marginTop:Float = 0F, marginRight:Float = 3F, marginBottom:Float = 0F): ImageView {
         val thumbnailSize = context.config.settingThumbnailSize
 //        val bitmap = photoUriToDownSamplingBitmap(context, photoUriDto, 0, thumbnailSize.toInt() - 5, thumbnailSize.toInt() - 5)
         val imageView = ImageView(context)
@@ -347,7 +347,6 @@ object EasyDiaryUtils {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .priority(Priority.HIGH)
         Glide.with(context).load(getApplicationDataDirectory(context) + photoUriDto.getFilePath()).apply(options).into(imageView)
-
         return imageView
     }
 

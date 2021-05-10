@@ -194,8 +194,8 @@ class DiaryUpdateActivity : EditActivity() {
             val thumbnailSize = config.settingThumbnailSize
             it.forEachIndexed { index, photoUriDto ->
                 val imageView = when (isLandScape()) {
-                    true -> EasyDiaryUtils.createAttachedPhotoView(this, photoUriDto, index, 0F, 0F, 0F, 3F)
-                    false -> EasyDiaryUtils.createAttachedPhotoView(this, photoUriDto, index, 0F, 0F, 3F, 0F)
+                    true -> EasyDiaryUtils.createAttachedPhotoView(this, photoUriDto, 0F, 0F, 0F, 3F)
+                    false -> EasyDiaryUtils.createAttachedPhotoView(this, photoUriDto, 0F, 0F, 3F, 0F)
                 }
                 
                 imageView.setOnClickListener(PhotoClickListener(index))
