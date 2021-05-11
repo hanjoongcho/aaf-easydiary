@@ -169,22 +169,45 @@ Currently supported languages are listed below:
 > Korean Translation contributor   
 * hanjoongcho (https://github.com/hanjoongcho)  
 [strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-ko/strings.xml)  
-[MANUAL_ko.md](https://github.com/hanjoongcho/aaf-easydiary/blob/master/MANUAL_ko.md)  
 
 > English Translation contributor 
 * Google translation robot  
 [strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-en/strings.xml)  
-[MANUAL.md](https://github.com/hanjoongcho/aaf-easydiary/blob/master/MANUAL.md)  
 
 > Japanese Translation contributor  
 * ScratchBuild (https://github.com/ScratchBuild)  
 [strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-ja/strings.xml)  
-[MANUAL_ja.md](https://github.com/hanjoongcho/aaf-easydiary/blob/master/MANUAL_ja.md)  
 
 > German Translation contributor
 * fulmeek (https://github.com/fulmeek)  
 [strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-de/strings.xml)  
-[MANUAL_de.md](https://github.com/hanjoongcho/aaf-easydiary/blob/master/MANUAL_de.md)  
+
+> Italian Translation contributor
+* FrancescoFernicola (https://github.com/FrancescoFernicola)
+* margherita-martinelli (https://github.com/margherita-martinelli)
+* antcont (https://github.com/antcont)  
+[strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-it/strings.xml)  
+
+> French Translation contributor
+* Larnicone (https://github.com/Larnicone)  
+[strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-fr/strings.xml)  
+
+> Hindi Translation contributor
+* Prasanta-Hembram (https://github.com/Prasanta-Hembram)  
+[strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-hi/strings.xml)  
+
+> Santali Translation contributor
+* Prasanta-Hembram (https://github.com/Prasanta-Hembram)  
+[strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-sat/strings.xml)  
+
+> Russian Translation contributor
+* stikice (https://github.com/stikice)  
+[strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-ru/strings.xml)  
+
+> Chinese Translation contributor
+* liuteng-sy (https://github.com/liuteng-sy)  
+* WAining (https://github.com/WAining)  
+[strings.xml](https://github.com/hanjoongcho/aaf-easydiary/blob/master/app/src/main/res/values-zh-rCN/strings.xml)  
 
 # Contributing
 [Contributing](Contributing.md)
