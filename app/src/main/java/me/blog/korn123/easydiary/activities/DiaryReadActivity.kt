@@ -481,7 +481,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
 
         override fun onActivityCreated(savedInstanceState: Bundle?) {
             super.onActivityCreated(savedInstanceState)
-
+            requireContext().changeDrawableIconColor(config.primaryColor, R.drawable.map_marker_2)
             togglePhoto.setOnClickListener {
                 context?.let { context ->
                     when (photoContainerScrollView.visibility) {
