@@ -80,6 +80,7 @@ open class CheatSheetActivity : EasyDiaryActivity() {
             add(CheatSheetAdapter.CheatSheet("Android-02", "Architecture Guidelines / MVP", "https://raw.githubusercontent.com/hanjoongcho/android-guidelines/master/architecture_guidelines/android_architecture.md"))
             add(CheatSheetAdapter.CheatSheet("Kotlin-01", "Explanation of kotlin basic functions", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/kotlin/kotlin.md"))
             add(CheatSheetAdapter.CheatSheet("Kotlin-02", "Explanation of kotlin collection functions", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/kotlin/kotlin.collections.md"))
+            add(CheatSheetAdapter.CheatSheet("Kotlin-03", "Coding Conventions", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/kotlin/coding-conventions.md"))
             add(CheatSheetAdapter.CheatSheet("ES6-01", "var, let, const", "https://gist.githubusercontent.com/hanjoongcho/983fe388a669f1da9df13cf64f63c5f3/raw/d1587f1da1d7ead1ba695e50094dbf52daaf6e1e/var-let-const.md"))
             add(CheatSheetAdapter.CheatSheet("ES6-02", "Promise", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/es6/promise.md"))
             add(CheatSheetAdapter.CheatSheet("Java-01", "Describes annotations mainly used in Spring Framework", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/annotations/spring.md"))
