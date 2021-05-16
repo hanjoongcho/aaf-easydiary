@@ -202,6 +202,7 @@ object FlavorUtils {
         LEISURE_GOLF -> R.drawable.ic_golf_stick
         LEISURE_WALKING -> R.drawable.ic_walking
         LEISURE_TRAINING -> R.drawable.ic_checklist
+        LEISURE_DOCUMENTARY -> R.drawable.ic_documentary
 
         SYMBOL_YOUTUBE -> R.drawable.ic_youtube
         SYMBOL_NETFLIX -> R.drawable.ic_netflix
