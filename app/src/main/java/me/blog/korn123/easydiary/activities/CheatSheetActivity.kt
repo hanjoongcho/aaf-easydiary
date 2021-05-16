@@ -27,6 +27,7 @@ open class CheatSheetActivity : EasyDiaryActivity() {
     private lateinit var mCheatSheetAdapter: CheatSheetAdapter
     private var mOriginCheatSheetList = arrayListOf<CheatSheetAdapter.CheatSheet>()
     private var mFilteredCheatSheetList = arrayListOf<CheatSheetAdapter.CheatSheet>()
+    // t1 commit 01
 
     /***************************************************************************************************
      *   override functions
