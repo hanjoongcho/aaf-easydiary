@@ -101,6 +101,7 @@ open class CheatSheetActivity : EasyDiaryActivity() {
             add(CheatSheetAdapter.CheatSheet("Data-Structure-01", "국가상수도데이터베이스표준화지침(20210101 개정)", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/design/database/standardization.md"))
             add(CheatSheetAdapter.CheatSheet("Data-Structure-02", "Unicode", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/data-structure/unicode.md"))
             add(CheatSheetAdapter.CheatSheet("Data-Structure-03", "ASCII", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/data-structure/ascii.md"))
+            add(CheatSheetAdapter.CheatSheet("Database-01", "Oracle", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/database/oracle-01.md"))
         }
 
         mBinding.recyclerCheatSheet.apply {
