@@ -449,8 +449,8 @@ abstract class EditActivity : EasyDiaryActivity() {
             }
             runOnUiThread {
                 when (isLandScape()) {
-                    true -> photoContainer.postDelayed({ (photoContainerScrollView as ScrollView).fullScroll(ScrollView.FOCUS_DOWN) }, 100L)
-                    false -> photoContainer.postDelayed({ (photoContainerScrollView as HorizontalScrollView).fullScroll(HorizontalScrollView.FOCUS_RIGHT) }, 100L)
+                    true -> photoContainer.postDelayed({ (photoContainerScrollView.getChildAt(0) as ScrollView).fullScroll(ScrollView.FOCUS_DOWN) }, 100L)
+                    false -> photoContainer.postDelayed({ (photoContainerScrollView.getChildAt(0) as HorizontalScrollView).fullScroll(HorizontalScrollView.FOCUS_RIGHT) }, 100L)
                 }
                 setVisiblePhotoProgress(false)
             }

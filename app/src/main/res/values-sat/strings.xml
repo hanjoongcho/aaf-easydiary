@@ -520,6 +520,10 @@
         Italian translation added\n
         Improved landscape screen UX
     </string>
+    <string name="release_233">
+        v1.4.167 / 2021.05.18\n
+        Fixed a bug that abnormally terminated on some devices when rotating the device
+    </string>
     
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->

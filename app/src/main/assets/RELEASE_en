@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.167 (date: 2021.05.18)
+  * Fixed a bug that abnormally terminated on some devices when rotating the device
+
 # Changes in 1.4.166 (date: 2021.05.11)
   * Italian translation added
   * Improved landscape screen UX
