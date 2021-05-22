@@ -579,9 +579,6 @@ fun EasyDiaryActivity.migrateData(binging: ActivityDiaryMainBinding) {
             // 03. USER_CUSTOM_FONTS_DIRECTORY
             val fontSrcDir = File(EasyDiaryUtils.getExternalStorageDirectory(), USER_CUSTOM_FONTS_DIRECTORY)
             val fontDestDir = File(EasyDiaryUtils.getApplicationDataDirectory(this@migrateData) + USER_CUSTOM_FONTS_DIRECTORY)
-            if (config.enableDebugMode) {
-                runOnUiThread { showAlertDialog("fontSrcDir.listFiles: ${fontSrcDir.listFiles()}", null, false) }
-            }
             fontSrcDir.listFiles()?.let {
                 it.forEachIndexed { index, file ->
                     if (File(fontDestDir, file.name).exists()) {
