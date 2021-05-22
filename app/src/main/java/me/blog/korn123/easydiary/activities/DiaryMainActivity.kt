@@ -28,6 +28,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
+import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
 import me.blog.korn123.easydiary.databinding.PopupMenuMainBinding
@@ -305,7 +306,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     }
 
     private fun migrateData() {
-        Thread(Runnable {
+        Thread {
             val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
             val listPhotoUri = EasyDiaryDbHelper.selectPhotoUriAll(realmInstance)
             var isFontDirMigrate = false
@@ -372,6 +373,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 // 03. USER_CUSTOM_FONTS_DIRECTORY
                 val fontSrcDir = File(EasyDiaryUtils.getExternalStorageDirectory(), USER_CUSTOM_FONTS_DIRECTORY)
                 val fontDestDir = File(EasyDiaryUtils.getApplicationDataDirectory(this) + USER_CUSTOM_FONTS_DIRECTORY)
+                if (config.enableDebugMode) {
+                    runOnUiThread { showAlertDialog("fontSrcDir.listFiles: ${fontSrcDir.listFiles()}", null, false) }
+                }
                 fontSrcDir.listFiles()?.let {
                     it.forEachIndexed { index, file ->
                         if (File(fontDestDir, file.name).exists()) {
@@ -413,7 +417,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                     }, false)
                 }
             }
-        }).start()
+        }.start()
     }
     
     private fun initShowcase() {
