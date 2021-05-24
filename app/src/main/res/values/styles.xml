@@ -10,13 +10,14 @@
         <item name="windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowBackground">@null</item> ,
+        <item name="android:windowBackground">@null</item>
     </style>
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:fastScrollThumbDrawable">@drawable/ic_fast_scroll</item>
         <item name="android:fastScrollTrackDrawable">@null</item>
+        <item name="android:windowBackground">@null</item>
     </style>
 
     <style name="AppCard.Timeline">

@@ -273,6 +273,9 @@ open class BaseDevActivity : EasyDiaryActivity() {
         TransitionHelper.startActivityWithTransition(this, Intent(this, CheatSheetActivity::class.java))
     }
 
+    fun restartApplication(view: View) {
+        triggerRestart()
+    }
 
     /***************************************************************************************************
      *   etc functions
