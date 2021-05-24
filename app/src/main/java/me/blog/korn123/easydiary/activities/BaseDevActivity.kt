@@ -274,7 +274,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
     }
 
     fun restartApplication(view: View) {
-        restartApp()
+        triggerRestart()
     }
 
     /***************************************************************************************************

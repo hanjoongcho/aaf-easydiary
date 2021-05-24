@@ -215,16 +215,24 @@ fun Activity.startActivityWithTransition(intent: Intent) {
     overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
 }
 
-fun Activity.restartApp() {
-    val readDiaryIntent = Intent(this, DiaryMainActivity::class.java)
-    readDiaryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-    val mPendingIntentId = 123456
-    val mPendingIntent = PendingIntent.getActivity(this, mPendingIntentId, readDiaryIntent, PendingIntent.FLAG_CANCEL_CURRENT)
-    val mgr = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
-    ActivityCompat.finishAffinity(this)
-    //System.runFinalizersOnExit(true)
-    exitProcess(0)
+//fun Activity.restartApp() {
+//    val readDiaryIntent = Intent(this, DiaryMainActivity::class.java)
+//    readDiaryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+//    val mPendingIntentId = 123456
+//    val mPendingIntent = PendingIntent.getActivity(this, mPendingIntentId, readDiaryIntent, PendingIntent.FLAG_CANCEL_CURRENT)
+//    val mgr = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//    mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
+//    ActivityCompat.finishAffinity(this)
+//    //System.runFinalizersOnExit(true)
+//    exitProcess(0)
+//}
+
+fun Activity.triggerRestart() {
+    val intent = Intent(this, DiaryMainActivity::class.java)
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    this.startActivity(intent)
+    finish()
+    Runtime.getRuntime().exit(0)
 }
 
 fun Activity.refreshApp() {
@@ -616,7 +624,7 @@ fun EasyDiaryActivity.migrateData(binging: ActivityDiaryMainBinding) {
             binging.modalContainer.visibility = View.GONE
             if (isFontDirMigrate) {
                 showAlertDialog("Font 리소스가 변경되어 애플리케이션을 다시 시작합니다.", DialogInterface.OnClickListener { _, _ ->
-                    restartApp()
+                    triggerRestart()
                 }, false)
             }
         }
