@@ -566,14 +566,14 @@
     <string name="notification_msg_upload_complete">Загрузка завершена</string>
     <string name="notification_msg_upload_success">%s Загрузка выполнена успешно: %d%s</string>
     <string name="notification_msg_upload_fail">%s Ошибка загрузки: %d%s</string>
-    <string name="notification_msg_google_drive_file_count">Количество восстановленных файлов</string>
+    <string name="notification_msg_google_drive_file_count">%s Количество восстановленных файлов: %d%s</string>
     <string name="notification_msg_download_file_count">Количество файлов для скачивания</string>
     <string name="notification_msg_download_invalid">Все целевые файлы восстановления уже существуют.</string>
     <string name="notification_msg_download_empty">Файл для восстановления не существует.</string>
     <string name="notification_msg_download_progress">Скачивается…</string>
     <string name="notification_msg_download_complete">Загрузка завершена</string>
-    <string name="notification_msg_download_success">Скачивание выполнена успешно</string>
-    <string name="notification_msg_download_fail">Ошибка скачивания</string>
+    <string name="notification_msg_download_success">%s Скачивание выполнена успешно: %d%s</string>
+    <string name="notification_msg_download_fail">%s Ошибка скачивания: %d%s</string>
     <string name="notification_msg_duplicate_file_count">%s Количество существующих файлов: %d%s</string>
     <string name="preferences_category_lock">Настройка блокировки приложения</string>
     <string name="fingerprint_lock_title">Блокировка отпечатком пальца</string>

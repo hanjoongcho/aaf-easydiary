@@ -566,14 +566,14 @@
     <string name="notification_msg_upload_complete">Upload Complete</string>
     <string name="notification_msg_upload_success">%s Upload Success: %d%s</string>
     <string name="notification_msg_upload_fail">%s Upload Fail: %d%s</string>
-    <string name="notification_msg_google_drive_file_count">Number of recover files</string>
+    <string name="notification_msg_google_drive_file_count">%s Number of recover files: %d%s</string>
     <string name="notification_msg_download_file_count">Number of files to download</string>
     <string name="notification_msg_download_invalid">All recovery target files already exist.</string>
     <string name="notification_msg_download_empty">The file to be recovered does not exist.</string>
     <string name="notification_msg_download_progress">Downloading…</string>
     <string name="notification_msg_download_complete">Download Complete</string>
-    <string name="notification_msg_download_success">Download Success</string>
-    <string name="notification_msg_download_fail">Download Fail</string>
+    <string name="notification_msg_download_success">%s Download Success: %d%s</string>
+    <string name="notification_msg_download_fail">%s Download Fail: %d%s</string>
     <string name="notification_msg_duplicate_file_count">%s Number of exist files: %d%s</string>
     <string name="preferences_category_lock">Application lock setting</string>
     <string name="fingerprint_lock_title">Fingerprint lock</string>

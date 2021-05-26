@@ -566,14 +566,14 @@
     <string name="notification_msg_upload_complete">备份完成</string>
     <string name="notification_msg_upload_success">%s 备份成功: %d%s</string>
     <string name="notification_msg_upload_fail">%s 备份失败: %d%s</string>
-    <string name="notification_msg_google_drive_file_count">恢复文件数目</string>
+    <string name="notification_msg_google_drive_file_count">%s 恢复文件数目: %d%s</string>
     <string name="notification_msg_download_file_count">可恢复的文件数目</string>
     <string name="notification_msg_download_invalid">所有恢复目标文件已经存在</string>
     <string name="notification_msg_download_empty">要恢复的文件不存在</string>
     <string name="notification_msg_download_progress">恢复……</string>
     <string name="notification_msg_download_complete">恢复完成</string>
-    <string name="notification_msg_download_success">恢复成功</string>
-    <string name="notification_msg_download_fail">恢复失败</string>
+    <string name="notification_msg_download_success">%s 恢复成功: %d%s</string>
+    <string name="notification_msg_download_fail">%s 恢复失败: %d%s</string>
     <string name="notification_msg_duplicate_file_count">%s 存在文件的数量: %d%s</string>
     <string name="preferences_category_lock">应用锁定设定</string>
     <string name="fingerprint_lock_title">指纹锁</string>
