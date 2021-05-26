@@ -566,14 +566,14 @@
     <string name="notification_msg_upload_complete">Caricamento completato</string>
     <string name="notification_msg_upload_success">%s Caricamento riuscito: %d%s</string>
     <string name="notification_msg_upload_fail">%s Caricamento non riuscito: %d%s</string>
-    <string name="notification_msg_google_drive_file_count">Numero file ripristinati</string>
+    <string name="notification_msg_google_drive_file_count">%s Numero file ripristinati: %d%s</string>
     <string name="notification_msg_download_file_count">Numero file da scaricare</string>
     <string name="notification_msg_download_invalid">File di destinazione del ripristino già esistenti.</string>
     <string name="notification_msg_download_empty">Il file da ripristinare non esiste.</string>
     <string name="notification_msg_download_progress">Download in corso...</string>
     <string name="notification_msg_download_complete">Download completato</string>
-    <string name="notification_msg_download_success">Download riuscito</string>
-    <string name="notification_msg_download_fail">Download non riuscito</string>
+    <string name="notification_msg_download_success">%s Download riuscito: %d%s</string>
+    <string name="notification_msg_download_fail">%s Download non riuscito: %d%s</string>
     <string name="notification_msg_duplicate_file_count">%s Numero file esistenti: %d%s</string>
     <string name="preferences_category_lock">Impostazioni di blocco</string>
     <string name="fingerprint_lock_title">Blocco con impronta digitale</string>

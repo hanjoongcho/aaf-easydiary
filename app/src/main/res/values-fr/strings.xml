@@ -566,14 +566,14 @@
     <string name="notification_msg_upload_complete">Envoi terminé</string>
     <string name="notification_msg_upload_success">%s Réussite de l\'envoi: %d%s</string>
     <string name="notification_msg_upload_fail">%s Échec de l\'envoi: %d%s</string>
-    <string name="notification_msg_google_drive_file_count">Nombre de fichiers restaurés</string>
+    <string name="notification_msg_google_drive_file_count">%s Nombre de fichiers restaurés: %d%s</string>
     <string name="notification_msg_download_file_count">Nombre de fichiers à télécharger</string>
     <string name="notification_msg_download_invalid">Tous les fichiers cibles de restauration existent déjà.</string>
     <string name="notification_msg_download_empty">Le fichier à restaurer n\'existe pas.</string>
     <string name="notification_msg_download_progress">Téléchargement…</string>
     <string name="notification_msg_download_complete">Téléchargement terminé</string>
-    <string name="notification_msg_download_success">Téléchargement réussi</string>
-    <string name="notification_msg_download_fail">Échec du téléchargement</string>
+    <string name="notification_msg_download_success">%s Téléchargement réussi: %d%s</string>
+    <string name="notification_msg_download_fail">%s Échec du téléchargement: %d%s</string>
     <string name="notification_msg_duplicate_file_count">%s Nombre de fichiers existants: %d%s</string>
     <string name="preferences_category_lock">Réglage du verrouillage de l\'application</string>
     <string name="fingerprint_lock_title">Verrouillage par empreinte digitale</string>

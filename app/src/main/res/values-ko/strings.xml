@@ -566,14 +566,14 @@
     <string name="notification_msg_upload_complete">파일 업로드 완료</string>
     <string name="notification_msg_upload_success">%s 업로드 성공: %d%s</string>
     <string name="notification_msg_upload_fail">%s 업로드 실패: %d%s</string>
-    <string name="notification_msg_google_drive_file_count">복구대상 파일</string>
+    <string name="notification_msg_google_drive_file_count">%s 복구대상 파일: %d%s</string>
     <string name="notification_msg_download_file_count">다운로드 대상 파일</string>
     <string name="notification_msg_download_invalid">복구 대상 파일이 디바이스에 모두 존재합니다.</string>
     <string name="notification_msg_download_empty">복구 대상 파일이 존재하지 않습니다.</string>
     <string name="notification_msg_download_progress">파일 다운로드 진행중…</string>
     <string name="notification_msg_download_complete">파일 다운로드 완료</string>
-    <string name="notification_msg_download_success">다운로드 성공</string>
-    <string name="notification_msg_download_fail">다운로드 실패</string>
+    <string name="notification_msg_download_success">%s 다운로드 성공: %d%s</string>
+    <string name="notification_msg_download_fail">%s 다운로드 실패: %d%s</string>
     <string name="notification_msg_duplicate_file_count">%s 중복 파일: %d%s</string>
     <string name="preferences_category_lock">애플리케이션 잠금설정</string>
     <string name="fingerprint_lock_title">지문인식 잠금</string>

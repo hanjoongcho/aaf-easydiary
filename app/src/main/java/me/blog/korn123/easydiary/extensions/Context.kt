@@ -641,10 +641,10 @@ fun Context.createBackupContentText(localDeviceFileCount: Int, duplicateFileCoun
 
 fun Context.createRecoveryContentText(remoteDriveFileCount: Int, duplicateFileCount: Int, successCount: Int, failCount: Int): StringBuilder = StringBuilder()
         .append("<b>\uD83D\uDCF7 Attached Photos</b><br>")
-        .append(getString(R.string.notification_msg_device_file_count, "*", remoteDriveFileCount, "<br>"))
+        .append(getString(R.string.notification_msg_google_drive_file_count, "*", remoteDriveFileCount, "<br>"))
         .append(getString(R.string.notification_msg_duplicate_file_count, "*", duplicateFileCount, "<br>"))
-        .append(getString(R.string.notification_msg_upload_success, "*", successCount, "<br>"))
-        .append(getString(R.string.notification_msg_upload_fail, "*", failCount, "<br>"))
+        .append(getString(R.string.notification_msg_download_success, "*", successCount, "<br>"))
+        .append(getString(R.string.notification_msg_download_fail, "*", failCount, "<br>"))
 
 fun Context.forceInitRealmLessThanOreo() {
     // android marshmallow minor version bug workaround

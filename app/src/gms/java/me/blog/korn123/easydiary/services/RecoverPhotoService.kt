@@ -20,6 +20,7 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.extensions.createBackupContentText
+import me.blog.korn123.easydiary.extensions.createRecoveryContentText
 import me.blog.korn123.easydiary.helper.*
 import java.io.File
 import java.util.*
@@ -200,7 +201,7 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
     }
 
     private fun launchCompleteNotification(contentText: String) {
-        val stringBuilder = createBackupContentText(remoteDriveFileCount, duplicateFileCount, successCount, failCount)
+        val stringBuilder = createRecoveryContentText(remoteDriveFileCount, duplicateFileCount, successCount, failCount)
                 .insert(0, "$contentText<br>")
 
         val resultNotificationBuilder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_download")

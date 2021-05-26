@@ -566,14 +566,14 @@
     <string name="notification_msg_upload_complete">アップロード完了</string>
     <string name="notification_msg_upload_success">%s アップロード成功: %d%s</string>
     <string name="notification_msg_upload_fail">%s アップロード失敗: %d%s</string>
-    <string name="notification_msg_google_drive_file_count">回復ファイルの数</string>
+    <string name="notification_msg_google_drive_file_count">%s 回復ファイルの数: %d%s</string>
     <string name="notification_msg_download_file_count">ダウンロードするファイルの数</string>
     <string name="notification_msg_download_invalid">すべての回復先ファイルがすでに存在しています。</string>
     <string name="notification_msg_download_empty">回復対象のファイルが存在しません。</string>
     <string name="notification_msg_download_progress">ダウンロード…</string>
     <string name="notification_msg_download_complete">ダウンロード完了</string>
-    <string name="notification_msg_download_success">ダウンロード成功</string>
-    <string name="notification_msg_download_fail">ダウンロード失敗</string>
+    <string name="notification_msg_download_success">%s ダウンロード成功: %d%s</string>
+    <string name="notification_msg_download_fail">%s ダウンロード失敗: %d%s</string>
     <string name="notification_msg_duplicate_file_count">%s 存在するファイルの数: %d%s</string>
     <string name="preferences_category_lock">アプリロックの設定</string>
     <string name="fingerprint_lock_title">指紋ロック</string>

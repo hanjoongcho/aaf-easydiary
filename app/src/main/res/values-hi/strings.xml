@@ -566,14 +566,14 @@
     <string name="notification_msg_upload_complete">अपलोड पूरा हुआ</string>
     <string name="notification_msg_upload_success">%s सफलतापूर्वक अपलोड हो गया: %d%s</string>
     <string name="notification_msg_upload_fail">%s फेल अपलोड करें: %d%s</string>
-    <string name="notification_msg_google_drive_file_count">पुनर्प्राप्त फ़ाइलों की संख्या</string>
+    <string name="notification_msg_google_drive_file_count">%s पुनर्प्राप्त फ़ाइलों की संख्या: %d%s</string>
     <string name="notification_msg_download_file_count">डाउनलोड करने के लिए फ़ाइलों की संख्या</string>
     <string name="notification_msg_download_invalid">सभी पुनर्प्राप्ति लक्ष्य फ़ाइलें पहले से मौजूद हैं।</string>
     <string name="notification_msg_download_empty">पुनर्प्राप्त की जाने वाली फ़ाइल मौजूद नहीं है।</string>
     <string name="notification_msg_download_progress">डाउनलोड कर रहा है…</string>
     <string name="notification_msg_download_complete">डाउनलोड सम्पन्न हुआ</string>
-    <string name="notification_msg_download_success">डाउनलोड सफलता</string>
-    <string name="notification_msg_download_fail">डाउनलोड विफल</string>
+    <string name="notification_msg_download_success">%s डाउनलोड सफलता: %d%s</string>
+    <string name="notification_msg_download_fail">%s डाउनलोड विफल: %d%s</string>
     <string name="notification_msg_duplicate_file_count">%sमौजूद फ़ाइलों की संख्या: %d%s</string>
     <string name="preferences_category_lock">एप्लिकेशन लॉक सेटिंग</string>
     <string name="fingerprint_lock_title">फिंगरप्रिंट लॉक</string>

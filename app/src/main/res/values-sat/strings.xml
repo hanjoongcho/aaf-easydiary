@@ -566,14 +566,14 @@
     <string name="notification_msg_upload_complete">ᱞᱮᱫᱮ ᱪᱟᱵᱟᱮᱱᱟ</string>
     <string name="notification_msg_upload_success">%s ᱞᱟᱫᱮ ᱦᱩᱭᱺ %d%s</string>
     <string name="notification_msg_upload_fail">%s ᱟᱹᱯᱞᱚᱰ ᱰᱤᱜᱟᱹᱣᱺ%d%s</string>
-    <string name="notification_msg_google_drive_file_count">ᱨᱤᱠᱟᱹᱣᱟᱹᱨ ᱨᱮᱫᱠᱚ ᱨᱮᱭᱟᱜ ᱱᱚᱢᱵᱚᱨ</string>
+    <string name="notification_msg_google_drive_file_count">%s ᱨᱤᱠᱟᱹᱣᱟᱹᱨ ᱨᱮᱫᱠᱚ ᱨᱮᱭᱟᱜ ᱱᱚᱢᱵᱚᱨ: %d%s</string>
     <string name="notification_msg_download_file_count">ᱛᱤᱱᱟᱹᱝ ᱜᱟᱱ ᱨᱮᱫ ᱠᱚ ᱰᱟᱩᱱᱞᱚᱰ ᱨᱮᱭᱟᱜ ᱱᱚᱢᱵᱚᱨ</string>
     <string name="notification_msg_download_invalid">ᱡᱷᱚᱛᱚ ᱨᱤᱠᱟᱹᱣᱨᱤ ᱴᱟᱨᱜᱮᱴ ᱨᱮᱫᱠᱚ ᱢᱟᱲᱟᱝ ᱠᱷᱚᱱ ᱢᱮᱱᱟᱜᱼᱟ ᱾</string>
     <string name="notification_msg_download_empty">ᱨᱮᱠᱟᱹᱣᱟᱹᱨᱚᱜ ᱠᱟᱱ ᱨᱮᱫ ᱫᱚ ᱱᱤᱛᱚᱜ ᱠᱟᱱᱩᱜᱼᱟ ᱾</string>
     <string name="notification_msg_download_progress">ᱰᱟᱩᱱᱞᱚᱰᱤᱝ…</string>
     <string name="notification_msg_download_complete">ᱰᱟᱩᱱᱞᱳᱰ ᱪᱟᱵᱟᱮᱱᱟ</string>
-    <string name="notification_msg_download_success">ᱰᱟᱩᱱᱞᱳᱰ ᱦᱩᱭᱮᱱ</string>
-    <string name="notification_msg_download_fail">ᱰᱟᱩᱱᱞᱳᱰ ᱵᱷᱩᱞ</string>
+    <string name="notification_msg_download_success">%s ᱰᱟᱩᱱᱞᱳᱰ ᱦᱩᱭᱮᱱ: %d%s</string>
+    <string name="notification_msg_download_fail">%s ᱰᱟᱩᱱᱞᱳᱰ ᱵᱷᱩᱞ: %d%s</string>
     <string name="notification_msg_duplicate_file_count">%s ᱜᱚᱴᱟᱝ ᱨᱮᱫᱠᱚ ᱢᱮᱱᱟᱜᱼᱟᱺ %d%s</string>
     <string name="preferences_category_lock">ᱮᱯᱞᱤᱠᱮᱥᱚᱱ ᱠᱩᱞᱩᱯ ᱥᱟᱡᱟᱣ</string>
     <string name="fingerprint_lock_title">ᱛᱤᱠᱟᱹᱴᱩᱵᱪᱷᱟᱯᱟ ᱠᱩᱞᱩᱯ</string>

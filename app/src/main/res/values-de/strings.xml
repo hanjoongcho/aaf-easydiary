@@ -566,14 +566,14 @@
     <string name="notification_msg_upload_complete">Upload abgeschlossen</string>
     <string name="notification_msg_upload_success">%s Upload-Erfolg: %d%s</string>
     <string name="notification_msg_upload_fail">%s Upload fehlgeschlagen: %d%s</string>
-    <string name="notification_msg_google_drive_file_count">Anzahl der Wiederherstellungsdateien</string>
+    <string name="notification_msg_google_drive_file_count">%s Anzahl der Wiederherstellungsdateien: %d%s</string>
     <string name="notification_msg_download_file_count">Anzahl der herunterzuladenden Dateien</string>
     <string name="notification_msg_download_invalid">Alle Wiederherstellungszieldateien sind bereits vorhanden.</string>
     <string name="notification_msg_download_empty">Die wiederherzustellende Datei existiert nicht.</string>
     <string name="notification_msg_download_progress">Herunterladen von…</string>
     <string name="notification_msg_download_complete">Download abgeschlossen</string>
-    <string name="notification_msg_download_success">Download Erfolg</string>
-    <string name="notification_msg_download_fail">Download fehlgeschlagen</string>
+    <string name="notification_msg_download_success">%s Download Erfolg: %d%s</string>
+    <string name="notification_msg_download_fail">%s Download fehlgeschlagen: %d%s</string>
     <string name="notification_msg_duplicate_file_count">%s Anzahl der vorhandenen Dateien: %d%s</string>
     <string name="preferences_category_lock">Einstellung der Anwendungssperre</string>
     <string name="fingerprint_lock_title">Fingerabdruck-Sperre</string>
