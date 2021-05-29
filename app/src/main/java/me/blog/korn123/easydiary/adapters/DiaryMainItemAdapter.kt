@@ -96,7 +96,7 @@ class DiaryMainItemAdapter(
                 EasyDiaryDbHelper.updateDiary(diaryDto)
             }
 
-            when ((activity as DiaryMainActivity).mDiaryMode) {
+            when ((activity as DiaryMainActivity).diaryMode) {
                 DiaryMode.READ -> selection.visibility = View.GONE
                 DiaryMode.DELETE -> {
                     selection.visibility = View.VISIBLE

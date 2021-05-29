@@ -50,8 +50,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     private var mDiaryList: ArrayList<DiaryDto> = arrayListOf()
     private var mShowcaseIndex = 0
     private var mShowcaseView: ShowcaseView? = null
-    private var popupWindow: PopupWindow? = null
-    var mDiaryMode = DiaryMode.READ
+    private var mPopupWindow: PopupWindow? = null
+    var diaryMode = DiaryMode.READ
 
 
     /***************************************************************************************************
@@ -86,13 +86,13 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         when (savedInstanceState == null) {
             true -> checkWhatsNewDialog()
             false -> {
-                mDiaryMode = savedInstanceState.getSerializable(DIARY_MODE) as DiaryMode
+                diaryMode = savedInstanceState.getSerializable(DIARY_MODE) as DiaryMode
             }
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putSerializable(DIARY_MODE, mDiaryMode)
+        outState.putSerializable(DIARY_MODE, diaryMode)
         super.onSaveInstanceState(outState)
     }
 
@@ -173,7 +173,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                mDiaryMode = DiaryMode.READ
+                diaryMode = DiaryMode.READ
                 invalidateOptionsMenu()
                 mDiaryMainItemAdapter?.notifyDataSetChanged()
                 return true
@@ -234,7 +234,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        when (mDiaryMode) {
+        when (diaryMode) {
             DiaryMode.READ -> {
                 supportActionBar?.setDisplayHomeAsUpEnabled(false)
                 menuInflater.inflate(R.menu.diary_main, menu)
@@ -276,7 +276,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 R.id.chart -> TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, Intent(this@DiaryMainActivity, StatisticsActivity::class.java))
                 R.id.settings -> TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, Intent(this@DiaryMainActivity, SettingsActivity::class.java))
             }
-            Handler(Looper.getMainLooper()).post { popupWindow?.dismiss() }
+            Handler(Looper.getMainLooper()).post { mPopupWindow?.dismiss() }
         }
 
         mPopupMenuBinding.run {
@@ -291,7 +291,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     }
 
     private fun openCustomOptionMenu() {
-        popupWindow = EasyDiaryUtils.openCustomOptionMenu(mPopupMenuBinding.root, findViewById(R.id.popupMenu))
+        mPopupWindow = EasyDiaryUtils.openCustomOptionMenu(mPopupMenuBinding.root, findViewById(R.id.popupMenu))
     }
 
     private fun openPostcardViewer() {
@@ -389,7 +389,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
 
         mBinding.diaryListView.setOnItemLongClickListener { adapterView, _, i, _ ->
             EasyDiaryDbHelper.clearSelectedStatus()
-            mDiaryMode = DiaryMode.DELETE
+            diaryMode = DiaryMode.DELETE
             invalidateOptionsMenu()
             refreshList()
 //            mDiaryMainItemAdapter?.notifyDataSetChanged()
