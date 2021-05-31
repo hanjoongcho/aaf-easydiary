@@ -23,7 +23,6 @@ import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.adapters.CheatSheetAdapter
 import me.blog.korn123.easydiary.databinding.ActivityDevBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
@@ -43,7 +42,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
     private lateinit var mBinding: ActivityDevBinding
     private val mViewModel: BaseDevViewModel by viewModels()
     private val mLocationManager by lazy { getSystemService(Context.LOCATION_SERVICE) as LocationManager }
-    private var mCheatSheetList = arrayListOf<CheatSheetAdapter.CheatSheet>()
     private val mNetworkLocationListener = object : LocationListener {
         override fun onLocationChanged(p0: Location) {
             makeToast("Network location has been updated")
@@ -81,7 +79,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
 
         setupActionLog()
-        setupNextAlarm()
+        setupDetermineNextAlarm()
         setupNotification()
         setupClearUnusedPhoto()
         setupLocation()
@@ -112,7 +110,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
      *   test functions
      *
      ***************************************************************************************************/
-    private fun setupNextAlarm() {
+    private fun setupDetermineNextAlarm() {
         mBinding.cardNextAlarm.setOnClickListener {
             val nextAlarm = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val triggerTimeMillis = (getSystemService(Context.ALARM_SERVICE) as AlarmManager).nextAlarmClock?.triggerTime ?: 0
@@ -121,6 +119,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     false -> "Alarm info is not exist."
                 }
             } else {
+                @Suppress("DEPRECATION")
                 Settings.System.getString(contentResolver, Settings.System.NEXT_ALARM_FORMATTED)
             }
 

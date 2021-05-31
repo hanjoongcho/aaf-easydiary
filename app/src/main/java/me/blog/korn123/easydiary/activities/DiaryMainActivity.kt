@@ -2,7 +2,6 @@ package me.blog.korn123.easydiary.activities
 
 import android.app.Activity
 import android.content.ActivityNotFoundException
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -182,7 +181,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 mDiaryMainItemAdapter?.getSelectedItems()?.run {
                     when (this.isNotEmpty()) {
                         true -> {
-                            showAlertDialog(getString(R.string.delete_selected_items_confirm, this.size), DialogInterface.OnClickListener { _, _ ->
+                            showAlertDialog(getString(R.string.delete_selected_items_confirm, this.size), { _, _ ->
                                 this.forEach { EasyDiaryDbHelper.deleteDiary(it.sequence) }
                                 refreshList()
                             }, null)
@@ -197,7 +196,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 mDiaryMainItemAdapter?.getSelectedItems()?.run {
                     when (this.isNotEmpty()) {
                         true -> {
-                            showAlertDialog(getString(R.string.duplicate_selected_items_confirm, this.size), DialogInterface.OnClickListener { _, _ ->
+                            showAlertDialog(getString(R.string.duplicate_selected_items_confirm, this.size), { _, _ ->
                                 this.reversed().map {
                                     it.isSelected = false
                                     EasyDiaryDbHelper.updateDiary(it)
@@ -374,12 +373,12 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             override fun afterTextChanged(editable: Editable) {}
         })
 
-        mBinding.clearQuery.setOnClickListener { _ ->
+        mBinding.clearQuery.setOnClickListener {
             selectFeelingSymbol()
             mBinding.query.text = null
         }
 
-        mBinding.diaryListView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
+        mBinding.diaryListView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, _, i, _ ->
             val diaryDto = adapterView.adapter.getItem(i) as DiaryDto
             val detailIntent = Intent(this@DiaryMainActivity, DiaryReadActivity::class.java)
             detailIntent.putExtra(DIARY_SEQUENCE, diaryDto.sequence)
@@ -387,7 +386,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, detailIntent)
         }
 
-        mBinding.diaryListView.setOnItemLongClickListener { adapterView, _, i, _ ->
+        mBinding.diaryListView.setOnItemLongClickListener { _, _, _, _ ->
             EasyDiaryDbHelper.clearSelectedStatus()
             diaryMode = DiaryMode.DELETE
             invalidateOptionsMenu()
@@ -422,7 +421,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
             }.run { startActivityForResult(this, REQUEST_CODE_SPEECH_INPUT) }
         } catch (e: ActivityNotFoundException) {
-            showAlertDialog(getString(R.string.recognizer_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
+            showAlertDialog(getString(R.string.recognizer_intent_not_found_message), { _, _ -> })
         }
     }
 
