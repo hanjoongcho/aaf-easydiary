@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import android.view.*
@@ -84,7 +85,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
         }
 
         setupViewPager()
-        if (startPageIndex > 0) Handler().post { diaryViewPager.setCurrentItem(startPageIndex, false) }
+        if (startPageIndex > 0) Handler(Looper.getMainLooper()).post { diaryViewPager.setCurrentItem(startPageIndex, false) }
         initShowcase()
     }
 
