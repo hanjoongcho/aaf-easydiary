@@ -14,6 +14,7 @@ import android.provider.Settings
 import android.view.View
 import android.widget.RemoteViews
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.app.NotificationCompat
 import androidx.databinding.DataBindingUtil
@@ -60,6 +61,9 @@ open class BaseDevActivity : EasyDiaryActivity() {
         override fun onProviderEnabled(p0: String) {}
         override fun onProviderDisabled(p0: String) {}
     }
+    private val mRequestLocationSourceLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        makeSnackBar(if (isLocationEnabled() && result.resultCode == Activity.RESULT_OK) "GPS provider setting is activated!!!" else "The request operation did not complete normally.")
+    }
 
 
     /***************************************************************************************************
@@ -91,17 +95,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
         mLocationManager.run {
             removeUpdates(mGPSLocationListener)
             removeUpdates(mNetworkLocationListener)
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        super.onActivityResult(requestCode, resultCode, intent)
-        pauseLock()
-
-        when (requestCode) {
-            REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS -> {
-                makeSnackBar(if (isLocationEnabled()) "GPS provider setting is activated." else "The request operation did not complete normally.")
-            }
         }
     }
 
@@ -295,7 +288,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
         when (hasGPSPermissions()) {
             true -> setLocationInfo()
             false -> {
-                acquireGPSPermissions() {
+                acquireGPSPermissions(mRequestLocationSourceLauncher) {
                     setLocationInfo()
                 }
             }

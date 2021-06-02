@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ListView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -31,7 +32,11 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
     private lateinit var mRootView: ViewGroup
     private val mActivity: Activity
         get() = requireActivity()
-
+    private val mRequestLocationSourceLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        requireActivity().run {
+            makeSnackBar(if (isLocationEnabled() && result.resultCode == Activity.RESULT_OK) "GPS provider setting is activated!!!" else "The request operation did not complete normally.")
+        }
+    }
 
     /***************************************************************************************************
      *   override functions
@@ -42,8 +47,17 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
         return mRootView
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+//    override fun onActivityCreated(savedInstanceState: Bundle?) {
+//        super.onActivityCreated(savedInstanceState)
+//        progressContainer = mActivity.findViewById(R.id.progressContainer)
+//
+//        bindEvent()
+//        updateFragmentUI(mRootView)
+//        initPreference()
+//    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         progressContainer = mActivity.findViewById(R.id.progressContainer)
 
         bindEvent()
@@ -58,19 +72,6 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
         if (mActivity.config.isThemeChanged) {
             mActivity.config.isThemeChanged = false
             mActivity.startMainActivityWithClearTask()
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        super.onActivityResult(requestCode, resultCode, intent)
-        mActivity.run {
-            pauseLock()
-
-            when (requestCode) {
-                REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS -> {
-                    makeSnackBar(if (isLocationEnabled()) "GPS provider setting is activated." else "The request operation did not complete normally.")
-                }
-            }
         }
     }
 
@@ -120,7 +121,7 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
                                     false -> {
                                         locationInfoSwitcher.isChecked = false
                                         if (this is EasyDiaryActivity) {
-                                            acquireGPSPermissions {
+                                            acquireGPSPermissions(mRequestLocationSourceLauncher) {
                                                 locationInfoSwitcher.isChecked = true
                                                 config.enableLocationInfo = locationInfoSwitcher.isChecked
                                             }

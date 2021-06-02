@@ -4,9 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
-import android.app.AlarmManager
 import android.app.Dialog
-import android.app.PendingIntent
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.DialogInterface
@@ -31,13 +29,13 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.graphics.drawable.toBitmap
-import androidx.fragment.app.Fragment
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.baseConfig
@@ -67,10 +65,7 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import java.io.ByteArrayOutputStream
 import java.io.File
-import java.lang.Exception
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.system.exitProcess
 
 
 /**
@@ -467,7 +462,7 @@ fun Activity.resourceToBase64(resourceId: Int): String {
     return image64
 }
 
-fun EasyDiaryActivity.acquireGPSPermissions(callback: () -> Unit) {
+fun EasyDiaryActivity.acquireGPSPermissions(activityResultLauncher: ActivityResultLauncher<Intent>, callback: () -> Unit) {
     handlePermission(PERMISSION_ACCESS_COARSE_LOCATION) { hasCoarseLocation ->
         if (hasCoarseLocation) {
             handlePermission(PERMISSION_ACCESS_FINE_LOCATION) { hasFineLocation ->
@@ -475,7 +470,8 @@ fun EasyDiaryActivity.acquireGPSPermissions(callback: () -> Unit) {
                     if (isLocationEnabled()) {
                         callback()
                     } else {
-                        startActivityForResult(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS)
+//                        startActivityForResult(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS)
+                        activityResultLauncher.launch(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
                     }
                 }
             }
