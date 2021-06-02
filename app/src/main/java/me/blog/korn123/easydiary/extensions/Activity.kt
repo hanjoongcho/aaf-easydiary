@@ -479,41 +479,41 @@ fun EasyDiaryActivity.acquireGPSPermissions(activityResultLauncher: ActivityResu
     }
 }
 
-fun EasyDiaryActivity.getLocationWithGPSProvider(callback: (location: Location?) -> Unit) {
-    val gpsProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-    val networkProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-    when (checkPermission(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,  Manifest.permission.ACCESS_COARSE_LOCATION))) {
-        true -> {
-            if (isLocationEnabled()) {
-                callback(gpsProvider.getLastKnownLocation(LocationManager.GPS_PROVIDER) ?: networkProvider.getLastKnownLocation(LocationManager.NETWORK_PROVIDER))
-            } else {
-                startActivityForResult(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS)
-            }
-        }
-        false -> {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            handlePermission(PERMISSION_ACCESS_COARSE_LOCATION) { hasCoarseLocation ->
-                if (hasCoarseLocation) {
-                    handlePermission(PERMISSION_ACCESS_FINE_LOCATION) { hasFineLocation ->
-                        if (hasFineLocation) {
-                            if (isLocationEnabled()) {
-                                callback(gpsProvider.getLastKnownLocation(LocationManager.GPS_PROVIDER) ?: networkProvider.getLastKnownLocation(LocationManager.NETWORK_PROVIDER))
-                            } else {
-                                startActivityForResult(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
+//fun EasyDiaryActivity.getLocationWithGPSProvider(callback: (location: Location?) -> Unit) {
+//    val gpsProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+//    val networkProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+//    when (checkPermission(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,  Manifest.permission.ACCESS_COARSE_LOCATION))) {
+//        true -> {
+//            if (isLocationEnabled()) {
+//                callback(gpsProvider.getLastKnownLocation(LocationManager.GPS_PROVIDER) ?: networkProvider.getLastKnownLocation(LocationManager.NETWORK_PROVIDER))
+//            } else {
+//                startActivityForResult(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS)
+//            }
+//        }
+//        false -> {
+//            // TODO: Consider calling
+//            //    ActivityCompat#requestPermissions
+//            // here to request the missing permissions, and then overriding
+//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//            //                                          int[] grantResults)
+//            // to handle the case where the user grants the permission. See the documentation
+//            // for ActivityCompat#requestPermissions for more details.
+//            handlePermission(PERMISSION_ACCESS_COARSE_LOCATION) { hasCoarseLocation ->
+//                if (hasCoarseLocation) {
+//                    handlePermission(PERMISSION_ACCESS_FINE_LOCATION) { hasFineLocation ->
+//                        if (hasFineLocation) {
+//                            if (isLocationEnabled()) {
+//                                callback(gpsProvider.getLastKnownLocation(LocationManager.GPS_PROVIDER) ?: networkProvider.getLastKnownLocation(LocationManager.NETWORK_PROVIDER))
+//                            } else {
+//                                startActivityForResult(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS)
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
 
 fun EasyDiaryActivity.migrateData(binging: ActivityDiaryMainBinding) {
     GlobalScope.launch {
