@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.fragments
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -21,7 +22,7 @@ import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import java.util.*
 
-class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
+class SettingsBasicFragment : androidx.fragment.app.Fragment() {
 
 
     /***************************************************************************************************
@@ -42,7 +43,7 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
      *   override functions
      *
      ***************************************************************************************************/
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         mRootView = inflater.inflate(R.layout.partial_settings_basic, container, false) as ViewGroup
         return mRootView
     }
@@ -181,6 +182,7 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
         taskSymbolTopOrder.setOnClickListener(mOnClickListener)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun initPreference() {
         sensitiveOptionSwitcher.isChecked = mActivity.config.diarySearchQueryCaseSensitive
         multiPickerOptionSwitcher.isChecked = mActivity.config.multiPickerEnable
@@ -210,7 +212,7 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
         val builder = AlertDialog.Builder(mActivity)
         builder.setNegativeButton(getString(android.R.string.cancel), null)
         val inflater = mActivity.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val containerView = inflater.inflate(R.layout.dialog_option_item, null)
+        val containerView = inflater.inflate(R.layout.dialog_option_item, mRootView, false)
         val listView = containerView.findViewById<ListView>(R.id.listView)
 
         var selectedIndex = 0
@@ -226,7 +228,7 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
 
         val arrayAdapter = OptionItemAdapter(mActivity, R.layout.item_check_label, listThumbnailSize, mActivity.config.settingThumbnailSize)
         listView.adapter = arrayAdapter
-        listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+        listView.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
             @Suppress("UNCHECKED_CAST") val fontInfo = parent.adapter.getItem(position) as HashMap<String, String>
             fontInfo["optionValue"]?.let {
                 mActivity.config.settingThumbnailSize = it.toFloat()
@@ -244,7 +246,7 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
         val builder = AlertDialog.Builder(mActivity)
         builder.setNegativeButton(getString(android.R.string.cancel), null)
         val inflater = mActivity.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val containerView = inflater.inflate(R.layout.dialog_option_item, null)
+        val containerView = inflater.inflate(R.layout.dialog_option_item, mRootView, false)
         val listView = containerView.findViewById<ListView>(R.id.listView)
 
         var selectedIndex = 0
@@ -260,7 +262,7 @@ class SettingsBasicFragment() : androidx.fragment.app.Fragment() {
 
         val arrayAdapter = OptionItemAdapter(mActivity, R.layout.item_check_label, listMaxLines, mActivity.config.summaryMaxLines.toFloat())
         listView.adapter = arrayAdapter
-        listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+        listView.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
             @Suppress("UNCHECKED_CAST") val optionInfo = parent.adapter.getItem(position) as HashMap<String, String>
             optionInfo["optionValue"]?.let {
                 mActivity.config.summaryMaxLines = it.toInt()
