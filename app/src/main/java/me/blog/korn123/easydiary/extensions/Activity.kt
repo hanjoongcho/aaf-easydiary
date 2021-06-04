@@ -365,6 +365,20 @@ fun Activity.writeFileWithSAF(fileName: String, mimeType: String, requestCode: I
     startActivityForResult(intent, requestCode)
 }
 
+fun Activity.writeFileWithSAF(activityResultLauncher: ActivityResultLauncher<Intent>, fileName: String, mimeType: String) {
+    Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+        // Filter to only show results that can be "opened", such as
+        // a file (as opposed to a list of contacts or timezones).
+        addCategory(Intent.CATEGORY_OPENABLE)
+
+        type = mimeType
+        // Create a file with the requested MIME type.
+        putExtra(Intent.EXTRA_TITLE, fileName)
+    }.run {
+        activityResultLauncher.launch(this)
+    }
+}
+
 fun Activity.exportHtmlBook(uri: Uri?, diaryList: List<DiaryDto>) {
     uri?.let {
         val os = contentResolver.openOutputStream(it)
