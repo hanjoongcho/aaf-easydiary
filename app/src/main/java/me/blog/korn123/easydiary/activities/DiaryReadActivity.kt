@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import android.view.*
@@ -14,7 +15,7 @@ import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.fragment.app.viewModels
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
@@ -84,7 +85,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
         }
 
         setupViewPager()
-        if (startPageIndex > 0) Handler().post { diaryViewPager.setCurrentItem(startPageIndex, false) }
+        if (startPageIndex > 0) Handler(Looper.getMainLooper()).post { diaryViewPager.setCurrentItem(startPageIndex, false) }
         initShowcase()
     }
 
@@ -701,7 +702,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
             fm: androidx.fragment.app.FragmentManager,
             private val diaryList: List<DiaryDto>,
             private val query: String?
-    ) : androidx.fragment.app.FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+    ) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
         override fun getItem(position: Int): androidx.fragment.app.Fragment {
             // getItem is called to instantiate the fragment for the given page.

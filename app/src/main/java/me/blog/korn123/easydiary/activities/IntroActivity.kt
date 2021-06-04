@@ -16,9 +16,9 @@ import java.util.*
  * Created by CHO HANJOONG on 2016-12-31.
  */
 
-class IntroActivity : AppCompatActivity(), Handler.Callback {
+class IntroActivity : AppCompatActivity() {
     private lateinit var mBinding: ActivityIntroBinding
-
+    private lateinit var mHandler: Handler
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityIntroBinding.inflate(layoutInflater)
@@ -44,7 +44,19 @@ class IntroActivity : AppCompatActivity(), Handler.Callback {
                 config.settingFontSize = CommonUtils.dpToPixelFloatValue(this, DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE.toFloat())
             }
         }
-        Handler(this).sendEmptyMessageDelayed(START_MAIN_ACTIVITY, 500)
+
+        mHandler = object: Handler(this.mainLooper) {
+            override fun handleMessage(msg: Message) {
+                super.handleMessage(msg)
+                when (msg.what) {
+                    START_MAIN_ACTIVITY -> {
+                        TransitionHelper.startActivityWithTransition(this@IntroActivity, Intent(this@IntroActivity, DiaryMainActivity::class.java))
+                        finish()
+                    }
+                    else -> {}
+                }
+            }
+        }.apply { sendEmptyMessageDelayed(START_MAIN_ACTIVITY, 500) }
     }
 
     override fun onResume() {
@@ -54,16 +66,5 @@ class IntroActivity : AppCompatActivity(), Handler.Callback {
             initTextSize(this)
             setBackgroundColor(config.primaryColor)
         }
-    }
-
-    override fun handleMessage(message: Message): Boolean {
-        when (message.what) {
-            START_MAIN_ACTIVITY -> {
-                TransitionHelper.startActivityWithTransition(this, Intent(this, DiaryMainActivity::class.java))
-                finish()
-            }
-            else -> {}
-        }
-        return false
     }
 }

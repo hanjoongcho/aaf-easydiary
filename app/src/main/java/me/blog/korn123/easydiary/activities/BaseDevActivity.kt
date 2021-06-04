@@ -14,6 +14,7 @@ import android.provider.Settings
 import android.view.View
 import android.widget.RemoteViews
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.app.NotificationCompat
 import androidx.databinding.DataBindingUtil
@@ -23,7 +24,6 @@ import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.adapters.CheatSheetAdapter
 import me.blog.korn123.easydiary.databinding.ActivityDevBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
@@ -43,7 +43,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
     private lateinit var mBinding: ActivityDevBinding
     private val mViewModel: BaseDevViewModel by viewModels()
     private val mLocationManager by lazy { getSystemService(Context.LOCATION_SERVICE) as LocationManager }
-    private var mCheatSheetList = arrayListOf<CheatSheetAdapter.CheatSheet>()
     private val mNetworkLocationListener = object : LocationListener {
         override fun onLocationChanged(p0: Location) {
             makeToast("Network location has been updated")
@@ -61,6 +60,9 @@ open class BaseDevActivity : EasyDiaryActivity() {
         override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {}
         override fun onProviderEnabled(p0: String) {}
         override fun onProviderDisabled(p0: String) {}
+    }
+    private val mRequestLocationSourceLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        makeSnackBar(if (isLocationEnabled() && result.resultCode == Activity.RESULT_OK) "GPS provider setting is activated!!!" else "The request operation did not complete normally.")
     }
 
 
@@ -81,7 +83,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
 
         setupActionLog()
-        setupNextAlarm()
+        setupDetermineNextAlarm()
         setupNotification()
         setupClearUnusedPhoto()
         setupLocation()
@@ -96,23 +98,12 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        super.onActivityResult(requestCode, resultCode, intent)
-        pauseLock()
-
-        when (requestCode) {
-            REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS -> {
-                makeSnackBar(if (isLocationEnabled()) "GPS provider setting is activated." else "The request operation did not complete normally.")
-            }
-        }
-    }
-
 
     /***************************************************************************************************
      *   test functions
      *
      ***************************************************************************************************/
-    private fun setupNextAlarm() {
+    private fun setupDetermineNextAlarm() {
         mBinding.cardNextAlarm.setOnClickListener {
             val nextAlarm = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val triggerTimeMillis = (getSystemService(Context.ALARM_SERVICE) as AlarmManager).nextAlarmClock?.triggerTime ?: 0
@@ -121,6 +112,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     false -> "Alarm info is not exist."
                 }
             } else {
+                @Suppress("DEPRECATION")
                 Settings.System.getString(contentResolver, Settings.System.NEXT_ALARM_FORMATTED)
             }
 
@@ -296,7 +288,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
         when (hasGPSPermissions()) {
             true -> setLocationInfo()
             false -> {
-                acquireGPSPermissions() {
+                acquireGPSPermissions(mRequestLocationSourceLauncher) {
                     setLocationInfo()
                 }
             }

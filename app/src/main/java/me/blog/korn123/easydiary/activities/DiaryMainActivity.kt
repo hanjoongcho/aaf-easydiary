@@ -2,7 +2,6 @@ package me.blog.korn123.easydiary.activities
 
 import android.app.Activity
 import android.content.ActivityNotFoundException
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -50,8 +49,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     private var mDiaryList: ArrayList<DiaryDto> = arrayListOf()
     private var mShowcaseIndex = 0
     private var mShowcaseView: ShowcaseView? = null
-    private var popupWindow: PopupWindow? = null
-    var mDiaryMode = DiaryMode.READ
+    private var mPopupWindow: PopupWindow? = null
+    var diaryMode = DiaryMode.READ
 
 
     /***************************************************************************************************
@@ -86,13 +85,13 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         when (savedInstanceState == null) {
             true -> checkWhatsNewDialog()
             false -> {
-                mDiaryMode = savedInstanceState.getSerializable(DIARY_MODE) as DiaryMode
+                diaryMode = savedInstanceState.getSerializable(DIARY_MODE) as DiaryMode
             }
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putSerializable(DIARY_MODE, mDiaryMode)
+        outState.putSerializable(DIARY_MODE, diaryMode)
         super.onSaveInstanceState(outState)
     }
 
@@ -173,7 +172,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                mDiaryMode = DiaryMode.READ
+                diaryMode = DiaryMode.READ
                 invalidateOptionsMenu()
                 mDiaryMainItemAdapter?.notifyDataSetChanged()
                 return true
@@ -182,7 +181,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 mDiaryMainItemAdapter?.getSelectedItems()?.run {
                     when (this.isNotEmpty()) {
                         true -> {
-                            showAlertDialog(getString(R.string.delete_selected_items_confirm, this.size), DialogInterface.OnClickListener { _, _ ->
+                            showAlertDialog(getString(R.string.delete_selected_items_confirm, this.size), { _, _ ->
                                 this.forEach { EasyDiaryDbHelper.deleteDiary(it.sequence) }
                                 refreshList()
                             }, null)
@@ -197,7 +196,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 mDiaryMainItemAdapter?.getSelectedItems()?.run {
                     when (this.isNotEmpty()) {
                         true -> {
-                            showAlertDialog(getString(R.string.duplicate_selected_items_confirm, this.size), DialogInterface.OnClickListener { _, _ ->
+                            showAlertDialog(getString(R.string.duplicate_selected_items_confirm, this.size), { _, _ ->
                                 this.reversed().map {
                                     it.isSelected = false
                                     EasyDiaryDbHelper.updateDiary(it)
@@ -234,7 +233,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        when (mDiaryMode) {
+        when (diaryMode) {
             DiaryMode.READ -> {
                 supportActionBar?.setDisplayHomeAsUpEnabled(false)
                 menuInflater.inflate(R.menu.diary_main, menu)
@@ -276,7 +275,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 R.id.chart -> TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, Intent(this@DiaryMainActivity, StatisticsActivity::class.java))
                 R.id.settings -> TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, Intent(this@DiaryMainActivity, SettingsActivity::class.java))
             }
-            Handler(Looper.getMainLooper()).post { popupWindow?.dismiss() }
+            Handler(Looper.getMainLooper()).post { mPopupWindow?.dismiss() }
         }
 
         mPopupMenuBinding.run {
@@ -291,7 +290,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     }
 
     private fun openCustomOptionMenu() {
-        popupWindow = EasyDiaryUtils.openCustomOptionMenu(mPopupMenuBinding.root, findViewById(R.id.popupMenu))
+        mPopupWindow = EasyDiaryUtils.openCustomOptionMenu(mPopupMenuBinding.root, findViewById(R.id.popupMenu))
     }
 
     private fun openPostcardViewer() {
@@ -374,12 +373,12 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             override fun afterTextChanged(editable: Editable) {}
         })
 
-        mBinding.clearQuery.setOnClickListener { _ ->
+        mBinding.clearQuery.setOnClickListener {
             selectFeelingSymbol()
             mBinding.query.text = null
         }
 
-        mBinding.diaryListView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
+        mBinding.diaryListView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, _, i, _ ->
             val diaryDto = adapterView.adapter.getItem(i) as DiaryDto
             val detailIntent = Intent(this@DiaryMainActivity, DiaryReadActivity::class.java)
             detailIntent.putExtra(DIARY_SEQUENCE, diaryDto.sequence)
@@ -387,9 +386,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, detailIntent)
         }
 
-        mBinding.diaryListView.setOnItemLongClickListener { adapterView, _, i, _ ->
+        mBinding.diaryListView.setOnItemLongClickListener { _, _, _, _ ->
             EasyDiaryDbHelper.clearSelectedStatus()
-            mDiaryMode = DiaryMode.DELETE
+            diaryMode = DiaryMode.DELETE
             invalidateOptionsMenu()
             refreshList()
 //            mDiaryMainItemAdapter?.notifyDataSetChanged()
@@ -422,7 +421,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
             }.run { startActivityForResult(this, REQUEST_CODE_SPEECH_INPUT) }
         } catch (e: ActivityNotFoundException) {
-            showAlertDialog(getString(R.string.recognizer_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
+            showAlertDialog(getString(R.string.recognizer_intent_not_found_message), { _, _ -> })
         }
     }
 
