@@ -394,7 +394,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             true
         }
 
-        mBinding.modalContainer.setOnTouchListener { _, _ -> true }
+        EasyDiaryUtils.disableTouchEvent(mBinding.modalContainer)
 
         mBinding.insertDiaryButton.setOnClickListener{
             val createDiary = Intent(this@DiaryMainActivity, DiaryInsertActivity::class.java)
@@ -430,7 +430,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         refreshList(queryString)
     }
 
-    fun refreshList(query: String) {
+    private fun refreshList(query: String) {
         mDiaryList.clear()
         mDiaryList.addAll(EasyDiaryDbHelper.readDiary(query, config.diarySearchQueryCaseSensitive, 0, 0, viewModel.symbol.value ?: 0))
         mDiaryMainItemAdapter?.currentQuery = query

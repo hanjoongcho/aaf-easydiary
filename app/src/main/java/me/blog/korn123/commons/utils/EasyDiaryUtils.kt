@@ -2,6 +2,7 @@ package me.blog.korn123.commons.utils
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.content.Context
 import android.database.Cursor
@@ -389,5 +390,10 @@ object EasyDiaryUtils {
             start()
         }
         return popup
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    fun disableTouchEvent(view: View) {
+        view.setOnTouchListener { _, _ -> true }
     }
 }
