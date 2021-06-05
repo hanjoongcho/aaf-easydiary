@@ -23,7 +23,6 @@ import io.github.aafactory.commons.extensions.baseConfig
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.partial_bottom_toolbar.*
 import kotlinx.android.synthetic.main.popup_encription.view.*
-import kotlinx.android.synthetic.main.popup_menu_read.view.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createAttachedPhotoView
 import me.blog.korn123.commons.utils.FlavorUtils
@@ -32,6 +31,7 @@ import me.blog.korn123.commons.utils.JasyptUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityDiaryReadBinding
 import me.blog.korn123.easydiary.databinding.FragmentDiaryReadBinding
+import me.blog.korn123.easydiary.databinding.PopupMenuReadBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
@@ -439,14 +439,14 @@ class DiaryReadActivity : EasyDiaryActivity() {
     }
 
     private fun createCustomOptionMenu() {
+        val pmrBinding = PopupMenuReadBinding.inflate(layoutInflater)
         var popupWindow: PopupWindow? = null
-        val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val popupView = (inflater.inflate(R.layout.popup_menu_read, null) as ViewGroup).apply {
+        val popupView = pmrBinding.root.apply {
             updateAppViews(this)
             updateTextColors(this)
             FontUtils.setFontsTypeface(applicationContext, null, this, true)
             val fragment = mSectionsPagerAdapter.instantiateItem(mBinding.diaryViewPager, mBinding.diaryViewPager.currentItem) as PlaceholderFragment
-            delete.setOnClickListener {
+            pmrBinding.delete.setOnClickListener {
                 val positiveListener = DialogInterface.OnClickListener { _, _ ->
                     EasyDiaryDbHelper.deleteDiary(fragment.getSequence())
                     TransitionHelper.finishActivityWithTransition(this@DiaryReadActivity)
