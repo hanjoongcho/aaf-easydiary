@@ -21,7 +21,6 @@ import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import io.github.aafactory.commons.extensions.baseConfig
 import io.github.aafactory.commons.utils.DateUtils
-import kotlinx.android.synthetic.main.fragment_diary_read.*
 import kotlinx.android.synthetic.main.partial_bottom_toolbar.*
 import kotlinx.android.synthetic.main.popup_encription.view.*
 import kotlinx.android.synthetic.main.popup_menu_read.view.*
@@ -161,7 +160,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
     private fun startEditing(fragment: PlaceholderFragment, inputPass: String? = null) {
         val updateDiaryIntent = Intent(this@DiaryReadActivity, DiaryUpdateActivity::class.java).apply {
             putExtra(DIARY_SEQUENCE, fragment.getSequence())
-            putExtra(DIARY_CONTENTS_SCROLL_Y, (fragment.diaryContents.parent.parent as ScrollView).scrollY)
+            putExtra(DIARY_CONTENTS_SCROLL_Y, fragment.getContentsPositionY())
             inputPass?.let {
                 putExtra(DIARY_ENCRYPT_PASSWORD, it)
             }
@@ -487,13 +486,13 @@ class DiaryReadActivity : EasyDiaryActivity() {
             requireContext().changeDrawableIconColor(config.primaryColor, R.drawable.map_marker_2)
             togglePhoto.setOnClickListener {
                 context?.let { context ->
-                    when (photoContainerScrollView.visibility) {
+                    when (mBinding.photoContainerScrollView.visibility) {
                         View.VISIBLE -> {
-                            photoContainerScrollView.visibility = View.GONE
+                            mBinding.photoContainerScrollView.visibility = View.GONE
                             togglePhoto.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.expand))
                         }
                         View.GONE -> {
-                            photoContainerScrollView.visibility = View.VISIBLE
+                            mBinding.photoContainerScrollView.visibility = View.VISIBLE
                             togglePhoto.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.collapse))
                         }
                     }    
@@ -525,7 +524,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
 
         fun getSequence() = arguments?.getInt(DIARY_SEQUENCE) ?: -1
 
-        fun getDiaryContents(): String = diaryContents.text.toString() 
+        fun getDiaryContents(): String = mBinding.diaryContents.text.toString()
 
         fun isEncryptContents() = EasyDiaryDbHelper.readDiaryBy(getSequence()).isEncrypt
 
@@ -533,82 +532,83 @@ class DiaryReadActivity : EasyDiaryActivity() {
 
         private fun initContents() {
             val diaryDto = EasyDiaryDbHelper.readDiaryBy(getSequence())
+            mBinding.run {
+                if (StringUtils.isEmpty(diaryDto.title)) {
+                    diaryTitle.visibility = View.GONE
+                }
+                diaryTitle.text = diaryDto.title
+                EasyDiaryUtils.boldString(requireContext(), diaryTitle)
+                diaryContents.text = diaryDto.contents
+                date.text = when (diaryDto.isAllDay) {
+                    true -> DateUtils.getFullPatternDate(diaryDto.currentTimeMillis)
+                    false -> DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis)
+                }
+                initBottomContainer()
 
-            if (StringUtils.isEmpty(diaryDto.title)) {
-                diaryTitle.visibility = View.GONE
-            }
-            diaryTitle.text = diaryDto.title
-            EasyDiaryUtils.boldString(requireContext(), diaryTitle)
-            diaryContents.text = diaryDto.contents
-            date.text = when (diaryDto.isAllDay) {
-                true -> DateUtils.getFullPatternDate(diaryDto.currentTimeMillis)
-                false -> DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis)
-            }
-            initBottomContainer()
-
-            arguments?.getString(DIARY_SEARCH_QUERY)?.let { query ->
-                if (StringUtils.isNotEmpty(query)) {
-                    context?.config?.run {
-                        if (diarySearchQueryCaseSensitive) {
-                            EasyDiaryUtils.highlightString(diaryTitle, query)
-                            EasyDiaryUtils.highlightString(diaryContents, query)
-                        } else {
-                            EasyDiaryUtils.highlightStringIgnoreCase(diaryTitle, query)
-                            EasyDiaryUtils.highlightStringIgnoreCase(diaryContents, query)
+                arguments?.getString(DIARY_SEARCH_QUERY)?.let { query ->
+                    if (StringUtils.isNotEmpty(query)) {
+                        context?.config?.run {
+                            if (diarySearchQueryCaseSensitive) {
+                                EasyDiaryUtils.highlightString(diaryTitle, query)
+                                EasyDiaryUtils.highlightString(diaryContents, query)
+                            } else {
+                                EasyDiaryUtils.highlightStringIgnoreCase(diaryTitle, query)
+                                EasyDiaryUtils.highlightStringIgnoreCase(diaryContents, query)
+                            }
                         }
-                    }
-                }    
-            }
-
-            val weatherFlag = diaryDto.weather
-            FlavorUtils.initWeatherView(requireContext(), weather, weatherFlag)
-
-            // TODO fixme elegance
-            val photoCount = diaryDto.photoUris?.size ?: 0 
-            if (photoCount > 0) {
-                (bottomTitle as TextView).text = if (requireActivity().isLandScape()) "x$photoCount" else getString(R.string.attached_photo_count, photoCount)
-                bottomToolbar.visibility = View.VISIBLE
-                photoContainerScrollView.visibility = View.VISIBLE
-
-                if (photoContainer.childCount > 0) photoContainer.removeAllViews()
-                context?.let { appContext ->
-                    val thumbnailSize = appContext.config.settingThumbnailSize
-                    diaryDto.photoUris?.forEachIndexed { index, item ->
-                        val imageView = when (requireActivity().isLandScape()) {
-                           true -> createAttachedPhotoView(appContext, item, 0F, 0F, 0F, 3F)
-                           false -> createAttachedPhotoView(appContext, item, 0F, 0F, 3F, 0F)
-                        }
-                        photoContainer.addView(imageView)
-                        imageView.setOnClickListener(PhotoClickListener(getSequence(), index))
                     }
                 }
-            } else {
-                bottomToolbar.visibility = View.GONE
-                photoContainerScrollView.visibility = View.GONE
-            }
 
-            context?.run {
-                mViewModel.isShowAddress.value = config.enableLocationInfo
-                if (config.enableLocationInfo) {
-                    diaryDto.location?.let {
+                val weatherFlag = diaryDto.weather
+                FlavorUtils.initWeatherView(requireContext(), weather, weatherFlag)
+
+                // TODO fixme elegance
+                val photoCount = diaryDto.photoUris?.size ?: 0
+                if (photoCount > 0) {
+                    (bottomTitle as TextView).text = if (requireActivity().isLandScape()) "x$photoCount" else getString(R.string.attached_photo_count, photoCount)
+                    bottomToolbar.visibility = View.VISIBLE
+                    photoContainerScrollView.visibility = View.VISIBLE
+
+                    if (photoContainer.childCount > 0) photoContainer.removeAllViews()
+                    context?.let { appContext ->
+                        val thumbnailSize = appContext.config.settingThumbnailSize
+                        diaryDto.photoUris?.forEachIndexed { index, item ->
+                            val imageView = when (requireActivity().isLandScape()) {
+                                true -> createAttachedPhotoView(appContext, item, 0F, 0F, 0F, 3F)
+                                false -> createAttachedPhotoView(appContext, item, 0F, 0F, 3F, 0F)
+                            }
+                            photoContainer.addView(imageView)
+                            imageView.setOnClickListener(PhotoClickListener(getSequence(), index))
+                        }
+                    }
+                } else {
+                    bottomToolbar.visibility = View.GONE
+                    photoContainerScrollView.visibility = View.GONE
+                }
+
+                context?.run {
+                    mViewModel.isShowAddress.value = config.enableLocationInfo
+                    if (config.enableLocationInfo) {
+                        diaryDto.location?.let {
 //                        locationLabel.setTextColor(config.textColor)
 //                        locationContainer.background = getLabelBackground()
-                        locationLabel.text = it.address
-                    } ?: { mViewModel.isShowAddress.value = false } ()
-                }
+                            locationLabel.text = it.address
+                        } ?: { mViewModel.isShowAddress.value = false } ()
+                    }
 
-                mViewModel.isShowContentsCounting.value = config.enableCountCharacters
-                if (config.enableCountCharacters) {
-                    contentsLength.run {
+                    mViewModel.isShowContentsCounting.value = config.enableCountCharacters
+                    if (config.enableCountCharacters) {
+                        contentsLength.run {
 //                        setTextColor(config.textColor)
 //                        background = getLabelBackground()
-                        text = getString(R.string.diary_contents_length, diaryDto.contents?.length ?: 0)
+                            text = getString(R.string.diary_contents_length, diaryDto.contents?.length ?: 0)
+                        }
                     }
-                }
 
-                (this as DiaryReadActivity).run {
-                    mIsEncryptData = diaryDto.isEncrypt
-                    invalidateOptionsMenu()
+                    (this as DiaryReadActivity).run {
+                        mIsEncryptData = diaryDto.isEncrypt
+                        invalidateOptionsMenu()
+                    }
                 }
             }
         }
@@ -647,8 +647,10 @@ class DiaryReadActivity : EasyDiaryActivity() {
         }
 
         fun decryptDataOnce(inputPass: String) {
-            diaryTitle.text = JasyptUtils.decrypt(diaryTitle.text.toString(), inputPass)
-            diaryContents.text = JasyptUtils.decrypt(diaryContents.text.toString(), inputPass)
+            mBinding.run {
+                diaryTitle.text = JasyptUtils.decrypt(diaryTitle.text.toString(), inputPass)
+                diaryContents.text = JasyptUtils.decrypt(diaryContents.text.toString(), inputPass)
+            }
         }
 
         fun decryptData(inputPass: String): Boolean {
@@ -669,6 +671,10 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 }
             }
             return result
+        }
+
+        fun getContentsPositionY(): Int {
+            return (mBinding.diaryContents.parent.parent as ScrollView).scrollY
         }
 
         companion object {
