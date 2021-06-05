@@ -21,7 +21,6 @@ import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import io.github.aafactory.commons.extensions.baseConfig
 import io.github.aafactory.commons.utils.DateUtils
-import kotlinx.android.synthetic.main.activity_diary_read.*
 import kotlinx.android.synthetic.main.fragment_diary_read.*
 import kotlinx.android.synthetic.main.partial_bottom_toolbar.*
 import kotlinx.android.synthetic.main.popup_encription.view.*
@@ -32,6 +31,7 @@ import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.commons.utils.JasyptUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.databinding.ActivityDiaryReadBinding
 import me.blog.korn123.easydiary.databinding.FragmentDiaryReadBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
@@ -56,6 +56,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
      * [android.support.v4.app.FragmentStatePagerAdapter].
      */
     private lateinit var mSectionsPagerAdapter: SectionsPagerAdapter
+    private lateinit var mBinding: ActivityDiaryReadBinding
     private var mTextToSpeech: TextToSpeech? = null
     private var mShowcaseView: ShowcaseView? = null
     private var mShowcaseIndex = 1
@@ -69,8 +70,9 @@ class DiaryReadActivity : EasyDiaryActivity() {
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_diary_read)
-        setSupportActionBar(toolbar)
+        mBinding = ActivityDiaryReadBinding.inflate(layoutInflater)
+        setContentView(mBinding.root)
+        setSupportActionBar(mBinding.toolbar)
         supportActionBar?.run {
             title = ""
             setDisplayHomeAsUpEnabled(true)
@@ -85,7 +87,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
         }
 
         setupViewPager()
-        if (startPageIndex > 0) Handler(Looper.getMainLooper()).post { diaryViewPager.setCurrentItem(startPageIndex, false) }
+        if (startPageIndex > 0) Handler(Looper.getMainLooper()).post { mBinding.diaryViewPager.setCurrentItem(startPageIndex, false) }
         initShowcase()
     }
 
@@ -100,7 +102,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        val fragment = mSectionsPagerAdapter.instantiateItem(diaryViewPager, diaryViewPager.currentItem)
+        val fragment = mSectionsPagerAdapter.instantiateItem(mBinding.diaryViewPager, mBinding.diaryViewPager.currentItem)
         if (fragment is PlaceholderFragment) {
             outState.putInt(DIARY_SEQUENCE, fragment.getSequence())
         }
@@ -109,7 +111,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 //        val fragment = mSectionsPagerAdapter?.getItem(diaryViewPager.currentItem)
-        val fragment = mSectionsPagerAdapter.instantiateItem(diaryViewPager, diaryViewPager.currentItem)
+        val fragment = mSectionsPagerAdapter.instantiateItem(mBinding.diaryViewPager, mBinding.diaryViewPager.currentItem)
         val fontSize = config.settingFontSize
         if (fragment is PlaceholderFragment) {
             when (item.itemId) {
@@ -318,12 +320,12 @@ class DiaryReadActivity : EasyDiaryActivity() {
 
     private fun setupViewPager() {
         // Set up the ViewPager with the sections adapter.
-        diaryViewPager.adapter = mSectionsPagerAdapter
-        diaryViewPager.addOnPageChangeListener(object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
+        mBinding.diaryViewPager.adapter = mSectionsPagerAdapter
+        mBinding.diaryViewPager.addOnPageChangeListener(object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
             override fun onPageSelected(position: Int) {
-                val fragment = mSectionsPagerAdapter.instantiateItem(diaryViewPager, diaryViewPager.currentItem)
+                val fragment = mSectionsPagerAdapter.instantiateItem(mBinding.diaryViewPager, mBinding.diaryViewPager.currentItem)
                 fragment.let {
 //                    it.setFontsTypeface()
 //                    it.setFontsSize()
@@ -347,7 +349,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 when (mShowcaseIndex) {
                     1 -> {
                         setButtonPosition(centerParams)
-                        setShowcase(ViewTarget(diaryViewPager), false)
+                        setShowcase(ViewTarget(mBinding.diaryViewPager), false)
                         setContentTitle(getString(R.string.read_diary_detail_showcase_title_1))
                         setContentText(getString(R.string.read_diary_detail_showcase_message_1))
                     }
@@ -444,7 +446,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
             updateAppViews(this)
             updateTextColors(this)
             FontUtils.setFontsTypeface(applicationContext, null, this, true)
-            val fragment = mSectionsPagerAdapter.instantiateItem(diaryViewPager, diaryViewPager.currentItem) as PlaceholderFragment
+            val fragment = mSectionsPagerAdapter.instantiateItem(mBinding.diaryViewPager, mBinding.diaryViewPager.currentItem) as PlaceholderFragment
             delete.setOnClickListener {
                 val positiveListener = DialogInterface.OnClickListener { _, _ ->
                     EasyDiaryDbHelper.deleteDiary(fragment.getSequence())

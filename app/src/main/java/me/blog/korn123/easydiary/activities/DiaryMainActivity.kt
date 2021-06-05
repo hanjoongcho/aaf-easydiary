@@ -76,7 +76,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                             mDiaryMainItemAdapter?.notifyDataSetChanged()
                         }
                     }
-
                 }
             }
         }
