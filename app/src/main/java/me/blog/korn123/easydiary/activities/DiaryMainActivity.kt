@@ -19,6 +19,8 @@ import androidx.core.app.ActivityCompat
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.github.ksoichiro.android.observablescrollview.ObservableListView
+import com.google.android.play.core.review.ReviewManagerFactory
+import com.google.android.play.core.review.model.ReviewErrorCode
 import com.nineoldandroids.view.ViewHelper
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.coroutines.GlobalScope
@@ -140,6 +142,18 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         }
 
         if (ViewHelper.getTranslationY(mBinding.appBar) < 0) mBinding.searchCard.useCompatPadding = false
+
+        val manager = ReviewManagerFactory.create(this)
+        val request = manager.requestReviewFlow()
+        request.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                // We got the ReviewInfo object
+                val reviewInfo = task.result
+            } else {
+                // There was some problem, log or handle the error code.
+//                @ReviewErrorCode val reviewErrorCode = (task.getException() as TaskException).errorCode
+            }
+        }
     }
 
     override fun createScrollable(): ObservableListView {
