@@ -14,6 +14,7 @@ import android.widget.AbsListView
 import android.widget.AdapterView
 import android.widget.PopupWindow
 import android.widget.RelativeLayout
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
@@ -50,6 +51,36 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     private var mShowcaseIndex = 0
     private var mShowcaseView: ShowcaseView? = null
     private var mPopupWindow: PopupWindow? = null
+    private val mRequestSpeechInputLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.let {
+                mBinding.query.setText(it[0])
+                mBinding.query.setSelection(it[0].length)
+            }
+        }
+        pauseLock()
+    }
+    private val mRequestSAFForHtmlBookLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.let {
+                mDiaryMainItemAdapter?.getSelectedItems()?.run {
+                    mBinding.progressCoroutine.visibility = View.VISIBLE
+                    GlobalScope.launch {
+                        exportHtmlBook(it.data, this@run)
+                        runOnUiThread {
+                            mBinding.progressCoroutine.visibility = View.GONE
+                            mDiaryMainItemAdapter?.getSelectedItems()?.forEach {
+                                it.isSelected = false
+                                EasyDiaryDbHelper.updateDiary(it)
+                            }
+                            mDiaryMainItemAdapter?.notifyDataSetChanged()
+                        }
+                    }
+                }
+            }
+        }
+        pauseLock()
+    }
     var diaryMode = DiaryMode.READ
 
 
@@ -135,40 +166,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        super.onActivityResult(requestCode, resultCode, intent)
-        if (resultCode == Activity.RESULT_OK && intent != null) {
-            when (requestCode) {
-                REQUEST_CODE_SPEECH_INPUT -> {
-                    intent.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.let {
-                        mBinding.query.setText(it[0])
-                        mBinding.query.setSelection(it[0].length)
-                    }
-                    pauseLock()
-                }
-                REQUEST_CODE_SAF_HTML_BOOK -> {
-                    intent.let {
-                        mDiaryMainItemAdapter?.getSelectedItems()?.run {
-                            mBinding.progressCoroutine.visibility = View.VISIBLE
-                            GlobalScope.launch {
-                                exportHtmlBook(it.data, this@run)
-                                runOnUiThread {
-                                    mBinding.progressCoroutine.visibility = View.GONE
-                                    mDiaryMainItemAdapter?.getSelectedItems()?.forEach {
-                                        it.isSelected = false
-                                        EasyDiaryDbHelper.updateDiary(it)
-                                    }
-                                    mDiaryMainItemAdapter?.notifyDataSetChanged()
-                                }
-                            }
-
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
@@ -213,7 +210,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 }
             }
             R.id.saveAsHtml -> {
-                writeFileWithSAF("${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}.html", MIME_TYPE_HTML, REQUEST_CODE_SAF_HTML_BOOK)
+//                writeFileWithSAF("${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}.html", MIME_TYPE_HTML, REQUEST_CODE_SAF_HTML_BOOK)
+                writeFileWithSAF(mRequestSAFForHtmlBookLauncher, "${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}.html", MIME_TYPE_HTML)
             }
             R.id.timeline -> {
                 val timelineIntent = Intent(this@DiaryMainActivity, TimelineActivity::class.java)
@@ -395,7 +393,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             true
         }
 
-        mBinding.modalContainer.setOnTouchListener { _, _ -> true }
+        EasyDiaryUtils.disableTouchEvent(mBinding.modalContainer)
 
         mBinding.insertDiaryButton.setOnClickListener{
             val createDiary = Intent(this@DiaryMainActivity, DiaryInsertActivity::class.java)
@@ -419,7 +417,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
                 putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
                 putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
-            }.run { startActivityForResult(this, REQUEST_CODE_SPEECH_INPUT) }
+            }.run { mRequestSpeechInputLauncher.launch(this) }
         } catch (e: ActivityNotFoundException) {
             showAlertDialog(getString(R.string.recognizer_intent_not_found_message), { _, _ -> })
         }
@@ -431,7 +429,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         refreshList(queryString)
     }
 
-    fun refreshList(query: String) {
+    private fun refreshList(query: String) {
         mDiaryList.clear()
         mDiaryList.addAll(EasyDiaryDbHelper.readDiary(query, config.diarySearchQueryCaseSensitive, 0, 0, viewModel.symbol.value ?: 0))
         mDiaryMainItemAdapter?.currentQuery = query

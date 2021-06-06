@@ -61,8 +61,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
         override fun onProviderEnabled(p0: String) {}
         override fun onProviderDisabled(p0: String) {}
     }
-    private val mRequestLocationSourceLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        makeSnackBar(if (isLocationEnabled() && result.resultCode == Activity.RESULT_OK) "GPS provider setting is activated!!!" else "The request operation did not complete normally.")
+    private val mRequestLocationSourceLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
+        makeSnackBar(if (isLocationEnabled()) "GPS provider setting is activated!!!" else "The request operation did not complete normally.")
     }
 
 
@@ -154,7 +154,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
         mBinding.clearUnusedPhoto.setOnClickListener {
             val localPhotoBaseNames = arrayListOf<String>()
             val unUsedPhotos = arrayListOf<String>()
-            File(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY).listFiles().map {
+            val targetFiles = File(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY)
+            targetFiles.listFiles()?.map {
                 localPhotoBaseNames.add(it.name)
             }
 
@@ -199,9 +200,9 @@ open class BaseDevActivity : EasyDiaryActivity() {
             mBinding.textCoroutine1Console.append("$tag: $message\n")
             mBinding.scrollCoroutine.post { mBinding.scrollCoroutine.fullScroll(View.FOCUS_DOWN) }
         }
-        suspend fun doWorld() {
-            delay(1000)
-        }
+//        suspend fun doWorld() {
+//            delay(1000)
+//        }
 
         mBinding.buttonCoroutineBasicStart.setOnClickListener {
             if (mCoroutineJob1?.isActive == true) {

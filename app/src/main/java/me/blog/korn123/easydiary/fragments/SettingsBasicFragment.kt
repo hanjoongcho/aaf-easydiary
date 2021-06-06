@@ -33,9 +33,9 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
     private lateinit var mRootView: ViewGroup
     private val mActivity: Activity
         get() = requireActivity()
-    private val mRequestLocationSourceLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+    private val mRequestLocationSourceLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
         requireActivity().run {
-            makeSnackBar(if (isLocationEnabled() && result.resultCode == Activity.RESULT_OK) "GPS provider setting is activated!!!" else "The request operation did not complete normally.")
+            makeSnackBar(if (isLocationEnabled()) "GPS provider setting is activated!!!" else "The request operation did not complete normally.")
         }
     }
 
