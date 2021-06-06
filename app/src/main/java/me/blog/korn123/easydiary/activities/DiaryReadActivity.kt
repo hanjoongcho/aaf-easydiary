@@ -51,7 +51,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
      */
     private lateinit var mSectionsPagerAdapter: SectionsPagerAdapter
     private lateinit var mBinding: ActivityDiaryReadBinding
-    private lateinit var mPopupEncryptionBinding: PopupEncriptionBinding
+    private lateinit var mPopupEncryptionBinding: PopupEncryptionBinding
     private var mTextToSpeech: TextToSpeech? = null
     private var mShowcaseView: ShowcaseView? = null
     private var mShowcaseIndex = 1
@@ -66,7 +66,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityDiaryReadBinding.inflate(layoutInflater)
-        mPopupEncryptionBinding = PopupEncriptionBinding.inflate(layoutInflater)
+        mPopupEncryptionBinding = PopupEncryptionBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
         setSupportActionBar(mBinding.toolbar)
         supportActionBar?.run {
