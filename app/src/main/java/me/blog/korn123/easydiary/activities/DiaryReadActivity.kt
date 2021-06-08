@@ -475,8 +475,8 @@ class DiaryReadActivity : EasyDiaryActivity() {
 //            return mRootView
         }
 
-        override fun onActivityCreated(savedInstanceState: Bundle?) {
-            super.onActivityCreated(savedInstanceState)
+        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+            super.onViewCreated(view, savedInstanceState)
             requireContext().changeDrawableIconColor(config.primaryColor, R.drawable.map_marker_2)
             mBinding.bottomToolbar.run {
                 togglePhoto.setOnClickListener {
