@@ -684,7 +684,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
             }
         }
 
-        inner class PhotoClickListener(var diarySequence: Int, var index: Int) : View.OnClickListener {
+        inner class PhotoClickListener(private var diarySequence: Int, var index: Int) : View.OnClickListener {
             override fun onClick(v: View) {
                 val photoViewPager = Intent(context, PhotoViewPagerActivity::class.java)
                 photoViewPager.putExtra(DIARY_SEQUENCE, diarySequence)

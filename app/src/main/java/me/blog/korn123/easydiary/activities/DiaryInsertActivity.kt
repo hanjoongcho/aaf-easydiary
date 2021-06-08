@@ -37,6 +37,7 @@ class DiaryInsertActivity : EditActivity() {
     private lateinit var mShowcaseView: ShowcaseView
     private var mShowcaseIndex = 2
 
+
     /***************************************************************************************************
      *   override functions
      *
@@ -181,7 +182,7 @@ class DiaryInsertActivity : EditActivity() {
     }
 
     private fun setupKeypad() {
-        val hasShot = getSharedPreferences("showcase_internal", Context.MODE_PRIVATE).getBoolean("hasShot" + SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER, false)
+        val hasShot = getSharedPreferences("showcase_internal", Context.MODE_PRIVATE).getBoolean("hasShot$SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER", false)
         if (!hasShot) window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
     }
 
