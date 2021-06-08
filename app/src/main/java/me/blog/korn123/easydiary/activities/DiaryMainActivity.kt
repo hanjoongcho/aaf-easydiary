@@ -121,6 +121,25 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 diaryMode = savedInstanceState.getSerializable(DIARY_MODE) as DiaryMode
             }
         }
+
+        val manager = ReviewManagerFactory.create(this)
+        val request = manager.requestReviewFlow()
+        request.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                // We got the ReviewInfo object
+                val reviewInfo = task.result
+                val flow = manager.launchReviewFlow(this, reviewInfo)
+                flow.addOnCompleteListener { _ ->
+                    makeToast("The flow has finished.")
+                    // The flow has finished. The API does not indicate whether the user
+                    // reviewed or not, or even whether the review dialog was shown. Thus, no
+                    // matter the result, we continue our app flow.
+                }
+            } else {
+                makeToast("There was some problem, log or handle the error code.")
+                // There was some problem, log or handle the error code.
+            }
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -142,24 +161,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         }
 
         if (ViewHelper.getTranslationY(mBinding.appBar) < 0) mBinding.searchCard.useCompatPadding = false
-
-        val manager = ReviewManagerFactory.create(this)
-        val request = manager.requestReviewFlow()
-        request.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                // We got the ReviewInfo object
-                val reviewInfo = task.result
-                val flow = manager.launchReviewFlow(this, reviewInfo)
-                flow.addOnCompleteListener { _ ->
-                    // The flow has finished. The API does not indicate whether the user
-                    // reviewed or not, or even whether the review dialog was shown. Thus, no
-                    // matter the result, we continue our app flow.
-                }
-            } else {
-                // There was some problem, log or handle the error code.
-//                @ReviewErrorCode val reviewErrorCode = (task.getException() as TaskException).errorCode
-            }
-        }
     }
 
     override fun createScrollable(): ObservableListView {
