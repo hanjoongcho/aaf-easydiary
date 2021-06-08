@@ -6,7 +6,6 @@ import android.annotation.TargetApi
 import android.app.Activity
 import android.app.Dialog
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -17,8 +16,6 @@ import android.graphics.Canvas
 import android.graphics.Point
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.location.Location
-import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
@@ -38,7 +35,6 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.play.core.review.ReviewManagerFactory
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
 import io.github.aafactory.commons.helpers.PERMISSION_ACCESS_COARSE_LOCATION
@@ -475,27 +471,6 @@ fun Activity.resourceToBase64(resourceId: Int): String {
         bos.close()
     }
     return image64
-}
-
-fun Activity.startReviewFlow() {
-    val manager = ReviewManagerFactory.create(this)
-    val request = manager.requestReviewFlow()
-    request.addOnCompleteListener { task ->
-        if (task.isSuccessful) {
-            // We got the ReviewInfo object
-            val reviewInfo = task.result
-            val flow = manager.launchReviewFlow(this, reviewInfo)
-            flow.addOnCompleteListener { _ ->
-                makeToast("The flow has finished.")
-                // The flow has finished. The API does not indicate whether the user
-                // reviewed or not, or even whether the review dialog was shown. Thus, no
-                // matter the result, we continue our app flow.
-            }
-        } else {
-            makeToast("There was some problem, log or handle the error code.")
-            // There was some problem, log or handle the error code.
-        }
-    }
 }
 
 fun EasyDiaryActivity.acquireGPSPermissions(activityResultLauncher: ActivityResultLauncher<Intent>, callback: () -> Unit) {
