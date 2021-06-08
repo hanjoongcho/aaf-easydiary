@@ -475,8 +475,8 @@ class DiaryReadActivity : EasyDiaryActivity() {
 //            return mRootView
         }
 
-        override fun onActivityCreated(savedInstanceState: Bundle?) {
-            super.onActivityCreated(savedInstanceState)
+        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+            super.onViewCreated(view, savedInstanceState)
             requireContext().changeDrawableIconColor(config.primaryColor, R.drawable.map_marker_2)
             mBinding.bottomToolbar.run {
                 togglePhoto.setOnClickListener {
@@ -684,7 +684,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
             }
         }
 
-        inner class PhotoClickListener(var diarySequence: Int, var index: Int) : View.OnClickListener {
+        inner class PhotoClickListener(private var diarySequence: Int, var index: Int) : View.OnClickListener {
             override fun onClick(v: View) {
                 val photoViewPager = Intent(context, PhotoViewPagerActivity::class.java)
                 photoViewPager.putExtra(DIARY_SEQUENCE, diarySequence)
