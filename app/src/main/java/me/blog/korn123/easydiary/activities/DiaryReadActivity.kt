@@ -108,7 +108,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 //        val fragment = mSectionsPagerAdapter?.getItem(diaryViewPager.currentItem)
         val fragment = mSectionsPagerAdapter.instantiateItem(mBinding.diaryViewPager, mBinding.diaryViewPager.currentItem)
-        val fontSize = config.settingFontSize
+//        val fontSize = config.settingFontSize
         if (fragment is PlaceholderFragment) {
             when (item.itemId) {
                 android.R.id.home ->
@@ -389,7 +389,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
     }
 
     private fun initModule() {
-        mTextToSpeech = TextToSpeech(this@DiaryReadActivity, TextToSpeech.OnInitListener { status ->
+        mTextToSpeech = TextToSpeech(this@DiaryReadActivity) { status ->
             if (status == TextToSpeech.SUCCESS) {
                 mTextToSpeech?.run {
                     language = Locale.getDefault()
@@ -397,7 +397,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                     setSpeechRate(1f)
                 }
             }
-        })
+        }
     }
 
     private fun destroyModule() {
@@ -419,7 +419,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
     @Suppress("DEPRECATION")
     private fun ttsUnder20(text: String) {
         val map = HashMap<String, String>()
-        map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "MessageId")
+        map[TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID] = "MessageId"
         mTextToSpeech?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
             override fun onStart(utteranceId: String) {}
 
@@ -462,17 +462,11 @@ class DiaryReadActivity : EasyDiaryActivity() {
     class PlaceholderFragment : androidx.fragment.app.Fragment() {
         private lateinit var mRootView: ViewGroup
         private lateinit var mBinding: FragmentDiaryReadBinding
-        private lateinit var mPartialBottomToolbarBinding: PartialBottomToolbarBinding
         private val mViewModel: DiaryReadViewModel by viewModels()
         private var mPrimaryColor = 0
 
-        override fun onCreate(savedInstanceState: Bundle?) {
-            super.onCreate(savedInstanceState)
-        }
-        
-        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
             mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_diary_read, container, false)
-            mPartialBottomToolbarBinding = PartialBottomToolbarBinding.inflate(layoutInflater)
             mBinding.lifecycleOwner = this
             mBinding.viewModel = mViewModel
             mRootView = mBinding.mainHolder
@@ -484,18 +478,20 @@ class DiaryReadActivity : EasyDiaryActivity() {
         override fun onActivityCreated(savedInstanceState: Bundle?) {
             super.onActivityCreated(savedInstanceState)
             requireContext().changeDrawableIconColor(config.primaryColor, R.drawable.map_marker_2)
-            mPartialBottomToolbarBinding.togglePhoto.setOnClickListener {
-                context?.let { context ->
-                    when (mBinding.photoContainerScrollView.visibility) {
-                        View.VISIBLE -> {
-                            mBinding.photoContainerScrollView.visibility = View.GONE
-                            mPartialBottomToolbarBinding.togglePhoto.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.expand))
+            mBinding.bottomToolbar.run {
+                togglePhoto.setOnClickListener {
+                    context?.let { context ->
+                        when (mBinding.photoContainerScrollView.visibility) {
+                            View.VISIBLE -> {
+                                mBinding.photoContainerScrollView.visibility = View.GONE
+                                togglePhoto.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.expand))
+                            }
+                            View.GONE -> {
+                                mBinding.photoContainerScrollView.visibility = View.VISIBLE
+                                togglePhoto.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.collapse))
+                            }
                         }
-                        View.GONE -> {
-                            mBinding.photoContainerScrollView.visibility = View.VISIBLE
-                            mPartialBottomToolbarBinding.togglePhoto.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.collapse))
-                        }
-                    }    
+                    }
                 }
             }
 
@@ -516,10 +512,6 @@ class DiaryReadActivity : EasyDiaryActivity() {
         override fun onResume() {
             super.onResume()
             initContents()
-        }
-
-        override fun onDestroy() {
-            super.onDestroy()
         }
 
         fun getSequence() = arguments?.getInt(DIARY_SEQUENCE) ?: -1
@@ -564,26 +556,28 @@ class DiaryReadActivity : EasyDiaryActivity() {
 
                 // TODO fixme elegance
                 val photoCount = diaryDto.photoUris?.size ?: 0
-                if (photoCount > 0) {
-                    (mPartialBottomToolbarBinding.bottomTitle as TextView).text = if (requireActivity().isLandScape()) "x$photoCount" else getString(R.string.attached_photo_count, photoCount)
-                    mPartialBottomToolbarBinding.bottomToolbar.visibility = View.VISIBLE
-                    photoContainerScrollView.visibility = View.VISIBLE
+                mBinding.bottomToolbar.run {
+                    if (photoCount > 0) {
+                        bottomTitle.text = if (requireActivity().isLandScape()) "x$photoCount" else getString(R.string.attached_photo_count, photoCount)
+                        bottomToolbar.visibility = View.VISIBLE
+                        photoContainerScrollView.visibility = View.VISIBLE
 
-                    if (photoContainer.childCount > 0) photoContainer.removeAllViews()
-                    context?.let { appContext ->
-                        val thumbnailSize = appContext.config.settingThumbnailSize
-                        diaryDto.photoUris?.forEachIndexed { index, item ->
-                            val imageView = when (requireActivity().isLandScape()) {
-                                true -> createAttachedPhotoView(appContext, item, 0F, 0F, 0F, 3F)
-                                false -> createAttachedPhotoView(appContext, item, 0F, 0F, 3F, 0F)
+                        if (photoContainer.childCount > 0) photoContainer.removeAllViews()
+                        context?.let { appContext ->
+//                        val thumbnailSize = appContext.config.settingThumbnailSize
+                            diaryDto.photoUris?.forEachIndexed { index, item ->
+                                val imageView = when (requireActivity().isLandScape()) {
+                                    true -> createAttachedPhotoView(appContext, item, 0F, 0F, 0F, 3F)
+                                    false -> createAttachedPhotoView(appContext, item, 0F, 0F, 3F, 0F)
+                                }
+                                photoContainer.addView(imageView)
+                                imageView.setOnClickListener(PhotoClickListener(getSequence(), index))
                             }
-                            photoContainer.addView(imageView)
-                            imageView.setOnClickListener(PhotoClickListener(getSequence(), index))
                         }
+                    } else {
+                        bottomToolbar.visibility = View.GONE
+                        photoContainerScrollView.visibility = View.GONE
                     }
-                } else {
-                    mPartialBottomToolbarBinding.bottomToolbar.visibility = View.GONE
-                    photoContainerScrollView.visibility = View.GONE
                 }
 
                 context?.run {
@@ -619,16 +613,14 @@ class DiaryReadActivity : EasyDiaryActivity() {
             }
         }
 
-        fun setFontsTypeface() {
+        private fun setFontsTypeface() {
             activity?.let { it ->
                 FontUtils.setFontsTypeface(it, it.assets, "", mRootView)
             }
         }
 
-        fun setFontsSize() {
-            context?.let {
-                it.initTextSize(mRootView)
-            }
+        private fun setFontsSize() {
+            requireContext().initTextSize(mRootView)
         }
 
         fun encryptData(inputPass: String) {

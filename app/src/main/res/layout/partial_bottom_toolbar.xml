@@ -1,4 +1,5 @@
 <io.github.aafactory.commons.views.LabelLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/bottomToolbar"
     android:foreground="?attr/selectableItemBackground"
@@ -7,7 +8,9 @@
     android:background="?attr/colorPrimary"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <TextView
+    <me.blog.korn123.easydiary.views.FixedTextView
+        app:applyGlobalSize="true"
+        app:applyGlobalColor="true"
         android:id="@+id/bottomTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
