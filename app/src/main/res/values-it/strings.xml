@@ -524,6 +524,10 @@
         v1.4.167 / 18/05/2021\n
         Fixed a bug that abnormally terminated on some devices when rotating the device
     </string>
+    <string name="release_234">
+        v1.4.168 / 2021.06.10\n
+        Ottimizzazione esperienza utente (UX)
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
