@@ -542,6 +542,8 @@ const val DIARY_LAST_BACKUP_TIMESTAMP_LOCAL = "diary_last_backup_time_local"
 const val PHOTO_LAST_BACKUP_TIMESTAMP_GOOGLE_DRIVE = "photo_last_backup_time_google_drive"
 const val CAPTURE_CAMERA_FILE_NAME = "capture.jpg"
 const val UPDATE_SHARED_PREFERENCE = "update_shared_preference"
+const val APP_EXECUTION_COUNT = "count_app_execution"
+const val APP_EXECUTION_COUNT_DEFAULT = 0
 
 const val SETTING_FLAG_EXPORT_GOOGLE_DRIVE = 1
 const val SETTING_FLAG_IMPORT_GOOGLE_DRIVE = 2

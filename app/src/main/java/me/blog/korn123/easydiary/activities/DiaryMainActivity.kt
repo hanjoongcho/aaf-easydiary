@@ -120,7 +120,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             }
         }
 
-        if (config.enableDebugMode) startReviewFlow()
+        config.appExecutionCount = config.appExecutionCount.plus(1)
+        if (config.appExecutionCount > 10) startReviewFlow()
+        if (config.enableDebugMode) makeToast("appExecutionCount: ${config.appExecutionCount}")
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
