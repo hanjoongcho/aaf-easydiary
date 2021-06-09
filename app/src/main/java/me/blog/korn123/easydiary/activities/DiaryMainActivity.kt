@@ -121,7 +121,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         }
 
         config.appExecutionCount = config.appExecutionCount.plus(1)
-        if (config.appExecutionCount > 10) startReviewFlow()
+        if (config.appExecutionCount > 30 && EasyDiaryDbHelper.countDiaryAll() > 300) startReviewFlow()
         if (config.enableDebugMode) makeToast("appExecutionCount: ${config.appExecutionCount}")
     }
 
