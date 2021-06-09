@@ -148,4 +148,8 @@ class Config(context: Context) : BaseConfig(context) {
     var selectedSymbols: String
         get() = prefs.getString(SETTING_SELECTED_SYMBOLS, SELECTED_SYMBOLS_DEFAULT)!!
         set(selectedSymbols) = prefs.edit().putString(SETTING_SELECTED_SYMBOLS, selectedSymbols).apply()
+
+    var appExecutionCount: Int
+        get() = prefs.getInt(APP_EXECUTION_COUNT, APP_EXECUTION_COUNT_DEFAULT)
+        set(appExecutionCount) = prefs.edit().putInt(APP_EXECUTION_COUNT, appExecutionCount).apply()
 }
