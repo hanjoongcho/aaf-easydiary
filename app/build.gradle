@@ -21,13 +21,14 @@ android {
             storePassword properties.getProperty("storePassword")
         }
     }
-    
+
+    // major.minor.maintenance.hotfix
     defaultConfig {
         applicationId "me.blog.korn123.easydiary"
         minSdkVersion 19
         targetSdkVersion versions.compileSdk
-        versionCode 234
-        versionName '1.4.168'
+        versionCode 235
+        versionName '1.4.169.0'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
