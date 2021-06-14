@@ -1,6 +1,5 @@
 package me.blog.korn123.easydiary.fragments
 
-import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
@@ -8,7 +7,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.github.mikephil.charting.charts.BarLineChartBase
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
@@ -33,6 +31,7 @@ import me.blog.korn123.easydiary.extensions.scaledDrawable
 import java.util.*
 
 class HorizontalBarChartFragment : androidx.fragment.app.Fragment() {
+    private lateinit var mSymbolMap: HashMap<Int, String>
     val mSequences = arrayListOf<Int>()
     private val mTypeface: Typeface
         get() = FontUtils.getCommonTypeface(requireContext())!!
@@ -40,6 +39,7 @@ class HorizontalBarChartFragment : androidx.fragment.app.Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        mSymbolMap = FlavorUtils.getDiarySymbolMap(requireContext())
         barChart.setDrawBarShadow(false)
         barChart.setDrawValueAboveBar(true)
         barChart.description.isEnabled = false
@@ -55,7 +55,7 @@ class HorizontalBarChartFragment : androidx.fragment.app.Fragment() {
         // mChart.setDrawYLabels(false);
 //        barChart.zoom(1.5F, 0F, 0F, 0F)
 
-        val xAxisFormatter = AxisValueFormatter(context, barChart)
+        val xAxisFormatter = AxisValueFormatter()
 
         val xAxis = barChart.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
@@ -158,11 +158,10 @@ class HorizontalBarChartFragment : androidx.fragment.app.Fragment() {
         barChart.data = barData
     }
 
-    inner class AxisValueFormatter(private var context: Context?, private val chart: BarLineChartBase<*>) : IAxisValueFormatter {
+    inner class AxisValueFormatter : IAxisValueFormatter {
         override fun getFormattedValue(value: Float, axis: AxisBase?): String {
-            val symbolMap = FlavorUtils.getDiarySymbolMap(context!!)
             return when  {
-                value > 0 -> symbolMap[mSequences[value.toInt() - 1]] ?: "None"
+                value > 0 && value <= mSequences.size -> mSymbolMap[mSequences[value.toInt() - 1]] ?: "None"
                 else -> "None"
             }
         }
