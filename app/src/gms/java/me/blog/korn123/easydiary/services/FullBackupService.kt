@@ -216,7 +216,7 @@ class FullBackupService : Service() {
                     .append("<b>\uD83D\uDCC1 Database</b><br>")
                     .append("* Saved file name: $savedFileName")
 
-            val resultNotificationBuilder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_upload")
+            val resultNotificationBuilder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_alarm")
             resultNotificationBuilder
                     .setDefaults(Notification.DEFAULT_ALL)
                     .setWhen(System.currentTimeMillis())
