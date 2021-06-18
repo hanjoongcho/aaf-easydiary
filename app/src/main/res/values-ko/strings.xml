@@ -180,7 +180,7 @@
     <string name="release_116">
         v1.4.53 / 2018.10.13\n
         프리뷰 사진크기 설정기능 추가\n
-        프리뷰 사진 토글기능(접거나 펴기) 추가 
+        프리뷰 사진 토글기능(접거나 펴기) 추가
     </string>
     <string name="release_118">
         v1.4.55 / 2018.11.01\n
@@ -250,7 +250,7 @@
     </string>
     <string name="release_143">
         v1.4.80 / 2019.06.07\n
-        Google Drive Android API를 Google Drive REST API로 변경함(Google Drive Android API는 2019년 12월 6일부터 서비스 종료됨)  
+        Google Drive Android API를 Google Drive REST API로 변경함(Google Drive Android API는 2019년 12월 6일부터 서비스 종료됨)
     </string>
     <string name="release_147">
         v1.4.83 / 2019.06.09\n
@@ -527,6 +527,10 @@
     <string name="release_234">
         v1.4.168 / 2021.06.10\n
         사용자경험(UX) 최적화
+    </string>
+    <string name="release_235">
+        v1.4.169 / 2021.06.18\n
+        Spanish translation added
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->

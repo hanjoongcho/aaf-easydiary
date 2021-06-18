@@ -215,7 +215,7 @@
         Aggiunto pulsante di creazione del diario alla cronologia
     </string>
     <string name="release_133">
-        v1.4.70 / 25/01/2019\n 
+        v1.4.70 / 25/01/2019\n
         Aggiunta opzione di visualizzazione del riassunto dei contenuti del diario
     </string>
     <string name="release_134">
@@ -527,6 +527,10 @@
     <string name="release_234">
         v1.4.168 / 2021.06.10\n
         Ottimizzazione esperienza utente (UX)
+    </string>
+    <string name="release_235">
+        v1.4.169 / 2021.06.18\n
+        Aggiunta traduzione spagnola
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->

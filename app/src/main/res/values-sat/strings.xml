@@ -145,7 +145,7 @@
     <string name="menu_timeline">ᱴᱟᱭᱤᱢᱞᱟᱭᱤᱱ</string>
     <string name="post_card">ᱰᱟᱭᱨᱤ ᱰᱟᱠᱼᱠᱟᱰ</string>
     <string name="menu_delete">ᱢᱮᱴᱟᱣ ᱢᱮ</string>
-    
+
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.41 here.                                                      -->
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -156,345 +156,345 @@
     <string name="preferences_category_aaf">AAF Easy ᱥᱤᱨᱤᱡᱽ</string>
     <string name="invite_friends">ᱜᱟᱛᱮ ᱠᱚ ᱱᱮᱣᱛᱟ ᱮᱢᱟ ᱠᱚᱢ</string>
     <string name="invite_friends_summary">%s ᱮᱯᱞᱤᱠᱮᱥᱚᱱ ᱟᱢ ᱨᱤᱱ ᱜᱟᱛᱮ ᱟᱠ ᱥᱟᱞᱟᱜ ᱦᱟᱹᱴᱤᱧ ᱢᱮ ᱾</string>
-    
+
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Release notes here.                                                      -->
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
-    <string name="release_103">        
+    <string name="release_103">
         v1.4.41 / 2018.05.28\n
         ᱵᱟᱝ ᱠᱟᱹᱢᱤᱮᱫ ᱰᱟᱭᱨᱤᱠᱴᱚᱨᱭ ᱨᱮ ᱟᱡ ᱛᱮ ᱰᱟᱠᱼᱠᱟᱰ ᱵᱨᱟᱩᱡᱽ ᱢᱳᱰ ᱵᱚᱸᱫᱟᱜ ᱵᱟᱹᱜ ᱠᱚ ᱴᱷᱤᱠ ᱮᱱᱟ
     </string>
-    <string name="release_105">        
+    <string name="release_105">
         v1.4.42 / 2018.06.27\n
         ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱮᱠᱥᱯᱤᱨᱤᱮᱸᱱᱥ (UX) ᱚᱯᱴᱤᱢᱟᱭᱡᱮᱥᱚᱱ
     </string>
-    <string name="release_110">        
+    <string name="release_110">
         v1.4.47 / 2018.08.29\n
         ᱰᱟᱠᱼᱠᱟᱰ ᱠᱮᱴᱟᱣ ᱯᱷᱟᱸᱠᱥᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
     </string>
-    <string name="release_114">        
+    <string name="release_114">
         v1.4.51 / 2018.09.29\n
         AAF ᱠᱚᱢᱚᱱ ᱢᱳᱰᱭᱩᱞ ᱟᱹᱯᱰᱮᱴ\n
         ᱮᱯ ᱯᱮᱠᱤᱝ ᱡᱟᱭᱜᱟ Android 9 Pie ᱛᱮ ᱵᱚᱫᱚᱞ ᱢᱮ
     </string>
-    <string name="release_116">        
+    <string name="release_116">
         v1.4.53 / 2018.10.13\n
         ᱪᱤᱛᱟᱹᱨ ᱧᱮᱞ ᱵᱤᱲᱟᱹᱣ ᱥᱟᱡᱟᱣ ᱯᱷᱟᱸᱠᱥᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ\n
         ᱧᱮᱞ ᱵᱤᱲᱟᱹᱣ ᱪᱤᱛᱟᱹᱨ ᱴᱚᱜᱟᱹᱞ ᱯᱷᱟᱸᱠᱥᱚᱱ ᱥᱮᱞᱮᱫᱮᱱᱟ(ᱨᱟᱹᱯᱩᱫ ᱟᱨ ᱵᱟᱝ ᱠᱷᱩᱞᱟᱹ)
     </string>
-    <string name="release_118">        
+    <string name="release_118">
         v1.4.55 / 2018.11.01\n
         ᱰᱟᱭᱨᱤ ᱚᱞᱟᱜ ᱚᱠᱛᱚ ᱮᱞᱥᱯᱨᱮᱥᱚᱱ ᱵᱮᱥ ᱪᱷᱚ\n
         ᱰᱟᱭᱨᱤ ᱴᱟᱭᱴᱟᱹᱞ ᱟᱨ ᱴᱟᱭᱤᱢᱞᱟᱭᱤᱱ ᱚᱠᱛᱚ ᱵᱤᱵᱨᱚᱬ ᱨᱮ ᱵᱚᱞᱼᱰᱯᱷᱮᱥ ᱥᱟᱡᱟᱣ ᱯᱷᱟᱸᱠᱥᱚᱱ ᱠᱚ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
     </string>
-    <string name="release_120">        
+    <string name="release_120">
         v1.4.57 / 2018.11.12\n
         ᱟᱭᱢᱟ ᱪᱤᱛᱟᱹᱨ ᱠᱚ ᱢᱤᱫ ᱡᱮᱠᱷᱟ ᱛᱮ ᱞᱟᱴᱷᱟ ᱪᱷᱚ ᱞᱟᱹᱜᱤᱫ ᱟᱭᱠᱟᱼᱵᱟᱪᱷᱱᱟᱣ ᱯᱷᱟᱸᱠᱥᱚᱱ ᱠᱚ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
     </string>
-    <string name="release_126">        
+    <string name="release_126">
         v1.4.63 / 2018.11.25\n
         Google Drive ᱨᱮᱭᱟᱜ ᱵᱮᱵᱷᱟᱨ ᱛᱮ ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ ᱵᱮᱠᱟᱹᱯ ᱟᱨ ᱨᱤᱠᱟᱹᱣᱨᱤ ᱯᱷᱟᱠᱥᱚᱱ ᱠᱚ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
     </string>
-    <string name="release_128">        
+    <string name="release_128">
         v1.4.65 / 2018.12.19\n
         ᱛᱤᱠᱟᱹᱴᱤᱵᱪᱷᱟᱯᱟ ᱥᱮᱱᱥᱚᱨ ᱵᱮᱵᱷᱟᱨ ᱠᱟᱛᱮ ᱠᱩᱞᱩᱯ ᱯᱷᱟᱸᱠᱥᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
     </string>
-    <string name="release_130">        
+    <string name="release_130">
         v1.4.67 / 2019.01.01\n
         ᱰᱟᱠᱼᱠᱟᱰ ᱥᱠᱨᱤᱱ ᱨᱮ ᱵᱮᱥ ᱪᱚᱨᱚᱠ ᱪᱤᱛᱟᱹᱨ ᱧᱮᱞ ᱫᱟᱲᱮ ᱨᱮᱭᱟᱜ ᱠᱟᱹᱢᱤ ᱦᱩᱭᱮᱱᱟ
     </string>
-    <string name="release_131">        
+    <string name="release_131">
         v1.4.68 / 2019.01.06\n
         ᱥᱚᱯᱷᱚᱥ ᱣᱮᱠᱥᱤᱱ ᱨᱮ ᱛᱤᱱᱟᱹᱝᱜᱟᱱ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱡᱤᱱᱤᱥ ᱠᱚ ᱠᱚᱢ ᱠᱚᱱᱯᱷᱤᱰᱮᱱᱥ ᱛᱮ ᱨᱤᱯᱚᱴᱚᱜ ᱠᱟᱱ ᱛᱟᱦᱮᱸᱡ ᱚᱱᱟ ᱠᱚ ᱴᱷᱤᱠ ᱮᱱᱟ(ᱱᱚᱴᱤᱯᱷᱤᱠᱮᱥᱚᱱ ᱟᱸᱡᱚᱢᱤᱭᱟᱹ, ᱵᱚᱦᱟᱞ ᱴᱨᱤᱜᱚᱨ)\n
         ᱯᱚᱥᱴᱼᱠᱟᱰ ᱢᱟᱯ ᱮᱰᱡᱟᱹᱥᱴᱢᱮᱴ ᱯᱷᱟᱸᱠᱥᱚᱱ
     </string>
-    <string name="release_132">        
+    <string name="release_132">
         v1.4.69 / 2019.01.16\n
         ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱮᱠᱥᱯᱤᱨᱤᱮᱸᱥ (UX) ᱚᱯᱴᱤᱢᱟᱭᱡᱮᱥᱚᱱ\n
         Android 9 Pie ᱵᱷᱟᱹᱨᱥᱚᱱ ᱨᱮ ᱥᱠᱨᱤᱱ ᱴᱨᱟᱱᱡᱮᱠᱥᱚᱱ ᱴᱷᱤᱠ ᱵᱟᱝ ᱛᱟᱦᱮᱸᱱ ᱠᱚ ᱴᱷᱤᱠ ᱮᱱᱟ\n
         ᱰᱟᱭᱨᱤ ᱴᱟᱭᱤᱢᱞᱟᱭᱤᱱ ᱛᱮᱭᱟᱨ ᱵᱩᱛᱟᱹᱢ ᱠᱚ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
     </string>
-    <string name="release_133">        
+    <string name="release_133">
         v1.4.70 / 2019.01.25\n
         ᱰᱟᱭᱨᱤ ᱨᱮᱭᱟᱜ ᱥᱟᱹᱟᱨᱭ ᱠᱚ ᱧᱮᱞ ᱫᱟᱲᱮᱭᱟᱜ ᱚᱯᱥᱚᱱ ᱠᱚ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
     </string>
-    <string name="release_134">        
+    <string name="release_134">
         v1.4.71 / 2019.01.26\n
         ᱥᱟᱫᱷᱚᱱ ᱨᱮᱭᱟᱜ ᱛᱤᱠᱟᱹᱴᱩᱵ ᱪᱷᱟᱯᱟ ᱵᱤᱵᱨᱚᱬ ᱠᱚ ᱵᱚᱫᱚᱞ ᱡᱷᱚᱜ ᱮᱯᱞᱤᱠᱮᱥᱚᱱ ᱟᱡ ᱛᱮ ᱵᱚᱸᱫᱚᱜ ᱠᱚ ᱴᱷᱤᱠ ᱮᱱᱟ
     </string>
-    <string name="release_136">        
+    <string name="release_136">
         v1.4.73 / 2019.02.11\n
         ᱯᱤᱱ ᱥᱮᱴ ᱟᱨ ᱠᱷᱩᱞᱟᱹ ᱡᱷᱚᱜ ᱴᱷᱤᱠ ᱰᱤᱡᱤᱴ ᱠᱚ ᱛᱟᱦᱮᱱ ᱨᱮᱭᱟᱜ ᱠᱚ ᱥᱮᱴ ᱮᱱᱟ
     </string>
-    <string name="release_137">        
+    <string name="release_137">
         v1.4.74 / 2019.03.06\n
         ᱰᱟᱠᱼᱠᱟᱰ ᱪᱤᱛᱟᱹᱨ ᱨᱮ ᱯᱷᱤᱞᱴᱚᱨ ᱠᱚ ᱮᱢ ᱪᱷᱚ ᱨᱮᱭᱟᱜ ᱠᱟᱹᱢᱤ ᱠᱚ ᱥᱩᱫᱷᱨᱟᱹᱣ ᱮᱱᱟ\n
         ᱰᱟᱭᱨᱤ ᱠᱚ Excel ᱨᱮᱫ ᱛᱮ ᱵᱷᱮᱡᱟ ᱫᱟᱲᱮᱭᱟᱜ ᱯᱷᱤᱪᱚᱨ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
     </string>
-    <string name="release_138">        
+    <string name="release_138">
         v1.4.75 / 2019.03.22\n
         ᱮᱯ ᱜᱟᱠᱷᱩᱲᱟᱱ ᱵᱤᱵᱨᱚᱬ ᱥᱟᱦᱴᱟ, ᱥᱟᱶ FAQs ᱟᱨ ᱱᱤᱡᱮᱨᱟᱜ ᱱᱤᱛᱤ\n
         ᱯᱤᱱ ᱟᱨ ᱛᱤᱠᱟᱹᱴᱩᱵᱪᱷᱟᱯᱟ ᱠᱷᱩᱞᱟᱹ ᱴᱚᱜᱟᱹᱞ ᱥᱩᱫᱷᱨᱟᱹᱣ ᱮᱱᱟ
     </string>
-    <string name="release_139">        
+    <string name="release_139">
         v1.4.76 / 2019.04.24\n
         ᱕᱐ ᱯᱨᱚᱠᱟᱨᱟᱜ ᱰᱟᱭᱨᱤ ᱪᱤᱱᱦᱟᱹ ᱟᱭᱠᱚᱱ ᱵᱟᱪᱷᱟᱣ ᱢᱮ
     </string>
-    <string name="release_140">        
+    <string name="release_140">
         v1.4.77 / 2019.05.11\n
         ᱰᱟᱭᱨᱤ ᱪᱤᱱᱦᱟᱹ ᱟᱨ ᱮᱢ ᱴᱩᱢᱟᱹᱞ ᱠᱚ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
     </string>
-    <string name="release_141">        
+    <string name="release_141">
         v1.4.78 / 2019.05.13\n
         ᱰᱤᱜᱟᱹᱣ ᱠᱚ ᱴᱷᱤᱠ ᱪᱷᱚᱭ ᱮᱱᱟ, ᱚᱠᱟ ᱞᱟᱹᱜᱤᱫ ᱥᱟᱡᱟᱣ ᱥᱠᱨᱤᱱ ᱨᱮᱭᱟᱜ ᱯᱷᱟᱸᱠᱥᱚᱱ ᱥᱟᱫᱷᱚᱱ ᱫᱚᱦᱚ ᱡᱟᱭᱜᱟ ᱨᱮᱭᱟᱜ ᱟᱫᱮᱨ ᱵᱟᱭ ᱧᱟᱢ ᱞᱮᱠᱷᱟᱱ ᱫᱚ ᱟᱡ ᱛᱮ ᱵᱚᱸᱫᱚᱜ ᱠᱟᱱ ᱛᱟᱦᱮᱸᱡ
     </string>
-    <string name="release_143">        
+    <string name="release_143">
         v1.4.80 / 2019.06.07\n
         Google Drive Android API ᱵᱚᱫᱚᱞ ᱛᱮ Google Drive REST API ᱛᱮ ᱵᱚᱫᱚᱞ ᱮᱱᱟ (Google Drive Android API ᱫᱚ ᱰᱤᱥᱮᱢᱵᱚᱨ ᱖, ᱒᱐᱑᱙ ᱨᱮ ᱵᱚᱸᱫᱚᱜᱼᱟ)
     </string>
-    <string name="release_147">        
+    <string name="release_147">
         v1.4.83 / 2019.06.09\n
         ᱵᱚᱦᱟᱞ ᱨᱮᱫ ᱢᱟᱯ ᱠᱚ ᱦᱚᱯᱚᱱ ᱪᱷᱚ ᱞᱟᱹᱜᱤᱫ ᱟᱨ ᱚᱯᱴᱤᱢᱟᱭᱤᱡᱽ ᱞᱟᱹᱜᱤᱫ ᱮᱱᱰᱨᱚᱭᱮᱰ ᱮᱯ ᱵᱟᱹᱱᱰᱟᱹᱞ ᱮᱢ ᱪᱷᱚᱭ ᱢᱮ
     </string>
-    <string name="release_149">        
+    <string name="release_149">
         v1.4.84 / 2019.06.15\n
         ᱰᱟᱭᱨᱤ ᱥᱴᱟᱴᱤᱥᱴᱤᱠᱥ ᱵᱮᱥ ᱪᱷᱚ
     </string>
-    <string name="release_150">        
+    <string name="release_150">
         v1.4.85 / 2019.06.18\n
         Google Drive(ᱨᱤᱥᱮᱴ API) ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱦᱚᱠ ᱟᱛᱩᱨ ᱵᱷᱩᱞ ᱴᱷᱤᱠ ᱪᱷᱚ
     </string>
-    <string name="release_151">        
+    <string name="release_151">
         v1.4.86 / 2019.06.19\n
         Google Drive(ᱨᱤᱥᱮᱴ API) ᱰᱟᱭᱨᱤ ᱥᱟᱞᱟᱜ ᱪᱤᱛᱟᱹᱨᱠᱚ ᱨᱤᱠᱟᱹᱣᱟᱹᱨ ᱵᱷᱩᱞ ᱥᱩᱫᱽᱷᱨᱟᱹᱣ
     </string>
-    <string name="release_152">        
+    <string name="release_152">
         v1.4.87 / 2019.06.20\n
-        ᱢᱟᱲᱟᱝ Google Drive in v1.4.80 ᱨᱮᱭᱟᱜ ᱵᱮᱵᱷᱟᱨ ᱵᱷᱩᱞ ᱠᱚ ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱨᱮᱭᱟᱜ ᱚᱛᱷᱮᱱᱴᱤᱠᱮᱚᱱ ᱴᱚᱠᱮᱱ ᱵᱷᱩᱞ ᱥᱩᱫᱽᱷᱨᱟᱹᱣᱮᱱᱟ 
+        ᱢᱟᱲᱟᱝ Google Drive in v1.4.80 ᱨᱮᱭᱟᱜ ᱵᱮᱵᱷᱟᱨ ᱵᱷᱩᱞ ᱠᱚ ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱨᱮᱭᱟᱜ ᱚᱛᱷᱮᱱᱴᱤᱠᱮᱚᱱ ᱴᱚᱠᱮᱱ ᱵᱷᱩᱞ ᱥᱩᱫᱽᱷᱨᱟᱹᱣᱮᱱᱟ
     </string>
-    <string name="release_154">        
+    <string name="release_154">
         v1.4.88 / 2019.07.16\n
         Android support library ᱫᱚ AndroidX ᱵᱷᱟᱹᱨᱥᱚᱱ ᱛᱮ ᱩᱪᱟᱹᱲ ᱮᱱᱟ\n
         ᱰᱟᱭᱨᱤ ᱪᱤᱱᱦᱟᱹ ᱟᱭᱠᱚᱱ ᱠᱚ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
     </string>
-    <string name="release_157">        
+    <string name="release_157">
         v1.4.91 / 2019.08.12\n
         ᱥᱟᱫᱷᱚᱱ ᱫᱚᱦᱚᱟᱜ ᱛᱮ ᱵᱮᱠᱟᱹᱯ ᱟᱨ ᱨᱤᱠᱟᱹᱣᱨᱤ ᱯᱷᱟᱸᱠᱥᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ\n
         ᱛᱤᱱᱟᱹᱝ ᱦᱟᱱ ᱥᱟᱫᱷᱚᱱ ᱠᱚᱨᱮ ᱠᱮᱞᱮᱱᱰᱚᱨ ᱨᱮ ᱚᱞ ᱠᱚ ᱴᱷᱤᱠ ᱥᱮ ᱵᱟᱝ ᱫᱮᱠᱟᱣᱜ ᱠᱚ ᱴᱷᱤᱠ ᱮᱱᱟ
     </string>
-    <string name="release_159">        
+    <string name="release_159">
         v1.4.93 / 2019.08.29\n
         ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱮᱠᱥᱯᱤᱨᱤᱮᱸᱥ (UX) ᱚᱯᱴᱤᱢᱟᱭᱡᱮᱥᱚᱱ\n
         ᱢᱟᱨᱮ OS ᱨᱮ ᱠᱚᱱᱯᱷᱤᱜᱽᱭᱩᱨᱮᱥᱚᱱ ᱥᱠᱨᱤᱱ ᱨᱮ ᱟᱪᱮᱨ ᱡᱷᱚᱜ ᱟᱡ ᱦᱩᱠᱼᱟ ᱠᱨᱟᱥᱚᱜ ᱨᱮᱭᱟᱜ ᱵᱟᱹᱜ ᱴᱷᱮᱠ ᱦᱩᱭ ᱮᱱᱟ
     </string>
-    <string name="release_160">        
+    <string name="release_160">
         v1.4.94 / 2019.09.03\n
         ᱠᱮᱞᱮᱱᱰᱚᱨ ᱦᱟᱴᱫᱤᱱ ᱠᱚ ᱨᱮᱭᱟᱜ ᱥᱟᱡᱟᱣ ᱥᱮᱞᱮᱫ ᱮᱱᱟ\n
         ᱴᱮᱵᱽᱞᱮᱴ ᱞᱮᱸᱰᱥᱠᱮᱯ ᱨᱮ ᱠᱮᱞᱮᱱᱰᱚᱨ ᱠᱚ ᱴᱷᱤᱠ ᱥᱮ ᱵᱟᱝ ᱫᱮᱠᱷᱟᱣᱜ ᱠᱚ ᱨᱮᱭᱟᱜ ᱵᱟᱹᱜ ᱠᱚ ᱱᱤᱛᱚᱜ ᱴᱷᱤ ᱦᱩᱭ ᱮᱱᱟ
     </string>
-    <string name="release_163">        
+    <string name="release_163">
         v1.4.97 / 2019.09.17\n
         ᱴᱟᱭᱤᱢᱞᱟᱭᱤᱱ ᱥᱮᱸᱫᱽᱨᱟ ᱯᱷᱤᱞᱴᱚᱨ ᱥᱩᱫᱽᱷᱨᱟᱹᱣ ᱮᱱᱟ\n
         ᱰᱟᱭᱨᱤ ᱱᱚᱠᱚᱞ ᱯᱷᱟᱸᱠᱥᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
     </string>
-    <string name="release_165">        
+    <string name="release_165">
         v1.4.99 / 2019.09.26\n
         ᱰᱟᱭᱨᱤ ᱚᱞ ᱦᱤᱥᱟᱹᱵ ᱯᱷᱟᱸᱠᱥᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
     </string>
-    <string name="release_167">        
+    <string name="release_167">
         v1.4.101 / 2019.10.03\n
         Android 10 ᱫᱚᱦᱚ ᱟᱫᱮᱨ ᱤᱥᱩ ᱨᱮ ᱨᱮᱲ ᱨᱩᱟᱹᱲ(targetSdkVersion ᱫᱚ ᱥᱠᱚᱯᱼᱰ ᱫᱚᱦᱚ ᱯᱚᱞᱤᱥᱭ ᱵᱟᱹᱰ ᱞᱟᱹᱜᱤᱫ ᱠᱤᱪᱷᱩ ᱚᱠᱛᱚ ᱞᱟᱹᱜᱤᱫ ᱰᱟᱩᱱᱜᱨᱮᱰ ᱠᱟᱱᱟ)
     </string>
-    <string name="release_169">        
+    <string name="release_169">
         v1.4.103 / 2019.10.09\n
-        ᱫᱚᱦᱚ ᱡᱟᱭᱜᱟ ᱵᱚᱫᱚᱞ ᱢᱮ ᱟᱨ Android 10 ᱨᱮ ᱥᱠᱚᱯᱼᱰ ᱫᱚᱦᱚ ᱯᱚᱞᱤᱥᱭ ᱠᱚ ᱨᱮᱲ ᱨᱩᱟᱹᱲ ᱨᱮ ᱵᱚᱫᱚᱞ 
+        ᱫᱚᱦᱚ ᱡᱟᱭᱜᱟ ᱵᱚᱫᱚᱞ ᱢᱮ ᱟᱨ Android 10 ᱨᱮ ᱥᱠᱚᱯᱼᱰ ᱫᱚᱦᱚ ᱯᱚᱞᱤᱥᱭ ᱠᱚ ᱨᱮᱲ ᱨᱩᱟᱹᱲ ᱨᱮ ᱵᱚᱫᱚᱞ
     </string>
-    <string name="release_170">        
+    <string name="release_170">
         v1.4.104 / 2019.10.19\n
         ᱠᱮᱞᱮᱱᱰᱚᱨ ᱪᱤᱠᱤ ᱢᱟᱯ ᱥᱟᱡᱟᱣᱠᱚ ᱥᱮᱞᱮᱫ ᱮᱱᱟ\n
         ᱥᱟᱡᱟᱣ ᱥᱠᱨᱤᱱ ᱛᱮ ᱠᱷᱚᱥᱨᱚᱫ ᱥᱟᱦᱴᱟ ᱠᱚ ᱮᱢ ᱪᱷᱚᱭ ᱢᱮ
     </string>
-    <string name="release_171">        
+    <string name="release_171">
         v1.4.105 / 2019.10.20\n
         ᱥᱟᱫᱷᱚᱱ ᱨᱮ Excel ᱨᱮᱫ ᱥᱟᱸᱪᱟᱣ ᱯᱷᱟᱸᱠᱥᱚᱱ ᱨᱮᱭᱟᱜ ᱦᱩᱲᱟᱹᱜ ᱠᱚ ᱴᱷᱤᱠ ᱮᱱᱟ \n
         ᱴᱟᱭᱤᱢᱞᱟᱭᱤᱱ ᱠᱷᱚᱱ ᱰᱟᱭᱨᱤ ᱠᱚ ᱢᱮᱴᱟᱣ ᱡᱷᱚᱜ ᱵᱷᱩᱞ ᱠᱚ ᱥᱩᱫᱽᱷᱨᱟᱹᱣ ᱮᱱᱟ
     </string>
-    <string name="release_172">        
+    <string name="release_172">
         v1.4.106 / 2019.10.25\n
         ᱰᱟᱭᱴᱤ ᱥᱟᱯᱲᱟᱣ ᱯᱚᱨᱮ ᱦᱩᱠᱼᱟ ᱡᱤᱱᱤᱥ ᱠᱚ ᱴᱷᱤᱠ ᱥᱮ ᱵᱟᱝ ᱧᱮᱞ ᱫᱟᱲᱮᱭᱟᱜ ᱨᱮᱭᱟᱜ ᱵᱷᱩᱞ ᱠᱚ ᱥᱩᱫᱽᱷᱨᱟᱹᱣ ᱮᱱᱟ\n
         ᱵᱟᱲᱟᱭ ᱠᱟᱱ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱠᱚ ᱥᱩᱢᱮᱫᱟᱹᱭ ᱞᱟᱭᱵᱽᱨᱮᱨᱭ ᱞᱟᱹᱜᱤᱫ ᱨᱤᱢᱮᱰᱤᱭᱮᱥᱚᱱ
     </string>
-    <string name="release_173">        
+    <string name="release_173">
         v1.4.107 / 2019.10.31\n
         ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱮᱠᱥᱯᱤᱨᱤᱮᱸᱱᱥ (UX) ᱚᱯᱴᱤᱢᱟᱭᱡᱮᱥᱚᱱ
     </string>
-    <string name="release_174">        
+    <string name="release_174">
         v1.4.108 / 2019.11.18\n
         ᱮᱯ ᱯᱷᱨᱮᱸᱪ ᱯᱟᱹᱨᱥᱤ ᱛᱮ ᱥᱮᱴ ᱠᱟᱛᱮ ᱠᱮᱞᱮᱱᱰᱟᱹᱨ ᱪᱤᱠᱤ ᱢᱟᱯ ᱵᱚᱫᱚᱞ ᱡᱷᱚᱜ ᱵᱷᱩᱞ ᱠᱚ ᱥᱩᱫᱽᱷᱨᱟᱹᱣ ᱮᱱᱟ
     </string>
-    <string name="release_176">        
+    <string name="release_176">
         v1.4.110 / 2019.12.13\n
         ᱰᱟᱭᱨᱤ ᱰᱮᱥᱵᱚᱰ ᱯᱷᱤᱪᱚᱨ ᱠᱚ ᱥᱮᱴ ᱮᱱᱟ\n
         ᱰᱟᱭᱨᱤ ᱵᱮᱠᱟᱹᱯ ᱨᱮᱫ ᱠᱚ ᱥᱟᱫᱷᱚᱱ ᱠᱷᱚᱱ ᱢᱮᱴᱟᱣ ᱫᱟᱲᱮᱭᱟᱜ ᱨᱮᱭᱟᱜ ᱯᱷᱤᱪᱚᱨ ᱠᱚ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
     </string>
-    <string name="release_178">        
+    <string name="release_178">
         v1.4.112 / 2019.12.31\n
         ᱠᱮᱢᱨᱟ ᱮᱯ ᱤᱱᱴᱮᱜᱽᱨᱮᱥᱚᱱ ᱥᱟᱞᱟᱜ ᱛᱮ ᱰᱟᱭᱨᱤ ᱨᱮ ᱪᱤᱛᱟᱹᱨ ᱠᱚ ᱥᱮᱞᱮᱫ ᱫᱟᱲᱮᱭᱟᱜ ᱨᱮᱭᱟᱜ ᱯᱷᱤᱪᱟᱹᱨ ᱥᱮᱞᱮᱫ ᱮᱱᱟ\n
         ᱰᱟᱭᱨᱤ ᱰᱮᱥᱵᱽᱚᱰ ᱨᱮ ᱥᱩᱫᱷᱟᱹᱨ
     </string>
-    <string name="release_179">        
+    <string name="release_179">
         v1.4.113 / 2020.01.04\n
         ᱠᱮᱞᱮᱱᱰᱚᱨ ᱥᱠᱨᱤᱱ ᱨᱮ ᱢᱟᱦᱟ ᱵᱟᱪᱷᱟᱣᱤᱭᱟᱹ ᱵᱮᱵᱷᱟᱨ ᱠᱟᱛᱮ ᱢᱟᱦᱟ ᱦᱚᱞᱪᱚᱞ ᱯᱷᱟᱸᱠᱥᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
     </string>
-    <string name="release_180">        
+    <string name="release_180">
         v1.4.114 / 2020.01.15\n
         ᱰᱟᱭᱨᱤ ᱪᱤᱱᱦᱟᱹ ᱟᱭᱠᱚᱱ ᱥᱟᱹᱯᱚᱴ ᱮᱱᱟ\n
         ᱯᱷᱨᱮᱸᱪ ᱥᱟᱹᱯᱚᱴ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
     </string>
-    <string name="release_182">        
+    <string name="release_182">
         v1.4.116 / 2020.01.21\n
         ᱞᱟᱭᱥᱮᱱᱥ ᱯᱚᱞᱤᱥᱭ ᱫᱚ 「Apache License 2.0」 ᱠᱷᱚᱱ 「GNU General Public License v3.0」ᱛᱮ ᱵᱚᱫᱚᱞ ᱮᱱᱟ
     </string>
-    <string name="release_184">        
+    <string name="release_184">
         v1.4.118 / 2020.02.11\n
         [BETA] ᱯᱭᱨᱟᱹ ᱰᱟᱴᱟ ᱵᱮᱠᱟᱹᱯ ᱯᱷᱤᱪᱟᱹᱨ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
     </string>
-    <string name="release_185">        
+    <string name="release_185">
         v1.4.119 / 2020.02.15\n
         ᱰᱟᱭᱨᱤ ᱪᱤᱱᱦᱟᱹ ᱟᱭᱠᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
     </string>
-    <string name="release_186">        
+    <string name="release_186">
         v1.4.120 / 2020.02.19\n
         ᱰᱟᱭᱨᱤ ᱪᱤᱱᱦᱟᱹ ᱟᱭᱠᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ\n
         ᱰᱟᱭᱨᱤ ᱪᱤᱱᱦᱟᱹ ᱨᱮᱭᱟᱜ ᱵᱮᱵᱷᱟᱨ ᱠᱟᱛᱮ ᱥᱮᱸᱫᱽᱨᱟ ᱯᱷᱟᱸᱠᱥᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
     </string>
-    <string name="release_187">        
+    <string name="release_187">
         v1.4.121 / 2020.03.02\n
         ᱠᱮᱞᱮᱱᱰᱟᱹ ᱥᱠᱨᱤᱱ ᱨᱮᱭᱟᱜ ᱨᱟᱹᱯᱛᱟᱨ ᱠᱚ ᱥᱩᱫᱽᱷᱨᱟᱹᱣ ᱮᱱᱟ(ᱢᱟᱲᱟᱝ ᱥᱩᱫᱽᱷᱨᱟᱹᱣ)
     </string>
-    <string name="release_188">        
+    <string name="release_188">
         v1.4.122 / 2020.03.09\n
         [BETA] ᱰᱟᱴᱟ ᱨᱤᱠᱟᱹᱣᱨᱤ ᱯᱷᱤᱪᱚᱨ ᱥᱮᱞᱮᱫ ᱮᱱᱟ\n
         ᱰᱮᱥᱵᱚᱰ ᱥᱴᱟᱴᱤᱥᱴᱤᱠᱥ ᱨᱮ ᱛᱤᱱᱟᱹᱝ ᱜᱟᱱ ᱪᱤᱱᱦᱟᱹ ᱠᱚ ᱢᱟᱨᱟᱝ ᱧᱮᱞᱚᱜ ᱠᱟᱱ ᱛᱟᱦᱮᱸᱡ\n
         ᱠᱮᱞᱮᱱᱰᱟᱹᱨ ᱥᱠᱨᱤᱱ ᱨᱮᱭᱟᱜ ᱰᱟᱭᱨᱤ ᱞᱤᱥᱴ ᱨᱮ ᱥᱚᱨᱴ ᱚᱯᱥᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
     </string>
-    <string name="release_190">        
+    <string name="release_190">
         v1.4.124 / 2020.03.15\n
         ᱵᱮᱥᱤᱠ ᱥᱟᱡᱟᱣ ᱥᱠᱨᱤᱱ ᱠᱷᱚᱱ ᱵᱷᱮᱜᱟᱨ ᱨᱮ ᱪᱤᱠᱤ ᱥᱚᱢᱵᱚᱱᱫᱷᱤᱭᱚ ᱥᱟᱡᱟᱣ ᱚᱯᱥᱚᱱ ᱫᱚᱦᱚ ᱮᱱᱟ
     </string>
-    <string name="release_191">        
+    <string name="release_191">
         v1.4.125 / 2020.03.23\n
         ᱰᱟᱭᱨᱤ ᱥᱟᱯᱲᱟᱣ ᱥᱠᱨᱤᱱ ᱨᱮ ᱟᱫᱮᱨ ᱡᱷᱚᱜ ᱠᱚᱨᱥᱚᱨ ᱡᱟᱭᱜᱟ ᱥᱟᱡᱟᱣ ᱚᱯᱥᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ\n
         ᱡᱤᱱᱤᱥ ᱥᱟᱹᱢᱟᱨᱭ ᱧᱮᱞ ᱚᱯᱥᱚᱱ ᱨᱮ ᱡᱟᱹᱥᱛᱤ ᱱᱚᱢᱵᱚᱨ ᱞᱟᱹᱭᱤᱱᱠᱚ ᱨᱮᱭᱟ ᱯᱷᱟᱸᱠᱥᱚᱱ ᱠᱚ ᱥᱮᱞᱮᱫ ᱮᱱᱟ\n
         ᱠᱮᱞᱮᱱᱰᱚᱨ ᱥᱠᱨᱤᱱ ᱨᱮ ᱦᱟᱴ ᱨᱮᱭᱟᱜ ᱢᱟᱦᱟ ᱠᱚ ᱠᱟᱴᱚᱵ ᱤᱥᱩ ᱠᱚ ᱯᱷᱤᱠᱥ ᱮᱱᱟ
     </string>
-    <string name="release_192">        
+    <string name="release_192">
         v1.4.126 / 2020.04.05\n
         ᱯᱤᱱ ᱱᱚᱢᱵᱚᱨ ᱵᱮᱵᱷᱟᱨ ᱠᱟᱛᱮ ᱰᱟᱭᱨᱤ ᱮᱱᱠᱨᱤᱯᱥᱚᱱ ᱯᱷᱤᱪᱚᱨ ᱥᱮᱞᱮᱫ ᱮᱱᱟ\n
         Android 10 ᱨᱮ ᱟᱭᱢᱟᱼᱵᱟᱪᱷᱟᱣᱤᱭᱟᱹ ᱫᱚᱦᱚ ᱤᱥᱩ ᱠᱚ ᱴᱷᱤᱠ ᱞᱟᱹᱜᱤᱫ ᱠᱚᱢ ᱥᱚᱢᱚᱭ ᱞᱟᱹᱜᱤᱫ requestLegacyExternalStorage ᱚᱯᱥᱚᱱ ᱮᱢ ᱪᱷᱚ
     </string>
-    <string name="release_193">        
+    <string name="release_193">
         v1.4.127 / 2020.04.12\n
         requestLegacyExternalStorage ᱚᱯᱥᱚᱱ ᱚᱪᱚᱜ ᱮᱱᱟ\n
         SAF (Storage Access Framework) ᱨᱮᱭᱟᱜ ᱵᱮᱵᱷᱟᱨ ᱛᱮ ᱰᱟᱴᱟᱵᱮᱥ ᱨᱮᱫ ᱵᱮᱠᱟᱹᱯ ᱟᱨ ᱨᱤᱠᱟᱹᱣᱨᱤ ᱯᱷᱤᱪᱚᱨ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
     </string>
-    <string name="release_195">        
+    <string name="release_195">
         v1.4.129 / 2020.04.21\n
         ᱮᱱᱤᱢᱮᱴᱮᱰ GIF ᱨᱮᱫ ᱠᱚ ᱞᱟᱴᱷᱟ ᱨᱮᱭᱟᱜ ᱯᱷᱤᱚᱨ ᱥᱮᱞᱮᱫ ᱮᱱᱟ\n
         ᱰᱟᱭᱨᱤ ᱟᱭᱢᱟ ᱱᱚᱠᱚᱞ ᱟᱨ ᱢᱮᱴᱟᱣ ᱯᱷᱤᱪᱚᱨ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
     </string>
-    <string name="release_196">        
+    <string name="release_196">
         v1.4.130 / 2020.05.20\n
         ᱰᱟᱭᱨᱤ ᱥᱮᱰᱭᱩᱞ ᱥᱟᱡᱟᱣ ᱯᱷᱤᱪᱚᱨ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
     </string>
-    <string name="release_197">        
+    <string name="release_197">
         v1.4.131 / 2020.05.26\n
          Android 4.4 ᱵᱷᱟᱹᱨᱥᱚᱱ ᱨᱮ ᱥᱠᱨᱤᱱ ᱠᱚ ᱟᱡ ᱛᱮ ᱵᱚᱸᱫᱚᱜ ᱨᱮᱭᱟᱜ ᱦᱤᱲᱟᱹᱜ ᱠᱚ ᱴᱷᱤᱠ ᱮᱱᱟ
     </string>
-    <string name="release_198">        
+    <string name="release_198">
         v1.4.132 / 2020.05.31\n
-        ᱛᱷᱤᱢ ᱨᱚᱝ ᱵᱚᱫᱚᱞ ᱡᱷᱚᱜ ᱵᱩᱛᱟᱹᱢ ᱠᱚ ᱠᱟᱰ ᱧᱮᱞᱚᱜ ᱥᱟᱞᱟᱜ ᱵᱷᱤᱛᱨᱭ ᱨᱮ ᱛᱟᱦᱮᱸᱱ ᱠᱟᱱ ᱟᱨ ᱠᱟᱰᱣᱤᱣ ᱵᱽᱮᱠᱜᱽᱨᱟᱩᱸᱰ ᱨᱚᱝ ᱠᱚ ᱚᱱᱟ ᱨᱚᱝ ᱛᱮ ᱥᱮᱴ ᱮᱱᱟ 
+        ᱛᱷᱤᱢ ᱨᱚᱝ ᱵᱚᱫᱚᱞ ᱡᱷᱚᱜ ᱵᱩᱛᱟᱹᱢ ᱠᱚ ᱠᱟᱰ ᱧᱮᱞᱚᱜ ᱥᱟᱞᱟᱜ ᱵᱷᱤᱛᱨᱭ ᱨᱮ ᱛᱟᱦᱮᱸᱱ ᱠᱟᱱ ᱟᱨ ᱠᱟᱰᱣᱤᱣ ᱵᱽᱮᱠᱜᱽᱨᱟᱩᱸᱰ ᱨᱚᱝ ᱠᱚ ᱚᱱᱟ ᱨᱚᱝ ᱛᱮ ᱥᱮᱴ ᱮᱱᱟ
     </string>
-    <string name="release_199">        
+    <string name="release_199">
         v1.4.133 / 2020.06.02\n
         ᱥᱠᱨᱤᱱ ᱵᱽᱮᱠᱜᱽᱨᱟᱩᱸᱰ ᱨᱚᱝ ᱯᱩᱸᱰ ᱛᱮ ᱥᱮᱴ ᱡᱷᱚᱜ ᱠᱩᱞᱩᱯᱥᱠᱨᱤᱱ ᱟᱭᱠᱚᱱ ᱵᱟᱝ ᱧᱮᱞ ᱴᱷᱤᱠ ᱨᱮᱭᱟᱜ ᱤᱥᱩ ᱦᱚᱸ ᱴᱷᱤᱠ ᱮᱱᱟ
     </string>
-    <string name="release_200">        
+    <string name="release_200">
         v1.4.134 / 2020.06.14\n
         ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ (UX) ᱚᱯᱴᱤᱢᱟᱭᱡᱮᱥᱚᱱ
     </string>
-    <string name="release_201">        
+    <string name="release_201">
         v1.4.135 / 2020.06.18\n
         RTL ᱯᱟᱹᱨᱥᱤ ᱥᱟᱹᱯᱚᱴ ᱮᱱᱟ
     </string>
-    <string name="release_202">        
+    <string name="release_202">
         v1.4.136 / 2020.06.29\n
-        ᱰᱟᱭᱨᱤ ᱞᱤᱥᱴ ᱣᱤᱡᱽᱮᱭ ᱯᱷᱤᱪᱚᱨ ᱥᱮᱞᱮᱫ ᱮᱱᱟ 
+        ᱰᱟᱭᱨᱤ ᱞᱤᱥᱴ ᱣᱤᱡᱽᱮᱭ ᱯᱷᱤᱪᱚᱨ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
     </string>
-    <string name="release_203">        
+    <string name="release_203">
         v1.4.137 / 2020.07.05\n
         Google Play ᱨᱩᱠᱷᱤᱭᱟᱹ ᱱᱤᱛᱤ ᱮᱢ ᱪᱷᱚᱮᱱᱟ
     </string>
-    <string name="release_205">        
+    <string name="release_205">
         v1.4.139 / 2020.07.11\n
         ᱡᱩᱲᱟᱹᱣ ᱟᱠᱟᱱ Google ᱠᱷᱟᱛᱟᱟᱜ ᱵᱤᱵᱨᱚᱬ ᱠᱚ ᱫᱮᱠᱷᱟᱣ ᱨᱮᱭᱟᱜ ᱯᱷᱤᱪᱚᱨ ᱠᱚ ᱥᱮᱞᱮᱫ ᱮᱱᱟ \n
         ᱥᱮᱰᱭᱩᱞᱟᱹᱨ ᱛᱮ Google Drive ᱵᱮᱠᱟᱹᱯ ᱯᱷᱤᱪᱚᱨ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
     </string>
-    <string name="release_206">        
+    <string name="release_206">
         v1.4.140 / 2020.07.20\n
         ᱮᱯ ᱵᱚᱹ ᱡᱷᱚ ᱥᱮᱰᱭᱩᱞᱟᱹᱨ ᱵᱟᱝ ᱠᱟᱹᱢᱤᱮᱫ ᱵᱷᱩᱞ ᱠᱚ ᱴᱷᱤᱠ ᱮᱱᱟ
     </string>
-    <string name="release_207">        
+    <string name="release_207">
         v1.4.141 / 2020.08.03\n
         ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱮᱠᱥᱯᱤᱨᱤᱮᱱᱥ (UX) ᱚᱯᱴᱤᱢᱟᱭᱡᱮᱥᱚᱱ\n
         ᱯᱷᱨᱮᱸᱪ ᱛᱚᱨᱡᱚᱢᱟ ᱟᱹᱯᱰᱮᱴᱠᱚ
     </string>
-    <string name="release_209">        
+    <string name="release_209">
         v1.4.143 / 2020.08.26\n
         ᱥᱟᱡᱟᱣ ᱥᱠᱨᱤᱱ ᱨᱮ ᱟᱡ ᱛᱮ ᱛᱤᱱᱟᱹᱝ ᱜᱟᱱ ᱥᱟᱫᱷᱚᱱ ᱠᱚ ᱵᱚᱸᱫᱚᱜ ᱠᱟᱱᱟ ᱛᱟᱦᱮᱸᱡ ᱚᱱᱟ ᱠᱚ ᱴᱷᱤᱠ ᱮᱱᱟ
     </string>
-    <string name="release_211">        
+    <string name="release_211">
         v1.4.145 / 2020.09.04\n
         ᱡᱽᱟᱹᱨᱢᱟᱹᱱ ᱛᱚᱨᱡᱚᱢᱟ ᱟᱹᱯᱰᱮᱴ ᱮᱱᱟ
     </string>
-    <string name="release_212">        
+    <string name="release_212">
         v1.4.146 / 2020.09.10\n
         ᱡᱽᱟᱹᱨᱢᱟᱹᱱ ᱛᱚᱨᱡᱚᱢᱟ ᱟᱹᱯᱰᱮᱴ ᱮᱱᱟ\n
         ᱡᱟᱭᱜᱟ ᱵᱤᱵᱨᱚᱬ ᱫᱮᱠᱷᱟᱣ ᱚᱯᱥᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
     </string>
-    <string name="release_214">        
+    <string name="release_214">
         v1.4.148 / 2020.09.15\n
         ᱠᱟᱫᱢᱤ ᱪᱤᱱᱦᱟᱹ ᱥᱚᱨᱴᱤᱝ ᱚᱯᱥᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
     </string>
-    <string name="release_216">        
+    <string name="release_216">
         v1.4.150 / 2020.09.22\n
         ᱣᱤᱡᱮᱴ ᱴᱷᱤᱠ ᱥᱮ ᱵᱟᱝ ᱫᱮᱠᱷᱟᱣᱜ ᱠᱟᱱ ᱨᱮᱭᱜ ᱵᱷᱩᱞ ᱠᱚ ᱴᱷᱤᱠ ᱮᱱᱟ
     </string>
-    <string name="release_217">        
+    <string name="release_217">
         v1.4.151 / 2020.10.05\n
         ᱠᱮᱞᱮᱱᱰᱚᱨ ᱥᱠᱨᱤᱱ ᱨᱮ ᱰᱟᱭᱨᱤ ᱛᱮᱭᱟᱨ ᱵᱩᱛᱟᱹᱢ ᱠᱚ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
     </string>
-    <string name="release_218">        
+    <string name="release_218">
         v1.4.152 / 2020.10.19\n
         ᱨᱟᱹᱥᱤᱭᱟᱹᱱ ᱛᱚᱨᱡᱚᱢᱟ ᱟᱹᱯᱰᱮᱴ\n
         ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱮᱠᱥᱯᱤᱨᱤᱮᱱᱥ (UX) ᱚᱯᱴᱤᱢᱟᱭᱡᱮᱥᱚᱱ
     </string>
-    <string name="release_219">        
+    <string name="release_219">
         v1.4.153 / 2020.11.10\n
         ᱦᱤᱱᱫᱤ ᱛᱚᱨᱡᱮᱢᱟ ᱥᱮᱞᱮᱫ ᱮᱱᱟ\n
         ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱮᱠᱥᱯᱤᱨᱤᱮᱱᱥ (UX) ᱚᱯᱴᱤᱢᱟᱭᱡᱮᱥᱚᱱ
     </string>
-    <string name="release_220">        
+    <string name="release_220">
         v1.4.154 / 2020.11.28\n
         ᱰᱟᱭᱨᱤ ᱪᱤᱱᱦᱟᱹ ᱥᱮᱞᱮᱫᱮᱱᱟ\n
         ᱰᱮᱥᱵᱚᱰ ᱨᱮ ᱰᱟᱭᱨᱤ ᱪᱤᱱᱦᱟᱹ ᱵᱮᱵᱷᱟᱨ ᱨᱮᱭᱟᱜ ᱯᱷᱤᱞᱴᱚᱨ ᱠᱚ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
     </string>
-    <string name="release_221">        
+    <string name="release_221">
         v1.4.155 / 2020.12.14\n
         ᱰᱟᱭᱨᱤ ᱪᱤᱱᱦᱟᱹ ᱠᱚ ᱥᱮᱞᱮᱫ ᱮᱱᱟ\n
         ᱰᱟᱠᱼᱠᱟᱰ ᱛᱮᱭᱟᱨ ᱡᱷᱚᱜ, ᱯᱷᱟᱸᱠᱥᱚᱱ ᱫᱚ ᱞᱟᱦᱟ ᱦᱚᱪᱚ ᱠᱟᱱᱟ ᱚᱠᱟ ᱛᱮ ᱞᱟᱴᱷᱟ ᱟᱠᱟᱱ ᱪᱤᱛᱟᱹᱨ ᱠᱚ ᱱᱚᱠᱚᱞ ᱟᱨ ᱵᱟᱝ ᱯᱷᱤᱞᱴᱚᱨ ᱮᱢ ᱮᱢ ᱪᱷᱚ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ
     </string>
-    <string name="release_222">        
+    <string name="release_222">
         v1.4.156 / 2021.01.11\n
         ᱰᱟᱭᱨᱤ ᱪᱤᱱᱦᱟᱹ ᱥᱮᱞᱮᱫ ᱮᱱᱟ\n
         ᱠᱮᱞᱮᱱᱰᱚᱨ ᱥᱠᱨᱤᱱ UX ᱞᱟᱦᱟ ᱦᱚ ᱪᱷᱚ ᱮᱱᱟ
@@ -528,7 +528,11 @@
         v1.4.168 / 2021.06.10\n
         ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱮᱠᱥᱯᱤᱨᱤᱮᱱᱥ (UX) ᱚᱯᱴᱤᱢᱟᱭᱡᱮᱥᱚᱱ
     </string>
-    
+    <string name="release_235">
+        v1.4.169 / 2021.06.18\n
+        Spanish translation added
+    </string>
+
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
