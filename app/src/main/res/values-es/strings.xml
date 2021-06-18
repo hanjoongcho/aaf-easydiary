@@ -1,439 +1,439 @@
 <resources>
     <string name="app_name">Easy Diary</string>
-    <string name="common_create_seconds">Creation Seconds</string>
-    <string name="create_diary_title">Write Diary</string>
-    <string name="write_date">Date</string>
-    <string name="request_title_message">Please enter a title.</string>
-    <string name="request_content_message">Please enter your content.</string>
-    <string name="guide_message">Type or speak the title.</string>
-    <string name="contents_text_hint">Type or speak the contents.</string>
-    <string name="delete_photo_confirm_message">Are you sure you want to delete this photo?</string>
-    <string name="gallery_intent_not_found_message">The Gallery app is not installed or is disabled.</string>
-    <string name="create_diary_showcase_button_1">Next</string>
-    <string name="create_diary_showcase_button_2">Close</string>
-    <string name="create_diary_showcase_title_1">Weather</string>
-    <string name="create_diary_showcase_title_2">Title</string>
-    <string name="create_diary_showcase_title_3">Contents</string>
-    <string name="create_diary_showcase_title_4">Attach photo</string>
-    <string name="create_diary_showcase_title_5">Scale up font</string>
-    <string name="create_diary_showcase_title_6">Scale down font</string>
-    <string name="create_diary_showcase_title_7">Pick date</string>
-    <string name="create_diary_showcase_title_8">Pick time</string>
-    <string name="create_diary_showcase_title_9">Save</string>
-    <string name="create_diary_showcase_message_1">Select the weather for the diary creation time. Weather selection is not mandatory.</string>
-    <string name="create_diary_showcase_message_2">Type the title of the diary. Entering a subject is not mandatory.</string>
-    <string name="create_diary_showcase_message_3">Enter diaries, notes, summary notes, and more.</string>
-    <string name="create_diary_showcase_message_4">Attach a photo to the diary.</string>
-    <string name="create_diary_showcase_message_5">Enlarge the text used in the diary.</string>
-    <string name="create_diary_showcase_message_6">Reduce the font used in the diary.</string>
-    <string name="create_diary_showcase_message_7">Select the diary creation date. If you want to create a diary for the past date, you can change the date.</string>
-    <string name="create_diary_showcase_message_8">Select diary creation time. You can change the time if you want to create a diary for the last time.</string>
-    <string name="create_diary_showcase_message_9">Save the completed diary.</string>
-    <string name="read_diary_title">Search</string>
-    <string name="input_mode_a">Speech mode</string>
-    <string name="input_mode_c">Keypad mode</string>
-    <string name="guide_message_2">Type or speak the subject.</string>
-    <string name="recognizer_intent_not_found_message">The speech recognition module is not installed or is disabled.</string>
-    <string name="sample_diary_title_1">Be dangerous rather than careful.</string>
-    <string name="sample_diary_title_2">I repeat what I know when I speak.</string>
-    <string name="sample_diary_title_3">The more bad news we hear, the more we should be happy.</string>
-    <string name="sample_diary_title_4">Abundance calls comfort, constraint calls creativity.</string>
-    <string name="sample_diary_1">When you look back at your past life, you will surely know that you have been damaging your life because you are too careful not to be in danger.\nDanger of danger.\nDanger rather than being careful.\n- Grant money, In the law of</string>
-    <string name="sample_diary_2">When you talk, you are only repeating what you already know.\nBut if you listen, you may learn something new.\n-The Dalai Lama</string>
-    <string name="sample_diary_3">It is the bad news that you need to hear most as a leader. \nThe good news is good tomorrow, but the bad news will be worse tomorrow. \nThis is because even if the facts are heartbreaking, That\'s why it\'s safe to say. \n- Eric Schmidt, President of Google, \"How does Google work?\"</string>
-    <string name="sample_diary_4">Constraints are not a barrier to creativity, but creativity is used to overcome constraints. \nAll great works or creative solutions are those that have a lot of time constraints, physical constraints, and resource constraints. Creativity is born in a constrained environment. \n- Representative Kim Bong-Jin</string>
-    <string name="read_diary_showcase_button_1">Next</string>
-    <string name="read_diary_showcase_button_2">Close</string>
-    <string name="read_diary_showcase_title_1">Write diary</string>
-    <string name="read_diary_showcase_title_2">Search</string>
-    <string name="read_diary_showcase_title_3">Speech recognition</string>
-    <string name="read_diary_showcase_title_4">Calendar</string>
-    <string name="read_diary_showcase_title_5">Timeline</string>
-    <string name="read_diary_showcase_title_6">Chart</string>
-    <string name="read_diary_showcase_title_7">Advanced setting</string>
-    <string name="read_diary_showcase_title_8">View diary</string>
-    <string name="read_diary_showcase_message_1">You can create various diaries such as diary, memo, summary note, etc. according to the flow of time.</string>
-    <string name="read_diary_showcase_message_2">You can search for diaries using keywords. When a keyword is entered, the matching diary is searched and the keyword is highlighted.</string>
-    <string name="read_diary_showcase_message_3">You can use the speech recognition feature to enter search keywords without a keypad.</string>
-    <string name="read_diary_showcase_message_4">The created diary can be collected by date using the calendar.</string>
-    <string name="read_diary_showcase_message_5">The created diary is provided as a timeline.</string>
-    <string name="read_diary_showcase_message_6">You can view charts of diary entries for the entire period.</string>
-    <string name="read_diary_showcase_message_7">You can use advanced settings to change fonts, set lock number, backup and restore diary.</string>
-    <string name="read_diary_showcase_message_8">Click the diary card in the list to view the diary.</string>
-    <string name="diary_photo_migration_message">The image attachment method of the EasyDiary is changed so that the existing link information is compressed and stored in the EasyDiary folder.\nPlease wait for the operation to finish.</string>
-    <string name="read_diary_detail_title">Read Diary</string>
-    <string name="delete_confirm">Are you sure you want to delete?</string>
-    <string name="read_diary_detail_showcase_button_1">Next</string>
-    <string name="read_diary_detail_showcase_button_2">Close</string>
-    <string name="read_diary_detail_showcase_title_0">Diary View</string>
-    <string name="read_diary_detail_showcase_title_1">Move page</string>
-    <string name="read_diary_detail_showcase_title_2">Edit diary</string>
+    <string name="common_create_seconds">Segundos</string>
+    <string name="create_diary_title">Escribir diario</string>
+    <string name="write_date">Fecha</string>
+    <string name="request_title_message">Ingrese un título.</string>
+    <string name="request_content_message">Ingrese su contenido.</string>
+    <string name="guide_message">Escriba o dicte el título.</string>
+    <string name="contents_text_hint">Escriba o dicte el contenido.</string>
+    <string name="delete_photo_confirm_message">¿Estás seguro de que quieres eliminar esta foto?</string>
+    <string name="gallery_intent_not_found_message">La aplicación Galería no está instalada o está deshabilitada.</string>
+    <string name="create_diary_showcase_button_1">Siguiente</string>
+    <string name="create_diary_showcase_button_2">Cerrar</string>
+    <string name="create_diary_showcase_title_1">Tiempo</string>
+    <string name="create_diary_showcase_title_2">Título</string>
+    <string name="create_diary_showcase_title_3">Contenido</string>
+    <string name="create_diary_showcase_title_4">Adjuntar foto</string>
+    <string name="create_diary_showcase_title_5">Ampliar fuente</string>
+    <string name="create_diary_showcase_title_6">Reducir fuente</string>
+    <string name="create_diary_showcase_title_7">Seleccionar fecha</string>
+    <string name="create_diary_showcase_title_8">Seleccionar tiempo</string>
+    <string name="create_diary_showcase_title_9">Guardar</string>
+    <string name="create_diary_showcase_message_1">Seleccione el clima para la hora de creación del diario. La selección del clima no es obligatoria.</string>
+    <string name="create_diary_showcase_message_2">Escriba el título del diario. No es obligatorio ingresar un tema.</string>
+    <string name="create_diary_showcase_message_3">Ingrese diarios, notas, resumen y más.</string>
+    <string name="create_diary_showcase_message_4">Adjunte una foto al diario.</string>
+    <string name="create_diary_showcase_message_5">Amplíe la fuente utilizada en el diario.</string>
+    <string name="create_diary_showcase_message_6">Reduzca la fuente utilizada en el diario.</string>
+    <string name="create_diary_showcase_message_7">Seleccione la fecha de creación del diario. Si desea crear un diario para una fecha pasada, puede cambiar la fecha.</string>
+    <string name="create_diary_showcase_message_8">Seleccione la hora de creación del diario. Puede cambiar la hora si desea crear un diario por última vez.</string>
+    <string name="create_diary_showcase_message_9">Guardar diario completo.</string>
+    <string name="read_diary_title">Buscar</string>
+    <string name="input_mode_a">Modo dictado</string>
+    <string name="input_mode_c">Modo teclado</string>
+    <string name="guide_message_2">Escriba o dicte el tema.</string>
+    <string name="recognizer_intent_not_found_message">La función de reconocimiento de voz no está instalado o está desactivado.</string>
+    <string name="sample_diary_title_1">Sé peligroso en lugar de cuidadoso.</string>
+    <string name="sample_diary_title_2">Las palabras pueden contra gigantes.</string>
+    <string name="sample_diary_title_3">Cuantas más malas noticias escuchemos, más felices deberíamos estar.</string>
+    <string name="sample_diary_title_4">La abundancia llama comodidad, la restricción llama creatividad.</string>
+    <string name="sample_diary_1">Cuando mire hacia atrás en su vida pasada, seguramente sabrá que ha estado dañando su vida porque tiene mucho cuidado de no estar en peligro. \nPeligro de peligro. \nPeligro en lugar de tener cuidado. \n- Concede dinero, En la ley de</string>
+    <string name="sample_diary_2">Cuando hablas, solo estás repitiendo lo que ya sabes.\nPero si escuchas, puedes aprender algo nuevo.\n-The Dalai Lama</string>
+    <string name="sample_diary_3">Son las malas noticias las que más necesitas escuchar como líder. \nLas buenas noticias son buenas mañana, pero las malas noticias serán peores mañana. \nEsto se debe a que incluso si los hechos son desgarradores, es por eso que es seguro decirlo. \n- Eric Schmidt, Presidente de google, \"¿Cómo funciona Google?\"</string>
+    <string name="sample_diary_4">Las limitaciones no son una barrera para la creatividad, pero la creatividad se utiliza para superarlas. \nTodas las grandes obras o soluciones creativas son aquellas que tienen muchas limitaciones de tiempo, limitaciones físicas y limitaciones de recursos. La creatividad nace en un entorno restringido. \n- Representante Kim Bong-Jin</string>
+    <string name="read_diary_showcase_button_1">Siguiente</string>
+    <string name="read_diary_showcase_button_2">Cerrar</string>
+    <string name="read_diary_showcase_title_1">Escribir diario</string>
+    <string name="read_diary_showcase_title_2">Buscar</string>
+    <string name="read_diary_showcase_title_3">Reconocimiento de voz</string>
+    <string name="read_diary_showcase_title_4">Calendario</string>
+    <string name="read_diary_showcase_title_5">Cronología</string>
+    <string name="read_diary_showcase_title_6">Gráfico</string>
+    <string name="read_diary_showcase_title_7">Configuración avanzada</string>
+    <string name="read_diary_showcase_title_8">Ver diario</string>
+    <string name="read_diary_showcase_message_1">Puede crear varios diarios como diario, notas, resumen, etc. de acuerdo con el flujo del tiempo.</string>
+    <string name="read_diary_showcase_message_2">Puede buscar en los diarios utilizando palabras clave. Cuando se ingresa una palabra clave, se busca en el diario correspondiente y se resalta la palabra clave.</string>
+    <string name="read_diary_showcase_message_3">Puede usar la función de reconocimiento de voz para ingresar palabras clave de búsqueda sin un teclado.</string>
+    <string name="read_diary_showcase_message_4">El diario creado se puede recopilar por fecha utilizando el calendario.</string>
+    <string name="read_diary_showcase_message_5">El diario creado se proporciona como una línea de tiempo.</string>
+    <string name="read_diary_showcase_message_6">Puede ver gráficos de las entradas del diario para todo el período.</string>
+    <string name="read_diary_showcase_message_7">Puede utilizar la configuración avanzada para cambiar las fuentes, establecer el número de bloqueo, hacer una copia de seguridad y restaurar el diario.</string>
+    <string name="read_diary_showcase_message_8">Haga clic en la tarjeta del diario en la lista para ver el diario.</string>
+    <string name="diary_photo_migration_message">El método de adjuntar imágenes de EasyDiary se cambia para que la información del enlace existente se comprima y se almacene en la carpeta EasyDiary. \nEspere a que finalice la operación.</string>
+    <string name="read_diary_detail_title">Leer Diario</string>
+    <string name="delete_confirm">¿Estás seguro de que quieres eliminar?</string>
+    <string name="read_diary_detail_showcase_button_1">Siguiente</string>
+    <string name="read_diary_detail_showcase_button_2">Cerrar</string>
+    <string name="read_diary_detail_showcase_title_0">Ver Diario</string>
+    <string name="read_diary_detail_showcase_title_1">Mover página</string>
+    <string name="read_diary_detail_showcase_title_2">Editar diario</string>
     <string name="read_diary_detail_showcase_title_3">TTS</string>
     <string name="read_diary_detail_showcase_title_4">Postcard</string>
-    <string name="read_diary_detail_showcase_title_5">Delete diary</string>
-    <string name="read_diary_detail_showcase_message_0">Browse the saved diary. You can modify a saved diary or create a diary card by specifying a custom color.</string>
-    <string name="read_diary_detail_showcase_message_1">Drag the screen left or right to view diaries created before or after.</string>
-    <string name="read_diary_detail_showcase_message_2">You can go to the diary editing screen to edit the diary being viewed.</string>
-    <string name="read_diary_detail_showcase_message_3">You can listen to the diary text by voice using the Google TTS feature.</string>
-    <string name="read_diary_detail_showcase_message_4">Use the diary to create post cards and share them with others.</string>
-    <string name="read_diary_detail_showcase_message_5">You can delete the current diary and go to the search screen.</string>
-    <string name="update_diary_title">Edit Diary</string>
-    <string name="back_pressed_confirm">Click the \'OK\' button to go to the previous screen without saving the current diary.</string>
-    <string name="rate_app">Rate App</string>
-    <string name="guide_message_3">Insufficient permission for the request feature.</string>
-    <string name="restore_diary">Recover diary</string>
-    <string name="restore_diary_summary">Recover all content except attachments using data backed up to Google Drive.</string>
-    <string name="restore_photo">Recover diary photos(Manual)</string>
-    <string name="restore_photo_summary">Users directly recover photos attached to the diary.</string>
-    <string name="backup_diary">Backup diary</string>
-    <string name="backup_diary_summary">Back up all content except attachments to Google Drive.</string>
-    <string name="font_setting">Font setting</string>
-    <string name="add_ttf_fonts_title">Add TTF font</string>
-    <string name="add_ttf_fonts_summary">Add your own TTF fonts to the Easy Diary.\nIf the fonts are added, you can use the added fonts with the built-in fonts.\nWhen you select a TTF file using the file explorer, the font is automatically registered in Easy Diary and activated in the font setting menu.</string>
+    <string name="read_diary_detail_showcase_title_5">Eliminar diario</string>
+    <string name="read_diary_detail_showcase_message_0">Explore el diario guardado. Puede modificar un diario guardado o crear una tarjeta de diario especificando un color personalizado.</string>
+    <string name="read_diary_detail_showcase_message_1">Arrastre la pantalla hacia la izquierda o hacia la derecha para ver los diarios creados antes o después.</string>
+    <string name="read_diary_detail_showcase_message_2">Puede ir a la pantalla de edición del diario para editar el diario que está viendo.</string>
+    <string name="read_diary_detail_showcase_message_3">Puede escuchar el texto del diario por voz utilizando la función Google TTS.</string>
+    <string name="read_diary_detail_showcase_message_4">Utilice el diario para crear postcards y compartirlas con otros.</string>
+    <string name="read_diary_detail_showcase_message_5">Puedes eliminar el diario actual e ir a la pantalla de búsqueda.</string>
+    <string name="update_diary_title">Editar Diario</string>
+    <string name="back_pressed_confirm">Haga clic en el botón \'OK \' para ir a la pantalla anterior sin guardar el diario actual.</string>
+    <string name="rate_app">Calificar aplicacion</string>
+    <string name="guide_message_3">Permiso insuficiente para la función de solicitud.</string>
+    <string name="restore_diary">Recuperar diario</string>
+    <string name="restore_diary_summary">Recupere todo el contenido, excepto los archivos adjuntos, utilizando datos respaldados en Google Drive.</string>
+    <string name="restore_photo">Recuperar fotos del diario (manual)</string>
+    <string name="restore_photo_summary">Los usuarios recuperan directamente las fotos adjuntas al diario.</string>
+    <string name="backup_diary">Copia de seguridad del diario</string>
+    <string name="backup_diary_summary">Realice una copia de seguridad de todo el contenido excepto los archivos adjuntos a Google Drive.</string>
+    <string name="font_setting">Configuración de fuente</string>
+    <string name="add_ttf_fonts_title">Agregar fuente TTF</string>
+    <string name="add_ttf_fonts_summary">Agregue sus propias fuentes TTF a Easy Diary.\nSi se agregan las fuentes, puede usar las fuentes agregadas con las fuentes integradas.\nCuando selecciona un archivo TTF con el explorador de archivos, la fuente se registra automáticamente en Easy Diary y se activa en el menú de configuración de fuentes.</string>
     <string name="add_ttf_fonts_info_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/MANUAL.md</string>
-    <string name="diary_search_keyword_case_sensitive_title">Case sensitive</string>
-    <string name="diary_search_keyword_case_sensitive_summary">When the option is activated, it checks whether the diary matches case.</string>
-    <string name="setting_primary_color_title">Theme</string>
-    <string name="setting_primary_color_summary">Set the primary color of the application.</string>
-    <string name="pick_text_color_guide_message">The current version only supports theme color changes.\nText color changes will be available in the future.</string>
-    <string name="pick_background_color_guide_message">The current version only supports theme color changes.\nBackground color changes will be available in the future.</string>
+    <string name="diary_search_keyword_case_sensitive_title">Distingue mayúsculas y minúsculas</string>
+    <string name="diary_search_keyword_case_sensitive_summary">Cuando la opción está activada, comprueba si el diario coincide con el texto.</string>
+    <string name="setting_primary_color_title">Tema</string>
+    <string name="setting_primary_color_summary">Establezca el color primario de la aplicación.</string>
+    <string name="pick_text_color_guide_message">La versión actual solo admite el cambio de color del tema.\nLos cambios de color del texto estarán disponibles en el futuro.</string>
+    <string name="pick_background_color_guide_message">La versión actual solo admite el cambio de color del tema.\nLos cambios de color de fondo estarán disponibles en el futuro.</string>
     <string name="easy_photo_map_title">Easy PhotoMap</string>
-    <string name="easy_photo_map_summary">Easy Photo Map is a photomap application that displays the location of the photo on the map using the location information included in the photo.</string>
+    <string name="easy_photo_map_summary">Easy Photo Map es una aplicación de fotomapa que muestra la ubicación de la foto en el mapa utilizando la información de ubicación incluida en la foto.</string>
     <string name="easy_password_title">Easy Password</string>
-    <string name="easy_password_summary">Easy Password is an application that helps you manage passwords used for login, document security, door lock, lock, credit card, account management, etc. by using one pattern lock set by the user.</string>
-    <string name="font_line_spacing">Font line spacing</string>
-    <string name="font_line_spacing_summary">Change the line spacing of the font to the set ratio.</string>
-    <string name="calendar_title">Calendar</string>
-    <string name="guide_message_4">There is no diary created on that day.</string>
-    <string name="bar_chart_title">Chart</string>
-    <string name="bar_chart_status">Time Diary Creation Status</string>
-    <string name="range_a">0h~3h</string>
-    <string name="range_b">4h~7h</string>
-    <string name="range_c">8h~11h</string>
-    <string name="range_d">12h~15h</string>
-    <string name="range_e">16h~19h</string>
-    <string name="range_f">20h~23h</string>
-    <string name="range_g">1h~24h</string>
-    <string name="write_time">write time</string>
-    <string name="write_count">write count</string>
-    <string name="unlock_guide_message">Please enter your lock number</string>
-    <string name="photo_view_error_info">No photos found.\nAttached photos from Gallery may have been deleted or moved.</string>
-    <string name="diary_card_export_info">Diary card saved path</string>
-    <string name="diary_card_share_info">Share diary card</string>
-    <string name="diary_card_export_error_message">An error occurred while generating the diary card. Please try again.</string>
-    <string name="post_card_showcase_button_1">Next</string>
-    <string name="post_card_showcase_button_2">Close</string>
-    <string name="post_card_showcase_title_0">Diary Post Card</string>
-    <string name="post_card_showcase_title_1">Text color</string>
-    <string name="post_card_showcase_title_2">Background color</string>
-    <string name="post_card_showcase_title_3">Create postcard</string>
-    <string name="post_card_showcase_title_4">Share postcard</string>
-    <string name="post_card_showcase_title_5">Exit Editing</string>
-    <string name="post_card_showcase_message_0">You can use the saved diary to create and save custom postcards.</string>
-    <string name="post_card_showcase_message_1">Change the postcard text color. You can select the desired color using the color picker.</string>
-    <string name="post_card_showcase_message_2">Change the postcard background color. You can select the desired color using the color picker.</string>
-    <string name="post_card_showcase_message_3">Postcard created can be saved as image files.</string>
-    <string name="post_card_showcase_message_4">Postcard created can be shared with friends. Share your postcard with email, mms, messenger, and more.</string>
-    <string name="post_card_showcase_message_5">Exit the postcard editing screen and return to the previous screen.</string>
-    <string name="timeline_title">Timeline</string>
-    <string name="postcard_viewer_title">Diary Postcard</string>
-    <string name="postcard_viewer_no_cards_saved">No saved diary post card.</string>
-    <string name="google_drive_connect_message">Google Drive in sync…</string>
+    <string name="easy_password_summary">Easy Password es una aplicación que le ayuda a administrar las contraseñas utilizadas para el inicio de sesión, la seguridad de los documentos, la cerradura de la puerta, la cerradura, la tarjeta de crédito, la administración de cuentas, etc. mediante el uso de un patrón de bloqueo establecido por el usuario.</string>
+    <string name="font_line_spacing">Espaciado de línea de fuente</string>
+    <string name="font_line_spacing_summary">Cambie el interlineado de la fuente a la proporción establecida.</string>
+    <string name="calendar_title">Calendario</string>
+    <string name="guide_message_4">No hay un diario creado ese día.</string>
+    <string name="bar_chart_title">Gráfico</string>
+    <string name="bar_chart_status">Estado de creación del diario de tiempo</string>
+    <string name="range_a">0h-3h</string>
+    <string name="range_b">4h-7h</string>
+    <string name="range_c">8h-11h</string>
+    <string name="range_d">12h-15h</string>
+    <string name="range_e">16h-19h</string>
+    <string name="range_f">20h-23h</string>
+    <string name="range_g">1h-24h</string>
+    <string name="write_time">Tiempo de escritura</string>
+    <string name="write_count">Conteo</string>
+    <string name="unlock_guide_message">Ingrese su número de bloqueo</string>
+    <string name="photo_view_error_info">No se encontraron fotos.\nEs posible que las fotos adjuntas de la Galería se hayan eliminado o movido.</string>
+    <string name="diary_card_export_info">Ruta guardada de la tarjeta de diario</string>
+    <string name="diary_card_share_info">Compartir tarjeta de diario</string>
+    <string name="diary_card_export_error_message">Se produjo un error al generar la tarjeta de diario. Inténtalo de nuevo.</string>
+    <string name="post_card_showcase_button_1">Siguiente</string>
+    <string name="post_card_showcase_button_2">Cerrar</string>
+    <string name="post_card_showcase_title_0">Postal del Diario</string>
+    <string name="post_card_showcase_title_1">Color de texto</string>
+    <string name="post_card_showcase_title_2">Color de fondo</string>
+    <string name="post_card_showcase_title_3">Crear postal</string>
+    <string name="post_card_showcase_title_4">Compartir postal</string>
+    <string name="post_card_showcase_title_5">Salir de la edición</string>
+    <string name="post_card_showcase_message_0">Puede utilizar el diario guardado para crear y guardar postales personalizadas.</string>
+    <string name="post_card_showcase_message_1">Cambia el color del texto de la postal. Puede seleccionar el color deseado con el selector de colores.</string>
+    <string name="post_card_showcase_message_2">Cambia el color de fondo de la postal. Puede seleccionar el color deseado con el selector de colores.</string>
+    <string name="post_card_showcase_message_3">La postal creada se puede guardar como archivos de imagen.</string>
+    <string name="post_card_showcase_message_4">La postal creada se puede compartir con amigos. Comparta su postal con correo electrónico, mms, messenger y más.</string>
+    <string name="post_card_showcase_message_5">Salga de la pantalla de edición de postales y regrese a la pantalla anterior.</string>
+    <string name="timeline_title">Cronología</string>
+    <string name="postcard_viewer_title">Postal del diario</string>
+    <string name="postcard_viewer_no_cards_saved">No hay postal guardada en el diario.</string>
+    <string name="google_drive_connect_message">Google Drive sincronizado…</string>
     <string name="diary_count"></string>
-    <string name="menu_calendar">Calendar</string>
-    <string name="menu_chart">Statistics</string>
-    <string name="menu_timeline">Timeline</string>
-    <string name="post_card">Diary Postcard</string>
-    <string name="menu_delete">Delete</string>
+    <string name="menu_calendar">Calendario</string>
+    <string name="menu_chart">Estadísticas</string>
+    <string name="menu_timeline">Cronología</string>
+    <string name="post_card">Postal del diario</string>
+    <string name="menu_delete">Eliminar</string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.41 here.                                                      -->
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
-    <string name="preferences_category_settings">Application Settings</string>
-    <string name="preferences_category_information">Application Information</string>
-    <string name="preferences_information_licenses">Open Source Licenses</string>
-    <string name="preferences_information_licenses_summary">Open source software notices</string>
-    <string name="preferences_category_aaf">AAF Easy Series</string>
-    <string name="invite_friends">Invite friends</string>
-    <string name="invite_friends_summary">Share the %s application with your friends.</string>
+    <string name="preferences_category_settings">Configuraciones de la aplicación</string>
+    <string name="preferences_category_information">Información de la aplicación</string>
+    <string name="preferences_information_licenses">Licencias de código abierto</string>
+    <string name="preferences_information_licenses_summary">Avisos de software de código abierto</string>
+    <string name="preferences_category_aaf">Serie AAF Easy</string>
+    <string name="invite_friends">Invitar amigos</string>
+    <string name="invite_friends_summary">Comparta la application %s con sus amigos.</string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Release notes here.                                                      -->
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <string name="release_103">
         v1.4.41 / 2018.05.28\n
-        Fixed a bug that abnormally terminated in Postcard browse mode when there is no working directory
+        Se corrigió un error que terminaba de manera anormal en el modo de exploración de postales cuando no había un directorio de trabajo
     </string>
     <string name="release_105">
         v1.4.42 / 2018.06.27\n
-        User Experience (UX) Optimization
+        Optimización de la experiencia del usuario (UX)
     </string>
     <string name="release_110">
         v1.4.47 / 2018.08.29\n
-        Added post card deletion function
+        Función de eliminación de postal agregada
     </string>
     <string name="release_114">
         v1.4.51 / 2018.09.29\n
-        AAF common module update\n
-        Change app packaging environment to Android 9 Pie
+        Actualización del módulo común AAF\n
+        Cambiar el entorno de empaquetado de la aplicación a Android 9 Pie
     </string>
     <string name="release_116">
         v1.4.53 / 2018.10.13\n
-        Added preview photo size setting function\n
-        Added preview photo toggle function(fold or unfold)
+        Se agregó la función de configuración del tamaño de la foto de vista previa\n
+        Se agregó la función de alternancia de la foto de vista previa (plegar o desplegar)
     </string>
     <string name="release_118">
         v1.4.55 / 2018.11.01\n
-        Improving the time expression of diary writing\n
-        Boldface setting function added to diary title and timeline time information
+        Mejorar la expresión temporal de la escritura de un diario.\n
+        Función de configuración en negrita agregada al título del diario y a la información de tiempo de la línea de tiempo
     </string>
     <string name="release_120">
         v1.4.57 / 2018.11.12\n
-        Added multi-picker setting function to attach multiple pictures at one time
+        Se agregó la función de configuración de selector múltiple para adjuntar varias imágenes a la vez
     </string>
     <string name="release_126">
         v1.4.63 / 2018.11.25\n
-        Added attached photos backup and recovery function using Google Drive
+        Se agregó la función de copia de seguridad y recuperación de fotos adjuntas usando Google Drive
     </string>
     <string name="release_128">
         v1.4.65 / 2018.12.19\n
-        Added lock function using fingerprint sensor
+        Función de bloqueo agregada mediante sensor de huellas dactilares
     </string>
     <string name="release_130">
         v1.4.67 / 2019.01.01\n
-        Improved the ability to view attached photos on the postcard screen
+        Se mejoró la capacidad de ver fotos adjuntas en la pantalla de la postal.
     </string>
     <string name="release_131">
         v1.4.68 / 2019.01.06\n
-        Solved security considerations for some items that are reported with low confidence in Sophos vaccine(Notification listener, Trigger installation)\n
-        Add Postcard font size adjustment function
+        Consideraciones de seguridad resueltas para algunos elementos que se informan con poca confianza en la vacuna de Sophos (escucha de notificaciones, instalación de activación)\n
+        Agregar función de ajuste de tamaño de fuente de postal
     </string>
     <string name="release_132">
         v1.4.69 / 2019.01.16\n
-        User Experience (UX) Optimization\n
-        Fixed an error that screen transition is not normal in Android 9 Pie version\n
-        Add timeline diary creation button
+        Optimización de la experiencia del usuario (UX)\n
+        Se corrigió un error que indicaba que la transición de pantalla no era normal en la versión de Android 9 Pie.\n
+        Agregar botón de creación de diario de línea de tiempo
     </string>
     <string name="release_133">
         v1.4.70 / 2019.01.25\n
-        Added option to view summary of diary content
+        Opción agregada para ver el resumen del contenido del diario
     </string>
     <string name="release_134">
         v1.4.71 / 2019.01.26\n
-        Fixed an error that the application terminated abnormally when changing device fingerprint information
+        Se corrigió un error que causaba que la aplicación terminara de manera anormal al cambiar la información de la huella digital del dispositivo.
     </string>
     <string name="release_136">
         v1.4.73 / 2019.02.11\n
-        Improved the ability to correct input digits when PIN is set and unlocked
+        Se mejoró la capacidad de corregir los dígitos de entrada cuando el PIN está configurado y desbloqueado
     </string>
     <string name="release_137">
         v1.4.74 / 2019.03.06\n
-        Improved the ability to apply filters to postcard images\n
-        Added ability to export diary to Excel file
+        Se mejoró la capacidad de aplicar filtros a las imágenes de postales.\n
+        Se agregó la capacidad de exportar el diario a un archivo de Excel.
     </string>
     <string name="release_138">
         v1.4.75 / 2019.03.22\n
-        Add application-specific information pages, including FAQs and privacy policies\n
-        Improved pin and fingerprint unlock toggle
+        Agregue páginas de información específicas de la aplicación, incluidas las preguntas frecuentes y las políticas de privacidad\n
+        Alternancia mejorada de desbloqueo de pin y huella digital
     </string>
     <string name="release_139">
         v1.4.76 / 2019.04.24\n
-        Add 50 kinds of diary symbol icons
+        50 tipos de iconos de símbolo de diario nuevos
     </string>
     <string name="release_140">
         v1.4.77 / 2019.05.11\n
-        Add diary symbols and apply categories
+        Agregado símbolos de diario y aplicar categorías
     </string>
     <string name="release_141">
         v1.4.78 / 2019.05.13\n
-        Fixed an error that ended abnormally if some function of the setting screen does not have access to device storage
+        Se corrigió un error que terminaba de manera anormal si alguna función de la pantalla de configuración no tenía acceso al almacenamiento del dispositivo.
     </string>
     <string name="release_143">
         v1.4.80 / 2019.06.07\n
-        Changed Google Drive Android API to Google Drive REST API (Google Drive Android API will be shut down on December 6, 2019)
+        Se cambió la API de Android de Google Drive a la API de REST de Google Drive (la API de Android de Google Drive se cerrará el 6 de diciembre de 2019)
     </string>
     <string name="release_147">
         v1.4.83 / 2019.06.09\n
-        Apply Android App Bundle to reduce and optimize installation file size
+        Aplicar Android App Bundle para reducir y optimizar el tamaño del archivo de instalación
     </string>
     <string name="release_149">
         v1.4.84 / 2019.06.15\n
-        Improved diary statistics
+        Estadísticas de diario mejoradas
     </string>
     <string name="release_150">
         v1.4.85 / 2019.06.18\n
-        Google Drive(REST API) user rights acquisition error correction
+        Corrección de errores de adquisición de derechos de usuario de Google Drive (API REST)
     </string>
     <string name="release_151">
         v1.4.86 / 2019.06.19\n
-        Google Drive(REST API) Recovering photos with diary Fixing errors
+        Google Drive (API REST) Recuperación de fotos con diario Corrección de errores
     </string>
     <string name="release_152">
         v1.4.87 / 2019.06.20\n
-        Fixed authentication token error for users authenticated to use Google Drive in v1.4.80 earlier
+        Se corrigió el error de token de autenticación para los usuarios autenticados para usar Google Drive en v1.4.80 antes
     </string>
     <string name="release_154">
         v1.4.88 / 2019.07.16\n
-        Migrated Android support library to AndroidX version\n
-        Add diary symbol icon
+        Biblioteca de soporte de Android migrada a la versión de AndroidX\n
+        Agregado icono de símbolo de diario
     </string>
     <string name="release_157">
         v1.4.91 / 2019.08.12\n
-        Added backup and recovery function using device storage\n
-        Fixed an issue that caused some text to be truncated on calendars on some devices
+        Función de copia de seguridad y recuperación agregada usando el almacenamiento del dispositivo\n
+        Se solucionó un problema que causaba que se truncara parte del texto en los calendarios de algunos dispositivos.
     </string>
     <string name="release_159">
         v1.4.93 / 2019.08.29\n
-        User Experience (UX) Optimization\n
-        Bug fixes that crash abnormally when entering the configuration screen on older OS
+        Optimización de la experiencia del usuario (UX)\n
+        Correcciones de errores que se bloquean de forma anormal al ingresar a la pantalla de configuración en sistemas operativos más antiguos
     </string>
     <string name="release_160">
         v1.4.94 / 2019.09.03\n
-        Added calendar weekday start setting\n
-        Fixed an issue that prevented the calendar from showing in tablet landscape
+        Se agregó la configuración de inicio del día de la semana del calendario\n
+        Se solucionó un problema que impedía que el calendario se mostrara en el paisaje de la tableta.
     </string>
     <string name="release_163">
         v1.4.97 / 2019.09.17\n
-        Improved timeline search filter\n
-        Diary copy function added
+        Filtro de búsqueda de línea de tiempo mejorado\n
+        Función de copia de diario agregada
     </string>
     <string name="release_165">
         v1.4.99 / 2019.09.26\n
-        Diary text counting function added
+        Se agregó la función de conteo de texto del diario
     </string>
     <string name="release_167">
         v1.4.101 / 2019.10.03\n
-        Respond to Android 10 storage access issues (targetSdkVersion temporary downgrade to avoid scoped storage policy)
+        Responder a problemas de acceso al almacenamiento de Android 10 (degradación temporal de targetSdkVersion para evitar la política de almacenamiento de ámbito)
     </string>
     <string name="release_169">
         v1.4.103 / 2019.10.09\n
-        Change storage location and migrate to respond to Android 10 Scoped Storage policies
+        Cambiar la ubicación de almacenamiento y migrar para responder a las políticas de almacenamiento con alcance de Android 10
     </string>
     <string name="release_170">
         v1.4.104 / 2019.10.19\n
-        Added calendar font scale setting\n
-        Apply sliding page to setting screen
+        Configuración de escala de fuente de calendario agregada\n
+        Aplicar página deslizante a la pantalla de configuración
     </string>
     <string name="release_171">
         v1.4.105 / 2019.10.20\n
-        Fixed an error that occurred when using the Excel file device saving function\n
-        Fixed error when deleting diary from timeline
+        Se corrigió un error que ocurría al usar la función de guardado del dispositivo de archivo de Excel\n
+        Se corrigió el error al eliminar el diario de la línea de tiempo
     </string>
     <string name="release_172">
         v1.4.106 / 2019.10.25\n
-        Fixed the error that the changed contents are not immediately visible after editing the diary\n
-        Remediation for Vulnerable Libraries with known Security Issues
+        Se corrigió el error de que los contenidos cambiados no son visibles inmediatamente después de editar el diario.\n
+        Corrección de bibliotecas vulnerables con problemas de seguridad conocidos
     </string>
     <string name="release_173">
         v1.4.107 / 2019.10.31\n
-        User Experience (UX) Optimization
+        Optimización de la experiencia del usuario (UX)
     </string>
     <string name="release_174">
         v1.4.108 / 2019.11.18\n
-        Fixed an error that occurred when setting the calendar font scale on a device set to French
+        Se corrigió un error que ocurría al configurar la escala de fuente del calendario en un dispositivo configurado en francés
     </string>
     <string name="release_176">
         v1.4.110 / 2019.12.13\n
-        Added Diary Dashboard feature\n
-        Added the ability to delete the diary backup file stored in the device
+        Se agregó la función de tablero de diario\n
+        Se agregó la capacidad de eliminar el archivo de respaldo del diario almacenado en el dispositivo
     </string>
     <string name="release_178">
         v1.4.112 / 2019.12.31\n
-        Add photo attachment function through camera app integration\n
-        Diary Dashboard Improvements
+        Agregue la función de adjuntar fotos a través de la integración de la aplicación de la cámara\n
+        Mejoras en el tablero de diario
     </string>
     <string name="release_179">
         v1.4.113 / 2020.01.04\n
-        Added date movement function using date picker on calendar screen
+        Función de movimiento de fecha agregada usando el selector de fecha en la pantalla del calendario
     </string>
     <string name="release_180">
         v1.4.114 / 2020.01.15\n
-        Added diary symbol icon\n
-        Added French support
+        Icono de símbolo de diario agregado\n
+        Soporte francés agregado
     </string>
     <string name="release_182">
         v1.4.116 / 2020.01.21\n
-        License policy changed from 「Apache License 2.0」 to 「GNU General Public License v3.0」
+        La política de licencia cambió de 「Apache License 2.0」 a 「GNU General Public License v3.0」
     </string>
     <string name="release_184">
         v1.4.118 / 2020.02.11\n
-        [BETA] Added full data backup feature
+        [BETA] Se agregó la función de copia de seguridad de datos completa
     </string>
     <string name="release_185">
         v1.4.119 / 2020.02.15\n
-        Added diary symbol icon
+        Icono de símbolo de diario agregado
     </string>
     <string name="release_186">
         v1.4.120 / 2020.02.19\n
-        Added diary symbol icon\n
-        Added search function using diary symbol
+        Icono de símbolo de diario agregado\n
+        Función de búsqueda agregada usando el símbolo del diario
     </string>
     <string name="release_187">
         v1.4.121 / 2020.03.02\n
-        Improved the speed of the calendar screen(1st improvement)
+        Se mejoró la velocidad de la pantalla del calendario (primera mejora)
     </string>
     <string name="release_188">
         v1.4.122 / 2020.03.09\n
-        [BETA] Added full data recovery feature\n
-        Some symbols appear unusually large in dashboard statistics\n
-        Added sort option of the diary list in the calendar screen
+        [BETA] Se agregó la función de recuperación de datos completa\n
+        Algunos símbolos aparecen inusualmente grandes en las estadísticas del tablero.\n
+        Opción de clasificación agregada de la lista del diario en la pantalla del calendario
     </string>
     <string name="release_190">
         v1.4.124 / 2020.03.15\n
-        Separate font-related setting option from basic setting screen
+        Opción de configuración separada relacionada con la fuente de la pantalla de configuración básica
     </string>
     <string name="release_191">
         v1.4.125 / 2020.03.23\n
-        Added cursor position setting option when entering diary edit screen\n
-        Added the function to set the maximum number of lines in the content summary view option\n
-        Fixed an issue where the day of the week was cut off on the calendar screen
+        Se agregó la opción de configuración de la posición del cursor al ingresar a la pantalla de edición del diario\n
+        Se agregó la función para establecer el número máximo de líneas en la opción de vista de resumen de contenido\n
+        Se solucionó un problema por el cual el día de la semana se cortaba en la pantalla del calendario.
     </string>
     <string name="release_192">
         v1.4.126 / 2020.04.05\n
-        Added diary encryption feature using pin number\n
-        Temporarily apply the requestLegacyExternalStorage option to respond to multi-picker scoped storage issues in Android 10
+        Se agregó la función de cifrado de diario mediante el número de PIN\n
+        Aplicar temporalmente la opción requestLegacyExternalStorage para responder a problemas de almacenamiento con ámbito de selector múltiple en Android 10
     </string>
     <string name="release_193">
         v1.4.127 / 2020.04.12\n
-        Removed requestLegacyExternalStorage option\n
-        Adding database file backup and recovery feature using SAF (Storage Access Framework)
+        Se eliminó la opción requestLegacyExternalStorage\n
+        Adición de la función de copia de seguridad y recuperación de archivos de base de datos utilizando SAF (Storage Access Framework)
     </string>
     <string name="release_195">
         v1.4.129 / 2020.04.21\n
-        Added feature to attach animated GIF files\n
-        Added diary multiple copy and delete feature
+        Característica agregada para adjuntar archivos GIF animados\n
+        Se agregó la función de copia y eliminación múltiple del diario
     </string>
     <string name="release_196">
         v1.4.130 / 2020.05.20\n
-        Added diary schedule setting feature
+        Se agregó la función de configuración del horario del diario
     </string>
     <string name="release_197">
         v1.4.131 / 2020.05.26\n
-        Fixed an error that caused abnormal termination of some screens in Android 4.4 version
+        Se corrigió un error que causaba la terminación anormal de algunas pantallas en la versión de Android 4.4.
     </string>
     <string name="release_198">
         v1.4.132 / 2020.05.31\n
-        Fixed an issue where buttons included inside the card view could not be identified when the theme color and the card view background color were set to the same color
+        Se solucionó un problema por el cual los botones incluidos dentro de la vista de la tarjeta no se podían identificar cuando el color del tema y el color de fondo de la vista de la tarjeta estaban configurados en el mismo color
     </string>
     <string name="release_199">
         v1.4.133 / 2020.06.02\n
-        Fixed an issue where the lock screen icon was not identified when the screen background color was set to white
+        Se solucionó un problema por el cual el ícono de la pantalla de bloqueo no se identificaba cuando el color de fondo de la pantalla estaba configurado en blanco
     </string>
     <string name="release_200">
         v1.4.134 / 2020.06.14\n
-        User Experience (UX) Optimization
+        Optimización de la experiencia del usuario (UX)
     </string>
     <string name="release_201">
         v1.4.135 / 2020.06.18\n
-        Added RTL language support
+        Se agregó compatibilidad con el idioma RTL
     </string>
     <string name="release_202">
         v1.4.136 / 2020.06.29\n
-        Added diary list widget feature
+        Función de widget de lista de diario agregada
     </string>
     <string name="release_203">
         v1.4.137 / 2020.07.05\n
-        Applied Google Play security policy
+        Política de seguridad de Google Play aplicada
     </string>
     <string name="release_205">
         v1.4.139 / 2020.07.11\n
@@ -658,7 +658,7 @@
     <string name="calendar_start_day_monday">Monday</string>
     <string name="calendar_start_day_saturday">Saturday</string>
     <string name="calendar_menu_previous">Previous</string>
-    <string name="calendar_menu_next">Next</string>
+    <string name="calendar_menu_next">Siguiente</string>
     <string name="filter_start_date">Start Date</string>
     <string name="filter_start_date_hint">Please enter a start date.</string>
     <string name="filter_end_date">End Date</string>
@@ -666,7 +666,7 @@
     <string name="filter_search_word">Search Word</string>
     <string name="filter_search_word_hint">Please enter your search term.</string>
     <string name="filter_clear">Reset filter</string>
-    <string name="filter_close">Close</string>
+    <string name="filter_close">Cerrar</string>
     <string name="copy_diary_item">Do you want to copy the selected diary?</string>
     <string name="diary_contents_length">Characters: %d</string>
     <string name="count_characters_title">Text counting</string>
@@ -749,7 +749,7 @@
     <string name="schedule_backup_local_complete">Diary backup completed on local device.</string>
     <string name="schedule_backup_gms_complete">The diary backup file and attached photo were saved in Google Drive.%s</string>
     <string name="ok">OK</string>
-    <string name="cancel">Cancel</string>
+    <string name="cancel">Cancelar</string>
     <string name="settings">Settings</string>
     <string name="location_info_title">Location information display</string>
     <string name="location_info_description">The location information is displayed in the diary using GPS information.</string>
