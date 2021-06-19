@@ -110,11 +110,30 @@ class DiaryInsertActivity : EditActivity() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        saveTempDiary()
+    }
+
 
     /***************************************************************************************************
      *   etc functions
      *
      ***************************************************************************************************/
+    private fun saveTempDiary() {
+        val diaryTemp = DiaryDto(
+                -1,
+                mCurrentTimeMillis,
+                diaryTitle.text.toString(),
+                diaryContents.text.toString(),
+                mSelectedItemPosition,
+                allDay.isChecked
+        )
+        if (mLocation != null) diaryTemp.location = mLocation
+        diaryTemp.photoUris = mPhotoUris
+        EasyDiaryDbHelper.insertTemporaryDiary(diaryTemp)
+    }
+
     private fun setupShowcase() {
         val margin = ((resources.displayMetrics.density * 12) as Number).toInt()
 

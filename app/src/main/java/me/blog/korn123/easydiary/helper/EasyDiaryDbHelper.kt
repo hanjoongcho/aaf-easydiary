@@ -3,10 +3,7 @@ package me.blog.korn123.easydiary.helper
 import android.content.Context
 import io.realm.*
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.models.ActionLog
-import me.blog.korn123.easydiary.models.Alarm
-import me.blog.korn123.easydiary.models.DiaryDto
-import me.blog.korn123.easydiary.models.PhotoUriDto
+import me.blog.korn123.easydiary.models.*
 import org.apache.commons.lang3.StringUtils
 
 /**
@@ -17,7 +14,7 @@ object EasyDiaryDbHelper {
     private val mDiaryConfig: RealmConfiguration by lazy {
         RealmConfiguration.Builder()
                 .name("diary.realm")
-                .schemaVersion(19)
+                .schemaVersion(20)
                 .migration(EasyDiaryMigration())
                 .modules(Realm.getDefaultModule()!!)
                 .build()
@@ -79,6 +76,13 @@ object EasyDiaryDbHelper {
             }
             diaryDto.sequence = sequence
             realm.insert(diaryDto)
+        }
+    }
+
+    fun insertTemporaryDiary(diaryTemp: DiaryDto) {
+        deleteDiary(diaryTemp.sequence)
+        getInstance().executeTransaction { realm ->
+            realm.insert(diaryTemp)
         }
     }
 

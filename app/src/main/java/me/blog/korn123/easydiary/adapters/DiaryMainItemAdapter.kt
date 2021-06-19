@@ -130,6 +130,7 @@ class DiaryMainItemAdapter(
                 true -> DateUtils.getFullPatternDate(diaryDto.currentTimeMillis)
                 false -> DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis)
             }
+            if (context.config.enableDebugMode) textDateTime.text = "[${diaryDto.sequence}] ${textDateTime.text}"
             FlavorUtils.initWeatherView(context, imageSymbol, diaryDto.weather)
 
             when (diaryDto.photoUris?.size ?: 0 > 0) {

@@ -13,16 +13,13 @@ import io.realm.annotations.PrimaryKey
 open class DiaryDto : RealmObject {
     @PrimaryKey
     var sequence: Int = 0
+    var originSequence: Int = 0
 
     @Ignore
     private val sessionId: Int = 0
-
     var currentTimeMillis: Long = 0
-
     var title: String? = null
-
     var contents: String? = null
-
     var dateString: String? = null
 
     /**
@@ -32,21 +29,13 @@ open class DiaryDto : RealmObject {
      * </pre>
      */
     var weather: Int = 0
-
     var photoUris: RealmList<PhotoUriDto>? = null
-
     var fontName: String? = null
-
     var fontSize: Float = 0.toFloat()
-    
     var isAllDay: Boolean = false
-
     var isEncrypt: Boolean = false
-
     var encryptKeyHash: String? = null
-
     var isSelected: Boolean = false
-
     var location: Location? = null
 
     constructor()
