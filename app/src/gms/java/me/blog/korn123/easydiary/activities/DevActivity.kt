@@ -24,7 +24,7 @@ class DevActivity : BaseDevActivity() {
      ***************************************************************************************************/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        fullBackupService.setOnClickListener {
+        button_execute_full_backup_service.setOnClickListener {
             GoogleOAuthHelper.getGoogleSignAccount(this)?.account?.let { account ->
                 DriveServiceHelper(this, account).run {
                     initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
