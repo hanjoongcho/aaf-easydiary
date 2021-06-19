@@ -88,6 +88,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
         setupClearUnusedPhoto()
         setupLocation()
         setupCoroutine()
+        setupTestFunction()
     }
 
     override fun onDestroy() {
@@ -103,6 +104,13 @@ open class BaseDevActivity : EasyDiaryActivity() {
      *   test functions
      *
      ***************************************************************************************************/
+    private fun setupTestFunction() {
+        mBinding.buttonEnableOrientation.setOnClickListener { setScreenOrientationSensor(true) }
+        mBinding.buttonDisableOrientation.setOnClickListener { setScreenOrientationSensor(false) }
+        mBinding.buttonHoldOrientation.setOnClickListener { holdCurrentOrientation() }
+        mBinding.buttonDisableOrientation.setOnClickListener { clearHoldOrientation() }
+    }
+
     private fun setupDetermineNextAlarm() {
         mBinding.buttonDetermineNextAlarm.setOnClickListener {
             val nextAlarm = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -121,12 +129,12 @@ open class BaseDevActivity : EasyDiaryActivity() {
     }
 
     private fun setupNotification() {
-        mBinding.cardNotification1.setOnClickListener {
+        mBinding.buttonNotification01.setOnClickListener {
             (applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).apply {
                 notify(NOTIFICATION_ID_DEV, createNotification(NotificationInfo(R.drawable.ic_diary_writing, true)))
             }
         }
-        mBinding.cardNotification2.setOnClickListener {
+        mBinding.buttonNotification02.setOnClickListener {
             (applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).apply {
                 notify(NOTIFICATION_ID_DEV, createNotification(NotificationInfo(R.drawable.ic_diary_backup_local, useActionButton = true, useCustomContentView = true)))
             }
