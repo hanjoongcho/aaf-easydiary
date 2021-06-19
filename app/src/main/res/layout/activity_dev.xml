@@ -192,51 +192,28 @@
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
-                        android:id="@+id/card_next_alarm"
                         android:orientation="vertical"
                         style="@style/AppCard.Settings">
-                        <LinearLayout
-                            style="@style/LinearLayoutVertical">
-                            <com.simplemobiletools.commons.views.MyTextView
-                                android:text="Next Alarm"
-                                style="@style/SettingsTitle" />
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:orientation="vertical"
-                        android:onClick="restartApplication"
-                        style="@style/AppCard.Settings">
-                        <LinearLayout
-                            style="@style/LinearLayoutVertical">
-                            <com.simplemobiletools.commons.views.MyTextView
-                                android:text="Restart App"
-                                style="@style/SettingsTitle" />
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/fullBackupService"
-                        android:orientation="vertical"
-                        style="@style/AppCard.Settings">
-                        <LinearLayout
-                            style="@style/LinearLayoutVertical">
-                            <com.simplemobiletools.commons.views.MyTextView
-                                android:text="Full Backup Service"
-                                style="@style/SettingsTitle" />
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/clearUnusedPhoto"
-                        android:orientation="vertical"
-                        style="@style/AppCard.Settings">
-                        <LinearLayout
-                            style="@style/LinearLayoutVertical">
-                            <com.simplemobiletools.commons.views.MyTextView
-                                android:text="Clear unused photo"
-                                style="@style/SettingsTitle" />
-                        </LinearLayout>
+                        <com.google.android.flexbox.FlexboxLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <Button
+                                android:id="@+id/button_determine_next_alarm"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                            <Button
+                                android:id="@+id/button_restart_app"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                            <Button
+                                android:id="@+id/button_execute_full_backup_service"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                            <Button
+                                android:id="@+id/button_clear_unused_photo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                        </com.google.android.flexbox.FlexboxLayout>
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView

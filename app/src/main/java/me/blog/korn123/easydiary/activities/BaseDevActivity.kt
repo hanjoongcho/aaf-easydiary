@@ -104,7 +104,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
      *
      ***************************************************************************************************/
     private fun setupDetermineNextAlarm() {
-        mBinding.cardNextAlarm.setOnClickListener {
+        mBinding.buttonDetermineNextAlarm.setOnClickListener {
             val nextAlarm = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val triggerTimeMillis = (getSystemService(Context.ALARM_SERVICE) as AlarmManager).nextAlarmClock?.triggerTime ?: 0
                 when (triggerTimeMillis > 0) {
@@ -151,7 +151,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
     }
 
     private fun setupClearUnusedPhoto() {
-        mBinding.clearUnusedPhoto.setOnClickListener {
+        mBinding.buttonClearUnusedPhoto.setOnClickListener {
             val localPhotoBaseNames = arrayListOf<String>()
             val unUsedPhotos = arrayListOf<String>()
             val targetFiles = File(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY)
