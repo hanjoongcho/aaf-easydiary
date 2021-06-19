@@ -528,6 +528,10 @@
         v1.4.168 / 2021.06.10\n
         Optimización de la experiencia del usuario (UX)
     </string>
+    <string name="release_235">
+        v1.4.169 / 2021.06.18\n
+        Se agregó la traducción al Español
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
