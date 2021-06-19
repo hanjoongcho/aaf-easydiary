@@ -108,7 +108,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
         mBinding.buttonEnableOrientation.setOnClickListener { setScreenOrientationSensor(true) }
         mBinding.buttonDisableOrientation.setOnClickListener { setScreenOrientationSensor(false) }
         mBinding.buttonHoldOrientation.setOnClickListener { holdCurrentOrientation() }
-        mBinding.buttonDisableOrientation.setOnClickListener { clearHoldOrientation() }
+        mBinding.buttonReleaseOrientation.setOnClickListener { clearHoldOrientation() }
     }
 
     private fun setupDetermineNextAlarm() {
