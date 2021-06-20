@@ -62,7 +62,7 @@ class PostCardActivity : EasyDiaryActivity() {
             setHomeAsUpIndicator(R.drawable.ic_cross)    
         }
         mSequence = intent.getIntExtra(DIARY_SEQUENCE, 0)
-        val diaryDto = EasyDiaryDbHelper.readDiaryBy(mSequence)
+        val diaryDto = EasyDiaryDbHelper.readDiaryBy(mSequence)!!
         FlavorUtils.initWeatherView(this, weather, diaryDto.weather)
         when (diaryDto.title.isNullOrEmpty()) {
             true -> diaryTitle.visibility = View.GONE

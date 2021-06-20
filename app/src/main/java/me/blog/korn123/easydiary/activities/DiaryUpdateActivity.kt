@@ -156,7 +156,7 @@ class DiaryUpdateActivity : EditActivity() {
     private fun initData() {
         val intent = intent
         mSequence = intent.getIntExtra(DIARY_SEQUENCE, 0)
-        val diaryDto = EasyDiaryDbHelper.readDiaryBy(mSequence)
+        val diaryDto = EasyDiaryDbHelper.readDiaryBy(mSequence)!!
         if (diaryDto.isAllDay) {
             allDay.isChecked = true
             toggleTimePickerTool()

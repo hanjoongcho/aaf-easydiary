@@ -36,6 +36,7 @@ class DiaryInsertActivity : EditActivity() {
      ***************************************************************************************************/
     private lateinit var mShowcaseView: ShowcaseView
     private var mShowcaseIndex = 2
+    private var mIsFinishBeforeSave = true
 
 
     /***************************************************************************************************
@@ -63,6 +64,7 @@ class DiaryInsertActivity : EditActivity() {
         restoreContents(savedInstanceState)
         initBottomToolbar()
         toggleSimpleLayout()
+        checkTemporaryDiary()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
@@ -112,7 +114,13 @@ class DiaryInsertActivity : EditActivity() {
 
     override fun onPause() {
         super.onPause()
-        saveTempDiary()
+        if (mIsFinishBeforeSave) saveTemporaryDiary()
+        if (config.enableDebugMode) makeToast("onPause")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (config.enableDebugMode) makeToast("onDestroy")
     }
 
 
@@ -120,7 +128,7 @@ class DiaryInsertActivity : EditActivity() {
      *   etc functions
      *
      ***************************************************************************************************/
-    private fun saveTempDiary() {
+    private fun saveTemporaryDiary() {
         val diaryTemp = DiaryDto(
                 -1,
                 mCurrentTimeMillis,
@@ -132,6 +140,15 @@ class DiaryInsertActivity : EditActivity() {
         if (mLocation != null) diaryTemp.location = mLocation
         diaryTemp.photoUris = mPhotoUris
         EasyDiaryDbHelper.insertTemporaryDiary(diaryTemp)
+    }
+
+    private fun checkTemporaryDiary() {
+        EasyDiaryDbHelper.selectTemporaryDiary()?.let {
+            showAlertDialog("임시저장 다이어리 불러오기", "임시저장된 다이어리가 있습니다. 임시저장된 다이어리를 불러오시겠습니까?"
+                    , { _, _ -> makeToast("OK") }
+                    , { _, _ -> EasyDiaryDbHelper.deleteTemporaryDiary() }, false
+            )
+        }
     }
 
     private fun setupShowcase() {
@@ -231,6 +248,7 @@ class DiaryInsertActivity : EditActivity() {
                 } else {
                     TransitionHelper.finishActivityWithTransition(this)
                 }
+                mIsFinishBeforeSave = false
             }
         }
 

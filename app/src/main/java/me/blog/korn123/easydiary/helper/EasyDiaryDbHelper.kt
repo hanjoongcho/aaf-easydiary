@@ -80,10 +80,19 @@ object EasyDiaryDbHelper {
     }
 
     fun insertTemporaryDiary(diaryTemp: DiaryDto) {
+        deleteTemporaryDiary()
         deleteDiary(diaryTemp.sequence)
         getInstance().executeTransaction { realm ->
             realm.insert(diaryTemp)
         }
+    }
+
+    fun selectTemporaryDiary(): DiaryDto? {
+        return readDiaryBy(-1)
+    }
+
+    fun deleteTemporaryDiary() {
+        deleteDiary(-1)
     }
 
     fun selectFirstDiary(): DiaryDto? {
@@ -149,8 +158,8 @@ object EasyDiaryDbHelper {
         }
     }
 
-    fun readDiaryBy(sequence: Int, realmInstance: Realm = getInstance()): DiaryDto {
-        return realmInstance.where(DiaryDto::class.java).equalTo("sequence", sequence).findFirst()!!
+    fun readDiaryBy(sequence: Int, realmInstance: Realm = getInstance()): DiaryDto? {
+        return realmInstance.where(DiaryDto::class.java).equalTo("sequence", sequence).findFirst()
     }
 
     fun readDiaryByDateString(dateString: String?, sort: Sort = Sort.DESCENDING): List<DiaryDto> {
