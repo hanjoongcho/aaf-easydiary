@@ -8,12 +8,12 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.provider.MediaStore
 import android.speech.RecognizerIntent
 import android.text.Editable
@@ -23,18 +23,12 @@ import android.util.TypedValue
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.ColorUtils
-import com.bumptech.glide.Glide
-import com.bumptech.glide.Priority
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
 import com.werb.pickphotoview.PickPhotoView
-import io.github.aafactory.commons.utils.CALCULATION
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import io.realm.RealmList
@@ -45,9 +39,11 @@ import kotlinx.android.synthetic.main.partial_edit_toolbar_sub.*
 import kotlinx.android.synthetic.main.viewholder_photo.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
+import me.blog.korn123.commons.utils.JasyptUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.models.DiaryDto
 import me.blog.korn123.easydiary.models.PhotoUriDto
 import java.io.File
 import java.text.ParseException
@@ -516,6 +512,99 @@ abstract class EditActivity : EasyDiaryActivity() {
             }
             
             selectFeelingSymbol(getInt(SYMBOL_SEQUENCE, 0))
+        }
+    }
+
+    protected fun restoreTemporaryDiary(temporaryDiary: DiaryDto) {
+        mPhotoUris.clear()
+        val attachView = photoContainer.getChildAt(photoContainer.childCount.minus(1))
+        photoContainer.removeAllViews()
+        photoContainer.addView(attachView)
+        temporaryDiary.photoUris?.forEach { mPhotoUris.add(PhotoUriDto(it.photoUri!!)) }
+        mCurrentTimeMillis = temporaryDiary.currentTimeMillis
+
+        val calendar = Calendar.getInstance(Locale.getDefault())
+        calendar.timeInMillis = mCurrentTimeMillis
+        mYear = calendar.get(Calendar.YEAR)
+        mMonth = calendar.get(Calendar.MONTH).plus(1)
+        mDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
+        mHourOfDay = calendar.get(Calendar.HOUR_OF_DAY)
+        mMinute = calendar.get(Calendar.MINUTE)
+        mSecond = calendar.get(Calendar.SECOND)
+        mPhotoUris.forEachIndexed { index, photoUriDto ->
+            val imageView = when (isLandScape()) {
+                true -> EasyDiaryUtils.createAttachedPhotoView(this@EditActivity, photoUriDto, 0F, 0F, 0F, 3F)
+                false -> EasyDiaryUtils.createAttachedPhotoView(this@EditActivity, photoUriDto, 0F, 0F, 3F, 0F)
+            }
+            imageView.setOnClickListener(PhotoClickListener(index))
+            photoContainer.addView(imageView, photoContainer.childCount - 1)
+        }
+        selectFeelingSymbol(temporaryDiary.sequence)
+    }
+
+    protected fun initData(diaryDto: DiaryDto) {
+        if (diaryDto.isAllDay) {
+            allDay.isChecked = true
+            toggleTimePickerTool()
+        }
+
+        val encryptionPass = intent.getStringExtra(DIARY_ENCRYPT_PASSWORD)
+        when (encryptionPass == null) {
+            true -> {
+                diaryTitle.setText(diaryDto.title)
+                //        getSupportActionBar().setSubtitle(DateUtils.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
+                diaryContents.setText(diaryDto.contents)
+            }
+            false -> {
+                diaryTitle.setText(JasyptUtils.decrypt(diaryDto.title ?: "", encryptionPass))
+                //        getSupportActionBar().setSubtitle(DateUtils.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
+                diaryContents.setText(JasyptUtils.decrypt(diaryDto.contents ?: "", encryptionPass))
+            }
+        }
+
+        mCurrentTimeMillis = diaryDto.currentTimeMillis
+        if (config.holdPositionEnterEditScreen) {
+            Handler().post {
+                contentsContainer.scrollY = intent.getIntExtra(DIARY_CONTENTS_SCROLL_Y, 0) - (feelingSymbolButton.parent.parent as ViewGroup).measuredHeight
+            }
+        } else {
+            diaryContents.requestFocus()
+        }
+
+        // TODO fixme elegance
+        diaryDto.photoUris?.let {
+            mPhotoUris.addAll(it)
+        }
+
+        mPhotoUris.let {
+            val thumbnailSize = config.settingThumbnailSize
+            it.forEachIndexed { index, photoUriDto ->
+                val imageView = when (isLandScape()) {
+                    true -> EasyDiaryUtils.createAttachedPhotoView(this, photoUriDto, 0F, 0F, 0F, 3F)
+                    false -> EasyDiaryUtils.createAttachedPhotoView(this, photoUriDto, 0F, 0F, 3F, 0F)
+                }
+
+                imageView.setOnClickListener(PhotoClickListener(index))
+                photoContainer.addView(imageView, photoContainer.childCount - 1)
+            }
+        }
+
+//        initSpinner()
+        selectFeelingSymbol(diaryDto.weather)
+        if (config.enableLocationInfo) {
+//            locationLabel.setTextColor(config.textColor)
+//            locationContainer.background = getLabelBackground()
+            diaryDto.location?.let {
+                locationContainer.visibility = View.VISIBLE
+                locationLabel.text = it.address
+                mLocation = it
+            } ?: {
+                setLocationInfo()
+                mLocation?.let {
+                    locationContainer.visibility = View.VISIBLE
+                    locationLabel.text = it.address
+                }
+            } ()
         }
     }
 

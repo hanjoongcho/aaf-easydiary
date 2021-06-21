@@ -157,69 +157,7 @@ class DiaryUpdateActivity : EditActivity() {
         val intent = intent
         mSequence = intent.getIntExtra(DIARY_SEQUENCE, 0)
         val diaryDto = EasyDiaryDbHelper.readDiaryBy(mSequence)!!
-        if (diaryDto.isAllDay) {
-            allDay.isChecked = true
-            toggleTimePickerTool()
-        }
-
-        val encryptionPass = intent.getStringExtra(DIARY_ENCRYPT_PASSWORD)
-        when (encryptionPass == null) {
-            true -> {
-                diaryTitle.setText(diaryDto.title)
-                //        getSupportActionBar().setSubtitle(DateUtils.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
-                diaryContents.setText(diaryDto.contents)
-            }
-            false -> {
-                diaryTitle.setText(JasyptUtils.decrypt(diaryDto.title ?: "", encryptionPass))
-                //        getSupportActionBar().setSubtitle(DateUtils.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
-                diaryContents.setText(JasyptUtils.decrypt(diaryDto.contents ?: "", encryptionPass))
-            }
-        }
-
-        mCurrentTimeMillis = diaryDto.currentTimeMillis
-        if (config.holdPositionEnterEditScreen) {
-            Handler().post {
-                contentsContainer.scrollY = intent.getIntExtra(DIARY_CONTENTS_SCROLL_Y, 0) - (feelingSymbolButton.parent.parent as ViewGroup).measuredHeight
-            }
-        } else {
-            diaryContents.requestFocus()
-        }
-
-        // TODO fixme elegance
-        diaryDto.photoUris?.let {
-            mPhotoUris.addAll(it)
-        }
-
-        mPhotoUris.let {
-            val thumbnailSize = config.settingThumbnailSize
-            it.forEachIndexed { index, photoUriDto ->
-                val imageView = when (isLandScape()) {
-                    true -> EasyDiaryUtils.createAttachedPhotoView(this, photoUriDto, 0F, 0F, 0F, 3F)
-                    false -> EasyDiaryUtils.createAttachedPhotoView(this, photoUriDto, 0F, 0F, 3F, 0F)
-                }
-                
-                imageView.setOnClickListener(PhotoClickListener(index))
-                photoContainer.addView(imageView, photoContainer.childCount - 1)
-            }
-        }
-
-//        initSpinner()
-        selectFeelingSymbol(diaryDto.weather)
-        if (config.enableLocationInfo) {
-//            locationLabel.setTextColor(config.textColor)
-//            locationContainer.background = getLabelBackground()
-            diaryDto.location?.let {
-                locationContainer.visibility = View.VISIBLE
-                locationLabel.text = it.address
-                mLocation = it
-            } ?: {
-                setLocationInfo()
-                mLocation?.let {
-                    locationContainer.visibility = View.VISIBLE
-                    locationLabel.text = it.address
-                }
-            } ()
-        }
+        initData(diaryDto)
     }
 
     private fun bindEvent() {

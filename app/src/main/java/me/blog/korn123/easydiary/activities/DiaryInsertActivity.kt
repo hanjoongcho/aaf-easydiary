@@ -145,7 +145,10 @@ class DiaryInsertActivity : EditActivity() {
     private fun checkTemporaryDiary() {
         EasyDiaryDbHelper.selectTemporaryDiary()?.let {
             showAlertDialog("임시저장 다이어리 불러오기", "임시저장된 다이어리가 있습니다. 임시저장된 다이어리를 불러오시겠습니까?"
-                    , { _, _ -> makeToast("OK") }
+                    , { _, _ ->
+                          initData(it)
+                          initBottomToolbar()
+                      }
                     , { _, _ -> EasyDiaryDbHelper.deleteTemporaryDiary() }, false
             )
         }
