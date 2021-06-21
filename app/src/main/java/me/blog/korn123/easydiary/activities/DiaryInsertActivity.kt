@@ -148,6 +148,7 @@ class DiaryInsertActivity : EditActivity() {
                     , { _, _ ->
                           initData(it)
                           initBottomToolbar()
+                          EasyDiaryDbHelper.deleteTemporaryDiary()
                       }
                     , { _, _ -> EasyDiaryDbHelper.deleteTemporaryDiary() }, false
             )
