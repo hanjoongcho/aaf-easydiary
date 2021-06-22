@@ -36,7 +36,7 @@ class DiaryInsertActivity : EditActivity() {
      ***************************************************************************************************/
     private lateinit var mShowcaseView: ShowcaseView
     private var mShowcaseIndex = 2
-    private var mIsFinishBeforeSave = true
+    private var mIsDiarySaved = false
 
 
     /***************************************************************************************************
@@ -114,7 +114,11 @@ class DiaryInsertActivity : EditActivity() {
 
     override fun onPause() {
         super.onPause()
-        if (mIsFinishBeforeSave) saveTemporaryDiary()
+        if (mIsDiarySaved) {
+            EasyDiaryDbHelper.deleteTemporaryDiary()
+        } else {
+            saveTemporaryDiary()
+        }
         if (config.enableDebugMode) makeToast("onPause")
     }
 
@@ -252,7 +256,7 @@ class DiaryInsertActivity : EditActivity() {
                 } else {
                     TransitionHelper.finishActivityWithTransition(this)
                 }
-                mIsFinishBeforeSave = false
+                mIsDiarySaved = true
             }
         }
 
