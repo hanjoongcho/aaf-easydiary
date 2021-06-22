@@ -545,9 +545,10 @@ abstract class EditActivity : EasyDiaryActivity() {
 
     protected fun initData(diaryDto: DiaryDto) {
         val attachedPhotos = photoContainer.childCount
+        if (config.enableDebugMode) makeToast("attachedPhotos: $attachedPhotos")
         if (attachedPhotos > 1) {
             for (i in attachedPhotos downTo 2) {
-                photoContainer.removeViewAt(i.minus(1))
+                photoContainer.removeViewAt(i.minus(2))
             }
         }
         mPhotoUris.clear()
