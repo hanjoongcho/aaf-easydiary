@@ -36,7 +36,6 @@ class DiaryInsertActivity : EditActivity() {
      ***************************************************************************************************/
     private lateinit var mShowcaseView: ShowcaseView
     private var mShowcaseIndex = 2
-    private var mIsDiarySaved = false
 
 
     /***************************************************************************************************
@@ -64,7 +63,7 @@ class DiaryInsertActivity : EditActivity() {
         restoreContents(savedInstanceState)
         initBottomToolbar()
         toggleSimpleLayout()
-        checkTemporaryDiary()
+        checkTemporaryDiary(DIARY_SEQUENCE_TEMPORARY)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
@@ -115,9 +114,9 @@ class DiaryInsertActivity : EditActivity() {
     override fun onPause() {
         super.onPause()
         if (mIsDiarySaved) {
-            EasyDiaryDbHelper.deleteTemporaryDiary()
+            EasyDiaryDbHelper.deleteTemporaryDiary(DIARY_SEQUENCE_TEMPORARY)
         } else {
-            saveTemporaryDiary()
+            saveTemporaryDiary(DIARY_SEQUENCE_TEMPORARY)
         }
         if (config.enableDebugMode) makeToast("onPause")
     }
@@ -132,33 +131,6 @@ class DiaryInsertActivity : EditActivity() {
      *   etc functions
      *
      ***************************************************************************************************/
-    private fun saveTemporaryDiary() {
-        val diaryTemp = DiaryDto(
-                -1,
-                mCurrentTimeMillis,
-                diaryTitle.text.toString(),
-                diaryContents.text.toString(),
-                mSelectedItemPosition,
-                allDay.isChecked
-        )
-        if (mLocation != null) diaryTemp.location = mLocation
-        diaryTemp.photoUris = mPhotoUris
-        EasyDiaryDbHelper.insertTemporaryDiary(diaryTemp)
-    }
-
-    private fun checkTemporaryDiary() {
-        EasyDiaryDbHelper.selectTemporaryDiary()?.let {
-            showAlertDialog("임시저장 다이어리 불러오기", "임시저장된 다이어리가 있습니다. 임시저장된 다이어리를 불러오시겠습니까?"
-                    , { _, _ ->
-                          initData(it)
-                          initBottomToolbar()
-                          EasyDiaryDbHelper.deleteTemporaryDiary()
-                      }
-                    , { _, _ -> EasyDiaryDbHelper.deleteTemporaryDiary() }, false
-            )
-        }
-    }
-
     private fun setupShowcase() {
         val margin = ((resources.displayMetrics.density * 12) as Number).toInt()
 
@@ -239,7 +211,7 @@ class DiaryInsertActivity : EditActivity() {
                 makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
             } else {
                 val diaryDto = DiaryDto(
-                        -1,
+                        DIARY_SEQUENCE_INIT,
                         mCurrentTimeMillis,
                         this@DiaryInsertActivity.diaryTitle.text.toString(),
                         this@DiaryInsertActivity.diaryContents.text.toString(),

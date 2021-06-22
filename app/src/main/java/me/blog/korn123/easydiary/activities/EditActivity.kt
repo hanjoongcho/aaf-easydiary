@@ -86,6 +86,7 @@ abstract class EditActivity : EasyDiaryActivity() {
     protected var mCurrentTimeMillis: Long = 0
     protected var mYear = mCalendar.get(Calendar.YEAR)
     protected var mLocation: me.blog.korn123.easydiary.models.Location? = null
+    protected var mIsDiarySaved = false
 
     /**
      * mMonth is not Calendar.MONTH
@@ -284,6 +285,33 @@ abstract class EditActivity : EasyDiaryActivity() {
                     showAlertDialog(getString(R.string.gallery_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
                 }
             }
+        }
+    }
+
+    protected fun saveTemporaryDiary(originSequence: Int) {
+        val diaryTemp = DiaryDto(
+                DIARY_SEQUENCE_INIT,
+                mCurrentTimeMillis,
+                diaryTitle.text.toString(),
+                diaryContents.text.toString(),
+                mSelectedItemPosition,
+                allDay.isChecked
+        ).apply { this.originSequence = originSequence }
+        if (mLocation != null) diaryTemp.location = mLocation
+        diaryTemp.photoUris = mPhotoUris
+        EasyDiaryDbHelper.insertTemporaryDiary(diaryTemp)
+    }
+
+    protected fun checkTemporaryDiary(originSequence: Int) {
+        EasyDiaryDbHelper.selectTemporaryDiary(originSequence)?.let {
+            showAlertDialog("임시저장 다이어리 불러오기", "임시저장된 다이어리가 있습니다. 임시저장된 다이어리를 불러오시겠습니까?"
+                    , { _, _ ->
+                initData(it)
+                initBottomToolbar()
+                EasyDiaryDbHelper.deleteTemporaryDiary(DIARY_SEQUENCE_TEMPORARY)
+            }
+                    , { _, _ -> EasyDiaryDbHelper.deleteDiary(DIARY_SEQUENCE_TEMPORARY) }, false
+            )
         }
     }
 
@@ -515,34 +543,15 @@ abstract class EditActivity : EasyDiaryActivity() {
         }
     }
 
-    protected fun restoreTemporaryDiary(temporaryDiary: DiaryDto) {
-        mPhotoUris.clear()
-        val attachView = photoContainer.getChildAt(photoContainer.childCount.minus(1))
-        photoContainer.removeAllViews()
-        photoContainer.addView(attachView)
-        temporaryDiary.photoUris?.forEach { mPhotoUris.add(PhotoUriDto(it.photoUri!!)) }
-        mCurrentTimeMillis = temporaryDiary.currentTimeMillis
-
-        val calendar = Calendar.getInstance(Locale.getDefault())
-        calendar.timeInMillis = mCurrentTimeMillis
-        mYear = calendar.get(Calendar.YEAR)
-        mMonth = calendar.get(Calendar.MONTH).plus(1)
-        mDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
-        mHourOfDay = calendar.get(Calendar.HOUR_OF_DAY)
-        mMinute = calendar.get(Calendar.MINUTE)
-        mSecond = calendar.get(Calendar.SECOND)
-        mPhotoUris.forEachIndexed { index, photoUriDto ->
-            val imageView = when (isLandScape()) {
-                true -> EasyDiaryUtils.createAttachedPhotoView(this@EditActivity, photoUriDto, 0F, 0F, 0F, 3F)
-                false -> EasyDiaryUtils.createAttachedPhotoView(this@EditActivity, photoUriDto, 0F, 0F, 3F, 0F)
-            }
-            imageView.setOnClickListener(PhotoClickListener(index))
-            photoContainer.addView(imageView, photoContainer.childCount - 1)
-        }
-        selectFeelingSymbol(temporaryDiary.sequence)
-    }
-
     protected fun initData(diaryDto: DiaryDto) {
+        val attachedPhotos = photoContainer.childCount
+        if (attachedPhotos > 1) {
+            for (i in attachedPhotos downTo 2) {
+                photoContainer.removeViewAt(i.minus(1))
+            }
+        }
+        mPhotoUris.clear()
+
         if (diaryDto.isAllDay) {
             allDay.isChecked = true
             toggleTimePickerTool()
@@ -638,5 +647,7 @@ abstract class EditActivity : EasyDiaryActivity() {
     companion object {
         const val FOCUS_TITLE = 0
         const val FOCUS_CONTENTS = 1
+        const val DIARY_SEQUENCE_TEMPORARY = -1
+        const val DIARY_SEQUENCE_INIT = 0
     }
 }

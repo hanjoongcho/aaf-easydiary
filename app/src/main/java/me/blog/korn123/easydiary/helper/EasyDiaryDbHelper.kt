@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.helper
 
 import android.content.Context
 import io.realm.*
+import me.blog.korn123.easydiary.activities.EditActivity
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.models.*
 import org.apache.commons.lang3.StringUtils
@@ -80,19 +81,19 @@ object EasyDiaryDbHelper {
     }
 
     fun insertTemporaryDiary(diaryTemp: DiaryDto) {
-        deleteTemporaryDiary()
-        deleteDiary(diaryTemp.sequence)
+        deleteTemporaryDiary(diaryTemp.originSequence)
         getInstance().executeTransaction { realm ->
+            if (diaryTemp.sequence == EditActivity.DIARY_SEQUENCE_INIT) {
+                realm.where(DiaryDto::class.java).max("sequence")?.let {
+                    diaryTemp.sequence = it.toInt().plus(1)
+                }
+            }
             realm.insert(diaryTemp)
         }
     }
 
-    fun selectTemporaryDiary(): DiaryDto? {
-        return readDiaryBy(-1)
-    }
-
-    fun deleteTemporaryDiary() {
-        deleteDiary(-1)
+    fun selectTemporaryDiary(originSequence: Int, realmInstance: Realm = getInstance()): DiaryDto? {
+        return realmInstance.where(DiaryDto::class.java).equalTo("originSequence", originSequence).findFirst()
     }
 
     fun selectFirstDiary(): DiaryDto? {
@@ -184,6 +185,16 @@ object EasyDiaryDbHelper {
     fun deleteDiary(sequence: Int, realmInstance: Realm = getInstance()) {
         realmInstance.run {
             where(DiaryDto::class.java).equalTo("sequence", sequence).findFirst()?.let {
+                beginTransaction()
+                it.deleteFromRealm()
+                commitTransaction()
+            }
+        }
+    }
+
+    fun deleteTemporaryDiary(originSequence: Int, realmInstance: Realm = getInstance()) {
+        realmInstance.run {
+            where(DiaryDto::class.java).equalTo("originSequence", originSequence).findFirst()?.let {
                 beginTransaction()
                 it.deleteFromRealm()
                 commitTransaction()
