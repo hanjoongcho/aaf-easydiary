@@ -650,5 +650,6 @@ abstract class EditActivity : EasyDiaryActivity() {
         const val FOCUS_CONTENTS = 1
         const val DIARY_SEQUENCE_TEMPORARY = -1
         const val DIARY_SEQUENCE_INIT = 0
+        const val DIARY_ORIGIN_SEQUENCE_INIT = 0
     }
 }

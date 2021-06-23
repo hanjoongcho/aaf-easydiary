@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.helper
 import android.content.Context
 import io.realm.*
 import me.blog.korn123.easydiary.activities.EditActivity
+import me.blog.korn123.easydiary.activities.EditActivity.Companion.DIARY_ORIGIN_SEQUENCE_INIT
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.models.*
 import org.apache.commons.lang3.StringUtils
@@ -93,6 +94,7 @@ object EasyDiaryDbHelper {
     fun duplicateDiaryBy(diaryDto: DiaryDto) {
         diaryDto.currentTimeMillis = System.currentTimeMillis()
         diaryDto.updateDateString()
+        diaryDto.originSequence = DIARY_ORIGIN_SEQUENCE_INIT
         insertDiary(diaryDto)
     }
 
