@@ -104,7 +104,7 @@ object EasyDiaryDbHelper {
 
     fun findFirstDiary(): DiaryDto? {
         val realm = getInstance()
-        val firstItemTimeMillis = (realm.where(DiaryDto::class.java).min("currentTimeMillis") ?: 0L).toLong()
+        val firstItemTimeMillis = (realm.where(DiaryDto::class.java).greaterThan("originSequence", 0).min("currentTimeMillis") ?: 0L).toLong()
         return realm.where(DiaryDto::class.java).equalTo("currentTimeMillis", firstItemTimeMillis).findFirst()
     }
 
@@ -139,6 +139,10 @@ object EasyDiaryDbHelper {
         // apply feeling symbol
         if (symbolSequence in 1..9998) {
             results = results.where().equalTo("weather", symbolSequence).findAll()
+        }
+
+        if (EasyDiaryApplication.context?.config?.enableDebugMode == false) {
+            results = results.where().lessThan("originSequence", 1).findAll()
         }
 
         return when (EasyDiaryApplication.context?.config?.enableTaskSymbolTopOrder ?: false) {
