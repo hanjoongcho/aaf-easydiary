@@ -142,7 +142,7 @@ object EasyDiaryDbHelper {
         }
 
         if (EasyDiaryApplication.context?.config?.enableDebugMode == false) {
-            results = results.where().lessThan("originSequence", 1).findAll()
+            results = results.where().equalTo("originSequence", DIARY_ORIGIN_SEQUENCE_INIT).findAll()
         }
 
         return when (EasyDiaryApplication.context?.config?.enableTaskSymbolTopOrder ?: false) {
