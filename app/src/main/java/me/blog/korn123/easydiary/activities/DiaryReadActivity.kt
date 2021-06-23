@@ -75,7 +75,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
         }
 
         val query = intent.getStringExtra(DIARY_SEARCH_QUERY)
-        val diaryList: List<DiaryDto> = EasyDiaryDbHelper.readDiary(query, config.diarySearchQueryCaseSensitive)
+        val diaryList: List<DiaryDto> = EasyDiaryDbHelper.findDiary(query, config.diarySearchQueryCaseSensitive)
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager, diaryList, query)
         val startPageIndex = when(savedInstanceState == null) {
             true -> mSectionsPagerAdapter.sequenceToPageIndex(intent.getIntExtra(DIARY_SEQUENCE, -1))
@@ -446,7 +446,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
             val fragment = mSectionsPagerAdapter.instantiateItem(mBinding.diaryViewPager, mBinding.diaryViewPager.currentItem) as PlaceholderFragment
             pmrBinding.delete.setOnClickListener {
                 val positiveListener = DialogInterface.OnClickListener { _, _ ->
-                    EasyDiaryDbHelper.deleteDiary(fragment.getSequence())
+                    EasyDiaryDbHelper.deleteDiaryBy(fragment.getSequence())
                     TransitionHelper.finishActivityWithTransition(this@DiaryReadActivity)
                 }
                 showAlertDialog(getString(R.string.delete_confirm), positiveListener, null)
@@ -518,12 +518,12 @@ class DiaryReadActivity : EasyDiaryActivity() {
 
         fun getDiaryContents(): String = mBinding.diaryContents.text.toString()
 
-        fun isEncryptContents() = EasyDiaryDbHelper.readDiaryBy(getSequence())?.isEncrypt ?: false
+        fun isEncryptContents() = EasyDiaryDbHelper.findDiaryBy(getSequence())?.isEncrypt ?: false
 
-        fun getPasswordHash() = EasyDiaryDbHelper.readDiaryBy(getSequence())?.encryptKeyHash
+        fun getPasswordHash() = EasyDiaryDbHelper.findDiaryBy(getSequence())?.encryptKeyHash
 
         private fun initContents() {
-            val diaryDto = EasyDiaryDbHelper.readDiaryBy(getSequence())!!
+            val diaryDto = EasyDiaryDbHelper.findDiaryBy(getSequence())!!
             mBinding.run {
                 if (StringUtils.isEmpty(diaryDto.title)) {
                     diaryTitle.visibility = View.GONE
@@ -626,7 +626,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
         fun encryptData(inputPass: String) {
             context?.let {
                 val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
-                val diaryDto = EasyDiaryDbHelper.readDiaryBy(getSequence(), realmInstance)!!
+                val diaryDto = EasyDiaryDbHelper.findDiaryBy(getSequence(), realmInstance)!!
                 realmInstance.beginTransaction()
                 diaryDto.isEncrypt = true
                 diaryDto.title = JasyptUtils.encrypt(diaryDto.title ?: "", inputPass)
@@ -649,7 +649,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
             var result = true
             context?.let {
                 val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
-                val diaryDto = EasyDiaryDbHelper.readDiaryBy(getSequence(), realmInstance)!!
+                val diaryDto = EasyDiaryDbHelper.findDiaryBy(getSequence(), realmInstance)!!
                 if (diaryDto.encryptKeyHash == JasyptUtils.sha256(inputPass)) {
                     realmInstance.beginTransaction()
                     diaryDto.isEncrypt = false

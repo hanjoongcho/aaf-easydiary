@@ -72,7 +72,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                             mBinding.progressCoroutine.visibility = View.GONE
                             mDiaryMainItemAdapter?.getSelectedItems()?.forEach {
                                 it.isSelected = false
-                                EasyDiaryDbHelper.updateDiary(it)
+                                EasyDiaryDbHelper.updateDiaryBy(it)
                             }
                             mDiaryMainItemAdapter?.notifyDataSetChanged()
                         }
@@ -98,7 +98,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             title = getString(R.string.read_diary_title)
         }
 
-        mDiaryList.addAll(EasyDiaryDbHelper.readDiary(null))
+        mDiaryList.addAll(EasyDiaryDbHelper.findDiary(null))
         mDiaryMainItemAdapter = DiaryMainItemAdapter(this, R.layout.item_diary_main, mDiaryList)
         mBinding.diaryListView.adapter = mDiaryMainItemAdapter
 
@@ -184,7 +184,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                     when (this.isNotEmpty()) {
                         true -> {
                             showAlertDialog(getString(R.string.delete_selected_items_confirm, this.size), { _, _ ->
-                                this.forEach { EasyDiaryDbHelper.deleteDiary(it.sequence) }
+                                this.forEach { EasyDiaryDbHelper.deleteDiaryBy(it.sequence) }
                                 refreshList()
                             }, null)
                         }
@@ -201,8 +201,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                             showAlertDialog(getString(R.string.duplicate_selected_items_confirm, this.size), { _, _ ->
                                 this.reversed().map {
                                     it.isSelected = false
-                                    EasyDiaryDbHelper.updateDiary(it)
-                                    EasyDiaryDbHelper.duplicateDiary(it)
+                                    EasyDiaryDbHelper.updateDiaryBy(it)
+                                    EasyDiaryDbHelper.duplicateDiaryBy(it)
                                 }
                                 refreshList()
                                 Handler(Looper.getMainLooper()).post { mBinding.diaryListView.setSelection(0) }
@@ -436,7 +436,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
 
     private fun refreshList(query: String) {
         mDiaryList.clear()
-        mDiaryList.addAll(EasyDiaryDbHelper.readDiary(query, config.diarySearchQueryCaseSensitive, 0, 0, viewModel.symbol.value ?: 0))
+        mDiaryList.addAll(EasyDiaryDbHelper.findDiary(query, config.diarySearchQueryCaseSensitive, 0, 0, viewModel.symbol.value ?: 0))
         mDiaryMainItemAdapter?.currentQuery = query
         mDiaryMainItemAdapter?.notifyDataSetChanged()
     }

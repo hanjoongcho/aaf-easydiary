@@ -54,7 +54,7 @@ class DailySymbolAdapter(
                 Calendar.SUNDAY -> Color.RED
                 else -> Color.BLACK
             })
-            val pair = EasyDiaryDbHelper.readDiaryByDateString(dailySymbol.dateString).partition { item ->
+            val pair = EasyDiaryDbHelper.findDiaryByDateString(dailySymbol.dateString).partition { item ->
                 activity.config.selectedSymbols.split(",").find { it.toInt() == item.weather } != null
             }
 

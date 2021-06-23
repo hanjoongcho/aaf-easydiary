@@ -114,7 +114,7 @@ class DiaryInsertActivity : EditActivity() {
     override fun onPause() {
         super.onPause()
         if (mIsDiarySaved) {
-            EasyDiaryDbHelper.deleteTemporaryDiary(DIARY_SEQUENCE_TEMPORARY)
+            EasyDiaryDbHelper.deleteTemporaryDiaryBy(DIARY_SEQUENCE_TEMPORARY)
         } else {
             saveTemporaryDiary(DIARY_SEQUENCE_TEMPORARY)
         }

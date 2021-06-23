@@ -113,7 +113,7 @@ class BarChartFragment : androidx.fragment.app.Fragment() {
 
     private fun setData(count: Int, range: Float) {
         val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
-        val listDiary = EasyDiaryDbHelper.readDiary(null, realmInstance = realmInstance)
+        val listDiary = EasyDiaryDbHelper.findDiary(null, realmInstance = realmInstance)
         realmInstance.close()
         val map = hashMapOf<Int, Int>()
         listDiary.map { diaryDto ->

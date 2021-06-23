@@ -89,7 +89,7 @@ class CaldroidItemAdapter(
                     root.setPadding(leftPadding, topPadding, rightPadding, bottomPadding)
 
                     val sort: Sort = if (context.config.calendarSorting == CALENDAR_SORTING_ASC) Sort.ASCENDING else Sort.DESCENDING
-                    val mDiaryList = EasyDiaryDbHelper.readDiaryByDateString(dateString, sort)
+                    val mDiaryList = EasyDiaryDbHelper.findDiaryByDateString(dateString, sort)
                     itemCount.run {
                         setTextColor(Color.RED)
                         text = if (count > 3) {

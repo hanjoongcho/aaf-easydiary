@@ -67,7 +67,7 @@ class DiaryUpdateActivity : EditActivity() {
                 diaryDto.isAllDay = allDay.isChecked
                 applyRemoveIndex()
                 diaryDto.photoUris = mPhotoUris
-                EasyDiaryDbHelper.updateDiary(diaryDto)
+                EasyDiaryDbHelper.updateDiaryBy(diaryDto)
                 TransitionHelper.finishActivityWithTransition(this)
                 mIsDiarySaved = true
             }
@@ -152,7 +152,7 @@ class DiaryUpdateActivity : EditActivity() {
     override fun onPause() {
         super.onPause()
         if (mIsDiarySaved) {
-            EasyDiaryDbHelper.deleteTemporaryDiary(mSequence)
+            EasyDiaryDbHelper.deleteTemporaryDiaryBy(mSequence)
         } else {
             saveTemporaryDiary(mSequence)
         }
@@ -165,7 +165,7 @@ class DiaryUpdateActivity : EditActivity() {
     private fun initData() {
         val intent = intent
         mSequence = intent.getIntExtra(DIARY_SEQUENCE, 0)
-        val diaryDto = EasyDiaryDbHelper.readDiaryBy(mSequence)!!
+        val diaryDto = EasyDiaryDbHelper.findDiaryBy(mSequence)!!
         initData(diaryDto)
     }
 

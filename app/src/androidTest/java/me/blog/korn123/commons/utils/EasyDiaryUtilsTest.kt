@@ -11,7 +11,6 @@ import me.blog.korn123.easydiary.extensions.preferenceToJsonString
 import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.SETTING_THUMBNAIL_SIZE
-import me.blog.korn123.easydiary.models.DiaryDto
 import me.blog.korn123.easydiary.models.DiarySymbol
 import org.junit.Assert.*
 import org.junit.Test
@@ -87,7 +86,7 @@ class EasyDiaryUtilsTest {
         Log.i(AAF_TEST, "Start")
         var count = 0
         EasyDiaryDbHelper.getTemporaryInstance().let {
-            var items = EasyDiaryDbHelper.readDiary(null, realmInstance = it)
+            var items = EasyDiaryDbHelper.findDiary(null, realmInstance = it)
             items.forEach { diary ->
                 Log.i(AAF_TEST, diary.title ?: "")
                 count++

@@ -80,7 +80,7 @@ class DiaryMainWidgetFactory(private val context: Context) : RemoteViewsService.
     private fun setData() {
         val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
         diaryItems.clear()
-        diaryItems.addAll(EasyDiaryDbHelper.readDiary(null, false, 0, 0, 0, realmInstance))
+        diaryItems.addAll(EasyDiaryDbHelper.findDiary(null, false, 0, 0, 0, realmInstance))
         realmInstance.close()
     }
 }
