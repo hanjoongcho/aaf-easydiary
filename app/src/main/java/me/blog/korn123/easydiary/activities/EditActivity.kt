@@ -45,6 +45,7 @@ import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import me.blog.korn123.easydiary.models.PhotoUriDto
+import org.apache.commons.lang3.StringUtils
 import java.io.File
 import java.text.ParseException
 import java.util.*
@@ -296,10 +297,16 @@ abstract class EditActivity : EasyDiaryActivity() {
                 diaryContents.text.toString(),
                 mSelectedItemPosition,
                 allDay.isChecked
-        ).apply { this.originSequence = originSequence }
-        if (mLocation != null) diaryTemp.location = mLocation
-        diaryTemp.photoUris = mPhotoUris
-        EasyDiaryDbHelper.insertTemporaryDiary(diaryTemp)
+        ).apply {
+            this.originSequence = originSequence
+            photoUris = mPhotoUris
+        }
+        if (StringUtils.isNotEmpty(diaryTemp.title)
+                || StringUtils.isNotEmpty(diaryTemp.contents)
+                || diaryTemp.photoUris?.isNotEmpty() == true) {
+            if (mLocation != null) diaryTemp.location = mLocation
+            EasyDiaryDbHelper.insertTemporaryDiary(diaryTemp)
+        }
     }
 
     protected fun checkTemporaryDiary(originSequence: Int) {
