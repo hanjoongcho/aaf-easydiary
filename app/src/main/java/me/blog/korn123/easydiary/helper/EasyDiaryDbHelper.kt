@@ -104,7 +104,9 @@ object EasyDiaryDbHelper {
 
     fun findFirstDiary(): DiaryDto? {
         val realm = getInstance()
-        val firstItemTimeMillis = (realm.where(DiaryDto::class.java).equalTo("originSequence", DIARY_ORIGIN_SEQUENCE_INIT).min("currentTimeMillis") ?: 0L).toLong()
+        val firstItemTimeMillis = (realm.where(DiaryDto::class.java)
+                .equalTo("originSequence", DIARY_ORIGIN_SEQUENCE_INIT)
+                .min("currentTimeMillis") ?: 0L).toLong()
         return realm.where(DiaryDto::class.java).equalTo("currentTimeMillis", firstItemTimeMillis).findFirst()
     }
 
@@ -207,15 +209,19 @@ object EasyDiaryDbHelper {
     }
 
     fun countDiaryAll(): Long {
-        return getInstance().where(DiaryDto::class.java).count()
+        return getInstance().where(DiaryDto::class.java)
+                .equalTo("originSequence", DIARY_ORIGIN_SEQUENCE_INIT)
+                .count()
     }
 
-    fun countDiaryBy(dateString: String): Int = getInstance().where(DiaryDto::class.java).equalTo("dateString", dateString).count().toInt()
+    fun countDiaryBy(dateString: String): Int = getInstance().where(DiaryDto::class.java)
+            .equalTo("originSequence", DIARY_ORIGIN_SEQUENCE_INIT)
+            .equalTo("dateString", dateString)
+            .count().toInt()
 
-    fun countPhotoUriBy(uriString: String): Int {
-        val count = getInstance().where(PhotoUriDto::class.java).equalTo("photoUri", uriString).count()
-        return count.toInt()
-    }
+    fun countPhotoUriBy(uriString: String): Int = getInstance().where(PhotoUriDto::class.java)
+            .equalTo("photoUri", uriString)
+            .count().toInt()
 
 
     /***************************************************************************************************
