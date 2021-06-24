@@ -104,7 +104,7 @@ object EasyDiaryDbHelper {
 
     fun findFirstDiary(): DiaryDto? {
         val realm = getInstance()
-        val firstItemTimeMillis = (realm.where(DiaryDto::class.java).greaterThan("originSequence", 0).min("currentTimeMillis") ?: 0L).toLong()
+        val firstItemTimeMillis = (realm.where(DiaryDto::class.java).equalTo("originSequence", DIARY_ORIGIN_SEQUENCE_INIT).min("currentTimeMillis") ?: 0L).toLong()
         return realm.where(DiaryDto::class.java).equalTo("currentTimeMillis", firstItemTimeMillis).findFirst()
     }
 
@@ -141,6 +141,7 @@ object EasyDiaryDbHelper {
             results = results.where().equalTo("weather", symbolSequence).findAll()
         }
 
+        // Exclude -1 or greater than 0
         if (EasyDiaryApplication.context?.config?.enableDebugMode == false) {
             results = results.where().equalTo("originSequence", DIARY_ORIGIN_SEQUENCE_INIT).findAll()
         }
@@ -170,7 +171,11 @@ object EasyDiaryDbHelper {
     }
 
     fun findDiaryByDateString(dateString: String?, sort: Sort = Sort.DESCENDING): List<DiaryDto> {
-        return getInstance().where(DiaryDto::class.java).equalTo("dateString", dateString).findAll().sort("sequence", sort).toList()
+        return getInstance().where(DiaryDto::class.java)
+                .equalTo("originSequence", DIARY_ORIGIN_SEQUENCE_INIT)
+                .equalTo("dateString", dateString)
+                .findAll()
+                .sort("sequence", sort).toList()
     }
 
     fun findPhotoUriAll(realmInstance: Realm = getInstance()): List<PhotoUriDto> {
