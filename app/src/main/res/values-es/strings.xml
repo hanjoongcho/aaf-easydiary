@@ -765,4 +765,6 @@
     <string name="symbol_filter_picker_remove_guide_message">Debe seleccionarse al menos un símbolo.</string>
     <string name="title_dialog_postcard_photo_option">Configuración de filtro y recorte de fotos</string>
     <string name="msg_check_force_single_photo">Cambie para exponer solo una foto en el área de fotos de la tarjeta postal.\nSi hay más de una foto registrada, puede deslizar el dedo para ver otras fotos.</string>
+    <string name="load_auto_save_diary_title">Load auto-save diary</string>
+    <string name="load_auto_save_diary_description">There is a diary stored temporarily. Do you want to load the temporarily saved diary?</string>
 </resources>

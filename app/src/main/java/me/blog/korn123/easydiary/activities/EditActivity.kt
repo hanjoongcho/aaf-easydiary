@@ -311,13 +311,15 @@ abstract class EditActivity : EasyDiaryActivity() {
 
     protected fun checkTemporaryDiary(originSequence: Int) {
         EasyDiaryDbHelper.findTemporaryDiaryBy(originSequence)?.let {
-            showAlertDialog("임시저장 다이어리 불러오기", "임시저장된 다이어리가 있습니다. 임시저장된 다이어리를 불러오시겠습니까?"
-                    , { _, _ ->
-                initData(it)
-                initBottomToolbar()
-                EasyDiaryDbHelper.deleteTemporaryDiaryBy(DIARY_SEQUENCE_TEMPORARY)
-            }
-                    , { _, _ -> EasyDiaryDbHelper.deleteDiaryBy(DIARY_SEQUENCE_TEMPORARY) }, false
+            showAlertDialog(
+                    getString(R.string.load_auto_save_diary_title),
+                    getString(R.string.load_auto_save_diary_description),
+                    { _, _ ->
+                        initData(it)
+                        initBottomToolbar()
+                        EasyDiaryDbHelper.deleteTemporaryDiaryBy(DIARY_SEQUENCE_TEMPORARY)
+                    },
+                    { _, _ -> EasyDiaryDbHelper.deleteDiaryBy(DIARY_SEQUENCE_TEMPORARY) }, false
             )
         }
     }
