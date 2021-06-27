@@ -169,7 +169,8 @@ object EasyDiaryDbHelper {
     }
 
     fun findDiaryBy(sequence: Int, realmInstance: Realm = getInstance()): DiaryDto? {
-        return realmInstance.where(DiaryDto::class.java).equalTo("sequence", sequence).findFirst()
+        return realmInstance.where(DiaryDto::class.java)
+                .equalTo("sequence", sequence).findFirst()
     }
 
     fun findDiaryByDateString(dateString: String?, sort: Sort = Sort.DESCENDING): List<DiaryDto> {
