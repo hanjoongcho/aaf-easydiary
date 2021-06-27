@@ -63,7 +63,7 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
                 mActivity,
                 mAlarmList,
                 AdapterView.OnItemClickListener { _, _, position, _ ->
-                    openAlarmDialog(EasyDiaryDbHelper.duplicateAlarm(mAlarmList[position]), mAlarmList[position])
+                    openAlarmDialog(EasyDiaryDbHelper.duplicateAlarmBy(mAlarmList[position]), mAlarmList[position])
                 }
         )
 
@@ -214,7 +214,7 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
 
                                 // save alarm
                                 temporaryAlarm.label = rootView?.alarmDescription?.text.toString()
-                                EasyDiaryDbHelper.updateAlarm(temporaryAlarm)
+                                EasyDiaryDbHelper.updateAlarmBy(temporaryAlarm)
                                 alertDialog?.dismiss()
                                 updateAlarmList()
                                 alertDialog?.dismiss()
@@ -229,7 +229,7 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
     private fun updateAlarmList() {
         mAlarmList.run {
             clear()
-            addAll(EasyDiaryDbHelper.readAlarmAll())
+            addAll(EasyDiaryDbHelper.findAlarmAll())
             infoMessage.visibility = if (this.isEmpty()) View.VISIBLE else View.GONE
         }
         mAlarmAdapter.notifyDataSetChanged()

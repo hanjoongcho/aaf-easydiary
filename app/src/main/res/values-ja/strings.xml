@@ -765,4 +765,6 @@
     <string name="symbol_filter_picker_remove_guide_message">少なくとも1つのシンボルを選択する必要があります。</string>
     <string name="title_dialog_postcard_photo_option">写真のトリミングとフィルターの設定</string>
     <string name="msg_check_force_single_photo">はがきの写真領域に写真を1枚だけ表示するように変更します。\n複数の写真が登録されている場合は、スワイプして他の写真を表示できます。</string>
+    <string name="load_auto_save_diary_title">一時保存ダイアリー読み込み</string>
+    <string name="load_auto_save_diary_description">一時保存されたダイアリーがあります。一時保存されたダイアリーを呼んでしますか？</string>
 </resources>

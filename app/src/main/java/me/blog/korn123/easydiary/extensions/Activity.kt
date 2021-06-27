@@ -529,7 +529,7 @@ fun EasyDiaryActivity.acquireGPSPermissions(activityResultLauncher: ActivityResu
 fun EasyDiaryActivity.migrateData(binging: ActivityDiaryMainBinding) {
     GlobalScope.launch {
         val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
-        val listPhotoUri = EasyDiaryDbHelper.selectPhotoUriAll(realmInstance)
+        val listPhotoUri = EasyDiaryDbHelper.findPhotoUriAll(realmInstance)
         var isFontDirMigrate = false
         for ((index, dto) in listPhotoUri.withIndex()) {
 //                Log.i("PHOTO-URI", dto.photoUri)

@@ -765,4 +765,6 @@
     <string name="symbol_filter_picker_remove_guide_message">At least one symbol must be selected.</string>
     <string name="title_dialog_postcard_photo_option">Photo crop and filter settings</string>
     <string name="msg_check_force_single_photo">Change to expose only one photo in the photo area of the post card.\nIf more than one photo is registered, you can swipe to view other photos.</string>
+    <string name="load_auto_save_diary_title">Load auto-save diary</string>
+    <string name="load_auto_save_diary_description">There is a diary stored temporarily. Do you want to load the temporarily saved diary?</string>
 </resources>

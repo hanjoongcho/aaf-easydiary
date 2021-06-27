@@ -765,4 +765,6 @@
     <string name="symbol_filter_picker_remove_guide_message">कम से कम एक प्रतीक का चयन करना होगा।</string>
     <string name="title_dialog_postcard_photo_option">फोटो काटना और फिल्टर सेटिंग्स</string>
     <string name="msg_check_force_single_photo">पोस्ट कार्ड के फोटो क्षेत्र में केवल एक फोटो को उजागर करने के लिए बदलें।\nयदि एक से अधिक फ़ोटो पंजीकृत हैं, तो आप अन्य फ़ोटो देखने के लिए स्वाइप कर सकते हैं।</string>
+    <string name="load_auto_save_diary_title">Load auto-save diary</string>
+    <string name="load_auto_save_diary_description">There is a diary stored temporarily. Do you want to load the temporarily saved diary?</string>
 </resources>

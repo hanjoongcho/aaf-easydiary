@@ -60,7 +60,7 @@ class DiaryInsertActivity : EditActivity() {
         setDateTime()
         bindEvent()
         setupKeypad()
-        restoreContents(savedInstanceState)
+        savedInstanceState?.let { restoreContents(it) } ?: run { checkTemporaryDiary(DIARY_SEQUENCE_TEMPORARY) }
         initBottomToolbar()
         toggleSimpleLayout()
     }
@@ -108,6 +108,21 @@ class DiaryInsertActivity : EditActivity() {
             true -> photoProgress.visibility = View.VISIBLE
             false -> photoProgress.visibility = View.GONE
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (mIsDiarySaved) {
+            EasyDiaryDbHelper.deleteTemporaryDiaryBy(DIARY_SEQUENCE_TEMPORARY)
+        } else {
+            saveTemporaryDiary(DIARY_SEQUENCE_TEMPORARY)
+        }
+        if (config.enableDebugMode) makeToast("onPause")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (config.enableDebugMode) makeToast("onDestroy")
     }
 
 
@@ -195,7 +210,7 @@ class DiaryInsertActivity : EditActivity() {
                 makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
             } else {
                 val diaryDto = DiaryDto(
-                        -1,
+                        DIARY_SEQUENCE_INIT,
                         mCurrentTimeMillis,
                         this@DiaryInsertActivity.diaryTitle.text.toString(),
                         this@DiaryInsertActivity.diaryContents.text.toString(),
@@ -212,6 +227,7 @@ class DiaryInsertActivity : EditActivity() {
                 } else {
                     TransitionHelper.finishActivityWithTransition(this)
                 }
+                mIsDiarySaved = true
             }
         }
 

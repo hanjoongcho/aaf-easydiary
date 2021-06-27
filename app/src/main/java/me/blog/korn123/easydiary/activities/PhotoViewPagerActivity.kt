@@ -3,7 +3,6 @@ package me.blog.korn123.easydiary.activities
 import android.os.Bundle
 import android.os.Handler
 import android.view.*
-import android.webkit.MimeTypeMap
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.bumptech.glide.Glide
@@ -37,7 +36,7 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
         val intent = intent
         val sequence = intent.getIntExtra(DIARY_SEQUENCE, 0)
         val photoIndex = intent.getIntExtra(DIARY_ATTACH_PHOTO_INDEX, 0)
-        val diaryDto = EasyDiaryDbHelper.readDiaryBy(sequence)
+        val diaryDto = EasyDiaryDbHelper.findDiaryBy(sequence)!!
         mPhotoCount = diaryDto.photoUris?.size ?: 0
 
         supportActionBar?.run {

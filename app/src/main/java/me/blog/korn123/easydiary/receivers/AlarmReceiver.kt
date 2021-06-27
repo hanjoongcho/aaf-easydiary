@@ -16,7 +16,7 @@ class AlarmReceiver : BroadcastReceiver() {
         when (intent.getBooleanExtra(DOZE_SCHEDULE, false)) {
             true -> {
                 context.run {
-                    EasyDiaryDbHelper.readSnoozeAlarms().forEach { alarm ->
+                    EasyDiaryDbHelper.findSnoozeAlarms().forEach { alarm ->
                         EasyDiaryDbHelper.beginTransaction()
                         alarm.retryCount = 0
                         EasyDiaryDbHelper.commitTransaction()
@@ -27,7 +27,7 @@ class AlarmReceiver : BroadcastReceiver() {
             }
             false -> {
                 val alarmId = intent.getIntExtra(SettingsScheduleFragment.ALARM_ID, -1)
-                EasyDiaryDbHelper.readAlarmBy(alarmId)?.let {
+                EasyDiaryDbHelper.findAlarmBy(alarmId)?.let {
                     context.executeScheduledTask(it)
                 }
             }

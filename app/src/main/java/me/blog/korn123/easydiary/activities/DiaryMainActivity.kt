@@ -26,6 +26,7 @@ import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.EditActivity.Companion.DIARY_SEQUENCE_INIT
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
 import me.blog.korn123.easydiary.databinding.PopupMenuMainBinding
 import me.blog.korn123.easydiary.enums.DiaryMode
@@ -71,7 +72,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                             mBinding.progressCoroutine.visibility = View.GONE
                             mDiaryMainItemAdapter?.getSelectedItems()?.forEach {
                                 it.isSelected = false
-                                EasyDiaryDbHelper.updateDiary(it)
+                                EasyDiaryDbHelper.updateDiaryBy(it)
                             }
                             mDiaryMainItemAdapter?.notifyDataSetChanged()
                         }
@@ -97,7 +98,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             title = getString(R.string.read_diary_title)
         }
 
-        mDiaryList.addAll(EasyDiaryDbHelper.readDiary(null))
+        mDiaryList.addAll(EasyDiaryDbHelper.findDiary(null))
         mDiaryMainItemAdapter = DiaryMainItemAdapter(this, R.layout.item_diary_main, mDiaryList)
         mBinding.diaryListView.adapter = mDiaryMainItemAdapter
 
@@ -183,7 +184,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                     when (this.isNotEmpty()) {
                         true -> {
                             showAlertDialog(getString(R.string.delete_selected_items_confirm, this.size), { _, _ ->
-                                this.forEach { EasyDiaryDbHelper.deleteDiary(it.sequence) }
+                                this.forEach { EasyDiaryDbHelper.deleteDiaryBy(it.sequence) }
                                 refreshList()
                             }, null)
                         }
@@ -200,8 +201,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                             showAlertDialog(getString(R.string.duplicate_selected_items_confirm, this.size), { _, _ ->
                                 this.reversed().map {
                                     it.isSelected = false
-                                    EasyDiaryDbHelper.updateDiary(it)
-                                    EasyDiaryDbHelper.duplicateDiary(it)
+                                    EasyDiaryDbHelper.updateDiaryBy(it)
+                                    EasyDiaryDbHelper.duplicateDiaryBy(it)
                                 }
                                 refreshList()
                                 Handler(Looper.getMainLooper()).post { mBinding.diaryListView.setSelection(0) }
@@ -435,29 +436,29 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
 
     private fun refreshList(query: String) {
         mDiaryList.clear()
-        mDiaryList.addAll(EasyDiaryDbHelper.readDiary(query, config.diarySearchQueryCaseSensitive, 0, 0, viewModel.symbol.value ?: 0))
+        mDiaryList.addAll(EasyDiaryDbHelper.findDiary(query, config.diarySearchQueryCaseSensitive, 0, 0, viewModel.symbol.value ?: 0))
         mDiaryMainItemAdapter?.currentQuery = query
         mDiaryMainItemAdapter?.notifyDataSetChanged()
     }
 
     private fun initSampleData() {
         EasyDiaryDbHelper.insertDiary(DiaryDto(
-                -1,
+                DIARY_SEQUENCE_INIT,
                 System.currentTimeMillis() - 395000000L, getString(R.string.sample_diary_title_1), getString(R.string.sample_diary_1),
                 1
         ))
         EasyDiaryDbHelper.insertDiary(DiaryDto(
-                -1,
+                DIARY_SEQUENCE_INIT,
                 System.currentTimeMillis() - 263000000L, getString(R.string.sample_diary_title_2), getString(R.string.sample_diary_2),
                 2
         ))
         EasyDiaryDbHelper.insertDiary(DiaryDto(
-                -1,
+                DIARY_SEQUENCE_INIT,
                 System.currentTimeMillis() - 132000000L, getString(R.string.sample_diary_title_3), getString(R.string.sample_diary_3),
                 3
         ))
         EasyDiaryDbHelper.insertDiary(DiaryDto(
-                -1,
+                DIARY_SEQUENCE_INIT,
                 System.currentTimeMillis() - 4000000L, getString(R.string.sample_diary_title_4), getString(R.string.sample_diary_4),
                 4
         ))

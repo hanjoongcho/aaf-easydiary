@@ -3,10 +3,8 @@ package me.blog.korn123.easydiary.activities
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.speech.RecognizerIntent
 import android.view.View
-import android.view.ViewGroup
 import com.werb.pickphotoview.util.PickConfig
 import kotlinx.android.synthetic.main.activity_diary_edit.*
 import kotlinx.android.synthetic.main.partial_bottom_toolbar.*
@@ -16,7 +14,9 @@ import kotlinx.android.synthetic.main.partial_edit_toolbar_sub.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.JasyptUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.extensions.makeSnackBar
+import me.blog.korn123.easydiary.extensions.openFeelingSymbolDialog
+import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
@@ -40,7 +40,6 @@ class DiaryUpdateActivity : EditActivity() {
                 diaryContents.requestFocus()
                 makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
             } else {
-
                 val encryptionPass = intent.getStringExtra(DIARY_ENCRYPT_PASSWORD)
                 val diaryDto = when (encryptionPass == null) {
                     true -> {
@@ -68,8 +67,9 @@ class DiaryUpdateActivity : EditActivity() {
                 diaryDto.isAllDay = allDay.isChecked
                 applyRemoveIndex()
                 diaryDto.photoUris = mPhotoUris
-                EasyDiaryDbHelper.updateDiary(diaryDto)
+                EasyDiaryDbHelper.updateDiaryBy(diaryDto)
                 TransitionHelper.finishActivityWithTransition(this)
+                mIsDiarySaved = true
             }
         }
     }
@@ -98,7 +98,7 @@ class DiaryUpdateActivity : EditActivity() {
         setupPhotoView()
         setDateTime()
         bindEvent()
-        restoreContents(savedInstanceState)
+        savedInstanceState?.let { restoreContents(it) } ?: run { checkTemporaryDiary(mSequence) }
         initBottomToolbar()
         toggleSimpleLayout()
     }
@@ -147,7 +147,15 @@ class DiaryUpdateActivity : EditActivity() {
             false -> photoProgress.visibility = View.GONE
         }
     }
-    
+
+    override fun onPause() {
+        super.onPause()
+        if (mIsDiarySaved) {
+            EasyDiaryDbHelper.deleteTemporaryDiaryBy(mSequence)
+        } else {
+            saveTemporaryDiary(mSequence)
+        }
+    }
 
     /***************************************************************************************************
      *   etc functions
@@ -156,70 +164,8 @@ class DiaryUpdateActivity : EditActivity() {
     private fun initData() {
         val intent = intent
         mSequence = intent.getIntExtra(DIARY_SEQUENCE, 0)
-        val diaryDto = EasyDiaryDbHelper.readDiaryBy(mSequence)
-        if (diaryDto.isAllDay) {
-            allDay.isChecked = true
-            toggleTimePickerTool()
-        }
-
-        val encryptionPass = intent.getStringExtra(DIARY_ENCRYPT_PASSWORD)
-        when (encryptionPass == null) {
-            true -> {
-                diaryTitle.setText(diaryDto.title)
-                //        getSupportActionBar().setSubtitle(DateUtils.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
-                diaryContents.setText(diaryDto.contents)
-            }
-            false -> {
-                diaryTitle.setText(JasyptUtils.decrypt(diaryDto.title ?: "", encryptionPass))
-                //        getSupportActionBar().setSubtitle(DateUtils.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
-                diaryContents.setText(JasyptUtils.decrypt(diaryDto.contents ?: "", encryptionPass))
-            }
-        }
-
-        mCurrentTimeMillis = diaryDto.currentTimeMillis
-        if (config.holdPositionEnterEditScreen) {
-            Handler().post {
-                contentsContainer.scrollY = intent.getIntExtra(DIARY_CONTENTS_SCROLL_Y, 0) - (feelingSymbolButton.parent.parent as ViewGroup).measuredHeight
-            }
-        } else {
-            diaryContents.requestFocus()
-        }
-
-        // TODO fixme elegance
-        diaryDto.photoUris?.let {
-            mPhotoUris.addAll(it)
-        }
-
-        mPhotoUris.let {
-            val thumbnailSize = config.settingThumbnailSize
-            it.forEachIndexed { index, photoUriDto ->
-                val imageView = when (isLandScape()) {
-                    true -> EasyDiaryUtils.createAttachedPhotoView(this, photoUriDto, 0F, 0F, 0F, 3F)
-                    false -> EasyDiaryUtils.createAttachedPhotoView(this, photoUriDto, 0F, 0F, 3F, 0F)
-                }
-                
-                imageView.setOnClickListener(PhotoClickListener(index))
-                photoContainer.addView(imageView, photoContainer.childCount - 1)
-            }
-        }
-
-//        initSpinner()
-        selectFeelingSymbol(diaryDto.weather)
-        if (config.enableLocationInfo) {
-//            locationLabel.setTextColor(config.textColor)
-//            locationContainer.background = getLabelBackground()
-            diaryDto.location?.let {
-                locationContainer.visibility = View.VISIBLE
-                locationLabel.text = it.address
-                mLocation = it
-            } ?: {
-                setLocationInfo()
-                mLocation?.let {
-                    locationContainer.visibility = View.VISIBLE
-                    locationLabel.text = it.address
-                }
-            } ()
-        }
+        val diaryDto = EasyDiaryDbHelper.findDiaryBy(mSequence)!!
+        initData(diaryDto)
     }
 
     private fun bindEvent() {

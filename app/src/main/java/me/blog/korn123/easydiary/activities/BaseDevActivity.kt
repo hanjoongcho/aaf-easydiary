@@ -142,7 +142,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
     }
 
     private fun updateActionLog() {
-        val actionLogs: List<ActionLog> = EasyDiaryDbHelper.readActionLogAll()
+        val actionLogs: List<ActionLog> = EasyDiaryDbHelper.findActionLogAll()
         val sb = StringBuilder()
         actionLogs.map {
             sb.append("${it.className}-${it.signature}-${it.key}: ${it.value}\n")
@@ -159,7 +159,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 localPhotoBaseNames.add(it.name)
             }
 
-            EasyDiaryDbHelper.selectPhotoUriAll().map { photoUriDto ->
+            EasyDiaryDbHelper.findPhotoUriAll().map { photoUriDto ->
                 if (!localPhotoBaseNames.contains(FilenameUtils.getBaseName(photoUriDto.getFilePath()))) {
                     unUsedPhotos.add(FilenameUtils.getBaseName(photoUriDto.getFilePath()))
                 }

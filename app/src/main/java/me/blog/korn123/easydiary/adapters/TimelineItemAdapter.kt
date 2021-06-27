@@ -67,10 +67,11 @@ class TimelineItemAdapter(
             }
 
             FlavorUtils.initWeatherView(context, diarySymbol, diaryDto.weather, false)
-            val mergedContents = when (StringUtils.isNotEmpty(diaryDto.title)) {
+            var mergedContents = when (StringUtils.isNotEmpty(diaryDto.title)) {
                 true -> "${diaryDto.title}\n${diaryDto.contents}"
                 false -> "${diaryDto.contents}"
             }
+            if (context.config.enableDebugMode) mergedContents = "[${diaryDto.originSequence}] $mergedContents"
             textView1.text = when (diaryDto.isAllDay) {
                 true -> applyBoldToDate(context.resources.getString(R.string.all_day), mergedContents)
                 false -> applyBoldToDate(DateUtils.timeMillisToDateTime(diaryDto.currentTimeMillis, DateUtils.TIME_PATTERN_WITH_SECONDS), mergedContents)

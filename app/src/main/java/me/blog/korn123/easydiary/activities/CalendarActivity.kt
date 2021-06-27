@@ -177,7 +177,7 @@ class CalendarActivity : EasyDiaryActivity() {
         val formatter = SimpleDateFormat(DateUtils.DATE_PATTERN_DASH, Locale.getDefault())
         val sort: Sort = if (config.calendarSorting == CALENDAR_SORTING_ASC) Sort.ASCENDING else Sort.DESCENDING
         mDiaryList.clear()
-        mDiaryList.addAll(EasyDiaryDbHelper.readDiaryByDateString(formatter.format(mCalendar.time), sort))
+        mDiaryList.addAll(EasyDiaryDbHelper.findDiaryByDateString(formatter.format(mCalendar.time), sort))
         mArrayAdapterDiary?.notifyDataSetChanged()
         selectedList.setSelection(0)
 

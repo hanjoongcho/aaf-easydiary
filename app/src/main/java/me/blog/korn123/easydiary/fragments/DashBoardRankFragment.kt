@@ -35,7 +35,7 @@ class DashBoardRankFragment : androidx.fragment.app.Fragment() {
                     calendar.add(Calendar.DATE, -30)
                     val startMillis = calendar.timeInMillis
                     dashboardTitle.text = getString(R.string.dashboard_title_last_month)
-                    diaryCount.text = EasyDiaryDbHelper.readDiary(null, true, startMillis, endMillis).size.toString()
+                    diaryCount.text = EasyDiaryDbHelper.findDiary(null, true, startMillis, endMillis).size.toString()
                     val startDate = DateUtils.getDateStringFromTimeMillis(startMillis, SimpleDateFormat.MEDIUM)
                     val endDate = DateUtils.getDateStringFromTimeMillis(endMillis, SimpleDateFormat.MEDIUM)
                     val periodInfo = "$startDate - $endDate"
@@ -48,7 +48,7 @@ class DashBoardRankFragment : androidx.fragment.app.Fragment() {
                     calendar.add(Calendar.DATE, -7)
                     val startMillis = calendar.timeInMillis
                     dashboardTitle.text = getString(R.string.dashboard_title_last_week)
-                    diaryCount.text = EasyDiaryDbHelper.readDiary(null, true, startMillis, endMillis).size.toString()
+                    diaryCount.text = EasyDiaryDbHelper.findDiary(null, true, startMillis, endMillis).size.toString()
                     val startDate = DateUtils.getDateStringFromTimeMillis(startMillis, SimpleDateFormat.MEDIUM)
                     val endDate = DateUtils.getDateStringFromTimeMillis(endMillis, SimpleDateFormat.MEDIUM)
                     val periodInfo = "$startDate - $endDate"
@@ -56,7 +56,7 @@ class DashBoardRankFragment : androidx.fragment.app.Fragment() {
                     ChartUtils.getSortedMapBySymbol(true, startMillis, endMillis)
                 }
                 else -> {
-                    val firstDiary = EasyDiaryDbHelper.selectFirstDiary()
+                    val firstDiary = EasyDiaryDbHelper.findFirstDiary()
                     val endMillis = System.currentTimeMillis()
                     val startMillis = firstDiary?.currentTimeMillis ?: endMillis
                     dashboardTitle.text = getString(R.string.dashboard_title_lifetime)

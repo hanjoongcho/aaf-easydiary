@@ -289,7 +289,7 @@ class TimelineActivity : EasyDiaryActivity() {
 
         mDiaryList.run {
             clear()
-            addAll(EasyDiaryDbHelper.readDiary(
+            addAll(EasyDiaryDbHelper.findDiary(
                     query.text.toString(),
                     config.diarySearchQueryCaseSensitive,
                     startMillis,

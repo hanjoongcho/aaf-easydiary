@@ -319,7 +319,7 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
 
     private fun createWorkBook(infoView: TextView? = null, guideMessage: String? = ""): Workbook {
         val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
-        val diaryList = EasyDiaryDbHelper.readDiary(null, false, 0, 0, 0, realmInstance)
+        val diaryList = EasyDiaryDbHelper.findDiary(null, false, 0, 0, 0, realmInstance)
         val wb: Workbook = HSSFWorkbook()
         val sheet = wb.createSheet("new sheet")
 

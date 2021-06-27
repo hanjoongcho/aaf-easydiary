@@ -93,7 +93,7 @@ class DiaryMainItemAdapter(
 
             selection.setOnCheckedChangeListener { _, isChecked ->
                 diaryDto.isSelected = isChecked
-                EasyDiaryDbHelper.updateDiary(diaryDto)
+                EasyDiaryDbHelper.updateDiaryBy(diaryDto)
             }
 
             when ((activity as DiaryMainActivity).diaryMode) {
@@ -130,6 +130,7 @@ class DiaryMainItemAdapter(
                 true -> DateUtils.getFullPatternDate(diaryDto.currentTimeMillis)
                 false -> DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis)
             }
+            if (context.config.enableDebugMode) textDateTime.text = "[${diaryDto.originSequence}] ${textDateTime.text}"
             FlavorUtils.initWeatherView(context, imageSymbol, diaryDto.weather)
 
             when (diaryDto.photoUris?.size ?: 0 > 0) {

@@ -75,7 +75,7 @@ class FullBackupService : Service() {
 
         // test alarm sequence is 5
         val alarmId = intent?.getIntExtra(SettingsScheduleFragment.ALARM_ID, 5) ?: 5
-        EasyDiaryDbHelper.readAlarmBy(alarmId)?.let {
+        EasyDiaryDbHelper.findAlarmBy(alarmId)?.let {
             val workStatus = WorkStatus()
             workStatusList.add(workStatus)
             backupPhoto(it, workStatus)
