@@ -60,10 +60,9 @@ class DiaryInsertActivity : EditActivity() {
         setDateTime()
         bindEvent()
         setupKeypad()
-        restoreContents(savedInstanceState)
+        savedInstanceState?.let { restoreContents(it) } ?: run { checkTemporaryDiary(DIARY_SEQUENCE_TEMPORARY) }
         initBottomToolbar()
         toggleSimpleLayout()
-        checkTemporaryDiary(DIARY_SEQUENCE_TEMPORARY)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {

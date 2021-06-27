@@ -98,10 +98,9 @@ class DiaryUpdateActivity : EditActivity() {
         setupPhotoView()
         setDateTime()
         bindEvent()
-        restoreContents(savedInstanceState)
+        savedInstanceState?.let { restoreContents(it) } ?: run { checkTemporaryDiary(mSequence) }
         initBottomToolbar()
         toggleSimpleLayout()
-        checkTemporaryDiary(mSequence)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
