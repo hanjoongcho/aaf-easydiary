@@ -16,7 +16,7 @@ import java.util.*
  * Created by CHO HANJOONG on 2016-12-31.
  */
 
-class IntroActivity : AppCompatActivity() {
+class IntroActivity : AppCompatActivity() { 
     private lateinit var mBinding: ActivityIntroBinding
     private lateinit var mHandler: Handler
     override fun onCreate(savedInstanceState: Bundle?) {
