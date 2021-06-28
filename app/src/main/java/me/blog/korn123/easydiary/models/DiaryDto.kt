@@ -5,6 +5,8 @@ import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.Ignore
 import io.realm.annotations.PrimaryKey
+import me.blog.korn123.easydiary.activities.EditActivity.Companion.DIARY_ORIGIN_SEQUENCE_INIT
+import me.blog.korn123.easydiary.activities.EditActivity.Companion.DIARY_SEQUENCE_INIT
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -12,8 +14,8 @@ import io.realm.annotations.PrimaryKey
 
 open class DiaryDto : RealmObject {
     @PrimaryKey
-    var sequence: Int = 0
-    var originSequence: Int = 0
+    var sequence: Int = DIARY_SEQUENCE_INIT
+    var originSequence: Int = DIARY_ORIGIN_SEQUENCE_INIT
 
     @Ignore
     private val sessionId: Int = 0
