@@ -34,7 +34,7 @@ import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 import org.apache.commons.io.FilenameUtils
 import java.io.File
 
-open class BaseDevActivity : EasyDiaryActivity() { 
+open class BaseDevActivity : EasyDiaryActivity() {  
 
     /***************************************************************************************************
      *   global properties
