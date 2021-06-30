@@ -105,10 +105,13 @@ open class BaseDevActivity : EasyDiaryActivity() {
      *
      ***************************************************************************************************/
     private fun setupTestFunction() {
-        mBinding.buttonEnableOrientation.setOnClickListener { setScreenOrientationSensor(true) }
-        mBinding.buttonDisableOrientation.setOnClickListener { setScreenOrientationSensor(false) }
-        mBinding.buttonHoldOrientation.setOnClickListener { holdCurrentOrientation() }
-        mBinding.buttonReleaseOrientation.setOnClickListener { clearHoldOrientation() }
+        mBinding.run {
+            buttonEnableOrientation.setOnClickListener { setScreenOrientationSensor(true) }
+            buttonDisableOrientation.setOnClickListener { setScreenOrientationSensor(false) }
+            buttonHoldOrientation.setOnClickListener { holdCurrentOrientation() }
+            buttonReleaseOrientation.setOnClickListener { clearHoldOrientation() }
+            buttonReviewFlow.setOnClickListener { startReviewFlow() }
+        }
     }
 
     private fun setupDetermineNextAlarm() {
