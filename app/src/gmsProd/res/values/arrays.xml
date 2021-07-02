@@ -146,6 +146,7 @@
     </string-array>
 
     <string-array name="food_item_array">
+        <item>278|Lobster</item>
         <item>267|Fried Chicken</item>
         <item>275|Pizza</item>
         <item>250|Burger</item>
