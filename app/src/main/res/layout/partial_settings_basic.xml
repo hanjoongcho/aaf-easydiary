@@ -388,6 +388,32 @@
                     style="@style/SettingsSummary" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/enableReviewFlow"
+            style="@style/AppCard.Settings">
+            <LinearLayout
+                style="@style/LinearLayoutVertical">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:text="@string/enable_review_flow_title"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        style="@style/SettingsTitle" />
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/enableReviewFlowSwitcher"
+                        android:clickable="false"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:text="@string/enable_review_flow_summary"
+                    style="@style/SettingsSummary" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
     </LinearLayout>
 </ScrollView>
 

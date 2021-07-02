@@ -767,4 +767,6 @@
     <string name="msg_check_force_single_photo">はがきの写真領域に写真を1枚だけ表示するように変更します。\n複数の写真が登録されている場合は、スワイプして他の写真を表示できます。</string>
     <string name="load_auto_save_diary_title">一時保存ダイアリー読み込み</string>
     <string name="load_auto_save_diary_description">一時保存されたダイアリーがあります。一時保存されたダイアリーを呼んでしますか？</string>
+    <string name="enable_review_flow_title">GooglePlayレビューの流れ</string>
+    <string name="enable_review_flow_summary">EasyDiaryを特定の期間使用すると、GooglePlayレビュー登録ダイアログが有効になります。 レビュー登録機能を使用しない場合、またはレビュー登録後にGooglePlayダイアログが開く場合は、このオプションを無効にしてダイアログが開かないようにすることができます。</string>
 </resources>

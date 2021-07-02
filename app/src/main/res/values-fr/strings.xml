@@ -767,4 +767,6 @@
     <string name="msg_check_force_single_photo">Change to expose only one photo in the photo area of the post card.\nIf more than one photo is registered, you can swipe to view other photos.</string>
     <string name="load_auto_save_diary_title">Load auto-save diary</string>
     <string name="load_auto_save_diary_description">There is a diary stored temporarily. Do you want to load the temporarily saved diary?</string>
+    <string name="enable_review_flow_title">Google Play Review Flow</string>
+    <string name="enable_review_flow_summary">If you use Easy Diary for a specific period, the Google Play review registration dialog will be activated. If you do not want to use the review registration function or if the Google Play dialog opens after review registration, you can disable this option to prevent the dialog from opening.</string>
 </resources>
