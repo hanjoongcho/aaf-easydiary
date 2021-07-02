@@ -532,6 +532,11 @@
         v1.4.169.0 / 2021.06.19\n
         스페인어 번역 추가
     </string>
+    <string name="release_236">
+        v1.4.170.0 / 2021.07.03\n
+        임시저장 및 복구 기능 추가\n
+        인앱리뷰 비활성화 기능 추가
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -767,6 +772,6 @@
     <string name="msg_check_force_single_photo">포스트 카드 사진 영영에 1개의 사진만 노출합니다.\n2개 이상의 사진이 등록되어 있는경우 스와이프 하여 다른 사진을 볼 수 있습니다.</string>
     <string name="load_auto_save_diary_title">임시저장 다이어리 불러오기</string>
     <string name="load_auto_save_diary_description">임시저장된 다이어리가 있습니다. 임시저장된 다이어리를 불러오시겠습니까?</string>
-    <string name="enable_review_flow_title">구글플레이 리뷰플로우</string>
+    <string name="enable_review_flow_title">구글플레이 인앱 리뷰</string>
     <string name="enable_review_flow_summary">특정기간동안 이지다이어리를 사용하는 경우 구글플레이 리뷰등록 다이얼로그가 활성화됩니다. 리뷰등록 기능을 사용하고 싶지 않거나 리뷰등록 이후에도 구글플레이 다이얼로그가 열리는 경우 이 옵션을 비활성화 시켜 다이얼로그가 열리지 않도록 할 수 있습니다.</string>
 </resources>

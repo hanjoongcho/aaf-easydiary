@@ -532,6 +532,11 @@
         v1.4.169.0 / 2021.06.19\n
         Spanish translation added
     </string>
+    <string name="release_236">
+        v1.4.170.0 / 2021.07.03\n
+        Added temporary save and recovery function\n
+        Added the option to disable In-App Review
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -767,6 +772,6 @@
     <string name="msg_check_force_single_photo">पोस्ट कार्ड के फोटो क्षेत्र में केवल एक फोटो को उजागर करने के लिए बदलें।\nयदि एक से अधिक फ़ोटो पंजीकृत हैं, तो आप अन्य फ़ोटो देखने के लिए स्वाइप कर सकते हैं।</string>
     <string name="load_auto_save_diary_title">Load auto-save diary</string>
     <string name="load_auto_save_diary_description">There is a diary stored temporarily. Do you want to load the temporarily saved diary?</string>
-    <string name="enable_review_flow_title">Google Play Review Flow</string>
+    <string name="enable_review_flow_title">Google Play In-App Review</string>
     <string name="enable_review_flow_summary">If you use Easy Diary for a specific period, the Google Play review registration dialog will be activated. If you do not want to use the review registration function or if the Google Play dialog opens after review registration, you can disable this option to prevent the dialog from opening.</string>
 </resources>

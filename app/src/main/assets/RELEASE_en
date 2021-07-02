@@ -4,6 +4,10 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.170.0 (date: 2021.07.03)
+  * Added temporary save and recovery function
+  * Added the option to disable In-App Review
+
 # Changes in 1.4.169.0 (date: 2021.06.19)
   * Spanish translation added
 
