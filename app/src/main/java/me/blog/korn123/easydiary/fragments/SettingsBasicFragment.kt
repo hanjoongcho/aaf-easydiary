@@ -14,6 +14,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import kotlinx.android.synthetic.main.partial_settings_basic.*
+import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.CustomizationActivity
 import me.blog.korn123.easydiary.activities.EasyDiaryActivity
@@ -31,8 +32,6 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
      ***************************************************************************************************/
     private lateinit var progressContainer: ConstraintLayout
     private lateinit var mRootView: ViewGroup
-    private val mActivity: Activity
-        get() = requireActivity()
     private val mRequestLocationSourceLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
         requireActivity().run {
             makeSnackBar(if (isLocationEnabled()) "GPS provider setting is activated!!!" else "The request operation did not complete normally.")
@@ -59,7 +58,8 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        progressContainer = mActivity.findViewById(R.id.progressContainer)
+        progressContainer = requireActivity().findViewById(R.id.progressContainer)
+        if (BuildConfig.FLAVOR == "foss") enableReviewFlow.visibility = View.GONE
 
         bindEvent()
         updateFragmentUI(mRootView)
@@ -70,9 +70,11 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
         super.onResume()
         updateFragmentUI(mRootView)
         initPreference()
-        if (mActivity.config.isThemeChanged) {
-            mActivity.config.isThemeChanged = false
-            mActivity.startMainActivityWithClearTask()
+        requireActivity().run {
+            if (config.isThemeChanged) {
+                config.isThemeChanged = false
+                startMainActivityWithClearTask()
+            }
         }
     }
 
@@ -82,7 +84,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     private val mOnClickListener = View.OnClickListener { view ->
-        mActivity.run {
+        requireActivity().run {
             when (view.id) {
                 R.id.primaryColor -> TransitionHelper.startActivityWithTransition(this, Intent(this, CustomizationActivity::class.java))
                 R.id.thumbnailSetting -> {
@@ -147,6 +149,10 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                     taskSymbolTopOrderSwitcher.toggle()
                     config.enableTaskSymbolTopOrder = taskSymbolTopOrderSwitcher.isChecked
                 }
+                R.id.enableReviewFlow -> {
+                    enableReviewFlowSwitcher.toggle()
+                    config.enableReviewFlow = enableReviewFlowSwitcher.isChecked
+                }
             }
         }
     }
@@ -159,8 +165,13 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
         multiPickerOption.setOnClickListener(mOnClickListener)
         sensitiveOption.setOnClickListener(mOnClickListener)
         maxLines.setOnClickListener(mOnClickListener)
+        countCharacters.setOnClickListener(mOnClickListener)
+        locationInfo.setOnClickListener(mOnClickListener)
+        holdPositionEnterEditScreen.setOnClickListener(mOnClickListener)
+        taskSymbolTopOrder.setOnClickListener(mOnClickListener)
+        enableReviewFlow.setOnClickListener(mOnClickListener)
         calendarStartDay.setOnCheckedChangeListener { _, i ->
-            mActivity.config.calendarStartDay = when (i) {
+            requireActivity().config.calendarStartDay = when (i) {
                 R.id.startMonday -> CALENDAR_START_DAY_MONDAY
 //                R.id.startTuesday -> CALENDAR_START_DAY_TUESDAY
 //                R.id.startWednesday -> CALENDAR_START_DAY_WEDNESDAY
@@ -171,107 +182,110 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
             }
         }
         calendarSorting.setOnCheckedChangeListener { _, i ->
-            mActivity.config.calendarSorting = when (i) {
+            requireActivity().config.calendarSorting = when (i) {
                 R.id.ascending -> CALENDAR_SORTING_ASC
                 else -> CALENDAR_SORTING_DESC
             }
         }
-        countCharacters.setOnClickListener(mOnClickListener)
-        locationInfo.setOnClickListener(mOnClickListener)
-        holdPositionEnterEditScreen.setOnClickListener(mOnClickListener)
-        taskSymbolTopOrder.setOnClickListener(mOnClickListener)
     }
 
     @SuppressLint("SetTextI18n")
     private fun initPreference() {
-        sensitiveOptionSwitcher.isChecked = mActivity.config.diarySearchQueryCaseSensitive
-        multiPickerOptionSwitcher.isChecked = mActivity.config.multiPickerEnable
-        enableCardViewPolicySwitcher.isChecked = mActivity.config.enableCardViewPolicy
-        contentsSummarySwitcher.isChecked = mActivity.config.enableContentsSummary
-        countCharactersSwitcher.isChecked = mActivity.config.enableCountCharacters
-        locationInfoSwitcher.isChecked = mActivity.config.enableLocationInfo
-        taskSymbolTopOrderSwitcher.isChecked = mActivity.config.enableTaskSymbolTopOrder
+        requireActivity().run {
+            sensitiveOptionSwitcher.isChecked = config.diarySearchQueryCaseSensitive
+            multiPickerOptionSwitcher.isChecked = config.multiPickerEnable
+            enableCardViewPolicySwitcher.isChecked = config.enableCardViewPolicy
+            contentsSummarySwitcher.isChecked = config.enableContentsSummary
+            countCharactersSwitcher.isChecked = config.enableCountCharacters
+            locationInfoSwitcher.isChecked = config.enableLocationInfo
+            taskSymbolTopOrderSwitcher.isChecked = config.enableTaskSymbolTopOrder
+            enableReviewFlowSwitcher.isChecked = config.enableReviewFlow
 
-        when (mActivity.config.calendarStartDay) {
-            CALENDAR_START_DAY_MONDAY -> startMonday.isChecked = true
-            CALENDAR_START_DAY_SATURDAY -> startSaturday.isChecked = true
-            else -> startSunday.isChecked = true
+            when (config.calendarStartDay) {
+                CALENDAR_START_DAY_MONDAY -> startMonday.isChecked = true
+                CALENDAR_START_DAY_SATURDAY -> startSaturday.isChecked = true
+                else -> startSunday.isChecked = true
+            }
+            when (config.calendarSorting) {
+                CALENDAR_SORTING_ASC -> ascending.isChecked = true
+                CALENDAR_SORTING_DESC -> descending.isChecked = true
+            }
+            holdPositionSwitcher.isChecked = config.holdPositionEnterEditScreen
+            thumbnailSettingDescription.text = "${config.settingThumbnailSize.toInt()}dp x ${config.settingThumbnailSize.toInt()}dp"
+            maxLines.visibility = if (contentsSummarySwitcher.isChecked) View.VISIBLE else View.GONE
+            maxLinesValue.text = getString(R.string.max_lines_value, config.summaryMaxLines)
         }
-        when (mActivity.config.calendarSorting) {
-            CALENDAR_SORTING_ASC -> ascending.isChecked = true
-            CALENDAR_SORTING_DESC -> descending.isChecked = true
-        }
-        holdPositionSwitcher.isChecked = mActivity.config.holdPositionEnterEditScreen
-        thumbnailSettingDescription.text = "${mActivity.config.settingThumbnailSize.toInt()}dp x ${mActivity.config.settingThumbnailSize.toInt()}dp"
-        maxLines.visibility = if (contentsSummarySwitcher.isChecked) View.VISIBLE else View.GONE
-        maxLinesValue.text = getString(R.string.max_lines_value, mActivity.config.summaryMaxLines)
     }
 
     private fun openThumbnailSettingDialog() {
-        var alertDialog: AlertDialog? = null
-        val builder = AlertDialog.Builder(mActivity)
-        builder.setNegativeButton(getString(android.R.string.cancel), null)
-        val inflater = mActivity.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val containerView = inflater.inflate(R.layout.dialog_option_item, mRootView, false)
-        val listView = containerView.findViewById<ListView>(R.id.listView)
+        requireActivity().run {
+            var alertDialog: AlertDialog? = null
+            val builder = AlertDialog.Builder(this)
+            builder.setNegativeButton(getString(android.R.string.cancel), null)
+            val inflater = getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val containerView = inflater.inflate(R.layout.dialog_option_item, mRootView, false)
+            val listView = containerView.findViewById<ListView>(R.id.listView)
 
-        var selectedIndex = 0
-        val listThumbnailSize = ArrayList<Map<String, String>>()
-        for (i in 40..200 step 10) {
-            listThumbnailSize.add(mapOf("optionTitle" to "${i}dp x ${i}dp", "optionValue" to "$i"))
-        }
-
-        listThumbnailSize.mapIndexed { index, map ->
-            val size = map["optionValue"] ?: "0"
-            if (mActivity.config.settingThumbnailSize == size.toFloat()) selectedIndex = index
-        }
-
-        val arrayAdapter = OptionItemAdapter(mActivity, R.layout.item_check_label, listThumbnailSize, mActivity.config.settingThumbnailSize)
-        listView.adapter = arrayAdapter
-        listView.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
-            @Suppress("UNCHECKED_CAST") val fontInfo = parent.adapter.getItem(position) as HashMap<String, String>
-            fontInfo["optionValue"]?.let {
-                mActivity.config.settingThumbnailSize = it.toFloat()
-                initPreference()
+            var selectedIndex = 0
+            val listThumbnailSize = ArrayList<Map<String, String>>()
+            for (i in 40..200 step 10) {
+                listThumbnailSize.add(mapOf("optionTitle" to "${i}dp x ${i}dp", "optionValue" to "$i"))
             }
-            alertDialog?.cancel()
-        }
-        alertDialog = builder.create().apply { mActivity.updateAlertDialog(this, null, containerView, getString(R.string.thumbnail_setting_title)) }
 
-        listView.setSelection(selectedIndex)
+            listThumbnailSize.mapIndexed { index, map ->
+                val size = map["optionValue"] ?: "0"
+                if (config.settingThumbnailSize == size.toFloat()) selectedIndex = index
+            }
+
+            val arrayAdapter = OptionItemAdapter(this, R.layout.item_check_label, listThumbnailSize, config.settingThumbnailSize)
+            listView.adapter = arrayAdapter
+            listView.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
+                @Suppress("UNCHECKED_CAST") val fontInfo = parent.adapter.getItem(position) as HashMap<String, String>
+                fontInfo["optionValue"]?.let {
+                    config.settingThumbnailSize = it.toFloat()
+                    initPreference()
+                }
+                alertDialog?.cancel()
+            }
+            alertDialog = builder.create().apply { updateAlertDialog(this, null, containerView, getString(R.string.thumbnail_setting_title)) }
+
+            listView.setSelection(selectedIndex)
+        }
     }
 
     private fun openMaxLinesSettingDialog() {
-        var alertDialog: AlertDialog? = null
-        val builder = AlertDialog.Builder(mActivity)
-        builder.setNegativeButton(getString(android.R.string.cancel), null)
-        val inflater = mActivity.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val containerView = inflater.inflate(R.layout.dialog_option_item, mRootView, false)
-        val listView = containerView.findViewById<ListView>(R.id.listView)
+        requireActivity().run {
+            var alertDialog: AlertDialog? = null
+            val builder = AlertDialog.Builder(this)
+            builder.setNegativeButton(getString(android.R.string.cancel), null)
+            val inflater = getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val containerView = inflater.inflate(R.layout.dialog_option_item, mRootView, false)
+            val listView = containerView.findViewById<ListView>(R.id.listView)
 
-        var selectedIndex = 0
-        val listMaxLines = ArrayList<Map<String, String>>()
-        for (i in 1..20) {
-            listMaxLines.add(mapOf("optionTitle" to getString(R.string.max_lines_value, i), "optionValue" to "$i"))
-        }
-
-        listMaxLines.mapIndexed { index, map ->
-            val size = map["optionValue"] ?: 0
-            if (mActivity.config.summaryMaxLines == size) selectedIndex = index
-        }
-
-        val arrayAdapter = OptionItemAdapter(mActivity, R.layout.item_check_label, listMaxLines, mActivity.config.summaryMaxLines.toFloat())
-        listView.adapter = arrayAdapter
-        listView.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
-            @Suppress("UNCHECKED_CAST") val optionInfo = parent.adapter.getItem(position) as HashMap<String, String>
-            optionInfo["optionValue"]?.let {
-                mActivity.config.summaryMaxLines = it.toInt()
-                initPreference()
+            var selectedIndex = 0
+            val listMaxLines = ArrayList<Map<String, String>>()
+            for (i in 1..20) {
+                listMaxLines.add(mapOf("optionTitle" to getString(R.string.max_lines_value, i), "optionValue" to "$i"))
             }
-            alertDialog?.cancel()
-        }
 
-        alertDialog = builder.create().apply { mActivity.updateAlertDialog(this, null, containerView, getString(R.string.max_lines_title)) }
-        listView.setSelection(selectedIndex)
+            listMaxLines.mapIndexed { index, map ->
+                val size = map["optionValue"] ?: 0
+                if (config.summaryMaxLines == size) selectedIndex = index
+            }
+
+            val arrayAdapter = OptionItemAdapter(this, R.layout.item_check_label, listMaxLines, config.summaryMaxLines.toFloat())
+            listView.adapter = arrayAdapter
+            listView.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
+                @Suppress("UNCHECKED_CAST") val optionInfo = parent.adapter.getItem(position) as HashMap<String, String>
+                optionInfo["optionValue"]?.let {
+                    config.summaryMaxLines = it.toInt()
+                    initPreference()
+                }
+                alertDialog?.cancel()
+            }
+
+            alertDialog = builder.create().apply { updateAlertDialog(this, null, containerView, getString(R.string.max_lines_title)) }
+            listView.setSelection(selectedIndex)
+        }
     }
 }

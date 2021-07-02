@@ -152,4 +152,8 @@ class Config(context: Context) : BaseConfig(context) {
     var appExecutionCount: Int
         get() = prefs.getInt(APP_EXECUTION_COUNT, APP_EXECUTION_COUNT_DEFAULT)
         set(appExecutionCount) = prefs.edit().putInt(APP_EXECUTION_COUNT, appExecutionCount).apply()
+
+    var enableReviewFlow: Boolean
+        get() = prefs.getBoolean(SETTING_ENABLE_REVIEW_FLOW, true)
+        set(enableReviewFlow) = prefs.edit().putBoolean(SETTING_ENABLE_REVIEW_FLOW, enableReviewFlow).apply()
 }
