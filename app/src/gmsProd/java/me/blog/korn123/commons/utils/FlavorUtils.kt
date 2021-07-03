@@ -172,6 +172,7 @@ object FlavorUtils {
         FOOD_NOODLES -> R.drawable.ic_noodles
         FOOD_FRIED_RICE -> R.drawable.ic_fried_rice
         FOOD_SOUP02 -> R.drawable.ic_soup2
+        FOOD_LOBSTER -> R.drawable.ic_lobster
 
         LEISURE_PICNIC -> R.drawable.ic_picnic
         LEISURE_MOVIE -> R.drawable.ic_movie
