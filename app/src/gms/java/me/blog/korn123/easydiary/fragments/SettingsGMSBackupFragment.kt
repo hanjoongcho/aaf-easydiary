@@ -33,6 +33,7 @@ import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.android.synthetic.main.partial_settings_backup_gms.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.BaseSettingsActivity
 import me.blog.korn123.easydiary.adapters.RealmFileItemAdapter
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
@@ -68,8 +69,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        progressContainer = requireActivity().findViewById(R.id.progressContainer)
+        progressContainer = (requireActivity() as BaseSettingsActivity).getProgressContainer()
 
         // Clear google OAuth token generated prior to version 1.4.80
         if (requireActivity().config.clearLegacyToken) GoogleOAuthHelper.signOutGoogleOAuth(requireActivity(), false)

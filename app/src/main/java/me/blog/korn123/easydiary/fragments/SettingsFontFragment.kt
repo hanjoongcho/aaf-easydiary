@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.partial_settings_font.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.BaseSettingsActivity
 import me.blog.korn123.easydiary.activities.SettingsActivity
 import me.blog.korn123.easydiary.adapters.FontItemAdapter
 import me.blog.korn123.easydiary.adapters.OptionItemAdapter
@@ -51,8 +52,7 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        progressContainer = mActivity.findViewById(R.id.progressContainer)
+        progressContainer = (requireActivity() as BaseSettingsActivity).getProgressContainer()
         mActivity.run {
             changeDrawableIconColor(config.textColor, R.drawable.minus_6)
             changeDrawableIconColor(config.textColor, R.drawable.plus_6)
