@@ -50,8 +50,8 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
         return mRootView
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         progressContainer = (requireActivity() as BaseSettingsActivity).getProgressContainer()
         mActivity.run {
             changeDrawableIconColor(config.textColor, R.drawable.minus_6)

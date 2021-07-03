@@ -11,10 +11,8 @@ import android.widget.ListView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.activities.BaseSettingsActivity
 import me.blog.korn123.easydiary.activities.CustomizationActivity
 import me.blog.korn123.easydiary.activities.EasyDiaryActivity
 import me.blog.korn123.easydiary.adapters.OptionItemAdapter
@@ -31,7 +29,6 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     private lateinit var mBinding: PartialSettingsBasicBinding
-    private lateinit var progressContainer: ConstraintLayout
     private val mRequestLocationSourceLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
         requireActivity().run {
             makeSnackBar(if (isLocationEnabled()) "GPS provider setting is activated!!!" else "The request operation did not complete normally.")
@@ -47,20 +44,9 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
         return mBinding.root
     }
 
-//    override fun onActivityCreated(savedInstanceState: Bundle?) {
-//        super.onActivityCreated(savedInstanceState)
-//        progressContainer = mActivity.findViewById(R.id.progressContainer)
-//
-//        bindEvent()
-//        updateFragmentUI(mRootView)
-//        initPreference()
-//    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        progressContainer = (requireActivity() as BaseSettingsActivity).getProgressContainer()
         if (BuildConfig.FLAVOR == "foss") mBinding.enableReviewFlow.visibility = View.GONE
-
         bindEvent()
         updateFragmentUI(mBinding.root)
         initPreference()

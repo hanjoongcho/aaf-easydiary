@@ -67,8 +67,8 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
         return mRootView
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         progressContainer = (requireActivity() as BaseSettingsActivity).getProgressContainer()
 
         // Clear google OAuth token generated prior to version 1.4.80
