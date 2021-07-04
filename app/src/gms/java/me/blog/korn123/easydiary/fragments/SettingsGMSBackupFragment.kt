@@ -72,7 +72,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
         progressContainer = (requireActivity() as BaseSettingsActivity).getProgressContainer()
 
         // Clear google OAuth token generated prior to version 1.4.80
-        if (requireActivity().config.clearLegacyToken) GoogleOAuthHelper.signOutGoogleOAuth(requireActivity(), false)
+        if (!requireActivity().config.clearLegacyToken) GoogleOAuthHelper.signOutGoogleOAuth(requireActivity(), false)
 
         bindEvent()
         updateFragmentUI(mRootView)
