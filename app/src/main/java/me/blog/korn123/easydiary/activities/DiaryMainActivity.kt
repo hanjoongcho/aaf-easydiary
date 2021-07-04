@@ -25,7 +25,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
-import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.EditActivity.Companion.DIARY_SEQUENCE_INIT
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter

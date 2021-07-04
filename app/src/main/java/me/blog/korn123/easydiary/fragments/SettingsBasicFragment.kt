@@ -1,7 +1,6 @@
 package me.blog.korn123.easydiary.fragments
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,13 +11,12 @@ import android.widget.ListView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
-import kotlinx.android.synthetic.main.partial_settings_basic.*
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.CustomizationActivity
 import me.blog.korn123.easydiary.activities.EasyDiaryActivity
 import me.blog.korn123.easydiary.adapters.OptionItemAdapter
+import me.blog.korn123.easydiary.databinding.PartialSettingsBasicBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import java.util.*
@@ -30,8 +28,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var progressContainer: ConstraintLayout
-    private lateinit var mRootView: ViewGroup
+    private lateinit var mBinding: PartialSettingsBasicBinding
     private val mRequestLocationSourceLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
         requireActivity().run {
             makeSnackBar(if (isLocationEnabled()) "GPS provider setting is activated!!!" else "The request operation did not complete normally.")
@@ -43,32 +40,21 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        mRootView = inflater.inflate(R.layout.partial_settings_basic, container, false) as ViewGroup
-        return mRootView
+        mBinding = PartialSettingsBasicBinding.inflate(layoutInflater)
+        return mBinding.root
     }
-
-//    override fun onActivityCreated(savedInstanceState: Bundle?) {
-//        super.onActivityCreated(savedInstanceState)
-//        progressContainer = mActivity.findViewById(R.id.progressContainer)
-//
-//        bindEvent()
-//        updateFragmentUI(mRootView)
-//        initPreference()
-//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        progressContainer = requireActivity().findViewById(R.id.progressContainer)
-        if (BuildConfig.FLAVOR == "foss") enableReviewFlow.visibility = View.GONE
-
+        if (BuildConfig.FLAVOR == "foss") mBinding.enableReviewFlow.visibility = View.GONE
         bindEvent()
-        updateFragmentUI(mRootView)
+        updateFragmentUI(mBinding.root)
         initPreference()
     }
 
     override fun onResume() {
         super.onResume()
-        updateFragmentUI(mRootView)
+        updateFragmentUI(mBinding.root)
         initPreference()
         requireActivity().run {
             if (config.isThemeChanged) {
@@ -84,107 +70,111 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     private val mOnClickListener = View.OnClickListener { view ->
-        requireActivity().run {
-            when (view.id) {
-                R.id.primaryColor -> TransitionHelper.startActivityWithTransition(this, Intent(this, CustomizationActivity::class.java))
-                R.id.thumbnailSetting -> {
-                    openThumbnailSettingDialog()
-                }
-                R.id.contentsSummary -> {
-                    contentsSummarySwitcher.toggle()
-                    config.enableContentsSummary = contentsSummarySwitcher.isChecked
-                    maxLines.visibility = if (contentsSummarySwitcher.isChecked) View.VISIBLE else View.GONE
-                }
-                R.id.enableCardViewPolicy -> {
-                    enableCardViewPolicySwitcher.toggle()
-                    config.enableCardViewPolicy = enableCardViewPolicySwitcher.isChecked
-                    updateCardViewPolicy(mRootView)
-                }
-                R.id.multiPickerOption -> {
-                    multiPickerOptionSwitcher.toggle()
-                    config.multiPickerEnable = multiPickerOptionSwitcher.isChecked
-                }
-                R.id.sensitiveOption -> {
-                    sensitiveOptionSwitcher.toggle()
-                    config.diarySearchQueryCaseSensitive = sensitiveOptionSwitcher.isChecked
-                }
-                R.id.countCharacters -> {
-                    countCharactersSwitcher.toggle()
-                    config.enableCountCharacters = countCharactersSwitcher.isChecked
-                }
-                R.id.locationInfo -> {
-                    locationInfoSwitcher.toggle()
-                    when (locationInfoSwitcher.isChecked) {
-                        true -> {
-                            run {
-                                when (hasGPSPermissions()) {
-                                    true -> {
-                                        config.enableLocationInfo = locationInfoSwitcher.isChecked
-                                    }
-                                    false -> {
-                                        locationInfoSwitcher.isChecked = false
-                                        if (this is EasyDiaryActivity) {
-                                            acquireGPSPermissions(mRequestLocationSourceLauncher) {
-                                                locationInfoSwitcher.isChecked = true
-                                                config.enableLocationInfo = locationInfoSwitcher.isChecked
+        requireActivity().run activity@ {
+            mBinding.run {
+                when (view.id) {
+                    R.id.primaryColor -> TransitionHelper.startActivityWithTransition(this@activity, Intent(this@activity, CustomizationActivity::class.java))
+                    R.id.thumbnailSetting -> {
+                        openThumbnailSettingDialog()
+                    }
+                    R.id.contentsSummary -> {
+                        contentsSummarySwitcher.toggle()
+                        config.enableContentsSummary = contentsSummarySwitcher.isChecked
+                        maxLines.visibility = if (contentsSummarySwitcher.isChecked) View.VISIBLE else View.GONE
+                    }
+                    R.id.enableCardViewPolicy -> {
+                        enableCardViewPolicySwitcher.toggle()
+                        config.enableCardViewPolicy = enableCardViewPolicySwitcher.isChecked
+                        updateCardViewPolicy(this.root)
+                    }
+                    R.id.multiPickerOption -> {
+                        multiPickerOptionSwitcher.toggle()
+                        config.multiPickerEnable = multiPickerOptionSwitcher.isChecked
+                    }
+                    R.id.sensitiveOption -> {
+                        sensitiveOptionSwitcher.toggle()
+                        config.diarySearchQueryCaseSensitive = sensitiveOptionSwitcher.isChecked
+                    }
+                    R.id.countCharacters -> {
+                        countCharactersSwitcher.toggle()
+                        config.enableCountCharacters = countCharactersSwitcher.isChecked
+                    }
+                    R.id.locationInfo -> {
+                        locationInfoSwitcher.toggle()
+                        when (locationInfoSwitcher.isChecked) {
+                            true -> {
+                                run {
+                                    when (hasGPSPermissions()) {
+                                        true -> {
+                                            config.enableLocationInfo = locationInfoSwitcher.isChecked
+                                        }
+                                        false -> {
+                                            locationInfoSwitcher.isChecked = false
+                                            if (this@activity is EasyDiaryActivity) {
+                                                acquireGPSPermissions(mRequestLocationSourceLauncher) {
+                                                    locationInfoSwitcher.isChecked = true
+                                                    config.enableLocationInfo = locationInfoSwitcher.isChecked
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
-                        }
-                        false -> {
-                            config.enableLocationInfo = locationInfoSwitcher.isChecked
+                            false -> {
+                                config.enableLocationInfo = locationInfoSwitcher.isChecked
+                            }
                         }
                     }
-                }
-                R.id.holdPositionEnterEditScreen -> {
-                    holdPositionSwitcher.toggle()
-                    config.holdPositionEnterEditScreen = holdPositionSwitcher.isChecked
-                }
-                R.id.maxLines -> {
-                    openMaxLinesSettingDialog()
-                }
-                R.id.taskSymbolTopOrder -> {
-                    taskSymbolTopOrderSwitcher.toggle()
-                    config.enableTaskSymbolTopOrder = taskSymbolTopOrderSwitcher.isChecked
-                }
-                R.id.enableReviewFlow -> {
-                    enableReviewFlowSwitcher.toggle()
-                    config.enableReviewFlow = enableReviewFlowSwitcher.isChecked
+                    R.id.holdPositionEnterEditScreen -> {
+                        holdPositionSwitcher.toggle()
+                        config.holdPositionEnterEditScreen = holdPositionSwitcher.isChecked
+                    }
+                    R.id.maxLines -> {
+                        openMaxLinesSettingDialog()
+                    }
+                    R.id.taskSymbolTopOrder -> {
+                        taskSymbolTopOrderSwitcher.toggle()
+                        config.enableTaskSymbolTopOrder = taskSymbolTopOrderSwitcher.isChecked
+                    }
+                    R.id.enableReviewFlow -> {
+                        enableReviewFlowSwitcher.toggle()
+                        config.enableReviewFlow = enableReviewFlowSwitcher.isChecked
+                    }
                 }
             }
         }
     }
 
     private fun bindEvent() {
-        primaryColor.setOnClickListener(mOnClickListener)
-        thumbnailSetting.setOnClickListener(mOnClickListener)
-        contentsSummary.setOnClickListener(mOnClickListener)
-        enableCardViewPolicy.setOnClickListener(mOnClickListener)
-        multiPickerOption.setOnClickListener(mOnClickListener)
-        sensitiveOption.setOnClickListener(mOnClickListener)
-        maxLines.setOnClickListener(mOnClickListener)
-        countCharacters.setOnClickListener(mOnClickListener)
-        locationInfo.setOnClickListener(mOnClickListener)
-        holdPositionEnterEditScreen.setOnClickListener(mOnClickListener)
-        taskSymbolTopOrder.setOnClickListener(mOnClickListener)
-        enableReviewFlow.setOnClickListener(mOnClickListener)
-        calendarStartDay.setOnCheckedChangeListener { _, i ->
-            requireActivity().config.calendarStartDay = when (i) {
-                R.id.startMonday -> CALENDAR_START_DAY_MONDAY
+        mBinding.run {
+            primaryColor.setOnClickListener(mOnClickListener)
+            thumbnailSetting.setOnClickListener(mOnClickListener)
+            contentsSummary.setOnClickListener(mOnClickListener)
+            enableCardViewPolicy.setOnClickListener(mOnClickListener)
+            multiPickerOption.setOnClickListener(mOnClickListener)
+            sensitiveOption.setOnClickListener(mOnClickListener)
+            maxLines.setOnClickListener(mOnClickListener)
+            countCharacters.setOnClickListener(mOnClickListener)
+            locationInfo.setOnClickListener(mOnClickListener)
+            holdPositionEnterEditScreen.setOnClickListener(mOnClickListener)
+            taskSymbolTopOrder.setOnClickListener(mOnClickListener)
+            enableReviewFlow.setOnClickListener(mOnClickListener)
+            calendarStartDay.setOnCheckedChangeListener { _, i ->
+                requireActivity().config.calendarStartDay = when (i) {
+                    R.id.startMonday -> CALENDAR_START_DAY_MONDAY
 //                R.id.startTuesday -> CALENDAR_START_DAY_TUESDAY
 //                R.id.startWednesday -> CALENDAR_START_DAY_WEDNESDAY
 //                R.id.startThursday -> CALENDAR_START_DAY_THURSDAY
 //                R.id.startFriday -> CALENDAR_START_DAY_FRIDAY
-                R.id.startSaturday -> CALENDAR_START_DAY_SATURDAY
-                else -> CALENDAR_START_DAY_SUNDAY
+                    R.id.startSaturday -> CALENDAR_START_DAY_SATURDAY
+                    else -> CALENDAR_START_DAY_SUNDAY
+                }
             }
-        }
-        calendarSorting.setOnCheckedChangeListener { _, i ->
-            requireActivity().config.calendarSorting = when (i) {
-                R.id.ascending -> CALENDAR_SORTING_ASC
-                else -> CALENDAR_SORTING_DESC
+            calendarSorting.setOnCheckedChangeListener { _, i ->
+                requireActivity().config.calendarSorting = when (i) {
+                    R.id.ascending -> CALENDAR_SORTING_ASC
+                    else -> CALENDAR_SORTING_DESC
+                }
             }
         }
     }
@@ -192,28 +182,30 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
     @SuppressLint("SetTextI18n")
     private fun initPreference() {
         requireActivity().run {
-            sensitiveOptionSwitcher.isChecked = config.diarySearchQueryCaseSensitive
-            multiPickerOptionSwitcher.isChecked = config.multiPickerEnable
-            enableCardViewPolicySwitcher.isChecked = config.enableCardViewPolicy
-            contentsSummarySwitcher.isChecked = config.enableContentsSummary
-            countCharactersSwitcher.isChecked = config.enableCountCharacters
-            locationInfoSwitcher.isChecked = config.enableLocationInfo
-            taskSymbolTopOrderSwitcher.isChecked = config.enableTaskSymbolTopOrder
-            enableReviewFlowSwitcher.isChecked = config.enableReviewFlow
+            mBinding.run {
+                sensitiveOptionSwitcher.isChecked = config.diarySearchQueryCaseSensitive
+                multiPickerOptionSwitcher.isChecked = config.multiPickerEnable
+                enableCardViewPolicySwitcher.isChecked = config.enableCardViewPolicy
+                contentsSummarySwitcher.isChecked = config.enableContentsSummary
+                countCharactersSwitcher.isChecked = config.enableCountCharacters
+                locationInfoSwitcher.isChecked = config.enableLocationInfo
+                taskSymbolTopOrderSwitcher.isChecked = config.enableTaskSymbolTopOrder
+                enableReviewFlowSwitcher.isChecked = config.enableReviewFlow
 
-            when (config.calendarStartDay) {
-                CALENDAR_START_DAY_MONDAY -> startMonday.isChecked = true
-                CALENDAR_START_DAY_SATURDAY -> startSaturday.isChecked = true
-                else -> startSunday.isChecked = true
+                when (config.calendarStartDay) {
+                    CALENDAR_START_DAY_MONDAY -> startMonday.isChecked = true
+                    CALENDAR_START_DAY_SATURDAY -> startSaturday.isChecked = true
+                    else -> startSunday.isChecked = true
+                }
+                when (config.calendarSorting) {
+                    CALENDAR_SORTING_ASC -> ascending.isChecked = true
+                    CALENDAR_SORTING_DESC -> descending.isChecked = true
+                }
+                holdPositionSwitcher.isChecked = config.holdPositionEnterEditScreen
+                thumbnailSettingDescription.text = "${config.settingThumbnailSize.toInt()}dp x ${config.settingThumbnailSize.toInt()}dp"
+                maxLines.visibility = if (contentsSummarySwitcher.isChecked) View.VISIBLE else View.GONE
+                maxLinesValue.text = getString(R.string.max_lines_value, config.summaryMaxLines)
             }
-            when (config.calendarSorting) {
-                CALENDAR_SORTING_ASC -> ascending.isChecked = true
-                CALENDAR_SORTING_DESC -> descending.isChecked = true
-            }
-            holdPositionSwitcher.isChecked = config.holdPositionEnterEditScreen
-            thumbnailSettingDescription.text = "${config.settingThumbnailSize.toInt()}dp x ${config.settingThumbnailSize.toInt()}dp"
-            maxLines.visibility = if (contentsSummarySwitcher.isChecked) View.VISIBLE else View.GONE
-            maxLinesValue.text = getString(R.string.max_lines_value, config.summaryMaxLines)
         }
     }
 
@@ -223,7 +215,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
             val builder = AlertDialog.Builder(this)
             builder.setNegativeButton(getString(android.R.string.cancel), null)
             val inflater = getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            val containerView = inflater.inflate(R.layout.dialog_option_item, mRootView, false)
+            val containerView = inflater.inflate(R.layout.dialog_option_item, mBinding.root, false)
             val listView = containerView.findViewById<ListView>(R.id.listView)
 
             var selectedIndex = 0
@@ -259,7 +251,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
             val builder = AlertDialog.Builder(this)
             builder.setNegativeButton(getString(android.R.string.cancel), null)
             val inflater = getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            val containerView = inflater.inflate(R.layout.dialog_option_item, mRootView, false)
+            val containerView = inflater.inflate(R.layout.dialog_option_item, mBinding.root, false)
             val listView = containerView.findViewById<ListView>(R.id.listView)
 
             var selectedIndex = 0

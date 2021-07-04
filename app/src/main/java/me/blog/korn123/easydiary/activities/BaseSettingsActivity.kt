@@ -14,7 +14,7 @@ open class BaseSettingsActivity : EasyDiaryActivity() {
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var mBinding: ActivitySettingsBinding
+    protected lateinit var mBinding: ActivitySettingsBinding
     lateinit var mDotIndicatorPager2Adapter: DotIndicatorPager2Adapter
     var mCurrentPosition = 0
 
@@ -54,4 +54,6 @@ open class BaseSettingsActivity : EasyDiaryActivity() {
     fun updateUI() {
         super.onResume()
     }
+
+    fun getProgressContainer() = mBinding.partialSettingsProgress.progressContainer
 }
