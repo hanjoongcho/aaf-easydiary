@@ -30,11 +30,11 @@ import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.FileList
 import io.github.aafactory.commons.utils.DateUtils
-import kotlinx.android.synthetic.main.partial_settings_backup_gms.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.BaseSettingsActivity
 import me.blog.korn123.easydiary.adapters.RealmFileItemAdapter
+import me.blog.korn123.easydiary.databinding.PartialSettingsBackupGmsBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.helper.GoogleOAuthHelper.Companion.callAccountCallback
@@ -52,8 +52,8 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
      *   global properties
      *
      ***************************************************************************************************/
+    private lateinit var mBinding: PartialSettingsBackupGmsBinding
     private lateinit var progressContainer: ConstraintLayout
-    private lateinit var mRootView: ViewGroup
     private lateinit var mContext: Context
     private var mTaskFlag = 0
 
@@ -63,8 +63,8 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mRootView = inflater.inflate(R.layout.partial_settings_backup_gms, container, false) as ViewGroup
-        return mRootView
+        mBinding = PartialSettingsBackupGmsBinding.inflate(layoutInflater)
+        return mBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -75,13 +75,13 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
         if (!requireActivity().config.clearLegacyToken) GoogleOAuthHelper.signOutGoogleOAuth(requireActivity(), false)
 
         bindEvent()
-        updateFragmentUI(mRootView)
+        updateFragmentUI(mBinding.root)
         initPreference()
     }
 
     override fun onResume() {
         super.onResume()
-        updateFragmentUI(mRootView)
+        updateFragmentUI(mBinding.root)
         initPreference()
     }
 
@@ -346,12 +346,14 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
     }
 
     private fun bindEvent() {
-        restoreSetting.setOnClickListener(mOnClickListener)
-        backupSetting.setOnClickListener(mOnClickListener)
-        backupAttachPhoto.setOnClickListener(mOnClickListener)
-        recoverAttachPhoto.setOnClickListener(mOnClickListener)
-        signInGoogleOAuth.setOnClickListener(mOnClickListener)
-        signOutGoogleOAuth.setOnClickListener(mOnClickListener)
+        mBinding.run {
+            restoreSetting.setOnClickListener(mOnClickListener)
+            backupSetting.setOnClickListener(mOnClickListener)
+            backupAttachPhoto.setOnClickListener(mOnClickListener)
+            recoverAttachPhoto.setOnClickListener(mOnClickListener)
+            signInGoogleOAuth.setOnClickListener(mOnClickListener)
+            signOutGoogleOAuth.setOnClickListener(mOnClickListener)
+        }
     }
 
     private fun initPreference() {
@@ -359,25 +361,27 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
     }
 
     private fun determineAccountInfo() {
-        when (GoogleOAuthHelper.isValidGoogleSignAccount(requireActivity())) {
-            true -> {
-                profilePhoto.visibility = View.VISIBLE
-                signInGoogleOAuthTitle.text = getString(R.string.google_drive_account_information_title)
-                GoogleOAuthHelper.getGoogleSignAccount(requireActivity())?.run {
-                    val sb = StringBuilder()
-                    sb.append(this.displayName +  System.getProperty("line.separator"))
-                    sb.append(this.email)
-                    requireActivity().runOnUiThread { accountInfo.text = sb.toString() }
-                    Glide.with(requireActivity())
-                            .load(this.photoUrl)
-                            .apply(RequestOptions().circleCrop())
-                            .into(profilePhoto)
+        mBinding.run {
+            when (GoogleOAuthHelper.isValidGoogleSignAccount(requireActivity())) {
+                true -> {
+                    profilePhoto.visibility = View.VISIBLE
+                    signInGoogleOAuthTitle.text = getString(R.string.google_drive_account_information_title)
+                    GoogleOAuthHelper.getGoogleSignAccount(requireActivity())?.run {
+                        val sb = StringBuilder()
+                        sb.append(this.displayName +  System.getProperty("line.separator"))
+                        sb.append(this.email)
+                        requireActivity().runOnUiThread { accountInfo.text = sb.toString() }
+                        Glide.with(requireActivity())
+                                .load(this.photoUrl)
+                                .apply(RequestOptions().circleCrop())
+                                .into(profilePhoto)
+                    }
                 }
-            }
-            false -> {
-                profilePhoto.visibility = View.GONE
-                signInGoogleOAuthTitle.text = getString(R.string.google_drive_account_sign_in_title)
-                accountInfo.text = getString(R.string.google_drive_account_sign_in_description)
+                false -> {
+                    profilePhoto.visibility = View.GONE
+                    signInGoogleOAuthTitle.text = getString(R.string.google_drive_account_sign_in_title)
+                    accountInfo.text = getString(R.string.google_drive_account_sign_in_description)
+                }
             }
         }
     }

@@ -2,7 +2,6 @@ package me.blog.korn123.easydiary.fragments
 
 import android.annotation.TargetApi
 import android.app.Activity
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
@@ -20,14 +19,14 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import io.github.aafactory.commons.extensions.baseConfig
 import io.github.aafactory.commons.utils.DateUtils
-import kotlinx.android.synthetic.main.partial_settings_backup_local.*
-import kotlinx.android.synthetic.main.popup_location_selector.view.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.RealmFileItemAdapter
 import me.blog.korn123.easydiary.adapters.SimpleCheckboxAdapter
+import me.blog.korn123.easydiary.databinding.PartialSettingsBackupLocalBinding
+import me.blog.korn123.easydiary.databinding.PopupLocationSelectorBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.workers.BackupOperations
@@ -43,14 +42,14 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.util.*
 
-class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
+class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
 
 
     /***************************************************************************************************
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var mRootView: ViewGroup
+    private lateinit var mBinding: PartialSettingsBackupLocalBinding
     private val mActivity: Activity
         get() = requireActivity()
 
@@ -60,20 +59,20 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mRootView = inflater.inflate(R.layout.partial_settings_backup_local, container, false) as ViewGroup
-        return mRootView
+        mBinding = PartialSettingsBackupLocalBinding.inflate(layoutInflater)
+        return mBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         bindEvent()
-        updateFragmentUI(mRootView)
+        updateFragmentUI(mBinding.root)
         initPreference()
     }
 
     override fun onResume() {
         super.onResume()
-        updateFragmentUI(mRootView)
+        updateFragmentUI(mBinding.root)
         initPreference()
     }
 
@@ -493,13 +492,15 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
     }
 
     private fun bindEvent() {
-        exportExcel.setOnClickListener(mOnClickListener)
-        sendEmailWithExcel.setOnClickListener(mOnClickListener)
-        exportRealmFile.setOnClickListener(mOnClickListener)
-        importRealmFile.setOnClickListener(mOnClickListener)
-        deleteRealmFile.setOnClickListener(mOnClickListener)
-        exportFullBackupFile.setOnClickListener(mOnClickListener)
-        importFullBackupFile.setOnClickListener(mOnClickListener)
+        mBinding.run {
+            exportExcel.setOnClickListener(mOnClickListener)
+            sendEmailWithExcel.setOnClickListener(mOnClickListener)
+            exportRealmFile.setOnClickListener(mOnClickListener)
+            importRealmFile.setOnClickListener(mOnClickListener)
+            deleteRealmFile.setOnClickListener(mOnClickListener)
+            exportFullBackupFile.setOnClickListener(mOnClickListener)
+            importFullBackupFile.setOnClickListener(mOnClickListener)
+        }
     }
 
     private fun initPreference() {}
@@ -509,14 +510,14 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
         val builder = AlertDialog.Builder(mActivity).apply {
             setNegativeButton(getString(android.R.string.cancel), null)
         }
-        val inflater = mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val popupView = (inflater.inflate(R.layout.popup_location_selector, null) as ViewGroup).apply {
+
+        val popupView = PopupLocationSelectorBinding.inflate(layoutInflater).apply {
             modeInternalTitle.text = internalTitle
             modeInternalDescription.text = internalDescription
             modeExternalTitle.text = externalTitle
             modeExternalDescription.text = externalDescription
 
-            setBackgroundColor(mActivity.baseConfig.backgroundColor)
+            root.setBackgroundColor(mActivity.baseConfig.backgroundColor)
             closePopup.setOnClickListener { dialog?.dismiss() }
             modeInternal.setOnClickListener {
                 when (popupMode) {
@@ -534,14 +535,14 @@ class SettingsLocalBackupFragment() : androidx.fragment.app.Fragment() {
             }
         }
         mActivity.run {
-            updateTextColors(popupView)
-            initTextSize(popupView)
+            updateTextColors(popupView.root)
+            initTextSize(popupView.root)
         }
 
-        FontUtils.setFontsTypeface(mActivity, null, popupView, true)
-        builder.setView(popupView)
+        FontUtils.setFontsTypeface(mActivity, null, popupView.root, true)
+        builder.setView(popupView.root)
         dialog = builder.create().apply {
-            mActivity.updateAlertDialog(this, null, popupView)
+            mActivity.updateAlertDialog(this, null, popupView.root)
         }
     }
 
