@@ -6,9 +6,6 @@ import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.view.View
 import com.werb.pickphotoview.util.PickConfig
-import kotlinx.android.synthetic.main.partial_bottom_toolbar.*
-import kotlinx.android.synthetic.main.partial_edit_photo_container.*
-import kotlinx.android.synthetic.main.partial_edit_toolbar_sub.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.JasyptUtils
 import me.blog.korn123.easydiary.R
@@ -62,7 +59,7 @@ class DiaryUpdateActivity : EditActivity() {
 
                 if (mLocation != null) diaryDto.location = mLocation
                 diaryDto.weather = mSelectedItemPosition
-                diaryDto.isAllDay = allDay.isChecked
+                diaryDto.isAllDay = mBinding.partialEditToolbarSub.allDay.isChecked
                 applyRemoveIndex()
                 diaryDto.photoUris = mPhotoUris
                 EasyDiaryDbHelper.updateDiaryBy(diaryDto)
@@ -168,24 +165,26 @@ class DiaryUpdateActivity : EditActivity() {
     }
 
     private fun bindEvent() {
-        saveContents.setOnClickListener(mOnClickListener)
-        photoView.setOnClickListener(mClickListener)
-        captureCamera.setOnClickListener(mClickListener)
-        datePicker.setOnClickListener(mClickListener)
-        timePicker.setOnClickListener(mClickListener)
-        secondsPicker.setOnClickListener(mClickListener)
-        microphone.setOnClickListener(mClickListener)
+        mBinding.partialEditToolbarSub.saveContents.setOnClickListener(mOnClickListener)
+        mBinding.partialEditContents.partialEditPhotoContainer.photoView.setOnClickListener(mClickListener)
+        mBinding.partialEditContents.partialEditPhotoContainer.captureCamera.setOnClickListener(mClickListener)
+        mBinding.partialEditToolbarSub.datePicker.setOnClickListener(mClickListener)
+        mBinding.partialEditToolbarSub.timePicker.setOnClickListener(mClickListener)
+        mBinding.partialEditToolbarSub.secondsPicker.setOnClickListener(mClickListener)
+        mBinding.partialEditToolbarSub.microphone.setOnClickListener(mClickListener)
         mBinding.partialEditContents.locationContainer.setOnClickListener(mClickListener)
         mBinding.partialEditContents.diaryTitle.setOnTouchListener(mTouchListener)
         mBinding.partialEditContents.diaryContents.setOnTouchListener(mTouchListener)
 
-        togglePhoto.setOnClickListener {
+        mBinding.partialEditContents.partialBottomToolbar.togglePhoto.setOnClickListener {
             toggleSimpleLayout()
         }
 
-        allDayContainer.setOnClickListener {
-            allDay.isChecked = allDay.isChecked.not()
-            toggleTimePickerTool()
+        mBinding.partialEditToolbarSub.run {
+            allDayContainer.setOnClickListener {
+                allDay.isChecked = allDay.isChecked.not()
+                toggleTimePickerTool()
+            }
         }
 
         mBinding.partialEditContents.feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog(getString(R.string.diary_symbol_guide_message)) { symbolSequence ->

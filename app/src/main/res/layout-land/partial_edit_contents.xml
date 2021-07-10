@@ -156,7 +156,7 @@
                 </FrameLayout>
             </androidx.cardview.widget.CardView>
         </LinearLayout>
-        <include layout="@layout/partial_bottom_toolbar" />
-        <include layout="@layout/partial_edit_photo_container" />
+        <include android:id="@+id/partial_bottom_toolbar" layout="@layout/partial_bottom_toolbar" />
+        <include android:id="@+id/partial_edit_photo_container" layout="@layout/partial_edit_photo_container" />
     </LinearLayout>
 </LinearLayout>

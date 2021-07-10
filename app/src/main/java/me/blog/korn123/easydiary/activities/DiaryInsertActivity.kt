@@ -12,9 +12,6 @@ import android.widget.RelativeLayout
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.werb.pickphotoview.util.PickConfig
-import kotlinx.android.synthetic.main.partial_bottom_toolbar.*
-import kotlinx.android.synthetic.main.partial_edit_photo_container.*
-import kotlinx.android.synthetic.main.partial_edit_toolbar_sub.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.*
@@ -153,26 +150,26 @@ class DiaryInsertActivity : EditActivity() {
                 }
                 4 -> {
                     mShowcaseView.setButtonPosition(centerParams)
-                    mShowcaseView.setShowcase(ViewTarget(photoView), true)
+                    mShowcaseView.setShowcase(ViewTarget(mBinding.partialEditContents.partialEditPhotoContainer.photoView), true)
                     mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_4))
                     mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_4))
                 }
 
                 5 -> {
                     mShowcaseView.setButtonPosition(centerParams)
-                    mShowcaseView.setShowcase(ViewTarget(datePicker), true)
+                    mShowcaseView.setShowcase(ViewTarget(mBinding.partialEditToolbarSub.datePicker), true)
                     mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_7))
                     mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_7))
                 }
                 6 -> {
                     mShowcaseView.setButtonPosition(centerParams)
-                    mShowcaseView.setShowcase(ViewTarget(timePicker), true)
+                    mShowcaseView.setShowcase(ViewTarget(mBinding.partialEditToolbarSub.timePicker), true)
                     mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_8))
                     mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_8))
                 }
                 7 -> {
                     mShowcaseView.setButtonPosition(centerParams)
-                    mShowcaseView.setShowcase(ViewTarget(saveContents), true)
+                    mShowcaseView.setShowcase(ViewTarget(mBinding.partialEditToolbarSub.saveContents), true)
                     mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_9))
                     mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_9))
                     mShowcaseView.setButtonText(getString(R.string.create_diary_showcase_button_2))
@@ -201,7 +198,7 @@ class DiaryInsertActivity : EditActivity() {
     }
 
     private fun bindEvent() {
-        saveContents.setOnClickListener {
+        mBinding.partialEditToolbarSub.saveContents.setOnClickListener {
             hideSoftInputFromWindow()
             setLocationInfo()
             if (StringUtils.isEmpty(mBinding.partialEditContents.diaryContents.text)) {
@@ -214,7 +211,7 @@ class DiaryInsertActivity : EditActivity() {
                         mBinding.partialEditContents.diaryTitle.text.toString(),
                         mBinding.partialEditContents.diaryContents.text.toString(),
                         mSelectedItemPosition,
-                        allDay.isChecked
+                        mBinding.partialEditToolbarSub.allDay.isChecked
                 )
                 if (mLocation != null) diaryDto.location = mLocation
                 applyRemoveIndex()
@@ -230,22 +227,24 @@ class DiaryInsertActivity : EditActivity() {
             }
         }
 
-        photoView.setOnClickListener(mClickListener)
-        captureCamera.setOnClickListener(mClickListener)
-        datePicker.setOnClickListener(mClickListener)
-        timePicker.setOnClickListener(mClickListener)
-        secondsPicker.setOnClickListener(mClickListener)
-        microphone.setOnClickListener(mClickListener)
+        mBinding.partialEditContents.partialEditPhotoContainer.photoView.setOnClickListener(mClickListener)
+        mBinding.partialEditContents.partialEditPhotoContainer.captureCamera.setOnClickListener(mClickListener)
+        mBinding.partialEditToolbarSub.datePicker.setOnClickListener(mClickListener)
+        mBinding.partialEditToolbarSub.timePicker.setOnClickListener(mClickListener)
+        mBinding.partialEditToolbarSub.secondsPicker.setOnClickListener(mClickListener)
+        mBinding.partialEditToolbarSub.microphone.setOnClickListener(mClickListener)
         mBinding.partialEditContents.diaryTitle.setOnTouchListener(mTouchListener)
         mBinding.partialEditContents.diaryContents.setOnTouchListener(mTouchListener)
 
-        togglePhoto.setOnClickListener {
+        mBinding.partialEditContents.partialBottomToolbar.togglePhoto.setOnClickListener {
             toggleSimpleLayout()
         }
 
-        allDayContainer.setOnClickListener {
-            allDay.isChecked = allDay.isChecked.not()
-            toggleTimePickerTool()
+        mBinding.partialEditToolbarSub.run {
+            allDayContainer.setOnClickListener {
+                allDay.isChecked = allDay.isChecked.not()
+                toggleTimePickerTool()
+            }
         }
 
         mBinding.partialEditContents.feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog(getString(R.string.diary_symbol_guide_message)) { symbolSequence ->

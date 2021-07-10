@@ -32,10 +32,6 @@ import com.werb.pickphotoview.PickPhotoView
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import io.realm.RealmList
-import kotlinx.android.synthetic.main.partial_bottom_toolbar.*
-import kotlinx.android.synthetic.main.partial_edit_photo_container.*
-import kotlinx.android.synthetic.main.partial_edit_toolbar_sub.*
-import kotlinx.android.synthetic.main.viewholder_photo.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.JasyptUtils
@@ -299,7 +295,7 @@ abstract class EditActivity : EasyDiaryActivity() {
                 mBinding.partialEditContents.diaryTitle.text.toString(),
                 mBinding.partialEditContents.diaryContents.text.toString(),
                 mSelectedItemPosition,
-                allDay.isChecked
+                mBinding.partialEditToolbarSub.allDay.isChecked
         ).apply {
             this.originSequence = originSequence
             photoUris = mPhotoUris
@@ -352,20 +348,22 @@ abstract class EditActivity : EasyDiaryActivity() {
     }
 
     protected fun toggleSimpleLayout() {
-        when (photoContainerScrollView.visibility) {
-            View.VISIBLE -> {
-                photoContainerScrollView.visibility = View.GONE
-                mBinding.partialEditContents.titleCard.visibility = View.VISIBLE
-                togglePhoto.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.expand))
-                supportActionBar?.hide()
+        mBinding.partialEditContents.partialEditPhotoContainer.run {
+            when (photoContainerScrollView.visibility) {
+                View.VISIBLE -> {
+                    photoContainerScrollView.visibility = View.GONE
+                    mBinding.partialEditContents.titleCard.visibility = View.VISIBLE
+                    mBinding.partialEditContents.partialBottomToolbar.togglePhoto.setImageDrawable(ContextCompat.getDrawable(this@EditActivity, R.drawable.expand))
+                    supportActionBar?.hide()
+                }
+                View.GONE -> {
+                    photoContainerScrollView.visibility = View.VISIBLE
+                    mBinding.partialEditContents.titleCard.visibility = View.GONE
+                    mBinding.partialEditContents.partialBottomToolbar.togglePhoto.setImageDrawable(ContextCompat.getDrawable(this@EditActivity, R.drawable.collapse))
+                    supportActionBar?.show()
+                }
+                else -> {}
             }
-            View.GONE -> {
-                photoContainerScrollView.visibility = View.VISIBLE
-                mBinding.partialEditContents.titleCard.visibility = View.GONE
-                togglePhoto.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.collapse))
-                supportActionBar?.show()
-            }
-            else -> {}
         }
     }
 
@@ -399,27 +397,29 @@ abstract class EditActivity : EasyDiaryActivity() {
     }
 
     protected fun toggleTimePickerTool() {
-        when (allDay.isChecked) {
-            true -> {
-                timePicker.visibility = View.GONE
-                secondsPicker.visibility = View.GONE
-                mHourOfDay = 0
-                mMinute = 0
-                mSecond = 0
+        mBinding.partialEditToolbarSub.run {
+            when (allDay.isChecked) {
+                true -> {
+                    timePicker.visibility = View.GONE
+                    secondsPicker.visibility = View.GONE
+                    mHourOfDay = 0
+                    mMinute = 0
+                    mSecond = 0
+                }
+                false -> {
+                    timePicker.visibility = View.VISIBLE
+                    secondsPicker.visibility = View.VISIBLE
+                }
             }
-            false -> {
-                timePicker.visibility = View.VISIBLE
-                secondsPicker.visibility = View.VISIBLE
-            }
+            setDateTime()
         }
-        setDateTime()
     }
 
     protected fun setupPhotoView() {
         val thumbnailSize = config.settingThumbnailSize
         val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(applicationContext, thumbnailSize), CommonUtils.dpToPixel(applicationContext, thumbnailSize))
-        photoView.layoutParams = layoutParams
-        captureCamera.layoutParams = layoutParams
+        mBinding.partialEditContents.partialEditPhotoContainer.photoView.layoutParams = layoutParams
+        mBinding.partialEditContents.partialEditPhotoContainer.captureCamera.layoutParams = layoutParams
     }
 
     protected fun setupRecognizer() {
@@ -451,7 +451,7 @@ abstract class EditActivity : EasyDiaryActivity() {
             )
             supportActionBar?.run {
                 title = DateUtils.getFullPatternDate(mCurrentTimeMillis)
-                subtitle = if (allDay.isChecked) "No time information" else DateUtils.timeMillisToDateTime(mCurrentTimeMillis, DateUtils.TIME_PATTERN_WITH_SECONDS)
+                subtitle = if (mBinding.partialEditToolbarSub.allDay.isChecked) "No time information" else DateUtils.timeMillisToDateTime(mCurrentTimeMillis, DateUtils.TIME_PATTERN_WITH_SECONDS)
             }
         } catch (e: ParseException) {
             e.printStackTrace()
@@ -480,7 +480,9 @@ abstract class EditActivity : EasyDiaryActivity() {
                             false -> EasyDiaryUtils.createAttachedPhotoView(this, photoUriDto, 0F, 0F, 3F, 0F)
                         }
                         imageView.setOnClickListener(PhotoClickListener(currentIndex))
-                        photoContainer.addView(imageView, photoContainer.childCount - 1)
+                        mBinding.partialEditContents.partialEditPhotoContainer.run {
+                            photoContainer.addView(imageView, photoContainer.childCount - 1)
+                        }
                         initBottomToolbar()
                     }
                 } catch (e: Exception) {
@@ -488,9 +490,11 @@ abstract class EditActivity : EasyDiaryActivity() {
                 }
             }
             runOnUiThread {
-                when (isLandScape()) {
-                    true -> photoContainer.postDelayed({ (photoContainerScrollView.getChildAt(0) as ScrollView).fullScroll(ScrollView.FOCUS_DOWN) }, 100L)
-                    false -> photoContainer.postDelayed({ (photoContainerScrollView.getChildAt(0) as HorizontalScrollView).fullScroll(HorizontalScrollView.FOCUS_RIGHT) }, 100L)
+                mBinding.partialEditContents.partialEditPhotoContainer.run {
+                    when (isLandScape()) {
+                        true -> photoContainer.postDelayed({ (photoContainerScrollView.getChildAt(0) as ScrollView).fullScroll(ScrollView.FOCUS_DOWN) }, 100L)
+                        false -> photoContainer.postDelayed({ (photoContainerScrollView.getChildAt(0) as HorizontalScrollView).fullScroll(HorizontalScrollView.FOCUS_RIGHT) }, 100L)
+                    }
                 }
                 setVisiblePhotoProgress(false)
             }
@@ -498,7 +502,9 @@ abstract class EditActivity : EasyDiaryActivity() {
     }
 
     protected fun initBottomToolbar() {
-        (bottomTitle as TextView).text = if (isLandScape()) "x${photoContainer.childCount.minus(1)}" else getString(R.string.attached_photo_count, photoContainer.childCount.minus(1))
+        mBinding.partialEditContents.partialEditPhotoContainer.run {
+            mBinding.partialEditContents.partialBottomToolbar.bottomTitle.text = if (isLandScape()) "x${photoContainer.childCount.minus(1)}" else getString(R.string.attached_photo_count, photoContainer.childCount.minus(1))
+        }
     }
 
     protected fun selectFeelingSymbol(index: Int) {
@@ -531,46 +537,48 @@ abstract class EditActivity : EasyDiaryActivity() {
 
     protected fun restoreContents(savedInstanceState: Bundle?) {
         savedInstanceState?.run {
-            mPhotoUris.clear()
-            val attachView = photoContainer.getChildAt(photoContainer.childCount.minus(1))
-            photoContainer.removeAllViews()
-            photoContainer.addView(attachView)
+            mBinding.partialEditContents.partialEditPhotoContainer.run {
+                mPhotoUris.clear()
+                val attachView = photoContainer.getChildAt(photoContainer.childCount.minus(1))
+                photoContainer.removeAllViews()
+                photoContainer.addView(attachView)
 
-            getStringArrayList(LIST_URI_STRING)?.map { uriString ->
-                mPhotoUris.add(PhotoUriDto(uriString))
-            }
-            mYear = getInt(SELECTED_YEAR, mYear)
-            mMonth = getInt(SELECTED_MONTH, mMonth)
-            mDayOfMonth = getInt(SELECTED_DAY, mDayOfMonth)
-            mHourOfDay = getInt(SELECTED_HOUR, mHourOfDay)
-            mMinute = getInt(SELECTED_MINUTE, mMinute)
-            mSecond = getInt(SELECTED_SECOND, mSecond)
-
-            mPhotoUris.forEachIndexed { index, photoUriDto ->
-                val imageView = when (isLandScape()) {
-                    true -> EasyDiaryUtils.createAttachedPhotoView(this@EditActivity, photoUriDto, 0F, 0F, 0F, 3F)
-                    false -> EasyDiaryUtils.createAttachedPhotoView(this@EditActivity, photoUriDto, 0F, 0F, 3F, 0F)
+                getStringArrayList(LIST_URI_STRING)?.map { uriString ->
+                    mPhotoUris.add(PhotoUriDto(uriString))
                 }
-                imageView.setOnClickListener(PhotoClickListener(index))
-                photoContainer.addView(imageView, photoContainer.childCount - 1)
+                mYear = getInt(SELECTED_YEAR, mYear)
+                mMonth = getInt(SELECTED_MONTH, mMonth)
+                mDayOfMonth = getInt(SELECTED_DAY, mDayOfMonth)
+                mHourOfDay = getInt(SELECTED_HOUR, mHourOfDay)
+                mMinute = getInt(SELECTED_MINUTE, mMinute)
+                mSecond = getInt(SELECTED_SECOND, mSecond)
+
+                mPhotoUris.forEachIndexed { index, photoUriDto ->
+                    val imageView = when (isLandScape()) {
+                        true -> EasyDiaryUtils.createAttachedPhotoView(this@EditActivity, photoUriDto, 0F, 0F, 0F, 3F)
+                        false -> EasyDiaryUtils.createAttachedPhotoView(this@EditActivity, photoUriDto, 0F, 0F, 3F, 0F)
+                    }
+                    imageView.setOnClickListener(PhotoClickListener(index))
+                    photoContainer.addView(imageView, photoContainer.childCount - 1)
+                }
+
+                selectFeelingSymbol(getInt(SYMBOL_SEQUENCE, 0))
             }
-            
-            selectFeelingSymbol(getInt(SYMBOL_SEQUENCE, 0))
         }
     }
 
     protected fun initData(diaryDto: DiaryDto) {
-        val attachedPhotos = photoContainer.childCount
+        val attachedPhotos = mBinding.partialEditContents.partialEditPhotoContainer.photoContainer.childCount
         if (config.enableDebugMode) makeToast("attachedPhotos: $attachedPhotos")
         if (attachedPhotos > 1) {
             for (i in attachedPhotos downTo 2) {
-                photoContainer.removeViewAt(i.minus(2))
+                mBinding.partialEditContents.partialEditPhotoContainer.photoContainer.removeViewAt(i.minus(2))
             }
         }
         mPhotoUris.clear()
 
         if (diaryDto.isAllDay) {
-            allDay.isChecked = true
+            mBinding.partialEditToolbarSub.allDay.isChecked = true
             toggleTimePickerTool()
         }
 
@@ -611,7 +619,9 @@ abstract class EditActivity : EasyDiaryActivity() {
                 }
 
                 imageView.setOnClickListener(PhotoClickListener(index))
-                photoContainer.addView(imageView, photoContainer.childCount - 1)
+                mBinding.partialEditContents.partialEditPhotoContainer.run {
+                    photoContainer.addView(imageView, photoContainer.childCount - 1)
+                }
             }
         }
 
@@ -653,7 +663,7 @@ abstract class EditActivity : EasyDiaryActivity() {
                     getString(R.string.delete_photo_confirm_message),
                     DialogInterface.OnClickListener { dialog, which ->
                         mRemoveIndexes.add(targetIndex)
-                        photoContainer.removeView(v)
+                        mBinding.partialEditContents.partialEditPhotoContainer.photoContainer.removeView(v)
                         initBottomToolbar()
                     },
                     DialogInterface.OnClickListener { dialog, which -> }
