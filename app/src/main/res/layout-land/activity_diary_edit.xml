@@ -25,7 +25,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <include layout="@layout/partial_edit_contents" />
+            <include android:id="@+id/partial_edit_contents" layout="@layout/partial_edit_contents" />
             
             <ProgressBar
                 android:id="@+id/photoProgress"

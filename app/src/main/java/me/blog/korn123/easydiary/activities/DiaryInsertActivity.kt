@@ -12,9 +12,7 @@ import android.widget.RelativeLayout
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.werb.pickphotoview.util.PickConfig
-import kotlinx.android.synthetic.main.activity_diary_edit.*
 import kotlinx.android.synthetic.main.partial_bottom_toolbar.*
-import kotlinx.android.synthetic.main.partial_edit_contents.*
 import kotlinx.android.synthetic.main.partial_edit_photo_container.*
 import kotlinx.android.synthetic.main.partial_edit_toolbar_sub.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
@@ -44,8 +42,7 @@ class DiaryInsertActivity : EditActivity() {
      ***************************************************************************************************/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_diary_edit)
-        setSupportActionBar(toolbar)
+        setSupportActionBar(mBinding.toolbar)
         supportActionBar?.run {
             title = getString(R.string.create_diary_title)
             setDisplayHomeAsUpEnabled(true)
@@ -70,21 +67,23 @@ class DiaryInsertActivity : EditActivity() {
         pauseLock()
         when (requestCode) {
             REQUEST_CODE_SPEECH_INPUT -> if (resultCode == Activity.RESULT_OK && intent != null) {
-                intent.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.let {
-                    if (mCurrentCursor == FOCUS_TITLE) { // edit title
-                        val title = diaryTitle.text.toString()
-                        val sb = StringBuilder(title)
-                        sb.insert(diaryTitle.selectionStart, it[0])
-                        val cursorPosition = diaryTitle.selectionStart + it[0].length
-                        diaryTitle.setText(sb.toString())
-                        diaryTitle.setSelection(cursorPosition)
-                    } else {                   // edit contents
-                        val contents = diaryContents.text.toString()
-                        val sb = StringBuilder(contents)
-                        sb.insert(diaryContents.selectionStart, it[0])
-                        val cursorPosition = diaryContents.selectionStart + it[0].length
-                        diaryContents.setText(sb.toString())
-                        diaryContents.setSelection(cursorPosition)
+                mBinding.partialEditContents.run {
+                    intent.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.let {
+                        if (mCurrentCursor == FOCUS_TITLE) { // edit title
+                            val title = diaryTitle.text.toString()
+                            val sb = StringBuilder(title)
+                            sb.insert(diaryTitle.selectionStart, it[0])
+                            val cursorPosition = diaryTitle.selectionStart + it[0].length
+                            diaryTitle.setText(sb.toString())
+                            diaryTitle.setSelection(cursorPosition)
+                        } else {                   // edit contents
+                            val contents = diaryContents.text.toString()
+                            val sb = StringBuilder(contents)
+                            sb.insert(diaryContents.selectionStart, it[0])
+                            val cursorPosition = diaryContents.selectionStart + it[0].length
+                            diaryContents.setText(sb.toString())
+                            diaryContents.setSelection(cursorPosition)
+                        }
                     }
                 }
             }
@@ -105,8 +104,8 @@ class DiaryInsertActivity : EditActivity() {
     
     override fun setVisiblePhotoProgress(isVisible: Boolean) {
         when (isVisible) {
-            true -> photoProgress.visibility = View.VISIBLE
-            false -> photoProgress.visibility = View.GONE
+            true -> mBinding.photoProgress.visibility = View.VISIBLE
+            false -> mBinding.photoProgress.visibility = View.GONE
         }
     }
 
@@ -142,13 +141,13 @@ class DiaryInsertActivity : EditActivity() {
             when (mShowcaseIndex) {
                 2 -> {
                     mShowcaseView.setButtonPosition(centerParams)
-                    mShowcaseView.setShowcase(ViewTarget(diaryTitle), true)
+                    mShowcaseView.setShowcase(ViewTarget(mBinding.partialEditContents.diaryTitle), true)
                     mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_2))
                     mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_2))
                 }
                 3 -> {
                     mShowcaseView.setButtonPosition(centerParams)
-                    mShowcaseView.setShowcase(ViewTarget(diaryContents), true)
+                    mShowcaseView.setShowcase(ViewTarget(mBinding.partialEditContents.diaryContents), true)
                     mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_3))
                     mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_3))
                 }
@@ -185,7 +184,7 @@ class DiaryInsertActivity : EditActivity() {
 
         mShowcaseView = ShowcaseView.Builder(this)
                 .withMaterialShowcase()
-                .setTarget(ViewTarget(feelingSymbolButton))
+                .setTarget(ViewTarget(mBinding.partialEditContents.feelingSymbolButton))
                 .setContentTitle(getString(R.string.create_diary_showcase_title_1))
                 .setContentText(getString(R.string.create_diary_showcase_message_1))
                 .setStyle(R.style.ShowcaseTheme)
@@ -205,15 +204,15 @@ class DiaryInsertActivity : EditActivity() {
         saveContents.setOnClickListener {
             hideSoftInputFromWindow()
             setLocationInfo()
-            if (StringUtils.isEmpty(diaryContents.text)) {
-                diaryContents.requestFocus()
+            if (StringUtils.isEmpty(mBinding.partialEditContents.diaryContents.text)) {
+                mBinding.partialEditContents.diaryContents.requestFocus()
                 makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
             } else {
                 val diaryDto = DiaryDto(
                         DIARY_SEQUENCE_INIT,
                         mCurrentTimeMillis,
-                        this@DiaryInsertActivity.diaryTitle.text.toString(),
-                        this@DiaryInsertActivity.diaryContents.text.toString(),
+                        mBinding.partialEditContents.diaryTitle.text.toString(),
+                        mBinding.partialEditContents.diaryContents.text.toString(),
                         mSelectedItemPosition,
                         allDay.isChecked
                 )
@@ -237,8 +236,8 @@ class DiaryInsertActivity : EditActivity() {
         timePicker.setOnClickListener(mClickListener)
         secondsPicker.setOnClickListener(mClickListener)
         microphone.setOnClickListener(mClickListener)
-        diaryTitle.setOnTouchListener(mTouchListener)
-        diaryContents.setOnTouchListener(mTouchListener)
+        mBinding.partialEditContents.diaryTitle.setOnTouchListener(mTouchListener)
+        mBinding.partialEditContents.diaryContents.setOnTouchListener(mTouchListener)
 
         togglePhoto.setOnClickListener {
             toggleSimpleLayout()
@@ -249,7 +248,7 @@ class DiaryInsertActivity : EditActivity() {
             toggleTimePickerTool()
         }
 
-        feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog(getString(R.string.diary_symbol_guide_message)) { symbolSequence ->
+        mBinding.partialEditContents.feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog(getString(R.string.diary_symbol_guide_message)) { symbolSequence ->
             selectFeelingSymbol(symbolSequence)
         }}
     }

@@ -33,7 +33,6 @@ import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import io.realm.RealmList
 import kotlinx.android.synthetic.main.partial_bottom_toolbar.*
-import kotlinx.android.synthetic.main.partial_edit_contents.*
 import kotlinx.android.synthetic.main.partial_edit_photo_container.*
 import kotlinx.android.synthetic.main.partial_edit_toolbar_sub.*
 import kotlinx.android.synthetic.main.viewholder_photo.*
@@ -41,6 +40,7 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.JasyptUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.databinding.ActivityDiaryEditBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
@@ -83,6 +83,7 @@ abstract class EditActivity : EasyDiaryActivity() {
         override fun onProviderDisabled(p0: String) {}
     }
 
+    protected lateinit var mBinding: ActivityDiaryEditBinding
     protected val mPhotoUris: RealmList<PhotoUriDto> = RealmList()
     protected var mCurrentTimeMillis: Long = 0
     protected var mYear = mCalendar.get(Calendar.YEAR)
@@ -168,6 +169,8 @@ abstract class EditActivity : EasyDiaryActivity() {
      ***************************************************************************************************/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mBinding = ActivityDiaryEditBinding.inflate(layoutInflater)
+        setContentView(mBinding.root)
         changeDrawableIconColor(Color.WHITE, R.drawable.calendar_4_w)
 
         if (config.enableLocationInfo && checkPermission(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,  Manifest.permission.ACCESS_COARSE_LOCATION))) {
@@ -293,8 +296,8 @@ abstract class EditActivity : EasyDiaryActivity() {
         val diaryTemp = DiaryDto(
                 DIARY_SEQUENCE_INIT,
                 mCurrentTimeMillis,
-                diaryTitle.text.toString(),
-                diaryContents.text.toString(),
+                mBinding.partialEditContents.diaryTitle.text.toString(),
+                mBinding.partialEditContents.diaryContents.text.toString(),
                 mSelectedItemPosition,
                 allDay.isChecked
         ).apply {
@@ -325,24 +328,26 @@ abstract class EditActivity : EasyDiaryActivity() {
     }
 
     protected fun addTextWatcher() {
-        if (config.enableCountCharacters) {
-            contentsLength?.run {
+        mBinding.partialEditContents.run {
+            if (config.enableCountCharacters) {
+                contentsLength.run {
 //                setTextColor(config.textColor)
 //                background = getLabelBackground()
 //                visibility = View.VISIBLE
-                text = getString(R.string.diary_contents_length, 0)
-            }
-            diaryContents.addTextChangedListener(object : TextWatcher {
-                override fun afterTextChanged(p0: Editable?) {}
-                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    contentsLength.text = getString(R.string.diary_contents_length, p0?.length ?: 0)
+                    text = getString(R.string.diary_contents_length, 0)
                 }
-            })
-            contentsLengthContainer.visibility = View.VISIBLE
-        } else {
-            contentsLengthContainer.visibility = View.GONE
+                diaryContents.addTextChangedListener(object : TextWatcher {
+                    override fun afterTextChanged(p0: Editable?) {}
+                    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+                    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                        contentsLength.text = getString(R.string.diary_contents_length, p0?.length ?: 0)
+                    }
+                })
+                contentsLengthContainer.visibility = View.VISIBLE
+            } else {
+                contentsLengthContainer.visibility = View.GONE
+            }
         }
     }
 
@@ -350,13 +355,13 @@ abstract class EditActivity : EasyDiaryActivity() {
         when (photoContainerScrollView.visibility) {
             View.VISIBLE -> {
                 photoContainerScrollView.visibility = View.GONE
-                titleCard.visibility = View.VISIBLE
+                mBinding.partialEditContents.titleCard.visibility = View.VISIBLE
                 togglePhoto.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.expand))
                 supportActionBar?.hide()
             }
             View.GONE -> {
                 photoContainerScrollView.visibility = View.VISIBLE
-                titleCard.visibility = View.GONE
+                mBinding.partialEditContents.titleCard.visibility = View.GONE
                 togglePhoto.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.collapse))
                 supportActionBar?.show()
             }
@@ -366,20 +371,22 @@ abstract class EditActivity : EasyDiaryActivity() {
 
     protected fun setLocationInfo() {
         if (config.enableLocationInfo) {
-            locationProgress.visibility = View.VISIBLE
-            getLastKnownLocation()?.let { knownLocation ->
-                var locationInfo: String? = null
-                getFromLocation(knownLocation.latitude, knownLocation.longitude, 1)?.let { address ->
-                    if (address.isNotEmpty()) {
-                        locationInfo = fullAddress(address[0])
-                        mLocation = me.blog.korn123.easydiary.models.Location(locationInfo, knownLocation.latitude, knownLocation.longitude)
+            mBinding.partialEditContents.run {
+                locationProgress.visibility = View.VISIBLE
+                getLastKnownLocation()?.let { knownLocation ->
+                    var locationInfo: String? = null
+                    getFromLocation(knownLocation.latitude, knownLocation.longitude, 1)?.let { address ->
+                        if (address.isNotEmpty()) {
+                            locationInfo = fullAddress(address[0])
+                            mLocation = me.blog.korn123.easydiary.models.Location(locationInfo, knownLocation.latitude, knownLocation.longitude)
+                        }
                     }
-                }
-                locationLabel.text = locationInfo
-            } ?: {
-                makeToast(getString(R.string.location_info_error_message))
-            } ()
-            locationProgress.visibility = View.GONE
+                    locationLabel.text = locationInfo
+                } ?: {
+                    makeToast(getString(R.string.location_info_error_message))
+                } ()
+                locationProgress.visibility = View.GONE
+            }
         }
     }
 
@@ -497,10 +504,10 @@ abstract class EditActivity : EasyDiaryActivity() {
     protected fun selectFeelingSymbol(index: Int) {
         mSelectedItemPosition = index
         when (mSelectedItemPosition == 0) {
-            true -> symbolText.visibility = View.VISIBLE
-            false -> symbolText.visibility = View.GONE
+            true -> mBinding.partialEditContents.symbolText.visibility = View.VISIBLE
+            false -> mBinding.partialEditContents.symbolText.visibility = View.GONE
         }
-        FlavorUtils.initWeatherView(this, symbol, mSelectedItemPosition, false)
+        FlavorUtils.initWeatherView(this, mBinding.partialEditContents.symbol, mSelectedItemPosition, false)
     }
 
     protected fun initDateTime() {
@@ -570,24 +577,24 @@ abstract class EditActivity : EasyDiaryActivity() {
         val encryptionPass = intent.getStringExtra(DIARY_ENCRYPT_PASSWORD)
         when (encryptionPass == null) {
             true -> {
-                diaryTitle.setText(diaryDto.title)
+                mBinding.partialEditContents.diaryTitle.setText(diaryDto.title)
                 //        getSupportActionBar().setSubtitle(DateUtils.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
-                diaryContents.setText(diaryDto.contents)
+                mBinding.partialEditContents.diaryContents.setText(diaryDto.contents)
             }
             false -> {
-                diaryTitle.setText(JasyptUtils.decrypt(diaryDto.title ?: "", encryptionPass))
+                mBinding.partialEditContents.diaryTitle.setText(JasyptUtils.decrypt(diaryDto.title ?: "", encryptionPass))
                 //        getSupportActionBar().setSubtitle(DateUtils.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
-                diaryContents.setText(JasyptUtils.decrypt(diaryDto.contents ?: "", encryptionPass))
+                mBinding.partialEditContents.diaryContents.setText(JasyptUtils.decrypt(diaryDto.contents ?: "", encryptionPass))
             }
         }
 
         mCurrentTimeMillis = diaryDto.currentTimeMillis
         if (config.holdPositionEnterEditScreen) {
             Handler().post {
-                contentsContainer.scrollY = intent.getIntExtra(DIARY_CONTENTS_SCROLL_Y, 0) - (feelingSymbolButton.parent.parent as ViewGroup).measuredHeight
+                mBinding.partialEditContents.contentsContainer.scrollY = intent.getIntExtra(DIARY_CONTENTS_SCROLL_Y, 0) - (mBinding.partialEditContents.feelingSymbolButton.parent.parent as ViewGroup).measuredHeight
             }
         } else {
-            diaryContents.requestFocus()
+            mBinding.partialEditContents.diaryContents.requestFocus()
         }
 
         // TODO fixme elegance
@@ -614,14 +621,14 @@ abstract class EditActivity : EasyDiaryActivity() {
 //            locationLabel.setTextColor(config.textColor)
 //            locationContainer.background = getLabelBackground()
             diaryDto.location?.let {
-                locationContainer.visibility = View.VISIBLE
-                locationLabel.text = it.address
+                mBinding.partialEditContents.locationContainer.visibility = View.VISIBLE
+                mBinding.partialEditContents.locationLabel.text = it.address
                 mLocation = it
             } ?: {
                 setLocationInfo()
                 mLocation?.let {
-                    locationContainer.visibility = View.VISIBLE
-                    locationLabel.text = it.address
+                    mBinding.partialEditContents.locationContainer.visibility = View.VISIBLE
+                    mBinding.partialEditContents.locationLabel.text = it.address
                 }
             } ()
         }
