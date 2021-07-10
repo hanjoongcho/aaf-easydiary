@@ -40,7 +40,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var mBinding: ActivityDevBinding
     private val mViewModel: BaseDevViewModel by viewModels()
     private val mLocationManager by lazy { getSystemService(Context.LOCATION_SERVICE) as LocationManager }
     private val mNetworkLocationListener = object : LocationListener {
@@ -64,6 +63,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
     private val mRequestLocationSourceLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
         makeSnackBar(if (isLocationEnabled()) "GPS provider setting is activated!!!" else "The request operation did not complete normally.")
     }
+    protected lateinit var mBinding: ActivityDevBinding
 
 
     /***************************************************************************************************
