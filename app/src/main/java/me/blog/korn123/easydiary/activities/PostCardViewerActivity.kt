@@ -7,12 +7,11 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import io.github.aafactory.commons.utils.ColorUtils
-import kotlinx.android.synthetic.main.activity_post_card_viewer.*
-import kotlinx.android.synthetic.main.content_post_card_viewer.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.PostcardAdapter
+import me.blog.korn123.easydiary.databinding.ActivityPostCardViewerBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.helper.DIARY_POSTCARD_DIRECTORY
@@ -27,17 +26,19 @@ import java.io.File
  */
 
 class PostCardViewerActivity : EasyDiaryActivity() {
+    private lateinit var mBinding: ActivityPostCardViewerBinding
+    private lateinit var mPostcardAdapter: PostcardAdapter
     private var mListPostcard: ArrayList<PostcardAdapter.PostCard> = arrayListOf()
-    private lateinit var mPostcardAdapter: PostcardAdapter 
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_post_card_viewer)
-        toolbar.setNavigationOnClickListener { onBackPressed() }
+        mBinding = ActivityPostCardViewerBinding.inflate(layoutInflater)
+        setContentView(mBinding.root)
+        mBinding.toolbar.setNavigationOnClickListener { onBackPressed() }
 //        setSupportActionBar(toolbar)
         FontUtils.getTypeface(this, config.settingFontName)?.let {
-            toolbar_layout.setCollapsedTitleTypeface(it)
-            toolbar_layout.setExpandedTitleTypeface(it)
+            mBinding.toolbarLayout.setCollapsedTitleTypeface(it)
+            mBinding.toolbarLayout.setExpandedTitleTypeface(it)
         }
 
 //        val flexboxLayoutManager = FlexboxLayoutManager(this).apply {
@@ -61,7 +62,7 @@ class PostCardViewerActivity : EasyDiaryActivity() {
                 }
         )
         
-        recyclerView.apply {
+        mBinding.contentPostCardViewer.root.apply {
             layoutManager = gridLayoutManager
             addItemDecoration(spacesItemDecoration)
             adapter = mPostcardAdapter
@@ -70,8 +71,8 @@ class PostCardViewerActivity : EasyDiaryActivity() {
         }
 
         initPostCard()
-        toolbarImage.setColorFilter(ColorUtils.adjustAlpha(config.primaryColor, 0.5F))
-        deletePostCard.setOnClickListener {
+        mBinding.toolbarImage.setColorFilter(ColorUtils.adjustAlpha(config.primaryColor, 0.5F))
+        mBinding.deletePostCard.setOnClickListener {
             val selectedItems = arrayListOf<PostcardAdapter.PostCard>()
             mListPostcard.forEachIndexed { _, item ->
                 if (item.isItemChecked) selectedItems.add(item)
@@ -104,9 +105,9 @@ class PostCardViewerActivity : EasyDiaryActivity() {
         mListPostcard.addAll(listPostcard)
         mPostcardAdapter.notifyDataSetChanged()
         if (mListPostcard.isEmpty()) {
-            infoMessage.visibility = View.VISIBLE
-            recyclerView.visibility = View.GONE
-            app_bar.setExpanded(false)
+            mBinding.infoMessage.visibility = View.VISIBLE
+            mBinding.contentPostCardViewer.root.visibility = View.GONE
+            mBinding.appBar.setExpanded(false)
         }
     }
     

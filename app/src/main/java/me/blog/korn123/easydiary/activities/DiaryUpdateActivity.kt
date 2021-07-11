@@ -6,11 +6,6 @@ import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.view.View
 import com.werb.pickphotoview.util.PickConfig
-import kotlinx.android.synthetic.main.activity_diary_edit.*
-import kotlinx.android.synthetic.main.partial_bottom_toolbar.*
-import kotlinx.android.synthetic.main.partial_edit_contents.*
-import kotlinx.android.synthetic.main.partial_edit_photo_container.*
-import kotlinx.android.synthetic.main.partial_edit_toolbar_sub.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.JasyptUtils
 import me.blog.korn123.easydiary.R
@@ -36,8 +31,8 @@ class DiaryUpdateActivity : EditActivity() {
     private val mOnClickListener = View.OnClickListener { view ->
         hideSoftInputFromWindow()
         when (view.id) {
-            R.id.saveContents -> if (StringUtils.isEmpty(diaryContents.text)) {
-                diaryContents.requestFocus()
+            R.id.saveContents -> if (StringUtils.isEmpty(mBinding.partialEditContents.diaryContents.text)) {
+                mBinding.partialEditContents.diaryContents.requestFocus()
                 makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
             } else {
                 val encryptionPass = intent.getStringExtra(DIARY_ENCRYPT_PASSWORD)
@@ -46,16 +41,16 @@ class DiaryUpdateActivity : EditActivity() {
                         DiaryDto(
                                 mSequence,
                                 mCurrentTimeMillis,
-                                diaryTitle.text.toString(),
-                                diaryContents.text.toString()
+                                mBinding.partialEditContents.diaryTitle.text.toString(),
+                                mBinding.partialEditContents.diaryContents.text.toString()
                         )
                     }
                     false -> {
                         DiaryDto(
                                 mSequence,
                                 mCurrentTimeMillis,
-                                JasyptUtils.encrypt(diaryTitle.text.toString(), encryptionPass),
-                                JasyptUtils.encrypt(diaryContents.text.toString(), encryptionPass),
+                                JasyptUtils.encrypt(mBinding.partialEditContents.diaryTitle.text.toString(), encryptionPass),
+                                JasyptUtils.encrypt(mBinding.partialEditContents.diaryContents.text.toString(), encryptionPass),
                                 true,
                                 JasyptUtils.sha256(encryptionPass)
                         )
@@ -64,7 +59,7 @@ class DiaryUpdateActivity : EditActivity() {
 
                 if (mLocation != null) diaryDto.location = mLocation
                 diaryDto.weather = mSelectedItemPosition
-                diaryDto.isAllDay = allDay.isChecked
+                diaryDto.isAllDay = mBinding.partialEditToolbarSub.allDay.isChecked
                 applyRemoveIndex()
                 diaryDto.photoUris = mPhotoUris
                 EasyDiaryDbHelper.updateDiaryBy(diaryDto)
@@ -81,8 +76,7 @@ class DiaryUpdateActivity : EditActivity() {
      ***************************************************************************************************/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_diary_edit)
-        setSupportActionBar(toolbar)
+        setSupportActionBar(mBinding.toolbar)
         supportActionBar?.run {
             title = getString(R.string.update_diary_title)
             setDisplayHomeAsUpEnabled(true)
@@ -108,21 +102,23 @@ class DiaryUpdateActivity : EditActivity() {
         pauseLock()
         when (requestCode) {
             REQUEST_CODE_SPEECH_INPUT -> if (resultCode == Activity.RESULT_OK && intent != null) {
-                intent.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.let {
-                    if (mCurrentCursor == FOCUS_TITLE) { // edit title
-                        val title = diaryTitle.text.toString()
-                        val sb = StringBuilder(title)
-                        sb.insert(diaryTitle.selectionStart, it[0])
-                        val cursorPosition = diaryTitle.selectionStart + it[0].length
-                        diaryTitle.setText(sb.toString())
-                        diaryTitle.setSelection(cursorPosition)
-                    } else {                   // edit contents
-                        val contents = diaryContents.text.toString()
-                        val sb = StringBuilder(contents)
-                        sb.insert(diaryContents.selectionStart, it[0])
-                        val cursorPosition = diaryContents.selectionStart + it[0].length
-                        diaryContents.setText(sb.toString())
-                        diaryContents.setSelection(cursorPosition)
+                mBinding.partialEditContents.run {
+                    intent.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.let {
+                        if (mCurrentCursor == FOCUS_TITLE) { // edit title
+                            val title = diaryTitle.text.toString()
+                            val sb = StringBuilder(title)
+                            sb.insert(diaryTitle.selectionStart, it[0])
+                            val cursorPosition = diaryTitle.selectionStart + it[0].length
+                            diaryTitle.setText(sb.toString())
+                            diaryTitle.setSelection(cursorPosition)
+                        } else {                   // edit contents
+                            val contents = diaryContents.text.toString()
+                            val sb = StringBuilder(contents)
+                            sb.insert(diaryContents.selectionStart, it[0])
+                            val cursorPosition = diaryContents.selectionStart + it[0].length
+                            diaryContents.setText(sb.toString())
+                            diaryContents.setSelection(cursorPosition)
+                        }
                     }
                 }
             }
@@ -143,8 +139,8 @@ class DiaryUpdateActivity : EditActivity() {
 
     override fun setVisiblePhotoProgress(isVisible: Boolean) {
         when (isVisible) {
-            true -> photoProgress.visibility = View.VISIBLE
-            false -> photoProgress.visibility = View.GONE
+            true -> mBinding.photoProgress.visibility = View.VISIBLE
+            false -> mBinding.photoProgress.visibility = View.GONE
         }
     }
 
@@ -169,27 +165,29 @@ class DiaryUpdateActivity : EditActivity() {
     }
 
     private fun bindEvent() {
-        saveContents.setOnClickListener(mOnClickListener)
-        photoView.setOnClickListener(mClickListener)
-        captureCamera.setOnClickListener(mClickListener)
-        datePicker.setOnClickListener(mClickListener)
-        timePicker.setOnClickListener(mClickListener)
-        secondsPicker.setOnClickListener(mClickListener)
-        microphone.setOnClickListener(mClickListener)
-        locationContainer.setOnClickListener(mClickListener)
-        diaryTitle.setOnTouchListener(mTouchListener)
-        diaryContents.setOnTouchListener(mTouchListener)
+        mBinding.partialEditToolbarSub.saveContents.setOnClickListener(mOnClickListener)
+        mBinding.partialEditContents.partialEditPhotoContainer.photoView.setOnClickListener(mClickListener)
+        mBinding.partialEditContents.partialEditPhotoContainer.captureCamera.setOnClickListener(mClickListener)
+        mBinding.partialEditToolbarSub.datePicker.setOnClickListener(mClickListener)
+        mBinding.partialEditToolbarSub.timePicker.setOnClickListener(mClickListener)
+        mBinding.partialEditToolbarSub.secondsPicker.setOnClickListener(mClickListener)
+        mBinding.partialEditToolbarSub.microphone.setOnClickListener(mClickListener)
+        mBinding.partialEditContents.locationContainer.setOnClickListener(mClickListener)
+        mBinding.partialEditContents.diaryTitle.setOnTouchListener(mTouchListener)
+        mBinding.partialEditContents.diaryContents.setOnTouchListener(mTouchListener)
 
-        togglePhoto.setOnClickListener {
+        mBinding.partialEditContents.partialBottomToolbar.togglePhoto.setOnClickListener {
             toggleSimpleLayout()
         }
 
-        allDayContainer.setOnClickListener {
-            allDay.isChecked = allDay.isChecked.not()
-            toggleTimePickerTool()
+        mBinding.partialEditToolbarSub.run {
+            allDayContainer.setOnClickListener {
+                allDay.isChecked = allDay.isChecked.not()
+                toggleTimePickerTool()
+            }
         }
 
-        feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog(getString(R.string.diary_symbol_guide_message)) { symbolSequence ->
+        mBinding.partialEditContents.feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog(getString(R.string.diary_symbol_guide_message)) { symbolSequence ->
             selectFeelingSymbol(symbolSequence)
         }}
     }

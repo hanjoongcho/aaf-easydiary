@@ -1,22 +1,19 @@
 package me.blog.korn123.easydiary.adapters
 
-import android.content.Context
+import android.app.Activity
 import android.graphics.Typeface
 import android.text.SpannableString
 import android.text.TextUtils
 import android.text.style.StyleSpan
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.ImageView
-import android.widget.TextView
 import io.github.aafactory.commons.utils.DateUtils
-import kotlinx.android.synthetic.main.item_timeline.view.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.databinding.ItemTimelineBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
@@ -29,24 +26,24 @@ import org.apache.commons.lang3.StringUtils
  */
 
 class TimelineItemAdapter(
-        context: Context,
-        private val layoutResourceId: Int,
+        private val activity: Activity,
+        layoutResourceId: Int,
         private val list: List<DiaryDto>
-) : ArrayAdapter<DiaryDto>(context, layoutResourceId, list) {
+) : ArrayAdapter<DiaryDto>(activity, layoutResourceId, list) {
+    private lateinit var itemTimelineBinding: ItemTimelineBinding
     private var mPrimaryColor = 0
     var currentQuery: String? = null
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val itemView: View = convertView ?: LayoutInflater.from(parent.context).inflate(this.layoutResourceId, parent, false)
+        val itemView: View = convertView ?: run {
+            itemTimelineBinding = ItemTimelineBinding.inflate(activity.layoutInflater)
+            itemTimelineBinding.root
+        }
 
-        when (itemView.tag is ViewHolder) {
-            true -> itemView.tag as ViewHolder
+        when (itemView.tag is ItemTimelineBinding) {
+            true -> itemView.tag as ItemTimelineBinding
             false -> {
-                val holder = ViewHolder(
-                        itemView.diarySymbol, itemView.text1, itemView.title,
-                        itemView.horizontalLine2, itemView.titleContainer, itemView.circle,
-                        itemView.topLine, itemView.item_holder
-                )
+                val holder = itemTimelineBinding
                 itemView.tag = holder
                 holder
             }
@@ -72,11 +69,11 @@ class TimelineItemAdapter(
                 false -> "${diaryDto.contents}"
             }
             if (context.config.enableDebugMode) mergedContents = "[${diaryDto.originSequence}] $mergedContents"
-            textView1.text = when (diaryDto.isAllDay) {
+            text1.text = when (diaryDto.isAllDay) {
                 true -> applyBoldToDate(context.resources.getString(R.string.all_day), mergedContents)
                 false -> applyBoldToDate(DateUtils.timeMillisToDateTime(diaryDto.currentTimeMillis, DateUtils.TIME_PATTERN_WITH_SECONDS), mergedContents)
             }
-            item_holder.let {
+            itemHolder.let {
                 context.updateTextColors(it, 0, 0)
                 context.updateAppViews(it)
                 context.updateCardViewPolicy(it)
@@ -85,20 +82,20 @@ class TimelineItemAdapter(
 
             if (!currentQuery.isNullOrEmpty()) {
                 if (context.config.diarySearchQueryCaseSensitive) {
-                    EasyDiaryUtils.highlightString(textView1, currentQuery)
+                    EasyDiaryUtils.highlightString(text1, currentQuery)
                 } else {
-                    EasyDiaryUtils.highlightStringIgnoreCase(textView1, currentQuery)
+                    EasyDiaryUtils.highlightStringIgnoreCase(text1, currentQuery)
                 }
             }
 
             when (context.config.enableContentsSummary) {
                 true -> {
-                    textView1.maxLines = context.config.summaryMaxLines.plus(1)
-                    textView1.ellipsize = TextUtils.TruncateAt.valueOf("END")
+                    text1.maxLines = context.config.summaryMaxLines.plus(1)
+                    text1.ellipsize = TextUtils.TruncateAt.valueOf("END")
                 }
                 false -> {
-                    textView1.maxLines = Integer.MAX_VALUE
-                    textView1.ellipsize = null
+                    text1.maxLines = Integer.MAX_VALUE
+                    text1.ellipsize = null
                 }
             }
         }
@@ -112,13 +109,7 @@ class TimelineItemAdapter(
         return spannableString
     }
 
-    private fun setFontsTypeface(holder: ViewHolder) {
-        FontUtils.setFontsTypeface(context, context.assets, null, holder.item_holder)
+    private fun setFontsTypeface(itemTimelineBinding: ItemTimelineBinding) {
+        FontUtils.setFontsTypeface(context, context.assets, null, itemTimelineBinding.root)
     }
-
-    private class ViewHolder (
-            val diarySymbol: ImageView, val textView1: TextView, val title: TextView,
-            val horizontalLine2: View, val titleContainer: ViewGroup, val circle: ImageView,
-            val topLine: TextView, val item_holder: ViewGroup
-    )
 }

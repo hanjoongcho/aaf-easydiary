@@ -10,9 +10,9 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import io.github.aafactory.commons.utils.CommonUtils
-import kotlinx.android.synthetic.main.item_diary_calendar.view.*
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
+import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.updateAppViews
@@ -38,7 +38,7 @@ class DiaryCalendarItemAdapter(
         when (itemView.tag is ViewHolder) {
             true -> itemView.tag as ViewHolder
             false -> {
-                val viewHolder = ViewHolder(itemView.text1, itemView.weather, itemView.item_holder)
+                val viewHolder = ViewHolder(itemView.findViewById(R.id.text1), itemView.findViewById(R.id.weather), itemView.findViewById(R.id.item_holder))
                 itemView.tag = viewHolder
                 viewHolder
             }

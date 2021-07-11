@@ -7,13 +7,14 @@ import android.view.View
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import io.github.aafactory.commons.activities.BaseSimpleActivity
-import kotlinx.android.synthetic.main.activity_pin_lock.*
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.databinding.ActivityPinLockBinding
 import me.blog.korn123.easydiary.extensions.*
 
 
 class PinLockActivity : BaseSimpleActivity() {
+    private lateinit var mBinding: ActivityPinLockBinding
     private var mPassword = arrayOfNulls<String>(4)
     private var mPasswordView = arrayOfNulls<TextView>(4)
     private var mCursorIndex = 0
@@ -21,40 +22,43 @@ class PinLockActivity : BaseSimpleActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_pin_lock)
+        mBinding = ActivityPinLockBinding.inflate(layoutInflater)
+        setContentView(mBinding.root)
         activityMode = intent.getStringExtra(LAUNCHING_MODE)
-        
-        mPasswordView[0] = pass1
-        mPasswordView[1] = pass2
-        mPasswordView[2] = pass3
-        mPasswordView[3] = pass4
 
-        num0.setOnClickListener(keyPadClickListener)
-        num1.setOnClickListener(keyPadClickListener)
-        num2.setOnClickListener(keyPadClickListener)
-        num3.setOnClickListener(keyPadClickListener)
-        num4.setOnClickListener(keyPadClickListener)
-        num5.setOnClickListener(keyPadClickListener)
-        num6.setOnClickListener(keyPadClickListener)
-        num7.setOnClickListener(keyPadClickListener)
-        num8.setOnClickListener(keyPadClickListener)
-        num9.setOnClickListener(keyPadClickListener)
-        delete.setOnClickListener(keyPadClickListener)
-        if (config.fingerprintLockEnable) {
-            fingerprint.visibility = View.VISIBLE
-            changeFingerprintLock.setOnClickListener {
-                startActivity(Intent(this, FingerprintLockActivity::class.java).apply {
-                    putExtra(FingerprintLockActivity.LAUNCHING_MODE, FingerprintLockActivity.ACTIVITY_UNLOCK)
-                })
-                finish()
+        mBinding.run {
+            mPasswordView[0] = pass1
+            mPasswordView[1] = pass2
+            mPasswordView[2] = pass3
+            mPasswordView[3] = pass4
+
+            num0.setOnClickListener(keyPadClickListener)
+            num1.setOnClickListener(keyPadClickListener)
+            num2.setOnClickListener(keyPadClickListener)
+            num3.setOnClickListener(keyPadClickListener)
+            num4.setOnClickListener(keyPadClickListener)
+            num5.setOnClickListener(keyPadClickListener)
+            num6.setOnClickListener(keyPadClickListener)
+            num7.setOnClickListener(keyPadClickListener)
+            num8.setOnClickListener(keyPadClickListener)
+            num9.setOnClickListener(keyPadClickListener)
+            delete.setOnClickListener(keyPadClickListener)
+            if (config.fingerprintLockEnable) {
+                fingerprint.visibility = View.VISIBLE
+                changeFingerprintLock.setOnClickListener {
+                    startActivity(Intent(this@PinLockActivity, FingerprintLockActivity::class.java).apply {
+                        putExtra(FingerprintLockActivity.LAUNCHING_MODE, FingerprintLockActivity.ACTIVITY_UNLOCK)
+                    })
+                    finish()
+                }
             }
         }
     }
 
     override fun onResume() {
         super.onResume()
-        FontUtils.setFontsTypeface(applicationContext, assets, null, container)
-        infoMessage.text = if (activityMode == ACTIVITY_SETTING) getString(R.string.pin_setting_guide_message) else getString(R.string.pin_unlock_guide_message) 
+        FontUtils.setFontsTypeface(applicationContext, assets, null, mBinding.container)
+        mBinding.infoMessage.text = if (activityMode == ACTIVITY_SETTING) getString(R.string.pin_setting_guide_message) else getString(R.string.pin_unlock_guide_message)
     }
 
     override fun onBackPressed() {

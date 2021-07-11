@@ -1,14 +1,12 @@
 package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.viewholder_simple_checkbox.view.*
 import me.blog.korn123.commons.utils.FontUtils
-import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.databinding.ViewholderSimpleCheckboxBinding
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateTextColors
@@ -18,10 +16,7 @@ class SimpleCheckboxAdapter (
         private val realmFiles: List<SimpleCheckbox>
 ) : RecyclerView.Adapter<SimpleCheckboxAdapter.SimpleCheckboxViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SimpleCheckboxViewHolder {
-        val viewGroup = LayoutInflater
-                .from(parent.context)
-                .inflate(R.layout.viewholder_simple_checkbox, parent, false) as ViewGroup
-        return SimpleCheckboxViewHolder(activity, viewGroup, this)
+        return SimpleCheckboxViewHolder(activity, ViewholderSimpleCheckboxBinding.inflate(activity.layoutInflater, parent, false), this)
     }
 
     override fun getItemCount(): Int = realmFiles.size
@@ -31,7 +26,7 @@ class SimpleCheckboxAdapter (
     }
 
     fun onItemHolderClick(itemHolder: SimpleCheckboxViewHolder) {
-        itemHolder.itemView.checkbox.isChecked = itemHolder.itemView.checkbox.isChecked.not()
+        itemHolder.viewHolderSimpleCheckboxBinding.checkbox.isChecked = itemHolder.viewHolderSimpleCheckboxBinding.checkbox.isChecked.not()
     }
 
     fun onItemCheckedChange(position: Int, isChecked: Boolean) {
@@ -39,8 +34,8 @@ class SimpleCheckboxAdapter (
     }
 
     class SimpleCheckboxViewHolder(
-            activity: Activity, itemView: View, val adapter: SimpleCheckboxAdapter
-    ) : RecyclerView.ViewHolder(itemView), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+            activity: Activity, val viewHolderSimpleCheckboxBinding: ViewholderSimpleCheckboxBinding, val adapter: SimpleCheckboxAdapter
+    ) : RecyclerView.ViewHolder(viewHolderSimpleCheckboxBinding.root), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
         init {
             if (itemView is ViewGroup) {
                 itemView.run {
@@ -49,13 +44,13 @@ class SimpleCheckboxAdapter (
                     activity.updateAppViews(this)
                     FontUtils.setFontsTypeface(activity, activity.assets, null, this)
                     setOnClickListener(this@SimpleCheckboxViewHolder)
-                    checkbox.setOnCheckedChangeListener(this@SimpleCheckboxViewHolder)
+                    viewHolderSimpleCheckboxBinding.checkbox.setOnCheckedChangeListener(this@SimpleCheckboxViewHolder)
                 }
             }
         }
 
         fun bindTo(simpleCheckbox: SimpleCheckbox) {
-            itemView.run {
+            viewHolderSimpleCheckboxBinding.run {
                 title.text = simpleCheckbox.title
                 description.text = simpleCheckbox.description
                 checkbox.isChecked = simpleCheckbox.isChecked

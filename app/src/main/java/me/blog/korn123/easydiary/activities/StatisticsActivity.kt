@@ -3,9 +3,9 @@ package me.blog.korn123.easydiary.activities
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import kotlinx.android.synthetic.main.activity_barchart.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.chart.ChartBase
+import me.blog.korn123.easydiary.databinding.ActivityBarchartBinding
 import me.blog.korn123.easydiary.extensions.applyFontToMenuItem
 import me.blog.korn123.easydiary.fragments.BarChartFragment
 import me.blog.korn123.easydiary.fragments.BarChartFragmentT2
@@ -16,10 +16,12 @@ import me.blog.korn123.easydiary.fragments.HorizontalBarChartFragment
  */
 
 class StatisticsActivity : ChartBase() {
+    private lateinit var mBinding: ActivityBarchartBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_barchart)
-        setSupportActionBar(toolbar)
+        mBinding = ActivityBarchartBinding.inflate(layoutInflater)
+        setContentView(mBinding.root)
+        setSupportActionBar(mBinding.toolbar)
         supportActionBar?.run {
             title = getString(R.string.statistics_creation_time)
             setDisplayHomeAsUpEnabled(true)    

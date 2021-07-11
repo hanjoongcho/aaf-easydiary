@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'realm-android'
 
 ext.versions = [
@@ -95,9 +94,6 @@ android {
             minifyEnabled false
             signingConfig signingConfigs.config
         }
-    }
-    androidExtensions {
-        experimental = true
     }
     packagingOptions {
         exclude 'META-INF/commons_release.kotlin_module'

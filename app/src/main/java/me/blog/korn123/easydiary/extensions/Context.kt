@@ -52,12 +52,12 @@ import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import io.github.aafactory.commons.views.ModalView
 import io.realm.Realm
-import kotlinx.android.synthetic.main.dialog_message.view.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryInsertActivity
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
+import me.blog.korn123.easydiary.databinding.DialogMessageBinding
 import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.Alarm
@@ -292,18 +292,19 @@ fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null,
     alertDialog.run {
         when (customView == null) {
             true -> {
-                val inflater = getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-                val messageView = inflater.inflate(R.layout.dialog_message, null).apply {
-                    simpleMessage.text = message
-                    if (this is ViewGroup) {
-                        this.setBackgroundColor(config.backgroundColor)
-                        initTextSize(this)
-                        updateTextColors(this)
-                        updateAppViews(this)
-                        FontUtils.setFontsTypeface(this@updateAlertDialog, this@updateAlertDialog.assets, null, this)
+                DialogMessageBinding.inflate(layoutInflater).apply {
+                    root.apply {
+                        simpleMessage.text = message
+                        if (this is ViewGroup) {
+                            this.setBackgroundColor(config.backgroundColor)
+                            initTextSize(this)
+                            updateTextColors(this)
+                            updateAppViews(this)
+                            FontUtils.setFontsTypeface(this@updateAlertDialog, this@updateAlertDialog.assets, null, this)
+                        }
                     }
+                    setView(root)
                 }
-                setView(messageView)
             }
             false -> setView(customView)
         }

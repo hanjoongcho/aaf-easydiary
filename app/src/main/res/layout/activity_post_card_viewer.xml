@@ -50,7 +50,7 @@
         android:padding="@dimen/card_layout_padding"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <include layout="@layout/content_post_card_viewer"/>
+        <include android:id="@+id/content_post_card_viewer" layout="@layout/content_post_card_viewer"/>
         <TextView
             android:id="@+id/infoMessage"
             android:visibility="gone"

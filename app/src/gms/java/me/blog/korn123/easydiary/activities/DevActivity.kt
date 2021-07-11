@@ -8,7 +8,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import kotlinx.android.synthetic.main.activity_dev.*
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.helper.DriveServiceHelper
@@ -24,7 +23,7 @@ class DevActivity : BaseDevActivity() {
      ***************************************************************************************************/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        button_execute_full_backup_service.setOnClickListener {
+        mBinding.buttonExecuteFullBackupService.setOnClickListener {
             GoogleOAuthHelper.getGoogleSignAccount(this)?.account?.let { account ->
                 DriveServiceHelper(this, account).run {
                     initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->

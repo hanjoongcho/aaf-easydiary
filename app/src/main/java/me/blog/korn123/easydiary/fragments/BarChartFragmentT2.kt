@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.ContentLoadingProgressBar
+import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
@@ -17,7 +19,6 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import io.github.aafactory.commons.utils.CommonUtils
-import kotlinx.android.synthetic.main.fragment_barchart.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.ChartUtils
@@ -28,9 +29,13 @@ import me.blog.korn123.easydiary.chart.IValueFormatterExt
 import me.blog.korn123.easydiary.chart.MyAxisValueFormatter
 import me.blog.korn123.easydiary.chart.XYMarkerView
 import me.blog.korn123.easydiary.extensions.scaledDrawable
+import me.blog.korn123.easydiary.views.FixedTextView
 import java.util.*
 
 class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
+    private lateinit var mBarChart: BarChart
+    private lateinit var mChartTitle: FixedTextView
+    private lateinit var mBarChartProgressBar: ContentLoadingProgressBar
     private lateinit var mSymbolMap: HashMap<Int, String>
     private val mSequences = arrayListOf<Int>()
     private val mTypeface: Typeface
@@ -38,18 +43,21 @@ class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mBarChart = view.findViewById(R.id.barChart)
+        mChartTitle = view.findViewById(R.id.chartTitle)
+        mBarChartProgressBar = view.findViewById(R.id.barChartProgressBar)
 
         mSymbolMap = FlavorUtils.getDiarySymbolMap(requireContext())
-        barChart.setDrawBarShadow(false)
-        barChart.setDrawValueAboveBar(true)
-        barChart.description.isEnabled = false
+        mBarChart.setDrawBarShadow(false)
+        mBarChart.setDrawValueAboveBar(true)
+        mBarChart.description.isEnabled = false
 
         // if more than 60 entries are displayed in the chart, no values will be
         // drawn
-        barChart.setMaxVisibleValueCount(60)
+        mBarChart.setMaxVisibleValueCount(60)
 
         // scaling can now only be done on x- and y-axis separately
-        barChart.setPinchZoom(false)
+        mBarChart.setPinchZoom(false)
 
 //        barChart.setDrawGridBackground(true)
         // mChart.setDrawYLabels(false);
@@ -57,7 +65,7 @@ class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
 
         val xAxisFormatter = AxisValueFormatter()
 
-        val xAxis = barChart.xAxis
+        val xAxis = mBarChart.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.typeface = mTypeface
         xAxis.labelRotationAngle = -45F
@@ -67,7 +75,7 @@ class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
         xAxis.valueFormatter = xAxisFormatter
         val custom = MyAxisValueFormatter(context)
 
-        val leftAxis = barChart.axisLeft
+        val leftAxis = mBarChart.axisLeft
         leftAxis.typeface = mTypeface
         leftAxis.setLabelCount(8, false)
         leftAxis.valueFormatter = custom
@@ -75,7 +83,7 @@ class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
         leftAxis.spaceTop = 15f
         leftAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
 
-        val rightAxis = barChart.axisRight
+        val rightAxis = mBarChart.axisRight
         rightAxis.setDrawGridLines(false)
         rightAxis.typeface = mTypeface
         rightAxis.setLabelCount(8, false)
@@ -83,7 +91,7 @@ class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
         rightAxis.spaceTop = 15f
         rightAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
 
-        val legend = barChart.legend
+        val legend = mBarChart.legend
         legend.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
         legend.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
         legend.orientation = Legend.LegendOrientation.HORIZONTAL
@@ -95,23 +103,23 @@ class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
         legend.typeface = mTypeface
 
         val mv = XYMarkerView(requireContext(), xAxisFormatter)
-        mv.chartView = barChart // For bounds control
-        barChart.marker = mv // Set the marker to the chart
+        mv.chartView = mBarChart // For bounds control
+        mBarChart.marker = mv // Set the marker to the chart
 
         // determine title parameter
         arguments?.let { bundle ->
             val title = bundle.getString(BarChartFragment.CHART_TITLE)
             if (title != null) {
-                chartTitle.text = title
-                chartTitle.visibility = View.VISIBLE
+                mChartTitle.text = title
+                mChartTitle.visibility = View.VISIBLE
             }
         }
 
         GlobalScope.launch {
             setData()
             activity?.runOnUiThread {
-                barChart.animateY(2000)
-                barChartProgressBar.visibility = View.GONE
+                mBarChart.animateY(2000)
+                mBarChartProgressBar.visibility = View.GONE
             }
         }
     }
@@ -151,8 +159,8 @@ class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
         barData.setValueTextSize(10f)
         barData.setValueTypeface(mTypeface)
         barData.barWidth = 0.9f
-        barChart.zoom((sortedMap.size / 6.0F), 0F, 0F, 0F)
-        barChart.data = barData
+        mBarChart.zoom((sortedMap.size / 6.0F), 0F, 0F, 0F)
+        mBarChart.data = barData
     }
 
     inner class AxisValueFormatter : IAxisValueFormatter {
