@@ -1,14 +1,12 @@
 package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import me.blog.korn123.commons.utils.FontUtils
-import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.databinding.ViewholderCheatSheetBinding
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
@@ -21,9 +19,7 @@ class CheatSheetAdapter(
 ) : RecyclerView.Adapter<CheatSheetAdapter.CheatSheetViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CheatSheetViewHolder {
-        val view = LayoutInflater.from(activity)
-                .inflate(R.layout.viewholder_cheat_sheet, parent, false)
-        return CheatSheetViewHolder(activity, view, this)
+        return CheatSheetViewHolder(activity, ViewholderCheatSheetBinding.inflate(activity.layoutInflater, parent, false), this)
     }
 
     override fun onBindViewHolder(holder: CheatSheetViewHolder, position: Int) {
@@ -38,7 +34,7 @@ class CheatSheetAdapter(
         }
     }
 
-    class CheatSheetViewHolder(activity: Activity, itemView: View, val adapter: CheatSheetAdapter) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    class CheatSheetViewHolder(activity: Activity, private val viewHolderCheatSheetBinding: ViewholderCheatSheetBinding, val adapter: CheatSheetAdapter) : RecyclerView.ViewHolder(viewHolderCheatSheetBinding.root), View.OnClickListener {
         init {
             if (itemView is ViewGroup) {
                 itemView.run {
@@ -53,10 +49,8 @@ class CheatSheetAdapter(
         }
 
         fun bindTo(cheatSheet: CheatSheet) {
-            itemView.run {
-                itemView.findViewById<TextView>(R.id.text_title).text = cheatSheet.title
-                itemView.findViewById<TextView>(R.id.text_description).text = cheatSheet.description
-            }
+            viewHolderCheatSheetBinding.textTitle.text = cheatSheet.title
+            viewHolderCheatSheetBinding.textDescription.text = cheatSheet.description
         }
 
         override fun onClick(p0: View?) {
