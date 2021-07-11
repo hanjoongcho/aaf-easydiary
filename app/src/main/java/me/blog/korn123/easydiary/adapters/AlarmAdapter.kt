@@ -1,16 +1,14 @@
 package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.CompoundButton
 import androidx.recyclerview.widget.RecyclerView
 import com.simplemobiletools.commons.extensions.getSelectedDaysString
-import kotlinx.android.synthetic.main.viewholder_alarm.view.*
 import me.blog.korn123.commons.utils.FontUtils
-import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.databinding.ViewholderAlarmBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.Alarm
@@ -22,9 +20,7 @@ class AlarmAdapter(
 ) : RecyclerView.Adapter<AlarmAdapter.AlarmViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlarmViewHolder {
-        val view = LayoutInflater.from(activity)
-                .inflate(R.layout.viewholder_alarm, parent, false)
-        return AlarmViewHolder(activity, view, this)
+        return AlarmViewHolder(activity, ViewholderAlarmBinding.inflate(activity.layoutInflater, parent, false), this)
     }
 
     override fun onBindViewHolder(holder: AlarmViewHolder, position: Int) {
@@ -53,38 +49,36 @@ class AlarmAdapter(
     }
 
     class AlarmViewHolder(
-            val activity: Activity, itemView: View, val adapter: AlarmAdapter
-    ) : RecyclerView.ViewHolder(itemView), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+            val activity: Activity, private val viewHolderAlarmBinding: ViewholderAlarmBinding, val adapter: AlarmAdapter
+    ) : RecyclerView.ViewHolder(viewHolderAlarmBinding.root), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
         init {
-            itemView.run {
-                if (itemView is ViewGroup) {
-                    activity.run {
-                        initTextSize(itemView)
-                        updateTextColors(itemView)
-                        updateAppViews(itemView)
-                        updateCardViewPolicy(itemView)
-                        FontUtils.setFontsTypeface(this, this.assets, null, itemView)
-                    }
-
-                    setOnClickListener(this@AlarmViewHolder)
-                    alarm_switch.setOnCheckedChangeListener(this@AlarmViewHolder)
-                }
+            activity.run {
+                initTextSize(viewHolderAlarmBinding.root)
+                updateTextColors(viewHolderAlarmBinding.root)
+                updateAppViews(viewHolderAlarmBinding.root)
+                updateCardViewPolicy(viewHolderAlarmBinding.root)
+                FontUtils.setFontsTypeface(this, this.assets, null, viewHolderAlarmBinding.root)
             }
+
+            viewHolderAlarmBinding.root.setOnClickListener(this@AlarmViewHolder)
+            viewHolderAlarmBinding.alarmSwitch.setOnCheckedChangeListener(this@AlarmViewHolder)
         }
 
         fun bindTo(alarm: Alarm) {
-            itemView.alarm_days.text = activity.getSelectedDaysString(alarm.days)
-            itemView.alarm_days.setTextColor(activity.config.textColor)
-            itemView.alarm_switch.isChecked = alarm.isEnabled
-            itemView.alarmDescription.text = alarm.label
-            itemView.edit_alarm_time.text = activity.getFormattedTime(alarm.timeInMinutes * 60, false, true)
+            viewHolderAlarmBinding.run {
+                alarmDays.text = activity.getSelectedDaysString(alarm.days)
+                alarmDays.setTextColor(activity.config.textColor)
+                alarmSwitch.isChecked = alarm.isEnabled
+                alarmDescription.text = alarm.label
+                editAlarmTime.text = activity.getFormattedTime(alarm.timeInMinutes * 60, false, true)
 
-            val prefix = if (activity.config.enableDebugMode) "[${alarm.sequence}] " else ""
-            itemView.alarmLabel.text = when (alarm.workMode) {
-                Alarm.WORK_MODE_DIARY_WRITING -> "${prefix}diary-writing"
-                Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> "${prefix}diary-backup-local"
-                Alarm.WORK_MODE_DIARY_BACKUP_GMS -> "${prefix}diary-backup-gms"
-                else -> "${prefix}unclassified"
+                val prefix = if (activity.config.enableDebugMode) "[${alarm.sequence}] " else ""
+                alarmLabel.text = when (alarm.workMode) {
+                    Alarm.WORK_MODE_DIARY_WRITING -> "${prefix}diary-writing"
+                    Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> "${prefix}diary-backup-local"
+                    Alarm.WORK_MODE_DIARY_BACKUP_GMS -> "${prefix}diary-backup-gms"
+                    else -> "${prefix}unclassified"
+                }
             }
         }
 
