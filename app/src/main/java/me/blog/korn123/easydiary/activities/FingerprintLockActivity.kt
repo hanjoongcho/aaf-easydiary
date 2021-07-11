@@ -13,7 +13,6 @@ import android.security.keystore.KeyProperties
 import android.util.Base64
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.biometric.BiometricPrompt
@@ -21,9 +20,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.hardware.fingerprint.FingerprintManagerCompat
 import androidx.core.os.CancellationSignal
 import io.github.aafactory.commons.activities.BaseSimpleActivity
-import kotlinx.android.synthetic.main.activity_fingerprint.*
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.databinding.ActivityFingerprintBinding
 import me.blog.korn123.easydiary.extensions.*
 import java.io.IOException
 import java.security.InvalidAlgorithmParameterException
@@ -41,6 +40,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
      *   global properties
      *
      ***************************************************************************************************/
+    private lateinit var mBinding: ActivityFingerprintBinding
     private lateinit var mKeyStore: KeyStore
     private lateinit var mKeyGenerator: KeyGenerator
     private lateinit var mFingerprintManager: FingerprintManagerCompat
@@ -56,17 +56,18 @@ class FingerprintLockActivity : BaseSimpleActivity() {
      ***************************************************************************************************/
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_fingerprint)
+        mBinding = ActivityFingerprintBinding.inflate(layoutInflater)
+        setContentView(mBinding.root)
         mActivityMode = intent.getStringExtra(LAUNCHING_MODE)
 
-        changePinLock.setOnClickListener {
+        mBinding.changePinLock.setOnClickListener {
             startActivity(Intent(this, PinLockActivity::class.java).apply {
                 putExtra(PinLockActivity.LAUNCHING_MODE, PinLockActivity.ACTIVITY_UNLOCK)
             })
             finish()
         }
 
-        changePinLock.setOnLongClickListener {
+        mBinding.changePinLock.setOnLongClickListener {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && canAuthenticateWithBiometrics()) showBiometricPrompt()
             true
         }
@@ -76,9 +77,9 @@ class FingerprintLockActivity : BaseSimpleActivity() {
         super.onResume()
 
         if (!mSettingComplete) {
-            guideMessage.text = getString(R.string.place_finger)
-            FontUtils.setFontsTypeface(applicationContext, assets, null, container)
-            changePinLock.visibility = if (mActivityMode == ACTIVITY_SETTING) View.GONE else View.VISIBLE
+            mBinding.guideMessage.text = getString(R.string.place_finger)
+            FontUtils.setFontsTypeface(applicationContext, assets, null, mBinding.container)
+            mBinding.changePinLock.visibility = if (mActivityMode == ACTIVITY_SETTING) View.GONE else View.VISIBLE
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
@@ -117,7 +118,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                 // 06. screen lock 설정여부 확인
                 if (!keyguardManager.isKeyguardSecure) {
                     // Show a message that the user hasn't set up a fingerprint or lock screen.
-                    guideMessage.text = "Secure lock screen hasn't set up.\nGo to 'Settings -> Security -> Fingerprint' to set up a fingerprint"
+                    mBinding.guideMessage.text = "Secure lock screen hasn't set up.\nGo to 'Settings -> Security -> Fingerprint' to set up a fingerprint"
                     return
                 }
 
@@ -128,7 +129,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
                 // noinspection ResourceType
                 if (!mFingerprintManager.hasEnrolledFingerprints()) {
                     // This happens when no fingerprints are registered.
-                    guideMessage.text = "Go to 'Settings -> Security -> Fingerprint' and register at least one" + " fingerprint"
+                    mBinding.guideMessage.text = "Go to 'Settings -> Security -> Fingerprint' and register at least one" + " fingerprint"
                     return
                 }
 
@@ -362,7 +363,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
     }
 
     private fun updateErrorMessage(errorMessage: String) {
-        guideMessage.text = errorMessage
+        mBinding.guideMessage.text = errorMessage
     }
     
 
