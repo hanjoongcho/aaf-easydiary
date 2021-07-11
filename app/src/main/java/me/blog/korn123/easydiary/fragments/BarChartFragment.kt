@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.ContentLoadingProgressBar
+import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
@@ -13,7 +15,6 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import io.github.aafactory.commons.utils.DateUtils
-import kotlinx.android.synthetic.main.fragment_barchart.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.FontUtils
@@ -23,12 +24,23 @@ import me.blog.korn123.easydiary.chart.IValueFormatterExt
 import me.blog.korn123.easydiary.chart.MyAxisValueFormatter
 import me.blog.korn123.easydiary.chart.XYMarkerView
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.views.FixedTextView
 import java.util.*
 
 class BarChartFragment : androidx.fragment.app.Fragment() {
+    private lateinit var barChart: BarChart
+    private lateinit var chartTitle: FixedTextView
+    private lateinit var barChartProgressBar: ContentLoadingProgressBar
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_barchart, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        barChart = view.findViewById(R.id.barChart)
+        chartTitle = view.findViewById(R.id.chartTitle)
+        barChartProgressBar = view.findViewById(R.id.barChartProgressBar)
 
         barChart.setDrawBarShadow(false)
         barChart.setDrawValueAboveBar(true)
@@ -105,10 +117,6 @@ class BarChartFragment : androidx.fragment.app.Fragment() {
                 barChartProgressBar.visibility = View.GONE
             }
         }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_barchart, container, false)
     }
 
     private fun setData(count: Int, range: Float) {
