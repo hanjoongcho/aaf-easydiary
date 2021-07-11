@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.viewholder_cheat_sheet.view.*
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.initTextSize
@@ -54,8 +54,8 @@ class CheatSheetAdapter(
 
         fun bindTo(cheatSheet: CheatSheet) {
             itemView.run {
-                text_title.text = cheatSheet.title
-                text_description.text = cheatSheet.description
+                itemView.findViewById<TextView>(R.id.text_title).text = cheatSheet.title
+                itemView.findViewById<TextView>(R.id.text_description).text = cheatSheet.description
             }
         }
 
