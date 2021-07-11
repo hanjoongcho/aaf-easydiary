@@ -8,9 +8,9 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import kotlinx.android.synthetic.main.item_weather.view.*
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
+import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.models.DiarySymbol
 
@@ -40,7 +40,7 @@ class DiaryWeatherItemAdapter(
         when (itemView.tag is ViewHolder) {
             true -> itemView.tag as ViewHolder
             false -> {
-                val viewHolder = ViewHolder(itemView.text1, itemView.imageView1, itemView.item_holder)
+                val viewHolder = ViewHolder(itemView.findViewById(R.id.text1), itemView.findViewById(R.id.imageView1), itemView.findViewById(R.id.item_holder))
                 itemView.tag = viewHolder
                 viewHolder
             }
