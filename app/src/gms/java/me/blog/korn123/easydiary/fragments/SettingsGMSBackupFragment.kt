@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ListView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -56,6 +57,19 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
     private lateinit var progressContainer: ConstraintLayout
     private lateinit var mContext: Context
     private var mTaskFlag = 0
+    private val mRequestExternalStoragePermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+        requireActivity().pauseLock()
+        if (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+            when (mTaskFlag) {
+                SETTING_FLAG_EXPORT_GOOGLE_DRIVE -> backupDiaryRealm()
+                SETTING_FLAG_IMPORT_GOOGLE_DRIVE -> recoverDiaryRealm()
+                SETTING_FLAG_EXPORT_PHOTO_GOOGLE_DRIVE -> backupDiaryPhoto()
+                SETTING_FLAG_IMPORT_PHOTO_GOOGLE_DRIVE -> recoverDiaryPhoto()
+            }
+        } else {
+            requireActivity().makeSnackBar(requireActivity().findViewById(android.R.id.content), getString(R.string.guide_message_3))
+        }
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -115,25 +129,6 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
                     }
                 }
             }
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        requireActivity().pauseLock()
-        if (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-            when (requestCode) {
-                REQUEST_CODE_EXTERNAL_STORAGE -> if (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    when (mTaskFlag) {
-                        SETTING_FLAG_EXPORT_GOOGLE_DRIVE -> backupDiaryRealm()
-                        SETTING_FLAG_IMPORT_GOOGLE_DRIVE -> recoverDiaryRealm()
-                        SETTING_FLAG_EXPORT_PHOTO_GOOGLE_DRIVE -> backupDiaryPhoto()
-                        SETTING_FLAG_IMPORT_PHOTO_GOOGLE_DRIVE -> recoverDiaryPhoto()
-                    }
-                }
-            }
-        } else {
-            requireActivity().makeSnackBar(requireActivity().findViewById(android.R.id.content), getString(R.string.guide_message_3))
         }
     }
 
@@ -302,7 +297,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
                 if (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                     recoverDiaryRealm()
                 } else { // Permission has already been granted
-                    confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
+                    mRequestExternalStoragePermissionLauncher.launch(EXTERNAL_STORAGE_PERMISSIONS)
                 }
             }
             R.id.backupSetting -> {
@@ -310,21 +305,21 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
                 if (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                     backupDiaryRealm()
                 } else { // Permission has already been granted
-                    confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
+                    mRequestExternalStoragePermissionLauncher.launch(EXTERNAL_STORAGE_PERMISSIONS)
                 }
             }
             R.id.backupAttachPhoto -> {
                 mTaskFlag = SETTING_FLAG_EXPORT_PHOTO_GOOGLE_DRIVE
                 when (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                     true -> backupDiaryPhoto()
-                    false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
+                    false -> mRequestExternalStoragePermissionLauncher.launch(EXTERNAL_STORAGE_PERMISSIONS)
                 }
             }
             R.id.recoverAttachPhoto -> {
                 mTaskFlag = SETTING_FLAG_IMPORT_PHOTO_GOOGLE_DRIVE
                 when (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                     true -> recoverDiaryPhoto()
-                    false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
+                    false -> mRequestExternalStoragePermissionLauncher.launch(EXTERNAL_STORAGE_PERMISSIONS)
                 }
             }
             R.id.signInGoogleOAuth -> {
