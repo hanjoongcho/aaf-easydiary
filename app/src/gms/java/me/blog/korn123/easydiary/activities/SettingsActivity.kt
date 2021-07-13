@@ -1,6 +1,5 @@
 package me.blog.korn123.easydiary.activities
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import me.blog.korn123.easydiary.R
@@ -73,12 +72,5 @@ class SettingsActivity : BaseSettingsActivity() {
         menuInflater.inflate(R.menu.diary_settings_schedule, menu)
         if (mCurrentPosition == 5) menu.findItem(R.id.addSchedule).isVisible = true
         return true
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        super.onActivityResult(requestCode, resultCode, intent)
-        mDotIndicatorPager2Adapter.instantiateItem(mBinding.viewPager, mBinding.viewPager.currentItem).run {
-            if (this is SettingsBasicFragment) onActivityResult(requestCode, resultCode, intent)
-        }
     }
 }
