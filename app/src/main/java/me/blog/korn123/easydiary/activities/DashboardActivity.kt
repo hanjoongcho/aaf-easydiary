@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.github.aafactory.commons.utils.DateUtils
@@ -33,6 +34,10 @@ class DashboardActivity : EasyDiaryActivity() {
     private lateinit var mBinding: ActivityDashboardBinding
     private lateinit var mDailySymbolAdapter: DailySymbolAdapter
     private var mDailySymbolList: ArrayList<DailySymbolAdapter.DailySymbol> = arrayListOf()
+    private val mRequestUpdateDailySymbol = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) updateDailyCard()
+    }
+
 
     /***************************************************************************************************
      *   override functions
@@ -116,23 +121,9 @@ class DashboardActivity : EasyDiaryActivity() {
         initializeDailySymbol()
 
         mBinding.editSymbolFilter.setOnClickListener {
-            startActivityForResult(Intent(this, SymbolFilterPickerActivity::class.java), REQUEST_CODE_UPDATE_DAILY_SYMBOL_FILTER)
-//            TransitionHelper.startActivityWithTransition(this, Intent(this, SymbolFilterPickerActivity::class.java))
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        super.onActivityResult(requestCode, resultCode, intent)
-
-        when (resultCode == Activity.RESULT_OK/* && intent != null*/) {
-            true -> {
-                when (requestCode) {
-                    REQUEST_CODE_UPDATE_DAILY_SYMBOL_FILTER -> {
-                        updateDailyCard()
-                    }
-                }
+            Intent(this, SymbolFilterPickerActivity::class.java).apply {
+                mRequestUpdateDailySymbol.launch(this)
             }
-            false -> {}
         }
     }
 
