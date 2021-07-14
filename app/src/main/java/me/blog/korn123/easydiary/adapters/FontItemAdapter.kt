@@ -1,7 +1,6 @@
 package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
-import android.content.Context
 import android.graphics.BitmapFactory
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,7 +10,10 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
@@ -63,35 +65,51 @@ class FontItemAdapter(val activity: Activity, private val layoutResourceId: Int,
 
             this.position = position
 //        Log.i("fontDialog", "$position")
-            renderJob(context, this, position)
+            renderJob(activity, this, position)
         }
         return itemView
     }
 
-    class ViewHolder(val textView: TextView, val imageView: ImageView, var position: Int = 0, var job: Job? = null)
+    class ViewHolder(val textView: TextView, val imageView: ImageView, var position: Int = 0)
 
-    private fun renderJob(context: Context, holder: ViewHolder, position: Int) {
-        holder.job?.let {
-            Log.i(AAF_TEST, "Ready cancelAndJoin ${it.isActive}")
-            if (it.isActive) runBlocking {
-                Log.i(AAF_TEST, "cancelAndJoin!!!")
-                it.cancelAndJoin()
-            }
-        }
-
-        Log.i(AAF_TEST, "${holder.position} Start")
-        holder.job = GlobalScope.launch {
-//            runBlocking {
-//                delay(1000)
-//            }
-            holder.textView.run {
-                val tf = FontUtils.getTypeface(context, list[position]["fontName"])
-                activity.runOnUiThread {
-                    typeface = tf
-                    text = list[position]["disPlayFontName"]
+    inner class FontItemRenderer(val activity: Activity, val holder: ViewHolder, val position: Int) : Thread() {
+        override fun run() {
+            when (holder.position == position) {
+                true -> {
+                    holder.textView.run {
+                        val tf = FontUtils.getTypeface(context, list[position]["fontName"])
+                        activity.runOnUiThread {
+                            typeface = tf
+                            text = list[position]["disPlayFontName"]
+                        }
+                    }
+                    Log.i(AAF_TEST, "$position End")
                 }
+                false -> { Log.i(AAF_TEST, "$position Cancel") }
             }
         }
-        Log.i(AAF_TEST, "${holder.position} End")
+    }
+
+    private fun renderJob(activity: Activity, holder: ViewHolder, position: Int) {
+        Log.i(AAF_TEST, "$position Start")
+//        FontItemRenderer(activity, holder, position).apply { start() }
+
+        runBlocking {
+            when (holder.position == position) {
+                true -> {
+                    launch(Dispatchers.IO) {
+                        holder.textView.run {
+                            val tf = FontUtils.getTypeface(context, list[position]["fontName"])
+                            activity.runOnUiThread {
+                                typeface = tf
+                                text = list[position]["disPlayFontName"]
+                            }
+                        }
+                        Log.i(AAF_TEST, "${holder.position} End")
+                    }
+                }
+                false -> { Log.i(AAF_TEST, "$position Cancel") }
+            }
+        }
     }
 }
