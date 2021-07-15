@@ -10,10 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
@@ -94,19 +91,17 @@ class FontItemAdapter(val activity: Activity, private val layoutResourceId: Int,
         Log.i(AAF_TEST, "$position Start")
 //        FontItemRenderer(activity, holder, position).apply { start() }
 
-        runBlocking {
+        CoroutineScope(Dispatchers.IO).launch {
             when (holder.position == position) {
                 true -> {
-                    launch(Dispatchers.IO) {
-                        holder.textView.run {
-                            val tf = FontUtils.getTypeface(context, list[position]["fontName"])
-                            activity.runOnUiThread {
-                                typeface = tf
-                                text = list[position]["disPlayFontName"]
-                            }
+                    holder.textView.run {
+                        val tf = FontUtils.getTypeface(context, list[position]["fontName"])
+                        withContext(Dispatchers.Main) {
+                            typeface = tf
+                            text = list[position]["disPlayFontName"]
                         }
-                        Log.i(AAF_TEST, "${holder.position} End")
                     }
+                    Log.i(AAF_TEST, "${holder.position} End")
                 }
                 false -> { Log.i(AAF_TEST, "$position Cancel") }
             }
