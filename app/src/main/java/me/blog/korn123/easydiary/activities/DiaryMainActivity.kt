@@ -21,8 +21,7 @@ import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.github.ksoichiro.android.observablescrollview.ObservableListView
 import com.nineoldandroids.view.ViewHelper
 import io.github.aafactory.commons.utils.DateUtils
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
@@ -66,9 +65,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             result.data?.let {
                 mDiaryMainItemAdapter?.getSelectedItems()?.run {
                     mBinding.progressCoroutine.visibility = View.VISIBLE
-                    GlobalScope.launch {
+                    CoroutineScope(Dispatchers.IO).launch {
                         exportHtmlBook(it.data, this@run)
-                        runOnUiThread {
+                        withContext(Dispatchers.Main) {
                             mBinding.progressCoroutine.visibility = View.GONE
                             mDiaryMainItemAdapter?.getSelectedItems()?.forEach {
                                 it.isSelected = false

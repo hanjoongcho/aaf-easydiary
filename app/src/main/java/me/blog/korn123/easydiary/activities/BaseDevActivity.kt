@@ -223,10 +223,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     for (i in 1..50) {
                         if (isActive) {
                             val currentThreadName = Thread.currentThread().name
-                            runOnUiThread { updateConsole(i.toString(), currentThreadName) }
-                            runBlocking {
-                                delay(100)
-                            }
+                            withContext(Dispatchers.Main) { updateConsole(i.toString(), currentThreadName) }
+                            delay(500)
                         }
                     }
                 }

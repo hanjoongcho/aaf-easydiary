@@ -46,7 +46,7 @@ import java.util.*
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 
-class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
+class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
 
 
     /***************************************************************************************************
@@ -68,6 +68,36 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
             }
         } else {
             requireActivity().makeSnackBar(requireActivity().findViewById(android.R.id.content), getString(R.string.guide_message_3))
+        }
+    }
+    private val mRequestGoogleSignInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        requireActivity().pauseLock()
+        when (it.resultCode == Activity.RESULT_OK && it.data != null) {
+            true -> {
+                // The Task returned from this call is always completed, no need to attach
+                // a listener.
+                val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(it.data)
+                val googleSignAccount = task.getResult(ApiException::class.java)
+                googleSignAccount?.account?.let {
+                    callAccountCallback(it)
+                }
+            }
+            false -> {
+                requireActivity().makeSnackBar("Google account verification failed.")
+                progressContainer.visibility = View. GONE
+            }
+        }
+    }
+    private val mRequestGoogleDrivePermissions = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        requireActivity().pauseLock()
+        when (it.resultCode == Activity.RESULT_OK && it.data != null) {
+            true -> {
+                mPermissionCallback.invoke()
+            }
+            false -> {
+                requireActivity().makeSnackBar("Google account verification failed.")
+                progressContainer.visibility = View. GONE
+            }
         }
     }
 
@@ -99,39 +129,6 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
         initPreference()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        super.onActivityResult(requestCode, resultCode, intent)
-        requireActivity().pauseLock()
-
-        when (resultCode == Activity.RESULT_OK && intent != null) {
-            true -> {
-                // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-                when (requestCode) {
-                    REQUEST_CODE_GOOGLE_SIGN_IN -> {
-                        // The Task returned from this call is always completed, no need to attach
-                        // a listener.
-                        val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(intent)
-                        val googleSignAccount = task.getResult(ApiException::class.java)
-                        googleSignAccount?.account?.let {
-                            callAccountCallback(it)
-                        }
-                    }
-                    REQUEST_CODE_GOOGLE_DRIVE_PERMISSIONS -> {
-                        mPermissionCallback.invoke()
-                    }
-                }
-            }
-            false -> {
-                when (requestCode) {
-                    REQUEST_CODE_GOOGLE_SIGN_IN, REQUEST_CODE_GOOGLE_DRIVE_PERMISSIONS -> {
-                        requireActivity().makeSnackBar("Google account verification failed.")
-                        progressContainer.visibility = View. GONE
-                    }
-                }
-            }
-        }
-    }
-
 
     /***************************************************************************************************
      *   backup and recovery
@@ -154,7 +151,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
                 mPermissionCallback.invoke()
                 r
             } catch (e: UserRecoverableAuthIOException) {
-                startActivityForResult(e.intent, REQUEST_CODE_GOOGLE_DRIVE_PERMISSIONS)
+                mRequestGoogleDrivePermissions.launch(e.intent)
                 null
             }
         })
@@ -164,7 +161,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
         requireActivity().setScreenOrientationSensor(false)
         progressContainer.visibility = View.VISIBLE
         val realmPath = EasyDiaryDbHelper.getRealmPath()
-        initGoogleSignAccount(this) { account ->
+        initGoogleSignAccount(requireActivity(), mRequestGoogleSignInLauncher) { account ->
             requestDrivePermissions(account) {
                 DriveServiceHelper(mContext, account).run {
                     initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME) {
@@ -195,7 +192,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
     }
 
     private fun openRealmFilePickerDialog() {
-        initGoogleSignAccount(this) { account ->
+        initGoogleSignAccount(requireActivity(), mRequestGoogleSignInLauncher) { account ->
             requestDrivePermissions(account) {
                 val driveServiceHelper = DriveServiceHelper(mContext, account)
 //            driveServiceHelper.queryFiles("mimeType contains 'text/aaf_v' and name contains '$DIARY_DB_NAME'", 1000)
@@ -247,7 +244,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
     private fun recoverDiaryPhoto() {
         requireActivity().setScreenOrientationSensor(false)
         progressContainer.visibility = View.VISIBLE
-        initGoogleSignAccount(this) { account ->
+        initGoogleSignAccount(requireActivity(), mRequestGoogleSignInLauncher) { account ->
             requestDrivePermissions(account) {
                 requireActivity().runOnUiThread {
                     progressContainer.visibility = View.GONE
@@ -266,7 +263,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
     private fun backupDiaryPhoto() {
         requireActivity().setScreenOrientationSensor(false)
         progressContainer.visibility = View.VISIBLE
-        initGoogleSignAccount(this) { account ->
+        initGoogleSignAccount(requireActivity(), mRequestGoogleSignInLauncher) { account ->
             requestDrivePermissions(account) {
                 DriveServiceHelper(mContext, account).run {
                     initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_PHOTO_FOLDER_NAME) { photoFolderId ->
@@ -325,7 +322,7 @@ class SettingsGMSBackupFragment() : androidx.fragment.app.Fragment() {
             R.id.signInGoogleOAuth -> {
                 when (GoogleOAuthHelper.isValidGoogleSignAccount(requireActivity())) {
                     false -> {
-                        initGoogleSignAccount(this) { account ->
+                        initGoogleSignAccount(requireActivity(), mRequestGoogleSignInLauncher) { account ->
                             requestDrivePermissions(account) {
                                 determineAccountInfo()
                             }

@@ -8,8 +8,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.github.aafactory.commons.utils.DateUtils
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DailySymbolAdapter
@@ -17,7 +16,6 @@ import me.blog.korn123.easydiary.databinding.ActivityDashboardBinding
 import me.blog.korn123.easydiary.databinding.PartialDailySymbolBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.fragments.*
-import me.blog.korn123.easydiary.helper.REQUEST_CODE_UPDATE_DAILY_SYMBOL_FILTER
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -155,12 +153,12 @@ class DashboardActivity : EasyDiaryActivity() {
             })
         }
 
-        GlobalScope.launch { // launch a new coroutine and keep a reference to its Job
+        CoroutineScope(Dispatchers.IO).launch { // launch a new coroutine and keep a reference to its Job
             for (num in 1..365) {
                 mDailySymbolList.add(DailySymbolAdapter.DailySymbol(dateFormat.format(cal.time), cal.get(Calendar.DAY_OF_WEEK), cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())!!, dayOfMonth.format(cal.time), cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())!!))
                 cal.add(Calendar.DATE, -1)
             }
-            runOnUiThread {
+            withContext(Dispatchers.Main) {
                 updateDailyCard()
             }
         }
@@ -173,10 +171,10 @@ class DashboardActivity : EasyDiaryActivity() {
             dailyCardProgressBar.visibility = View.VISIBLE
             selectedSymbolFlexBox.removeAllViews()
 
-            GlobalScope.launch {
+            CoroutineScope(Dispatchers.IO).launch {
                 config.selectedSymbols.split(",").map { sequence ->
                     val partialDailySymbolBinding = PartialDailySymbolBinding.inflate(layoutInflater)
-                    runOnUiThread {
+                    withContext(Dispatchers.Main) {
                         FlavorUtils.initWeatherView(this@DashboardActivity, partialDailySymbolBinding.dailySymbol, sequence.toInt())
                         selectedSymbolFlexBox.addView(partialDailySymbolBinding.root)
                     }

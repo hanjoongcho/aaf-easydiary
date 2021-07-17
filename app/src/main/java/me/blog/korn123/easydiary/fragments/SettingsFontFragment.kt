@@ -97,15 +97,7 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
                         else -> {}
                     }
                 }
-                false -> {
-                    when (requestCode) {
-                        REQUEST_CODE_GOOGLE_SIGN_IN, REQUEST_CODE_GOOGLE_DRIVE_PERMISSIONS -> {
-                            makeSnackBar("Google account verification failed.")
-                            progressContainer.visibility = View. GONE
-                        }
-                        else -> {}
-                    }
-                }
+                false -> {}
             }
         }
     }

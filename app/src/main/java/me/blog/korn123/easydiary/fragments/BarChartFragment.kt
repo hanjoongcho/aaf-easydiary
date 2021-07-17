@@ -15,8 +15,10 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import io.github.aafactory.commons.utils.DateUtils
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.chart.DayAxisValueFormatter
@@ -110,9 +112,9 @@ class BarChartFragment : androidx.fragment.app.Fragment() {
             }
         }
 
-        GlobalScope.launch {
+        CoroutineScope(Dispatchers.IO).launch {
             setData(6, 20f)
-            activity?.runOnUiThread {
+            withContext(Dispatchers.Main) {
                 mBarChart.animateY(2000)
                 mBarChartProgressBar.visibility = View.GONE
             }
