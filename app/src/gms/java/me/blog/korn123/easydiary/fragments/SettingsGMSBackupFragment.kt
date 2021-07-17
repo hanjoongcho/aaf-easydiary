@@ -58,45 +58,51 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
     private lateinit var mContext: Context
     private var mTaskFlag = 0
     private val mRequestExternalStoragePermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-        requireActivity().pauseLock()
-        if (requireActivity().checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-            when (mTaskFlag) {
-                SETTING_FLAG_EXPORT_GOOGLE_DRIVE -> backupDiaryRealm()
-                SETTING_FLAG_IMPORT_GOOGLE_DRIVE -> recoverDiaryRealm()
-                SETTING_FLAG_EXPORT_PHOTO_GOOGLE_DRIVE -> backupDiaryPhoto()
-                SETTING_FLAG_IMPORT_PHOTO_GOOGLE_DRIVE -> recoverDiaryPhoto()
+        requireActivity().run {
+            pauseLock()
+            if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                when (mTaskFlag) {
+                    SETTING_FLAG_EXPORT_GOOGLE_DRIVE -> backupDiaryRealm()
+                    SETTING_FLAG_IMPORT_GOOGLE_DRIVE -> recoverDiaryRealm()
+                    SETTING_FLAG_EXPORT_PHOTO_GOOGLE_DRIVE -> backupDiaryPhoto()
+                    SETTING_FLAG_IMPORT_PHOTO_GOOGLE_DRIVE -> recoverDiaryPhoto()
+                }
+            } else {
+                makeSnackBar(requireActivity().findViewById(android.R.id.content), getString(R.string.guide_message_3))
             }
-        } else {
-            requireActivity().makeSnackBar(requireActivity().findViewById(android.R.id.content), getString(R.string.guide_message_3))
         }
     }
     private val mRequestGoogleSignInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        requireActivity().pauseLock()
-        when (it.resultCode == Activity.RESULT_OK && it.data != null) {
-            true -> {
-                // The Task returned from this call is always completed, no need to attach
-                // a listener.
-                val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(it.data)
-                val googleSignAccount = task.getResult(ApiException::class.java)
-                googleSignAccount?.account?.let {
-                    callAccountCallback(it)
+        requireActivity().run {
+            pauseLock()
+            when (it.resultCode == Activity.RESULT_OK && it.data != null) {
+                true -> {
+                    // The Task returned from this call is always completed, no need to attach
+                    // a listener.
+                    val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(it.data)
+                    val googleSignAccount = task.getResult(ApiException::class.java)
+                    googleSignAccount?.account?.let {
+                        callAccountCallback(it)
+                    }
                 }
-            }
-            false -> {
-                requireActivity().makeSnackBar("Google account verification failed.")
-                progressContainer.visibility = View. GONE
+                false -> {
+                    makeSnackBar("Google account verification failed.")
+                    progressContainer.visibility = View. GONE
+                }
             }
         }
     }
     private val mRequestGoogleDrivePermissions = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        requireActivity().pauseLock()
-        when (it.resultCode == Activity.RESULT_OK && it.data != null) {
-            true -> {
-                mPermissionCallback.invoke()
-            }
-            false -> {
-                requireActivity().makeSnackBar("Google account verification failed.")
-                progressContainer.visibility = View. GONE
+        requireActivity().run {
+            pauseLock()
+            when (it.resultCode == Activity.RESULT_OK && it.data != null) {
+                true -> {
+                    mPermissionCallback.invoke()
+                }
+                false -> {
+                    makeSnackBar("Google account verification failed.")
+                    progressContainer.visibility = View. GONE
+                }
             }
         }
     }
@@ -106,7 +112,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
         this.mContext = context
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         mBinding = PartialSettingsBackupGmsBinding.inflate(layoutInflater)
         return mBinding.root
     }

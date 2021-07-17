@@ -29,8 +29,9 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     private lateinit var mBinding: PartialSettingsBasicBinding
-    private val mRequestLocationSourceLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
+    private val mRequestLocationSourceLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         requireActivity().run {
+            pauseLock()
             when (isLocationEnabled()) {
                 true -> {
                     mBinding.locationInfoSwitcher.isChecked = true
