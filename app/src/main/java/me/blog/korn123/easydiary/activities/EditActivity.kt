@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.activities
 
 import android.Manifest
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.ActivityNotFoundException
@@ -26,6 +27,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.werb.pickphotoview.PickPhotoView
@@ -78,7 +80,41 @@ abstract class EditActivity : EasyDiaryActivity() {
         override fun onProviderEnabled(p0: String) {}
         override fun onProviderDisabled(p0: String) {}
     }
-
+    private val mRequestSpeechInput = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        pauseLock()
+        when (it.resultCode == Activity.RESULT_OK && it.data != null) {
+            true -> {
+                mBinding.partialEditContents.run {
+                    intent.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.let {
+                        if (mCurrentCursor == FOCUS_TITLE) { // edit title
+                            val title = diaryTitle.text.toString()
+                            val sb = StringBuilder(title)
+                            sb.insert(diaryTitle.selectionStart, it[0])
+                            val cursorPosition = diaryTitle.selectionStart + it[0].length
+                            diaryTitle.setText(sb.toString())
+                            diaryTitle.setSelection(cursorPosition)
+                        } else {                   // edit contents
+                            val contents = diaryContents.text.toString()
+                            val sb = StringBuilder(contents)
+                            sb.insert(diaryContents.selectionStart, it[0])
+                            val cursorPosition = diaryContents.selectionStart + it[0].length
+                            diaryContents.setText(sb.toString())
+                            diaryContents.setSelection(cursorPosition)
+                        }
+                    }
+                }
+            }
+            false -> {}
+        }
+    }
+    private val mRequestImagePicker = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        pauseLock()
+        if (it.resultCode == Activity.RESULT_OK && it.data != null) attachPhotos(arrayListOf(intent.data.toString()), true)
+    }
+    private val mRequestCaptureCamera = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        pauseLock()
+        if (it.resultCode == Activity.RESULT_OK) attachPhotos(arrayListOf(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY + CAPTURE_CAMERA_FILE_NAME), false)
+    }
     protected lateinit var mBinding: ActivityDiaryEditBinding
     protected val mPhotoUris: RealmList<PhotoUriDto> = RealmList()
     protected var mCurrentTimeMillis: Long = 0
@@ -124,7 +160,7 @@ abstract class EditActivity : EasyDiaryActivity() {
                 val captureFile = createTemporaryPhotoFile()
                 val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, getUriForFile(captureFile))
-                startActivityForResult(intent, REQUEST_CODE_CAPTURE_CAMERA)
+                mRequestCaptureCamera.launch(intent)
             }
             R.id.datePicker -> {
                 mDatePickerDialog.show()
@@ -250,7 +286,7 @@ abstract class EditActivity : EasyDiaryActivity() {
      ***************************************************************************************************/
     private fun showSpeechDialog() {
         try {
-            startActivityForResult(mRecognizerIntent, REQUEST_CODE_SPEECH_INPUT)
+            mRequestSpeechInput.launch(mRecognizerIntent)
         } catch (e: ActivityNotFoundException) {
             showAlertDialog(getString(R.string.recognizer_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
         }
@@ -280,7 +316,7 @@ abstract class EditActivity : EasyDiaryActivity() {
                 val pickImageIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                 //                pickIntent.setType("image/*");
                 try {
-                    startActivityForResult(pickImageIntent, REQUEST_CODE_IMAGE_PICKER)
+                    mRequestImagePicker.launch(pickImageIntent)
                 } catch (e: ActivityNotFoundException) {
                     showAlertDialog(getString(R.string.gallery_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
                 }
