@@ -54,6 +54,46 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
     private lateinit var mBinding: PartialSettingsBackupLocalBinding
     private val mActivity: Activity
         get() = requireActivity()
+    private val mRequestSAFWriteZip = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        requireActivity().run {
+            pauseLock()
+            if (it.resultCode == Activity.RESULT_OK && it.data != null && checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                exportFullBackupFile(it.data!!.data)
+            }
+        }
+    }
+    private val mRequestSAFWriteXLS = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        requireActivity().run {
+            pauseLock()
+            if (it.resultCode == Activity.RESULT_OK && it.data != null && checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                exportExcel(it.data!!.data)
+            }
+        }
+    }
+    private val mRequestSAFReadZip = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        requireActivity().run {
+            pauseLock()
+            if (it.resultCode == Activity.RESULT_OK && it.data != null) {
+                importFullBackupFile(it.data!!.data)
+            }
+        }
+    }
+    private val mRequestSAFWriteRealm = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        requireActivity().run {
+            pauseLock()
+            if (it.resultCode == Activity.RESULT_OK && it.data != null) {
+                exportRealmFileWithSAF(it.data!!.data)
+            }
+        }
+    }
+    private val mRequestSAFReadRealm = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        requireActivity().run {
+            pauseLock()
+            if (it.resultCode == Activity.RESULT_OK && it.data != null) {
+                importRealmFileWithSAF(it.data!!.data)
+            }
+        }
+    }
 
 
     /***************************************************************************************************
@@ -101,52 +141,6 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
             }
         } else {
             mActivity.makeSnackBar(mActivity.findViewById(android.R.id.content), getString(R.string.guide_message_3))
-        }
-    }
-
-
-    private val mRequestSAFWriteZip = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        requireActivity().run {
-            pauseLock()
-            if (it.resultCode == Activity.RESULT_OK && it.data != null && checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                exportFullBackupFile(it.data!!.data)
-            }
-        }
-    }
-
-    private val mRequestSAFWriteXLS = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        requireActivity().run {
-            pauseLock()
-            if (it.resultCode == Activity.RESULT_OK && it.data != null && checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                exportExcel(it.data!!.data)
-            }
-        }
-    }
-
-    private val mRequestSAFReadZip = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        requireActivity().run {
-            pauseLock()
-            if (it.resultCode == Activity.RESULT_OK && it.data != null) {
-                importFullBackupFile(it.data!!.data)
-            }
-        }
-    }
-
-    private val mRequestSAFWriteRealm = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        requireActivity().run {
-            pauseLock()
-            if (it.resultCode == Activity.RESULT_OK && it.data != null) {
-                exportRealmFileWithSAF(it.data!!.data)
-            }
-        }
-    }
-
-    private val mRequestSAFReadRealm = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        requireActivity().run {
-            pauseLock()
-            if (it.resultCode == Activity.RESULT_OK && it.data != null) {
-                importRealmFileWithSAF(it.data!!.data)
-            }
         }
     }
 
