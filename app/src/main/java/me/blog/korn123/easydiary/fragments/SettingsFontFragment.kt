@@ -41,12 +41,11 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
      ***************************************************************************************************/
     private lateinit var mBinding: PartialSettingsFontBinding
     private lateinit var progressContainer: ConstraintLayout
-    private val mRequestFontPick = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+    private val mRequestFontPick = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
         requireActivity().run {
             pauseLock()
-            if (it.resultCode == Activity.RESULT_OK && it.data != null) {
-                // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-                intent.data?.let { uri ->
+            if (activityResult.resultCode == Activity.RESULT_OK && activityResult.data != null) {
+                activityResult.data!!.data?.let { uri ->
                     val fileName = EasyDiaryUtils.queryName(contentResolver, uri)
                     if (FilenameUtils.getExtension(fileName).equals("ttf", true)) {
                         Thread(Runnable {

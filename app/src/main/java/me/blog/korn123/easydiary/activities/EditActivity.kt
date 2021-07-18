@@ -110,7 +110,7 @@ abstract class EditActivity : EasyDiaryActivity() {
     }
     private val mRequestImagePicker = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         pauseLock()
-        if (it.resultCode == Activity.RESULT_OK && it.data != null) attachPhotos(arrayListOf(intent.data.toString()), true)
+        if (it.resultCode == Activity.RESULT_OK && it.data != null) attachPhotos(arrayListOf(it.data!!.data.toString()), true)
     }
     private val mRequestCaptureCamera = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         pauseLock()
