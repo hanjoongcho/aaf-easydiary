@@ -19,8 +19,10 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import io.github.aafactory.commons.utils.CommonUtils
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.ChartUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
@@ -115,9 +117,9 @@ class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
             }
         }
 
-        GlobalScope.launch {
+        CoroutineScope(Dispatchers.IO).launch {
             setData()
-            activity?.runOnUiThread {
+            withContext(Dispatchers.Main) {
                 mBarChart.animateY(2000)
                 mBarChartProgressBar.visibility = View.GONE
             }

@@ -209,8 +209,14 @@
                                     android:layout_height="wrap_content"/>
                                 <Button
                                     app:layout_flexGrow="1"
-                                    android:id="@+id/button_coroutine_blocking"
-                                    android:text="[T3] Blocking"
+                                    android:id="@+id/button_run_blocking"
+                                    android:text="[T3] runBlocking"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"/>
+                                <Button
+                                    app:layout_flexGrow="1"
+                                    android:id="@+id/button_coroutine_scope"
+                                    android:text="[T4] CoroutineScope"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"/>
                             </com.google.android.flexbox.FlexboxLayout>

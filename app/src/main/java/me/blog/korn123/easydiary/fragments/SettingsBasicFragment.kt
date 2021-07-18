@@ -29,9 +29,17 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     private lateinit var mBinding: PartialSettingsBasicBinding
-    private val mRequestLocationSourceLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
+    private val mRequestLocationSourceLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         requireActivity().run {
-            makeSnackBar(if (isLocationEnabled()) "GPS provider setting is activated!!!" else "The request operation did not complete normally.")
+            pauseLock()
+            when (isLocationEnabled()) {
+                true -> {
+                    mBinding.locationInfoSwitcher.isChecked = true
+                    config.enableLocationInfo = mBinding.locationInfoSwitcher.isChecked
+                    makeSnackBar("GPS provider setting is activated!!!")
+                }
+                false -> makeSnackBar("The request operation did not complete normally.")
+            }
         }
     }
 

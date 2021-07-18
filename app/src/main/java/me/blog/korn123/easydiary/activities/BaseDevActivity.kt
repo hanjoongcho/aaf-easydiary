@@ -223,10 +223,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     for (i in 1..50) {
                         if (isActive) {
                             val currentThreadName = Thread.currentThread().name
-                            runOnUiThread { updateConsole(i.toString(), currentThreadName) }
-                            runBlocking {
-                                delay(100)
-                            }
+                            withContext(Dispatchers.Main) { updateConsole(i.toString(), currentThreadName) }
+                            delay(500)
                         }
                     }
                 }
@@ -266,10 +264,27 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
         }
 
-        mBinding.buttonCoroutineBlocking.setOnClickListener {
+        mBinding.buttonRunBlocking.setOnClickListener {
+            updateConsole("1")
             runBlocking {
-                updateConsole("runBlocking block")
+                launch {
+                    updateConsole("3")
+                    delay(2000)
+                    updateConsole("4")
+                }
+                updateConsole("2")
             }
+        }
+
+        mBinding.buttonCoroutineScope.setOnClickListener {
+            updateConsole("1")
+            CoroutineScope(Dispatchers.IO).launch {
+                val name = Thread.currentThread().name
+                withContext(Dispatchers.Main) { updateConsole("3", name) }
+                delay(2000)
+                withContext(Dispatchers.Main) { updateConsole("4", name) }
+            }
+            updateConsole("2")
         }
     }
 

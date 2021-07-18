@@ -1,24 +1,21 @@
 package me.blog.korn123.easydiary.activities
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.speech.RecognizerIntent
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.RelativeLayout
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
-import com.werb.pickphotoview.util.PickConfig
-import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.*
-import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.PREVIOUS_ACTIVITY_CREATE
+import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER
+import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.DiaryDto
 import org.apache.commons.lang3.StringUtils
-import java.util.*
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -59,46 +56,6 @@ class DiaryInsertActivity : EditActivity() {
         toggleSimpleLayout()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        super.onActivityResult(requestCode, resultCode, intent)
-        pauseLock()
-        when (requestCode) {
-            REQUEST_CODE_SPEECH_INPUT -> if (resultCode == Activity.RESULT_OK && intent != null) {
-                mBinding.partialEditContents.run {
-                    intent.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.let {
-                        if (mCurrentCursor == FOCUS_TITLE) { // edit title
-                            val title = diaryTitle.text.toString()
-                            val sb = StringBuilder(title)
-                            sb.insert(diaryTitle.selectionStart, it[0])
-                            val cursorPosition = diaryTitle.selectionStart + it[0].length
-                            diaryTitle.setText(sb.toString())
-                            diaryTitle.setSelection(cursorPosition)
-                        } else {                   // edit contents
-                            val contents = diaryContents.text.toString()
-                            val sb = StringBuilder(contents)
-                            sb.insert(diaryContents.selectionStart, it[0])
-                            val cursorPosition = diaryContents.selectionStart + it[0].length
-                            diaryContents.setText(sb.toString())
-                            diaryContents.setSelection(cursorPosition)
-                        }
-                    }
-                }
-            }
-            REQUEST_CODE_IMAGE_PICKER -> if (resultCode == Activity.RESULT_OK && intent != null) {
-                attachPhotos(arrayListOf(intent.data.toString()), true)
-            }
-            PickConfig.PICK_PHOTO_DATA -> {
-                intent?.let {
-                    val selectedUriPaths = it.getSerializableExtra(PickConfig.INTENT_IMG_LIST_SELECT) as ArrayList<String>
-                    attachPhotos(selectedUriPaths, true)
-                }
-            }
-            REQUEST_CODE_CAPTURE_CAMERA -> if (resultCode == Activity.RESULT_OK) {
-                attachPhotos(arrayListOf(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY + CAPTURE_CAMERA_FILE_NAME), false)
-            }
-        }
-    }
-    
     override fun setVisiblePhotoProgress(isVisible: Boolean) {
         when (isVisible) {
             true -> mBinding.photoProgress.visibility = View.VISIBLE

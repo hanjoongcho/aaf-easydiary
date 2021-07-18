@@ -172,25 +172,6 @@ class PostCardActivity : EasyDiaryActivity() {
             }
         }
     }
-    
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        mBinding.run {
-            when (requestCode) {
-                REQUEST_CODE_BACKGROUND_COLOR_PICKER -> if (resultCode == Activity.RESULT_OK && data != null) {
-                    val hexStringColor = "#" + data.getStringExtra("color")
-                    contentsContainer.setBackgroundColor(Color.parseColor(hexStringColor))
-                    photoGridContainer.setBackgroundColor(Color.parseColor(hexStringColor))
-                }
-                REQUEST_CODE_TEXT_COLOR_PICKER -> if (resultCode == Activity.RESULT_OK && data != null) {
-                    val hexStringColor = "#" + data.getStringExtra("color")
-                    diaryTitle.setTextColor(Color.parseColor(hexStringColor))
-                    date.setTextColor(Color.parseColor(hexStringColor))
-                    contents.setTextColor(Color.parseColor(hexStringColor))
-                }
-            }
-        }
-    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.diary_post_card, menu)
