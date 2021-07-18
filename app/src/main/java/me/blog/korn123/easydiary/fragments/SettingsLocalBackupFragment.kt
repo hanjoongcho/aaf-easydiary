@@ -13,6 +13,8 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -94,7 +96,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                     deleteRealmFile()
                 }
                 REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_FULL_BACKUP -> if (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".zip", MIME_TYPE_ZIP, REQUEST_CODE_SAF_WRITE_ZIP)
+                    writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".zip", MIME_TYPE_ZIP, mRequestSAFWriteZip)
                 }
             }
         } else {
@@ -102,25 +104,48 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        super.onActivityResult(requestCode, resultCode, intent)
-        if (resultCode == Activity.RESULT_OK && intent != null) {
-            when (requestCode) {
-                REQUEST_CODE_SAF_WRITE_ZIP -> if (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    exportFullBackupFile(intent.data)
-                }
-                REQUEST_CODE_SAF_WRITE_XLS -> if (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    exportExcel(intent.data)
-                }
-                REQUEST_CODE_SAF_READ_ZIP -> {
-                    importFullBackupFile(intent.data)
-                }
-                REQUEST_CODE_SAF_WRITE_REALM -> {
-                    exportRealmFileWithSAF(intent.data)
-                }
-                REQUEST_CODE_SAF_READ_REALM -> {
-                    importRealmFileWithSAF(intent.data)
-                }
+
+    private val mRequestSAFWriteZip = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        requireActivity().run {
+            pauseLock()
+            if (it.resultCode == Activity.RESULT_OK && it.data != null && checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                exportFullBackupFile(it.data!!.data)
+            }
+        }
+    }
+
+    private val mRequestSAFWriteXLS = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        requireActivity().run {
+            pauseLock()
+            if (it.resultCode == Activity.RESULT_OK && it.data != null && checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                exportExcel(it.data!!.data)
+            }
+        }
+    }
+
+    private val mRequestSAFReadZip = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        requireActivity().run {
+            pauseLock()
+            if (it.resultCode == Activity.RESULT_OK && it.data != null) {
+                importFullBackupFile(it.data!!.data)
+            }
+        }
+    }
+
+    private val mRequestSAFWriteRealm = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        requireActivity().run {
+            pauseLock()
+            if (it.resultCode == Activity.RESULT_OK && it.data != null) {
+                exportRealmFileWithSAF(it.data!!.data)
+            }
+        }
+    }
+
+    private val mRequestSAFReadRealm = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        requireActivity().run {
+            pauseLock()
+            if (it.resultCode == Activity.RESULT_OK && it.data != null) {
+                importRealmFileWithSAF(it.data!!.data)
             }
         }
     }
@@ -283,7 +308,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun createExportExcelUri() {
-        writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".xls", MIME_TYPE_XLS, REQUEST_CODE_SAF_WRITE_XLS)
+        writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".xls", MIME_TYPE_XLS, mRequestSAFWriteXLS)
     }
 
     private fun exportExcel(uri: Uri?) {
@@ -412,7 +437,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    private fun writeFileWithSAF(fileName: String, mimeType: String, requestCode: Int) {
+    private fun writeFileWithSAF(fileName: String, mimeType: String, activityResultLauncher: ActivityResultLauncher<Intent>) {
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
             // Filter to only show results that can be "opened", such as
             // a file (as opposed to a list of contacts or timezones).
@@ -422,14 +447,14 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
             // Create a file with the requested MIME type.
             putExtra(Intent.EXTRA_TITLE, fileName)
         }
-        startActivityForResult(intent, requestCode)
+        activityResultLauncher.launch(intent)
     }
 
-    private fun readFileWithSAF(mimeType: String, requestCode: Int) {
+    private fun readFileWithSAF(mimeType: String, activityResultLauncher: ActivityResultLauncher<Intent>) {
         val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
             type = mimeType
         }
-        startActivityForResult(intent, requestCode)
+        activityResultLauncher.launch(intent)
     }
 
     private fun exportFullBackupFile(uri: Uri?) {
@@ -460,12 +485,12 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
             }
             R.id.exportFullBackupFile -> {
                 when (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    true -> writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".zip", MIME_TYPE_ZIP, REQUEST_CODE_SAF_WRITE_ZIP)
+                    true -> writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".zip", MIME_TYPE_ZIP, mRequestSAFWriteZip)
                     false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_FULL_BACKUP)
                 }
             }
             R.id.importFullBackupFile -> {
-                readFileWithSAF(MIME_TYPE_ZIP, REQUEST_CODE_SAF_READ_ZIP)
+                readFileWithSAF(MIME_TYPE_ZIP, mRequestSAFReadZip)
             }
             R.id.sendEmailWithExcel -> {
                 sendEmailWithExcel()
@@ -528,8 +553,8 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
             }
             modeExternal.setOnClickListener {
                 when (popupMode) {
-                    MODE_BACKUP -> writeFileWithSAF(DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"), MIME_TYPE_REALM, REQUEST_CODE_SAF_WRITE_REALM)
-                    MODE_RECOVERY -> readFileWithSAF(MIME_TYPE_REALM, REQUEST_CODE_SAF_READ_REALM)
+                    MODE_BACKUP -> writeFileWithSAF(DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"), MIME_TYPE_REALM, mRequestSAFWriteRealm)
+                    MODE_RECOVERY -> readFileWithSAF(MIME_TYPE_REALM, mRequestSAFReadRealm)
                 }
                 dialog?.dismiss()
             }
