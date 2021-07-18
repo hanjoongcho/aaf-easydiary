@@ -30,7 +30,8 @@ import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import com.werb.pickphotoview.PickPhotoView
+import com.werb.pickphotoview.PickPhotoViewEx
+import com.werb.pickphotoview.util.PickConfig
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import io.realm.RealmList
@@ -114,6 +115,13 @@ abstract class EditActivity : EasyDiaryActivity() {
     private val mRequestCaptureCamera = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         pauseLock()
         if (it.resultCode == Activity.RESULT_OK) attachPhotos(arrayListOf(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY + CAPTURE_CAMERA_FILE_NAME), false)
+    }
+    private val mRequestPickPhotoData = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        pauseLock()
+        it?.data?.let { data ->
+            val selectedUriPaths = data.getSerializableExtra(PickConfig.INTENT_IMG_LIST_SELECT) as java.util.ArrayList<String>
+            attachPhotos(selectedUriPaths, true)
+        }
     }
     protected lateinit var mBinding: ActivityDiaryEditBinding
     protected val mPhotoUris: RealmList<PhotoUriDto> = RealmList()
@@ -299,7 +307,7 @@ abstract class EditActivity : EasyDiaryActivity() {
                 var colorPrimary: TypedValue = TypedValue()
                 theme.resolveAttribute(R.attr.colorPrimaryDark, colorPrimaryDark, true)
                 theme.resolveAttribute(R.attr.colorPrimary, colorPrimary, true)
-                PickPhotoView.Builder(this)
+                PickPhotoViewEx.Builder(this)
                         .setShowCamera(false)
                         .setHasPhotoSize(0)
                         .setPickPhotoSize(15)
@@ -310,7 +318,7 @@ abstract class EditActivity : EasyDiaryActivity() {
                         .setToolbarColor(colorPrimary.resourceId)
                         .setToolbarTextColor(R.color.white)
                         .setSelectIconColor(colorPrimary.resourceId)
-                        .start()
+                        .start(mRequestPickPhotoData)
             }
             false -> {
                 val pickImageIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)

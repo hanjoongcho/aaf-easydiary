@@ -60,19 +60,6 @@ class DiaryInsertActivity : EditActivity() {
         toggleSimpleLayout()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        super.onActivityResult(requestCode, resultCode, intent)
-        pauseLock()
-        when (requestCode) {
-            PickConfig.PICK_PHOTO_DATA -> {
-                intent?.let {
-                    val selectedUriPaths = it.getSerializableExtra(PickConfig.INTENT_IMG_LIST_SELECT) as ArrayList<String>
-                    attachPhotos(selectedUriPaths, true)
-                }
-            }
-        }
-    }
-    
     override fun setVisiblePhotoProgress(isVisible: Boolean) {
         when (isVisible) {
             true -> mBinding.photoProgress.visibility = View.VISIBLE

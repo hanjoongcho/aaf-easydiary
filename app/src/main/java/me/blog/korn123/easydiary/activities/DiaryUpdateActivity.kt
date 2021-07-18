@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import com.werb.pickphotoview.util.PickConfig
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.JasyptUtils
@@ -94,21 +95,6 @@ class DiaryUpdateActivity : EditActivity() {
         savedInstanceState?.let { restoreContents(it) } ?: run { checkTemporaryDiary(mSequence) }
         initBottomToolbar()
         toggleSimpleLayout()
-    }
-
-
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        super.onActivityResult(requestCode, resultCode, intent)
-        pauseLock()
-        when (requestCode) {
-            PickConfig.PICK_PHOTO_DATA -> {
-                intent?.let {
-                    val selectedUriPaths = it.getSerializableExtra(PickConfig.INTENT_IMG_LIST_SELECT) as ArrayList<String>
-                    attachPhotos(selectedUriPaths, true)
-                }
-            }
-        }
     }
 
     override fun setVisiblePhotoProgress(isVisible: Boolean) {
