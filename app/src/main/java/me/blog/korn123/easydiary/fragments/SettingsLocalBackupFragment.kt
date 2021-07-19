@@ -54,6 +54,23 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
     private lateinit var mBinding: PartialSettingsBackupLocalBinding
     private val mActivity: Activity
         get() = requireActivity()
+    private var mTaskFlag = 0
+    private val mRequestExternalStoragePermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+        requireActivity().run {
+            pauseLock()
+            if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                when (mTaskFlag) {
+                    REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_EXCEL -> createExportExcelUri()
+                    REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_REALM -> showLocationSelectionPopup(MODE_BACKUP, getString(R.string.backup_internal_title), getString(R.string.backup_internal_description), getString(R.string.backup_external_title), getString(R.string.backup_external_description))
+                    REQUEST_CODE_EXTERNAL_STORAGE_WITH_IMPORT_REALM -> showLocationSelectionPopup(MODE_RECOVERY, getString(R.string.recovery_internal_title), getString(R.string.recovery_internal_description), getString(R.string.recovery_external_title), getString(R.string.recovery_external_description))
+                    REQUEST_CODE_EXTERNAL_STORAGE_WITH_DELETE_REALM -> deleteRealmFile()
+                    REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_FULL_BACKUP -> writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".zip", MIME_TYPE_ZIP, mRequestSAFWriteZip)
+                }
+            } else {
+                makeSnackBar(requireActivity().findViewById(android.R.id.content), getString(R.string.guide_message_3))
+            }
+        }
+    }
     private val mRequestSAFWriteZip = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         requireActivity().run {
             pauseLock()
@@ -116,32 +133,6 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
         super.onResume()
         updateFragmentUI(mBinding.root)
         initPreference()
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        mActivity.pauseLock()
-        if (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-            when (requestCode) {
-                REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_EXCEL -> if (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    createExportExcelUri()
-                }
-                REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_REALM -> if (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    showLocationSelectionPopup(MODE_BACKUP, getString(R.string.backup_internal_title), getString(R.string.backup_internal_description), getString(R.string.backup_external_title), getString(R.string.backup_external_description))
-                }
-                REQUEST_CODE_EXTERNAL_STORAGE_WITH_IMPORT_REALM -> if (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    showLocationSelectionPopup(MODE_RECOVERY, getString(R.string.recovery_internal_title), getString(R.string.recovery_internal_description), getString(R.string.recovery_external_title), getString(R.string.recovery_external_description))
-                }
-                REQUEST_CODE_EXTERNAL_STORAGE_WITH_DELETE_REALM -> if (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    deleteRealmFile()
-                }
-                REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_FULL_BACKUP -> if (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".zip", MIME_TYPE_ZIP, mRequestSAFWriteZip)
-                }
-            }
-        } else {
-            mActivity.makeSnackBar(mActivity.findViewById(android.R.id.content), getString(R.string.guide_message_3))
-        }
     }
 
 
@@ -470,41 +461,58 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     private val mOnClickListener = View.OnClickListener { view ->
-        when (view.id) {
-            R.id.exportExcel -> {
-                when (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    true -> createExportExcelUri()
-                    false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_EXCEL)
+        requireActivity().run {
+            when (view.id) {
+                R.id.exportExcel -> {
+                    when (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                        true -> createExportExcelUri()
+                        false -> {
+                            mTaskFlag = REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_EXCEL
+                            confirmExternalStoragePermission(EXTERNAL_STORAGE_PERMISSIONS, mRequestExternalStoragePermissionLauncher)
+                        }
+                    }
                 }
-            }
-            R.id.exportFullBackupFile -> {
-                when (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    true -> writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".zip", MIME_TYPE_ZIP, mRequestSAFWriteZip)
-                    false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_FULL_BACKUP)
+                R.id.exportFullBackupFile -> {
+                    when (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                        true -> writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".zip", MIME_TYPE_ZIP, mRequestSAFWriteZip)
+                        false -> {
+                            mTaskFlag = REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_FULL_BACKUP
+                            confirmExternalStoragePermission(EXTERNAL_STORAGE_PERMISSIONS, mRequestExternalStoragePermissionLauncher)
+                        }
+                    }
                 }
-            }
-            R.id.importFullBackupFile -> {
-                readFileWithSAF(MIME_TYPE_ZIP, mRequestSAFReadZip)
-            }
-            R.id.sendEmailWithExcel -> {
-                sendEmailWithExcel()
-            }
-            R.id.exportRealmFile -> {
-                when (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    true -> showLocationSelectionPopup(MODE_BACKUP, getString(R.string.backup_internal_title), getString(R.string.backup_internal_description), getString(R.string.backup_external_title), getString(R.string.backup_external_description))
-                    false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_REALM)
+                R.id.importFullBackupFile -> {
+                    readFileWithSAF(MIME_TYPE_ZIP, mRequestSAFReadZip)
                 }
-            }
-            R.id.importRealmFile -> {
-                when (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    true -> showLocationSelectionPopup(MODE_RECOVERY, getString(R.string.recovery_internal_title), getString(R.string.recovery_internal_description), getString(R.string.recovery_external_title), getString(R.string.recovery_external_description))
-                    false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_IMPORT_REALM)
+                R.id.sendEmailWithExcel -> {
+                    sendEmailWithExcel()
                 }
-            }
-            R.id.deleteRealmFile -> {
-                when (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    true -> deleteRealmFile()
-                    false -> confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_DELETE_REALM)
+                R.id.exportRealmFile -> {
+                    when (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                        true -> showLocationSelectionPopup(MODE_BACKUP, getString(R.string.backup_internal_title), getString(R.string.backup_internal_description), getString(R.string.backup_external_title), getString(R.string.backup_external_description))
+                        false -> {
+                            mTaskFlag = REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_REALM
+                            confirmExternalStoragePermission(EXTERNAL_STORAGE_PERMISSIONS, mRequestExternalStoragePermissionLauncher)
+                        }
+                    }
+                }
+                R.id.importRealmFile -> {
+                    when (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                        true -> showLocationSelectionPopup(MODE_RECOVERY, getString(R.string.recovery_internal_title), getString(R.string.recovery_internal_description), getString(R.string.recovery_external_title), getString(R.string.recovery_external_description))
+                        false -> {
+                            mTaskFlag = REQUEST_CODE_EXTERNAL_STORAGE_WITH_IMPORT_REALM
+                            confirmExternalStoragePermission(EXTERNAL_STORAGE_PERMISSIONS, mRequestExternalStoragePermissionLauncher)
+                        }
+                    }
+                }
+                R.id.deleteRealmFile -> {
+                    when (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                        true -> deleteRealmFile()
+                        false -> {
+                            mTaskFlag = REQUEST_CODE_EXTERNAL_STORAGE_WITH_DELETE_REALM
+                            confirmExternalStoragePermission(EXTERNAL_STORAGE_PERMISSIONS, mRequestExternalStoragePermissionLauncher)
+                        }
+                    }
                 }
             }
         }
