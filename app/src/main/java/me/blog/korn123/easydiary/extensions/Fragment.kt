@@ -44,10 +44,9 @@ fun Fragment.confirmPermission(permissions: Array<String>, requestCode: Int) {
     }
 }
 
-fun Fragment.confirmPermission(permissions: Array<String>, activityResultLauncher: ActivityResultLauncher<Array<String>>) {
-    if (ActivityCompat.shouldShowRequestPermissionRationale(activity!!, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            || ActivityCompat.shouldShowRequestPermissionRationale(activity!!, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-        AlertDialog.Builder(context!!)
+fun Fragment.confirmExternalStoragePermission(permissions: Array<String>, activityResultLauncher: ActivityResultLauncher<Array<String>>) {
+    if (permissions.any { permission ->  ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), permission) }) {
+        AlertDialog.Builder(requireContext())
                 .setMessage(getString(R.string.permission_confirmation_dialog_message))
                 .setTitle(getString(R.string.permission_confirmation_dialog_title))
                 .setPositiveButton(getString(R.string.ok)) { _, _ -> activityResultLauncher.launch(permissions) }
