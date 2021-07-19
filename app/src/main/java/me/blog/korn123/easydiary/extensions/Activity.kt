@@ -1,6 +1,5 @@
 package me.blog.korn123.easydiary.extensions
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
@@ -105,8 +104,7 @@ fun Activity.openGooglePlayBy(targetAppId: String) {
 }
 
 fun Activity.confirmPermission(permissions: Array<String>, requestCode: Int) {
-    if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+    if (permissions.any { permission ->  ActivityCompat.shouldShowRequestPermissionRationale(this, permission) }) {
         AlertDialog.Builder(this)
                 .setMessage(getString(R.string.permission_confirmation_dialog_message))
                 .setTitle(getString(R.string.permission_confirmation_dialog_title))
@@ -114,6 +112,18 @@ fun Activity.confirmPermission(permissions: Array<String>, requestCode: Int) {
                 .show()
     } else {
         ActivityCompat.requestPermissions(this, permissions, requestCode)
+    }
+}
+
+fun Activity.confirmExternalStoragePermission(permissions: Array<String>, activityResultLauncher: ActivityResultLauncher<Array<String>>) {
+    if (permissions.any { permission ->  ActivityCompat.shouldShowRequestPermissionRationale(this, permission) }) {
+        AlertDialog.Builder(this)
+                .setMessage(getString(R.string.permission_confirmation_dialog_message))
+                .setTitle(getString(R.string.permission_confirmation_dialog_title))
+                .setPositiveButton(getString(R.string.ok)) { _, _ -> activityResultLauncher.launch(permissions) }
+                .show()
+    } else {
+        activityResultLauncher.launch(permissions)
     }
 }
 

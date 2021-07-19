@@ -44,18 +44,6 @@ fun Fragment.confirmPermission(permissions: Array<String>, requestCode: Int) {
     }
 }
 
-fun Fragment.confirmExternalStoragePermission(permissions: Array<String>, activityResultLauncher: ActivityResultLauncher<Array<String>>) {
-    if (permissions.any { permission ->  ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), permission) }) {
-        AlertDialog.Builder(requireContext())
-                .setMessage(getString(R.string.permission_confirmation_dialog_message))
-                .setTitle(getString(R.string.permission_confirmation_dialog_title))
-                .setPositiveButton(getString(R.string.ok)) { _, _ -> activityResultLauncher.launch(permissions) }
-                .show()
-    } else {
-        activityResultLauncher.launch(permissions)
-    }
-}
-
 fun Fragment.scaledDrawable(id: Int, width: Int, height: Int): Drawable? {
     var drawable = AppCompatResources.getDrawable(context!!, id)
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {

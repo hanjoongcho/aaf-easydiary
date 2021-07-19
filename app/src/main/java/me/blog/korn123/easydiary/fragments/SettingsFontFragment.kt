@@ -113,7 +113,7 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
                 R.id.fontSetting -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                     openFontSettingDialog()
                 } else {
-                    this@SettingsFontFragment.confirmExternalStoragePermission(EXTERNAL_STORAGE_PERMISSIONS, mRequestExternalStoragePermissionLauncher)
+                    confirmExternalStoragePermission(EXTERNAL_STORAGE_PERMISSIONS, mRequestExternalStoragePermissionLauncher)
                 }
                 R.id.decreaseFont -> {
                     config.settingFontSize = config.settingFontSize - 5
