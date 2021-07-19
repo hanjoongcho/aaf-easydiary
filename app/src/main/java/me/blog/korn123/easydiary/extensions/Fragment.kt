@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
@@ -40,6 +41,19 @@ fun Fragment.confirmPermission(permissions: Array<String>, requestCode: Int) {
                 .show()
     } else {
         requestPermissions(permissions, requestCode)
+    }
+}
+
+fun Fragment.confirmPermission(permissions: Array<String>, activityResultLauncher: ActivityResultLauncher<Array<String>>) {
+    if (ActivityCompat.shouldShowRequestPermissionRationale(activity!!, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            || ActivityCompat.shouldShowRequestPermissionRationale(activity!!, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+        AlertDialog.Builder(context!!)
+                .setMessage(getString(R.string.permission_confirmation_dialog_message))
+                .setTitle(getString(R.string.permission_confirmation_dialog_title))
+                .setPositiveButton(getString(R.string.ok)) { _, _ -> activityResultLauncher.launch(permissions) }
+                .show()
+    } else {
+        activityResultLauncher.launch(permissions)
     }
 }
 

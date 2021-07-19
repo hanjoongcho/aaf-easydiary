@@ -25,7 +25,6 @@ import me.blog.korn123.easydiary.databinding.PartialSettingsFontBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.DEFAULT_CALENDAR_FONT_SCALE
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
-import me.blog.korn123.easydiary.helper.REQUEST_CODE_EXTERNAL_STORAGE_WITH_FONT_SETTING
 import me.blog.korn123.easydiary.helper.USER_CUSTOM_FONTS_DIRECTORY
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
@@ -65,6 +64,16 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
             }
         }
     }
+    private val mRequestExternalStoragePermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+        requireActivity().run {
+            pauseLock()
+            when (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                true -> openFontSettingDialog()
+                false -> makeSnackBar(mBinding.root, getString(R.string.guide_message_3))
+            }
+        }
+    }
+
 
     /***************************************************************************************************
      *   override functions
@@ -93,22 +102,6 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
         initPreference()
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        requireActivity().run {
-            pauseLock()
-            if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                when (requestCode) {
-                    REQUEST_CODE_EXTERNAL_STORAGE_WITH_FONT_SETTING -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                        openFontSettingDialog()
-                    }
-                }
-            } else {
-                makeSnackBar(mBinding.root, getString(R.string.guide_message_3))
-            }
-        }
-    }
-
 
     /***************************************************************************************************
      *   etc functions
@@ -120,7 +113,7 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
                 R.id.fontSetting -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                     openFontSettingDialog()
                 } else {
-                    confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_FONT_SETTING)
+                    this@SettingsFontFragment.confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, mRequestExternalStoragePermissionLauncher)
                 }
                 R.id.decreaseFont -> {
                     config.settingFontSize = config.settingFontSize - 5
