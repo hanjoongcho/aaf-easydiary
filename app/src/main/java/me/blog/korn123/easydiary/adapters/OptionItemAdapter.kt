@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
@@ -31,6 +32,7 @@ class OptionItemAdapter(
             activity.run {
                 initTextSize(itemView)
                 updateTextColors(itemView)
+                FontUtils.setFontsTypeface(this, this.assets, null, itemView)
             }
         }
 
