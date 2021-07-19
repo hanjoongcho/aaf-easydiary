@@ -288,6 +288,16 @@ fun Context.updateDrawableColorInnerCardView(resourceId: Int) {
     changeDrawableIconColor(config.textColor, resourceId)
 }
 
+fun Context.changeDrawableIconColor(color: Int, resourceId: Int) {
+    AppCompatResources.getDrawable(this, resourceId)?.apply {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            colorFilter = BlendModeColorFilter(color, BlendMode.SRC_IN)
+        } else {
+            setColorFilter(color, PorterDuff.Mode.SRC_IN)
+        }
+    }
+}
+
 fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null, customView: View? = null, customTitle: String? = null) {
     alertDialog.run {
         when (customView == null) {
@@ -340,16 +350,6 @@ fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null,
             typeface = globalTypeface
         }
         if (!isNightMode()) getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(baseConfig.textColor)
-    }
-}
-
-fun Context.changeDrawableIconColor(color: Int, resourceId: Int) {
-    AppCompatResources.getDrawable(this, resourceId)?.apply {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            colorFilter = BlendModeColorFilter(color, BlendMode.SRC_IN)
-        } else {
-            setColorFilter(color, PorterDuff.Mode.SRC_IN)
-        }
     }
 }
 

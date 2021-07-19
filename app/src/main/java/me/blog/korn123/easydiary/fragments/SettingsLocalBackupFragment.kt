@@ -558,6 +558,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
             }
         }
         mActivity.run {
+            updateDrawableColorInnerCardView(R.drawable.delete)
             updateTextColors(popupView.root)
             initTextSize(popupView.root)
         }
