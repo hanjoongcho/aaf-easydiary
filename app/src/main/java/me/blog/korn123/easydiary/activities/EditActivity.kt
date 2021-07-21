@@ -81,12 +81,12 @@ abstract class EditActivity : EasyDiaryActivity() {
         override fun onProviderEnabled(p0: String) {}
         override fun onProviderDisabled(p0: String) {}
     }
-    private val mRequestSpeechInput = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+    private val mRequestSpeechInput = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
         pauseLock()
-        when (it.resultCode == Activity.RESULT_OK && it.data != null) {
+        when (activityResult.resultCode == Activity.RESULT_OK && activityResult.data != null) {
             true -> {
                 mBinding.partialEditContents.run {
-                    intent.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.let {
+                    activityResult.data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.let {
                         if (mCurrentCursor == FOCUS_TITLE) { // edit title
                             val title = diaryTitle.text.toString()
                             val sb = StringBuilder(title)
