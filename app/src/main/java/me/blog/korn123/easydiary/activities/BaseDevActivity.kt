@@ -60,7 +60,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
         override fun onProviderEnabled(p0: String) {}
         override fun onProviderDisabled(p0: String) {}
     }
-    private val mRequestLocationSourceLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
+    private val mRequestLocationSourceLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         makeSnackBar(if (isLocationEnabled()) "GPS provider setting is activated!!!" else "The request operation did not complete normally.")
     }
     protected lateinit var mBinding: ActivityDevBinding
@@ -111,6 +111,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             buttonHoldOrientation.setOnClickListener { holdCurrentOrientation() }
             buttonReleaseOrientation.setOnClickListener { clearHoldOrientation() }
             buttonReviewFlow.setOnClickListener { startReviewFlow() }
+            buttonRestartApp.setOnClickListener { restartApplication() }
         }
     }
 
@@ -256,9 +257,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     for (i in 1..10) {
                         val currentThreadName = Thread.currentThread().name
                         runOnUiThread { updateConsole(i.toString(), currentThreadName) }
-                        runBlocking {
-                            delay(100)
-                        }
+                        delay(100)
                     }
                 }
             }
@@ -288,13 +287,14 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
     }
 
+    private fun restartApplication() {
+        triggerRestart()
+    }
+
     fun openCheatSheet(view: View) {
         TransitionHelper.startActivityWithTransition(this, Intent(this, CheatSheetActivity::class.java))
     }
 
-    fun restartApplication(view: View) {
-        triggerRestart()
-    }
 
     /***************************************************************************************************
      *   etc functions
@@ -395,23 +395,23 @@ data class NotificationInfo(var largeIconResourceId: Int, var useActionButton: B
  *   extensions
  *
  ***************************************************************************************************/
-fun fun1(param1: String, block: (responseData: String) -> String): String {
-    println(param1)
-    return block("")
-}
-
-fun fun2(param1: String, block: (responseData: String) -> Boolean): String {
-    println(param1)
-    var blockReturn = block(param1)
-    return param1
-}
-
-fun test1() {
-    val result = fun1("banana") { responseData ->
-        "data: $responseData"
-    }
-    println(result)
-}
+//fun fun1(param1: String, block: (responseData: String) -> String): String {
+//    println(param1)
+//    return block("")
+//}
+//
+//fun fun2(param1: String, block: (responseData: String) -> Boolean): String {
+//    println(param1)
+//    var blockReturn = block(param1)
+//    return param1
+//}
+//
+//fun test1() {
+//    val result = fun1("banana") { responseData ->
+//        "data: $responseData"
+//    }
+//    println(result)
+//}
 
 
 
