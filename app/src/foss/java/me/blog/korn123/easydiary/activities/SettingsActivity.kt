@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DotIndicatorPager2Adapter
+import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.fragments.*
 
 class SettingsActivity : BaseSettingsActivity() {
@@ -40,6 +41,7 @@ class SettingsActivity : BaseSettingsActivity() {
                             3 -> {
                                 title = getString(R.string.preferences_category_backup_restore_device)
                                 subtitle = getString(R.string.preferences_category_backup_restore_device_sub)
+                                pauseLock()
                                 updateUI()
                             }
                             4 -> {
