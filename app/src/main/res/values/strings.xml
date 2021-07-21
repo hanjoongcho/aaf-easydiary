@@ -537,6 +537,10 @@
         Added temporary save and recovery function\n
         Added the option to disable In-App Review
     </string>
+    <string name="release_238">
+        v1.4.171.0 / 2021.07.21\n
+        User Experience (UX) Optimization
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
