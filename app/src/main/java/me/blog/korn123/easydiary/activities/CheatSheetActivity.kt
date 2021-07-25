@@ -76,6 +76,7 @@ open class CheatSheetActivity : EasyDiaryActivity() {
     private fun setupCheatSheet() {
         mOriginCheatSheetList.run {
             add(CheatSheetAdapter.CheatSheet("Cheat Sheet", "This page is a collection of useful link information such as open source projects and development related guides.", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/README.md"))
+            add(CheatSheetAdapter.CheatSheet("Regular Expression", "Basic Chapter-01", "https://raw.githubusercontent.com/hanjoongcho/CheatSheet/master/regular-expression/chapter01.md"))
             add(CheatSheetAdapter.CheatSheet("Git-01", "Git and Git Flow Cheat Sheet", "https://raw.githubusercontent.com/arslanbilal/git-cheat-sheet/master/other-sheets/git-cheat-sheet-ko.md"))
             add(CheatSheetAdapter.CheatSheet("Android-01", "Project guidelines", "https://raw.githubusercontent.com/hanjoongcho/android-guidelines/master/project_and_code_guidelines.md"))
             add(CheatSheetAdapter.CheatSheet("Android-02", "Architecture Guidelines / MVP", "https://raw.githubusercontent.com/hanjoongcho/android-guidelines/master/architecture_guidelines/android_architecture.md"))
