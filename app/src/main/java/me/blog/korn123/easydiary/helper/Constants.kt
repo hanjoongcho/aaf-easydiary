@@ -364,10 +364,10 @@ const val CALENDAR_SORTING_ASC  = 1
 const val CALENDAR_SORTING_DESC = 2
 const val CALENDAR_START_DAY_SUNDAY    = 1
 const val CALENDAR_START_DAY_MONDAY    = 2
-const val CALENDAR_START_DAY_TUESDAY   = 3
-const val CALENDAR_START_DAY_WEDNESDAY = 4
-const val CALENDAR_START_DAY_THURSDAY  = 5
-const val CALENDAR_START_DAY_FRIDAY    = 6
+//const val CALENDAR_START_DAY_TUESDAY   = 3
+//const val CALENDAR_START_DAY_WEDNESDAY = 4
+//const val CALENDAR_START_DAY_THURSDAY  = 5
+//const val CALENDAR_START_DAY_FRIDAY    = 6
 const val CALENDAR_START_DAY_SATURDAY  = 7
 
 
@@ -418,7 +418,7 @@ const val DIARY_DB_NAME = "diary.realm"
 // startActivityForResult Request Code: Permission
 const val REQUEST_CODE_EXTERNAL_STORAGE = 1
 const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_SHARE_DIARY_CARD = 2
-const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_FONT_SETTING = 3
+//const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_FONT_SETTING = 3
 const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_MARKDOWN = 4
 const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_EXCEL = 5
 const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_REALM = 6
@@ -429,11 +429,11 @@ const val REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_FULL_BACKUP = 10
 //const val REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS = 11
 
 // startActivityForResult Request Code: Etc
-const val REQUEST_CODE_LOCK_SETTING = 21
+//const val REQUEST_CODE_LOCK_SETTING = 21
 
 // startActivityForResult Request Code: ColorPicker
-const val REQUEST_CODE_BACKGROUND_COLOR_PICKER = 31
-const val REQUEST_CODE_TEXT_COLOR_PICKER = 32
+//const val REQUEST_CODE_BACKGROUND_COLOR_PICKER = 31
+//const val REQUEST_CODE_TEXT_COLOR_PICKER = 32
 
 const val REQUEST_CODE_SAF_WRITE_ZIP = 40
 const val REQUEST_CODE_SAF_WRITE_XLS = 41
@@ -443,7 +443,7 @@ const val REQUEST_CODE_SAF_READ_REALM = 44
 const val REQUEST_CODE_SAF_HTML_BOOK = 45
 
 //const val REQUEST_CODE_FONT_PICK = 103
-const val REQUEST_CODE_UPDATE_DAILY_SYMBOL_FILTER = 104
+//const val REQUEST_CODE_UPDATE_DAILY_SYMBOL_FILTER = 104
 
 
 /***************************************************************************************************
@@ -476,7 +476,7 @@ val EXTERNAL_STORAGE_PERMISSIONS = arrayOf(Manifest.permission.WRITE_EXTERNAL_ST
 const val INIT_DUMMY_DATA_FLAG = "init_dummy_data"
 
 const val APP_LOCK_ENABLE = "application_lock"
-const val APP_LOCK_REQUEST_PASSWORD = "lock_password"
+//const val APP_LOCK_REQUEST_PASSWORD = "lock_password"
 const val APP_LOCK_SAVED_PASSWORD = "application_lock_password"
 const val APP_LOCK_DEFAULT_PASSWORD = "0000"
 
@@ -488,7 +488,7 @@ const val DIARY_ENCRYPT_PASSWORD = "diary_encrypt_password"
 const val DIARY_MODE = "diary_mode"
 const val POSTCARD_SEQUENCE = "postcard_sequence"
 
-const val OPEN_URL_INFO = "open_url_info"
+//const val OPEN_URL_INFO = "open_url_info"
 const val THUMBNAIL_BACKGROUND_ALPHA = 170
 
 const val DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE = 20
@@ -502,8 +502,8 @@ const val POSTCARD_BG_COLOR_VALUE = -0x1
 const val POSTCARD_TEXT_COLOR_VALUE = -0xb5b5b4
 const val POSTCARD_CROP_MODE = "postcard_crop_mode"
 
-const val APP_BACKGROUND_ALPHA = 200
-const val INTRO_BACKGROUND_ALPHA = 255
+//const val APP_BACKGROUND_ALPHA = 200
+//const val INTRO_BACKGROUND_ALPHA = 255
 const val SETTING_FONT_SIZE = "font_size"
 const val SETTING_CALENDAR_FONT_SCALE = "setting_calendar_font_scale"
 const val SETTING_FONT_NAME = "font_setting"

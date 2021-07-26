@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.AdapterView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.*
@@ -110,16 +109,15 @@ open class CheatSheetActivity : EasyDiaryActivity() {
             addItemDecoration(SettingsScheduleFragment.SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding)))
             mCheatSheetAdapter =  CheatSheetAdapter(
                     this@CheatSheetActivity,
-                    mFilteredCheatSheetList,
-                    AdapterView.OnItemClickListener { _, _, position, _ ->
-                        val item = mFilteredCheatSheetList[position]
-                        TransitionHelper.startActivityWithTransition(this@CheatSheetActivity, Intent(this@CheatSheetActivity, MarkDownViewActivity::class.java).apply {
-                            putExtra(MarkDownViewActivity.OPEN_URL_INFO, item.url)
-                            putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, item.title)
-                            putExtra(MarkDownViewActivity.FORCE_APPEND_CODE_BLOCK, item.forceAppendCodeBlock)
-                        })
-                    }
-            )
+                    mFilteredCheatSheetList
+            ) { _, _, position, _ ->
+                val item = mFilteredCheatSheetList[position]
+                TransitionHelper.startActivityWithTransition(this@CheatSheetActivity, Intent(this@CheatSheetActivity, MarkDownViewActivity::class.java).apply {
+                    putExtra(MarkDownViewActivity.OPEN_URL_INFO, item.url)
+                    putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, item.title)
+                    putExtra(MarkDownViewActivity.FORCE_APPEND_CODE_BLOCK, item.forceAppendCodeBlock)
+                })
+            }
             adapter = mCheatSheetAdapter
         }
     }
