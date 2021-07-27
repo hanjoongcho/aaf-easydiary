@@ -358,33 +358,20 @@ fun Activity.scaledDrawable(id: Int, width: Int, height: Int): Drawable? {
     return BitmapDrawable(resources, Bitmap.createScaledBitmap(bitmap, width, height, false))
 }
 
-@TargetApi(Build.VERSION_CODES.KITKAT)
-fun Activity.writeFileWithSAF(fileName: String, mimeType: String, requestCode: Int) {
-    val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-        // Filter to only show results that can be "opened", such as
-        // a file (as opposed to a list of contacts or timezones).
-        addCategory(Intent.CATEGORY_OPENABLE)
+//}
 
-        type = mimeType
-        // Create a file with the requested MIME type.
-        putExtra(Intent.EXTRA_TITLE, fileName)
-    }
-    startActivityForResult(intent, requestCode)
-}
-
-fun Activity.writeFileWithSAF(activityResultLauncher: ActivityResultLauncher<Intent>, fileName: String, mimeType: String) {
-    Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-        // Filter to only show results that can be "opened", such as
-        // a file (as opposed to a list of contacts or timezones).
-        addCategory(Intent.CATEGORY_OPENABLE)
-
-        type = mimeType
-        // Create a file with the requested MIME type.
-        putExtra(Intent.EXTRA_TITLE, fileName)
-    }.run {
-        activityResultLauncher.launch(this)
-    }
-}
+//@TargetApi(Build.VERSION_CODES.KITKAT)
+//fun Activity.writeFileWithSAF(fileName: String, mimeType: String, requestCode: Int) {
+//    val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+//        // Filter to only show results that can be "opened", such as
+//        // a file (as opposed to a list of contacts or timezones).
+//        addCategory(Intent.CATEGORY_OPENABLE)
+//
+//        type = mimeType
+//        // Create a file with the requested MIME type.
+//        putExtra(Intent.EXTRA_TITLE, fileName)
+//    }
+//    startActivityForResult(intent, requestCode)
 
 fun Activity.exportHtmlBook(uri: Uri?, diaryList: List<DiaryDto>) {
     uri?.let {
