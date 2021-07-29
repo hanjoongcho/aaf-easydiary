@@ -386,7 +386,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             val diaryDto = adapterView.adapter.getItem(i) as DiaryDto
             val detailIntent = Intent(this@DiaryMainActivity, DiaryReadActivity::class.java)
             detailIntent.putExtra(DIARY_SEQUENCE, diaryDto.sequence)
-            detailIntent.putExtra(DIARY_SEARCH_QUERY, mDiaryMainItemAdapter?.currentQuery)
+            detailIntent.putExtra(SELECTED_SEARCH_QUERY, mDiaryMainItemAdapter?.currentQuery)
+            detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE,viewModel.symbol.value ?: 0)
             TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, detailIntent)
         }
 

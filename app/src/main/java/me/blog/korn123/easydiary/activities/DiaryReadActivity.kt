@@ -74,8 +74,9 @@ class DiaryReadActivity : EasyDiaryActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-        val query = intent.getStringExtra(DIARY_SEARCH_QUERY)
-        val diaryList: List<DiaryDto> = EasyDiaryDbHelper.findDiary(query, config.diarySearchQueryCaseSensitive)
+        val query = intent.getStringExtra(SELECTED_SEARCH_QUERY)
+        val symbolSequence = intent.getIntExtra(SELECTED_SYMBOL_SEQUENCE, 0)
+        val diaryList: List<DiaryDto> = EasyDiaryDbHelper.findDiary(query, config.diarySearchQueryCaseSensitive, 0, 0, symbolSequence)
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager, diaryList, query)
         val startPageIndex = when(savedInstanceState == null) {
             true -> mSectionsPagerAdapter.sequenceToPageIndex(intent.getIntExtra(DIARY_SEQUENCE, -1))
@@ -537,7 +538,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 }
                 initBottomContainer()
 
-                arguments?.getString(DIARY_SEARCH_QUERY)?.let { query ->
+                arguments?.getString(SELECTED_SEARCH_QUERY)?.let { query ->
                     if (StringUtils.isNotEmpty(query)) {
                         context?.config?.run {
                             if (diarySearchQueryCaseSensitive) {
@@ -678,7 +679,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 val fragment = PlaceholderFragment()
                 val args = Bundle()
                 args.putInt(DIARY_SEQUENCE, sequence)
-                args.putString(DIARY_SEARCH_QUERY, query)
+                args.putString(SELECTED_SEARCH_QUERY, query)
                 fragment.arguments = args
                 return fragment
             }
