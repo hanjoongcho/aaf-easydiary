@@ -251,6 +251,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                                 true -> {
                                     fragment.encryptData(inputPass)
                                     popupWindow.dismiss()
+                                    clearHoldOrientation()
                                 }
                                 false -> guideMessage.text = getString(R.string.diary_pin_number_confirm_error)
                             }
@@ -266,6 +267,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                                         fragment.decryptData(inputPass)
                                     }
                                     popupWindow.dismiss()
+                                    clearHoldOrientation()
                                 }
                                 false -> {
                                     inputPass = ""
@@ -278,6 +280,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                                 true -> {
                                     callback?.invoke(inputPass)
                                     popupWindow.dismiss()
+                                    clearHoldOrientation()
                                 }
                                 else -> {
                                     inputPass = ""
