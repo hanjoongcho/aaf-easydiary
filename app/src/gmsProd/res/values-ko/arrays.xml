@@ -180,6 +180,10 @@
     </string-array>
 
     <string-array name="leisure_item_array">
+        <item>330|Bicycle</item>
+        <item>331|Friends</item>
+        <item>332|Friends</item>
+        <item>333|Friends</item>
         <item>321|Party</item>
         <item>44|Game</item>
         <item>300|Picnic</item>
