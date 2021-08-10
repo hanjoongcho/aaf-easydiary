@@ -274,7 +274,8 @@ class TimelineActivity : EasyDiaryActivity() {
             val diaryDto = adapterView.adapter.getItem(i) as DiaryDto
             val detailIntent = Intent(this@TimelineActivity, DiaryReadActivity::class.java)
             detailIntent.putExtra(DIARY_SEQUENCE, diaryDto.sequence)
-            detailIntent.putExtra(DIARY_SEARCH_QUERY, mBinding.partialTimelineFilter.query.text.toString())
+            detailIntent.putExtra(SELECTED_SEARCH_QUERY, mBinding.partialTimelineFilter.query.text.toString())
+            detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE, mSymbolSequence)
             TransitionHelper.startActivityWithTransition(this@TimelineActivity, detailIntent)
         }
     }

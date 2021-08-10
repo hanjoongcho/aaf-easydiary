@@ -1,11 +1,9 @@
 package me.blog.korn123.easydiary.fragments
 
-import android.annotation.TargetApi
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.TextView
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -69,7 +66,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                     REQUEST_CODE_EXTERNAL_STORAGE_WITH_IMPORT_REALM -> showLocationSelectionPopup(MODE_RECOVERY, getString(R.string.recovery_internal_title), getString(R.string.recovery_internal_description), getString(R.string.recovery_external_title), getString(R.string.recovery_external_description))
                     REQUEST_CODE_EXTERNAL_STORAGE_WITH_DELETE_REALM -> deleteRealmFile()
                     REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_FULL_BACKUP -> setupLauncher(REQUEST_CODE_SAF_WRITE_ZIP) {
-                        writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".zip", MIME_TYPE_ZIP, mRequestWriteFileWithSAF)
+                        EasyDiaryUtils.writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".zip", MIME_TYPE_ZIP, mRequestWriteFileWithSAF)
                     }
                 }
             } else {
@@ -281,7 +278,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
 
     private fun createExportExcelUri() {
         setupLauncher(REQUEST_CODE_SAF_WRITE_XLS) {
-            writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".xls", MIME_TYPE_XLS, mRequestWriteFileWithSAF)
+            EasyDiaryUtils.writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".xls", MIME_TYPE_XLS, mRequestWriteFileWithSAF)
         }
     }
 
@@ -410,26 +407,26 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
         return wb
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
-    private fun writeFileWithSAF(fileName: String, mimeType: String, activityResultLauncher: ActivityResultLauncher<Intent>) {
-        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-            // Filter to only show results that can be "opened", such as
-            // a file (as opposed to a list of contacts or timezones).
-            addCategory(Intent.CATEGORY_OPENABLE)
+//    @TargetApi(Build.VERSION_CODES.KITKAT)
+//    private fun writeFileWithSAF(fileName: String, mimeType: String, activityResultLauncher: ActivityResultLauncher<Intent>) {
+//        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+//            // Filter to only show results that can be "opened", such as
+//            // a file (as opposed to a list of contacts or timezones).
+//            addCategory(Intent.CATEGORY_OPENABLE)
+//
+//            type = mimeType
+//            // Create a file with the requested MIME type.
+//            putExtra(Intent.EXTRA_TITLE, fileName)
+//        }
+//        activityResultLauncher.launch(intent)
+//    }
 
-            type = mimeType
-            // Create a file with the requested MIME type.
-            putExtra(Intent.EXTRA_TITLE, fileName)
-        }
-        activityResultLauncher.launch(intent)
-    }
-
-    private fun readFileWithSAF(mimeType: String, activityResultLauncher: ActivityResultLauncher<Intent>) {
-        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
-            type = mimeType
-        }
-        activityResultLauncher.launch(intent)
-    }
+//    private fun readFileWithSAF(mimeType: String, activityResultLauncher: ActivityResultLauncher<Intent>) {
+//        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+//            type = mimeType
+//        }
+//        activityResultLauncher.launch(intent)
+//    }
 
     private fun exportFullBackupFile(uri: Uri?) {
         exportRealmFile(false)
@@ -467,7 +464,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                 R.id.exportFullBackupFile -> {
                     when (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                         true -> setupLauncher(REQUEST_CODE_SAF_WRITE_ZIP) {
-                            writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".zip", MIME_TYPE_ZIP, mRequestWriteFileWithSAF)
+                            EasyDiaryUtils.writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".zip", MIME_TYPE_ZIP, mRequestWriteFileWithSAF)
                         }
                         false -> setupLauncher(REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_FULL_BACKUP) {
                             confirmExternalStoragePermission(EXTERNAL_STORAGE_PERMISSIONS, mRequestExternalStoragePermissionLauncher)
@@ -476,7 +473,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                 }
                 R.id.importFullBackupFile -> {
                     setupLauncher(REQUEST_CODE_SAF_READ_ZIP) {
-                        readFileWithSAF(MIME_TYPE_ZIP, mRequestReadFileWithSAF)
+                        EasyDiaryUtils.readFileWithSAF(MIME_TYPE_ZIP, mRequestReadFileWithSAF)
                     }
                 }
                 R.id.sendEmailWithExcel -> {
@@ -548,10 +545,10 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
             modeExternal.setOnClickListener {
                 when (popupMode) {
                     MODE_BACKUP -> setupLauncher(REQUEST_CODE_SAF_WRITE_REALM) {
-                        writeFileWithSAF(DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"), MIME_TYPE_REALM, mRequestWriteFileWithSAF)
+                        EasyDiaryUtils.writeFileWithSAF(DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"), MIME_TYPE_REALM, mRequestWriteFileWithSAF)
                     }
                     MODE_RECOVERY -> setupLauncher(REQUEST_CODE_SAF_READ_REALM) {
-                        readFileWithSAF(MIME_TYPE_REALM, mRequestReadFileWithSAF)
+                        EasyDiaryUtils.readFileWithSAF(MIME_TYPE_REALM, mRequestReadFileWithSAF)
                     }
                 }
                 dialog?.dismiss()

@@ -217,7 +217,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             }
             R.id.saveAsHtml -> {
 //                writeFileWithSAF("${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}.html", MIME_TYPE_HTML, REQUEST_CODE_SAF_HTML_BOOK)
-                writeFileWithSAF(mRequestSAFForHtmlBookLauncher, "${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}.html", MIME_TYPE_HTML)
+                EasyDiaryUtils.writeFileWithSAF("${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}.html", MIME_TYPE_HTML, mRequestSAFForHtmlBookLauncher)
             }
             R.id.timeline -> {
                 val timelineIntent = Intent(this@DiaryMainActivity, TimelineActivity::class.java)
@@ -386,7 +386,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             val diaryDto = adapterView.adapter.getItem(i) as DiaryDto
             val detailIntent = Intent(this@DiaryMainActivity, DiaryReadActivity::class.java)
             detailIntent.putExtra(DIARY_SEQUENCE, diaryDto.sequence)
-            detailIntent.putExtra(DIARY_SEARCH_QUERY, mDiaryMainItemAdapter?.currentQuery)
+            detailIntent.putExtra(SELECTED_SEARCH_QUERY, mDiaryMainItemAdapter?.currentQuery)
+            detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE,viewModel.symbol.value ?: 0)
             TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, detailIntent)
         }
 
