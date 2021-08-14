@@ -298,7 +298,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     }
 
     private fun openPostcardViewer() {
-        val postCardViewer = Intent(this@DiaryMainActivity, PostCardViewerActivity::class.java)
+        val postCardViewer = Intent(this@DiaryMainActivity, PostcardViewerActivity::class.java)
         TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, postCardViewer)
     }
 

@@ -19,7 +19,7 @@ import jp.wasabeef.glide.transformations.CropTransformation
 import jp.wasabeef.glide.transformations.GrayscaleTransformation
 import jp.wasabeef.glide.transformations.gpu.*
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.activities.PostCardActivity
+import me.blog.korn123.easydiary.activities.PostcardActivity
 import me.blog.korn123.easydiary.fragments.PhotoFlexItemOptionFragment
 import kotlin.math.ceil
 import kotlin.math.sqrt
@@ -96,7 +96,7 @@ class PhotoAdapter(
 
         fun bindTo(postCardPhotoItem: PostCardPhotoItem) {
             val point =  CommonUtils.getDefaultDisplay(activity)
-            val height = PostCardActivity.calcPhotoGridHeight(activity)
+            val height = PostcardActivity.calcPhotoGridHeight(activity)
             val size = if (point.x > point.y) height else point.x
 
             if (postCardPhotoItem.forceSinglePhotoPosition) {
