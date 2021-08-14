@@ -25,7 +25,7 @@ import java.io.File
  * Created by CHO HANJOONG on 2018-05-18.
  */
 
-class PostCardViewerActivity : EasyDiaryActivity() {
+class PostcardViewerActivity : EasyDiaryActivity() {
     private lateinit var mBinding: ActivityPostCardViewerBinding
     private lateinit var mPostcardAdapter: PostcardAdapter
     private var mListPostcard: ArrayList<PostcardAdapter.PostCard> = arrayListOf()
@@ -51,14 +51,14 @@ class PostCardViewerActivity : EasyDiaryActivity() {
         val spacesItemDecoration = SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding))
         val gridLayoutManager = androidx.recyclerview.widget.GridLayoutManager(this, 2)
 
-        EasyDiaryUtils.initWorkingDirectory(this@PostCardViewerActivity)
+        EasyDiaryUtils.initWorkingDirectory(this@PostcardViewerActivity)
         mPostcardAdapter = PostcardAdapter(
-                this@PostCardViewerActivity,
+                this@PostcardViewerActivity,
                 mListPostcard,
                 AdapterView.OnItemClickListener { _, _, position, _ ->
-                    val intent = Intent(this@PostCardViewerActivity, PostcardViewPagerActivity::class.java)
+                    val intent = Intent(this@PostcardViewerActivity, PostcardViewPagerActivity::class.java)
                     intent.putExtra(POSTCARD_SEQUENCE, position)
-                    TransitionHelper.startActivityWithTransition(this@PostCardViewerActivity, intent)
+                    TransitionHelper.startActivityWithTransition(this@PostcardViewerActivity, intent)
                 }
         )
         

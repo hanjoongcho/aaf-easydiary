@@ -129,7 +129,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 }
                 R.id.speechOutButton -> textToSpeech(fragment.getDiaryContents())
                 R.id.postCard -> {
-                    val postCardIntent = Intent(this@DiaryReadActivity, PostCardActivity::class.java)
+                    val postCardIntent = Intent(this@DiaryReadActivity, PostcardActivity::class.java)
                     postCardIntent.putExtra(DIARY_SEQUENCE, fragment.getSequence())
                     //                startActivityForResult(postCardIntent, Constants.REQUEST_CODE_BACKGROUND_COLOR_PICKER);
                     TransitionHelper.startActivityWithTransition(this@DiaryReadActivity, postCardIntent)
