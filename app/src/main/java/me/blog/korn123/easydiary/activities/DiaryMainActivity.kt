@@ -230,7 +230,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, calendarIntent)
             }
             R.id.microphone -> showSpeechDialog()
-            R.id.devConsole -> TransitionHelper.startActivityWithTransition(this, Intent(this, DevActivity::class.java))
             R.id.popupMenu -> openCustomOptionMenu()
         }
         return super.onOptionsItemSelected(item)
@@ -241,10 +240,10 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             DiaryMode.READ -> {
                 supportActionBar?.setDisplayHomeAsUpEnabled(false)
                 menuInflater.inflate(R.menu.diary_main, menu)
-                menu.findItem(R.id.devConsole).run {
-                    applyFontToMenuItem(this)
-                    if (config.enableDebugMode) this.setVisible(true) else this.setVisible(false)
-                }
+//                menu.findItem(R.id.devConsole).run {
+//                    applyFontToMenuItem(this)
+//                    if (config.enableDebugMode) this.setVisible(true) else this.setVisible(false)
+//                }
             }
             DiaryMode.DELETE -> {
                 supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -278,6 +277,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 R.id.dashboard -> TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, Intent(this@DiaryMainActivity, DashboardActivity::class.java))
                 R.id.chart -> TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, Intent(this@DiaryMainActivity, StatisticsActivity::class.java))
                 R.id.settings -> TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, Intent(this@DiaryMainActivity, SettingsActivity::class.java))
+                R.id.devConsole -> TransitionHelper.startActivityWithTransition(this, Intent(this, DevActivity::class.java))
             }
             Handler(Looper.getMainLooper()).post { mPopupWindow?.dismiss() }
         }
@@ -290,11 +290,14 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             dashboard.setOnClickListener(customItemClickListener)
             chart.setOnClickListener(customItemClickListener)
             settings.setOnClickListener(customItemClickListener)
+            devConsole.setOnClickListener(customItemClickListener)
         }
     }
 
     private fun openCustomOptionMenu() {
         mPopupWindow = EasyDiaryUtils.openCustomOptionMenu(mPopupMenuBinding.root, findViewById(R.id.popupMenu))
+        updateDrawableColorInnerCardView(R.drawable.bug_2)
+        if (config.enableDebugMode) mPopupMenuBinding.devConsole.visibility = View.VISIBLE
     }
 
     private fun openPostcardViewer() {

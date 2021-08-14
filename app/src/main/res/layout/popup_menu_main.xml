@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -17,6 +18,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+            <androidx.appcompat.widget.LinearLayoutCompat
+                tools:visibility="visible"
+                android:visibility="gone"
+                android:id="@+id/devConsole"
+                android:paddingLeft="25dp"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:padding="5dp"
+                    android:src="@drawable/bug_2"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <me.blog.korn123.easydiary.views.FixedTextView
+                    style="@style/text_view_option_menu_item"
+                    android:text="Dev Console"
+                    android:paddingLeft="10dp"
+                    app:applyGlobalColor="true"
+                    app:applyGlobalSize="false" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
             <me.blog.korn123.easydiary.views.FixedTextView
                 style="@style/text_view_option_menu_item"
                 android:id="@+id/postCard"

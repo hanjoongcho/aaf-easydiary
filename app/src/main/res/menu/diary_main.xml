@@ -2,12 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:icon="@drawable/bug_2"
-        android:id="@+id/devConsole"
-        android:orderInCategory="100"
-        android:title="Dev Console"
-        app:showAsAction="always" />
-    <item
         android:icon="@drawable/planner"
         android:id="@+id/planner"
         android:orderInCategory="100"
