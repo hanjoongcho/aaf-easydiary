@@ -19,54 +19,49 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <androidx.appcompat.widget.LinearLayoutCompat
+                style="@style/linear_popup_menu_item"
                 tools:visibility="visible"
                 android:visibility="gone"
-                android:id="@+id/devConsole"
-                android:paddingLeft="25dp"
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:id="@+id/devConsole">
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:padding="5dp"
-                    android:src="@drawable/bug_2"
-                    android:layout_gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    style="@style/image_view_popup_menu_icon"
+                    android:src="@drawable/bug_2" />
                 <me.blog.korn123.easydiary.views.FixedTextView
-                    style="@style/text_view_option_menu_item"
+                    style="@style/text_view_popup_menu_item"
                     android:text="Dev Console"
-                    android:paddingLeft="10dp"
-                    app:applyGlobalColor="true"
-                    app:applyGlobalSize="false" />
+                    android:paddingStart="10dp" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                style="@style/linear_popup_menu_item"
+                android:id="@+id/postCard">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:src="@drawable/picture_w"
+                    style="@style/image_view_popup_menu_icon" />
+                <me.blog.korn123.easydiary.views.FixedTextView
+                    style="@style/text_view_popup_menu_item"
+                    android:text="@string/post_card"
+                    android:paddingStart="10dp" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <me.blog.korn123.easydiary.views.FixedTextView
+                style="@style/text_view_popup_menu_item"
+                android:id="@+id/dashboard"
+                android:text="@string/menu_dashboard" />
+            <androidx.appcompat.widget.LinearLayoutCompat
+                style="@style/linear_popup_menu_item"
+                android:id="@+id/chart">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:src="@drawable/combo"
+                    style="@style/image_view_popup_menu_icon" />
+                <me.blog.korn123.easydiary.views.FixedTextView
+                    style="@style/text_view_popup_menu_item"
+                    android:text="@string/menu_chart"
+                    android:paddingStart="10dp" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <me.blog.korn123.easydiary.views.FixedTextView
-                style="@style/text_view_option_menu_item"
-                android:id="@+id/postCard"
-                android:text="@string/post_card"
-                app:applyGlobalColor="true"
-                app:applyGlobalSize="false" />
-
-            <me.blog.korn123.easydiary.views.FixedTextView
-                style="@style/text_view_option_menu_item"
-                android:id="@+id/dashboard"
-                android:text="@string/menu_dashboard"
-                app:applyGlobalColor="true"
-                app:applyGlobalSize="false" />
-
-            <me.blog.korn123.easydiary.views.FixedTextView
-                style="@style/text_view_option_menu_item"
-                android:id="@+id/chart"
-                android:text="@string/menu_chart"
-                app:applyGlobalColor="true"
-                app:applyGlobalSize="false" />
-
-            <me.blog.korn123.easydiary.views.FixedTextView
                 android:id="@+id/settings"
-                style="@style/text_view_option_menu_item"
-                android:text="@string/settings"
-                app:applyGlobalColor="true"
-                app:applyGlobalSize="false" />
+                style="@style/text_view_popup_menu_item"
+                android:text="@string/settings" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </LinearLayout>

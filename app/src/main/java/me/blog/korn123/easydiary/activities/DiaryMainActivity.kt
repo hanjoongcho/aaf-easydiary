@@ -295,9 +295,11 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     }
 
     private fun openCustomOptionMenu() {
+        if (config.enableDebugMode) mPopupMenuBinding.devConsole.visibility = View.VISIBLE
         mPopupWindow = EasyDiaryUtils.openCustomOptionMenu(mPopupMenuBinding.root, findViewById(R.id.popupMenu))
         updateDrawableColorInnerCardView(R.drawable.bug_2)
-        if (config.enableDebugMode) mPopupMenuBinding.devConsole.visibility = View.VISIBLE
+        updateDrawableColorInnerCardView(R.drawable.picture_w)
+        updateDrawableColorInnerCardView(R.drawable.combo)
     }
 
     private fun openPostcardViewer() {

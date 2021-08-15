@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <me.blog.korn123.easydiary.views.FixedTextView
-                style="@style/text_view_option_menu_item"
+                style="@style/text_view_popup_menu_item"
                 android:id="@+id/delete"
                 android:text="@string/menu_delete"
                 app:applyGlobalColor="true"
