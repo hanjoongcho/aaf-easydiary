@@ -46,7 +46,7 @@
                 style="@style/linear_popup_menu_item"
                 android:id="@+id/dashboard">
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:src="@drawable/picture_w"
+                    android:src="@drawable/statistics"
                     style="@style/image_view_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
                     style="@style/text_view_popup_menu_item"
