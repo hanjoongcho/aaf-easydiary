@@ -295,7 +295,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     }
 
     private fun openCustomOptionMenu() {
-        if (config.enableDebugMode) mPopupMenuBinding.devConsole.visibility = View.VISIBLE
+        mPopupMenuBinding.devConsole.visibility = if (config.enableDebugMode) View.VISIBLE else View.GONE
         mPopupWindow = EasyDiaryUtils.openCustomOptionMenu(mPopupMenuBinding.root, findViewById(R.id.popupMenu))
         updateDrawableColorInnerCardView(R.drawable.bug_2)
         updateDrawableColorInnerCardView(R.drawable.picture_w)
