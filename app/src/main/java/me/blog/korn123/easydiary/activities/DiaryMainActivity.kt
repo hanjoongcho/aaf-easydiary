@@ -300,6 +300,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         updateDrawableColorInnerCardView(R.drawable.bug_2)
         updateDrawableColorInnerCardView(R.drawable.picture_w)
         updateDrawableColorInnerCardView(R.drawable.combo)
+        updateDrawableColorInnerCardView(R.drawable.statistics)
+        updateDrawableColorInnerCardView(R.drawable.settings_7)
     }
 
     private fun openPostcardViewer() {
