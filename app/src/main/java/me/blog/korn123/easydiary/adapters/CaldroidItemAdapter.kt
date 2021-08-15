@@ -9,10 +9,7 @@ import android.widget.TextView
 import com.roomorama.caldroid.CaldroidGridAdapter
 import hirondelle.date4j.DateTime
 import io.realm.Sort
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
@@ -63,6 +60,7 @@ class CaldroidItemAdapter(
 
         binding.run {
             CoroutineScope(Dispatchers.IO).launch {
+                delay(100)
                 withContext(Dispatchers.Main) {
                     val dateString = dateTime.format("YYYY-MM-DD")
                     val count = EasyDiaryDbHelper.countDiaryBy(dateString)
