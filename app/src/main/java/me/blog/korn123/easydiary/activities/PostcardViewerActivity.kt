@@ -13,6 +13,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.PostcardAdapter
 import me.blog.korn123.easydiary.databinding.ActivityPostCardViewerBinding
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.helper.DIARY_POSTCARD_DIRECTORY
 import me.blog.korn123.easydiary.helper.POSTCARD_SEQUENCE
@@ -49,7 +50,7 @@ class PostcardViewerActivity : EasyDiaryActivity() {
 //        }
         
         val spacesItemDecoration = SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding))
-        val gridLayoutManager = androidx.recyclerview.widget.GridLayoutManager(this, 2)
+        val gridLayoutManager = androidx.recyclerview.widget.GridLayoutManager(this, if (isLandScape()) 5 else 2 )
 
         EasyDiaryUtils.initWorkingDirectory(this@PostcardViewerActivity)
         mPostcardAdapter = PostcardAdapter(

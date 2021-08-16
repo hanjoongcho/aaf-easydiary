@@ -12,6 +12,7 @@ import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.databinding.ViewholderPostCardBinding
+import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.updateAppViews
 import java.io.File
 import java.text.SimpleDateFormat
@@ -66,7 +67,8 @@ internal class PostcardAdapter(
             }
 
             val point =  CommonUtils.getDefaultDisplay(activity)
-            val targetX = floor((point.x - CommonUtils.dpToPixelFloatValue(viewHolderPostCardBinding.imageview.context, 9F)) / 2.0)
+            val columnSize = if (activity.isLandScape()) 5 else 2
+            val targetX = floor((point.x - CommonUtils.dpToPixelFloatValue(viewHolderPostCardBinding.imageview.context, 9F)) / columnSize)
             viewHolderPostCardBinding.imageContainer.layoutParams.height = targetX.toInt()
             viewHolderPostCardBinding.imageview.layoutParams.height = targetX.toInt()
             Glide.with(viewHolderPostCardBinding.imageview.context)
