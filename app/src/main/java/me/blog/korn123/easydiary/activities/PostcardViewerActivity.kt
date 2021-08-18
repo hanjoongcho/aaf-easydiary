@@ -4,6 +4,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
 import android.widget.AdapterView
 import io.github.aafactory.commons.utils.ColorUtils
@@ -11,7 +12,7 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.PostcardAdapter
-import me.blog.korn123.easydiary.databinding.ActivityPostCardViewerBinding
+import me.blog.korn123.easydiary.databinding.ActivityPostcardViewerBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.showAlertDialog
@@ -27,16 +28,16 @@ import java.io.File
  */
 
 class PostcardViewerActivity : EasyDiaryActivity() {
-    private lateinit var mBinding: ActivityPostCardViewerBinding
+    private lateinit var mBinding: ActivityPostcardViewerBinding
     private lateinit var mPostcardAdapter: PostcardAdapter
     private var mListPostcard: ArrayList<PostcardAdapter.PostCard> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityPostCardViewerBinding.inflate(layoutInflater)
+        mBinding = ActivityPostcardViewerBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
         mBinding.toolbar.setNavigationOnClickListener { onBackPressed() }
-//        setSupportActionBar(toolbar)
+        setSupportActionBar(mBinding.toolbar)
         FontUtils.getTypeface(this, config.settingFontName)?.let {
             mBinding.toolbarLayout.setCollapsedTitleTypeface(it)
             mBinding.toolbarLayout.setExpandedTitleTypeface(it)
@@ -93,6 +94,16 @@ class PostcardViewerActivity : EasyDiaryActivity() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        supportActionBar?.setBackgroundDrawable(null)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.postcard_viewer, menu)
+        return true
     }
 
     private fun initPostCard() {
