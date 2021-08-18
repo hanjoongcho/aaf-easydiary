@@ -24,6 +24,7 @@ internal class PostcardAdapter(
         private val listPostcard: List<PostCard>,
         private val onItemClickListener: AdapterView.OnItemClickListener
 ) : RecyclerView.Adapter<PostcardAdapter.PostcardViewHolder>() {
+    var columnSize = if (activity.isLandScape()) 5 else 2
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostcardViewHolder {
         return PostcardViewHolder(activity, ViewholderPostCardBinding.inflate(activity.layoutInflater, parent, false), this)
@@ -43,7 +44,7 @@ internal class PostcardAdapter(
         listPostcard[position].isItemChecked = isChecked
     }
 
-    class PostcardViewHolder(
+    inner class PostcardViewHolder(
             val activity: Activity, private val viewHolderPostCardBinding: ViewholderPostCardBinding, val adapter: PostcardAdapter
     ) : RecyclerView.ViewHolder(viewHolderPostCardBinding.root), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
         init {
@@ -67,7 +68,7 @@ internal class PostcardAdapter(
             }
 
             val point =  CommonUtils.getDefaultDisplay(activity)
-            val columnSize = if (activity.isLandScape()) 5 else 2
+
             val targetX = floor((point.x - CommonUtils.dpToPixelFloatValue(viewHolderPostCardBinding.imageview.context, 9F)) / columnSize)
             viewHolderPostCardBinding.imageContainer.layoutParams.height = targetX.toInt()
             viewHolderPostCardBinding.imageview.layoutParams.height = targetX.toInt()
@@ -84,11 +85,11 @@ internal class PostcardAdapter(
         override fun onCheckedChanged(p0: CompoundButton?, p1: Boolean) {
             adapter.onItemCheckedChange(this.adapterPosition, p1)
         }
+    }
 
-        companion object {
-            const val GUIDE_MESSAGE = "No information"
-            const val POSTCARD_DATE_FORMAT = "yyyyMMddHHmmss"
-        }
+    companion object {
+        const val GUIDE_MESSAGE = "No information"
+        const val POSTCARD_DATE_FORMAT = "yyyyMMddHHmmss"
     }
 
     data class PostCard(val file: File, var isItemChecked: Boolean)

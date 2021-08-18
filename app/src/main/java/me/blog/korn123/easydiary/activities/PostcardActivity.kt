@@ -41,7 +41,8 @@ import java.io.File
  * Created by hanjoong on 2017-07-01.
  */
 
-class PostcardActivity : EasyDiaryActivity() {
+class
+PostcardActivity : EasyDiaryActivity() {
     lateinit var mBinding: ActivityPostcardBinding
     lateinit var mShowcaseView: ShowcaseView
     lateinit var mSavedDiaryCardPath: String

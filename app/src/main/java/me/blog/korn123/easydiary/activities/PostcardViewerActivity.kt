@@ -4,23 +4,33 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.view.LayoutInflater
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
+import android.widget.ListView
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import io.github.aafactory.commons.utils.ColorUtils
+import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.adapters.OptionItemAdapter
 import me.blog.korn123.easydiary.adapters.PostcardAdapter
 import me.blog.korn123.easydiary.databinding.ActivityPostcardViewerBinding
+import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.showAlertDialog
-import me.blog.korn123.easydiary.helper.DIARY_POSTCARD_DIRECTORY
-import me.blog.korn123.easydiary.helper.POSTCARD_SEQUENCE
-import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.extensions.updateAlertDialog
+import me.blog.korn123.easydiary.helper.*
 import org.apache.commons.io.FileUtils
 import java.io.File
+import java.util.HashMap
 
 
 /**
@@ -104,6 +114,49 @@ class PostcardViewerActivity : EasyDiaryActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.postcard_viewer, menu)
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.layout -> openGridSettingDialog()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun openGridSettingDialog() {
+        var alertDialog: AlertDialog? = null
+        val builder = AlertDialog.Builder(this)
+        builder.setNegativeButton(getString(android.R.string.cancel), null)
+        val inflater = getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val containerView = inflater.inflate(R.layout.dialog_option_item, mBinding.root, false)
+        val listView = containerView.findViewById<ListView>(R.id.listView)
+
+        var selectedIndex = 0
+        val listMaxLines = java.util.ArrayList<Map<String, String>>()
+        for (i in 1..10) {
+            listMaxLines.add(mapOf("optionTitle" to getString(R.string.postcard_grid_option_column_number, i), "optionValue" to "$i"))
+        }
+
+        listMaxLines.mapIndexed { index, map ->
+            val size = map["optionValue"] ?: 0
+            if (config.summaryMaxLines == size) selectedIndex = index
+        }
+
+        val arrayAdapter = OptionItemAdapter(this, R.layout.item_check_label, listMaxLines, config.summaryMaxLines.toFloat())
+        listView.adapter = arrayAdapter
+        listView.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
+            @Suppress("UNCHECKED_CAST") val optionInfo = parent.adapter.getItem(position) as HashMap<String, String>
+            optionInfo["optionValue"]?.let {
+//                config.summaryMaxLines = it.toInt()
+//                initPreference()
+                mPostcardAdapter.columnSize = it.toInt()
+                mPostcardAdapter.notifyDataSetChanged()
+            }
+            alertDialog?.cancel()
+        }
+
+        alertDialog = builder.create().apply { updateAlertDialog(this, null, containerView, getString(R.string.postcard_grid_option_title)) }
+        listView.setSelection(selectedIndex)
     }
 
     private fun initPostCard() {

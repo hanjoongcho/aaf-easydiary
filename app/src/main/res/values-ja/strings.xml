@@ -778,4 +778,6 @@
     <string name="load_auto_save_diary_description">一時保存されたダイアリーがあります。一時保存されたダイアリーを呼んでしますか？</string>
     <string name="enable_review_flow_title">GooglePlayアプリ内レビュー</string>
     <string name="enable_review_flow_summary">EasyDiaryを特定の期間使用すると、GooglePlayレビュー登録ダイアログが有効になります。 レビュー登録機能を使用しない場合、またはレビュー登録後にGooglePlayダイアログが開く場合は、このオプションを無効にしてダイアログが開かないようにすることができます。</string>
+    <string name="postcard_grid_option_title">Postcard grid options</string>
+    <string name="postcard_grid_option_column_number">%d column per row</string>
 </resources>

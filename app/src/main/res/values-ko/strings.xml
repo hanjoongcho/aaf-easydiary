@@ -778,4 +778,6 @@
     <string name="load_auto_save_diary_description">임시저장된 다이어리가 있습니다. 임시저장된 다이어리를 불러오시겠습니까?</string>
     <string name="enable_review_flow_title">구글플레이 인앱 리뷰</string>
     <string name="enable_review_flow_summary">특정기간동안 이지다이어리를 사용하는 경우 구글플레이 리뷰등록 다이얼로그가 활성화됩니다. 리뷰등록 기능을 사용하고 싶지 않거나 리뷰등록 이후에도 구글플레이 다이얼로그가 열리는 경우 이 옵션을 비활성화 시켜 다이얼로그가 열리지 않도록 할 수 있습니다.</string>
+    <string name="postcard_grid_option_title">Postcard grid options</string>
+    <string name="postcard_grid_option_column_number">%d column per row</string>
 </resources>
