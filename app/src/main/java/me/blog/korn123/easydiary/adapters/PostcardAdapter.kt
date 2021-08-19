@@ -12,6 +12,7 @@ import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.databinding.ViewholderPostCardBinding
+import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.updateAppViews
 import java.io.File
@@ -24,7 +25,6 @@ internal class PostcardAdapter(
         private val listPostcard: List<PostCard>,
         private val onItemClickListener: AdapterView.OnItemClickListener
 ) : RecyclerView.Adapter<PostcardAdapter.PostcardViewHolder>() {
-    var columnSize = if (activity.isLandScape()) 5 else 2
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostcardViewHolder {
         return PostcardViewHolder(activity, ViewholderPostCardBinding.inflate(activity.layoutInflater, parent, false), this)
@@ -67,15 +67,17 @@ internal class PostcardAdapter(
                 timeStampView.text = GUIDE_MESSAGE
             }
 
-            val point =  CommonUtils.getDefaultDisplay(activity)
-
-            val targetX = floor((point.x - CommonUtils.dpToPixelFloatValue(viewHolderPostCardBinding.imageview.context, 9F)) / columnSize)
-            viewHolderPostCardBinding.imageContainer.layoutParams.height = targetX.toInt()
-            viewHolderPostCardBinding.imageview.layoutParams.height = targetX.toInt()
-            Glide.with(viewHolderPostCardBinding.imageview.context)
-                    .load(postCard.file)
+            activity.run {
+                val point =  CommonUtils.getDefaultDisplay(this)
+                val spanCount = if (activity.isLandScape()) config.postcardSpanCountLandscape else config.postcardSpanCountPortrait
+                val targetX = floor((point.x - CommonUtils.dpToPixelFloatValue(viewHolderPostCardBinding.imageview.context, 9F)) / spanCount)
+                viewHolderPostCardBinding.imageContainer.layoutParams.height = targetX.toInt()
+                viewHolderPostCardBinding.imageview.layoutParams.height = targetX.toInt()
+                Glide.with(viewHolderPostCardBinding.imageview.context)
+                        .load(postCard.file)
 //                .apply(RequestOptions().placeholder(R.drawable.ic_aaf_photos).fitCenter())
-                    .into(viewHolderPostCardBinding.imageview)
+                        .into(viewHolderPostCardBinding.imageview)
+            }
         }
 
         override fun onClick(p0: View?) {

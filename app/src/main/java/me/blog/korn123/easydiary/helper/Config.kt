@@ -156,4 +156,12 @@ class Config(context: Context) : BaseConfig(context) {
     var enableReviewFlow: Boolean
         get() = prefs.getBoolean(SETTING_ENABLE_REVIEW_FLOW, true)
         set(enableReviewFlow) = prefs.edit().putBoolean(SETTING_ENABLE_REVIEW_FLOW, enableReviewFlow).apply()
+
+    var postcardSpanCountLandscape: Int
+        get() = prefs.getInt(SETTING_POSTCARD_SPAN_COUNT_LANDSCAPE, 5)
+        set(postcardSpanCountLandscape) = prefs.edit().putInt(SETTING_POSTCARD_SPAN_COUNT_LANDSCAPE, postcardSpanCountLandscape).apply()
+
+    var postcardSpanCountPortrait: Int
+        get() = prefs.getInt(SETTING_POSTCARD_SPAN_COUNT_PORTRAIT, 2)
+        set(postcardSpanCountPortrait) = prefs.edit().putInt(SETTING_POSTCARD_SPAN_COUNT_LANDSCAPE, postcardSpanCountPortrait).apply()
 }
