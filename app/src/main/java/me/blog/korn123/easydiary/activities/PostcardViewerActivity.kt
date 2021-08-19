@@ -142,7 +142,7 @@ class PostcardViewerActivity : EasyDiaryActivity() {
                     postcardSpanCount = config.postcardSpanCountLandscape
                     selectedIndex = index
                 }
-                isLandScape() && config.postcardSpanCountPortrait == size.toInt() -> {
+                !isLandScape() && config.postcardSpanCountPortrait == size.toInt() -> {
                     postcardSpanCount = config.postcardSpanCountPortrait
                     selectedIndex = index
                 }
