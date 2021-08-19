@@ -163,5 +163,5 @@ class Config(context: Context) : BaseConfig(context) {
 
     var postcardSpanCountPortrait: Int
         get() = prefs.getInt(SETTING_POSTCARD_SPAN_COUNT_PORTRAIT, 2)
-        set(postcardSpanCountPortrait) = prefs.edit().putInt(SETTING_POSTCARD_SPAN_COUNT_LANDSCAPE, postcardSpanCountPortrait).apply()
+        set(postcardSpanCountPortrait) = prefs.edit().putInt(SETTING_POSTCARD_SPAN_COUNT_PORTRAIT, postcardSpanCountPortrait).apply()
 }
