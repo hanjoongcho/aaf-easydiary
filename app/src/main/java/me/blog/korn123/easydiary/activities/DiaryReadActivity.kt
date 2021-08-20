@@ -453,22 +453,29 @@ class DiaryReadActivity : EasyDiaryActivity() {
                     true -> decryptData.visibility = View.VISIBLE
                     false -> encryptData.visibility = View.VISIBLE
                 }
-
-                delete.setOnClickListener {
-                    val positiveListener = DialogInterface.OnClickListener { _, _ ->
-                        EasyDiaryDbHelper.deleteDiaryBy(fragment.getSequence())
-                        TransitionHelper.finishActivityWithTransition(this@DiaryReadActivity)
+                val itemClickListener = View.OnClickListener { view ->
+                    when (view.id) {
+                        R.id.delete -> {
+                            val positiveListener = DialogInterface.OnClickListener { _, _ ->
+                                EasyDiaryDbHelper.deleteDiaryBy(fragment.getSequence())
+                                TransitionHelper.finishActivityWithTransition(this@DiaryReadActivity)
+                            }
+                            showAlertDialog(getString(R.string.delete_confirm), positiveListener, null)
+                        }
+                        R.id.postcard -> {
+                            val postCardIntent = Intent(this@DiaryReadActivity, PostcardActivity::class.java)
+                            postCardIntent.putExtra(DIARY_SEQUENCE, fragment.getSequence())
+                            TransitionHelper.startActivityWithTransition(this@DiaryReadActivity, postCardIntent)
+                        }
+                        R.id.encryptData -> showEncryptPagePopup(fragment, ENCRYPTION)
+                        R.id.decryptData -> showEncryptPagePopup(fragment, DECRYPTION)
                     }
-                    showAlertDialog(getString(R.string.delete_confirm), positiveListener, null)
                     popupWindow?.dismiss()
                 }
-                postcard.setOnClickListener {
-                    val postCardIntent = Intent(this@DiaryReadActivity, PostcardActivity::class.java)
-                    postCardIntent.putExtra(DIARY_SEQUENCE, fragment.getSequence())
-                    TransitionHelper.startActivityWithTransition(this@DiaryReadActivity, postCardIntent)
-                }
-                encryptData.setOnClickListener { showEncryptPagePopup(fragment, ENCRYPTION) }
-                decryptData.setOnClickListener { showEncryptPagePopup(fragment, DECRYPTION) }
+                delete.setOnClickListener(itemClickListener)
+                postcard.setOnClickListener(itemClickListener)
+                encryptData.setOnClickListener(itemClickListener)
+                decryptData.setOnClickListener(itemClickListener)
             }
         }
         popupWindow = EasyDiaryUtils.openCustomOptionMenu(popupView, findViewById(R.id.popupMenu))
