@@ -148,10 +148,10 @@ class DiaryReadActivity : EasyDiaryActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.diary_read, menu)
-        when (mIsEncryptData) {
-            true -> menu.findItem(R.id.encryptData).isVisible = false
-            false -> menu.findItem(R.id.decryptData).isVisible = false
-        }
+//        when (mIsEncryptData) {
+//            true -> menu.findItem(R.id.encryptData).isVisible = false
+//            false -> menu.findItem(R.id.decryptData).isVisible = false
+//        }
         return true
     }
 
