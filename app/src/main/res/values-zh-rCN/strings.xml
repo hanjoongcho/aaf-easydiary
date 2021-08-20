@@ -541,6 +541,10 @@
         v1.4.171.0 / 2021.07.21\n
         User Experience (UX) Optimization
     </string>
+    <string name="release_239">
+        v1.4.172.0 / 2021.08.20\n
+        User Experience (UX) Optimization
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  自1.4.47版本以来添加的资源点击这里。                                                      -->
@@ -778,5 +782,6 @@
     <string name="load_auto_save_diary_description">There is a diary stored temporarily. Do you want to load the temporarily saved diary?</string>
     <string name="enable_review_flow_title">Google Play In-App Review</string>
     <string name="enable_review_flow_summary">If you use Easy Diary for a specific period, the Google Play review registration dialog will be activated. If you do not want to use the review registration function or if the Google Play dialog opens after review registration, you can disable this option to prevent the dialog from opening.</string>
+    <string name="postcard_grid_option_title">Postcard grid options</string>
     <string name="postcard_grid_option_column_number">%d column per row</string>
 </resources>
