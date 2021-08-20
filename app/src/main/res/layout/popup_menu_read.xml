@@ -19,6 +19,16 @@
             android:orientation="vertical">
             <androidx.appcompat.widget.LinearLayoutCompat
                 style="@style/linear_popup_menu_item"
+                android:id="@+id/postcard">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:src="@drawable/picture_w"
+                    style="@style/image_view_popup_menu_icon" />
+                <me.blog.korn123.easydiary.views.FixedTextView
+                    style="@style/text_view_popup_menu_item"
+                    android:text="Postcard Creation" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                style="@style/linear_popup_menu_item"
                 android:id="@+id/delete">
                 <androidx.appcompat.widget.AppCompatImageView
                     android:src="@drawable/delete_w"

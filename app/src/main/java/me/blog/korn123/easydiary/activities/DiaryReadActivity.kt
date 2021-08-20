@@ -128,12 +128,12 @@ class DiaryReadActivity : EasyDiaryActivity() {
                     }
                 }
                 R.id.speechOutButton -> textToSpeech(fragment.getDiaryContents())
-                R.id.postCard -> {
-                    val postCardIntent = Intent(this@DiaryReadActivity, PostcardActivity::class.java)
-                    postCardIntent.putExtra(DIARY_SEQUENCE, fragment.getSequence())
-                    //                startActivityForResult(postCardIntent, Constants.REQUEST_CODE_BACKGROUND_COLOR_PICKER);
-                    TransitionHelper.startActivityWithTransition(this@DiaryReadActivity, postCardIntent)
-                }
+//                R.id.postCard -> {
+//                    val postCardIntent = Intent(this@DiaryReadActivity, PostcardActivity::class.java)
+//                    postCardIntent.putExtra(DIARY_SEQUENCE, fragment.getSequence())
+//                    //                startActivityForResult(postCardIntent, Constants.REQUEST_CODE_BACKGROUND_COLOR_PICKER);
+//                    TransitionHelper.startActivityWithTransition(this@DiaryReadActivity, postCardIntent)
+//                }
                 R.id.encryptData -> {
                     showEncryptPagePopup(fragment, ENCRYPTION)
                 }
@@ -448,13 +448,20 @@ class DiaryReadActivity : EasyDiaryActivity() {
             updateTextColors(this)
             FontUtils.setFontsTypeface(applicationContext, null, this, true)
             val fragment = mSectionsPagerAdapter.instantiateItem(mBinding.diaryViewPager, mBinding.diaryViewPager.currentItem) as PlaceholderFragment
-            pmrBinding.delete.setOnClickListener {
-                val positiveListener = DialogInterface.OnClickListener { _, _ ->
-                    EasyDiaryDbHelper.deleteDiaryBy(fragment.getSequence())
-                    TransitionHelper.finishActivityWithTransition(this@DiaryReadActivity)
+            pmrBinding.run {
+                delete.setOnClickListener {
+                    val positiveListener = DialogInterface.OnClickListener { _, _ ->
+                        EasyDiaryDbHelper.deleteDiaryBy(fragment.getSequence())
+                        TransitionHelper.finishActivityWithTransition(this@DiaryReadActivity)
+                    }
+                    showAlertDialog(getString(R.string.delete_confirm), positiveListener, null)
+                    popupWindow?.dismiss()
                 }
-                showAlertDialog(getString(R.string.delete_confirm), positiveListener, null)
-                popupWindow?.dismiss()
+                postcard.setOnClickListener {
+                    val postCardIntent = Intent(this@DiaryReadActivity, PostcardActivity::class.java)
+                    postCardIntent.putExtra(DIARY_SEQUENCE, fragment.getSequence())
+                    TransitionHelper.startActivityWithTransition(this@DiaryReadActivity, postCardIntent)
+                }
             }
         }
         popupWindow = EasyDiaryUtils.openCustomOptionMenu(popupView, findViewById(R.id.popupMenu))

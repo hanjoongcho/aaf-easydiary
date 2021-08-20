@@ -14,12 +14,6 @@
         android:title="@string/text_to_speech"
         app:showAsAction="always" />
     <item
-        android:id="@+id/postCard"
-        android:icon="@drawable/picture_w"
-        android:orderInCategory="100"
-        android:title="@string/diary_postcard"
-        app:showAsAction="always" />
-    <item
         android:id="@+id/encryptData"
         android:icon="@drawable/padlock"
         android:orderInCategory="100"
