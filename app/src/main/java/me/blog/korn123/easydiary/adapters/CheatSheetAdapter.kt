@@ -34,17 +34,17 @@ class CheatSheetAdapter(
         }
     }
 
-    class CheatSheetViewHolder(activity: Activity, private val viewHolderCheatSheetBinding: ViewholderCheatSheetBinding, val adapter: CheatSheetAdapter) : RecyclerView.ViewHolder(viewHolderCheatSheetBinding.root), View.OnClickListener {
+    class CheatSheetViewHolder(
+            activity: Activity, private val viewHolderCheatSheetBinding: ViewholderCheatSheetBinding, val adapter: CheatSheetAdapter
+    ) : RecyclerView.ViewHolder(viewHolderCheatSheetBinding.root), View.OnClickListener {
         init {
-            if (itemView is ViewGroup) {
-                itemView.run {
-                    activity.initTextSize(this)
-                    activity.updateTextColors(this)
-                    activity.updateAppViews(this)
-                    activity.updateCardViewPolicy(this)
-                    FontUtils.setFontsTypeface(activity, activity.assets, null, this)
-                    setOnClickListener(this@CheatSheetViewHolder)
-                }
+            viewHolderCheatSheetBinding.run {
+                activity.initTextSize(root)
+                activity.updateTextColors(root)
+                activity.updateAppViews(root)
+                activity.updateCardViewPolicy(root)
+                FontUtils.setFontsTypeface(activity, activity.assets, null, root)
+                cardItem.setOnClickListener(this@CheatSheetViewHolder)
             }
         }
 

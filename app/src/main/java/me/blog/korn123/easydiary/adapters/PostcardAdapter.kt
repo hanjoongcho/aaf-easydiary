@@ -12,6 +12,8 @@ import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.databinding.ViewholderPostCardBinding
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.updateAppViews
 import java.io.File
 import java.text.SimpleDateFormat
@@ -42,7 +44,7 @@ internal class PostcardAdapter(
         listPostcard[position].isItemChecked = isChecked
     }
 
-    class PostcardViewHolder(
+    inner class PostcardViewHolder(
             val activity: Activity, private val viewHolderPostCardBinding: ViewholderPostCardBinding, val adapter: PostcardAdapter
     ) : RecyclerView.ViewHolder(viewHolderPostCardBinding.root), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
         init {
@@ -65,14 +67,17 @@ internal class PostcardAdapter(
                 timeStampView.text = GUIDE_MESSAGE
             }
 
-            val point =  CommonUtils.getDefaultDisplay(activity)
-            val targetX = floor((point.x - CommonUtils.dpToPixelFloatValue(viewHolderPostCardBinding.imageview.context, 9F)) / 2.0)
-            viewHolderPostCardBinding.imageContainer.layoutParams.height = targetX.toInt()
-            viewHolderPostCardBinding.imageview.layoutParams.height = targetX.toInt()
-            Glide.with(viewHolderPostCardBinding.imageview.context)
-                    .load(postCard.file)
+            activity.run {
+                val point =  CommonUtils.getDefaultDisplay(this)
+                val spanCount = if (activity.isLandScape()) config.postcardSpanCountLandscape else config.postcardSpanCountPortrait
+                val targetX = floor((point.x - CommonUtils.dpToPixelFloatValue(viewHolderPostCardBinding.imageview.context, 9F)) / spanCount)
+                viewHolderPostCardBinding.imageContainer.layoutParams.height = targetX.toInt()
+                viewHolderPostCardBinding.imageview.layoutParams.height = targetX.toInt()
+                Glide.with(viewHolderPostCardBinding.imageview.context)
+                        .load(postCard.file)
 //                .apply(RequestOptions().placeholder(R.drawable.ic_aaf_photos).fitCenter())
-                    .into(viewHolderPostCardBinding.imageview)
+                        .into(viewHolderPostCardBinding.imageview)
+            }
         }
 
         override fun onClick(p0: View?) {
@@ -82,11 +87,11 @@ internal class PostcardAdapter(
         override fun onCheckedChanged(p0: CompoundButton?, p1: Boolean) {
             adapter.onItemCheckedChange(this.adapterPosition, p1)
         }
+    }
 
-        companion object {
-            const val GUIDE_MESSAGE = "No information"
-            const val POSTCARD_DATE_FORMAT = "yyyyMMddHHmmss"
-        }
+    companion object {
+        const val GUIDE_MESSAGE = "No information"
+        const val POSTCARD_DATE_FORMAT = "yyyyMMddHHmmss"
     }
 
     data class PostCard(val file: File, var isItemChecked: Boolean)

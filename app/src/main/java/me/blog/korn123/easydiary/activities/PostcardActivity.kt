@@ -32,7 +32,7 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.PhotoAdapter
-import me.blog.korn123.easydiary.databinding.ActivityPostCardBinding
+import me.blog.korn123.easydiary.databinding.ActivityPostcardBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import java.io.File
@@ -41,8 +41,9 @@ import java.io.File
  * Created by hanjoong on 2017-07-01.
  */
 
-class PostcardActivity : EasyDiaryActivity() {
-    lateinit var mBinding: ActivityPostCardBinding
+class
+PostcardActivity : EasyDiaryActivity() {
+    lateinit var mBinding: ActivityPostcardBinding
     lateinit var mShowcaseView: ShowcaseView
     lateinit var mSavedDiaryCardPath: String
     lateinit var mPhotoAdapter: PhotoAdapter
@@ -54,7 +55,7 @@ class PostcardActivity : EasyDiaryActivity() {
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityPostCardBinding.inflate(layoutInflater)
+        mBinding = ActivityPostcardBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
 
         setSupportActionBar(mBinding.toolbar)

@@ -4,21 +4,30 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
+import android.widget.ListView
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
 import io.github.aafactory.commons.utils.ColorUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.adapters.OptionItemAdapter
 import me.blog.korn123.easydiary.adapters.PostcardAdapter
-import me.blog.korn123.easydiary.databinding.ActivityPostCardViewerBinding
+import me.blog.korn123.easydiary.databinding.ActivityPostcardViewerBinding
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.showAlertDialog
-import me.blog.korn123.easydiary.helper.DIARY_POSTCARD_DIRECTORY
-import me.blog.korn123.easydiary.helper.POSTCARD_SEQUENCE
-import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.extensions.updateAlertDialog
+import me.blog.korn123.easydiary.helper.*
 import org.apache.commons.io.FileUtils
 import java.io.File
+import java.util.*
 
 
 /**
@@ -26,16 +35,16 @@ import java.io.File
  */
 
 class PostcardViewerActivity : EasyDiaryActivity() {
-    private lateinit var mBinding: ActivityPostCardViewerBinding
+    private lateinit var mBinding: ActivityPostcardViewerBinding
     private lateinit var mPostcardAdapter: PostcardAdapter
+    private lateinit var mGridLayoutManager: GridLayoutManager
     private var mListPostcard: ArrayList<PostcardAdapter.PostCard> = arrayListOf()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityPostCardViewerBinding.inflate(layoutInflater)
+        mBinding = ActivityPostcardViewerBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
         mBinding.toolbar.setNavigationOnClickListener { onBackPressed() }
-//        setSupportActionBar(toolbar)
+        setSupportActionBar(mBinding.toolbar)
         FontUtils.getTypeface(this, config.settingFontName)?.let {
             mBinding.toolbarLayout.setCollapsedTitleTypeface(it)
             mBinding.toolbarLayout.setExpandedTitleTypeface(it)
@@ -49,7 +58,7 @@ class PostcardViewerActivity : EasyDiaryActivity() {
 //        }
         
         val spacesItemDecoration = SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding))
-        val gridLayoutManager = androidx.recyclerview.widget.GridLayoutManager(this, 2)
+        mGridLayoutManager = GridLayoutManager(this, if (isLandScape()) config.postcardSpanCountLandscape else config.postcardSpanCountPortrait)
 
         EasyDiaryUtils.initWorkingDirectory(this@PostcardViewerActivity)
         mPostcardAdapter = PostcardAdapter(
@@ -61,9 +70,9 @@ class PostcardViewerActivity : EasyDiaryActivity() {
                     TransitionHelper.startActivityWithTransition(this@PostcardViewerActivity, intent)
                 }
         )
-        
+
         mBinding.contentPostCardViewer.root.apply {
-            layoutManager = gridLayoutManager
+            layoutManager = mGridLayoutManager
             addItemDecoration(spacesItemDecoration)
             adapter = mPostcardAdapter
 //            setHasFixedSize(true)
@@ -92,6 +101,73 @@ class PostcardViewerActivity : EasyDiaryActivity() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        supportActionBar?.setBackgroundDrawable(null)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.postcard_viewer, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.layout -> openGridSettingDialog()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun openGridSettingDialog() {
+        var alertDialog: AlertDialog? = null
+        val builder = AlertDialog.Builder(this)
+        builder.setNegativeButton(getString(android.R.string.cancel), null)
+        val inflater = getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val containerView = inflater.inflate(R.layout.dialog_option_item, mBinding.root, false)
+        val listView = containerView.findViewById<ListView>(R.id.listView)
+
+        var selectedIndex = 0
+        val listMaxLines = java.util.ArrayList<Map<String, String>>()
+        for (i in 1..10) {
+            listMaxLines.add(mapOf("optionTitle" to getString(R.string.postcard_grid_option_column_number, i), "optionValue" to "$i"))
+        }
+
+        var postcardSpanCount = 0
+        listMaxLines.mapIndexed { index, map ->
+            val size = map["optionValue"] ?: "0"
+            when {
+                isLandScape() && config.postcardSpanCountLandscape == size.toInt() -> {
+                    postcardSpanCount = config.postcardSpanCountLandscape
+                    selectedIndex = index
+                }
+                !isLandScape() && config.postcardSpanCountPortrait == size.toInt() -> {
+                    postcardSpanCount = config.postcardSpanCountPortrait
+                    selectedIndex = index
+                }
+            }
+        }
+
+        val arrayAdapter = OptionItemAdapter(this, R.layout.item_check_label, listMaxLines, postcardSpanCount.toFloat())
+        listView.adapter = arrayAdapter
+        listView.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
+            @Suppress("UNCHECKED_CAST") val optionInfo = parent.adapter.getItem(position) as HashMap<String, String>
+            optionInfo["optionValue"]?.let {
+//                config.summaryMaxLines = it.toInt()
+//                initPreference()
+                when (isLandScape()) {
+                    true -> config.postcardSpanCountLandscape = it.toInt()
+                    false -> config.postcardSpanCountPortrait = it.toInt()
+                }
+                mGridLayoutManager.spanCount = it.toInt()
+                mPostcardAdapter.notifyDataSetChanged()
+            }
+            alertDialog?.cancel()
+        }
+
+        alertDialog = builder.create().apply { updateAlertDialog(this, null, containerView, getString(R.string.postcard_grid_option_title)) }
+        listView.setSelection(selectedIndex)
     }
 
     private fun initPostCard() {
