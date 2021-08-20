@@ -134,12 +134,12 @@ class DiaryReadActivity : EasyDiaryActivity() {
 //                    //                startActivityForResult(postCardIntent, Constants.REQUEST_CODE_BACKGROUND_COLOR_PICKER);
 //                    TransitionHelper.startActivityWithTransition(this@DiaryReadActivity, postCardIntent)
 //                }
-                R.id.encryptData -> {
-                    showEncryptPagePopup(fragment, ENCRYPTION)
-                }
-                R.id.decryptData -> {
-                    showEncryptPagePopup(fragment, DECRYPTION)
-                }
+//                R.id.encryptData -> {
+//                    showEncryptPagePopup(fragment, ENCRYPTION)
+//                }
+//                R.id.decryptData -> {
+//                    showEncryptPagePopup(fragment, DECRYPTION)
+//                }
                 R.id.popupMenu -> createCustomOptionMenu()
             }
         }
@@ -449,6 +449,11 @@ class DiaryReadActivity : EasyDiaryActivity() {
             FontUtils.setFontsTypeface(applicationContext, null, this, true)
             val fragment = mSectionsPagerAdapter.instantiateItem(mBinding.diaryViewPager, mBinding.diaryViewPager.currentItem) as PlaceholderFragment
             pmrBinding.run {
+                when (mIsEncryptData) {
+                    true -> decryptData.visibility = View.VISIBLE
+                    false -> encryptData.visibility = View.VISIBLE
+                }
+
                 delete.setOnClickListener {
                     val positiveListener = DialogInterface.OnClickListener { _, _ ->
                         EasyDiaryDbHelper.deleteDiaryBy(fragment.getSequence())
@@ -462,6 +467,8 @@ class DiaryReadActivity : EasyDiaryActivity() {
                     postCardIntent.putExtra(DIARY_SEQUENCE, fragment.getSequence())
                     TransitionHelper.startActivityWithTransition(this@DiaryReadActivity, postCardIntent)
                 }
+                encryptData.setOnClickListener { showEncryptPagePopup(fragment, ENCRYPTION) }
+                decryptData.setOnClickListener { showEncryptPagePopup(fragment, DECRYPTION) }
             }
         }
         popupWindow = EasyDiaryUtils.openCustomOptionMenu(popupView, findViewById(R.id.popupMenu))

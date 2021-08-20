@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -25,7 +26,31 @@
                     style="@style/image_view_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
                     style="@style/text_view_popup_menu_item"
-                    android:text="Postcard Creation" />
+                    android:text="Postcard Making" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                style="@style/linear_popup_menu_item"
+                tools:visibility="visible"
+                android:visibility="gone"
+                android:id="@+id/encryptData">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:src="@drawable/padlock"
+                    style="@style/image_view_popup_menu_icon" />
+                <me.blog.korn123.easydiary.views.FixedTextView
+                    style="@style/text_view_popup_menu_item"
+                    android:text="Encrypt Data" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                style="@style/linear_popup_menu_item"
+                tools:visibility="visible"
+                android:visibility="gone"
+                android:id="@+id/decryptData">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:src="@drawable/unlock"
+                    style="@style/image_view_popup_menu_icon" />
+                <me.blog.korn123.easydiary.views.FixedTextView
+                    style="@style/text_view_popup_menu_item"
+                    android:text="Decrypt Data" />
             </androidx.appcompat.widget.LinearLayoutCompat>
             <androidx.appcompat.widget.LinearLayoutCompat
                 style="@style/linear_popup_menu_item"

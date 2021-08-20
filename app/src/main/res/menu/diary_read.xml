@@ -14,18 +14,6 @@
         android:title="@string/text_to_speech"
         app:showAsAction="always" />
     <item
-        android:id="@+id/encryptData"
-        android:icon="@drawable/padlock"
-        android:orderInCategory="100"
-        android:title="EncryptData"
-        app:showAsAction="always" />
-    <item
-        android:id="@+id/decryptData"
-        android:icon="@drawable/unlock"
-        android:orderInCategory="100"
-        android:title="DecryptData"
-        app:showAsAction="always" />
-    <item
         android:icon="@drawable/ic_options_three_dots"
         android:id="@+id/popupMenu"
         android:orderInCategory="100"
