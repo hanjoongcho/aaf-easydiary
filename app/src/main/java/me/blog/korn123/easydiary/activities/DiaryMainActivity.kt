@@ -285,7 +285,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         mPopupMenuBinding.run {
             updateAppViews(this.root)
             updateTextColors(this.root)
-            FontUtils.setFontsTypeface(applicationContext, null, this.root, true)
+            FontUtils.setFontsTypeface(this@DiaryMainActivity, null, this.root, true)
             postCard.setOnClickListener(customItemClickListener)
             dashboard.setOnClickListener(customItemClickListener)
             chart.setOnClickListener(customItemClickListener)
@@ -295,6 +295,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     }
 
     private fun openCustomOptionMenu() {
+        FontUtils.setFontsTypeface(this@DiaryMainActivity, null, mPopupMenuBinding.root, true)
         mPopupMenuBinding.devConsole.visibility = if (config.enableDebugMode) View.VISIBLE else View.GONE
         mPopupWindow = EasyDiaryUtils.openCustomOptionMenu(mPopupMenuBinding.root, findViewById(R.id.popupMenu))
         updateDrawableColorInnerCardView(R.drawable.bug_2)
