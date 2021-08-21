@@ -784,4 +784,7 @@
     <string name="enable_review_flow_summary">If you use Easy Diary for a specific period, the Google Play review registration dialog will be activated. If you do not want to use the review registration function or if the Google Play dialog opens after review registration, you can disable this option to prevent the dialog from opening.</string>
     <string name="postcard_grid_option_title">Postcard grid options</string>
     <string name="postcard_grid_option_column_number">%d column per row</string>
+    <string name="encrypt_diary">Encrypt Diary</string>
+    <string name="decrypt_diary">Decrypt Diary</string>
+    <string name="postcard_making">Postcard Making</string>
 </resources>

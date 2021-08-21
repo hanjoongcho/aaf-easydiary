@@ -26,7 +26,7 @@
                     style="@style/image_view_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
                     style="@style/text_view_popup_menu_item"
-                    android:text="Postcard Making" />
+                    android:text="@string/postcard_making" />
             </androidx.appcompat.widget.LinearLayoutCompat>
             <androidx.appcompat.widget.LinearLayoutCompat
                 style="@style/linear_popup_menu_item"
@@ -38,7 +38,7 @@
                     style="@style/image_view_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
                     style="@style/text_view_popup_menu_item"
-                    android:text="Encrypt Data" />
+                    android:text="@string/encrypt_diary" />
             </androidx.appcompat.widget.LinearLayoutCompat>
             <androidx.appcompat.widget.LinearLayoutCompat
                 style="@style/linear_popup_menu_item"
@@ -50,7 +50,7 @@
                     style="@style/image_view_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
                     style="@style/text_view_popup_menu_item"
-                    android:text="Decrypt Data" />
+                    android:text="@string/decrypt_diary" />
             </androidx.appcompat.widget.LinearLayoutCompat>
             <androidx.appcompat.widget.LinearLayoutCompat
                 style="@style/linear_popup_menu_item"
