@@ -664,9 +664,11 @@ class DiaryReadActivity : EasyDiaryActivity() {
         }
 
         fun decryptDataOnce(inputPass: String) {
-            mBinding.run {
-                diaryTitle.text = JasyptUtils.decrypt(diaryTitle.text.toString(), inputPass)
-                diaryContents.text = JasyptUtils.decrypt(diaryContents.text.toString(), inputPass)
+            EasyDiaryDbHelper.findDiaryBy(getSequence())?.let { diaryDto ->
+                mBinding.run {
+                    diaryTitle.text = JasyptUtils.decrypt(diaryDto.title!!, inputPass)
+                    diaryContents.text = JasyptUtils.decrypt(diaryDto.contents!!, inputPass)
+                }
             }
         }
 
