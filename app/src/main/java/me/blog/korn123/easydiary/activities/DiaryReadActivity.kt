@@ -479,6 +479,10 @@ class DiaryReadActivity : EasyDiaryActivity() {
             }
         }
         popupWindow = EasyDiaryUtils.openCustomOptionMenu(popupView, findViewById(R.id.popupMenu))
+        updateDrawableColorInnerCardView(R.drawable.picture_w)
+        updateDrawableColorInnerCardView(R.drawable.padlock)
+        updateDrawableColorInnerCardView(R.drawable.unlock)
+        updateDrawableColorInnerCardView(R.drawable.delete_w)
     }
 
     /**
