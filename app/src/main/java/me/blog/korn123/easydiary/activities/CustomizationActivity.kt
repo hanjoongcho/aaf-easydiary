@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.activities
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -9,13 +10,13 @@ import com.simplemobiletools.commons.extensions.setBackgroundWithStroke
 import io.github.aafactory.commons.activities.BaseSimpleActivity
 import io.github.aafactory.commons.dialogs.LineColorPickerDialog
 import io.github.aafactory.commons.extensions.*
+import io.github.aafactory.commons.extensions.getThemeId
+import io.github.aafactory.commons.extensions.updateAppViews
+import io.github.aafactory.commons.extensions.updateTextColors
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityCustomizationBinding
-import me.blog.korn123.easydiary.extensions.initTextSize
-import me.blog.korn123.easydiary.extensions.pauseLock
-import me.blog.korn123.easydiary.extensions.resumeLock
-import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
+import me.blog.korn123.easydiary.extensions.*
 
 /**
  * Created by CHO HANJOONG on 2018-02-06.
@@ -57,9 +58,13 @@ class CustomizationActivity : BaseSimpleActivity() {
             customizationBackgroundColorHolder.setOnClickListener { pickBackgroundColor() }
             customizationScreenBackgroundColorHolder.setOnClickListener { pickScreenBackgroundColor() }
             customizationPrimaryColorHolder.setOnClickListener { pickPrimaryColor() }
-            autoSetupEasyDiaryTheme.setOnClickListener {  }
-            autoSetupDarkTheme.setOnClickListener {
-                setCurrentBackgroundColor(121212)
+            imageAutoSetupEasyDiaryTheme.setOnClickListener {
+
+                setCurrentBackgroundColor(Color.parseColor("#121212"))
+                colorChanged()
+            }
+            imageAutoSetupDarkTheme.setOnClickListener {
+                setCurrentBackgroundColor(Color.parseColor("#464646"))
                 colorChanged()
             }
         }
@@ -156,6 +161,7 @@ class CustomizationActivity : BaseSimpleActivity() {
     }
 
     private fun setCurrentBackgroundColor(color: Int) {
+        makeToast("$color")
         curBackgroundColor = color
         updateAppViews(mActivityCustomizationBinding.mainHolder, curBackgroundColor)
     }

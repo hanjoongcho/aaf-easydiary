@@ -169,6 +169,7 @@
                             android:paddingRight="@dimen/medium_margin"
                             android:text="Dark Theme"/>
                         <ImageView
+                            android:id="@+id/image_auto_setup_dark_theme"
                             android:background="?attr/selectableItemBackgroundBorderless"
                             android:padding="10dp"
                             android:src="@drawable/update"
@@ -195,6 +196,7 @@
                             android:paddingRight="@dimen/medium_margin"
                             android:text="Dark Theme"/>
                         <ImageView
+                            android:id="@+id/image_auto_setup_easy_diary_theme"
                             android:background="?attr/selectableItemBackgroundBorderless"
                             android:padding="10dp"
                             android:src="@drawable/update"
