@@ -148,11 +148,64 @@
                             android:clickable="false"/>
                     </RelativeLayout>
                     <com.simplemobiletools.commons.views.MyTextView
+                        android:id="@+id/auto_setup_label"
                         android:layout_below="@+id/customization_text_color_holder"
                         android:textStyle="bold"
                         android:text="테마를 이용한 자동설정"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
+                    <RelativeLayout
+                        android:layout_below="@+id/auto_setup_label"
+                        android:id="@+id/auto_setup_dark_theme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/medium_margin"
+                        android:padding="@dimen/activity_margin">
+                        <com.simplemobiletools.commons.views.MyTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:paddingLeft="@dimen/medium_margin"
+                            android:paddingRight="@dimen/medium_margin"
+                            android:text="Dark Theme"/>
+                        <ImageView
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:padding="10dp"
+                            android:src="@drawable/update"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginEnd="@dimen/medium_margin"
+                            android:layout_marginRight="@dimen/medium_margin"
+                            android:clickable="false"/>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_below="@+id/auto_setup_dark_theme"
+                        android:id="@+id/auto_setup_easy_diary_theme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/medium_margin"
+                        android:padding="@dimen/activity_margin">
+                        <com.simplemobiletools.commons.views.MyTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:paddingLeft="@dimen/medium_margin"
+                            android:paddingRight="@dimen/medium_margin"
+                            android:text="Dark Theme"/>
+                        <ImageView
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:padding="10dp"
+                            android:src="@drawable/update"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginEnd="@dimen/medium_margin"
+                            android:layout_marginRight="@dimen/medium_margin"
+                            android:clickable="false"/>
+                    </RelativeLayout>
                 </RelativeLayout>
             </ScrollView>
         </androidx.cardview.widget.CardView>

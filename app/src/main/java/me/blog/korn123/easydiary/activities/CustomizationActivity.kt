@@ -15,6 +15,7 @@ import me.blog.korn123.easydiary.databinding.ActivityCustomizationBinding
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.resumeLock
+import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
 
 /**
  * Created by CHO HANJOONG on 2018-02-06.
@@ -48,6 +49,7 @@ class CustomizationActivity : BaseSimpleActivity() {
             updateTextColors(mainHolder)
             updateAppViews(mainHolder)
             initTextSize(mainHolder)
+            updateDrawableColorInnerCardView(R.drawable.update)
             initColorVariables()
             setupColorsPickers()
 
@@ -55,6 +57,11 @@ class CustomizationActivity : BaseSimpleActivity() {
             customizationBackgroundColorHolder.setOnClickListener { pickBackgroundColor() }
             customizationScreenBackgroundColorHolder.setOnClickListener { pickScreenBackgroundColor() }
             customizationPrimaryColorHolder.setOnClickListener { pickPrimaryColor() }
+            autoSetupEasyDiaryTheme.setOnClickListener {  }
+            autoSetupDarkTheme.setOnClickListener {
+                setCurrentBackgroundColor(121212)
+                colorChanged()
+            }
         }
     }
 
