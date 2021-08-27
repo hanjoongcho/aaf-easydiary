@@ -16,54 +16,40 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
     </com.google.android.material.appbar.AppBarLayout>
-
     <RelativeLayout
         android:id="@+id/main_holder"
         android:padding="@dimen/card_layout_padding"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <androidx.cardview.widget.CardView
-            xmlns:android="http://schemas.android.com/apk/res/android"
             style="@style/AppCard.Customization">
             <ScrollView
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <com.simplemobiletools.commons.views.MyTextView
+                        android:id="@+id/user_setup_label"
                         android:text="사용자 정의 설정"
-                        android:textStyle="bold"
+                        android:padding="@dimen/activity_margin"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                     <RelativeLayout
                         android:id="@+id/customization_primary_color_holder"
+                        android:layout_below="@+id/user_setup_label"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/medium_margin"
                         android:background="?attr/selectableItemBackground"
                         android:padding="@dimen/activity_margin">
                         <com.simplemobiletools.commons.views.MyTextView
+                            style="@style/text_custom_theme_item"
                             android:id="@+id/customization_primary_color_label"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:paddingLeft="@dimen/medium_margin"
-                            android:paddingRight="@dimen/medium_margin"
                             android:text="@string/primary_color"/>
-
                         <ImageView
-                            android:id="@+id/customization_primary_color"
-                            android:layout_width="@dimen/color_sample_size"
-                            android:layout_height="@dimen/color_sample_size"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginEnd="@dimen/medium_margin"
-                            android:layout_marginRight="@dimen/medium_margin"
-                            android:clickable="false"/>
+                            style="@style/image_custom_theme_icon"
+                            android:id="@+id/customization_primary_color" />
                     </RelativeLayout>
-
                     <RelativeLayout
                         android:id="@+id/customization_background_color_holder"
                         android:layout_width="match_parent"
@@ -73,25 +59,13 @@
                         android:background="?attr/selectableItemBackground"
                         android:padding="@dimen/activity_margin">
                         <com.simplemobiletools.commons.views.MyTextView
+                            style="@style/text_custom_theme_item"
                             android:id="@+id/customization_background_color_label"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:paddingLeft="@dimen/medium_margin"
-                            android:paddingRight="@dimen/medium_margin"
                             android:text="@string/background_color"/>
-
                         <ImageView
-                            android:id="@+id/customization_background_color"
-                            android:layout_width="@dimen/color_sample_size"
-                            android:layout_height="@dimen/color_sample_size"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginEnd="@dimen/medium_margin"
-                            android:layout_marginRight="@dimen/medium_margin"
-                            android:clickable="false"/>
+                            style="@style/image_custom_theme_icon"
+                            android:id="@+id/customization_background_color" />
                     </RelativeLayout>
-
                     <RelativeLayout
                         android:id="@+id/customization_screen_background_color_holder"
                         android:layout_width="match_parent"
@@ -101,25 +75,13 @@
                         android:background="?attr/selectableItemBackground"
                         android:padding="@dimen/activity_margin">
                         <com.simplemobiletools.commons.views.MyTextView
+                            style="@style/text_custom_theme_item"
                             android:id="@+id/customization_background_color_label2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:paddingLeft="@dimen/medium_margin"
-                            android:paddingRight="@dimen/medium_margin"
                             android:text="@string/screen_background_color"/>
-
                         <ImageView
-                            android:id="@+id/customization_screen_background_color"
-                            android:layout_width="@dimen/color_sample_size"
-                            android:layout_height="@dimen/color_sample_size"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginEnd="@dimen/medium_margin"
-                            android:layout_marginRight="@dimen/medium_margin"
-                            android:clickable="false"/>
+                            style="@style/image_custom_theme_icon"
+                            android:id="@+id/customization_screen_background_color" />
                     </RelativeLayout>
-
                     <RelativeLayout
                         android:id="@+id/customization_text_color_holder"
                         android:layout_below="@+id/customization_screen_background_color_holder"
@@ -129,28 +91,17 @@
                         android:background="?attr/selectableItemBackground"
                         android:padding="@dimen/activity_margin">
                         <com.simplemobiletools.commons.views.MyTextView
+                            style="@style/text_custom_theme_item"
                             android:id="@+id/customization_text_color_label"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:paddingLeft="@dimen/medium_margin"
-                            android:paddingRight="@dimen/medium_margin"
                             android:text="@string/text_color"/>
-
                         <ImageView
-                            android:id="@+id/customization_text_color"
-                            android:layout_width="@dimen/color_sample_size"
-                            android:layout_height="@dimen/color_sample_size"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginEnd="@dimen/medium_margin"
-                            android:layout_marginRight="@dimen/medium_margin"
-                            android:clickable="false"/>
+                            style="@style/image_custom_theme_icon"
+                            android:id="@+id/customization_text_color" />
                     </RelativeLayout>
                     <com.simplemobiletools.commons.views.MyTextView
                         android:id="@+id/auto_setup_label"
                         android:layout_below="@+id/customization_text_color_holder"
-                        android:textStyle="bold"
+                        android:padding="@dimen/activity_margin"
                         android:text="테마를 이용한 자동설정"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -159,19 +110,14 @@
                         android:id="@+id/auto_setup_dark_theme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/medium_margin"
                         android:padding="@dimen/activity_margin">
                         <com.simplemobiletools.commons.views.MyTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:paddingLeft="@dimen/medium_margin"
-                            android:paddingRight="@dimen/medium_margin"
+                            style="@style/text_custom_theme_item"
                             android:text="Dark Theme"/>
                         <ImageView
                             android:id="@+id/image_auto_setup_dark_theme"
                             android:background="?attr/selectableItemBackgroundBorderless"
-                            android:padding="10dp"
+                            android:padding="5dp"
                             android:src="@drawable/update"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -186,19 +132,14 @@
                         android:id="@+id/auto_setup_easy_diary_theme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/medium_margin"
                         android:padding="@dimen/activity_margin">
                         <com.simplemobiletools.commons.views.MyTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:paddingLeft="@dimen/medium_margin"
-                            android:paddingRight="@dimen/medium_margin"
+                            style="@style/text_custom_theme_item"
                             android:text="Dark Theme"/>
                         <ImageView
                             android:id="@+id/image_auto_setup_easy_diary_theme"
                             android:background="?attr/selectableItemBackgroundBorderless"
-                            android:padding="10dp"
+                            android:padding="5dp"
                             android:src="@drawable/update"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
