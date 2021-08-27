@@ -166,7 +166,6 @@ class CustomizationActivity : BaseSimpleActivity() {
     }
 
     private fun setCurrentBackgroundColor(color: Int) {
-        makeToast("$color")
         curBackgroundColor = color
         updateAppViews(mActivityCustomizationBinding.mainHolder, curBackgroundColor)
     }
