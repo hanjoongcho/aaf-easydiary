@@ -50,7 +50,7 @@ class Config(val context: Context) {
         set(sundayFirst) = prefs.edit().putBoolean(SUNDAY_FIRST, sundayFirst).apply()
 
     var screenBackgroundColor: Int
-        get() = prefs.getInt(SETTING_CARD_VIEW_BACKGROUND_COLOR, Color.parseColor("#EAEAEA"))
+        get() = prefs.getInt(SETTING_CARD_VIEW_BACKGROUND_COLOR, Color.parseColor(EASYDIARY_THEME_SCREEN_BACKGROUND_COLOR))
         set(screenBackgroundColor) = prefs.edit().putInt(SETTING_CARD_VIEW_BACKGROUND_COLOR, screenBackgroundColor).apply()
 
 

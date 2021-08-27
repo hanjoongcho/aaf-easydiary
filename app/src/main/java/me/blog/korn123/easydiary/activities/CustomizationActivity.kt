@@ -17,6 +17,7 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityCustomizationBinding
 import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.helper.*
 
 /**
  * Created by CHO HANJOONG on 2018-02-06.
@@ -59,17 +60,17 @@ class CustomizationActivity : BaseSimpleActivity() {
             customizationScreenBackgroundColorHolder.setOnClickListener { pickScreenBackgroundColor() }
             customizationPrimaryColorHolder.setOnClickListener { pickPrimaryColor() }
             imageAutoSetupEasyDiaryTheme.setOnClickListener {
-                setCurrentPrimaryColor(Color.parseColor("#07ABB3"))
-                setCurrentBackgroundColor(Color.parseColor("#FFFFFF"))
-                setCurrentScreenBackgroundColor(Color.parseColor("#EAEAEA"))
-                setCurrentTextColor(Color.parseColor("#4D4C4C"))
+                setCurrentPrimaryColor(Color.parseColor(EASYDIARY_THEME_PRIMARY_COLOR))
+                setCurrentBackgroundColor(Color.parseColor(EASYDIARY_THEME_BACKGROUND_COLOR))
+                setCurrentScreenBackgroundColor(Color.parseColor(EASYDIARY_THEME_SCREEN_BACKGROUND_COLOR))
+                setCurrentTextColor(Color.parseColor(EASYDIARY_THEME_TEXT_COLOR))
                 colorChanged()
             }
             imageAutoSetupDarkTheme.setOnClickListener {
-                setCurrentPrimaryColor(Color.parseColor("#000000"))
-                setCurrentBackgroundColor(Color.parseColor("#464646"))
-                setCurrentScreenBackgroundColor(Color.parseColor("#292929"))
-                setCurrentTextColor(Color.parseColor("#BBBBBB"))
+                setCurrentPrimaryColor(Color.parseColor(DARK_THEME_PRIMARY_COLOR))
+                setCurrentBackgroundColor(Color.parseColor(DARK_THEME_BACKGROUND_COLOR))
+                setCurrentScreenBackgroundColor(Color.parseColor(DARK_THEME_SCREEN_BACKGROUND_COLOR))
+                setCurrentTextColor(Color.parseColor(DARK_THEME_TEXT_COLOR))
                 colorChanged()
             }
         }
