@@ -61,7 +61,7 @@ class CustomizationActivity : BaseSimpleActivity() {
             imageAutoSetupEasyDiaryTheme.setOnClickListener {
                 setCurrentPrimaryColor(Color.parseColor("#07ABB3"))
                 setCurrentBackgroundColor(Color.parseColor("#FFFFFF"))
-                setCurrentScreenBackgroundColor(Color.parseColor("#05868C"))
+                setCurrentScreenBackgroundColor(Color.parseColor("#07ABB3").darkenColor())
                 setCurrentTextColor(Color.parseColor("#4D4C4C"))
                 colorChanged()
             }

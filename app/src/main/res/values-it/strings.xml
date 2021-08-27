@@ -545,6 +545,11 @@
         v1.4.172.2 / 2021.08.24\n
         User Experience (UX) Optimization
     </string>
+    <string name="release_242">
+        v1.4.172.3 / 2021.08.28\n
+        Improved custom app theme and color settings\n
+        Fixed Showcase View error related to toolbar menu change
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
