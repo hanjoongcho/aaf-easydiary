@@ -61,7 +61,7 @@ class CustomizationActivity : BaseSimpleActivity() {
             imageAutoSetupEasyDiaryTheme.setOnClickListener {
                 setCurrentPrimaryColor(Color.parseColor("#07ABB3"))
                 setCurrentBackgroundColor(Color.parseColor("#FFFFFF"))
-                setCurrentScreenBackgroundColor(Color.parseColor("#07ABB3").darkenColor())
+                setCurrentScreenBackgroundColor(Color.parseColor("#EAEAEA"))
                 setCurrentTextColor(Color.parseColor("#4D4C4C"))
                 colorChanged()
             }
@@ -120,7 +120,7 @@ class CustomizationActivity : BaseSimpleActivity() {
     override fun getMainViewGroup(): ViewGroup? = findViewById<ViewGroup>(R.id.main_holder)
 
     private fun saveChanges(finishAfterSave: Boolean) {
-        baseConfig.apply {
+        config.apply {
             textColor = curTextColor
             backgroundColor = curBackgroundColor
             screenBackgroundColor = curScreenBackgroundColor
@@ -137,10 +137,10 @@ class CustomizationActivity : BaseSimpleActivity() {
     }
 
     private fun initColorVariables() {
-        curTextColor = baseConfig.textColor
-        curBackgroundColor = baseConfig.backgroundColor
-        curScreenBackgroundColor = baseConfig.screenBackgroundColor
-        curPrimaryColor = baseConfig.primaryColor
+        curTextColor = config.textColor
+        curBackgroundColor = config.backgroundColor
+        curScreenBackgroundColor = config.screenBackgroundColor
+        curPrimaryColor = config.primaryColor
     }
 
     private fun setupColorsPickers() {

@@ -38,6 +38,7 @@ open class EasyDiaryActivity : BaseSimpleActivity() {
                 updateAppViews(it)
                 updateCardViewPolicy(it)
             }
+            updateBackgroundColor(config.screenBackgroundColor)
             FontUtils.setFontsTypeface(applicationContext, null, findViewById<ViewGroup>(android.R.id.content), mCustomLineSpacing)
         }
     }

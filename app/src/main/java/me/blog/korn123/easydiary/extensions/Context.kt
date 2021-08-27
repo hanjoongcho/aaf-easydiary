@@ -46,7 +46,6 @@ import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
 import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.*
 import com.simplemobiletools.commons.views.*
-import io.github.aafactory.commons.extensions.baseConfig
 import io.github.aafactory.commons.extensions.dpToPixel
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
@@ -99,13 +98,13 @@ fun Context.pauseLock() {
 fun Context.updateTextColors(viewGroup: ViewGroup, tmpTextColor: Int = 0, tmpAccentColor: Int = 0) {
     if (isNightMode()) return
 
-    val textColor = if (tmpTextColor == 0) baseConfig.textColor else tmpTextColor
-    val backgroundColor = baseConfig.backgroundColor
+    val textColor = if (tmpTextColor == 0) config.textColor else tmpTextColor
+    val backgroundColor = config.backgroundColor
     val accentColor = if (tmpAccentColor == 0) {
         if (isBlackAndWhiteTheme()) {
             Color.WHITE
         } else {
-            baseConfig.primaryColor
+            config.primaryColor
         }
     } else {
         tmpAccentColor
@@ -141,7 +140,7 @@ fun Context.updateTextColors(viewGroup: ViewGroup, tmpTextColor: Int = 0, tmpAcc
 fun Context.updateAppViews(viewGroup: ViewGroup, tmpBackgroundColor: Int = 0) {
     if (isNightMode()) return
 
-    val backgroundColor = if (tmpBackgroundColor == 0) baseConfig.backgroundColor else tmpBackgroundColor
+    val backgroundColor = if (tmpBackgroundColor == 0) config.backgroundColor else tmpBackgroundColor
     val cnt = viewGroup.childCount
     (0 until cnt)
             .map { viewGroup.getChildAt(it) }
@@ -318,7 +317,7 @@ fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null,
             }
             false -> setView(customView)
         }
-//        if (!isNightMode()) window?.setBackgroundDrawable(ColorDrawable(baseConfig.backgroundColor))
+//        if (!isNightMode()) window?.setBackgroundDrawable(ColorDrawable(config.backgroundColor))
         if (!isNightMode()) window?.setBackgroundDrawable(GradientDrawable().apply {
             shape = GradientDrawable.RECTANGLE
             setColor(config.backgroundColor)
@@ -330,7 +329,7 @@ fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null,
         customTitle?.let {
             val titleView = TextView(this@updateAlertDialog).apply {
                 text = customTitle
-                if (!isNightMode()) setTextColor(baseConfig.textColor)
+                if (!isNightMode()) setTextColor(config.textColor)
 //                setBackgroundColor(ContextCompat.getColor(this@updateAlertDialog, R.color.white))
                 typeface = globalTypeface
                 val padding = CommonUtils.dpToPixel(this@updateAlertDialog, 15F)
@@ -342,14 +341,14 @@ fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null,
         }
         show()
         getButton(AlertDialog.BUTTON_POSITIVE).run {
-            if (!isNightMode()) setTextColor(baseConfig.textColor)
+            if (!isNightMode()) setTextColor(config.textColor)
             typeface = globalTypeface
         }
         getButton(AlertDialog.BUTTON_NEGATIVE).run {
-            if (!isNightMode()) setTextColor(baseConfig.textColor)
+            if (!isNightMode()) setTextColor(config.textColor)
             typeface = globalTypeface
         }
-        if (!isNightMode()) getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(baseConfig.textColor)
+        if (!isNightMode()) getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(config.textColor)
     }
 }
 
