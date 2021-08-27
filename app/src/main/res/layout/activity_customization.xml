@@ -135,7 +135,7 @@
                         android:padding="@dimen/activity_margin">
                         <com.simplemobiletools.commons.views.MyTextView
                             style="@style/text_custom_theme_item"
-                            android:text="Dark Theme"/>
+                            android:text="EasyDiary Theme"/>
                         <ImageView
                             android:id="@+id/image_auto_setup_easy_diary_theme"
                             android:background="?attr/selectableItemBackgroundBorderless"
