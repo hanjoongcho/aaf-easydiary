@@ -787,4 +787,6 @@
     <string name="encrypt_diary">다이어리 암호화</string>
     <string name="decrypt_diary">다이어리 복호화</string>
     <string name="postcard_making">포스트카드 만들기</string>
+    <string name="user_custom_setting">사용자 정의 설정</string>
+    <string name="automation_settings">테마을 이용한 자동설정</string>
 </resources>

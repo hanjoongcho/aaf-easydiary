@@ -31,7 +31,7 @@
                     android:layout_height="wrap_content">
                     <com.simplemobiletools.commons.views.MyTextView
                         android:id="@+id/user_setup_label"
-                        android:text="사용자 정의 설정"
+                        android:text="@string/user_custom_setting"
                         android:padding="@dimen/activity_margin"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -102,7 +102,7 @@
                         android:id="@+id/auto_setup_label"
                         android:layout_below="@+id/customization_text_color_holder"
                         android:padding="@dimen/activity_margin"
-                        android:text="테마를 이용한 자동설정"
+                        android:text="@string/automation_settings"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                     <RelativeLayout

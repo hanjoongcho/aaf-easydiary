@@ -787,4 +787,6 @@
     <string name="encrypt_diary">日記を暗号化する</string>
     <string name="decrypt_diary">日記を解読する</string>
     <string name="postcard_making">はがき作り</string>
+    <string name="user_custom_setting">ユーザーカスタム設定</string>
+    <string name="automation_settings">テーマを使用した自動設定</string>
 </resources>

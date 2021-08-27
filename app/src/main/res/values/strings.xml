@@ -787,4 +787,6 @@
     <string name="encrypt_diary">Encrypt Diary</string>
     <string name="decrypt_diary">Decrypt Diary</string>
     <string name="postcard_making">Postcard Making</string>
+    <string name="user_custom_setting">User Custom Setting</string>
+    <string name="automation_settings">Automatic setting using themes</string>
 </resources>
