@@ -59,10 +59,10 @@ class CustomizationActivity : BaseSimpleActivity() {
             customizationScreenBackgroundColorHolder.setOnClickListener { pickScreenBackgroundColor() }
             customizationPrimaryColorHolder.setOnClickListener { pickPrimaryColor() }
             imageAutoSetupEasyDiaryTheme.setOnClickListener {
-                setCurrentPrimaryColor(Color.parseColor("#0097A7"))
+                setCurrentPrimaryColor(Color.parseColor("#07ABB3"))
                 setCurrentBackgroundColor(Color.parseColor("#FFFFFF"))
-                setCurrentScreenBackgroundColor(Color.parseColor("#FFFFFF"))
-                setCurrentTextColor(Color.parseColor("#000000"))
+                setCurrentScreenBackgroundColor(Color.parseColor("#05868C"))
+                setCurrentTextColor(Color.parseColor("#4D4C4C"))
                 colorChanged()
             }
             imageAutoSetupDarkTheme.setOnClickListener {

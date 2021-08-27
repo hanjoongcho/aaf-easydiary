@@ -366,13 +366,13 @@ class DiaryReadActivity : EasyDiaryActivity() {
                         setContentTitle(getString(R.string.read_diary_detail_showcase_title_3))
                         setContentText(getString(R.string.read_diary_detail_showcase_message_3))
                     }
-                    4 -> {
-                        setButtonPosition(centerParams)
-                        setTarget(ViewTarget(R.id.postCard, this@DiaryReadActivity))
-                        setContentTitle(getString(R.string.read_diary_detail_showcase_title_4))
-                        setContentText(getString(R.string.read_diary_detail_showcase_message_4))
-                    }
-                    5 -> hide()
+//                    4 -> {
+//                        setButtonPosition(centerParams)
+//                        setTarget(ViewTarget(R.id.postCard, this@DiaryReadActivity))
+//                        setContentTitle(getString(R.string.read_diary_detail_showcase_title_4))
+//                        setContentText(getString(R.string.read_diary_detail_showcase_message_4))
+//                    }
+                    4 -> hide()
                 }
             }
             mShowcaseIndex++
