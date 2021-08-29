@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.172.4 (date: 2021.08.29)
+  * User Experience (UX) Optimization
+
 # Changes in 1.4.172.3 (date: 2021.08.28)
   * Improved custom app theme and color settings
   * Fixed Showcase View error related to toolbar menu change
