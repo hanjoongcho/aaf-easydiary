@@ -1,9 +1,16 @@
 package me.blog.korn123.easydiary.helper
 
 import android.content.Context
-import io.github.aafactory.commons.helpers.BaseConfig
+import android.graphics.Color
+import android.text.format.DateFormat
+import androidx.preference.PreferenceManager
+import com.simplemobiletools.commons.extensions.darkenColor
+import com.simplemobiletools.commons.extensions.getSharedPrefs
+import com.simplemobiletools.commons.helpers.*
+import io.github.aafactory.commons.helpers.*
 import io.github.aafactory.commons.utils.CommonUtils
 import me.blog.korn123.easydiary.R
+import java.util.*
 
 /**
  * Created by CHO HANJOONG on 2017-12-24.
@@ -12,11 +19,56 @@ import me.blog.korn123.easydiary.R
  * https://github.com/SimpleMobileTools/Simple-Commons
  */
 
-class Config(context: Context) : BaseConfig(context) {
-    companion object {
-        fun newInstance(context: Context) = Config(context)
-    }
+class Config(val context: Context) {
+    private val legacyPrefs = PreferenceManager.getDefaultSharedPreferences(context)!!
+    private val prefs = context.getSharedPrefs()
 
+    /// ------------------------------------------------------------------
+    /// Simple Mobile Tools properties
+    /// ------------------------------------------------------------------
+    var textColor: Int
+        get() = prefs.getInt(TEXT_COLOR, context.resources.getColor(R.color.default_text_color))
+        set(textColor) = prefs.edit().putInt(TEXT_COLOR, textColor).apply()
+
+    var backgroundColor: Int
+        get() = prefs.getInt(BACKGROUND_COLOR, context.resources.getColor(R.color.default_background_color))
+        set(backgroundColor) = prefs.edit().putInt(BACKGROUND_COLOR, backgroundColor).apply()
+
+    var primaryColor: Int
+        get() = prefs.getInt(PRIMARY_COLOR, context.resources.getColor(R.color.color_primary))
+        set(primaryColor) = prefs.edit().putInt(PRIMARY_COLOR, primaryColor).apply()
+
+    var use24HourFormat: Boolean
+        get() = prefs.getBoolean(USE_24_HOUR_FORMAT, DateFormat.is24HourFormat(context))
+        set(use24HourFormat) = prefs.edit().putBoolean(USE_24_HOUR_FORMAT, use24HourFormat).apply()
+
+    var isSundayFirst: Boolean
+        get() {
+            val isSundayFirst = Calendar.getInstance(Locale.getDefault()).firstDayOfWeek == Calendar.SUNDAY
+            return prefs.getBoolean(SUNDAY_FIRST, isSundayFirst)
+        }
+        set(sundayFirst) = prefs.edit().putBoolean(SUNDAY_FIRST, sundayFirst).apply()
+
+    var screenBackgroundColor: Int
+        get() = prefs.getInt(SETTING_CARD_VIEW_BACKGROUND_COLOR, Color.parseColor(EASYDIARY_THEME_SCREEN_BACKGROUND_COLOR))
+        set(screenBackgroundColor) = prefs.edit().putInt(SETTING_CARD_VIEW_BACKGROUND_COLOR, screenBackgroundColor).apply()
+
+
+    /// ------------------------------------------------------------------
+    /// Awesome Application Factory legacy properties
+    /// ------------------------------------------------------------------
+    var aafPinLockPauseMillis: Long
+        get() = prefs.getLong(AAF_PIN_LOCK_PAUSE_MILLIS, 0L)
+        set(aafPinLockPauseMillis) = prefs.edit().putLong(AAF_PIN_LOCK_PAUSE_MILLIS, aafPinLockPauseMillis).apply()
+
+    var isThemeChanged: Boolean
+        get() = prefs.getBoolean(AAF_THEME_CHANGE, false)
+        set(isThemeChanged) = prefs.edit().putBoolean(AAF_THEME_CHANGE, isThemeChanged).apply()
+
+
+    /// ------------------------------------------------------------------
+    /// Easy Diary properties
+    /// ------------------------------------------------------------------
     var settingFontName: String
         get() = legacyPrefs.getString(SETTING_FONT_NAME, CUSTOM_FONTS_SUPPORTED_LANGUAGE_DEFAULT)!!
         set(settingFontName) = legacyPrefs.edit().putString(SETTING_FONT_NAME, settingFontName).apply()
@@ -164,4 +216,8 @@ class Config(context: Context) : BaseConfig(context) {
     var postcardSpanCountPortrait: Int
         get() = prefs.getInt(SETTING_POSTCARD_SPAN_COUNT_PORTRAIT, 2)
         set(postcardSpanCountPortrait) = prefs.edit().putInt(SETTING_POSTCARD_SPAN_COUNT_PORTRAIT, postcardSpanCountPortrait).apply()
+
+    companion object {
+        fun newInstance(context: Context) = Config(context)
+    }
 }

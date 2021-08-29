@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.activities
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -395,7 +396,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             val detailIntent = Intent(this@DiaryMainActivity, DiaryReadActivity::class.java)
             detailIntent.putExtra(DIARY_SEQUENCE, diaryDto.sequence)
             detailIntent.putExtra(SELECTED_SEARCH_QUERY, mDiaryMainItemAdapter?.currentQuery)
-            detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE,viewModel.symbol.value ?: 0)
+            detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE, viewModel.symbol.value ?: 0)
             TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, detailIntent)
         }
 
@@ -446,7 +447,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
 
     private fun refreshList(query: String) {
         mDiaryList.clear()
-        mDiaryList.addAll(EasyDiaryDbHelper.findDiary(query, config.diarySearchQueryCaseSensitive, 0, 0, viewModel.symbol.value ?: 0))
+        mDiaryList.addAll(EasyDiaryDbHelper.findDiary(query, config.diarySearchQueryCaseSensitive, 0, 0, viewModel.symbol.value
+                ?: 0))
         mDiaryMainItemAdapter?.currentQuery = query
         mDiaryMainItemAdapter?.notifyDataSetChanged()
     }

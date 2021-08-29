@@ -1,6 +1,7 @@
 <io.github.aafactory.commons.views.LabelLayout
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bottomToolbar"
     android:foreground="?attr/selectableItemBackground"
     android:orientation="horizontal"
@@ -10,7 +11,9 @@
     android:layout_height="wrap_content">
     <me.blog.korn123.easydiary.views.FixedTextView
         app:applyGlobalSize="true"
-        app:applyGlobalColor="true"
+        app:applyGlobalColor="false"
+        tools:text="3"
+        android:textColor="@android:color/white"
         android:id="@+id/bottomTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -9,7 +9,7 @@ import com.simplemobiletools.commons.dialogs.ColorPickerDialog
 import com.simplemobiletools.commons.extensions.setBackgroundWithStroke
 import io.github.aafactory.commons.activities.BaseSimpleActivity
 import io.github.aafactory.commons.dialogs.LineColorPickerDialog
-import io.github.aafactory.commons.extensions.*
+import io.github.aafactory.commons.extensions.darkenColor
 import io.github.aafactory.commons.extensions.getThemeId
 import io.github.aafactory.commons.extensions.updateAppViews
 import io.github.aafactory.commons.extensions.updateTextColors
@@ -17,6 +17,7 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityCustomizationBinding
 import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.helper.*
 
 /**
  * Created by CHO HANJOONG on 2018-02-06.
@@ -58,18 +59,18 @@ class CustomizationActivity : BaseSimpleActivity() {
             customizationBackgroundColorHolder.setOnClickListener { pickBackgroundColor() }
             customizationScreenBackgroundColorHolder.setOnClickListener { pickScreenBackgroundColor() }
             customizationPrimaryColorHolder.setOnClickListener { pickPrimaryColor() }
-            imageAutoSetupEasyDiaryTheme.setOnClickListener {
-                setCurrentPrimaryColor(Color.parseColor("#07ABB3"))
-                setCurrentBackgroundColor(Color.parseColor("#FFFFFF"))
-                setCurrentScreenBackgroundColor(Color.parseColor("#07ABB3").darkenColor())
-                setCurrentTextColor(Color.parseColor("#4D4C4C"))
+            autoSetupEasyDiaryTheme.setOnClickListener {
+                setCurrentPrimaryColor(Color.parseColor(EASYDIARY_THEME_PRIMARY_COLOR))
+                setCurrentBackgroundColor(Color.parseColor(EASYDIARY_THEME_BACKGROUND_COLOR))
+                setCurrentScreenBackgroundColor(Color.parseColor(EASYDIARY_THEME_SCREEN_BACKGROUND_COLOR))
+                setCurrentTextColor(Color.parseColor(EASYDIARY_THEME_TEXT_COLOR))
                 colorChanged()
             }
-            imageAutoSetupDarkTheme.setOnClickListener {
-                setCurrentPrimaryColor(Color.parseColor("#000000"))
-                setCurrentBackgroundColor(Color.parseColor("#464646"))
-                setCurrentScreenBackgroundColor(Color.parseColor("#292929"))
-                setCurrentTextColor(Color.parseColor("#BBBBBB"))
+            autoSetupDarkTheme.setOnClickListener {
+                setCurrentPrimaryColor(Color.parseColor(DARK_THEME_PRIMARY_COLOR))
+                setCurrentBackgroundColor(Color.parseColor(DARK_THEME_BACKGROUND_COLOR))
+                setCurrentScreenBackgroundColor(Color.parseColor(DARK_THEME_SCREEN_BACKGROUND_COLOR))
+                setCurrentTextColor(Color.parseColor(DARK_THEME_TEXT_COLOR))
                 colorChanged()
             }
         }
@@ -120,7 +121,7 @@ class CustomizationActivity : BaseSimpleActivity() {
     override fun getMainViewGroup(): ViewGroup? = findViewById<ViewGroup>(R.id.main_holder)
 
     private fun saveChanges(finishAfterSave: Boolean) {
-        baseConfig.apply {
+        config.apply {
             textColor = curTextColor
             backgroundColor = curBackgroundColor
             screenBackgroundColor = curScreenBackgroundColor
@@ -137,10 +138,10 @@ class CustomizationActivity : BaseSimpleActivity() {
     }
 
     private fun initColorVariables() {
-        curTextColor = baseConfig.textColor
-        curBackgroundColor = baseConfig.backgroundColor
-        curScreenBackgroundColor = baseConfig.screenBackgroundColor
-        curPrimaryColor = baseConfig.primaryColor
+        curTextColor = config.textColor
+        curBackgroundColor = config.backgroundColor
+        curScreenBackgroundColor = config.screenBackgroundColor
+        curPrimaryColor = config.primaryColor
     }
 
     private fun setupColorsPickers() {

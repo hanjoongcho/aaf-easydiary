@@ -472,6 +472,20 @@ const val MIME_TYPE_HTML = "text/html"
 
 
 /***************************************************************************************************
+ *   Theme Color
+ *
+ ***************************************************************************************************/
+const val DARK_THEME_PRIMARY_COLOR = "#000000"
+const val DARK_THEME_BACKGROUND_COLOR = "#464646"
+const val DARK_THEME_SCREEN_BACKGROUND_COLOR = "#292929"
+const val DARK_THEME_TEXT_COLOR = "#BBBBBB"
+const val EASYDIARY_THEME_PRIMARY_COLOR = "#07ABB3"
+const val EASYDIARY_THEME_BACKGROUND_COLOR = "#FFFFFF"
+const val EASYDIARY_THEME_SCREEN_BACKGROUND_COLOR = "#EAEAEA"
+const val EASYDIARY_THEME_TEXT_COLOR = "#4D4C4C"
+
+
+/***************************************************************************************************
  *   Etc constants
  *
  ***************************************************************************************************/

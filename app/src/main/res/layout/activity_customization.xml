@@ -110,14 +110,12 @@
                         android:id="@+id/auto_setup_dark_theme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground"
                         android:padding="@dimen/activity_margin">
                         <com.simplemobiletools.commons.views.MyTextView
                             style="@style/text_custom_theme_item"
                             android:text="Dark Theme"/>
                         <ImageView
-                            android:id="@+id/image_auto_setup_dark_theme"
-                            android:background="?attr/selectableItemBackgroundBorderless"
-                            android:padding="5dp"
                             android:src="@drawable/update"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -129,17 +127,16 @@
                     </RelativeLayout>
                     <RelativeLayout
                         android:layout_below="@+id/auto_setup_dark_theme"
+                        android:layout_marginTop="@dimen/medium_margin"
                         android:id="@+id/auto_setup_easy_diary_theme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground"
                         android:padding="@dimen/activity_margin">
                         <com.simplemobiletools.commons.views.MyTextView
                             style="@style/text_custom_theme_item"
                             android:text="EasyDiary Theme"/>
                         <ImageView
-                            android:id="@+id/image_auto_setup_easy_diary_theme"
-                            android:background="?attr/selectableItemBackgroundBorderless"
-                            android:padding="5dp"
                             android:src="@drawable/update"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
