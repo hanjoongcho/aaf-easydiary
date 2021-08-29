@@ -9,7 +9,7 @@ import com.simplemobiletools.commons.dialogs.ColorPickerDialog
 import com.simplemobiletools.commons.extensions.setBackgroundWithStroke
 import io.github.aafactory.commons.activities.BaseSimpleActivity
 import io.github.aafactory.commons.dialogs.LineColorPickerDialog
-import io.github.aafactory.commons.extensions.*
+import io.github.aafactory.commons.extensions.darkenColor
 import io.github.aafactory.commons.extensions.getThemeId
 import io.github.aafactory.commons.extensions.updateAppViews
 import io.github.aafactory.commons.extensions.updateTextColors
@@ -59,14 +59,14 @@ class CustomizationActivity : BaseSimpleActivity() {
             customizationBackgroundColorHolder.setOnClickListener { pickBackgroundColor() }
             customizationScreenBackgroundColorHolder.setOnClickListener { pickScreenBackgroundColor() }
             customizationPrimaryColorHolder.setOnClickListener { pickPrimaryColor() }
-            imageAutoSetupEasyDiaryTheme.setOnClickListener {
+            autoSetupEasyDiaryTheme.setOnClickListener {
                 setCurrentPrimaryColor(Color.parseColor(EASYDIARY_THEME_PRIMARY_COLOR))
                 setCurrentBackgroundColor(Color.parseColor(EASYDIARY_THEME_BACKGROUND_COLOR))
                 setCurrentScreenBackgroundColor(Color.parseColor(EASYDIARY_THEME_SCREEN_BACKGROUND_COLOR))
                 setCurrentTextColor(Color.parseColor(EASYDIARY_THEME_TEXT_COLOR))
                 colorChanged()
             }
-            imageAutoSetupDarkTheme.setOnClickListener {
+            autoSetupDarkTheme.setOnClickListener {
                 setCurrentPrimaryColor(Color.parseColor(DARK_THEME_PRIMARY_COLOR))
                 setCurrentBackgroundColor(Color.parseColor(DARK_THEME_BACKGROUND_COLOR))
                 setCurrentScreenBackgroundColor(Color.parseColor(DARK_THEME_SCREEN_BACKGROUND_COLOR))
