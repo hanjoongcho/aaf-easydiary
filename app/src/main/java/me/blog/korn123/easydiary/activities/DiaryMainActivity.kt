@@ -2,42 +2,37 @@ package me.blog.korn123.easydiary.activities
 
 import android.app.Activity
 import android.content.ActivityNotFoundException
-import android.content.DialogInterface
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.*
 import android.widget.AbsListView
 import android.widget.AdapterView
 import android.widget.PopupWindow
 import android.widget.RelativeLayout
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.github.ksoichiro.android.observablescrollview.ObservableListView
 import com.nineoldandroids.view.ViewHelper
-import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.EditActivity.Companion.DIARY_SEQUENCE_INIT
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
 import me.blog.korn123.easydiary.databinding.PopupMenuMainBinding
 import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
-import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.StringUtils
-import java.io.File
 import java.util.*
 
 /**
@@ -55,8 +50,38 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     private var mDiaryList: ArrayList<DiaryDto> = arrayListOf()
     private var mShowcaseIndex = 0
     private var mShowcaseView: ShowcaseView? = null
-    private var popupWindow: PopupWindow? = null
-    var mDiaryMode = DiaryMode.READ
+    private var mPopupWindow: PopupWindow? = null
+    private val mRequestSpeechInputLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.let {
+                mBinding.query.setText(it[0])
+                mBinding.query.setSelection(it[0].length)
+            }
+        }
+        pauseLock()
+    }
+    private val mRequestSAFForHtmlBookLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.let {
+                mDiaryMainItemAdapter?.getSelectedItems()?.run {
+                    mBinding.progressCoroutine.visibility = View.VISIBLE
+                    CoroutineScope(Dispatchers.IO).launch {
+                        exportHtmlBook(it.data, this@run)
+                        withContext(Dispatchers.Main) {
+                            mBinding.progressCoroutine.visibility = View.GONE
+                            mDiaryMainItemAdapter?.getSelectedItems()?.forEach {
+                                it.isSelected = false
+                                EasyDiaryDbHelper.updateDiaryBy(it)
+                            }
+                            mDiaryMainItemAdapter?.notifyDataSetChanged()
+                        }
+                    }
+                }
+            }
+        }
+        pauseLock()
+    }
+    var diaryMode = DiaryMode.READ
 
 
     /***************************************************************************************************
@@ -72,7 +97,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             title = getString(R.string.read_diary_title)
         }
 
-        mDiaryList.addAll(EasyDiaryDbHelper.readDiary(null))
+        mDiaryList.addAll(EasyDiaryDbHelper.findDiary(null))
         mDiaryMainItemAdapter = DiaryMainItemAdapter(this, R.layout.item_diary_main, mDiaryList)
         mBinding.diaryListView.adapter = mDiaryMainItemAdapter
 
@@ -85,19 +110,25 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         bindEvent()
         initShowcase()
         EasyDiaryUtils.initWorkingDirectory(this@DiaryMainActivity)
-        migrateData()
+        migrateData(mBinding)
         setupPopupMenu()
 
         when (savedInstanceState == null) {
             true -> checkWhatsNewDialog()
             false -> {
-                mDiaryMode = savedInstanceState.getSerializable(DIARY_MODE) as DiaryMode
+                diaryMode = savedInstanceState.getSerializable(DIARY_MODE) as DiaryMode
             }
+        }
+
+        if (config.enableReviewFlow) {
+            config.appExecutionCount = config.appExecutionCount.plus(1)
+            if (config.appExecutionCount > 30 && EasyDiaryDbHelper.countDiaryAll() > 300) startReviewFlow()
+            if (config.enableDebugMode) makeToast("appExecutionCount: ${config.appExecutionCount}")
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putSerializable(DIARY_MODE, mDiaryMode)
+        outState.putSerializable(DIARY_MODE, diaryMode)
         super.onSaveInstanceState(outState)
     }
 
@@ -141,44 +172,10 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        super.onActivityResult(requestCode, resultCode, intent)
-        if (resultCode == Activity.RESULT_OK && intent != null) {
-            when (requestCode) {
-                REQUEST_CODE_SPEECH_INPUT -> {
-                    intent.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.let {
-                        mBinding.query.setText(it[0])
-                        mBinding.query.setSelection(it[0].length)
-                    }
-                    pauseLock()
-                }
-                REQUEST_CODE_SAF_HTML_BOOK -> {
-                    intent.let {
-                        mDiaryMainItemAdapter?.getSelectedItems()?.run {
-                            mBinding.progressCoroutine.visibility = View.VISIBLE
-                            GlobalScope.launch {
-                                exportHtmlBook(it.data, this@run)
-                                runOnUiThread {
-                                    mBinding.progressCoroutine.visibility = View.GONE
-                                    mDiaryMainItemAdapter?.getSelectedItems()?.forEach {
-                                        it.isSelected = false
-                                        EasyDiaryDbHelper.updateDiary(it)
-                                    }
-                                    mDiaryMainItemAdapter?.notifyDataSetChanged()
-                                }
-                            }
-
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                mDiaryMode = DiaryMode.READ
+                diaryMode = DiaryMode.READ
                 invalidateOptionsMenu()
                 mDiaryMainItemAdapter?.notifyDataSetChanged()
                 return true
@@ -187,8 +184,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 mDiaryMainItemAdapter?.getSelectedItems()?.run {
                     when (this.isNotEmpty()) {
                         true -> {
-                            showAlertDialog(getString(R.string.delete_selected_items_confirm, this.size), DialogInterface.OnClickListener { _, _ ->
-                                this.forEach { EasyDiaryDbHelper.deleteDiary(it.sequence) }
+                            showAlertDialog(getString(R.string.delete_selected_items_confirm, this.size), { _, _ ->
+                                this.forEach { EasyDiaryDbHelper.deleteDiaryBy(it.sequence) }
                                 refreshList()
                             }, null)
                         }
@@ -202,11 +199,11 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 mDiaryMainItemAdapter?.getSelectedItems()?.run {
                     when (this.isNotEmpty()) {
                         true -> {
-                            showAlertDialog(getString(R.string.duplicate_selected_items_confirm, this.size), DialogInterface.OnClickListener { _, _ ->
+                            showAlertDialog(getString(R.string.duplicate_selected_items_confirm, this.size), { _, _ ->
                                 this.reversed().map {
                                     it.isSelected = false
-                                    EasyDiaryDbHelper.updateDiary(it)
-                                    EasyDiaryDbHelper.duplicateDiary(it)
+                                    EasyDiaryDbHelper.updateDiaryBy(it)
+                                    EasyDiaryDbHelper.duplicateDiaryBy(it)
                                 }
                                 refreshList()
                                 Handler(Looper.getMainLooper()).post { mBinding.diaryListView.setSelection(0) }
@@ -219,7 +216,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 }
             }
             R.id.saveAsHtml -> {
-                writeFileWithSAF("${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}.html", MIME_TYPE_HTML, REQUEST_CODE_SAF_HTML_BOOK)
+//                writeFileWithSAF("${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}.html", MIME_TYPE_HTML, REQUEST_CODE_SAF_HTML_BOOK)
+                EasyDiaryUtils.writeFileWithSAF("${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}.html", MIME_TYPE_HTML, mRequestSAFForHtmlBookLauncher)
             }
             R.id.timeline -> {
                 val timelineIntent = Intent(this@DiaryMainActivity, TimelineActivity::class.java)
@@ -232,21 +230,20 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, calendarIntent)
             }
             R.id.microphone -> showSpeechDialog()
-            R.id.devConsole -> TransitionHelper.startActivityWithTransition(this, Intent(this, DevActivity::class.java))
             R.id.popupMenu -> openCustomOptionMenu()
         }
         return super.onOptionsItemSelected(item)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        when (mDiaryMode) {
+        when (diaryMode) {
             DiaryMode.READ -> {
                 supportActionBar?.setDisplayHomeAsUpEnabled(false)
                 menuInflater.inflate(R.menu.diary_main, menu)
-                menu.findItem(R.id.devConsole).run {
-                    applyFontToMenuItem(this)
-                    if (config.enableDebugMode) this.setVisible(true) else this.setVisible(false)
-                }
+//                menu.findItem(R.id.devConsole).run {
+//                    applyFontToMenuItem(this)
+//                    if (config.enableDebugMode) this.setVisible(true) else this.setVisible(false)
+//                }
             }
             DiaryMode.DELETE -> {
                 supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -280,8 +277,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
                 R.id.dashboard -> TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, Intent(this@DiaryMainActivity, DashboardActivity::class.java))
                 R.id.chart -> TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, Intent(this@DiaryMainActivity, StatisticsActivity::class.java))
                 R.id.settings -> TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, Intent(this@DiaryMainActivity, SettingsActivity::class.java))
+                R.id.devConsole -> TransitionHelper.startActivityWithTransition(this, Intent(this, DevActivity::class.java))
             }
-            Handler(Looper.getMainLooper()).post { popupWindow?.dismiss() }
+            Handler(Looper.getMainLooper()).post { mPopupWindow?.dismiss() }
         }
 
         mPopupMenuBinding.run {
@@ -292,130 +290,25 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             dashboard.setOnClickListener(customItemClickListener)
             chart.setOnClickListener(customItemClickListener)
             settings.setOnClickListener(customItemClickListener)
+            devConsole.setOnClickListener(customItemClickListener)
         }
     }
 
     private fun openCustomOptionMenu() {
-        popupWindow = EasyDiaryUtils.openCustomOptionMenu(mPopupMenuBinding.root, findViewById(R.id.popupMenu))
+        mPopupMenuBinding.devConsole.visibility = if (config.enableDebugMode) View.VISIBLE else View.GONE
+        mPopupWindow = EasyDiaryUtils.openCustomOptionMenu(mPopupMenuBinding.root, findViewById(R.id.popupMenu))
+        updateDrawableColorInnerCardView(R.drawable.bug_2)
+        updateDrawableColorInnerCardView(R.drawable.picture_w)
+        updateDrawableColorInnerCardView(R.drawable.combo)
+        updateDrawableColorInnerCardView(R.drawable.statistics)
+        updateDrawableColorInnerCardView(R.drawable.settings_7)
     }
 
     private fun openPostcardViewer() {
-        val postCardViewer = Intent(this@DiaryMainActivity, PostCardViewerActivity::class.java)
+        val postCardViewer = Intent(this@DiaryMainActivity, PostcardViewerActivity::class.java)
         TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, postCardViewer)
     }
 
-    private fun migrateData() {
-        Thread(Runnable {
-            val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
-            val listPhotoUri = EasyDiaryDbHelper.selectPhotoUriAll(realmInstance)
-            var isFontDirMigrate = false
-            for ((index, dto) in listPhotoUri.withIndex()) {
-//                Log.i("PHOTO-URI", dto.photoUri)
-                if (dto.isContentUri()) {
-                    val photoPath = EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
-                    CommonUtils.uriToFile(this, Uri.parse(dto.photoUri), photoPath)
-                    realmInstance.beginTransaction()
-                    dto.photoUri = FILE_URI_PREFIX + photoPath
-                    realmInstance.commitTransaction()
-                    runOnUiThread {
-                        mBinding.progressInfo.text = "Converting... ($index/${listPhotoUri.size})"
-                    }
-                }
-            }
-
-            if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                File(EasyDiaryUtils.getApplicationDataDirectory(this) + WORKING_DIRECTORY).listFiles()?.let {
-                    it.forEach { file ->
-                        if (file.extension.equals("jpg", true)) FileUtils.moveFileToDirectory(file, File(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_POSTCARD_DIRECTORY), true)
-                    }
-                }
-
-                // Move attached photo from external storage to application data directory
-                // From 1.4.102
-                // 01. DIARY_PHOTO_DIRECTORY
-                val photoSrcDir = File(EasyDiaryUtils.getExternalStorageDirectory(), DIARY_PHOTO_DIRECTORY)
-                val photoDestDir = File(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY)
-                photoSrcDir.listFiles()?.let {
-                    it.forEachIndexed { index, file ->
-                        Log.i("aaf-t", "${File(photoDestDir, file.name).exists()} ${File(photoDestDir, file.name).absolutePath}")
-                        if (File(photoDestDir, file.name).exists()) {
-                            Log.i("aaf-t", "${File(photoDestDir, file.name).delete()}")
-                        }
-                        FileUtils.copyFileToDirectory(file, photoDestDir)
-                        runOnUiThread {
-                            mBinding.migrationMessage.text = getString(R.string.storage_migration_message)
-                            mBinding.progressInfo.text = "$index/${it.size} (Photo)"
-                        }
-                    }
-                    photoSrcDir.renameTo(File(photoSrcDir.absolutePath + "_migration"))
-                }
-//                destDir.listFiles().map { file ->
-//                    FileUtils.moveToDirectory(file, srcDir, true)
-//                }
-
-                // 02. DIARY_POSTCARD_DIRECTORY
-                val postCardSrcDir = File(EasyDiaryUtils.getExternalStorageDirectory(), DIARY_POSTCARD_DIRECTORY)
-                val postCardDestDir = File(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_POSTCARD_DIRECTORY)
-                postCardSrcDir.listFiles()?.let {
-                    it.forEachIndexed { index, file ->
-                        if (File(postCardDestDir, file.name).exists()) {
-                            File(postCardDestDir, file.name).delete()
-                        }
-                        FileUtils.copyFileToDirectory(file, postCardDestDir)
-                        runOnUiThread {
-                            mBinding.progressInfo.text = "$index/${it.size} (Postcard)"
-                        }
-                    }
-                    postCardSrcDir.renameTo(File(postCardSrcDir.absolutePath + "_migration"))
-                }
-
-                // 03. USER_CUSTOM_FONTS_DIRECTORY
-                val fontSrcDir = File(EasyDiaryUtils.getExternalStorageDirectory(), USER_CUSTOM_FONTS_DIRECTORY)
-                val fontDestDir = File(EasyDiaryUtils.getApplicationDataDirectory(this) + USER_CUSTOM_FONTS_DIRECTORY)
-                fontSrcDir.listFiles()?.let {
-                    it.forEachIndexed { index, file ->
-                        if (File(fontDestDir, file.name).exists()) {
-                            File(fontDestDir, file.name).delete()
-                        }
-                        FileUtils.copyFileToDirectory(file, fontDestDir)
-                        runOnUiThread {
-                            mBinding.progressInfo.text = "$index/${it.size} (Font)"
-                        }
-                    }
-                    fontSrcDir.renameTo(File(fontSrcDir.absolutePath + "_migration"))
-                    if (it.isNotEmpty()) isFontDirMigrate = true
-                }
-
-                // 04. BACKUP_DB_DIRECTORY
-                val dbSrcDir = File(EasyDiaryUtils.getExternalStorageDirectory(), BACKUP_DB_DIRECTORY)
-                val dbDestDir = File(EasyDiaryUtils.getApplicationDataDirectory(this) + BACKUP_DB_DIRECTORY)
-                dbSrcDir.listFiles()?.let {
-                    it.forEachIndexed { index, file ->
-                        if (File(dbDestDir, file.name).exists()) {
-                            File(dbDestDir, file.name).delete()
-                        }
-                        FileUtils.copyFileToDirectory(file, dbDestDir)
-                        runOnUiThread {
-                            mBinding.progressInfo.text = "$index/${it.size} (Database)"
-                        }
-                    }
-                    dbSrcDir.renameTo(File(dbSrcDir.absolutePath + "_migration"))
-                }
-            }
-
-            realmInstance.close()
-            runOnUiThread {
-                mBinding.progressDialog.visibility = View.GONE
-                mBinding.modalContainer.visibility = View.GONE
-                if (isFontDirMigrate) {
-                    showAlertDialog("Font 리소스가 변경되어 애플리케이션을 다시 시작합니다.", DialogInterface.OnClickListener { _, _ ->
-                        restartApp()
-                    }, false)
-                }
-            }
-        }).start()
-    }
-    
     private fun initShowcase() {
         val margin = ((resources.displayMetrics.density * 12) as Number).toInt()
 
@@ -491,29 +384,30 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             override fun afterTextChanged(editable: Editable) {}
         })
 
-        mBinding.clearQuery.setOnClickListener { _ ->
+        mBinding.clearQuery.setOnClickListener {
             selectFeelingSymbol()
             mBinding.query.text = null
         }
 
-        mBinding.diaryListView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
+        mBinding.diaryListView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, _, i, _ ->
             val diaryDto = adapterView.adapter.getItem(i) as DiaryDto
             val detailIntent = Intent(this@DiaryMainActivity, DiaryReadActivity::class.java)
             detailIntent.putExtra(DIARY_SEQUENCE, diaryDto.sequence)
-            detailIntent.putExtra(DIARY_SEARCH_QUERY, mDiaryMainItemAdapter?.currentQuery)
+            detailIntent.putExtra(SELECTED_SEARCH_QUERY, mDiaryMainItemAdapter?.currentQuery)
+            detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE,viewModel.symbol.value ?: 0)
             TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, detailIntent)
         }
 
-        mBinding.diaryListView.setOnItemLongClickListener { adapterView, _, i, _ ->
+        mBinding.diaryListView.setOnItemLongClickListener { _, _, _, _ ->
             EasyDiaryDbHelper.clearSelectedStatus()
-            mDiaryMode = DiaryMode.DELETE
+            diaryMode = DiaryMode.DELETE
             invalidateOptionsMenu()
             refreshList()
 //            mDiaryMainItemAdapter?.notifyDataSetChanged()
             true
         }
 
-        mBinding.modalContainer.setOnTouchListener { _, _ -> true }
+        EasyDiaryUtils.disableTouchEvent(mBinding.modalContainer)
 
         mBinding.insertDiaryButton.setOnClickListener{
             val createDiary = Intent(this@DiaryMainActivity, DiaryInsertActivity::class.java)
@@ -537,9 +431,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
             Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
                 putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
                 putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
-            }.run { startActivityForResult(this, REQUEST_CODE_SPEECH_INPUT) }
+            }.run { mRequestSpeechInputLauncher.launch(this) }
         } catch (e: ActivityNotFoundException) {
-            showAlertDialog(getString(R.string.recognizer_intent_not_found_message), DialogInterface.OnClickListener { dialog, which -> })
+            showAlertDialog(getString(R.string.recognizer_intent_not_found_message), { _, _ -> })
         }
     }
 
@@ -549,31 +443,31 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         refreshList(queryString)
     }
 
-    fun refreshList(query: String) {
+    private fun refreshList(query: String) {
         mDiaryList.clear()
-        mDiaryList.addAll(EasyDiaryDbHelper.readDiary(query, config.diarySearchQueryCaseSensitive, 0, 0, viewModel.symbol.value ?: 0))
+        mDiaryList.addAll(EasyDiaryDbHelper.findDiary(query, config.diarySearchQueryCaseSensitive, 0, 0, viewModel.symbol.value ?: 0))
         mDiaryMainItemAdapter?.currentQuery = query
         mDiaryMainItemAdapter?.notifyDataSetChanged()
     }
 
     private fun initSampleData() {
         EasyDiaryDbHelper.insertDiary(DiaryDto(
-                -1,
+                DIARY_SEQUENCE_INIT,
                 System.currentTimeMillis() - 395000000L, getString(R.string.sample_diary_title_1), getString(R.string.sample_diary_1),
                 1
         ))
         EasyDiaryDbHelper.insertDiary(DiaryDto(
-                -1,
+                DIARY_SEQUENCE_INIT,
                 System.currentTimeMillis() - 263000000L, getString(R.string.sample_diary_title_2), getString(R.string.sample_diary_2),
                 2
         ))
         EasyDiaryDbHelper.insertDiary(DiaryDto(
-                -1,
+                DIARY_SEQUENCE_INIT,
                 System.currentTimeMillis() - 132000000L, getString(R.string.sample_diary_title_3), getString(R.string.sample_diary_3),
                 3
         ))
         EasyDiaryDbHelper.insertDiary(DiaryDto(
-                -1,
+                DIARY_SEQUENCE_INIT,
                 System.currentTimeMillis() - 4000000L, getString(R.string.sample_diary_title_4), getString(R.string.sample_diary_4),
                 4
         ))

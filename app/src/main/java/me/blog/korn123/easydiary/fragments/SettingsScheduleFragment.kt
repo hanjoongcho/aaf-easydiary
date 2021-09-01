@@ -15,15 +15,14 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.simplemobiletools.commons.extensions.*
-import kotlinx.android.synthetic.main.dialog_alarm.view.*
-import kotlinx.android.synthetic.main.partial_settings_schedule.*
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.AlarmAdapter
+import me.blog.korn123.easydiary.databinding.DialogAlarmBinding
+import me.blog.korn123.easydiary.databinding.PartialSettingsScheduleBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
@@ -39,7 +38,7 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var mRootView: ViewGroup
+    private lateinit var mBinding: PartialSettingsScheduleBinding
     private lateinit var mAlarmAdapter: AlarmAdapter
     private var mAlarmList: ArrayList<Alarm> = arrayListOf()
     private val mActivity: Activity
@@ -50,24 +49,23 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
      *   override functions
      *
      ***************************************************************************************************/
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mRootView = inflater.inflate(R.layout.partial_settings_schedule, container, false) as ViewGroup
-        return mRootView
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        mBinding = PartialSettingsScheduleBinding.inflate(layoutInflater)
+        return mBinding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        updateFragmentUI(mRootView)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        updateFragmentUI(mBinding.root)
         mAlarmAdapter = AlarmAdapter(
                 mActivity,
                 mAlarmList,
                 AdapterView.OnItemClickListener { _, _, position, _ ->
-                    openAlarmDialog(EasyDiaryDbHelper.duplicateAlarm(mAlarmList[position]), mAlarmList[position])
+                    openAlarmDialog(EasyDiaryDbHelper.duplicateAlarmBy(mAlarmList[position]), mAlarmList[position])
                 }
         )
 
-        alarmRecyclerView.apply {
+        mBinding.alarmRecyclerView.apply {
             layoutManager = androidx.recyclerview.widget.GridLayoutManager(mActivity, 1)
             addItemDecoration(SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding)))
             adapter = mAlarmAdapter
@@ -84,7 +82,7 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
 
     override fun onResume() {
         super.onResume()
-        updateFragmentUI(mRootView)
+        updateFragmentUI(mBinding.root)
         mActivity.updateDrawableColorInnerCardView(R.drawable.delete_w)
     }
 
@@ -94,25 +92,24 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     fun openAlarmDialog(temporaryAlarm: Alarm, storedAlarm: Alarm? = null) {
-        mActivity.run {
-            var rootView: View? = null
+        mActivity.run activity@ {
+            val dialogAlarmBinding = DialogAlarmBinding.inflate(layoutInflater)
             var alertDialog: AlertDialog? = null
             val builder = AlertDialog.Builder(this).apply {
                 setCancelable(false)
                 setPositiveButton(getString(android.R.string.ok), null)
                 setNegativeButton(getString(android.R.string.cancel)) { _, _ -> alertDialog?.dismiss() }
             }
-            val inflater = getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            rootView = inflater.inflate(R.layout.dialog_alarm, null).apply {
+            dialogAlarmBinding.run {
                 val dayLetters = resources.getStringArray(R.array.week_day_letters).toList() as ArrayList<String>
                 val dayIndexes = arrayListOf(0, 1, 2, 3, 4, 5, 6)
                 if (config.isSundayFirst) {
                     dayIndexes.moveLastItemToFront()
                 }
-                edit_alarm_days_holder.removeAllViews()
+                editAlarmDaysHolder.removeAllViews()
                 dayIndexes.forEach {
                     val pow = 2.0.pow(it.toDouble()).toInt()
-                    val day = layoutInflater.inflate(R.layout.alarm_day, edit_alarm_days_holder, false) as TextView
+                    val day = layoutInflater.inflate(R.layout.alarm_day, editAlarmDaysHolder, false) as TextView
                     day.text = dayLetters[it]
 
                     val isDayChecked = temporaryAlarm.days and pow != 0
@@ -129,25 +126,25 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
                         }
                         day.background = getProperDayDrawable(selectDay)
                         day.setTextColor(if (selectDay) config.backgroundColor else config.textColor)
-                        alarm_days.text = getSelectedDaysString(temporaryAlarm.days)
+                        alarmDays.text = getSelectedDaysString(temporaryAlarm.days)
                         EasyDiaryDbHelper.commitTransaction()
                     }
 
-                    edit_alarm_days_holder.addView(day)
+                    editAlarmDaysHolder.addView(day)
                 }
-                alarm_days.text = getSelectedDaysString(temporaryAlarm.days)
-                alarm_days.setTextColor(config.textColor)
-                alarm_switch.isChecked = temporaryAlarm.isEnabled
+                alarmDays.text = getSelectedDaysString(temporaryAlarm.days)
+                alarmDays.setTextColor(config.textColor)
+                alarmSwitch.isChecked = temporaryAlarm.isEnabled
                 alarmDescription.setText(temporaryAlarm.label)
-                edit_alarm_time.text = getFormattedTime(temporaryAlarm.timeInMinutes * 60, false, true)
+                editAlarmTime.text = getFormattedTime(temporaryAlarm.timeInMinutes * 60, false, true)
 
-                edit_alarm_time.setOnClickListener {
-                    TimePickerDialog(this@run, TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+                editAlarmTime.setOnClickListener {
+                    TimePickerDialog(this@activity, TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
                         temporaryAlarm.timeInMinutes = hourOfDay * 60 + minute
-                        edit_alarm_time.text = getFormattedTime(temporaryAlarm.timeInMinutes * 60, false, true)
-                    }, temporaryAlarm.timeInMinutes / 60, temporaryAlarm.timeInMinutes % 60, DateFormat.is24HourFormat(this@run)).show()
+                        editAlarmTime.text = getFormattedTime(temporaryAlarm.timeInMinutes * 60, false, true)
+                    }, temporaryAlarm.timeInMinutes / 60, temporaryAlarm.timeInMinutes % 60, DateFormat.is24HourFormat(this@activity)).show()
                 }
-                alarm_switch.setOnCheckedChangeListener { _, isChecked ->
+                alarmSwitch.setOnCheckedChangeListener { _, isChecked ->
                     temporaryAlarm.isEnabled = isChecked
                 }
                 when (storedAlarm == null) {
@@ -178,27 +175,25 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
                     }
                 }
 
-                if (this is ViewGroup) {
-                    this.setBackgroundColor(config.backgroundColor)
-                    initTextSize(this)
-                    updateTextColors(this)
-                    updateAppViews(this)
-                    FontUtils.setFontsTypeface(this@run, this@run.assets, null, this)
-                }
+                root.setBackgroundColor(config.backgroundColor)
+                this@activity.initTextSize(root)
+                updateTextColors(root)
+                updateAppViews(root)
+                FontUtils.setFontsTypeface(this@activity, this@activity.assets, null, root)
 
                 if (BuildConfig.FLAVOR == "foss") diaryBackupGMS.visibility = View.GONE
             }
 
             alertDialog = builder.create().apply {
-                updateAlertDialog(this, null, rootView, getString(R.string.preferences_category_schedule))
+                updateAlertDialog(this, null, dialogAlarmBinding.root, getString(R.string.preferences_category_schedule))
                 getButton(AlertDialog.BUTTON_POSITIVE).run {
                     setOnClickListener {
                         when {
-                            rootView.alarm_days.text.isEmpty() -> {
+                            dialogAlarmBinding.alarmDays.text.isEmpty() -> {
                                 toast("Please select days.")
                             }
-                            rootView.alarmDescription.text.isEmpty() -> {
-                                rootView.alarmDescription.run {
+                            dialogAlarmBinding.alarmDescription.text.isEmpty() -> {
+                                dialogAlarmBinding.alarmDescription.run {
                                     requestFocus()
                                     toast("Please input schedule description.")
                                     (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).showSoftInput(this@run, InputMethodManager.RESULT_UNCHANGED_SHOWN)
@@ -213,8 +208,8 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
                                 }
 
                                 // save alarm
-                                temporaryAlarm.label = rootView?.alarmDescription?.text.toString()
-                                EasyDiaryDbHelper.updateAlarm(temporaryAlarm)
+                                temporaryAlarm.label = dialogAlarmBinding?.alarmDescription?.text.toString()
+                                EasyDiaryDbHelper.updateAlarmBy(temporaryAlarm)
                                 alertDialog?.dismiss()
                                 updateAlarmList()
                                 alertDialog?.dismiss()
@@ -229,8 +224,8 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
     private fun updateAlarmList() {
         mAlarmList.run {
             clear()
-            addAll(EasyDiaryDbHelper.readAlarmAll())
-            infoMessage.visibility = if (this.isEmpty()) View.VISIBLE else View.GONE
+            addAll(EasyDiaryDbHelper.findAlarmAll())
+            mBinding.infoMessage.visibility = if (this.isEmpty()) View.VISIBLE else View.GONE
         }
         mAlarmAdapter.notifyDataSetChanged()
     }

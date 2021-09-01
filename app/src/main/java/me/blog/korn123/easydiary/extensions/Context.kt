@@ -23,7 +23,6 @@ import android.preference.PreferenceManager
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.RelativeSizeSpan
-import android.util.Log
 import android.util.TypedValue
 import android.view.*
 import android.widget.*
@@ -39,7 +38,6 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.graphics.ColorUtils
-import androidx.core.graphics.drawable.toBitmap
 import androidx.core.location.LocationManagerCompat
 import com.google.gson.GsonBuilder
 import com.simplemobiletools.commons.extensions.adjustAlpha
@@ -50,28 +48,24 @@ import com.simplemobiletools.commons.helpers.*
 import com.simplemobiletools.commons.views.*
 import io.github.aafactory.commons.extensions.baseConfig
 import io.github.aafactory.commons.extensions.dpToPixel
-import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import io.github.aafactory.commons.views.ModalView
 import io.realm.Realm
-import kotlinx.android.synthetic.main.dialog_message.view.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryInsertActivity
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
+import me.blog.korn123.easydiary.databinding.DialogMessageBinding
 import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.receivers.AlarmReceiver
 import me.blog.korn123.easydiary.views.FixedCardView
 import me.blog.korn123.easydiary.views.FixedTextView
-import org.apache.commons.codec.binary.Base64
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
@@ -294,22 +288,33 @@ fun Context.updateDrawableColorInnerCardView(resourceId: Int) {
     changeDrawableIconColor(config.textColor, resourceId)
 }
 
+fun Context.changeDrawableIconColor(color: Int, resourceId: Int) {
+    AppCompatResources.getDrawable(this, resourceId)?.apply {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            colorFilter = BlendModeColorFilter(color, BlendMode.SRC_IN)
+        } else {
+            setColorFilter(color, PorterDuff.Mode.SRC_IN)
+        }
+    }
+}
+
 fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null, customView: View? = null, customTitle: String? = null) {
     alertDialog.run {
         when (customView == null) {
             true -> {
-                val inflater = getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-                val messageView = inflater.inflate(R.layout.dialog_message, null).apply {
-                    simpleMessage.text = message
-                    if (this is ViewGroup) {
-                        this.setBackgroundColor(config.backgroundColor)
-                        initTextSize(this)
-                        updateTextColors(this)
-                        updateAppViews(this)
-                        FontUtils.setFontsTypeface(this@updateAlertDialog, this@updateAlertDialog.assets, null, this)
+                DialogMessageBinding.inflate(layoutInflater).apply {
+                    root.apply {
+                        simpleMessage.text = message
+                        if (this is ViewGroup) {
+                            this.setBackgroundColor(config.backgroundColor)
+                            initTextSize(this)
+                            updateTextColors(this)
+                            updateAppViews(this)
+                            FontUtils.setFontsTypeface(this@updateAlertDialog, this@updateAlertDialog.assets, null, this)
+                        }
                     }
+                    setView(root)
                 }
-                setView(messageView)
             }
             false -> setView(customView)
         }
@@ -345,16 +350,6 @@ fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null,
             typeface = globalTypeface
         }
         if (!isNightMode()) getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(baseConfig.textColor)
-    }
-}
-
-fun Context.changeDrawableIconColor(color: Int, resourceId: Int) {
-    AppCompatResources.getDrawable(this, resourceId)?.apply {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            colorFilter = BlendModeColorFilter(color, BlendMode.SRC_IN);
-        } else {
-            setColorFilter(color, PorterDuff.Mode.SRC_IN)
-        }
     }
 }
 
@@ -555,7 +550,7 @@ fun Context.executeScheduledTask(alarm: Alarm) {
 }
 
 fun Context.rescheduleEnabledAlarms() {
-    EasyDiaryDbHelper.readAlarmAll().forEach {
+    EasyDiaryDbHelper.findAlarmAll().forEach {
         if (it.isEnabled) scheduleNextAlarm(it, false)
     }
 }
@@ -641,10 +636,10 @@ fun Context.createBackupContentText(localDeviceFileCount: Int, duplicateFileCoun
 
 fun Context.createRecoveryContentText(remoteDriveFileCount: Int, duplicateFileCount: Int, successCount: Int, failCount: Int): StringBuilder = StringBuilder()
         .append("<b>\uD83D\uDCF7 Attached Photos</b><br>")
-        .append(getString(R.string.notification_msg_device_file_count, "*", remoteDriveFileCount, "<br>"))
+        .append(getString(R.string.notification_msg_google_drive_file_count, "*", remoteDriveFileCount, "<br>"))
         .append(getString(R.string.notification_msg_duplicate_file_count, "*", duplicateFileCount, "<br>"))
-        .append(getString(R.string.notification_msg_upload_success, "*", successCount, "<br>"))
-        .append(getString(R.string.notification_msg_upload_fail, "*", failCount, "<br>"))
+        .append(getString(R.string.notification_msg_download_success, "*", successCount, "<br>"))
+        .append(getString(R.string.notification_msg_download_fail, "*", failCount, "<br>"))
 
 fun Context.forceInitRealmLessThanOreo() {
     // android marshmallow minor version bug workaround

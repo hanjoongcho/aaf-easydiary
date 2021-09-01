@@ -15,9 +15,9 @@ import io.noties.markwon.utils.ColorUtils
 import io.noties.markwon.utils.Dip
 import io.noties.prism4j.Prism4j
 import io.noties.prism4j.annotations.PrismBundle
-import kotlinx.android.synthetic.main.activity_markdown_view.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.databinding.ActivityMarkdownViewBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
 import me.blog.korn123.easydiary.helper.MARKDOWN_DIRECTORY
@@ -32,6 +32,7 @@ import java.net.URL
 
 @PrismBundle(include = ["java", "kotlin", "javascript"], grammarLocatorClassName = ".GrammarLocatorSourceCode")
 class MarkDownViewActivity : EasyDiaryActivity() {
+    private lateinit var mBinding: ActivityMarkdownViewBinding
     private lateinit var savedFilePath: String
     private lateinit var markdownUrl: String
     private val mPrism4j = Prism4j(GrammarLocatorSourceCode())
@@ -39,8 +40,9 @@ class MarkDownViewActivity : EasyDiaryActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_markdown_view)
-        setSupportActionBar(toolbar)
+        mBinding = ActivityMarkdownViewBinding.inflate(layoutInflater)
+        setContentView(mBinding.root)
+        setSupportActionBar(mBinding.toolbar)
         val pageTitle = intent.getStringExtra(OPEN_URL_DESCRIPTION)
         mForceAppendCodeBlock = intent.getBooleanExtra(FORCE_APPEND_CODE_BLOCK, true)
 
@@ -70,7 +72,7 @@ class MarkDownViewActivity : EasyDiaryActivity() {
     private fun openMarkdownFile() {
         when (File(savedFilePath).exists()) {
             true -> {
-                runOnUiThread { progressBar.visibility = View.GONE }
+                runOnUiThread { mBinding.progressBar.visibility = View.GONE }
                 initMarkdown()
             }
             false -> {
@@ -92,7 +94,7 @@ class MarkDownViewActivity : EasyDiaryActivity() {
 //                            .tableOddRowBackgroundColor(ColorUtils.applyAlpha(Color.BLUE, 80))
                 })
                 .usePlugin(SyntaxHighlightPlugin.create(mPrism4j, Prism4jThemeDefault.create(0)))
-                .build().apply { setMarkdown(markdownView, readSavedFile()) }
+                .build().apply { setMarkdown(mBinding.markdownView, readSavedFile()) }
     }
 
     private fun openMarkdownFileAfterDownload(fileURL: String, saveFilePath: String) {
@@ -115,12 +117,12 @@ class MarkDownViewActivity : EasyDiaryActivity() {
             httpConn.disconnect()
 
             runOnUiThread {
-                progressBar.visibility = View.GONE
+                mBinding.progressBar.visibility = View.GONE
                 initMarkdown()
             }
         } else {
             runOnUiThread {
-                progressBar.visibility = View.GONE
+                mBinding.progressBar.visibility = View.GONE
                 makeToast("Network is not available.")
             }
         }
@@ -135,7 +137,7 @@ class MarkDownViewActivity : EasyDiaryActivity() {
         when (item.itemId) {
             R.id.update -> {
                 Thread.sleep(200) /*wait ripple animation*/
-                progressBar.visibility = View.VISIBLE
+                mBinding.progressBar.visibility = View.VISIBLE
 
                 if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                     File(savedFilePath).delete()

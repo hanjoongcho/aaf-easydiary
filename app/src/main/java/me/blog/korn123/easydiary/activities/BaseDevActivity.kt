@@ -14,6 +14,7 @@ import android.provider.Settings
 import android.view.View
 import android.widget.RemoteViews
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.app.NotificationCompat
 import androidx.databinding.DataBindingUtil
@@ -23,7 +24,6 @@ import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.adapters.CheatSheetAdapter
 import me.blog.korn123.easydiary.databinding.ActivityDevBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
@@ -34,16 +34,14 @@ import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 import org.apache.commons.io.FilenameUtils
 import java.io.File
 
-open class BaseDevActivity : EasyDiaryActivity() { 
+open class BaseDevActivity : EasyDiaryActivity() {  
 
     /***************************************************************************************************
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var mBinding: ActivityDevBinding
     private val mViewModel: BaseDevViewModel by viewModels()
     private val mLocationManager by lazy { getSystemService(Context.LOCATION_SERVICE) as LocationManager }
-    private var mCheatSheetList = arrayListOf<CheatSheetAdapter.CheatSheet>()
     private val mNetworkLocationListener = object : LocationListener {
         override fun onLocationChanged(p0: Location) {
             makeToast("Network location has been updated")
@@ -62,6 +60,10 @@ open class BaseDevActivity : EasyDiaryActivity() {
         override fun onProviderEnabled(p0: String) {}
         override fun onProviderDisabled(p0: String) {}
     }
+    private val mRequestLocationSourceLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        makeSnackBar(if (isLocationEnabled()) "GPS provider setting is activated!!!" else "The request operation did not complete normally.")
+    }
+    protected lateinit var mBinding: ActivityDevBinding
 
 
     /***************************************************************************************************
@@ -81,11 +83,12 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
 
         setupActionLog()
-        setupNextAlarm()
+        setupDetermineNextAlarm()
         setupNotification()
         setupClearUnusedPhoto()
         setupLocation()
         setupCoroutine()
+        setupTestFunction()
     }
 
     override fun onDestroy() {
@@ -96,24 +99,24 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        super.onActivityResult(requestCode, resultCode, intent)
-        pauseLock()
-
-        when (requestCode) {
-            REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS -> {
-                makeSnackBar(if (isLocationEnabled()) "GPS provider setting is activated." else "The request operation did not complete normally.")
-            }
-        }
-    }
-
 
     /***************************************************************************************************
      *   test functions
      *
      ***************************************************************************************************/
-    private fun setupNextAlarm() {
-        mBinding.cardNextAlarm.setOnClickListener {
+    private fun setupTestFunction() {
+        mBinding.run {
+            buttonEnableOrientation.setOnClickListener { setScreenOrientationSensor(true) }
+            buttonDisableOrientation.setOnClickListener { setScreenOrientationSensor(false) }
+            buttonHoldOrientation.setOnClickListener { holdCurrentOrientation() }
+            buttonReleaseOrientation.setOnClickListener { clearHoldOrientation() }
+            buttonReviewFlow.setOnClickListener { startReviewFlow() }
+            buttonRestartApp.setOnClickListener { restartApplication() }
+        }
+    }
+
+    private fun setupDetermineNextAlarm() {
+        mBinding.buttonDetermineNextAlarm.setOnClickListener {
             val nextAlarm = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val triggerTimeMillis = (getSystemService(Context.ALARM_SERVICE) as AlarmManager).nextAlarmClock?.triggerTime ?: 0
                 when (triggerTimeMillis > 0) {
@@ -121,6 +124,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     false -> "Alarm info is not exist."
                 }
             } else {
+                @Suppress("DEPRECATION")
                 Settings.System.getString(contentResolver, Settings.System.NEXT_ALARM_FORMATTED)
             }
 
@@ -129,12 +133,12 @@ open class BaseDevActivity : EasyDiaryActivity() {
     }
 
     private fun setupNotification() {
-        mBinding.cardNotification1.setOnClickListener {
+        mBinding.buttonNotification01.setOnClickListener {
             (applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).apply {
                 notify(NOTIFICATION_ID_DEV, createNotification(NotificationInfo(R.drawable.ic_diary_writing, true)))
             }
         }
-        mBinding.cardNotification2.setOnClickListener {
+        mBinding.buttonNotification02.setOnClickListener {
             (applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).apply {
                 notify(NOTIFICATION_ID_DEV, createNotification(NotificationInfo(R.drawable.ic_diary_backup_local, useActionButton = true, useCustomContentView = true)))
             }
@@ -150,7 +154,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
     }
 
     private fun updateActionLog() {
-        val actionLogs: List<ActionLog> = EasyDiaryDbHelper.readActionLogAll()
+        val actionLogs: List<ActionLog> = EasyDiaryDbHelper.findActionLogAll()
         val sb = StringBuilder()
         actionLogs.map {
             sb.append("${it.className}-${it.signature}-${it.key}: ${it.value}\n")
@@ -159,14 +163,15 @@ open class BaseDevActivity : EasyDiaryActivity() {
     }
 
     private fun setupClearUnusedPhoto() {
-        mBinding.clearUnusedPhoto.setOnClickListener {
+        mBinding.buttonClearUnusedPhoto.setOnClickListener {
             val localPhotoBaseNames = arrayListOf<String>()
             val unUsedPhotos = arrayListOf<String>()
-            File(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY).listFiles().map {
+            val targetFiles = File(EasyDiaryUtils.getApplicationDataDirectory(this) + DIARY_PHOTO_DIRECTORY)
+            targetFiles.listFiles()?.map {
                 localPhotoBaseNames.add(it.name)
             }
 
-            EasyDiaryDbHelper.selectPhotoUriAll().map { photoUriDto ->
+            EasyDiaryDbHelper.findPhotoUriAll().map { photoUriDto ->
                 if (!localPhotoBaseNames.contains(FilenameUtils.getBaseName(photoUriDto.getFilePath()))) {
                     unUsedPhotos.add(FilenameUtils.getBaseName(photoUriDto.getFilePath()))
                 }
@@ -207,9 +212,9 @@ open class BaseDevActivity : EasyDiaryActivity() {
             mBinding.textCoroutine1Console.append("$tag: $message\n")
             mBinding.scrollCoroutine.post { mBinding.scrollCoroutine.fullScroll(View.FOCUS_DOWN) }
         }
-        suspend fun doWorld() {
-            delay(1000)
-        }
+//        suspend fun doWorld() {
+//            delay(1000)
+//        }
 
         mBinding.buttonCoroutineBasicStart.setOnClickListener {
             if (mCoroutineJob1?.isActive == true) {
@@ -219,10 +224,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     for (i in 1..50) {
                         if (isActive) {
                             val currentThreadName = Thread.currentThread().name
-                            runOnUiThread { updateConsole(i.toString(), currentThreadName) }
-                            runBlocking {
-                                delay(100)
-                            }
+                            withContext(Dispatchers.Main) { updateConsole(i.toString(), currentThreadName) }
+                            delay(500)
                         }
                     }
                 }
@@ -254,19 +257,38 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     for (i in 1..10) {
                         val currentThreadName = Thread.currentThread().name
                         runOnUiThread { updateConsole(i.toString(), currentThreadName) }
-                        runBlocking {
-                            delay(100)
-                        }
+                        delay(100)
                     }
                 }
             }
         }
 
-        mBinding.buttonCoroutineBlocking.setOnClickListener {
+        mBinding.buttonRunBlocking.setOnClickListener {
+            updateConsole("1")
             runBlocking {
-                updateConsole("runBlocking block")
+                launch {
+                    updateConsole("3")
+                    delay(2000)
+                    updateConsole("4")
+                }
+                updateConsole("2")
             }
         }
+
+        mBinding.buttonCoroutineScope.setOnClickListener {
+            updateConsole("1")
+            CoroutineScope(Dispatchers.IO).launch {
+                val name = Thread.currentThread().name
+                withContext(Dispatchers.Main) { updateConsole("3", name) }
+                delay(2000)
+                withContext(Dispatchers.Main) { updateConsole("4", name) }
+            }
+            updateConsole("2")
+        }
+    }
+
+    private fun restartApplication() {
+        triggerRestart()
     }
 
     fun openCheatSheet(view: View) {
@@ -293,7 +315,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
         when (hasGPSPermissions()) {
             true -> setLocationInfo()
             false -> {
-                acquireGPSPermissions() {
+                acquireGPSPermissions(mRequestLocationSourceLauncher) {
                     setLocationInfo()
                 }
             }
@@ -373,23 +395,23 @@ data class NotificationInfo(var largeIconResourceId: Int, var useActionButton: B
  *   extensions
  *
  ***************************************************************************************************/
-fun fun1(param1: String, block: (responseData: String) -> String): String {
-    println(param1)
-    return block("")
-}
-
-fun fun2(param1: String, block: (responseData: String) -> Boolean): String {
-    println(param1)
-    var blockReturn = block(param1)
-    return param1
-}
-
-fun test1() {
-    val result = fun1("banana") { responseData ->
-        "data: $responseData"
-    }
-    println(result)
-}
+//fun fun1(param1: String, block: (responseData: String) -> String): String {
+//    println(param1)
+//    return block("")
+//}
+//
+//fun fun2(param1: String, block: (responseData: String) -> Boolean): String {
+//    println(param1)
+//    var blockReturn = block(param1)
+//    return param1
+//}
+//
+//fun test1() {
+//    val result = fun1("banana") { responseData ->
+//        "data: $responseData"
+//    }
+//    println(result)
+//}
 
 
 

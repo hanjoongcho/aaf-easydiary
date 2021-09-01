@@ -172,6 +172,7 @@ object FlavorUtils {
         FOOD_NOODLES -> R.drawable.ic_noodles
         FOOD_FRIED_RICE -> R.drawable.ic_fried_rice
         FOOD_SOUP02 -> R.drawable.ic_soup2
+        FOOD_LOBSTER -> R.drawable.ic_lobster
 
         LEISURE_PICNIC -> R.drawable.ic_picnic
         LEISURE_MOVIE -> R.drawable.ic_movie
@@ -202,6 +203,11 @@ object FlavorUtils {
         LEISURE_GOLF -> R.drawable.ic_golf_stick
         LEISURE_WALKING -> R.drawable.ic_walking
         LEISURE_TRAINING -> R.drawable.ic_checklist
+        LEISURE_DOCUMENTARY -> R.drawable.ic_documentary
+        LEISURE_BICYCLE -> R.drawable.ic_bicycle
+        LEISURE_FRIENDS_1 -> R.drawable.ic_friends1
+        LEISURE_FRIENDS_2 -> R.drawable.ic_friends2
+        LEISURE_FRIENDS_3 -> R.drawable.ic_friends3
 
         SYMBOL_YOUTUBE -> R.drawable.ic_youtube
         SYMBOL_NETFLIX -> R.drawable.ic_netflix

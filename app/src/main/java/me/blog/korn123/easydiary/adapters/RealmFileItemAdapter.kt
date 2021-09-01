@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import kotlinx.android.synthetic.main.item_realm_file.view.*
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.initTextSize
@@ -36,7 +35,7 @@ class RealmFileItemAdapter(
         when (itemView.tag is ViewHolder) {
             true -> itemView.tag as ViewHolder
             false -> {
-                val holder = ViewHolder(itemView.fileName, itemView.createdTime)
+                val holder = ViewHolder(itemView.findViewById(R.id.fileName), itemView.findViewById(R.id.createdTime))
                 itemView.tag = holder
                 holder
             }

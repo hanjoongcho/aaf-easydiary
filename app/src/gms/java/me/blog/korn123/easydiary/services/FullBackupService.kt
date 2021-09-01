@@ -75,7 +75,7 @@ class FullBackupService : Service() {
 
         // test alarm sequence is 5
         val alarmId = intent?.getIntExtra(SettingsScheduleFragment.ALARM_ID, 5) ?: 5
-        EasyDiaryDbHelper.readAlarmBy(alarmId)?.let {
+        EasyDiaryDbHelper.findAlarmBy(alarmId)?.let {
             val workStatus = WorkStatus()
             workStatusList.add(workStatus)
             backupPhoto(it, workStatus)
@@ -216,7 +216,7 @@ class FullBackupService : Service() {
                     .append("<b>\uD83D\uDCC1 Database</b><br>")
                     .append("* Saved file name: $savedFileName")
 
-            val resultNotificationBuilder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_upload")
+            val resultNotificationBuilder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_alarm")
             resultNotificationBuilder
                     .setDefaults(Notification.DEFAULT_ALL)
                     .setWhen(System.currentTimeMillis())

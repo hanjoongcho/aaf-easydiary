@@ -1,14 +1,10 @@
 package me.blog.korn123.easydiary.extensions
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
-import android.app.AlarmManager
 import android.app.Dialog
-import android.app.PendingIntent
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -19,24 +15,23 @@ import android.graphics.Canvas
 import android.graphics.Point
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.location.Location
-import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.graphics.drawable.toBitmap
-import androidx.fragment.app.Fragment
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.baseConfig
@@ -44,7 +39,10 @@ import com.simplemobiletools.commons.models.Release
 import io.github.aafactory.commons.helpers.PERMISSION_ACCESS_COARSE_LOCATION
 import io.github.aafactory.commons.helpers.PERMISSION_ACCESS_FINE_LOCATION
 import io.github.aafactory.commons.utils.BitmapUtils
+import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
@@ -53,15 +51,17 @@ import me.blog.korn123.easydiary.activities.EasyDiaryActivity
 import me.blog.korn123.easydiary.activities.FingerprintLockActivity
 import me.blog.korn123.easydiary.activities.PinLockActivity
 import me.blog.korn123.easydiary.adapters.SymbolPagerAdapter
+import me.blog.korn123.easydiary.databinding.ActivityDiaryMainBinding
 import me.blog.korn123.easydiary.dialogs.WhatsNewDialog
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
 import me.blog.korn123.easydiary.views.SlidingTabLayout
 import org.apache.commons.codec.binary.Base64
+import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import java.io.ByteArrayOutputStream
-import java.lang.Exception
-import kotlin.system.exitProcess
+import java.io.File
+import java.util.*
 
 
 /**
@@ -104,8 +104,7 @@ fun Activity.openGooglePlayBy(targetAppId: String) {
 }
 
 fun Activity.confirmPermission(permissions: Array<String>, requestCode: Int) {
-    if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+    if (permissions.any { permission ->  ActivityCompat.shouldShowRequestPermissionRationale(this, permission) }) {
         AlertDialog.Builder(this)
                 .setMessage(getString(R.string.permission_confirmation_dialog_message))
                 .setTitle(getString(R.string.permission_confirmation_dialog_title))
@@ -113,6 +112,18 @@ fun Activity.confirmPermission(permissions: Array<String>, requestCode: Int) {
                 .show()
     } else {
         ActivityCompat.requestPermissions(this, permissions, requestCode)
+    }
+}
+
+fun Activity.confirmExternalStoragePermission(permissions: Array<String>, activityResultLauncher: ActivityResultLauncher<Array<String>>) {
+    if (permissions.any { permission ->  ActivityCompat.shouldShowRequestPermissionRationale(this, permission) }) {
+        AlertDialog.Builder(this)
+                .setMessage(getString(R.string.permission_confirmation_dialog_message))
+                .setTitle(getString(R.string.permission_confirmation_dialog_title))
+                .setPositiveButton(getString(R.string.ok)) { _, _ -> activityResultLauncher.launch(permissions) }
+                .show()
+    } else {
+        activityResultLauncher.launch(permissions)
     }
 }
 
@@ -206,16 +217,24 @@ fun Activity.startActivityWithTransition(intent: Intent) {
     overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
 }
 
-fun Activity.restartApp() {
-    val readDiaryIntent = Intent(this, DiaryMainActivity::class.java)
-    readDiaryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-    val mPendingIntentId = 123456
-    val mPendingIntent = PendingIntent.getActivity(this, mPendingIntentId, readDiaryIntent, PendingIntent.FLAG_CANCEL_CURRENT)
-    val mgr = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
-    ActivityCompat.finishAffinity(this)
-    //System.runFinalizersOnExit(true)
-    exitProcess(0)
+//fun Activity.restartApp() {
+//    val readDiaryIntent = Intent(this, DiaryMainActivity::class.java)
+//    readDiaryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+//    val mPendingIntentId = 123456
+//    val mPendingIntent = PendingIntent.getActivity(this, mPendingIntentId, readDiaryIntent, PendingIntent.FLAG_CANCEL_CURRENT)
+//    val mgr = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//    mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
+//    ActivityCompat.finishAffinity(this)
+//    //System.runFinalizersOnExit(true)
+//    exitProcess(0)
+//}
+
+fun Activity.triggerRestart() {
+    val intent = Intent(this, DiaryMainActivity::class.java)
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    this.startActivity(intent)
+    finish()
+    Runtime.getRuntime().exit(0)
 }
 
 fun Activity.refreshApp() {
@@ -339,19 +358,20 @@ fun Activity.scaledDrawable(id: Int, width: Int, height: Int): Drawable? {
     return BitmapDrawable(resources, Bitmap.createScaledBitmap(bitmap, width, height, false))
 }
 
-@TargetApi(Build.VERSION_CODES.KITKAT)
-fun Activity.writeFileWithSAF(fileName: String, mimeType: String, requestCode: Int) {
-    val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-        // Filter to only show results that can be "opened", such as
-        // a file (as opposed to a list of contacts or timezones).
-        addCategory(Intent.CATEGORY_OPENABLE)
+//}
 
-        type = mimeType
-        // Create a file with the requested MIME type.
-        putExtra(Intent.EXTRA_TITLE, fileName)
-    }
-    startActivityForResult(intent, requestCode)
-}
+//@TargetApi(Build.VERSION_CODES.KITKAT)
+//fun Activity.writeFileWithSAF(fileName: String, mimeType: String, requestCode: Int) {
+//    val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+//        // Filter to only show results that can be "opened", such as
+//        // a file (as opposed to a list of contacts or timezones).
+//        addCategory(Intent.CATEGORY_OPENABLE)
+//
+//        type = mimeType
+//        // Create a file with the requested MIME type.
+//        putExtra(Intent.EXTRA_TITLE, fileName)
+//    }
+//    startActivityForResult(intent, requestCode)
 
 fun Activity.exportHtmlBook(uri: Uri?, diaryList: List<DiaryDto>) {
     uri?.let {
@@ -450,7 +470,7 @@ fun Activity.resourceToBase64(resourceId: Int): String {
     return image64
 }
 
-fun EasyDiaryActivity.acquireGPSPermissions(callback: () -> Unit) {
+fun EasyDiaryActivity.acquireGPSPermissions(activityResultLauncher: ActivityResultLauncher<Intent>, callback: () -> Unit) {
     handlePermission(PERMISSION_ACCESS_COARSE_LOCATION) { hasCoarseLocation ->
         if (hasCoarseLocation) {
             handlePermission(PERMISSION_ACCESS_FINE_LOCATION) { hasFineLocation ->
@@ -458,7 +478,8 @@ fun EasyDiaryActivity.acquireGPSPermissions(callback: () -> Unit) {
                     if (isLocationEnabled()) {
                         callback()
                     } else {
-                        startActivityForResult(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS)
+//                        startActivityForResult(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS)
+                        activityResultLauncher.launch(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
                     }
                 }
             }
@@ -466,39 +487,152 @@ fun EasyDiaryActivity.acquireGPSPermissions(callback: () -> Unit) {
     }
 }
 
-fun EasyDiaryActivity.getLocationWithGPSProvider(callback: (location: Location?) -> Unit) {
-    val gpsProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-    val networkProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-    when (checkPermission(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,  Manifest.permission.ACCESS_COARSE_LOCATION))) {
-        true -> {
-            if (isLocationEnabled()) {
-                callback(gpsProvider.getLastKnownLocation(LocationManager.GPS_PROVIDER) ?: networkProvider.getLastKnownLocation(LocationManager.NETWORK_PROVIDER))
-            } else {
-                startActivityForResult(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS)
-            }
-        }
-        false -> {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            handlePermission(PERMISSION_ACCESS_COARSE_LOCATION) { hasCoarseLocation ->
-                if (hasCoarseLocation) {
-                    handlePermission(PERMISSION_ACCESS_FINE_LOCATION) { hasFineLocation ->
-                        if (hasFineLocation) {
-                            if (isLocationEnabled()) {
-                                callback(gpsProvider.getLastKnownLocation(LocationManager.GPS_PROVIDER) ?: networkProvider.getLastKnownLocation(LocationManager.NETWORK_PROVIDER))
-                            } else {
-                                startActivityForResult(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS)
-                            }
-                        }
-                    }
+//fun EasyDiaryActivity.getLocationWithGPSProvider(callback: (location: Location?) -> Unit) {
+//    val gpsProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+//    val networkProvider = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+//    when (checkPermission(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,  Manifest.permission.ACCESS_COARSE_LOCATION))) {
+//        true -> {
+//            if (isLocationEnabled()) {
+//                callback(gpsProvider.getLastKnownLocation(LocationManager.GPS_PROVIDER) ?: networkProvider.getLastKnownLocation(LocationManager.NETWORK_PROVIDER))
+//            } else {
+//                startActivityForResult(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS)
+//            }
+//        }
+//        false -> {
+//            // TODO: Consider calling
+//            //    ActivityCompat#requestPermissions
+//            // here to request the missing permissions, and then overriding
+//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//            //                                          int[] grantResults)
+//            // to handle the case where the user grants the permission. See the documentation
+//            // for ActivityCompat#requestPermissions for more details.
+//            handlePermission(PERMISSION_ACCESS_COARSE_LOCATION) { hasCoarseLocation ->
+//                if (hasCoarseLocation) {
+//                    handlePermission(PERMISSION_ACCESS_FINE_LOCATION) { hasFineLocation ->
+//                        if (hasFineLocation) {
+//                            if (isLocationEnabled()) {
+//                                callback(gpsProvider.getLastKnownLocation(LocationManager.GPS_PROVIDER) ?: networkProvider.getLastKnownLocation(LocationManager.NETWORK_PROVIDER))
+//                            } else {
+//                                startActivityForResult(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_CODE_ACTION_LOCATION_SOURCE_SETTINGS)
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
+
+fun EasyDiaryActivity.migrateData(binging: ActivityDiaryMainBinding) {
+    GlobalScope.launch {
+        val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
+        val listPhotoUri = EasyDiaryDbHelper.findPhotoUriAll(realmInstance)
+        var isFontDirMigrate = false
+        for ((index, dto) in listPhotoUri.withIndex()) {
+//                Log.i("PHOTO-URI", dto.photoUri)
+            if (dto.isContentUri()) {
+                val photoPath = EasyDiaryUtils.getApplicationDataDirectory(this@migrateData) + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
+                CommonUtils.uriToFile(this@migrateData, Uri.parse(dto.photoUri), photoPath)
+                realmInstance.beginTransaction()
+                dto.photoUri = FILE_URI_PREFIX + photoPath
+                realmInstance.commitTransaction()
+                runOnUiThread {
+                    binging.progressInfo.text = "Converting... ($index/${listPhotoUri.size})"
                 }
             }
         }
-    }
+
+        if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+            File(EasyDiaryUtils.getApplicationDataDirectory(this@migrateData) + WORKING_DIRECTORY).listFiles()?.let {
+                it.forEach { file ->
+                    if (file.extension.equals("jpg", true)) FileUtils.moveFileToDirectory(file, File(EasyDiaryUtils.getApplicationDataDirectory(this@migrateData) + DIARY_POSTCARD_DIRECTORY), true)
+                }
+            }
+
+            // Move attached photo from external storage to application data directory
+            // From 1.4.102
+            // 01. DIARY_PHOTO_DIRECTORY
+            val photoSrcDir = File(EasyDiaryUtils.getExternalStorageDirectory(), DIARY_PHOTO_DIRECTORY)
+            val photoDestDir = File(EasyDiaryUtils.getApplicationDataDirectory(this@migrateData) + DIARY_PHOTO_DIRECTORY)
+            photoSrcDir.listFiles()?.let {
+                it.forEachIndexed { index, file ->
+                    Log.i("aaf-t", "${File(photoDestDir, file.name).exists()} ${File(photoDestDir, file.name).absolutePath}")
+                    if (File(photoDestDir, file.name).exists()) {
+                        Log.i("aaf-t", "${File(photoDestDir, file.name).delete()}")
+                    }
+                    FileUtils.copyFileToDirectory(file, photoDestDir)
+                    runOnUiThread {
+                        binging.migrationMessage.text = getString(R.string.storage_migration_message)
+                        binging.progressInfo.text = "$index/${it.size} (Photo)"
+                    }
+                }
+                photoSrcDir.renameTo(File(photoSrcDir.absolutePath + "_migration"))
+            }
+//                destDir.listFiles().map { file ->
+//                    FileUtils.moveToDirectory(file, srcDir, true)
+//                }
+
+            // 02. DIARY_POSTCARD_DIRECTORY
+            val postCardSrcDir = File(EasyDiaryUtils.getExternalStorageDirectory(), DIARY_POSTCARD_DIRECTORY)
+            val postCardDestDir = File(EasyDiaryUtils.getApplicationDataDirectory(this@migrateData) + DIARY_POSTCARD_DIRECTORY)
+            postCardSrcDir.listFiles()?.let {
+                it.forEachIndexed { index, file ->
+                    if (File(postCardDestDir, file.name).exists()) {
+                        File(postCardDestDir, file.name).delete()
+                    }
+                    FileUtils.copyFileToDirectory(file, postCardDestDir)
+                    runOnUiThread {
+                        binging.progressInfo.text = "$index/${it.size} (Postcard)"
+                    }
+                }
+                postCardSrcDir.renameTo(File(postCardSrcDir.absolutePath + "_migration"))
+            }
+
+            // 03. USER_CUSTOM_FONTS_DIRECTORY
+            val fontSrcDir = File(EasyDiaryUtils.getExternalStorageDirectory(), USER_CUSTOM_FONTS_DIRECTORY)
+            val fontDestDir = File(EasyDiaryUtils.getApplicationDataDirectory(this@migrateData) + USER_CUSTOM_FONTS_DIRECTORY)
+            fontSrcDir.listFiles()?.let {
+                it.forEachIndexed { index, file ->
+                    if (File(fontDestDir, file.name).exists()) {
+                        File(fontDestDir, file.name).delete()
+                    }
+                    FileUtils.copyFileToDirectory(file, fontDestDir)
+                    runOnUiThread {
+                        binging.progressInfo.text = "$index/${it.size} (Font)"
+                    }
+                }
+                fontSrcDir.renameTo(File(fontSrcDir.absolutePath + "_migration"))
+                if (it.isNotEmpty()) isFontDirMigrate = true
+            }
+
+            // 04. BACKUP_DB_DIRECTORY
+            val dbSrcDir = File(EasyDiaryUtils.getExternalStorageDirectory(), BACKUP_DB_DIRECTORY)
+            val dbDestDir = File(EasyDiaryUtils.getApplicationDataDirectory(this@migrateData) + BACKUP_DB_DIRECTORY)
+            dbSrcDir.listFiles()?.let {
+                it.forEachIndexed { index, file ->
+                    if (File(dbDestDir, file.name).exists()) {
+                        File(dbDestDir, file.name).delete()
+                    }
+                    FileUtils.copyFileToDirectory(file, dbDestDir)
+                    runOnUiThread {
+                        binging.progressInfo.text = "$index/${it.size} (Database)"
+                    }
+                }
+                dbSrcDir.renameTo(File(dbSrcDir.absolutePath + "_migration"))
+            }
+        }
+
+        realmInstance.close()
+        runOnUiThread {
+            binging.progressDialog.visibility = View.GONE
+            binging.modalContainer.visibility = View.GONE
+            if (isFontDirMigrate) {
+                showAlertDialog("Font 리소스가 변경되어 애플리케이션을 다시 시작합니다.", DialogInterface.OnClickListener { _, _ ->
+                    triggerRestart()
+                }, false)
+            }
+        }
+    }.start()
 }
+
 

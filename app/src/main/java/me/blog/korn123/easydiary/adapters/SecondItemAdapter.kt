@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import kotlinx.android.synthetic.main.item_second.view.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 
@@ -30,7 +29,7 @@ class SecondItemAdapter(
         when (itemView.tag is ViewHolder) {
             true -> itemView.tag as ViewHolder
             false -> {
-                val holder = ViewHolder(itemView.seconds)
+                val holder = ViewHolder(itemView.findViewById(R.id.seconds))
                 itemView.tag = holder
                 holder
             }

@@ -9,19 +9,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ListView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.xw.repo.BubbleSeekBar
-import kotlinx.android.synthetic.main.partial_settings_font.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.BaseSettingsActivity
 import me.blog.korn123.easydiary.activities.SettingsActivity
 import me.blog.korn123.easydiary.adapters.FontItemAdapter
 import me.blog.korn123.easydiary.adapters.OptionItemAdapter
+import me.blog.korn123.easydiary.databinding.PartialSettingsFontBinding
 import me.blog.korn123.easydiary.extensions.*
-import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.helper.DEFAULT_CALENDAR_FONT_SCALE
+import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
+import me.blog.korn123.easydiary.helper.USER_CUSTOM_FONTS_DIRECTORY
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import java.io.File
@@ -34,10 +38,41 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
      *   global properties
      *
      ***************************************************************************************************/
+    private lateinit var mBinding: PartialSettingsFontBinding
     private lateinit var progressContainer: ConstraintLayout
-    private lateinit var mRootView: ViewGroup
-    private val mActivity: Activity
-        get() = requireActivity()
+    private val mRequestFontPick = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
+        requireActivity().run {
+            pauseLock()
+            if (activityResult.resultCode == Activity.RESULT_OK && activityResult.data != null) {
+                activityResult.data!!.data?.let { uri ->
+                    val fileName = EasyDiaryUtils.queryName(contentResolver, uri)
+                    if (FilenameUtils.getExtension(fileName).equals("ttf", true)) {
+                        Thread(Runnable {
+                            val inputStream = contentResolver.openInputStream(uri)
+                            val fontDestDir = File(EasyDiaryUtils.getApplicationDataDirectory(this) + USER_CUSTOM_FONTS_DIRECTORY)
+                            FileUtils.copyToFile(inputStream, File(fontDestDir, fileName))
+                            runOnUiThread{
+                                progressContainer.visibility = View.GONE
+                                showAlertDialog("${FilenameUtils.getBaseName(fileName)} font file is registered.", null)
+                            }
+                        }).start()
+                        progressContainer.visibility = View.VISIBLE
+                    } else {
+                        showAlertDialog(getString(R.string.add_ttf_fonts_title), "$fileName is not ttf file.", null)
+                    }
+                }
+            }
+        }
+    }
+    private val mRequestExternalStoragePermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+        requireActivity().run {
+            pauseLock()
+            when (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                true -> openFontSettingDialog()
+                false -> makeSnackBar(mBinding.root, getString(R.string.guide_message_3))
+            }
+        }
+    }
 
 
     /***************************************************************************************************
@@ -45,81 +80,26 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mRootView = inflater.inflate(R.layout.partial_settings_font, container, false) as ViewGroup
-        return mRootView
+        mBinding = PartialSettingsFontBinding.inflate(layoutInflater)
+        return mBinding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        progressContainer = mActivity.findViewById(R.id.progressContainer)
-        mActivity.run {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        progressContainer = (requireActivity() as BaseSettingsActivity).getProgressContainer()
+        requireActivity().run {
             changeDrawableIconColor(config.textColor, R.drawable.minus_6)
             changeDrawableIconColor(config.textColor, R.drawable.plus_6)
         }
         bindEvent()
-        updateFragmentUI(mRootView)
+        updateFragmentUI(mBinding.root)
         initPreference()
     }
 
     override fun onResume() {
         super.onResume()
-        updateFragmentUI(mRootView)
+        updateFragmentUI(mBinding.root)
         initPreference()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        super.onActivityResult(requestCode, resultCode, intent)
-        mActivity.pauseLock()
-
-        when (resultCode == Activity.RESULT_OK && intent != null) {
-            true -> {
-                // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-                when (requestCode) {
-                    REQUEST_CODE_FONT_PICK -> {
-                        intent.data?.let { uri ->
-                            val fileName = EasyDiaryUtils.queryName(mActivity.contentResolver, uri)
-                            if (FilenameUtils.getExtension(fileName).equals("ttf", true)) {
-                                Thread(Runnable {
-                                    val inputStream = mActivity.contentResolver.openInputStream(uri)
-                                    val fontDestDir = File(EasyDiaryUtils.getApplicationDataDirectory(mActivity) + USER_CUSTOM_FONTS_DIRECTORY)
-                                    FileUtils.copyToFile(inputStream, File(fontDestDir, fileName))
-                                    mActivity.runOnUiThread{
-                                        progressContainer.visibility = View.GONE
-                                        mActivity.showAlertDialog("${FilenameUtils.getBaseName(fileName)} font file is registered.", null)
-                                    }
-                                }).start()
-                                progressContainer.visibility = View.VISIBLE
-                            } else {
-                                mActivity.showAlertDialog(getString(R.string.add_ttf_fonts_title), "$fileName is not ttf file.", null)
-                            }
-                        }
-                    }
-                }
-            }
-            false -> {
-                when (requestCode) {
-                    REQUEST_CODE_GOOGLE_SIGN_IN, REQUEST_CODE_GOOGLE_DRIVE_PERMISSIONS -> {
-                        mActivity.makeSnackBar("Google account verification failed.")
-                        progressContainer.visibility = View. GONE
-                    }
-                }
-            }
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        mActivity.pauseLock()
-        if (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-            when (requestCode) {
-                REQUEST_CODE_EXTERNAL_STORAGE_WITH_FONT_SETTING -> if (mActivity.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                    openFontSettingDialog()
-                }
-            }
-        } else {
-            mActivity.makeSnackBar(mRootView, getString(R.string.guide_message_3))
-        }
     }
 
 
@@ -128,20 +108,20 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     private val mOnClickListener = View.OnClickListener { view ->
-        mActivity.run {
+        requireActivity().run {
             when (view.id) {
                 R.id.fontSetting -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                     openFontSettingDialog()
                 } else {
-                    confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE_WITH_FONT_SETTING)
+                    confirmExternalStoragePermission(EXTERNAL_STORAGE_PERMISSIONS, mRequestExternalStoragePermissionLauncher)
                 }
                 R.id.decreaseFont -> {
                     config.settingFontSize = config.settingFontSize - 5
-                    initTextSize(mRootView)
+                    initTextSize(mBinding.root)
                 }
                 R.id.increaseFont -> {
                     config.settingFontSize = config.settingFontSize + 5
-                    initTextSize(mRootView)
+                    initTextSize(mBinding.root)
                 }
                 R.id.calendarFontScale -> {
                     openCalendarFontScaleDialog()
@@ -151,44 +131,46 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
                     performFileSearch()
                 }
                 R.id.boldStyleOption -> {
-                    boldStyleOptionSwitcher.toggle()
-                    config.boldStyleEnable = boldStyleOptionSwitcher.isChecked
+                    mBinding.boldStyleOptionSwitcher.toggle()
+                    config.boldStyleEnable = mBinding.boldStyleOptionSwitcher.isChecked
                 }
             }
         }
     }
 
     private fun bindEvent() {
-        fontSetting.setOnClickListener(mOnClickListener)
-        fontLineSpacing.configBuilder
-                .min(0.2F)
-                .max(1.8F)
-                .progress(mActivity.config.lineSpacingScaleFactor)
-                .floatType()
-                .secondTrackColor(config.textColor)
-                .trackColor(config.textColor)
-                .sectionCount(16)
-                .sectionTextInterval(2)
-                .showSectionText()
-                .sectionTextPosition(BubbleSeekBar.TextPosition.BELOW_SECTION_MARK)
-                .autoAdjustSectionMark()
-                .build()
-        val bubbleSeekBarListener = object : BubbleSeekBar.OnProgressChangedListener {
-            override fun onProgressChanged(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float, fromUser: Boolean) {
-                Log.i("progress", "$progress $progressFloat")
-                mActivity.config.lineSpacingScaleFactor = progressFloat
-                setFontsStyle()
-                Log.i("progress", "${mActivity.config.lineSpacingScaleFactor}")
+        mBinding.run {
+            fontSetting.setOnClickListener(mOnClickListener)
+            fontLineSpacing.configBuilder
+                    .min(0.2F)
+                    .max(1.8F)
+                    .progress(requireActivity().config.lineSpacingScaleFactor)
+                    .floatType()
+                    .secondTrackColor(config.textColor)
+                    .trackColor(config.textColor)
+                    .sectionCount(16)
+                    .sectionTextInterval(2)
+                    .showSectionText()
+                    .sectionTextPosition(BubbleSeekBar.TextPosition.BELOW_SECTION_MARK)
+                    .autoAdjustSectionMark()
+                    .build()
+            val bubbleSeekBarListener = object : BubbleSeekBar.OnProgressChangedListener {
+                override fun onProgressChanged(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float, fromUser: Boolean) {
+                    Log.i("progress", "$progress $progressFloat")
+                    requireActivity().config.lineSpacingScaleFactor = progressFloat
+                    setFontsStyle()
+                    Log.i("progress", "${requireActivity().config.lineSpacingScaleFactor}")
+                }
+                override fun getProgressOnActionUp(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float) {}
+                override fun getProgressOnFinally(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float, fromUser: Boolean) {}
             }
-            override fun getProgressOnActionUp(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float) {}
-            override fun getProgressOnFinally(bubbleSeekBar: BubbleSeekBar?, progress: Int, progressFloat: Float, fromUser: Boolean) {}
+            fontLineSpacing.setOnProgressChangedListener(bubbleSeekBarListener)
+            decreaseFont.setOnClickListener(mOnClickListener)
+            increaseFont.setOnClickListener(mOnClickListener)
+            calendarFontScale.setOnClickListener(mOnClickListener)
+            addTtfFontSetting.setOnClickListener(mOnClickListener)
+            boldStyleOption.setOnClickListener(mOnClickListener)
         }
-        fontLineSpacing.setOnProgressChangedListener(bubbleSeekBarListener)
-        decreaseFont.setOnClickListener(mOnClickListener)
-        increaseFont.setOnClickListener(mOnClickListener)
-        calendarFontScale.setOnClickListener(mOnClickListener)
-        addTtfFontSetting.setOnClickListener(mOnClickListener)
-        boldStyleOption.setOnClickListener(mOnClickListener)
     }
 
     /**
@@ -211,16 +193,18 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
             type = "*/*"
         }
 
-        startActivityForResult(intent, REQUEST_CODE_FONT_PICK)
+        mRequestFontPick.launch(intent)
     }
 
     private fun initPreference() {
-        fontSettingSummary.text = FontUtils.fontFileNameToDisplayName(mActivity, mActivity.config.settingFontName)
-        calendarFontScaleDescription.text = when (mActivity.config.settingCalendarFontScale) {
-            DEFAULT_CALENDAR_FONT_SCALE -> getString(R.string.calendar_font_scale_disable)
-            else -> getString(R.string.calendar_font_scale_factor, mActivity.config.settingCalendarFontScale)
+        mBinding.run {
+            fontSettingSummary.text = FontUtils.fontFileNameToDisplayName(requireActivity(), requireActivity().config.settingFontName)
+            calendarFontScaleDescription.text = when (requireActivity().config.settingCalendarFontScale) {
+                DEFAULT_CALENDAR_FONT_SCALE -> getString(R.string.calendar_font_scale_disable)
+                else -> getString(R.string.calendar_font_scale_factor, requireActivity().config.settingCalendarFontScale)
+            }
+            boldStyleOptionSwitcher.isChecked = requireActivity().config.boldStyleEnable
         }
-        boldStyleOptionSwitcher.isChecked = mActivity.config.boldStyleEnable
     }
 
     /**
@@ -229,9 +213,9 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
      */
     private fun openCalendarFontScaleDialog() {
         var alertDialog: AlertDialog? = null
-        val builder = AlertDialog.Builder(mActivity)
+        val builder = AlertDialog.Builder(requireActivity())
         builder.setNegativeButton(getString(android.R.string.cancel), null)
-        val inflater = mActivity.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val inflater = requireActivity().getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val containerView = inflater.inflate(R.layout.dialog_option_item, null)
         val listView = containerView.findViewById<ListView>(R.id.listView)
 
@@ -244,31 +228,31 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
 
         listFontScale.mapIndexed { index, map ->
             val fontScale = map["optionValue"] ?: "0"
-            if (mActivity.config.settingCalendarFontScale == fontScale.toFloat()) selectedIndex = index
+            if (requireActivity().config.settingCalendarFontScale == fontScale.toFloat()) selectedIndex = index
         }
 
-        val arrayAdapter = OptionItemAdapter(mActivity, R.layout.item_check_label, listFontScale, mActivity.config.settingCalendarFontScale)
+        val arrayAdapter = OptionItemAdapter(requireActivity(), R.layout.item_check_label, listFontScale, requireActivity().config.settingCalendarFontScale)
         listView.adapter = arrayAdapter
         listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             val fontInfo = parent.adapter.getItem(position) as HashMap<String, String>
             fontInfo["optionValue"]?.let {
-                mActivity.config.settingCalendarFontScale = it.toFloat()
+                requireActivity().config.settingCalendarFontScale = it.toFloat()
             }
             alertDialog?.cancel()
             initPreference()
         }
 
-        alertDialog = builder.create().apply { mActivity.updateAlertDialog(this, null, containerView, getString(R.string.calendar_font_scale_title)) }
+        alertDialog = builder.create().apply { requireActivity().updateAlertDialog(this, null, containerView, getString(R.string.calendar_font_scale_title)) }
         listView.setSelection(selectedIndex)
     }
 
     private fun openFontSettingDialog() {
         var alertDialog: AlertDialog? = null
-        EasyDiaryUtils.initWorkingDirectory(mActivity)
-        val builder = AlertDialog.Builder(mActivity)
+        EasyDiaryUtils.initWorkingDirectory(requireActivity())
+        val builder = AlertDialog.Builder(requireActivity())
         builder.setNegativeButton(getString(android.R.string.cancel), null)
 //        builder.setTitle(getString(R.string.font_setting))
-        val inflater = mActivity.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val inflater = requireActivity().getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val fontView = inflater.inflate(R.layout.dialog_fonts, null)
         val listView = fontView.findViewById<ListView>(R.id.listFont)
 
@@ -283,7 +267,7 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
             listFont.add(map)
         }
 
-        val fontDir = File(EasyDiaryUtils.getApplicationDataDirectory(mActivity) + USER_CUSTOM_FONTS_DIRECTORY)
+        val fontDir = File(EasyDiaryUtils.getApplicationDataDirectory(requireActivity()) + USER_CUSTOM_FONTS_DIRECTORY)
         fontDir.list()?.let {
             for (fontName in it) {
                 if (FilenameUtils.getExtension(fontName).equals("ttf", ignoreCase = true)) {
@@ -296,7 +280,7 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
         }
 
         listFont.mapIndexed { index, map ->
-            if (mActivity.config.settingFontName == map["fontName"]) selectedIndex = index
+            if (requireActivity().config.settingFontName == map["fontName"]) selectedIndex = index
         }
 
         val arrayAdapter = FontItemAdapter(requireActivity(), R.layout.item_check_label, listFont)
@@ -304,12 +288,12 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
         listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             val fontInfo = parent.adapter.getItem(position) as HashMap<String, String>
             fontInfo["fontName"]?.let {
-                mActivity.config.settingFontName = it
-                FontUtils.setCommonTypeface(mActivity)
+                requireActivity().config.settingFontName = it
+                FontUtils.setCommonTypeface(requireActivity())
                 initPreference()
                 setFontsStyle()
 
-                (mActivity as SettingsActivity).run {
+                (requireActivity() as SettingsActivity).run {
                     pauseLock()
                     updateUI()
                 }
@@ -317,11 +301,11 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
             alertDialog?.cancel()
         }
 
-        alertDialog = builder.create().apply { mActivity.updateAlertDialog(this, null, fontView, getString(R.string.font_setting)) }
+        alertDialog = builder.create().apply { requireActivity().updateAlertDialog(this, null, fontView, getString(R.string.font_setting)) }
         listView.setSelection(selectedIndex)
     }
 
     private fun setFontsStyle() {
-        FontUtils.setFontsTypeface(mActivity, mActivity.assets, null, mRootView)
+        FontUtils.setFontsTypeface(requireActivity(), requireActivity().assets, null, mBinding.root)
     }
 }

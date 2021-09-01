@@ -19,13 +19,13 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
-            <include layout="@layout/partial_edit_toolbar_sub" />
+            <include android:id="@+id/partial_edit_toolbar_sub" layout="@layout/partial_edit_toolbar_sub" />
         </com.google.android.material.appbar.AppBarLayout>
         
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <include layout="@layout/partial_edit_contents" />
+            <include android:id="@+id/partial_edit_contents" layout="@layout/partial_edit_contents" />
             
             <ProgressBar
                 android:id="@+id/photoProgress"

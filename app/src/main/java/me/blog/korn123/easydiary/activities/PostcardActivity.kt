@@ -28,11 +28,11 @@ import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.CALCULATION
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
-import kotlinx.android.synthetic.main.activity_post_card.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.PhotoAdapter
+import me.blog.korn123.easydiary.databinding.ActivityPostcardBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import java.io.File
@@ -41,7 +41,9 @@ import java.io.File
  * Created by hanjoong on 2017-07-01.
  */
 
-class PostCardActivity : EasyDiaryActivity() {
+class
+PostcardActivity : EasyDiaryActivity() {
+    lateinit var mBinding: ActivityPostcardBinding
     lateinit var mShowcaseView: ShowcaseView
     lateinit var mSavedDiaryCardPath: String
     lateinit var mPhotoAdapter: PhotoAdapter
@@ -53,87 +55,90 @@ class PostCardActivity : EasyDiaryActivity() {
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_post_card)
+        mBinding = ActivityPostcardBinding.inflate(layoutInflater)
+        setContentView(mBinding.root)
 
-        setSupportActionBar(toolbar)
+        setSupportActionBar(mBinding.toolbar)
         supportActionBar?.run {
             title = ""
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_cross)    
         }
         mSequence = intent.getIntExtra(DIARY_SEQUENCE, 0)
-        val diaryDto = EasyDiaryDbHelper.readDiaryBy(mSequence)
-        FlavorUtils.initWeatherView(this, weather, diaryDto.weather)
-        when (diaryDto.title.isNullOrEmpty()) {
-            true -> diaryTitle.visibility = View.GONE
-            false -> diaryTitle.text = diaryDto.title
-        }
-        contents.text = diaryDto.contents
-        date.text = when (diaryDto.isAllDay) {
-            true -> DateUtils.getFullPatternDate(diaryDto.currentTimeMillis)
-            false -> DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis)
-        }
-        
-        EasyDiaryUtils.boldString(applicationContext, diaryTitle)
-        
-        initShowcase()
-        savedInstanceState?.let {
-            setBackgroundColor(it.getInt(POSTCARD_BG_COLOR, POSTCARD_BG_COLOR_VALUE))
-            setTextColor(it.getInt(POSTCARD_TEXT_COLOR, POSTCARD_TEXT_COLOR_VALUE))
-        }
 
-        diaryDto.photoUris?.let {
-            if (/*resources.configuration.orientation == ORIENTATION_PORTRAIT && */it.size > 0) {
-                photoContainer.visibility = View.VISIBLE
+        mBinding.run {
+            val diaryDto = EasyDiaryDbHelper.findDiaryBy(mSequence)!!
+            FlavorUtils.initWeatherView(this@PostcardActivity, weather, diaryDto.weather)
+            when (diaryDto.title.isNullOrEmpty()) {
+                true -> diaryTitle.visibility = View.GONE
+                false -> diaryTitle.text = diaryDto.title
+            }
+            contents.text = diaryDto.contents
+            date.text = when (diaryDto.isAllDay) {
+                true -> DateUtils.getFullPatternDate(diaryDto.currentTimeMillis)
+                false -> DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis)
+            }
+            EasyDiaryUtils.boldString(applicationContext, diaryTitle)
 
-                val postCardPhotoItems = arrayListOf<PhotoAdapter.PostCardPhotoItem>()
-                it.forEachIndexed { index, photoUriDto ->
-                    postCardPhotoItems.add(PhotoAdapter.PostCardPhotoItem(EasyDiaryUtils.getApplicationDataDirectory(this) + photoUriDto.getFilePath(), index, 2, 0))
-                }
-                mPhotoAdapter = PhotoAdapter(this, postCardPhotoItems) {
+            initShowcase()
+            savedInstanceState?.let {
+                setBackgroundColor(it.getInt(POSTCARD_BG_COLOR, POSTCARD_BG_COLOR_VALUE))
+                setTextColor(it.getInt(POSTCARD_TEXT_COLOR, POSTCARD_TEXT_COLOR_VALUE))
+            }
+
+            diaryDto.photoUris?.let {
+                if (/*resources.configuration.orientation == ORIENTATION_PORTRAIT && */it.size > 0) {
+                    photoContainer.visibility = View.VISIBLE
+
+                    val postCardPhotoItems = arrayListOf<PhotoAdapter.PostCardPhotoItem>()
+                    it.forEachIndexed { index, photoUriDto ->
+                        postCardPhotoItems.add(PhotoAdapter.PostCardPhotoItem(EasyDiaryUtils.getApplicationDataDirectory(this@PostcardActivity) + photoUriDto.getFilePath(), index, 2, 0))
+                    }
+                    mPhotoAdapter = PhotoAdapter(this@PostcardActivity, postCardPhotoItems) {
+                        resizePhotoGrid()
+                    }
+
+                    photoGrid.run {
+                        layoutManager = FlexboxLayoutManager(this@PostcardActivity).apply {
+                            flexWrap = FlexWrap.WRAP
+                            flexDirection = FlexDirection.ROW
+//                            alignItems = AlignItems.STRETCH
+                        }
+                        adapter = mPhotoAdapter
+                    }
                     resizePhotoGrid()
                 }
-
-                photoGrid.run {
-                    layoutManager = FlexboxLayoutManager(this@PostCardActivity).apply {
-                        flexWrap = FlexWrap.WRAP
-                        flexDirection = FlexDirection.ROW
-//                            alignItems = AlignItems.STRETCH
-                    }
-                    adapter = mPhotoAdapter
-                }
-                resizePhotoGrid()
             }
-        }
 
-        fontSizeSeekBar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                mAddFontSize = progress - 20
-                updateTextSize(postContainer, this@PostCardActivity, mAddFontSize)
+            fontSizeSeekBar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                    mAddFontSize = progress - 20
+                    updateTextSize(postContainer, this@PostcardActivity, mAddFontSize)
 //                toolbar.title = "$mAddFontSize"
-            }
+                }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-            }
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                }
 
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-            }
-        })
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                }
+            })
+        }
     }
 
     private fun resizePhotoGrid() {
-        photoGrid.run {
+        mBinding.photoGrid.run {
             when (resources.configuration.orientation == ORIENTATION_PORTRAIT) {
                 true -> {
                     if (mPhotoAdapter.postCardPhotoItems.none { item -> item.forceSinglePhotoPosition }) {
                         layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
                     } else {
-                        layoutParams.height = CommonUtils.getDefaultDisplay(this@PostCardActivity).x
+                        layoutParams.height = CommonUtils.getDefaultDisplay(this@PostcardActivity).x
                     }
 
                 }
                 false -> {
-                    val height = calcPhotoGridHeight(this@PostCardActivity)
+                    val height = calcPhotoGridHeight(this@PostcardActivity)
                     layoutParams.width = height
                 }
             }
@@ -148,7 +153,7 @@ class PostCardActivity : EasyDiaryActivity() {
 
     override fun onResume() {
         super.onResume()
-        updateTextSize(postContainer, this@PostCardActivity, mAddFontSize)
+        updateTextSize(mBinding.postContainer, this@PostcardActivity, mAddFontSize)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -168,23 +173,6 @@ class PostCardActivity : EasyDiaryActivity() {
             }
         }
     }
-    
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            REQUEST_CODE_BACKGROUND_COLOR_PICKER -> if (resultCode == Activity.RESULT_OK && data != null) {
-                val hexStringColor = "#" + data.getStringExtra("color")
-                contentsContainer.setBackgroundColor(Color.parseColor(hexStringColor))
-                photoGridContainer.setBackgroundColor(Color.parseColor(hexStringColor))
-            }
-            REQUEST_CODE_TEXT_COLOR_PICKER -> if (resultCode == Activity.RESULT_OK && data != null) {
-                val hexStringColor = "#" + data.getStringExtra("color")
-                diaryTitle.setTextColor(Color.parseColor(hexStringColor))
-                date.setTextColor(Color.parseColor(hexStringColor))
-                contents.setTextColor(Color.parseColor(hexStringColor))
-            }
-        }
-    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.diary_post_card, menu)
@@ -194,7 +182,7 @@ class PostCardActivity : EasyDiaryActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.bgColor -> ColorPickerDialogBuilder
-                    .with(this@PostCardActivity)
+                    .with(this@PostcardActivity)
                     //                        .setTitle("Choose Color")
                     .initialColor(mBgColor)
                     .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
@@ -208,7 +196,7 @@ class PostCardActivity : EasyDiaryActivity() {
                     .build()
                     .show()
             R.id.textColor -> ColorPickerDialogBuilder
-                    .with(this@PostCardActivity)
+                    .with(this@PostcardActivity)
                     //                        .setTitle("Choose Color")
                     .initialColor(mTextColor)
                     .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
@@ -237,15 +225,19 @@ class PostCardActivity : EasyDiaryActivity() {
     
     private fun setBackgroundColor(selectedColor: Int) {
         mBgColor = selectedColor
-        contentsContainer.setBackgroundColor(mBgColor)
-        photoGridContainer.setBackgroundColor(mBgColor)
+        mBinding.run {
+            contentsContainer.setBackgroundColor(mBgColor)
+            photoGridContainer.setBackgroundColor(mBgColor)
+        }
     }
     
     private fun setTextColor(selectedColor: Int) {
         mTextColor = selectedColor
-        diaryTitle.setTextColor(mTextColor)
-        date.setTextColor(mTextColor)
-        contents.setTextColor(mTextColor)
+        mBinding.run {
+            diaryTitle.setTextColor(mTextColor)
+            date.setTextColor(mTextColor)
+            contents.setTextColor(mTextColor)
+        }
     }
     
     private fun initShowcase() {
@@ -260,19 +252,19 @@ class PostCardActivity : EasyDiaryActivity() {
             when (showcaseIndex) {
                 1 -> {
                     mShowcaseView.setButtonPosition(centerParams)
-                    mShowcaseView.setTarget(ViewTarget(R.id.textColor, this@PostCardActivity))
+                    mShowcaseView.setTarget(ViewTarget(R.id.textColor, this@PostcardActivity))
                     mShowcaseView.setContentTitle(getString(R.string.post_card_showcase_title_1))
                     mShowcaseView.setContentText(getString(R.string.post_card_showcase_message_1))
                 }
                 2 -> {
                     mShowcaseView.setButtonPosition(centerParams)
-                    mShowcaseView.setTarget(ViewTarget(R.id.bgColor, this@PostCardActivity))
+                    mShowcaseView.setTarget(ViewTarget(R.id.bgColor, this@PostcardActivity))
                     mShowcaseView.setContentTitle(getString(R.string.post_card_showcase_title_2))
                     mShowcaseView.setContentText(getString(R.string.post_card_showcase_message_2))
                 }
                 3 -> {
                     mShowcaseView.setButtonPosition(centerParams)
-                    mShowcaseView.setTarget(ViewTarget(R.id.save, this@PostCardActivity))
+                    mShowcaseView.setTarget(ViewTarget(R.id.save, this@PostcardActivity))
                     mShowcaseView.setContentTitle(getString(R.string.post_card_showcase_title_3))
                     mShowcaseView.setContentText(getString(R.string.post_card_showcase_message_3))
                 }
@@ -295,40 +287,40 @@ class PostCardActivity : EasyDiaryActivity() {
 
     private fun exportDiaryCard(showInfoDialog: Boolean) {
         // draw viewGroup on UI Thread
-        val bitmap = when (photoContainer.visibility == View.VISIBLE) {
-            true -> diaryViewGroupToBitmap(postContainer, true)
-            false -> diaryViewGroupToBitmap(postContainer, false)
-        } 
-                
-        progressBar.visibility = View.VISIBLE
-
-        // generate postcard file another thread
-        Thread(Runnable {
-            try {
-                val diaryCardPath = "$DIARY_POSTCARD_DIRECTORY${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}_$mSequence.jpg"
-                mSavedDiaryCardPath = EasyDiaryUtils.getApplicationDataDirectory(this) + diaryCardPath
-                EasyDiaryUtils.initWorkingDirectory(this@PostCardActivity)
-                BitmapUtils.saveBitmapToFileCache(bitmap, mSavedDiaryCardPath)
-                Handler(Looper.getMainLooper()).post {
-                    progressBar.visibility = View.GONE
-                    if (showInfoDialog) {
+        mBinding.run {
+            val bitmap = when (photoContainer.visibility == View.VISIBLE) {
+                true -> diaryViewGroupToBitmap(postContainer, true)
+                false -> diaryViewGroupToBitmap(postContainer, false)
+            }
+            progressBar.visibility = View.VISIBLE
+            // generate postcard file another thread
+            Thread(Runnable {
+                try {
+                    val diaryCardPath = "$DIARY_POSTCARD_DIRECTORY${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}_$mSequence.jpg"
+                    mSavedDiaryCardPath = EasyDiaryUtils.getApplicationDataDirectory(this@PostcardActivity) + diaryCardPath
+                    EasyDiaryUtils.initWorkingDirectory(this@PostcardActivity)
+                    BitmapUtils.saveBitmapToFileCache(bitmap, mSavedDiaryCardPath)
+                    Handler(Looper.getMainLooper()).post {
+                        progressBar.visibility = View.GONE
+                        if (showInfoDialog) {
 //                        showAlertDialog(getString(R.string.diary_card_export_info), diaryCardPath, DialogInterface.OnClickListener { dialog, which -> })
-                        val postCardViewer = Intent(this@PostCardActivity, PostCardViewerActivity::class.java)
-                        TransitionHelper.startActivityWithTransition(this@PostCardActivity, postCardViewer)
-                    } else {
-                        shareDiary()
+                            val postCardViewer = Intent(this@PostcardActivity, PostcardViewerActivity::class.java)
+                            TransitionHelper.startActivityWithTransition(this@PostcardActivity, postCardViewer)
+                        } else {
+                            shareDiary()
+                        }
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    val errorMessage = e.message
+                    Handler(Looper.getMainLooper()).post {
+                        progressBar.visibility = View.GONE
+                        val errorInfo = String.format("%s\n\n[ERROR: %s]", getString(R.string.diary_card_export_error_message), errorMessage)
+                        showAlertDialog(errorInfo, DialogInterface.OnClickListener { dialog, which -> })
                     }
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                val errorMessage = e.message
-                Handler(Looper.getMainLooper()).post {
-                    progressBar.visibility = View.GONE
-                    val errorInfo = String.format("%s\n\n[ERROR: %s]", getString(R.string.diary_card_export_error_message), errorMessage)
-                    showAlertDialog(errorInfo, DialogInterface.OnClickListener { dialog, which -> })
-                }
-            }
-        }).start()
+            }).start()
+        }
     }
 
     private fun shareDiary() {

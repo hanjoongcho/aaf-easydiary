@@ -2,16 +2,13 @@ package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
 import android.graphics.Color
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.partial_daily_symbol.view.*
-import kotlinx.android.synthetic.main.viewholder_daily_symbol.view.*
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
-import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.databinding.PartialDailySymbolBinding
+import me.blog.korn123.easydiary.databinding.ViewholderDailySymbolBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import java.util.*
@@ -22,9 +19,7 @@ class DailySymbolAdapter(
 ) : RecyclerView.Adapter<DailySymbolAdapter.DailySymbolViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DailySymbolViewHolder {
-        val view = LayoutInflater.from(activity)
-                .inflate(R.layout.viewholder_daily_symbol, parent, false)
-        return DailySymbolViewHolder(view, activity)
+        return DailySymbolViewHolder(ViewholderDailySymbolBinding.inflate(activity.layoutInflater), activity)
     }
 
     override fun onBindViewHolder(holder: DailySymbolViewHolder, position: Int) {
@@ -33,7 +28,7 @@ class DailySymbolAdapter(
 
     override fun getItemCount() = items.size
 
-    class DailySymbolViewHolder(itemView: View, val activity: Activity) : RecyclerView.ViewHolder(itemView) {
+    class DailySymbolViewHolder(private val binding: ViewholderDailySymbolBinding, val activity: Activity) : RecyclerView.ViewHolder(binding.root) {
         init {
             if (itemView is ViewGroup) {
                 activity.run {
@@ -47,29 +42,27 @@ class DailySymbolAdapter(
         }
 
         fun bindTo(dailySymbol: DailySymbol) {
-            itemView.dayOfMonth.text = dailySymbol.dayOfMonth
-            itemView.dayOfWeek.text = dailySymbol.dayOfWeekStr
-            itemView.dayOfWeek.setTextColor(when (dailySymbol.dayOfWeekNum) {
+            binding.dayOfMonth.text = dailySymbol.dayOfMonth
+            binding.dayOfWeek.text = dailySymbol.dayOfWeekStr
+            binding.dayOfWeek.setTextColor(when (dailySymbol.dayOfWeekNum) {
                 Calendar.SATURDAY -> Color.BLUE
                 Calendar.SUNDAY -> Color.RED
                 else -> Color.BLACK
             })
-            val pair = EasyDiaryDbHelper.readDiaryByDateString(dailySymbol.dateString).partition { item ->
+            val pair = EasyDiaryDbHelper.findDiaryByDateString(dailySymbol.dateString).partition { item ->
                 activity.config.selectedSymbols.split(",").find { it.toInt() == item.weather } != null
             }
 
             when (pair.first.isEmpty()) {
-                true -> itemView.noItemMessage.visibility = View.VISIBLE
-                false -> itemView.noItemMessage.visibility = View.GONE
+                true -> binding.noItemMessage.visibility = View.VISIBLE
+                false -> binding.noItemMessage.visibility = View.GONE
             }
 
-            itemView.symbolFlexbox.removeAllViews()
-            (activity.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater).let {
-                pair.first.map { diary ->
-                    val symbolCard = it.inflate(R.layout.partial_daily_symbol, null)
-                    FlavorUtils.initWeatherView(activity, symbolCard.dailySymbol, diary.weather)
-                    itemView.symbolFlexbox.addView(symbolCard)
-                }
+            binding.symbolFlexbox.removeAllViews()
+            pair.first.map { diary ->
+                val partialDailySymbolBinding = PartialDailySymbolBinding.inflate(activity.layoutInflater)
+                FlavorUtils.initWeatherView(activity, partialDailySymbolBinding.dailySymbol, diary.weather)
+                binding.symbolFlexbox.addView(partialDailySymbolBinding.root)
             }
         }
     }

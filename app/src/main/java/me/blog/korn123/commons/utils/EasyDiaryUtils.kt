@@ -2,8 +2,10 @@ package me.blog.korn123.commons.utils
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.content.Context
+import android.content.Intent
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -26,6 +28,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
+import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
@@ -389,5 +392,31 @@ object EasyDiaryUtils {
             start()
         }
         return popup
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    fun disableTouchEvent(view: View) {
+        view.setOnTouchListener { _, _ -> true }
+    }
+
+    fun readFileWithSAF(mimeType: String, activityResultLauncher: ActivityResultLauncher<Intent>) {
+        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+            type = mimeType
+        }
+        activityResultLauncher.launch(intent)
+    }
+
+    fun writeFileWithSAF(fileName: String, mimeType: String, activityResultLauncher: ActivityResultLauncher<Intent>) {
+        Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+            // Filter to only show results that can be "opened", such as
+            // a file (as opposed to a list of contacts or timezones).
+            addCategory(Intent.CATEGORY_OPENABLE)
+
+            type = mimeType
+            // Create a file with the requested MIME type.
+            putExtra(Intent.EXTRA_TITLE, fileName)
+        }.run {
+            activityResultLauncher.launch(this)
+        }
     }
 }

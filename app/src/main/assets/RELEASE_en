@@ -4,6 +4,25 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.172.0 (date: 2021.08.20)
+  * User Experience (UX) Optimization
+
+# Changes in 1.4.171.0 (date: 2021.07.21)
+  * User Experience (UX) Optimization
+
+# Changes in 1.4.170.1 (date: 2021.07.04)
+  * Added temporary save and recovery function
+  * Added the option to disable In-App Review
+
+# Changes in 1.4.169.0 (date: 2021.06.19)
+  * Spanish translation added
+
+# Changes in 1.4.168 (date: 2021.06.10)
+  * User Experience (UX) Optimization
+
+# Changes in 1.4.167 (date: 2021.05.18)
+  * Fixed a bug that abnormally terminated on some devices when rotating the device
+
 # Changes in 1.4.166 (date: 2021.05.11)
   * Italian translation added
   * Improved landscape screen UX

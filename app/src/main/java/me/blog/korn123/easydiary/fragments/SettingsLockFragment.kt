@@ -7,10 +7,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.partial_settings_lock.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.FingerprintLockActivity
 import me.blog.korn123.easydiary.activities.PinLockActivity
+import me.blog.korn123.easydiary.databinding.PartialSettingsLockBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.extensions.updateFragmentUI
@@ -22,7 +22,7 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var mRootView: ViewGroup
+    private lateinit var mBinding: PartialSettingsLockBinding
     private val mActivity: Activity
         get() = requireActivity()
 
@@ -32,21 +32,20 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mRootView = inflater.inflate(R.layout.partial_settings_lock, container, false) as ViewGroup
-        return mRootView
+        mBinding = PartialSettingsLockBinding.inflate(layoutInflater)
+        return mBinding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         bindEvent()
-        updateFragmentUI(mRootView)
+        updateFragmentUI(mBinding.root)
         initPreference()
     }
 
     override fun onResume() {
         super.onResume()
-        updateFragmentUI(mRootView)
+        updateFragmentUI(mBinding.root)
         initPreference()
     }
 
@@ -64,7 +63,7 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
                             if (config.fingerprintLockEnable) {
                                 showAlertDialog(getString(R.string.pin_release_need_fingerprint_disable), null)
                             } else {
-                                appLockSettingSwitcher.isChecked = false
+                                mBinding.appLockSettingSwitcher.isChecked = false
                                 config.aafPinLockEnable = false
                                 showAlertDialog(getString(R.string.pin_setting_release), null)
                             }
@@ -80,7 +79,7 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         when (config.fingerprintLockEnable) {
                             true -> {
-                                fingerprintSwitcher.isChecked = false
+                                mBinding.fingerprintSwitcher.isChecked = false
                                 config.fingerprintLockEnable = false
                                 showAlertDialog(getString(R.string.fingerprint_setting_release), null)
                             }
@@ -106,12 +105,16 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun bindEvent() {
-        appLockSetting.setOnClickListener(mOnClickListener)
-        fingerprint.setOnClickListener(mOnClickListener)
+        mBinding.run {
+            appLockSetting.setOnClickListener(mOnClickListener)
+            fingerprint.setOnClickListener(mOnClickListener)
+        }
     }
 
     private fun initPreference() {
-        appLockSettingSwitcher.isChecked = mActivity.config.aafPinLockEnable
-        fingerprintSwitcher.isChecked = mActivity.config.fingerprintLockEnable
+        mBinding.run {
+            appLockSettingSwitcher.isChecked = mActivity.config.aafPinLockEnable
+            fingerprintSwitcher.isChecked = mActivity.config.fingerprintLockEnable
+        }
     }
 }

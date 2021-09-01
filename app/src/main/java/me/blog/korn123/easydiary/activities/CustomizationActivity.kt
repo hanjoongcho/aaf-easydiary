@@ -8,7 +8,6 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.pauseLock
 import me.blog.korn123.easydiary.extensions.resumeLock
-import me.blog.korn123.easydiary.helper.APP_BACKGROUND_ALPHA
 
 /**
  * Created by CHO HANJOONG on 2018-02-06.

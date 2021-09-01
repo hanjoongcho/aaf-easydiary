@@ -133,21 +133,25 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent">
-            <include layout="@layout/partial_bottom_toolbar" />
+            <include android:id="@+id/bottom_toolbar" layout="@layout/partial_bottom_toolbar" />
         </LinearLayout>
 
-        <ScrollView
+        <RelativeLayout
             android:id="@+id/photoContainerScrollView"
-            android:layout_margin="5dp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent">
-            <LinearLayout
-                android:id="@+id/photoContainer"
-                android:gravity="center"
-                android:orientation="vertical"
+            <ScrollView
+                android:layout_margin="5dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            </LinearLayout>
-        </ScrollView>
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:id="@+id/photoContainer"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                </LinearLayout>
+            </ScrollView>
+        </RelativeLayout>
     </LinearLayout>
 </layout>

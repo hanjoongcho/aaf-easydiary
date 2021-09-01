@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import kotlinx.android.synthetic.main.item_check_label.view.*
+import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
@@ -32,13 +32,14 @@ class OptionItemAdapter(
             activity.run {
                 initTextSize(itemView)
                 updateTextColors(itemView)
+                FontUtils.setFontsTypeface(this, this.assets, null, itemView)
             }
         }
 
         when (itemView.tag is ViewHolder) {
             true -> itemView.tag as ViewHolder
             false -> {
-                val viewHolder = ViewHolder(itemView.textView, itemView.checkIcon)
+                val viewHolder = ViewHolder(itemView.findViewById(R.id.textView), itemView.findViewById(R.id.checkIcon))
                 itemView.tag = viewHolder
                 viewHolder
             }

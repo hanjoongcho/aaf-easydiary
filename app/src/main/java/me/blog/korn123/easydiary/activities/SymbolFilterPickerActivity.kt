@@ -6,10 +6,10 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
-import kotlinx.android.synthetic.main.activity_symbol_filter_picker.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.SymbolFilterAdapter
 import me.blog.korn123.easydiary.adapters.SymbolPagerAdapter
+import me.blog.korn123.easydiary.databinding.ActivitySymbolFilterPickerBinding
 import me.blog.korn123.easydiary.extensions.addCategory
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.showAlertDialog
@@ -25,6 +25,7 @@ class SymbolFilterPickerActivity : EasyDiaryActivity() {
      *   global properties
      *
      ***************************************************************************************************/
+    private lateinit var mBinding: ActivitySymbolFilterPickerBinding
     private lateinit var mSymbolFilterAdapter: SymbolFilterAdapter
     private var mSymbolFilterList: ArrayList<SymbolFilterAdapter.SymbolFilter> = arrayListOf()
 
@@ -35,9 +36,9 @@ class SymbolFilterPickerActivity : EasyDiaryActivity() {
      ***************************************************************************************************/
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.activity_symbol_filter_picker)
-        setSupportActionBar(toolbar)
+        mBinding = ActivitySymbolFilterPickerBinding.inflate(layoutInflater)
+        setContentView(mBinding.root)
+        setSupportActionBar(mBinding.toolbar)
         supportActionBar?.run {
             title = "Symbol Picker"
             setDisplayHomeAsUpEnabled(true)
@@ -59,13 +60,12 @@ class SymbolFilterPickerActivity : EasyDiaryActivity() {
             }
         )
 
-        recyclerView?.apply {
+        mBinding.recyclerView.apply {
             layoutManager = androidx.recyclerview.widget.GridLayoutManager(this@SymbolFilterPickerActivity, 4)
             addItemDecoration(SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding)))
             adapter = mSymbolFilterAdapter
         }
         updateSymbolFilter()
-
 
         val itemList = arrayListOf<Array<String>>()
         val categoryList = arrayListOf<String>()
@@ -89,10 +89,12 @@ class SymbolFilterPickerActivity : EasyDiaryActivity() {
                 }
             }
         }
-        viewpager.run {
-            setBackgroundColor(config.backgroundColor)
-            adapter = symbolPagerAdapter
-            sliding_tabs.setViewPager(this)
+        mBinding.run {
+            viewpager.run {
+                setBackgroundColor(config.backgroundColor)
+                adapter = symbolPagerAdapter
+                slidingTabs.setViewPager(this)
+            }
         }
     }
 
@@ -121,7 +123,7 @@ class SymbolFilterPickerActivity : EasyDiaryActivity() {
             mSymbolFilterList.add(SymbolFilterAdapter.SymbolFilter(sequence.toInt()))
         }
         mSymbolFilterAdapter.notifyDataSetChanged()
-        if (scrollToBottom) recyclerView.smoothScrollToPosition(mSymbolFilterList.size.minus(1))
+        if (scrollToBottom) mBinding.recyclerView.smoothScrollToPosition(mSymbolFilterList.size.minus(1))
     }
 
     class SpacesItemDecoration(private val space: Int) : androidx.recyclerview.widget.RecyclerView.ItemDecoration() {

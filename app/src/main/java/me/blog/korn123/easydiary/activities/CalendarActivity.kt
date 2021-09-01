@@ -3,27 +3,28 @@ package me.blog.korn123.easydiary.activities
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.LinearLayout
 import com.roomorama.caldroid.CaldroidFragment
 import com.roomorama.caldroid.CaldroidFragmentEx
 import com.roomorama.caldroid.CaldroidListener
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import io.realm.Sort
-import kotlinx.android.synthetic.main.activity_calendar.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryInsertActivity.Companion.INITIALIZE_TIME_MILLIS
 import me.blog.korn123.easydiary.adapters.DiaryCalendarItemAdapter
+import me.blog.korn123.easydiary.databinding.ActivityCalendarBinding
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.fragments.CalendarFragment
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiaryDto
-import org.apache.commons.lang3.StringUtils
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -39,6 +40,7 @@ class CalendarActivity : EasyDiaryActivity() {
      *   global properties
      *
      ***************************************************************************************************/
+    private lateinit var mBinding: ActivityCalendarBinding
     private lateinit var mCalendarFragment: CaldroidFragmentEx
     private lateinit var mDatePickerDialog: DatePickerDialog
     private val mCalendar = Calendar.getInstance(Locale.getDefault())
@@ -52,12 +54,13 @@ class CalendarActivity : EasyDiaryActivity() {
      ***************************************************************************************************/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (config.settingCalendarFontScale == DEFAULT_CALENDAR_FONT_SCALE) {
-            setContentView(R.layout.activity_calendar)
-        } else {
-            setContentView(R.layout.activity_calendar_scale)
+        mBinding = ActivityCalendarBinding.inflate(layoutInflater)
+        setContentView(mBinding.root)
+        if (config.settingCalendarFontScale != DEFAULT_CALENDAR_FONT_SCALE && !isLandScape()) {
+            mBinding.calendarCard.layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 6F)
+            mBinding.frameBottom?.layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 4F)
         }
-        setSupportActionBar(toolbar)
+        setSupportActionBar(mBinding.toolbar)
         supportActionBar?.run {
             title = getString(R.string.calendar_title)
             setDisplayHomeAsUpEnabled(true)    
@@ -70,19 +73,19 @@ class CalendarActivity : EasyDiaryActivity() {
         }, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH))
 
         if (config.enableCardViewPolicy) {
-            calendarCard.useCompatPadding = true
-            calendarCard.cardElevation = CommonUtils.dpToPixelFloatValue(this, 2F)
+            mBinding.calendarCard.useCompatPadding = true
+            mBinding.calendarCard.cardElevation = CommonUtils.dpToPixelFloatValue(this, 2F)
         } else {
-            calendarCard.useCompatPadding = false
-            calendarCard.cardElevation = 0F
+            mBinding.calendarCard.useCompatPadding = false
+            mBinding.calendarCard.cardElevation = 0F
         }
         
         val cal = Calendar.getInstance()
         val currentDate = cal.time
         refreshList()
         mArrayAdapterDiary = DiaryCalendarItemAdapter(this, R.layout.item_diary_calendar, this.mDiaryList)
-        selectedList.adapter = mArrayAdapterDiary
-        selectedList.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
+        mBinding.selectedList.adapter = mArrayAdapterDiary
+        mBinding.selectedList.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
             val diaryDto = adapterView.adapter.getItem(i) as DiaryDto
             val detailIntent = Intent(this@CalendarActivity, DiaryReadActivity::class.java)
             detailIntent.putExtra(DIARY_SEQUENCE, diaryDto.sequence)
@@ -134,7 +137,7 @@ class CalendarActivity : EasyDiaryActivity() {
             override fun onCaldroidViewCreated() { }
         }
 
-        writeDiary.setOnClickListener {
+        mBinding.writeDiary.setOnClickListener {
             TransitionHelper.startActivityWithTransition(this, Intent(this, DiaryInsertActivity::class.java).apply {
                 putExtra(INITIALIZE_TIME_MILLIS, mCalendar.timeInMillis)
             })
@@ -179,16 +182,16 @@ class CalendarActivity : EasyDiaryActivity() {
         val formatter = SimpleDateFormat(DateUtils.DATE_PATTERN_DASH, Locale.getDefault())
         val sort: Sort = if (config.calendarSorting == CALENDAR_SORTING_ASC) Sort.ASCENDING else Sort.DESCENDING
         mDiaryList.clear()
-        mDiaryList.addAll(EasyDiaryDbHelper.readDiaryByDateString(formatter.format(mCalendar.time), sort))
+        mDiaryList.addAll(EasyDiaryDbHelper.findDiaryByDateString(formatter.format(mCalendar.time), sort))
         mArrayAdapterDiary?.notifyDataSetChanged()
-        selectedList.setSelection(0)
+        mBinding.selectedList.setSelection(0)
 
         if (mDiaryList.size > 0) {
-            selectedList.visibility = View.VISIBLE
-            emptyInfo.visibility = View.GONE
+            mBinding.selectedList.visibility = View.VISIBLE
+            mBinding.emptyInfo.visibility = View.GONE
         } else {
-            selectedList.visibility = View.GONE
-            emptyInfo.visibility = View.VISIBLE
+            mBinding.selectedList.visibility = View.GONE
+            mBinding.emptyInfo.visibility = View.VISIBLE
         }
     }
 

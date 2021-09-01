@@ -520,6 +520,31 @@
         Italian translation added\n
         Improved landscape screen UX
     </string>
+    <string name="release_233">
+        v1.4.167 / 2021.05.18\n
+        Fixed a bug that abnormally terminated on some devices when rotating the device
+    </string>
+    <string name="release_234">
+        v1.4.168 / 2021.06.10\n
+        User Experience (UX) Optimization
+    </string>
+    <string name="release_235">
+        v1.4.169.0 / 2021.06.19\n
+        Spanish translation added
+    </string>
+    <string name="release_237">
+        v1.4.170.1 / 2021.07.04\n
+        Added temporary save and recovery function\n
+        Added the option to disable In-App Review
+    </string>
+    <string name="release_238">
+        v1.4.171.0 / 2021.07.21\n
+        User Experience (UX) Optimization
+    </string>
+    <string name="release_239">
+        v1.4.172.0 / 2021.08.20\n
+        User Experience (UX) Optimization
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -562,14 +587,14 @@
     <string name="notification_msg_upload_complete">Загрузка завершена</string>
     <string name="notification_msg_upload_success">%s Загрузка выполнена успешно: %d%s</string>
     <string name="notification_msg_upload_fail">%s Ошибка загрузки: %d%s</string>
-    <string name="notification_msg_google_drive_file_count">Количество восстановленных файлов</string>
+    <string name="notification_msg_google_drive_file_count">%s Количество восстановленных файлов: %d%s</string>
     <string name="notification_msg_download_file_count">Количество файлов для скачивания</string>
     <string name="notification_msg_download_invalid">Все целевые файлы восстановления уже существуют.</string>
     <string name="notification_msg_download_empty">Файл для восстановления не существует.</string>
     <string name="notification_msg_download_progress">Скачивается…</string>
     <string name="notification_msg_download_complete">Загрузка завершена</string>
-    <string name="notification_msg_download_success">Скачивание выполнена успешно</string>
-    <string name="notification_msg_download_fail">Ошибка скачивания</string>
+    <string name="notification_msg_download_success">%s Скачивание выполнена успешно: %d%s</string>
+    <string name="notification_msg_download_fail">%s Ошибка скачивания: %d%s</string>
     <string name="notification_msg_duplicate_file_count">%s Количество существующих файлов: %d%s</string>
     <string name="preferences_category_lock">Настройка блокировки приложения</string>
     <string name="fingerprint_lock_title">Блокировка отпечатком пальца</string>
@@ -753,4 +778,10 @@
     <string name="symbol_filter_picker_remove_guide_message">At least one symbol must be selected.</string>
     <string name="title_dialog_postcard_photo_option">Photo crop and filter settings</string>
     <string name="msg_check_force_single_photo">Change to expose only one photo in the photo area of the post card.\nIf more than one photo is registered, you can swipe to view other photos.</string>
+    <string name="load_auto_save_diary_title">Load auto-save diary</string>
+    <string name="load_auto_save_diary_description">There is a diary stored temporarily. Do you want to load the temporarily saved diary?</string>
+    <string name="enable_review_flow_title">Google Play In-App Review</string>
+    <string name="enable_review_flow_summary">If you use Easy Diary for a specific period, the Google Play review registration dialog will be activated. If you do not want to use the review registration function or if the Google Play dialog opens after review registration, you can disable this option to prevent the dialog from opening.</string>
+    <string name="postcard_grid_option_title">Postcard grid options</string>
+    <string name="postcard_grid_option_column_number">%d column per row</string>
 </resources>

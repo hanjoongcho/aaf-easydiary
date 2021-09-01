@@ -520,6 +520,31 @@
         Italian translation added\n
         Improved landscape screen UX
     </string>
+    <string name="release_233">
+        v1.4.167 / 2021.05.18\n
+        Fixed a bug that abnormally terminated on some devices when rotating the device
+    </string>
+    <string name="release_234">
+        v1.4.168 / 2021.06.10\n
+        उपयोगकर्ता अनुभव (UX) अनुकूलन
+    </string>
+    <string name="release_235">
+        v1.4.169.0 / 2021.06.19\n
+        Spanish translation added
+    </string>
+    <string name="release_237">
+        v1.4.170.1 / 2021.07.04\n
+        Added temporary save and recovery function\n
+        Added the option to disable In-App Review
+    </string>
+    <string name="release_238">
+        v1.4.171.0 / 2021.07.21\n
+        User Experience (UX) Optimization
+    </string>
+    <string name="release_239">
+        v1.4.172.0 / 2021.08.20\n
+        User Experience (UX) Optimization
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -562,14 +587,14 @@
     <string name="notification_msg_upload_complete">अपलोड पूरा हुआ</string>
     <string name="notification_msg_upload_success">%s सफलतापूर्वक अपलोड हो गया: %d%s</string>
     <string name="notification_msg_upload_fail">%s फेल अपलोड करें: %d%s</string>
-    <string name="notification_msg_google_drive_file_count">पुनर्प्राप्त फ़ाइलों की संख्या</string>
+    <string name="notification_msg_google_drive_file_count">%s पुनर्प्राप्त फ़ाइलों की संख्या: %d%s</string>
     <string name="notification_msg_download_file_count">डाउनलोड करने के लिए फ़ाइलों की संख्या</string>
     <string name="notification_msg_download_invalid">सभी पुनर्प्राप्ति लक्ष्य फ़ाइलें पहले से मौजूद हैं।</string>
     <string name="notification_msg_download_empty">पुनर्प्राप्त की जाने वाली फ़ाइल मौजूद नहीं है।</string>
     <string name="notification_msg_download_progress">डाउनलोड कर रहा है…</string>
     <string name="notification_msg_download_complete">डाउनलोड सम्पन्न हुआ</string>
-    <string name="notification_msg_download_success">डाउनलोड सफलता</string>
-    <string name="notification_msg_download_fail">डाउनलोड विफल</string>
+    <string name="notification_msg_download_success">%s डाउनलोड सफलता: %d%s</string>
+    <string name="notification_msg_download_fail">%s डाउनलोड विफल: %d%s</string>
     <string name="notification_msg_duplicate_file_count">%sमौजूद फ़ाइलों की संख्या: %d%s</string>
     <string name="preferences_category_lock">एप्लिकेशन लॉक सेटिंग</string>
     <string name="fingerprint_lock_title">फिंगरप्रिंट लॉक</string>
@@ -753,4 +778,10 @@
     <string name="symbol_filter_picker_remove_guide_message">कम से कम एक प्रतीक का चयन करना होगा।</string>
     <string name="title_dialog_postcard_photo_option">फोटो काटना और फिल्टर सेटिंग्स</string>
     <string name="msg_check_force_single_photo">पोस्ट कार्ड के फोटो क्षेत्र में केवल एक फोटो को उजागर करने के लिए बदलें।\nयदि एक से अधिक फ़ोटो पंजीकृत हैं, तो आप अन्य फ़ोटो देखने के लिए स्वाइप कर सकते हैं।</string>
+    <string name="load_auto_save_diary_title">Load auto-save diary</string>
+    <string name="load_auto_save_diary_description">There is a diary stored temporarily. Do you want to load the temporarily saved diary?</string>
+    <string name="enable_review_flow_title">Google Play In-App Review</string>
+    <string name="enable_review_flow_summary">If you use Easy Diary for a specific period, the Google Play review registration dialog will be activated. If you do not want to use the review registration function or if the Google Play dialog opens after review registration, you can disable this option to prevent the dialog from opening.</string>
+    <string name="postcard_grid_option_title">Postcard grid options</string>
+    <string name="postcard_grid_option_column_number">%d column per row</string>
 </resources>

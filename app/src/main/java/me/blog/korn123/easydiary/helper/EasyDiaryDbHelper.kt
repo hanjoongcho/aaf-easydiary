@@ -2,11 +2,10 @@ package me.blog.korn123.easydiary.helper
 
 import android.content.Context
 import io.realm.*
+import me.blog.korn123.easydiary.activities.EditActivity
+import me.blog.korn123.easydiary.activities.EditActivity.Companion.DIARY_ORIGIN_SEQUENCE_INIT
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.models.ActionLog
-import me.blog.korn123.easydiary.models.Alarm
-import me.blog.korn123.easydiary.models.DiaryDto
-import me.blog.korn123.easydiary.models.PhotoUriDto
+import me.blog.korn123.easydiary.models.*
 import org.apache.commons.lang3.StringUtils
 
 /**
@@ -17,7 +16,7 @@ object EasyDiaryDbHelper {
     private val mDiaryConfig: RealmConfiguration by lazy {
         RealmConfiguration.Builder()
                 .name("diary.realm")
-                .schemaVersion(19)
+                .schemaVersion(20)
                 .migration(EasyDiaryMigration())
                 .modules(Realm.getDefaultModule()!!)
                 .build()
@@ -60,14 +59,12 @@ object EasyDiaryDbHelper {
 
     /***************************************************************************************************
      *   Manage DiaryDto model
+     *   Create: Insert
+     *   Read: Find
+     *   Update: Update
+     *   Delete: Delete
      *
      ***************************************************************************************************/
-    fun duplicateDiary(diaryDto: DiaryDto) {
-        diaryDto.currentTimeMillis = System.currentTimeMillis()
-        diaryDto.updateDateString()
-        insertDiary(diaryDto)
-    }
-
     fun insertDiary(diaryDto: DiaryDto) {
         getInstance().executeTransaction { realm ->
             var sequence = 1
@@ -82,14 +79,35 @@ object EasyDiaryDbHelper {
         }
     }
 
-    fun selectFirstDiary(): DiaryDto? {
-        val realm = getInstance()
-        val firstItemTimeMillis = (realm.where(DiaryDto::class.java).min("currentTimeMillis") ?: 0L).toLong()
-        return realm.where(DiaryDto::class.java).equalTo("currentTimeMillis", firstItemTimeMillis).findFirst()
+    fun insertTemporaryDiary(diaryTemp: DiaryDto) {
+        deleteTemporaryDiaryBy(diaryTemp.originSequence)
+        getInstance().executeTransaction { realm ->
+            if (diaryTemp.sequence == EditActivity.DIARY_SEQUENCE_INIT) {
+                realm.where(DiaryDto::class.java).max("sequence")?.let {
+                    diaryTemp.sequence = it.toInt().plus(1)
+                }
+            }
+            realm.insert(diaryTemp)
+        }
     }
 
-    fun countDiaryAll(): Long {
-        return getInstance().where(DiaryDto::class.java).count()
+    fun duplicateDiaryBy(diaryDto: DiaryDto) {
+        diaryDto.currentTimeMillis = System.currentTimeMillis()
+        diaryDto.updateDateString()
+        diaryDto.originSequence = DIARY_ORIGIN_SEQUENCE_INIT
+        insertDiary(diaryDto)
+    }
+
+    fun findTemporaryDiaryBy(originSequence: Int, realmInstance: Realm = getInstance()): DiaryDto? {
+        return realmInstance.where(DiaryDto::class.java).equalTo("originSequence", originSequence).findFirst()
+    }
+
+    fun findFirstDiary(): DiaryDto? {
+        val realm = getInstance()
+        val firstItemTimeMillis = (realm.where(DiaryDto::class.java)
+                .equalTo("originSequence", DIARY_ORIGIN_SEQUENCE_INIT)
+                .min("currentTimeMillis") ?: 0L).toLong()
+        return realm.where(DiaryDto::class.java).equalTo("currentTimeMillis", firstItemTimeMillis).findFirst()
     }
 
     /**
@@ -97,7 +115,7 @@ object EasyDiaryDbHelper {
      *
      * @return an in-memory detached copy of managed RealmObjects.
      */
-    fun readDiary(query: String?, isSensitive: Boolean = false, startTimeMillis: Long = 0, endTimeMillis: Long = 0, symbolSequence: Int = 0, realmInstance: Realm = getInstance()): List<DiaryDto> {
+    fun findDiary(query: String?, isSensitive: Boolean = false, startTimeMillis: Long = 0, endTimeMillis: Long = 0, symbolSequence: Int = 0, realmInstance: Realm = getInstance()): List<DiaryDto> {
         var results: RealmResults<DiaryDto> = when (StringUtils.isEmpty(query)) {
             true -> {
                 realmInstance.where(DiaryDto::class.java).findAll().sort(arrayOf("currentTimeMillis", "sequence"), arrayOf(Sort.DESCENDING, Sort.DESCENDING))
@@ -125,6 +143,11 @@ object EasyDiaryDbHelper {
             results = results.where().equalTo("weather", symbolSequence).findAll()
         }
 
+        // Exclude -1 or greater than 0
+        if (EasyDiaryApplication.context?.config?.enableDebugMode == false) {
+            results = results.where().equalTo("originSequence", DIARY_ORIGIN_SEQUENCE_INIT).findAll()
+        }
+
         return when (EasyDiaryApplication.context?.config?.enableTaskSymbolTopOrder ?: false) {
             true -> {
                 val sortedList = realmInstance.copyFromRealm(results)
@@ -145,30 +168,28 @@ object EasyDiaryDbHelper {
         }
     }
 
-    fun readDiaryBy(sequence: Int, realmInstance: Realm = getInstance()): DiaryDto {
-        return realmInstance.where(DiaryDto::class.java).equalTo("sequence", sequence).findFirst()!!
+    fun findDiaryBy(sequence: Int, realmInstance: Realm = getInstance()): DiaryDto? {
+        return realmInstance.where(DiaryDto::class.java)
+                .equalTo("sequence", sequence).findFirst()
     }
 
-    fun readDiaryByDateString(dateString: String?, sort: Sort = Sort.DESCENDING): List<DiaryDto> {
-        return getInstance().where(DiaryDto::class.java).equalTo("dateString", dateString).findAll().sort("sequence", sort).toList()
+    fun findDiaryByDateString(dateString: String?, sort: Sort = Sort.DESCENDING): List<DiaryDto> {
+        return getInstance().where(DiaryDto::class.java)
+                .equalTo("originSequence", DIARY_ORIGIN_SEQUENCE_INIT)
+                .equalTo("dateString", dateString)
+                .findAll()
+                .sort("sequence", sort).toList()
     }
 
-    fun selectPhotoUriAll(realmInstance: Realm = getInstance()): List<PhotoUriDto> {
+    fun findPhotoUriAll(realmInstance: Realm = getInstance()): List<PhotoUriDto> {
         return realmInstance.where(PhotoUriDto::class.java).findAll().sort("photoUri", Sort.ASCENDING).toList()
     }
 
-    fun countPhotoUriBy(uriString: String): Int {
-        val count = getInstance().where(PhotoUriDto::class.java).equalTo("photoUri", uriString).count()
-        return count.toInt()
-    }
-
-    fun countDiaryBy(dateString: String): Int = getInstance().where(DiaryDto::class.java).equalTo("dateString", dateString).count().toInt()
-
-    fun updateDiary(diaryDto: DiaryDto) {
+    fun updateDiaryBy(diaryDto: DiaryDto) {
         getInstance().executeTransaction { realm -> realm.insertOrUpdate(diaryDto) }
     }
 
-    fun deleteDiary(sequence: Int, realmInstance: Realm = getInstance()) {
+    fun deleteDiaryBy(sequence: Int, realmInstance: Realm = getInstance()) {
         realmInstance.run {
             where(DiaryDto::class.java).equalTo("sequence", sequence).findFirst()?.let {
                 beginTransaction()
@@ -178,18 +199,9 @@ object EasyDiaryDbHelper {
         }
     }
 
-
-    /***************************************************************************************************
-     *   Manage Alarm model
-     *
-     ***************************************************************************************************/
-    private fun readAlarmBy(realmInstance: Realm, sequence: Int): Alarm? {
-        return realmInstance.where(Alarm::class.java).equalTo("sequence", sequence).findFirst()
-    }
-
-    fun deleteAlarm(sequence: Int) {
-        readAlarmBy(sequence)?.let {
-            getInstance().run {
+    fun deleteTemporaryDiaryBy(originSequence: Int, realmInstance: Realm = getInstance()) {
+        realmInstance.run {
+            where(DiaryDto::class.java).equalTo("originSequence", originSequence).findFirst()?.let {
                 beginTransaction()
                 it.deleteFromRealm()
                 commitTransaction()
@@ -197,32 +209,34 @@ object EasyDiaryDbHelper {
         }
     }
 
-    fun countAlarmAll(): Long {
-        return getInstance().where(Alarm::class.java).count()
+    fun countDiaryAll(): Long {
+        return getInstance().where(DiaryDto::class.java)
+                .equalTo("originSequence", DIARY_ORIGIN_SEQUENCE_INIT)
+                .count()
     }
 
-    fun readAlarmAll(): List<Alarm> = getInstance().where(Alarm::class.java).findAll().sort("sequence", Sort.ASCENDING)
+    fun countDiaryBy(dateString: String): Int = getInstance().where(DiaryDto::class.java)
+            .equalTo("originSequence", DIARY_ORIGIN_SEQUENCE_INIT)
+            .equalTo("dateString", dateString)
+            .count().toInt()
 
-    fun readAlarmBy(sequence: Int): Alarm? {
-        return readAlarmBy(getInstance(), sequence)
-    }
+    fun countPhotoUriBy(uriString: String): Int = getInstance().where(PhotoUriDto::class.java)
+            .equalTo("photoUri", uriString)
+            .count().toInt()
 
-    fun duplicateAlarm(alarm: Alarm, realmInstance: Realm = getInstance()): Alarm {
-        return realmInstance.copyFromRealm(alarm)
-    }
 
-    fun updateAlarm(alarm: Alarm) {
-        getInstance().executeTransaction { realm -> realm.insertOrUpdate(alarm) }
-    }
-
-    fun createTemporaryAlarm(workMode: Int = Alarm.WORK_MODE_DIARY_WRITING): Alarm {
+    /***************************************************************************************************
+     *   Manage Alarm model
+     *
+     ***************************************************************************************************/
+    fun insertTemporaryAlarm(workMode: Int = Alarm.WORK_MODE_DIARY_WRITING): Alarm {
         val alarm = Alarm().apply { this.workMode = workMode }
         val sequence = getInstance().where(Alarm::class.java).max("sequence") ?: 0
         when (sequence.toInt() == countAlarmAll().toInt()) {
             true ->  alarm.sequence = sequence.toInt().plus(1)
             false -> {
                 run loop@ {
-                    readAlarmAll().forEachIndexed { index, item ->
+                    findAlarmAll().forEachIndexed { index, item ->
                         val validSequence = index.plus(1)
                         if (item.sequence != validSequence) {
                             alarm.sequence = validSequence
@@ -235,7 +249,39 @@ object EasyDiaryDbHelper {
         return alarm
     }
 
-    fun readSnoozeAlarms(): List<Alarm> = getInstance().where(Alarm::class.java).greaterThan("retryCount", 0).findAll().toList()
+    fun duplicateAlarmBy(alarm: Alarm, realmInstance: Realm = getInstance()): Alarm {
+        return realmInstance.copyFromRealm(alarm)
+    }
+
+    private fun findAlarmBy(realmInstance: Realm, sequence: Int): Alarm? {
+        return realmInstance.where(Alarm::class.java).equalTo("sequence", sequence).findFirst()
+    }
+
+    fun findAlarmBy(sequence: Int): Alarm? {
+        return findAlarmBy(getInstance(), sequence)
+    }
+
+    fun findAlarmAll(): List<Alarm> = getInstance().where(Alarm::class.java).findAll().sort("sequence", Sort.ASCENDING)
+
+    fun findSnoozeAlarms(): List<Alarm> = getInstance().where(Alarm::class.java).greaterThan("retryCount", 0).findAll().toList()
+
+    fun updateAlarmBy(alarm: Alarm) {
+        getInstance().executeTransaction { realm -> realm.insertOrUpdate(alarm) }
+    }
+
+    fun deleteAlarmBy(sequence: Int) {
+        findAlarmBy(sequence)?.let {
+            getInstance().run {
+                beginTransaction()
+                it.deleteFromRealm()
+                commitTransaction()
+            }
+        }
+    }
+
+    fun countAlarmAll(): Long {
+        return getInstance().where(Alarm::class.java).count()
+    }
 
 
     /***************************************************************************************************
@@ -252,7 +298,7 @@ object EasyDiaryDbHelper {
         }
     }
 
-    fun readActionLogAll(): List<ActionLog> = getInstance().where(ActionLog::class.java).findAll().sort("sequence", Sort.DESCENDING)
+    fun findActionLogAll(): List<ActionLog> = getInstance().where(ActionLog::class.java).findAll().sort("sequence", Sort.DESCENDING)
 
     fun deleteActionLogAll() {
         getInstance().executeTransaction { realm ->

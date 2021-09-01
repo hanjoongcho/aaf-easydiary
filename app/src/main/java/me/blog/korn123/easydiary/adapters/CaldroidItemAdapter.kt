@@ -9,8 +9,7 @@ import android.widget.TextView
 import com.roomorama.caldroid.CaldroidGridAdapter
 import hirondelle.date4j.DateTime
 import io.realm.Sort
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
@@ -60,8 +59,9 @@ class CaldroidItemAdapter(
         }
 
         binding.run {
-            GlobalScope.launch {
-                activity.runOnUiThread {
+            CoroutineScope(Dispatchers.IO).launch {
+                delay(100)
+                withContext(Dispatchers.Main) {
                     val dateString = dateTime.format("YYYY-MM-DD")
                     val count = EasyDiaryDbHelper.countDiaryBy(dateString)
                     val topPadding = root.paddingTop
@@ -89,7 +89,7 @@ class CaldroidItemAdapter(
                     root.setPadding(leftPadding, topPadding, rightPadding, bottomPadding)
 
                     val sort: Sort = if (context.config.calendarSorting == CALENDAR_SORTING_ASC) Sort.ASCENDING else Sort.DESCENDING
-                    val mDiaryList = EasyDiaryDbHelper.readDiaryByDateString(dateString, sort)
+                    val mDiaryList = EasyDiaryDbHelper.findDiaryByDateString(dateString, sort)
                     itemCount.run {
                         setTextColor(Color.RED)
                         text = if (count > 3) {

@@ -180,7 +180,7 @@
     <string name="release_116">
         v1.4.53 / 2018.10.13\n
         프리뷰 사진크기 설정기능 추가\n
-        프리뷰 사진 토글기능(접거나 펴기) 추가 
+        프리뷰 사진 토글기능(접거나 펴기) 추가
     </string>
     <string name="release_118">
         v1.4.55 / 2018.11.01\n
@@ -250,7 +250,7 @@
     </string>
     <string name="release_143">
         v1.4.80 / 2019.06.07\n
-        Google Drive Android API를 Google Drive REST API로 변경함(Google Drive Android API는 2019년 12월 6일부터 서비스 종료됨)  
+        Google Drive Android API를 Google Drive REST API로 변경함(Google Drive Android API는 2019년 12월 6일부터 서비스 종료됨)
     </string>
     <string name="release_147">
         v1.4.83 / 2019.06.09\n
@@ -520,6 +520,31 @@
         이탈리아어 번역 추가\n
         가로화면 UX 개선
     </string>
+    <string name="release_233">
+        v1.4.167 / 2021.05.18\n
+        디바이스 화면 회전시 일부 기기에서 비정상 종료되던 버그수정
+    </string>
+    <string name="release_234">
+        v1.4.168 / 2021.06.10\n
+        사용자경험(UX) 최적화
+    </string>
+    <string name="release_235">
+        v1.4.169.0 / 2021.06.19\n
+        스페인어 번역 추가
+    </string>
+    <string name="release_237">
+        v1.4.170.1 / 2021.07.04\n
+        임시저장 및 복구 기능 추가\n
+        인앱리뷰 비활성화 기능 추가
+    </string>
+    <string name="release_238">
+        v1.4.171.0 / 2021.07.21\n
+        사용자경험(UX) 최적화
+    </string>
+    <string name="release_239">
+        v1.4.172.0 / 2021.08.20\n
+        사용자경험(UX) 최적화
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -562,14 +587,14 @@
     <string name="notification_msg_upload_complete">파일 업로드 완료</string>
     <string name="notification_msg_upload_success">%s 업로드 성공: %d%s</string>
     <string name="notification_msg_upload_fail">%s 업로드 실패: %d%s</string>
-    <string name="notification_msg_google_drive_file_count">복구대상 파일</string>
+    <string name="notification_msg_google_drive_file_count">%s 복구대상 파일: %d%s</string>
     <string name="notification_msg_download_file_count">다운로드 대상 파일</string>
     <string name="notification_msg_download_invalid">복구 대상 파일이 디바이스에 모두 존재합니다.</string>
     <string name="notification_msg_download_empty">복구 대상 파일이 존재하지 않습니다.</string>
     <string name="notification_msg_download_progress">파일 다운로드 진행중…</string>
     <string name="notification_msg_download_complete">파일 다운로드 완료</string>
-    <string name="notification_msg_download_success">다운로드 성공</string>
-    <string name="notification_msg_download_fail">다운로드 실패</string>
+    <string name="notification_msg_download_success">%s 다운로드 성공: %d%s</string>
+    <string name="notification_msg_download_fail">%s 다운로드 실패: %d%s</string>
     <string name="notification_msg_duplicate_file_count">%s 중복 파일: %d%s</string>
     <string name="preferences_category_lock">애플리케이션 잠금설정</string>
     <string name="fingerprint_lock_title">지문인식 잠금</string>
@@ -753,4 +778,10 @@
     <string name="symbol_filter_picker_remove_guide_message">적어도 1개 이상의 심벌을 선택해야 합니다.</string>
     <string name="title_dialog_postcard_photo_option">사진 크롭 및 필터 설정</string>
     <string name="msg_check_force_single_photo">포스트 카드 사진 영영에 1개의 사진만 노출합니다.\n2개 이상의 사진이 등록되어 있는경우 스와이프 하여 다른 사진을 볼 수 있습니다.</string>
+    <string name="load_auto_save_diary_title">임시저장 다이어리 불러오기</string>
+    <string name="load_auto_save_diary_description">임시저장된 다이어리가 있습니다. 임시저장된 다이어리를 불러오시겠습니까?</string>
+    <string name="enable_review_flow_title">구글플레이 인앱 리뷰</string>
+    <string name="enable_review_flow_summary">특정기간동안 이지다이어리를 사용하는 경우 구글플레이 리뷰등록 다이얼로그가 활성화됩니다. 리뷰등록 기능을 사용하고 싶지 않거나 리뷰등록 이후에도 구글플레이 다이얼로그가 열리는 경우 이 옵션을 비활성화 시켜 다이얼로그가 열리지 않도록 할 수 있습니다.</string>
+    <string name="postcard_grid_option_title">포스트카드 그리드 옵션</string>
+    <string name="postcard_grid_option_column_number">로우당 컬럼 %d개</string>
 </resources>
