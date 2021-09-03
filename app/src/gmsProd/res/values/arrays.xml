@@ -90,9 +90,9 @@
         <item>127|Angry</item>
         <item>123|Demon</item>
         <item>115|Devil</item>
-        <item>116|Skull</item>
+        <item>116|</item>
         <item>118|Alien</item>
-        <item>117|Poo</item>
+        <item>117|</item>
     </string-array>
 
     <string-array name="daily_item_array">

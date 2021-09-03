@@ -107,8 +107,8 @@ object FlavorUtils {
         EMOTION_SLEEPING -> R.drawable.ic_021_sleeping
         EMOTION_RICH -> R.drawable.ic_025_rich
         EMOTION_DEVIL -> R.drawable.ic_026_devil
-        EMOTION_SKULL -> R.drawable.ic_027_skull
-        EMOTION_POO -> R.drawable.ic_030_poo
+        EMOTION_002 -> R.drawable.ic_027_002
+        EMOTION_001 -> R.drawable.ic_030_001
         EMOTION_ALIEN -> R.drawable.ic_032_alien
         EMOTION_SURPRISED -> R.drawable.ic_033_surprised_2
         EMOTION_LAUGHING_1 -> R.drawable.ic_041_laughing_1
