@@ -105,33 +105,32 @@ class DiaryInsertActivity : EditActivity() {
                     mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_3))
                     mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_3))
                 }
+//                4 -> {
+//                    mShowcaseView.setButtonPosition(centerParams)
+//                    mShowcaseView.setShowcase(ViewTarget(mBinding.partialEditContents.partialEditPhotoContainer.photoView), true)
+//                    mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_4))
+//                    mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_4))
+//                }
                 4 -> {
-                    mShowcaseView.setButtonPosition(centerParams)
-                    mShowcaseView.setShowcase(ViewTarget(mBinding.partialEditContents.partialEditPhotoContainer.photoView), true)
-                    mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_4))
-                    mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_4))
-                }
-
-                5 -> {
                     mShowcaseView.setButtonPosition(centerParams)
                     mShowcaseView.setShowcase(ViewTarget(mBinding.partialEditToolbarSub.datePicker), true)
                     mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_7))
                     mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_7))
                 }
-                6 -> {
+                5 -> {
                     mShowcaseView.setButtonPosition(centerParams)
                     mShowcaseView.setShowcase(ViewTarget(mBinding.partialEditToolbarSub.timePicker), true)
                     mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_8))
                     mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_8))
                 }
-                7 -> {
+                6 -> {
                     mShowcaseView.setButtonPosition(centerParams)
                     mShowcaseView.setShowcase(ViewTarget(mBinding.partialEditToolbarSub.saveContents), true)
                     mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_9))
                     mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_9))
                     mShowcaseView.setButtonText(getString(R.string.create_diary_showcase_button_2))
                 }
-                8 -> mShowcaseView.hide()
+                7 -> mShowcaseView.hide()
             }
             mShowcaseIndex++
         }

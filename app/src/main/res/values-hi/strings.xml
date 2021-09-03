@@ -541,9 +541,18 @@
         v1.4.171.0 / 2021.07.21\n
 		उपयोगकर्ता अनुभव (UX)अनुकूलन
     </string>
-    <string name="release_239">
-        v1.4.172.0 / 2021.08.20\n
-		उपयोगकर्ता अनुभव (UX)अनुकूलन
+    <string name="release_241">
+        v1.4.172.2 / 2021.08.24\n
+        User Experience (UX) Optimization
+    </string>
+    <string name="release_242">
+        v1.4.172.3 / 2021.08.28\n
+        Improved custom app theme and color settings\n
+        Fixed Showcase View error related to toolbar menu change
+    </string>
+    <string name="release_243">
+        v1.4.172.4 / 2021.08.29\n
+        User Experience (UX) Optimization
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -784,4 +793,9 @@
     <string name="enable_review_flow_summary">यदि आप किसी विशिष्ट अवधि के लिए आसान डायरी का उपयोग करते हैं, तो Google Play समीक्षा पंजीकरण संवाद सक्रिय हो जाएगा। यदि आप समीक्षा पंजीकरण फ़ंक्शन का उपयोग नहीं करना चाहते हैं या यदि Google Play संवाद समीक्षा पंजीकरण के बाद खुलता है, तो आप संवाद को खोलने से रोकने के लिए इस विकल्प को अक्षम कर सकते हैं।</string>
     <string name="postcard_grid_option_title">पोस्टकार्ड ग्रिड विकल्प</string>
     <string name="postcard_grid_option_column_number">%d कॉलम प्रति पंक्ति</string>
+    <string name="encrypt_diary">Encrypt Diary</string>
+    <string name="decrypt_diary">Decrypt Diary</string>
+    <string name="postcard_making">Postcard Making</string>
+    <string name="user_custom_setting">User Custom Setting</string>
+    <string name="automation_settings">Automatic setting using themes</string>
 </resources>

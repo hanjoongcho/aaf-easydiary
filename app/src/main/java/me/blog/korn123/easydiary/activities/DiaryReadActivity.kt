@@ -128,18 +128,18 @@ class DiaryReadActivity : EasyDiaryActivity() {
                     }
                 }
                 R.id.speechOutButton -> textToSpeech(fragment.getDiaryContents())
-                R.id.postCard -> {
-                    val postCardIntent = Intent(this@DiaryReadActivity, PostcardActivity::class.java)
-                    postCardIntent.putExtra(DIARY_SEQUENCE, fragment.getSequence())
-                    //                startActivityForResult(postCardIntent, Constants.REQUEST_CODE_BACKGROUND_COLOR_PICKER);
-                    TransitionHelper.startActivityWithTransition(this@DiaryReadActivity, postCardIntent)
-                }
-                R.id.encryptData -> {
-                    showEncryptPagePopup(fragment, ENCRYPTION)
-                }
-                R.id.decryptData -> {
-                    showEncryptPagePopup(fragment, DECRYPTION)
-                }
+//                R.id.postCard -> {
+//                    val postCardIntent = Intent(this@DiaryReadActivity, PostcardActivity::class.java)
+//                    postCardIntent.putExtra(DIARY_SEQUENCE, fragment.getSequence())
+//                    //                startActivityForResult(postCardIntent, Constants.REQUEST_CODE_BACKGROUND_COLOR_PICKER);
+//                    TransitionHelper.startActivityWithTransition(this@DiaryReadActivity, postCardIntent)
+//                }
+//                R.id.encryptData -> {
+//                    showEncryptPagePopup(fragment, ENCRYPTION)
+//                }
+//                R.id.decryptData -> {
+//                    showEncryptPagePopup(fragment, DECRYPTION)
+//                }
                 R.id.popupMenu -> createCustomOptionMenu()
             }
         }
@@ -148,10 +148,10 @@ class DiaryReadActivity : EasyDiaryActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.diary_read, menu)
-        when (mIsEncryptData) {
-            true -> menu.findItem(R.id.encryptData).isVisible = false
-            false -> menu.findItem(R.id.decryptData).isVisible = false
-        }
+//        when (mIsEncryptData) {
+//            true -> menu.findItem(R.id.encryptData).isVisible = false
+//            false -> menu.findItem(R.id.decryptData).isVisible = false
+//        }
         return true
     }
 
@@ -366,13 +366,13 @@ class DiaryReadActivity : EasyDiaryActivity() {
                         setContentTitle(getString(R.string.read_diary_detail_showcase_title_3))
                         setContentText(getString(R.string.read_diary_detail_showcase_message_3))
                     }
-                    4 -> {
-                        setButtonPosition(centerParams)
-                        setTarget(ViewTarget(R.id.postCard, this@DiaryReadActivity))
-                        setContentTitle(getString(R.string.read_diary_detail_showcase_title_4))
-                        setContentText(getString(R.string.read_diary_detail_showcase_message_4))
-                    }
-                    5 -> hide()
+//                    4 -> {
+//                        setButtonPosition(centerParams)
+//                        setTarget(ViewTarget(R.id.postCard, this@DiaryReadActivity))
+//                        setContentTitle(getString(R.string.read_diary_detail_showcase_title_4))
+//                        setContentText(getString(R.string.read_diary_detail_showcase_message_4))
+//                    }
+                    4 -> hide()
                 }
             }
             mShowcaseIndex++
@@ -448,16 +448,41 @@ class DiaryReadActivity : EasyDiaryActivity() {
             updateTextColors(this)
             FontUtils.setFontsTypeface(applicationContext, null, this, true)
             val fragment = mSectionsPagerAdapter.instantiateItem(mBinding.diaryViewPager, mBinding.diaryViewPager.currentItem) as PlaceholderFragment
-            pmrBinding.delete.setOnClickListener {
-                val positiveListener = DialogInterface.OnClickListener { _, _ ->
-                    EasyDiaryDbHelper.deleteDiaryBy(fragment.getSequence())
-                    TransitionHelper.finishActivityWithTransition(this@DiaryReadActivity)
+            pmrBinding.run {
+                when (mIsEncryptData) {
+                    true -> decryptData.visibility = View.VISIBLE
+                    false -> encryptData.visibility = View.VISIBLE
                 }
-                showAlertDialog(getString(R.string.delete_confirm), positiveListener, null)
-                popupWindow?.dismiss()
+                val itemClickListener = View.OnClickListener { view ->
+                    when (view.id) {
+                        R.id.delete -> {
+                            val positiveListener = DialogInterface.OnClickListener { _, _ ->
+                                EasyDiaryDbHelper.deleteDiaryBy(fragment.getSequence())
+                                TransitionHelper.finishActivityWithTransition(this@DiaryReadActivity)
+                            }
+                            showAlertDialog(getString(R.string.delete_confirm), positiveListener, null)
+                        }
+                        R.id.postcard -> {
+                            val postCardIntent = Intent(this@DiaryReadActivity, PostcardActivity::class.java)
+                            postCardIntent.putExtra(DIARY_SEQUENCE, fragment.getSequence())
+                            TransitionHelper.startActivityWithTransition(this@DiaryReadActivity, postCardIntent)
+                        }
+                        R.id.encryptData -> showEncryptPagePopup(fragment, ENCRYPTION)
+                        R.id.decryptData -> showEncryptPagePopup(fragment, DECRYPTION)
+                    }
+                    popupWindow?.dismiss()
+                }
+                delete.setOnClickListener(itemClickListener)
+                postcard.setOnClickListener(itemClickListener)
+                encryptData.setOnClickListener(itemClickListener)
+                decryptData.setOnClickListener(itemClickListener)
             }
         }
         popupWindow = EasyDiaryUtils.openCustomOptionMenu(popupView, findViewById(R.id.popupMenu))
+        updateDrawableColorInnerCardView(R.drawable.picture_w)
+        updateDrawableColorInnerCardView(R.drawable.padlock)
+        updateDrawableColorInnerCardView(R.drawable.unlock)
+        updateDrawableColorInnerCardView(R.drawable.delete_w)
     }
 
     /**
@@ -643,9 +668,11 @@ class DiaryReadActivity : EasyDiaryActivity() {
         }
 
         fun decryptDataOnce(inputPass: String) {
-            mBinding.run {
-                diaryTitle.text = JasyptUtils.decrypt(diaryTitle.text.toString(), inputPass)
-                diaryContents.text = JasyptUtils.decrypt(diaryContents.text.toString(), inputPass)
+            EasyDiaryDbHelper.findDiaryBy(getSequence())?.let { diaryDto ->
+                mBinding.run {
+                    diaryTitle.text = JasyptUtils.decrypt(diaryDto.title!!, inputPass)
+                    diaryContents.text = JasyptUtils.decrypt(diaryDto.contents!!, inputPass)
+                }
             }
         }
 

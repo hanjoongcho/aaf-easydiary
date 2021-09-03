@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.BitmapFactory
 import android.location.Location
 import android.location.LocationListener
@@ -112,6 +113,11 @@ open class BaseDevActivity : EasyDiaryActivity() {
             buttonReleaseOrientation.setOnClickListener { clearHoldOrientation() }
             buttonReviewFlow.setOnClickListener { startReviewFlow() }
             buttonRestartApp.setOnClickListener { restartApplication() }
+            buttonResetShowcaseMain.setOnClickListener {
+                getSharedPreferences("showcase_internal", MODE_PRIVATE).run {
+                    edit().putBoolean("hasShot$SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER", false).apply()
+                }
+            }
         }
     }
 

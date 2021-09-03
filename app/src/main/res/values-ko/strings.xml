@@ -541,8 +541,17 @@
         v1.4.171.0 / 2021.07.21\n
         사용자경험(UX) 최적화
     </string>
-    <string name="release_239">
-        v1.4.172.0 / 2021.08.20\n
+    <string name="release_241">
+        v1.4.172.2 / 2021.08.24\n
+        사용자경험(UX) 최적화
+    </string>
+    <string name="release_242">
+        v1.4.172.3 / 2021.08.28\n
+        사용자정의 앱 테마 및 색상 설정기능 개선\n
+        툴바메뉴 변경으로 발생한 쇼케이스 오류수정
+    </string>
+    <string name="release_243">
+        v1.4.172.4 / 2021.08.29\n
         사용자경험(UX) 최적화
     </string>
 
@@ -784,4 +793,9 @@
     <string name="enable_review_flow_summary">특정기간동안 이지다이어리를 사용하는 경우 구글플레이 리뷰등록 다이얼로그가 활성화됩니다. 리뷰등록 기능을 사용하고 싶지 않거나 리뷰등록 이후에도 구글플레이 다이얼로그가 열리는 경우 이 옵션을 비활성화 시켜 다이얼로그가 열리지 않도록 할 수 있습니다.</string>
     <string name="postcard_grid_option_title">포스트카드 그리드 옵션</string>
     <string name="postcard_grid_option_column_number">로우당 컬럼 %d개</string>
+    <string name="encrypt_diary">다이어리 암호화</string>
+    <string name="decrypt_diary">다이어리 복호화</string>
+    <string name="postcard_making">포스트카드 만들기</string>
+    <string name="user_custom_setting">사용자 정의 설정</string>
+    <string name="automation_settings">테마를 이용한 자동설정</string>
 </resources>

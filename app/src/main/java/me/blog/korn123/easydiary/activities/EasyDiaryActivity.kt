@@ -38,6 +38,7 @@ open class EasyDiaryActivity : BaseSimpleActivity() {
                 updateAppViews(it)
                 updateCardViewPolicy(it)
             }
+            updateBackgroundColor(config.screenBackgroundColor)
             FontUtils.setFontsTypeface(applicationContext, null, findViewById<ViewGroup>(android.R.id.content), mCustomLineSpacing)
         }
     }
@@ -58,7 +59,9 @@ open class EasyDiaryActivity : BaseSimpleActivity() {
 
     fun checkWhatsNewDialog(applyFilter: Boolean = true) {
         arrayListOf<Release>().apply {
-            add(Release(239, R.string.release_239))
+            add(Release(243, R.string.release_243))
+            add(Release(242, R.string.release_242))
+            add(Release(241, R.string.release_241))
             add(Release(238, R.string.release_238))
             add(Release(237, R.string.release_237))
             add(Release(235, R.string.release_235))

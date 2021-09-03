@@ -541,9 +541,18 @@
         v1.4.171.0 / 2021.07.21\n
         ᱭᱩᱡᱚᱨ ᱮᱠᱥᱯᱤᱨᱤᱮᱱᱥ (UX) ᱚᱯᱴᱤᱢᱟᱭᱡᱮᱥᱚᱱ
     </string>
-    <string name="release_239">
-        v1.4.172.0 / 2021.08.20\n
-        ᱭᱩᱡᱚᱨ ᱮᱠᱥᱯᱤᱨᱤᱮᱱᱥ (UX) ᱚᱯᱴᱤᱢᱟᱭᱡᱮᱥᱚᱱ
+    <string name="release_241">
+        v1.4.172.2 / 2021.08.24\n
+        User Experience (UX) Optimization
+    </string>
+    <string name="release_242">
+        v1.4.172.3 / 2021.08.28\n
+        Improved custom app theme and color settings\n
+        Fixed Showcase View error related to toolbar menu change
+    </string>
+    <string name="release_243">
+        v1.4.172.4 / 2021.08.29\n
+        User Experience (UX) Optimization
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -784,4 +793,9 @@
     <string name="enable_review_flow_summary">ᱟᱢ ᱡᱩᱫᱤ Easy Diary ᱢᱤᱫ ᱚᱠᱛᱚ ᱞᱟᱹᱜᱤᱫ ᱵᱮᱵᱷᱟᱨ ᱥᱟᱱᱟᱢ ᱠᱟᱱᱟ, Google Play ᱨᱤᱵᱷᱤᱣ ᱨᱮᱡᱤᱥᱴᱨᱮᱥᱚᱱ ᱰᱟᱭᱞᱚᱜᱽ ᱮᱠᱴᱤᱵᱷᱚᱜᱼᱟ ᱾ ᱟᱢ ᱡᱩᱫᱤ ᱨᱤᱵᱷᱤᱣ ᱨᱮᱡᱤᱥᱴᱨᱮᱥᱚᱱ ᱯᱷᱟᱹᱝᱠᱥᱚᱱ ᱵᱟᱝ ᱵᱮᱵᱷᱟᱨ ᱥᱮᱱᱟᱢ ᱠᱟᱱᱟ ᱟᱨ ᱵᱟᱝ ᱡᱩᱫᱤ ᱨᱤᱵᱷᱤᱣ ᱨᱮᱡᱤᱥᱴᱨᱮᱥᱚᱱ ᱛᱟᱭᱚᱢ Google Play ᱰᱟᱭᱞᱚᱜᱽ ᱠᱷᱩᱞᱟᱹᱜ ᱠᱟᱱᱟ, ᱰᱟᱭᱞᱚᱜᱽ ᱟᱞᱚ ᱠᱷᱩᱞᱟᱹ ᱪᱷᱚ ᱞᱟᱹᱜᱤᱫ ᱟᱢ ᱵᱚᱸᱫ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱾</string>
     <string name="postcard_grid_option_title">ᱰᱟᱠᱼᱠᱟᱰ ᱜᱽᱨᱤᱰ ᱚᱯᱥᱚᱱ</string>
     <string name="postcard_grid_option_column_number">%d ᱠᱚᱞᱚᱢ ᱯᱟᱹᱨ ᱨᱚ</string>
+    <string name="encrypt_diary">Encrypt Diary</string>
+    <string name="decrypt_diary">Decrypt Diary</string>
+    <string name="postcard_making">Postcard Making</string>
+    <string name="user_custom_setting">User Custom Setting</string>
+    <string name="automation_settings">Automatic setting using themes</string>
 </resources>
