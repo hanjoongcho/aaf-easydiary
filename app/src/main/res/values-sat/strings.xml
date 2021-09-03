@@ -509,20 +509,20 @@
     </string>
     <string name="release_229">
         v1.4.163 / 2021.03.23\n
-        Added function to save diary as HTML
+        ᱰᱟᱭᱨᱤ HTML ᱞᱮᱠᱷᱟ ᱛᱮ ᱥᱟᱸᱪᱟᱣ ᱞᱟᱹᱜᱤᱫ ᱚᱯᱥᱚᱱ ᱦᱮᱡ ᱮᱱᱟ
     </string>
     <string name="release_230">
         v1.4.164 / 2021.04.26\n
-        Fixed an issue where the date on the calendar was not visible when the card view color was black
+        ᱠᱟᱰ ᱧᱮᱞ ᱨᱚᱝ ᱦᱮᱱᱫᱮ ᱡᱷᱚᱜ ᱢᱟᱦᱚᱸ ᱠᱚ ᱠᱮᱞᱮᱱᱰᱚᱨ ᱨᱮ ᱵᱟᱝ ᱧᱮᱞ ᱫᱟᱲᱮᱭᱟᱜ ᱠᱚ ᱨᱮᱭᱟᱜ ᱰᱤᱜᱟᱹᱣ ᱴᱷᱤᱠ ᱮᱱᱟ ᱾
     </string>
     <string name="release_232">
         v1.4.166 / 2021.05.11\n
-        Italian translation added\n
-        Improved landscape screen UX
+        ᱤᱴᱟᱞᱤᱭᱟᱹᱱ ᱛᱚᱨᱡᱚᱢᱟ ᱥᱮᱞᱮᱫ ᱮᱱᱟ\n
+        ᱞᱮᱱᱰᱥᱠᱮᱯ ᱥᱠᱨᱤᱱ UX ᱥᱩᱫᱽᱷᱨᱟᱹᱣᱮᱱᱟ
     </string>
     <string name="release_233">
         v1.4.167 / 2021.05.18\n
-        Fixed a bug that abnormally terminated on some devices when rotating the device
+        ᱥᱟᱫᱷᱚᱱ ᱟᱹᱪᱩᱨ ᱡᱷᱚᱜ ᱰᱤᱜᱟᱹᱣ ᱨᱮᱭᱟᱜ ᱵᱟᱹᱜ ᱴᱷᱤᱠ ᱪᱷᱚ ᱮᱱᱟ ᱡᱟᱦᱟᱸ ᱠᱷᱟᱹᱛᱤᱨ ᱥᱟᱫᱷᱚᱱ ᱟᱡ ᱛᱮ ᱵᱚᱸᱫᱚᱜ ᱠᱟᱱ ᱛᱟᱦᱮᱸᱡ
     </string>
     <string name="release_234">
         v1.4.168 / 2021.06.10\n
@@ -530,16 +530,16 @@
     </string>
     <string name="release_235">
         v1.4.169.0 / 2021.06.19\n
-        Spanish translation added
+        ᱥᱯᱮᱱᱤᱥ ᱛᱚᱨᱡᱚᱢᱟ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
     </string>
     <string name="release_237">
         v1.4.170.1 / 2021.07.04\n
-        Added temporary save and recovery function\n
-        Added the option to disable In-App Review
+        ᱥᱟᱸᱪᱟᱣ ᱟᱨ ᱨᱤᱠᱟᱣᱟᱹᱨᱤ ᱯᱷᱟᱹᱝᱥᱚᱱ ᱫᱚᱦᱚ ᱛᱷᱟᱲ ᱚᱯᱥᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ\n
+        ᱤᱱᱼᱮᱯ ᱨᱤᱵᱷᱤᱣ ᱵᱚᱸᱫ ᱞᱟᱹᱜᱤᱫ ᱚᱯᱥᱚᱱ ᱥᱮᱞᱮᱫ ᱦᱩᱭᱮᱱᱟ ᱾
     </string>
     <string name="release_238">
         v1.4.171.0 / 2021.07.21\n
-        User Experience (UX) Optimization
+        ᱭᱩᱡᱚᱨ ᱮᱠᱥᱯᱤᱨᱤᱮᱱᱥ (UX) ᱚᱯᱴᱤᱢᱟᱭᱡᱮᱥᱚᱱ
     </string>
     <string name="release_241">
         v1.4.172.2 / 2021.08.24\n
@@ -787,12 +787,12 @@
     <string name="symbol_filter_picker_remove_guide_message">ᱚᱛᱤ ᱠᱚᱢ ᱨᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱪᱤᱱᱦᱟᱹ ᱱᱤᱦᱟᱹᱛᱤ ᱵᱟᱪᱷᱟᱣ ᱫᱚᱨᱠᱟᱨ ᱾</string>
     <string name="title_dialog_postcard_photo_option">ᱯᱷᱚᱴᱚ ᱜᱮᱫ ᱟᱨ ᱯᱷᱤᱞᱴᱚᱨ ᱥᱟᱡᱟᱣᱠᱚ</string>
     <string name="msg_check_force_single_photo">ᱰᱟᱠᱼᱠᱟᱰ ᱨᱮᱭᱟᱜ ᱪᱤᱛᱟᱹᱨ ᱡᱟᱭᱜᱟ ᱨᱮ ᱠᱷᱟᱹᱞᱤ ᱢᱤᱫᱴᱟᱹᱝ ᱪᱤᱛᱟᱹᱨ ᱛᱮ ᱛᱮ ᱛᱟᱦᱮᱸ ᱪᱷᱚᱭ ᱢᱮ ᱾\nᱡᱩᱫᱤ ᱢᱤᱫᱴᱟᱹᱝ ᱠᱷᱚᱱ ᱡᱟᱹᱥᱛᱤ ᱯᱷᱚᱴᱚ ᱨᱮᱡᱤᱥᱴᱚᱨ ᱞᱮᱠᱷᱟᱱ, ᱟᱢ ᱠᱷᱚᱥᱨᱚᱫ ᱠᱟᱛᱮ ᱚᱞᱜᱟ ᱪᱤᱛᱟᱹᱨ ᱠᱚ ᱧᱮᱞ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ ᱾</string>
-    <string name="load_auto_save_diary_title">Load auto-save diary</string>
-    <string name="load_auto_save_diary_description">There is a diary stored temporarily. Do you want to load the temporarily saved diary?</string>
-    <string name="enable_review_flow_title">Google Play In-App Review</string>
-    <string name="enable_review_flow_summary">If you use Easy Diary for a specific period, the Google Play review registration dialog will be activated. If you do not want to use the review registration function or if the Google Play dialog opens after review registration, you can disable this option to prevent the dialog from opening.</string>
-    <string name="postcard_grid_option_title">Postcard grid options</string>
-    <string name="postcard_grid_option_column_number">%d column per row</string>
+    <string name="load_auto_save_diary_title">ᱟᱡᱛᱮ ᱥᱟᱸᱪᱟᱣ ᱰᱟᱭᱨᱤ ᱞᱟᱫᱮ ᱢᱮ</string>
+    <string name="load_auto_save_diary_description">ᱢᱤᱫᱴᱟᱹᱝ ᱰᱟᱭᱨᱤ ᱫᱚᱦᱚ ᱛᱷᱟᱲ ᱠᱟᱱᱟ ᱾ ᱟᱢ ᱪᱮᱫ ᱫᱚᱦᱚ ᱛᱷᱟᱲ ᱥᱟᱸᱪᱟᱣ ᱠᱟᱱ ᱰᱟᱭᱨᱤ ᱞᱟᱫᱮ ᱥᱟᱱᱟᱢ ᱠᱟᱱᱟ ᱥᱮ?</string>
+    <string name="enable_review_flow_title">Google Play ᱤᱱᱼᱟᱯ ᱨᱤᱵᱷᱤᱣ</string>
+    <string name="enable_review_flow_summary">ᱟᱢ ᱡᱩᱫᱤ Easy Diary ᱢᱤᱫ ᱚᱠᱛᱚ ᱞᱟᱹᱜᱤᱫ ᱵᱮᱵᱷᱟᱨ ᱥᱟᱱᱟᱢ ᱠᱟᱱᱟ, Google Play ᱨᱤᱵᱷᱤᱣ ᱨᱮᱡᱤᱥᱴᱨᱮᱥᱚᱱ ᱰᱟᱭᱞᱚᱜᱽ ᱮᱠᱴᱤᱵᱷᱚᱜᱼᱟ ᱾ ᱟᱢ ᱡᱩᱫᱤ ᱨᱤᱵᱷᱤᱣ ᱨᱮᱡᱤᱥᱴᱨᱮᱥᱚᱱ ᱯᱷᱟᱹᱝᱠᱥᱚᱱ ᱵᱟᱝ ᱵᱮᱵᱷᱟᱨ ᱥᱮᱱᱟᱢ ᱠᱟᱱᱟ ᱟᱨ ᱵᱟᱝ ᱡᱩᱫᱤ ᱨᱤᱵᱷᱤᱣ ᱨᱮᱡᱤᱥᱴᱨᱮᱥᱚᱱ ᱛᱟᱭᱚᱢ Google Play ᱰᱟᱭᱞᱚᱜᱽ ᱠᱷᱩᱞᱟᱹᱜ ᱠᱟᱱᱟ, ᱰᱟᱭᱞᱚᱜᱽ ᱟᱞᱚ ᱠᱷᱩᱞᱟᱹ ᱪᱷᱚ ᱞᱟᱹᱜᱤᱫ ᱟᱢ ᱵᱚᱸᱫ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱾</string>
+    <string name="postcard_grid_option_title">ᱰᱟᱠᱼᱠᱟᱰ ᱜᱽᱨᱤᱰ ᱚᱯᱥᱚᱱ</string>
+    <string name="postcard_grid_option_column_number">%d ᱠᱚᱞᱚᱢ ᱯᱟᱹᱨ ᱨᱚ</string>
     <string name="encrypt_diary">Encrypt Diary</string>
     <string name="decrypt_diary">Decrypt Diary</string>
     <string name="postcard_making">Postcard Making</string>
