@@ -32,7 +32,6 @@
             android:layout_height="match_parent">
             <androidx.cardview.widget.CardView
                 android:id="@+id/searchCard"
-                app:cardElevation="3dp"
                 style="@style/AppCard">
                 <LinearLayout
                     android:orientation="horizontal"
@@ -82,7 +81,6 @@
                         android:layout_height="wrap_content" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-
             <com.github.ksoichiro.android.observablescrollview.ObservableListView
                 android:id="@+id/diaryListView"
                 android:layout_marginTop="@dimen/card_layout_padding"
