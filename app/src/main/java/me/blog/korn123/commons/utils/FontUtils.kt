@@ -2,6 +2,7 @@ package me.blog.korn123.commons.utils
 
 import android.content.Context
 import android.content.res.AssetManager
+import android.graphics.Paint
 import android.graphics.Typeface
 import android.view.ViewGroup
 import android.widget.TextView
@@ -106,4 +107,6 @@ object FontUtils {
         }
         return displayName ?: FilenameUtils.getBaseName(fontFileName)
     }
+
+    fun measureTextWidth(paint: Paint, text: String, scaleFactor: Float = 1.9f): Int = paint.measureText(text).toInt().times(scaleFactor).toInt()
 }

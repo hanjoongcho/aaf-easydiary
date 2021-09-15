@@ -18,7 +18,7 @@ import java.util.*
 class WeekdayArrayAdapter(context: Context, private val textViewResourceId: Int,
                                objects: List<String>, themeResource: Int) : com.roomorama.caldroid.WeekdayArrayAdapter(context, textViewResourceId, objects, themeResource) {
     val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-    
+    var mDiameter = 0
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val weekDayView = inflater.inflate(textViewResourceId, null).apply {
             val textWeekday = findViewById<CalendarItem>(R.id.text_weekday)
@@ -26,11 +26,10 @@ class WeekdayArrayAdapter(context: Context, private val textViewResourceId: Int,
             FontUtils.setFontsTypeface(context, context.assets, "", this as ViewGroup)
             context.initTextSize(this)
             textWeekday.run {
+                if (mDiameter == 0) mDiameter = FontUtils.measureTextWidth(paint, "55")
                 text = getItem(position)
-                if (Locale.getDefault().language.matches("ko|ja".toRegex())) {
-                    layoutParams?.width = (textSize * 2).toInt()
-                    layoutParams?.height = (textSize * 2).toInt()
-                }
+                layoutParams?.width = mDiameter
+                layoutParams?.height = mDiameter
             }
 
             when (context.config.calendarStartDay) {

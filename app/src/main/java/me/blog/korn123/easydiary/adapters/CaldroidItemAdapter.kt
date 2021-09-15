@@ -17,6 +17,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.FragmentCustomCellBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.helper.CALENDAR_SORTING_ASC
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 
@@ -27,7 +28,7 @@ class CaldroidItemAdapter(
         caldroidData: Map<String, Any?>,
         extraData: Map<String, Any>
 ) : CaldroidGridAdapter(activity, month, year, caldroidData, extraData) {
-
+    var mDiameter = 0
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
         val itemView: View = convertView ?: run {
@@ -44,12 +45,12 @@ class CaldroidItemAdapter(
 
         // Get dateTime of this cell
         val dateTime = this.datetimeList[position]
-
         val calendarDate = binding.calendarDate.apply {
 //            changeDateColor(binding, dateTime)
-            text = "${datetimeList[position].day}"
-            layoutParams?.width = (textSize * 2).toInt()
-            layoutParams?.height = (textSize * 2).toInt()
+            text = datetimeList[position].day.toString()
+            if (mDiameter == 0) mDiameter = FontUtils.measureTextWidth(paint, "55")
+            layoutParams?.width = mDiameter
+            layoutParams?.height = mDiameter
         }
 
         if (dateTime.month != month) { // Set color of the dates in previous / next month
