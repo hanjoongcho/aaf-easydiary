@@ -113,16 +113,7 @@ object FontUtils {
 
     fun measureTextWidth(paint: Paint, text: String, scaleFactor: Float = 1.9f): Int = paint.measureText(text).toInt().times(scaleFactor).toInt()
 
-    fun initDefaultFontSetting(activity: Activity) {
-        activity.run {
-            // Initial font size setting
-            if (!preferencesContains(SETTING_FONT_SIZE)) {
-                config.settingFontSize = CommonUtils.dpToPixelFloatValue(this, DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE.toFloat())
-            }
-        }
-    }
-
-    fun initNanumPenFontSetting(activity: Activity) {
+    private fun initDefaultFontSetting(activity: Activity) {
         activity.run {
             // Initial font typeface setting
             if (!preferencesContains(SETTING_FONT_NAME)) {
@@ -132,6 +123,15 @@ object FontUtils {
             // Initial font size setting
             if (!preferencesContains(SETTING_FONT_SIZE)) {
                 config.settingFontSize = CommonUtils.dpToPixelFloatValue(this, DEFAULT_FONT_SIZE_UN_SUPPORT_LANGUAGE.toFloat())
+            }
+        }
+    }
+
+    private fun initNanumPenFontSetting(activity: Activity) {
+        activity.run {
+            // Initial font size setting
+            if (!preferencesContains(SETTING_FONT_SIZE)) {
+                config.settingFontSize = CommonUtils.dpToPixelFloatValue(this, DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE.toFloat())
             }
         }
     }
