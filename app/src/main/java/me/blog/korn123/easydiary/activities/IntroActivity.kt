@@ -19,6 +19,15 @@ import java.util.*
 class IntroActivity : AppCompatActivity() { 
     private lateinit var mBinding: ActivityIntroBinding
     private lateinit var mHandler: Handler
+    override fun onResume() {
+        super.onResume()
+        mBinding.root.run {
+            FontUtils.setFontsTypeface(this@IntroActivity, assets, null, this)
+            initTextSize(this)
+            setBackgroundColor(config.primaryColor)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityIntroBinding.inflate(layoutInflater)
@@ -26,24 +35,7 @@ class IntroActivity : AppCompatActivity() {
         setContentView(mBinding.root)
         rescheduleEnabledAlarms()
 
-        // determine device language
-        if (!Locale.getDefault().language.matches(CUSTOM_FONTS_SUPPORT_LANGUAGE.toRegex())) {
-
-            // Initial font typeface setting
-            if (!preferencesContains(SETTING_FONT_NAME)) {
-                config.settingFontName = CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT
-            }
-
-            // Initial font size setting
-            if (!preferencesContains(SETTING_FONT_SIZE)) {
-                config.settingFontSize = CommonUtils.dpToPixelFloatValue(this, DEFAULT_FONT_SIZE_UN_SUPPORT_LANGUAGE.toFloat())
-            }
-        } else {
-            // Initial font size setting
-            if (!preferencesContains(SETTING_FONT_SIZE)) {
-                config.settingFontSize = CommonUtils.dpToPixelFloatValue(this, DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE.toFloat())
-            }
-        }
+        FontUtils.checkFontSetting(this)
 
         mHandler = object: Handler(this.mainLooper) {
             override fun handleMessage(msg: Message) {
@@ -57,14 +49,5 @@ class IntroActivity : AppCompatActivity() {
                 }
             }
         }.apply { sendEmptyMessageDelayed(START_MAIN_ACTIVITY, 500) }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        mBinding.root.run {
-            FontUtils.setFontsTypeface(this@IntroActivity, assets, null, this)
-            initTextSize(this)
-            setBackgroundColor(config.primaryColor)
-        }
     }
 }

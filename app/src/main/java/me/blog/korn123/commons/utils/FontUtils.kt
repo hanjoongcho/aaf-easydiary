@@ -1,19 +1,22 @@
 package me.blog.korn123.commons.utils
 
+import android.app.Activity
 import android.content.Context
 import android.content.res.AssetManager
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.view.ViewGroup
 import android.widget.TextView
+import io.github.aafactory.commons.utils.CommonUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.helper.CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT
-import me.blog.korn123.easydiary.helper.USER_CUSTOM_FONTS_DIRECTORY
+import me.blog.korn123.easydiary.extensions.preferencesContains
+import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.views.FixedTextView
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang3.StringUtils
 import java.io.File
+import java.util.*
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -109,4 +112,39 @@ object FontUtils {
     }
 
     fun measureTextWidth(paint: Paint, text: String, scaleFactor: Float = 1.9f): Int = paint.measureText(text).toInt().times(scaleFactor).toInt()
+
+    fun initDefaultFontSetting(activity: Activity) {
+        activity.run {
+            // Initial font size setting
+            if (!preferencesContains(SETTING_FONT_SIZE)) {
+                config.settingFontSize = CommonUtils.dpToPixelFloatValue(this, DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE.toFloat())
+            }
+        }
+    }
+
+    fun initNanumPenFontSetting(activity: Activity) {
+        activity.run {
+            // Initial font typeface setting
+            if (!preferencesContains(SETTING_FONT_NAME)) {
+                config.settingFontName = CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT
+            }
+
+            // Initial font size setting
+            if (!preferencesContains(SETTING_FONT_SIZE)) {
+                config.settingFontSize = CommonUtils.dpToPixelFloatValue(this, DEFAULT_FONT_SIZE_UN_SUPPORT_LANGUAGE.toFloat())
+            }
+        }
+    }
+
+    fun checkFontSetting(activity: Activity) {
+        activity.run {
+            // determine device language
+            if (!Locale.getDefault().language.matches(CUSTOM_FONTS_SUPPORT_LANGUAGE.toRegex())) {
+//                initNanumPenFontSetting(this)
+                initDefaultFontSetting(this)
+            } else {
+                initDefaultFontSetting(this)
+            }
+        }
+    }
 }
