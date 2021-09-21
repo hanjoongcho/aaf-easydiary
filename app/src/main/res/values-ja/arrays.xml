@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string-array name="options_spinner_view_mode">
         <item>Fit Center</item>
         <item>Crop Top</item>
@@ -19,27 +19,10 @@
         <item>Vignette</item>
         <item>Gray Scale</item>
     </string-array>
-
-    <string-array name="weather_item_array">
-        <item>0|Aucun</item>
-        <item>1|Ensoleillé</item>
-        <item>2|Nuages et soleil</item>
-        <item>3|Pluvieux</item>
-        <item>4|Orageux</item>
-        <item>5|Neige</item>
+    <string-array name="pref_list_fonts_title" tools:ignore="InconsistentArrays">
+        <item>デバイスの設定フォント</item>
     </string-array>
-
-    <string-array name="tasks_item_array">
-        <item>80|Todo</item>
-        <item>81|Doing</item>
-        <item>82|Done</item>
-        <item>83|Cancel</item>
-    </string-array>
-
-    <string-array name="pref_list_fonts_title">
-        <item>Police de caractère du système</item>
-    </string-array>
-    <string-array name="pref_list_fonts_values">
+    <string-array name="pref_list_fonts_values" tools:ignore="InconsistentArrays">
         <item>Default</item>
     </string-array>
 </resources>
