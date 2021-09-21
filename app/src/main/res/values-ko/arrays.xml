@@ -1,0 +1,34 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string-array name="options_spinner_view_mode">
+        <item>중앙에 맞춤</item>
+        <item>상단을 기준으로 Crop</item>
+        <item>중앙을 기준으로 Crop</item>
+        <item>하단을 기준으로 Crop</item>
+    </string-array>
+    <string-array name="options_spinner_filter_mode">
+        <item>No Filter</item>
+        <item>Cartoon</item>
+        <item>Sepia</item>
+        <item>Contrast</item>
+        <item>Invert</item>
+        <item>Pixelation</item>
+        <item>Sketch</item>
+        <item>Swirl</item>
+        <item>Brightness</item>
+        <item>Kuwahara</item>
+        <item>Vignette</item>
+        <item>Gray Scale</item>
+    </string-array>
+    <string-array name="pref_list_fonts_title" tools:ignore="InconsistentArrays">
+        <item>나눔손글씨 펜</item>
+        <item>나눔손글씨 붓</item>
+        <item>동그라미재단L</item>
+        <item>디바이스 설정폰트</item>
+    </string-array>
+    <string-array name="pref_list_fonts_values" tools:ignore="InconsistentArrays">
+        <item>NanumPen.ttf</item>
+        <item>NanumBrush.ttf</item>
+        <item>TheCircleL.ttf</item>
+        <item>Default</item>
+    </string-array>
+</resources>
