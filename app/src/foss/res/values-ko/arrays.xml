@@ -19,7 +19,6 @@
         <item>Vignette</item>
         <item>Gray Scale</item>
     </string-array>
-
     <string-array name="weather_item_array">
         <item>0|선택안함</item>
         <item>1|Sunny</item>
@@ -28,24 +27,10 @@
         <item>4|BOLT</item>
         <item>5|Snowing</item>
     </string-array>
-
     <string-array name="tasks_item_array">
         <item>80|Todo</item>
         <item>81|Doing</item>
         <item>82|Done</item>
         <item>83|Cancel</item>
-    </string-array>
-
-    <string-array name="pref_list_fonts_title">
-        <item>나눔손글씨 펜</item>
-        <item>나눔손글씨 붓</item>
-        <item>동그라미재단L</item>
-        <item>디바이스 설정폰트</item>
-    </string-array>
-    <string-array name="pref_list_fonts_values">
-        <item>NanumPen.ttf</item>
-        <item>NanumBrush.ttf</item>
-        <item>TheCircleL.ttf</item>
-        <item>Default</item>
     </string-array>
 </resources>

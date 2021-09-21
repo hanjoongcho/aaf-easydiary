@@ -1,0 +1,14 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string-array name="pref_list_fonts_title" tools:ignore="InconsistentArrays">
+        <item>나눔손글씨 펜</item>
+        <item>나눔손글씨 붓</item>
+        <item>동그라미재단L</item>
+        <item>디바이스 설정폰트</item>
+    </string-array>
+    <string-array name="pref_list_fonts_values" tools:ignore="InconsistentArrays">
+        <item>NanumPen.ttf</item>
+        <item>NanumBrush.ttf</item>
+        <item>TheCircleL.ttf</item>
+        <item>Default</item>
+    </string-array>
+</resources>

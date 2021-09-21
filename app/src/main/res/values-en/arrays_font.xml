@@ -1,0 +1,14 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string-array name="pref_list_fonts_title" tools:ignore="InconsistentArrays">
+        <item>NanumPen</item>
+        <item>NanumBrush</item>
+        <item>CircleL</item>
+        <item>Device setting font</item>
+    </string-array>
+    <string-array name="pref_list_fonts_values" tools:ignore="InconsistentArrays">
+        <item>NanumPen.ttf</item>
+        <item>NanumBrush.ttf</item>
+        <item>TheCircleL.ttf</item>
+        <item>Default</item>
+    </string-array>
+</resources>

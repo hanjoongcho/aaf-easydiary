@@ -19,7 +19,6 @@
         <item>Vignette</item>
         <item>Gray Scale</item>
     </string-array>
-
     <string-array name="weather_item_array">
         <item>0|Not selected</item>
         <item>1|Sunny</item>
@@ -38,7 +37,6 @@
         <item>6|Rainbow</item>
         <item>8|Stars</item>
     </string-array>
-
     <string-array name="emotion_item_array">
         <item>139|Sad</item>
         <item>128|Cry</item>
@@ -94,7 +92,6 @@
         <item>118|Alien</item>
         <item>117|</item>
     </string-array>
-
     <string-array name="daily_item_array">
         <item>60|Hurry</item>
         <item>65|Discussion</item>
@@ -137,14 +134,12 @@
         <item>86|Contract</item>
         <item>87|Pin Code</item>
     </string-array>
-
     <string-array name="tasks_item_array">
         <item>80|Todo</item>
         <item>81|Doing</item>
         <item>82|Done</item>
         <item>83|Cancel</item>
     </string-array>
-
     <string-array name="food_item_array">
         <item>278|Lobster</item>
         <item>267|Fried Chicken</item>
@@ -169,16 +164,15 @@
         <item>57|Coffee</item>
         <item>254|Water</item>
         <item>255|Milk</item>
-        <item>276|Beverage</item>
-        <item>258|Beverage</item>
-        <item>259|Beverage</item>
-        <item>261|Beverage</item>
-        <item>263|Beverage</item>
-        <item>265|Beverage</item>
-        <item>269|Beverage</item>
+        <item>276|</item>
+        <item>258|</item>
+        <item>259|</item>
+        <item>261|</item>
+        <item>263|</item>
+        <item>265|</item>
+        <item>269|</item>
         <item>43|Vitamins</item>
     </string-array>
-
     <string-array name="leisure_item_array">
         <item>330|Bicycle</item>
         <item>331|Friends</item>
@@ -216,7 +210,6 @@
         <item>318|Tennis</item>
         <item>319|Tennis</item>
     </string-array>
-
     <string-array name="landscape_item_array">
         <item>200|Beach</item>
         <item>201|Bridge</item>
@@ -234,7 +227,6 @@
         <item>213|Town Hall</item>
         <item>214|Train Station</item>
     </string-array>
-
     <string-array name="symbol_item_array">
         <item>350|Youtube</item>
         <item>370|Netflix</item>
@@ -259,7 +251,6 @@
         <item>366|Linux</item>
         <item>371|Git</item>
     </string-array>
-
     <string-array name="flag_item_array">
         <item>450|Mauritius</item>
         <item>452|Austria</item>
@@ -290,7 +281,6 @@
         <item>477|Puerto Rico</item>
         <item>478|Comoros</item>
         <item>479|North Korea</item>
-
         <item>483|China</item>
         <item>504|Scotland</item>
         <item>512|Japan</item>
@@ -336,12 +326,5 @@
         <item>704|Brazil</item>
         <item>709|United Kingdom</item>
         <item>710|Thailand</item>
-    </string-array>
-
-    <string-array name="pref_list_fonts_title">
-        <item>Device setting font</item>
-    </string-array>
-    <string-array name="pref_list_fonts_values">
-        <item>Default</item>
     </string-array>
 </resources>
