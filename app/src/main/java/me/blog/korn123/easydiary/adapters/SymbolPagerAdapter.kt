@@ -1,6 +1,8 @@
 package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.view.ViewGroup
 import android.widget.GridView
@@ -20,9 +22,10 @@ class SymbolPagerAdapter(
         val activity: Activity,
         private val items: ArrayList<Array<String>>,
         private val categories: List<String>,
+        private val selectedSymbolSequence: Int = 0,
         private val callback: (Int) -> Unit
 ) : androidx.viewpager.widget.PagerAdapter() {
-
+        var selectedItemPosition = 0
     /**
      * @return the number of pages to display
      */
@@ -63,11 +66,18 @@ class SymbolPagerAdapter(
         container.addView(view)
 
         val symbolList = arrayListOf<DiarySymbol>()
-        items[position].map { item -> symbolList.add(DiarySymbol(item))}
+        items[position].map {item ->
+            val diarySymbol = DiarySymbol(item)
+            symbolList.add(diarySymbol)
+            if (diarySymbol.sequence == selectedSymbolSequence) selectedItemPosition = symbolList.size
+        }
 
         val arrayAdapter = DiaryWeatherItemAdapter(activity, R.layout.item_weather, symbolList)
         val gridView = view.findViewById<GridView>(R.id.feelingSymbols)
-        gridView.adapter = arrayAdapter
+        Handler(Looper.getMainLooper()).post { gridView.adapter = arrayAdapter }
+        if (selectedItemPosition > 0) {
+            gridView.post { gridView.smoothScrollToPosition(selectedItemPosition) }
+        }
         gridView.setOnItemClickListener { parent, view, position, id ->
             val diarySymbol = parent.adapter.getItem(position) as DiarySymbol
             callback.invoke(diarySymbol.sequence)

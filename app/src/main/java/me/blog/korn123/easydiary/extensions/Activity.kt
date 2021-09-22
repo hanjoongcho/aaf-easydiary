@@ -284,7 +284,7 @@ fun Activity.startMainActivityWithClearTask() {
 
 fun Activity.isAccessFromOutside(): Boolean = intent.getStringExtra(DIARY_EXECUTION_MODE) == EXECUTION_MODE_ACCESS_FROM_OUTSIDE
 
-fun Activity.openFeelingSymbolDialog(guideMessage: String, callback: (Int) -> Unit) {
+fun Activity.openFeelingSymbolDialog(guideMessage: String, selectedSymbolSequence: Int = 0, callback: (Int) -> Unit) {
     var dialog: Dialog? = null
     val inflater = getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     val symbolDialog = inflater.inflate(R.layout.dialog_feeling_pager, null)
@@ -301,11 +301,24 @@ fun Activity.openFeelingSymbolDialog(guideMessage: String, callback: (Int) -> Un
     addCategory(itemList, categoryList, "symbol_item_array", getString(R.string.category_symbol))
     addCategory(itemList, categoryList, "flag_item_array", getString(R.string.category_flag))
 
+    val currentItem = when {
+        selectedSymbolSequence < 40 -> 0
+        selectedSymbolSequence in 100..199 -> 1
+        selectedSymbolSequence in 40..99 -> 2
+        selectedSymbolSequence in 80..83 -> 3
+        selectedSymbolSequence in 250..299 -> 4
+        selectedSymbolSequence in 300..349 -> 5
+        selectedSymbolSequence in 200..249 -> 6
+        selectedSymbolSequence in 350..449 -> 7
+        selectedSymbolSequence in 450..749 -> 8
+        else -> 0
+    }
+
     val viewPager = symbolDialog.findViewById<androidx.viewpager.widget.ViewPager>(R.id.viewpager).apply { setBackgroundColor(config.backgroundColor) }
     symbolDialog.findViewById<TextView>(R.id.diarySymbolGuide)?.let {
         it.text = guideMessage
     }
-    val symbolPagerAdapter = SymbolPagerAdapter(this, itemList, categoryList) { symbolSequence ->
+    val symbolPagerAdapter = SymbolPagerAdapter(this, itemList, categoryList, selectedSymbolSequence) { symbolSequence ->
         callback.invoke(symbolSequence)
         dialog?.dismiss()
     }
@@ -313,6 +326,7 @@ fun Activity.openFeelingSymbolDialog(guideMessage: String, callback: (Int) -> Un
 
     val slidingTabLayout = symbolDialog.findViewById<SlidingTabLayout>(R.id.sliding_tabs).apply { setBackgroundColor(config.backgroundColor) }
     slidingTabLayout.setViewPager(viewPager)
+    viewPager.setCurrentItem(currentItem, true)
 
     val dismissButton = symbolDialog.findViewById(R.id.closeBottomSheet) as ImageView
     dismissButton.setOnClickListener { dialog?.dismiss() }
