@@ -25,7 +25,6 @@ class SymbolPagerAdapter(
         private val selectedSymbolSequence: Int = 0,
         private val callback: (Int) -> Unit
 ) : androidx.viewpager.widget.PagerAdapter() {
-        var selectedItemPosition = 0
     /**
      * @return the number of pages to display
      */
@@ -60,12 +59,14 @@ class SymbolPagerAdapter(
      * inflate a layout from the apps resources and then change the text view to signify the position.
      */
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
+//        selectedItemPosition = 0
         // Inflate a new layout from our resources
         val view = activity.layoutInflater.inflate(R.layout.dialog_feeling, container, false)
         // Add the newly created View to the ViewPager
         container.addView(view)
 
         val symbolList = arrayListOf<DiarySymbol>()
+        var selectedItemPosition = 0
         items[position].map {item ->
             val diarySymbol = DiarySymbol(item)
             symbolList.add(diarySymbol)
@@ -76,7 +77,7 @@ class SymbolPagerAdapter(
         val gridView = view.findViewById<GridView>(R.id.feelingSymbols)
         Handler(Looper.getMainLooper()).post { gridView.adapter = arrayAdapter }
         if (selectedItemPosition > 0) {
-            gridView.post { gridView.smoothScrollToPosition(selectedItemPosition) }
+            gridView.post { gridView.setSelection(selectedItemPosition) }
         }
         gridView.setOnItemClickListener { parent, view, position, id ->
             val diarySymbol = parent.adapter.getItem(position) as DiarySymbol
