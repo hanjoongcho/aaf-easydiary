@@ -1,6 +1,8 @@
 package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.view.ViewGroup
 import android.widget.GridView
@@ -20,9 +22,9 @@ class SymbolPagerAdapter(
         val activity: Activity,
         private val items: ArrayList<Array<String>>,
         private val categories: List<String>,
+        private val selectedSymbolSequence: Int = 0,
         private val callback: (Int) -> Unit
 ) : androidx.viewpager.widget.PagerAdapter() {
-
     /**
      * @return the number of pages to display
      */
@@ -57,17 +59,26 @@ class SymbolPagerAdapter(
      * inflate a layout from the apps resources and then change the text view to signify the position.
      */
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
+//        selectedItemPosition = 0
         // Inflate a new layout from our resources
         val view = activity.layoutInflater.inflate(R.layout.dialog_feeling, container, false)
         // Add the newly created View to the ViewPager
         container.addView(view)
 
         val symbolList = arrayListOf<DiarySymbol>()
-        items[position].map { item -> symbolList.add(DiarySymbol(item))}
+        var selectedItemPosition = 0
+        items[position].map {item ->
+            val diarySymbol = DiarySymbol(item)
+            symbolList.add(diarySymbol)
+            if (diarySymbol.sequence == selectedSymbolSequence) selectedItemPosition = symbolList.size
+        }
 
         val arrayAdapter = DiaryWeatherItemAdapter(activity, R.layout.item_weather, symbolList)
         val gridView = view.findViewById<GridView>(R.id.feelingSymbols)
-        gridView.adapter = arrayAdapter
+        Handler(Looper.getMainLooper()).post { gridView.adapter = arrayAdapter }
+        if (selectedItemPosition > 0) {
+            gridView.post { gridView.setSelection(selectedItemPosition) }
+        }
         gridView.setOnItemClickListener { parent, view, position, id ->
             val diarySymbol = parent.adapter.getItem(position) as DiarySymbol
             callback.invoke(diarySymbol.sequence)
