@@ -806,5 +806,5 @@
     <string name="postcard_making">はがき作り</string>
     <string name="user_custom_setting">ユーザーカスタム設定</string>
     <string name="automation_settings">テーマを使用した自動設定</string>
-    <string name="place_finger_description">Please place your finger on the fingerprint sensor</string>
+    <string name="place_finger_description">指紋センサーに指を上げてください。</string>
 </resources>
