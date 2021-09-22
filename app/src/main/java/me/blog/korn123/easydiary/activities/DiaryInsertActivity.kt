@@ -203,7 +203,7 @@ class DiaryInsertActivity : EditActivity() {
             }
         }
 
-        mBinding.partialEditContents.feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog(getString(R.string.diary_symbol_guide_message)) { symbolSequence ->
+        mBinding.partialEditContents.feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog(getString(R.string.diary_symbol_guide_message), mSelectedItemPosition) { symbolSequence ->
             selectFeelingSymbol(symbolSequence)
         }}
     }

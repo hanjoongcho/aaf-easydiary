@@ -70,7 +70,7 @@ class SymbolPagerAdapter(
         items[position].map {item ->
             val diarySymbol = DiarySymbol(item)
             symbolList.add(diarySymbol)
-            if (diarySymbol.sequence == selectedSymbolSequence) selectedItemPosition = symbolList.size
+            if (diarySymbol.sequence == selectedSymbolSequence) selectedItemPosition = symbolList.size.minus(1)
         }
 
         val arrayAdapter = DiaryWeatherItemAdapter(activity, R.layout.item_weather, symbolList)
