@@ -77,7 +77,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
         super.onResume()
 
         if (!mSettingComplete) {
-            mBinding.guideMessage.text = getString(R.string.place_finger)
+            mBinding.guideMessage.text = getString(R.string.place_finger_description)
             FontUtils.setFontsTypeface(applicationContext, assets, null, mBinding.container)
             mBinding.changePinLock.visibility = if (mActivityMode == ACTIVITY_SETTING) View.GONE else View.VISIBLE
 
@@ -405,7 +405,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
 
         // Set prompt info
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
-                .setDescription(getString(R.string.place_finger))
+                .setDescription(getString(R.string.place_finger_description))
                 .setTitle(getString(R.string.app_name))
 //                .setSubtitle("Subtitle")
                 .setNegativeButtonText(getString(R.string.cancel))

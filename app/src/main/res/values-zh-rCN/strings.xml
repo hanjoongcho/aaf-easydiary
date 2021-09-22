@@ -806,4 +806,5 @@
     <string name="postcard_making">Postcard Making</string>
     <string name="user_custom_setting">User Custom Setting</string>
     <string name="automation_settings">Automatic setting using themes</string>
+    <string name="place_finger_description">请将手指放在指纹传感器上</string>
 </resources>

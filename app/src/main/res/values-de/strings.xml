@@ -783,7 +783,7 @@
     <string name="schedule_backup_local_complete">Tagebuchsicherung auf lokalem Gerät abgeschlossen.</string>
     <string name="schedule_backup_gms_complete">Die Sicherungsdatei des Tagebuchs und das angehängte Foto wurden in Google Drive gespeichert.%s</string>
     <string name="ok">OK</string>
-    <string name="cancel">Abruch</string>
+    <string name="cancel">Abbruch</string>
     <string name="settings">Einstellungen</string>
     <string name="location_info_title">Anzeige der Standortinformationen</string>
     <string name="location_info_description">Die Standortinformationen werden mithilfe von GPS-Informationen im Tagebuch angezeigt.</string>
@@ -806,4 +806,5 @@
     <string name="postcard_making">Postcard Making</string>
     <string name="user_custom_setting">User Custom Setting</string>
     <string name="automation_settings">Automatic setting using themes</string>
+    <string name="place_finger_description">Please place your finger on the fingerprint sensor</string>
 </resources>
