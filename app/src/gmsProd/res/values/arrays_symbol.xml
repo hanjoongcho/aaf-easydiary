@@ -111,6 +111,7 @@
         <item>84|Recipe</item>
         <item>88|Dictionary</item>
         <item>85|Stock</item>
+        <item>89|Money</item>
         <item>86|Contract</item>
         <item>87|Pin Code</item>
     </string-array>
