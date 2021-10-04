@@ -163,8 +163,8 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.7'
 
     // AAFactory
-//    implementation 'io.github.aafactory:aafactory-commons:1.0.9'
-    implementation project(":aafactory-commons")
+    implementation 'io.github.aafactory:aafactory-commons:1.0.9'
+//    implementation project(":aafactory-commons")
 
     // etc.
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.31'
@@ -188,7 +188,7 @@ dependencies {
     implementation 'io.noties:prism4j:2.0.0'
     implementation group: 'org.jasypt', name: 'jasypt', version: '1.9.2'
 
-//    kapt 'io.noties:prism4j-bundler:2.0.0'
+    kapt 'io.noties:prism4j-bundler:2.0.0'
 
     // android test
     androidTestImplementation 'androidx.test:core:1.4.0'
