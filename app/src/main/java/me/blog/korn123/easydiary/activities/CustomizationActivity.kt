@@ -11,8 +11,6 @@ import io.github.aafactory.commons.activities.BaseSimpleActivity
 import io.github.aafactory.commons.dialogs.LineColorPickerDialog
 import io.github.aafactory.commons.extensions.darkenColor
 import io.github.aafactory.commons.extensions.getThemeId
-import io.github.aafactory.commons.extensions.updateAppViews
-import io.github.aafactory.commons.extensions.updateTextColors
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityCustomizationBinding
