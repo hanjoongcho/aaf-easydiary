@@ -67,6 +67,7 @@ class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
                 TransitionHelper.startActivityWithTransition(requireActivity(), Intent(requireActivity(), MarkDownViewActivity::class.java).apply {
                     putExtra(MarkDownViewActivity.OPEN_URL_INFO, "https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/THIRDPARTY.md")
                     putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, getString(R.string.preferences_information_licenses))
+                    putExtra(MarkDownViewActivity.FORCE_APPEND_CODE_BLOCK, false)
                 })
             }
             R.id.releaseNotes -> (requireActivity() as SettingsActivity).checkWhatsNewDialog(false)
@@ -74,12 +75,14 @@ class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
                 TransitionHelper.startActivityWithTransition(requireActivity(), Intent(requireActivity(), MarkDownViewActivity::class.java).apply {
                     putExtra(MarkDownViewActivity.OPEN_URL_INFO, getString(R.string.faq_url))
                     putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, getString(R.string.faq_title))
+                    putExtra(MarkDownViewActivity.FORCE_APPEND_CODE_BLOCK, false)
                 })
             }
             R.id.privacyPolicy -> {
                 TransitionHelper.startActivityWithTransition(requireActivity(), Intent(requireActivity(), MarkDownViewActivity::class.java).apply {
                     putExtra(MarkDownViewActivity.OPEN_URL_INFO, getString(R.string.privacy_policy_url))
                     putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, getString(R.string.privacy_policy_title))
+                    putExtra(MarkDownViewActivity.FORCE_APPEND_CODE_BLOCK, false)
                 })
             }
         }
