@@ -7,10 +7,10 @@ import org.junit.Test
 
 class MaxMin {
     // Return a customer whose order count is the highest among all customers
-    fun Shop.getCustomerWithMaximumNumberOfOrders(): Customer? = customers.maxBy { it.orders.size }
+    fun Shop.getCustomerWithMaximumNumberOfOrders(): Customer? = customers.maxByOrNull { it.orders.size }
 
     // Return the most expensive product which has been ordered
-    fun Customer.getMostExpensiveOrderedProduct(): Product? = orders.flatMap { it.products }.maxBy { it.price }
+    fun Customer.getMostExpensiveOrderedProduct(): Product? = orders.flatMap { it.products }.maxByOrNull { it.price }
 
     @Test
     fun getCustomerWithMaximumNumberOfOrders_test() {
