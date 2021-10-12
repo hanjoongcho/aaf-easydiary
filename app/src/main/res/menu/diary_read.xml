@@ -14,6 +14,12 @@
         android:title="@string/text_to_speech"
         app:showAsAction="always" />
     <item
+        android:id="@+id/highlightText"
+        android:icon="@drawable/ic_aaf_search"
+        android:orderInCategory="100"
+        android:title="Highlight"
+        app:showAsAction="always" />
+    <item
         android:icon="@drawable/ic_options_three_dots"
         android:id="@+id/popupMenu"
         android:orderInCategory="100"

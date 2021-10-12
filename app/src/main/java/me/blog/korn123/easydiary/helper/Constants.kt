@@ -84,6 +84,8 @@ const val DAILY_CONTRACT = 86
 const val DAILY_PIN_CODE = 87
 const val DAILY_DICTIONARY = 88
 const val DAILY_MONEY = 89
+const val DAILY_CIGARETTE = 90
+const val DAILY_NO_SMOKING = 91
 
 // Tasks 80 ~ 83
 const val DAILY_TODO = 80
