@@ -75,6 +75,8 @@ object FlavorUtils {
         DAILY_PIN_CODE -> R.drawable.ic_pin_code
         DAILY_DICTIONARY -> R.drawable.ic_dictionary
         DAILY_MONEY -> R.drawable.ic_money
+        DAILY_CIGARETTE -> R.drawable.ic_cigarette
+        DAILY_NO_SMOKING -> R.drawable.ic_no_smoking
 
         LANDSCAPE_BEACH -> R.drawable.ic_beach
         LANDSCAPE_BRIDGE -> R.drawable.ic_bridge

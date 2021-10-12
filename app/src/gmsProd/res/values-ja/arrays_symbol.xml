@@ -114,6 +114,8 @@
         <item>89|Money</item>
         <item>86|Contract</item>
         <item>87|Pin Code</item>
+        <item>90|</item>
+        <item>91|</item>
     </string-array>
     <string-array name="tasks_item_array">
         <item>80|Todo</item>
