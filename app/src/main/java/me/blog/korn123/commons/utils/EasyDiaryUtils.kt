@@ -184,7 +184,7 @@ object EasyDiaryUtils {
         }
     }
 
-    private fun removeSpans(spannableString: SpannableString) {
+    fun removeSpans(spannableString: SpannableString) {
         spannableString.getSpans(0, spannableString.length, BackgroundColorSpan::class.java)?.forEach { spannableString.removeSpan(it) }
         spannableString.getSpans(0, spannableString.length, ForegroundColorSpan::class.java)?.forEach { spannableString.removeSpan(it) }
     }

@@ -9,8 +9,10 @@ import android.os.Handler
 import android.os.Looper
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
+import android.text.SpannableString
 import android.view.*
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.databinding.DataBindingUtil
@@ -52,6 +54,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
     private lateinit var mSectionsPagerAdapter: SectionsPagerAdapter
     private lateinit var mBinding: ActivityDiaryReadBinding
     private lateinit var mPopupEncryptionBinding: PopupEncryptionBinding
+    private lateinit var mDialogHighlightKeywordBinding: DialogHighlightKeywordBinding
     private var mTextToSpeech: TextToSpeech? = null
     private var mShowcaseView: ShowcaseView? = null
     private var mShowcaseIndex = 1
@@ -67,6 +70,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
         super.onCreate(savedInstanceState)
         mBinding = ActivityDiaryReadBinding.inflate(layoutInflater)
         mPopupEncryptionBinding = PopupEncryptionBinding.inflate(layoutInflater)
+        mDialogHighlightKeywordBinding = DialogHighlightKeywordBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
         setSupportActionBar(mBinding.toolbar)
         supportActionBar?.run {
@@ -106,6 +110,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
         super.onSaveInstanceState(outState)
     }
 
+    var mDialogSearch: AlertDialog? = null
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 //        val fragment = mSectionsPagerAdapter?.getItem(diaryViewPager.currentItem)
         val fragment = mSectionsPagerAdapter.instantiateItem(mBinding.diaryViewPager, mBinding.diaryViewPager.currentItem)
@@ -141,6 +146,27 @@ class DiaryReadActivity : EasyDiaryActivity() {
 //                    showEncryptPagePopup(fragment, DECRYPTION)
 //                }
                 R.id.popupMenu -> createCustomOptionMenu()
+                R.id.highlightText -> {
+                    mDialogSearch?.show() ?: run {
+                        val builder = AlertDialog.Builder(this).apply {
+                            setNegativeButton(getString(android.R.string.cancel), null)
+                            setPositiveButton(getString(android.R.string.ok)) { _, _ ->
+                                // Dialog for search keyword
+                                when (mDialogHighlightKeywordBinding.searchKeywordQuery.text.toString().isNotEmpty()) {
+                                    true -> fragment.highlightDiary(mDialogHighlightKeywordBinding.searchKeywordQuery.text.toString())
+                                    false -> fragment.clearHighLight()
+                                }
+                                mDialogSearch?.dismiss()
+                            }
+                        }
+                        mDialogSearch = builder.create()
+                        mDialogHighlightKeywordBinding.root.run {
+                            updateTextColors(this)
+                            FontUtils.setFontsTypeface(applicationContext, null, this, mCustomLineSpacing)
+                            updateAlertDialog(mDialogSearch!!, null, this, "Search Keyword")
+                        }
+                    }
+                }
             }
         }
         return true
@@ -148,10 +174,10 @@ class DiaryReadActivity : EasyDiaryActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.diary_read, menu)
-//        when (mIsEncryptData) {
-//            true -> menu.findItem(R.id.encryptData).isVisible = false
-//            false -> menu.findItem(R.id.decryptData).isVisible = false
-//        }
+        when (config.enableDebugMode) {
+            true -> menu.findItem(R.id.highlightText).isVisible = true
+            false -> menu.findItem(R.id.highlightText).isVisible = false
+        }
         return true
     }
 
@@ -551,6 +577,27 @@ class DiaryReadActivity : EasyDiaryActivity() {
 
         fun getPasswordHash() = EasyDiaryDbHelper.findDiaryBy(getSequence())?.encryptKeyHash
 
+        fun highlightDiary(query: String) {
+            context?.config?.run {
+                if (diarySearchQueryCaseSensitive) {
+                    EasyDiaryUtils.highlightString(mBinding.diaryTitle, query)
+                    EasyDiaryUtils.highlightString(mBinding.diaryContents, query)
+                } else {
+                    EasyDiaryUtils.highlightStringIgnoreCase(mBinding.diaryTitle, query)
+                    EasyDiaryUtils.highlightStringIgnoreCase(mBinding.diaryContents, query)
+                }
+            }
+        }
+
+        fun clearHighLight() {
+            mBinding.diaryTitle.run {
+                this.text = SpannableString(this.text).apply { EasyDiaryUtils.removeSpans(this) }
+            }
+            mBinding.diaryContents.run {
+                this.text = SpannableString(this.text).apply { EasyDiaryUtils.removeSpans(this) }
+            }
+        }
+
         private fun initContents() {
             val diaryDto = EasyDiaryDbHelper.findDiaryBy(getSequence())!!
             mBinding.run {
@@ -568,15 +615,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
 
                 arguments?.getString(SELECTED_SEARCH_QUERY)?.let { query ->
                     if (StringUtils.isNotEmpty(query)) {
-                        context?.config?.run {
-                            if (diarySearchQueryCaseSensitive) {
-                                EasyDiaryUtils.highlightString(diaryTitle, query)
-                                EasyDiaryUtils.highlightString(diaryContents, query)
-                            } else {
-                                EasyDiaryUtils.highlightStringIgnoreCase(diaryTitle, query)
-                                EasyDiaryUtils.highlightStringIgnoreCase(diaryContents, query)
-                            }
-                        }
+                        highlightDiary(query)
                     }
                 }
 
