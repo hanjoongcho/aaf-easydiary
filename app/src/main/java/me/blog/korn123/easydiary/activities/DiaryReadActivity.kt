@@ -153,7 +153,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                             setPositiveButton(getString(android.R.string.ok)) { _, _ ->
                                 // Dialog for search keyword
                                 when (mDialogHighlightKeywordBinding.searchKeywordQuery.text.toString().isNotEmpty()) {
-                                    true -> fragment.highlightDiary(mDialogHighlightKeywordBinding.searchKeywordQuery.text.toString())
+                                    true -> fragment.highlightDiary(mDialogHighlightKeywordBinding.searchKeywordQuery.text.toString(), true)
                                     false -> fragment.clearHighLight()
                                 }
                                 mDialogSearch?.dismiss()
@@ -577,7 +577,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
 
         fun getPasswordHash() = EasyDiaryDbHelper.findDiaryBy(getSequence())?.encryptKeyHash
 
-        fun highlightDiary(query: String) {
+        fun highlightDiary(query: String, moveScroll: Boolean = false) {
             context?.config?.run {
                 if (diarySearchQueryCaseSensitive) {
                     EasyDiaryUtils.highlightString(mBinding.diaryTitle, query)
@@ -585,6 +585,14 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 } else {
                     EasyDiaryUtils.highlightStringIgnoreCase(mBinding.diaryTitle, query)
                     EasyDiaryUtils.highlightStringIgnoreCase(mBinding.diaryContents, query)
+                }
+            }
+
+            if (moveScroll) {
+                val index = mBinding.diaryContents.text.toString().indexOf(query, 0, true)
+                if (index > 0) {
+                    val layout = mBinding.diaryContents.layout
+                    mBinding.scrollDiaryContents.scrollTo(0, layout.getLineTop(layout.getLineForOffset(index)))
                 }
             }
         }
