@@ -149,7 +149,7 @@
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.41 here.                                                      -->
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
-    <string name="preferences_category_settings">Application Settings</string>
+    <string name="preferences_category_settings">Basic Settings</string>
     <string name="preferences_category_information">Application Information</string>
     <string name="preferences_information_licenses">Open Source Licenses</string>
     <string name="preferences_information_licenses_summary">Open source software notices</string>

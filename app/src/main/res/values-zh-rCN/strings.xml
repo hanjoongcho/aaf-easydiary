@@ -149,7 +149,7 @@
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  自1.4.41版本以来添加的资源点击这里。                                                      -->
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
-    <string name="preferences_category_settings">应用设定</string>
+    <string name="preferences_category_settings">基本设定</string>
     <string name="preferences_category_information">申请资料</string>
     <string name="preferences_information_licenses">开放源码许可证</string>
     <string name="preferences_information_licenses_summary">开放源码软件注意事项</string>

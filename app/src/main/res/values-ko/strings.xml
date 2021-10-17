@@ -149,7 +149,7 @@
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.41 here.                                                      -->
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
-    <string name="preferences_category_settings">애플리케이션 기본설정</string>
+    <string name="preferences_category_settings">기본설정</string>
     <string name="preferences_category_information">애플리케이션 정보</string>
     <string name="preferences_information_licenses">오픈소스 라이선스</string>
     <string name="preferences_information_licenses_summary">오픈소스 소프트웨어 라이선스를 공지합니다.</string>
