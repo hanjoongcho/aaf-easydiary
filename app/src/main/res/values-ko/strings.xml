@@ -682,7 +682,7 @@
     <string name="statistics_symbol_all">심벌별 통계 전체</string>
     <string name="statistics_symbol_top_ten">심벌별 통계 TOP10</string>
     <string name="category_flag">FLAG</string>
-    <string name="preferences_category_backup_restore_device">애플리케이션 백업 및 복구</string>
+    <string name="preferences_category_backup_restore_device">백업 및 복구</string>
     <string name="preferences_category_backup_restore_device_sub">디바이스 저장소</string>
     <string name="export_realm_title">다이어리 백업하기</string>
     <string name="export_realm_description">첨부사진을 제외한 데이터베이스 파일을 디바이스 저장소에 백업합니다.\n내부 저장소에 백업된 파일은 애플리케이션 삭제 시 같이 삭제되기 때문에 작성된 데이터를 영구적으로 보관하시려면 외부 공용저장소 또는 구글드라이브 백업 기능을 이용하시기 바랍니다.</string>

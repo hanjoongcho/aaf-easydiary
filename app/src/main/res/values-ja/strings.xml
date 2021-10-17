@@ -682,7 +682,7 @@
     <string name="statistics_symbol_all">シンボルごとの統計全体</string>
     <string name="statistics_symbol_top_ten">シンボルごとの統計TOP10</string>
     <string name="category_flag">FLAG</string>
-    <string name="preferences_category_backup_restore_device">アプリのバックアップとリストア</string>
+    <string name="preferences_category_backup_restore_device">バックアップとリストア</string>
     <string name="preferences_category_backup_restore_device_sub">Device Storage</string>
     <string name="export_realm_title">日記をバックアップする</string>
     <string name="export_realm_description">添付の写真を除いて、データベースファイルをデバイスのストレージにバックアップします。\n内部ストレージにバックアップされたファイルは、アプリケーションの削除時に削除されるため作成されたデータを完全に保持する場合は、外部のパブリックストアやGoogleドライブのバックアップ機能をご利用ください。</string>

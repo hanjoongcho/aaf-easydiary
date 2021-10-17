@@ -682,7 +682,7 @@
     <string name="statistics_symbol_all">All statistics by symbol</string>
     <string name="statistics_symbol_top_ten">Top 10 statistics by symbol</string>
     <string name="category_flag">FLAG</string>
-    <string name="preferences_category_backup_restore_device">Application Backup and Restore</string>
+    <string name="preferences_category_backup_restore_device">Backup and Restore</string>
     <string name="preferences_category_backup_restore_device_sub">Device Storage</string>
     <string name="export_realm_title">Backup diary</string>
     <string name="export_realm_description">Back up database files except the attached photo to the device storage.\nSince files backed up in the internal storage are deleted when the application is deleted, use the external public storage or Google Drive backup function to permanently store the created data.</string>
