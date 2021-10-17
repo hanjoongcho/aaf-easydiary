@@ -297,7 +297,7 @@ fun Context.changeDrawableIconColor(color: Int, resourceId: Int) {
     }
 }
 
-fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null, customView: View? = null, customTitle: String? = null) {
+fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null, customView: View? = null, customTitle: String? = null, backgroundAlpha: Int = 255) {
     alertDialog.run {
         when (customView == null) {
             true -> {
@@ -322,6 +322,7 @@ fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null,
             shape = GradientDrawable.RECTANGLE
             setColor(config.backgroundColor)
             cornerRadius = CommonUtils.dpToPixelFloatValue(this@updateAlertDialog, 3F)
+            alpha = backgroundAlpha
         })
 
         val globalTypeface = FontUtils.getCommonTypeface(this@updateAlertDialog)

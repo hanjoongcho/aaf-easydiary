@@ -17,14 +17,12 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
-import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.fragment.app.viewModels
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import io.github.aafactory.commons.extensions.baseConfig
-import io.github.aafactory.commons.extensions.makeToast
 import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createAttachedPhotoView
@@ -116,7 +114,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
 
     var mDialogSearch: AlertDialog? = null
     var mSearchIndexes = arrayListOf<Int>()
-    var mCurrentIndex = 0
+    var mCurrentIndexesSequence = 0
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 //        val fragment = mSectionsPagerAdapter?.getItem(diaryViewPager.currentItem)
         val fragment = mSectionsPagerAdapter.instantiateItem(mBinding.diaryViewPager, mBinding.diaryViewPager.currentItem)
@@ -162,26 +160,26 @@ class DiaryReadActivity : EasyDiaryActivity() {
 //                        mDialogSearch?.dismiss()
                     }
                     fun updateLabel() {
-                        mDialogHighlightKeywordBinding.indexes.text = "$mCurrentIndex / ${mSearchIndexes.size}"
+                        mDialogHighlightKeywordBinding.indexes.text = "$mCurrentIndexesSequence / ${mSearchIndexes.size}"
                     }
                     mDialogSearch?.show() ?: run {
                         val builder = AlertDialog.Builder(this).apply {
-                            setNegativeButton(getString(android.R.string.cancel), null)
                             setPositiveButton(getString(android.R.string.ok)) { _, _ ->
-
                             }
                         }
                         mDialogSearch = builder.create()
                         mDialogHighlightKeywordBinding.run {
-                            previous.setOnClickListener {
-                                if (mCurrentIndex < mSearchIndexes.size) {
-                                    mCurrentIndex.plus(1)
+                            next.setOnClickListener {
+                                if (mCurrentIndexesSequence < mSearchIndexes.size) {
+                                    mCurrentIndexesSequence = mCurrentIndexesSequence.plus(1)
+                                    fragment.moveScroll(searchKeywordQuery.text.toString(), mSearchIndexes[mCurrentIndexesSequence.minus(1)])
                                     updateLabel()
                                 }
                             }
-                            next.setOnClickListener {
-                                if (mCurrentIndex > 0) {
-                                    mCurrentIndex.minus(1)
+                            previous.setOnClickListener {
+                                if (mCurrentIndexesSequence > 1) {
+                                    mCurrentIndexesSequence = mCurrentIndexesSequence.minus(1)
+                                    fragment.moveScroll(searchKeywordQuery.text.toString(), mSearchIndexes[mCurrentIndexesSequence.minus(1)])
                                     updateLabel()
                                 }
                             }
@@ -189,10 +187,11 @@ class DiaryReadActivity : EasyDiaryActivity() {
                                 override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
                                 override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
 //                                    makeToast(charSequence.toString())
+                                    mCurrentIndexesSequence = 0
                                     mSearchIndexes.clear()
                                     mSearchIndexes.addAll(EasyDiaryUtils.searchWordIndexes(fragment.getContents(), charSequence.toString()))
                                     highLight()
-                                    if (mSearchIndexes.isNotEmpty()) mCurrentIndex = 1
+                                    if (mSearchIndexes.isNotEmpty()) mCurrentIndexesSequence = 1
                                     updateLabel()
                                 }
                                 override fun afterTextChanged(editable: Editable) {}
@@ -200,7 +199,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                             root.run {
                                 updateTextColors(this)
                                 FontUtils.setFontsTypeface(applicationContext, null, this, mCustomLineSpacing)
-                                updateAlertDialog(mDialogSearch!!, null, this, "Search Keyword")
+                                updateAlertDialog(mDialogSearch!!, null, this, null, 200)
                             }
                         }
                     }
@@ -627,11 +626,15 @@ class DiaryReadActivity : EasyDiaryActivity() {
             }
 
             if (moveScroll) {
-                val index = mBinding.diaryContents.text.toString().indexOf(query, 0, true)
-                if (index > 0) {
-                    val layout = mBinding.diaryContents.layout
-                    mBinding.scrollDiaryContents.scrollTo(0, layout.getLineTop(layout.getLineForOffset(index)))
-                }
+                moveScroll(query)
+            }
+        }
+
+        fun moveScroll(query: String, startIndex: Int = 0) {
+            val index = mBinding.diaryContents.text.toString().indexOf(query, startIndex, true)
+            if (index > 0) {
+                val layout = mBinding.diaryContents.layout
+                mBinding.scrollDiaryContents.scrollTo(0, layout.getLineTop(layout.getLineForOffset(index)))
             }
         }
 
