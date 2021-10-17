@@ -9,18 +9,22 @@ import android.os.Handler
 import android.os.Looper
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
+import android.text.Editable
 import android.text.SpannableString
+import android.text.TextWatcher
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
+import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.fragment.app.viewModels
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import io.github.aafactory.commons.extensions.baseConfig
+import io.github.aafactory.commons.extensions.makeToast
 import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createAttachedPhotoView
@@ -111,6 +115,8 @@ class DiaryReadActivity : EasyDiaryActivity() {
     }
 
     var mDialogSearch: AlertDialog? = null
+    var mSearchIndexes = arrayListOf<Int>()
+    var mCurrentIndex = 0
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 //        val fragment = mSectionsPagerAdapter?.getItem(diaryViewPager.currentItem)
         val fragment = mSectionsPagerAdapter.instantiateItem(mBinding.diaryViewPager, mBinding.diaryViewPager.currentItem)
@@ -147,23 +153,55 @@ class DiaryReadActivity : EasyDiaryActivity() {
 //                }
                 R.id.popupMenu -> createCustomOptionMenu()
                 R.id.highlightText -> {
+                    fun highLight() {
+                        // Dialog for search keyword
+                        when (mDialogHighlightKeywordBinding.searchKeywordQuery.text.toString().isNotEmpty()) {
+                            true -> fragment.highlightDiary(mDialogHighlightKeywordBinding.searchKeywordQuery.text.toString(), true)
+                            false -> fragment.clearHighLight()
+                        }
+//                        mDialogSearch?.dismiss()
+                    }
+                    fun updateLabel() {
+                        mDialogHighlightKeywordBinding.indexes.text = "$mCurrentIndex / ${mSearchIndexes.size}"
+                    }
                     mDialogSearch?.show() ?: run {
                         val builder = AlertDialog.Builder(this).apply {
                             setNegativeButton(getString(android.R.string.cancel), null)
                             setPositiveButton(getString(android.R.string.ok)) { _, _ ->
-                                // Dialog for search keyword
-                                when (mDialogHighlightKeywordBinding.searchKeywordQuery.text.toString().isNotEmpty()) {
-                                    true -> fragment.highlightDiary(mDialogHighlightKeywordBinding.searchKeywordQuery.text.toString(), true)
-                                    false -> fragment.clearHighLight()
-                                }
-                                mDialogSearch?.dismiss()
+
                             }
                         }
                         mDialogSearch = builder.create()
-                        mDialogHighlightKeywordBinding.root.run {
-                            updateTextColors(this)
-                            FontUtils.setFontsTypeface(applicationContext, null, this, mCustomLineSpacing)
-                            updateAlertDialog(mDialogSearch!!, null, this, "Search Keyword")
+                        mDialogHighlightKeywordBinding.run {
+                            previous.setOnClickListener {
+                                if (mCurrentIndex < mSearchIndexes.size) {
+                                    mCurrentIndex.plus(1)
+                                    updateLabel()
+                                }
+                            }
+                            next.setOnClickListener {
+                                if (mCurrentIndex > 0) {
+                                    mCurrentIndex.minus(1)
+                                    updateLabel()
+                                }
+                            }
+                            searchKeywordQuery.addTextChangedListener(object : TextWatcher {
+                                override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+                                override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+//                                    makeToast(charSequence.toString())
+                                    mSearchIndexes.clear()
+                                    mSearchIndexes.addAll(EasyDiaryUtils.searchWordIndexes(fragment.getContents(), charSequence.toString()))
+                                    highLight()
+                                    if (mSearchIndexes.isNotEmpty()) mCurrentIndex = 1
+                                    updateLabel()
+                                }
+                                override fun afterTextChanged(editable: Editable) {}
+                            })
+                            root.run {
+                                updateTextColors(this)
+                                FontUtils.setFontsTypeface(applicationContext, null, this, mCustomLineSpacing)
+                                updateAlertDialog(mDialogSearch!!, null, this, "Search Keyword")
+                            }
                         }
                     }
                 }
@@ -596,6 +634,8 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 }
             }
         }
+
+        fun getContents() = mBinding.diaryContents.text.toString()
 
         fun clearHighLight() {
             mBinding.diaryTitle.run {

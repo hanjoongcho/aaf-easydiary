@@ -419,4 +419,14 @@ object EasyDiaryUtils {
             activityResultLauncher.launch(this)
         }
     }
+
+    fun searchWordIndexes(contents: String, searchWord: String): List<Int> {
+        val indexes = arrayListOf<Int>()
+        var index = contents.indexOf(searchWord, 0, true)
+        while (index >= 0) {
+            indexes.add(index)
+            index = contents.indexOf(searchWord, index.plus(1), true)
+        }
+        return indexes
+    }
 }

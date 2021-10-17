@@ -5,13 +5,43 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="10dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
+    android:layout_height="wrap_content"
+    tools:background="@color/color_primary"
+    >
+    <com.simplemobiletools.commons.views.MyTextView
+        app:layout_constraintTop_toTopOf="@+id/previous"
+        app:layout_constraintBottom_toBottomOf="@+id/previous"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/previous"
+        tools:text="2/7"
+        android:id="@+id/indexes"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"/>
+    <ImageView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/next"
+        android:id="@+id/previous"
+        android:src="@drawable/left_arrow"
+        android:padding="5dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        />
+    <ImageView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/next"
+        android:src="@drawable/right_arrow"
+        android:padding="5dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        />
     <com.simplemobiletools.commons.views.MyEditText
         tools:text="Easy Diary"
         android:hint="Enter the word you want to find."
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/next"
         app:layout_constraintEnd_toEndOf="parent"
         android:id="@+id/search_keyword_query"
         android:layout_width="0dp"
