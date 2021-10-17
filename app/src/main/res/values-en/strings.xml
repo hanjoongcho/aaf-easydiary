@@ -594,7 +594,7 @@
     <string name="bold_style_option_summary">Set the diary title and timeline time to be displayed in bold.</string>
     <string name="multi_picker_option_title">Multi picker setting</string>
     <string name="multi_picker_option_summary">When attaching a diary photo, I use the multi-picker provided in the diary without using the gallery app. When Multi-picker is enabled, you can attach multiple pictures at once.</string>
-    <string name="preferences_category_backup_restore">Application Backup and Restore</string>
+    <string name="preferences_category_backup_restore">Backup and Restore</string>
     <string name="preferences_category_backup_restore_sub">Google Drive</string>
     <string name="backup_attach_photo_title">Backup attached photos</string>
     <string name="backup_attach_photo_summary">Backup your attached photos to Google Drive. This feature may not work on some devices due to beta service.</string>

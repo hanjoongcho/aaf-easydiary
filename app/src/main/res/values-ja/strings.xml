@@ -594,7 +594,7 @@
     <string name="bold_style_option_summary">日記のタイトルとタイムラインの時間を太字で表示するように設定します。</string>
     <string name="multi_picker_option_title">マルチピッカー設定</string>
     <string name="multi_picker_option_summary">日記に写真を添付するとき、ギャラリーアプリを使わずに「Easy Diary」内蔵のマルチピッカーを使います。 マルチピッカーを有効にすると、一度に複数の画像を添付することができます。</string>
-    <string name="preferences_category_backup_restore">アプリのバックアップとリストア</string>
+    <string name="preferences_category_backup_restore">バックアップとリストア</string>
     <string name="preferences_category_backup_restore_sub">Google Drive</string>
     <string name="backup_attach_photo_title">日記の添付写真をバックアップ</string>
     <string name="backup_attach_photo_summary">添付した写真をGoogleドライブにバックアップします。 この機能はベータ版であり、一部の端末では正常に動作しない可能性があります。</string>
