@@ -617,7 +617,7 @@
     <string name="notification_msg_download_success">%s Download Success: %d%s</string>
     <string name="notification_msg_download_fail">%s Download Fail: %d%s</string>
     <string name="notification_msg_duplicate_file_count">%s Number of exist files: %d%s</string>
-    <string name="preferences_category_lock">Application lock setting</string>
+    <string name="preferences_category_lock">Lock setting</string>
     <string name="fingerprint_lock_title">Fingerprint lock</string>
     <string name="fingerprint_lock_summary">If the device supports fingerprint recognition and has a registered fingerprint, lock the application with the registered fingerprint.</string>
     <string name="fingerprint_not_available">The operating system installed on the device does not support fingerprint recognition.</string>
@@ -739,7 +739,7 @@
     <string name="calendar_sort_descending">Descending</string>
     <string name="calendar_sort_title">Calendar sort option</string>
     <string name="calendar_sort_summary">Set the sort order of the daily diary list in the calendar screen.</string>
-    <string name="preferences_category_font">Application font setting</string>
+    <string name="preferences_category_font">Font setting</string>
     <string name="hold_position_title">Scroll position setting</string>
     <string name="hold_position_summary">When the edit screen starts, the scroll position on the browse screen is maintained. If this setting is not set, scrolling moves to the last position of the text.</string>
     <string name="max_lines_title">Max Lines</string>

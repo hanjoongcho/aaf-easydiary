@@ -617,7 +617,7 @@
     <string name="notification_msg_download_success">%s 다운로드 성공: %d%s</string>
     <string name="notification_msg_download_fail">%s 다운로드 실패: %d%s</string>
     <string name="notification_msg_duplicate_file_count">%s 중복 파일: %d%s</string>
-    <string name="preferences_category_lock">애플리케이션 잠금설정</string>
+    <string name="preferences_category_lock">잠금설정</string>
     <string name="fingerprint_lock_title">지문인식 잠금</string>
     <string name="fingerprint_lock_summary">디바이스가 지문인식 기능을 지원하고 등록된 지문이 있는경우 등록된 지문으로 애플리케이션을 잠금니다.</string>
     <string name="fingerprint_not_available">디바이스에 설치된 운영시스템이 지문인식 기능을 지원하지 않습니다.</string>
@@ -739,7 +739,7 @@
     <string name="calendar_sort_descending">내림차순</string>
     <string name="calendar_sort_title">캘린더 정렬 설정</string>
     <string name="calendar_sort_summary">일자별 다이어리 목록의 정렬 방법을 설정합니다.</string>
-    <string name="preferences_category_font">애플리케이션 폰트설정</string>
+    <string name="preferences_category_font">폰트설정</string>
     <string name="hold_position_title">스크롤 위치 설정</string>
     <string name="hold_position_summary">편집화면이 시작될 때 열람 모드에서의 스크롤 위치를 유지합니다. 이 설정을 하지 않을 경우 스크롤은 글의 마지막 위치로 이동됩니다.</string>
     <string name="max_lines_title">최대 라인수</string>

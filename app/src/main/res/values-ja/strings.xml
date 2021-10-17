@@ -617,7 +617,7 @@
     <string name="notification_msg_download_success">%s ダウンロード成功: %d%s</string>
     <string name="notification_msg_download_fail">%s ダウンロード失敗: %d%s</string>
     <string name="notification_msg_duplicate_file_count">%s 存在するファイルの数: %d%s</string>
-    <string name="preferences_category_lock">アプリロックの設定</string>
+    <string name="preferences_category_lock">ロックの設定</string>
     <string name="fingerprint_lock_title">指紋ロック</string>
     <string name="fingerprint_lock_summary">デバイスが指紋認識機能をサポートし、登録された指紋がある場合、登録された指紋でアプリをロックします。</string>
     <string name="fingerprint_not_available">デバイスにインストール済みのオペレーティングシステムが、指紋認識機能をサポートしていません。</string>
@@ -739,7 +739,7 @@
     <string name="calendar_sort_descending">降順</string>
     <string name="calendar_sort_title">カレンダーの並べ替えを設定</string>
     <string name="calendar_sort_summary">日付別ダイアリーリストのソート方法を設定します。</string>
-    <string name="preferences_category_font">アプリケーションフォント設定</string>
+    <string name="preferences_category_font">フォント設定</string>
     <string name="hold_position_title">Scroll position setting</string>
     <string name="hold_position_summary">編集画面が起動時に閲覧モードでのスクロール位置を維持します。この設定をしない場合は、スクロールは文の最後の位置に移動されます。</string>
     <string name="max_lines_title">最大線</string>
