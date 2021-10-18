@@ -201,6 +201,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                                 FontUtils.setFontsTypeface(applicationContext, null, this, mCustomLineSpacing)
                                 updateAlertDialog(mDialogSearch!!, null, this, null, 200)
                             }
+                            updateLabel()
                         }
                     }
                 }
