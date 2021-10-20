@@ -134,7 +134,7 @@ class Config(val context: Context) {
         set(fingerprintAuthenticationFailCount) = prefs.edit().putInt(FINGERPRINT_AUTHENTICATION_FAIL_COUNT, fingerprintAuthenticationFailCount).apply()
 
     var enableCardViewPolicy: Boolean
-        get() = prefs.getBoolean(ENABLE_CARD_VIEW_POLICY, false)
+        get() = prefs.getBoolean(ENABLE_CARD_VIEW_POLICY, true)
         set(enableCardViewPolicy) = prefs.edit().putBoolean(ENABLE_CARD_VIEW_POLICY, enableCardViewPolicy).apply()
     
     var enableContentsSummary: Boolean
