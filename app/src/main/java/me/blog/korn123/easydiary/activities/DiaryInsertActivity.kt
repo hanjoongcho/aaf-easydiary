@@ -38,7 +38,8 @@ class DiaryInsertActivity : EditActivity() {
         super.onCreate(savedInstanceState)
         setSupportActionBar(mBinding.toolbar)
         supportActionBar?.run {
-            title = getString(R.string.create_diary_title)
+//            title = getString(R.string.create_diary_title)
+            setDisplayShowTitleEnabled(false)
             setDisplayHomeAsUpEnabled(true)
         }
 
@@ -113,19 +114,19 @@ class DiaryInsertActivity : EditActivity() {
 //                }
                 4 -> {
                     mShowcaseView.setButtonPosition(centerParams)
-                    mShowcaseView.setShowcase(ViewTarget(mBinding.partialEditToolbarSub.datePicker), true)
+                    mShowcaseView.setShowcase(ViewTarget(R.id.datePicker, this), true)
                     mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_7))
                     mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_7))
                 }
                 5 -> {
                     mShowcaseView.setButtonPosition(centerParams)
-                    mShowcaseView.setShowcase(ViewTarget(mBinding.partialEditToolbarSub.timePicker), true)
+                    mShowcaseView.setShowcase(ViewTarget(R.id.timePicker, this), true)
                     mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_8))
                     mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_8))
                 }
                 6 -> {
                     mShowcaseView.setButtonPosition(centerParams)
-                    mShowcaseView.setShowcase(ViewTarget(mBinding.partialEditToolbarSub.saveContents), true)
+                    mShowcaseView.setShowcase(ViewTarget(R.id.secondsPicker, this), true)
                     mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_9))
                     mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_9))
                     mShowcaseView.setButtonText(getString(R.string.create_diary_showcase_button_2))
@@ -153,42 +154,38 @@ class DiaryInsertActivity : EditActivity() {
         if (!hasShot) window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
     }
 
-    private fun bindEvent() {
-        mBinding.partialEditToolbarSub.saveContents.setOnClickListener {
-            hideSoftInputFromWindow()
-            setLocationInfo()
-            if (StringUtils.isEmpty(mBinding.partialEditContents.diaryContents.text)) {
-                mBinding.partialEditContents.diaryContents.requestFocus()
-                makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
+    override fun saveContents() {
+        hideSoftInputFromWindow()
+        setLocationInfo()
+        if (StringUtils.isEmpty(mBinding.partialEditContents.diaryContents.text)) {
+            mBinding.partialEditContents.diaryContents.requestFocus()
+            makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
+        } else {
+            val diaryDto = DiaryDto(
+                    DIARY_SEQUENCE_INIT,
+                    mCurrentTimeMillis,
+                    mBinding.partialEditContents.diaryTitle.text.toString(),
+                    mBinding.partialEditContents.diaryContents.text.toString(),
+                    mSelectedItemPosition,
+                    mBinding.partialEditContents.allDay.isChecked
+            )
+            if (mLocation != null) diaryDto.location = mLocation
+            applyRemoveIndex()
+            diaryDto.photoUris = mPhotoUris
+            EasyDiaryDbHelper.insertDiary(diaryDto)
+            config.previousActivity = PREVIOUS_ACTIVITY_CREATE
+            if (isAccessFromOutside()) {
+                startMainActivityWithClearTask()
             } else {
-                val diaryDto = DiaryDto(
-                        DIARY_SEQUENCE_INIT,
-                        mCurrentTimeMillis,
-                        mBinding.partialEditContents.diaryTitle.text.toString(),
-                        mBinding.partialEditContents.diaryContents.text.toString(),
-                        mSelectedItemPosition,
-                        mBinding.partialEditContents.allDay.isChecked
-                )
-                if (mLocation != null) diaryDto.location = mLocation
-                applyRemoveIndex()
-                diaryDto.photoUris = mPhotoUris
-                EasyDiaryDbHelper.insertDiary(diaryDto)
-                config.previousActivity = PREVIOUS_ACTIVITY_CREATE
-                if (isAccessFromOutside()) {
-                    startMainActivityWithClearTask()
-                } else {
-                    TransitionHelper.finishActivityWithTransition(this)
-                }
-                mIsDiarySaved = true
+                TransitionHelper.finishActivityWithTransition(this)
             }
+            mIsDiarySaved = true
         }
+    }
 
+    private fun bindEvent() {
         mBinding.partialEditContents.partialEditPhotoContainer.photoView.setOnClickListener(mClickListener)
         mBinding.partialEditContents.partialEditPhotoContainer.captureCamera.setOnClickListener(mClickListener)
-        mBinding.partialEditToolbarSub.datePicker.setOnClickListener(mClickListener)
-        mBinding.partialEditToolbarSub.timePicker.setOnClickListener(mClickListener)
-        mBinding.partialEditToolbarSub.secondsPicker.setOnClickListener(mClickListener)
-        mBinding.partialEditToolbarSub.microphone.setOnClickListener(mClickListener)
         mBinding.partialEditContents.diaryTitle.setOnTouchListener(mTouchListener)
         mBinding.partialEditContents.diaryContents.setOnTouchListener(mTouchListener)
 

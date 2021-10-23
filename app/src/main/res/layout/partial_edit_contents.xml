@@ -74,19 +74,19 @@
                                 android:id="@+id/date"
                                 tools:text="2021년10월23일 토요일 05:14"
                                 android:textColor="@color/default_text_color"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
                                 style="@style/text_view_diary_read_fragment_inner_contents"/>
                             <LinearLayout
                                 android:id="@+id/allDayContainer"
                                 android:orientation="horizontal"
-                                android:layout_marginStart="10dp"
+                                android:layout_marginStart="5dp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content">
                                 <androidx.appcompat.widget.AppCompatCheckBox
                                     app:buttonTint="@android:color/white"
                                     android:id="@+id/allDay"
                                     android:clickable="false"
-                                    android:layout_marginStart="-5dp"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content" />
                                 <com.simplemobiletools.commons.views.MyTextView
@@ -95,7 +95,6 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content" />
                             </LinearLayout>
-
                         </androidx.appcompat.widget.LinearLayoutCompat>
                     </LinearLayout>
                     <ScrollView

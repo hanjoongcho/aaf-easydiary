@@ -21,12 +21,12 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.text.format.DateFormat
 import android.util.TypedValue
-import android.view.MenuItem
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.HorizontalScrollView
+import android.widget.LinearLayout
+import android.widget.ScrollView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -48,7 +48,6 @@ import org.apache.commons.lang3.StringUtils
 import java.io.File
 import java.text.ParseException
 import java.util.*
-import kotlin.collections.ArrayList
 
 abstract class EditActivity : EasyDiaryActivity() {
 
@@ -170,24 +169,6 @@ abstract class EditActivity : EasyDiaryActivity() {
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, getUriForFile(captureFile))
                 mRequestCaptureCamera.launch(intent)
             }
-            R.id.datePicker -> {
-                mDatePickerDialog.show()
-            }
-            R.id.timePicker -> {
-                mTimePickerDialog.show()
-            }
-            R.id.secondsPicker -> {
-                val itemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-                    val itemMap = parent.adapter.getItem(position) as HashMap<String, String>
-                    mSecond = Integer.valueOf(itemMap["value"]!!)
-                    setDateTime()
-                    mSecondsPickerDialog.cancel()
-                }
-                val builder = EasyDiaryUtils.createSecondsPickerBuilder(this, itemClickListener, mSecond)
-                mSecondsPickerDialog = builder.create()
-                mSecondsPickerDialog.show()
-            }
-            R.id.microphone -> showSpeechDialog()
             R.id.locationContainer -> {
                 setLocationInfo()
             }
@@ -240,6 +221,14 @@ abstract class EditActivity : EasyDiaryActivity() {
         super.onSaveInstanceState(outState)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.diary_edit, menu)
+        menu.findItem(R.id.timePicker).isVisible = mEnableTimePicker
+        menu.findItem(R.id.secondsPicker).isVisible = mEnableSecondsPicker
+        return true
+    }
+
+    abstract fun saveContents()
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home ->
@@ -247,6 +236,25 @@ abstract class EditActivity : EasyDiaryActivity() {
                         DialogInterface.OnClickListener { _, _ -> super.onBackPressed() },
                         null
                 )
+            R.id.saveContents -> saveContents()
+            R.id.datePicker -> {
+                mDatePickerDialog.show()
+            }
+            R.id.timePicker -> {
+                mTimePickerDialog.show()
+            }
+            R.id.secondsPicker -> {
+                val itemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+                    val itemMap = parent.adapter.getItem(position) as HashMap<String, String>
+                    mSecond = Integer.valueOf(itemMap["value"]!!)
+                    setDateTime()
+                    mSecondsPickerDialog.cancel()
+                }
+                val builder = EasyDiaryUtils.createSecondsPickerBuilder(this, itemClickListener, mSecond)
+                mSecondsPickerDialog = builder.create()
+                mSecondsPickerDialog.show()
+            }
+            R.id.microphone -> showSpeechDialog()
         }
         return true
     }
@@ -398,13 +406,13 @@ abstract class EditActivity : EasyDiaryActivity() {
                     photoContainerScrollView.visibility = View.GONE
 //                    mBinding.partialEditContents.titleCard.visibility = View.VISIBLE
                     mBinding.partialEditContents.partialBottomToolbar.togglePhoto.setImageDrawable(ContextCompat.getDrawable(this@EditActivity, R.drawable.expand))
-                    supportActionBar?.hide()
+//                    supportActionBar?.hide()
                 }
                 View.GONE -> {
                     photoContainerScrollView.visibility = View.VISIBLE
 //                    mBinding.partialEditContents.titleCard.visibility = View.GONE
                     mBinding.partialEditContents.partialBottomToolbar.togglePhoto.setImageDrawable(ContextCompat.getDrawable(this@EditActivity, R.drawable.collapse))
-                    supportActionBar?.show()
+//                    supportActionBar?.show()
                 }
                 else -> {}
             }
@@ -440,23 +448,27 @@ abstract class EditActivity : EasyDiaryActivity() {
         mRemoveIndexes.clear()
     }
 
+    var mEnableTimePicker = true
+    var mEnableSecondsPicker = true
+
     protected fun toggleTimePickerTool() {
         mBinding.run {
             partialEditToolbarSub.run {
                 when (partialEditContents.allDay.isChecked) {
                     true -> {
-                        timePicker.visibility = View.GONE
-                        secondsPicker.visibility = View.GONE
+                        mEnableTimePicker = false
+                        mEnableSecondsPicker = false
                         mHourOfDay = 0
                         mMinute = 0
                         mSecond = 0
                     }
                     false -> {
-                        timePicker.visibility = View.VISIBLE
-                        secondsPicker.visibility = View.VISIBLE
+                        mEnableTimePicker = true
+                        mEnableSecondsPicker = true
                     }
                 }
                 setDateTime()
+                invalidateOptionsMenu()
             }
         }
     }
@@ -495,13 +507,13 @@ abstract class EditActivity : EasyDiaryActivity() {
                     false,
                     mHourOfDay, mMinute, mSecond
             )
-            supportActionBar?.run {
-                title = DateUtils.getFullPatternDate(mCurrentTimeMillis)
-                subtitle = if (mBinding.partialEditContents.allDay.isChecked) "No time information" else DateUtils.timeMillisToDateTime(mCurrentTimeMillis, DateUtils.TIME_PATTERN_WITH_SECONDS)
-            }
+//            supportActionBar?.run {
+//                title = DateUtils.getFullPatternDate(mCurrentTimeMillis)
+//                subtitle = if (mBinding.partialEditContents.allDay.isChecked) "No time information" else DateUtils.timeMillisToDateTime(mCurrentTimeMillis, DateUtils.TIME_PATTERN_WITH_SECONDS)
+//            }
             mBinding.partialEditContents.date.text = when (mBinding.partialEditContents.allDay.isChecked) {
                 true -> DateUtils.getFullPatternDate(mCurrentTimeMillis)
-                false -> DateUtils.getFullPatternDateWithTime(mCurrentTimeMillis)
+                false -> DateUtils.getFullPatternDateWithTimeAndSeconds(mCurrentTimeMillis)
             }
         } catch (e: ParseException) {
             e.printStackTrace()

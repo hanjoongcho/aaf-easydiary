@@ -24,46 +24,6 @@ class DiaryUpdateActivity : EditActivity() {
      *
      ***************************************************************************************************/
     private var mSequence: Int = 0
-    private val mOnClickListener = View.OnClickListener { view ->
-        hideSoftInputFromWindow()
-        when (view.id) {
-            R.id.saveContents -> if (StringUtils.isEmpty(mBinding.partialEditContents.diaryContents.text)) {
-                mBinding.partialEditContents.diaryContents.requestFocus()
-                makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
-            } else {
-                val encryptionPass = intent.getStringExtra(DIARY_ENCRYPT_PASSWORD)
-                val diaryDto = when (encryptionPass == null) {
-                    true -> {
-                        DiaryDto(
-                                mSequence,
-                                mCurrentTimeMillis,
-                                mBinding.partialEditContents.diaryTitle.text.toString(),
-                                mBinding.partialEditContents.diaryContents.text.toString()
-                        )
-                    }
-                    false -> {
-                        DiaryDto(
-                                mSequence,
-                                mCurrentTimeMillis,
-                                JasyptUtils.encrypt(mBinding.partialEditContents.diaryTitle.text.toString(), encryptionPass),
-                                JasyptUtils.encrypt(mBinding.partialEditContents.diaryContents.text.toString(), encryptionPass),
-                                true,
-                                JasyptUtils.sha256(encryptionPass)
-                        )
-                    }
-                }
-
-                if (mLocation != null) diaryDto.location = mLocation
-                diaryDto.weather = mSelectedItemPosition
-                diaryDto.isAllDay = mBinding.partialEditContents.allDay.isChecked
-                applyRemoveIndex()
-                diaryDto.photoUris = mPhotoUris
-                EasyDiaryDbHelper.updateDiaryBy(diaryDto)
-                TransitionHelper.finishActivityWithTransition(this)
-                mIsDiarySaved = true
-            }
-        }
-    }
 
 
     /***************************************************************************************************
@@ -74,7 +34,8 @@ class DiaryUpdateActivity : EditActivity() {
         super.onCreate(savedInstanceState)
         setSupportActionBar(mBinding.toolbar)
         supportActionBar?.run {
-            title = getString(R.string.update_diary_title)
+//            title = getString(R.string.update_diary_title)
+            setDisplayShowTitleEnabled(false)
             setDisplayHomeAsUpEnabled(true)
         }
 //        mCustomLineSpacing = false
@@ -120,14 +81,48 @@ class DiaryUpdateActivity : EditActivity() {
         initData(diaryDto)
     }
 
+    override fun saveContents() {
+        hideSoftInputFromWindow()
+        if (StringUtils.isEmpty(mBinding.partialEditContents.diaryContents.text)) {
+            mBinding.partialEditContents.diaryContents.requestFocus()
+            makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
+        } else {
+            val encryptionPass = intent.getStringExtra(DIARY_ENCRYPT_PASSWORD)
+            val diaryDto = when (encryptionPass == null) {
+                true -> {
+                    DiaryDto(
+                            mSequence,
+                            mCurrentTimeMillis,
+                            mBinding.partialEditContents.diaryTitle.text.toString(),
+                            mBinding.partialEditContents.diaryContents.text.toString()
+                    )
+                }
+                false -> {
+                    DiaryDto(
+                            mSequence,
+                            mCurrentTimeMillis,
+                            JasyptUtils.encrypt(mBinding.partialEditContents.diaryTitle.text.toString(), encryptionPass),
+                            JasyptUtils.encrypt(mBinding.partialEditContents.diaryContents.text.toString(), encryptionPass),
+                            true,
+                            JasyptUtils.sha256(encryptionPass)
+                    )
+                }
+            }
+
+            if (mLocation != null) diaryDto.location = mLocation
+            diaryDto.weather = mSelectedItemPosition
+            diaryDto.isAllDay = mBinding.partialEditContents.allDay.isChecked
+            applyRemoveIndex()
+            diaryDto.photoUris = mPhotoUris
+            EasyDiaryDbHelper.updateDiaryBy(diaryDto)
+            TransitionHelper.finishActivityWithTransition(this)
+            mIsDiarySaved = true
+        }
+    }
+
     private fun bindEvent() {
-        mBinding.partialEditToolbarSub.saveContents.setOnClickListener(mOnClickListener)
         mBinding.partialEditContents.partialEditPhotoContainer.photoView.setOnClickListener(mClickListener)
         mBinding.partialEditContents.partialEditPhotoContainer.captureCamera.setOnClickListener(mClickListener)
-        mBinding.partialEditToolbarSub.datePicker.setOnClickListener(mClickListener)
-        mBinding.partialEditToolbarSub.timePicker.setOnClickListener(mClickListener)
-        mBinding.partialEditToolbarSub.secondsPicker.setOnClickListener(mClickListener)
-        mBinding.partialEditToolbarSub.microphone.setOnClickListener(mClickListener)
         mBinding.partialEditContents.locationContainer.setOnClickListener(mClickListener)
         mBinding.partialEditContents.diaryTitle.setOnTouchListener(mTouchListener)
         mBinding.partialEditContents.diaryContents.setOnTouchListener(mTouchListener)

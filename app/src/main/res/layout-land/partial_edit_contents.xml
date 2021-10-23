@@ -75,33 +75,37 @@
                             </androidx.appcompat.widget.LinearLayoutCompat>
 
                             <androidx.appcompat.widget.LinearLayoutCompat
-                                android:orientation="horizontal"
+                                style="@style/edit_text_diary_edit_inner_contents"
                                 android:gravity="center_vertical|end"
-                                style="@style/edit_text_diary_edit_inner_contents">
+                                android:orientation="horizontal">
+
                                 <com.simplemobiletools.commons.views.MyTextView
                                     android:id="@+id/date"
-                                    tools:text="2021년10월23일 토요일 05:14"
-                                    android:textColor="@color/default_text_color"
+                                    style="@style/text_view_diary_read_fragment_inner_contents"
                                     android:layout_width="wrap_content"
-                                    style="@style/text_view_diary_read_fragment_inner_contents"/>
+                                    android:textColor="@color/default_text_color"
+                                    tools:text="2021년10월23일 토요일 05:14" />
+
                                 <LinearLayout
                                     android:id="@+id/allDayContainer"
-                                    android:orientation="horizontal"
-                                    android:layout_marginStart="10dp"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content">
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
+                                    android:orientation="horizontal">
+
                                     <androidx.appcompat.widget.AppCompatCheckBox
-                                        app:buttonTint="@android:color/white"
                                         android:id="@+id/allDay"
-                                        android:clickable="false"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
                                         android:layout_marginStart="-5dp"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content" />
+                                        android:clickable="false"
+                                        app:buttonTint="@android:color/white" />
+
                                     <com.simplemobiletools.commons.views.MyTextView
-                                        android:text="@string/all_day"
-                                        android:textColor="@android:color/white"
                                         android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content" />
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/all_day"
+                                        android:textColor="@android:color/white" />
                                 </LinearLayout>
                             </androidx.appcompat.widget.LinearLayoutCompat>
                         </LinearLayout>

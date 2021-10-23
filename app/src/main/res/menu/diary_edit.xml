@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:icon="@drawable/calendar_4_w"
+        android:id="@+id/datePicker"
+        android:orderInCategory="100"
+        android:title="datePicker"
+        app:showAsAction="always" />
+    <item
+        android:icon="@drawable/time_8_w"
+        android:id="@+id/timePicker"
+        android:orderInCategory="100"
+        android:title="timePicker"
+        app:showAsAction="always" />
+    <item
+        android:icon="@drawable/time_w"
+        android:id="@+id/secondsPicker"
+        android:orderInCategory="100"
+        android:title="secondsPicker"
+        app:showAsAction="always" />
+    <item
+        android:icon="@drawable/microphone"
+        android:id="@+id/microphone"
+        android:orderInCategory="100"
+        android:title="microphone"
+        app:showAsAction="always" />
+    <item
+        android:icon="@drawable/save_w"
+        android:id="@+id/saveContents"
+        android:orderInCategory="100"
+        android:title="saveContents"
+        app:showAsAction="always" />
+</menu>
