@@ -55,7 +55,7 @@ class DiaryUpdateActivity : EditActivity() {
 
                 if (mLocation != null) diaryDto.location = mLocation
                 diaryDto.weather = mSelectedItemPosition
-                diaryDto.isAllDay = mBinding.partialEditToolbarSub.allDay.isChecked
+                diaryDto.isAllDay = mBinding.partialEditContents.allDay.isChecked
                 applyRemoveIndex()
                 diaryDto.photoUris = mPhotoUris
                 EasyDiaryDbHelper.updateDiaryBy(diaryDto)
@@ -136,7 +136,7 @@ class DiaryUpdateActivity : EditActivity() {
             toggleSimpleLayout()
         }
 
-        mBinding.partialEditToolbarSub.run {
+        mBinding.partialEditContents.run {
             allDayContainer.setOnClickListener {
                 allDay.isChecked = allDay.isChecked.not()
                 toggleTimePickerTool()

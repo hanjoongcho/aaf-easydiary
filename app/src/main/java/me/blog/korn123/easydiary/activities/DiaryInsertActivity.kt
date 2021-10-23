@@ -167,7 +167,7 @@ class DiaryInsertActivity : EditActivity() {
                         mBinding.partialEditContents.diaryTitle.text.toString(),
                         mBinding.partialEditContents.diaryContents.text.toString(),
                         mSelectedItemPosition,
-                        mBinding.partialEditToolbarSub.allDay.isChecked
+                        mBinding.partialEditContents.allDay.isChecked
                 )
                 if (mLocation != null) diaryDto.location = mLocation
                 applyRemoveIndex()
@@ -196,7 +196,7 @@ class DiaryInsertActivity : EditActivity() {
             toggleSimpleLayout()
         }
 
-        mBinding.partialEditToolbarSub.run {
+        mBinding.partialEditContents.run {
             allDayContainer.setOnClickListener {
                 allDay.isChecked = allDay.isChecked.not()
                 toggleTimePickerTool()

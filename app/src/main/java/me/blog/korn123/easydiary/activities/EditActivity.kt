@@ -339,7 +339,7 @@ abstract class EditActivity : EasyDiaryActivity() {
                 mBinding.partialEditContents.diaryTitle.text.toString(),
                 mBinding.partialEditContents.diaryContents.text.toString(),
                 mSelectedItemPosition,
-                mBinding.partialEditToolbarSub.allDay.isChecked
+                mBinding.partialEditContents.allDay.isChecked
         ).apply {
             this.originSequence = originSequence
             photoUris = mPhotoUris
@@ -396,13 +396,13 @@ abstract class EditActivity : EasyDiaryActivity() {
             when (photoContainerScrollView.visibility) {
                 View.VISIBLE -> {
                     photoContainerScrollView.visibility = View.GONE
-                    mBinding.partialEditContents.titleCard.visibility = View.VISIBLE
+//                    mBinding.partialEditContents.titleCard.visibility = View.VISIBLE
                     mBinding.partialEditContents.partialBottomToolbar.togglePhoto.setImageDrawable(ContextCompat.getDrawable(this@EditActivity, R.drawable.expand))
                     supportActionBar?.hide()
                 }
                 View.GONE -> {
                     photoContainerScrollView.visibility = View.VISIBLE
-                    mBinding.partialEditContents.titleCard.visibility = View.GONE
+//                    mBinding.partialEditContents.titleCard.visibility = View.GONE
                     mBinding.partialEditContents.partialBottomToolbar.togglePhoto.setImageDrawable(ContextCompat.getDrawable(this@EditActivity, R.drawable.collapse))
                     supportActionBar?.show()
                 }
@@ -441,21 +441,23 @@ abstract class EditActivity : EasyDiaryActivity() {
     }
 
     protected fun toggleTimePickerTool() {
-        mBinding.partialEditToolbarSub.run {
-            when (allDay.isChecked) {
-                true -> {
-                    timePicker.visibility = View.GONE
-                    secondsPicker.visibility = View.GONE
-                    mHourOfDay = 0
-                    mMinute = 0
-                    mSecond = 0
+        mBinding.run {
+            partialEditToolbarSub.run {
+                when (partialEditContents.allDay.isChecked) {
+                    true -> {
+                        timePicker.visibility = View.GONE
+                        secondsPicker.visibility = View.GONE
+                        mHourOfDay = 0
+                        mMinute = 0
+                        mSecond = 0
+                    }
+                    false -> {
+                        timePicker.visibility = View.VISIBLE
+                        secondsPicker.visibility = View.VISIBLE
+                    }
                 }
-                false -> {
-                    timePicker.visibility = View.VISIBLE
-                    secondsPicker.visibility = View.VISIBLE
-                }
+                setDateTime()
             }
-            setDateTime()
         }
     }
 
@@ -495,7 +497,11 @@ abstract class EditActivity : EasyDiaryActivity() {
             )
             supportActionBar?.run {
                 title = DateUtils.getFullPatternDate(mCurrentTimeMillis)
-                subtitle = if (mBinding.partialEditToolbarSub.allDay.isChecked) "No time information" else DateUtils.timeMillisToDateTime(mCurrentTimeMillis, DateUtils.TIME_PATTERN_WITH_SECONDS)
+                subtitle = if (mBinding.partialEditContents.allDay.isChecked) "No time information" else DateUtils.timeMillisToDateTime(mCurrentTimeMillis, DateUtils.TIME_PATTERN_WITH_SECONDS)
+            }
+            mBinding.partialEditContents.date.text = when (mBinding.partialEditContents.allDay.isChecked) {
+                true -> DateUtils.getFullPatternDate(mCurrentTimeMillis)
+                false -> DateUtils.getFullPatternDateWithTime(mCurrentTimeMillis)
             }
         } catch (e: ParseException) {
             e.printStackTrace()
@@ -622,7 +628,7 @@ abstract class EditActivity : EasyDiaryActivity() {
         mPhotoUris.clear()
 
         if (diaryDto.isAllDay) {
-            mBinding.partialEditToolbarSub.allDay.isChecked = true
+            mBinding.partialEditContents.allDay.isChecked = true
             toggleTimePickerTool()
         }
 

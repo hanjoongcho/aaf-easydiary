@@ -10,60 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <androidx.cardview.widget.CardView
-            android:id="@+id/titleCard"
-            android:layout_marginTop="@dimen/card_layout_margin"
-            android:layout_marginStart="@dimen/card_layout_margin"
-            android:layout_marginEnd="@dimen/card_layout_margin"
-            style="@style/AppCard.EditTitle">
-            <LinearLayout
-                style="@style/LinearLayoutHorizontal">
-                <LinearLayout
-                    android:id="@+id/feelingSymbolButton"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:minHeight="45dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    <ImageView
-                        android:visibility="gone"
-                        android:id="@+id/symbol"
-                        android:layout_marginEnd="10dp"
-                        android:layout_width="@dimen/diary_symbol_width"
-                        android:layout_height="@dimen/diary_symbol_height" />
-                    <com.simplemobiletools.commons.views.MyTextView
-                        android:id="@+id/symbolText"
-                        android:text="@string/diary_symbol"
-                        android:layout_marginEnd="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                    <com.simplemobiletools.commons.views.MyTextView
-                        android:id="@+id/symbolTextArrow"
-                        android:text="▼"
-                        android:textSize="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-
-                <com.simplemobiletools.commons.views.MyEditText
-                    android:id="@+id/diaryTitle"
-                    style="@style/edit_text_diary_edit_inner_contents"
-                    android:layout_gravity="center_vertical"
-                    android:background="@android:color/transparent"
-                    android:gravity="center_vertical"
-                    android:hint="@string/guide_message"
-                    android:inputType="text|textCapSentences|textAutoCorrect|textAutoComplete" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_marginTop="@dimen/card_layout_margin"
-            android:layout_marginBottom="@dimen/card_layout_margin"
-            android:layout_marginStart="@dimen/card_layout_margin"
-            android:layout_marginEnd="@dimen/card_layout_margin"
+            android:layout_margin="@dimen/card_layout_margin"
             style="@style/AppCard">
             <FrameLayout
                 android:layout_width="match_parent"
@@ -72,6 +21,83 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+                    <LinearLayout
+                        style="@style/LinearLayoutVertical">
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:orientation="horizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <LinearLayout
+                                android:id="@+id/feelingSymbolButton"
+                                android:gravity="center"
+                                android:orientation="horizontal"
+                                android:minHeight="32dp"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+                                <ImageView
+                                    android:visibility="gone"
+                                    android:id="@+id/symbol"
+                                    android:layout_marginEnd="10dp"
+                                    android:layout_width="@dimen/diary_symbol_width"
+                                    android:layout_height="@dimen/diary_symbol_height" />
+                                <com.simplemobiletools.commons.views.MyTextView
+                                    android:id="@+id/symbolText"
+                                    android:text="@string/diary_symbol"
+                                    android:layout_marginEnd="10dp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                                <com.simplemobiletools.commons.views.MyTextView
+                                    android:id="@+id/symbolTextArrow"
+                                    android:text="▼"
+                                    android:textSize="10dp"
+                                    android:layout_marginEnd="10dp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                            </LinearLayout>
+                            <com.simplemobiletools.commons.views.MyEditText
+                                android:id="@+id/diaryTitle"
+                                style="@style/edit_text_diary_edit_inner_contents"
+                                android:layout_gravity="center_vertical"
+                                android:background="@android:color/transparent"
+                                android:gravity="center_vertical"
+                                android:hint="@string/guide_message"
+                                android:inputType="text|textCapSentences|textAutoCorrect|textAutoComplete" />
+                            />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical|end"
+                            style="@style/edit_text_diary_edit_inner_contents">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:id="@+id/date"
+                                tools:text="2021년10월23일 토요일 05:14"
+                                android:textColor="@color/default_text_color"
+                                android:layout_width="wrap_content"
+                                style="@style/text_view_diary_read_fragment_inner_contents"/>
+                            <LinearLayout
+                                android:id="@+id/allDayContainer"
+                                android:orientation="horizontal"
+                                android:layout_marginStart="10dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+                                <androidx.appcompat.widget.AppCompatCheckBox
+                                    app:buttonTint="@android:color/white"
+                                    android:id="@+id/allDay"
+                                    android:clickable="false"
+                                    android:layout_marginStart="-5dp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                                <com.simplemobiletools.commons.views.MyTextView
+                                    android:text="@string/all_day"
+                                    android:textColor="@android:color/white"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                            </LinearLayout>
+
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+                    </LinearLayout>
                     <ScrollView
                         android:id="@+id/contentsContainer"
                         android:fillViewport="true"
@@ -86,7 +112,6 @@
                             android:hint="@string/contents_text_hint"
                             android:inputType="text|textCapSentences|textAutoCorrect|textMultiLine|textLongMessage" />
                     </ScrollView>
-
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">

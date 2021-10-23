@@ -50,11 +50,12 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
                                 <com.simplemobiletools.commons.views.MyTextView
+                                    tools:text="Diary Title"
                                     android:id="@+id/diaryTitle"
                                     android:gravity="center_vertical"
                                     style="@style/text_view_diary_read_fragment_inner_contents"/>
-
                                 <com.simplemobiletools.commons.views.MyTextView
+                                    tools:text="2021년10월23일 토요일 05:14"
                                     android:textColor="@color/default_text_color"
                                     android:gravity="center_vertical|end"
                                     android:id="@+id/date"
