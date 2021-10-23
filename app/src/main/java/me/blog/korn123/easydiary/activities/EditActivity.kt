@@ -453,23 +453,21 @@ abstract class EditActivity : EasyDiaryActivity() {
 
     protected fun toggleTimePickerTool() {
         mBinding.run {
-            partialEditToolbarSub.run {
-                when (partialEditContents.allDay.isChecked) {
-                    true -> {
-                        mEnableTimePicker = false
-                        mEnableSecondsPicker = false
-                        mHourOfDay = 0
-                        mMinute = 0
-                        mSecond = 0
-                    }
-                    false -> {
-                        mEnableTimePicker = true
-                        mEnableSecondsPicker = true
-                    }
+            when (partialEditContents.allDay.isChecked) {
+                true -> {
+                    mEnableTimePicker = false
+                    mEnableSecondsPicker = false
+                    mHourOfDay = 0
+                    mMinute = 0
+                    mSecond = 0
                 }
-                setDateTime()
-                invalidateOptionsMenu()
+                false -> {
+                    mEnableTimePicker = true
+                    mEnableSecondsPicker = true
+                }
             }
+            setDateTime()
+            invalidateOptionsMenu()
         }
     }
 
