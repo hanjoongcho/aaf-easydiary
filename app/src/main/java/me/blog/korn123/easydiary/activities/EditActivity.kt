@@ -285,6 +285,11 @@ abstract class EditActivity : EasyDiaryActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        toggleTimePickerTool()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         if (config.enableLocationInfo) {
