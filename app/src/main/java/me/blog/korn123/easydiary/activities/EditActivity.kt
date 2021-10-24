@@ -633,14 +633,17 @@ abstract class EditActivity : EasyDiaryActivity() {
     }
 
     protected fun initData(diaryDto: DiaryDto) {
-//        val attachedPhotos = mBinding.partialEditContents.partialEditPhotoContainer.photoContainer.childCount
-//        if (config.enableDebugMode) makeToast("attachedPhotos: $attachedPhotos, ${mPhotoUris.size}")
-//        if (attachedPhotos > 1) {
-//            for (i in attachedPhotos downTo 2) {
-//                mBinding.partialEditContents.partialEditPhotoContainer.photoContainer.removeViewAt(i.minus(2))
-//            }
-//        }
-//        mPhotoUris.clear()
+        // When checkTemporaryDiary is called in edit mode, the already loaded attached photo must be cleared.
+        // Start clearing
+        val attachedPhotos = mBinding.partialEditContents.partialEditPhotoContainer.photoContainer.childCount
+        if (config.enableDebugMode) makeToast("attachedPhotos: $attachedPhotos, ${mPhotoUris.size}")
+        if (attachedPhotos > 1) {
+            for (i in attachedPhotos downTo 2) {
+                mBinding.partialEditContents.partialEditPhotoContainer.photoContainer.removeViewAt(i.minus(2))
+            }
+        }
+        mPhotoUris.clear()
+        // End clearing
 
         if (diaryDto.isAllDay) {
             mBinding.partialEditContents.allDay.isChecked = true
