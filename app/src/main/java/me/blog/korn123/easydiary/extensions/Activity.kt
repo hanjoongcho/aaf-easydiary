@@ -304,8 +304,8 @@ fun Activity.openFeelingSymbolDialog(guideMessage: String, selectedSymbolSequenc
     val currentItem = when {
         selectedSymbolSequence < 40 -> 0
         selectedSymbolSequence in 100..199 -> 1
-        selectedSymbolSequence in 40..99 -> 2
         selectedSymbolSequence in 80..83 -> 3
+        selectedSymbolSequence in 40..99 -> 2
         selectedSymbolSequence in 250..299 -> 4
         selectedSymbolSequence in 300..349 -> 5
         selectedSymbolSequence in 200..249 -> 6
