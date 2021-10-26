@@ -437,9 +437,9 @@ abstract class EditActivity : EasyDiaryActivity() {
                         }
                     }
                     locationLabel.text = locationInfo
-                } ?: {
+                } ?: run {
                     makeToast(getString(R.string.location_info_error_message))
-                } ()
+                }
                 locationProgress.visibility = View.GONE
             }
         }
@@ -702,13 +702,13 @@ abstract class EditActivity : EasyDiaryActivity() {
                 mBinding.partialEditContents.locationContainer.visibility = View.VISIBLE
                 mBinding.partialEditContents.locationLabel.text = it.address
                 mLocation = it
-            } ?: {
+            } ?: run {
                 setLocationInfo()
                 mLocation?.let {
                     mBinding.partialEditContents.locationContainer.visibility = View.VISIBLE
                     mBinding.partialEditContents.locationLabel.text = it.address
                 }
-            } ()
+            }
         }
     }
 
@@ -729,12 +729,12 @@ abstract class EditActivity : EasyDiaryActivity() {
             val targetIndex = index
             showAlertDialog(
                     getString(R.string.delete_photo_confirm_message),
-                    DialogInterface.OnClickListener { dialog, which ->
+                    { _, _ ->
                         mRemoveIndexes.add(targetIndex)
                         mBinding.partialEditContents.partialEditPhotoContainer.photoContainer.removeView(v)
                         initBottomToolbar()
                     },
-                    DialogInterface.OnClickListener { dialog, which -> }
+                    { _, _ -> }
             )
         }
     }
