@@ -17,7 +17,7 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateTextColors
-import me.blog.korn123.easydiary.models.DiaryDto
+import me.blog.korn123.easydiary.models.Diary
 import org.apache.commons.lang3.StringUtils
 
 /**
@@ -29,8 +29,8 @@ import org.apache.commons.lang3.StringUtils
 class DiaryCalendarItemAdapter(
         context: Context,
         private val layoutResourceId: Int,
-        private val list: List<DiaryDto>
-) : ArrayAdapter<DiaryDto>(context, layoutResourceId, list) {
+        private val list: List<Diary>
+) : ArrayAdapter<Diary>(context, layoutResourceId, list) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val itemView: View = convertView ?: LayoutInflater.from(parent.context).inflate(this.layoutResourceId, parent, false)

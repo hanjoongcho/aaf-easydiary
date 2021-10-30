@@ -3,7 +3,6 @@ package me.blog.korn123.easydiary.activities
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -32,7 +31,7 @@ import me.blog.korn123.easydiary.databinding.PopupMenuMainBinding
 import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
-import me.blog.korn123.easydiary.models.DiaryDto
+import me.blog.korn123.easydiary.models.Diary
 import org.apache.commons.lang3.StringUtils
 import java.util.*
 
@@ -48,7 +47,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
      ***************************************************************************************************/
     private lateinit var mPopupMenuBinding: PopupMenuMainBinding
     private var mDiaryMainItemAdapter: DiaryMainItemAdapter? = null
-    private var mDiaryList: ArrayList<DiaryDto> = arrayListOf()
+    private var mDiaryList: ArrayList<Diary> = arrayListOf()
     private var mShowcaseIndex = 0
     private var mShowcaseView: ShowcaseView? = null
     private var mPopupWindow: PopupWindow? = null
@@ -392,7 +391,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
         }
 
         mBinding.diaryListView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, _, i, _ ->
-            val diaryDto = adapterView.adapter.getItem(i) as DiaryDto
+            val diaryDto = adapterView.adapter.getItem(i) as Diary
             val detailIntent = Intent(this@DiaryMainActivity, DiaryReadActivity::class.java)
             detailIntent.putExtra(DIARY_SEQUENCE, diaryDto.sequence)
             detailIntent.putExtra(SELECTED_SEARCH_QUERY, mDiaryMainItemAdapter?.currentQuery)
@@ -454,22 +453,22 @@ class DiaryMainActivity : ToolbarControlBaseActivity<ObservableListView>() {
     }
 
     private fun initSampleData() {
-        EasyDiaryDbHelper.insertDiary(DiaryDto(
+        EasyDiaryDbHelper.insertDiary(Diary(
                 DIARY_SEQUENCE_INIT,
                 System.currentTimeMillis() - 395000000L, getString(R.string.sample_diary_title_1), getString(R.string.sample_diary_1),
                 1
         ))
-        EasyDiaryDbHelper.insertDiary(DiaryDto(
+        EasyDiaryDbHelper.insertDiary(Diary(
                 DIARY_SEQUENCE_INIT,
                 System.currentTimeMillis() - 263000000L, getString(R.string.sample_diary_title_2), getString(R.string.sample_diary_2),
                 2
         ))
-        EasyDiaryDbHelper.insertDiary(DiaryDto(
+        EasyDiaryDbHelper.insertDiary(Diary(
                 DIARY_SEQUENCE_INIT,
                 System.currentTimeMillis() - 132000000L, getString(R.string.sample_diary_title_3), getString(R.string.sample_diary_3),
                 3
         ))
-        EasyDiaryDbHelper.insertDiary(DiaryDto(
+        EasyDiaryDbHelper.insertDiary(Diary(
                 DIARY_SEQUENCE_INIT,
                 System.currentTimeMillis() - 4000000L, getString(R.string.sample_diary_title_4), getString(R.string.sample_diary_4),
                 4

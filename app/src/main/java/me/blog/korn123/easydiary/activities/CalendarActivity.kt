@@ -24,7 +24,7 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.fragments.CalendarFragment
 import me.blog.korn123.easydiary.helper.*
-import me.blog.korn123.easydiary.models.DiaryDto
+import me.blog.korn123.easydiary.models.Diary
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -44,8 +44,8 @@ class CalendarActivity : EasyDiaryActivity() {
     private lateinit var mCalendarFragment: CaldroidFragmentEx
     private lateinit var mDatePickerDialog: DatePickerDialog
     private val mCalendar = Calendar.getInstance(Locale.getDefault())
-    private var mDiaryList: MutableList<DiaryDto> = mutableListOf()
-    private var mArrayAdapterDiary: ArrayAdapter<DiaryDto>? = null
+    private var mDiaryList: MutableList<Diary> = mutableListOf()
+    private var mArrayAdapterDiary: ArrayAdapter<Diary>? = null
 
 
     /***************************************************************************************************
@@ -86,7 +86,7 @@ class CalendarActivity : EasyDiaryActivity() {
         mArrayAdapterDiary = DiaryCalendarItemAdapter(this, R.layout.item_diary_calendar, this.mDiaryList)
         mBinding.selectedList.adapter = mArrayAdapterDiary
         mBinding.selectedList.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
-            val diaryDto = adapterView.adapter.getItem(i) as DiaryDto
+            val diaryDto = adapterView.adapter.getItem(i) as Diary
             val detailIntent = Intent(this@CalendarActivity, DiaryReadActivity::class.java)
             detailIntent.putExtra(DIARY_SEQUENCE, diaryDto.sequence)
             TransitionHelper.startActivityWithTransition(this@CalendarActivity, detailIntent)

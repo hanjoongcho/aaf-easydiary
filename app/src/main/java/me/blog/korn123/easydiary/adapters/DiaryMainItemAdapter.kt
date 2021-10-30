@@ -32,7 +32,7 @@ import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
-import me.blog.korn123.easydiary.models.DiaryDto
+import me.blog.korn123.easydiary.models.Diary
 import org.apache.commons.lang3.StringUtils
 
 /**
@@ -44,8 +44,8 @@ import org.apache.commons.lang3.StringUtils
 class DiaryMainItemAdapter(
         private val activity: Activity,
         layoutResourceId: Int,
-        private val list: List<DiaryDto>
-) : ArrayAdapter<DiaryDto>(activity, layoutResourceId, list) {
+        private val list: List<Diary>
+) : ArrayAdapter<Diary>(activity, layoutResourceId, list) {
     var currentQuery: String? = null
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -187,8 +187,8 @@ class DiaryMainItemAdapter(
         return itemView
     }
 
-    fun getSelectedItems(): List<DiaryDto> {
-        val selectedItems = arrayListOf<DiaryDto>()
+    fun getSelectedItems(): List<Diary> {
+        val selectedItems = arrayListOf<Diary>()
         list.map {
             if (it.isSelected) selectedItems.add(it)
         }

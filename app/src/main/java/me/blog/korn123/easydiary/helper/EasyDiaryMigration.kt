@@ -5,8 +5,6 @@ import io.realm.DynamicRealm
 import io.realm.FieldAttribute
 import io.realm.RealmMigration
 import io.realm.RealmObjectSchema
-import me.blog.korn123.easydiary.models.Alarm
-import me.blog.korn123.easydiary.models.Location
 
 /**
  * Created by hanjoong on 2017-03-25.
@@ -17,6 +15,8 @@ class EasyDiaryMigration : RealmMigration {
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
         var currentVersion = oldVersion
         val schema = realm.schema
+
+        // schemaVersion 1 ~ 20
         val diarySchema: RealmObjectSchema? = schema.get("DiaryDto")
         diarySchema?.let {
             if (currentVersion == 1L) {
@@ -272,6 +272,13 @@ class EasyDiaryMigration : RealmMigration {
             //                    .renameField("type_tmp", "type");
             //            mCurrentVersion++;
             //        }
+        }
+
+        // schemaVersion 21 ~
+        if (currentVersion == 20L) {
+            schema.rename("DiaryDto", "Diary")
+            schema.rename("PhotoUriDto", "PhotoUri")
+            currentVersion++
         }
     }
 }

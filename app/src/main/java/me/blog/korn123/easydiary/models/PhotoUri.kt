@@ -10,7 +10,7 @@ import org.apache.commons.lang3.StringUtils
  * Created by hanjoong on 2017-06-08.
  */
 
-open class PhotoUriDto : RealmObject {
+open class PhotoUri : RealmObject {
     var photoUri: String? = null
     var mimeType: String? = null
 

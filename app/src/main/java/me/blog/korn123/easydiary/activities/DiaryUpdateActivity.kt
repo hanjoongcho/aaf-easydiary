@@ -10,7 +10,7 @@ import me.blog.korn123.easydiary.helper.DIARY_ENCRYPT_PASSWORD
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.TransitionHelper
-import me.blog.korn123.easydiary.models.DiaryDto
+import me.blog.korn123.easydiary.models.Diary
 import org.apache.commons.lang3.StringUtils
 
 
@@ -90,7 +90,7 @@ class DiaryUpdateActivity : EditActivity() {
             val encryptionPass = intent.getStringExtra(DIARY_ENCRYPT_PASSWORD)
             val diaryDto = when (encryptionPass == null) {
                 true -> {
-                    DiaryDto(
+                    Diary(
                             mSequence,
                             mCurrentTimeMillis,
                             mBinding.partialEditContents.diaryTitle.text.toString(),
@@ -98,7 +98,7 @@ class DiaryUpdateActivity : EditActivity() {
                     )
                 }
                 false -> {
-                    DiaryDto(
+                    Diary(
                             mSequence,
                             mCurrentTimeMillis,
                             JasyptUtils.encrypt(mBinding.partialEditContents.diaryTitle.text.toString(), encryptionPass),

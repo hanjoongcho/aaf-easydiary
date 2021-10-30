@@ -12,7 +12,7 @@ import me.blog.korn123.easydiary.activities.EditActivity.Companion.DIARY_SEQUENC
  * Created by CHO HANJOONG on 2017-03-16.
  */
 
-open class DiaryDto : RealmObject {
+open class Diary : RealmObject {
     @PrimaryKey
     var sequence: Int = DIARY_SEQUENCE_INIT
     var originSequence: Int = DIARY_ORIGIN_SEQUENCE_INIT
@@ -31,7 +31,7 @@ open class DiaryDto : RealmObject {
      * </pre>
      */
     var weather: Int = 0
-    var photoUris: RealmList<PhotoUriDto>? = null
+    var photoUris: RealmList<PhotoUri>? = null
     var fontName: String? = null
     var fontSize: Float = 0.toFloat()
     var isAllDay: Boolean = false

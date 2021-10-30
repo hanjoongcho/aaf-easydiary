@@ -1,7 +1,6 @@
 package me.blog.korn123.easydiary.extensions
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.app.Activity
 import android.app.Dialog
 import android.content.ActivityNotFoundException
@@ -54,7 +53,7 @@ import me.blog.korn123.easydiary.adapters.SymbolPagerAdapter
 import me.blog.korn123.easydiary.databinding.ActivityDiaryMainBinding
 import me.blog.korn123.easydiary.dialogs.WhatsNewDialog
 import me.blog.korn123.easydiary.helper.*
-import me.blog.korn123.easydiary.models.DiaryDto
+import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.views.SlidingTabLayout
 import org.apache.commons.codec.binary.Base64
 import org.apache.commons.io.FileUtils
@@ -387,7 +386,7 @@ fun Activity.scaledDrawable(id: Int, width: Int, height: Int): Drawable? {
 //    }
 //    startActivityForResult(intent, requestCode)
 
-fun Activity.exportHtmlBook(uri: Uri?, diaryList: List<DiaryDto>) {
+fun Activity.exportHtmlBook(uri: Uri?, diaryList: List<Diary>) {
     uri?.let {
         val os = contentResolver.openOutputStream(it)
         IOUtils.write(createHtmlString(diaryList), os, "UTF-8")
@@ -395,7 +394,7 @@ fun Activity.exportHtmlBook(uri: Uri?, diaryList: List<DiaryDto>) {
     }
 }
 
-fun Activity.createHtmlString(diaryList: List<DiaryDto>): String {
+fun Activity.createHtmlString(diaryList: List<Diary>): String {
     val diaryDivision = StringBuilder()
     diaryList.forEach {
         val html = StringBuilder()

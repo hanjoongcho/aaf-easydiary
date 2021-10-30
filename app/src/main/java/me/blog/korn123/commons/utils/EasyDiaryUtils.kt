@@ -48,8 +48,8 @@ import me.blog.korn123.easydiary.adapters.SecondItemAdapter
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.*
-import me.blog.korn123.easydiary.models.DiaryDto
-import me.blog.korn123.easydiary.models.PhotoUriDto
+import me.blog.korn123.easydiary.models.Diary
+import me.blog.korn123.easydiary.models.PhotoUri
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import org.apache.commons.lang3.StringUtils
@@ -212,19 +212,19 @@ object EasyDiaryUtils {
 
     fun photoUriToDownSamplingBitmap(
             context: Context,
-            photoUriDto: PhotoUriDto,
+            photoUri: PhotoUri,
             requiredSize: Int = 50,
             fixedWidth: Int = 45,
             fixedHeight: Int = 45
     ): Bitmap = try {
-        when (photoUriDto.isContentUri()) {
+        when (photoUri.isContentUri()) {
             true -> {
-                BitmapUtils.decodeFile(context, Uri.parse(photoUriDto.photoUri), CommonUtils.dpToPixel(context, fixedWidth.toFloat(), CALCULATION.FLOOR), CommonUtils.dpToPixel(context, fixedHeight.toFloat(), CALCULATION.FLOOR))
+                BitmapUtils.decodeFile(context, Uri.parse(photoUri.photoUri), CommonUtils.dpToPixel(context, fixedWidth.toFloat(), CALCULATION.FLOOR), CommonUtils.dpToPixel(context, fixedHeight.toFloat(), CALCULATION.FLOOR))
             }
             false -> {
                 when (fixedWidth == fixedHeight) {
-                    true -> BitmapUtils.decodeFileCropCenter(getApplicationDataDirectory(context) + photoUriDto.getFilePath(), CommonUtils.dpToPixel(context, fixedWidth.toFloat(), CALCULATION.FLOOR))
-                    false -> BitmapUtils.decodeFile(getApplicationDataDirectory(context) + photoUriDto.getFilePath(), CommonUtils.dpToPixel(context, fixedWidth.toFloat(), CALCULATION.FLOOR), CommonUtils.dpToPixel(context, fixedHeight.toFloat(), CALCULATION.FLOOR))
+                    true -> BitmapUtils.decodeFileCropCenter(getApplicationDataDirectory(context) + photoUri.getFilePath(), CommonUtils.dpToPixel(context, fixedWidth.toFloat(), CALCULATION.FLOOR))
+                    false -> BitmapUtils.decodeFile(getApplicationDataDirectory(context) + photoUri.getFilePath(), CommonUtils.dpToPixel(context, fixedWidth.toFloat(), CALCULATION.FLOOR), CommonUtils.dpToPixel(context, fixedHeight.toFloat(), CALCULATION.FLOOR))
                 }
 
             }
@@ -240,14 +240,14 @@ object EasyDiaryUtils {
         BitmapFactory.decodeResource(context.resources, R.drawable.error_7)
     }
 
-    fun photoUriToBitmap(context: Context, photoUriDto: PhotoUriDto): Bitmap? {
+    fun photoUriToBitmap(context: Context, photoUri: PhotoUri): Bitmap? {
         val bitmap: Bitmap? = try {
-            when (photoUriDto.isContentUri()) {
+            when (photoUri.isContentUri()) {
                 true -> {
-                    BitmapFactory.decodeStream(context.contentResolver.openInputStream(Uri.parse(photoUriDto.photoUri)))
+                    BitmapFactory.decodeStream(context.contentResolver.openInputStream(Uri.parse(photoUri.photoUri)))
                 }
                 false -> {
-                    BitmapFactory.decodeFile(getApplicationDataDirectory(context) + photoUriDto.getFilePath())
+                    BitmapFactory.decodeFile(getApplicationDataDirectory(context) + photoUri.getFilePath())
                 }
             }
         } catch (e: Exception) {
@@ -287,8 +287,8 @@ object EasyDiaryUtils {
         FileUtils.copyFile(compressedFile, destFile)
     }
 
-    fun summaryDiaryLabel(diaryDto: DiaryDto): String {
-        return if (!diaryDto.title.isNullOrEmpty()) diaryDto.title!! else StringUtils.abbreviate(diaryDto.contents, 10)
+    fun summaryDiaryLabel(diary: Diary): String {
+        return if (!diary.title.isNullOrEmpty()) diary.title!! else StringUtils.abbreviate(diary.contents, 10)
     }
 
     fun datePickerToTimeMillis(dayOfMonth: Int, month: Int, year: Int, isFullHour: Boolean = false, hour: Int = 0, minute: Int = 0, second: Int = 0): Long {
@@ -302,7 +302,7 @@ object EasyDiaryUtils {
         return cal.timeInMillis
     }
 
-    fun sequenceToPageIndex(diaryList: List<DiaryDto>, sequence: Int): Int {
+    fun sequenceToPageIndex(diaryList: List<Diary>, sequence: Int): Int {
         var pageIndex = 0
         if (sequence > -1) {
             for (i in diaryList.indices) {
@@ -327,7 +327,7 @@ object EasyDiaryUtils {
         return name ?: UUID.randomUUID().toString()
     }
 
-    fun createAttachedPhotoView(context: Context, photoUriDto: PhotoUriDto, marginLeft:Float = 0F, marginTop:Float = 0F, marginRight:Float = 3F, marginBottom:Float = 0F): ImageView {
+    fun createAttachedPhotoView(context: Context, photoUri: PhotoUri, marginLeft:Float = 0F, marginTop:Float = 0F, marginRight:Float = 3F, marginBottom:Float = 0F): ImageView {
         val thumbnailSize = context.config.settingThumbnailSize
 //        val bitmap = photoUriToDownSamplingBitmap(context, photoUriDto, 0, thumbnailSize.toInt() - 5, thumbnailSize.toInt() - 5)
         val imageView = ImageView(context)
@@ -349,7 +349,7 @@ object EasyDiaryUtils {
                 .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .priority(Priority.HIGH)
-        Glide.with(context).load(getApplicationDataDirectory(context) + photoUriDto.getFilePath()).apply(options).into(imageView)
+        Glide.with(context).load(getApplicationDataDirectory(context) + photoUri.getFilePath()).apply(options).into(imageView)
         return imageView
     }
 

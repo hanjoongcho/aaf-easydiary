@@ -15,7 +15,7 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ItemTimelineBinding
 import me.blog.korn123.easydiary.extensions.*
-import me.blog.korn123.easydiary.models.DiaryDto
+import me.blog.korn123.easydiary.models.Diary
 import org.apache.commons.lang3.StringUtils
 
 
@@ -28,8 +28,8 @@ import org.apache.commons.lang3.StringUtils
 class TimelineItemAdapter(
         private val activity: Activity,
         layoutResourceId: Int,
-        private val list: List<DiaryDto>
-) : ArrayAdapter<DiaryDto>(activity, layoutResourceId, list) {
+        private val list: List<Diary>
+) : ArrayAdapter<Diary>(activity, layoutResourceId, list) {
     private lateinit var itemTimelineBinding: ItemTimelineBinding
     private var mPrimaryColor = 0
     var currentQuery: String? = null

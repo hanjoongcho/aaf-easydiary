@@ -33,7 +33,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.*
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
-import me.blog.korn123.easydiary.models.DiaryDto
+import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.viewmodels.DiaryReadViewModel
 import org.apache.commons.lang3.StringUtils
 import java.util.*
@@ -82,7 +82,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
 
         val query = intent.getStringExtra(SELECTED_SEARCH_QUERY)
         val symbolSequence = intent.getIntExtra(SELECTED_SYMBOL_SEQUENCE, 0)
-        val diaryList: List<DiaryDto> = EasyDiaryDbHelper.findDiary(query, config.diarySearchQueryCaseSensitive, 0, 0, symbolSequence)
+        val diaryList: List<Diary> = EasyDiaryDbHelper.findDiary(query, config.diarySearchQueryCaseSensitive, 0, 0, symbolSequence)
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager, diaryList, query)
         val startPageIndex = when(savedInstanceState == null) {
             true -> mSectionsPagerAdapter.sequenceToPageIndex(intent.getIntExtra(DIARY_SEQUENCE, -1))
@@ -822,7 +822,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
      */
     inner class SectionsPagerAdapter(
             fm: androidx.fragment.app.FragmentManager,
-            private val diaryList: List<DiaryDto>,
+            private val diaryList: List<Diary>,
             private val query: String?
     ) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 

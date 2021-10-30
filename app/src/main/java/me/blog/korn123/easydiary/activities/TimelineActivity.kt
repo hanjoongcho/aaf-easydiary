@@ -25,7 +25,7 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.openFeelingSymbolDialog
 import me.blog.korn123.easydiary.helper.*
-import me.blog.korn123.easydiary.models.DiaryDto
+import me.blog.korn123.easydiary.models.Diary
 import java.util.*
 
 
@@ -43,7 +43,7 @@ class TimelineActivity : EasyDiaryActivity() {
     private lateinit var mSDatePickerDialog: DatePickerDialog
     private lateinit var mEDatePickerDialog: DatePickerDialog
     private var mTimelineItemAdapter: TimelineItemAdapter? = null
-    private var mDiaryList: ArrayList<DiaryDto> = arrayListOf()
+    private var mDiaryList: ArrayList<Diary> = arrayListOf()
     private var mFirstTouch = 0F
     private val mCalendar = Calendar.getInstance(Locale.getDefault())
     private var mSymbolSequence = SYMBOL_SELECT_ALL
@@ -271,7 +271,7 @@ class TimelineActivity : EasyDiaryActivity() {
 
     private fun setupTimelineSearch() {
         mBinding.timelineList.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
-            val diaryDto = adapterView.adapter.getItem(i) as DiaryDto
+            val diaryDto = adapterView.adapter.getItem(i) as Diary
             val detailIntent = Intent(this@TimelineActivity, DiaryReadActivity::class.java)
             detailIntent.putExtra(DIARY_SEQUENCE, diaryDto.sequence)
             detailIntent.putExtra(SELECTED_SEARCH_QUERY, mBinding.partialTimelineFilter.query.text.toString())

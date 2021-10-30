@@ -14,7 +14,7 @@ import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.PREVIOUS_ACTIVITY_CREATE
 import me.blog.korn123.easydiary.helper.SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER
 import me.blog.korn123.easydiary.helper.TransitionHelper
-import me.blog.korn123.easydiary.models.DiaryDto
+import me.blog.korn123.easydiary.models.Diary
 import org.apache.commons.lang3.StringUtils
 
 /**
@@ -161,7 +161,7 @@ class DiaryInsertActivity : EditActivity() {
             mBinding.partialEditContents.diaryContents.requestFocus()
             makeSnackBar(findViewById(android.R.id.content), getString(R.string.request_content_message))
         } else {
-            val diaryDto = DiaryDto(
+            val diaryDto = Diary(
                     DIARY_SEQUENCE_INIT,
                     mCurrentTimeMillis,
                     mBinding.partialEditContents.diaryTitle.text.toString(),

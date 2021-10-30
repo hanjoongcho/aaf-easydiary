@@ -42,8 +42,8 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityDiaryEditBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
-import me.blog.korn123.easydiary.models.DiaryDto
-import me.blog.korn123.easydiary.models.PhotoUriDto
+import me.blog.korn123.easydiary.models.Diary
+import me.blog.korn123.easydiary.models.PhotoUri
 import org.apache.commons.lang3.StringUtils
 import java.io.File
 import java.text.ParseException
@@ -123,7 +123,7 @@ abstract class EditActivity : EasyDiaryActivity() {
         }
     }
     protected lateinit var mBinding: ActivityDiaryEditBinding
-    protected val mPhotoUris: RealmList<PhotoUriDto> = RealmList()
+    protected val mPhotoUris: RealmList<PhotoUri> = RealmList()
     protected var mCurrentTimeMillis: Long = 0
     protected var mYear = mCalendar.get(Calendar.YEAR)
     protected var mLocation: me.blog.korn123.easydiary.models.Location? = null
@@ -346,7 +346,7 @@ abstract class EditActivity : EasyDiaryActivity() {
     }
 
     protected fun saveTemporaryDiary(originSequence: Int) {
-        val diaryTemp = DiaryDto(
+        val diaryTemp = Diary(
                 DIARY_SEQUENCE_INIT,
                 mCurrentTimeMillis,
                 mBinding.partialEditContents.diaryTitle.text.toString(),
@@ -536,7 +536,7 @@ abstract class EditActivity : EasyDiaryActivity() {
                             MIME_TYPE_JPEG
                         }
                     }
-                    val photoUriDto = PhotoUriDto(FILE_URI_PREFIX + photoPath, mimeType)
+                    val photoUriDto = PhotoUri(FILE_URI_PREFIX + photoPath, mimeType)
                     mPhotoUris.add(photoUriDto)
                     val currentIndex = mPhotoUris.size - 1
                     runOnUiThread {
@@ -609,7 +609,7 @@ abstract class EditActivity : EasyDiaryActivity() {
                 photoContainer.addView(attachView)
 
                 getStringArrayList(LIST_URI_STRING)?.map { uriString ->
-                    mPhotoUris.add(PhotoUriDto(uriString))
+                    mPhotoUris.add(PhotoUri(uriString))
                 }
                 mYear = getInt(SELECTED_YEAR, mYear)
                 mMonth = getInt(SELECTED_MONTH, mMonth)
@@ -632,7 +632,7 @@ abstract class EditActivity : EasyDiaryActivity() {
         }
     }
 
-    protected fun initData(diaryDto: DiaryDto) {
+    protected fun initData(diary: Diary) {
         // When checkTemporaryDiary is called in edit mode, the already loaded attached photo must be cleared.
         // Start clearing
         val attachedPhotos = mBinding.partialEditContents.partialEditPhotoContainer.photoContainer.childCount
@@ -645,7 +645,7 @@ abstract class EditActivity : EasyDiaryActivity() {
         mPhotoUris.clear()
         // End clearing
 
-        if (diaryDto.isAllDay) {
+        if (diary.isAllDay) {
             mBinding.partialEditContents.allDay.isChecked = true
             toggleTimePickerTool()
         }
@@ -653,18 +653,18 @@ abstract class EditActivity : EasyDiaryActivity() {
         val encryptionPass = intent.getStringExtra(DIARY_ENCRYPT_PASSWORD)
         when (encryptionPass == null) {
             true -> {
-                mBinding.partialEditContents.diaryTitle.setText(diaryDto.title)
+                mBinding.partialEditContents.diaryTitle.setText(diary.title)
                 //        getSupportActionBar().setSubtitle(DateUtils.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
-                mBinding.partialEditContents.diaryContents.setText(diaryDto.contents)
+                mBinding.partialEditContents.diaryContents.setText(diary.contents)
             }
             false -> {
-                mBinding.partialEditContents.diaryTitle.setText(JasyptUtils.decrypt(diaryDto.title ?: "", encryptionPass))
+                mBinding.partialEditContents.diaryTitle.setText(JasyptUtils.decrypt(diary.title ?: "", encryptionPass))
                 //        getSupportActionBar().setSubtitle(DateUtils.getFullPatternDateWithTime(diaryDto.getCurrentTimeMillis()));
-                mBinding.partialEditContents.diaryContents.setText(JasyptUtils.decrypt(diaryDto.contents ?: "", encryptionPass))
+                mBinding.partialEditContents.diaryContents.setText(JasyptUtils.decrypt(diary.contents ?: "", encryptionPass))
             }
         }
 
-        mCurrentTimeMillis = diaryDto.currentTimeMillis
+        mCurrentTimeMillis = diary.currentTimeMillis
         if (config.holdPositionEnterEditScreen) {
             Handler().post {
                 mBinding.partialEditContents.contentsContainer.scrollY = intent.getIntExtra(DIARY_CONTENTS_SCROLL_Y, 0) - (mBinding.partialEditContents.feelingSymbolButton.parent.parent as ViewGroup).measuredHeight
@@ -674,7 +674,7 @@ abstract class EditActivity : EasyDiaryActivity() {
         }
 
         // TODO fixme elegance
-        diaryDto.photoUris?.let {
+        diary.photoUris?.let {
             mPhotoUris.addAll(it)
         }
 
@@ -694,11 +694,11 @@ abstract class EditActivity : EasyDiaryActivity() {
         }
 
 //        initSpinner()
-        selectFeelingSymbol(diaryDto.weather)
+        selectFeelingSymbol(diary.weather)
         if (config.enableLocationInfo) {
 //            locationLabel.setTextColor(config.textColor)
 //            locationContainer.background = getLabelBackground()
-            diaryDto.location?.let {
+            diary.location?.let {
                 mBinding.partialEditContents.locationContainer.visibility = View.VISIBLE
                 mBinding.partialEditContents.locationLabel.text = it.address
                 mLocation = it

@@ -18,7 +18,7 @@ import me.blog.korn123.easydiary.databinding.ActivityPhotoViewPagerBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.shareFile
 import me.blog.korn123.easydiary.helper.*
-import me.blog.korn123.easydiary.models.DiaryDto
+import me.blog.korn123.easydiary.models.Diary
 import java.io.File
 
 /**
@@ -79,7 +79,7 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
                     }
                 }
                 R.id.share -> {
-                    (viewPager.adapter as PhotoPagerAdapter).diaryDto.photoUris?.let {
+                    (viewPager.adapter as PhotoPagerAdapter).diary.photoUris?.let {
                         it[viewPager.currentItem]?.let { photoUri ->
                             val filePath = EasyDiaryUtils.getApplicationDataDirectory(this@PhotoViewPagerActivity) + photoUri.getFilePath()
                             shareFile(File(filePath), photoUri.mimeType ?: MIME_TYPE_JPEG)
@@ -97,15 +97,15 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
         return true
     }
 
-    internal class PhotoPagerAdapter(var diaryDto: DiaryDto) : androidx.viewpager.widget.PagerAdapter() {
+    internal class PhotoPagerAdapter(var diary: Diary) : androidx.viewpager.widget.PagerAdapter() {
         override fun getCount(): Int {
-            return diaryDto.photoUris?.size ?: 0
+            return diary.photoUris?.size ?: 0
         }
 
         override fun instantiateItem(container: ViewGroup, position: Int): View {
             val viewHolder = LinearLayout(container.context).apply { tag = "view_$position" }
             val photoView = PhotoView(container.context)
-            val imageFilePath = EasyDiaryUtils.getApplicationDataDirectory(container.context) + diaryDto.photoUris!![position]!!.getFilePath()
+            val imageFilePath = EasyDiaryUtils.getApplicationDataDirectory(container.context) + diary.photoUris!![position]!!.getFilePath()
 
             when (File(imageFilePath).exists()) {
                 false -> {
@@ -123,7 +123,7 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
                 true -> {
                     // Now just add PhotoView to ViewPager and return it
 //                    photoView.setImageBitmap(bitmap)
-                    diaryDto.photoUris?.let {
+                    diary.photoUris?.let {
                         it[position]?.let { photoUriDto ->
                             val options = RequestOptions()
                                     .error(R.drawable.error_7)

@@ -14,11 +14,11 @@ import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
-import me.blog.korn123.easydiary.models.DiaryDto
+import me.blog.korn123.easydiary.models.Diary
 
 
 class DiaryMainWidgetFactory(private val context: Context) : RemoteViewsService.RemoteViewsFactory {
-    private val diaryItems: ArrayList<DiaryDto> = arrayListOf()
+    private val diaryItems: ArrayList<Diary> = arrayListOf()
 
     override fun onCreate() {
         setData()
