@@ -20,10 +20,14 @@ import androidx.core.app.ActivityCompat
 import androidx.core.hardware.fingerprint.FingerprintManagerCompat
 import androidx.core.os.CancellationSignal
 import io.github.aafactory.commons.activities.BaseSimpleActivity
+import io.github.aafactory.commons.extensions.holdCurrentOrientation
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityFingerprintBinding
-import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.makeSnackBar
+import me.blog.korn123.easydiary.extensions.pauseLock
+import me.blog.korn123.easydiary.extensions.showAlertDialog
 import java.io.IOException
 import java.security.InvalidAlgorithmParameterException
 import java.security.KeyStore

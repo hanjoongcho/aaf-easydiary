@@ -1,26 +1,24 @@
 package me.blog.korn123.easydiary.activities
 
 import android.annotation.SuppressLint
-import android.app.*
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.view.View
 import android.widget.RemoteViews
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.app.NotificationCompat
 import androidx.databinding.DataBindingUtil
-import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.isOreoPlus
-import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
@@ -83,7 +81,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
 
         setupActionLog()
-        setupDetermineNextAlarm()
         setupNotification()
         setupClearUnusedPhoto()
         setupLocation()
@@ -106,34 +103,12 @@ open class BaseDevActivity : EasyDiaryActivity() {
      ***************************************************************************************************/
     private fun setupTestFunction() {
         mBinding.run {
-            buttonEnableOrientation.setOnClickListener { setScreenOrientationSensor(true) }
-            buttonDisableOrientation.setOnClickListener { setScreenOrientationSensor(false) }
-            buttonHoldOrientation.setOnClickListener { holdCurrentOrientation() }
-            buttonReleaseOrientation.setOnClickListener { clearHoldOrientation() }
             buttonReviewFlow.setOnClickListener { startReviewFlow() }
-            buttonRestartApp.setOnClickListener { restartApplication() }
             buttonResetShowcaseMain.setOnClickListener {
                 getSharedPreferences("showcase_internal", MODE_PRIVATE).run {
                     edit().putBoolean("hasShot$SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER", false).apply()
                 }
             }
-        }
-    }
-
-    private fun setupDetermineNextAlarm() {
-        mBinding.buttonDetermineNextAlarm.setOnClickListener {
-            val nextAlarm = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val triggerTimeMillis = (getSystemService(Context.ALARM_SERVICE) as AlarmManager).nextAlarmClock?.triggerTime ?: 0
-                when (triggerTimeMillis > 0) {
-                    true -> DateUtils.getFullPatternDateWithTime(triggerTimeMillis)
-                    false -> "Alarm info is not exist."
-                }
-            } else {
-                @Suppress("DEPRECATION")
-                Settings.System.getString(contentResolver, Settings.System.NEXT_ALARM_FORMATTED)
-            }
-
-            toast(nextAlarm, Toast.LENGTH_LONG)
         }
     }
 
@@ -290,10 +265,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
             updateConsole("2")
         }
-    }
-
-    private fun restartApplication() {
-        triggerRestart()
     }
 
     fun openCheatSheet(view: View) {

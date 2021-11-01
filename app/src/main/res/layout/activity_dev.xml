@@ -102,18 +102,6 @@
                             android:layout_height="wrap_content">
                             <Button
                                 app:layout_flexGrow="1"
-                                android:id="@+id/button_determine_next_alarm"
-                                android:text="Next-Alarm"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
-                            <Button
-                                app:layout_flexGrow="1"
-                                android:id="@+id/button_restart_app"
-                                android:text="Restart-App"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
-                            <Button
-                                app:layout_flexGrow="1"
                                 android:id="@+id/button_execute_full_backup_service"
                                 android:text="Full-Backup"
                                 android:layout_width="wrap_content"
@@ -134,30 +122,6 @@
                                 app:layout_flexGrow="1"
                                 android:id="@+id/button_notification_02"
                                 android:text="Notification-02"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
-                            <Button
-                                app:layout_flexGrow="1"
-                                android:id="@+id/button_enable_orientation"
-                                android:text="Orientation-Sensor-O"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
-                            <Button
-                                app:layout_flexGrow="1"
-                                android:id="@+id/button_disable_orientation"
-                                android:text="Orientation-Sensor-X"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
-                            <Button
-                                app:layout_flexGrow="1"
-                                android:id="@+id/button_hold_orientation"
-                                android:text="Orientation-Hold-O"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
-                            <Button
-                                app:layout_flexGrow="1"
-                                android:id="@+id/button_release_orientation"
-                                android:text="Orientation-Hold-X"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"/>
                             <Button

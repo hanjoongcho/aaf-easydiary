@@ -1,12 +1,10 @@
 package me.blog.korn123.easydiary.extensions
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -35,6 +33,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
+import io.github.aafactory.commons.extensions.triggerRestart
 import io.github.aafactory.commons.helpers.PERMISSION_ACCESS_COARSE_LOCATION
 import io.github.aafactory.commons.helpers.PERMISSION_ACCESS_FINE_LOCATION
 import io.github.aafactory.commons.utils.BitmapUtils
@@ -159,25 +158,6 @@ fun Activity.makeSnackBar(message: String, duration: Int = Snackbar.LENGTH_SHORT
             .setAction("Action", null).show()
 }
 
-fun Activity.setScreenOrientationSensor(enableSensor: Boolean) {
-    requestedOrientation = when (enableSensor) {
-        true -> ActivityInfo.SCREEN_ORIENTATION_SENSOR
-        false -> ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
-    }
-}
-
-@SuppressLint("SourceLockedOrientationActivity")
-fun Activity.holdCurrentOrientation() {
-    when (resources.configuration.orientation) {
-        Configuration.ORIENTATION_PORTRAIT -> requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        Configuration.ORIENTATION_LANDSCAPE -> requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-    }
-}
-
-fun Activity.clearHoldOrientation() {
-    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-}
-
 fun Activity.isLandScape(): Boolean {
     return resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 }
@@ -227,14 +207,6 @@ fun Activity.startActivityWithTransition(intent: Intent) {
 //    //System.runFinalizersOnExit(true)
 //    exitProcess(0)
 //}
-
-fun Activity.triggerRestart() {
-    val intent = Intent(this, DiaryMainActivity::class.java)
-    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    this.startActivity(intent)
-    finish()
-    Runtime.getRuntime().exit(0)
-}
 
 fun Activity.refreshApp() {
     val readDiaryIntent = Intent(this, DiaryMainActivity::class.java)
@@ -641,7 +613,7 @@ fun EasyDiaryActivity.migrateData(binging: ActivityDiaryMainBinding) {
             binging.modalContainer.visibility = View.GONE
             if (isFontDirMigrate) {
                 showAlertDialog("Font 리소스가 변경되어 애플리케이션을 다시 시작합니다.", DialogInterface.OnClickListener { _, _ ->
-                    triggerRestart()
+                    triggerRestart(DiaryMainActivity::class.java)
                 }, false)
             }
         }
