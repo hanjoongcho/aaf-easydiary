@@ -267,10 +267,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
     }
 
-    fun openCheatSheet(view: View) {
-        TransitionHelper.startActivityWithTransition(this, Intent(this, CheatSheetActivity::class.java))
-    }
-
 
     /***************************************************************************************************
      *   etc functions

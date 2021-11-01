@@ -64,17 +64,6 @@
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
                     <androidx.cardview.widget.CardView
-                        android:onClick="openCheatSheet"
-                        style="@style/AppCard.Settings">
-                        <LinearLayout
-                            style="@style/LinearLayoutVertical">
-                            <com.simplemobiletools.commons.views.MyTextView
-                                android:text="GitHub Pages"
-                                android:id="@+id/text_cheat_sheet"
-                                style="@style/SettingsTitle" />
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-                    <androidx.cardview.widget.CardView
                         android:onClick="@{() -> view_model.plus()}"
                         style="@style/AppCard.Settings">
                         <LinearLayout
