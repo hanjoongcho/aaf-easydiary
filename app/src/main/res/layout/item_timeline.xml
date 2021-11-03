@@ -30,12 +30,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <RelativeLayout
-            android:layout_marginStart="34dp"
+            android:layout_marginStart="30dp"
             android:layout_width="20dp"
             android:layout_height="wrap_content">
             <TextView
                 android:id="@+id/topLine"
                 android:background="@android:color/white"
+                android:layout_marginStart="4dp"
                 android:layout_width="3dp"
                 android:layout_height="5dp" />
         </RelativeLayout>
@@ -95,11 +96,12 @@
         </LinearLayout>
         
         <RelativeLayout
-            android:layout_marginStart="34dp"
+            android:layout_marginStart="30dp"
             android:layout_width="20dp"
             android:layout_height="wrap_content">
             <TextView
                 android:background="@android:color/white"
+                android:layout_marginStart="4dp"
                 android:layout_width="3dp"
                 android:layout_height="6dp" />
         </RelativeLayout>
