@@ -20,7 +20,7 @@ limitations under the License.
     android:id="@+id/recyclerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:fastScrollEnabled="true"
+    app:fastScrollEnabled="false"
     app:fastScrollHorizontalThumbDrawable="@drawable/ic_fast_scroll"
     app:fastScrollHorizontalTrackDrawable="@drawable/line_drawable"
     app:fastScrollVerticalThumbDrawable="@drawable/ic_fast_scroll"
