@@ -1,13 +1,16 @@
 package me.blog.korn123.easydiary.adapters
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.CompoundButton
+import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView.SectionedAdapter
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.FontUtils
@@ -24,7 +27,7 @@ internal class PostcardAdapter(
         val activity: Activity,
         private val listPostcard: List<PostCard>,
         private val onItemClickListener: AdapterView.OnItemClickListener
-) : RecyclerView.Adapter<PostcardAdapter.PostcardViewHolder>() {
+) : RecyclerView.Adapter<PostcardAdapter.PostcardViewHolder>(), SectionedAdapter {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostcardViewHolder {
         return PostcardViewHolder(activity, ViewholderPostCardBinding.inflate(activity.layoutInflater, parent, false), this)
@@ -35,6 +38,12 @@ internal class PostcardAdapter(
     }
 
     override fun getItemCount() = listPostcard.size
+
+    @SuppressLint("DefaultLocale")
+    @NonNull
+    override fun getSectionName(position: Int): String {
+        return String.format("%d. %s", position + 1, listPostcard[position].file.name)
+    }
 
     fun onItemHolderClick(itemHolder: PostcardViewHolder) {
         onItemClickListener.onItemClick(null, itemHolder.itemView, itemHolder.adapterPosition, itemHolder.itemId)
