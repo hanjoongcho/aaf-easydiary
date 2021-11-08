@@ -23,7 +23,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.floor
 
-internal class PostcardAdapter(
+class PostcardAdapter(
         val activity: Activity,
         private val listPostcard: List<PostCard>,
         private val onItemClickListener: AdapterView.OnItemClickListener
@@ -53,7 +53,7 @@ internal class PostcardAdapter(
         listPostcard[position].isItemChecked = isChecked
     }
 
-    inner class PostcardViewHolder(
+    class PostcardViewHolder(
             val activity: Activity, private val viewHolderPostCardBinding: ViewholderPostCardBinding, val adapter: PostcardAdapter
     ) : RecyclerView.ViewHolder(viewHolderPostCardBinding.root), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
         init {
@@ -98,10 +98,10 @@ internal class PostcardAdapter(
         }
     }
 
+    data class PostCard(val file: File, var isItemChecked: Boolean)
+
     companion object {
         const val GUIDE_MESSAGE = "No information"
         const val POSTCARD_DATE_FORMAT = "yyyyMMddHHmmss"
     }
-
-    data class PostCard(val file: File, var isItemChecked: Boolean)
 }
