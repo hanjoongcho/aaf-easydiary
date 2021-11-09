@@ -114,9 +114,18 @@ class DiaryMainActivity2 : EasyDiaryActivity() {
         }
 
         mDiaryList.addAll(EasyDiaryDbHelper.findDiary(null))
-        mDiaryMainItemAdapter = DiaryMainItemAdapter2(this, mDiaryList)
+        mDiaryMainItemAdapter = DiaryMainItemAdapter2(this, mDiaryList, {
+            val detailIntent = Intent(this@DiaryMainActivity2, DiaryReadActivity::class.java)
+            detailIntent.putExtra(DIARY_SEQUENCE, it.sequence)
+            detailIntent.putExtra(SELECTED_SEARCH_QUERY, mDiaryMainItemAdapter?.currentQuery)
+            detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE, viewModel.symbol.value ?: 0)
+            TransitionHelper.startActivityWithTransition(this@DiaryMainActivity2, detailIntent)
+        }, {
+
+        })
         mBinding.diaryListView.adapter = mDiaryMainItemAdapter
         mBinding.diaryListView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        mBinding.diaryListView.setPopUpTypeface(FontUtils.getCommonTypeface(this))
 
         if (!config.isInitDummyData) {
             initSampleData()
@@ -162,7 +171,7 @@ class DiaryMainActivity2 : EasyDiaryActivity() {
                             showToolbar()
                         }
                         mVerticalScrollCount = 0
-                    } else if (dy == 0) {
+                    } else if (dy == 0) { // FIXME: stop scroll
                         if (toolbarIsHidden()) {
                             showToolbar()
                         }

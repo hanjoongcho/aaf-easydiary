@@ -38,7 +38,9 @@ import org.apache.commons.lang3.StringUtils
 
 class DiaryMainItemAdapter2(
         val activity: Activity,
-        private val diaryItems: List<Diary>
+        private val diaryItems: List<Diary>,
+        val itemClickCallback: (diary: Diary) -> Unit,
+        val itemLongClickCallback: () -> Unit
 ) : RecyclerView.Adapter<DiaryMainItemAdapter2.ViewHolder>(), FastScrollRecyclerView.SectionedAdapter {
     var currentQuery: String? = null
 
@@ -53,7 +55,11 @@ class DiaryMainItemAdapter2(
     override fun getItemCount(): Int = diaryItems.size
 
     override fun getSectionName(position: Int): String {
-        return String.format("%d. %s", position + 1, diaryItems[position].title)
+        val label = when (diaryItems[position].title?.isNotEmpty() ?: false) {
+            true -> String.format("%d. %s", position + 1, diaryItems[position].title)
+            false -> String.format("%d. %s", position + 1, diaryItems[position].contents)
+        }
+        return label
     }
 
     fun getSelectedItems(): List<Diary> {
@@ -71,6 +77,7 @@ class DiaryMainItemAdapter2(
             itemDiaryMainBinding.run {
                 activity.run {
                     root.run {
+                        setOnClickListener { itemClickCallback.invoke(diary) }
                         updateTextColors(this, 0, 0)
                         updateAppViews(this)
                         initTextSize(this)

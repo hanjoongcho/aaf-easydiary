@@ -84,11 +84,6 @@
             <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
                 android:id="@+id/diaryListView"
                 android:layout_marginTop="@dimen/card_layout_padding"
-                android:listSelector="@android:color/transparent"
-                android:fastScrollAlwaysVisible="false"
-                android:fastScrollEnabled="true"
-                android:dividerHeight="@dimen/card_layout_margin"
-                android:divider="@null"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:fastScrollAutoHide="true"
@@ -102,6 +97,7 @@
                 app:fastScrollPopupTextVerticalAlignmentMode="font_metrics"
                 app:fastScrollThumbColor="?attr/colorAccent"
                 app:fastScrollThumbEnabled="true"
+                app:fastScrollTrackColor="#00000000"
                 />
         </LinearLayout>
 
