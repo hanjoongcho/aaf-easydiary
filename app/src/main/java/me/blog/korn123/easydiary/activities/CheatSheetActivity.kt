@@ -75,6 +75,7 @@ open class CheatSheetActivity : EasyDiaryActivity() {
     private fun setupCheatSheet() {
         mOriginCheatSheetList.run {}
         mBinding.recyclerCheatSheet.apply {
+
             layoutManager = LinearLayoutManager(this@CheatSheetActivity, LinearLayoutManager.VERTICAL, false)
             addItemDecoration(SettingsScheduleFragment.SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding)))
             mCheatSheetAdapter =  CheatSheetAdapter(

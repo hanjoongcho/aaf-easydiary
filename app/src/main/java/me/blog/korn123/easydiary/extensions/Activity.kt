@@ -49,6 +49,7 @@ import me.blog.korn123.easydiary.activities.EasyDiaryActivity
 import me.blog.korn123.easydiary.activities.FingerprintLockActivity
 import me.blog.korn123.easydiary.activities.PinLockActivity
 import me.blog.korn123.easydiary.adapters.SymbolPagerAdapter
+import me.blog.korn123.easydiary.databinding.ActivityDiaryMain2Binding
 import me.blog.korn123.easydiary.databinding.ActivityDiaryMainBinding
 import me.blog.korn123.easydiary.dialogs.WhatsNewDialog
 import me.blog.korn123.easydiary.helper.*
@@ -620,4 +621,114 @@ fun EasyDiaryActivity.migrateData(binging: ActivityDiaryMainBinding) {
     }.start()
 }
 
+fun EasyDiaryActivity.migrateData(binging: ActivityDiaryMain2Binding) {
+    GlobalScope.launch {
+        val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
+        val listPhotoUri = EasyDiaryDbHelper.findPhotoUriAll(realmInstance)
+        var isFontDirMigrate = false
+        for ((index, dto) in listPhotoUri.withIndex()) {
+//                Log.i("PHOTO-URI", dto.photoUri)
+            if (dto.isContentUri()) {
+                val photoPath = EasyDiaryUtils.getApplicationDataDirectory(this@migrateData) + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
+                CommonUtils.uriToFile(this@migrateData, Uri.parse(dto.photoUri), photoPath)
+                realmInstance.beginTransaction()
+                dto.photoUri = FILE_URI_PREFIX + photoPath
+                realmInstance.commitTransaction()
+                runOnUiThread {
+                    binging.progressInfo.text = "Converting... ($index/${listPhotoUri.size})"
+                }
+            }
+        }
 
+        if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+            File(EasyDiaryUtils.getApplicationDataDirectory(this@migrateData) + WORKING_DIRECTORY).listFiles()?.let {
+                it.forEach { file ->
+                    if (file.extension.equals("jpg", true)) FileUtils.moveFileToDirectory(file, File(EasyDiaryUtils.getApplicationDataDirectory(this@migrateData) + DIARY_POSTCARD_DIRECTORY), true)
+                }
+            }
+
+            // Move attached photo from external storage to application data directory
+            // From 1.4.102
+            // 01. DIARY_PHOTO_DIRECTORY
+            val photoSrcDir = File(EasyDiaryUtils.getExternalStorageDirectory(), DIARY_PHOTO_DIRECTORY)
+            val photoDestDir = File(EasyDiaryUtils.getApplicationDataDirectory(this@migrateData) + DIARY_PHOTO_DIRECTORY)
+            photoSrcDir.listFiles()?.let {
+                it.forEachIndexed { index, file ->
+                    Log.i("aaf-t", "${File(photoDestDir, file.name).exists()} ${File(photoDestDir, file.name).absolutePath}")
+                    if (File(photoDestDir, file.name).exists()) {
+                        Log.i("aaf-t", "${File(photoDestDir, file.name).delete()}")
+                    }
+                    FileUtils.copyFileToDirectory(file, photoDestDir)
+                    runOnUiThread {
+                        binging.migrationMessage.text = getString(R.string.storage_migration_message)
+                        binging.progressInfo.text = "$index/${it.size} (Photo)"
+                    }
+                }
+                photoSrcDir.renameTo(File(photoSrcDir.absolutePath + "_migration"))
+            }
+//                destDir.listFiles().map { file ->
+//                    FileUtils.moveToDirectory(file, srcDir, true)
+//                }
+
+            // 02. DIARY_POSTCARD_DIRECTORY
+            val postCardSrcDir = File(EasyDiaryUtils.getExternalStorageDirectory(), DIARY_POSTCARD_DIRECTORY)
+            val postCardDestDir = File(EasyDiaryUtils.getApplicationDataDirectory(this@migrateData) + DIARY_POSTCARD_DIRECTORY)
+            postCardSrcDir.listFiles()?.let {
+                it.forEachIndexed { index, file ->
+                    if (File(postCardDestDir, file.name).exists()) {
+                        File(postCardDestDir, file.name).delete()
+                    }
+                    FileUtils.copyFileToDirectory(file, postCardDestDir)
+                    runOnUiThread {
+                        binging.progressInfo.text = "$index/${it.size} (Postcard)"
+                    }
+                }
+                postCardSrcDir.renameTo(File(postCardSrcDir.absolutePath + "_migration"))
+            }
+
+            // 03. USER_CUSTOM_FONTS_DIRECTORY
+            val fontSrcDir = File(EasyDiaryUtils.getExternalStorageDirectory(), USER_CUSTOM_FONTS_DIRECTORY)
+            val fontDestDir = File(EasyDiaryUtils.getApplicationDataDirectory(this@migrateData) + USER_CUSTOM_FONTS_DIRECTORY)
+            fontSrcDir.listFiles()?.let {
+                it.forEachIndexed { index, file ->
+                    if (File(fontDestDir, file.name).exists()) {
+                        File(fontDestDir, file.name).delete()
+                    }
+                    FileUtils.copyFileToDirectory(file, fontDestDir)
+                    runOnUiThread {
+                        binging.progressInfo.text = "$index/${it.size} (Font)"
+                    }
+                }
+                fontSrcDir.renameTo(File(fontSrcDir.absolutePath + "_migration"))
+                if (it.isNotEmpty()) isFontDirMigrate = true
+            }
+
+            // 04. BACKUP_DB_DIRECTORY
+            val dbSrcDir = File(EasyDiaryUtils.getExternalStorageDirectory(), BACKUP_DB_DIRECTORY)
+            val dbDestDir = File(EasyDiaryUtils.getApplicationDataDirectory(this@migrateData) + BACKUP_DB_DIRECTORY)
+            dbSrcDir.listFiles()?.let {
+                it.forEachIndexed { index, file ->
+                    if (File(dbDestDir, file.name).exists()) {
+                        File(dbDestDir, file.name).delete()
+                    }
+                    FileUtils.copyFileToDirectory(file, dbDestDir)
+                    runOnUiThread {
+                        binging.progressInfo.text = "$index/${it.size} (Database)"
+                    }
+                }
+                dbSrcDir.renameTo(File(dbSrcDir.absolutePath + "_migration"))
+            }
+        }
+
+        realmInstance.close()
+        runOnUiThread {
+            binging.progressDialog.visibility = View.GONE
+            binging.modalContainer.visibility = View.GONE
+            if (isFontDirMigrate) {
+                showAlertDialog("Font 리소스가 변경되어 애플리케이션을 다시 시작합니다.", DialogInterface.OnClickListener { _, _ ->
+                    triggerRestart(DiaryMainActivity::class.java)
+                }, false)
+            }
+        }
+    }.start()
+}
