@@ -147,17 +147,22 @@ class DiaryMainActivity2 : EasyDiaryActivity() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (!keypadIsShown()) {
-                    if (dy > 0) {
-                        Log.i(AAF_TEST, "UP: $dy")
+                    mVerticalScrollCount += dy
+                    Log.i(AAF_TEST, "mVerticalScrollCount: $mVerticalScrollCount")
+                    if (mVerticalScrollCount > 50) {
+                        Log.i(AAF_TEST, "UP")
                         if (toolbarIsShown()) {
                             hideToolbar()
                         }
-                    } else if (dy == 0) {
+                        mVerticalScrollCount = 0
+
+                    } else if (mVerticalScrollCount < -50) {
+                        Log.i(AAF_TEST, "DOWN")
                         if (toolbarIsHidden()) {
                             showToolbar()
                         }
-                    } else {
-                        Log.i(AAF_TEST, "DOWN: $dy")
+                        mVerticalScrollCount = 0
+                    } else if (dy == 0) {
                         if (toolbarIsHidden()) {
                             showToolbar()
                         }
@@ -166,6 +171,7 @@ class DiaryMainActivity2 : EasyDiaryActivity() {
             }
         })
     }
+    var mVerticalScrollCount = 0
 
     private fun toolbarIsShown(): Boolean {
         return ViewHelper.getTranslationY(mBinding.appBar).toInt() == 0
@@ -187,22 +193,26 @@ class DiaryMainActivity2 : EasyDiaryActivity() {
         mBinding.searchCard.useCompatPadding = false
     }
 
+    private var mAnimator: ValueAnimator? = null
     private fun moveToolbar(toTranslationY: Float) {
         if (ViewHelper.getTranslationY(mBinding.appBar) == toTranslationY) {
             Log.i(AAF_TEST, "cancel moveToolbar")
             return
         }
 
-        val animator = ValueAnimator.ofFloat(ViewHelper.getTranslationY(mBinding.appBar), toTranslationY)
-        animator.addUpdateListener { animation ->
-            val translationY = animation.animatedValue as Float
-            ViewHelper.setTranslationY(mBinding.appBar, translationY)
-            ViewHelper.setTranslationY(mBinding.mainHolder as View?, translationY)
-            val lp = (mBinding.mainHolder as View).layoutParams as FrameLayout.LayoutParams
-            lp.height = (-translationY).toInt() + getScreenHeight() - lp.topMargin
-            (mBinding.mainHolder as View).requestLayout()
+        Log.i(AAF_TEST, "moveToolbar")
+        if (mAnimator == null || !mAnimator!!.isRunning) {
+            mAnimator = ValueAnimator.ofFloat(ViewHelper.getTranslationY(mBinding.appBar), toTranslationY).setDuration(500)
+            mAnimator?.addUpdateListener { animation ->
+                val translationY = animation.animatedValue as Float
+                ViewHelper.setTranslationY(mBinding.appBar, translationY)
+                ViewHelper.setTranslationY(mBinding.mainHolder as View?, translationY)
+                val lp = (mBinding.mainHolder as View).layoutParams as FrameLayout.LayoutParams
+                lp.height = (-translationY).toInt() + getScreenHeight() - lp.topMargin
+                (mBinding.mainHolder as View).requestLayout()
+            }
+            mAnimator?.start()
         }
-        animator.start()
     }
 
     private fun getScreenHeight(): Int {
