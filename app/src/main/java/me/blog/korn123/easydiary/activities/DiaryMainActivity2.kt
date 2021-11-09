@@ -148,12 +148,16 @@ class DiaryMainActivity2 : EasyDiaryActivity() {
                 super.onScrolled(recyclerView, dx, dy)
                 if (!keypadIsShown()) {
                     if (dy > 0) {
-                        Log.i(AAF_TEST, "UP")
+                        Log.i(AAF_TEST, "UP: $dy")
                         if (toolbarIsShown()) {
                             hideToolbar()
                         }
+                    } else if (dy == 0) {
+                        if (toolbarIsHidden()) {
+                            showToolbar()
+                        }
                     } else {
-                        Log.i(AAF_TEST, "DOWN")
+                        Log.i(AAF_TEST, "DOWN: $dy")
                         if (toolbarIsHidden()) {
                             showToolbar()
                         }
@@ -172,20 +176,24 @@ class DiaryMainActivity2 : EasyDiaryActivity() {
     }
 
     private fun showToolbar() {
+        Log.i(AAF_TEST, "showToolbar")
         moveToolbar(0F)
         if (config.enableCardViewPolicy) mBinding.searchCard.useCompatPadding = true
     }
 
     private fun hideToolbar() {
+        Log.i(AAF_TEST, "hideToolbar")
         moveToolbar(-mBinding.appBar.height.toFloat())
         mBinding.searchCard.useCompatPadding = false
     }
 
     private fun moveToolbar(toTranslationY: Float) {
         if (ViewHelper.getTranslationY(mBinding.appBar) == toTranslationY) {
+            Log.i(AAF_TEST, "cancel moveToolbar")
             return
         }
-        val animator = ValueAnimator.ofFloat(ViewHelper.getTranslationY(mBinding.appBar), toTranslationY).setDuration(500)
+
+        val animator = ValueAnimator.ofFloat(ViewHelper.getTranslationY(mBinding.appBar), toTranslationY)
         animator.addUpdateListener { animation ->
             val translationY = animation.animatedValue as Float
             ViewHelper.setTranslationY(mBinding.appBar, translationY)
@@ -208,7 +216,7 @@ class DiaryMainActivity2 : EasyDiaryActivity() {
         if (heightDiff > CommonUtils.dpToPixel(this, 200F)) {
             isShow = true
         }
-        Log.i("keypadIsShown", "$heightDiff, ${CommonUtils.dpToPixel(this, 200F)}")
+//        Log.i("keypadIsShown", "$heightDiff, ${CommonUtils.dpToPixel(this, 200F)}")
 
         return isShow
     }
