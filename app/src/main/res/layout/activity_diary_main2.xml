@@ -81,7 +81,7 @@
                         android:layout_height="wrap_content" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-            <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
+            <me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
                 android:id="@+id/diaryListView"
                 android:layout_marginTop="@dimen/card_layout_padding"
                 android:layout_width="match_parent"

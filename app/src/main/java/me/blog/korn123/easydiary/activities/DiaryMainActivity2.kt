@@ -22,6 +22,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
+import com.github.ksoichiro.android.observablescrollview.ObservableListView
+import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView
 import com.nineoldandroids.animation.ValueAnimator
 import com.nineoldandroids.view.ViewHelper
 import io.github.aafactory.commons.utils.CommonUtils
@@ -42,6 +44,7 @@ import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.viewmodels.DiaryMainViewModel
+import me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
 import org.apache.commons.lang3.StringUtils
 import java.util.*
 
@@ -49,15 +52,13 @@ import java.util.*
  * Created by CHO HANJOONG on 2017-03-16.
  */
 
-class DiaryMainActivity2 : EasyDiaryActivity() {
+class DiaryMainActivity2 : ToolbarControlBaseActivity2<FastScrollObservableRecyclerView>() {
 
     /***************************************************************************************************
      *   global properties
      *
      ***************************************************************************************************/
     private lateinit var mPopupMenuBinding: PopupMenuMainBinding
-    private lateinit var mBinding: ActivityDiaryMain2Binding
-    private val viewModel: DiaryMainViewModel by viewModels()
     private var mDiaryMainItemAdapter: DiaryMainItemAdapter2? = null
     private var mDiaryList: ArrayList<Diary> = arrayListOf()
     private var mShowcaseIndex = 0
@@ -100,13 +101,13 @@ class DiaryMainActivity2 : EasyDiaryActivity() {
      *   override functions
      *
      ***************************************************************************************************/
+    override fun createScrollable(): FastScrollObservableRecyclerView {
+        return mBinding.diaryListView
+    }
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mPopupMenuBinding = PopupMenuMainBinding.inflate(layoutInflater)
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_diary_main2)
-        mBinding.lifecycleOwner = this
-        mBinding.viewModel = viewModel
-        setSupportActionBar(mBinding.toolbar)
         forceInitRealmLessThanOreo()
 
         supportActionBar?.run {
@@ -151,93 +152,6 @@ class DiaryMainActivity2 : EasyDiaryActivity() {
             if (config.appExecutionCount > 30 && EasyDiaryDbHelper.countDiaryAll() > 300) startReviewFlow()
             if (config.enableDebugMode) makeToast("appExecutionCount: ${config.appExecutionCount}")
         }
-
-        mBinding.diaryListView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                if (!keypadIsShown()) {
-                    mVerticalScrollCount += dy
-                    Log.i(AAF_TEST, "mVerticalScrollCount: $mVerticalScrollCount")
-                    if (mVerticalScrollCount > 50) {
-                        Log.i(AAF_TEST, "UP")
-                        if (toolbarIsShown()) {
-                            hideToolbar()
-                        }
-                        mVerticalScrollCount = 0
-
-                    } else if (mVerticalScrollCount < -50) {
-                        Log.i(AAF_TEST, "DOWN")
-                        if (toolbarIsHidden()) {
-                            showToolbar()
-                        }
-                        mVerticalScrollCount = 0
-                    } else if (dy == 0) { // FIXME: stop scroll
-                        if (toolbarIsHidden()) {
-                            showToolbar()
-                        }
-                    }
-                }
-            }
-        })
-    }
-    var mVerticalScrollCount = 0
-
-    private fun toolbarIsShown(): Boolean {
-        return ViewHelper.getTranslationY(mBinding.appBar).toInt() == 0
-    }
-
-    private fun toolbarIsHidden(): Boolean {
-        return ViewHelper.getTranslationY(mBinding.appBar).toInt() == -mBinding.appBar.height
-    }
-
-    private fun showToolbar() {
-        Log.i(AAF_TEST, "showToolbar")
-        moveToolbar(0F)
-        if (config.enableCardViewPolicy) mBinding.searchCard.useCompatPadding = true
-    }
-
-    private fun hideToolbar() {
-        Log.i(AAF_TEST, "hideToolbar")
-        moveToolbar(-mBinding.appBar.height.toFloat())
-        mBinding.searchCard.useCompatPadding = false
-    }
-
-    private var mAnimator: ValueAnimator? = null
-    private fun moveToolbar(toTranslationY: Float) {
-        if (ViewHelper.getTranslationY(mBinding.appBar) == toTranslationY) {
-            Log.i(AAF_TEST, "cancel moveToolbar")
-            return
-        }
-
-        Log.i(AAF_TEST, "moveToolbar")
-        if (mAnimator == null || !mAnimator!!.isRunning) {
-            mAnimator = ValueAnimator.ofFloat(ViewHelper.getTranslationY(mBinding.appBar), toTranslationY).setDuration(500)
-            mAnimator?.addUpdateListener { animation ->
-                val translationY = animation.animatedValue as Float
-                ViewHelper.setTranslationY(mBinding.appBar, translationY)
-                ViewHelper.setTranslationY(mBinding.mainHolder as View?, translationY)
-                val lp = (mBinding.mainHolder as View).layoutParams as FrameLayout.LayoutParams
-                lp.height = (-translationY).toInt() + getScreenHeight() - lp.topMargin
-                (mBinding.mainHolder as View).requestLayout()
-            }
-            mAnimator?.start()
-        }
-    }
-
-    private fun getScreenHeight(): Int {
-        return findViewById<View>(android.R.id.content).height
-    }
-
-    private fun keypadIsShown(): Boolean {
-        var isShow = false
-        val rootView = findViewById<View>(android.R.id.content)
-        val heightDiff = rootView.rootView.height - rootView.height
-        if (heightDiff > CommonUtils.dpToPixel(this, 200F)) {
-            isShow = true
-        }
-//        Log.i("keypadIsShown", "$heightDiff, ${CommonUtils.dpToPixel(this, 200F)}")
-
-        return isShow
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -527,10 +441,6 @@ class DiaryMainActivity2 : EasyDiaryActivity() {
 
     private fun selectFeelingSymbol(index: Int = SYMBOL_SELECT_ALL) {
         updateSymbolSequence(if (index == 0) SYMBOL_SELECT_ALL else index)
-    }
-
-    private fun updateSymbolSequence(symbolSequence: Int) {
-        viewModel.updateSymbolSequence(symbolSequence)
     }
 
     private fun showSpeechDialog() {
