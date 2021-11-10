@@ -56,7 +56,7 @@ class DiaryMainItemAdapter(
 
     override fun getSectionName(position: Int): String {
         fun ellipsis(str: String?): String {
-            val maxLength = 10
+            val maxLength = 15
             val ellipsisString = str?.let {
                 when (str.length > maxLength) {
                     true -> str.take(maxLength).plus("…")
@@ -66,8 +66,8 @@ class DiaryMainItemAdapter(
             return ellipsisString
         }
         val label = when (diaryItems[position].title?.isNotEmpty() ?: false) {
-            true -> String.format("%d. %s", position + 1, ellipsis(diaryItems[position].title))
-            false -> String.format("%d. %s", position + 1, ellipsis(diaryItems[position].contents))
+            true -> String.format("%s", ellipsis(diaryItems[position].title))
+            false -> String.format("%s", ellipsis(diaryItems[position].contents))
         }
         return label
     }

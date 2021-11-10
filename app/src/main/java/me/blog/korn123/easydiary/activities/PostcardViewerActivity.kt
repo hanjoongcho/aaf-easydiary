@@ -77,6 +77,7 @@ class PostcardViewerActivity : EasyDiaryActivity() {
             adapter = mPostcardAdapter
 //            setHasFixedSize(true)
 //            clipToPadding = false
+            setPopUpTypeface(FontUtils.getCommonTypeface(this@PostcardViewerActivity))
         }
 
         initPostCard()
