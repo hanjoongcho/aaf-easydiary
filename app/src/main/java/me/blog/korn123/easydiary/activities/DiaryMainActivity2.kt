@@ -9,24 +9,15 @@ import android.os.Looper
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.*
-import android.widget.FrameLayout
 import android.widget.PopupWindow
 import android.widget.RelativeLayout
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
-import com.github.ksoichiro.android.observablescrollview.ObservableListView
-import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView
-import com.nineoldandroids.animation.ValueAnimator
 import com.nineoldandroids.view.ViewHelper
-import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -37,13 +28,12 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.EditActivity.Companion.DIARY_SEQUENCE_INIT
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter2
-import me.blog.korn123.easydiary.databinding.ActivityDiaryMain2Binding
 import me.blog.korn123.easydiary.databinding.PopupMenuMainBinding
 import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.Diary
-import me.blog.korn123.easydiary.viewmodels.DiaryMainViewModel
 import me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
 import org.apache.commons.lang3.StringUtils
 import java.util.*
@@ -129,9 +119,12 @@ class DiaryMainActivity2 : ToolbarControlBaseActivity2<FastScrollObservableRecyc
             //            mDiaryMainItemAdapter?.notifyDataSetChanged()
         }
 
-        mBinding.diaryListView.adapter = mDiaryMainItemAdapter
-        mBinding.diaryListView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        mBinding.diaryListView.setPopUpTypeface(FontUtils.getCommonTypeface(this))
+        mBinding.diaryListView.run {
+            adapter = mDiaryMainItemAdapter
+            layoutManager = LinearLayoutManager(this@DiaryMainActivity2, LinearLayoutManager.VERTICAL, false)
+            addItemDecoration(SettingsScheduleFragment.SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding)))
+            setPopUpTypeface(FontUtils.getCommonTypeface(this@DiaryMainActivity2))
+        }
 
         if (!config.isInitDummyData) {
             initSampleData()

@@ -55,9 +55,19 @@ class DiaryMainItemAdapter2(
     override fun getItemCount(): Int = diaryItems.size
 
     override fun getSectionName(position: Int): String {
+        fun ellipsis(str: String?): String {
+            val maxLength = 10
+            val ellipsisString = str?.let {
+                when (str.length > maxLength) {
+                    true -> str.take(maxLength).plus("…")
+                    false -> str
+                }
+            } ?: ""
+            return ellipsisString
+        }
         val label = when (diaryItems[position].title?.isNotEmpty() ?: false) {
-            true -> String.format("%d. %s", position + 1, diaryItems[position].title)
-            false -> String.format("%d. %s", position + 1, diaryItems[position].contents)
+            true -> String.format("%d. %s", position + 1, ellipsis(diaryItems[position].title))
+            false -> String.format("%d. %s", position + 1, ellipsis(diaryItems[position].contents))
         }
         return label
     }
