@@ -78,6 +78,10 @@ class DiaryMainItemAdapter2(
                 activity.run {
                     root.run {
                         setOnClickListener { itemClickCallback.invoke(diary) }
+                        setOnLongClickListener {
+                            itemLongClickCallback()
+                            true
+                        }
                         updateTextColors(this, 0, 0)
                         updateAppViews(this)
                         initTextSize(this)

@@ -121,9 +121,14 @@ class DiaryMainActivity2 : ToolbarControlBaseActivity2<FastScrollObservableRecyc
             detailIntent.putExtra(SELECTED_SEARCH_QUERY, mDiaryMainItemAdapter?.currentQuery)
             detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE, viewModel.symbol.value ?: 0)
             TransitionHelper.startActivityWithTransition(this@DiaryMainActivity2, detailIntent)
-        }, {
+        }) {
+            EasyDiaryDbHelper.clearSelectedStatus()
+            diaryMode = DiaryMode.DELETE
+            invalidateOptionsMenu()
+            refreshList()
+            //            mDiaryMainItemAdapter?.notifyDataSetChanged()
+        }
 
-        })
         mBinding.diaryListView.adapter = mDiaryMainItemAdapter
         mBinding.diaryListView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         mBinding.diaryListView.setPopUpTypeface(FontUtils.getCommonTypeface(this))
