@@ -81,24 +81,17 @@
                         android:layout_height="wrap_content" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-            <me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
+            <com.github.ksoichiro.android.observablescrollview.ObservableListView
                 android:id="@+id/diaryListView"
                 android:layout_marginTop="@dimen/card_layout_padding"
+                android:listSelector="@android:color/transparent"
+                android:fastScrollAlwaysVisible="false"
+                android:fastScrollEnabled="true"
+                android:dividerHeight="@dimen/card_layout_margin"
+                android:divider="@null"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:fastScrollAutoHide="true"
-                app:fastScrollAutoHideDelay="1500"
-                app:fastScrollEnableThumbInactiveColor="true"
-                app:fastScrollPopupBackgroundSize="36sp"
-                app:fastScrollPopupBgColor="?attr/colorAccent"
-                app:fastScrollPopupPosition="adjacent"
-                app:fastScrollPopupTextColor="@android:color/primary_text_dark"
-                app:fastScrollPopupTextSize="12sp"
-                app:fastScrollPopupTextVerticalAlignmentMode="text_bounds"
-                app:fastScrollThumbColor="?attr/colorAccent"
-                app:fastScrollThumbEnabled="true"
-                app:fastScrollTrackColor="#00000000"
-                />
+                android:layout_height="match_parent">
+            </com.github.ksoichiro.android.observablescrollview.ObservableListView>
         </LinearLayout>
 
         <com.simplemobiletools.commons.views.MyFloatingActionButton

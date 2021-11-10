@@ -29,18 +29,18 @@ import com.nineoldandroids.animation.ValueAnimator
 import com.nineoldandroids.view.ViewHelper
 import io.github.aafactory.commons.utils.CommonUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.databinding.ActivityDiaryMain2Binding
+import me.blog.korn123.easydiary.databinding.ActivityDiaryMain1Binding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.viewmodels.DiaryMainViewModel
 
-abstract class ToolbarControlBaseActivity2<S : Scrollable> : EasyDiaryActivity(), ObservableScrollViewCallbacks {
-    protected lateinit var mBinding: ActivityDiaryMain2Binding
+abstract class ToolbarControlBaseActivity1<S : Scrollable> : EasyDiaryActivity(), ObservableScrollViewCallbacks {
+    protected lateinit var mBinding: ActivityDiaryMain1Binding
     protected val viewModel: DiaryMainViewModel by viewModels()
     private var mScrollable: S? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_diary_main2)
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_diary_main1)
         mBinding.lifecycleOwner = this
         mBinding.viewModel = viewModel
 

@@ -109,8 +109,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     edit().putBoolean("hasShot$SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER", false).apply()
                 }
             }
-            buttonMain2.setOnClickListener {
-                TransitionHelper.startActivityWithTransition(this@BaseDevActivity, Intent(this@BaseDevActivity, DiaryMainActivity2::class.java))
+            buttonMain1.setOnClickListener {
+                TransitionHelper.startActivityWithTransition(this@BaseDevActivity, Intent(this@BaseDevActivity, DiaryMainActivity1::class.java))
             }
         }
     }

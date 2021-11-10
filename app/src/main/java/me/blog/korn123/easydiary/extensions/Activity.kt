@@ -49,7 +49,7 @@ import me.blog.korn123.easydiary.activities.EasyDiaryActivity
 import me.blog.korn123.easydiary.activities.FingerprintLockActivity
 import me.blog.korn123.easydiary.activities.PinLockActivity
 import me.blog.korn123.easydiary.adapters.SymbolPagerAdapter
-import me.blog.korn123.easydiary.databinding.ActivityDiaryMain2Binding
+import me.blog.korn123.easydiary.databinding.ActivityDiaryMain1Binding
 import me.blog.korn123.easydiary.databinding.ActivityDiaryMainBinding
 import me.blog.korn123.easydiary.dialogs.WhatsNewDialog
 import me.blog.korn123.easydiary.helper.*
@@ -621,7 +621,7 @@ fun EasyDiaryActivity.migrateData(binging: ActivityDiaryMainBinding) {
     }.start()
 }
 
-fun EasyDiaryActivity.migrateData(binging: ActivityDiaryMain2Binding) {
+fun EasyDiaryActivity.migrateData(binging: ActivityDiaryMain1Binding) {
     GlobalScope.launch {
         val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
         val listPhotoUri = EasyDiaryDbHelper.findPhotoUriAll(realmInstance)

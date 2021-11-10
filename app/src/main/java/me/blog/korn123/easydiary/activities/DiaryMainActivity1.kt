@@ -10,13 +10,15 @@ import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
+import android.widget.AbsListView
+import android.widget.AdapterView
 import android.widget.PopupWindow
 import android.widget.RelativeLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
+import com.github.ksoichiro.android.observablescrollview.ObservableListView
 import com.nineoldandroids.view.ViewHelper
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.coroutines.CoroutineScope
@@ -27,14 +29,12 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.EditActivity.Companion.DIARY_SEQUENCE_INIT
-import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter2
+import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter1
 import me.blog.korn123.easydiary.databinding.PopupMenuMainBinding
 import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.extensions.*
-import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.Diary
-import me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
 import org.apache.commons.lang3.StringUtils
 import java.util.*
 
@@ -42,14 +42,14 @@ import java.util.*
  * Created by CHO HANJOONG on 2017-03-16.
  */
 
-class DiaryMainActivity2 : ToolbarControlBaseActivity2<FastScrollObservableRecyclerView>() {
+class DiaryMainActivity1 : ToolbarControlBaseActivity1<ObservableListView>() {
 
     /***************************************************************************************************
      *   global properties
      *
      ***************************************************************************************************/
     private lateinit var mPopupMenuBinding: PopupMenuMainBinding
-    private var mDiaryMainItemAdapter: DiaryMainItemAdapter2? = null
+    private var mDiaryMainItemAdapter: DiaryMainItemAdapter1? = null
     private var mDiaryList: ArrayList<Diary> = arrayListOf()
     private var mShowcaseIndex = 0
     private var mShowcaseView: ShowcaseView? = null
@@ -91,10 +91,6 @@ class DiaryMainActivity2 : ToolbarControlBaseActivity2<FastScrollObservableRecyc
      *   override functions
      *
      ***************************************************************************************************/
-    override fun createScrollable(): FastScrollObservableRecyclerView {
-        return mBinding.diaryListView
-    }
-
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mPopupMenuBinding = PopupMenuMainBinding.inflate(layoutInflater)
@@ -105,26 +101,8 @@ class DiaryMainActivity2 : ToolbarControlBaseActivity2<FastScrollObservableRecyc
         }
 
         mDiaryList.addAll(EasyDiaryDbHelper.findDiary(null))
-        mDiaryMainItemAdapter = DiaryMainItemAdapter2(this, mDiaryList, {
-            val detailIntent = Intent(this@DiaryMainActivity2, DiaryReadActivity::class.java)
-            detailIntent.putExtra(DIARY_SEQUENCE, it.sequence)
-            detailIntent.putExtra(SELECTED_SEARCH_QUERY, mDiaryMainItemAdapter?.currentQuery)
-            detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE, viewModel.symbol.value ?: 0)
-            TransitionHelper.startActivityWithTransition(this@DiaryMainActivity2, detailIntent)
-        }) {
-            EasyDiaryDbHelper.clearSelectedStatus()
-            diaryMode = DiaryMode.DELETE
-            invalidateOptionsMenu()
-            refreshList()
-            //            mDiaryMainItemAdapter?.notifyDataSetChanged()
-        }
-
-        mBinding.diaryListView.run {
-            adapter = mDiaryMainItemAdapter
-            layoutManager = LinearLayoutManager(this@DiaryMainActivity2, LinearLayoutManager.VERTICAL, false)
-            addItemDecoration(SettingsScheduleFragment.SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding)))
-            setPopUpTypeface(FontUtils.getCommonTypeface(this@DiaryMainActivity2))
-        }
+        mDiaryMainItemAdapter = DiaryMainItemAdapter1(this, R.layout.item_diary_main, mDiaryList)
+        mBinding.diaryListView.adapter = mDiaryMainItemAdapter
 
         if (!config.isInitDummyData) {
             initSampleData()
@@ -134,7 +112,7 @@ class DiaryMainActivity2 : ToolbarControlBaseActivity2<FastScrollObservableRecyc
         updateDrawableColorInnerCardView(R.drawable.delete)
         bindEvent()
         initShowcase()
-        EasyDiaryUtils.initWorkingDirectory(this@DiaryMainActivity2)
+        EasyDiaryUtils.initWorkingDirectory(this@DiaryMainActivity1)
         migrateData(mBinding)
         setupPopupMenu()
 
@@ -166,12 +144,23 @@ class DiaryMainActivity2 : ToolbarControlBaseActivity2<FastScrollObservableRecyc
 
         if (config.previousActivity == PREVIOUS_ACTIVITY_CREATE) {
 //            diaryListView.smoothScrollToPosition(0)
-//            mBinding.diaryListView.setSelection(0)
-            mBinding.diaryListView.layoutManager?.scrollToPosition(0)
+            mBinding.diaryListView.setSelection(0)
             config.previousActivity = -1
         }
 
         if (ViewHelper.getTranslationY(mBinding.appBar) < 0) mBinding.searchCard.useCompatPadding = false
+    }
+
+    override fun createScrollable(): ObservableListView {
+        // ObservableListView uses setOnScrollListener, but it still works.
+        mBinding.diaryListView.setOnScrollListener(object : AbsListView.OnScrollListener {
+            override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
+            }
+
+            override fun onScroll(view: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
+            }
+        })
+        return mBinding.diaryListView
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -220,7 +209,7 @@ class DiaryMainActivity2 : ToolbarControlBaseActivity2<FastScrollObservableRecyc
                                     EasyDiaryDbHelper.duplicateDiaryBy(it)
                                 }
                                 refreshList()
-                                Handler(Looper.getMainLooper()).post { mBinding.diaryListView.layoutManager?.scrollToPosition(0) }
+                                Handler(Looper.getMainLooper()).post { mBinding.diaryListView.setSelection(0) }
                             }, null)
                         }
                         false -> {
@@ -234,14 +223,14 @@ class DiaryMainActivity2 : ToolbarControlBaseActivity2<FastScrollObservableRecyc
                 EasyDiaryUtils.writeFileWithSAF("${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}.html", MIME_TYPE_HTML, mRequestSAFForHtmlBookLauncher)
             }
             R.id.timeline -> {
-                val timelineIntent = Intent(this@DiaryMainActivity2, TimelineActivity::class.java)
+                val timelineIntent = Intent(this@DiaryMainActivity1, TimelineActivity::class.java)
                 //                startActivity(timelineIntent);
-                TransitionHelper.startActivityWithTransition(this@DiaryMainActivity2, timelineIntent)
+                TransitionHelper.startActivityWithTransition(this@DiaryMainActivity1, timelineIntent)
             }
             R.id.planner -> {
-                val calendarIntent = Intent(this@DiaryMainActivity2, CalendarActivity::class.java)
+                val calendarIntent = Intent(this@DiaryMainActivity1, CalendarActivity::class.java)
                 //                startActivity(calendarIntent);
-                TransitionHelper.startActivityWithTransition(this@DiaryMainActivity2, calendarIntent)
+                TransitionHelper.startActivityWithTransition(this@DiaryMainActivity1, calendarIntent)
             }
             R.id.microphone -> showSpeechDialog()
             R.id.popupMenu -> openCustomOptionMenu()
@@ -269,7 +258,7 @@ class DiaryMainActivity2 : ToolbarControlBaseActivity2<FastScrollObservableRecyc
     }
 
     override fun onBackPressed() {
-        if (mBinding.progressDialog.visibility == View.GONE) ActivityCompat.finishAffinity(this@DiaryMainActivity2)
+        if (mBinding.progressDialog.visibility == View.GONE) ActivityCompat.finishAffinity(this@DiaryMainActivity1)
     }
 
 
@@ -288,9 +277,9 @@ class DiaryMainActivity2 : ToolbarControlBaseActivity2<FastScrollObservableRecyc
                         }
                     }
                 }
-                R.id.dashboard -> TransitionHelper.startActivityWithTransition(this@DiaryMainActivity2, Intent(this@DiaryMainActivity2, DashboardActivity::class.java))
-                R.id.chart -> TransitionHelper.startActivityWithTransition(this@DiaryMainActivity2, Intent(this@DiaryMainActivity2, StatisticsActivity::class.java))
-                R.id.settings -> TransitionHelper.startActivityWithTransition(this@DiaryMainActivity2, Intent(this@DiaryMainActivity2, SettingsActivity::class.java))
+                R.id.dashboard -> TransitionHelper.startActivityWithTransition(this@DiaryMainActivity1, Intent(this@DiaryMainActivity1, DashboardActivity::class.java))
+                R.id.chart -> TransitionHelper.startActivityWithTransition(this@DiaryMainActivity1, Intent(this@DiaryMainActivity1, StatisticsActivity::class.java))
+                R.id.settings -> TransitionHelper.startActivityWithTransition(this@DiaryMainActivity1, Intent(this@DiaryMainActivity1, SettingsActivity::class.java))
                 R.id.devConsole -> TransitionHelper.startActivityWithTransition(this, Intent(this, DevActivity::class.java))
             }
             Handler(Looper.getMainLooper()).post { mPopupWindow?.dismiss() }
@@ -299,7 +288,7 @@ class DiaryMainActivity2 : ToolbarControlBaseActivity2<FastScrollObservableRecyc
         mPopupMenuBinding.run {
             updateAppViews(this.root)
             updateTextColors(this.root)
-            FontUtils.setFontsTypeface(this@DiaryMainActivity2, null, this.root, true)
+            FontUtils.setFontsTypeface(this@DiaryMainActivity1, null, this.root, true)
             postCard.setOnClickListener(customItemClickListener)
             dashboard.setOnClickListener(customItemClickListener)
             chart.setOnClickListener(customItemClickListener)
@@ -309,7 +298,7 @@ class DiaryMainActivity2 : ToolbarControlBaseActivity2<FastScrollObservableRecyc
     }
 
     private fun openCustomOptionMenu() {
-        FontUtils.setFontsTypeface(this@DiaryMainActivity2, null, mPopupMenuBinding.root, true)
+        FontUtils.setFontsTypeface(this@DiaryMainActivity1, null, mPopupMenuBinding.root, true)
         mPopupMenuBinding.devConsole.visibility = if (config.enableDebugMode) View.VISIBLE else View.GONE
         mPopupWindow = EasyDiaryUtils.openCustomOptionMenu(mPopupMenuBinding.root, findViewById(R.id.popupMenu))
         updateDrawableColorInnerCardView(R.drawable.bug_2)
@@ -320,8 +309,8 @@ class DiaryMainActivity2 : ToolbarControlBaseActivity2<FastScrollObservableRecyc
     }
 
     private fun openPostcardViewer() {
-        val postCardViewer = Intent(this@DiaryMainActivity2, PostcardViewerActivity::class.java)
-        TransitionHelper.startActivityWithTransition(this@DiaryMainActivity2, postCardViewer)
+        val postCardViewer = Intent(this@DiaryMainActivity1, PostcardViewerActivity::class.java)
+        TransitionHelper.startActivityWithTransition(this@DiaryMainActivity1, postCardViewer)
     }
 
     private fun initShowcase() {
@@ -353,19 +342,19 @@ class DiaryMainActivity2 : ToolbarControlBaseActivity2<FastScrollObservableRecyc
                     }
                     2 -> {
                         setButtonPosition(centerParams)
-                        setTarget(ViewTarget(R.id.planner, this@DiaryMainActivity2))
+                        setTarget(ViewTarget(R.id.planner, this@DiaryMainActivity1))
                         setContentTitle(getString(R.string.read_diary_showcase_title_4))
                         setContentText(getString(R.string.read_diary_showcase_message_4))
                     }
                     3 -> {
                         setButtonPosition(centerParams)
-                        setTarget(ViewTarget(R.id.timeline, this@DiaryMainActivity2))
+                        setTarget(ViewTarget(R.id.timeline, this@DiaryMainActivity1))
                         setContentTitle(getString(R.string.read_diary_showcase_title_5))
                         setContentText(getString(R.string.read_diary_showcase_message_5))
                     }
                     4 -> {
                         setButtonPosition(centerParams)
-                        setTarget(ViewTarget(R.id.microphone, this@DiaryMainActivity2))
+                        setTarget(ViewTarget(R.id.microphone, this@DiaryMainActivity1))
                         setContentTitle(getString(R.string.read_diary_showcase_title_3))
                         setContentText(getString(R.string.read_diary_showcase_message_3))
                     }
@@ -404,31 +393,31 @@ class DiaryMainActivity2 : ToolbarControlBaseActivity2<FastScrollObservableRecyc
             mBinding.query.text = null
         }
 
-//        mBinding.diaryListView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, _, i, _ ->
-//            val diaryDto = adapterView.adapter.getItem(i) as Diary
-//            val detailIntent = Intent(this@DiaryMainActivity2, DiaryReadActivity::class.java)
-//            detailIntent.putExtra(DIARY_SEQUENCE, diaryDto.sequence)
-//            detailIntent.putExtra(SELECTED_SEARCH_QUERY, mDiaryMainItemAdapter?.currentQuery)
-//            detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE, viewModel.symbol.value ?: 0)
-//            TransitionHelper.startActivityWithTransition(this@DiaryMainActivity2, detailIntent)
-//        }
-//
-//        mBinding.diaryListView.setOnItemLongClickListener { _, _, _, _ ->
-//            EasyDiaryDbHelper.clearSelectedStatus()
-//            diaryMode = DiaryMode.DELETE
-//            invalidateOptionsMenu()
-//            refreshList()
-////            mDiaryMainItemAdapter?.notifyDataSetChanged()
-//            true
-//        }
+        mBinding.diaryListView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, _, i, _ ->
+            val diaryDto = adapterView.adapter.getItem(i) as Diary
+            val detailIntent = Intent(this@DiaryMainActivity1, DiaryReadActivity::class.java)
+            detailIntent.putExtra(DIARY_SEQUENCE, diaryDto.sequence)
+            detailIntent.putExtra(SELECTED_SEARCH_QUERY, mDiaryMainItemAdapter?.currentQuery)
+            detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE, viewModel.symbol.value ?: 0)
+            TransitionHelper.startActivityWithTransition(this@DiaryMainActivity1, detailIntent)
+        }
+
+        mBinding.diaryListView.setOnItemLongClickListener { _, _, _, _ ->
+            EasyDiaryDbHelper.clearSelectedStatus()
+            diaryMode = DiaryMode.DELETE
+            invalidateOptionsMenu()
+            refreshList()
+//            mDiaryMainItemAdapter?.notifyDataSetChanged()
+            true
+        }
 
         EasyDiaryUtils.disableTouchEvent(mBinding.modalContainer)
 
         mBinding.insertDiaryButton.setOnClickListener{
-            val createDiary = Intent(this@DiaryMainActivity2, DiaryInsertActivity::class.java)
+            val createDiary = Intent(this@DiaryMainActivity1, DiaryInsertActivity::class.java)
             //                startActivity(createDiary);
-            //                DiaryMainActivity.this.overridePendingTransition(R.anim.anim_right_to_center, R.anim.anim_center_to_left);
-            TransitionHelper.startActivityWithTransition(this@DiaryMainActivity2, createDiary)
+            //                DiaryMainActivity1.this.overridePendingTransition(R.anim.anim_right_to_center, R.anim.anim_center_to_left);
+            TransitionHelper.startActivityWithTransition(this@DiaryMainActivity1, createDiary)
         }
 
         mBinding.feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog(getString(R.string.diary_symbol_search_message)) { symbolSequence ->
