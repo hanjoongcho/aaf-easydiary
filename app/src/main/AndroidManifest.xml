@@ -39,7 +39,6 @@
         <activity android:name=".activities.DiaryReadActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" android:excludeFromRecents="true" />
         <activity android:name=".activities.DiaryUpdateActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
         <activity android:name=".activities.DiaryMainActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
-        <activity android:name=".activities.DiaryMainActivity1" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
         <activity android:name=".activities.DevActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
         <activity android:name=".activities.CheatSheetActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
         <activity android:name=".activities.SettingsActivity" android:label="" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
