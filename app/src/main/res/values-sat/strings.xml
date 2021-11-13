@@ -566,6 +566,10 @@
         v1.4.172.11 / 2021.10.27\n
         User Experience (UX) Optimization
     </string>
+    <string name="release_251">
+        v1.4.172.12 / 2021.11.13\n
+        Improved diary list screen fast scrolling
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
