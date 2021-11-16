@@ -280,6 +280,7 @@ PostcardActivity : EasyDiaryActivity() {
                 .setStyle(R.style.ShowcaseTheme)
                 .singleShot(SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER.toLong())
                 .setOnClickListener(showcaseViewOnClickListener)
+                .blockAllTouches()
                 .build()
         mShowcaseView.setButtonText(getString(R.string.post_card_showcase_button_1))
         mShowcaseView.setButtonPosition(centerParams)

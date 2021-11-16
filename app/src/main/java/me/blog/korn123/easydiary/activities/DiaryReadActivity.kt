@@ -451,6 +451,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 .setStyle(R.style.ShowcaseTheme)
                 .singleShot(SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_NUMBER.toLong())
                 .setOnClickListener(showcaseViewOnClickListener)
+                .blockAllTouches()
                 .build()
         mShowcaseView?.run {
             setButtonText(getString(R.string.read_diary_detail_showcase_button_1))

@@ -144,6 +144,7 @@ class DiaryInsertActivity : EditActivity() {
                 .setStyle(R.style.ShowcaseTheme)
                 .singleShot(SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER.toLong())
                 .setOnClickListener(showcaseViewOnClickListener)
+                .blockAllTouches()
                 .build()
         mShowcaseView.setButtonText(getString(R.string.create_diary_showcase_button_1))
         mShowcaseView.setButtonPosition(centerParams)

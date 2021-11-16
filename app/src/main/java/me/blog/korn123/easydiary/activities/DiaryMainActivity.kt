@@ -309,14 +309,14 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     }
 
     private fun openCustomOptionMenu() {
-        FontUtils.setFontsTypeface(this@DiaryMainActivity, null, mPopupMenuBinding.root, true)
-        mPopupMenuBinding.devConsole.visibility = if (config.enableDebugMode) View.VISIBLE else View.GONE
-        mPopupWindow = EasyDiaryUtils.openCustomOptionMenu(mPopupMenuBinding.root, findViewById(R.id.popupMenu))
         updateDrawableColorInnerCardView(R.drawable.bug_2)
         updateDrawableColorInnerCardView(R.drawable.picture_w)
         updateDrawableColorInnerCardView(R.drawable.combo)
         updateDrawableColorInnerCardView(R.drawable.statistics)
         updateDrawableColorInnerCardView(R.drawable.settings_7)
+        FontUtils.setFontsTypeface(this@DiaryMainActivity, null, mPopupMenuBinding.root, true)
+        mPopupMenuBinding.devConsole.visibility = if (config.enableDebugMode) View.VISIBLE else View.GONE
+        mPopupWindow = EasyDiaryUtils.openCustomOptionMenu(mPopupMenuBinding.root, findViewById(R.id.popupMenu))
     }
 
     private fun openPostcardViewer() {
@@ -383,6 +383,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 .setStyle(R.style.ShowcaseTheme)
                 .singleShot(SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER.toLong())
                 .setOnClickListener(showcaseViewOnClickListener)
+                .blockAllTouches()
                 .build()
         mShowcaseView?.setButtonText(getString(R.string.read_diary_showcase_button_1))
         mShowcaseView?.setButtonPosition(centerParams)
