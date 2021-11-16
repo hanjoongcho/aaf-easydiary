@@ -18,26 +18,28 @@
                 android:layout_height="wrap_content">
 
                 <me.blog.korn123.easydiary.views.FixedTextView
-                    app:applyGlobalSize="false"
-                    app:applyGlobalColor="false"
                     android:id="@+id/alarmLabel"
-                    android:textSize="11dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:background="@drawable/bg_card_stamp"
                     android:padding="5dp"
                     android:text="Diary Writing"
-                    android:textColor="?attr/colorPrimary" />
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="11dp"
+                    app:applyGlobalColor="false"
+                    app:applyGlobalSize="false" />
 
                 <me.blog.korn123.easydiary.views.FixedTextView
-                    app:applyGlobalSize="false"
-                    app:applyGlobalColor="true"
                     android:id="@+id/edit_alarm_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:text="07:00"
                     android:textSize="44sp"
-                    android:text="07:00"/>
+                    app:applyGlobalColor="true"
+                    app:applyGlobalSize="false" />
 
                 <com.simplemobiletools.commons.views.MyTextView
                     android:id="@+id/alarm_days"
@@ -62,12 +64,12 @@
 
                 <com.simplemobiletools.commons.views.MySwitchCompat
                     android:id="@+id/alarm_switch"
-                    android:checked="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/alarmLabel"
                     android:layout_above="@+id/alarm_days"
+                    android:layout_below="@+id/alarmLabel"
                     android:layout_alignParentEnd="true"
+                    android:checked="true"
                     android:paddingHorizontal="10dp" />
             </RelativeLayout>
         </LinearLayout>
