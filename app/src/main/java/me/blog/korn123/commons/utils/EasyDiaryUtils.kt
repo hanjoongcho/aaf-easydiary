@@ -30,6 +30,7 @@ import android.view.View
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AlertDialog
+import androidx.core.animation.addListener
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import com.bumptech.glide.Glide
@@ -373,7 +374,7 @@ object EasyDiaryUtils {
         return GsonBuilder().create().fromJson(jsonString, type)
     }
 
-    fun openCustomOptionMenu(content: View, parent: View): PopupWindow {
+    fun openCustomOptionMenu(content: View, parent: View, callback: () -> Unit): PopupWindow {
         val width = LinearLayout.LayoutParams.WRAP_CONTENT
         val height = LinearLayout.LayoutParams.WRAP_CONTENT
         val popup: PopupWindow = PopupWindow(content, width, height, true).apply {
@@ -390,6 +391,7 @@ object EasyDiaryUtils {
             playTogether(animX, animY)
             duration = 390
             start()
+            addListener { callback() }
         }
         return popup
     }
