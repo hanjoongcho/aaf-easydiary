@@ -1,5 +1,6 @@
 package me.blog.korn123.commons.utils
 
+import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
@@ -374,7 +375,7 @@ object EasyDiaryUtils {
         return GsonBuilder().create().fromJson(jsonString, type)
     }
 
-    fun openCustomOptionMenu(content: View, parent: View, callback: () -> Unit): PopupWindow {
+    fun openCustomOptionMenu(content: View, parent: View): PopupWindow {
         val width = LinearLayout.LayoutParams.WRAP_CONTENT
         val height = LinearLayout.LayoutParams.WRAP_CONTENT
         val popup: PopupWindow = PopupWindow(content, width, height, true).apply {
@@ -391,7 +392,6 @@ object EasyDiaryUtils {
             playTogether(animX, animY)
             duration = 390
             start()
-            addListener { callback() }
         }
         return popup
     }

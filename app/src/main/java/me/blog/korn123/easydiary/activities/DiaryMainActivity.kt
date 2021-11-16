@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.nineoldandroids.view.ViewHelper
+import io.github.aafactory.commons.extensions.makeToast
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -311,12 +312,13 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     private fun openCustomOptionMenu() {
         FontUtils.setFontsTypeface(this@DiaryMainActivity, null, mPopupMenuBinding.root, true)
         mPopupMenuBinding.devConsole.visibility = if (config.enableDebugMode) View.VISIBLE else View.GONE
-        mPopupWindow = EasyDiaryUtils.openCustomOptionMenu(mPopupMenuBinding.root, findViewById(R.id.popupMenu)) {
-            updateDrawableColorInnerCardView(R.drawable.bug_2)
-            updateDrawableColorInnerCardView(R.drawable.picture_w)
-            updateDrawableColorInnerCardView(R.drawable.combo)
-            updateDrawableColorInnerCardView(R.drawable.statistics)
-            updateDrawableColorInnerCardView(R.drawable.settings_7)
+        mPopupWindow = EasyDiaryUtils.openCustomOptionMenu(mPopupMenuBinding.root, findViewById(R.id.popupMenu))
+        mPopupMenuBinding.run {
+            updateDrawableColorInnerCardView(iconDevConsole)
+            updateDrawableColorInnerCardView(iconStatistics)
+            updateDrawableColorInnerCardView(iconStatistics)
+            updateDrawableColorInnerCardView(iconDashboard)
+            updateDrawableColorInnerCardView(iconSettings)
         }
     }
 

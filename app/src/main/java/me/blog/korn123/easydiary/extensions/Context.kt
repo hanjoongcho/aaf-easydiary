@@ -281,10 +281,18 @@ fun Context.initTextSize(textView: TextView) {
     textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
 }
 
-fun Context.updateDrawableColorInnerCardView(resourceId: Int) {
+fun Context.updateDrawableColorInnerCardView(resourceId: Int, color: Int = config.textColor) {
     if (isNightMode()) return
+    changeDrawableIconColor(color, resourceId)
+}
 
-    changeDrawableIconColor(config.textColor, resourceId)
+fun Context.updateDrawableColorInnerCardView(imageView: ImageView, color: Int = config.textColor) {
+    if (isNightMode()) return
+    changeDrawableIconColor(color, imageView)
+}
+
+fun Context.changeDrawableIconColor(color: Int, imageView: ImageView) {
+    imageView.setColorFilter(color, PorterDuff.Mode.SRC_IN)
 }
 
 fun Context.changeDrawableIconColor(color: Int, resourceId: Int) {

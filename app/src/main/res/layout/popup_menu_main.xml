@@ -25,6 +25,7 @@
                 android:id="@+id/devConsole">
                 <androidx.appcompat.widget.AppCompatImageView
                     style="@style/image_view_popup_menu_icon"
+                    android:id="@+id/icon_dev_console"
                     android:src="@drawable/bug_2" />
                 <me.blog.korn123.easydiary.views.FixedTextView
                     style="@style/text_view_popup_menu_item"
@@ -35,6 +36,7 @@
                 android:id="@+id/postCard">
                 <androidx.appcompat.widget.AppCompatImageView
                     android:src="@drawable/picture_w"
+                    android:id="@+id/icon_postcard"
                     style="@style/image_view_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
                     style="@style/text_view_popup_menu_item"
@@ -45,6 +47,7 @@
                 android:id="@+id/dashboard">
                 <androidx.appcompat.widget.AppCompatImageView
                     android:src="@drawable/statistics"
+                    android:id="@+id/icon_dashboard"
                     style="@style/image_view_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
                     style="@style/text_view_popup_menu_item"
@@ -55,6 +58,7 @@
                 android:id="@+id/chart">
                 <androidx.appcompat.widget.AppCompatImageView
                     android:src="@drawable/combo"
+                    android:id="@+id/icon_statistics"
                     style="@style/image_view_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
                     style="@style/text_view_popup_menu_item"
@@ -65,6 +69,7 @@
                 android:id="@+id/settings">
                 <androidx.appcompat.widget.AppCompatImageView
                     android:src="@drawable/settings_7"
+                    android:id="@+id/icon_settings"
                     style="@style/image_view_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
                     style="@style/text_view_popup_menu_item"
