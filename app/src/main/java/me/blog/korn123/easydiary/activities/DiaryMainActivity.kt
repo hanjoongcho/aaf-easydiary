@@ -315,9 +315,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         mPopupWindow = EasyDiaryUtils.openCustomOptionMenu(mPopupMenuBinding.root, findViewById(R.id.popupMenu))
         mPopupMenuBinding.run {
             updateDrawableColorInnerCardView(iconDevConsole)
-            updateDrawableColorInnerCardView(iconStatistics)
-            updateDrawableColorInnerCardView(iconStatistics)
+            updateDrawableColorInnerCardView(iconPostcard)
             updateDrawableColorInnerCardView(iconDashboard)
+            updateDrawableColorInnerCardView(iconStatistics)
             updateDrawableColorInnerCardView(iconSettings)
         }
     }
