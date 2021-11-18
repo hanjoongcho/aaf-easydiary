@@ -132,7 +132,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             config.isInitDummyData = true
         }
 
-        updateDrawableColorInnerCardView(R.drawable.delete)
+        updateDrawableColorInnerCardView(mBinding.imgClearQuery)
         bindEvent()
         initShowcase()
         EasyDiaryUtils.initWorkingDirectory(this@DiaryMainActivity)
@@ -314,11 +314,11 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         mPopupMenuBinding.devConsole.visibility = if (config.enableDebugMode) View.VISIBLE else View.GONE
         mPopupWindow = EasyDiaryUtils.openCustomOptionMenu(mPopupMenuBinding.root, findViewById(R.id.popupMenu))
         mPopupMenuBinding.run {
-            updateDrawableColorInnerCardView(iconDevConsole)
-            updateDrawableColorInnerCardView(iconPostcard)
-            updateDrawableColorInnerCardView(iconDashboard)
-            updateDrawableColorInnerCardView(iconStatistics)
-            updateDrawableColorInnerCardView(iconSettings)
+            updateDrawableColorInnerCardView(imgDevConsole)
+            updateDrawableColorInnerCardView(imgPostcard)
+            updateDrawableColorInnerCardView(imgDashboard)
+            updateDrawableColorInnerCardView(imgStatistics)
+            updateDrawableColorInnerCardView(imgSettings)
         }
     }
 
@@ -403,7 +403,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             override fun afterTextChanged(editable: Editable) {}
         })
 
-        mBinding.clearQuery.setOnClickListener {
+        mBinding.imgClearQuery.setOnClickListener {
             selectFeelingSymbol()
             mBinding.query.text = null
         }

@@ -23,6 +23,7 @@
                 android:id="@+id/postcard">
                 <androidx.appcompat.widget.AppCompatImageView
                     android:src="@drawable/picture_w"
+                    android:id="@+id/img_postcard"
                     style="@style/image_view_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
                     style="@style/text_view_popup_menu_item"
@@ -35,6 +36,7 @@
                 android:id="@+id/encryptData">
                 <androidx.appcompat.widget.AppCompatImageView
                     android:src="@drawable/padlock"
+                    android:id="@+id/img_encrypt_data"
                     style="@style/image_view_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
                     style="@style/text_view_popup_menu_item"
@@ -47,6 +49,7 @@
                 android:id="@+id/decryptData">
                 <androidx.appcompat.widget.AppCompatImageView
                     android:src="@drawable/unlock"
+                    android:id="@+id/img_decrypt_data"
                     style="@style/image_view_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
                     style="@style/text_view_popup_menu_item"
@@ -57,6 +60,7 @@
                 android:id="@+id/delete">
                 <androidx.appcompat.widget.AppCompatImageView
                     android:src="@drawable/delete_w"
+                    android:id="@+id/img_delete"
                     style="@style/image_view_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
                     style="@style/text_view_popup_menu_item"

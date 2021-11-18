@@ -72,7 +72,7 @@
                         android:maxLines="1" />
 
                     <ImageView
-                        android:id="@+id/clearQuery"
+                        android:id="@+id/img_clear_query"
                         android:src="@drawable/delete"
                         android:layout_gravity="end|center_vertical"
                         android:padding="3dp"

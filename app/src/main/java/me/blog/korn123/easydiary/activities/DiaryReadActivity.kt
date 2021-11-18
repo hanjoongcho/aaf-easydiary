@@ -234,9 +234,9 @@ class DiaryReadActivity : EasyDiaryActivity() {
     }
 
     private fun showEncryptPagePopup(fragment: PlaceholderFragment, workMode: String, callback: ((inputPass: String) -> Unit)? = null) {
-        updateDrawableColorInnerCardView(R.drawable.delete)
 
         mPopupEncryptionBinding.run {
+            updateDrawableColorInnerCardView(closePopup)
             var inputPass = ""
             var confirmPass = ""
             holdCurrentOrientation()
@@ -543,13 +543,14 @@ class DiaryReadActivity : EasyDiaryActivity() {
                 postcard.setOnClickListener(itemClickListener)
                 encryptData.setOnClickListener(itemClickListener)
                 decryptData.setOnClickListener(itemClickListener)
+
+                updateDrawableColorInnerCardView(imgPostcard)
+                updateDrawableColorInnerCardView(imgEncryptData)
+                updateDrawableColorInnerCardView(imgDecryptData)
+                updateDrawableColorInnerCardView(imgDelete)
             }
         }
         popupWindow = EasyDiaryUtils.openCustomOptionMenu(popupView, findViewById(R.id.popupMenu))
-        updateDrawableColorInnerCardView(R.drawable.picture_w)
-        updateDrawableColorInnerCardView(R.drawable.padlock)
-        updateDrawableColorInnerCardView(R.drawable.unlock)
-        updateDrawableColorInnerCardView(R.drawable.delete_w)
     }
 
     /**
