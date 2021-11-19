@@ -362,7 +362,8 @@ class FastScrollObservableRecyclerView : FastScrollRecyclerView, Scrollable {
 
         companion object {
             val EMPTY_STATE: SavedState = SavedState()
-            @SuppressLint("ParcelCreator")
+
+            @JvmField
             val CREATOR: Parcelable.Creator<SavedState?> = object : Parcelable.Creator<SavedState?> {
                 override fun createFromParcel(`in`: Parcel): SavedState? {
                     return SavedState(`in`)
