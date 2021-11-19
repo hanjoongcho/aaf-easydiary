@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.172.13 (date: 2021.11.20)
+  * Fixed an error that caused abnormal termination when entering the main screen after cleaning the memory
+
 # Changes in 1.4.172.12 (date: 2021.11.13)
   * Improved diary list screen fast scrolling
 
