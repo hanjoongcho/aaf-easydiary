@@ -11,7 +11,7 @@ import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.MarkDownViewerActivity
 import me.blog.korn123.easydiary.activities.SettingsActivity
-import me.blog.korn123.easydiary.databinding.PartialSettingsAppInfoBinding
+import me.blog.korn123.easydiary.databinding.FragmentSettingsAppInfoBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.openGooglePlayBy
 import me.blog.korn123.easydiary.extensions.updateFragmentUI
@@ -24,7 +24,7 @@ class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var mBinding: PartialSettingsAppInfoBinding
+    private lateinit var mBinding: FragmentSettingsAppInfoBinding
 
 
     /***************************************************************************************************
@@ -32,7 +32,7 @@ class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mBinding = PartialSettingsAppInfoBinding.inflate(layoutInflater)
+        mBinding = FragmentSettingsAppInfoBinding.inflate(layoutInflater)
         return mBinding.root
     }
 

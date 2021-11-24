@@ -222,7 +222,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.diary_edit, menu)
+        menuInflater.inflate(R.menu.activity_base_diary_editing, menu)
         menu.findItem(R.id.timePicker).isVisible = mEnableTimePicker
         menu.findItem(R.id.secondsPicker).isVisible = mEnableSecondsPicker
         return true

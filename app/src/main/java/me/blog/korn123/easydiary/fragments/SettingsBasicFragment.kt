@@ -16,7 +16,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.CustomizationActivity
 import me.blog.korn123.easydiary.activities.EasyDiaryActivity
 import me.blog.korn123.easydiary.adapters.OptionItemAdapter
-import me.blog.korn123.easydiary.databinding.PartialSettingsBasicBinding
+import me.blog.korn123.easydiary.databinding.FragmentSettingsBasicBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import java.util.*
@@ -28,7 +28,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var mBinding: PartialSettingsBasicBinding
+    private lateinit var mBinding: FragmentSettingsBasicBinding
     private val mRequestLocationSourceLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         requireActivity().run {
             pauseLock()
@@ -48,7 +48,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        mBinding = PartialSettingsBasicBinding.inflate(layoutInflater)
+        mBinding = FragmentSettingsBasicBinding.inflate(layoutInflater)
         return mBinding.root
     }
 

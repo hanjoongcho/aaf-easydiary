@@ -22,7 +22,7 @@ import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.AlarmAdapter
 import me.blog.korn123.easydiary.databinding.DialogAlarmBinding
-import me.blog.korn123.easydiary.databinding.PartialSettingsScheduleBinding
+import me.blog.korn123.easydiary.databinding.FragmentSettingsScheduleBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
@@ -38,7 +38,7 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var mBinding: PartialSettingsScheduleBinding
+    private lateinit var mBinding: FragmentSettingsScheduleBinding
     private lateinit var mAlarmAdapter: AlarmAdapter
     private var mAlarmList: ArrayList<Alarm> = arrayListOf()
     private val mActivity: Activity
@@ -50,7 +50,7 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        mBinding = PartialSettingsScheduleBinding.inflate(layoutInflater)
+        mBinding = FragmentSettingsScheduleBinding.inflate(layoutInflater)
         return mBinding.root
     }
 

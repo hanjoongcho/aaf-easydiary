@@ -36,7 +36,7 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.BaseSettingsActivity
 import me.blog.korn123.easydiary.adapters.RealmFileItemAdapter
-import me.blog.korn123.easydiary.databinding.PartialSettingsBackupGmsBinding
+import me.blog.korn123.easydiary.databinding.FragmentSettingsBackupGmsBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.helper.GoogleOAuthHelper.Companion.callAccountCallback
@@ -54,7 +54,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var mBinding: PartialSettingsBackupGmsBinding
+    private lateinit var mBinding: FragmentSettingsBackupGmsBinding
     private lateinit var progressContainer: ConstraintLayout
     private lateinit var mContext: Context
     private var mTaskFlag = 0
@@ -114,7 +114,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        mBinding = PartialSettingsBackupGmsBinding.inflate(layoutInflater)
+        mBinding = FragmentSettingsBackupGmsBinding.inflate(layoutInflater)
         return mBinding.root
     }
 

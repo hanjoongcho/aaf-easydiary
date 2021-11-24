@@ -110,7 +110,7 @@ class PostcardViewerActivity : EasyDiaryActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.postcard_viewer, menu)
+        menuInflater.inflate(R.menu.activity_postcard_viewer, menu)
         return true
     }
 

@@ -160,7 +160,7 @@ class TimelineActivity : EasyDiaryActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.diary_timeline, menu)
+        menuInflater.inflate(R.menu.activity_timeline, menu)
         return true
     }
 

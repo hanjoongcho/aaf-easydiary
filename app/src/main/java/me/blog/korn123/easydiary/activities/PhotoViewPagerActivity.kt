@@ -93,7 +93,7 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.diary_photo_view, menu)
+        menuInflater.inflate(R.menu.activity_photo_view_pager, menu)
         return true
     }
 

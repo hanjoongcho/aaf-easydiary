@@ -254,7 +254,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         when (diaryMode) {
             DiaryMode.READ -> {
                 supportActionBar?.setDisplayHomeAsUpEnabled(false)
-                menuInflater.inflate(R.menu.diary_main, menu)
+                menuInflater.inflate(R.menu.activity_diary_main, menu)
 //                menu.findItem(R.id.devConsole).run {
 //                    applyFontToMenuItem(this)
 //                    if (config.enableDebugMode) this.setVisible(true) else this.setVisible(false)
@@ -262,7 +262,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             }
             DiaryMode.DELETE -> {
                 supportActionBar?.setDisplayHomeAsUpEnabled(true)
-                menuInflater.inflate(R.menu.diary_main_delete, menu)
+                menuInflater.inflate(R.menu.activity_diary_main_delete, menu)
                 applyFontToMenuItem(menu.findItem(R.id.delete))
             }
         }

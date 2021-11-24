@@ -213,7 +213,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.diary_read, menu)
+        menuInflater.inflate(R.menu.activity_diary_reading, menu)
         when (config.enableDebugMode) {
             true -> menu.findItem(R.id.highlightText).isVisible = true
             false -> menu.findItem(R.id.highlightText).isVisible = false

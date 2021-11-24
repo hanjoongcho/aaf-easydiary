@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.FingerprintLockActivity
 import me.blog.korn123.easydiary.activities.PinLockActivity
-import me.blog.korn123.easydiary.databinding.PartialSettingsLockBinding
+import me.blog.korn123.easydiary.databinding.FragmentSettingsLockBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.extensions.updateFragmentUI
@@ -22,7 +22,7 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var mBinding: PartialSettingsLockBinding
+    private lateinit var mBinding: FragmentSettingsLockBinding
     private val mActivity: Activity
         get() = requireActivity()
 
@@ -32,7 +32,7 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mBinding = PartialSettingsLockBinding.inflate(layoutInflater)
+        mBinding = FragmentSettingsLockBinding.inflate(layoutInflater)
         return mBinding.root
     }
 

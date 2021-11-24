@@ -129,7 +129,7 @@ class MarkDownViewerActivity : EasyDiaryActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.markdown_view, menu)
+        menuInflater.inflate(R.menu.activity_markdown_viewer, menu)
         return true
     }
 
