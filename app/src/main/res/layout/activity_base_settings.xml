@@ -51,5 +51,5 @@
         </LinearLayout>
     </LinearLayout>
 
-    <include android:id="@+id/partial_settings_progress" layout="@layout/partial_settings_progress" />
+    <include android:id="@+id/partial_settings_progress" layout="@layout/fragment_settings_progress" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

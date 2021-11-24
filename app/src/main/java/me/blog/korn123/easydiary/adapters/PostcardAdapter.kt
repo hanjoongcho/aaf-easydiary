@@ -14,7 +14,7 @@ import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView.S
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.FontUtils
-import me.blog.korn123.easydiary.databinding.ViewholderPostCardBinding
+import me.blog.korn123.easydiary.databinding.ItemPostCardBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.updateAppViews
@@ -30,7 +30,7 @@ class PostcardAdapter(
 ) : RecyclerView.Adapter<PostcardAdapter.PostcardViewHolder>(), SectionedAdapter {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostcardViewHolder {
-        return PostcardViewHolder(activity, ViewholderPostCardBinding.inflate(activity.layoutInflater, parent, false), this)
+        return PostcardViewHolder(activity, ItemPostCardBinding.inflate(activity.layoutInflater, parent, false), this)
     }
 
     override fun onBindViewHolder(holder: PostcardViewHolder, position: Int) {
@@ -54,10 +54,10 @@ class PostcardAdapter(
     }
 
     class PostcardViewHolder(
-            val activity: Activity, private val viewHolderPostCardBinding: ViewholderPostCardBinding, val adapter: PostcardAdapter
-    ) : RecyclerView.ViewHolder(viewHolderPostCardBinding.root), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+            val activity: Activity, private val ItemPostCardBinding: ItemPostCardBinding, val adapter: PostcardAdapter
+    ) : RecyclerView.ViewHolder(ItemPostCardBinding.root), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
         init {
-            viewHolderPostCardBinding.run {
+            ItemPostCardBinding.run {
                 activity.updateAppViews(root)
                 FontUtils.setFontsTypeface(activity, activity.assets, null, imageContainer)
                 root.setOnClickListener(this@PostcardViewHolder)
@@ -66,9 +66,9 @@ class PostcardAdapter(
         }
 
         fun bindTo(postCard: PostCard) {
-            val timeStampView = viewHolderPostCardBinding.createdDate
+            val timeStampView = ItemPostCardBinding.createdDate
             timeStampView.setTextSize(TypedValue.COMPLEX_UNIT_PX, CommonUtils.dpToPixelFloatValue(activity, 10F))
-            viewHolderPostCardBinding.checkItem.isChecked = postCard.isItemChecked
+            ItemPostCardBinding.checkItem.isChecked = postCard.isItemChecked
             try {
                 val format = SimpleDateFormat(POSTCARD_DATE_FORMAT, Locale.getDefault())
                 timeStampView.text = DateUtils.getFullPatternDate(format.parse(postCard.file.name.split("_")[0]).time)
@@ -79,13 +79,13 @@ class PostcardAdapter(
             activity.run {
                 val point =  CommonUtils.getDefaultDisplay(this)
                 val spanCount = if (activity.isLandScape()) config.postcardSpanCountLandscape else config.postcardSpanCountPortrait
-                val targetX = floor((point.x - CommonUtils.dpToPixelFloatValue(viewHolderPostCardBinding.imageview.context, 9F)) / spanCount)
-                viewHolderPostCardBinding.imageContainer.layoutParams.height = targetX.toInt()
-                viewHolderPostCardBinding.imageview.layoutParams.height = targetX.toInt()
-                Glide.with(viewHolderPostCardBinding.imageview.context)
+                val targetX = floor((point.x - CommonUtils.dpToPixelFloatValue(ItemPostCardBinding.imageview.context, 9F)) / spanCount)
+                ItemPostCardBinding.imageContainer.layoutParams.height = targetX.toInt()
+                ItemPostCardBinding.imageview.layoutParams.height = targetX.toInt()
+                Glide.with(ItemPostCardBinding.imageview.context)
                         .load(postCard.file)
 //                .apply(RequestOptions().placeholder(R.drawable.ic_aaf_photos).fitCenter())
-                        .into(viewHolderPostCardBinding.imageview)
+                        .into(ItemPostCardBinding.imageview)
             }
         }
 

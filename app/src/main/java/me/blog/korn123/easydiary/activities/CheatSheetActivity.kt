@@ -1,20 +1,16 @@
 package me.blog.korn123.easydiary.activities
 
-import android.app.*
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.coroutines.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.CheatSheetAdapter
 import me.blog.korn123.easydiary.databinding.ActivityCheatSheetBinding
-import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.*
-import java.util.*
 
 open class CheatSheetActivity : EasyDiaryActivity() {
 
@@ -83,10 +79,10 @@ open class CheatSheetActivity : EasyDiaryActivity() {
                     mFilteredCheatSheetList
             ) { _, _, position, _ ->
                 val item = mFilteredCheatSheetList[position]
-                TransitionHelper.startActivityWithTransition(this@CheatSheetActivity, Intent(this@CheatSheetActivity, MarkDownViewActivity::class.java).apply {
-                    putExtra(MarkDownViewActivity.OPEN_URL_INFO, item.url)
-                    putExtra(MarkDownViewActivity.OPEN_URL_DESCRIPTION, item.title)
-                    putExtra(MarkDownViewActivity.FORCE_APPEND_CODE_BLOCK, item.forceAppendCodeBlock)
+                TransitionHelper.startActivityWithTransition(this@CheatSheetActivity, Intent(this@CheatSheetActivity, MarkDownViewerActivity::class.java).apply {
+                    putExtra(MarkDownViewerActivity.OPEN_URL_INFO, item.url)
+                    putExtra(MarkDownViewerActivity.OPEN_URL_DESCRIPTION, item.title)
+                    putExtra(MarkDownViewerActivity.FORCE_APPEND_CODE_BLOCK, item.forceAppendCodeBlock)
                 })
             }
             adapter = mCheatSheetAdapter

@@ -28,7 +28,7 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.RealmFileItemAdapter
 import me.blog.korn123.easydiary.adapters.SimpleCheckboxAdapter
-import me.blog.korn123.easydiary.databinding.PartialSettingsBackupLocalBinding
+import me.blog.korn123.easydiary.databinding.FragmentSettingsBackupLocalBinding
 import me.blog.korn123.easydiary.databinding.PopupLocationSelectorBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
@@ -52,7 +52,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var mBinding: PartialSettingsBackupLocalBinding
+    private lateinit var mBinding: FragmentSettingsBackupLocalBinding
     private val mActivity: Activity
         get() = requireActivity()
     private var mTaskFlag = 0
@@ -104,7 +104,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mBinding = PartialSettingsBackupLocalBinding.inflate(layoutInflater)
+        mBinding = FragmentSettingsBackupLocalBinding.inflate(layoutInflater)
         return mBinding.root
     }
 

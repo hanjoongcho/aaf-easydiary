@@ -69,7 +69,7 @@ class SettingsActivity : BaseSettingsActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.diary_settings_schedule, menu)
+        menuInflater.inflate(R.menu.fragment_settings_schedule, menu)
         if (mCurrentPosition == 5) menu.findItem(R.id.addSchedule).isVisible = true
         return true
     }

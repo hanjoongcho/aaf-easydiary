@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.recyclerview.widget.RecyclerView
 import me.blog.korn123.commons.utils.FontUtils
-import me.blog.korn123.easydiary.databinding.ViewholderCheatSheetBinding
+import me.blog.korn123.easydiary.databinding.ItemCheatSheetBinding
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.updateAppViews
 import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
@@ -19,7 +19,7 @@ class CheatSheetAdapter(
 ) : RecyclerView.Adapter<CheatSheetAdapter.CheatSheetViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CheatSheetViewHolder {
-        return CheatSheetViewHolder(activity, ViewholderCheatSheetBinding.inflate(activity.layoutInflater, parent, false), this)
+        return CheatSheetViewHolder(activity, ItemCheatSheetBinding.inflate(activity.layoutInflater, parent, false), this)
     }
 
     override fun onBindViewHolder(holder: CheatSheetViewHolder, position: Int) {
@@ -35,10 +35,10 @@ class CheatSheetAdapter(
     }
 
     class CheatSheetViewHolder(
-            activity: Activity, private val viewHolderCheatSheetBinding: ViewholderCheatSheetBinding, val adapter: CheatSheetAdapter
-    ) : RecyclerView.ViewHolder(viewHolderCheatSheetBinding.root), View.OnClickListener {
+            activity: Activity, private val ItemCheatSheetBinding: ItemCheatSheetBinding, val adapter: CheatSheetAdapter
+    ) : RecyclerView.ViewHolder(ItemCheatSheetBinding.root), View.OnClickListener {
         init {
-            viewHolderCheatSheetBinding.run {
+            ItemCheatSheetBinding.run {
                 activity.initTextSize(root)
                 activity.updateTextColors(root)
                 activity.updateAppViews(root)
@@ -49,8 +49,8 @@ class CheatSheetAdapter(
         }
 
         fun bindTo(cheatSheet: CheatSheet) {
-            viewHolderCheatSheetBinding.textTitle.text = cheatSheet.title
-            viewHolderCheatSheetBinding.textDescription.text = cheatSheet.description
+            ItemCheatSheetBinding.textTitle.text = cheatSheet.title
+            ItemCheatSheetBinding.textDescription.text = cheatSheet.description
         }
 
         override fun onClick(p0: View?) {

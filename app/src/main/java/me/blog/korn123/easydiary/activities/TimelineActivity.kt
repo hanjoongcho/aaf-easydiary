@@ -19,7 +19,7 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.TimelineItemAdapter
-import me.blog.korn123.easydiary.databinding.ActivityTimelineDiaryBinding
+import me.blog.korn123.easydiary.databinding.ActivityTimelineBinding
 import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.initTextSize
@@ -39,7 +39,7 @@ class TimelineActivity : EasyDiaryActivity() {
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var mBinding: ActivityTimelineDiaryBinding
+    private lateinit var mBinding: ActivityTimelineBinding
     private lateinit var mSDatePickerDialog: DatePickerDialog
     private lateinit var mEDatePickerDialog: DatePickerDialog
     private var mTimelineItemAdapter: TimelineItemAdapter? = null
@@ -55,7 +55,7 @@ class TimelineActivity : EasyDiaryActivity() {
      ***************************************************************************************************/
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityTimelineDiaryBinding.inflate(layoutInflater)
+        mBinding = ActivityTimelineBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
         setSupportActionBar(mBinding.toolbar)
         supportActionBar?.run {
@@ -160,7 +160,7 @@ class TimelineActivity : EasyDiaryActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.diary_timeline, menu)
+        menuInflater.inflate(R.menu.activity_timeline, menu)
         return true
     }
 
@@ -186,7 +186,7 @@ class TimelineActivity : EasyDiaryActivity() {
     private fun bindEvent() {
         mBinding.partialTimelineFilter.run {
             mBinding.insertDiaryButton.setOnClickListener { _ ->
-                val createDiary = Intent(this@TimelineActivity, DiaryInsertActivity::class.java)
+                val createDiary = Intent(this@TimelineActivity, DiaryWritingActivity::class.java)
                 TransitionHelper.startActivityWithTransition(this@TimelineActivity, createDiary)
             }
 
@@ -272,7 +272,7 @@ class TimelineActivity : EasyDiaryActivity() {
     private fun setupTimelineSearch() {
         mBinding.timelineList.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
             val diaryDto = adapterView.adapter.getItem(i) as Diary
-            val detailIntent = Intent(this@TimelineActivity, DiaryReadActivity::class.java)
+            val detailIntent = Intent(this@TimelineActivity, DiaryReadingActivity::class.java)
             detailIntent.putExtra(DIARY_SEQUENCE, diaryDto.sequence)
             detailIntent.putExtra(SELECTED_SEARCH_QUERY, mBinding.partialTimelineFilter.query.text.toString())
             detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE, mSymbolSequence)

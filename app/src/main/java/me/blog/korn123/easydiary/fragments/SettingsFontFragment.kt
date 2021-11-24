@@ -21,7 +21,7 @@ import me.blog.korn123.easydiary.activities.BaseSettingsActivity
 import me.blog.korn123.easydiary.activities.SettingsActivity
 import me.blog.korn123.easydiary.adapters.FontItemAdapter
 import me.blog.korn123.easydiary.adapters.OptionItemAdapter
-import me.blog.korn123.easydiary.databinding.PartialSettingsFontBinding
+import me.blog.korn123.easydiary.databinding.FragmentSettingsFontBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.DEFAULT_CALENDAR_FONT_SCALE
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
@@ -38,7 +38,7 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var mBinding: PartialSettingsFontBinding
+    private lateinit var mBinding: FragmentSettingsFontBinding
     private lateinit var progressContainer: ConstraintLayout
     private val mRequestFontPick = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
         requireActivity().run {
@@ -80,7 +80,7 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mBinding = PartialSettingsFontBinding.inflate(layoutInflater)
+        mBinding = FragmentSettingsFontBinding.inflate(layoutInflater)
         return mBinding.root
     }
 

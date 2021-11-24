@@ -17,7 +17,7 @@ import me.blog.korn123.easydiary.R
  *
  * @author Philipp Jahoda
  */
-class XYMarkerView(context: Context, private val xAxisValueFormatter: IAxisValueFormatter) : MarkerView(context, R.layout.custom_marker_view) {
+class XYMarkerView(context: Context, private val xAxisValueFormatter: IAxisValueFormatter) : MarkerView(context, R.layout.partial_custom_marker_view) {
     private val tvContent: TextView = findViewById(R.id.tvContent)
 
     // callbacks everytime the MarkerView is redrawn, can be used to update the

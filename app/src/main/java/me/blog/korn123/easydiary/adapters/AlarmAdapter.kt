@@ -8,7 +8,7 @@ import android.widget.CompoundButton
 import androidx.recyclerview.widget.RecyclerView
 import com.simplemobiletools.commons.extensions.getSelectedDaysString
 import me.blog.korn123.commons.utils.FontUtils
-import me.blog.korn123.easydiary.databinding.ViewholderAlarmBinding
+import me.blog.korn123.easydiary.databinding.ItemAlarmBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.Alarm
@@ -20,7 +20,7 @@ class AlarmAdapter(
 ) : RecyclerView.Adapter<AlarmAdapter.AlarmViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlarmViewHolder {
-        return AlarmViewHolder(activity, ViewholderAlarmBinding.inflate(activity.layoutInflater, parent, false), this)
+        return AlarmViewHolder(activity, ItemAlarmBinding.inflate(activity.layoutInflater, parent, false), this)
     }
 
     override fun onBindViewHolder(holder: AlarmViewHolder, position: Int) {
@@ -49,7 +49,7 @@ class AlarmAdapter(
     }
 
     class AlarmViewHolder(
-            val activity: Activity, private val viewHolderAlarmBinding: ViewholderAlarmBinding, val adapter: AlarmAdapter
+            val activity: Activity, private val viewHolderAlarmBinding: ItemAlarmBinding, val adapter: AlarmAdapter
     ) : RecyclerView.ViewHolder(viewHolderAlarmBinding.root), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
         init {
             activity.run {

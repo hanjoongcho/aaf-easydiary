@@ -23,7 +23,7 @@ import io.github.aafactory.commons.activities.BaseSimpleActivity
 import io.github.aafactory.commons.extensions.holdCurrentOrientation
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.databinding.ActivityFingerprintBinding
+import me.blog.korn123.easydiary.databinding.ActivityFingerprintLockBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 import me.blog.korn123.easydiary.extensions.pauseLock
@@ -44,7 +44,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
      *   global properties
      *
      ***************************************************************************************************/
-    private lateinit var mBinding: ActivityFingerprintBinding
+    private lateinit var mBinding: ActivityFingerprintLockBinding
     private lateinit var mKeyStore: KeyStore
     private lateinit var mKeyGenerator: KeyGenerator
     private lateinit var mFingerprintManager: FingerprintManagerCompat
@@ -60,7 +60,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
      ***************************************************************************************************/
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityFingerprintBinding.inflate(layoutInflater)
+        mBinding = ActivityFingerprintLockBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
         mActivityMode = intent.getStringExtra(LAUNCHING_MODE)
 

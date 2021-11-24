@@ -39,7 +39,7 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.JasyptUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.databinding.ActivityDiaryEditBinding
+import me.blog.korn123.easydiary.databinding.ActivityBaseDiaryEditingBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.Diary
@@ -49,7 +49,7 @@ import java.io.File
 import java.text.ParseException
 import java.util.*
 
-abstract class EditActivity : EasyDiaryActivity() {
+abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
 
     /***************************************************************************************************
      *   global properties
@@ -122,7 +122,7 @@ abstract class EditActivity : EasyDiaryActivity() {
             attachPhotos(selectedUriPaths, true)
         }
     }
-    protected lateinit var mBinding: ActivityDiaryEditBinding
+    protected lateinit var mBinding: ActivityBaseDiaryEditingBinding
     protected val mPhotoUris: RealmList<PhotoUri> = RealmList()
     protected var mCurrentTimeMillis: Long = 0
     protected var mYear = mCalendar.get(Calendar.YEAR)
@@ -190,7 +190,7 @@ abstract class EditActivity : EasyDiaryActivity() {
      ***************************************************************************************************/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityDiaryEditBinding.inflate(layoutInflater)
+        mBinding = ActivityBaseDiaryEditingBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
         changeDrawableIconColor(Color.WHITE, R.drawable.calendar_4_w)
 
@@ -222,7 +222,7 @@ abstract class EditActivity : EasyDiaryActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.diary_edit, menu)
+        menuInflater.inflate(R.menu.activity_base_diary_editing, menu)
         menu.findItem(R.id.timePicker).isVisible = mEnableTimePicker
         menu.findItem(R.id.secondsPicker).isVisible = mEnableSecondsPicker
         return true
@@ -410,13 +410,13 @@ abstract class EditActivity : EasyDiaryActivity() {
                 View.VISIBLE -> {
                     photoContainerScrollView.visibility = View.GONE
 //                    mBinding.partialEditContents.titleCard.visibility = View.VISIBLE
-                    mBinding.partialEditContents.partialBottomToolbar.togglePhoto.setImageDrawable(ContextCompat.getDrawable(this@EditActivity, R.drawable.expand))
+                    mBinding.partialEditContents.partialBottomToolbar.togglePhoto.setImageDrawable(ContextCompat.getDrawable(this@BaseDiaryEditingActivity, R.drawable.expand))
 //                    supportActionBar?.hide()
                 }
                 View.GONE -> {
                     photoContainerScrollView.visibility = View.VISIBLE
 //                    mBinding.partialEditContents.titleCard.visibility = View.GONE
-                    mBinding.partialEditContents.partialBottomToolbar.togglePhoto.setImageDrawable(ContextCompat.getDrawable(this@EditActivity, R.drawable.collapse))
+                    mBinding.partialEditContents.partialBottomToolbar.togglePhoto.setImageDrawable(ContextCompat.getDrawable(this@BaseDiaryEditingActivity, R.drawable.collapse))
 //                    supportActionBar?.show()
                 }
                 else -> {}
@@ -583,8 +583,8 @@ abstract class EditActivity : EasyDiaryActivity() {
 
     protected fun initDateTime() {
         intent?.run {
-            if (hasExtra(DiaryInsertActivity.INITIALIZE_TIME_MILLIS)) {
-                mCurrentTimeMillis = getLongExtra(DiaryInsertActivity.INITIALIZE_TIME_MILLIS, 0)
+            if (hasExtra(DiaryWritingActivity.INITIALIZE_TIME_MILLIS)) {
+                mCurrentTimeMillis = getLongExtra(DiaryWritingActivity.INITIALIZE_TIME_MILLIS, 0)
             }
         }
 
@@ -620,8 +620,8 @@ abstract class EditActivity : EasyDiaryActivity() {
 
                 mPhotoUris.forEachIndexed { index, photoUriDto ->
                     val imageView = when (isLandScape()) {
-                        true -> EasyDiaryUtils.createAttachedPhotoView(this@EditActivity, photoUriDto, 0F, 0F, 0F, 3F)
-                        false -> EasyDiaryUtils.createAttachedPhotoView(this@EditActivity, photoUriDto, 0F, 0F, 3F, 0F)
+                        true -> EasyDiaryUtils.createAttachedPhotoView(this@BaseDiaryEditingActivity, photoUriDto, 0F, 0F, 0F, 3F)
+                        false -> EasyDiaryUtils.createAttachedPhotoView(this@BaseDiaryEditingActivity, photoUriDto, 0F, 0F, 3F, 0F)
                     }
                     imageView.setOnClickListener(PhotoClickListener(index))
                     photoContainer.addView(imageView, photoContainer.childCount - 1)

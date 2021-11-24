@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.databinding.PartialDailySymbolBinding
-import me.blog.korn123.easydiary.databinding.ViewholderDailySymbolBinding
+import me.blog.korn123.easydiary.databinding.ItemDailySymbolBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import java.util.*
@@ -19,7 +19,7 @@ class DailySymbolAdapter(
 ) : RecyclerView.Adapter<DailySymbolAdapter.DailySymbolViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DailySymbolViewHolder {
-        return DailySymbolViewHolder(ViewholderDailySymbolBinding.inflate(activity.layoutInflater), activity)
+        return DailySymbolViewHolder(ItemDailySymbolBinding.inflate(activity.layoutInflater), activity)
     }
 
     override fun onBindViewHolder(holder: DailySymbolViewHolder, position: Int) {
@@ -28,7 +28,7 @@ class DailySymbolAdapter(
 
     override fun getItemCount() = items.size
 
-    class DailySymbolViewHolder(private val binding: ViewholderDailySymbolBinding, val activity: Activity) : RecyclerView.ViewHolder(binding.root) {
+    class DailySymbolViewHolder(private val binding: ItemDailySymbolBinding, val activity: Activity) : RecyclerView.ViewHolder(binding.root) {
         init {
             if (itemView is ViewGroup) {
                 activity.run {

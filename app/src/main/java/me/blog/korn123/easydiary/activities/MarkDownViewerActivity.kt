@@ -17,7 +17,7 @@ import io.noties.prism4j.Prism4j
 import io.noties.prism4j.annotations.PrismBundle
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.databinding.ActivityMarkdownViewBinding
+import me.blog.korn123.easydiary.databinding.ActivityMarkdownViewerBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.EXTERNAL_STORAGE_PERMISSIONS
 import me.blog.korn123.easydiary.helper.MARKDOWN_DIRECTORY
@@ -31,8 +31,8 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 @PrismBundle(include = ["java", "kotlin", "javascript"], grammarLocatorClassName = ".GrammarLocatorSourceCode")
-class MarkDownViewActivity : EasyDiaryActivity() {
-    private lateinit var mBinding: ActivityMarkdownViewBinding
+class MarkDownViewerActivity : EasyDiaryActivity() {
+    private lateinit var mBinding: ActivityMarkdownViewerBinding
     private lateinit var savedFilePath: String
     private lateinit var markdownUrl: String
     private val mPrism4j = Prism4j(GrammarLocatorSourceCode())
@@ -40,7 +40,7 @@ class MarkDownViewActivity : EasyDiaryActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityMarkdownViewBinding.inflate(layoutInflater)
+        mBinding = ActivityMarkdownViewerBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
         setSupportActionBar(mBinding.toolbar)
         val pageTitle = intent.getStringExtra(OPEN_URL_DESCRIPTION)
@@ -129,7 +129,7 @@ class MarkDownViewActivity : EasyDiaryActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.markdown_view, menu)
+        menuInflater.inflate(R.menu.activity_markdown_viewer, menu)
         return true
     }
 
