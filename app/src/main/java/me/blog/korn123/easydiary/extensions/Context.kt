@@ -54,7 +54,7 @@ import io.realm.Realm
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.activities.DiaryInsertActivity
+import me.blog.korn123.easydiary.activities.DiaryWritingActivity
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.databinding.DialogMessageBinding
 import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
@@ -498,7 +498,7 @@ fun Context.isScreenOn() = (getSystemService(Context.POWER_SERVICE) as PowerMana
 fun Context.getOpenAlarmTabIntent(alarm: Alarm): PendingIntent {
     val intent: Intent? = when (alarm.workMode) {
         Alarm.WORK_MODE_DIARY_WRITING -> {
-            Intent(this, DiaryInsertActivity::class.java).apply {
+            Intent(this, DiaryWritingActivity::class.java).apply {
                 putExtra(DIARY_EXECUTION_MODE, EXECUTION_MODE_ACCESS_FROM_OUTSIDE)
             }
         }

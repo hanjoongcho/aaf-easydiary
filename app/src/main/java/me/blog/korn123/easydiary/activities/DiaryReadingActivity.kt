@@ -45,7 +45,7 @@ import java.util.*
  * Created by CHO HANJOONG on 2017-03-16.
  */
 
-class DiaryReadActivity : EasyDiaryActivity() {
+class DiaryReadingActivity : EasyDiaryActivity() {
 
     /**
      * The [android.support.v4.view.PagerAdapter] that will provide
@@ -56,7 +56,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
      * [android.support.v4.app.FragmentStatePagerAdapter].
      */
     private lateinit var mSectionsPagerAdapter: SectionsPagerAdapter
-    private lateinit var mBinding: ActivityDiaryReadBinding
+    private lateinit var mBinding: ActivityDiaryReadingBinding
     private lateinit var mPopupEncryptionBinding: PopupEncryptionBinding
     private lateinit var mDialogHighlightKeywordBinding: DialogHighlightKeywordBinding
     private var mTextToSpeech: TextToSpeech? = null
@@ -72,7 +72,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityDiaryReadBinding.inflate(layoutInflater)
+        mBinding = ActivityDiaryReadingBinding.inflate(layoutInflater)
         mPopupEncryptionBinding = PopupEncryptionBinding.inflate(layoutInflater)
         mDialogHighlightKeywordBinding = DialogHighlightKeywordBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
@@ -222,7 +222,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
     }
 
     private fun startEditing(fragment: PlaceholderFragment, inputPass: String? = null) {
-        val updateDiaryIntent = Intent(this@DiaryReadActivity, DiaryUpdateActivity::class.java).apply {
+        val updateDiaryIntent = Intent(this@DiaryReadingActivity, DiaryEditingActivity::class.java).apply {
             putExtra(DIARY_SEQUENCE, fragment.getSequence())
             putExtra(DIARY_CONTENTS_SCROLL_Y, fragment.getContentsPositionY())
             inputPass?.let {
@@ -230,7 +230,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
             }
 
         }
-        TransitionHelper.startActivityWithTransition(this@DiaryReadActivity, updateDiaryIntent)
+        TransitionHelper.startActivityWithTransition(this@DiaryReadingActivity, updateDiaryIntent)
     }
 
     private fun showEncryptPagePopup(fragment: PlaceholderFragment, workMode: String, callback: ((inputPass: String) -> Unit)? = null) {
@@ -422,13 +422,13 @@ class DiaryReadActivity : EasyDiaryActivity() {
                     }
                     2 -> {
                         setButtonPosition(centerParams)
-                        setTarget(ViewTarget(R.id.edit, this@DiaryReadActivity))
+                        setTarget(ViewTarget(R.id.edit, this@DiaryReadingActivity))
                         setContentTitle(getString(R.string.read_diary_detail_showcase_title_2))
                         setContentText(getString(R.string.read_diary_detail_showcase_message_2))
                     }
                     3 -> {
                         setButtonPosition(centerParams)
-                        setTarget(ViewTarget(R.id.speechOutButton, this@DiaryReadActivity))
+                        setTarget(ViewTarget(R.id.speechOutButton, this@DiaryReadingActivity))
                         setContentTitle(getString(R.string.read_diary_detail_showcase_title_3))
                         setContentText(getString(R.string.read_diary_detail_showcase_message_3))
                     }
@@ -460,7 +460,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
     }
 
     private fun initModule() {
-        mTextToSpeech = TextToSpeech(this@DiaryReadActivity) { status ->
+        mTextToSpeech = TextToSpeech(this@DiaryReadingActivity) { status ->
             if (status == TextToSpeech.SUCCESS) {
                 mTextToSpeech?.run {
                     language = Locale.getDefault()
@@ -525,14 +525,14 @@ class DiaryReadActivity : EasyDiaryActivity() {
                         R.id.delete -> {
                             val positiveListener = DialogInterface.OnClickListener { _, _ ->
                                 EasyDiaryDbHelper.deleteDiaryBy(fragment.getSequence())
-                                TransitionHelper.finishActivityWithTransition(this@DiaryReadActivity)
+                                TransitionHelper.finishActivityWithTransition(this@DiaryReadingActivity)
                             }
                             showAlertDialog(getString(R.string.delete_confirm), positiveListener, null)
                         }
                         R.id.postcard -> {
-                            val postCardIntent = Intent(this@DiaryReadActivity, PostcardActivity::class.java)
+                            val postCardIntent = Intent(this@DiaryReadingActivity, PostcardActivity::class.java)
                             postCardIntent.putExtra(DIARY_SEQUENCE, fragment.getSequence())
-                            TransitionHelper.startActivityWithTransition(this@DiaryReadActivity, postCardIntent)
+                            TransitionHelper.startActivityWithTransition(this@DiaryReadingActivity, postCardIntent)
                         }
                         R.id.encryptData -> showEncryptPagePopup(fragment, ENCRYPTION)
                         R.id.decryptData -> showEncryptPagePopup(fragment, DECRYPTION)
@@ -723,7 +723,7 @@ class DiaryReadActivity : EasyDiaryActivity() {
                         }
                     }
 
-                    (this as DiaryReadActivity).run {
+                    (this as DiaryReadingActivity).run {
                         mIsEncryptData = diaryDto.isEncrypt
                         invalidateOptionsMenu()
                     }

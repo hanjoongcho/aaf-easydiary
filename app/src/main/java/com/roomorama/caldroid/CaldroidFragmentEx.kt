@@ -19,7 +19,6 @@ import android.widget.Button
 import android.widget.GridView
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.viewpager.widget.ViewPager
 
@@ -1127,7 +1126,7 @@ abstract class CaldroidFragmentEx : DialogFragment() {
         // for app that wants to change theme dynamically.
         requireActivity().setTheme(themeResource)
 
-        val view = localInflater.inflate(R.layout.calendar_view, container, false)
+        val view = localInflater.inflate(me.blog.korn123.easydiary.R.layout.partial_calendar_view, container, false)
         view.setBackgroundColor(getBackgroundColor())
 
         // For the monthTitleTextView

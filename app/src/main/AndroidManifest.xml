@@ -35,9 +35,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.DiaryInsertActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" android:excludeFromRecents="true" />
-        <activity android:name=".activities.DiaryReadActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" android:excludeFromRecents="true" />
-        <activity android:name=".activities.DiaryUpdateActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
+        <activity android:name=".activities.DiaryWritingActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" android:excludeFromRecents="true" />
+        <activity android:name=".activities.DiaryReadingActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" android:excludeFromRecents="true" />
+        <activity android:name=".activities.DiaryEditingActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
         <activity android:name=".activities.DiaryMainActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
         <activity android:name=".activities.DevActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
         <activity android:name=".activities.CheatSheetActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
@@ -53,7 +53,7 @@
         <activity android:name=".activities.PostcardViewPagerActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" android:hardwareAccelerated="false" android:launchMode="singleTask" />
         <activity android:name=".activities.FingerprintLockActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
         <activity android:name=".activities.PinLockActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
-        <activity android:name=".activities.MarkDownViewActivity" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.MarkDownViewerActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.SymbolFilterPickerActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />
         <provider
             android:name="androidx.core.content.FileProvider"

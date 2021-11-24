@@ -17,7 +17,7 @@ import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import io.realm.Sort
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.activities.DiaryInsertActivity.Companion.INITIALIZE_TIME_MILLIS
+import me.blog.korn123.easydiary.activities.DiaryWritingActivity.Companion.INITIALIZE_TIME_MILLIS
 import me.blog.korn123.easydiary.adapters.DiaryCalendarItemAdapter
 import me.blog.korn123.easydiary.databinding.ActivityCalendarBinding
 import me.blog.korn123.easydiary.extensions.config
@@ -87,7 +87,7 @@ class CalendarActivity : EasyDiaryActivity() {
         mBinding.selectedList.adapter = mArrayAdapterDiary
         mBinding.selectedList.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
             val diaryDto = adapterView.adapter.getItem(i) as Diary
-            val detailIntent = Intent(this@CalendarActivity, DiaryReadActivity::class.java)
+            val detailIntent = Intent(this@CalendarActivity, DiaryReadingActivity::class.java)
             detailIntent.putExtra(DIARY_SEQUENCE, diaryDto.sequence)
             TransitionHelper.startActivityWithTransition(this@CalendarActivity, detailIntent)
         }
@@ -138,7 +138,7 @@ class CalendarActivity : EasyDiaryActivity() {
         }
 
         mBinding.writeDiary.setOnClickListener {
-            TransitionHelper.startActivityWithTransition(this, Intent(this, DiaryInsertActivity::class.java).apply {
+            TransitionHelper.startActivityWithTransition(this, Intent(this, DiaryWritingActivity::class.java).apply {
                 putExtra(INITIALIZE_TIME_MILLIS, mCalendar.timeInMillis)
             })
         }

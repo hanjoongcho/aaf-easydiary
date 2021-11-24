@@ -27,7 +27,7 @@ import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.activities.EditActivity.Companion.DIARY_SEQUENCE_INIT
+import me.blog.korn123.easydiary.activities.BaseEditingActivity.Companion.DIARY_SEQUENCE_INIT
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
 import me.blog.korn123.easydiary.databinding.PopupMenuMainBinding
 import me.blog.korn123.easydiary.enums.DiaryMode
@@ -107,7 +107,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
         mDiaryList.addAll(EasyDiaryDbHelper.findDiary(null))
         mDiaryMainItemAdapter = DiaryMainItemAdapter(this, mDiaryList, {
-            val detailIntent = Intent(this@DiaryMainActivity, DiaryReadActivity::class.java)
+            val detailIntent = Intent(this@DiaryMainActivity, DiaryReadingActivity::class.java)
             detailIntent.putExtra(DIARY_SEQUENCE, it.sequence)
             detailIntent.putExtra(SELECTED_SEARCH_QUERY, mDiaryMainItemAdapter?.currentQuery)
             detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE, viewModel.symbol.value ?: 0)
@@ -429,7 +429,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         EasyDiaryUtils.disableTouchEvent(mBinding.modalContainer)
 
         mBinding.insertDiaryButton.setOnClickListener{
-            val createDiary = Intent(this@DiaryMainActivity, DiaryInsertActivity::class.java)
+            val createDiary = Intent(this@DiaryMainActivity, DiaryWritingActivity::class.java)
             //                startActivity(createDiary);
             //                DiaryMainActivity.this.overridePendingTransition(R.anim.anim_right_to_center, R.anim.anim_center_to_left);
             TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, createDiary)
