@@ -101,7 +101,7 @@ class DiaryMainItemAdapter(
 
                     if (config.enableLocationInfo) {
                         diary.location?.let {
-                            changeDrawableIconColor(config.primaryColor, R.drawable.map_marker_2)
+                            changeDrawableIconColor(config.primaryColor, R.drawable.ic_map_marker_2)
 //                        locationLabel.setTextColor(config.textColor)
 //                        locationContainer.background = getLabelBackground()
 
@@ -202,7 +202,7 @@ class DiaryMainItemAdapter(
                         }
                         val options = RequestOptions()
                                 /*.error(R.drawable.error_7)*/
-                                .placeholder(R.drawable.error_7)
+                                .placeholder(R.drawable.ic_error_7)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .priority(Priority.HIGH)
                                 .centerCrop()

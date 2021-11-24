@@ -77,13 +77,13 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
 
     override fun onPause() {
         super.onPause()
-        mActivity.changeDrawableIconColor(android.R.color.white, R.drawable.delete_w)
+        mActivity.changeDrawableIconColor(android.R.color.white, R.drawable.ic_delete_w)
     }
 
     override fun onResume() {
         super.onResume()
         updateFragmentUI(mBinding.root)
-        mActivity.updateDrawableColorInnerCardView(R.drawable.delete_w)
+        mActivity.updateDrawableColorInnerCardView(R.drawable.ic_delete_w)
     }
 
 
@@ -231,7 +231,7 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
     }
 
     private fun getProperDayDrawable(selected: Boolean): Drawable {
-        val drawableId = if (selected) R.drawable.circle_background_filled else R.drawable.circle_background_stroke
+        val drawableId = if (selected) R.drawable.bg_circle_filled else R.drawable.bg_circle_stroke
         val drawable = ContextCompat.getDrawable(mActivity, drawableId)
         drawable!!.applyColorFilter(mActivity.config.textColor)
         return drawable

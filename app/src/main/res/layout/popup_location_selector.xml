@@ -13,7 +13,7 @@
         android:id="@+id/closePopup"
         android:theme="@style/AppTheme.AppBarOverlay"
         android:contentDescription=""
-        android:src="@drawable/delete"
+        android:src="@drawable/ic_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 

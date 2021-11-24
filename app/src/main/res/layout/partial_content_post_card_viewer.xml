@@ -13,7 +13,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<!--thumb.xml, thumb_drawable.xml ,line.xml, line_drawable.xml-->
 <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"

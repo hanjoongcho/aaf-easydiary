@@ -19,7 +19,7 @@
         <ImageView
             android:id="@+id/removeSymbol"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/delete"
+            android:src="@drawable/ic_delete"
             android:layout_gravity="end"
             android:layout_width="20dp"
             android:layout_height="20dp" />

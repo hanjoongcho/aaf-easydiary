@@ -125,7 +125,7 @@
         <item name="android:layout_marginLeft">10dp</item>
         <item name="android:layout_marginStart">10dp</item>
         <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/circle_background_filled</item>
+        <item name="android:background">@drawable/bg_circle_filled</item>
         <item name="android:layout_width">35dp</item>
         <item name="android:layout_height">35dp</item>
     </style>
@@ -214,11 +214,11 @@
     </style>
     <style name="CaldroidDefaultLeftButton" parent="CaldroidDefaultArrowButton">
         <item name="android:layout_alignParentLeft">true</item>
-        <item name="android:background">@drawable/arrow_94_b</item>
+        <item name="android:background">@drawable/ic_arrow_94_b</item>
     </style>
     <style name="CaldroidDefaultRightButton" parent="CaldroidDefaultArrowButton">
         <item name="android:layout_alignParentRight">true</item>
-        <item name="android:background">@drawable/arrow_3_b</item>
+        <item name="android:background">@drawable/ic_arrow_3_b</item>
     </style>
     <style name="CaldroidDefaultMonthNameLand">
         <item name="android:textColor">@android:color/black</item>

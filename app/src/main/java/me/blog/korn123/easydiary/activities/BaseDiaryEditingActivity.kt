@@ -192,7 +192,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         super.onCreate(savedInstanceState)
         mBinding = ActivityBaseDiaryEditingBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-        changeDrawableIconColor(Color.WHITE, R.drawable.calendar_4_w)
+        changeDrawableIconColor(Color.WHITE, R.drawable.ic_calendar_4_w)
 
         if (config.enableLocationInfo && checkPermission(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,  Manifest.permission.ACCESS_COARSE_LOCATION))) {
             mLocationManager.run {
@@ -410,13 +410,13 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                 View.VISIBLE -> {
                     photoContainerScrollView.visibility = View.GONE
 //                    mBinding.partialEditContents.titleCard.visibility = View.VISIBLE
-                    mBinding.partialEditContents.partialBottomToolbar.togglePhoto.setImageDrawable(ContextCompat.getDrawable(this@BaseDiaryEditingActivity, R.drawable.expand))
+                    mBinding.partialEditContents.partialBottomToolbar.togglePhoto.setImageDrawable(ContextCompat.getDrawable(this@BaseDiaryEditingActivity, R.drawable.ic_expand))
 //                    supportActionBar?.hide()
                 }
                 View.GONE -> {
                     photoContainerScrollView.visibility = View.VISIBLE
 //                    mBinding.partialEditContents.titleCard.visibility = View.GONE
-                    mBinding.partialEditContents.partialBottomToolbar.togglePhoto.setImageDrawable(ContextCompat.getDrawable(this@BaseDiaryEditingActivity, R.drawable.collapse))
+                    mBinding.partialEditContents.partialBottomToolbar.togglePhoto.setImageDrawable(ContextCompat.getDrawable(this@BaseDiaryEditingActivity, R.drawable.ic_collapse))
 //                    supportActionBar?.show()
                 }
                 else -> {}

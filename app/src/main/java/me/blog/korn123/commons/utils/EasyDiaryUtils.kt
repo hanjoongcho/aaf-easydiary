@@ -1,6 +1,5 @@
 package me.blog.korn123.commons.utils
 
-import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
@@ -31,7 +30,6 @@ import android.view.View
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AlertDialog
-import androidx.core.animation.addListener
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import com.bumptech.glide.Glide
@@ -233,13 +231,13 @@ object EasyDiaryUtils {
         }
     } catch (fe: FileNotFoundException) {
         fe.printStackTrace()
-        BitmapFactory.decodeResource(context.resources, R.drawable.error_7)
+        BitmapFactory.decodeResource(context.resources, R.drawable.ic_error_7)
     } catch (se: SecurityException) {
         se.printStackTrace()
-        BitmapFactory.decodeResource(context.resources, R.drawable.error_7)
+        BitmapFactory.decodeResource(context.resources, R.drawable.ic_error_7)
     } catch (e: Exception) {
         e.printStackTrace()
-        BitmapFactory.decodeResource(context.resources, R.drawable.error_7)
+        BitmapFactory.decodeResource(context.resources, R.drawable.ic_error_7)
     }
 
     fun photoUriToBitmap(context: Context, photoUri: PhotoUri): Bitmap? {
@@ -347,7 +345,7 @@ object EasyDiaryUtils {
         imageView.scaleType = ImageView.ScaleType.CENTER
         val options = RequestOptions()
 //                .error(R.drawable.error_7)
-                .placeholder(R.drawable.error_7)
+                .placeholder(R.drawable.ic_error_7)
                 .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .priority(Priority.HIGH)

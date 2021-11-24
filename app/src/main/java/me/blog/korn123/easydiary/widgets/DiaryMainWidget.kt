@@ -74,8 +74,8 @@ class DiaryMainWidget : AppWidgetProvider() {
         appWidgetManager.getAppWidgetIds(getComponentName(context)).forEach {
             RemoteViews(context.packageName, getProperLayout(context)).apply {
                 setInt(R.id.widgetToolbar, "setBackgroundColor", toolbarColor)
-                setImageViewBitmap(R.id.openWritePage, context.changeBitmapColor(R.drawable.edit, iconColor))
-                setImageViewBitmap(R.id.updateWidget, context.changeBitmapColor(R.drawable.update, iconColor))
+                setImageViewBitmap(R.id.openWritePage, context.changeBitmapColor(R.drawable.ic_edit, iconColor))
+                setImageViewBitmap(R.id.updateWidget, context.changeBitmapColor(R.drawable.ic_update, iconColor))
 
                 setupIntent(context, this, OPEN_WRITE_PAGE, R.id.openWritePage)
                 setupIntent(context, this, UPDATE_WIDGET, R.id.updateWidget)

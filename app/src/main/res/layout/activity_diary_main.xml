@@ -73,7 +73,7 @@
 
                     <ImageView
                         android:id="@+id/img_clear_query"
-                        android:src="@drawable/delete"
+                        android:src="@drawable/ic_delete"
                         android:layout_gravity="end|center_vertical"
                         android:padding="3dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
@@ -107,7 +107,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
-            app:srcCompat="@drawable/edit" />
+            app:srcCompat="@drawable/ic_edit" />
 
         <LinearLayout
             android:id="@+id/modalContainer"

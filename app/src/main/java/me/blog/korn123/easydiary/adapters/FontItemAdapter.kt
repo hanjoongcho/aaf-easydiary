@@ -47,13 +47,13 @@ class FontItemAdapter(val activity: Activity, private val layoutResourceId: Int,
             }
         }.run {
             if (StringUtils.equals(context.config.settingFontName, list[position]["fontName"])) {
-                activity.updateDrawableColorInnerCardView(R.drawable.check_mark)
-                ContextCompat.getDrawable(context, R.drawable.check_mark).run {
+                activity.updateDrawableColorInnerCardView(R.drawable.ic_check_mark)
+                ContextCompat.getDrawable(context, R.drawable.ic_check_mark).run {
                     imageView.setImageDrawable(this)
                     imageView.alpha = 1F
                 }
             } else {
-                imageView.setImageBitmap(BitmapFactory.decodeResource(context.resources, R.drawable.check_mark_off))
+                imageView.setImageBitmap(BitmapFactory.decodeResource(context.resources, R.drawable.ic_check_mark_off))
                 imageView.alpha = 0.1F
             }
             textView.text = StringUtils.EMPTY

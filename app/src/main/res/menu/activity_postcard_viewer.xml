@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:icon="@drawable/grid_three_up"
+        android:icon="@drawable/ic_grid_three_up"
         android:id="@+id/layout"
         android:orderInCategory="100"
         android:title="Layout"

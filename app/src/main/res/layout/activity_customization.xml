@@ -116,7 +116,7 @@
                             style="@style/text_custom_theme_item"
                             android:text="Dark Theme"/>
                         <ImageView
-                            android:src="@drawable/update"
+                            android:src="@drawable/ic_update"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
@@ -137,7 +137,7 @@
                             style="@style/text_custom_theme_item"
                             android:text="EasyDiary Theme"/>
                         <ImageView
-                            android:src="@drawable/update"
+                            android:src="@drawable/ic_update"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
