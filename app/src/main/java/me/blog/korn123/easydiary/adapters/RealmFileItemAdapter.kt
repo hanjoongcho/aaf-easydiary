@@ -40,7 +40,7 @@ class RealmFileItemAdapter(
                 holder
             }
         }.run {
-            activity.updateDrawableColorInnerCardView(R.drawable.text_file_5)
+            activity.updateDrawableColorInnerCardView(R.drawable.ic_text_file_5)
             name.text = list[position]["name"]
             createdTime.text = list[position]["createdTime"]
         }

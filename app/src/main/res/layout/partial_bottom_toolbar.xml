@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
             android:layout_marginEnd="10dp"
-            android:src="@drawable/collapse" />
+            android:src="@drawable/ic_collapse" />
     </LinearLayout>
 </io.github.aafactory.commons.views.LabelLayout>
    

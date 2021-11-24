@@ -62,7 +62,7 @@
 
                     <ImageView
                         android:id="@+id/decreaseFont"
-                        android:src="@drawable/minus_6"
+                        android:src="@drawable/ic_minus_6"
                         android:layout_marginEnd="6dp"
                         android:padding="3dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
@@ -71,7 +71,7 @@
 
                     <ImageView
                         android:id="@+id/increaseFont"
-                        android:src="@drawable/plus_6"
+                        android:src="@drawable/ic_plus_6"
                         android:padding="3dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:layout_width="wrap_content"

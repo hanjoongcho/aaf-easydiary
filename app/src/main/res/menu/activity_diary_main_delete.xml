@@ -2,13 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:icon="@drawable/html"
+        android:icon="@drawable/ic_html"
         android:id="@+id/saveAsHtml"
         android:orderInCategory="100"
         android:title="HTML"
         app:showAsAction="always" />
     <item
-        android:icon="@drawable/copy"
+        android:icon="@drawable/ic_copy"
         android:id="@+id/duplication"
         android:orderInCategory="100"
         android:title="Duplicate"

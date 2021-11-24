@@ -25,7 +25,7 @@
                 android:id="@+id/toolbarImage"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/london"
+                android:src="@drawable/bg_london"
                 app:tint="#BB3E50B4"
                 android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax"
@@ -66,5 +66,5 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/delete_w" />
+        app:srcCompat="@drawable/ic_delete_w" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

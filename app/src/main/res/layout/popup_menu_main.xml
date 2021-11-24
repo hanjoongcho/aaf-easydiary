@@ -26,7 +26,7 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     style="@style/image_view_popup_menu_icon"
                     android:id="@+id/img_dev_console"
-                    android:src="@drawable/bug_2" />
+                    android:src="@drawable/ic_bug_2" />
                 <me.blog.korn123.easydiary.views.FixedTextView
                     style="@style/text_view_popup_menu_item"
                     android:text="Dev Console" />
@@ -35,7 +35,7 @@
                 style="@style/linear_popup_menu_item"
                 android:id="@+id/postCard">
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:src="@drawable/picture_w"
+                    android:src="@drawable/ic_picture_w"
                     android:id="@+id/img_postcard"
                     style="@style/image_view_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
@@ -46,7 +46,7 @@
                 style="@style/linear_popup_menu_item"
                 android:id="@+id/dashboard">
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:src="@drawable/statistics"
+                    android:src="@drawable/ic_statistics"
                     android:id="@+id/img_dashboard"
                     style="@style/image_view_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
@@ -57,7 +57,7 @@
                 style="@style/linear_popup_menu_item"
                 android:id="@+id/chart">
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:src="@drawable/combo"
+                    android:src="@drawable/ic_combo"
                     android:id="@+id/img_statistics"
                     style="@style/image_view_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
@@ -68,7 +68,7 @@
                 style="@style/linear_popup_menu_item"
                 android:id="@+id/settings">
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:src="@drawable/settings_7"
+                    android:src="@drawable/ic_settings_7"
                     android:id="@+id/img_settings"
                     style="@style/image_view_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView

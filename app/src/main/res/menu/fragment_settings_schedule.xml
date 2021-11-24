@@ -4,7 +4,7 @@
     <item
         android:id="@+id/addSchedule"
         android:visible="false"
-        android:icon="@drawable/signs"
+        android:icon="@drawable/ic_signs"
         android:orderInCategory="100"
         android:title="Add Schedule"
         app:showAsAction="always" />

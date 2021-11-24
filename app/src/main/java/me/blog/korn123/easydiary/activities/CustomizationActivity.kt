@@ -49,7 +49,7 @@ class CustomizationActivity : BaseSimpleActivity() {
             updateTextColors(mainHolder)
             updateAppViews(mainHolder)
             initTextSize(mainHolder)
-            updateDrawableColorInnerCardView(R.drawable.update)
+            updateDrawableColorInnerCardView(R.drawable.ic_update)
             initColorVariables()
             setupColorsPickers()
 

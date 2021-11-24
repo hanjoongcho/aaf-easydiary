@@ -574,18 +574,18 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
-            requireContext().changeDrawableIconColor(config.primaryColor, R.drawable.map_marker_2)
+            requireContext().changeDrawableIconColor(config.primaryColor, R.drawable.ic_map_marker_2)
             mBinding.bottomToolbar.run {
                 togglePhoto.setOnClickListener {
                     context?.let { context ->
                         when (mBinding.photoContainerScrollView.visibility) {
                             View.VISIBLE -> {
                                 mBinding.photoContainerScrollView.visibility = View.GONE
-                                togglePhoto.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.expand))
+                                togglePhoto.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_expand))
                             }
                             View.GONE -> {
                                 mBinding.photoContainerScrollView.visibility = View.VISIBLE
-                                togglePhoto.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.collapse))
+                                togglePhoto.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_collapse))
                             }
                         }
                     }

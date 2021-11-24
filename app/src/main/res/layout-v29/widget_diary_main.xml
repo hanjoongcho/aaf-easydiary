@@ -16,7 +16,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:layout_alignParentStart="true"
             android:id="@+id/updateWidget"
-            android:src="@drawable/update"
+            android:src="@drawable/ic_update"
             android:padding="3dp"
             android:layout_width="33dp"
             android:layout_height="33dp" />
@@ -25,7 +25,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:layout_alignParentEnd="true"
             android:id="@+id/openWritePage"
-            android:src="@drawable/edit"
+            android:src="@drawable/ic_edit"
             android:padding="3dp"
             android:layout_width="33dp"
             android:layout_height="33dp" />

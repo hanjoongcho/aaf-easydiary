@@ -65,7 +65,7 @@
                     android:layout_height="wrap_content">
                     <ImageView
                         android:id="@+id/deleteAlarm"
-                        android:src="@drawable/delete_w"
+                        android:src="@drawable/ic_delete_w"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 

@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/share"
-        android:icon="@drawable/sharethis_w"
+        android:icon="@drawable/ic_sharethis_w"
         android:orderInCategory="100"
         android:title=""
         app:showAsAction="always" />
     <item
-        android:icon="@drawable/rotate"
+        android:icon="@drawable/ic_rotate"
         android:id="@+id/planner"
         android:orderInCategory="100"
         android:title="@string/rotate_photo"

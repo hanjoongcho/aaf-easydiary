@@ -2,19 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:icon="@drawable/planner"
+        android:icon="@drawable/ic_planner"
         android:id="@+id/planner"
         android:orderInCategory="100"
         android:title="@string/menu_calendar"
         app:showAsAction="always" />
     <item
-        android:icon="@drawable/settings_11"
+        android:icon="@drawable/ic_settings_11"
         android:id="@+id/timeline"
         android:orderInCategory="100"
         android:title="@string/menu_timeline"
         app:showAsAction="always" />
     <item
-        android:icon="@drawable/microphone"
+        android:icon="@drawable/ic_microphone"
         android:id="@+id/microphone"
         android:orderInCategory="100"
         android:title="@string/speech_to_text"

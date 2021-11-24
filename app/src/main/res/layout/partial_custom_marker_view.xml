@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="40dp"
-    android:background="@drawable/marker2" >
+    android:background="@drawable/ic_marker2" >
 
     <TextView
         android:id="@+id/tvContent"

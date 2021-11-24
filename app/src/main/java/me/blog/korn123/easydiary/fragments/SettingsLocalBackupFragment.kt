@@ -247,7 +247,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
         val exportFileName = "aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}"
         val builder = AlertDialog.Builder(mActivity)
         builder.setTitle(getString(R.string.export_excel_title))
-        builder.setIcon(ContextCompat.getDrawable(mActivity, R.drawable.excel_3))
+        builder.setIcon(ContextCompat.getDrawable(mActivity, R.drawable.ic_excel_3))
         builder.setCancelable(false)
 //        builder.setPositiveButton(getString(R.string.ok), null)
         val alert = builder.create()
@@ -287,7 +287,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
         val exportFileName = "aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}"
         val builder = AlertDialog.Builder(mActivity)
         builder.setTitle(getString(R.string.export_excel_title))
-        builder.setIcon(ContextCompat.getDrawable(mActivity, R.drawable.excel_3))
+        builder.setIcon(ContextCompat.getDrawable(mActivity, R.drawable.ic_excel_3))
         builder.setCancelable(false)
 //        builder.setPositiveButton(getString(R.string.ok), null)
         val alert = builder.create()
@@ -555,7 +555,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
             }
         }
         mActivity.run {
-            updateDrawableColorInnerCardView(R.drawable.delete)
+            updateDrawableColorInnerCardView(R.drawable.ic_delete)
             updateTextColors(popupView.root)
             initTextSize(popupView.root)
         }
