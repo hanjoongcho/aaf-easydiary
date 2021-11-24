@@ -21,7 +21,7 @@ import org.apache.commons.lang3.StringUtils
  * Created by CHO HANJOONG on 2017-03-16.
  */
 
-class DiaryWritingActivity : BaseEditingActivity() {
+class DiaryWritingActivity : BaseDiaryEditingActivity() {
     /***************************************************************************************************
      *   global properties
      *

@@ -5,7 +5,7 @@ import android.view.Menu
 import android.view.MenuItem
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.chart.ChartBase
-import me.blog.korn123.easydiary.databinding.ActivityBarchartBinding
+import me.blog.korn123.easydiary.databinding.ActivityStatisticsBinding
 import me.blog.korn123.easydiary.extensions.applyFontToMenuItem
 import me.blog.korn123.easydiary.fragments.BarChartFragment
 import me.blog.korn123.easydiary.fragments.BarChartFragmentT2
@@ -16,10 +16,10 @@ import me.blog.korn123.easydiary.fragments.HorizontalBarChartFragment
  */
 
 class StatisticsActivity : ChartBase() {
-    private lateinit var mBinding: ActivityBarchartBinding
+    private lateinit var mBinding: ActivityStatisticsBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityBarchartBinding.inflate(layoutInflater)
+        mBinding = ActivityStatisticsBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
         setSupportActionBar(mBinding.toolbar)
         supportActionBar?.run {
@@ -37,7 +37,7 @@ class StatisticsActivity : ChartBase() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.diary_chart, menu)
+        menuInflater.inflate(R.menu.activity_statistics, menu)
         val targetItems = mutableListOf<MenuItem>()
         targetItems.add(menu.findItem(R.id.barChart))
         targetItems.add(menu.findItem(R.id.barChart2))

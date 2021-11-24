@@ -2,8 +2,8 @@ package me.blog.korn123.easydiary.helper
 
 import android.content.Context
 import io.realm.*
-import me.blog.korn123.easydiary.activities.BaseEditingActivity
-import me.blog.korn123.easydiary.activities.BaseEditingActivity.Companion.DIARY_ORIGIN_SEQUENCE_INIT
+import me.blog.korn123.easydiary.activities.BaseDiaryEditingActivity
+import me.blog.korn123.easydiary.activities.BaseDiaryEditingActivity.Companion.DIARY_ORIGIN_SEQUENCE_INIT
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.models.*
 import org.apache.commons.lang3.StringUtils
@@ -82,7 +82,7 @@ object EasyDiaryDbHelper {
     fun insertTemporaryDiary(diaryTemp: Diary) {
         deleteTemporaryDiaryBy(diaryTemp.originSequence)
         getInstance().executeTransaction { realm ->
-            if (diaryTemp.sequence == BaseEditingActivity.DIARY_SEQUENCE_INIT) {
+            if (diaryTemp.sequence == BaseDiaryEditingActivity.DIARY_SEQUENCE_INIT) {
                 realm.where(Diary::class.java).max("sequence")?.let {
                     diaryTemp.sequence = it.toInt().plus(1)
                 }

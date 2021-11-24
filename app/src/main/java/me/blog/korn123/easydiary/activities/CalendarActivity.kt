@@ -160,7 +160,7 @@ class CalendarActivity : EasyDiaryActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.diary_calendar, menu)
+        menuInflater.inflate(R.menu.activity_calendar, menu)
         return true
     }
 

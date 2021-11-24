@@ -22,7 +22,7 @@ import com.simplemobiletools.commons.helpers.isOreoPlus
 import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.databinding.ActivityDevBinding
+import me.blog.korn123.easydiary.databinding.ActivityBaseDevBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.ActionLog
@@ -61,7 +61,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
     private val mRequestLocationSourceLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         makeSnackBar(if (isLocationEnabled()) "GPS provider setting is activated!!!" else "The request operation did not complete normally.")
     }
-    protected lateinit var mBinding: ActivityDevBinding
+    protected lateinit var mBinding: ActivityBaseDevBinding
 
 
     /***************************************************************************************************
@@ -70,7 +70,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
      ***************************************************************************************************/
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_dev)
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_base_dev)
         mBinding.lifecycleOwner = this
         mBinding.viewModel = mViewModel
 

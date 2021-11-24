@@ -5,8 +5,8 @@ import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.Ignore
 import io.realm.annotations.PrimaryKey
-import me.blog.korn123.easydiary.activities.BaseEditingActivity.Companion.DIARY_ORIGIN_SEQUENCE_INIT
-import me.blog.korn123.easydiary.activities.BaseEditingActivity.Companion.DIARY_SEQUENCE_INIT
+import me.blog.korn123.easydiary.activities.BaseDiaryEditingActivity.Companion.DIARY_ORIGIN_SEQUENCE_INIT
+import me.blog.korn123.easydiary.activities.BaseDiaryEditingActivity.Companion.DIARY_SEQUENCE_INIT
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
