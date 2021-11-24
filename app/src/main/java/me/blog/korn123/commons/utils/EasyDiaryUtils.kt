@@ -379,7 +379,7 @@ object EasyDiaryUtils {
         val width = LinearLayout.LayoutParams.WRAP_CONTENT
         val height = LinearLayout.LayoutParams.WRAP_CONTENT
         val popup: PopupWindow = PopupWindow(content, width, height, true).apply {
-            animationStyle = R.style.text_view_option_animation
+//            animationStyle = R.style.text_view_option_animation
             setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 //          showAsDropDown(findViewById(R.id.devConsole), 0, 0)
             showAtLocation(parent, Gravity.TOP or Gravity.RIGHT,0, CommonUtils.dpToPixel(parent.context, 24F))
