@@ -18,7 +18,7 @@ class SymbolFilterAdapter(
 ) : RecyclerView.Adapter<SymbolFilterAdapter.SymbolFilterViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SymbolFilterViewHolder {
         val view = LayoutInflater.from(activity)
-                .inflate(R.layout.viewholder_symbol_filter, parent, false)
+                .inflate(R.layout.item_symbol_filter, parent, false)
         return SymbolFilterViewHolder(view, activity, this)
     }
 

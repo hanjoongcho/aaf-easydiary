@@ -33,7 +33,7 @@ class PhotoAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewHolder {
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.viewholder_photo, parent, false)
+                .inflate(R.layout.item_photo, parent, false)
         return PhotoViewHolder(view, activity, itemCount, this)
     }
 
