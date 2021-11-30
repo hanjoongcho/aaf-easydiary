@@ -20,7 +20,7 @@ class AlarmAdapter(
 ) : RecyclerView.Adapter<AlarmAdapter.AlarmViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlarmViewHolder {
-        return AlarmViewHolder(activity, ItemAlarmBinding.inflate(activity.layoutInflater, parent, false), this)
+        return AlarmViewHolder(ItemAlarmBinding.inflate(activity.layoutInflater, parent, false))
     }
 
     override fun onBindViewHolder(holder: AlarmViewHolder, position: Int) {
@@ -48,8 +48,8 @@ class AlarmAdapter(
         EasyDiaryDbHelper.commitTransaction()
     }
 
-    class AlarmViewHolder(
-            val activity: Activity, private val viewHolderAlarmBinding: ItemAlarmBinding, val adapter: AlarmAdapter
+    inner class AlarmViewHolder(
+            private val viewHolderAlarmBinding: ItemAlarmBinding
     ) : RecyclerView.ViewHolder(viewHolderAlarmBinding.root), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
         init {
             activity.run {
@@ -83,11 +83,11 @@ class AlarmAdapter(
         }
 
         override fun onClick(view: View?) {
-            adapter.onItemHolderClick(this)
+            onItemHolderClick(this)
         }
 
         override fun onCheckedChanged(p0: CompoundButton?, p1: Boolean) {
-            adapter.onItemCheckedChange(this.adapterPosition, p1)
+            onItemCheckedChange(this.adapterPosition, p1)
         }
     }
 }
