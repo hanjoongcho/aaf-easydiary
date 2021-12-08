@@ -14,6 +14,7 @@ import android.widget.PopupWindow
 import android.widget.RelativeLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
@@ -122,7 +123,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
         mBinding.diaryListView.run {
             adapter = mDiaryMainItemAdapter
-            layoutManager = LinearLayoutManager(this@DiaryMainActivity, LinearLayoutManager.VERTICAL, false)
+//            layoutManager = LinearLayoutManager(this@DiaryMainActivity, LinearLayoutManager.VERTICAL, false)
+            layoutManager = if (isLandScape()) GridLayoutManager(this@DiaryMainActivity, 2) else GridLayoutManager(this@DiaryMainActivity, 1)
             addItemDecoration(SettingsScheduleFragment.SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding)))
             setPopUpTypeface(FontUtils.getCommonTypeface(this@DiaryMainActivity))
         }
