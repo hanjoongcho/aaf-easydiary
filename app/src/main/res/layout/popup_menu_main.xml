@@ -40,7 +40,7 @@
                     android:src="@drawable/ic_grid_three_up" />
                 <me.blog.korn123.easydiary.views.FixedTextView
                     style="@style/text_view_popup_menu_item"
-                    android:text="Grid Layout" />
+                    android:text="@string/postcard_grid_option_title" />
             </androidx.appcompat.widget.LinearLayoutCompat>
             <androidx.appcompat.widget.LinearLayoutCompat
                 style="@style/linear_popup_menu_item"
