@@ -811,7 +811,7 @@
     <string name="load_auto_save_diary_description">अस्थायी रूप से संग्रहीत एक डायरी है। क्या आप अस्थायी रूप से सहेजी गई डायरी को लोड करना चाहते हैं?</string>
     <string name="enable_review_flow_title">Google Play इन-ऐप समीक्षा</string>
     <string name="enable_review_flow_summary">यदि आप किसी विशिष्ट अवधि के लिए आसान डायरी का उपयोग करते हैं, तो Google Play समीक्षा पंजीकरण संवाद सक्रिय हो जाएगा। यदि आप समीक्षा पंजीकरण फ़ंक्शन का उपयोग नहीं करना चाहते हैं या यदि Google Play संवाद समीक्षा पंजीकरण के बाद खुलता है, तो आप संवाद को खोलने से रोकने के लिए इस विकल्प को अक्षम कर सकते हैं।</string>
-    <string name="postcard_grid_option_title">पोस्टकार्ड ग्रिड विकल्प</string>
+    <string name="postcard_grid_option_title">ग्रिड विकल्प</string>
     <string name="postcard_grid_option_column_number">%d कॉलम प्रति पंक्ति</string>
     <string name="encrypt_diary">Encrypt Diary</string>
     <string name="decrypt_diary">Decrypt Diary</string>
