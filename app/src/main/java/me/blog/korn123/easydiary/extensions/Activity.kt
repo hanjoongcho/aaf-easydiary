@@ -19,9 +19,8 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.view.ViewGroup
+import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -48,6 +47,7 @@ import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.activities.EasyDiaryActivity
 import me.blog.korn123.easydiary.activities.FingerprintLockActivity
 import me.blog.korn123.easydiary.activities.PinLockActivity
+import me.blog.korn123.easydiary.adapters.OptionItemAdapter
 import me.blog.korn123.easydiary.adapters.SymbolPagerAdapter
 import me.blog.korn123.easydiary.databinding.ActivityDiaryMainBinding
 import me.blog.korn123.easydiary.dialogs.WhatsNewDialog
@@ -455,6 +455,82 @@ fun Activity.resourceToBase64(resourceId: Int): String {
     return image64
 }
 
+fun Activity.openGridSettingDialog(rootView: ViewGroup, mode: Int, callback: (spanCount: Int) -> Unit) {
+    var alertDialog: AlertDialog? = null
+    val builder = AlertDialog.Builder(this)
+    builder.setNegativeButton(getString(android.R.string.cancel), null)
+    val inflater = getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+    val containerView = inflater.inflate(R.layout.dialog_option_item, rootView, false)
+    val listView = containerView.findViewById<ListView>(R.id.listView)
+
+    var selectedIndex = 0
+    val listMaxLines = java.util.ArrayList<Map<String, String>>()
+    for (i in 1..10) {
+        listMaxLines.add(mapOf("optionTitle" to getString(R.string.postcard_grid_option_column_number, i), "optionValue" to "$i"))
+    }
+
+    var postcardSpanCount = 0
+    listMaxLines.mapIndexed { index, map ->
+        val size = map["optionValue"] ?: "0"
+        when (isLandScape()) {
+             true -> {
+                when {
+                    mode == 0 && config.postcardSpanCountLandscape == size.toInt() -> {
+                        postcardSpanCount = config.postcardSpanCountLandscape
+                        selectedIndex = index
+                    }
+                    mode == 1 && config.diaryMainSpanCountLandscape == size.toInt() -> {
+                        postcardSpanCount = config.diaryMainSpanCountLandscape
+                        selectedIndex = index
+                    }
+                }
+
+            }
+            false -> {
+                when {
+                    mode == 0 && config.postcardSpanCountPortrait == size.toInt() -> {
+                        postcardSpanCount = config.postcardSpanCountPortrait
+                        selectedIndex = index
+                    }
+                    mode == 1 && config.diaryMainSpanCountPortrait == size.toInt() -> {
+                        postcardSpanCount = config.diaryMainSpanCountPortrait
+                        selectedIndex = index
+                    }
+                }
+            }
+        }
+    }
+
+    val arrayAdapter = OptionItemAdapter(this, R.layout.item_check_label, listMaxLines, postcardSpanCount.toFloat())
+    listView.adapter = arrayAdapter
+    listView.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
+        @Suppress("UNCHECKED_CAST") val optionInfo = parent.adapter.getItem(position) as HashMap<String, String>
+        optionInfo["optionValue"]?.let {
+//                config.summaryMaxLines = it.toInt()
+//                initPreference()
+            when (isLandScape()) {
+                true -> {
+                    when (mode) {
+                        0 -> config.postcardSpanCountLandscape = it.toInt()
+                        1 -> config.diaryMainSpanCountLandscape = it.toInt()
+                    }
+                }
+                false -> {
+                    when (mode) {
+                        0 -> config.postcardSpanCountPortrait = it.toInt()
+                        1 -> config.diaryMainSpanCountPortrait = it.toInt()
+                    }
+                }
+            }
+            callback.invoke(it.toInt())
+        }
+        alertDialog?.cancel()
+    }
+
+    alertDialog = builder.create().apply { updateAlertDialog(this, null, containerView, getString(R.string.postcard_grid_option_title)) }
+    listView.setSelection(selectedIndex)
+}
+
 fun EasyDiaryActivity.acquireGPSPermissions(activityResultLauncher: ActivityResultLauncher<Intent>, callback: () -> Unit) {
     handlePermission(PERMISSION_ACCESS_COARSE_LOCATION) { hasCoarseLocation ->
         if (hasCoarseLocation) {
@@ -618,4 +694,6 @@ fun EasyDiaryActivity.migrateData(binging: ActivityDiaryMainBinding) {
             }
         }
     }.start()
+
+
 }

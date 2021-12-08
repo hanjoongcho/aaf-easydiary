@@ -20,10 +20,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.OptionItemAdapter
 import me.blog.korn123.easydiary.adapters.PostcardAdapter
 import me.blog.korn123.easydiary.databinding.ActivityPostcardViewerBinding
-import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.isLandScape
-import me.blog.korn123.easydiary.extensions.showAlertDialog
-import me.blog.korn123.easydiary.extensions.updateAlertDialog
+import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import org.apache.commons.io.FileUtils
 import java.io.File
@@ -116,59 +113,12 @@ class PostcardViewerActivity : EasyDiaryActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.layout -> openGridSettingDialog()
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    private fun openGridSettingDialog() {
-        var alertDialog: AlertDialog? = null
-        val builder = AlertDialog.Builder(this)
-        builder.setNegativeButton(getString(android.R.string.cancel), null)
-        val inflater = getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val containerView = inflater.inflate(R.layout.dialog_option_item, mBinding.root, false)
-        val listView = containerView.findViewById<ListView>(R.id.listView)
-
-        var selectedIndex = 0
-        val listMaxLines = java.util.ArrayList<Map<String, String>>()
-        for (i in 1..10) {
-            listMaxLines.add(mapOf("optionTitle" to getString(R.string.postcard_grid_option_column_number, i), "optionValue" to "$i"))
-        }
-
-        var postcardSpanCount = 0
-        listMaxLines.mapIndexed { index, map ->
-            val size = map["optionValue"] ?: "0"
-            when {
-                isLandScape() && config.postcardSpanCountLandscape == size.toInt() -> {
-                    postcardSpanCount = config.postcardSpanCountLandscape
-                    selectedIndex = index
-                }
-                !isLandScape() && config.postcardSpanCountPortrait == size.toInt() -> {
-                    postcardSpanCount = config.postcardSpanCountPortrait
-                    selectedIndex = index
-                }
-            }
-        }
-
-        val arrayAdapter = OptionItemAdapter(this, R.layout.item_check_label, listMaxLines, postcardSpanCount.toFloat())
-        listView.adapter = arrayAdapter
-        listView.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
-            @Suppress("UNCHECKED_CAST") val optionInfo = parent.adapter.getItem(position) as HashMap<String, String>
-            optionInfo["optionValue"]?.let {
-//                config.summaryMaxLines = it.toInt()
-//                initPreference()
-                when (isLandScape()) {
-                    true -> config.postcardSpanCountLandscape = it.toInt()
-                    false -> config.postcardSpanCountPortrait = it.toInt()
-                }
+            R.id.layout -> openGridSettingDialog(mBinding.root, 0) {
                 mGridLayoutManager.spanCount = it.toInt()
                 mPostcardAdapter.notifyDataSetChanged()
             }
-            alertDialog?.cancel()
         }
-
-        alertDialog = builder.create().apply { updateAlertDialog(this, null, containerView, getString(R.string.postcard_grid_option_title)) }
-        listView.setSelection(selectedIndex)
+        return super.onOptionsItemSelected(item)
     }
 
     private fun initPostCard() {

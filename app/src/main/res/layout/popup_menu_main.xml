@@ -33,6 +33,17 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
             <androidx.appcompat.widget.LinearLayoutCompat
                 style="@style/linear_popup_menu_item"
+                android:id="@+id/gridLayout">
+                <androidx.appcompat.widget.AppCompatImageView
+                    style="@style/image_view_popup_menu_icon"
+                    android:id="@+id/img_grid_layout"
+                    android:src="@drawable/ic_grid_three_up" />
+                <me.blog.korn123.easydiary.views.FixedTextView
+                    style="@style/text_view_popup_menu_item"
+                    android:text="Grid Layout" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                style="@style/linear_popup_menu_item"
                 android:id="@+id/postCard">
                 <androidx.appcompat.widget.AppCompatImageView
                     android:src="@drawable/ic_picture_w"
