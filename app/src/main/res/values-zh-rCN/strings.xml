@@ -574,6 +574,10 @@
         v1.4.172.13 / 2021.11.20\n
         Fixed an error that caused abnormal termination when entering the main screen after cleaning the memory
     </string>
+    <string name="release_253">
+        v1.4.172.14 / 2021.12.10\n
+        Added grid setting option to main screen
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  自1.4.47版本以来添加的资源点击这里。                                                      -->
