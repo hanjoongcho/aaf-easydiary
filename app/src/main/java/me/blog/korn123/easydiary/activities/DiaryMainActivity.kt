@@ -14,7 +14,7 @@ import android.widget.PopupWindow
 import android.widget.RelativeLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.nineoldandroids.view.ViewHelper
@@ -50,6 +50,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
      *
      ***************************************************************************************************/
     private lateinit var mPopupMenuBinding: PopupMenuMainBinding
+    private lateinit var mGridLayoutManager: GridLayoutManager
     private var mDiaryMainItemAdapter: DiaryMainItemAdapter? = null
     private var mDiaryList: ArrayList<Diary> = arrayListOf()
     private var mShowcaseIndex = 0
@@ -120,9 +121,11 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             //            mDiaryMainItemAdapter?.notifyDataSetChanged()
         }
 
+        mGridLayoutManager =  if (isLandScape()) GridLayoutManager(this@DiaryMainActivity, config.diaryMainSpanCountLandscape) else GridLayoutManager(this@DiaryMainActivity, config.diaryMainSpanCountPortrait)
         mBinding.diaryListView.run {
             adapter = mDiaryMainItemAdapter
-            layoutManager = LinearLayoutManager(this@DiaryMainActivity, LinearLayoutManager.VERTICAL, false)
+//            layoutManager = LinearLayoutManager(this@DiaryMainActivity, LinearLayoutManager.VERTICAL, false)
+            layoutManager = mGridLayoutManager
             addItemDecoration(SettingsScheduleFragment.SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding)))
             setPopUpTypeface(FontUtils.getCommonTypeface(this@DiaryMainActivity))
         }
@@ -293,6 +296,10 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 R.id.chart -> TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, Intent(this@DiaryMainActivity, StatisticsActivity::class.java))
                 R.id.settings -> TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, Intent(this@DiaryMainActivity, SettingsActivity::class.java))
                 R.id.devConsole -> TransitionHelper.startActivityWithTransition(this, Intent(this, DevActivity::class.java))
+                R.id.gridLayout -> openGridSettingDialog(mBinding.mainHolder, 1) { spanCount ->
+                    mGridLayoutManager.spanCount = spanCount
+                    mDiaryMainItemAdapter?.notifyDataSetChanged()
+                }
             }
             Handler(Looper.getMainLooper()).post { mPopupWindow?.dismiss() }
         }
@@ -306,6 +313,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             chart.setOnClickListener(customItemClickListener)
             settings.setOnClickListener(customItemClickListener)
             devConsole.setOnClickListener(customItemClickListener)
+            gridLayout.setOnClickListener(customItemClickListener)
         }
     }
 
@@ -319,6 +327,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             updateDrawableColorInnerCardView(imgDashboard)
             updateDrawableColorInnerCardView(imgStatistics)
             updateDrawableColorInnerCardView(imgSettings)
+            updateDrawableColorInnerCardView(imgGridLayout)
         }
     }
 
