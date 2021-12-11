@@ -218,11 +218,11 @@ class Config(val context: Context) {
         set(postcardSpanCountPortrait) = prefs.edit().putInt(SETTING_POSTCARD_SPAN_COUNT_PORTRAIT, postcardSpanCountPortrait).apply()
 
     var diaryMainSpanCountLandscape: Int
-        get() = prefs.getInt(SETTING_DIARY_MAIN_SPAN_COUNT_LANDSCAPE, 5)
+        get() = prefs.getInt(SETTING_DIARY_MAIN_SPAN_COUNT_LANDSCAPE, 1)
         set(diaryMainSpanCountLandscape) = prefs.edit().putInt(SETTING_DIARY_MAIN_SPAN_COUNT_LANDSCAPE, diaryMainSpanCountLandscape).apply()
 
     var diaryMainSpanCountPortrait: Int
-        get() = prefs.getInt(SETTING_DIARY_MAIN_SPAN_COUNT_PORTRAIT, 2)
+        get() = prefs.getInt(SETTING_DIARY_MAIN_SPAN_COUNT_PORTRAIT, 1)
         set(diaryMainSpanCountPortrait) = prefs.edit().putInt(SETTING_DIARY_MAIN_SPAN_COUNT_PORTRAIT, diaryMainSpanCountPortrait).apply()
 
     companion object {
