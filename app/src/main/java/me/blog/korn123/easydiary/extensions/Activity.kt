@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.extensions
 import android.app.Activity
 import android.app.Dialog
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.Configuration
@@ -531,6 +532,8 @@ fun Activity.openGridSettingDialog(rootView: ViewGroup, mode: Int, callback: (sp
     listView.setSelection(selectedIndex)
 }
 
+fun Activity.diaryMainSpanCount(): Int = if (isLandScape()) config.diaryMainSpanCountLandscape else config.diaryMainSpanCountPortrait
+
 fun EasyDiaryActivity.acquireGPSPermissions(activityResultLauncher: ActivityResultLauncher<Intent>, callback: () -> Unit) {
     handlePermission(PERMISSION_ACCESS_COARSE_LOCATION) { hasCoarseLocation ->
         if (hasCoarseLocation) {
@@ -694,6 +697,4 @@ fun EasyDiaryActivity.migrateData(binging: ActivityDiaryMainBinding) {
             }
         }
     }.start()
-
-
 }

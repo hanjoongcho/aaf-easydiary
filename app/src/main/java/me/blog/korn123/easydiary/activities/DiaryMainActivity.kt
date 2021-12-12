@@ -32,7 +32,6 @@ import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
 import me.blog.korn123.easydiary.databinding.PopupMenuMainBinding
 import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.extensions.*
-import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
@@ -121,12 +120,12 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             //            mDiaryMainItemAdapter?.notifyDataSetChanged()
         }
 
-        mGridLayoutManager =  if (isLandScape()) GridLayoutManager(this@DiaryMainActivity, config.diaryMainSpanCountLandscape) else GridLayoutManager(this@DiaryMainActivity, config.diaryMainSpanCountPortrait)
+        mGridLayoutManager =  GridLayoutManager(this@DiaryMainActivity, diaryMainSpanCount())
         mBinding.diaryListView.run {
             adapter = mDiaryMainItemAdapter
 //            layoutManager = LinearLayoutManager(this@DiaryMainActivity, LinearLayoutManager.VERTICAL, false)
             layoutManager = mGridLayoutManager
-            addItemDecoration(SettingsScheduleFragment.SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding)))
+            addItemDecoration(GridSpaceItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding), this@DiaryMainActivity))
             setPopUpTypeface(FontUtils.getCommonTypeface(this@DiaryMainActivity))
         }
 
@@ -298,6 +297,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 R.id.devConsole -> TransitionHelper.startActivityWithTransition(this, Intent(this, DevActivity::class.java))
                 R.id.gridLayout -> openGridSettingDialog(mBinding.mainHolder, 1) { spanCount ->
                     mGridLayoutManager.spanCount = spanCount
+                    mBinding.diaryListView.invalidateItemDecorations()
                     mDiaryMainItemAdapter?.notifyDataSetChanged()
                 }
             }

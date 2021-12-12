@@ -39,6 +39,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.graphics.ColorUtils
 import androidx.core.location.LocationManagerCompat
+import androidx.recyclerview.widget.GridLayoutManager
 import com.google.gson.GsonBuilder
 import com.simplemobiletools.commons.extensions.adjustAlpha
 import com.simplemobiletools.commons.extensions.formatMinutesToTimeString
@@ -739,4 +740,3 @@ fun Context.getLabelBackground(): GradientDrawable {
         setStroke(strokeWidth, strokeColor)
     }
 }
-
