@@ -298,7 +298,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 R.id.gridLayout -> openGridSettingDialog(mBinding.mainHolder, 1) { spanCount ->
                     mGridLayoutManager.spanCount = spanCount
                     mBinding.diaryListView.invalidateItemDecorations()
-                    mDiaryMainItemAdapter?.notifyDataSetChanged()
+//                    mDiaryMainItemAdapter?.notifyDataSetChanged()
                 }
             }
             Handler(Looper.getMainLooper()).post { mPopupWindow?.dismiss() }
