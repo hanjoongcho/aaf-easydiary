@@ -574,8 +574,8 @@
         v1.4.172.13 / 2021.11.20\n
         Fixed an error that caused abnormal termination when entering the main screen after cleaning the memory
     </string>
-    <string name="release_255">
-        v1.4.172.16 / 2021.12.12\n
+    <string name="release_256">
+        v1.4.172.17 / 2021.12.14\n
         Added grid setting option to main screen
     </string>
 
