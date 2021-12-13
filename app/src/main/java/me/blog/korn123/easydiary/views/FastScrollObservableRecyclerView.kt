@@ -1,10 +1,10 @@
 package me.blog.korn123.easydiary.views
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Parcel
 import android.os.Parcelable
 import android.util.AttributeSet
+import android.util.Log
 import android.util.SparseIntArray
 import android.view.MotionEvent
 import android.view.View
@@ -15,6 +15,7 @@ import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCal
 import com.github.ksoichiro.android.observablescrollview.ScrollState
 import com.github.ksoichiro.android.observablescrollview.Scrollable
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
+import me.blog.korn123.easydiary.helper.AAF_TEST
 
 class FastScrollObservableRecyclerView : FastScrollRecyclerView, Scrollable {
 
@@ -149,10 +150,12 @@ class FastScrollObservableRecyclerView : FastScrollRecyclerView, Scrollable {
         }
     }
 
+    var mDownPositionY = 0F
     override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
         if (mCallbacks != null) {
             when (ev.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
+                    mDownPositionY = ev.y
                     run {
                         mDragging = true
                         mFirstScroll = mDragging
@@ -170,6 +173,8 @@ class FastScrollObservableRecyclerView : FastScrollRecyclerView, Scrollable {
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                     mIntercepted = false
                     mDragging = false
+                    Log.i(AAF_TEST, "onTouchEvent offset: ${ev.y.minus(mDownPositionY)}")
+                    if (ev.y.minus(mDownPositionY) > 100) mScrollState = ScrollState.DOWN
                     mCallbacks!!.onUpOrCancelMotionEvent(mScrollState)
                 }
                 MotionEvent.ACTION_MOVE -> {
