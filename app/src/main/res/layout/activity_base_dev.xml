@@ -121,8 +121,8 @@
                                 android:layout_height="wrap_content"/>
                             <Button
                                 app:layout_flexGrow="1"
-                                android:id="@+id/button_reset_showcase_main"
-                                android:text="Reset Showcase (Main)"
+                                android:id="@+id/button_reset_showcase"
+                                android:text="Reset Showcase"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"/>
                         </com.google.android.flexbox.FlexboxLayout>

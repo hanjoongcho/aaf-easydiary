@@ -267,6 +267,7 @@ PostcardActivity : EasyDiaryActivity() {
                     mShowcaseView.setTarget(ViewTarget(R.id.save, this@PostcardActivity))
                     mShowcaseView.setContentTitle(getString(R.string.post_card_showcase_title_3))
                     mShowcaseView.setContentText(getString(R.string.post_card_showcase_message_3))
+                    mShowcaseView.setButtonText(getString(R.string.create_diary_showcase_button_2))
                 }
                 4 -> mShowcaseView.hide()
             }

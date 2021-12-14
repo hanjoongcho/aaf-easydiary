@@ -104,9 +104,12 @@ open class BaseDevActivity : EasyDiaryActivity() {
     private fun setupTestFunction() {
         mBinding.run {
             buttonReviewFlow.setOnClickListener { startReviewFlow() }
-            buttonResetShowcaseMain.setOnClickListener {
+            buttonResetShowcase.setOnClickListener {
                 getSharedPreferences("showcase_internal", MODE_PRIVATE).run {
                     edit().putBoolean("hasShot$SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER", false).apply()
+                    edit().putBoolean("hasShot$SHOWCASE_SINGLE_SHOT_CREATE_DIARY_NUMBER", false).apply()
+                    edit().putBoolean("hasShot$SHOWCASE_SINGLE_SHOT_READ_DIARY_DETAIL_NUMBER", false).apply()
+                    edit().putBoolean("hasShot$SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER", false).apply()
                 }
             }
         }

@@ -30,7 +30,8 @@ import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.FileList
-import io.github.aafactory.commons.extensions.setScreenOrientationSensor
+import io.github.aafactory.commons.extensions.clearHoldOrientation
+import io.github.aafactory.commons.extensions.holdCurrentOrientation
 import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
@@ -165,7 +166,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun backupDiaryRealm() {
-        requireActivity().setScreenOrientationSensor(false)
+        requireActivity().holdCurrentOrientation()
         progressContainer.visibility = View.VISIBLE
         val realmPath = EasyDiaryDbHelper.getRealmPath()
         initGoogleSignAccount(requireActivity(), mRequestGoogleSignInLauncher) { account ->
@@ -180,11 +181,11 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                             progressContainer.visibility = View. GONE
                             requireActivity().makeSnackBar(getString(R.string.backup_completed_message))
                             requireActivity().config.diaryBackupGoogle = System.currentTimeMillis()
-                            requireActivity().setScreenOrientationSensor(true)
+                            requireActivity().clearHoldOrientation()
                         }.addOnFailureListener { e ->
                             requireActivity().makeSnackBar(e.message ?: "Please try again later.")
                             progressContainer.visibility = View.GONE
-                            requireActivity().setScreenOrientationSensor(true)
+                            requireActivity().clearHoldOrientation()
                         }
                     }
                 }
@@ -193,7 +194,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun recoverDiaryRealm() {
-        requireActivity().setScreenOrientationSensor(false)
+        requireActivity().holdCurrentOrientation()
         progressContainer.visibility = View.VISIBLE
         openRealmFilePickerDialog()
     }
@@ -212,7 +213,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                                 realmFiles.add(itemInfo)
                             }
                             val builder = AlertDialog.Builder(requireActivity())
-                            builder.setNegativeButton(getString(android.R.string.cancel)) { _, _ -> requireActivity().setScreenOrientationSensor(true) }
+                            builder.setNegativeButton(getString(android.R.string.cancel)) { _, _ -> requireActivity().clearHoldOrientation() }
 //                        builder.setMessage(getString(R.string.open_realm_file_message))
                             val inflater = requireActivity().getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
                             val fontView = inflater.inflate(R.layout.dialog_realm_files, null)
@@ -249,7 +250,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun recoverDiaryPhoto() {
-        requireActivity().setScreenOrientationSensor(false)
+        requireActivity().holdCurrentOrientation()
         progressContainer.visibility = View.VISIBLE
         initGoogleSignAccount(requireActivity(), mRequestGoogleSignInLauncher) { account ->
             requestDrivePermissions(account) {
@@ -260,7 +261,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                             val recoverPhotoService = Intent(this, RecoverPhotoService::class.java)
                             startService(recoverPhotoService)
                             finish()
-                        }, DialogInterface.OnClickListener { _, _ -> setScreenOrientationSensor(true) })
+                        }, DialogInterface.OnClickListener { _, _ -> clearHoldOrientation() })
                     }
                 }
             }
@@ -268,7 +269,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun backupDiaryPhoto() {
-        requireActivity().setScreenOrientationSensor(false)
+        requireActivity().holdCurrentOrientation()
         progressContainer.visibility = View.VISIBLE
         initGoogleSignAccount(requireActivity(), mRequestGoogleSignInLauncher) { account ->
             requestDrivePermissions(account) {
@@ -281,7 +282,7 @@ class SettingsGMSBackupFragment : androidx.fragment.app.Fragment() {
                                 backupPhotoService.putExtra(DriveServiceHelper.WORKING_FOLDER_ID, photoFolderId)
                                 ContextCompat.startForegroundService(context, backupPhotoService)
                                 finish()
-                            }, DialogInterface.OnClickListener { _, _ -> setScreenOrientationSensor(true) })
+                            }, DialogInterface.OnClickListener { _, _ -> clearHoldOrientation() })
                         }
                     }
                 }

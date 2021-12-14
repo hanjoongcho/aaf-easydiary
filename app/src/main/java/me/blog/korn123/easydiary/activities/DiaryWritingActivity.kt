@@ -106,12 +106,6 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
                     mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_3))
                     mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_3))
                 }
-//                4 -> {
-//                    mShowcaseView.setButtonPosition(centerParams)
-//                    mShowcaseView.setShowcase(ViewTarget(mBinding.partialEditContents.partialEditPhotoContainer.photoView), true)
-//                    mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_4))
-//                    mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_4))
-//                }
                 4 -> {
                     mShowcaseView.setButtonPosition(centerParams)
                     mShowcaseView.setShowcase(ViewTarget(R.id.datePicker, this), true)
@@ -126,7 +120,7 @@ class DiaryWritingActivity : BaseDiaryEditingActivity() {
                 }
                 6 -> {
                     mShowcaseView.setButtonPosition(centerParams)
-                    mShowcaseView.setShowcase(ViewTarget(R.id.secondsPicker, this), true)
+                    mShowcaseView.setShowcase(ViewTarget(R.id.saveContents, this), true)
                     mShowcaseView.setContentTitle(getString(R.string.create_diary_showcase_title_9))
                     mShowcaseView.setContentText(getString(R.string.create_diary_showcase_message_9))
                     mShowcaseView.setButtonText(getString(R.string.create_diary_showcase_button_2))

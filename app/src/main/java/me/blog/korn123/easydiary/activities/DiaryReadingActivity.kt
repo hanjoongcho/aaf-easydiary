@@ -431,13 +431,8 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                         setTarget(ViewTarget(R.id.speechOutButton, this@DiaryReadingActivity))
                         setContentTitle(getString(R.string.read_diary_detail_showcase_title_3))
                         setContentText(getString(R.string.read_diary_detail_showcase_message_3))
+                        setButtonText(getString(R.string.create_diary_showcase_button_2))
                     }
-//                    4 -> {
-//                        setButtonPosition(centerParams)
-//                        setTarget(ViewTarget(R.id.postCard, this@DiaryReadActivity))
-//                        setContentTitle(getString(R.string.read_diary_detail_showcase_title_4))
-//                        setContentText(getString(R.string.read_diary_detail_showcase_message_4))
-//                    }
                     4 -> hide()
                 }
             }
