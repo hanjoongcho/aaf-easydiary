@@ -380,6 +380,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                         setTarget(ViewTarget(R.id.microphone, this@DiaryMainActivity))
                         setContentTitle(getString(R.string.read_diary_showcase_title_3))
                         setContentText(getString(R.string.read_diary_showcase_message_3))
+                        setButtonText(getString(R.string.create_diary_showcase_button_2))
                     }
                     5 -> hide()
                 }
