@@ -543,40 +543,40 @@
     </string>
     <string name="release_241">
         v1.4.172.2 / 2021.08.24\n
-        User Experience (UX) Optimization
+        ᱭᱩᱡᱚᱨ ᱮᱠᱥᱯᱤᱨᱤᱮᱱᱥ (UX) ᱚᱯᱴᱤᱢᱟᱭᱡᱮᱥᱚᱱ
     </string>
     <string name="release_242">
         v1.4.172.3 / 2021.08.28\n
-        Improved custom app theme and color settings\n
-        Fixed Showcase View error related to toolbar menu change
+        ᱠᱚᱥᱴᱚᱢ ᱮᱯ ᱛᱷᱤᱢ ᱟᱨ ᱨᱚᱝ ᱥᱟᱡᱟᱣ ᱠᱚ ᱥᱩᱫᱷᱨᱟᱹᱣ ᱮᱱᱟ\n
+        ᱦᱚᱛᱤᱭᱟᱹᱨ ᱢᱮᱱᱩ ᱵᱚᱫᱚᱞ ᱡᱩᱲᱟᱹᱣ ᱥᱚᱠᱮᱥ ᱧᱮᱞ ᱦᱩᱰᱟᱹᱜ ᱴᱷᱤᱠ ᱮᱱᱟ
     </string>
     <string name="release_243">
         v1.4.172.4 / 2021.08.29\n
-        User Experience (UX) Optimization
+        ᱭᱩᱡᱚᱨ ᱮᱠᱥᱯᱤᱨᱤᱮᱱᱥ (UX) ᱚᱯᱴᱤᱢᱟᱭᱡᱮᱥᱚᱱ
     </string>
     <string name="release_244">
         v1.4.172.5 / 2021.09.04\n
-        Multilingual translation updated
+        ᱟᱭᱢᱟ ᱯᱟᱹᱨᱥᱤ ᱛᱚᱨᱡᱚᱢᱟ ᱦᱟᱹᱞᱤᱭᱟᱹᱠ ᱮᱱᱟ
     </string>
     <string name="release_246">
         v1.4.172.7 / 2021.09.17\n
-        Change the initial font setting policy
+        ᱯᱩᱭᱞᱩ ᱪᱤᱠᱤ ᱥᱟᱡᱟᱣ ᱱᱤᱛᱤ ᱵᱚᱫᱚᱞ
     </string>
     <string name="release_250">
         v1.4.172.11 / 2021.10.27\n
-        User Experience (UX) Optimization
+        ᱭᱩᱡᱚᱨ ᱮᱠᱥᱯᱤᱨᱤᱮᱱᱥ (UX) ᱚᱯᱴᱤᱢᱟᱭᱡᱮᱥᱚᱱ
     </string>
     <string name="release_251">
         v1.4.172.12 / 2021.11.13\n
-        Improved diary list screen fast scrolling
+        ᱥᱠᱨᱤᱱ ᱨᱮ ᱰᱟᱭᱨᱤ ᱞᱤᱥᱴ ᱞᱚᱜᱚᱱ ᱠᱷᱚᱥᱨᱟᱣ ᱠᱚ ᱥᱩᱫᱷᱨᱟᱹᱣ ᱮᱱᱟ
     </string>
     <string name="release_252">
         v1.4.172.13 / 2021.11.20\n
-        Fixed an error that caused abnormal termination when entering the main screen after cleaning the memory
+        ᱢᱮᱢᱚᱨᱭ ᱠᱚ ᱥᱟᱯᱷᱟ ᱠᱟᱛᱮ ᱢᱩᱞ ᱥᱠᱨᱤᱱ ᱨᱮ ᱵᱚᱞᱚ ᱡᱷᱚᱜ ᱵᱟᱝ ᱴᱷᱤᱠ ᱛᱮ ᱵᱚᱸᱫᱚᱜ ᱦᱩᱰᱟᱹᱜ ᱠᱚ ᱴᱷᱤᱠ ᱮᱱᱟ
     </string>
     <string name="release_257">
         v1.4.172.18 / 2021.12.15\n
-        Added grid setting option to main screen
+        ᱢᱩᱞ ᱥᱠᱨᱤᱱ ᱨᱮ ᱜᱽᱨᱤᱰ ᱚᱯᱥᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -817,10 +817,10 @@
     <string name="enable_review_flow_summary">ᱟᱢ ᱡᱩᱫᱤ Easy Diary ᱢᱤᱫ ᱚᱠᱛᱚ ᱞᱟᱹᱜᱤᱫ ᱵᱮᱵᱷᱟᱨ ᱥᱟᱱᱟᱢ ᱠᱟᱱᱟ, Google Play ᱨᱤᱵᱷᱤᱣ ᱨᱮᱡᱤᱥᱴᱨᱮᱥᱚᱱ ᱰᱟᱭᱞᱚᱜᱽ ᱮᱠᱴᱤᱵᱷᱚᱜᱼᱟ ᱾ ᱟᱢ ᱡᱩᱫᱤ ᱨᱤᱵᱷᱤᱣ ᱨᱮᱡᱤᱥᱴᱨᱮᱥᱚᱱ ᱯᱷᱟᱹᱝᱠᱥᱚᱱ ᱵᱟᱝ ᱵᱮᱵᱷᱟᱨ ᱥᱮᱱᱟᱢ ᱠᱟᱱᱟ ᱟᱨ ᱵᱟᱝ ᱡᱩᱫᱤ ᱨᱤᱵᱷᱤᱣ ᱨᱮᱡᱤᱥᱴᱨᱮᱥᱚᱱ ᱛᱟᱭᱚᱢ Google Play ᱰᱟᱭᱞᱚᱜᱽ ᱠᱷᱩᱞᱟᱹᱜ ᱠᱟᱱᱟ, ᱰᱟᱭᱞᱚᱜᱽ ᱟᱞᱚ ᱠᱷᱩᱞᱟᱹ ᱪᱷᱚ ᱞᱟᱹᱜᱤᱫ ᱟᱢ ᱵᱚᱸᱫ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱾</string>
     <string name="postcard_grid_option_title">ᱜᱽᱨᱤᱰ ᱚᱯᱥᱚᱱ</string>
     <string name="postcard_grid_option_column_number">%d ᱠᱚᱞᱚᱢ ᱯᱟᱹᱨ ᱨᱚ</string>
-    <string name="encrypt_diary">Encrypt Diary</string>
-    <string name="decrypt_diary">Decrypt Diary</string>
-    <string name="postcard_making">Postcard Making</string>
-    <string name="user_custom_setting">User Custom Setting</string>
-    <string name="automation_settings">Automatic setting using themes</string>
-    <string name="place_finger_description">Please place your finger on the fingerprint sensor</string>
+    <string name="encrypt_diary">ᱰᱟᱭᱨᱤ ᱮᱱᱠᱨᱤᱯᱴ ᱢᱮ</string>
+    <string name="decrypt_diary">ᱰᱟᱭᱨᱤ ᱰᱤᱠᱨᱤᱯᱴ ᱢᱮ</string>
+    <string name="postcard_making">ᱯᱚᱥᱴᱠᱟᱰ ᱛᱮᱭᱟᱨ</string>
+    <string name="user_custom_setting">ᱵᱮᱵᱷᱟᱨᱤᱭᱟ ᱱᱤᱡᱚᱨ ᱥᱟᱡᱟᱣ</string>
+    <string name="automation_settings">ᱛᱷᱤᱢᱥ ᱨᱮ ᱟᱡ ᱛᱮ ᱥᱟᱡᱟᱣ</string>
+    <string name="place_finger_description">ᱛᱤᱠᱟᱹᱴᱩᱵᱪᱷᱟᱯᱟ ᱥᱮᱱᱥᱚᱨ ᱨᱮ ᱟᱢᱟᱜ ᱠᱟᱹᱴᱩᱵ ᱫᱚᱦᱚᱭ ᱛᱟᱢ</string>
 </resources>
