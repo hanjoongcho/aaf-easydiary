@@ -166,7 +166,7 @@
     </string>
     <string name="release_105">
         v1.4.42 / 2018.06.27\n
-		उपयोगकर्ता अनुभव (UX) अनुकूलन
+		उपयोगकर्ता अनुभव (यूएक्स) अनुकूलन
     </string>
     <string name="release_110">
         v1.4.47 / 2018.08.29\n
@@ -446,7 +446,7 @@
     </string>
     <string name="release_207">
         v1.4.141 / 2020.08.03\n
-		उपयोगकर्ता अनुभव (UX) अनुकूलन\n
+		उपयोगकर्ता अनुभव (यूएक्स) अनुकूलन\n
 		फ्रेंच अनुवाद अद्यतन
     </string>
     <string name="release_209">
@@ -539,44 +539,44 @@
     </string>
     <string name="release_238">
         v1.4.171.0 / 2021.07.21\n
-		उपयोगकर्ता अनुभव (UX)अनुकूलन
+		उपयोगकर्ता अनुभव (यूएक्स) अनुकूलन
     </string>
     <string name="release_241">
         v1.4.172.2 / 2021.08.24\n
-        User Experience (UX) Optimization
+        उपयोगकर्ता अनुभव (यूएक्स) अनुकूलन
     </string>
     <string name="release_242">
         v1.4.172.3 / 2021.08.28\n
-        Improved custom app theme and color settings\n
-        Fixed Showcase View error related to toolbar menu change
+        बेहतर कस्टम ऐप थीम और रंग सेटिंग\n
+        फिक्स्ड शोकेस टूलबार मेनू परिवर्तन से संबंधित त्रुटि देखें
     </string>
     <string name="release_243">
         v1.4.172.4 / 2021.08.29\n
-        User Experience (UX) Optimization
+        उपयोगकर्ता अनुभव (यूएक्स) अनुकूलन
     </string>
     <string name="release_244">
         v1.4.172.5 / 2021.09.04\n
-        Multilingual translation updated
+        बहुभाषी अनुवाद अपडेट किया गया
     </string>
     <string name="release_246">
         v1.4.172.7 / 2021.09.17\n
-        Change the initial font setting policy
+        प्रारंभिक फ़ॉन्ट सेटिंग नीति बदलें
     </string>
     <string name="release_250">
         v1.4.172.11 / 2021.10.27\n
-        User Experience (UX) Optimization
+        उपयोगकर्ता अनुभव (यूएक्स) अनुकूलन
     </string>
     <string name="release_251">
         v1.4.172.12 / 2021.11.13\n
-        Improved diary list screen fast scrolling
+        बेहतर डायरी सूची स्क्रीन तेजी से स्क्रॉलिंग
     </string>
     <string name="release_252">
         v1.4.172.13 / 2021.11.20\n
-        Fixed an error that caused abnormal termination when entering the main screen after cleaning the memory
+        स्मृति को साफ करने के बाद मुख्य स्क्रीन में प्रवेश करते समय असामान्य समाप्ति का कारण बनने वाली त्रुटि को ठीक किया गया
     </string>
     <string name="release_257">
         v1.4.172.18 / 2021.12.15\n
-        Added grid setting option to main screen
+        मुख्य स्क्रीन में जोड़ा गया ग्रिड सेटिंग विकल्प
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -817,10 +817,10 @@
     <string name="enable_review_flow_summary">यदि आप किसी विशिष्ट अवधि के लिए आसान डायरी का उपयोग करते हैं, तो Google Play समीक्षा पंजीकरण संवाद सक्रिय हो जाएगा। यदि आप समीक्षा पंजीकरण फ़ंक्शन का उपयोग नहीं करना चाहते हैं या यदि Google Play संवाद समीक्षा पंजीकरण के बाद खुलता है, तो आप संवाद को खोलने से रोकने के लिए इस विकल्प को अक्षम कर सकते हैं।</string>
     <string name="postcard_grid_option_title">ग्रिड विकल्प</string>
     <string name="postcard_grid_option_column_number">%d कॉलम प्रति पंक्ति</string>
-    <string name="encrypt_diary">Encrypt Diary</string>
-    <string name="decrypt_diary">Decrypt Diary</string>
-    <string name="postcard_making">Postcard Making</string>
-    <string name="user_custom_setting">User Custom Setting</string>
-    <string name="automation_settings">Automatic setting using themes</string>
-    <string name="place_finger_description">Please place your finger on the fingerprint sensor</string>
+    <string name="encrypt_diary">एन्क्रिप्ट डायरी</string>
+    <string name="decrypt_diary">डिक्रिप्ट डायरी</string>
+    <string name="postcard_making">पोस्टकार्ड बनाना</string>
+    <string name="user_custom_setting">उपयोगकर्ता कस्टम सेटिंग</string>
+    <string name="automation_settings">थीम का उपयोग करके स्वचालित सेटिंग</string>
+    <string name="place_finger_description">कृपया अपनी अंगुली फ़िंगरप्रिंट सेंसर पर रखें</string>
 </resources>
