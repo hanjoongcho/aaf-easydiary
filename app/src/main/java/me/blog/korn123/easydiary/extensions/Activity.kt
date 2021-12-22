@@ -539,6 +539,8 @@ fun Activity.openGridSettingDialog(rootView: ViewGroup, mode: Int, callback: (sp
 
 fun Activity.diaryMainSpanCount(): Int = if (isLandScape()) config.diaryMainSpanCountLandscape else config.diaryMainSpanCountPortrait
 
+fun Activity.postcardViewerSpanCount(): Int = if (isLandScape()) config.postcardSpanCountLandscape else config.postcardSpanCountPortrait
+
 fun EasyDiaryActivity.acquireGPSPermissions(activityResultLauncher: ActivityResultLauncher<Intent>, callback: () -> Unit) {
     handlePermission(PERMISSION_ACCESS_COARSE_LOCATION) { hasCoarseLocation ->
         if (hasCoarseLocation) {

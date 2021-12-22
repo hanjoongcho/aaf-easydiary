@@ -125,7 +125,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             adapter = mDiaryMainItemAdapter
 //            layoutManager = LinearLayoutManager(this@DiaryMainActivity, LinearLayoutManager.VERTICAL, false)
             layoutManager = mGridLayoutManager
-            addItemDecoration(GridSpaceDiaryMainItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding), this@DiaryMainActivity))
+            addItemDecoration(GridItemDecorationDiaryMain(resources.getDimensionPixelSize(R.dimen.card_layout_padding), this@DiaryMainActivity))
             setPopUpTypeface(FontUtils.getCommonTypeface(this@DiaryMainActivity))
         }
 

@@ -2,29 +2,28 @@ package me.blog.korn123.easydiary.activities
 
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Rect
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
-import android.widget.ListView
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import io.github.aafactory.commons.utils.ColorUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.adapters.OptionItemAdapter
 import me.blog.korn123.easydiary.adapters.PostcardAdapter
 import me.blog.korn123.easydiary.databinding.ActivityPostcardViewerBinding
-import me.blog.korn123.easydiary.extensions.*
-import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.isLandScape
+import me.blog.korn123.easydiary.extensions.openGridSettingDialog
+import me.blog.korn123.easydiary.extensions.showAlertDialog
+import me.blog.korn123.easydiary.helper.DIARY_POSTCARD_DIRECTORY
+import me.blog.korn123.easydiary.helper.GridItemDecorationPostcardViewer
+import me.blog.korn123.easydiary.helper.POSTCARD_SEQUENCE
+import me.blog.korn123.easydiary.helper.TransitionHelper
 import org.apache.commons.io.FileUtils
 import java.io.File
-import java.util.*
 
 
 /**
@@ -54,7 +53,7 @@ class PostcardViewerActivity : EasyDiaryActivity() {
 //            justifyContent = JustifyContent.FLEX_START 
 //        }
         
-        val spacesItemDecoration = SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding))
+        val spacesItemDecoration = GridItemDecorationPostcardViewer(resources.getDimensionPixelSize(R.dimen.card_layout_padding), this)
         mGridLayoutManager = GridLayoutManager(this, if (isLandScape()) config.postcardSpanCountLandscape else config.postcardSpanCountPortrait)
 
         EasyDiaryUtils.initWorkingDirectory(this@PostcardViewerActivity)
@@ -135,23 +134,6 @@ class PostcardViewerActivity : EasyDiaryActivity() {
             mBinding.infoMessage.visibility = View.VISIBLE
             mBinding.contentPostCardViewer.root.visibility = View.GONE
             mBinding.appBar.setExpanded(false)
-        }
-    }
-    
-    internal class SpacesItemDecoration(private val space: Int) : androidx.recyclerview.widget.RecyclerView.ItemDecoration() {
-        override fun getItemOffsets(outRect: Rect, view: View, parent: androidx.recyclerview.widget.RecyclerView, state: androidx.recyclerview.widget.RecyclerView.State) {
-            val position = parent.getChildAdapterPosition(view)
-            when (position % 2) {
-                0 -> {
-                    outRect.right = space
-                }
-                else -> outRect.right = 0
-            }
-            
-            when (position < 2) {
-                true -> outRect.top = 0 
-                false -> outRect.top = space 
-            }
         }
     }
 }
