@@ -3,7 +3,6 @@ package me.blog.korn123.easydiary.extensions
 import android.app.Activity
 import android.app.Dialog
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.Configuration
@@ -464,24 +463,30 @@ fun Activity.openGridSettingDialog(rootView: ViewGroup, mode: Int, callback: (sp
     val containerView = inflater.inflate(R.layout.dialog_option_item, rootView, false)
     val listView = containerView.findViewById<ListView>(R.id.listView)
 
-    var selectedIndex = 0
-    val listMaxLines = java.util.ArrayList<Map<String, String>>()
-    for (i in 1..10) {
-        listMaxLines.add(mapOf("optionTitle" to getString(R.string.postcard_grid_option_column_number, i), "optionValue" to "$i"))
+    val maxSpanCount = when {
+        !isLandScape() && mode == 0 -> 5
+        !isLandScape() && mode == 1 -> 3
+        isLandScape() && mode == 0 -> 10
+        else -> 5
+    }
+    val optionItems = mutableListOf<Map<String, String>>()
+    for (i in 1..maxSpanCount) {
+        optionItems.add(mapOf("optionTitle" to getString(R.string.postcard_grid_option_column_number, i), "optionValue" to "$i"))
     }
 
-    var postcardSpanCount = 0
-    listMaxLines.mapIndexed { index, map ->
+    var spanCount = 0
+    var selectedIndex = 0
+    optionItems.mapIndexed { index, map ->
         val size = map["optionValue"] ?: "0"
         when (isLandScape()) {
              true -> {
                 when {
                     mode == 0 && config.postcardSpanCountLandscape == size.toInt() -> {
-                        postcardSpanCount = config.postcardSpanCountLandscape
+                        spanCount = config.postcardSpanCountLandscape
                         selectedIndex = index
                     }
                     mode == 1 && config.diaryMainSpanCountLandscape == size.toInt() -> {
-                        postcardSpanCount = config.diaryMainSpanCountLandscape
+                        spanCount = config.diaryMainSpanCountLandscape
                         selectedIndex = index
                     }
                 }
@@ -490,11 +495,11 @@ fun Activity.openGridSettingDialog(rootView: ViewGroup, mode: Int, callback: (sp
             false -> {
                 when {
                     mode == 0 && config.postcardSpanCountPortrait == size.toInt() -> {
-                        postcardSpanCount = config.postcardSpanCountPortrait
+                        spanCount = config.postcardSpanCountPortrait
                         selectedIndex = index
                     }
                     mode == 1 && config.diaryMainSpanCountPortrait == size.toInt() -> {
-                        postcardSpanCount = config.diaryMainSpanCountPortrait
+                        spanCount = config.diaryMainSpanCountPortrait
                         selectedIndex = index
                     }
                 }
@@ -502,7 +507,7 @@ fun Activity.openGridSettingDialog(rootView: ViewGroup, mode: Int, callback: (sp
         }
     }
 
-    val arrayAdapter = OptionItemAdapter(this, R.layout.item_check_label, listMaxLines, postcardSpanCount.toFloat())
+    val arrayAdapter = OptionItemAdapter(this, R.layout.item_check_label, optionItems, spanCount.toFloat())
     listView.adapter = arrayAdapter
     listView.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
         @Suppress("UNCHECKED_CAST") val optionInfo = parent.adapter.getItem(position) as HashMap<String, String>
