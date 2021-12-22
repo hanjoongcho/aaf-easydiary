@@ -54,10 +54,10 @@ class PostcardAdapter(
     }
 
     class PostcardViewHolder(
-            val activity: Activity, private val ItemPostCardBinding: ItemPostCardBinding, val adapter: PostcardAdapter
-    ) : RecyclerView.ViewHolder(ItemPostCardBinding.root), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+            val activity: Activity, private val itemPostCardBinding: ItemPostCardBinding, val adapter: PostcardAdapter
+    ) : RecyclerView.ViewHolder(itemPostCardBinding.root), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
         init {
-            ItemPostCardBinding.run {
+            itemPostCardBinding.run {
                 activity.updateAppViews(root)
                 FontUtils.setFontsTypeface(activity, activity.assets, null, imageContainer)
                 root.setOnClickListener(this@PostcardViewHolder)
@@ -66,9 +66,9 @@ class PostcardAdapter(
         }
 
         fun bindTo(postCard: PostCard) {
-            val timeStampView = ItemPostCardBinding.createdDate
+            val timeStampView = itemPostCardBinding.createdDate
             timeStampView.setTextSize(TypedValue.COMPLEX_UNIT_PX, CommonUtils.dpToPixelFloatValue(activity, 10F))
-            ItemPostCardBinding.checkItem.isChecked = postCard.isItemChecked
+            itemPostCardBinding.checkItem.isChecked = postCard.isItemChecked
             try {
                 val format = SimpleDateFormat(POSTCARD_DATE_FORMAT, Locale.getDefault())
                 timeStampView.text = DateUtils.getFullPatternDate(format.parse(postCard.file.name.split("_")[0]).time)
@@ -79,13 +79,13 @@ class PostcardAdapter(
             activity.run {
                 val point =  CommonUtils.getDefaultDisplay(this)
                 val spanCount = if (activity.isLandScape()) config.postcardSpanCountLandscape else config.postcardSpanCountPortrait
-                val targetX = floor((point.x - CommonUtils.dpToPixelFloatValue(ItemPostCardBinding.imageview.context, 9F)) / spanCount)
-                ItemPostCardBinding.imageContainer.layoutParams.height = targetX.toInt()
-                ItemPostCardBinding.imageview.layoutParams.height = targetX.toInt()
-                Glide.with(ItemPostCardBinding.imageview.context)
+                val targetX = floor((point.x - CommonUtils.dpToPixelFloatValue(itemPostCardBinding.imageview.context, 9F)) / spanCount)
+                itemPostCardBinding.imageContainer.layoutParams.height = targetX.toInt()
+                itemPostCardBinding.imageview.layoutParams.height = targetX.toInt()
+                Glide.with(itemPostCardBinding.imageview.context)
                         .load(postCard.file)
 //                .apply(RequestOptions().placeholder(R.drawable.ic_aaf_photos).fitCenter())
-                        .into(ItemPostCardBinding.imageview)
+                        .into(itemPostCardBinding.imageview)
             }
         }
 
