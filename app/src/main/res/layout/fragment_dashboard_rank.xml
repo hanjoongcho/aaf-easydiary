@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/card_ashboard">
+    style="@style/card_dashboard">
     <LinearLayout
         tools:background="@color/divider_grey"
         android:visibility="visible"
@@ -65,7 +65,7 @@
             android:visibility="gone"
             tools:visibility="visible">
             <me.blog.korn123.easydiary.views.FixedCardView
-                style="@style/card_ashboard"
+                style="@style/card_dashboard"
                 android:id="@+id/rank1"
                 android:layout_width="0dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -125,7 +125,7 @@
             </me.blog.korn123.easydiary.views.FixedCardView>
 
             <me.blog.korn123.easydiary.views.FixedCardView
-                style="@style/card_ashboard"
+                style="@style/card_dashboard"
                 android:id="@+id/rank2"
                 android:layout_width="0dp"
                 app:layout_constraintStart_toEndOf="@+id/rank1"
@@ -185,7 +185,7 @@
             </me.blog.korn123.easydiary.views.FixedCardView>
 
             <me.blog.korn123.easydiary.views.FixedCardView
-                style="@style/card_ashboard"
+                style="@style/card_dashboard"
                 android:id="@+id/rank3"
                 android:layout_width="0dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -246,7 +246,7 @@
             </me.blog.korn123.easydiary.views.FixedCardView>
 
             <me.blog.korn123.easydiary.views.FixedCardView
-                style="@style/card_ashboard"
+                style="@style/card_dashboard"
                 android:id="@+id/rank4"
                 android:layout_width="0dp"
                 app:layout_constraintStart_toEndOf="@+id/rank3"

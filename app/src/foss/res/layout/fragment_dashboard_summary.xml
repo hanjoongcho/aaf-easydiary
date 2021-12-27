@@ -7,7 +7,7 @@
     android:layout_height="wrap_content">
     <me.blog.korn123.easydiary.views.FixedCardView
         android:visibility="gone"
-        style="@style/card_ashboard">
+        style="@style/card_dashboard">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -29,7 +29,7 @@
             </LinearLayout>
 
             <me.blog.korn123.easydiary.views.FixedCardView
-                style="@style/card_ashboard">
+                style="@style/card_dashboard">
                 <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="match_parent"
@@ -47,7 +47,7 @@
                 </LinearLayout>
             </me.blog.korn123.easydiary.views.FixedCardView>
             <me.blog.korn123.easydiary.views.FixedCardView
-                style="@style/card_ashboard">
+                style="@style/card_dashboard">
                 <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="match_parent"
@@ -68,7 +68,7 @@
     </me.blog.korn123.easydiary.views.FixedCardView>
 
     <me.blog.korn123.easydiary.views.FixedCardView
-        style="@style/card_ashboard">
+        style="@style/card_dashboard">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -87,7 +87,7 @@
                     android:layout_height="wrap_content"/>
             </LinearLayout>
             <me.blog.korn123.easydiary.views.FixedCardView
-                style="@style/card_ashboard">
+                style="@style/card_dashboard">
                 <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="match_parent"

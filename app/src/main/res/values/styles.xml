@@ -171,7 +171,7 @@
         <item name="layout_constraintTop_toTopOf">parent</item>
         <item name="layout_constraintLeft_toLeftOf">parent</item>
     </style>
-    <style name="card_ashboard">
+    <style name="card_dashboard">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="contentPadding">@dimen/dashboard_card_padding</item>
