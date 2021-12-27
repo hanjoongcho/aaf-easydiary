@@ -96,6 +96,7 @@
                 app:fastScrollPopupBackgroundSize="45sp"
                 app:fastScrollPopupTextVerticalAlignmentMode="font_metrics"
                 app:fastScrollThumbColor="?attr/colorAccent"
+                app:fastScrollThumbInactiveColor="?attr/colorAccent"
                 app:fastScrollThumbEnabled="true"
                 app:fastScrollTrackColor="#00000000"
                 />
