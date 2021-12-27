@@ -71,6 +71,13 @@ class CustomizationActivity : BaseSimpleActivity() {
                 setCurrentTextColor(Color.parseColor(DARK_THEME_TEXT_COLOR))
                 colorChanged()
             }
+            autoSetupGreenTheme.setOnClickListener {
+                setCurrentPrimaryColor(Color.parseColor(GREEN_THEME_PRIMARY_COLOR))
+                setCurrentBackgroundColor(Color.parseColor(GREEN_THEME_BACKGROUND_COLOR))
+                setCurrentScreenBackgroundColor(Color.parseColor(GREEN_THEME_SCREEN_BACKGROUND_COLOR))
+                setCurrentTextColor(Color.parseColor(GREEN_THEME_TEXT_COLOR))
+                colorChanged()
+            }
         }
     }
 

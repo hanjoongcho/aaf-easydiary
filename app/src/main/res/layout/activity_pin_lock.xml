@@ -69,7 +69,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
-            style="@style/layout_lock_number_container">
+            style="@style/linear_lock_number_container">
             <TextView
                 style="@style/text_view_lock_number_button"
                 android:id="@+id/num1"
@@ -86,7 +86,7 @@
         </LinearLayout>
 
         <LinearLayout
-            style="@style/layout_lock_number_container">
+            style="@style/linear_lock_number_container">
 
             <TextView
                 android:id="@+id/num4"
@@ -107,7 +107,7 @@
         </LinearLayout>
 
         <LinearLayout
-            style="@style/layout_lock_number_container">
+            style="@style/linear_lock_number_container">
             <TextView
                 style="@style/text_view_lock_number_button"
                 android:id="@+id/num7"
@@ -124,7 +124,7 @@
         </LinearLayout>
 
         <LinearLayout
-            style="@style/layout_lock_number_container">
+            style="@style/linear_lock_number_container">
             <LinearLayout
                 android:padding="5dp"
                 android:id="@+id/changeFingerprintLock"

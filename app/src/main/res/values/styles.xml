@@ -49,6 +49,22 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:foreground">?attr/selectableItemBackground</item>
     </style>
+    <style name="linear_lock_number_container">
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="relative_theme_container">
+        <item name="layout_goneMarginTop">@dimen/medium_margin</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">@dimen/activity_margin</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
 
     <!--App View Style-->
     <style name="text_custom_theme_item">
@@ -62,6 +78,16 @@
         <item name="android:paddingRight">@dimen/medium_margin</item>
     </style>
     <style name="image_custom_theme_icon">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_marginEnd">@dimen/medium_margin</item>
+        <item name="android:layout_marginRight">@dimen/medium_margin</item>
+        <item name="android:clickable">false</item>
+        <item name="android:src">@drawable/ic_update</item>
+    </style>
+    <style name="image_custom_color_icon">
         <item name="android:layout_width">@dimen/color_sample_size</item>
         <item name="android:layout_height">@dimen/color_sample_size</item>
         <item name="android:layout_alignParentEnd">true</item>
@@ -89,15 +115,6 @@
         <item name="android:layout_weight">1</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">50dp</item>
-    </style>
-    <style name="layout_lock_number_container">
-        <item name="android:paddingLeft">10dp</item>
-        <item name="android:paddingRight">10dp</item>
-        <item name="android:paddingBottom">5dp</item>
-        <item name="android:gravity">center</item>
-        <item name="android:orientation">horizontal</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
     </style>
     <style name="text_view_lock_number_button">
         <item name="android:textColor">@color/pinLockText</item>
