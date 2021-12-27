@@ -26,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
-            style="@style/image_view_custom_toolbar_icon"
+            style="@style/image_custom_toolbar_icon"
             android:id="@+id/togglePhoto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

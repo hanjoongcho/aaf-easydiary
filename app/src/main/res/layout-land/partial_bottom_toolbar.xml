@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <ImageView
-                style="@style/image_view_custom_toolbar_icon"
+                style="@style/image_custom_toolbar_icon"
                 android:id="@+id/togglePhoto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <ImageView
-                style="@style/image_view_custom_toolbar_icon"
+                style="@style/image_custom_toolbar_icon"
                 app:layout_constraintBottom_toTopOf="@+id/bottomTitle"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

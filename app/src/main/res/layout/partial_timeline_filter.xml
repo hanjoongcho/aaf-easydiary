@@ -42,7 +42,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"/>
             <ImageView
-                style="@style/image_view_custom_toolbar_icon"
+                style="@style/image_custom_toolbar_icon"
                 android:id="@+id/startDatePicker"
                 app:srcCompat="@drawable/ic_calendar_4_w"
                 android:layout_width="wrap_content"
@@ -79,7 +79,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"/>
             <ImageView
-                style="@style/image_view_custom_toolbar_icon"
+                style="@style/image_custom_toolbar_icon"
                 android:id="@+id/endDatePicker"
                 app:srcCompat="@drawable/ic_calendar_4_w"
                 android:layout_width="wrap_content"

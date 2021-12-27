@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <TextView
-        style="@style/text_view_notification_h1"
+        style="@style/text_notification_h1"
         android:text="첨부사진 백업 결과"
         />
     <LinearLayout
@@ -19,7 +19,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
         <TextView
-            style="@style/text_view_notification_contents"
+            style="@style/text_notification_contents"
             android:text="10"
             />
     </LinearLayout>
@@ -33,7 +33,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
         <TextView
-            style="@style/text_view_notification_contents"
+            style="@style/text_notification_contents"
             android:text="10"
             />
     </LinearLayout>
@@ -47,7 +47,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
         <TextView
-            style="@style/text_view_notification_contents"
+            style="@style/text_notification_contents"
             android:text="10"
             />
     </LinearLayout>
@@ -61,12 +61,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
         <TextView
-            style="@style/text_view_notification_contents"
+            style="@style/text_notification_contents"
             android:text="10"
             />
     </LinearLayout>
     <TextView
-        style="@style/text_view_notification_h1"
+        style="@style/text_notification_h1"
         android:text="데이터베이스 백업 결과"
         />
     <LinearLayout
@@ -79,7 +79,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
         <TextView
-            style="@style/text_view_notification_contents"
+            style="@style/text_notification_contents"
             android:text="diary-2020123213.realm"
             />
     </LinearLayout>

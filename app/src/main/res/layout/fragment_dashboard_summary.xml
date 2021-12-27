@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <me.blog.korn123.easydiary.views.FixedCardView
-        style="@style/card_view_dashboard">
+        style="@style/card_ashboard">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -28,7 +28,7 @@
             </LinearLayout>
 
             <me.blog.korn123.easydiary.views.FixedCardView
-                style="@style/card_view_dashboard">
+                style="@style/card_ashboard">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:orientation="vertical"
                     android:layout_width="match_parent"
@@ -67,7 +67,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </me.blog.korn123.easydiary.views.FixedCardView>
             <me.blog.korn123.easydiary.views.FixedCardView
-                style="@style/card_view_dashboard">
+                style="@style/card_ashboard">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:orientation="vertical"
                     android:layout_width="match_parent"
@@ -109,7 +109,7 @@
     </me.blog.korn123.easydiary.views.FixedCardView>
 
     <me.blog.korn123.easydiary.views.FixedCardView
-        style="@style/card_view_dashboard">
+        style="@style/card_ashboard">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -129,7 +129,7 @@
                     android:layout_height="wrap_content"/>
             </LinearLayout>
             <me.blog.korn123.easydiary.views.FixedCardView
-                style="@style/card_view_dashboard">
+                style="@style/card_ashboard">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:orientation="vertical"
                     android:layout_width="match_parent"

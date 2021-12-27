@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/card_view_dashboard">
+    style="@style/card_ashboard">
     <LinearLayout
         tools:background="@color/divider_grey"
         android:visibility="visible"
@@ -65,7 +65,7 @@
             android:visibility="gone"
             tools:visibility="visible">
             <me.blog.korn123.easydiary.views.FixedCardView
-                style="@style/card_view_dashboard"
+                style="@style/card_ashboard"
                 android:id="@+id/rank1"
                 android:layout_width="0dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -88,7 +88,7 @@
                         app:applyGlobalSize="false"
                         app:applyGlobalColor="false"
                         android:id="@+id/markRank1"
-                        style="@style/text_view_dashboard_ranking"
+                        style="@style/text_dashboard_ranking"
                         android:gravity="center"
                         android:text="1"
                         tools:ignore="MissingConstraints" />
@@ -125,7 +125,7 @@
             </me.blog.korn123.easydiary.views.FixedCardView>
 
             <me.blog.korn123.easydiary.views.FixedCardView
-                style="@style/card_view_dashboard"
+                style="@style/card_ashboard"
                 android:id="@+id/rank2"
                 android:layout_width="0dp"
                 app:layout_constraintStart_toEndOf="@+id/rank1"
@@ -148,7 +148,7 @@
                         app:applyGlobalSize="false"
                         app:applyGlobalColor="false"
                         android:id="@+id/markRank2"
-                        style="@style/text_view_dashboard_ranking"
+                        style="@style/text_dashboard_ranking"
                         android:gravity="center"
                         android:text="2"
                         tools:ignore="MissingConstraints"/>
@@ -185,7 +185,7 @@
             </me.blog.korn123.easydiary.views.FixedCardView>
 
             <me.blog.korn123.easydiary.views.FixedCardView
-                style="@style/card_view_dashboard"
+                style="@style/card_ashboard"
                 android:id="@+id/rank3"
                 android:layout_width="0dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -209,7 +209,7 @@
                         app:applyGlobalSize="false"
                         app:applyGlobalColor="false"
                         android:id="@+id/markRank3"
-                        style="@style/text_view_dashboard_ranking"
+                        style="@style/text_dashboard_ranking"
                         android:gravity="center"
                         android:text="3"
                         tools:ignore="MissingConstraints" />
@@ -246,7 +246,7 @@
             </me.blog.korn123.easydiary.views.FixedCardView>
 
             <me.blog.korn123.easydiary.views.FixedCardView
-                style="@style/card_view_dashboard"
+                style="@style/card_ashboard"
                 android:id="@+id/rank4"
                 android:layout_width="0dp"
                 app:layout_constraintStart_toEndOf="@+id/rank3"
@@ -270,7 +270,7 @@
                         app:applyGlobalSize="false"
                         app:applyGlobalColor="false"
                         android:id="@+id/markRank4"
-                        style="@style/text_view_dashboard_ranking"
+                        style="@style/text_dashboard_ranking"
                         android:gravity="center"
                         android:text="4"
                         tools:ignore="MissingConstraints" />

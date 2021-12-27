@@ -30,12 +30,12 @@
                     <com.simplemobiletools.commons.views.MyTextView
                         android:id="@+id/text_title"
                         android:gravity="center_vertical"
-                        style="@style/text_view_diary_main_item_inner_contents"/>
+                        style="@style/text_diary_main_item_inner_contents"/>
                     
                     <com.simplemobiletools.commons.views.MyTextView
                         android:id="@+id/text_date_time"
                         android:gravity="end"
-                        style="@style/text_view_diary_main_item_inner_contents"/>
+                        style="@style/text_diary_main_item_inner_contents"/>
                 </LinearLayout>
             </LinearLayout>
     
@@ -44,7 +44,7 @@
                 android:layout_marginTop="@dimen/card_contents_padding"
                 android:maxLines="3"
                 android:gravity="start"
-                style="@style/text_view_diary_main_item_inner_contents"/>
+                style="@style/text_diary_main_item_inner_contents"/>
             <com.google.android.flexbox.FlexboxLayout
                 android:id="@+id/photoViews"
                 app:flexDirection="row"

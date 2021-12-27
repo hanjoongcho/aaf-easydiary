@@ -19,20 +19,20 @@
         <TextView
             android:id="@+id/pass1"
             tools:text="0"
-            style="@style/text_view_lock_number_input" />
+            style="@style/text_lock_number_input" />
         <TextView
             android:id="@+id/pass2"
             tools:text="0"
-            style="@style/text_view_lock_number_input" />
+            style="@style/text_lock_number_input" />
         <TextView
             android:id="@+id/pass3"
             tools:text="0"
-            style="@style/text_view_lock_number_input" />
+            style="@style/text_lock_number_input" />
         <TextView
             android:id="@+id/pass4"
             tools:text="0"
             android:layout_marginEnd="0dp"
-            style="@style/text_view_lock_number_input" />
+            style="@style/text_lock_number_input" />
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -69,66 +69,66 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
-            style="@style/linear_lock_number_container">
+            style="@style/linear_lock_number_pad">
             <TextView
-                style="@style/text_view_lock_number_button"
+                style="@style/text_lock_number_button"
                 android:id="@+id/num1"
                 android:text="1" />
             <TextView
-                style="@style/text_view_lock_number_button"
+                style="@style/text_lock_number_button"
                 android:id="@+id/num2"
                 android:text="2" />
             <TextView
-                style="@style/text_view_lock_number_button"
+                style="@style/text_lock_number_button"
                 android:layout_marginEnd="0dp"
                 android:id="@+id/num3"
                 android:text="3"/>
         </LinearLayout>
 
         <LinearLayout
-            style="@style/linear_lock_number_container">
+            style="@style/linear_lock_number_pad">
 
             <TextView
                 android:id="@+id/num4"
-                style="@style/text_view_lock_number_button"
+                style="@style/text_lock_number_button"
                 android:text="4"/>
 
             <TextView
                 android:id="@+id/num5"
-                style="@style/text_view_lock_number_button"
+                style="@style/text_lock_number_button"
                 android:text="5"/>
 
             <TextView
                 android:id="@+id/num6"
-                style="@style/text_view_lock_number_button"
+                style="@style/text_lock_number_button"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="0dp"
                 android:text="6"/>
         </LinearLayout>
 
         <LinearLayout
-            style="@style/linear_lock_number_container">
+            style="@style/linear_lock_number_pad">
             <TextView
-                style="@style/text_view_lock_number_button"
+                style="@style/text_lock_number_button"
                 android:id="@+id/num7"
                 android:text="7" />
             <TextView
-                style="@style/text_view_lock_number_button"
+                style="@style/text_lock_number_button"
                 android:id="@+id/num8"
                 android:text="8" />
             <TextView
-                style="@style/text_view_lock_number_button"
+                style="@style/text_lock_number_button"
                 android:layout_marginEnd="0dp"
                 android:id="@+id/num9"
                 android:text="9" />
         </LinearLayout>
 
         <LinearLayout
-            style="@style/linear_lock_number_container">
+            style="@style/linear_lock_number_pad">
             <LinearLayout
                 android:padding="5dp"
                 android:id="@+id/changeFingerprintLock"
-                style="@style/text_view_lock_number_button">
+                style="@style/text_lock_number_button">
                 <ImageView
                     tools:visibility="visible"
                     app:tint="@color/pinLockText"
@@ -139,11 +139,11 @@
                     android:layout_width="wrap_content"/>
             </LinearLayout>
             <TextView
-                style="@style/text_view_lock_number_button"
+                style="@style/text_lock_number_button"
                 android:id="@+id/num0"
                 android:text="0" />
             <TextView
-                style="@style/text_view_lock_number_button"
+                style="@style/text_lock_number_button"
                 android:id="@+id/delete"
                 android:text="←"
                 android:layout_marginEnd="0dp"/>

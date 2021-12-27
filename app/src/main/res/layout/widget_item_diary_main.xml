@@ -21,13 +21,13 @@
                 tools:text="Today is a very pleasant day."
                 android:id="@+id/text1"
                 android:gravity="center_vertical"
-                style="@style/text_view_diary_main_item_inner_contents"/>
+                style="@style/text_diary_main_item_inner_contents"/>
 
             <TextView
                 tools:text="2020년 06월 22일 월요일 09:44"
                 android:id="@+id/text3"
                 android:gravity="end"
-                style="@style/text_view_diary_main_item_inner_contents"/>
+                style="@style/text_diary_main_item_inner_contents"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -37,5 +37,5 @@
         android:layout_marginTop="@dimen/card_contents_padding"
         android:maxLines="3"
         android:gravity="start"
-        style="@style/text_view_diary_main_item_inner_contents"/>
+        style="@style/text_diary_main_item_inner_contents"/>
 </LinearLayout>

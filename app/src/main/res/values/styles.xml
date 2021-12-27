@@ -49,7 +49,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:foreground">?attr/selectableItemBackground</item>
     </style>
-    <style name="linear_lock_number_container">
+    <style name="linear_lock_number_pad">
         <item name="android:paddingLeft">10dp</item>
         <item name="android:paddingRight">10dp</item>
         <item name="android:paddingBottom">5dp</item>
@@ -96,18 +96,18 @@
         <item name="android:layout_marginRight">@dimen/medium_margin</item>
         <item name="android:clickable">false</item>
     </style>
-    <style name="image_view_custom_toolbar_icon">
+    <style name="image_custom_toolbar_icon">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">5dp</item>
         <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
     </style>
-    <style name="image_view_popup_menu_icon">
+    <style name="image_popup_menu_icon">
         <item name="android:layout_width">20dp</item>
         <item name="android:layout_height">20dp</item>
         <item name="android:layout_gravity">center</item>
     </style>
-    <style name="text_view_lock_number_input">
+    <style name="text_lock_number_input">
         <item name="android:textStyle">bold</item>
         <item name="android:gravity">center</item>
         <item name="android:background">@drawable/bg_card_diary</item>
@@ -116,7 +116,7 @@
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">50dp</item>
     </style>
-    <style name="text_view_lock_number_button">
+    <style name="text_lock_number_button">
         <item name="android:textColor">@color/pinLockText</item>
         <item name="android:textStyle">bold</item>
         <item name="android:layout_marginRight">5dp</item>
@@ -127,7 +127,7 @@
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">50dp</item>
     </style>
-    <style name="text_view_number_button">
+    <style name="text_number_button">
         <item name="android:textSize">23sp</item>
         <item name="android:textColor">@color/pinLockText</item>
         <item name="android:textStyle">bold</item>
@@ -137,7 +137,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
-    <style name="text_view_circle">
+    <style name="text_circle">
         <item name="android:textColor">@color/default_text_color</item>
         <item name="android:layout_marginLeft">10dp</item>
         <item name="android:layout_marginStart">10dp</item>
@@ -146,23 +146,23 @@
         <item name="android:layout_width">35dp</item>
         <item name="android:layout_height">35dp</item>
     </style>
-    <style name="text_view_diary_main_item_inner_contents">
+    <style name="text_diary_main_item_inner_contents">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">@dimen/diary_card_text_padding</item>
     </style>
-    <style name="text_view_diary_read_fragment_inner_contents">
+    <style name="text_diary_read_fragment_inner_contents">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">@dimen/diary_card_text_padding</item>
         <item name="android:textIsSelectable">true</item>
     </style>
-    <style name="edit_text_diary_edit_inner_contents">
+    <style name="edit_diary_edit_inner_contents">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">@dimen/diary_card_text_padding</item>
     </style>
-    <style name="text_view_dashboard_ranking">
+    <style name="text_dashboard_ranking">
         <item name="android:layout_width">20dp</item>
         <item name="android:layout_height">20dp</item>
         <item name="android:textStyle">bold</item>
@@ -171,14 +171,14 @@
         <item name="layout_constraintTop_toTopOf">parent</item>
         <item name="layout_constraintLeft_toLeftOf">parent</item>
     </style>
-    <style name="card_view_dashboard">
+    <style name="card_ashboard">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="contentPadding">@dimen/dashboard_card_padding</item>
         <item name="cardCornerRadius">@dimen/dashboard_card_radius</item>
         <item name="fixedAppcompatPadding">true</item>
     </style>
-    <style name="text_view_popup_menu_item">
+    <style name="text_popup_menu_item">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:paddingTop">13dp</item>
@@ -190,17 +190,17 @@
         <item name="applyGlobalColor">true</item>
         <item name="applyGlobalSize">false</item>
     </style>
-    <style name="text_view_option_animation">
+    <style name="text_option_animation">
         <item name="android:windowEnterAnimation">@anim/none</item>
         <item name="android:windowExitAnimation">@anim/fade_out</item>
     </style>
-    <style name="text_view_notification_h1">
+    <style name="text_notification_h1">
         <item name="android:layout_marginBottom">5dp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
-    <style name="text_view_notification_contents">
+    <style name="text_notification_contents">
         <item name="android:gravity">right</item>
         <item name="android:layout_marginBottom">3dp</item>
         <item name="android:layout_weight">5</item>

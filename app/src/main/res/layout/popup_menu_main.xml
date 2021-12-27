@@ -24,22 +24,22 @@
                 android:visibility="gone"
                 android:id="@+id/devConsole">
                 <androidx.appcompat.widget.AppCompatImageView
-                    style="@style/image_view_popup_menu_icon"
+                    style="@style/image_popup_menu_icon"
                     android:id="@+id/img_dev_console"
                     android:src="@drawable/ic_bug_2" />
                 <me.blog.korn123.easydiary.views.FixedTextView
-                    style="@style/text_view_popup_menu_item"
+                    style="@style/text_popup_menu_item"
                     android:text="Dev Console" />
             </androidx.appcompat.widget.LinearLayoutCompat>
             <androidx.appcompat.widget.LinearLayoutCompat
                 style="@style/linear_popup_menu_item"
                 android:id="@+id/gridLayout">
                 <androidx.appcompat.widget.AppCompatImageView
-                    style="@style/image_view_popup_menu_icon"
+                    style="@style/image_popup_menu_icon"
                     android:id="@+id/img_grid_layout"
                     android:src="@drawable/ic_grid_three_up" />
                 <me.blog.korn123.easydiary.views.FixedTextView
-                    style="@style/text_view_popup_menu_item"
+                    style="@style/text_popup_menu_item"
                     android:text="@string/postcard_grid_option_title" />
             </androidx.appcompat.widget.LinearLayoutCompat>
             <androidx.appcompat.widget.LinearLayoutCompat
@@ -48,9 +48,9 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:src="@drawable/ic_picture_w"
                     android:id="@+id/img_postcard"
-                    style="@style/image_view_popup_menu_icon" />
+                    style="@style/image_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
-                    style="@style/text_view_popup_menu_item"
+                    style="@style/text_popup_menu_item"
                     android:text="@string/post_card" />
             </androidx.appcompat.widget.LinearLayoutCompat>
             <androidx.appcompat.widget.LinearLayoutCompat
@@ -59,9 +59,9 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:src="@drawable/ic_statistics"
                     android:id="@+id/img_dashboard"
-                    style="@style/image_view_popup_menu_icon" />
+                    style="@style/image_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
-                    style="@style/text_view_popup_menu_item"
+                    style="@style/text_popup_menu_item"
                     android:text="@string/menu_dashboard" />
             </androidx.appcompat.widget.LinearLayoutCompat>
             <androidx.appcompat.widget.LinearLayoutCompat
@@ -70,9 +70,9 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:src="@drawable/ic_combo"
                     android:id="@+id/img_statistics"
-                    style="@style/image_view_popup_menu_icon" />
+                    style="@style/image_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
-                    style="@style/text_view_popup_menu_item"
+                    style="@style/text_popup_menu_item"
                     android:text="@string/menu_chart" />
             </androidx.appcompat.widget.LinearLayoutCompat>
             <androidx.appcompat.widget.LinearLayoutCompat
@@ -81,9 +81,9 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:src="@drawable/ic_settings_7"
                     android:id="@+id/img_settings"
-                    style="@style/image_view_popup_menu_icon" />
+                    style="@style/image_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
-                    style="@style/text_view_popup_menu_item"
+                    style="@style/text_popup_menu_item"
                     android:text="@string/settings" />
             </androidx.appcompat.widget.LinearLayoutCompat>
         </LinearLayout>

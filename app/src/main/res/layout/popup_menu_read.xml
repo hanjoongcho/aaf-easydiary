@@ -24,9 +24,9 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:src="@drawable/ic_picture_w"
                     android:id="@+id/img_postcard"
-                    style="@style/image_view_popup_menu_icon" />
+                    style="@style/image_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
-                    style="@style/text_view_popup_menu_item"
+                    style="@style/text_popup_menu_item"
                     android:text="@string/postcard_making" />
             </androidx.appcompat.widget.LinearLayoutCompat>
             <androidx.appcompat.widget.LinearLayoutCompat
@@ -37,9 +37,9 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:src="@drawable/ic_padlock"
                     android:id="@+id/img_encrypt_data"
-                    style="@style/image_view_popup_menu_icon" />
+                    style="@style/image_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
-                    style="@style/text_view_popup_menu_item"
+                    style="@style/text_popup_menu_item"
                     android:text="@string/encrypt_diary" />
             </androidx.appcompat.widget.LinearLayoutCompat>
             <androidx.appcompat.widget.LinearLayoutCompat
@@ -50,9 +50,9 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:src="@drawable/ic_unlock"
                     android:id="@+id/img_decrypt_data"
-                    style="@style/image_view_popup_menu_icon" />
+                    style="@style/image_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
-                    style="@style/text_view_popup_menu_item"
+                    style="@style/text_popup_menu_item"
                     android:text="@string/decrypt_diary" />
             </androidx.appcompat.widget.LinearLayoutCompat>
             <androidx.appcompat.widget.LinearLayoutCompat
@@ -61,9 +61,9 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:src="@drawable/ic_delete_w"
                     android:id="@+id/img_delete"
-                    style="@style/image_view_popup_menu_icon" />
+                    style="@style/image_popup_menu_icon" />
                 <me.blog.korn123.easydiary.views.FixedTextView
-                    style="@style/text_view_popup_menu_item"
+                    style="@style/text_popup_menu_item"
                     android:text="@string/menu_delete" />
             </androidx.appcompat.widget.LinearLayoutCompat>
         </LinearLayout>

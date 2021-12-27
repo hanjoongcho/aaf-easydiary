@@ -57,7 +57,7 @@
                             </LinearLayout>
                             <com.simplemobiletools.commons.views.MyEditText
                                 android:id="@+id/diaryTitle"
-                                style="@style/edit_text_diary_edit_inner_contents"
+                                style="@style/edit_diary_edit_inner_contents"
                                 android:layout_gravity="center_vertical"
                                 android:background="@android:color/transparent"
                                 android:gravity="center_vertical"
@@ -69,14 +69,14 @@
                         <androidx.appcompat.widget.LinearLayoutCompat
                             android:orientation="horizontal"
                             android:gravity="center_vertical|end"
-                            style="@style/edit_text_diary_edit_inner_contents">
+                            style="@style/edit_diary_edit_inner_contents">
                             <com.simplemobiletools.commons.views.MyTextView
                                 android:id="@+id/date"
                                 tools:text="2021년10월23일 토요일 05:14"
                                 android:textColor="@color/default_text_color"
                                 android:layout_width="0dp"
                                 android:layout_weight="1"
-                                style="@style/text_view_diary_read_fragment_inner_contents"/>
+                                style="@style/text_diary_read_fragment_inner_contents"/>
                             <LinearLayout
                                 android:id="@+id/allDayContainer"
                                 android:orientation="horizontal"
@@ -105,7 +105,7 @@
                         android:layout_height="0dp">
                         <com.simplemobiletools.commons.views.MyEditText
                             android:id="@+id/diaryContents"
-                            style="@style/edit_text_diary_edit_inner_contents"
+                            style="@style/edit_diary_edit_inner_contents"
                             android:background="@android:color/transparent"
                             android:gravity="top"
                             android:hint="@string/contents_text_hint"

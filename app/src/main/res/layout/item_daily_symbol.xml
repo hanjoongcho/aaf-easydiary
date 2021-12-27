@@ -6,7 +6,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
     <me.blog.korn123.easydiary.views.FixedCardView
-        style="@style/card_view_dashboard"
+        style="@style/card_ashboard"
         app:contentPadding="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">

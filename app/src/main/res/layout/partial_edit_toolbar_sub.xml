@@ -16,7 +16,7 @@
             android:src="@drawable/ic_calendar_4_w"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/image_view_custom_toolbar_icon"/>
+            style="@style/image_custom_toolbar_icon"/>
         <ImageView
             android:layout_marginEnd="@dimen/toolbar_icon_margin_right"
             android:id="@+id/timePicker"
@@ -24,7 +24,7 @@
             android:src="@drawable/ic_time_8_w"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/image_view_custom_toolbar_icon"/>
+            style="@style/image_custom_toolbar_icon"/>
         <ImageView
             android:layout_marginEnd="@dimen/toolbar_icon_margin_right"
             android:id="@+id/secondsPicker"
@@ -32,7 +32,7 @@
             android:src="@drawable/ic_time_w"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/image_view_custom_toolbar_icon"/>
+            style="@style/image_custom_toolbar_icon"/>
         <ImageView
             android:layout_marginEnd="@dimen/toolbar_icon_margin_right"
             android:id="@+id/microphone"
@@ -40,7 +40,7 @@
             android:src="@drawable/ic_microphone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/image_view_custom_toolbar_icon"/>
+            style="@style/image_custom_toolbar_icon"/>
         <ImageView
             android:layout_marginEnd="@dimen/toolbar_icon_margin_side"
             android:id="@+id/saveContents"
@@ -49,6 +49,6 @@
             android:layout_gravity="end|center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/image_view_custom_toolbar_icon"/>
+            style="@style/image_custom_toolbar_icon"/>
     </LinearLayout>
 </LinearLayout>

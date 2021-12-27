@@ -36,22 +36,22 @@
                 android:id="@+id/pass1"
                 android:layout_marginLeft="0dp"
                 android:layout_marginStart="0dp"
-                style="@style/text_view_circle" />
+                style="@style/text_circle" />
             <TextView
                 android:id="@+id/pass2"
-                style="@style/text_view_circle" />
+                style="@style/text_circle" />
             <TextView
                 android:id="@+id/pass3"
-                style="@style/text_view_circle" />
+                style="@style/text_circle" />
             <TextView
                 android:id="@+id/pass4"
-                style="@style/text_view_circle" />
+                style="@style/text_circle" />
             <TextView
                 android:id="@+id/pass5"
-                style="@style/text_view_circle" />
+                style="@style/text_circle" />
             <TextView
                 android:id="@+id/pass6"
-                style="@style/text_view_circle" />
+                style="@style/text_circle" />
         </LinearLayout>
 
         <com.simplemobiletools.commons.views.MyTextView
@@ -91,7 +91,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent">
         <ImageView
-            style="@style/image_view_custom_toolbar_icon"
+            style="@style/image_custom_toolbar_icon"
             android:layout_gravity="end"
             android:id="@+id/closePopup"
             android:theme="@style/AppTheme.AppBarOverlay"
@@ -112,7 +112,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <com.simplemobiletools.commons.views.MyTextView
-                    style="@style/text_view_number_button"
+                    style="@style/text_number_button"
                     android:text="1">
                 </com.simplemobiletools.commons.views.MyTextView>
             </LinearLayout>
@@ -123,7 +123,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <com.simplemobiletools.commons.views.MyTextView
-                    style="@style/text_view_number_button"
+                    style="@style/text_number_button"
                     android:text="2">
                 </com.simplemobiletools.commons.views.MyTextView>
             </LinearLayout>
@@ -134,7 +134,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <com.simplemobiletools.commons.views.MyTextView
-                    style="@style/text_view_number_button"
+                    style="@style/text_number_button"
                     android:text="3">
                 </com.simplemobiletools.commons.views.MyTextView>
             </LinearLayout>
@@ -151,7 +151,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <com.simplemobiletools.commons.views.MyTextView
-                    style="@style/text_view_number_button"
+                    style="@style/text_number_button"
                     android:text="4">
                 </com.simplemobiletools.commons.views.MyTextView>
             </LinearLayout>
@@ -162,7 +162,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <com.simplemobiletools.commons.views.MyTextView
-                    style="@style/text_view_number_button"
+                    style="@style/text_number_button"
                     android:text="5">
                 </com.simplemobiletools.commons.views.MyTextView>
             </LinearLayout>
@@ -173,7 +173,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <com.simplemobiletools.commons.views.MyTextView
-                    style="@style/text_view_number_button"
+                    style="@style/text_number_button"
                     android:text="6">
                 </com.simplemobiletools.commons.views.MyTextView>
             </LinearLayout>
@@ -190,7 +190,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <com.simplemobiletools.commons.views.MyTextView
-                    style="@style/text_view_number_button"
+                    style="@style/text_number_button"
                     android:text="7">
                 </com.simplemobiletools.commons.views.MyTextView>
             </LinearLayout>
@@ -201,7 +201,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <com.simplemobiletools.commons.views.MyTextView
-                    style="@style/text_view_number_button"
+                    style="@style/text_number_button"
                     android:text="8">
                 </com.simplemobiletools.commons.views.MyTextView>
             </LinearLayout>
@@ -212,7 +212,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <com.simplemobiletools.commons.views.MyTextView
-                    style="@style/text_view_number_button"
+                    style="@style/text_number_button"
                     android:text="9">
                 </com.simplemobiletools.commons.views.MyTextView>
             </LinearLayout>
@@ -228,7 +228,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <com.simplemobiletools.commons.views.MyTextView
-                    style="@style/text_view_number_button"
+                    style="@style/text_number_button"
                     android:text="">
                 </com.simplemobiletools.commons.views.MyTextView>
             </LinearLayout>
@@ -239,7 +239,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <com.simplemobiletools.commons.views.MyTextView
-                    style="@style/text_view_number_button"
+                    style="@style/text_number_button"
                     android:text="0">
                 </com.simplemobiletools.commons.views.MyTextView>
             </LinearLayout>
@@ -250,7 +250,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <com.simplemobiletools.commons.views.MyTextView
-                    style="@style/text_view_number_button"
+                    style="@style/text_number_button"
                     android:text="←">
                 </com.simplemobiletools.commons.views.MyTextView>
             </LinearLayout>

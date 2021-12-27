@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"/>
 
             <me.blog.korn123.easydiary.views.FixedCardView
-                style="@style/card_view_dashboard"
+                style="@style/card_ashboard"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <LinearLayout
