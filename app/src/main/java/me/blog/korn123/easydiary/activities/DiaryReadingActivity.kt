@@ -665,7 +665,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 //                        val thumbnailSize = appContext.config.settingThumbnailSize
                             diaryDto.photoUris?.forEachIndexed { index, item ->
                                 val imageView = when (requireActivity().isLandScape()) {
-                                    true -> createAttachedPhotoView(appContext, item, 0F, 0F, 0F, 3F)
+                                    true -> createAttachedPhotoView(appContext, item, 0F, 0F, 3F, 0F)
                                     false -> createAttachedPhotoView(appContext, item, 0F, 0F, 3F, 0F)
                                 }
                                 photoContainer.addView(imageView)
