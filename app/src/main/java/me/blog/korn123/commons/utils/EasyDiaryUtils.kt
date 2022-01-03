@@ -327,7 +327,7 @@ object EasyDiaryUtils {
         return name ?: UUID.randomUUID().toString()
     }
 
-    fun createAttachedPhotoView(context: Context, photoUri: PhotoUri, marginLeft:Float = 0F, marginTop:Float = 0F, marginRight:Float = 3F, marginBottom:Float = 0F): ImageView {
+    fun createAttachedPhotoView(context: Context, photoUri: PhotoUri, marginLeft:Float = 0F, marginTop:Float = 0F, marginRight:Float = 3F, marginBottom:Float = 0F, bgResourceId: Int = R.drawable.bg_card_thumbnail): ImageView {
         val thumbnailSize = context.config.settingThumbnailSize
 //        val bitmap = photoUriToDownSamplingBitmap(context, photoUriDto, 0, thumbnailSize.toInt() - 5, thumbnailSize.toInt() - 5)
         val imageView = ImageView(context)
@@ -335,7 +335,7 @@ object EasyDiaryUtils {
 //        val marginLeft = if (photoIndex == 0)  0 else CommonUtils.dpToPixel(context, 3F)
         layoutParams.setMargins(CommonUtils.dpToPixel(context, marginLeft), CommonUtils.dpToPixel(context, marginTop), CommonUtils.dpToPixel(context, marginRight), CommonUtils.dpToPixel(context, marginBottom))
         imageView.layoutParams = layoutParams
-        val drawable = ContextCompat.getDrawable(context, R.drawable.bg_card_thumbnail)
+        val drawable = ContextCompat.getDrawable(context, bgResourceId)
         val gradient = drawable as GradientDrawable
         gradient.setColor(ColorUtils.setAlphaComponent(context.config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA))
         imageView.background = gradient

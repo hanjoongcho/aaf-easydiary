@@ -13,17 +13,18 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <androidx.cardview.widget.CardView
+        <me.blog.korn123.easydiary.views.FixedCardView
+            app:fixedAppcompatPadding="false"
+            app:applyCardBackgroundColor="true"
             app:contentPadding="0dp"
-            android:layout_marginTop="@dimen/card_layout_margin"
-            android:layout_marginBottom="@dimen/card_layout_margin"
-            android:layout_marginStart="@dimen/card_layout_margin"
-            android:layout_marginEnd="@dimen/card_layout_margin"
+            app:cardCornerRadius="0dp"
+            android:layout_margin="0dp"
+            android:layout_height="match_parent"
             style="@style/AppCard">
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
                 <ScrollView
                     android:id="@+id/scroll_diary_contents"
                     android:fillViewport="false"
@@ -66,23 +67,6 @@
                             style="@style/text_diary_read_fragment_inner_contents"/>
                     </LinearLayout>
                 </ScrollView>
-                <RelativeLayout
-                    android:id="@+id/photoContainerScrollView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <HorizontalScrollView
-                        android:layout_margin="5dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-                        <LinearLayout
-                            android:id="@+id/photoContainer"
-                            android:gravity="center"
-                            android:orientation="horizontal"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
-                        </LinearLayout>
-                    </HorizontalScrollView>
-                </RelativeLayout>
                 <RelativeLayout
                     android:visibility="@{ view_model.isShowAddress || view_model.isShowContentsCounting ? View.VISIBLE : View.GONE }"
                     android:paddingLeft="@dimen/card_contents_padding"
@@ -138,7 +122,25 @@
                             android:layout_height="wrap_content"/>
                     </me.blog.korn123.easydiary.views.FixedCardView>
                 </RelativeLayout>
+                <RelativeLayout
+                    tools:visibility="visible"
+                    android:id="@+id/photoContainerScrollView"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <HorizontalScrollView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:id="@+id/photoContainer"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                        </LinearLayout>
+                    </HorizontalScrollView>
+                </RelativeLayout>
             </androidx.appcompat.widget.LinearLayoutCompat>
-        </androidx.cardview.widget.CardView>
+        </me.blog.korn123.easydiary.views.FixedCardView>
     </LinearLayout>
 </layout>
