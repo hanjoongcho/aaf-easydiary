@@ -41,8 +41,7 @@ import java.io.File
  * Created by hanjoong on 2017-07-01.
  */
 
-class
-PostcardActivity : EasyDiaryActivity() {
+class PostcardActivity : EasyDiaryActivity() {
     lateinit var mBinding: ActivityPostcardBinding
     lateinit var mShowcaseView: ShowcaseView
     lateinit var mSavedDiaryCardPath: String
@@ -62,7 +61,8 @@ PostcardActivity : EasyDiaryActivity() {
         supportActionBar?.run {
             title = ""
             setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(R.drawable.ic_cross)    
+            setHomeAsUpIndicator(R.drawable.ic_cross)
+            elevation = 0F
         }
         mSequence = intent.getIntExtra(DIARY_SEQUENCE, 0)
 
