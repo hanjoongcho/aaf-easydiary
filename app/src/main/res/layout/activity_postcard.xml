@@ -25,7 +25,7 @@
 
         <LinearLayout
             android:id="@+id/seekBarContainer"
-            android:paddingLeft="5dp"
+            android:padding="5dp"
             android:background="?attr/colorPrimary"
             android:orientation="horizontal"
             android:layout_width="match_parent"
