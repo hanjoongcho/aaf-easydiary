@@ -39,17 +39,17 @@ class PhotoAdapter(
 
     override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
         postCardPhotoItems[position].let { postCardPhotoItem ->
-            if (itemCount == 2) {
-                holder.itemView.layoutParams = (holder.itemView.layoutParams as FlexboxLayoutManager.LayoutParams).apply {
-                    if (position == 0) {
-                        isWrapBefore = false
-                        flexGrow = 1F
-                    } else {
-                        isWrapBefore = true
-                        flexGrow = 0F
-                    }
-                }
-            }
+//            if (itemCount == 2) {
+//                holder.itemView.layoutParams = (holder.itemView.layoutParams as FlexboxLayoutManager.LayoutParams).apply {
+//                    if (position == 0) {
+//                        isWrapBefore = false
+//                        flexGrow = 1F
+//                    } else {
+//                        isWrapBefore = true
+//                        flexGrow = 0F
+//                    }
+//                }
+//            }
             holder.bindTo(postCardPhotoItem)
         }
     }
