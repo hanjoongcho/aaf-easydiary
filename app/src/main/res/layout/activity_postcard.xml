@@ -56,12 +56,12 @@
         <FrameLayout
             android:id="@+id/main_holder"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
             <LinearLayout
                 android:id="@+id/postContainer"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
                 <LinearLayout
                     android:id="@+id/photoContainer"
                     android:visibility="gone"
