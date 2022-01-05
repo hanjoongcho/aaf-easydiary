@@ -226,8 +226,8 @@ class PostcardActivity : EasyDiaryActivity() {
     private fun setBackgroundColor(selectedColor: Int) {
         mBgColor = selectedColor
         mBinding.run {
-            contentsContainer.setBackgroundColor(mBgColor)
-            photoGridContainer.setBackgroundColor(mBgColor)
+            postContainer.setBackgroundColor(mBgColor)
+//            photoGridContainer.setBackgroundColor(mBgColor)
         }
     }
     
@@ -290,10 +290,10 @@ class PostcardActivity : EasyDiaryActivity() {
     private fun exportDiaryCard(showInfoDialog: Boolean) {
         // draw viewGroup on UI Thread
         mBinding.run {
-            val bitmap = when (photoContainer.visibility == View.VISIBLE) {
-                true -> diaryViewGroupToBitmap(postContainer, true)
-                false -> diaryViewGroupToBitmap(postContainer, false)
-            }
+//            val bitmap = when (photoContainer.visibility == View.VISIBLE) {
+//                true -> diaryViewGroupToBitmap(postContainer, true)
+//                false -> diaryViewGroupToBitmap(postContainer, false)
+//            }
             progressBar.visibility = View.VISIBLE
             // generate postcard file another thread
             Thread(Runnable {
@@ -301,7 +301,7 @@ class PostcardActivity : EasyDiaryActivity() {
                     val diaryCardPath = "$DIARY_POSTCARD_DIRECTORY${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}_$mSequence.jpg"
                     mSavedDiaryCardPath = EasyDiaryUtils.getApplicationDataDirectory(this@PostcardActivity) + diaryCardPath
                     EasyDiaryUtils.initWorkingDirectory(this@PostcardActivity)
-                    BitmapUtils.saveBitmapToFileCache(bitmap, mSavedDiaryCardPath)
+                    BitmapUtils.saveBitmapToFileCache(createBitmap(), mSavedDiaryCardPath)
                     Handler(Looper.getMainLooper()).post {
                         progressBar.visibility = View.GONE
                         if (showInfoDialog) {
@@ -332,6 +332,13 @@ class PostcardActivity : EasyDiaryActivity() {
         shareIntent.putExtra(Intent.EXTRA_STREAM, getUriForFile(file))
         shareIntent.type = "image/jpeg"
         startActivity(Intent.createChooser(shareIntent, getString(R.string.diary_card_share_info)))
+    }
+
+    private fun createBitmap(): Bitmap {
+        val scrollViewBitmap = Bitmap.createBitmap(mBinding.scrollPostcard.width, mBinding.scrollPostcard.getChildAt(0).height, Bitmap.Config.ARGB_8888)
+        val scrollViewCanvas = Canvas(scrollViewBitmap)
+        mBinding.scrollPostcard.draw(scrollViewCanvas)
+        return scrollViewBitmap
     }
 
     private fun diaryViewGroupToBitmap(viewGroup: ViewGroup, mergeBitmap: Boolean): Bitmap {
