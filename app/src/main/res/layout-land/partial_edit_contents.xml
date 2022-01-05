@@ -14,13 +14,13 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent">
-            <androidx.cardview.widget.CardView
+            <me.blog.korn123.easydiary.views.FixedCardView
+                app:fixedAppcompatPadding="false"
+                app:applyCardBackgroundColor="true"
+                app:cardCornerRadius="0dp"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:layout_marginTop="@dimen/card_layout_margin"
-                android:layout_marginBottom="@dimen/card_layout_margin"
-                android:layout_marginStart="@dimen/card_layout_margin"
-                android:layout_marginEnd="@dimen/card_layout_margin"
+                android:layout_margin="0dp"
                 style="@style/AppCard">
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -186,7 +186,7 @@
                         android:layout_width="32dp"
                         android:layout_height="32dp"/>
                 </FrameLayout>
-            </androidx.cardview.widget.CardView>
+            </me.blog.korn123.easydiary.views.FixedCardView>
         </LinearLayout>
         <include android:id="@+id/partial_bottom_toolbar" layout="@layout/partial_bottom_toolbar" />
         <include android:id="@+id/partial_edit_photo_container" layout="@layout/partial_edit_photo_container" />

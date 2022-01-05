@@ -16,8 +16,8 @@
         <me.blog.korn123.easydiary.views.FixedCardView
             app:fixedAppcompatPadding="false"
             app:applyCardBackgroundColor="true"
-            app:contentPadding="0dp"
             app:cardCornerRadius="0dp"
+            app:contentPadding="0dp"
             android:layout_margin="0dp"
             android:layout_height="match_parent"
             style="@style/AppCard">
