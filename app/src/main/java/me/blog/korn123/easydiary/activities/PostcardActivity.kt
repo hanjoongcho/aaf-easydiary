@@ -9,8 +9,6 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Matrix
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -28,6 +26,10 @@ import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.CALCULATION
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
@@ -296,13 +298,13 @@ class PostcardActivity : EasyDiaryActivity() {
 //            }
             progressBar.visibility = View.VISIBLE
             // generate postcard file another thread
-            Thread(Runnable {
+            CoroutineScope(Dispatchers.Default).launch {
                 try {
                     val diaryCardPath = "$DIARY_POSTCARD_DIRECTORY${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}_$mSequence.jpg"
                     mSavedDiaryCardPath = EasyDiaryUtils.getApplicationDataDirectory(this@PostcardActivity) + diaryCardPath
                     EasyDiaryUtils.initWorkingDirectory(this@PostcardActivity)
                     BitmapUtils.saveBitmapToFileCache(createBitmap(), mSavedDiaryCardPath)
-                    Handler(Looper.getMainLooper()).post {
+                    withContext(Dispatchers.Main) {
                         progressBar.visibility = View.GONE
                         if (showInfoDialog) {
 //                        showAlertDialog(getString(R.string.diary_card_export_info), diaryCardPath, DialogInterface.OnClickListener { dialog, which -> })
@@ -313,15 +315,14 @@ class PostcardActivity : EasyDiaryActivity() {
                         }
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace()
                     val errorMessage = e.message
-                    Handler(Looper.getMainLooper()).post {
+                    withContext(Dispatchers.Main) {
                         progressBar.visibility = View.GONE
                         val errorInfo = String.format("%s\n\n[ERROR: %s]", getString(R.string.diary_card_export_error_message), errorMessage)
                         showAlertDialog(errorInfo, DialogInterface.OnClickListener { dialog, which -> })
                     }
                 }
-            }).start()
+            }
         }
     }
 
