@@ -9,8 +9,6 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Matrix
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -28,6 +26,10 @@ import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.CALCULATION
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
@@ -41,8 +43,7 @@ import java.io.File
  * Created by hanjoong on 2017-07-01.
  */
 
-class
-PostcardActivity : EasyDiaryActivity() {
+class PostcardActivity : EasyDiaryActivity() {
     lateinit var mBinding: ActivityPostcardBinding
     lateinit var mShowcaseView: ShowcaseView
     lateinit var mSavedDiaryCardPath: String
@@ -62,7 +63,8 @@ PostcardActivity : EasyDiaryActivity() {
         supportActionBar?.run {
             title = ""
             setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(R.drawable.ic_cross)    
+            setHomeAsUpIndicator(R.drawable.ic_cross)
+            elevation = 0F
         }
         mSequence = intent.getIntExtra(DIARY_SEQUENCE, 0)
 
@@ -226,8 +228,8 @@ PostcardActivity : EasyDiaryActivity() {
     private fun setBackgroundColor(selectedColor: Int) {
         mBgColor = selectedColor
         mBinding.run {
-            contentsContainer.setBackgroundColor(mBgColor)
-            photoGridContainer.setBackgroundColor(mBgColor)
+            postContainer.setBackgroundColor(mBgColor)
+//            photoGridContainer.setBackgroundColor(mBgColor)
         }
     }
     
@@ -290,19 +292,19 @@ PostcardActivity : EasyDiaryActivity() {
     private fun exportDiaryCard(showInfoDialog: Boolean) {
         // draw viewGroup on UI Thread
         mBinding.run {
-            val bitmap = when (photoContainer.visibility == View.VISIBLE) {
-                true -> diaryViewGroupToBitmap(postContainer, true)
-                false -> diaryViewGroupToBitmap(postContainer, false)
-            }
+//            val bitmap = when (photoContainer.visibility == View.VISIBLE) {
+//                true -> diaryViewGroupToBitmap(postContainer, true)
+//                false -> diaryViewGroupToBitmap(postContainer, false)
+//            }
             progressBar.visibility = View.VISIBLE
             // generate postcard file another thread
-            Thread(Runnable {
+            CoroutineScope(Dispatchers.Default).launch {
                 try {
                     val diaryCardPath = "$DIARY_POSTCARD_DIRECTORY${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}_$mSequence.jpg"
                     mSavedDiaryCardPath = EasyDiaryUtils.getApplicationDataDirectory(this@PostcardActivity) + diaryCardPath
                     EasyDiaryUtils.initWorkingDirectory(this@PostcardActivity)
-                    BitmapUtils.saveBitmapToFileCache(bitmap, mSavedDiaryCardPath)
-                    Handler(Looper.getMainLooper()).post {
+                    BitmapUtils.saveBitmapToFileCache(createBitmap(), mSavedDiaryCardPath)
+                    withContext(Dispatchers.Main) {
                         progressBar.visibility = View.GONE
                         if (showInfoDialog) {
 //                        showAlertDialog(getString(R.string.diary_card_export_info), diaryCardPath, DialogInterface.OnClickListener { dialog, which -> })
@@ -313,15 +315,14 @@ PostcardActivity : EasyDiaryActivity() {
                         }
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace()
                     val errorMessage = e.message
-                    Handler(Looper.getMainLooper()).post {
+                    withContext(Dispatchers.Main) {
                         progressBar.visibility = View.GONE
                         val errorInfo = String.format("%s\n\n[ERROR: %s]", getString(R.string.diary_card_export_error_message), errorMessage)
                         showAlertDialog(errorInfo, DialogInterface.OnClickListener { dialog, which -> })
                     }
                 }
-            }).start()
+            }
         }
     }
 
@@ -332,6 +333,13 @@ PostcardActivity : EasyDiaryActivity() {
         shareIntent.putExtra(Intent.EXTRA_STREAM, getUriForFile(file))
         shareIntent.type = "image/jpeg"
         startActivity(Intent.createChooser(shareIntent, getString(R.string.diary_card_share_info)))
+    }
+
+    private fun createBitmap(): Bitmap {
+        val scrollViewBitmap = Bitmap.createBitmap(mBinding.scrollPostcard.width, mBinding.scrollPostcard.getChildAt(0).height, Bitmap.Config.ARGB_8888)
+        val scrollViewCanvas = Canvas(scrollViewBitmap)
+        mBinding.scrollPostcard.draw(scrollViewCanvas)
+        return scrollViewBitmap
     }
 
     private fun diaryViewGroupToBitmap(viewGroup: ViewGroup, mergeBitmap: Boolean): Bitmap {

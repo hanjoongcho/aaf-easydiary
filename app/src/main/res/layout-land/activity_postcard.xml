@@ -4,32 +4,37 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
-    <LinearLayout
+    android:layout_height="match_parent">
+    <com.google.android.material.appbar.AppBarLayout
+        app:elevation="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+    </com.google.android.material.appbar.AppBarLayout>
+    <androidx.appcompat.widget.LinearLayoutCompat
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:id="@+id/main_holder"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay">
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
-        </com.google.android.material.appbar.AppBarLayout>
-
-        <LinearLayout
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/seekBarContainer"
-            android:padding="5dp"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:background="?attr/colorPrimary"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <ImageView
+                android:layout_marginStart="5dp"
                 android:id="@+id/decreaseFont"
                 android:src="@drawable/decrease_font"
                 android:layout_width="20dp"
@@ -44,119 +49,102 @@
                 android:layout_width="0dp"
                 android:layout_height="20dp" />
             <ImageView
+                android:layout_marginEnd="5dp"
                 android:id="@+id/increaseFont"
                 android:src="@drawable/increase_font"
                 android:layout_width="20dp"
                 android:layout_height="20dp" />
-        </LinearLayout>
-
-        <FrameLayout
-            android:id="@+id/main_holder"
+        </androidx.appcompat.widget.LinearLayoutCompat>
+        <ScrollView
+            android:id="@+id/scroll_postcard"
+            android:fillViewport="false"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <LinearLayout
-                android:id="@+id/postContainer"
-                android:baselineAligned="false"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:orientation="horizontal"
+                android:id="@+id/postContainer"
+                android:background="@android:color/white"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
                 <LinearLayout
                     android:id="@+id/photoContainer"
                     android:visibility="gone"
                     tools:visibility="visible"
-                    android:background="@android:color/white"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content">
                     <LinearLayout
                         android:id="@+id/photoGridContainer"
-                        android:background="@android:color/white"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
                         <androidx.recyclerview.widget.RecyclerView
-
                             android:id="@+id/photoGrid"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
                         </androidx.recyclerview.widget.RecyclerView>
                     </LinearLayout>
                 </LinearLayout>
-                
-                <ScrollView
-                    android:fillViewport="true"
+                <LinearLayout
+                    android:padding="20dp"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
+                    android:layout_height="wrap_content">
                     <LinearLayout
-                        android:background="@android:color/white"
+                        android:padding="10dp"
+                        android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <LinearLayout
-                            android:id="@+id/contentsContainer"
-                            android:background="@android:color/white"
-                            android:padding="20dp"
-                            android:orientation="vertical"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                            android:layout_height="wrap_content">
+                            <ImageView
+                                android:id="@+id/weather"
+                                android:layout_marginEnd="10dp"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp" />
                             <LinearLayout
-                                android:padding="10dp"
                                 android:orientation="vertical"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
-                                <LinearLayout
-                                    android:orientation="horizontal"
+                                <TextView
+                                    android:paddingTop="5dp"
+                                    android:paddingBottom="5dp"
+                                    android:textColor="@color/default_text_color"
+                                    android:enabled="false"
+                                    android:gravity="center_vertical"
+                                    android:id="@+id/diaryTitle"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
-                                    <ImageView
-                                        android:id="@+id/weather"
-                                        android:layout_marginEnd="10dp"
-                                        android:layout_width="32dp"
-                                        android:layout_height="32dp" />
-
-                                    <LinearLayout
-                                        android:orientation="vertical"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content">
-                                        <TextView
-                                            android:paddingTop="5dp"
-                                            android:paddingBottom="5dp"
-                                            android:textColor="@color/default_text_color"
-                                            android:enabled="false"
-                                            android:gravity="center_vertical"
-                                            android:id="@+id/diaryTitle"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content" />
-
-                                        <TextView
-                                            android:textColor="@color/default_text_color"
-                                            android:enabled="false"
-                                            android:gravity="center_vertical|end"
-                                            android:id="@+id/date"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content" />
-                                    </LinearLayout>
-                                </LinearLayout>
+                                    android:layout_height="wrap_content" />
+                                <TextView
+                                    android:textColor="@color/default_text_color"
+                                    android:enabled="false"
+                                    android:gravity="center_vertical|end"
+                                    android:id="@+id/date"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" />
                             </LinearLayout>
-
-                            <TextView
-                                android:padding="10dp"
-                                android:enabled="false"
-                                android:textColor="@color/default_text_color"
-                                android:id="@+id/contents"
-                                android:gravity="start"
-                                android:layout_width="match_parent"
-                                android:layout_weight="1"
-                                android:layout_height="0dp" />
                         </LinearLayout>
                     </LinearLayout>
-                </ScrollView>
-            </LinearLayout>
-
-            <ProgressBar
-                android:id="@+id/progressBar"
-                android:visibility="gone"
-                android:layout_gravity="center"
-                android:layout_width="30dp"
-                android:layout_height="30dp" />
-        </FrameLayout>
-    </LinearLayout>
+                    <TextView
+                        tools:text="This area is diary contents."
+                        android:padding="10dp"
+                        android:enabled="false"
+                        android:textColor="@color/default_text_color"
+                        android:id="@+id/contents"
+                        android:gravity="start"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </ScrollView>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <ProgressBar
+        tools:visibility="visible"
+        android:id="@+id/progressBar"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        android:layout_width="30dp"
+        android:layout_height="30dp" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

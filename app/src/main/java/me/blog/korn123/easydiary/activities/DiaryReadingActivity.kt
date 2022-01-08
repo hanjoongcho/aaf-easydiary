@@ -15,7 +15,6 @@ import android.text.TextWatcher
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentStatePagerAdapter
@@ -570,23 +569,6 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
             requireContext().changeDrawableIconColor(config.primaryColor, R.drawable.ic_map_marker_2)
-            mBinding.bottomToolbar.run {
-                togglePhoto.setOnClickListener {
-                    context?.let { context ->
-                        when (mBinding.photoContainerScrollView.visibility) {
-                            View.VISIBLE -> {
-                                mBinding.photoContainerScrollView.visibility = View.GONE
-                                togglePhoto.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_expand))
-                            }
-                            View.GONE -> {
-                                mBinding.photoContainerScrollView.visibility = View.VISIBLE
-                                togglePhoto.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_collapse))
-                            }
-                        }
-                    }
-                }
-            }
-
             mRootView.let {
                 context?.run {
                     updateTextColors(it,0,0)
@@ -675,27 +657,22 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
                 // TODO fixme elegance
                 val photoCount = diaryDto.photoUris?.size ?: 0
-                mBinding.bottomToolbar.run {
+                mBinding.run {
                     if (photoCount > 0) {
-                        bottomTitle.text = if (requireActivity().isLandScape()) "x$photoCount" else getString(R.string.attached_photo_count, photoCount)
-                        bottomToolbar.visibility = View.VISIBLE
                         photoContainerScrollView.visibility = View.VISIBLE
-
                         if (photoContainer.childCount > 0) photoContainer.removeAllViews()
                         context?.let { appContext ->
 //                        val thumbnailSize = appContext.config.settingThumbnailSize
                             diaryDto.photoUris?.forEachIndexed { index, item ->
+                                val marginRight = if (index == photoCount.minus(1)) 0F else 3F
                                 val imageView = when (requireActivity().isLandScape()) {
-                                    true -> createAttachedPhotoView(appContext, item, 0F, 0F, 0F, 3F)
-                                    false -> createAttachedPhotoView(appContext, item, 0F, 0F, 3F, 0F)
+                                    true -> createAttachedPhotoView(appContext, item, 0F, 0F, marginRight, 0F, R.drawable.bg_card_thumbnail_rect)
+                                    false -> createAttachedPhotoView(appContext, item, 0F, 0F, marginRight, 0F, R.drawable.bg_card_thumbnail_rect)
                                 }
                                 photoContainer.addView(imageView)
                                 imageView.setOnClickListener(PhotoClickListener(getSequence(), index))
                             }
                         }
-                    } else {
-                        bottomToolbar.visibility = View.GONE
-                        photoContainerScrollView.visibility = View.GONE
                     }
                 }
 
