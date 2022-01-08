@@ -432,6 +432,9 @@ fun Context.preferenceToJsonString(): String {
     preferenceMap[APP_LOCK_ENABLE] = config.aafPinLockEnable
     preferenceMap[APP_LOCK_SAVED_PASSWORD] = config.aafPinLockSavedPassword
 
+    // ETC.
+    preferenceMap[SETTING_SELECTED_SYMBOLS] = config.selectedSymbols
+
     val gson = GsonBuilder().setPrettyPrinting().create()
     jsonString = gson.toJson(preferenceMap)
     return jsonString

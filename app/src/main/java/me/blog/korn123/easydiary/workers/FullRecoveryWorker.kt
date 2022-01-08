@@ -54,6 +54,9 @@ class FullRecoveryWorker(private val context: Context, workerParams: WorkerParam
 
                     // Settings Lock
 
+                    // ETC.
+                    selectedSymbols = map[SETTING_SELECTED_SYMBOLS] as String
+
                     updatePreference = true
                 }
             }
