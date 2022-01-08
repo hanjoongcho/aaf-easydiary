@@ -67,6 +67,21 @@
     </style>
 
     <!--App View Style-->
+    <style name="recycler_fast_scroll">
+        <item name="fastScrollAutoHide">true</item>
+        <item name="fastScrollAutoHideDelay">1500</item>
+        <item name="fastScrollEnableThumbInactiveColor">true</item>
+        <item name="fastScrollPopupBgColor">?attr/colorAccent</item>
+        <item name="fastScrollPopupPosition">adjacent</item>
+        <item name="fastScrollPopupTextColor">@android:color/primary_text_dark</item>
+        <item name="fastScrollPopupTextSize">15sp</item>
+        <item name="fastScrollPopupBackgroundSize">45sp</item>
+        <item name="fastScrollPopupTextVerticalAlignmentMode">font_metrics</item>
+        <item name="fastScrollThumbColor">?attr/colorAccent</item>
+        <item name="fastScrollThumbInactiveColor">?attr/colorAccent</item>
+        <item name="fastScrollThumbEnabled">true</item>
+        <item name="fastScrollTrackColor">#00000000</item>
+    </style>
     <style name="text_custom_theme_item">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
