@@ -100,12 +100,14 @@
                             </LinearLayout>
                         </androidx.appcompat.widget.LinearLayoutCompat>
                     </LinearLayout>
+
                     <ScrollView
                         android:id="@+id/contentsContainer"
-                        android:fillViewport="true"
                         android:layout_width="match_parent"
+                        android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:layout_height="0dp">
+                        android:fillViewport="true">
+
                         <com.simplemobiletools.commons.views.MyEditText
                             android:id="@+id/diaryContents"
                             style="@style/edit_diary_edit_inner_contents"
@@ -114,6 +116,7 @@
                             android:hint="@string/contents_text_hint"
                             android:inputType="text|textCapSentences|textAutoCorrect|textMultiLine|textLongMessage" />
                     </ScrollView>
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
