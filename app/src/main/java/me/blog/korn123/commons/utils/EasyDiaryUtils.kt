@@ -50,7 +50,6 @@ import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.models.PhotoUri
-import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import org.apache.commons.lang3.StringUtils
 import java.io.File
@@ -273,7 +272,7 @@ object EasyDiaryUtils {
                 val fos = FileOutputStream(tempFile)
                 IOUtils.copy(uriStream, fos)
                 val compressedFile = Compressor(context).setQuality(70).compressToFile(tempFile)
-                FileUtils.copyFile(compressedFile, destFile)
+                compressedFile.copyTo(destFile, true)
                 uriStream?.close()
                 fos.close()
                 tempFile.delete()
@@ -284,7 +283,7 @@ object EasyDiaryUtils {
 
     fun downSamplingImage(context: Context, srcFile: File, destFile: File) {
         val compressedFile = Compressor(context).setQuality(70).compressToFile(srcFile)
-        FileUtils.copyFile(compressedFile, destFile)
+        compressedFile.copyTo(destFile, true)
     }
 
     fun summaryDiaryLabel(diary: Diary): String {
