@@ -582,6 +582,11 @@
         v1.4.172.19 / 2022.01.12\n
         Diary detail screen UX improvement
     </string>
+    <string name="release_259">
+        v1.4.172.20 / 2022.01.19\n
+        Fixed an error that caused abnormal termination in Android 7.1 or lower version when attaching a photo\n
+        Fixed some errors that caused abnormal termination in Android 12 version
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->

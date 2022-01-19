@@ -62,7 +62,7 @@ open class BaseAlarmWorkExecutor(val context: Context) {
                     .setContentIntent(
                             PendingIntent.getBroadcast(this, 0, Intent(this, AlarmReceiver::class.java).apply {
                                 putExtra(DOZE_SCHEDULE, true)
-                            }, PendingIntent.FLAG_UPDATE_CURRENT)
+                            }, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
                     )
             notificationManager.notify(alarm.id, builder.build())
         }
