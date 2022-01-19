@@ -187,6 +187,7 @@ dependencies {
     implementation group: 'org.jasypt', name: 'jasypt', version: '1.9.2'
     implementation 'com.simplecityapps:recyclerview-fastscroll:2.0.1'
     kapt 'io.noties:prism4j-bundler:2.0.0'
+    implementation 'com.github.zhpanvip:bannerviewpager:3.5.5'
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
 

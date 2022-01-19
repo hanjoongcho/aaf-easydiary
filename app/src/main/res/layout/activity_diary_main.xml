@@ -81,6 +81,11 @@
                         android:layout_height="wrap_content" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+            <com.zhpan.bannerview.BannerViewPager
+                android:id="@+id/banner_history"
+                android:layout_width="match_parent"
+                android:layout_margin="10dp"
+                android:layout_height="120dp" />
             <me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
                 android:id="@+id/diaryListView"
                 android:layout_marginTop="@dimen/card_layout_padding"

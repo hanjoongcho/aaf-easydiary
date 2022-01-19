@@ -29,6 +29,7 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.BaseDiaryEditingActivity.Companion.DIARY_SEQUENCE_INIT
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
+import me.blog.korn123.easydiary.adapters.HistoryAdapter
 import me.blog.korn123.easydiary.databinding.PopupMenuMainBinding
 import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.extensions.*
@@ -152,6 +153,10 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             config.appExecutionCount = config.appExecutionCount.plus(1)
             if (config.appExecutionCount > 30 && EasyDiaryDbHelper.countDiaryAll() > 300) startReviewFlow()
             if (config.enableDebugMode) makeToast("appExecutionCount: ${config.appExecutionCount}")
+        }
+
+        mBinding.bannerHistory.apply {
+//            adapter = HistoryAdapter()
         }
     }
 
