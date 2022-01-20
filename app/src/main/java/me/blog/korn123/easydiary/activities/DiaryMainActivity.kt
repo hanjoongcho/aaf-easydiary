@@ -172,17 +172,18 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             setScrollDuration(800)
             setRevealWidth(dpToPixel(10F))
             setPageStyle(PageStyle.MULTI_PAGE_SCALE)
-            create(EasyDiaryDbHelper.findPhotoUriAll().reversed().subList(0, 4))
+            FigureIndicatorView(this@DiaryMainActivity).apply {
+                setRadius(dpToPixel(18F))
+                setTextSize(dpToPixel(13F))
+                setBackgroundColor(config.primaryColor)
+                setIndicatorGravity(IndicatorGravity.END)
+                setIndicatorView(this)
+            }
+            create(EasyDiaryDbHelper.findPhotoUriAll().shuffled().subList(0, 20))
 
             // custom indicator
 //            setIndicatorSlideMode(IndicatorSlideMode.NORMAL)
 //            setIndicatorVisibility(View.VISIBLE)
-//            setIndicatorGravity(IndicatorGravity.END)
-//            setIndicatorView(FigureIndicatorView(this@DiaryMainActivity).apply {
-//                setRadius(dpToPixel(18F))
-//                setTextSize(dpToPixel(13F))
-//                setBackgroundColor(Color.parseColor("#aa118EEA"))
-//            })
         }
     }
 
