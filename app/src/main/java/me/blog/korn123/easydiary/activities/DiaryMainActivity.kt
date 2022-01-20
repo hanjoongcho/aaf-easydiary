@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.activities
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -19,7 +20,9 @@ import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.nineoldandroids.view.ViewHelper
 import com.zhpan.bannerview.BannerViewPager
+import com.zhpan.bannerview.constants.IndicatorGravity
 import com.zhpan.bannerview.constants.PageStyle
+import com.zhpan.indicator.enums.IndicatorSlideMode
 import io.github.aafactory.commons.extensions.dpToPixel
 import io.github.aafactory.commons.extensions.makeToast
 import io.github.aafactory.commons.utils.DateUtils
@@ -40,6 +43,7 @@ import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.models.PhotoUri
 import me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
+import me.blog.korn123.easydiary.views.FigureIndicatorView
 import org.apache.commons.lang3.StringUtils
 import java.util.*
 
@@ -160,15 +164,25 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             if (config.enableDebugMode) makeToast("appExecutionCount: ${config.appExecutionCount}")
         }
 
-
-
         mBannerHistory = findViewById<BannerViewPager<PhotoUri>?>(R.id.banner_history).apply {
-            adapter = HistoryAdapter(this@DiaryMainActivity)
             setLifecycleRegistry(lifecycle)
-            setPageStyle(PageStyle.MULTI_PAGE_OVERLAP)
+            adapter = HistoryAdapter(this@DiaryMainActivity)
+            setInterval(5000)
             setPageMargin(dpToPixel(15F))
-            setRevealWidth(dpToPixel(80F))
-            create(EasyDiaryDbHelper.findPhotoUriAll().reversed().subList(0, 10))
+            setScrollDuration(800)
+            setRevealWidth(dpToPixel(10F))
+            setPageStyle(PageStyle.MULTI_PAGE_SCALE)
+            create(EasyDiaryDbHelper.findPhotoUriAll().reversed().subList(0, 4))
+
+            // custom indicator
+//            setIndicatorSlideMode(IndicatorSlideMode.NORMAL)
+//            setIndicatorVisibility(View.VISIBLE)
+//            setIndicatorGravity(IndicatorGravity.END)
+//            setIndicatorView(FigureIndicatorView(this@DiaryMainActivity).apply {
+//                setRadius(dpToPixel(18F))
+//                setTextSize(dpToPixel(13F))
+//                setBackgroundColor(Color.parseColor("#aa118EEA"))
+//            })
         }
     }
 

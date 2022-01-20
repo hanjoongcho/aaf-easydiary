@@ -26,6 +26,10 @@
 -keep class com.github.mikephil.charting.** { *; }
 -dontwarn com.github.mikephil.charting.**
 
+# For BannerViewPager
+-keep class androidx.recyclerview.widget.**{*;}
+-keep class androidx.viewpager2.widget.**{*;}
+
 -keepattributes Signature
 -keepattributes Annotation
 -keep class okhttp3.** { *; }

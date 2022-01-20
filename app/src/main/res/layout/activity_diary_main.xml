@@ -84,8 +84,7 @@
             <com.zhpan.bannerview.BannerViewPager
                 android:id="@+id/banner_history"
                 android:layout_width="match_parent"
-                android:layout_margin="10dp"
-                android:layout_height="120dp" />
+                android:layout_height="185dp" />
             <me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
                 android:id="@+id/diaryListView"
                 android:layout_marginTop="@dimen/card_layout_padding"
