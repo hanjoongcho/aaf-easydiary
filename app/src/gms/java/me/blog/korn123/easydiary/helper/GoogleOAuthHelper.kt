@@ -22,7 +22,7 @@ class GoogleOAuthHelper {
             // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
             activity.run {
                 val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestIdToken(getString(R.string.oauth_request_id_token))
+                        .requestIdToken(getString(R.string.oauth_requerst_id_token))
                         .requestEmail()
                         .build()
                 val client = GoogleSignIn.getClient(this, gso)
@@ -49,7 +49,7 @@ class GoogleOAuthHelper {
                     // Configure sign-in to request the user's ID, email address, and basic
                     // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
                     val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                            .requestIdToken(it.getString(R.string.oauth_request_id_token))
+                            .requestIdToken(it.getString(R.string.oauth_requerst_id_token))
                             .requestEmail()
                             .build()
                     val client = GoogleSignIn.getClient(it, gso)

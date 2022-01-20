@@ -18,6 +18,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.nineoldandroids.view.ViewHelper
+import com.zhpan.bannerview.BannerViewPager
+import com.zhpan.bannerview.constants.PageStyle
+import io.github.aafactory.commons.extensions.dpToPixel
 import io.github.aafactory.commons.extensions.makeToast
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.coroutines.CoroutineScope
@@ -35,6 +38,7 @@ import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.Diary
+import me.blog.korn123.easydiary.models.PhotoUri
 import me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
 import org.apache.commons.lang3.StringUtils
 import java.util.*
@@ -51,6 +55,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
      ***************************************************************************************************/
     private lateinit var mPopupMenuBinding: PopupMenuMainBinding
     private lateinit var mGridLayoutManager: GridLayoutManager
+    private lateinit var mBannerHistory: BannerViewPager<PhotoUri>
     private var mDiaryMainItemAdapter: DiaryMainItemAdapter? = null
     private var mDiaryList: ArrayList<Diary> = arrayListOf()
     private var mShowcaseIndex = 0
@@ -155,8 +160,15 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             if (config.enableDebugMode) makeToast("appExecutionCount: ${config.appExecutionCount}")
         }
 
-        mBinding.bannerHistory.apply {
-//            adapter = HistoryAdapter()
+
+
+        mBannerHistory = findViewById<BannerViewPager<PhotoUri>?>(R.id.banner_history).apply {
+            adapter = HistoryAdapter(this@DiaryMainActivity)
+            setLifecycleRegistry(lifecycle)
+            setPageStyle(PageStyle.MULTI_PAGE_OVERLAP)
+            setPageMargin(dpToPixel(15F))
+            setRevealWidth(dpToPixel(80F))
+            create(EasyDiaryDbHelper.findPhotoUriAll().reversed().subList(0, 10))
         }
     }
 

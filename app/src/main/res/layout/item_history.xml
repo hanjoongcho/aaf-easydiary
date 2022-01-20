@@ -2,7 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
+    <me.blog.korn123.easydiary.views.CornerImageView
         android:id="@+id/banner_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
