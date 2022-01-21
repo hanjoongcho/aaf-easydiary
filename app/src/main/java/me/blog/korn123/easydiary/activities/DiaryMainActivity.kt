@@ -172,7 +172,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 val diaryItems = EasyDiaryDbHelper.findDiary(null, false, System.currentTimeMillis().minus(days.plus(2) * oneDayMillis), System.currentTimeMillis().minus(days.minus(2) * oneDayMillis))
                 diaryItems.forEach {
                     it.photoUris?.forEach { photoUri ->
-                        historyItems.add(History("1년전", EasyDiaryUtils.getApplicationDataDirectory(this) + photoUri.getFilePath()))
+                        historyItems.add(History(label, EasyDiaryUtils.getApplicationDataDirectory(this) + photoUri.getFilePath()))
                     }
                 }
             }
@@ -197,7 +197,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                     visibility = View.VISIBLE
                     setLifecycleRegistry(lifecycle)
                     adapter = HistoryAdapter()
-                    setInterval(5000)
+                    setInterval(3000)
                     setPageMargin(dpToPixel(15F))
                     setScrollDuration(800)
                     setRevealWidth(dpToPixel(50F))
