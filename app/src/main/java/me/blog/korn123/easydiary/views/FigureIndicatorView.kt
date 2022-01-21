@@ -8,6 +8,7 @@ import android.util.AttributeSet
 import androidx.annotation.ColorInt
 import com.zhpan.bannerview.utils.BannerUtils
 import com.zhpan.indicator.base.BaseIndicatorView
+import me.blog.korn123.commons.utils.FontUtils
 
 /**
  * This class from 'com.example.zhpan.banner.view.FigureIndicatorView'
@@ -17,7 +18,7 @@ class FigureIndicatorView : BaseIndicatorView {
     private var radius = BannerUtils.dp2px(20f)
     private var backgroundColor = Color.parseColor("#88FF5252")
     private var textColor = Color.WHITE
-    private var textSize = BannerUtils.dp2px(13f)
+    private var mTextSize = BannerUtils.dp2px(13f)
     private var mPaint: Paint? = null
 
     constructor(context: Context) : this(context, null)
@@ -34,16 +35,19 @@ class FigureIndicatorView : BaseIndicatorView {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         if (getPageSize() > 1) {
-            mPaint!!.color = backgroundColor
-            canvas.drawCircle(width / 2f, height / 2f, radius.toFloat(), mPaint!!)
-            mPaint!!.color = textColor
-            mPaint!!.textSize = textSize.toFloat()
-            val text = "${getCurrentPosition().plus(1)}/${getPageSize()}"
-            val textWidth = mPaint!!.measureText(text).toInt()
-            val fontMetricsInt = mPaint!!.fontMetricsInt
-            val baseline = ((measuredHeight - fontMetricsInt.bottom + fontMetricsInt.top) / 2
-                    - fontMetricsInt.top)
-            canvas.drawText(text, (width - textWidth) / 2f, baseline.toFloat(), mPaint!!)
+            mPaint?.run {
+                typeface = FontUtils.getCommonTypeface(context)
+                color = backgroundColor
+                canvas.drawCircle(width / 2f, height / 2f, radius.toFloat(), this)
+                color = textColor
+                textSize = mTextSize.toFloat()
+                val text = "${getCurrentPosition().plus(1)}/${getPageSize()}"
+                val textWidth = this.measureText(text).toInt()
+                val fontMetricsInt = this.fontMetricsInt
+                val baseline = ((measuredHeight - fontMetricsInt.bottom + fontMetricsInt.top) / 2
+                        - fontMetricsInt.top)
+                canvas.drawText(text, (width - textWidth) / 2f, baseline.toFloat(), this)
+            }
         }
     }
 
@@ -56,7 +60,7 @@ class FigureIndicatorView : BaseIndicatorView {
     }
 
     fun setTextSize(textSize: Int) {
-        this.textSize = textSize
+        this.mTextSize = textSize
     }
 
     fun setTextColor(textColor: Int) {
