@@ -168,10 +168,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             val oneDayMillis: Long = 1000 * 60 * 60 * 24
             val betweenMillis = System.currentTimeMillis().minus(oldestDiary.currentTimeMillis)
             val betweenDays = betweenMillis / oneDayMillis
-            // more 1 years
-            if (betweenDays > 365) {
-                val diaryItems = EasyDiaryDbHelper.findDiary(null, false, System.currentTimeMillis().minus(370 * oneDayMillis), System.currentTimeMillis().minus(360 * oneDayMillis))
-
+            fun makeHistory(days: Int, label: String) {
+                val diaryItems = EasyDiaryDbHelper.findDiary(null, false, System.currentTimeMillis().minus(days.plus(2) * oneDayMillis), System.currentTimeMillis().minus(days.minus(2) * oneDayMillis))
                 diaryItems.forEach {
                     it.photoUris?.forEach { photoUri ->
                         historyItems.add(History("1년전", EasyDiaryUtils.getApplicationDataDirectory(this) + photoUri.getFilePath()))
@@ -179,26 +177,44 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 }
             }
 
-            mBannerHistory = findViewById<BannerViewPager<History>?>(R.id.banner_history).apply {
-                setLifecycleRegistry(lifecycle)
-                adapter = HistoryAdapter()
-                setInterval(5000)
-                setPageMargin(dpToPixel(15F))
-                setScrollDuration(800)
-                setRevealWidth(dpToPixel(10F))
-                setPageStyle(PageStyle.MULTI_PAGE_SCALE)
-                FigureIndicatorView(this@DiaryMainActivity).apply {
-                    setRadius(resources.getDimensionPixelOffset(R.dimen.dp_18))
-                    setTextSize(resources.getDimensionPixelOffset(R.dimen.sp_13))
-                    setBackgroundColor(config.primaryColor)
-                    setIndicatorGravity(IndicatorGravity.END)
-                    setIndicatorView(this)
-                }
-                create(historyItems)
+            // 2 Year Ago
+            if (betweenDays > 730) {
+                makeHistory(730, "2 Year Ago")
+            }
 
-                // custom indicator
+            // 1 Year Ago
+            if (betweenDays > 365) {
+                makeHistory(365, "1 Year Ago")
+            }
+
+            // 30 Days Ago
+            if (betweenDays > 30) {
+                makeHistory(30, "30 Days Ago")
+            }
+
+            if (historyItems.isNotEmpty()) {
+                mBannerHistory = findViewById<BannerViewPager<History>?>(R.id.banner_history).apply {
+                    visibility = View.VISIBLE
+                    setLifecycleRegistry(lifecycle)
+                    adapter = HistoryAdapter()
+                    setInterval(5000)
+                    setPageMargin(dpToPixel(15F))
+                    setScrollDuration(800)
+                    setRevealWidth(dpToPixel(50F))
+                    setPageStyle(PageStyle.MULTI_PAGE_SCALE)
+                    FigureIndicatorView(this@DiaryMainActivity).apply {
+                        setRadius(resources.getDimensionPixelOffset(R.dimen.dp_18))
+                        setTextSize(resources.getDimensionPixelOffset(R.dimen.sp_13))
+                        setBackgroundColor(config.primaryColor)
+                        setIndicatorGravity(IndicatorGravity.END)
+                        setIndicatorView(this)
+                    }
+                    create(historyItems)
+
+                    // custom indicator
 //            setIndicatorSlideMode(IndicatorSlideMode.NORMAL)
 //            setIndicatorVisibility(View.VISIBLE)
+                }
             }
         }
     }

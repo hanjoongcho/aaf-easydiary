@@ -32,6 +32,7 @@
             android:layout_height="match_parent">
             <androidx.cardview.widget.CardView
                 android:id="@+id/searchCard"
+                app:contentPadding="10dp"
                 style="@style/AppCard">
                 <LinearLayout
                     android:orientation="horizontal"
@@ -83,8 +84,9 @@
             </androidx.cardview.widget.CardView>
             <com.zhpan.bannerview.BannerViewPager
                 android:id="@+id/banner_history"
+                android:visibility="gone"
                 android:layout_width="match_parent"
-                android:layout_height="185dp" />
+                android:layout_height="150dp" />
             <me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
                 android:id="@+id/diaryListView"
                 android:layout_marginTop="@dimen/card_layout_padding"
