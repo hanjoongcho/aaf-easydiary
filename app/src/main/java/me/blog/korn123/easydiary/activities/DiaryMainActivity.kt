@@ -3,7 +3,6 @@ package me.blog.korn123.easydiary.activities
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -22,7 +21,6 @@ import com.nineoldandroids.view.ViewHelper
 import com.zhpan.bannerview.BannerViewPager
 import com.zhpan.bannerview.constants.IndicatorGravity
 import com.zhpan.bannerview.constants.PageStyle
-import com.zhpan.indicator.enums.IndicatorSlideMode
 import io.github.aafactory.commons.extensions.dpToPixel
 import io.github.aafactory.commons.extensions.makeToast
 import io.github.aafactory.commons.utils.DateUtils
@@ -41,6 +39,7 @@ import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.Diary
+import me.blog.korn123.easydiary.models.History
 import me.blog.korn123.easydiary.models.PhotoUri
 import me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
 import me.blog.korn123.easydiary.views.FigureIndicatorView
@@ -59,7 +58,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
      ***************************************************************************************************/
     private lateinit var mPopupMenuBinding: PopupMenuMainBinding
     private lateinit var mGridLayoutManager: GridLayoutManager
-    private lateinit var mBannerHistory: BannerViewPager<PhotoUri>
+    private lateinit var mBannerHistory: BannerViewPager<History>
     private var mDiaryMainItemAdapter: DiaryMainItemAdapter? = null
     private var mDiaryList: ArrayList<Diary> = arrayListOf()
     private var mShowcaseIndex = 0
@@ -164,26 +163,43 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             if (config.enableDebugMode) makeToast("appExecutionCount: ${config.appExecutionCount}")
         }
 
-        mBannerHistory = findViewById<BannerViewPager<PhotoUri>?>(R.id.banner_history).apply {
-            setLifecycleRegistry(lifecycle)
-            adapter = HistoryAdapter(this@DiaryMainActivity)
-            setInterval(5000)
-            setPageMargin(dpToPixel(15F))
-            setScrollDuration(800)
-            setRevealWidth(dpToPixel(10F))
-            setPageStyle(PageStyle.MULTI_PAGE_SCALE)
-            FigureIndicatorView(this@DiaryMainActivity).apply {
-                setRadius(dpToPixel(18F))
-                setTextSize(dpToPixel(13F))
-                setBackgroundColor(config.primaryColor)
-                setIndicatorGravity(IndicatorGravity.END)
-                setIndicatorView(this)
-            }
-            create(EasyDiaryDbHelper.findPhotoUriAll().shuffled().subList(0, 20))
+        EasyDiaryDbHelper.findOldestDiary()?.let { oldestDiary ->
+            val historyItems = mutableListOf<History>()
+            val oneDayMillis: Long = 1000 * 60 * 60 * 24
+            val betweenMillis = System.currentTimeMillis().minus(oldestDiary.currentTimeMillis)
+            val betweenDays = betweenMillis / oneDayMillis
+            // more 1 years
+            if (betweenDays > 365) {
+                val diaryItems = EasyDiaryDbHelper.findDiary(null, false, System.currentTimeMillis().minus(370 * oneDayMillis), System.currentTimeMillis().minus(360 * oneDayMillis))
 
-            // custom indicator
+                diaryItems.forEach {
+                    it.photoUris?.forEach { photoUri ->
+                        historyItems.add(History("1년전", EasyDiaryUtils.getApplicationDataDirectory(this) + photoUri.getFilePath()))
+                    }
+                }
+            }
+
+            mBannerHistory = findViewById<BannerViewPager<History>?>(R.id.banner_history).apply {
+                setLifecycleRegistry(lifecycle)
+                adapter = HistoryAdapter()
+                setInterval(5000)
+                setPageMargin(dpToPixel(15F))
+                setScrollDuration(800)
+                setRevealWidth(dpToPixel(10F))
+                setPageStyle(PageStyle.MULTI_PAGE_SCALE)
+                FigureIndicatorView(this@DiaryMainActivity).apply {
+                    setRadius(resources.getDimensionPixelOffset(R.dimen.dp_18))
+                    setTextSize(resources.getDimensionPixelOffset(R.dimen.sp_13))
+                    setBackgroundColor(config.primaryColor)
+                    setIndicatorGravity(IndicatorGravity.END)
+                    setIndicatorView(this)
+                }
+                create(historyItems)
+
+                // custom indicator
 //            setIndicatorSlideMode(IndicatorSlideMode.NORMAL)
 //            setIndicatorVisibility(View.VISIBLE)
+            }
         }
     }
 

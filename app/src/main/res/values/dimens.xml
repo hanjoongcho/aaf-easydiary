@@ -32,4 +32,7 @@
     <dimen name="card_layout_padding">1dp</dimen>
     <dimen name="card_layout_margin">1dp</dimen>
     <dimen name="card_contents_padding">15dp</dimen>
+
+    <dimen name="dp_18">18dp</dimen>
+    <dimen name="sp_13">13sp</dimen>
 </resources>

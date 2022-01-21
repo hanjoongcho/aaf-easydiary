@@ -168,6 +168,8 @@ object EasyDiaryDbHelper {
         }
     }
 
+    fun findOldestDiary(): Diary? = getInstance().where(Diary::class.java).sort("currentTimeMillis", Sort.ASCENDING).findFirst()
+
     fun findDiaryBy(sequence: Int, realmInstance: Realm = getInstance()): Diary? {
         return realmInstance.where(Diary::class.java)
                 .equalTo("sequence", sequence).findFirst()
