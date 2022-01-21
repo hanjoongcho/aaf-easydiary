@@ -36,7 +36,7 @@ class FigureIndicatorView : BaseIndicatorView {
         super.onDraw(canvas)
         if (getPageSize() > 1) {
             mPaint?.run {
-                typeface = FontUtils.getCommonTypeface(context)
+//                typeface = FontUtils.getCommonTypeface(context)
                 color = backgroundColor
                 canvas.drawCircle(width / 2f, height / 2f, radius.toFloat(), this)
                 color = textColor
