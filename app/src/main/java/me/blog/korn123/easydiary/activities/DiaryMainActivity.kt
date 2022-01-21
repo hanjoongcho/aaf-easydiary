@@ -44,6 +44,7 @@ import me.blog.korn123.easydiary.models.PhotoUri
 import me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
 import me.blog.korn123.easydiary.views.FigureIndicatorView
 import org.apache.commons.lang3.StringUtils
+import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -166,30 +167,35 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         EasyDiaryDbHelper.findOldestDiary()?.let { oldestDiary ->
             val historyItems = mutableListOf<History>()
             val oneDayMillis: Long = 1000 * 60 * 60 * 24
+            val oneYearDays: Int = 365
             val betweenMillis = System.currentTimeMillis().minus(oldestDiary.currentTimeMillis)
             val betweenDays = betweenMillis / oneDayMillis
-            fun makeHistory(days: Int, label: String) {
-                val diaryItems = EasyDiaryDbHelper.findDiary(null, false, System.currentTimeMillis().minus(days.plus(2) * oneDayMillis), System.currentTimeMillis().minus(days.minus(2) * oneDayMillis))
+            fun makeHistory(days: Int, millis: Long, label: String) {
+                val dayBuffer = 1
+                val start = if (days > 0) System.currentTimeMillis().minus(days.plus(dayBuffer) * oneDayMillis) else millis.minus(dayBuffer * oneDayMillis)
+                val end  = if (days > 0) System.currentTimeMillis().minus(days.minus(dayBuffer) * oneDayMillis) else millis.plus(dayBuffer * oneDayMillis)
+                val diaryItems = EasyDiaryDbHelper.findDiary(null, false, start, end)
                 diaryItems.forEach {
                     it.photoUris?.forEach { photoUri ->
-                        historyItems.add(History(label, EasyDiaryUtils.getApplicationDataDirectory(this) + photoUri.getFilePath()))
+                        historyItems.add(History("$label ${DateUtils.getDateStringFromTimeMillis(it.currentTimeMillis, SimpleDateFormat.DATE_FIELD)}", EasyDiaryUtils.getApplicationDataDirectory(this) + photoUri.getFilePath()))
                     }
                 }
             }
 
-            // 2 Year Ago
-            if (betweenDays > 730) {
-                makeHistory(730, "2 Year Ago")
-            }
-
             // 1 Year Ago
-            if (betweenDays > 365) {
-                makeHistory(365, "1 Year Ago")
+            if (betweenDays > oneYearDays) {
+                for (i in 1..(betweenDays / oneYearDays).toInt()) {
+                    makeHistory(oneYearDays * i, 0L, "$i ${if (i == 0) "Year" else "Years"} Ago")
+                }
             }
 
-            // 30 Days Ago
-            if (betweenDays > 30) {
-                makeHistory(30, "30 Days Ago")
+            // 11 ~ 1 Month Ago
+            val calendar = Calendar.getInstance(Locale.getDefault())
+            for (i in 1..11) {
+                calendar.add(Calendar.MONTH, -1)
+                if (oldestDiary.currentTimeMillis < calendar.timeInMillis) {
+                    makeHistory(0, calendar.timeInMillis, "1 ${if (i == 0) "Month" else "Months"} Ago")
+                }
             }
 
             if (historyItems.isNotEmpty()) {
@@ -209,7 +215,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                         setIndicatorGravity(IndicatorGravity.END)
                         setIndicatorView(this)
                     }
-                    create(historyItems)
+                    create(historyItems.reversed())
 
                     // custom indicator
 //            setIndicatorSlideMode(IndicatorSlideMode.NORMAL)

@@ -22,6 +22,7 @@
         app:fixedAppcompatPadding="true"
         app:contentPadding="5dp"
         app:cardBackgroundColor="?attr/colorPrimary"
+        android:alpha="0.8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
