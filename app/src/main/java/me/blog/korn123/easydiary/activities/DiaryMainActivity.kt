@@ -177,15 +177,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 val diaryItems = EasyDiaryDbHelper.findDiary(null, false, start, end)
                 diaryItems.forEach {
                     it.photoUris?.forEach { photoUri ->
-                        historyItems.add(History("$label ${DateUtils.getDateStringFromTimeMillis(it.currentTimeMillis, SimpleDateFormat.DATE_FIELD)}", EasyDiaryUtils.getApplicationDataDirectory(this) + photoUri.getFilePath()))
+                        historyItems.add(History("$label ${DateUtils.getDateStringFromTimeMillis(it.currentTimeMillis, SimpleDateFormat.FULL)}", EasyDiaryUtils.getApplicationDataDirectory(this) + photoUri.getFilePath()))
                     }
-                }
-            }
-
-            // 1 Year Ago
-            if (betweenDays > oneYearDays) {
-                for (i in 1..(betweenDays / oneYearDays).toInt()) {
-                    makeHistory(oneYearDays * i, 0L, "$i ${if (i == 0) "Year" else "Years"} Ago")
                 }
             }
 
@@ -194,7 +187,14 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             for (i in 1..11) {
                 calendar.add(Calendar.MONTH, -1)
                 if (oldestDiary.currentTimeMillis < calendar.timeInMillis) {
-                    makeHistory(0, calendar.timeInMillis, "1 ${if (i == 0) "Month" else "Months"} Ago")
+                    makeHistory(0, calendar.timeInMillis, "$i ${if (i == 0) "Month" else "Months"} Ago")
+                }
+            }
+
+            // 1 Year Ago
+            if (betweenDays > oneYearDays) {
+                for (i in 1..(betweenDays / oneYearDays).toInt()) {
+                    makeHistory(oneYearDays * i, 0L, "$i ${if (i == 0) "Year" else "Years"} Ago")
                 }
             }
 
