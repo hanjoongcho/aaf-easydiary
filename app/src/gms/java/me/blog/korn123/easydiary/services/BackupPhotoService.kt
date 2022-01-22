@@ -20,6 +20,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.createBackupContentText
+import me.blog.korn123.easydiary.extensions.pendingIntentFlag
 import me.blog.korn123.easydiary.helper.*
 import java.io.File
 import java.util.*
@@ -190,7 +191,7 @@ class BackupPhotoService : Service() {
                 .setContentIntent(
                         PendingIntent.getActivity(this, 0, Intent(this, DiaryMainActivity::class.java).apply {
                             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        }, PendingIntent.FLAG_UPDATE_CURRENT)
+                        }, pendingIntentFlag())
                 )
                 .addAction(
                         R.drawable.ic_easydiary,
