@@ -327,7 +327,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 .setContentIntent(
                         PendingIntent.getActivity(this, 0, Intent(this, DiaryMainActivity::class.java).apply {
                             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        }, PendingIntent.FLAG_UPDATE_CURRENT)
+                        }, pendingIntentFlag())
                 )
 
 

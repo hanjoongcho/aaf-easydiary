@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.172.21 (date: 2022.01.22)
+  * Fixed an error that caused abnormal termination when the schedule function was set in Android 12 version
+
 # Changes in 1.4.172.20 (date: 2022.01.19)
   * Fixed an error that caused abnormal termination in Android 7.1 or lower version when attaching a photo
   * Fixed some errors that caused abnormal termination in Android 12 version

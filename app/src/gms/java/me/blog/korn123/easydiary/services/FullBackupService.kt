@@ -22,6 +22,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.createBackupContentText
+import me.blog.korn123.easydiary.extensions.pendingIntentFlag
 import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.ActionLog
@@ -232,7 +233,7 @@ class FullBackupService : Service() {
                     .setContentIntent(
                             PendingIntent.getActivity(this, alarm.id, Intent(this, DiaryMainActivity::class.java).apply {
                                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            }, PendingIntent.FLAG_UPDATE_CURRENT)
+                            }, pendingIntentFlag())
                     )
                     .addAction(
                             R.drawable.ic_easydiary,
@@ -240,7 +241,7 @@ class FullBackupService : Service() {
                             PendingIntent.getService(this, alarm.id, Intent(this, NotificationService::class.java).apply {
                                 action = NotificationService.ACTION_FULL_BACKUP_GMS_DISMISS
                                 putExtra(SettingsScheduleFragment.ALARM_ID, alarm.id)
-                            }, PendingIntent.FLAG_UPDATE_CURRENT)
+                            }, pendingIntentFlag())
                     )
             mNotificationManager.notify(alarm.id, resultNotificationBuilder.build())
             workStatus.isDone = true

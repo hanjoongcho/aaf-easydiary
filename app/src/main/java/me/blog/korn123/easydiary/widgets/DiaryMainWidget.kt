@@ -14,6 +14,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryWritingActivity
 import me.blog.korn123.easydiary.activities.DiaryReadingActivity
 import me.blog.korn123.easydiary.extensions.changeBitmapColor
+import me.blog.korn123.easydiary.extensions.pendingIntentFlag
 import me.blog.korn123.easydiary.helper.DIARY_EXECUTION_MODE
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EXECUTION_MODE_ACCESS_FROM_OUTSIDE
@@ -91,7 +92,8 @@ class DiaryMainWidget : AppWidgetProvider() {
                         DiaryMainWidget::class.java
                 ).run {
                     action = OPEN_READ_PAGE
-                    PendingIntent.getBroadcast(context, 0, this, PendingIntent.FLAG_UPDATE_CURRENT)
+
+                    PendingIntent.getBroadcast(context, 0, this, context.pendingIntentFlag())
                 }
                 setPendingIntentTemplate(R.id.diaryListView, pendingIntent)
 

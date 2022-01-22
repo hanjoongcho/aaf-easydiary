@@ -587,6 +587,10 @@
         Fixed an error that caused abnormal termination in Android 7.1 or lower version when attaching a photo\n
         Fixed some errors that caused abnormal termination in Android 12 version
     </string>
+    <string name="release_260">
+        v1.4.172.21 / 2022.01.22\n
+        Fixed an error that caused abnormal termination when the schedule function was set in Android 12 version
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->

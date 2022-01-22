@@ -38,7 +38,7 @@ open class BaseAlarmWorkExecutor(val context: Context) {
         }
     }
 
-    @SuppressLint("NewApi")
+    @SuppressLint("NewApi", "LaunchActivityFromNotification")
     fun openSnoozeNotification(alarm: Alarm) {
         context.run {
             val notificationManager = getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
@@ -62,7 +62,7 @@ open class BaseAlarmWorkExecutor(val context: Context) {
                     .setContentIntent(
                             PendingIntent.getBroadcast(this, 0, Intent(this, AlarmReceiver::class.java).apply {
                                 putExtra(DOZE_SCHEDULE, true)
-                            }, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+                            }, pendingIntentFlag())
                     )
             notificationManager.notify(alarm.id, builder.build())
         }

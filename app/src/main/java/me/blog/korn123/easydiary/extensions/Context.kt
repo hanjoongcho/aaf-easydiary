@@ -81,6 +81,8 @@ import kotlin.math.pow
 
 val Context.config: Config get() = Config.newInstance(this)
 
+fun Context.pendingIntentFlag() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT else PendingIntent.FLAG_UPDATE_CURRENT
+
 fun Context.isNightMode() = when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
     Configuration.UI_MODE_NIGHT_YES -> false
     Configuration.UI_MODE_NIGHT_NO -> false
@@ -511,13 +513,13 @@ fun Context.getOpenAlarmTabIntent(alarm: Alarm): PendingIntent {
         }
         else -> null
     }
-    return PendingIntent.getActivity(this, 1000, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+    return PendingIntent.getActivity(this, 1000, intent, pendingIntentFlag())
 }
 
 fun Context.getAlarmIntent(alarm: Alarm): PendingIntent {
     val intent = Intent(this, AlarmReceiver::class.java)
     intent.putExtra(SettingsScheduleFragment.ALARM_ID, alarm.id)
-    return PendingIntent.getBroadcast(this, alarm.id, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+    return PendingIntent.getBroadcast(this, alarm.id, intent, pendingIntentFlag())
 }
 
 fun Context.cancelAlarmClock(alarm: Alarm) {
