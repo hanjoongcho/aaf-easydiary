@@ -357,7 +357,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 //                        layoutParams.height = dpToPixel(100F)
                         setRevealWidth(dpToPixel(10F))
                         create(historyItems.reversed())
-                        removeDefaultPageTransformer()
+//                        removeDefaultPageTransformer()
                     } else {
                         setRevealWidth(dpToPixel(50F))
                         create(historyItems.reversed())
