@@ -23,6 +23,7 @@ import com.zhpan.bannerview.constants.IndicatorGravity
 import com.zhpan.bannerview.constants.PageStyle
 import io.github.aafactory.commons.extensions.dpToPixel
 import io.github.aafactory.commons.extensions.makeToast
+import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -216,8 +217,12 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                     }
 
                     if (isLandScape()) {
-                        layoutParams.height = dpToPixel(100F)
-                        setRevealWidth(dpToPixel(280F))
+                        val point = CommonUtils.getDefaultDisplay(this@DiaryMainActivity)
+                        val historyWidth = (point.x / 2.5).toInt()
+                        mBinding.bannerHistory.layoutParams.width = historyWidth
+                        mBinding.diaryListView.layoutParams.width = point.x.minus(historyWidth)
+//                        layoutParams.height = dpToPixel(100F)
+                        setRevealWidth(dpToPixel(10F))
                         create(historyItems.reversed())
                         removeDefaultPageTransformer()
                     } else {
