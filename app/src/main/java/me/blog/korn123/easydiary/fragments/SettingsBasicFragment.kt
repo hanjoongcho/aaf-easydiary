@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ListView
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -19,7 +20,6 @@ import me.blog.korn123.easydiary.adapters.OptionItemAdapter
 import me.blog.korn123.easydiary.databinding.FragmentSettingsBasicBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
-import java.util.*
 
 class SettingsBasicFragment : androidx.fragment.app.Fragment() {
 
@@ -29,24 +29,31 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
      *
      ***************************************************************************************************/
     private lateinit var mBinding: FragmentSettingsBasicBinding
-    private val mRequestLocationSourceLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        requireActivity().run {
-            pauseLock()
-            when (isLocationEnabled()) {
-                true -> {
-                    mBinding.locationInfoSwitcher.isChecked = true
-                    config.enableLocationInfo = mBinding.locationInfoSwitcher.isChecked
-                    makeSnackBar("GPS provider setting is activated!!!")
-                }
-                false -> makeSnackBar("The request operation did not complete normally.")
-            }
-        }
-    }
+    private lateinit var mRequestLocationSourceLauncher: ActivityResultLauncher<Intent>
 
+    
     /***************************************************************************************************
      *   override functions
      *
      ***************************************************************************************************/
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        mRequestLocationSourceLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            requireActivity().run {
+                pauseLock()
+                when (isLocationEnabled()) {
+                    true -> {
+                        mBinding.locationInfoSwitcher.isChecked = true
+                        config.enableLocationInfo = mBinding.locationInfoSwitcher.isChecked
+                        makeSnackBar("GPS provider setting is activated!!!")
+                    }
+                    false -> makeSnackBar("The request operation did not complete normally.")
+                }
+            }
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         mBinding = FragmentSettingsBasicBinding.inflate(layoutInflater)
         return mBinding.root

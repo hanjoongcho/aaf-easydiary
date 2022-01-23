@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ListView
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -29,7 +30,6 @@ import me.blog.korn123.easydiary.helper.USER_CUSTOM_FONTS_DIRECTORY
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import java.io.File
-import java.util.*
 
 class SettingsFontFragment : androidx.fragment.app.Fragment() {
 
@@ -40,45 +40,53 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
      ***************************************************************************************************/
     private lateinit var mBinding: FragmentSettingsFontBinding
     private lateinit var progressContainer: ConstraintLayout
-    private val mRequestFontPick = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
-        requireActivity().run {
-            pauseLock()
-            if (activityResult.resultCode == Activity.RESULT_OK && activityResult.data != null) {
-                activityResult.data!!.data?.let { uri ->
-                    val fileName = EasyDiaryUtils.queryName(contentResolver, uri)
-                    if (FilenameUtils.getExtension(fileName).equals("ttf", true)) {
-                        Thread(Runnable {
-                            val inputStream = contentResolver.openInputStream(uri)
-                            val fontDestDir = File(EasyDiaryUtils.getApplicationDataDirectory(this) + USER_CUSTOM_FONTS_DIRECTORY)
-                            FileUtils.copyToFile(inputStream, File(fontDestDir, fileName))
-                            runOnUiThread{
-                                progressContainer.visibility = View.GONE
-                                showAlertDialog("${FilenameUtils.getBaseName(fileName)} font file is registered.", null)
-                            }
-                        }).start()
-                        progressContainer.visibility = View.VISIBLE
-                    } else {
-                        showAlertDialog(getString(R.string.add_ttf_fonts_title), "$fileName is not ttf file.", null)
-                    }
-                }
-            }
-        }
-    }
-    private val mRequestExternalStoragePermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-        requireActivity().run {
-            pauseLock()
-            when (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
-                true -> openFontSettingDialog()
-                false -> makeSnackBar(mBinding.root, getString(R.string.guide_message_3))
-            }
-        }
-    }
+    private lateinit var  mRequestFontPick: ActivityResultLauncher<Intent>
+    private lateinit var  mRequestExternalStoragePermissionLauncher: ActivityResultLauncher<Array<String>>
 
 
     /***************************************************************************************************
      *   override functions
      *
      ***************************************************************************************************/
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        mRequestFontPick = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
+            requireActivity().run {
+                pauseLock()
+                if (activityResult.resultCode == Activity.RESULT_OK && activityResult.data != null) {
+                    activityResult.data!!.data?.let { uri ->
+                        val fileName = EasyDiaryUtils.queryName(contentResolver, uri)
+                        if (FilenameUtils.getExtension(fileName).equals("ttf", true)) {
+                            Thread(Runnable {
+                                val inputStream = contentResolver.openInputStream(uri)
+                                val fontDestDir = File(EasyDiaryUtils.getApplicationDataDirectory(this) + USER_CUSTOM_FONTS_DIRECTORY)
+                                FileUtils.copyToFile(inputStream, File(fontDestDir, fileName))
+                                runOnUiThread{
+                                    progressContainer.visibility = View.GONE
+                                    showAlertDialog("${FilenameUtils.getBaseName(fileName)} font file is registered.", null)
+                                }
+                            }).start()
+                            progressContainer.visibility = View.VISIBLE
+                        } else {
+                            showAlertDialog(getString(R.string.add_ttf_fonts_title), "$fileName is not ttf file.", null)
+                        }
+                    }
+                }
+            }
+        }
+
+        mRequestExternalStoragePermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+            requireActivity().run {
+                pauseLock()
+                when (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
+                    true -> openFontSettingDialog()
+                    false -> makeSnackBar(mBinding.root, getString(R.string.guide_message_3))
+                }
+            }
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = FragmentSettingsFontBinding.inflate(layoutInflater)
         return mBinding.root
