@@ -9,6 +9,7 @@ import androidx.annotation.ColorInt
 import com.zhpan.bannerview.utils.BannerUtils
 import com.zhpan.indicator.base.BaseIndicatorView
 import me.blog.korn123.commons.utils.FontUtils
+import me.blog.korn123.easydiary.extensions.config
 
 /**
  * This class from 'com.example.zhpan.banner.view.FigureIndicatorView'
@@ -36,11 +37,12 @@ class FigureIndicatorView : BaseIndicatorView {
         super.onDraw(canvas)
         if (getPageSize() > 1) {
             mPaint?.run {
-//                typeface = FontUtils.getCommonTypeface(context)
+                typeface = FontUtils.getCommonTypeface(context)
                 color = backgroundColor
                 canvas.drawCircle(width / 2f, height / 2f, radius.toFloat(), this)
                 color = textColor
                 textSize = mTextSize.toFloat()
+//                textSize = context.config.settingFontSize
                 val text = "${getCurrentPosition().plus(1)}/${getPageSize()}"
                 val textWidth = this.measureText(text).toInt()
                 val fontMetricsInt = this.fontMetricsInt

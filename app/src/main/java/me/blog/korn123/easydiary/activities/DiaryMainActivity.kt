@@ -217,7 +217,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
                     if (isLandScape()) {
                         layoutParams.height = dpToPixel(100F)
-                        setRevealWidth(dpToPixel(250F))
+                        setRevealWidth(dpToPixel(280F))
                         create(historyItems.reversed())
                         removeDefaultPageTransformer()
                     } else {
