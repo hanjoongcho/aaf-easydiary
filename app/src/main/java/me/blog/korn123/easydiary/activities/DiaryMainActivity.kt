@@ -41,7 +41,6 @@ import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.models.History
-import me.blog.korn123.easydiary.models.PhotoUri
 import me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
 import me.blog.korn123.easydiary.views.FigureIndicatorView
 import org.apache.commons.lang3.StringUtils
@@ -151,87 +150,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         EasyDiaryUtils.initWorkingDirectory(this@DiaryMainActivity)
         migrateData(mBinding)
         setupPopupMenu()
-
-        when (savedInstanceState == null) {
-            true -> checkWhatsNewDialog()
-            false -> {
-                diaryMode = savedInstanceState.getSerializable(DIARY_MODE) as DiaryMode
-            }
-        }
-
-        if (config.enableReviewFlow) {
-            config.appExecutionCount = config.appExecutionCount.plus(1)
-            if (config.appExecutionCount > 30 && EasyDiaryDbHelper.countDiaryAll() > 300) startReviewFlow()
-            if (config.enableDebugMode) makeToast("appExecutionCount: ${config.appExecutionCount}")
-        }
-
-        EasyDiaryDbHelper.findOldestDiary()?.let { oldestDiary ->
-            val historyItems = mutableListOf<History>()
-            val oneDayMillis: Long = 1000 * 60 * 60 * 24
-            val oneYearDays: Int = 365
-            val betweenMillis = System.currentTimeMillis().minus(oldestDiary.currentTimeMillis)
-            val betweenDays = betweenMillis / oneDayMillis
-            fun makeHistory(days: Int, millis: Long, label: String) {
-                val dayBuffer = 1
-                val start = if (days > 0) System.currentTimeMillis().minus(days.plus(dayBuffer) * oneDayMillis) else millis.minus(dayBuffer * oneDayMillis)
-                val end  = if (days > 0) System.currentTimeMillis().minus(days.minus(dayBuffer) * oneDayMillis) else millis.plus(dayBuffer * oneDayMillis)
-                val diaryItems = EasyDiaryDbHelper.findDiary(null, false, start, end)
-                diaryItems.forEach {
-                    it.photoUris?.forEach { photoUri ->
-                        historyItems.add(History("$label ${DateUtils.getDateStringFromTimeMillis(it.currentTimeMillis, SimpleDateFormat.FULL)}", EasyDiaryUtils.getApplicationDataDirectory(this) + photoUri.getFilePath()))
-                    }
-                }
-            }
-
-            // 11 ~ 1 Month Ago
-            val calendar = Calendar.getInstance(Locale.getDefault())
-            for (i in 1..11) {
-                calendar.add(Calendar.MONTH, -1)
-                if (oldestDiary.currentTimeMillis < calendar.timeInMillis) {
-                    makeHistory(0, calendar.timeInMillis, "$i ${if (i == 0) "Month" else "Months"} Ago")
-                }
-            }
-
-            // 1 Year Ago
-            if (betweenDays > oneYearDays) {
-                for (i in 1..(betweenDays / oneYearDays).toInt()) {
-                    makeHistory(oneYearDays * i, 0L, "$i ${if (i == 0) "Year" else "Years"} Ago")
-                }
-            }
-
-            if (historyItems.isNotEmpty()) {
-                mBannerHistory = findViewById<BannerViewPager<History>?>(R.id.banner_history).apply {
-                    visibility = View.VISIBLE
-                    setLifecycleRegistry(lifecycle)
-                    adapter = HistoryAdapter()
-                    setInterval(3000)
-                    setScrollDuration(800)
-                    setPageMargin(dpToPixel(10F))
-                    setPageStyle(PageStyle.MULTI_PAGE_SCALE)
-                    FigureIndicatorView(this@DiaryMainActivity).apply {
-                        setRadius(resources.getDimensionPixelOffset(R.dimen.dp_18))
-                        setTextSize(resources.getDimensionPixelOffset(R.dimen.sp_13))
-                        setBackgroundColor(config.primaryColor)
-                        setIndicatorGravity(IndicatorGravity.END)
-                        setIndicatorView(this)
-                    }
-
-                    if (isLandScape()) {
-                        val point = CommonUtils.getDefaultDisplay(this@DiaryMainActivity)
-                        val historyWidth = (point.x / 2.5).toInt()
-                        mBinding.bannerHistory.layoutParams.width = historyWidth
-                        mBinding.diaryListView.layoutParams.width = point.x.minus(historyWidth)
-//                        layoutParams.height = dpToPixel(100F)
-                        setRevealWidth(dpToPixel(10F))
-                        create(historyItems.reversed())
-                        removeDefaultPageTransformer()
-                    } else {
-                        setRevealWidth(dpToPixel(50F))
-                        create(historyItems.reversed())
-                    }
-                }
-            }
-        }
+        checkBundle(savedInstanceState)
+        setupReviewFlow()
+        setupHistory()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -359,6 +280,93 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
      *   etc functions
      *
      ***************************************************************************************************/
+    private fun checkBundle(savedInstanceState: Bundle?) {
+        when (savedInstanceState == null) {
+            true -> checkWhatsNewDialog()
+            false -> {
+                diaryMode = savedInstanceState.getSerializable(DIARY_MODE) as DiaryMode
+            }
+        }
+    }
+
+    private fun setupReviewFlow() {
+        if (config.enableReviewFlow) {
+            config.appExecutionCount = config.appExecutionCount.plus(1)
+            if (config.appExecutionCount > 30 && EasyDiaryDbHelper.countDiaryAll() > 300) startReviewFlow()
+            if (config.enableDebugMode) makeToast("appExecutionCount: ${config.appExecutionCount}")
+        }
+    }
+
+    private fun setupHistory() {
+        EasyDiaryDbHelper.findOldestDiary()?.let { oldestDiary ->
+            val historyItems = mutableListOf<History>()
+            val oneDayMillis: Long = 1000 * 60 * 60 * 24
+            val oneYearDays: Int = 365
+            val betweenMillis = System.currentTimeMillis().minus(oldestDiary.currentTimeMillis)
+            val betweenDays = betweenMillis / oneDayMillis
+            fun makeHistory(days: Int, millis: Long, label: String) {
+                val dayBuffer = 1
+                val start = if (days > 0) System.currentTimeMillis().minus(days.plus(dayBuffer) * oneDayMillis) else millis.minus(dayBuffer * oneDayMillis)
+                val end  = if (days > 0) System.currentTimeMillis().minus(days.minus(dayBuffer) * oneDayMillis) else millis.plus(dayBuffer * oneDayMillis)
+                val diaryItems = EasyDiaryDbHelper.findDiary(null, false, start, end)
+                diaryItems.forEach {
+                    it.photoUris?.forEach { photoUri ->
+                        historyItems.add(History("$label ${DateUtils.getDateStringFromTimeMillis(it.currentTimeMillis, SimpleDateFormat.FULL)}", EasyDiaryUtils.getApplicationDataDirectory(this) + photoUri.getFilePath()))
+                    }
+                }
+            }
+
+            // 11 ~ 1 Month Ago
+            val calendar = Calendar.getInstance(Locale.getDefault())
+            for (i in 1..11) {
+                calendar.add(Calendar.MONTH, -1)
+                if (oldestDiary.currentTimeMillis < calendar.timeInMillis) {
+                    makeHistory(0, calendar.timeInMillis, "$i ${if (i == 0) "Month" else "Months"} Ago")
+                }
+            }
+
+            // 1 Year Ago
+            if (betweenDays > oneYearDays) {
+                for (i in 1..(betweenDays / oneYearDays).toInt()) {
+                    makeHistory(oneYearDays * i, 0L, "$i ${if (i == 0) "Year" else "Years"} Ago")
+                }
+            }
+
+            if (historyItems.isNotEmpty()) {
+                mBannerHistory = findViewById<BannerViewPager<History>?>(R.id.banner_history).apply {
+                    visibility = View.VISIBLE
+                    setLifecycleRegistry(lifecycle)
+                    adapter = HistoryAdapter()
+                    setInterval(3000)
+                    setScrollDuration(800)
+                    setPageMargin(dpToPixel(10F))
+                    setPageStyle(PageStyle.MULTI_PAGE_SCALE)
+                    FigureIndicatorView(this@DiaryMainActivity).apply {
+                        setRadius(resources.getDimensionPixelOffset(R.dimen.dp_18))
+                        setTextSize(resources.getDimensionPixelOffset(R.dimen.sp_13))
+                        setBackgroundColor(config.primaryColor)
+                        setIndicatorGravity(IndicatorGravity.END)
+                        setIndicatorView(this)
+                    }
+
+                    if (isLandScape()) {
+                        val point = CommonUtils.getDefaultDisplay(this@DiaryMainActivity)
+                        val historyWidth = (point.x / 2.5).toInt()
+                        mBinding.bannerHistory.layoutParams.width = historyWidth
+                        mBinding.diaryListView.layoutParams.width = point.x.minus(historyWidth)
+//                        layoutParams.height = dpToPixel(100F)
+                        setRevealWidth(dpToPixel(10F))
+                        create(historyItems.reversed())
+                        removeDefaultPageTransformer()
+                    } else {
+                        setRevealWidth(dpToPixel(50F))
+                        create(historyItems.reversed())
+                    }
+                }
+            }
+        }
+    }
+
     private fun setupPopupMenu() {
         val customItemClickListener = View.OnClickListener {
             when (it.id) {
