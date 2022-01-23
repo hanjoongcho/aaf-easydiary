@@ -204,9 +204,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                     setLifecycleRegistry(lifecycle)
                     adapter = HistoryAdapter()
                     setInterval(3000)
-                    setPageMargin(dpToPixel(15F))
                     setScrollDuration(800)
-                    setRevealWidth(dpToPixel(50F))
+                    setPageMargin(dpToPixel(10F))
                     setPageStyle(PageStyle.MULTI_PAGE_SCALE)
                     FigureIndicatorView(this@DiaryMainActivity).apply {
                         setRadius(resources.getDimensionPixelOffset(R.dimen.dp_18))
@@ -215,11 +214,16 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                         setIndicatorGravity(IndicatorGravity.END)
                         setIndicatorView(this)
                     }
-                    create(historyItems.reversed())
 
-                    // custom indicator
-//            setIndicatorSlideMode(IndicatorSlideMode.NORMAL)
-//            setIndicatorVisibility(View.VISIBLE)
+                    if (isLandScape()) {
+                        layoutParams.height = dpToPixel(100F)
+                        setRevealWidth(dpToPixel(250F))
+                        create(historyItems.reversed())
+                        removeDefaultPageTransformer()
+                    } else {
+                        setRevealWidth(dpToPixel(50F))
+                        create(historyItems.reversed())
+                    }
                 }
             }
         }

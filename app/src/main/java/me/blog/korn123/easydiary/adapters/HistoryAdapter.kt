@@ -27,7 +27,6 @@ class HistoryAdapter : BaseBannerAdapter<History>() {
             bannerImage.setRoundCorner(context.dpToPixel(8F))
             textDescription.typeface = FontUtils.getCommonTypeface(context)
             textDescription.text = history.title
-            textDescription.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.config.settingFontSize)
             val options = RequestOptions()
                 .error(R.drawable.ic_error_7)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
