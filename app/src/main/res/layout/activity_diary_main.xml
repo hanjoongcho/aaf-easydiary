@@ -83,6 +83,7 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
             <com.zhpan.bannerview.BannerViewPager
+                tools:visibility="visible"
                 android:id="@+id/banner_history"
                 android:visibility="gone"
                 android:layout_width="match_parent"

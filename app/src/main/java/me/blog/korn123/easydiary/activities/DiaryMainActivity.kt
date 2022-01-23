@@ -15,9 +15,11 @@ import android.widget.RelativeLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.viewpager2.widget.ViewPager2
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.nineoldandroids.view.ViewHelper
+import com.simplemobiletools.commons.extensions.toast
 import com.zhpan.bannerview.BannerViewPager
 import com.zhpan.bannerview.constants.IndicatorGravity
 import com.zhpan.bannerview.constants.PageStyle
@@ -362,6 +364,12 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                         setRevealWidth(dpToPixel(50F))
                         create(historyItems.reversed())
                     }
+//                    registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+//                        override fun onPageSelected(position: Int) {
+//                            super.onPageSelected(position)
+//                            toast(historyItems[position].title)
+//                        }
+//                    })
                 }
             }
         }
