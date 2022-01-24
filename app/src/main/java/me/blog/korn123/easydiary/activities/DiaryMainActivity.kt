@@ -313,27 +313,30 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 diaryItems.forEach {
                     it.photoUris?.forEach { photoUri ->
                         historyItems.add(
-                            History(historyTag,
-                            DateUtils.getDateStringFromTimeMillis(it.currentTimeMillis, SimpleDateFormat.FULL),
-                            EasyDiaryUtils.getApplicationDataDirectory(this) + photoUri.getFilePath())
+                            History(
+                                historyTag,
+                                DateUtils.getDateStringFromTimeMillis(it.currentTimeMillis, SimpleDateFormat.FULL),
+                                EasyDiaryUtils.getApplicationDataDirectory(this) + photoUri.getFilePath(),
+                                it.sequence
+                            )
                         )
                     }
                 }
             }
 
-            // 11 ~ 1 Month Ago
+            // 1 month history of less than 1 year
             val calendar = Calendar.getInstance(Locale.getDefault())
             for (i in 1..11) {
                 calendar.add(Calendar.MONTH, -1)
                 if (oldestDiary.currentTimeMillis < calendar.timeInMillis) {
-                    makeHistory(0, calendar.timeInMillis, "$i ${if (i == 0) "Month" else "Months"} Ago")
+                    makeHistory(0, calendar.timeInMillis, "$i ${if (i == 1) "Month" else "Months"} Ago")
                 }
             }
 
-            // 1 Year Ago
+            // 1 year history of more than 1 year
             if (betweenDays > oneYearDays) {
                 for (i in 1..(betweenDays / oneYearDays).toInt()) {
-                    makeHistory(oneYearDays * i, 0L, "$i ${if (i == 0) "Year" else "Years"} Ago")
+                    makeHistory(oneYearDays * i, 0L, "$i ${if (i == 1) "Year" else "Years"} Ago")
                 }
             }
 
@@ -353,7 +356,14 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                         setIndicatorGravity(IndicatorGravity.END)
                         setIndicatorView(this)
                     }
-
+                    setOnPageClickListener { _, position ->
+                        TransitionHelper.startActivityWithTransition(
+                            this@DiaryMainActivity,
+                            Intent(this@DiaryMainActivity, DiaryReadingActivity::class.java).apply {
+                                putExtra(DIARY_SEQUENCE, historyItems[position].sequence)
+                            }
+                        )
+                    }
                     historyItems.reverse()
                     mBinding.textDescription.text = historyItems[0].historyTag
                     if (isLandScape()) {
