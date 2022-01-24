@@ -83,6 +83,8 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
             <androidx.constraintlayout.widget.ConstraintLayout
+                tools:visibility="visible"
+                android:visibility="gone"
                 android:id="@+id/layout_banner_container"
                 android:layout_width="match_parent"
                 android:layout_height="150dp">
@@ -90,11 +92,9 @@
                     android:id="@+id/banner_history"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:visibility="visible" />
+                    app:layout_constraintTop_toTopOf="parent"/>
                 <me.blog.korn123.easydiary.views.FixedCardView
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"

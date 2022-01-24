@@ -87,13 +87,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    tools:visibility="visible"
                     android:id="@+id/layout_banner_container"
-                    android:layout_width="100dp"
+                    android:visibility="gone"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent">
                     <com.zhpan.bannerview.BannerViewPager
                         android:id="@+id/banner_history"
-                        tools:visibility="visible"
-                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
                     <me.blog.korn123.easydiary.views.FixedCardView
@@ -122,7 +122,7 @@
                 <me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
                     android:id="@+id/diaryListView"
                     android:layout_marginTop="@dimen/card_layout_padding"
-                    android:layout_width="100dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     style="@style/recycler_fast_scroll"
                     />

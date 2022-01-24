@@ -339,7 +339,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
             if (historyItems.isNotEmpty()) {
                 mBannerHistory = findViewById<BannerViewPager<History>?>(R.id.banner_history).apply {
-                    visibility = View.VISIBLE
+                    mBinding.layoutBannerContainer.visibility = View.VISIBLE
                     setLifecycleRegistry(lifecycle)
                     adapter = HistoryAdapter()
                     setInterval(3000)
