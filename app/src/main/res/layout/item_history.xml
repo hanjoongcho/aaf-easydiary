@@ -18,16 +18,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        app:fixedAppcompatPadding="true"
-        app:contentPadding="5dp"
-        app:cardBackgroundColor="?attr/colorPrimary"
+        android:layout_marginBottom="5dp"
         android:alpha="0.8"
-        app:layout_constraintTop_toTopOf="parent"
+        app:cardBackgroundColor="?attr/colorPrimary"
+        app:contentPadding="5dp"
+        app:fixedAppcompatPadding="true"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <me.blog.korn123.easydiary.views.FixedTextView
-            app:applyGlobalSize="false"
             android:id="@+id/text_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -35,6 +34,8 @@
             android:layout_marginEnd="5dp"
             android:textColor="#FFFFFF"
             android:textSize="13dp"
+            app:applyGlobalSize="false"
+            app:applyGlobalColor="false"
             tools:text="100" />
     </me.blog.korn123.easydiary.views.FixedCardView>
 

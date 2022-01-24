@@ -19,7 +19,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.nineoldandroids.view.ViewHelper
-import com.simplemobiletools.commons.extensions.toast
 import com.zhpan.bannerview.BannerViewPager
 import com.zhpan.bannerview.constants.IndicatorGravity
 import com.zhpan.bannerview.constants.PageStyle
@@ -306,14 +305,18 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             val oneYearDays: Int = 365
             val betweenMillis = System.currentTimeMillis().minus(oldestDiary.currentTimeMillis)
             val betweenDays = betweenMillis / oneDayMillis
-            fun makeHistory(days: Int, millis: Long, label: String) {
+            fun makeHistory(days: Int, millis: Long, historyTag: String) {
                 val dayBuffer = 1
                 val start = if (days > 0) System.currentTimeMillis().minus(days.plus(dayBuffer) * oneDayMillis) else millis.minus(dayBuffer * oneDayMillis)
                 val end  = if (days > 0) System.currentTimeMillis().minus(days.minus(dayBuffer) * oneDayMillis) else millis.plus(dayBuffer * oneDayMillis)
                 val diaryItems = EasyDiaryDbHelper.findDiary(null, false, start, end)
                 diaryItems.forEach {
                     it.photoUris?.forEach { photoUri ->
-                        historyItems.add(History("$label ${DateUtils.getDateStringFromTimeMillis(it.currentTimeMillis, SimpleDateFormat.FULL)}", EasyDiaryUtils.getApplicationDataDirectory(this) + photoUri.getFilePath()))
+                        historyItems.add(
+                            History(historyTag,
+                            DateUtils.getDateStringFromTimeMillis(it.currentTimeMillis, SimpleDateFormat.FULL),
+                            EasyDiaryUtils.getApplicationDataDirectory(this) + photoUri.getFilePath())
+                        )
                     }
                 }
             }
@@ -351,25 +354,28 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                         setIndicatorView(this)
                     }
 
+                    historyItems.reverse()
+                    mBinding.textDescription.text = historyItems[0].historyTag
                     if (isLandScape()) {
                         val point = CommonUtils.getDefaultDisplay(this@DiaryMainActivity)
                         val historyWidth = (point.x / 2.5).toInt()
-                        mBinding.bannerHistory.layoutParams.width = historyWidth
+                        mBinding.layoutBannerContainer.layoutParams.width = historyWidth
                         mBinding.diaryListView.layoutParams.width = point.x.minus(historyWidth)
 //                        layoutParams.height = dpToPixel(100F)
                         setRevealWidth(dpToPixel(10F))
-                        create(historyItems.reversed())
+                        create(historyItems)
 //                        removeDefaultPageTransformer()
                     } else {
                         setRevealWidth(dpToPixel(50F))
-                        create(historyItems.reversed())
+                        create(historyItems)
                     }
-//                    registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-//                        override fun onPageSelected(position: Int) {
-//                            super.onPageSelected(position)
+                    registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                        override fun onPageSelected(position: Int) {
+                            super.onPageSelected(position)
 //                            toast(historyItems[position].title)
-//                        }
-//                    })
+                            mBinding.textDescription.text = historyItems[position].historyTag
+                        }
+                    })
                 }
             }
         }
