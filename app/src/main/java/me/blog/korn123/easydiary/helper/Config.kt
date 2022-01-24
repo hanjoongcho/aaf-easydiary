@@ -225,6 +225,10 @@ class Config(val context: Context) {
         get() = prefs.getInt(SETTING_DIARY_MAIN_SPAN_COUNT_PORTRAIT, 1)
         set(diaryMainSpanCountPortrait) = prefs.edit().putInt(SETTING_DIARY_MAIN_SPAN_COUNT_PORTRAIT, diaryMainSpanCountPortrait).apply()
 
+    var enablePhotoHighlight: Boolean
+        get() = prefs.getBoolean(SETTING_ENABLE_PHOTO_HIGHLIGHT, false)
+        set(enablePhotoHighlight) = prefs.edit().putBoolean(SETTING_ENABLE_PHOTO_HIGHLIGHT, enablePhotoHighlight).apply()
+
     companion object {
         fun newInstance(context: Context) = Config(context)
     }

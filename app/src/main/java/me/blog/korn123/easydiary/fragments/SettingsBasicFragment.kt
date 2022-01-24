@@ -155,6 +155,10 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         enableReviewFlowSwitcher.toggle()
                         config.enableReviewFlow = enableReviewFlowSwitcher.isChecked
                     }
+                    R.id.enable_photo_highlight -> {
+                        enablePhotoHighlightSwitcher.toggle()
+                        config.enablePhotoHighlight = enablePhotoHighlightSwitcher.isChecked
+                    }
                 }
             }
         }
@@ -174,6 +178,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
             holdPositionEnterEditScreen.setOnClickListener(mOnClickListener)
             taskSymbolTopOrder.setOnClickListener(mOnClickListener)
             enableReviewFlow.setOnClickListener(mOnClickListener)
+            enablePhotoHighlight.setOnClickListener(mOnClickListener)
             calendarStartDay.setOnCheckedChangeListener { _, i ->
                 requireActivity().config.calendarStartDay = when (i) {
                     R.id.startMonday -> CALENDAR_START_DAY_MONDAY
@@ -206,6 +211,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                 locationInfoSwitcher.isChecked = config.enableLocationInfo
                 taskSymbolTopOrderSwitcher.isChecked = config.enableTaskSymbolTopOrder
                 enableReviewFlowSwitcher.isChecked = config.enableReviewFlow
+                enablePhotoHighlightSwitcher.isChecked = config.enablePhotoHighlight
 
                 when (config.calendarStartDay) {
                     CALENDAR_START_DAY_MONDAY -> startMonday.isChecked = true

@@ -836,4 +836,6 @@
     <string name="user_custom_setting">User Custom Setting</string>
     <string name="automation_settings">Automatic setting using themes</string>
     <string name="place_finger_description">Please place your finger on the fingerprint sensor</string>
+    <string name="enable_photo_highlight_title">Attached photo highlights</string>
+    <string name="enable_photo_highlight_description">Based on today\'s date, photos attached in the past are displayed in the highlight area in units of years and months. If there are no yearly or monthly attachments for today\'s date, the highlight area is not activated.</string>
 </resources>

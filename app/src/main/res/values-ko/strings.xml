@@ -836,4 +836,6 @@
     <string name="user_custom_setting">사용자 정의 설정</string>
     <string name="automation_settings">테마를 이용한 자동설정</string>
     <string name="place_finger_description">지문 센서에 손가락을 올려주세요.</string>
+    <string name="enable_photo_highlight_title">첨부사진 하이라이트</string>
+    <string name="enable_photo_highlight_description">오늘날짜를 기준으로 년단위, 월단위로 과거에 첨부한 사진을 하이라이트 영역에 보여줍니다. 오늘날짜에 해당하는 년단위, 월단위 첨부사진이 존재하지 않으면 하이라이트영역은 활성화되지 않습니다.</string>
 </resources>

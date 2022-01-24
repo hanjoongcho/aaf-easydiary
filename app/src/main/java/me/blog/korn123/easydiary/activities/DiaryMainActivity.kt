@@ -15,6 +15,7 @@ import android.widget.RelativeLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
@@ -176,6 +177,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         }
 
         if (ViewHelper.getTranslationY(mBinding.appBar) < 0) mBinding.searchCard.useCompatPadding = false
+
+        updateHistory()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -298,95 +301,110 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         }
     }
 
-    private fun setupHistory() {
-        EasyDiaryDbHelper.findOldestDiary()?.let { oldestDiary ->
-            val historyItems = mutableListOf<History>()
-            val oneDayMillis: Long = 1000 * 60 * 60 * 24
-            val oneYearDays: Int = 365
-            val betweenMillis = System.currentTimeMillis().minus(oldestDiary.currentTimeMillis)
-            val betweenDays = betweenMillis / oneDayMillis
-            fun makeHistory(days: Int, millis: Long, historyTag: String) {
-                val dayBuffer = 1
-                val start = if (days > 0) System.currentTimeMillis().minus(days.plus(dayBuffer) * oneDayMillis) else millis.minus(dayBuffer * oneDayMillis)
-                val end  = if (days > 0) System.currentTimeMillis().minus(days.minus(dayBuffer) * oneDayMillis) else millis.plus(dayBuffer * oneDayMillis)
-                val diaryItems = EasyDiaryDbHelper.findDiary(null, false, start, end)
-                diaryItems.forEach {
-                    it.photoUris?.forEach { photoUri ->
-                        historyItems.add(
-                            History(
-                                historyTag,
-                                DateUtils.getDateStringFromTimeMillis(it.currentTimeMillis, SimpleDateFormat.FULL),
-                                EasyDiaryUtils.getApplicationDataDirectory(this) + photoUri.getFilePath(),
-                                it.sequence
+    private fun updateHistory() {
+        // init default settings
+        mBinding.run {
+            layoutBannerContainer.visibility = View.GONE
+            if (isLandScape()) {
+                diaryListView.layoutParams.width = RecyclerView.LayoutParams.MATCH_PARENT
+            }
+        }
+
+        if (config.enablePhotoHighlight) {
+            EasyDiaryDbHelper.findOldestDiary()?.let { oldestDiary ->
+                val historyItems = mutableListOf<History>()
+                val oneDayMillis: Long = 1000 * 60 * 60 * 24
+                val oneYearDays: Int = 365
+                val betweenMillis = System.currentTimeMillis().minus(oldestDiary.currentTimeMillis)
+                val betweenDays = betweenMillis / oneDayMillis
+                fun makeHistory(days: Int, millis: Long, historyTag: String) {
+                    val dayBuffer = 1
+                    val start = if (days > 0) System.currentTimeMillis().minus(days.plus(dayBuffer) * oneDayMillis) else millis.minus(dayBuffer * oneDayMillis)
+                    val end  = if (days > 0) System.currentTimeMillis().minus(days.minus(dayBuffer) * oneDayMillis) else millis.plus(dayBuffer * oneDayMillis)
+                    val diaryItems = EasyDiaryDbHelper.findDiary(null, false, start, end)
+                    diaryItems.forEach {
+                        it.photoUris?.forEach { photoUri ->
+                            historyItems.add(
+                                History(
+                                    historyTag,
+                                    DateUtils.getDateStringFromTimeMillis(it.currentTimeMillis, SimpleDateFormat.FULL),
+                                    EasyDiaryUtils.getApplicationDataDirectory(this) + photoUri.getFilePath(),
+                                    it.sequence
+                                )
                             )
-                        )
-                    }
-                }
-            }
-
-            // 1 month history of less than 1 year
-            val calendar = Calendar.getInstance(Locale.getDefault())
-            for (i in 1..11) {
-                calendar.add(Calendar.MONTH, -1)
-                if (oldestDiary.currentTimeMillis < calendar.timeInMillis) {
-                    makeHistory(0, calendar.timeInMillis, "$i ${if (i == 1) "Month" else "Months"} Ago")
-                }
-            }
-
-            // 1 year history of more than 1 year
-            if (betweenDays > oneYearDays) {
-                for (i in 1..(betweenDays / oneYearDays).toInt()) {
-                    makeHistory(oneYearDays * i, 0L, "$i ${if (i == 1) "Year" else "Years"} Ago")
-                }
-            }
-
-            if (historyItems.isNotEmpty()) {
-                mBannerHistory = findViewById<BannerViewPager<History>?>(R.id.banner_history).apply {
-                    mBinding.layoutBannerContainer.visibility = View.VISIBLE
-                    setLifecycleRegistry(lifecycle)
-                    adapter = HistoryAdapter()
-                    setInterval(3000)
-                    setScrollDuration(800)
-                    setPageMargin(dpToPixel(10F))
-                    setPageStyle(PageStyle.MULTI_PAGE_SCALE)
-                    FigureIndicatorView(this@DiaryMainActivity).apply {
-                        setRadius(resources.getDimensionPixelOffset(R.dimen.dp_18))
-                        setTextSize(resources.getDimensionPixelOffset(R.dimen.sp_13))
-                        setBackgroundColor(config.primaryColor)
-                        setIndicatorGravity(IndicatorGravity.END)
-                        setIndicatorView(this)
-                    }
-                    setOnPageClickListener { _, position ->
-                        TransitionHelper.startActivityWithTransition(
-                            this@DiaryMainActivity,
-                            Intent(this@DiaryMainActivity, DiaryReadingActivity::class.java).apply {
-                                putExtra(DIARY_SEQUENCE, historyItems[position].sequence)
-                            }
-                        )
-                    }
-                    historyItems.reverse()
-                    mBinding.textDescription.text = historyItems[0].historyTag
-                    if (isLandScape()) {
-                        val point = CommonUtils.getDefaultDisplay(this@DiaryMainActivity)
-                        val historyWidth = (point.x / 2.5).toInt()
-                        mBinding.layoutBannerContainer.layoutParams.width = historyWidth
-                        mBinding.diaryListView.layoutParams.width = point.x.minus(historyWidth)
-//                        layoutParams.height = dpToPixel(100F)
-                        setRevealWidth(dpToPixel(10F))
-                        create(historyItems)
-//                        removeDefaultPageTransformer()
-                    } else {
-                        setRevealWidth(dpToPixel(50F))
-                        create(historyItems)
-                    }
-                    registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-                        override fun onPageSelected(position: Int) {
-                            super.onPageSelected(position)
-//                            toast(historyItems[position].title)
-                            mBinding.textDescription.text = historyItems[position].historyTag
                         }
-                    })
+                    }
                 }
+
+                // 1 month history of less than 1 year
+                val calendar = Calendar.getInstance(Locale.getDefault())
+                for (i in 1..11) {
+                    calendar.add(Calendar.MONTH, -1)
+                    if (oldestDiary.currentTimeMillis < calendar.timeInMillis) {
+                        makeHistory(0, calendar.timeInMillis, "$i ${if (i == 1) "Month" else "Months"} Ago")
+                    }
+                }
+
+                // 1 year history of more than 1 year
+                if (betweenDays > oneYearDays) {
+                    for (i in 1..(betweenDays / oneYearDays).toInt()) {
+                        makeHistory(oneYearDays * i, 0L, "$i ${if (i == 1) "Year" else "Years"} Ago")
+                    }
+                }
+                historyItems.reverse()
+
+                if (historyItems.isNotEmpty()) {
+                    mBinding.layoutBannerContainer.visibility = View.VISIBLE
+                    mBannerHistory.run {
+                        setOnPageClickListener { _, position ->
+                            TransitionHelper.startActivityWithTransition(
+                                this@DiaryMainActivity,
+                                Intent(this@DiaryMainActivity, DiaryReadingActivity::class.java).apply {
+                                    putExtra(DIARY_SEQUENCE, historyItems[position].sequence)
+                                }
+                            )
+                        }
+                        registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                            override fun onPageSelected(position: Int) {
+                                super.onPageSelected(position)
+//                            toast(historyItems[position].title)
+                                mBinding.textDescription.text = historyItems[position].historyTag
+                            }
+                        })
+                        if (isLandScape()) {
+                            val point = CommonUtils.getDefaultDisplay(this@DiaryMainActivity)
+                            val historyWidth = (point.x / 2.5).toInt()
+                            mBinding.layoutBannerContainer.layoutParams.width = historyWidth
+                            mBinding.diaryListView.layoutParams.width = point.x.minus(historyWidth)
+//                        layoutParams.height = dpToPixel(100F)
+                            setRevealWidth(dpToPixel(10F))
+                            create(historyItems)
+//                        removeDefaultPageTransformer()
+                        } else {
+                            setRevealWidth(dpToPixel(50F))
+                            create(historyItems)
+                        }
+                    }
+                    mBinding.textDescription.text = historyItems[0].historyTag
+                }
+            }
+        }
+    }
+
+    private fun setupHistory() {
+        mBannerHistory = findViewById<BannerViewPager<History>?>(R.id.banner_history).apply {
+            setLifecycleRegistry(lifecycle)
+            adapter = HistoryAdapter()
+            setInterval(3000)
+            setScrollDuration(800)
+            setPageMargin(dpToPixel(10F))
+            setPageStyle(PageStyle.MULTI_PAGE_SCALE)
+            FigureIndicatorView(this@DiaryMainActivity).apply {
+                setRadius(resources.getDimensionPixelOffset(R.dimen.dp_18))
+                setTextSize(resources.getDimensionPixelOffset(R.dimen.sp_13))
+                setBackgroundColor(config.primaryColor)
+                setIndicatorGravity(IndicatorGravity.END)
+                setIndicatorView(this)
             }
         }
     }
