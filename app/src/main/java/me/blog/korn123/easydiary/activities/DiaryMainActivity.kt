@@ -46,6 +46,7 @@ import me.blog.korn123.easydiary.models.History
 import me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
 import me.blog.korn123.easydiary.views.FigureIndicatorView
 import org.apache.commons.lang3.StringUtils
+import java.text.MessageFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -335,14 +336,14 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                         for (i in 1..11) {
                             calendar.add(Calendar.MONTH, -1)
                             if (oldestDiary.currentTimeMillis < calendar.timeInMillis) {
-                                makeHistory(0, calendar.timeInMillis, "$i ${if (i == 1) "Month" else "Months"} Ago")
+                                makeHistory(0, calendar.timeInMillis, MessageFormat.format(getString(R.string.monthly_highlight_tag), i))
                             }
                         }
 
                         // 1 year history of more than 1 year
                         if (betweenDays > oneYearDays) {
                             for (i in 1..(betweenDays / oneYearDays).toInt()) {
-                                makeHistory(oneYearDays * i, 0L, "$i ${if (i == 1) "Year" else "Years"} Ago")
+                                makeHistory(oneYearDays * i, 0L, MessageFormat.format(getString(R.string.yearly_highlight_tag), 1))
                             }
                         }
                         historyItems.reverse()

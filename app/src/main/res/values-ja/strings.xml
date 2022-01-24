@@ -838,4 +838,6 @@
     <string name="place_finger_description">指紋センサーに指を上げてください。</string>
     <string name="enable_photo_highlight_title">添付写真のハイライト</string>
     <string name="enable_photo_highlight_description">今日を基準に年単位、月単位で過去に添付した写真をハイライト領域に示します。 今日に該当する年単位、月単位添付写真が存在しない場合、ハイライト領域は活性化されません。</string>
+    <string name="yearly_highlight_tag">{0,number} 年前</string>
+    <string name="monthly_highlight_tag">{0,number} ヶ月前</string>
 </resources>
