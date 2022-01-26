@@ -840,4 +840,9 @@
     <string name="enable_photo_highlight_description">오늘날짜를 기준으로 년단위, 월단위로 과거에 첨부한 사진을 하이라이트 영역에 보여줍니다. 오늘날짜에 해당하는 년단위, 월단위 첨부사진이 존재하지 않으면 하이라이트영역은 활성화되지 않습니다.</string>
     <string name="yearly_highlight_tag">{0,number} 년 전</string>
     <string name="monthly_highlight_tag">{0,number} 달 전</string>
+    <string name="notification_channel_name_dev">알림 테스트</string>
+    <string name="notification_channel_name_alarm">다이어리 스케줄</string>
+    <string name="notification_channel_name_upload">구글드라이브 업로드</string>
+    <string name="notification_channel_name_download">구글드라이브 다운로드</string>
+    <string name="notification_channel_name_zip_helper">ZIP 백업 관리</string>
 </resources>

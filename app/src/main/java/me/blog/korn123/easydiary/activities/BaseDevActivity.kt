@@ -302,7 +302,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
         if (isOreoPlus()) {
             // Create the NotificationChannel
             val importance = NotificationManager.IMPORTANCE_HIGH
-            val channel = NotificationChannel("${NOTIFICATION_CHANNEL_ID}_dev", "${NOTIFICATION_CHANNEL_NAME}_dev", importance)
+            val channel = NotificationChannel("${NOTIFICATION_CHANNEL_ID}_dev", getString(R.string.notification_channel_name_dev), importance)
             channel.description = NOTIFICATION_CHANNEL_DESCRIPTION
 
             // Register the channel with the system; you can't change the importance

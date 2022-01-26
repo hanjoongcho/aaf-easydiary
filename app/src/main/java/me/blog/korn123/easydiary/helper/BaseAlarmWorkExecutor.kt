@@ -44,7 +44,7 @@ open class BaseAlarmWorkExecutor(val context: Context) {
             val notificationManager = getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
             if (isOreoPlus()) {
                 val importance = NotificationManager.IMPORTANCE_HIGH
-                val channel = NotificationChannel("${NOTIFICATION_CHANNEL_ID}_alarm", "${NOTIFICATION_CHANNEL_NAME}_alarm", importance)
+                val channel = NotificationChannel("${NOTIFICATION_CHANNEL_ID}_alarm", getString(R.string.notification_channel_name_alarm), importance)
                 channel.description = NOTIFICATION_CHANNEL_DESCRIPTION
                 notificationManager.createNotificationChannel(channel)
             }

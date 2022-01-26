@@ -57,7 +57,7 @@ class BackupPhotoService : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Create the NotificationChannel
             val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val mChannel = NotificationChannel("${NOTIFICATION_CHANNEL_ID}_upload", "${NOTIFICATION_CHANNEL_NAME}_upload", importance)
+            val mChannel = NotificationChannel("${NOTIFICATION_CHANNEL_ID}_upload", getString(R.string.notification_channel_name_upload), importance)
             mChannel.description = NOTIFICATION_CHANNEL_DESCRIPTION
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this

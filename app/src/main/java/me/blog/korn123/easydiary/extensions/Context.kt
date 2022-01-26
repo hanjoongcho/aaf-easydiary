@@ -574,7 +574,7 @@ fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): No
     if (isOreoPlus()) {
         // Create the NotificationChannel
         val importance = NotificationManager.IMPORTANCE_HIGH
-        val channel = NotificationChannel("${NOTIFICATION_CHANNEL_ID}_alarm", "${NOTIFICATION_CHANNEL_NAME}_alarm", importance)
+        val channel = NotificationChannel("${NOTIFICATION_CHANNEL_ID}_alarm", getString(R.string.notification_channel_name_alarm), importance)
         channel.description = NOTIFICATION_CHANNEL_DESCRIPTION
         // Register the channel with the system; you can't change the importance
         // or other notification behaviors after this

@@ -35,7 +35,7 @@ class ZipHelper(val context: Context) {
         if (isOreoPlus()) {
 //            val importance = NotificationManager.IMPORTANCE_HIGH
             val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val mChannel = NotificationChannel("${NOTIFICATION_CHANNEL_ID}_zip_helper", "${NOTIFICATION_CHANNEL_NAME}_zip_helper", importance)
+            val mChannel = NotificationChannel("${NOTIFICATION_CHANNEL_ID}_zip_helper", context.getString(R.string.notification_channel_name_zip_helper), importance)
             mChannel.description = NOTIFICATION_CHANNEL_DESCRIPTION
             notificationManager.createNotificationChannel(mChannel)
         }
