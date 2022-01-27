@@ -5,7 +5,10 @@ import android.content.Intent
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.WorkManager
 import me.blog.korn123.easydiary.activities.BaseDevActivity
-import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.helper.NOTIFICATION_COMPRESS_ID
+import me.blog.korn123.easydiary.helper.NOTIFICATION_DECOMPRESS_ID
+import me.blog.korn123.easydiary.helper.WORK_MANAGER_BACKUP
+import me.blog.korn123.easydiary.helper.WORK_MANAGER_RECOVERY
 
 
 open class BaseNotificationService(name: String = "EasyDiaryNotificationService") : IntentService(name) {
@@ -14,7 +17,7 @@ open class BaseNotificationService(name: String = "EasyDiaryNotificationService"
             when (it.action) {
                 ACTION_DISMISS_COMPRESS -> NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_COMPRESS_ID)
                 ACTION_DISMISS_DECOMPRESS -> NotificationManagerCompat.from(applicationContext).cancel(NOTIFICATION_DECOMPRESS_ID)
-                ACTION_DISMISS_DEV -> NotificationManagerCompat.from(applicationContext).cancel(BaseDevActivity.NOTIFICATION_ID_DEV)
+                ACTION_DISMISS_DEV -> NotificationManagerCompat.from(applicationContext).cancel(intent.getIntExtra(BaseDevActivity.NOTIFICATION_ID, 0))
                 ACTION_FULL_BACKUP_CANCEL -> handleActionFullBackupCancel()
                 ACTION_FULL_RECOVERY_CANCEL -> handleActionFullRecoveryCancel()
             }

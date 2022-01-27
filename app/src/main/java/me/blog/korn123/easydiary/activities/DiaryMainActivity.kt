@@ -20,6 +20,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.nineoldandroids.view.ViewHelper
+import com.simplemobiletools.commons.extensions.toast
 import com.zhpan.bannerview.BannerViewPager
 import com.zhpan.bannerview.constants.IndicatorGravity
 import com.zhpan.bannerview.constants.PageStyle
@@ -34,6 +35,7 @@ import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.BaseDevActivity.Companion.NOTIFICATION_INFO
 import me.blog.korn123.easydiary.activities.BaseDiaryEditingActivity.Companion.DIARY_SEQUENCE_INIT
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
 import me.blog.korn123.easydiary.adapters.HistoryAdapter
@@ -156,6 +158,12 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         checkBundle(savedInstanceState)
         setupReviewFlow()
         setupHistory()
+
+        // test code
+        if (config.enableDebugMode) {
+            makeToast("Notification id is ${intent.getIntExtra(BaseDevActivity.NOTIFICATION_ID, -1)}")
+            intent.getStringExtra(NOTIFICATION_INFO)?.let { makeToast("Notification info is $it") }
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

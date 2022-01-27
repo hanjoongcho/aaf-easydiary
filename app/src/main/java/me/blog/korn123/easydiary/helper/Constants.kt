@@ -394,7 +394,6 @@ const val SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER = 3
  *
  ***************************************************************************************************/
 const val NOTIFICATION_CHANNEL_ID = "easy_diary_channel_id"
-const val NOTIFICATION_CHANNEL_NAME = "notification_type"
 const val NOTIFICATION_CHANNEL_DESCRIPTION = "This channel is used for 'Easy-Diary' data backup and recovery operations."
 const val NOTIFICATION_FOREGROUND_PHOTO_BACKUP_GMS_ID = 1000
 const val NOTIFICATION_FOREGROUND_PHOTO_RECOVERY_GMS_ID = 1001

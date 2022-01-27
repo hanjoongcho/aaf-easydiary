@@ -17,6 +17,7 @@ import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.DriveScopes
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.BaseDevActivity.Companion.NOTIFICATION_INFO
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.createBackupContentText
@@ -189,16 +190,17 @@ class BackupPhotoService : Service() {
                         .bigText(HtmlCompat.fromHtml(stringBuilder.toString(), HtmlCompat.FROM_HTML_MODE_LEGACY))
                 )
                 .setContentIntent(
-                        PendingIntent.getActivity(this, 0, Intent(this, DiaryMainActivity::class.java).apply {
+                        PendingIntent.getActivity(this, NOTIFICATION_GMS_BACKUP_COMPLETE_ID, Intent(this, DiaryMainActivity::class.java).apply {
                             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            putExtra(NOTIFICATION_INFO, this@BackupPhotoService::class.java.name)
                         }, pendingIntentFlag())
                 )
                 .addAction(
                         R.drawable.ic_easydiary,
                         getString(R.string.dismiss),
-                        PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
+                        PendingIntent.getService(this, NOTIFICATION_GMS_BACKUP_COMPLETE_ID, Intent(this, NotificationService::class.java).apply {
                             action = NotificationService.ACTION_PHOTO_BACKUP_GMS_DISMISS
-                        }, 0)
+                        }, pendingIntentFlag())
                 )
         notificationManager.notify(NOTIFICATION_GMS_BACKUP_COMPLETE_ID, resultNotificationBuilder.build())
         localDeviceFileCount = 0

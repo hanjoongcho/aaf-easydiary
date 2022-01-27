@@ -18,6 +18,7 @@ import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.BaseDevActivity
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.extensions.createBackupContentText
 import me.blog.korn123.easydiary.extensions.createRecoveryContentText
@@ -219,16 +220,17 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
                 .setAutoCancel(true)
                 .setContentTitle(getString(R.string.recover_attach_photo_title))
                 .setContentIntent(
-                        PendingIntent.getActivity(this, 0, Intent(this, DiaryMainActivity::class.java).apply {
+                        PendingIntent.getActivity(this, NOTIFICATION_GMS_RECOVERY_COMPLETE_ID, Intent(this, DiaryMainActivity::class.java).apply {
                             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            putExtra(BaseDevActivity.NOTIFICATION_INFO, this@RecoverPhotoService::class.java.name)
                         }, pendingIntentFlag())
                 )
                 .addAction(
                         R.drawable.ic_easydiary,
                         getString(R.string.dismiss),
-                        PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
+                        PendingIntent.getService(this, NOTIFICATION_GMS_RECOVERY_COMPLETE_ID, Intent(this, NotificationService::class.java).apply {
                             action = NotificationService.ACTION_PHOTO_RECOVER_GMS_DISMISS
-                        }, 0)
+                        }, pendingIntentFlag())
                 )
         notificationManager.notify(NOTIFICATION_GMS_RECOVERY_COMPLETE_ID, resultNotificationBuilder.build())
         mInProcessJob = false

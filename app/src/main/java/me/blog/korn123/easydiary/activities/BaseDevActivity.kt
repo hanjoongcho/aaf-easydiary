@@ -17,6 +17,7 @@ import android.widget.RemoteViews
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.databinding.DataBindingUtil
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import kotlinx.coroutines.*
@@ -38,6 +39,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
      *   global properties
      *
      ***************************************************************************************************/
+    private var mNotificationCount = 0
     private val mViewModel: BaseDevViewModel by viewModels()
     private val mLocationManager by lazy { getSystemService(Context.LOCATION_SERVICE) as LocationManager }
     private val mNetworkLocationListener = object : LocationListener {
@@ -117,14 +119,21 @@ open class BaseDevActivity : EasyDiaryActivity() {
 
     private fun setupNotification() {
         mBinding.buttonNotification01.setOnClickListener {
-            (applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).apply {
-                notify(NOTIFICATION_ID_DEV, createNotification(NotificationInfo(R.drawable.ic_diary_writing, true)))
-            }
+            val notification = NotificationInfo(
+                R.drawable.ic_diary_writing,
+                useActionButton = true,
+                useCustomContentView = false,
+                id = mNotificationCount++
+            )
+            NotificationManagerCompat.from(this).notify(notification.id, createNotification(notification))
         }
         mBinding.buttonNotification02.setOnClickListener {
-            (applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).apply {
-                notify(NOTIFICATION_ID_DEV, createNotification(NotificationInfo(R.drawable.ic_diary_backup_local, useActionButton = true, useCustomContentView = true)))
-            }
+            val notification = NotificationInfo(
+                R.drawable.ic_diary_backup_local,
+                useActionButton = true,
+                useCustomContentView = true,
+                mNotificationCount++)
+            NotificationManagerCompat.from(this).notify(notification.id, createNotification(notification))
         }
     }
 
@@ -311,7 +320,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        val title = "Notification Title"
+        val title = "[${notificationInfo.id}] Notification Title"
         val text = "알림에 대한 본문 내용이 들어가는 영역입니다. 기본 템플릿을 확장형 알림을 구현할 수 있습니다."
         val notificationBuilder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_dev")
         notificationBuilder
@@ -325,8 +334,9 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 .setContentTitle(title)
                 .setContentText(text)
                 .setContentIntent(
-                        PendingIntent.getActivity(this, 0, Intent(this, DiaryMainActivity::class.java).apply {
+                        PendingIntent.getActivity(this, notificationInfo.id /*Private request code for the sender*/, Intent(this, DiaryMainActivity::class.java).apply {
                             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            putExtra(NOTIFICATION_ID, notificationInfo.id)
                         }, pendingIntentFlag())
                 )
 
@@ -344,9 +354,10 @@ open class BaseDevActivity : EasyDiaryActivity() {
             notificationBuilder.addAction(
                     R.drawable.ic_easydiary,
                     getString(R.string.dismiss),
-                    PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
+                    PendingIntent.getService(this, notificationInfo.id /*Private request code for the sender*/, Intent(this, NotificationService::class.java).apply {
                         action = BaseNotificationService.ACTION_DISMISS_DEV
-                    }, 0)
+                        putExtra(NOTIFICATION_ID, notificationInfo.id /*An identifier for this notification unique within your application.*/)
+                    }, pendingIntentFlag())
             )
         }
 
@@ -354,7 +365,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
     }
 
     companion object {
-        const val NOTIFICATION_ID_DEV = 9999
+        const val NOTIFICATION_ID = "notification_id"
+        const val NOTIFICATION_INFO = "notification_info"
     }
 }
 
@@ -363,7 +375,12 @@ open class BaseDevActivity : EasyDiaryActivity() {
  *   classes
  *
  ***************************************************************************************************/
-data class NotificationInfo(var largeIconResourceId: Int, var useActionButton: Boolean = false, var useCustomContentView: Boolean = false)
+data class NotificationInfo(
+    var largeIconResourceId: Int,
+    var useActionButton: Boolean = false,
+    var useCustomContentView: Boolean = false,
+    var id: Int = 0
+)
 
 
 /***************************************************************************************************
