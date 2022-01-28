@@ -331,8 +331,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 .setOnlyAlertOnce(true)
                 .setOngoing(false)
                 .setAutoCancel(true)
-                .setContentTitle(title)
-                .setContentText(text)
+                .setContentTitle("[Base] $title")
+                .setContentText("[Base] $text")
                 .setContentIntent(
                         PendingIntent.getActivity(this, notificationInfo.id /*Private request code for the sender*/, Intent(this, DiaryMainActivity::class.java).apply {
                             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -344,10 +344,10 @@ open class BaseDevActivity : EasyDiaryActivity() {
         if (notificationInfo.useCustomContentView) {
             notificationBuilder
                     .setStyle(NotificationCompat.DecoratedCustomViewStyle())
-                    .setCustomContentView(RemoteViews(applicationContext.packageName, R.layout.partial_notification))
+                    .setCustomBigContentView(RemoteViews(applicationContext.packageName, R.layout.partial_notification))
         } else {
             notificationBuilder
-                    .setStyle(NotificationCompat.BigTextStyle().bigText(text).setSummaryText(title))
+                    .setStyle(NotificationCompat.BigTextStyle().bigText("[Style] $text").setSummaryText("[Style] $title"))
         }
 
         if (notificationInfo.useActionButton) {

@@ -92,7 +92,7 @@ class BackupPhotoService : Service() {
                 .addAction(
                         R.drawable.ic_easydiary,
                         getString(R.string.cancel),
-                        PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
+                        PendingIntent.getService(this, NOTIFICATION_FOREGROUND_PHOTO_BACKUP_GMS_ID, Intent(this, NotificationService::class.java).apply {
                             action = NotificationService.ACTION_PHOTO_BACKUP_GMS_CANCEL
                         }, 0)
                 )
