@@ -88,9 +88,9 @@ class RecoverPhotoService(name: String = "RecoverPhotoService") : IntentService(
                 .addAction(
                         R.drawable.ic_easydiary,
                         getString(R.string.cancel),
-                        PendingIntent.getService(this, 0, Intent(this, NotificationService::class.java).apply {
+                        PendingIntent.getService(this, NOTIFICATION_FOREGROUND_PHOTO_RECOVERY_GMS_ID, Intent(this, NotificationService::class.java).apply {
                             action = NotificationService.ACTION_PHOTO_RECOVER_GMS_CANCEL
-                        }, 0)
+                        }, pendingIntentFlag())
                 )
         startForeground(NOTIFICATION_FOREGROUND_PHOTO_RECOVERY_GMS_ID, notificationBuilder.build())
 
