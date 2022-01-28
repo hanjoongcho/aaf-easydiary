@@ -157,7 +157,10 @@ dependencies {
     implementation 'com.google.guava:guava:27.0.1-android'
 
     // apache commons
-    implementation 'commons-io:commons-io:2.7'
+    // From version 2.7, it calls the java.nio.file API internally.
+    // NIO is available from Android 8.0 (API Level 26)
+    // Therefore, we must use version 2.6 before the minimum supported Android version becomes API Level 26 or higher.
+    implementation 'commons-io:commons-io:2.6' 
     implementation 'org.apache.commons:commons-lang3:3.7'
 
     // AAFactory
