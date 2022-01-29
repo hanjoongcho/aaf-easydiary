@@ -135,6 +135,14 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 mNotificationCount++)
             NotificationManagerCompat.from(this).notify(notification.id, createNotification(notification))
         }
+        mBinding.buttonNotification03.setOnClickListener {
+            val notification = NotificationInfo(
+                R.drawable.ic_done,
+                useActionButton = true,
+                useCustomContentView = false,
+                100)
+            NotificationManagerCompat.from(this).notify(notification.id, createNotification(notification))
+        }
     }
 
     private fun setupActionLog() {
@@ -327,7 +335,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.ic_easydiary)
-                .setLargeIcon(BitmapFactory.decodeResource(resources, notificationInfo.largeIconResourceId))
                 .setOnlyAlertOnce(true)
                 .setOngoing(false)
                 .setAutoCancel(true)
@@ -337,9 +344,9 @@ open class BaseDevActivity : EasyDiaryActivity() {
                         PendingIntent.getActivity(this, notificationInfo.id /*Private request code for the sender*/, Intent(this, DiaryMainActivity::class.java).apply {
                             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             putExtra(NOTIFICATION_ID, notificationInfo.id)
+                            putExtra(NOTIFICATION_INFO, "Test Notification Count: $mNotificationCount")
                         }, pendingIntentFlag())
                 )
-
 
         if (notificationInfo.useCustomContentView) {
             notificationBuilder
@@ -347,6 +354,7 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     .setCustomBigContentView(RemoteViews(applicationContext.packageName, R.layout.partial_notification))
         } else {
             notificationBuilder
+                    .setLargeIcon(BitmapFactory.decodeResource(resources, notificationInfo.largeIconResourceId))
                     .setStyle(NotificationCompat.BigTextStyle().bigText("[Style] $text").setSummaryText("[Style] $title"))
         }
 

@@ -113,6 +113,12 @@
                             android:layout_height="wrap_content"/>
                         <Button
                             app:layout_flexGrow="1"
+                            android:id="@+id/button_notification_03"
+                            android:text="Notification-03"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <Button
+                            app:layout_flexGrow="1"
                             android:id="@+id/button_review_flow"
                             android:text="ReviewFlow"
                             android:layout_width="wrap_content"
