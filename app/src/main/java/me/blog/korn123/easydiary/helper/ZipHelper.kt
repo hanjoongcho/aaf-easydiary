@@ -15,6 +15,7 @@ import androidx.core.app.NotificationCompat
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.pendingIntentFlag
 import me.blog.korn123.easydiary.services.BaseNotificationService
 import me.blog.korn123.easydiary.services.NotificationService
 import org.apache.commons.io.IOUtils
@@ -57,9 +58,9 @@ class ZipHelper(val context: Context) {
                 .addAction(
                         R.drawable.ic_easydiary,
                         context.getString(R.string.cancel),
-                        PendingIntent.getService(context, 0, Intent(context, NotificationService::class.java).apply {
+                        PendingIntent.getService(context, notificationId, Intent(context, NotificationService::class.java).apply {
                             action = actionString
-                        }, 0)
+                        }, context.pendingIntentFlag())
                 )
         notificationManager.notify(notificationId, mBuilder.build())
     }
@@ -100,9 +101,9 @@ class ZipHelper(val context: Context) {
                     .addAction(
                             R.drawable.ic_easydiary,
                             context.getString(R.string.dismiss),
-                            PendingIntent.getService(context, 0, Intent(context, NotificationService::class.java).apply {
+                            PendingIntent.getService(context, notificationId, Intent(context, NotificationService::class.java).apply {
                                 action = actionFlag
-                            }, 0)
+                            }, context.pendingIntentFlag())
                     )
             notificationManager.notify(notificationId, mBuilder.build())
         }

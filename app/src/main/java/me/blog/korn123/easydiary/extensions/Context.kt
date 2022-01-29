@@ -513,7 +513,7 @@ fun Context.getOpenAlarmTabIntent(alarm: Alarm): PendingIntent {
         }
         else -> null
     }
-    return PendingIntent.getActivity(this, 1000, intent, pendingIntentFlag())
+    return PendingIntent.getActivity(this, alarm.id, intent, pendingIntentFlag())
 }
 
 fun Context.getAlarmIntent(alarm: Alarm): PendingIntent {

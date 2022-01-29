@@ -19,6 +19,7 @@ import com.google.api.services.drive.DriveScopes
 import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.BaseDevActivity
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.createBackupContentText
@@ -107,7 +108,7 @@ class FullBackupService : Service() {
                         getString(R.string.cancel),
                         PendingIntent.getService(this, alarm.id, Intent(this, NotificationService::class.java).apply {
                             action = NotificationService.ACTION_FULL_BACKUP_GMS_CANCEL
-                        }, 0)
+                        }, pendingIntentFlag())
                 )
         startForeground(NOTIFICATION_FOREGROUND_FULL_BACKUP_GMS_ID, mNotificationBuilder.build())
 
@@ -233,6 +234,7 @@ class FullBackupService : Service() {
                     .setContentIntent(
                             PendingIntent.getActivity(this, alarm.id, Intent(this, DiaryMainActivity::class.java).apply {
                                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                putExtra(BaseDevActivity.NOTIFICATION_INFO, this@FullBackupService::class.java.name)
                             }, pendingIntentFlag())
                     )
                     .addAction(
