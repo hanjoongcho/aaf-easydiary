@@ -312,8 +312,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
     private fun updateHistory() {
         if (config.enablePhotoHighlight) {
-            when (mBannerHistory.adapter.itemCount > 0) {
-                false -> {
+            when (mBannerHistory.adapter.itemCount == 0) {
+                true -> {
                     EasyDiaryDbHelper.findOldestDiary()?.let { oldestDiary ->
                         val historyItems = mutableListOf<History>()
                         val oneDayMillis: Long = 1000 * 60 * 60 * 24
