@@ -70,6 +70,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     private var mShowcaseIndex = 0
     private var mShowcaseView: ShowcaseView? = null
     private var mPopupWindow: PopupWindow? = null
+    private var mLastHistoryCheckMillis = System.currentTimeMillis()
     private val mRequestSpeechInputLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.let {
@@ -311,6 +312,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     }
 
     private fun updateHistory() {
+        if (config.enableDebugMode) makeToast("History Highlight Last updated time: ${System.currentTimeMillis().minus(mLastHistoryCheckMillis) / 1000}seconds ago")
+
         if (config.enablePhotoHighlight) {
             when (mBannerHistory.adapter.itemCount == 0) {
                 true -> {
