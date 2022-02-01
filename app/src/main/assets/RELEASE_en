@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.173.0 (date: 2022.02.03)
+  * Added attached photo highlight function
+
 # Changes in 1.4.172.21 (date: 2022.01.22)
   * Fixed an error that caused abnormal termination when the schedule function was set in Android 12 version
 
