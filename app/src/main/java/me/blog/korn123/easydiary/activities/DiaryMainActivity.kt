@@ -323,9 +323,16 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                         val betweenMillis = System.currentTimeMillis().minus(oldestDiary.currentTimeMillis)
                         val betweenDays = betweenMillis / oneDayMillis
                         fun makeHistory(pastMillis: Long, historyTag: String) {
-                            val dayBuffer = 1
-                            val pastMillisBuffer  = pastMillis.plus(dayBuffer * oneDayMillis)
-                            val diaryItems = EasyDiaryDbHelper.findDiary(null, false, pastMillis, pastMillisBuffer)
+                            val defaultDayBuffer = 1
+                            val noDataDayBufferMaxLoop = 3
+                            val pastMillisBuffer  = pastMillis.plus(defaultDayBuffer * oneDayMillis)
+                            var diaryItems = EasyDiaryDbHelper.findDiary(null, false, pastMillis, pastMillisBuffer)
+                            if (diaryItems.isEmpty()) {
+                                for (i in 1..noDataDayBufferMaxLoop) {
+                                    diaryItems = EasyDiaryDbHelper.findDiary(null, false, pastMillis, pastMillisBuffer.plus(i * oneDayMillis))
+                                    if (diaryItems.isNotEmpty()) break
+                                }
+                            }
                             diaryItems.forEach {
                                 it.photoUris?.forEach { photoUri ->
                                     historyItems.add(
