@@ -20,7 +20,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.nineoldandroids.view.ViewHelper
-import com.simplemobiletools.commons.extensions.toast
 import com.zhpan.bannerview.BannerViewPager
 import com.zhpan.bannerview.constants.IndicatorGravity
 import com.zhpan.bannerview.constants.PageStyle
@@ -320,14 +319,13 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                     EasyDiaryDbHelper.findOldestDiary()?.let { oldestDiary ->
                         val historyItems = mutableListOf<History>()
                         val oneDayMillis: Long = 1000 * 60 * 60 * 24
-                        val oneYearDays: Int = 365
+                        val oneYearDays = 365
                         val betweenMillis = System.currentTimeMillis().minus(oldestDiary.currentTimeMillis)
                         val betweenDays = betweenMillis / oneDayMillis
-                        fun makeHistory(days: Int, millis: Long, historyTag: String) {
+                        fun makeHistory(pastMillis: Long, historyTag: String) {
                             val dayBuffer = 1
-                            val start = if (days > 0) System.currentTimeMillis().minus(days.plus(dayBuffer) * oneDayMillis) else millis.minus(dayBuffer * oneDayMillis)
-                            val end  = if (days > 0) System.currentTimeMillis().minus(days.minus(dayBuffer) * oneDayMillis) else millis.plus(dayBuffer * oneDayMillis)
-                            val diaryItems = EasyDiaryDbHelper.findDiary(null, false, start, end)
+                            val pastMillisBuffer  = pastMillis.plus(dayBuffer * oneDayMillis)
+                            val diaryItems = EasyDiaryDbHelper.findDiary(null, false, pastMillis, pastMillisBuffer)
                             diaryItems.forEach {
                                 it.photoUris?.forEach { photoUri ->
                                     historyItems.add(
@@ -343,18 +341,17 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                         }
 
                         // 1 month history of less than 1 year
-                        val calendar = Calendar.getInstance(Locale.getDefault())
                         for (i in 1..11) {
-                            calendar.add(Calendar.MONTH, -1)
-                            if (oldestDiary.currentTimeMillis < calendar.timeInMillis) {
-                                makeHistory(0, calendar.timeInMillis, MessageFormat.format(getString(R.string.monthly_highlight_tag), i))
+                            val pastMills = EasyDiaryUtils.convDateToTimeMillis(Calendar.MONTH, i.unaryMinus())
+                            if (oldestDiary.currentTimeMillis < pastMills) {
+                                makeHistory(pastMills, MessageFormat.format(getString(R.string.monthly_highlight_tag), i))
                             }
                         }
 
                         // 1 year history of more than 1 year
                         if (betweenDays > oneYearDays) {
                             for (i in 1..(betweenDays / oneYearDays).toInt()) {
-                                makeHistory(oneYearDays * i, 0L, MessageFormat.format(getString(R.string.yearly_highlight_tag), 1))
+                                makeHistory(EasyDiaryUtils.convDateToTimeMillis(Calendar.YEAR, i.unaryMinus()), MessageFormat.format(getString(R.string.yearly_highlight_tag), i))
                             }
                         }
                         historyItems.reverse()

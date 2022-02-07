@@ -191,7 +191,7 @@ dependencies {
     implementation 'com.github.zhpanvip:bannerviewpager:3.5.5'
     kapt 'io.noties:prism4j-bundler:2.0.0'
 
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
+//    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
 
     // android test
     androidTestImplementation 'androidx.test:core:1.4.0'
