@@ -429,4 +429,16 @@ object EasyDiaryUtils {
         }
         return indexes
     }
+
+    fun convDateToTimeMillis(field: Int, amount: Int, isZeroHour: Boolean = true, isZeroMinute: Boolean = true, isZeroSecond: Boolean = true, isZeroMilliSecond: Boolean = true): Long {
+        val calendar = Calendar.getInstance(Locale.getDefault())
+        if (isZeroHour) calendar.set(Calendar.HOUR_OF_DAY, 0)
+        if (isZeroMinute) calendar.set(Calendar.MINUTE, 0)
+        if (isZeroSecond) calendar.set(Calendar.SECOND, 0)
+        if (isZeroMilliSecond) calendar.set(Calendar.MILLISECOND, 0)
+        if (amount != 0) {
+            calendar.add(field, amount)
+        }
+        return calendar.timeInMillis
+    }
 }

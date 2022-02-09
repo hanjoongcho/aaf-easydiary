@@ -26,8 +26,8 @@ android {
         applicationId "me.blog.korn123.easydiary"
         minSdkVersion 19
         targetSdkVersion versions.compileSdk
-        versionCode 261
-        versionName '1.4.173.0'
+        versionCode 262
+        versionName '1.4.173.1'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -191,7 +191,7 @@ dependencies {
     implementation 'com.github.zhpanvip:bannerviewpager:3.5.5'
     kapt 'io.noties:prism4j-bundler:2.0.0'
 
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
+//    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
 
     // android test
     androidTestImplementation 'androidx.test:core:1.4.0'
