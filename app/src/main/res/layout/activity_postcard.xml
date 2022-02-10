@@ -56,6 +56,7 @@
                 android:layout_height="20dp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
         <ScrollView
+            android:background="@android:color/white"
             android:id="@+id/scroll_postcard"
             android:fillViewport="true"
             android:layout_width="match_parent"
