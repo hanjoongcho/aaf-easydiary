@@ -1,0 +1,852 @@
+<resources>
+    <string name="app_name">Easy Diary</string>
+    <string name="common_create_seconds">創作時間</string>
+    <string name="create_diary_title">寫日記</string>
+    <string name="write_date">日期</string>
+    <string name="request_title_message">請輸入標題</string>
+    <string name="request_content_message">請輸入您的內容</string>
+    <string name="guide_message">打字或說出標題</string>
+    <string name="contents_text_hint">打字或說出內容</string>
+    <string name="delete_photo_confirm_message">您確定要刪除這張照片嗎？</string>
+    <string name="gallery_intent_not_found_message">相簿程式未安裝或已停用</string>
+    <string name="create_diary_showcase_button_1">下一步</string>
+    <string name="create_diary_showcase_button_2">關閉</string>
+    <string name="create_diary_showcase_title_1">天氣</string>
+    <string name="create_diary_showcase_title_2">標題</string>
+    <string name="create_diary_showcase_title_3">內容</string>
+    <string name="create_diary_showcase_title_4">附加照片</string>
+    <string name="create_diary_showcase_title_5">放大字體</string>
+    <string name="create_diary_showcase_title_6">縮小字體</string>
+    <string name="create_diary_showcase_title_7">選擇日期</string>
+    <string name="create_diary_showcase_title_8">選擇時間</string>
+    <string name="create_diary_showcase_title_9">儲存</string>
+    <string name="create_diary_showcase_message_1">為日記裡的這天選擇天氣（可選）</string>
+    <string name="create_diary_showcase_message_2">輸入標題（可選）</string>
+    <string name="create_diary_showcase_message_3">寫日記、作筆記、摘要紀錄等</string>
+    <string name="create_diary_showcase_message_4">為日記增加照片</string>
+    <string name="create_diary_showcase_message_5">增大日記的字體</string>
+    <string name="create_diary_showcase_message_6">縮小日記的字體</string>
+    <string name="create_diary_showcase_message_7">選擇日記的日期。 如果想紀錄從前的日子，您可以更改日期。</string>
+    <string name="create_diary_showcase_message_8">選擇日記創作的時間。 如果這件事發生在從前，您可以更改時間。</string>
+    <string name="create_diary_showcase_message_9">保存完成的日記</string>
+    <string name="read_diary_title">搜尋</string>
+    <string name="input_mode_a">語音模式</string>
+    <string name="input_mode_c">鍵盤模式</string>
+    <string name="guide_message_2">輸入或說出主題</string>
+    <string name="recognizer_intent_not_found_message">語音輸入模組未安裝或已停用</string>
+    <string name="sample_diary_title_1">勇於冒險而非過於小心</string>
+    <string name="sample_diary_title_2">當我說話的時候我只是複誦我所知道的。</string>
+    <string name="sample_diary_title_3">我們聽到越多壞消息，我們應該越開心。</string>
+    <string name="sample_diary_title_4">富足招致安逸，限制激發創造力。</string>
+    <string name="sample_diary_1">當你回顧過去的日子，你一定會知道，你因為過於謹慎而損害自己的人生。 害怕危險而不敢冒險，這是更危險的事。 寧可冒險，也不該過於小心。</string>
+    <string name="sample_diary_2">當你開口說話，你只是在重複你所知道的。 但如果仔細傾聽，也許你會學到什麼不一樣的。 —達賴喇嘛</string>
+    <string name="sample_diary_3">作為一個領導者，你需要聽到的是壞消息。 因為好消息到明天還是好消息，但是壞消息到明天可能變得更糟糕。 這就是為什麼即使事實令人心碎，說出來依然安全。 — 艾立克·史密特，Google總裁，《Google模式：挑戰瘋狂變化世界的經營思維與工作邏輯》</string>
+    <string name="sample_diary_4">限制不是創造力的阻礙，創造力是用來克服限制的。 所有傑作或有創意的方案都有很多時間限制、物理限制、以及資源限制。 創造力是在充滿限制的環境中誕生的。 — 金奉珍</string>
+    <string name="read_diary_showcase_button_1">下一個</string>
+    <string name="read_diary_showcase_button_2">關閉</string>
+    <string name="read_diary_showcase_title_1">寫日記</string>
+    <string name="read_diary_showcase_title_2">搜尋</string>
+    <string name="read_diary_showcase_title_3">語音辨識</string>
+    <string name="read_diary_showcase_title_4">日曆</string>
+    <string name="read_diary_showcase_title_5">時間軸</string>
+    <string name="read_diary_showcase_title_6">圖表</string>
+    <string name="read_diary_showcase_title_7">進階設定</string>
+    <string name="read_diary_showcase_title_8">看日記</string>
+    <string name="read_diary_showcase_message_1">您可以根據時間順序創建不同的文本，像是日記、備忘錄、摘要紀錄等。</string>
+    <string name="read_diary_showcase_message_2">您可以用關鍵字搜尋日記。 當輸入關鍵字，被搜尋到的日記裡的關鍵字會以明亮的方式顯示。</string>
+    <string name="read_diary_showcase_message_3">您可以用語音辨識的功能輸入搜尋的關鍵子。</string>
+    <string name="read_diary_showcase_message_4">可以用日曆按日期查看已有的日記。</string>
+    <string name="read_diary_showcase_message_5">將已創建的日記作為時間軸。</string>
+    <string name="read_diary_showcase_message_6">You can view charts of diary entries for the entire period.</string>
+    <string name="read_diary_showcase_message_7">您可以使用進階設定更改字型、設定密碼、備份及還原日記。</string>
+    <string name="read_diary_showcase_message_8">點擊清單裡的日記卡查看日記</string>
+    <string name="diary_photo_migration_message">The image attachment method of the EasyDiary is changed so that the existing link information is compressed and stored in the EasyDiary folder.\nPlease wait for the operation to finish.</string>
+    <string name="read_diary_detail_title">閱讀日記</string>
+    <string name="delete_confirm">您確定要刪除嗎？</string>
+    <string name="read_diary_detail_showcase_button_1">下一個</string>
+    <string name="read_diary_detail_showcase_button_2">關閉</string>
+    <string name="read_diary_detail_showcase_title_0">Diary View</string>
+    <string name="read_diary_detail_showcase_title_1">Move page</string>
+    <string name="read_diary_detail_showcase_title_2">編輯日記</string>
+    <string name="read_diary_detail_showcase_title_3">文字轉語音</string>
+    <string name="read_diary_detail_showcase_title_4">Postcard</string>
+    <string name="read_diary_detail_showcase_title_5">刪除日記</string>
+    <string name="read_diary_detail_showcase_message_0">Browse the saved diary. You can modify a saved diary or create a diary card by specifying a custom color.</string>
+    <string name="read_diary_detail_showcase_message_1">Drag the screen left or right to view diaries created before or after.</string>
+    <string name="read_diary_detail_showcase_message_2">You can go to the diary editing screen to edit the diary being viewed.</string>
+    <string name="read_diary_detail_showcase_message_3">You can listen to the diary text by voice using the Google TTS feature.</string>
+    <string name="read_diary_detail_showcase_message_4">Use the diary to create post cards and share them with others.</string>
+    <string name="read_diary_detail_showcase_message_5">You can delete the current diary and go to the search screen.</string>
+    <string name="update_diary_title">編輯日記</string>
+    <string name="back_pressed_confirm">Click the \'OK\' button to go to the previous screen without saving the current diary.</string>
+    <string name="rate_app">為我們評分</string>
+    <string name="guide_message_3">對要求的功能權限不足</string>
+    <string name="restore_diary">還原日記</string>
+    <string name="restore_diary_summary">從Google Drive的備份中復原所有附加內容以外的資料。</string>
+    <string name="restore_photo">還原日記照片（手動）</string>
+    <string name="restore_photo_summary">使用者直接復原附加在日記裡的照片</string>
+    <string name="backup_diary">備份日記</string>
+    <string name="backup_diary_summary">將附加內容以外的資料備份到Google Drive。</string>
+    <string name="font_setting">字體設定</string>
+    <string name="add_ttf_fonts_title">增加TTF字體</string>
+    <string name="add_ttf_fonts_summary">Add your own TTF fonts to the Easy Diary.\nIf the fonts are added, you can use the added fonts with the built-in fonts.\nWhen you select a TTF file using the file explorer, the font is automatically registered in Easy Diary and activated in the font setting menu.</string>
+    <string name="add_ttf_fonts_info_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/MANUAL.md</string>
+    <string name="diary_search_keyword_case_sensitive_title">區分大小寫</string>
+    <string name="diary_search_keyword_case_sensitive_summary">When the option is activated, it checks whether the diary matches case.</string>
+    <string name="setting_primary_color_title">佈景主體</string>
+    <string name="setting_primary_color_summary">Set the primary color of the application.</string>
+    <string name="pick_text_color_guide_message">The current version only supports theme color changes.\nText color changes will be available in the future.</string>
+    <string name="pick_background_color_guide_message">The current version only supports theme color changes.\nBackground color changes will be available in the future.</string>
+    <string name="easy_photo_map_title">Easy PhotoMap</string>
+    <string name="easy_photo_map_summary">Easy Photo Map is a photomap application that displays the location of the photo on the map using the location information included in the photo.</string>
+    <string name="easy_password_title">Easy Password</string>
+    <string name="easy_password_summary">Easy Password is an application that helps you manage passwords used for login, document security, door lock, lock, credit card, account management, etc. by using one pattern lock set by the user.</string>
+    <string name="font_line_spacing">字體行距</string>
+    <string name="font_line_spacing_summary">Change the line spacing of the font to the set ratio.</string>
+    <string name="calendar_title">日曆</string>
+    <string name="guide_message_4">沒有這天的日記</string>
+    <string name="bar_chart_title">圖表</string>
+    <string name="bar_chart_status">Time Diary Creation Status</string>
+    <string name="range_a">0h~3h</string>
+    <string name="range_b">4h~7h</string>
+    <string name="range_c">8h~11h</string>
+    <string name="range_d">12h~15h</string>
+    <string name="range_e">16h~19h</string>
+    <string name="range_f">20h~23h</string>
+    <string name="range_g">1h~24h</string>
+    <string name="write_time">寫作時間</string>
+    <string name="write_count">寫作數量</string>
+    <string name="unlock_guide_message">請輸入您的鎖定密碼</string>
+    <string name="photo_view_error_info">No photos found.\nAttached photos from Gallery may have been deleted or moved.</string>
+    <string name="diary_card_export_info">日記卡儲存路徑</string>
+    <string name="diary_card_share_info">分享日記卡</string>
+    <string name="diary_card_export_error_message">An error occurred while generating the diary card. Please try again.</string>
+    <string name="post_card_showcase_button_1">下一個</string>
+    <string name="post_card_showcase_button_2">關閉</string>
+    <string name="post_card_showcase_title_0">日記卡</string>
+    <string name="post_card_showcase_title_1">文字顏色</string>
+    <string name="post_card_showcase_title_2">背景顏色</string>
+    <string name="post_card_showcase_title_3">Create postcard</string>
+    <string name="post_card_showcase_title_4">Share postcard</string>
+    <string name="post_card_showcase_title_5">退出編輯</string>
+    <string name="post_card_showcase_message_0">You can use the saved diary to create and save custom postcards.</string>
+    <string name="post_card_showcase_message_1">Change the postcard text color. You can select the desired color using the color picker.</string>
+    <string name="post_card_showcase_message_2">Change the postcard background color. You can select the desired color using the color picker.</string>
+    <string name="post_card_showcase_message_3">Postcard created can be saved as image files.</string>
+    <string name="post_card_showcase_message_4">Postcard created can be shared with friends. Share your postcard with email, mms, messenger, and more.</string>
+    <string name="post_card_showcase_message_5">Exit the postcard editing screen and return to the previous screen.</string>
+    <string name="timeline_title">時間軸</string>
+    <string name="postcard_viewer_title">Diary Postcard</string>
+    <string name="postcard_viewer_no_cards_saved">No saved diary post card.</string>
+    <string name="google_drive_connect_message">Google Drive同步中…</string>
+    <string name="diary_count"></string>
+    <string name="menu_calendar">日曆</string>
+    <string name="menu_chart">統計</string>
+    <string name="menu_timeline">時間軸</string>
+    <string name="post_card">Diary Postcard</string>
+    <string name="menu_delete">刪除</string>
+
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <!--  Resources added since version 1.4.41 here.                                                      -->
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <string name="preferences_category_settings">基本設定</string>
+    <string name="preferences_category_information">應用程式資訊</string>
+    <string name="preferences_information_licenses">開放原始碼授權</string>
+    <string name="preferences_information_licenses_summary">開源軟體注意事項</string>
+    <string name="preferences_category_aaf">AAF Easy系列</string>
+    <string name="invite_friends">邀請好友</string>
+    <string name="invite_friends_summary">與你的朋友分享%s</string>
+
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <!--  Release notes here.                                                      -->
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <string name="release_103">
+        v1.4.41 / 2018.05.28\n
+        Fixed a bug that abnormally terminated in Postcard browse mode when there is no working directory
+    </string>
+    <string name="release_105">
+        v1.4.42 / 2018.06.27\n
+        優化使用者體驗 (UX)
+    </string>
+    <string name="release_110">
+        v1.4.47 / 2018.08.29\n
+        新增明信片刪除功能
+    </string>
+    <string name="release_114">
+        v1.4.51 / 2018.09.29\n
+        AAF 通用模組更新\n
+        更改應用程式打包環境至Android 9 Pie
+    </string>
+    <string name="release_116">
+        v1.4.53 / 2018.10.13\n
+        新增預覽照片大小設定功能\n
+        新增預覽照片切換功能（折疊或展開）
+    </string>
+    <string name="release_118">
+        v1.4.55 / 2018.11.01\n
+        改善撰寫日記的時間標示\n
+        為日記標題及時間軸時間資訊增加粗體字設定功能
+    </string>
+    <string name="release_120">
+        v1.4.57 / 2018.11.12\n
+        新增多重選取設定功能，一次可以選多張照片
+    </string>
+    <string name="release_126">
+        v1.4.63 / 2018.11.25\n
+        新增用Google Drive備份及復原附加圖片的功能
+    </string>
+    <string name="release_128">
+        v1.4.65 / 2018.12.19\n
+        新增指紋感應器鎖定功能
+    </string>
+    <string name="release_130">
+        v1.4.67 / 2019.01.01\n
+        Improved the ability to view attached photos on the postcard screen
+    </string>
+    <string name="release_131">
+        v1.4.68 / 2019.01.06\n
+        Solved security considerations for some items that are reported with low confidence in Sophos vaccine(Notification listener, Trigger installation)\n
+        Add Postcard font size adjustment function
+    </string>
+    <string name="release_132">
+        v1.4.69 / 2019.01.16\n
+        User Experience (UX) Optimization\n
+        Fixed an error that screen transition is not normal in Android 9 Pie version\n
+        Add timeline diary creation button
+    </string>
+    <string name="release_133">
+        v1.4.70 / 2019.01.25\n
+        Added option to view summary of diary content
+    </string>
+    <string name="release_134">
+        v1.4.71 / 2019.01.26\n
+        Fixed an error that the application terminated abnormally when changing device fingerprint information
+    </string>
+    <string name="release_136">
+        v1.4.73 / 2019.02.11\n
+        Improved the ability to correct input digits when PIN is set and unlocked
+    </string>
+    <string name="release_137">
+        v1.4.74 / 2019.03.06\n
+        Improved the ability to apply filters to postcard images\n
+        Added ability to export diary to Excel file
+    </string>
+    <string name="release_138">
+        v1.4.75 / 2019.03.22\n
+        Add application-specific information pages, including FAQs and privacy policies\n
+        Improved pin and fingerprint unlock toggle
+    </string>
+    <string name="release_139">
+        v1.4.76 / 2019.04.24\n
+        Add 50 kinds of diary symbol icons
+    </string>
+    <string name="release_140">
+        v1.4.77 / 2019.05.11\n
+        Add diary symbols and apply categories
+    </string>
+    <string name="release_141">
+        v1.4.78 / 2019.05.13\n
+        Fixed an error that ended abnormally if some function of the setting screen does not have access to device storage
+    </string>
+    <string name="release_143">
+        v1.4.80 / 2019.06.07\n
+        Changed Google Drive Android API to Google Drive REST API (Google Drive Android API will be shut down on December 6, 2019)
+    </string>
+    <string name="release_147">
+        v1.4.83 / 2019.06.09\n
+        Apply Android App Bundle to reduce and optimize installation file size
+    </string>
+    <string name="release_149">
+        v1.4.84 / 2019.06.15\n
+        Improved diary statistics
+    </string>
+    <string name="release_150">
+        v1.4.85 / 2019.06.18\n
+        Google Drive(REST API) user rights acquisition error correction
+    </string>
+    <string name="release_151">
+        v1.4.86 / 2019.06.19\n
+        Google Drive(REST API) Recovering photos with diary Fixing errors
+    </string>
+    <string name="release_152">
+        v1.4.87 / 2019.06.20\n
+        Fixed authentication token error for users authenticated to use Google Drive in v1.4.80 earlier
+    </string>
+    <string name="release_154">
+        v1.4.88 / 2019.07.16\n
+        Migrated Android support library to AndroidX version\n
+        Add diary symbol icon
+    </string>
+    <string name="release_157">
+        v1.4.91 / 2019.08.12\n
+        Added backup and recovery function using device storage\n
+        Fixed an issue that caused some text to be truncated on calendars on some devices
+    </string>
+    <string name="release_159">
+        v1.4.93 / 2019.08.29\n
+        User Experience (UX) Optimization\n
+        Bug fixes that crash abnormally when entering the configuration screen on older OS
+    </string>
+    <string name="release_160">
+        v1.4.94 / 2019.09.03\n
+        Added calendar weekday start setting\n
+        Fixed an issue that prevented the calendar from showing in tablet landscape
+    </string>
+    <string name="release_163">
+        v1.4.97 / 2019.09.17\n
+        Improved timeline search filter\n
+        Diary copy function added
+    </string>
+    <string name="release_165">
+        v1.4.99 / 2019.09.26\n
+        Diary text counting function added
+    </string>
+    <string name="release_167">
+        v1.4.101 / 2019.10.03\n
+        Respond to Android 10 storage access issues (targetSdkVersion temporary downgrade to avoid scoped storage policy)
+    </string>
+    <string name="release_169">
+        v1.4.103 / 2019.10.09\n
+        Change storage location and migrate to respond to Android 10 Scoped Storage policies
+    </string>
+    <string name="release_170">
+        v1.4.104 / 2019.10.19\n
+        Added calendar font scale setting\n
+        Apply sliding page to setting screen
+    </string>
+    <string name="release_171">
+        v1.4.105 / 2019.10.20\n
+        Fixed an error that occurred when using the Excel file device saving function\n
+        Fixed error when deleting diary from timeline
+    </string>
+    <string name="release_172">
+        v1.4.106 / 2019.10.25\n
+        Fixed the error that the changed contents are not immediately visible after editing the diary\n
+        Remediation for Vulnerable Libraries with known Security Issues
+    </string>
+    <string name="release_173">
+        v1.4.107 / 2019.10.31\n
+        User Experience (UX) Optimization
+    </string>
+    <string name="release_174">
+        v1.4.108 / 2019.11.18\n
+        Fixed an error that occurred when setting the calendar font scale on a device set to French
+    </string>
+    <string name="release_176">
+        v1.4.110 / 2019.12.13\n
+        Added Diary Dashboard feature\n
+        Added the ability to delete the diary backup file stored in the device
+    </string>
+    <string name="release_178">
+        v1.4.112 / 2019.12.31\n
+        Add photo attachment function through camera app integration\n
+        Diary Dashboard Improvements
+    </string>
+    <string name="release_179">
+        v1.4.113 / 2020.01.04\n
+        Added date movement function using date picker on calendar screen
+    </string>
+    <string name="release_180">
+        v1.4.114 / 2020.01.15\n
+        Added diary symbol icon\n
+        Added French support
+    </string>
+    <string name="release_182">
+        v1.4.116 / 2020.01.21\n
+        License policy changed from 「Apache License 2.0」 to 「GNU General Public License v3.0」
+    </string>
+    <string name="release_184">
+        v1.4.118 / 2020.02.11\n
+        [BETA] Added full data backup feature
+    </string>
+    <string name="release_185">
+        v1.4.119 / 2020.02.15\n
+        Added diary symbol icon
+    </string>
+    <string name="release_186">
+        v1.4.120 / 2020.02.19\n
+        Added diary symbol icon\n
+        Added search function using diary symbol
+    </string>
+    <string name="release_187">
+        v1.4.121 / 2020.03.02\n
+        Improved the speed of the calendar screen(1st improvement)
+    </string>
+    <string name="release_188">
+        v1.4.122 / 2020.03.09\n
+        [BETA] Added full data recovery feature\n
+        Some symbols appear unusually large in dashboard statistics\n
+        Added sort option of the diary list in the calendar screen
+    </string>
+    <string name="release_190">
+        v1.4.124 / 2020.03.15\n
+        Separate font-related setting option from basic setting screen
+    </string>
+    <string name="release_191">
+        v1.4.125 / 2020.03.23\n
+        Added cursor position setting option when entering diary edit screen\n
+        Added the function to set the maximum number of lines in the content summary view option\n
+        Fixed an issue where the day of the week was cut off on the calendar screen
+    </string>
+    <string name="release_192">
+        v1.4.126 / 2020.04.05\n
+        Added diary encryption feature using pin number\n
+        Temporarily apply the requestLegacyExternalStorage option to respond to multi-picker scoped storage issues in Android 10
+    </string>
+    <string name="release_193">
+        v1.4.127 / 2020.04.12\n
+        Removed requestLegacyExternalStorage option\n
+        Adding database file backup and recovery feature using SAF (Storage Access Framework)
+    </string>
+    <string name="release_195">
+        v1.4.129 / 2020.04.21\n
+        Added feature to attach animated GIF files\n
+        Added diary multiple copy and delete feature
+    </string>
+    <string name="release_196">
+        v1.4.130 / 2020.05.20\n
+        Added diary schedule setting feature
+    </string>
+    <string name="release_197">
+        v1.4.131 / 2020.05.26\n
+        Fixed an error that caused abnormal termination of some screens in Android 4.4 version
+    </string>
+    <string name="release_198">
+        v1.4.132 / 2020.05.31\n
+        Fixed an issue where buttons included inside the card view could not be identified when the theme color and the card view background color were set to the same color
+    </string>
+    <string name="release_199">
+        v1.4.133 / 2020.06.02\n
+        Fixed an issue where the lock screen icon was not identified when the screen background color was set to white
+    </string>
+    <string name="release_200">
+        v1.4.134 / 2020.06.14\n
+        User Experience (UX) Optimization
+    </string>
+    <string name="release_201">
+        v1.4.135 / 2020.06.18\n
+        Added RTL language support
+    </string>
+    <string name="release_202">
+        v1.4.136 / 2020.06.29\n
+        Added diary list widget feature
+    </string>
+    <string name="release_203">
+        v1.4.137 / 2020.07.05\n
+        Applied Google Play security policy
+    </string>
+    <string name="release_205">
+        v1.4.139 / 2020.07.11\n
+        Added feature to display the information of the connected Google account\n
+        Added Google Drive backup feature using scheduler
+    </string>
+    <string name="release_206">
+        v1.4.140 / 2020.07.20\n
+        Fixed an error that the scheduler did not work in the application termination state
+    </string>
+    <string name="release_207">
+        v1.4.141 / 2020.08.03\n
+        User Experience (UX) Optimization\n
+        French translation updates
+    </string>
+    <string name="release_209">
+        v1.4.143 / 2020.08.26\n
+        Fixed an issue where some devices were abnormally terminated in the setting screen
+    </string>
+    <string name="release_211">
+        v1.4.145 / 2020.09.04\n
+        German translation updates
+    </string>
+    <string name="release_212">
+        v1.4.146 / 2020.09.10\n
+        German translation updates\n
+        Added location information display option
+    </string>
+    <string name="release_214">
+        v1.4.148 / 2020.09.15\n
+        Added task symbol sorting option
+    </string>
+    <string name="release_216">
+        v1.4.150 / 2020.09.22\n
+        Fixed a bug where the widget was not displayed normally
+    </string>
+    <string name="release_217">
+        v1.4.151 / 2020.10.05\n
+        Diary creation button added to the calendar screen
+    </string>
+    <string name="release_218">
+        v1.4.152 / 2020.10.19\n
+        Russian translation updates\n
+        User Experience (UX) Optimization
+    </string>
+    <string name="release_219">
+        v1.4.153 / 2020.11.10\n
+        Hindi translation added\n
+        User Experience (UX) Optimization
+    </string>
+    <string name="release_220">
+        v1.4.154 / 2020.11.28\n
+        Add diary symbols\n
+        Added daily symbol usage filtering function to dashboard
+    </string>
+    <string name="release_221">
+        v1.4.155 / 2020.12.14\n
+        Add diary symbols\n
+        When creating a post card, the function has been improved so that the attached photo can be cropped or a filter can be applied
+    </string>
+    <string name="release_222">
+        v1.4.156 / 2021.01.11\n
+        Add diary symbols\n
+        Improved calendar screen UX
+    </string>
+    <string name="release_225">
+        v1.4.159 / 2021.01.30\n
+        Chinese translation added
+    </string>
+    <string name="release_227">
+        v1.4.161 / 2021.02.12\n
+        User Experience (UX) Optimization
+    </string>
+    <string name="release_229">
+        v1.4.163 / 2021.03.23\n
+        Added function to save diary as HTML
+    </string>
+    <string name="release_230">
+        v1.4.164 / 2021.04.26\n
+        Fixed an issue where the date on the calendar was not visible when the card view color was black
+    </string>
+    <string name="release_232">
+        v1.4.166 / 2021.05.11\n
+        Italian translation added\n
+        Improved landscape screen UX
+    </string>
+    <string name="release_233">
+        v1.4.167 / 2021.05.18\n
+        Fixed a bug that abnormally terminated on some devices when rotating the device
+    </string>
+    <string name="release_234">
+        v1.4.168 / 2021.06.10\n
+        User Experience (UX) Optimization
+    </string>
+    <string name="release_235">
+        v1.4.169.0 / 2021.06.19\n
+        Spanish translation added
+    </string>
+    <string name="release_237">
+        v1.4.170.1 / 2021.07.04\n
+        Added temporary save and recovery function\n
+        Added the option to disable In-App Review
+    </string>
+    <string name="release_238">
+        v1.4.171.0 / 2021.07.21\n
+        User Experience (UX) Optimization
+    </string>
+    <string name="release_241">
+        v1.4.172.2 / 2021.08.24\n
+        User Experience (UX) Optimization
+    </string>
+    <string name="release_242">
+        v1.4.172.3 / 2021.08.28\n
+        Improved custom app theme and color settings\n
+        Fixed Showcase View error related to toolbar menu change
+    </string>
+    <string name="release_243">
+        v1.4.172.4 / 2021.08.29\n
+        User Experience (UX) Optimization
+    </string>
+    <string name="release_244">
+        v1.4.172.5 / 2021.09.04\n
+        Multilingual translation updated
+    </string>
+    <string name="release_246">
+        v1.4.172.7 / 2021.09.17\n
+        Change the initial font setting policy
+    </string>
+    <string name="release_250">
+        v1.4.172.11 / 2021.10.27\n
+        User Experience (UX) Optimization
+    </string>
+    <string name="release_251">
+        v1.4.172.12 / 2021.11.13\n
+        Improved diary list screen fast scrolling
+    </string>
+    <string name="release_252">
+        v1.4.172.13 / 2021.11.20\n
+        Fixed an error that caused abnormal termination when entering the main screen after cleaning the memory
+    </string>
+    <string name="release_257">
+        v1.4.172.18 / 2021.12.15\n
+        Added grid setting option to main screen
+    </string>
+    <string name="release_258">
+        v1.4.172.19 / 2022.01.12\n
+        Diary detail screen UX improvement
+    </string>
+    <string name="release_259">
+        v1.4.172.20 / 2022.01.19\n
+        Fixed an error that caused abnormal termination in Android 7.1 or lower version when attaching a photo\n
+        Fixed some errors that caused abnormal termination in Android 12 version
+    </string>
+    <string name="release_260">
+        v1.4.172.21 / 2022.01.22\n
+        Fixed an error that caused abnormal termination when the schedule function was set in Android 12 version
+    </string>
+    <string name="release_261">
+        v1.4.173.0 / 2022.02.03\n
+        Added attached photo highlight function
+    </string>
+
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <!--  Resources added since version 1.4.47 here.                                                      -->
+    <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
+    <string name="speech_to_text">語音輸入</string>
+    <string name="write_diary">寫日記</string>
+    <string name="date_picker">選擇日期</string>
+    <string name="time_picker">選擇時間</string>
+    <string name="seconds_picker">Select seconds</string>
+    <string name="save_diary">儲存日記</string>
+    <string name="photo_registration">Photo registration</string>
+    <string name="zoom_in">放大</string>
+    <string name="zoom_out">縮小</string>
+    <string name="edit_diary">編輯日記</string>
+    <string name="text_to_speech">Diary to speech</string>
+    <string name="diary_postcard">Diary Postcard</string>
+    <string name="thumbnail_setting_title">縮略圖大小</string>
+    <string name="thumbnail_setting_summary">Sets the thumbnail size of the photo attached to the diary. The set size only applies to the diary creation and modification screen, not to the search screen.</string>
+    <string name="collapse_attached_photo">Collapse attached photo</string>
+    <string name="expand_attached_photo">Expand attached photo</string>
+    <string name="release_notes_title">發行紀錄</string>
+    <string name="release_notes_summary">Check for new features by release version.</string>
+    <string name="attached_photo_count">%d Attached Photos</string>
+    <string name="all_day">全天</string>
+    <string name="bold_style_option_title">粗體字設定</string>
+    <string name="bold_style_option_summary">設定日記標題與時間軸時間以粗體字顯示</string>
+    <string name="multi_picker_option_title">Multi picker setting</string>
+    <string name="multi_picker_option_summary">When attaching a diary photo, I use the multi-picker provided in the diary without using the gallery app. When Multi-picker is enabled, you can attach multiple pictures at once.</string>
+    <string name="preferences_category_backup_restore">備份與還原</string>
+    <string name="preferences_category_backup_restore_sub">Google Drive</string>
+    <string name="backup_attach_photo_title">備份附加照片</string>
+    <string name="backup_attach_photo_summary">Backup your attached photos to Google Drive. This feature may not work on some devices due to beta service.</string>
+    <string name="recover_attach_photo_title">還原附加照片</string>
+    <string name="recover_attach_photo_summary">從Google Drive還原已備份的附加照片。 由於測試版服務，此功能可能無法在某些裝置上使用。</string>
+    <string name="notification_msg_device_file_count">%s 備份文件數量： %d%s</string>
+    <string name="notification_msg_upload_file_count">Number of files to upload</string>
+    <string name="notification_msg_upload_invalid">All backup target files already exist.</string>
+    <string name="notification_msg_upload_empty">The file to be backed up does not exist.</string>
+    <string name="notification_msg_upload_progress">上傳中…</string>
+    <string name="notification_msg_upload_complete">上傳完成</string>
+    <string name="notification_msg_upload_success">%s 上傳成功： %d%s</string>
+    <string name="notification_msg_upload_fail">%s 上傳失敗： %d%s</string>
+    <string name="notification_msg_google_drive_file_count">%s Number of recover files: %d%s</string>
+    <string name="notification_msg_download_file_count">Number of files to download</string>
+    <string name="notification_msg_download_invalid">All recovery target files already exist.</string>
+    <string name="notification_msg_download_empty">The file to be recovered does not exist.</string>
+    <string name="notification_msg_download_progress">下載中…</string>
+    <string name="notification_msg_download_complete">下載完成</string>
+    <string name="notification_msg_download_success">%s Download Success: %d%s</string>
+    <string name="notification_msg_download_fail">%s Download Fail: %d%s</string>
+    <string name="notification_msg_duplicate_file_count">%s Number of exist files: %d%s</string>
+    <string name="preferences_category_lock">Lock setting</string>
+    <string name="fingerprint_lock_title">指紋鎖定</string>
+    <string name="fingerprint_lock_summary">If the device supports fingerprint recognition and has a registered fingerprint, lock the application with the registered fingerprint.</string>
+    <string name="fingerprint_not_available">The operating system installed on the device does not support fingerprint recognition.</string>
+    <string name="fingerprint_setting_complete">Fingerprint lock setting is completed.</string>
+    <string name="fingerprint_setting_release">指紋鎖定已關閉</string>
+    <string name="fingerprint_lock_need_pin_setting">使用指紋鎖定之前，您需要先設定PIN碼</string>
+    <string name="fingerprint_authentication_fail_try_again">指紋驗證失敗，請再試一次</string>
+    <string name="fingerprint_authentication_info_changed">The fingerprint authentication information of the device has changed and the previously set authentication information can not be used.</string>
+    <string name="pin_lock_title">PIN碼鎖設定</string>
+    <string name="pin_lock_summary">設定PIN碼鎖定應用程式</string>
+    <string name="pin_setting_complete">PIN碼設定完成</string>
+    <string name="pin_setting_release">PIN碼鎖定已停用</string>
+    <string name="pin_release_need_fingerprint_disable">要停用PIN碼鎖定，您需要關閉指紋鎖定</string>
+    <string name="pin_setting_guide_message">請輸入一組數字作為PIN碼</string>
+    <string name="pin_unlock_guide_message">請輸入PIN碼</string>
+    <string name="pin_verification_fail">PIN碼驗證失敗</string>
+    <string name="change_pin_lock_mode">更改為PIN碼鎖定模式</string>
+    <string name="diary_creation_time_disable_message">No time information</string>
+    <string name="enable_card_view_policy_title">優化卡片圖示設計</string>
+    <string name="enable_card_view_policy_summary">Optimize the card view design for device.</string>
+    <string name="font_size_title">設定字體大小</string>
+    <string name="font_size_summary">縮小或放大字體</string>
+    <string name="contents_summary_title">日記內容摘要</string>
+    <string name="contents_summary_description">Summarize the contents of the diary provided in the calendar, timeline, search screen, and so on.</string>
+    <string name="init_cipher_error_guide_message">The fingerprint information of the device has been changed. Change the PIN lock mode to unlock, then unlock the fingerprint lock and set it again.</string>
+    <string name="export_excel_title">匯出為Excel</string>
+    <string name="export_excel_description">Save all content except the attached photo as an Excel file.</string>
+    <string name="export_excel_xls_location">地點</string>
+    <string name="export_excel_header_seq">Sequence</string>
+    <string name="export_excel_header_write_date">Write date</string>
+    <string name="export_excel_header_title">日記標題</string>
+    <string name="export_excel_header_contents">日記內容</string>
+    <string name="export_excel_header_attach_photo_path">Attached photo path</string>
+    <string name="export_excel_header_attach_photo_size">Attached photo size</string>
+    <string name="export_excel_header_write_time_millis">Write date\n(Since January 1st 1970 in milliseconds.)</string>
+    <string name="export_excel_header_weather">天氣</string>
+    <string name="export_excel_header_symbol">圖標</string>
+    <string name="export_excel_header_is_all_day">全天</string>
+    <string name="faq_title">常見問題</string>
+    <string name="faq_description">您可以查看常見問題及解決方法。</string>
+    <string name="faq_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/FAQs.md</string>
+    <string name="privacy_policy_title">隱私政策</string>
+    <string name="privacy_policy_description">Easy Diary隱私政策</string>
+    <string name="privacy_policy_url">https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/Privacy.md</string>
+    <string name="diary_symbol">日記圖標</string>
+    <string name="diary_symbol_guide_message">選擇一個符合目前天氣或日記內容的圖標。</string>
+    <string name="category_weather">天氣</string>
+    <string name="category_emotion">心情</string>
+    <string name="category_daily">日常生活&amp;事物</string>
+    <string name="category_food">美食&amp;飲品</string>
+    <string name="category_leisure">休閒生活</string>
+    <string name="category_landscape">Landscape&amp;Building</string>
+    <string name="rotate_photo">旋轉</string>
+    <string name="task_progress_message">Request work in process…</string>
+    <string name="open_realm_file_title">日記還原</string>
+    <string name="open_realm_file_message">Please choose a recovery target file.</string>
+    <string name="backup_completed_message">日記備份工作已完成</string>
+    <string name="backup_confirm_message">Do you want to start an attached photo backup task?</string>
+    <string name="recover_confirm_attached_photo">Do you want to start an attached photo recovery task?</string>
+    <string name="category_symbol">圖標</string>
+    <string name="statistics_creation_time">Statistics by creation time</string>
+    <string name="statistics_symbol_all">All statistics by symbol</string>
+    <string name="statistics_symbol_top_ten">前十名圖標統計</string>
+    <string name="category_flag">FLAG</string>
+    <string name="preferences_category_backup_restore_device">備份與還原</string>
+    <string name="preferences_category_backup_restore_device_sub">裝置儲存空間</string>
+    <string name="export_realm_title">備份日記</string>
+    <string name="export_realm_description">Back up database files except the attached photo to the device storage.\nSince files backed up in the internal storage are deleted when the application is deleted, use the external public storage or Google Drive backup function to permanently store the created data.</string>
+    <string name="export_realm_guide_message">The database file has been saved to the device storage at the path below.</string>
+    <string name="import_realm_title">還原日記</string>
+    <string name="import_realm_description">Recovers database files from device storage except attachments.</string>
+    <string name="diary_item_count">+%d</string>
+    <string name="calendar_start_day_title">日曆開始日</string>
+    <string name="calendar_start_day_summary">設定一週的開始日</string>
+    <string name="calendar_start_day_sunday">週日</string>
+    <string name="calendar_start_day_monday">週一</string>
+    <string name="calendar_start_day_saturday">週六</string>
+    <string name="calendar_menu_previous">Previous</string>
+    <string name="calendar_menu_next">Next</string>
+    <string name="filter_start_date">開始日期</string>
+    <string name="filter_start_date_hint">請輸入開始日期</string>
+    <string name="filter_end_date">結束日期</string>
+    <string name="filter_end_date_hint">請輸入結束日期</string>
+    <string name="filter_search_word">搜尋詞句</string>
+    <string name="filter_search_word_hint">請輸入您要找的詞句</string>
+    <string name="filter_clear">重置篩選條件</string>
+    <string name="filter_close">關閉</string>
+    <string name="copy_diary_item">您想要複製選擇的日記嗎？</string>
+    <string name="diary_contents_length">字元: %d</string>
+    <string name="count_characters_title">字數</string>
+    <string name="count_characters_summary">計算日記中的字數</string>
+    <string name="send_email_attach_excel_title">建立Excel文件並以電子郵件傳送</string>
+    <string name="send_email_attach_excel_description">All content except the attached photo is created as an Excel file and attached to the email.</string>
+    <string name="storage_migration_message">Storage location changes will be made in accordance with the Android 10 Scoped Storage policy. This job runs only once.</string>
+    <string name="google_drive_account_sign_out_title">Reset Google Drive linked account</string>
+    <string name="google_drive_account_sign_out_description">Remove token information published by Easy Diary using Google Drive linked account.</string>
+    <string name="calendar_font_scale_title">Set calendar font size</string>
+    <string name="calendar_font_scale_description">Scales the font size inside the calendar based on the set global font size.</string>
+    <string name="calendar_font_scale_disable">Do not use</string>
+    <string name="calendar_font_scale_factor">Global font size x %.1f</string>
+    <string name="dashboard_title_lifetime">Lifetime</string>
+    <string name="dashboard_title_last_month">Last Month</string>
+    <string name="dashboard_title_last_week">Last Week</string>
+    <string name="dashboard_guide_message">There is not enough data to generate ranking data. You need to write a diary using at least 4 symbols to activate dash board ranking.</string>
+    <string name="delete_realm_title">刪除備份文件</string>
+    <string name="delete_realm_description">Delete the backup file stored in the storage.</string>
+    <string name="menu_dashboard">Dashboard</string>
+    <string name="dashboard_title_backup_drive">Google Drive Backup History</string>
+    <string name="dashboard_title_backup_local">Local Device Backup History</string>
+    <string name="dashboard_backup_guide_message">No backup information</string>
+    <string name="last_diary_backup_time">Diary last backup time:</string>
+    <string name="last_photo_backup_time">Attached photo last backup time:</string>
+    <string name="export_full_backup_title">[BETA] Backup full data</string>
+    <string name="export_full_backup_description">Compress and back up all the data related to the diary such as database, attached photo, post card, font, etc. into one file.\nThis feature is a beta feature therefore may not work properly on some devices.</string>
+    <string name="diary_symbol_search_message">Select the diary symbol you want to filter.</string>
+    <string name="import_full_backup_title">[BETA] Recover full data</string>
+    <string name="import_full_backup_description">Decompress and recover all the data related to the diary such as database, attached photo, post card, font, etc.\nThis feature is a beta feature therefore may not work properly on some devices.</string>
+    <string name="calendar_sort_ascending">Ascending</string>
+    <string name="calendar_sort_descending">Descending</string>
+    <string name="calendar_sort_title">Calendar sort option</string>
+    <string name="calendar_sort_summary">Set the sort order of the daily diary list in the calendar screen.</string>
+    <string name="preferences_category_font">字型設定</string>
+    <string name="hold_position_title">Scroll position setting</string>
+    <string name="hold_position_summary">When the edit screen starts, the scroll position on the browse screen is maintained. If this setting is not set, scrolling moves to the last position of the text.</string>
+    <string name="max_lines_title">Max Lines</string>
+    <string name="max_lines_summary">Set the maximum number of lines to be displayed when the content summary option is activated.</string>
+    <string name="max_lines_value">%d Lines</string>
+    <string name="diary_encryption_title">日記加密</string>
+    <string name="diary_encryption_guide">Please enter the pin number to be used for diary encryption.\nEncrypt the title and body of the currently selected diary using the entered pin number.\nThe pin number cannot be recovered, so be careful not to forget the set pin number.</string>
+    <string name="diary_decryption_title">日記解密</string>
+    <string name="diary_decryption_guide">Enter the pin number to be used for diary decoding.\nDecrypt the diary\'s title and body content using the entered pin number.</string>
+    <string name="diary_pin_number_confirm_guide">Enter the pin number to be used for diary encryption once more.</string>
+    <string name="diary_pin_number_confirm_error">The first entered PIN number does not match the confirmation PIN number.\nPlease enter the PIN number again.</string>
+    <string name="diary_pin_number_verification_error">The PIN numbers do not match.\nPlease enter the PIN number you set when encrypting the diary.</string>
+    <string name="diary_decryption_guide_before_editing">Enter the PIN number you set when encrypting the diary.\nWhen the diary is edited, it is encrypted again with the existing password.</string>
+    <string name="diary_decryption_mode_once">Decrypt once for viewing</string>
+    <string name="diary_decryption_mode_permanent">Remove the pin number setting after decryption</string>
+    <string name="backup_internal_title">備份到內部儲存空間</string>
+    <string name="backup_internal_description">The backup file is saved in the Easy Diary internal storage. The backed up files cannot be accessed using applications other than Easy Diary.</string>
+    <string name="backup_external_title">備份到外部儲存空間</string>
+    <string name="backup_external_description">The backup file is stored in an external public storage. The backed up files can be accessed using File Explorer.</string>
+    <string name="recovery_internal_title">從內部儲存空間還原</string>
+    <string name="recovery_internal_description">Diary contents are restored using the database backup file stored in the Easy Diary internal storage.</string>
+    <string name="recovery_external_title">從外部儲存空間還原</string>
+    <string name="recovery_external_description">Diary contents are restored using the database backup file stored in the external public storage.</string>
+    <string name="delete_selected_items_confirm">Are you sure you want to delete the %d selected items?</string>
+    <string name="duplicate_selected_items_confirm">Are you sure you want to duplicate the %d selected items?</string>
+    <string name="no_items_warning">There are no items selected.</string>
+    <string name="preferences_category_schedule">Schedule setting</string>
+    <string name="schedule_time">日期與時間</string>
+    <string name="schedule_type">Schedule type</string>
+    <string name="schedule_description">Schedule description</string>
+    <string name="schedule_description_hint">Alarm description</string>
+    <string name="schedule_diary_writing_description">Diary writing\nRegister the diary writing schedule.\nWhen the schedule is registered, a notification message is provided according to the set day and time.</string>
+    <string name="schedule_backup_local_description">Diary backup (Device storage)\nRegistering the schedule backs up the database files excluding attached photos to the device local storage according to the set day and time and provides the result of the operation as a notification message.</string>
+    <string name="schedule_empty_message">There is no set schedule information.\nClick the plus button on the top right to add a new schedule.</string>
+    <string name="permission_confirmation_dialog_title">請求權限</string>
+    <string name="permission_confirmation_dialog_message">Authorization is required to use Easy Diary.</string>
+    <string name="google_drive_account_information_title">Linked Google account information</string>
+    <string name="schedule_backup_gms_description">Diary backup (Google Drive)\nRegistering the schedule backs up the database files and attached photos to the Google Drive according to the set day and time and provides the result of the operation as a notification message.</string>
+    <string name="google_drive_account_sign_in_title">Link Google Drive account</string>
+    <string name="google_drive_account_sign_in_description">Connect your account to Google Drive for easy diary data backup.</string>
+    <string name="schedule_gms_error_title">Waiting for scheduled work</string>
+    <string name="schedule_gms_error_message">The device entered doze mode and the backup operation using the network failed. If you touch the notification window, the backup operation will resume.</string>
+    <string name="schedule_pending_guide_message">The waiting schedule starts.</string>
+    <string name="schedule_diary_writing_complete">Touch the notification window to go to the diary screen.</string>
+    <string name="schedule_backup_local_complete">Diary backup completed on local device.</string>
+    <string name="schedule_backup_gms_complete">The diary backup file and attached photo were saved in Google Drive.%s</string>
+    <string name="ok">OK</string>
+    <string name="cancel">取消</string>
+    <string name="settings">設定</string>
+    <string name="location_info_title">Location information display</string>
+    <string name="location_info_description">The location information is displayed in the diary using GPS information.</string>
+    <string name="location_info_error_message">Location information cannot be received.</string>
+    <string name="category_tasks">Task</string>
+    <string name="task_symbol_top_order_title">Align the task symbol to the top</string>
+    <string name="task_symbol_top_order_description">If the type of Task Symbol is TODO or DOING among the diaries to which the task symbol is applied, it is arranged at the top of the list.</string>
+    <string name="dashboard_title_daily_symbol_tile">Filtering of symbol usage by day based on a year</string>
+    <string name="symbol_filter_picker_remove_guide_message">At least one symbol must be selected.</string>
+    <string name="title_dialog_postcard_photo_option">Photo crop and filter settings</string>
+    <string name="msg_check_force_single_photo">Change to expose only one photo in the photo area of the post card.\nIf more than one photo is registered, you can swipe to view other photos.</string>
+    <string name="load_auto_save_diary_title">Load auto-save diary</string>
+    <string name="load_auto_save_diary_description">There is a diary stored temporarily. Do you want to load the temporarily saved diary?</string>
+    <string name="enable_review_flow_title">Google Play In-App Review</string>
+    <string name="enable_review_flow_summary">If you use Easy Diary for a specific period, the Google Play review registration dialog will be activated. If you do not want to use the review registration function or if the Google Play dialog opens after review registration, you can disable this option to prevent the dialog from opening.</string>
+    <string name="postcard_grid_option_title">Grid options</string>
+    <string name="postcard_grid_option_column_number">%d column per row</string>
+    <string name="encrypt_diary">加密日記</string>
+    <string name="decrypt_diary">解密日記</string>
+    <string name="postcard_making">Postcard Making</string>
+    <string name="user_custom_setting">User Custom Setting</string>
+    <string name="automation_settings">Automatic setting using themes</string>
+    <string name="place_finger_description">Please place your finger on the fingerprint sensor</string>
+    <string name="enable_photo_highlight_title">Attached photo highlights</string>
+    <string name="enable_photo_highlight_description">Based on today\'s date, photos attached in the past are displayed in the highlight area in units of years and months. If there are no yearly or monthly attachments for today\'s date, the highlight area is not activated.</string>
+    <string name="yearly_highlight_tag">{0,number} {0,choice,1#Year Ago|1&lt;Years Ago}</string>
+    <string name="monthly_highlight_tag">{0,number} {0,choice,1#Month Ago|1&lt;Months Ago}</string>
+    <string name="notification_channel_name_dev">Notification Test</string>
+    <string name="notification_channel_name_alarm">Diary Schedule</string>
+    <string name="notification_channel_name_upload">Google Drive Upload</string>
+    <string name="notification_channel_name_download">Google Drive Download</string>
+    <string name="notification_channel_name_zip_helper">Management ZIP Backup</string>
+</resources>
