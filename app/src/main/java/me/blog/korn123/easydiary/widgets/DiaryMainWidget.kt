@@ -107,7 +107,7 @@ class DiaryMainWidget : AppWidgetProvider() {
     private fun setupIntent(context: Context, views: RemoteViews, action: String, id: Int) {
         Intent(context, DiaryMainWidget::class.java).apply {
             this.action = action
-            val pendingIntent = PendingIntent.getBroadcast(context, 0, this, 0)
+            val pendingIntent = PendingIntent.getBroadcast(context, 0, this, context.pendingIntentFlag())
             views.setOnClickPendingIntent(id, pendingIntent)
         }
     }
