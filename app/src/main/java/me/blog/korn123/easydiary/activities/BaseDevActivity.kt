@@ -355,8 +355,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
         } else {
             notificationBuilder
                     .setLargeIcon(BitmapFactory.decodeResource(resources, notificationInfo.largeIconResourceId))
-                    .setStyle(NotificationCompat.BigTextStyle().bigText("[Style] $text").setSummaryText("[Style] $title"))
         }
+        if (notificationInfo.id == 100) notificationBuilder.setStyle(NotificationCompat.BigTextStyle().bigText("[BigTextStyle] $text").setSummaryText("[BigTextStyle] $title"))
 
         if (notificationInfo.useActionButton) {
             notificationBuilder.addAction(
