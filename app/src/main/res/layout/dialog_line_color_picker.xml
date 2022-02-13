@@ -6,19 +6,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/activity_margin">
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/layout_status_bar_darken_color"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.simplemobiletools.commons.views.MyTextView
+            android:id="@+id/text_status_bar_darken_color"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Status Bar Darken Color" />
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_status_bar_darken_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <com.simplemobiletools.commons.views.LineColorPicker
         android:id="@+id/primary_line_color_picker"
+        android:layout_marginTop="@dimen/big_margin"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/line_color_picker_height"/>
-
+        android:layout_height="@dimen/line_color_picker_height"
+        android:layout_below="@+id/layout_status_bar_darken_color" />
     <com.simplemobiletools.commons.views.LineColorPicker
         android:id="@+id/secondary_line_color_picker"
         android:layout_width="match_parent"
         android:layout_height="@dimen/line_color_picker_height"
         android:layout_below="@+id/primary_line_color_picker"
         android:layout_marginTop="@dimen/big_margin"/>
-
     <com.simplemobiletools.commons.views.MyTextView
         android:id="@+id/hex_code"
         android:layout_width="wrap_content"
@@ -28,5 +45,4 @@
         android:layout_marginTop="@dimen/big_margin"
         android:textSize="@dimen/bigger_text_size"
         tools:text="#FF0000"/>
-
 </RelativeLayout>

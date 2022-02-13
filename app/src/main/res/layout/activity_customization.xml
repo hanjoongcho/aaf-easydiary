@@ -51,6 +51,23 @@
                             android:id="@+id/customization_primary_color" />
                     </RelativeLayout>
                     <RelativeLayout
+                        android:id="@+id/layout_status_bar_darken_color"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground"
+                        android:padding="@dimen/activity_margin">
+                        <com.simplemobiletools.commons.views.MyTextView
+                            style="@style/text_custom_theme_item"
+                            android:layout_marginLeft="20dp"
+                            android:id="@+id/text_status_bar_darken_color"
+                            android:text="StatusBar Darken Color"/>
+                        <androidx.appcompat.widget.SwitchCompat
+                            style="@style/image_custom_color_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/switch_status_bar_darken_color" />
+                    </RelativeLayout>
+                    <RelativeLayout
                         android:id="@+id/customization_background_color_holder"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

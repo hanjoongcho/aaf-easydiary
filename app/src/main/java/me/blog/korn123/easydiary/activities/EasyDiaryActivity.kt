@@ -57,6 +57,8 @@ open class EasyDiaryActivity : BaseSimpleActivity() {
     override fun getMainViewGroup(): ViewGroup? = mRootView
 //    override fun getBackgroundAlpha(): Int = APP_BACKGROUND_ALPHA
 
+    override fun isEnableStatusBarDarkenColor(): Boolean = config.enableStatusBarDarkenColor
+
     fun checkWhatsNewDialog(applyFilter: Boolean = true) {
         arrayListOf<Release>().apply {
             add(Release(263, R.string.release_263))

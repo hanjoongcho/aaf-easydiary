@@ -164,8 +164,8 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.7'
 
     // AAFactory
-    implementation 'io.github.aafactory:commons:1.0.10'
-//    implementation project(":aafactory-commons")
+//    implementation 'io.github.aafactory:commons:1.0.10'
+    implementation project(":aafactory-commons")
 
     // etc.
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.31'

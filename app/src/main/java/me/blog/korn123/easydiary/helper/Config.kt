@@ -229,6 +229,10 @@ class Config(val context: Context) {
         get() = prefs.getBoolean(SETTING_ENABLE_PHOTO_HIGHLIGHT, false)
         set(enablePhotoHighlight) = prefs.edit().putBoolean(SETTING_ENABLE_PHOTO_HIGHLIGHT, enablePhotoHighlight).apply()
 
+    var enableStatusBarDarkenColor: Boolean
+        get() = prefs.getBoolean(SETTING_ENABLE_STATUSBAR_DARKEN_COLOR, true)
+        set(enableStatusBarDarkenColor) = prefs.edit().putBoolean(SETTING_ENABLE_STATUSBAR_DARKEN_COLOR, enableStatusBarDarkenColor).apply()
+
     companion object {
         fun newInstance(context: Context) = Config(context)
     }

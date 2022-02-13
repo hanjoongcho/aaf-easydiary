@@ -48,6 +48,7 @@ class CustomizationActivity : BaseSimpleActivity() {
 
             updateTextColors(mainHolder)
             updateAppViews(mainHolder)
+            updateCardViewPolicy(mainHolder)
             initTextSize(mainHolder)
             updateDrawableColorInnerCardView(R.drawable.ic_update)
             initColorVariables()
@@ -77,6 +78,11 @@ class CustomizationActivity : BaseSimpleActivity() {
                 setCurrentScreenBackgroundColor(Color.parseColor(GREEN_THEME_SCREEN_BACKGROUND_COLOR))
                 setCurrentTextColor(Color.parseColor(GREEN_THEME_TEXT_COLOR))
                 colorChanged()
+            }
+            switchStatusBarDarkenColor.isChecked = config.enableStatusBarDarkenColor
+            layoutStatusBarDarkenColor.setOnClickListener {
+                switchStatusBarDarkenColor.toggle()
+                config.enableStatusBarDarkenColor = switchStatusBarDarkenColor.isChecked
             }
         }
     }
