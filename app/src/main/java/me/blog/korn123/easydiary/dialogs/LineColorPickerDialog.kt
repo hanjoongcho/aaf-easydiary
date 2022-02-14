@@ -80,7 +80,7 @@ class LineColorPickerDialog(val activity: BaseSimpleActivity, val color: Int, va
                         ColorUtils.setAlphaComponent(color, 100),
                     ))
                     thumbTintList = ColorStateList(arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked)), intArrayOf(
-                        Color.parseColor("EAE4E4"),
+                        Color.parseColor("#EAE4E4"),
                         color
                     ))
                 }
