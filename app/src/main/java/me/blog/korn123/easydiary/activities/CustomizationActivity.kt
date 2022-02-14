@@ -79,11 +79,6 @@ class CustomizationActivity : BaseSimpleActivity() {
                 setCurrentTextColor(Color.parseColor(GREEN_THEME_TEXT_COLOR))
                 colorChanged()
             }
-            switchStatusBarDarkenColor.isChecked = config.enableStatusBarDarkenColor
-            layoutStatusBarDarkenColor.setOnClickListener {
-                switchStatusBarDarkenColor.toggle()
-                config.enableStatusBarDarkenColor = switchStatusBarDarkenColor.isChecked
-            }
         }
     }
 
@@ -234,7 +229,11 @@ class CustomizationActivity : BaseSimpleActivity() {
             } else {
                 updateActionbarColor(curPrimaryColor)
                 setTheme(getThemeId(curPrimaryColor))
-                updateBackgroundColor(curPrimaryColor)
+                updateBackgroundColor(curScreenBackgroundColor)
+            }
+        }.apply {
+            setDarkenColorOptionChangeListener(config.enableStatusBarDarkenColor) { enableStatusBarDarkenColor ->
+                config.enableStatusBarDarkenColor = enableStatusBarDarkenColor
             }
         }
     }
