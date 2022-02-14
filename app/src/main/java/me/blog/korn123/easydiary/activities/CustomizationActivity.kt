@@ -7,13 +7,12 @@ import android.view.MenuItem
 import android.view.ViewGroup
 import com.simplemobiletools.commons.dialogs.ColorPickerDialog
 import com.simplemobiletools.commons.extensions.setBackgroundWithStroke
-import io.github.aafactory.commons.activities.BaseSimpleActivity
-import io.github.aafactory.commons.dialogs.LineColorPickerDialog
 import io.github.aafactory.commons.extensions.darkenColor
 import io.github.aafactory.commons.extensions.getThemeId
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityCustomizationBinding
+import me.blog.korn123.easydiary.dialogs.LineColorPickerDialog
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 
@@ -232,8 +231,9 @@ class CustomizationActivity : BaseSimpleActivity() {
                 updateBackgroundColor(curScreenBackgroundColor)
             }
         }.apply {
-            setDarkenColorOptionChangeListener(config.enableStatusBarDarkenColor) { enableStatusBarDarkenColor ->
+            setDarkenColorOptionChangeListener(config.enableStatusBarDarkenColor) { enableStatusBarDarkenColor, color ->
                 config.enableStatusBarDarkenColor = enableStatusBarDarkenColor
+                updateStatusBarColor(color)
             }
         }
     }

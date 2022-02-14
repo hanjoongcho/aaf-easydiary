@@ -3,7 +3,6 @@ package me.blog.korn123.easydiary.activities
 import android.os.Bundle
 import android.view.ViewGroup
 import com.simplemobiletools.commons.models.Release
-import io.github.aafactory.commons.activities.BaseSimpleActivity
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
@@ -56,8 +55,6 @@ open class EasyDiaryActivity : BaseSimpleActivity() {
 
     override fun getMainViewGroup(): ViewGroup? = mRootView
 //    override fun getBackgroundAlpha(): Int = APP_BACKGROUND_ALPHA
-
-    override fun isEnableStatusBarDarkenColor(): Boolean = config.enableStatusBarDarkenColor
 
     fun checkWhatsNewDialog(applyFilter: Boolean = true) {
         arrayListOf<Release>().apply {
