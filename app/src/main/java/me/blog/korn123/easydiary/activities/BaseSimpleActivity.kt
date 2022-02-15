@@ -1,7 +1,6 @@
 package me.blog.korn123.easydiary.activities
 
 import android.app.ActivityManager
-import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
@@ -9,7 +8,6 @@ import android.view.MenuItem
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import io.github.aafactory.commons.activities.BaseCustomizationActivity
 import io.github.aafactory.commons.extensions.*
 import me.blog.korn123.easydiary.extensions.config
 
@@ -21,11 +19,20 @@ import me.blog.korn123.easydiary.extensions.config
  */
 
 open class BaseSimpleActivity : AppCompatActivity() {
+
+    /***************************************************************************************************
+     *   global properties
+     *
+     ***************************************************************************************************/
     var actionOnPermission: ((granted: Boolean) -> Unit)? = null
     var isAskingPermissions = false
     var useDynamicTheme = true
-    private val GENERIC_PERM_HANDLER = 100
 
+
+    /***************************************************************************************************
+     *   override functions
+     *
+     ***************************************************************************************************/
     override fun onCreate(savedInstanceState: Bundle?) {
         if (useDynamicTheme) {
             setTheme(getThemeId())
@@ -60,8 +67,22 @@ open class BaseSimpleActivity : AppCompatActivity() {
             actionOnPermission?.invoke(grantResults[0] == 0)
         }
     }
-    
-    fun startCustomizationActivity() = startActivity(Intent(this, BaseCustomizationActivity::class.java))
+
+
+    /***************************************************************************************************
+     *   etc functions
+     *
+     ***************************************************************************************************/
+    open fun updateBackgroundColor(color: Int = baseConfig.screenBackgroundColor) {
+        val mainView: ViewGroup? = getMainViewGroup()
+        mainView?.run {
+//            setBackgroundColor(ColorUtils.setAlphaComponent(color, 255))
+            setBackgroundColor(color)
+        }
+    }
+
+    open fun getMainViewGroup(): ViewGroup? = null
+    //    open fun getBackgroundAlpha(): Int = 255
 
     fun updateActionbarColor(color: Int = baseConfig.primaryColor) {
         supportActionBar?.setBackgroundDrawable(ColorDrawable(color))
@@ -73,24 +94,6 @@ open class BaseSimpleActivity : AppCompatActivity() {
         }
     }
 
-    fun updateStatusBarColor(color: Int) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.statusBarColor = if (isEnableStatusBarDarkenColor()) color.darkenColor() else color
-        }
-    }
-
-    open fun updateBackgroundColor(color: Int = baseConfig.screenBackgroundColor) {
-        val mainView: ViewGroup? = getMainViewGroup()
-        mainView?.run {
-//            setBackgroundColor(ColorUtils.setAlphaComponent(color, 255))
-            setBackgroundColor(color)
-        }
-    }
-    
-    open fun getMainViewGroup(): ViewGroup? = null
-    
-//    open fun getBackgroundAlpha(): Int = 255
-    
     fun handlePermission(permissionId: Int, callback: (granted: Boolean) -> Unit) {
         actionOnPermission = null
         if (hasPermission(permissionId)) {
@@ -102,5 +105,13 @@ open class BaseSimpleActivity : AppCompatActivity() {
         }
     }
 
-    private fun isEnableStatusBarDarkenColor(): Boolean = config.enableStatusBarDarkenColor
+    fun updateStatusBarColor(color: Int) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.statusBarColor = if (config.enableStatusBarDarkenColor) color.darkenColor() else color
+        }
+    }
+
+    companion object {
+        private const val GENERIC_PERM_HANDLER = 100
+    }
 }
