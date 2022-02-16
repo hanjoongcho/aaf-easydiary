@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Easy Diary</string>
+    <string name="app_name">आसान डायरी</string>
     <string name="common_create_seconds">सेकंड लगे</string>
     <string name="create_diary_title">डायरी लिखें</string>
     <string name="write_date">तारीख</string>
@@ -543,62 +543,62 @@
     </string>
     <string name="release_241">
         v1.4.172.2 / 2021.08.24\n
-        उपयोगकर्ता अनुभव (यूएक्स) अनुकूलन
+		उपयोगकर्ता अनुभव (यूएक्स) अनुकूलन
     </string>
     <string name="release_242">
         v1.4.172.3 / 2021.08.28\n
-        बेहतर कस्टम ऐप थीम और रंग सेटिंग\n
-        फिक्स्ड शोकेस टूलबार मेनू परिवर्तन से संबंधित त्रुटि देखें
+		बेहतर कस्टम ऐप थीम और रंग सेटिंग\n
+		फिक्स्ड शोकेस टूलबार मेनू परिवर्तन से संबंधित त्रुटि देखें
     </string>
     <string name="release_243">
         v1.4.172.4 / 2021.08.29\n
-        उपयोगकर्ता अनुभव (यूएक्स) अनुकूलन
+		उपयोगकर्ता अनुभव (यूएक्स) अनुकूलन
     </string>
     <string name="release_244">
         v1.4.172.5 / 2021.09.04\n
-        बहुभाषी अनुवाद अपडेट किया गया
+		बहुभाषी अनुवाद अपडेट किया गया
     </string>
     <string name="release_246">
         v1.4.172.7 / 2021.09.17\n
-        प्रारंभिक फ़ॉन्ट सेटिंग नीति बदलें
+		प्रारंभिक फ़ॉन्ट सेटिंग नीति बदलें
     </string>
     <string name="release_250">
         v1.4.172.11 / 2021.10.27\n
-        उपयोगकर्ता अनुभव (यूएक्स) अनुकूलन
+		उपयोगकर्ता अनुभव (यूएक्स) अनुकूलन
     </string>
     <string name="release_251">
         v1.4.172.12 / 2021.11.13\n
-        बेहतर डायरी सूची स्क्रीन तेजी से स्क्रॉलिंग
+		बेहतर डायरी सूची स्क्रीन तेजी से स्क्रॉलिंग
     </string>
     <string name="release_252">
         v1.4.172.13 / 2021.11.20\n
-        स्मृति को साफ करने के बाद मुख्य स्क्रीन में प्रवेश करते समय असामान्य समाप्ति का कारण बनने वाली त्रुटि को ठीक किया गया
+		स्मृति को साफ करने के बाद मुख्य स्क्रीन में प्रवेश करते समय असामान्य समाप्ति का कारण बनने वाली त्रुटि को ठीक किया गया
     </string>
     <string name="release_257">
         v1.4.172.18 / 2021.12.15\n
-        मुख्य स्क्रीन में जोड़ा गया ग्रिड सेटिंग विकल्प
+		मुख्य स्क्रीन में जोड़ा गया ग्रिड सेटिंग विकल्प
     </string>
     <string name="release_258">
         v1.4.172.19 / 2022.01.12\n
-        Diary detail screen UX improvement
+		डायरी विवरण स्क्रीन UX सुधार
     </string>
     <string name="release_259">
         v1.4.172.20 / 2022.01.19\n
-        Fixed an error that caused abnormal termination in Android 7.1 or lower version when attaching a photo\n
-        Fixed some errors that caused abnormal termination in Android 12 version
+		फ़ोटो अटैच करते समय Android 7.1 या उससे पुराने वर्शन में असामान्य समाप्ति के कारण हुई गड़बड़ी को ठीक किया गया\n
+        Android 12 संस्करण में असामान्य समाप्ति का कारण बनने वाली कुछ त्रुटियों को ठीक किया गया
     </string>
     <string name="release_260">
         v1.4.172.21 / 2022.01.22\n
-        Fixed an error that caused abnormal termination when the schedule function was set in Android 12 version
+		एंड्रॉइड 12 संस्करण में शेड्यूल फ़ंक्शन सेट किए जाने पर असामान्य समाप्ति का कारण बनने वाली त्रुटि को ठीक किया गया
     </string>
     <string name="release_261">
         v1.4.173.0 / 2022.02.03\n
-        Added attached photo highlight function
+		फोटो हाइलाइट फ़ंक्शन जोड़ा गया 
     </string>
     <string name="release_262">
         v1.4.173.1 / 2022.02.09\n
-        Fixed an error where all yearly labels in the attached photo highlights were displayed as one year\n
-        Fixed an error that caused abnormal termination when using a filter on the diary post card creation screen
+		एक त्रुटि को ठीक किया गया जहां संलग्न फोटो हाइलाइट्स में सभी वार्षिक लेबल एक वर्ष के रूप में प्रदर्शित किए गए थे\n
+		डायरी पोस्ट कार्ड निर्माण स्क्रीन पर फ़िल्टर का उपयोग करते समय असामान्य समाप्ति का कारण बनने वाली त्रुटि को ठीक किया गया
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -845,13 +845,13 @@
     <string name="user_custom_setting">उपयोगकर्ता कस्टम सेटिंग</string>
     <string name="automation_settings">थीम का उपयोग करके स्वचालित सेटिंग</string>
     <string name="place_finger_description">कृपया अपनी अंगुली फ़िंगरप्रिंट सेंसर पर रखें</string>
-    <string name="enable_photo_highlight_title">Attached photo highlights</string>
-    <string name="enable_photo_highlight_description">Based on today\'s date, photos attached in the past are displayed in the highlight area in units of years and months. If there are no yearly or monthly attachments for today\'s date, the highlight area is not activated.</string>
+    <string name="enable_photo_highlight_title">फोटो हाइलाइट लग गया</string>
+    <string name="enable_photo_highlight_description">आज की तारीख के आधार पर, अतीत में संलग्न तस्वीरें हाइलाइट क्षेत्र में वर्षों और महीनों की इकाइयों में प्रदर्शित की जाती हैं। यदि आज की तारीख के लिए कोई वार्षिक या मासिक अनुलग्नक नहीं हैं, तो हाइलाइट क्षेत्र सक्रिय नहीं है।</string>
     <string name="yearly_highlight_tag">{0,number} {0,choice,1#Year Ago|1&lt;Years Ago}</string>
     <string name="monthly_highlight_tag">{0,number} {0,choice,1#Month Ago|1&lt;Months Ago}</string>
-    <string name="notification_channel_name_dev">Notification Test</string>
-    <string name="notification_channel_name_alarm">Diary Schedule</string>
-    <string name="notification_channel_name_upload">Google Drive Upload</string>
-    <string name="notification_channel_name_download">Google Drive Download</string>
-    <string name="notification_channel_name_zip_helper">Management ZIP Backup</string>
+    <string name="notification_channel_name_dev">अधिसूचना परीक्षण</string>
+    <string name="notification_channel_name_alarm">डायरी अनुसूची</string>
+    <string name="notification_channel_name_upload">Google Drive अपलोड</string>
+    <string name="notification_channel_name_download">Google Drive डाउनलोड</string>
+    <string name="notification_channel_name_zip_helper">प्रबंधन ज़िप बैकअप</string>
 </resources>

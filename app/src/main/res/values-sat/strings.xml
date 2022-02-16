@@ -564,41 +564,41 @@
     </string>
     <string name="release_250">
         v1.4.172.11 / 2021.10.27\n
-        ᱭᱩᱡᱚᱨ ᱮᱠᱥᱯᱤᱨᱤᱮᱱᱥ (UX) ᱚᱯᱴᱤᱢᱟᱭᱡᱮᱥᱚᱱ
+        ᱭᱩᱡᱚᱨ ᱮᱠᱥᱯᱤᱨᱤᱮᱱᱥ (UX) ᱚᱯᱴᱤᱢᱟᱭᱡᱮᱥᱚᱱ ᱾
     </string>
     <string name="release_251">
         v1.4.172.12 / 2021.11.13\n
-        ᱥᱠᱨᱤᱱ ᱨᱮ ᱰᱟᱭᱨᱤ ᱞᱤᱥᱴ ᱞᱚᱜᱚᱱ ᱠᱷᱚᱥᱨᱟᱣ ᱠᱚ ᱥᱩᱫᱷᱨᱟᱹᱣ ᱮᱱᱟ
+        ᱥᱠᱨᱤᱱ ᱨᱮ ᱰᱟᱭᱨᱤ ᱞᱤᱥᱴ ᱞᱚᱜᱚᱱ ᱠᱷᱚᱥᱨᱟᱣ ᱠᱚ ᱥᱩᱫᱷᱨᱟᱹᱣ ᱮᱱᱟ ᱾
     </string>
     <string name="release_252">
         v1.4.172.13 / 2021.11.20\n
-        ᱢᱮᱢᱚᱨᱭ ᱠᱚ ᱥᱟᱯᱷᱟ ᱠᱟᱛᱮ ᱢᱩᱞ ᱥᱠᱨᱤᱱ ᱨᱮ ᱵᱚᱞᱚ ᱡᱷᱚᱜ ᱵᱟᱝ ᱴᱷᱤᱠ ᱛᱮ ᱵᱚᱸᱫᱚᱜ ᱦᱩᱰᱟᱹᱜ ᱠᱚ ᱴᱷᱤᱠ ᱮᱱᱟ
+        ᱢᱮᱢᱚᱨᱭ ᱠᱚ ᱥᱟᱯᱷᱟ ᱠᱟᱛᱮ ᱢᱩᱞ ᱥᱠᱨᱤᱱ ᱨᱮ ᱵᱚᱞᱚ ᱡᱷᱚᱜ ᱵᱟᱝ ᱴᱷᱤᱠ ᱛᱮ ᱵᱚᱸᱫᱚᱜ ᱦᱩᱰᱟᱹᱜ ᱠᱚ ᱴᱷᱤᱠ ᱮᱱᱟ ᱾
     </string>
     <string name="release_257">
         v1.4.172.18 / 2021.12.15\n
-        ᱢᱩᱞ ᱥᱠᱨᱤᱱ ᱨᱮ ᱜᱽᱨᱤᱰ ᱚᱯᱥᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
+        ᱢᱩᱞ ᱥᱠᱨᱤᱱ ᱨᱮ ᱜᱽᱨᱤᱰ ᱚᱯᱥᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ ᱾
     </string>
     <string name="release_258">
         v1.4.172.19 / 2022.01.12\n
-        Diary detail screen UX improvement
+        ᱰᱟᱭᱨᱤ ᱵᱤᱵᱨᱚᱬ ᱯᱚᱨᱫᱟ UX ᱥᱩᱫᱽᱷᱨᱟᱹᱣ ᱾
     </string>
     <string name="release_259">
         v1.4.172.20 / 2022.01.19\n
-        Fixed an error that caused abnormal termination in Android 7.1 or lower version when attaching a photo\n
-        Fixed some errors that caused abnormal termination in Android 12 version
+        ᱦᱩᱰᱟᱹᱜ ᱠᱚ ᱴᱷᱤᱠᱮᱱᱟ ᱡᱟᱦᱟᱸ ᱫᱚ Android 7.1 ᱨᱮ ᱟᱡ ᱛᱮ ᱵᱚᱸᱫᱚᱜ ᱠᱟᱱ ᱛᱟᱦᱮᱸᱡ ᱟᱨᱵᱟᱝᱠᱷᱟᱱ ᱪᱤᱛᱟᱹᱨ ᱞᱟᱜᱟᱣ ᱡᱷᱚᱜ ᱠᱚᱢ ᱦᱟᱹᱞᱤᱭᱟᱹᱠᱟᱜ ᱨᱮ ᱦᱚᱸ ᱴᱷᱤᱠ ᱪᱷᱚ ᱮᱱᱟ ᱾
+        ᱦᱩᱰᱟᱹᱜ ᱠᱚ Android 12 ᱦᱟᱹᱞᱤᱭᱟᱹᱠ ᱨᱮ ᱴᱷᱤᱠᱮᱱᱟ ᱾
     </string>
     <string name="release_260">
         v1.4.172.21 / 2022.01.22\n
-        Fixed an error that caused abnormal termination when the schedule function was set in Android 12 version
+        ᱦᱩᱰᱟᱹᱜ ᱠᱚ Android 12 ᱦᱟᱹᱞᱤᱭᱟᱹᱠ ᱨᱮ ᱴᱷᱤᱠᱮᱱᱟ ᱡᱟᱦᱟᱸ ᱫᱚ ᱥᱮᱰᱭᱩᱞ ᱯᱷᱚᱝᱥᱚᱱ ᱥᱮᱴ ᱡᱷᱚᱜ ᱟᱡ ᱛᱮ ᱵᱚᱸᱫᱚᱜ ᱠᱟᱱ ᱛᱟᱦᱮᱸᱡ ᱾
     </string>
     <string name="release_261">
         v1.4.173.0 / 2022.02.03\n
-        Added attached photo highlight function
+        ᱪᱤᱛᱟᱹᱨ ᱦᱟᱭᱞᱟᱭᱤᱴ ᱯᱷᱚᱝᱥᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ ᱾
     </string>
     <string name="release_262">
         v1.4.173.1 / 2022.02.09\n
-        Fixed an error where all yearly labels in the attached photo highlights were displayed as one year\n
-        Fixed an error that caused abnormal termination when using a filter on the diary post card creation screen
+        ᱦᱤᱰᱟᱹᱜ ᱠᱚ ᱴᱷᱤᱠ ᱮᱱᱟ ᱡᱟᱦᱟᱸ ᱨᱮ ᱫᱚ ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ ᱨᱮᱭᱟᱜ ᱦᱟᱭᱞᱟᱭᱤᱴ ᱨᱮ ᱥᱮᱨᱢᱟᱠᱤᱭᱟᱹ ᱞᱮᱵᱮᱞ ᱠᱚ ᱢᱤᱫ ᱥᱮᱨᱢᱟ ᱞᱮᱠᱷᱟ ᱫᱮᱠᱷᱟᱣᱮᱫ ᱛᱟᱦᱮᱸᱡ ᱾
+        ᱰᱟᱭᱨᱤ ᱯᱚᱥᱴᱠᱟᱰ ᱛᱮᱭᱟᱨ ᱥᱠᱨᱤᱱ ᱨᱮ ᱪᱷᱟᱹᱱᱤᱭᱜ ᱵᱮᱵᱷᱟᱨ ᱡᱷᱚᱜ ᱟᱡ ᱛᱮ ᱵᱚᱸᱫᱚᱜ ᱦᱤᱰᱟᱹᱜ ᱠᱚ ᱴᱷᱤᱠᱮᱱᱟ ᱾
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -845,13 +845,13 @@
     <string name="user_custom_setting">ᱵᱮᱵᱷᱟᱨᱤᱭᱟ ᱱᱤᱡᱚᱨ ᱥᱟᱡᱟᱣ</string>
     <string name="automation_settings">ᱛᱷᱤᱢᱥ ᱨᱮ ᱟᱡ ᱛᱮ ᱥᱟᱡᱟᱣ</string>
     <string name="place_finger_description">ᱛᱤᱠᱟᱹᱴᱩᱵᱪᱷᱟᱯᱟ ᱥᱮᱱᱥᱚᱨ ᱨᱮ ᱟᱢᱟᱜ ᱠᱟᱹᱴᱩᱵ ᱫᱚᱦᱚᱭ ᱛᱟᱢ</string>
-    <string name="enable_photo_highlight_title">Attached photo highlights</string>
-    <string name="enable_photo_highlight_description">Based on today\'s date, photos attached in the past are displayed in the highlight area in units of years and months. If there are no yearly or monthly attachments for today\'s date, the highlight area is not activated.</string>
+    <string name="enable_photo_highlight_title">ᱪᱤᱛᱟᱹᱨ ᱦᱟᱭᱞᱟᱭᱤᱴ ᱠᱚ ᱞᱟᱴᱷᱟ ᱮᱱᱟ</string>
+    <string name="enable_photo_highlight_description">ᱛᱮᱦᱮᱸᱧᱟᱜ ᱢᱟᱦᱟᱸ ᱦᱤᱥᱟᱹᱵ ᱛᱮ, ᱟᱹᱰᱤ ᱢᱟᱲᱟᱝ ᱡᱷᱚᱜ ᱪᱤᱛᱟᱹᱨ ᱞᱟᱴᱷᱟᱼᱟᱜ ᱠᱚ ᱫᱚ ᱥᱮᱨᱢᱟ ᱟᱨ ᱪᱟᱸᱫᱚ ᱦᱤᱥᱟᱹᱵ ᱛᱮ ᱦᱟᱭᱞᱟᱭᱤᱴ ᱛᱟᱦᱮᱸᱱᱟ ᱛᱮᱦᱮᱸᱧ ᱞᱟᱹᱜᱤᱫ, ᱦᱟᱭᱞᱟᱭᱤᱴ ᱡᱟᱭᱜᱟ ᱫᱚ ᱵᱟᱝ ᱮᱢ ᱪᱷᱚ ᱠᱟᱱᱟ ᱾</string>
     <string name="yearly_highlight_tag">{0,number} {0,choice,1#Year Ago|1&lt;Years Ago}</string>
     <string name="monthly_highlight_tag">{0,number} {0,choice,1#Month Ago|1&lt;Months Ago}</string>
-    <string name="notification_channel_name_dev">Notification Test</string>
-    <string name="notification_channel_name_alarm">Diary Schedule</string>
-    <string name="notification_channel_name_upload">Google Drive Upload</string>
-    <string name="notification_channel_name_download">Google Drive Download</string>
-    <string name="notification_channel_name_zip_helper">Management ZIP Backup</string>
+    <string name="notification_channel_name_dev">ᱠᱷᱚᱵᱚᱨ ᱵᱤᱱᱤᱰ</string>
+    <string name="notification_channel_name_alarm">ᱥᱟᱭᱨᱤ ᱥᱮᱰᱭᱩᱞ</string>
+    <string name="notification_channel_name_upload">Google Drive ᱞᱟᱫᱮ</string>
+    <string name="notification_channel_name_download">Google Drive ᱰᱟᱩᱱᱞᱚᱰ</string>
+    <string name="notification_channel_name_zip_helper">ZIP ᱥᱟᱹᱣᱛᱤ ᱫᱚᱦᱚ ᱥᱮᱢᱵᱷᱲᱟᱣ</string>
 </resources>
