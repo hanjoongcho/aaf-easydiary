@@ -6,7 +6,9 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
 import com.simplemobiletools.commons.dialogs.ColorPickerDialog
+import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.setBackgroundWithStroke
+import com.simplemobiletools.commons.extensions.toast
 import io.github.aafactory.commons.extensions.darkenColor
 import io.github.aafactory.commons.extensions.getThemeId
 import me.blog.korn123.commons.utils.FontUtils
@@ -126,6 +128,7 @@ class CustomizationActivity : BaseSimpleActivity() {
     override fun getMainViewGroup(): ViewGroup? = findViewById<ViewGroup>(R.id.main_holder)
 
     private fun saveChanges(finishAfterSave: Boolean) {
+        toast("${curPrimaryColor}")
         config.apply {
             textColor = curTextColor
             backgroundColor = curBackgroundColor
@@ -221,6 +224,7 @@ class CustomizationActivity : BaseSimpleActivity() {
             isLineColorPickerVisible = false
             if (wasPositivePressed) {
                 if (hasColorChanged(curPrimaryColor, color)) {
+                    toast("${color}")
                     setCurrentPrimaryColor(color)
                     colorChanged()
                     setTheme(getThemeId(color))

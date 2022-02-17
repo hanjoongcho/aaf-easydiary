@@ -8,6 +8,8 @@ import android.view.MenuItem
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.simplemobiletools.commons.extensions.baseConfig
+import com.simplemobiletools.commons.extensions.toast
 import io.github.aafactory.commons.extensions.getPermissionString
 import io.github.aafactory.commons.extensions.hasPermission
 import me.blog.korn123.easydiary.extensions.config
@@ -39,6 +41,7 @@ open class BaseSimpleActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         if (useDynamicTheme) {
             setTheme(getThemeId())
+            toast("${baseConfig.primaryColor}")
 //            setTheme(R.style.AppTheme_AAF)
         }
 
