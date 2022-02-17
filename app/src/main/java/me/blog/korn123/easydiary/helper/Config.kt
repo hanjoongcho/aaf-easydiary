@@ -1,9 +1,16 @@
 package me.blog.korn123.easydiary.helper
 
 import android.content.Context
+import android.graphics.Color
+import android.text.format.DateFormat
 import androidx.preference.PreferenceManager
-import io.github.aafactory.commons.helpers.*
+import com.simplemobiletools.commons.extensions.getSharedPrefs
+import com.simplemobiletools.commons.helpers.*
+import io.github.aafactory.commons.helpers.AAF_PIN_LOCK_PAUSE_MILLIS
+import io.github.aafactory.commons.helpers.AAF_THEME_CHANGE
 import io.github.aafactory.commons.utils.CommonUtils
+import me.blog.korn123.easydiary.R
+import java.util.*
 
 /**
  * Created by CHO HANJOONG on 2017-12-24.
@@ -12,25 +19,44 @@ import io.github.aafactory.commons.utils.CommonUtils
  * https://github.com/SimpleMobileTools/Simple-Commons
  */
 
-class Config(context: Context) : com.simplemobiletools.commons.helpers.BaseConfig(context) {
+class Config(val context: Context) {
     private val legacyPrefs = PreferenceManager.getDefaultSharedPreferences(context)!!
+    private val prefs = context.getSharedPrefs()
+
+    /// ------------------------------------------------------------------
+    /// Simple Mobile Tools properties
+    /// ------------------------------------------------------------------
+    var textColor: Int
+        get() = prefs.getInt(TEXT_COLOR, context.resources.getColor(R.color.default_text_color))
+        set(textColor) = prefs.edit().putInt(TEXT_COLOR, textColor).apply()
+
+    var backgroundColor: Int
+        get() = prefs.getInt(BACKGROUND_COLOR, context.resources.getColor(R.color.default_background_color))
+        set(backgroundColor) = prefs.edit().putInt(BACKGROUND_COLOR, backgroundColor).apply()
+
+    var primaryColor: Int
+        get() = prefs.getInt(PRIMARY_COLOR, context.resources.getColor(R.color.color_primary))
+        set(primaryColor) = prefs.edit().putInt(PRIMARY_COLOR, primaryColor).apply()
+
+    var use24HourFormat: Boolean
+        get() = prefs.getBoolean(USE_24_HOUR_FORMAT, DateFormat.is24HourFormat(context))
+        set(use24HourFormat) = prefs.edit().putBoolean(USE_24_HOUR_FORMAT, use24HourFormat).apply()
+
+    var isSundayFirst: Boolean
+        get() {
+            val isSundayFirst = Calendar.getInstance(Locale.getDefault()).firstDayOfWeek == Calendar.SUNDAY
+            return prefs.getBoolean(SUNDAY_FIRST, isSundayFirst)
+        }
+        set(sundayFirst) = prefs.edit().putBoolean(SUNDAY_FIRST, sundayFirst).apply()
+
+    var screenBackgroundColor: Int
+        get() = prefs.getInt(SETTING_CARD_VIEW_BACKGROUND_COLOR, Color.parseColor(EASYDIARY_THEME_SCREEN_BACKGROUND_COLOR))
+        set(screenBackgroundColor) = prefs.edit().putInt(SETTING_CARD_VIEW_BACKGROUND_COLOR, screenBackgroundColor).apply()
 
 
     /// ------------------------------------------------------------------
     /// Awesome Application Factory legacy properties
     /// ------------------------------------------------------------------
-    var aafPatternLockProtectionOn: Boolean
-        get() = prefs.getBoolean(AAF_PATTERN_LOCK_PROTECTION_ON, false)
-        set(appPasswordProtectionOn) = prefs.edit().putBoolean(AAF_PATTERN_LOCK_PROTECTION_ON, appPasswordProtectionOn).apply()
-
-    var aafPatternLockPauseMillis: Long
-        get() = prefs.getLong(AAF_PATTERN_LOCK_PAUSE_MILLIS, 0L)
-        set(aafPatternLockPauseMillis) = prefs.edit().putLong(AAF_PATTERN_LOCK_PAUSE_MILLIS, aafPatternLockPauseMillis).apply()
-
-    var aafPatternLockSaved: String
-        get() = legacyPrefs.getString(AAF_PATTERN_LOCK_SAVED, AAF_PATTERN_LOCK_DEFAULT)!!
-        set(aafPatternLockSaved) = legacyPrefs.edit().putString(AAF_PATTERN_LOCK_SAVED, aafPatternLockSaved).apply()
-
     var aafPinLockPauseMillis: Long
         get() = prefs.getLong(AAF_PIN_LOCK_PAUSE_MILLIS, 0L)
         set(aafPinLockPauseMillis) = prefs.edit().putLong(AAF_PIN_LOCK_PAUSE_MILLIS, aafPinLockPauseMillis).apply()
@@ -54,7 +80,7 @@ class Config(context: Context) : com.simplemobiletools.commons.helpers.BaseConfi
     var previousActivity: Int
         get() = legacyPrefs.getInt(PREVIOUS_ACTIVITY, -1)
         set(previousActivity) = legacyPrefs.edit().putInt(PREVIOUS_ACTIVITY, previousActivity).apply()
-    
+
     var settingFontSize: Float
         get() = legacyPrefs.getFloat(SETTING_FONT_SIZE, CommonUtils.dpToPixelFloatValue(context, DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE.toFloat()))
         set(settingFontSize) = legacyPrefs.edit().putFloat(SETTING_FONT_SIZE, settingFontSize).apply()
@@ -86,7 +112,7 @@ class Config(context: Context) : com.simplemobiletools.commons.helpers.BaseConfi
     var boldStyleEnable: Boolean
         get() = prefs.getBoolean(SETTING_BOLD_STYLE, false)
         set(boldStyleEnable) = prefs.edit().putBoolean(SETTING_BOLD_STYLE, boldStyleEnable).apply()
-    
+
     var multiPickerEnable: Boolean
         get() = prefs.getBoolean(SETTING_MULTIPLE_PICKER, false)
         set(multiPickerEnable) = prefs.edit().putBoolean(SETTING_MULTIPLE_PICKER, multiPickerEnable).apply()
@@ -110,7 +136,7 @@ class Config(context: Context) : com.simplemobiletools.commons.helpers.BaseConfi
     var enableCardViewPolicy: Boolean
         get() = prefs.getBoolean(ENABLE_CARD_VIEW_POLICY, true)
         set(enableCardViewPolicy) = prefs.edit().putBoolean(ENABLE_CARD_VIEW_POLICY, enableCardViewPolicy).apply()
-    
+
     var enableContentsSummary: Boolean
         get() = prefs.getBoolean(SETTING_CONTENTS_SUMMARY, true)
         set(enableContentsSummary) = prefs.edit().putBoolean(SETTING_CONTENTS_SUMMARY, enableContentsSummary).apply()
