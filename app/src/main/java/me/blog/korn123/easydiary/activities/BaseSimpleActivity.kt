@@ -8,8 +8,11 @@ import android.view.MenuItem
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import io.github.aafactory.commons.extensions.*
+import io.github.aafactory.commons.extensions.getPermissionString
+import io.github.aafactory.commons.extensions.hasPermission
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.darkenColor
+import me.blog.korn123.easydiary.extensions.getThemeId
 
 /**
  * Created by CHO HANJOONG on 2017-11-25.
@@ -46,7 +49,7 @@ open class BaseSimpleActivity : AppCompatActivity() {
         super.onResume()
         if (useDynamicTheme) {
             setTheme(getThemeId())
-            updateBackgroundColor(baseConfig.screenBackgroundColor)
+            updateBackgroundColor(config.screenBackgroundColor)
         }
         updateActionbarColor()
     }
@@ -73,7 +76,7 @@ open class BaseSimpleActivity : AppCompatActivity() {
      *   etc functions
      *
      ***************************************************************************************************/
-    open fun updateBackgroundColor(color: Int = baseConfig.screenBackgroundColor) {
+    open fun updateBackgroundColor(color: Int = config.screenBackgroundColor) {
         val mainView: ViewGroup? = getMainViewGroup()
         mainView?.run {
 //            setBackgroundColor(ColorUtils.setAlphaComponent(color, 255))
@@ -84,7 +87,7 @@ open class BaseSimpleActivity : AppCompatActivity() {
     open fun getMainViewGroup(): ViewGroup? = null
     //    open fun getBackgroundAlpha(): Int = 255
 
-    fun updateActionbarColor(color: Int = baseConfig.primaryColor) {
+    fun updateActionbarColor(color: Int = config.primaryColor) {
         supportActionBar?.setBackgroundDrawable(ColorDrawable(color))
 //        supportActionBar?.title = Html.fromHtml("<font color='${color.getContrastColor().toHex()}'>${supportActionBar?.title}</font>")
         updateStatusBarColor(color)

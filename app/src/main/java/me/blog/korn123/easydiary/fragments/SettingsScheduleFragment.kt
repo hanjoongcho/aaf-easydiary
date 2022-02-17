@@ -16,7 +16,10 @@ import android.widget.AdapterView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import com.simplemobiletools.commons.extensions.*
+import com.simplemobiletools.commons.extensions.applyColorFilter
+import com.simplemobiletools.commons.extensions.getSelectedDaysString
+import com.simplemobiletools.commons.extensions.moveLastItemToFront
+import com.simplemobiletools.commons.extensions.toast
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
