@@ -13,6 +13,7 @@ import io.github.aafactory.commons.extensions.hasPermission
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.darkenColor
 import me.blog.korn123.easydiary.extensions.getThemeId
+import me.blog.korn123.easydiary.extensions.updateStatusBarColor
 
 /**
  * Created by CHO HANJOONG on 2017-11-25.
@@ -105,15 +106,6 @@ open class BaseSimpleActivity : AppCompatActivity() {
             isAskingPermissions = true
             actionOnPermission = callback
             ActivityCompat.requestPermissions(this, arrayOf(getPermissionString(permissionId)), GENERIC_PERM_HANDLER)
-        }
-    }
-
-    fun updateStatusBarColor(color: Int) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.statusBarColor = when (this.javaClass.simpleName == "DashboardActivity") {
-                true -> config.screenBackgroundColor.darkenColor()
-                false -> if (config.enableStatusBarDarkenColor) color.darkenColor() else color
-            }
         }
     }
 

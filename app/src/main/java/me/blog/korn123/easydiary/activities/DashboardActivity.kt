@@ -9,13 +9,20 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.github.aafactory.commons.utils.DateUtils
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.FlavorUtils
+import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DailySymbolAdapter
 import me.blog.korn123.easydiary.databinding.ActivityDashboardBinding
 import me.blog.korn123.easydiary.databinding.PartialDailySymbolBinding
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.darkenColor
+import me.blog.korn123.easydiary.extensions.getThemeId
+import me.blog.korn123.easydiary.extensions.updateStatusBarColor
 import me.blog.korn123.easydiary.fragments.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -24,7 +31,7 @@ import java.util.*
  * Created by CHO HANJOONG on 2017-03-16.
  */
 
-class DashboardActivity : EasyDiaryActivity() {
+class DashboardActivity : AppCompatActivity() {
 
     /***************************************************************************************************
      *   global properties
@@ -53,6 +60,9 @@ class DashboardActivity : EasyDiaryActivity() {
 //            title = "Dashboard"
 //            setDisplayHomeAsUpEnabled(true)
 //        }
+
+        updateStatusBarColor(config.screenBackgroundColor.darkenColor())
+        mBinding.root.setBackgroundColor(config.screenBackgroundColor.darkenColor())
 
         supportFragmentManager.beginTransaction().run {
             replace(R.id.summary, DashBoardSummaryFragment())
@@ -124,6 +134,14 @@ class DashboardActivity : EasyDiaryActivity() {
                 mRequestUpdateDailySymbol.launch(this)
             }
         }
+
+        mBinding.close.setOnClickListener { finish() }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setTheme(getThemeId())
+        FontUtils.setFontsTypeface(this, null, mBinding.root, true)
     }
 
 

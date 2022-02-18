@@ -541,6 +541,15 @@ fun Activity.diaryMainSpanCount(): Int = if (isLandScape()) config.diaryMainSpan
 
 fun Activity.postcardViewerSpanCount(): Int = if (isLandScape()) config.postcardSpanCountLandscape else config.postcardSpanCountPortrait
 
+fun Activity.updateStatusBarColor(color: Int) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        window.statusBarColor = when (this.javaClass.simpleName == "DashboardActivity") {
+            true -> config.screenBackgroundColor.darkenColor(3)
+            false -> if (config.enableStatusBarDarkenColor) color.darkenColor() else color
+        }
+    }
+}
+
 fun EasyDiaryActivity.acquireGPSPermissions(activityResultLauncher: ActivityResultLauncher<Intent>, callback: () -> Unit) {
     handlePermission(PERMISSION_ACCESS_COARSE_LOCATION) { hasCoarseLocation ->
         if (hasCoarseLocation) {
