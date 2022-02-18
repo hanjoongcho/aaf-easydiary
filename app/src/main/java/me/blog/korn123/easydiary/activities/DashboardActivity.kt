@@ -2,6 +2,8 @@ package me.blog.korn123.easydiary.activities
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
@@ -137,8 +139,9 @@ class DashboardActivity : BaseSimpleActivity() {
 
     override fun onResume() {
         super.onResume()
-        mBinding.root.also {
-            FontUtils.setFontsTypeface(this, null, mBinding.root, true)
+        mBinding.also {
+            FontUtils.setFontsTypeface(this, null, it.root, true)
+            it.close.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN)
         }
     }
 
