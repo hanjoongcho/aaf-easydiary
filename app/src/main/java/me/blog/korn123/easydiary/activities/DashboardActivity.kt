@@ -30,7 +30,7 @@ import java.util.*
  * Created by CHO HANJOONG on 2017-03-16.
  */
 
-class DashboardActivity : BaseSimpleActivity() {
+class DashboardActivity : AppCompatActivity() {
 
     /***************************************************************************************************
      *   global properties
@@ -50,6 +50,7 @@ class DashboardActivity : BaseSimpleActivity() {
      ***************************************************************************************************/
     public override fun onCreate(savedInstanceState: Bundle?) {
         // FIXME: Fixed a background thread processing error inside fragment when rotating the screen
+        setTheme(getThemeId())
         super.onCreate(null)
 
         mBinding = ActivityDashboardBinding.inflate(layoutInflater)

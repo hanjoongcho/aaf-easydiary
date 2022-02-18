@@ -544,7 +544,7 @@ fun Activity.postcardViewerSpanCount(): Int = if (isLandScape()) config.postcard
 fun Activity.updateStatusBarColor(color: Int) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
         window.statusBarColor = when (this.javaClass.simpleName == "DashboardActivity") {
-            true -> config.screenBackgroundColor.darkenColor(3)
+            true -> color
             false -> if (config.enableStatusBarDarkenColor) color.darkenColor() else color
         }
     }
