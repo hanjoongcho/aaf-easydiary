@@ -29,7 +29,7 @@ class LineColorPickerDialog(val activity: BaseSimpleActivity, val color: Int, va
     private var mDialogLineColorPickerBinding: DialogLineColorPickerBinding = DialogLineColorPickerBinding.inflate(activity.layoutInflater)
     private val PRIMARY_COLORS_COUNT = 19
     private val DEFAULT_PRIMARY_COLOR_INDEX = 7
-    private val DEFAULT_SECONDARY_COLOR_INDEX = 5
+    private val DEFAULT_SECONDARY_COLOR_INDEX = 6
     private val DEFAULT_COLOR_VALUE = activity.resources.getColor(R.color.colorPrimary)
     private var dialog: AlertDialog? = null
 

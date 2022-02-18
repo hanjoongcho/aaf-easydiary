@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Additional Primary Colors 2022.02.18 -->
+    <array name="md_cyans">
+        <item>@color/md_cyan_100</item>
+        <item>@color/md_cyan_200</item>
+        <item>@color/md_cyan_300</item>
+        <item>@color/md_cyan_400</item>
+        <item>@color/md_cyan_500</item>
+        <item>@color/md_cyan_600</item>
+        <item>@color/colorPrimary</item>
+        <item>@color/md_cyan_700</item>
+        <item>@color/md_cyan_800</item>
+        <item>@color/md_cyan_850</item>
+        <item>@color/md_cyan_900</item>
+    </array>
+</resources>

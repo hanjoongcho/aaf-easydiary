@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.github.aafactory.commons.utils.DateUtils
@@ -47,11 +48,11 @@ class DashboardActivity : EasyDiaryActivity() {
 
         mBinding = ActivityDashboardBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-        setSupportActionBar(mBinding.toolbar)
-        supportActionBar?.run {
-            title = "Dashboard"
-            setDisplayHomeAsUpEnabled(true)
-        }
+//        setSupportActionBar(mBinding.toolbar)
+//        supportActionBar?.run {
+//            title = "Dashboard"
+//            setDisplayHomeAsUpEnabled(true)
+//        }
 
         supportFragmentManager.beginTransaction().run {
             replace(R.id.summary, DashBoardSummaryFragment())
