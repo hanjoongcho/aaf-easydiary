@@ -19,10 +19,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DailySymbolAdapter
 import me.blog.korn123.easydiary.databinding.ActivityDashboardBinding
 import me.blog.korn123.easydiary.databinding.PartialDailySymbolBinding
-import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.darkenColor
-import me.blog.korn123.easydiary.extensions.getThemeId
-import me.blog.korn123.easydiary.extensions.updateStatusBarColor
+import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.fragments.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -31,7 +28,7 @@ import java.util.*
  * Created by CHO HANJOONG on 2017-03-16.
  */
 
-class DashboardActivity : AppCompatActivity() {
+class DashboardActivity : BaseSimpleActivity() {
 
     /***************************************************************************************************
      *   global properties
@@ -140,8 +137,9 @@ class DashboardActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        setTheme(getThemeId())
-        FontUtils.setFontsTypeface(this, null, mBinding.root, true)
+        mBinding.root.also {
+            FontUtils.setFontsTypeface(this, null, mBinding.root, true)
+        }
     }
 
 

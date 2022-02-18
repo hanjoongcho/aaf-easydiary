@@ -11,7 +11,6 @@ import androidx.core.app.ActivityCompat
 import io.github.aafactory.commons.extensions.getPermissionString
 import io.github.aafactory.commons.extensions.hasPermission
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.darkenColor
 import me.blog.korn123.easydiary.extensions.getThemeId
 import me.blog.korn123.easydiary.extensions.updateStatusBarColor
 

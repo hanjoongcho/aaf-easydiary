@@ -137,6 +137,6 @@
         android:layout_margin="@dimen/fab_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_cross" />
+        app:srcCompat="@drawable/ic_aaf_home" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 
