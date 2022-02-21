@@ -10,6 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.zhpan.bannerview.constants.PageStyle
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,6 +24,9 @@ import me.blog.korn123.easydiary.databinding.ActivityDashboardBinding
 import me.blog.korn123.easydiary.databinding.PartialDailySymbolBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.fragments.*
+import me.blog.korn123.easydiary.fragments.PhotoHighlightFragment.Companion.PAGE_MARGIN
+import me.blog.korn123.easydiary.fragments.PhotoHighlightFragment.Companion.PAGE_STYLE
+import me.blog.korn123.easydiary.fragments.PhotoHighlightFragment.Companion.REVEAL_WIDTH
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -65,7 +69,13 @@ class DashboardActivity : AppCompatActivity() {
         mBinding.root.setBackgroundColor(config.screenBackgroundColor.darkenColor())
 
         supportFragmentManager.beginTransaction().run {
-            replace(R.id.photoHighlight, PhotoHighlightFragment())
+            replace(R.id.photoHighlight, PhotoHighlightFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(PAGE_STYLE, PageStyle.MULTI_PAGE_SCALE)
+                    putFloat(REVEAL_WIDTH, 20F)
+                    putFloat(PAGE_MARGIN, 5F)
+                }
+            })
 
             // DashBoardSummaryFragment
             replace(R.id.summary, DashBoardSummaryFragment())

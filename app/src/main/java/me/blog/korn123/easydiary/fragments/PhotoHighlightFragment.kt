@@ -61,8 +61,9 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
             adapter = HistoryAdapter()
             setInterval(3000)
             setScrollDuration(800)
-            setPageMargin(requireContext().dpToPixel(10F))
-            setPageStyle(PageStyle.MULTI_PAGE_SCALE)
+            setPageMargin(requireContext().dpToPixel(arguments?.getFloat(PAGE_MARGIN) ?: 10F))
+            setPageStyle(arguments?.getInt(PAGE_STYLE) ?: PageStyle.MULTI_PAGE_SCALE)
+            setRevealWidth(requireContext().dpToPixel(arguments?.getFloat(REVEAL_WIDTH) ?: 10F))
             FigureIndicatorView(requireContext()).apply {
                 setRadius(resources.getDimensionPixelOffset(R.dimen.dp_18))
                 setTextSize(resources.getDimensionPixelOffset(R.dimen.sp_13))
@@ -142,8 +143,6 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
                                         mBinding.textDescription.text = historyItems[position].historyTag
                                     }
                                 })
-
-                                setRevealWidth(requireContext().dpToPixel(50F))
                                 create(historyItems)
                             }
                             mBinding.textDescription.text = historyItems[0].historyTag
@@ -158,5 +157,11 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
                 mBannerHistory.refreshData(mutableListOf())
             }
         }
+    }
+
+    companion object {
+        const val PAGE_STYLE = "page_style"
+        const val PAGE_MARGIN = "page_margin"
+        const val REVEAL_WIDTH = "reveal_width"
     }
 }
