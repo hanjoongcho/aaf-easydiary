@@ -22,7 +22,7 @@
                 android:id="@+id/photoHighlight"
                 android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="150dp"
                 android:orientation="vertical" />
             <LinearLayout
                 android:id="@+id/summary"
@@ -98,32 +98,23 @@
                 </LinearLayout>
             </me.blog.korn123.easydiary.views.FixedCardView>
 
-            <HorizontalScrollView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    <LinearLayout
-                        android:id="@+id/lifetime"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical" />
+            <LinearLayout
+                android:id="@+id/lifetime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
 
-                    <LinearLayout
-                        android:id="@+id/lastMonth"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical" />
+            <LinearLayout
+                android:id="@+id/lastMonth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
 
-                    <LinearLayout
-                        android:id="@+id/lastWeek"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical" />
-                </LinearLayout>
-            </HorizontalScrollView>
+            <LinearLayout
+                android:id="@+id/lastWeek"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
 
             <LinearLayout
                 android:id="@+id/statistics1"
