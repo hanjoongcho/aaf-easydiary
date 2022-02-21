@@ -65,7 +65,12 @@ class DashboardActivity : AppCompatActivity() {
         mBinding.root.setBackgroundColor(config.screenBackgroundColor.darkenColor())
 
         supportFragmentManager.beginTransaction().run {
+            replace(R.id.photoHighlight, PhotoHighlightFragment())
+
+            // DashBoardSummaryFragment
             replace(R.id.summary, DashBoardSummaryFragment())
+
+            // Commit
             commit()
         }
 

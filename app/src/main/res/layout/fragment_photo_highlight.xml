@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:visibility="visible"
+    android:visibility="gone"
+    android:id="@+id/layout_banner_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.zhpan.bannerview.BannerViewPager
+        android:id="@+id/banner_history"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+    <me.blog.korn123.easydiary.views.FixedCardView
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginStart="5dp"
+        app:fixedAppcompatPadding="true"
+        app:contentPadding="5dp"
+        app:cardBackgroundColor="?attr/colorPrimary"
+        android:alpha="0.8">
+        <me.blog.korn123.easydiary.views.FixedTextView
+            app:applyGlobalSize="false"
+            app:applyGlobalColor="false"
+            android:layout_gravity="center"
+            android:id="@+id/text_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:textSize="13dp"
+            tools:text="100" />
+    </me.blog.korn123.easydiary.views.FixedCardView>
+</androidx.constraintlayout.widget.ConstraintLayout>
