@@ -4,6 +4,10 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.173.1 (date: 2022.02.09)
+  * Fixed an error where all yearly labels in the attached photo highlights were displayed as one year
+  * Fixed an error that caused abnormal termination when using a filter on the diary post card creation screen
+
 # Changes in 1.4.173.0 (date: 2022.02.03)
   * Added attached photo highlight function
 
