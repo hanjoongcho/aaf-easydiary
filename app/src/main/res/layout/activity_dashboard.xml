@@ -98,23 +98,32 @@
                 </LinearLayout>
             </me.blog.korn123.easydiary.views.FixedCardView>
 
-            <LinearLayout
-                android:id="@+id/lifetime"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
 
-            <LinearLayout
-                android:id="@+id/lastMonth"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
+            <HorizontalScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:id="@+id/lifetime"
+                        android:layout_width="350dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+                    <LinearLayout
+                        android:id="@+id/lastMonth"
+                        android:layout_width="350dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+                    <LinearLayout
+                        android:id="@+id/lastWeek"
+                        android:layout_width="350dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+            </HorizontalScrollView>
 
-            <LinearLayout
-                android:id="@+id/lastWeek"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
 
             <LinearLayout
                 android:id="@+id/statistics1"

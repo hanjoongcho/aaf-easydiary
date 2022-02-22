@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.zhpan.bannerview.constants.PageStyle
+import io.github.aafactory.commons.extensions.dpToPixel
 import io.github.aafactory.commons.utils.DateUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -69,6 +70,7 @@ class DashboardActivity : AppCompatActivity() {
         mBinding.root.setBackgroundColor(config.screenBackgroundColor.darkenColor())
 
         supportFragmentManager.beginTransaction().run {
+            // PhotoHighlight
             replace(R.id.photoHighlight, PhotoHighlightFragment().apply {
                 arguments = Bundle().apply {
                     putInt(PAGE_STYLE, PageStyle.MULTI_PAGE_SCALE)
@@ -77,11 +79,17 @@ class DashboardActivity : AppCompatActivity() {
                 }
             })
 
-            // DashBoardSummaryFragment
+            // DashBoardSummary
             replace(R.id.summary, DashBoardSummaryFragment())
 
             // Commit
             commit()
+        }
+
+        mBinding.run {
+            val cardWidth = getDefaultDisplay().x * 0.9
+            lifetime.layoutParams.width = cardWidth.toInt()
+            lastMonth.layoutParams.width = cardWidth.toInt()
         }
 
         supportFragmentManager.beginTransaction().run {

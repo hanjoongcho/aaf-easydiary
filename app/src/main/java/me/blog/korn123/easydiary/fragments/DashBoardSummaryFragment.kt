@@ -24,6 +24,10 @@ class DashBoardSummaryFragment : androidx.fragment.app.Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         context?.let { ctx ->
+            mBinding.run {
+
+            }
+
             val diaryBackupUsingGMSMillis = ctx.config.diaryBackupGoogle
             mBinding.diaryBackupUsingGMS.text = when {
                 diaryBackupUsingGMSMillis > 0L -> DateUtils.getFullPatternDateWithTimeAndSeconds(diaryBackupUsingGMSMillis)
