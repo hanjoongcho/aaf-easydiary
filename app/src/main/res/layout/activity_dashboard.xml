@@ -2,30 +2,32 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_holder"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF">
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/main_holder"
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/photoHighlight"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/dashboard_container"/>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/dashboard_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:padding="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/photoHighlight">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <LinearLayout
-                android:id="@+id/photoHighlight"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:orientation="vertical" />
-
             <me.blog.korn123.easydiary.views.FixedCardView
                 style="@style/card_dashboard"
                 android:layout_width="match_parent"
