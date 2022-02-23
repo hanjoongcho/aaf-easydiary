@@ -35,7 +35,7 @@ import java.util.*
  * Created by CHO HANJOONG on 2017-03-16.
  */
 
-class DashboardActivity : AppCompatActivity() {
+class DashboardActivity : EasyDiaryActivity() {
 
     /***************************************************************************************************
      *   global properties
@@ -55,7 +55,7 @@ class DashboardActivity : AppCompatActivity() {
      ***************************************************************************************************/
     public override fun onCreate(savedInstanceState: Bundle?) {
         // FIXME: Fixed a background thread processing error inside fragment when rotating the screen
-        setTheme(getThemeId())
+//        setTheme(getThemeId())
         super.onCreate(null)
 
         mBinding = ActivityDashboardBinding.inflate(layoutInflater)
@@ -65,9 +65,6 @@ class DashboardActivity : AppCompatActivity() {
 //            title = "Dashboard"
 //            setDisplayHomeAsUpEnabled(true)
 //        }
-
-        updateStatusBarColor(config.screenBackgroundColor.darkenColor())
-        mBinding.root.setBackgroundColor(config.screenBackgroundColor.darkenColor())
 
         supportFragmentManager.beginTransaction().run {
             // PhotoHighlight
@@ -87,9 +84,17 @@ class DashboardActivity : AppCompatActivity() {
         }
 
         mBinding.run {
-            val cardWidth = getDefaultDisplay().x * 0.9
-            lifetime.layoutParams.width = cardWidth.toInt()
-            lastMonth.layoutParams.width = cardWidth.toInt()
+            (getDefaultDisplay().x * 0.8).toInt().also {
+                lifetime.layoutParams.width = it
+                lastMonth.layoutParams.width = it
+                lastWeek.layoutParams.width = it
+            }
+
+            (getDefaultDisplay().x * 0.95).toInt().also {
+                statistics1.layoutParams.width = it
+                statistics2.layoutParams.width = it
+                statistics3.layoutParams.width = it
+            }
         }
 
         supportFragmentManager.beginTransaction().run {
@@ -158,11 +163,16 @@ class DashboardActivity : AppCompatActivity() {
             }
         }
 
-        mBinding.close.setOnClickListener { finish() }
+        mBinding.close.setOnClickListener {
+            onBackPressed()
+        }
     }
 
     override fun onResume() {
         super.onResume()
+        updateStatusBarColor(config.screenBackgroundColor.darkenColor())
+        mBinding.mainHolder.setBackgroundColor(config.screenBackgroundColor.darkenColor())
+
         mBinding.also {
             FontUtils.setFontsTypeface(this, null, it.root, true)
             it.close.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN)

@@ -186,6 +186,19 @@
         <item name="layout_constraintTop_toTopOf">parent</item>
         <item name="layout_constraintLeft_toLeftOf">parent</item>
     </style>
+    <style name="text_dashboard_description">
+        <item name="applyGlobalSize">false</item>
+        <item name="applyGlobalColor">false</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textSize">@dimen/dashboard_text_default</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/dashboard_description_margin</item>
+        <item name="android:layout_marginEnd">@dimen/dashboard_description_margin</item>
+        <item name="layout_constraintEnd_toEndOf">parent</item>
+    </style>
     <style name="card_dashboard">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>

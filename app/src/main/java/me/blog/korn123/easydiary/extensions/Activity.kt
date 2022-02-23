@@ -31,6 +31,7 @@ import androidx.core.graphics.drawable.toBitmap
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.baseConfig
+import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.models.Release
 import io.github.aafactory.commons.extensions.triggerRestart
 import io.github.aafactory.commons.helpers.PERMISSION_ACCESS_COARSE_LOCATION

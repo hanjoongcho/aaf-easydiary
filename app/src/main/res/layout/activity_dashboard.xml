@@ -20,15 +20,12 @@
             android:orientation="vertical">
             <LinearLayout
                 android:id="@+id/photoHighlight"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="200dp"
                 android:orientation="vertical" />
-            <LinearLayout
-                android:id="@+id/summary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
+
             <me.blog.korn123.easydiary.views.FixedCardView
                 style="@style/card_dashboard"
                 android:layout_width="match_parent"
@@ -98,8 +95,14 @@
                 </LinearLayout>
             </me.blog.korn123.easydiary.views.FixedCardView>
 
+            <LinearLayout
+                android:id="@+id/summary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
 
             <HorizontalScrollView
+                android:scrollbars="none"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <androidx.appcompat.widget.LinearLayoutCompat
@@ -124,24 +127,32 @@
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </HorizontalScrollView>
 
+            <HorizontalScrollView
+                android:scrollbars="none"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:id="@+id/statistics3"
+                        android:layout_width="match_parent"
+                        android:layout_height="450dp"
+                        android:orientation="vertical" />
+                    <LinearLayout
+                        android:id="@+id/statistics1"
+                        android:layout_width="match_parent"
+                        android:layout_height="450dp"
+                        android:orientation="vertical" />
+                    <LinearLayout
+                        android:id="@+id/statistics2"
+                        android:layout_width="match_parent"
+                        android:layout_height="450dp"
+                        android:orientation="vertical" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+            </HorizontalScrollView>
 
-            <LinearLayout
-                android:id="@+id/statistics1"
-                android:layout_width="match_parent"
-                android:layout_height="450dp"
-                android:orientation="vertical" />
-
-            <LinearLayout
-                android:id="@+id/statistics2"
-                android:layout_width="match_parent"
-                android:layout_height="450dp"
-                android:orientation="vertical" />
-
-            <LinearLayout
-                android:id="@+id/statistics3"
-                android:layout_width="match_parent"
-                android:layout_height="500dp"
-                android:orientation="vertical" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
