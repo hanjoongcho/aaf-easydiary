@@ -86,39 +86,14 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <androidx.appcompat.widget.LinearLayoutCompat
                     tools:visibility="visible"
+                    android:orientation="vertical"
                     android:id="@+id/layout_banner_container"
                     android:visibility="gone"
                     android:layout_width="0dp"
                     android:layout_height="match_parent">
-                    <com.zhpan.bannerview.BannerViewPager
-                        android:id="@+id/banner_history"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-                    <me.blog.korn123.easydiary.views.FixedCardView
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="3dp"
-                        android:layout_marginStart="5dp"
-                        app:fixedAppcompatPadding="true"
-                        app:contentPadding="5dp"
-                        app:cardBackgroundColor="?attr/colorPrimary"
-                        android:alpha="0.8">
-                        <me.blog.korn123.easydiary.views.FixedTextView
-                            app:applyGlobalSize="false"
-                            app:applyGlobalColor="false"
-                            android:layout_gravity="center"
-                            android:id="@+id/text_description"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="#FFFFFF"
-                            android:textSize="13dp"
-                            tools:text="100" />
-                    </me.blog.korn123.easydiary.views.FixedCardView>
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.appcompat.widget.LinearLayoutCompat>
                 <me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
                     android:id="@+id/diaryListView"
                     android:layout_marginTop="@dimen/card_layout_padding"

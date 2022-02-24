@@ -242,4 +242,8 @@ class DashboardActivity : EasyDiaryActivity() {
             }
         }
     }
+
+    fun togglePhotoHighlight(isVisible: Boolean) {
+        mBinding.photoHighlight.visibility = if (isVisible) View.VISIBLE else View.GONE
+    }
 }

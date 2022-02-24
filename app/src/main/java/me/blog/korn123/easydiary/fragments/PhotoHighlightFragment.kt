@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewpager2.widget.ViewPager2
+import com.simplemobiletools.commons.extensions.toast
 import com.zhpan.bannerview.BannerViewPager
 import com.zhpan.bannerview.constants.IndicatorGravity
 import com.zhpan.bannerview.constants.PageStyle
@@ -13,6 +14,8 @@ import io.github.aafactory.commons.extensions.dpToPixel
 import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.DashboardActivity
+import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.activities.DiaryReadingActivity
 import me.blog.korn123.easydiary.adapters.HistoryAdapter
 import me.blog.korn123.easydiary.databinding.FragmentPhotoHighlightBinding
@@ -47,6 +50,10 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupHistory()
+    }
+
+    override fun onResume() {
+        super.onResume()
         updateHistory()
     }
 
@@ -71,6 +78,14 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
                 setIndicatorGravity(IndicatorGravity.END)
                 setIndicatorView(this)
             }
+        }
+    }
+
+    private fun togglePhotoHighlight(isVisible: Boolean) {
+        if (requireActivity() is DiaryMainActivity) {
+            (requireActivity() as DiaryMainActivity).togglePhotoHighlight(isVisible)
+        } else if (requireActivity() is DashboardActivity) {
+            (requireActivity() as DashboardActivity).togglePhotoHighlight(isVisible)
         }
     }
 
@@ -126,6 +141,7 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
                         historyItems.reverse()
 
                         if (historyItems.isNotEmpty()) {
+                            togglePhotoHighlight(true)
                             mBinding.layoutBannerContainer.visibility = View.VISIBLE
                             mBannerHistory.run {
                                 setOnPageClickListener { _, position ->
@@ -152,6 +168,7 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
             }
         } else {
             // init default settings
+            togglePhotoHighlight(false)
             mBinding.run {
                 layoutBannerContainer.visibility = View.GONE
                 mBannerHistory.refreshData(mutableListOf())
