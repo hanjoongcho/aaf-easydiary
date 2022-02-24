@@ -84,16 +84,25 @@ class DashboardActivity : EasyDiaryActivity() {
         }
 
         mBinding.run {
+            val scaleFactor = if (isLandScape()) 0.5F else 1F
             (getDefaultDisplay().x * 0.8).toInt().also {
-                lifetime.layoutParams.width = it
-                lastMonth.layoutParams.width = it
-                lastWeek.layoutParams.width = it
+                val width = it.times(scaleFactor).toInt()
+                lifetime.layoutParams.width = width
+                lastMonth.layoutParams.width = width
+                lastWeek.layoutParams.width = width
             }
 
             (getDefaultDisplay().x * 0.95).toInt().also {
-                statistics1.layoutParams.width = it
-                statistics2.layoutParams.width = it
-                statistics3.layoutParams.width = it
+                val width = it.times(scaleFactor).toInt()
+                statistics1.layoutParams.width = width
+                statistics2.layoutParams.width = width
+                statistics3.layoutParams.width = width
+                if (isLandScape()) {
+                    val height = getDefaultDisplay().y - statusBarHeight() - dpToPixel(20F)
+                    statistics1.layoutParams.height = height
+                    statistics2.layoutParams.height = height
+                    statistics3.layoutParams.height = height
+                }
             }
         }
 
