@@ -38,14 +38,7 @@
                         android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-                        <ImageView
-                            android:id="@+id/symbolGmsCard1"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:srcCompat="@drawable/ic_drive"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"/>
+
                         <me.blog.korn123.easydiary.views.FixedTextView
                             android:id="@+id/topLabelGmsCard1"
                             android:layout_marginStart="10dp"
