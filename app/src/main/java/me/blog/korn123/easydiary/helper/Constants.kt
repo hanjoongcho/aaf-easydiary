@@ -454,12 +454,28 @@ const val REQUEST_CODE_SAF_READ_REALM = 44
 
 
 /***************************************************************************************************
- *   Diary execution mode
+ *   Diary execution mode (Intent)
  *
  ***************************************************************************************************/
-const val DIARY_EXECUTION_MODE = "diary_execution_mode"
-const val EXECUTION_MODE_ACCESS_FROM_OUTSIDE = "execution_mode_access_from_outside"
+// IntroActivity Delay Message ID
 const val START_MAIN_ACTIVITY = 0
+const val START_DASHBOARD_ACTIVITY = 1
+
+// Diary Mode
+const val DIARY_EXECUTION_MODE = "diary_execution_mode"
+
+// Diary Mode Case01: DiaryMainWidget or getOpenAlarmTabIntent
+const val EXECUTION_MODE_ACCESS_FROM_OUTSIDE = "execution_mode_access_from_outside"
+
+// Diary Mode Case02: Automatically moves to the Dashboard when app is first launched
+const val EXECUTION_MODE_AUTOMATICALLY_MOVE_DASHBOARD = "execution_move_automatically_move_dashboard"
+
+
+/***************************************************************************************************
+ *   Diary view mode for DiaryMainActivity grid item layout (Bundle)
+ *   me.blog.korn123.easydiary.enums.DiaryMode
+ ***************************************************************************************************/
+const val DIARY_MODE = "diary_mode"
 
 
 /***************************************************************************************************
@@ -512,7 +528,6 @@ const val SELECTED_SYMBOL_SEQUENCE = "selected_symbol_sequence"
 const val DIARY_CONTENTS_SCROLL_Y = "diary_contents_scroll_y"
 const val DIARY_ATTACH_PHOTO_INDEX = "diary_attach_photo_index"
 const val DIARY_ENCRYPT_PASSWORD = "diary_encrypt_password"
-const val DIARY_MODE = "diary_mode"
 const val POSTCARD_SEQUENCE = "postcard_sequence"
 
 //const val OPEN_URL_INFO = "open_url_info"

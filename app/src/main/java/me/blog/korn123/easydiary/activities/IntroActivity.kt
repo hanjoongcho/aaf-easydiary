@@ -42,7 +42,11 @@ class IntroActivity : AppCompatActivity() {
                 super.handleMessage(msg)
                 when (msg.what) {
                     START_MAIN_ACTIVITY -> {
-                        TransitionHelper.startActivityWithTransition(this@IntroActivity, Intent(this@IntroActivity, DiaryMainActivity::class.java))
+                        TransitionHelper.startActivityWithTransition(
+                            this@IntroActivity, Intent(this@IntroActivity, DiaryMainActivity::class.java).apply {
+                                if (config.enableDebugMode) putExtra(EXECUTION_MODE_AUTOMATICALLY_MOVE_DASHBOARD, true)
+                            }
+                        )
                         finish()
                     }
                     else -> {}

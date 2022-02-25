@@ -149,6 +149,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         checkBundle(savedInstanceState)
         setupReviewFlow()
         setupPhotoHighlight()
+        checkIntent()
 
         // test code
         if (config.enableDebugMode) {
@@ -282,6 +283,15 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
      *   etc functions
      *
      ***************************************************************************************************/
+    private fun checkIntent() {
+        when (intent.getBooleanExtra(EXECUTION_MODE_AUTOMATICALLY_MOVE_DASHBOARD, false)) {
+            true -> {
+                intent.removeExtra(EXECUTION_MODE_AUTOMATICALLY_MOVE_DASHBOARD)
+                TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, Intent(this@DiaryMainActivity, DashboardActivity::class.java))
+            }
+        }
+    }
+
     private fun checkBundle(savedInstanceState: Bundle?) {
         when (savedInstanceState == null) {
             true -> checkWhatsNewDialog()
