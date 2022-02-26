@@ -62,11 +62,11 @@ class DashboardActivity : EasyDiaryActivity() {
 
         mBinding = ActivityDashboardBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-//        setSupportActionBar(mBinding.toolbar)
-//        supportActionBar?.run {
-//            title = "Dashboard"
-//            setDisplayHomeAsUpEnabled(true)
-//        }
+        setSupportActionBar(mBinding.toolbar)
+        supportActionBar?.run {
+            title = "Dashboard"
+            setDisplayHomeAsUpEnabled(true)
+        }
 
         supportFragmentManager.beginTransaction().run {
             // PhotoHighlight
@@ -174,9 +174,9 @@ class DashboardActivity : EasyDiaryActivity() {
             }
         }
 
-        mBinding.close.setOnClickListener {
-            onBackPressed()
-        }
+//        mBinding.close.setOnClickListener {
+//            onBackPressed()
+//        }
 
         EasyDiaryUtils.disableTouchEvent(mBinding.dashboardDimmer)
         object: Handler(this.mainLooper) {
@@ -193,16 +193,16 @@ class DashboardActivity : EasyDiaryActivity() {
         }.apply { sendEmptyMessageDelayed(1547, 1000) }
     }
 
-    override fun onResume() {
-        super.onResume()
-        updateStatusBarColor(config.screenBackgroundColor.darkenColor())
-        mBinding.mainHolder.setBackgroundColor(config.screenBackgroundColor.darkenColor())
+//    override fun onResume() {
+//        super.onResume()
+//        updateStatusBarColor(config.screenBackgroundColor.darkenColor())
+//        mBinding.mainHolder.setBackgroundColor(config.screenBackgroundColor.darkenColor())
 
-        mBinding.also {
-            FontUtils.setFontsTypeface(this, null, it.root, true)
-            it.close.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN)
-        }
-    }
+//        mBinding.also {
+//            FontUtils.setFontsTypeface(this, null, it.root, true)
+//            it.close.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN)
+//        }
+//    }
 
 
     /***************************************************************************************************

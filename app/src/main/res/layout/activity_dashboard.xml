@@ -5,6 +5,19 @@
     android:id="@+id/main_holder"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <com.google.android.material.appbar.AppBarLayout
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+    </com.google.android.material.appbar.AppBarLayout>
     <androidx.core.widget.NestedScrollView
         android:id="@+id/dashboard_container"
         android:layout_width="match_parent"
@@ -13,7 +26,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/app_bar">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -155,22 +168,12 @@
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
-    <com.simplemobiletools.commons.views.MyFloatingActionButton
-        android:id="@+id/close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="?attr/homeAsUpIndicator"
-        app:fabSize="mini"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
     <View
+        tools:visibility="gone"
         android:id="@+id/dashboardDimmer"
         android:background="?attr/colorPrimary"
         android:orientation="vertical"
-        android:alpha="0.9"
+        android:alpha="0.3"
         android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -178,7 +181,6 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="0dp"
         android:layout_height="0dp">
-
     </View>
     <ProgressBar
         android:id="@+id/dashboardProgress"
