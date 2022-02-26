@@ -5,9 +5,10 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.zhpan.bannerview.constants.PageStyle
@@ -17,6 +18,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
@@ -175,6 +177,20 @@ class DashboardActivity : EasyDiaryActivity() {
         mBinding.close.setOnClickListener {
             onBackPressed()
         }
+
+        EasyDiaryUtils.disableTouchEvent(mBinding.dashboardDimmer)
+        object: Handler(this.mainLooper) {
+            override fun handleMessage(msg: Message) {
+                super.handleMessage(msg)
+                when (msg.what) {
+                    1547 -> {
+                        mBinding.dashboardDimmer.visibility = View.GONE
+                        mBinding.dashboardProgress.visibility = View.GONE
+                    }
+                    else -> {}
+                }
+            }
+        }.apply { sendEmptyMessageDelayed(1547, 1000) }
     }
 
     override fun onResume() {

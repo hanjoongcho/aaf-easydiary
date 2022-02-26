@@ -177,6 +177,19 @@
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </HorizontalScrollView>
 
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/progressContainer"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:alpha="0.2"
+                android:background="?attr/colorPrimary"
+                android:gravity="center">
+
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
@@ -189,5 +202,28 @@
         app:fabSize="mini"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <View
+        android:id="@+id/dashboardDimmer"
+        android:background="?attr/colorPrimary"
+        android:orientation="vertical"
+        android:alpha="0.9"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp">
+
+    </View>
+    <ProgressBar
+        android:id="@+id/dashboardProgress"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="30dp"
+        android:layout_height="30dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
 
