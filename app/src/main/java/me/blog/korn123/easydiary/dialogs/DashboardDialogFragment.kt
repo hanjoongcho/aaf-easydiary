@@ -20,10 +20,6 @@ import me.blog.korn123.easydiary.fragments.PhotoHighlightFragment
 class DashboardDialogFragment : DialogFragment() {
     private lateinit var mBinding: ActivityDashboardBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onStart() {
         super.onStart()
         dialog?.run {
@@ -53,24 +49,26 @@ class DashboardDialogFragment : DialogFragment() {
             close.visibility = View.VISIBLE
             close.setOnClickListener { dismiss() }
 
-            childFragmentManager.beginTransaction().run {
-                // PhotoHighlight
-                replace(R.id.photoHighlight, PhotoHighlightFragment().apply {
-                    arguments = Bundle().apply {
-                        putInt(PhotoHighlightFragment.PAGE_STYLE, PageStyle.MULTI_PAGE_SCALE)
-                        putFloat(PhotoHighlightFragment.REVEAL_WIDTH, 20F)
-                        putFloat(PhotoHighlightFragment.PAGE_MARGIN, 5F)
-                    }
-                })
+            if (savedInstanceState == null) {
+                childFragmentManager.beginTransaction().run {
+                    // PhotoHighlight
+                    replace(R.id.photoHighlight, PhotoHighlightFragment().apply {
+                        arguments = Bundle().apply {
+                            putInt(PhotoHighlightFragment.PAGE_STYLE, PageStyle.MULTI_PAGE_SCALE)
+                            putFloat(PhotoHighlightFragment.REVEAL_WIDTH, 20F)
+                            putFloat(PhotoHighlightFragment.PAGE_MARGIN, 5F)
+                        }
+                    })
 
-                // DashBoardSummary
-                replace(R.id.summary, DashBoardSummaryFragment())
+                    // DashBoardSummary
+                    replace(R.id.summary, DashBoardSummaryFragment())
 
-                // Daily Symbol
-                replace(R.id.dashboard_daily_symbol, DailySymbolFragment())
+                    // Daily Symbol
+                    replace(R.id.dashboard_daily_symbol, DailySymbolFragment())
 
-                // Commit
-                commit()
+                    // Commit
+                    commit()
+                }
             }
 
 //            childFragmentManager.executePendingTransactions()
@@ -86,5 +84,9 @@ class DashboardDialogFragment : DialogFragment() {
             root.setBackgroundColor(requireActivity().config.screenBackgroundColor)
             FontUtils.setFontsTypeface(requireContext(), null, root, true)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
     }
 }
