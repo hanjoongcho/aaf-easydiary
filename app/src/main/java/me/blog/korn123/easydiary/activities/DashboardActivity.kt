@@ -1,37 +1,21 @@
 package me.blog.korn123.easydiary.activities
 
-import android.app.Activity
-import android.content.Intent
-import android.graphics.Color
-import android.graphics.PorterDuff
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.view.View
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.zhpan.bannerview.constants.PageStyle
 import io.github.aafactory.commons.extensions.dpToPixel
-import io.github.aafactory.commons.utils.DateUtils
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.commons.utils.FlavorUtils
-import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.adapters.DailySymbolAdapter
 import me.blog.korn123.easydiary.databinding.ActivityDashboardBinding
-import me.blog.korn123.easydiary.databinding.PartialDailySymbolBinding
-import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.extensions.getDefaultDisplay
+import me.blog.korn123.easydiary.extensions.isLandScape
+import me.blog.korn123.easydiary.extensions.statusBarHeight
 import me.blog.korn123.easydiary.fragments.*
 import me.blog.korn123.easydiary.fragments.PhotoHighlightFragment.Companion.PAGE_MARGIN
 import me.blog.korn123.easydiary.fragments.PhotoHighlightFragment.Companion.PAGE_STYLE
 import me.blog.korn123.easydiary.fragments.PhotoHighlightFragment.Companion.REVEAL_WIDTH
-import java.text.SimpleDateFormat
-import java.util.*
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -44,11 +28,6 @@ class DashboardActivity : EasyDiaryActivity() {
      *
      ***************************************************************************************************/
     private lateinit var mBinding: ActivityDashboardBinding
-    private lateinit var mDailySymbolAdapter: DailySymbolAdapter
-    private var mDailySymbolList: ArrayList<DailySymbolAdapter.DailySymbol> = arrayListOf()
-    private val mRequestUpdateDailySymbol = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) updateDailyCard()
-    }
 
 
     /***************************************************************************************************
@@ -80,6 +59,9 @@ class DashboardActivity : EasyDiaryActivity() {
 
             // DashBoardSummary
             replace(R.id.summary, DashBoardSummaryFragment())
+
+            // Daily Symbol
+            replace(R.id.dashboard_daily_symbol, DailySymbolFragment())
 
             // Commit
             commit()
@@ -166,13 +148,6 @@ class DashboardActivity : EasyDiaryActivity() {
         }
 
         supportFragmentManager.executePendingTransactions()
-        initializeDailySymbol()
-
-        mBinding.editSymbolFilter.setOnClickListener {
-            Intent(this, SymbolFilterPickerActivity::class.java).apply {
-                mRequestUpdateDailySymbol.launch(this)
-            }
-        }
 
 //        mBinding.close.setOnClickListener {
 //            onBackPressed()
@@ -209,65 +184,6 @@ class DashboardActivity : EasyDiaryActivity() {
      *   etc functions
      *
      ***************************************************************************************************/
-    private fun initializeDailySymbol() {
-        val dayOfMonth = SimpleDateFormat("dd", Locale.getDefault())
-        val dateFormat = SimpleDateFormat(DateUtils.DATE_PATTERN_DASH, Locale.getDefault())
-        val cal = Calendar.getInstance()
-        cal.time = Date()
-        mBinding.month.text = cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())
-
-        mDailySymbolAdapter = DailySymbolAdapter(
-                this,
-                mDailySymbolList
-        )
-        mBinding.dailyCardRecyclerView.apply {
-//            layoutManager = androidx.recyclerview.widget.GridLayoutManager(this@DashboardActivity, 1)
-            layoutManager = LinearLayoutManager(this@DashboardActivity, LinearLayoutManager.HORIZONTAL, false)
-//            addItemDecoration(SettingsScheduleFragment.SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding)))
-            adapter = mDailySymbolAdapter
-            addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                    mBinding.month.text = mDailySymbolList[(mBinding.dailyCardRecyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()].date
-                }
-            })
-        }
-
-        CoroutineScope(Dispatchers.IO).launch { // launch a new coroutine and keep a reference to its Job
-            for (num in 1..365) {
-                mDailySymbolList.add(DailySymbolAdapter.DailySymbol(dateFormat.format(cal.time), cal.get(Calendar.DAY_OF_WEEK), cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())!!, dayOfMonth.format(cal.time), cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())!!))
-                cal.add(Calendar.DATE, -1)
-            }
-            withContext(Dispatchers.Main) {
-                updateDailyCard()
-            }
-        }
-    }
-
-    private fun updateDailyCard() {
-        mBinding.run {
-            month.visibility = View.GONE
-            dailyCardRecyclerView.visibility = View.GONE
-            dailyCardProgressBar.visibility = View.VISIBLE
-            selectedSymbolFlexBox.removeAllViews()
-
-            CoroutineScope(Dispatchers.IO).launch {
-                config.selectedSymbols.split(",").map { sequence ->
-                    val partialDailySymbolBinding = PartialDailySymbolBinding.inflate(layoutInflater)
-                    withContext(Dispatchers.Main) {
-                        FlavorUtils.initWeatherView(this@DashboardActivity, partialDailySymbolBinding.dailySymbol, sequence.toInt())
-                        selectedSymbolFlexBox.addView(partialDailySymbolBinding.root)
-                    }
-                }
-                runOnUiThread {
-                    mDailySymbolAdapter.notifyDataSetChanged()
-                    month.visibility = View.VISIBLE
-                    dailyCardRecyclerView.visibility = View.VISIBLE
-                    dailyCardProgressBar.visibility = View.GONE
-                }
-            }
-        }
-    }
-
     fun togglePhotoHighlight(isVisible: Boolean) {
         mBinding.photoHighlight.visibility = if (isVisible) View.VISIBLE else View.GONE
     }

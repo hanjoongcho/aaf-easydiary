@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<me.blog.korn123.easydiary.views.FixedCardView style="@style/card_dashboard"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <me.blog.korn123.easydiary.views.FixedTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/dashboard_title_daily_symbol_tile"
+            android:textSize="@dimen/dashboard_title_h1"
+            app:applyGlobalColor="false"
+            app:applyGlobalSize="false"
+            app:applyHighLight="true" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/selectedSymbolFlexBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:alignContent="stretch"
+                app:alignItems="stretch"
+                app:flexWrap="wrap" />
+            <me.blog.korn123.easydiary.views.FixedCardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:contentPadding="3dp"
+                app:fixedAppcompatPadding="true">
+
+                <ImageView
+                    android:id="@+id/editSymbolFilter"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    app:srcCompat="@drawable/ic_select_symbol" />
+            </me.blog.korn123.easydiary.views.FixedCardView>
+        </LinearLayout>
+
+        <me.blog.korn123.easydiary.views.FixedTextView
+            android:id="@+id/month"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="@dimen/dashboard_title_h2"
+            app:applyGlobalColor="false"
+            app:applyGlobalSize="false"
+            tools:text="11월" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/dailyCardRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/dailyCardProgressBar"
+            style="?android:progressBarStyleLarge"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center" />
+    </LinearLayout>
+</me.blog.korn123.easydiary.views.FixedCardView>
+

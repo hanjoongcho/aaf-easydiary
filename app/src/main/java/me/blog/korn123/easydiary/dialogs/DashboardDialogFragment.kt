@@ -13,6 +13,7 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityDashboardBinding
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.fragments.DailySymbolFragment
 import me.blog.korn123.easydiary.fragments.DashBoardSummaryFragment
 import me.blog.korn123.easydiary.fragments.PhotoHighlightFragment
 
@@ -49,6 +50,7 @@ class DashboardDialogFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         mBinding.run {
             appBar.visibility = View.GONE
+            close.visibility = View.VISIBLE
             close.setOnClickListener { dismiss() }
 
             childFragmentManager.beginTransaction().run {
@@ -64,14 +66,17 @@ class DashboardDialogFragment : DialogFragment() {
                 // DashBoardSummary
                 replace(R.id.summary, DashBoardSummaryFragment())
 
+                // Daily Symbol
+                replace(R.id.dashboard_daily_symbol, DailySymbolFragment())
+
                 // Commit
                 commit()
             }
 
-
-
-
-
+//            childFragmentManager.executePendingTransactions()
+//            EasyDiaryUtils.disableTouchEvent(dashboardDimmer)
+            dashboardDimmer.visibility = View.GONE
+            dashboardProgress.visibility = View.GONE
         }
     }
 
