@@ -1,9 +1,12 @@
 package me.blog.korn123.easydiary.dialogs
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import com.zhpan.bannerview.constants.PageStyle
 import me.blog.korn123.commons.utils.FontUtils
@@ -23,7 +26,11 @@ class DashboardDialogFragment : DialogFragment() {
     override fun onStart() {
         super.onStart()
         dialog?.run {
-            window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+            window?.also {
+                it.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                it.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                it.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+            }
         }
     }
 
