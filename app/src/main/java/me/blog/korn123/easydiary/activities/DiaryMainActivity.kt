@@ -34,6 +34,7 @@ import me.blog.korn123.easydiary.activities.BaseDevActivity.Companion.NOTIFICATI
 import me.blog.korn123.easydiary.activities.BaseDiaryEditingActivity.Companion.DIARY_SEQUENCE_INIT
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
 import me.blog.korn123.easydiary.databinding.PopupMenuMainBinding
+import me.blog.korn123.easydiary.dialogs.DashboardDialogFragment
 import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.fragments.PhotoHighlightFragment
@@ -287,7 +288,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         when (intent.getBooleanExtra(EXECUTION_MODE_AUTOMATICALLY_MOVE_DASHBOARD, false)) {
             true -> {
                 intent.removeExtra(EXECUTION_MODE_AUTOMATICALLY_MOVE_DASHBOARD)
-                TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, Intent(this@DiaryMainActivity, DashboardActivity::class.java))
+//                TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, Intent(this@DiaryMainActivity, DashboardActivity::class.java))
+                DashboardDialogFragment().show(supportFragmentManager, "DashboardDialog")
             }
         }
     }
