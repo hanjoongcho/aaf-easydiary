@@ -24,9 +24,10 @@ class DashboardDialogFragment : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        dialog?.run {
-            window?.also {
-                it.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        requireActivity().run {
+            val height = getDefaultDisplay().y
+            dialog?.window?.also {
+                it.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, height)
                 it.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                 it.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
             }
@@ -149,7 +150,8 @@ class DashboardDialogFragment : DialogFragment() {
     override fun onResume() {
         super.onResume()
         mBinding.run {
-            root.setBackgroundColor(requireActivity().config.screenBackgroundColor)
+//            root.setBackgroundColor(requireActivity().config.screenBackgroundColor)
+            root.setBackgroundColor(Color.RED)
             FontUtils.setFontsTypeface(requireContext(), null, root, true)
         }
     }

@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.fragments
 
+import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable

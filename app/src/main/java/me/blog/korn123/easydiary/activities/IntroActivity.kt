@@ -5,12 +5,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import androidx.appcompat.app.AppCompatActivity
-import io.github.aafactory.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.databinding.ActivityIntroBinding
 import me.blog.korn123.easydiary.extensions.*
-import me.blog.korn123.easydiary.helper.*
-import java.util.*
+import me.blog.korn123.easydiary.helper.EXECUTION_MODE_AUTOMATICALLY_MOVE_DASHBOARD
+import me.blog.korn123.easydiary.helper.START_MAIN_ACTIVITY
+import me.blog.korn123.easydiary.helper.TransitionHelper
 
 /**
  * Created by CHO HANJOONG on 2016-12-31.
@@ -25,6 +25,7 @@ class IntroActivity : AppCompatActivity() {
             FontUtils.setFontsTypeface(this@IntroActivity, assets, null, this)
             initTextSize(this)
             setBackgroundColor(config.primaryColor)
+            updateStatusBarColor(config.primaryColor)
         }
     }
 
