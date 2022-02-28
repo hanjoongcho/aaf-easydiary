@@ -15,10 +15,6 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import io.github.aafactory.commons.utils.DateUtils
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.chart.DayAxisValueFormatter
@@ -27,7 +23,6 @@ import me.blog.korn123.easydiary.chart.MyAxisValueFormatter
 import me.blog.korn123.easydiary.chart.XYMarkerView
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.views.FixedTextView
-import java.util.*
 
 class BarChartFragment : androidx.fragment.app.Fragment() {
     private lateinit var mBarChart: BarChart
@@ -112,13 +107,13 @@ class BarChartFragment : androidx.fragment.app.Fragment() {
             }
         }
 
-        CoroutineScope(Dispatchers.IO).launch {
+//        CoroutineScope(Dispatchers.IO).launch {
             setData(6, 20f)
-            withContext(Dispatchers.Main) {
+//            withContext(Dispatchers.Main) {
                 mBarChart.animateY(2000)
                 mBarChartProgressBar.visibility = View.GONE
-            }
-        }
+//            }
+//        }
     }
 
     private fun setData(count: Int, range: Float) {
@@ -142,10 +137,7 @@ class BarChartFragment : androidx.fragment.app.Fragment() {
             if (map[i] != null) total = map[i] ?: 0
             barEntries.add(BarEntry(i.toFloat(), total.toFloat()))
         }
-
-        val barDataSet: BarDataSet
-
-        barDataSet = BarDataSet(barEntries, getString(R.string.statistics_creation_time))
+        val barDataSet = BarDataSet(barEntries, getString(R.string.statistics_creation_time))
         val iValueFormatter = IValueFormatterExt(context)
         barDataSet.valueFormatter = iValueFormatter
         val colors = intArrayOf(

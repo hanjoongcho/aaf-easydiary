@@ -113,28 +113,28 @@ class DashboardDialogFragment : DialogFragment() {
                 })
 
                 // Statistics-Creation Time
-//                val chartTitle = getString(R.string.statistics_creation_time)
-//                replace(R.id.statistics1, BarChartFragment().apply {
-//                    val args = Bundle()
-//                    args.putString(BarChartFragment.CHART_TITLE, chartTitle)
-//                    arguments = args
-//                })
+                val chartTitle = getString(R.string.statistics_creation_time)
+                replace(R.id.statistics1, BarChartFragment().apply {
+                    val args = Bundle()
+                    args.putString(BarChartFragment.CHART_TITLE, chartTitle)
+                    arguments = args
+                })
 
-//                    // Statistics-Symbol All
-//                    val symbolAllTitle = getString(R.string.statistics_symbol_all)
-//                    replace(R.id.statistics2, BarChartFragmentT2().apply {
-//                        val args = Bundle()
-//                        args.putString(BarChartFragment.CHART_TITLE, symbolAllTitle)
-//                        arguments = args
-//                    })
-//
-//                    // Statistics-Symbol TopTen
-//                    val symbolTopTenTitle = getString(R.string.statistics_symbol_top_ten)
-//                    replace(R.id.statistics3, HorizontalBarChartFragment().apply {
-//                        val args = Bundle()
-//                        args.putString(BarChartFragment.CHART_TITLE, symbolTopTenTitle)
-//                        arguments = args
-//                    })
+                // Statistics-Symbol All
+                val symbolAllTitle = getString(R.string.statistics_symbol_all)
+                replace(R.id.statistics2, BarChartFragmentT2().apply {
+                    val args = Bundle()
+                    args.putString(BarChartFragment.CHART_TITLE, symbolAllTitle)
+                    arguments = args
+                })
+
+                // Statistics-Symbol TopTen
+                val symbolTopTenTitle = getString(R.string.statistics_symbol_top_ten)
+                replace(R.id.statistics3, HorizontalBarChartFragment().apply {
+                    val args = Bundle()
+                    args.putString(BarChartFragment.CHART_TITLE, symbolTopTenTitle)
+                    arguments = args
+                })
 
                 // Commit
                 commit()
