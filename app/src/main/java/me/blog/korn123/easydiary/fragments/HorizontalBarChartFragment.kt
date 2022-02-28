@@ -19,6 +19,7 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import io.github.aafactory.commons.utils.CommonUtils
+import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.ChartUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
@@ -34,9 +35,10 @@ class HorizontalBarChartFragment : androidx.fragment.app.Fragment() {
     private lateinit var mChartTitle: FixedTextView
     private lateinit var mBarChartProgressBar: ContentLoadingProgressBar
     private lateinit var mSymbolMap: HashMap<Int, String>
-    val mSequences = arrayListOf<Int>()
+    private var mCoroutineJob: Job? = null
     private val mTypeface: Typeface
         get() = FontUtils.getCommonTypeface(requireContext())!!
+    val mSequences = arrayListOf<Int>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -105,59 +107,61 @@ class HorizontalBarChartFragment : androidx.fragment.app.Fragment() {
             }
         }
 
-//        CoroutineScope(Dispatchers.IO).launch {
-            setData()
-//            withContext(Dispatchers.Main) {
+        mCoroutineJob = CoroutineScope(Dispatchers.IO).launch {
+            val sortedMap = ChartUtils.getSortedMapBySymbol(true)
+            val barEntries = ArrayList<BarEntry>()
+            var index = 1F
+            val itemArray = arrayListOf<HashMap<String, Int>>()
+            sortedMap.forEach { (key, value) ->
+                if (index > 10) return@forEach
+                itemArray.add( hashMapOf("key" to key, "value" to value) )
+                mSequences.add(key)
+                index++
+            }
+            itemArray.reverse()
+            mSequences.reverse()
+
+            withContext(Dispatchers.Main) {
+                itemArray.forEachIndexed { index, item ->
+                    val drawable: Drawable? = when (FlavorUtils.sequenceToSymbolResourceId(item["key"]!!) > 0) {
+                        true -> scaledDrawable(FlavorUtils.sequenceToSymbolResourceId(item["key"]!!), CommonUtils.dpToPixel(requireContext(),24F) , CommonUtils.dpToPixel(requireContext(),24F))
+                        false -> null
+                    }
+                    barEntries.add(BarEntry((index + 1F), item["value"]!!.toFloat(), drawable))
+                }
+                val barDataSet = BarDataSet(barEntries, getString(R.string.statistics_symbol_top_ten))
+                val iValueFormatter = IValueFormatterExt(context)
+                barDataSet.valueFormatter = iValueFormatter
+                val colors = intArrayOf(
+                    Color.rgb(255, 102, 0), Color.rgb(245, 199, 0),
+                    Color.rgb(106, 150, 31), Color.rgb(179, 100, 53), Color.rgb(115, 130, 153)
+                )
+                barDataSet.setColors(*colors)
+                barDataSet.setDrawIcons(true)
+                barDataSet.setDrawValues(false)
+                val dataSets = ArrayList<IBarDataSet>()
+                dataSets.add(barDataSet)
+
+                val barData = BarData(dataSets)
+                barData.setValueTextSize(10f)
+//        barData.setValueTypeface(mTfLight)
+                barData.barWidth = 0.9f
+//        barChart.zoom((sortedMap.size / 6.0F), 0F, 0F, 0F)
+                mBarChart.data = barData
+
                 mBarChart.animateY(2000)
                 mBarChartProgressBar.visibility = View.GONE
-//            }
-//        }
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mCoroutineJob?.run { if (isActive) cancel() }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_horizontal_barchart, container, false)
-    }
-
-    private fun setData() {
-        val sortedMap = ChartUtils.getSortedMapBySymbol(true)
-
-        val barEntries = ArrayList<BarEntry>()
-        var index = 1F
-        val itemArray = arrayListOf<HashMap<String, Int>>()
-        sortedMap.forEach { (key, value) ->
-            if (index > 10) return@forEach
-            itemArray.add( hashMapOf("key" to key, "value" to value) )
-            mSequences.add(key)
-            index++
-        }
-        itemArray.reverse()
-        mSequences.reverse()
-        itemArray.forEachIndexed { index, item ->
-            val drawable: Drawable? = when (FlavorUtils.sequenceToSymbolResourceId(item["key"]!!) > 0) {
-                true -> scaledDrawable(FlavorUtils.sequenceToSymbolResourceId(item["key"]!!), CommonUtils.dpToPixel(requireContext(),24F) , CommonUtils.dpToPixel(requireContext(),24F))
-                false -> null
-            }
-            barEntries.add(BarEntry((index + 1F), item["value"]!!.toFloat(), drawable))
-        }
-        val barDataSet = BarDataSet(barEntries, getString(R.string.statistics_symbol_top_ten))
-        val iValueFormatter = IValueFormatterExt(context)
-        barDataSet.valueFormatter = iValueFormatter
-        val colors = intArrayOf(
-                Color.rgb(255, 102, 0), Color.rgb(245, 199, 0),
-                Color.rgb(106, 150, 31), Color.rgb(179, 100, 53), Color.rgb(115, 130, 153)
-        )
-        barDataSet.setColors(*colors)
-        barDataSet.setDrawIcons(true)
-        barDataSet.setDrawValues(false)
-        val dataSets = ArrayList<IBarDataSet>()
-        dataSets.add(barDataSet)
-
-        val barData = BarData(dataSets)
-        barData.setValueTextSize(10f)
-//        barData.setValueTypeface(mTfLight)
-        barData.barWidth = 0.9f
-//        barChart.zoom((sortedMap.size / 6.0F), 0F, 0F, 0F)
-        mBarChart.data = barData
     }
 
     inner class AxisValueFormatter : IAxisValueFormatter {

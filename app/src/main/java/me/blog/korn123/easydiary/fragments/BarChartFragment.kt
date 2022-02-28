@@ -29,6 +29,7 @@ class BarChartFragment : androidx.fragment.app.Fragment() {
     private lateinit var mBarChart: BarChart
     private lateinit var mChartTitle: FixedTextView
     private lateinit var mBarChartProgressBar: ContentLoadingProgressBar
+    private var mCoroutineJob: Job? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_barchart, container, false)
@@ -108,7 +109,7 @@ class BarChartFragment : androidx.fragment.app.Fragment() {
             }
         }
 
-        coroutineJob = CoroutineScope(Dispatchers.IO).launch {
+        mCoroutineJob = CoroutineScope(Dispatchers.IO).launch {
             val barEntries = setData()
             withContext(Dispatchers.Main) {
                 val barDataSet = BarDataSet(barEntries, getString(R.string.statistics_creation_time))
@@ -135,10 +136,8 @@ class BarChartFragment : androidx.fragment.app.Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        coroutineJob?.run { if (isActive) cancel() }
+        mCoroutineJob?.run { if (isActive) cancel() }
     }
-
-    private var coroutineJob: Job? = null
 
     private fun setData(count: Int = 6, range: Float = 20F): ArrayList<BarEntry> {
         val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
