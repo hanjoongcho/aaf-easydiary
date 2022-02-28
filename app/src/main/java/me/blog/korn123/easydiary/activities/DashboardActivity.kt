@@ -153,19 +153,19 @@ class DashboardActivity : EasyDiaryActivity() {
 //            onBackPressed()
 //        }
 
-        EasyDiaryUtils.disableTouchEvent(mBinding.dashboardDimmer)
-        object: Handler(this.mainLooper) {
-            override fun handleMessage(msg: Message) {
-                super.handleMessage(msg)
-                when (msg.what) {
-                    1547 -> {
-                        mBinding.dashboardDimmer.visibility = View.GONE
-                        mBinding.dashboardProgress.visibility = View.GONE
-                    }
-                    else -> {}
-                }
-            }
-        }.apply { sendEmptyMessageDelayed(1547, 1000) }
+//        EasyDiaryUtils.disableTouchEvent(mBinding.dashboardDimmer)
+//        object: Handler(this.mainLooper) {
+//            override fun handleMessage(msg: Message) {
+//                super.handleMessage(msg)
+//                when (msg.what) {
+//                    1547 -> {
+//                        mBinding.dashboardDimmer.visibility = View.GONE
+//                        mBinding.dashboardProgress.visibility = View.GONE
+//                    }
+//                    else -> {}
+//                }
+//            }
+//        }.apply { sendEmptyMessageDelayed(1547, 1000) }
     }
 
 //    override fun onResume() {

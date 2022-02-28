@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewpager2.widget.ViewPager2
-import com.simplemobiletools.commons.extensions.toast
 import com.zhpan.bannerview.BannerViewPager
 import com.zhpan.bannerview.constants.IndicatorGravity
 import com.zhpan.bannerview.constants.PageStyle

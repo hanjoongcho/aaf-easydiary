@@ -20,6 +20,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/photoHighlight"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -147,7 +148,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
     <View
-        tools:visibility="gone"
+        android:visibility="gone"
         android:id="@+id/dashboardDimmer"
         android:background="?attr/colorPrimary"
         android:orientation="vertical"
@@ -161,6 +162,7 @@
         android:layout_height="0dp">
     </View>
     <ProgressBar
+        android:visibility="gone"
         android:id="@+id/dashboardProgress"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

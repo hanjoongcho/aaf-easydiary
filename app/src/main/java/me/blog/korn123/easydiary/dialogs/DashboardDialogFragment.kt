@@ -140,8 +140,8 @@ class DashboardDialogFragment : DialogFragment() {
             }
 //            childFragmentManager.executePendingTransactions()
 //            EasyDiaryUtils.disableTouchEvent(dashboardDimmer)
-            dashboardDimmer.visibility = View.GONE
-            dashboardProgress.visibility = View.GONE
+//            dashboardDimmer.visibility = View.GONE
+//            dashboardProgress.visibility = View.GONE
         }
     }
 
