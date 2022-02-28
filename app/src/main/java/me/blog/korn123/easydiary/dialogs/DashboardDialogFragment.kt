@@ -49,7 +49,7 @@ class DashboardDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mBinding.run {
-//            appBar.visibility = View.GONE
+            appBar.visibility = View.GONE
             close.visibility = View.VISIBLE
             close.setOnClickListener { dismiss() }
 
@@ -74,52 +74,52 @@ class DashboardDialogFragment : DialogFragment() {
                 }
             }
 
-//            if (savedInstanceState == null) {
-                childFragmentManager.beginTransaction().run {
-                    // PhotoHighlight
-                    replace(R.id.photoHighlight, PhotoHighlightFragment().apply {
-                        arguments = Bundle().apply {
-                            putInt(PhotoHighlightFragment.PAGE_STYLE, PageStyle.MULTI_PAGE_SCALE)
-                            putFloat(PhotoHighlightFragment.REVEAL_WIDTH, 20F)
-                            putFloat(PhotoHighlightFragment.PAGE_MARGIN, 5F)
-                        }
-                    })
+            childFragmentManager.beginTransaction().run {
+                // PhotoHighlight
+                replace(R.id.photoHighlight, PhotoHighlightFragment().apply {
+                    arguments = Bundle().apply {
+                        putInt(PhotoHighlightFragment.PAGE_STYLE, PageStyle.MULTI_PAGE_SCALE)
+                        putFloat(PhotoHighlightFragment.REVEAL_WIDTH, 20F)
+                        putFloat(PhotoHighlightFragment.PAGE_MARGIN, 5F)
+                    }
+                })
 
-//                    // DashBoardSummary
-//                    replace(R.id.summary, DashBoardSummaryFragment())
-//
-//                    // Daily Symbol
-//                    replace(R.id.dashboard_daily_symbol, DailySymbolFragment())
-//
-//                    // DashBoardRank-Lifetime
-//                    replace(R.id.lifetime, DashBoardRankFragment().apply {
-//                        val args = Bundle()
-//                        args.putString(DashBoardRankFragment.MODE_FLAG, DashBoardRankFragment.MODE_LIFETIME)
-//                        arguments = args
-//                    })
-//
-//                    // DashBoardRank-LastMonth
-//                    replace(R.id.lastMonth, DashBoardRankFragment().apply {
-//                        val args = Bundle()
-//                        args.putString(DashBoardRankFragment.MODE_FLAG, DashBoardRankFragment.MODE_LAST_MONTH)
-//                        arguments = args
-//                    })
-//
-//                    // DashBoardRank-LastWeek
-//                    replace(R.id.lastWeek, DashBoardRankFragment().apply {
-//                        val args = Bundle()
-//                        args.putString(DashBoardRankFragment.MODE_FLAG, DashBoardRankFragment.MODE_LAST_WEEK)
-//                        arguments = args
-//                    })
-//
-//                    // Statistics-Creation Time
-//                    val chartTitle = getString(R.string.statistics_creation_time)
-//                    replace(R.id.statistics1, BarChartFragment().apply {
-//                        val args = Bundle()
-//                        args.putString(BarChartFragment.CHART_TITLE, chartTitle)
-//                        arguments = args
-//                    })
-//
+                // DashBoardSummary
+                replace(R.id.summary, DashBoardSummaryFragment())
+
+                // Daily Symbol
+                replace(R.id.dashboard_daily_symbol, DailySymbolFragment())
+
+
+                // DashBoardRank-Lifetime
+                replace(R.id.lifetime, DashBoardRankFragment().apply {
+                    val args = Bundle()
+                    args.putString(DashBoardRankFragment.MODE_FLAG, DashBoardRankFragment.MODE_LIFETIME)
+                    arguments = args
+                })
+
+                // DashBoardRank-LastMonth
+                replace(R.id.lastMonth, DashBoardRankFragment().apply {
+                    val args = Bundle()
+                    args.putString(DashBoardRankFragment.MODE_FLAG, DashBoardRankFragment.MODE_LAST_MONTH)
+                    arguments = args
+                })
+
+                // DashBoardRank-LastWeek
+                replace(R.id.lastWeek, DashBoardRankFragment().apply {
+                    val args = Bundle()
+                    args.putString(DashBoardRankFragment.MODE_FLAG, DashBoardRankFragment.MODE_LAST_WEEK)
+                    arguments = args
+                })
+
+                // Statistics-Creation Time
+//                val chartTitle = getString(R.string.statistics_creation_time)
+//                replace(R.id.statistics1, BarChartFragment().apply {
+//                    val args = Bundle()
+//                    args.putString(BarChartFragment.CHART_TITLE, chartTitle)
+//                    arguments = args
+//                })
+
 //                    // Statistics-Symbol All
 //                    val symbolAllTitle = getString(R.string.statistics_symbol_all)
 //                    replace(R.id.statistics2, BarChartFragmentT2().apply {
@@ -136,10 +136,9 @@ class DashboardDialogFragment : DialogFragment() {
 //                        arguments = args
 //                    })
 
-                    // Commit
-                    commit()
-                }
-//            }
+                // Commit
+                commit()
+            }
 //            childFragmentManager.executePendingTransactions()
 //            EasyDiaryUtils.disableTouchEvent(dashboardDimmer)
             dashboardDimmer.visibility = View.GONE

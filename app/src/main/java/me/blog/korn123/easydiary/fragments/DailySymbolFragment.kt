@@ -11,10 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.github.aafactory.commons.utils.DateUtils
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.activities.SymbolFilterPickerActivity
 import me.blog.korn123.easydiary.adapters.DailySymbolAdapter
@@ -36,6 +33,8 @@ class DailySymbolFragment : Fragment() {
     private val mRequestUpdateDailySymbol = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) updateDailyCard()
     }
+    private var mInitializeDailySymbolJob: Job? = null
+    private var mUpdateDailyCardJob: Job? = null
 
 
     /***************************************************************************************************
@@ -60,6 +59,12 @@ class DailySymbolFragment : Fragment() {
                 mRequestUpdateDailySymbol.launch(this)
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mInitializeDailySymbolJob?.run { if (isActive) cancel() }
+        mUpdateDailyCardJob?.run { if (isActive) cancel() }
     }
 
 
@@ -90,7 +95,7 @@ class DailySymbolFragment : Fragment() {
             })
         }
 
-        CoroutineScope(Dispatchers.IO).launch { // launch a new coroutine and keep a reference to its Job
+        mInitializeDailySymbolJob = CoroutineScope(Dispatchers.IO).launch { // launch a new coroutine and keep a reference to its Job
             for (num in 1..365) {
                 mDailySymbolList.add(
                     DailySymbolAdapter.DailySymbol(dateFormat.format(cal.time), cal.get(
@@ -111,7 +116,7 @@ class DailySymbolFragment : Fragment() {
             dailyCardProgressBar.visibility = View.VISIBLE
             selectedSymbolFlexBox.removeAllViews()
 
-            CoroutineScope(Dispatchers.IO).launch {
+            mUpdateDailyCardJob = CoroutineScope(Dispatchers.IO).launch {
                 config.selectedSymbols.split(",").map { sequence ->
                     val partialDailySymbolBinding = PartialDailySymbolBinding.inflate(layoutInflater)
                     withContext(Dispatchers.Main) {
