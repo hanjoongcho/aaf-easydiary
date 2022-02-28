@@ -15,6 +15,7 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import io.github.aafactory.commons.utils.DateUtils
+import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.chart.DayAxisValueFormatter
@@ -107,16 +108,39 @@ class BarChartFragment : androidx.fragment.app.Fragment() {
             }
         }
 
-//        CoroutineScope(Dispatchers.IO).launch {
-            setData(6, 20f)
-//            withContext(Dispatchers.Main) {
+        coroutineJob = CoroutineScope(Dispatchers.IO).launch {
+            val barEntries = setData()
+            withContext(Dispatchers.Main) {
+                val barDataSet = BarDataSet(barEntries, getString(R.string.statistics_creation_time))
+                val iValueFormatter = IValueFormatterExt(context)
+                barDataSet.valueFormatter = iValueFormatter
+                val colors = intArrayOf(
+                    Color.rgb(193, 37, 82), Color.rgb(255, 102, 0), Color.rgb(245, 199, 0),
+                    Color.rgb(106, 150, 31), Color.rgb(179, 100, 53), Color.rgb(115, 130, 153))
+                barDataSet.setColors(*colors)
+                barDataSet.setDrawIcons(false)
+                barDataSet.setDrawValues(true)
+                val dataSets = ArrayList<IBarDataSet>()
+                dataSets.add(barDataSet)
+                val barData = BarData(dataSets)
+                barData.setValueTextSize(10f)
+                barData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
+                barData.barWidth = 0.9f
+                mBarChart.data = barData
                 mBarChart.animateY(2000)
                 mBarChartProgressBar.visibility = View.GONE
-//            }
-//        }
+            }
+        }
     }
 
-    private fun setData(count: Int, range: Float) {
+    override fun onDestroy() {
+        super.onDestroy()
+        coroutineJob?.run { if (isActive) cancel() }
+    }
+
+    private var coroutineJob: Job? = null
+
+    private fun setData(count: Int = 6, range: Float = 20F): ArrayList<BarEntry> {
         val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
         val listDiary = EasyDiaryDbHelper.findDiary(null, realmInstance = realmInstance)
         realmInstance.close()
@@ -130,31 +154,13 @@ class BarChartFragment : androidx.fragment.app.Fragment() {
                 map.put(itemNumber, (map[itemNumber] ?: 0) + 1)
             }
         }
-
         val barEntries = ArrayList<BarEntry>()
         for (i in 1..count) {
             var total = 0
             if (map[i] != null) total = map[i] ?: 0
             barEntries.add(BarEntry(i.toFloat(), total.toFloat()))
         }
-        val barDataSet = BarDataSet(barEntries, getString(R.string.statistics_creation_time))
-        val iValueFormatter = IValueFormatterExt(context)
-        barDataSet.valueFormatter = iValueFormatter
-        val colors = intArrayOf(
-                Color.rgb(193, 37, 82), Color.rgb(255, 102, 0), Color.rgb(245, 199, 0),
-                Color.rgb(106, 150, 31), Color.rgb(179, 100, 53), Color.rgb(115, 130, 153))
-        barDataSet.setColors(*colors)
-        barDataSet.setDrawIcons(false)
-        barDataSet.setDrawValues(true)
-        val dataSets = ArrayList<IBarDataSet>()
-        dataSets.add(barDataSet)
-
-        val barData = BarData(dataSets)
-        barData.setValueTextSize(10f)
-        barData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
-        barData.barWidth = 0.9f
-
-        mBarChart.data = barData
+        return barEntries
     }
 
     private fun hourToItemNumber(hour: Int): Int = when (hour) {
