@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.dialogs
 
+import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -27,7 +28,7 @@ class DashboardDialogFragment : DialogFragment() {
         requireActivity().run {
             val height = getDefaultDisplay().y
             dialog?.window?.also {
-                it.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, height)
+                it.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
                 it.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                 it.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
             }
@@ -48,7 +49,7 @@ class DashboardDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mBinding.run {
-            appBar.visibility = View.GONE
+//            appBar.visibility = View.GONE
             close.visibility = View.VISIBLE
             close.setOnClickListener { dismiss() }
 
@@ -73,7 +74,7 @@ class DashboardDialogFragment : DialogFragment() {
                 }
             }
 
-            if (savedInstanceState == null) {
+//            if (savedInstanceState == null) {
                 childFragmentManager.beginTransaction().run {
                     // PhotoHighlight
                     replace(R.id.photoHighlight, PhotoHighlightFragment().apply {
@@ -84,62 +85,61 @@ class DashboardDialogFragment : DialogFragment() {
                         }
                     })
 
-                    // DashBoardSummary
-                    replace(R.id.summary, DashBoardSummaryFragment())
-
-                    // Daily Symbol
-                    replace(R.id.dashboard_daily_symbol, DailySymbolFragment())
-
-                    // DashBoardRank-Lifetime
-                    replace(R.id.lifetime, DashBoardRankFragment().apply {
-                        val args = Bundle()
-                        args.putString(DashBoardRankFragment.MODE_FLAG, DashBoardRankFragment.MODE_LIFETIME)
-                        arguments = args
-                    })
-
-                    // DashBoardRank-LastMonth
-                    replace(R.id.lastMonth, DashBoardRankFragment().apply {
-                        val args = Bundle()
-                        args.putString(DashBoardRankFragment.MODE_FLAG, DashBoardRankFragment.MODE_LAST_MONTH)
-                        arguments = args
-                    })
-
-                    // DashBoardRank-LastWeek
-                    replace(R.id.lastWeek, DashBoardRankFragment().apply {
-                        val args = Bundle()
-                        args.putString(DashBoardRankFragment.MODE_FLAG, DashBoardRankFragment.MODE_LAST_WEEK)
-                        arguments = args
-                    })
-
-                    // Statistics-Creation Time
-                    val chartTitle = getString(R.string.statistics_creation_time)
-                    replace(R.id.statistics1, BarChartFragment().apply {
-                        val args = Bundle()
-                        args.putString(BarChartFragment.CHART_TITLE, chartTitle)
-                        arguments = args
-                    })
-
-                    // Statistics-Symbol All
-                    val symbolAllTitle = getString(R.string.statistics_symbol_all)
-                    replace(R.id.statistics2, BarChartFragmentT2().apply {
-                        val args = Bundle()
-                        args.putString(BarChartFragment.CHART_TITLE, symbolAllTitle)
-                        arguments = args
-                    })
-
-                    // Statistics-Symbol TopTen
-                    val symbolTopTenTitle = getString(R.string.statistics_symbol_top_ten)
-                    replace(R.id.statistics3, HorizontalBarChartFragment().apply {
-                        val args = Bundle()
-                        args.putString(BarChartFragment.CHART_TITLE, symbolTopTenTitle)
-                        arguments = args
-                    })
+//                    // DashBoardSummary
+//                    replace(R.id.summary, DashBoardSummaryFragment())
+//
+//                    // Daily Symbol
+//                    replace(R.id.dashboard_daily_symbol, DailySymbolFragment())
+//
+//                    // DashBoardRank-Lifetime
+//                    replace(R.id.lifetime, DashBoardRankFragment().apply {
+//                        val args = Bundle()
+//                        args.putString(DashBoardRankFragment.MODE_FLAG, DashBoardRankFragment.MODE_LIFETIME)
+//                        arguments = args
+//                    })
+//
+//                    // DashBoardRank-LastMonth
+//                    replace(R.id.lastMonth, DashBoardRankFragment().apply {
+//                        val args = Bundle()
+//                        args.putString(DashBoardRankFragment.MODE_FLAG, DashBoardRankFragment.MODE_LAST_MONTH)
+//                        arguments = args
+//                    })
+//
+//                    // DashBoardRank-LastWeek
+//                    replace(R.id.lastWeek, DashBoardRankFragment().apply {
+//                        val args = Bundle()
+//                        args.putString(DashBoardRankFragment.MODE_FLAG, DashBoardRankFragment.MODE_LAST_WEEK)
+//                        arguments = args
+//                    })
+//
+//                    // Statistics-Creation Time
+//                    val chartTitle = getString(R.string.statistics_creation_time)
+//                    replace(R.id.statistics1, BarChartFragment().apply {
+//                        val args = Bundle()
+//                        args.putString(BarChartFragment.CHART_TITLE, chartTitle)
+//                        arguments = args
+//                    })
+//
+//                    // Statistics-Symbol All
+//                    val symbolAllTitle = getString(R.string.statistics_symbol_all)
+//                    replace(R.id.statistics2, BarChartFragmentT2().apply {
+//                        val args = Bundle()
+//                        args.putString(BarChartFragment.CHART_TITLE, symbolAllTitle)
+//                        arguments = args
+//                    })
+//
+//                    // Statistics-Symbol TopTen
+//                    val symbolTopTenTitle = getString(R.string.statistics_symbol_top_ten)
+//                    replace(R.id.statistics3, HorizontalBarChartFragment().apply {
+//                        val args = Bundle()
+//                        args.putString(BarChartFragment.CHART_TITLE, symbolTopTenTitle)
+//                        arguments = args
+//                    })
 
                     // Commit
                     commit()
                 }
-            }
-
+//            }
 //            childFragmentManager.executePendingTransactions()
 //            EasyDiaryUtils.disableTouchEvent(dashboardDimmer)
             dashboardDimmer.visibility = View.GONE
@@ -150,13 +150,10 @@ class DashboardDialogFragment : DialogFragment() {
     override fun onResume() {
         super.onResume()
         mBinding.run {
-//            root.setBackgroundColor(requireActivity().config.screenBackgroundColor)
-            root.setBackgroundColor(Color.RED)
+            root.setBackgroundColor(requireActivity().config.screenBackgroundColor)
+//            root.setBackgroundColor(Color.RED)
             FontUtils.setFontsTypeface(requireContext(), null, root, true)
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
 }
