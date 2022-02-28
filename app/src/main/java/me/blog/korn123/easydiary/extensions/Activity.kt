@@ -15,6 +15,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
+import android.util.DisplayMetrics
 import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -181,11 +182,34 @@ fun Activity.statusBarHeight(): Int {
     return statusBarHeight
 }
 
+fun Activity.navigationBarHeight(): Int {
+    var statusBarHeight = 0
+    val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
+    if (resourceId > 0) {
+        statusBarHeight = resources.getDimensionPixelSize(resourceId)
+    }
+    return statusBarHeight
+}
+
 fun Activity.getDefaultDisplay(): Point {
     val display = windowManager.defaultDisplay
     val size = Point()
     display.getSize(size)
     return size
+}
+
+fun Activity.getDisplayMetrics(): DisplayMetrics {
+    val outMetrics = DisplayMetrics()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        val display = display
+        display?.getRealMetrics(outMetrics)
+    } else {
+        @Suppress("DEPRECATION")
+        val display = windowManager.defaultDisplay
+        @Suppress("DEPRECATION")
+        display.getMetrics(outMetrics)
+    }
+    return outMetrics
 }
 
 fun Activity.getRootViewHeight(): Int {

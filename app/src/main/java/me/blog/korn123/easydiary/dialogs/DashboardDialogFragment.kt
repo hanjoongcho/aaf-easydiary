@@ -14,10 +14,7 @@ import io.github.aafactory.commons.extensions.dpToPixel
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityDashboardBinding
-import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.getDefaultDisplay
-import me.blog.korn123.easydiary.extensions.isLandScape
-import me.blog.korn123.easydiary.extensions.statusBarHeight
+import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.fragments.*
 
 class DashboardDialogFragment : DialogFragment() {
@@ -26,9 +23,11 @@ class DashboardDialogFragment : DialogFragment() {
     override fun onStart() {
         super.onStart()
         requireActivity().run {
-            val height = getDefaultDisplay().y
+            var height = getDisplayMetrics().heightPixels
+            height = if (requireActivity().isLandScape()) height.minus(statusBarHeight()) else height.minus(statusBarHeight()).minus(navigationBarHeight())
             dialog?.window?.also {
-                it.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+//                it.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                it.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, height)
                 it.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                 it.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
             }
