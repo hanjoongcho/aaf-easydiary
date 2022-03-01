@@ -311,18 +311,16 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         }
     }
 
-    lateinit var mPhotoHighlightFragment: PhotoHighlightFragment
     private fun setupPhotoHighlight() {
-        mPhotoHighlightFragment = PhotoHighlightFragment().apply {
-            arguments = Bundle().apply {
-                putInt(PhotoHighlightFragment.PAGE_STYLE, PageStyle.MULTI_PAGE_SCALE)
-                putFloat(PhotoHighlightFragment.REVEAL_WIDTH, 20F)
-                putFloat(PhotoHighlightFragment.PAGE_MARGIN, 5F)
-            }
-        }
-
         supportFragmentManager.beginTransaction().run {
-            replace(R.id.layout_banner_container, mPhotoHighlightFragment)
+            replace(R.id.layout_banner_container, PhotoHighlightFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(PhotoHighlightFragment.PAGE_STYLE, PageStyle.MULTI_PAGE_SCALE)
+                    putFloat(PhotoHighlightFragment.REVEAL_WIDTH, 20F)
+                    putFloat(PhotoHighlightFragment.PAGE_MARGIN, 5F)
+                }
+                togglePhotoHighlightCallback = { isVisible: Boolean -> togglePhotoHighlight(isVisible) }
+            })
             commit()
         }
     }

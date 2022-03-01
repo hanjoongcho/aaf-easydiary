@@ -35,6 +35,7 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
      ***************************************************************************************************/
     private lateinit var mBinding: FragmentPhotoHighlightBinding
     private lateinit var mBannerHistory: BannerViewPager<History>
+    var togglePhotoHighlightCallback: ((isVisible: Boolean) -> Unit)? = null
 
 
     /***************************************************************************************************
@@ -77,14 +78,6 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
                 setIndicatorGravity(IndicatorGravity.END)
                 setIndicatorView(this)
             }
-        }
-    }
-
-    private fun togglePhotoHighlight(isVisible: Boolean) {
-        if (requireActivity() is DiaryMainActivity) {
-            (requireActivity() as DiaryMainActivity).togglePhotoHighlight(isVisible)
-        } else if (requireActivity() is DashboardActivity) {
-            (requireActivity() as DashboardActivity).togglePhotoHighlight(isVisible)
         }
     }
 
@@ -140,7 +133,7 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
                         historyItems.reverse()
 
                         if (historyItems.isNotEmpty()) {
-                            togglePhotoHighlight(true)
+                            togglePhotoHighlightCallback?.invoke(true)
                             mBinding.layoutBannerContainer.visibility = View.VISIBLE
                             mBannerHistory.run {
                                 setOnPageClickListener { _, position ->
@@ -167,7 +160,7 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
             }
         } else {
             // init default settings
-            togglePhotoHighlight(false)
+            togglePhotoHighlightCallback?.invoke(false)
             mBinding.run {
                 layoutBannerContainer.visibility = View.GONE
                 mBannerHistory.refreshData(mutableListOf())

@@ -81,6 +81,9 @@ class DashboardDialogFragment : DialogFragment() {
                         putFloat(PhotoHighlightFragment.REVEAL_WIDTH, 20F)
                         putFloat(PhotoHighlightFragment.PAGE_MARGIN, 5F)
                     }
+                    togglePhotoHighlightCallback = { isVisible: Boolean ->
+                        photoHighlight.visibility = if (isVisible) View.VISIBLE else View.GONE
+                    }
                 })
 
                 // DashBoardSummary
@@ -153,5 +156,4 @@ class DashboardDialogFragment : DialogFragment() {
             FontUtils.setFontsTypeface(requireContext(), null, root, true)
         }
     }
-
 }

@@ -55,6 +55,9 @@ class DashboardActivity : EasyDiaryActivity() {
                     putFloat(REVEAL_WIDTH, 20F)
                     putFloat(PAGE_MARGIN, 5F)
                 }
+                togglePhotoHighlightCallback = { isVisible: Boolean ->
+                    mBinding.photoHighlight.visibility = if (isVisible) View.VISIBLE else View.GONE
+                }
             })
 
             // DashBoardSummary
@@ -184,7 +187,4 @@ class DashboardActivity : EasyDiaryActivity() {
      *   etc functions
      *
      ***************************************************************************************************/
-    fun togglePhotoHighlight(isVisible: Boolean) {
-        mBinding.photoHighlight.visibility = if (isVisible) View.VISIBLE else View.GONE
-    }
 }
