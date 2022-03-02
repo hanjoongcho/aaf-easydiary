@@ -45,7 +45,7 @@ class DailySymbolFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         mBinding = FragmentDailySymbolBinding.inflate(layoutInflater)
         return mBinding.root
     }

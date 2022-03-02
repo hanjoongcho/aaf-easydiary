@@ -60,6 +60,7 @@ class DashboardDialogFragment : DialogFragment() {
                 lifetime.layoutParams.width = width
                 lastMonth.layoutParams.width = width
                 lastWeek.layoutParams.width = width
+//                dDay.layoutParams.width = width
             }
 
             (requireActivity().getDefaultDisplay().x * 0.95).toInt().also {
@@ -88,12 +89,14 @@ class DashboardDialogFragment : DialogFragment() {
                     }
                 })
 
+                // DDay
+                replace(R.id.dDay, DDayFragment())
+
                 // DashBoardSummary
                 replace(R.id.summary, DashBoardSummaryFragment())
 
                 // Daily Symbol
                 replace(R.id.dashboard_daily_symbol, DailySymbolFragment())
-
 
                 // DashBoardRank-Lifetime
                 replace(R.id.lifetime, DashBoardRankFragment().apply {

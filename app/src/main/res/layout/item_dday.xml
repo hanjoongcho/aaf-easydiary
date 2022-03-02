@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/AppCard">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <me.blog.korn123.easydiary.views.FixedTextView
+                    android:id="@+id/alarmLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/bg_card_stamp"
+                    android:padding="5dp"
+                    android:text="Diary Writing"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="11dp"
+                    app:applyGlobalColor="false"
+                    app:applyGlobalSize="false" />
+
+                <me.blog.korn123.easydiary.views.FixedTextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:text="07:00"
+                    android:textSize="44sp"
+                    app:applyGlobalColor="true"
+                    app:applyGlobalSize="false" />
+
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:id="@+id/alarm_days"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="true"
+                    android:layout_below="@+id/title"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:padding="@dimen/tiny_margin"
+                    android:textSize="@dimen/bigger_text_size"
+                    tools:text="Mon, Tue, Wed, Thu, Fri"/>
+
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:id="@+id/alarmDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="true"
+                    android:layout_below="@id/alarm_days"
+                    android:padding="@dimen/tiny_margin"
+                    tools:text="Mon, Tue, Wed, Thu, Fri"/>
+
+                <com.simplemobiletools.commons.views.MySwitchCompat
+                    android:id="@+id/alarm_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/alarm_days"
+                    android:layout_below="@+id/alarmLabel"
+                    android:layout_alignParentEnd="true"
+                    android:checked="true"
+                    android:paddingHorizontal="10dp" />
+            </RelativeLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>
+
+

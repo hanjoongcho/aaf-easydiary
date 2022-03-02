@@ -92,7 +92,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         }
         pauseLock()
     }
-    var diaryMode = DiaryMode.READ
+    var mDiaryMode = DiaryMode.READ
 
 
     /***************************************************************************************************
@@ -134,7 +134,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putSerializable(DIARY_MODE, diaryMode)
+        outState.putSerializable(DIARY_MODE, mDiaryMode)
         super.onSaveInstanceState(outState)
     }
 
@@ -170,7 +170,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                diaryMode = DiaryMode.READ
+                mDiaryMode = DiaryMode.READ
                 invalidateOptionsMenu()
                 mDiaryMainItemAdapter?.notifyDataSetChanged()
                 return true
@@ -231,7 +231,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        when (diaryMode) {
+        when (mDiaryMode) {
             DiaryMode.READ -> {
                 supportActionBar?.setDisplayHomeAsUpEnabled(false)
                 menuInflater.inflate(R.menu.activity_diary_main, menu)
@@ -272,7 +272,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         when (savedInstanceState == null) {
             true -> checkWhatsNewDialog()
             false -> {
-                diaryMode = savedInstanceState.getSerializable(DIARY_MODE) as DiaryMode
+                mDiaryMode = savedInstanceState.getSerializable(DIARY_MODE) as DiaryMode
             }
         }
     }
@@ -292,6 +292,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                     putInt(PhotoHighlightFragment.PAGE_STYLE, PageStyle.MULTI_PAGE_SCALE)
                     putFloat(PhotoHighlightFragment.REVEAL_WIDTH, 20F)
                     putFloat(PhotoHighlightFragment.PAGE_MARGIN, 5F)
+                    putBoolean(PhotoHighlightFragment.AUTO_PLAY, true)
                 }
                 togglePhotoHighlightCallback = { isVisible: Boolean -> togglePhotoHighlight(isVisible) }
             })
@@ -299,7 +300,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         }
     }
 
-    fun togglePhotoHighlight(isVisible: Boolean) {
+    private fun togglePhotoHighlight(isVisible: Boolean) {
         if (config.enableDebugMode) makeToast("History Highlight Last updated time: ${System.currentTimeMillis().minus(mLastHistoryCheckMillis) / 1000}seconds ago")
 
 
@@ -474,24 +475,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             mBinding.query.text = null
         }
 
-//        mBinding.diaryListView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, _, i, _ ->
-//            val diaryDto = adapterView.adapter.getItem(i) as Diary
-//            val detailIntent = Intent(this@DiaryMainActivity, DiaryReadActivity::class.java)
-//            detailIntent.putExtra(DIARY_SEQUENCE, diaryDto.sequence)
-//            detailIntent.putExtra(SELECTED_SEARCH_QUERY, mDiaryMainItemAdapter?.currentQuery)
-//            detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE, viewModel.symbol.value ?: 0)
-//            TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, detailIntent)
-//        }
-//
-//        mBinding.diaryListView.setOnItemLongClickListener { _, _, _, _ ->
-//            EasyDiaryDbHelper.clearSelectedStatus()
-//            diaryMode = DiaryMode.DELETE
-//            invalidateOptionsMenu()
-//            refreshList()
-////            mDiaryMainItemAdapter?.notifyDataSetChanged()
-//            true
-//        }
-
         EasyDiaryUtils.disableTouchEvent(mBinding.modalContainer)
 
         mBinding.insertDiaryButton.setOnClickListener{
@@ -575,7 +558,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, detailIntent)
         }) {
             EasyDiaryDbHelper.clearSelectedStatus()
-            diaryMode = DiaryMode.DELETE
+            mDiaryMode = DiaryMode.DELETE
             invalidateOptionsMenu()
             refreshList()
             //            mDiaryMainItemAdapter?.notifyDataSetChanged()

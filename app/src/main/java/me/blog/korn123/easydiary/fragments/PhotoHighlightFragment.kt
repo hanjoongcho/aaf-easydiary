@@ -66,6 +66,7 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
         mBannerHistory = (mBinding.bannerHistory as BannerViewPager<History>).apply {
             setLifecycleRegistry(lifecycle)
             adapter = HistoryAdapter()
+            setAutoPlay(arguments?.getBoolean(AUTO_PLAY) ?: false)
             setInterval(3000)
             setScrollDuration(800)
             setPageMargin(requireContext().dpToPixel(arguments?.getFloat(PAGE_MARGIN) ?: 10F))
@@ -172,5 +173,6 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
         const val PAGE_STYLE = "page_style"
         const val PAGE_MARGIN = "page_margin"
         const val REVEAL_WIDTH = "reveal_width"
+        const val AUTO_PLAY = "auto_play"
     }
 }
