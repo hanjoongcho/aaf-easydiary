@@ -112,35 +112,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             title = getString(R.string.read_diary_title)
         }
 
-        mDiaryList.addAll(EasyDiaryDbHelper.findDiary(null))
-        mDiaryMainItemAdapter = DiaryMainItemAdapter(this, mDiaryList, {
-            val detailIntent = Intent(this@DiaryMainActivity, DiaryReadingActivity::class.java)
-            detailIntent.putExtra(DIARY_SEQUENCE, it.sequence)
-            detailIntent.putExtra(SELECTED_SEARCH_QUERY, mDiaryMainItemAdapter?.currentQuery)
-            detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE, viewModel.symbol.value ?: 0)
-            TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, detailIntent)
-        }) {
-            EasyDiaryDbHelper.clearSelectedStatus()
-            diaryMode = DiaryMode.DELETE
-            invalidateOptionsMenu()
-            refreshList()
-            //            mDiaryMainItemAdapter?.notifyDataSetChanged()
-        }
-
-        mGridLayoutManager =  GridLayoutManager(this@DiaryMainActivity, diaryMainSpanCount())
-        mBinding.diaryListView.run {
-            adapter = mDiaryMainItemAdapter
-//            layoutManager = LinearLayoutManager(this@DiaryMainActivity, LinearLayoutManager.VERTICAL, false)
-            layoutManager = mGridLayoutManager
-            addItemDecoration(GridItemDecorationDiaryMain(resources.getDimensionPixelSize(R.dimen.card_layout_padding), this@DiaryMainActivity))
-            setPopUpTypeface(FontUtils.getCommonTypeface(this@DiaryMainActivity))
-        }
-
-        if (!config.isInitDummyData) {
-            initSampleData()
-            config.isInitDummyData = true
-        }
-
+//        mDiaryList.addAll(EasyDiaryDbHelper.findDiary(null))
+        initDiaryGrid()
+        initDummyData()
         updateDrawableColorInnerCardView(mBinding.imgClearQuery)
         bindEvent()
         initShowcase()
@@ -583,5 +557,42 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 System.currentTimeMillis() - 4000000L, getString(R.string.sample_diary_title_4), getString(R.string.sample_diary_4),
                 4
         ))
+    }
+
+    private fun initDummyData() {
+        if (!config.isInitDummyData) {
+            initSampleData()
+            config.isInitDummyData = true
+        }
+    }
+
+    private fun initDiaryGrid() {
+        mDiaryMainItemAdapter = DiaryMainItemAdapter(this, mDiaryList, {
+            val detailIntent = Intent(this@DiaryMainActivity, DiaryReadingActivity::class.java)
+            detailIntent.putExtra(DIARY_SEQUENCE, it.sequence)
+            detailIntent.putExtra(SELECTED_SEARCH_QUERY, mDiaryMainItemAdapter?.currentQuery)
+            detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE, viewModel.symbol.value ?: 0)
+            TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, detailIntent)
+        }) {
+            EasyDiaryDbHelper.clearSelectedStatus()
+            diaryMode = DiaryMode.DELETE
+            invalidateOptionsMenu()
+            refreshList()
+            //            mDiaryMainItemAdapter?.notifyDataSetChanged()
+        }
+
+        mGridLayoutManager = GridLayoutManager(this@DiaryMainActivity, diaryMainSpanCount())
+        mBinding.diaryListView.run {
+            adapter = mDiaryMainItemAdapter
+            //            layoutManager = LinearLayoutManager(this@DiaryMainActivity, LinearLayoutManager.VERTICAL, false)
+            layoutManager = mGridLayoutManager
+            addItemDecoration(
+                GridItemDecorationDiaryMain(
+                    resources.getDimensionPixelSize(R.dimen.card_layout_padding),
+                    this@DiaryMainActivity
+                )
+            )
+            setPopUpTypeface(FontUtils.getCommonTypeface(this@DiaryMainActivity))
+        }
     }
 }
