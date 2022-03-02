@@ -233,6 +233,10 @@ class Config(val context: Context) {
         get() = prefs.getBoolean(SETTING_ENABLE_STATUSBAR_DARKEN_COLOR, true)
         set(enableStatusBarDarkenColor) = prefs.edit().putBoolean(SETTING_ENABLE_STATUSBAR_DARKEN_COLOR, enableStatusBarDarkenColor).apply()
 
+    var enableWelcomeDashboardPopup: Boolean
+        get() = prefs.getBoolean(SETTING_ENABLE_WELCOME_DASHBOARD_POPUP, false)
+        set(enableWelcomeDashboardPopup) = prefs.edit().putBoolean(SETTING_ENABLE_WELCOME_DASHBOARD_POPUP, enableWelcomeDashboardPopup).apply()
+
     companion object {
         fun newInstance(context: Context) = Config(context)
     }

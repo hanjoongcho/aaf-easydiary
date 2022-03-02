@@ -159,6 +159,10 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                         enablePhotoHighlightSwitcher.toggle()
                         config.enablePhotoHighlight = enablePhotoHighlightSwitcher.isChecked
                     }
+                    R.id.enable_welcome_dashboard_popup -> {
+                        enableWelcomeDashboardPopupSwitcher.toggle()
+                        config.enableWelcomeDashboardPopup = enableWelcomeDashboardPopupSwitcher.isChecked
+                    }
                 }
             }
         }
@@ -179,6 +183,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
             taskSymbolTopOrder.setOnClickListener(mOnClickListener)
             enableReviewFlow.setOnClickListener(mOnClickListener)
             enablePhotoHighlight.setOnClickListener(mOnClickListener)
+            enableWelcomeDashboardPopup.setOnClickListener(mOnClickListener)
             calendarStartDay.setOnCheckedChangeListener { _, i ->
                 requireActivity().config.calendarStartDay = when (i) {
                     R.id.startMonday -> CALENDAR_START_DAY_MONDAY
@@ -212,6 +217,7 @@ class SettingsBasicFragment : androidx.fragment.app.Fragment() {
                 taskSymbolTopOrderSwitcher.isChecked = config.enableTaskSymbolTopOrder
                 enableReviewFlowSwitcher.isChecked = config.enableReviewFlow
                 enablePhotoHighlightSwitcher.isChecked = config.enablePhotoHighlight
+                enableWelcomeDashboardPopupSwitcher.isChecked = config.enableWelcomeDashboardPopup
 
                 when (config.calendarStartDay) {
                     CALENDAR_START_DAY_MONDAY -> startMonday.isChecked = true

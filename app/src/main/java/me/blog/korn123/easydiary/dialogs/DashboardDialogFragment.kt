@@ -1,6 +1,5 @@
 package me.blog.korn123.easydiary.dialogs
 
-import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -23,13 +22,16 @@ class DashboardDialogFragment : DialogFragment() {
     override fun onStart() {
         super.onStart()
         requireActivity().run {
-            var height = getDisplayMetrics().heightPixels
-            height = if (requireActivity().isLandScape()) height.minus(statusBarHeight()) else height.minus(statusBarHeight()).minus(navigationBarHeight())
-            dialog?.window?.also {
-//                it.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-                it.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, height)
-                it.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                it.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+            getDisplayMetrics().also {
+                val width = it.widthPixels
+                val height = if (requireActivity().isLandScape()) it.heightPixels.minus(statusBarHeight()) else it.heightPixels.minus(statusBarHeight()).minus(navigationBarHeight())
+                val margin = 0
+                dialog?.window?.run {
+//                setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                    setLayout(width.minus(margin), height.minus(margin))
+                    setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                    clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+                }
             }
         }
     }
@@ -38,7 +40,7 @@ class DashboardDialogFragment : DialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         mBinding = ActivityDashboardBinding.inflate(layoutInflater)
 
 

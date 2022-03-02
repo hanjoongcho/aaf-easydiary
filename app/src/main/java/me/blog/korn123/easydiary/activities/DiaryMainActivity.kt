@@ -285,9 +285,9 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
      *
      ***************************************************************************************************/
     private fun checkIntent() {
-        when (intent.getBooleanExtra(EXECUTION_MODE_AUTOMATICALLY_MOVE_DASHBOARD, false)) {
+        when (intent.getBooleanExtra(EXECUTION_MODE_WELCOME_DASHBOARD, false)) {
             true -> {
-                intent.removeExtra(EXECUTION_MODE_AUTOMATICALLY_MOVE_DASHBOARD)
+                intent.removeExtra(EXECUTION_MODE_WELCOME_DASHBOARD)
 //                TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, Intent(this@DiaryMainActivity, DashboardActivity::class.java))
                 DashboardDialogFragment().apply { show(supportFragmentManager, "DashboardDialog") }
             }

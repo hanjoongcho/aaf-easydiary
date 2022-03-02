@@ -467,8 +467,8 @@ const val DIARY_EXECUTION_MODE = "diary_execution_mode"
 // Diary Mode Case01: DiaryMainWidget or getOpenAlarmTabIntent
 const val EXECUTION_MODE_ACCESS_FROM_OUTSIDE = "execution_mode_access_from_outside"
 
-// Diary Mode Case02: Automatically moves to the Dashboard when app is first launched
-const val EXECUTION_MODE_AUTOMATICALLY_MOVE_DASHBOARD = "execution_move_automatically_move_dashboard"
+// Diary Mode Case02: Automatically open Dashboard popup when app is restarting after finish
+const val EXECUTION_MODE_WELCOME_DASHBOARD = "execution_mode_welcome_dashboard"
 
 
 /***************************************************************************************************
@@ -494,7 +494,7 @@ const val MIME_TYPE_HTML = "text/html"
  *   Theme Color
  *
  ***************************************************************************************************/
-const val AUTO_SETTUP_SCRENN_BACKGROUND_DARKEN_COLOR = -30
+const val AUTO_SETTUP_SCREEN_BACKGROUND_DARKEN_COLOR = -30
 const val EASYDIARY_THEME_PRIMARY_COLOR = "#07ABB3"
 const val EASYDIARY_THEME_BACKGROUND_COLOR = "#FFFFFF"
 const val EASYDIARY_THEME_SCREEN_BACKGROUND_COLOR = "#EAEAEA"
@@ -569,6 +569,7 @@ const val SETTING_POSTCARD_SPAN_COUNT_PORTRAIT = "setting_postcard_span_count_po
 const val SETTING_DIARY_MAIN_SPAN_COUNT_LANDSCAPE = "setting_diary_main_span_count_landscape"
 const val SETTING_DIARY_MAIN_SPAN_COUNT_PORTRAIT = "setting_diary_main_span_count_portrait"
 const val SETTING_ENABLE_STATUSBAR_DARKEN_COLOR = "setting_enable_statusbar_darken_color"
+const val SETTING_ENABLE_WELCOME_DASHBOARD_POPUP = "setting_enable_welcome_dashboard_popup"
 const val SELECTED_SYMBOLS_DEFAULT = "1,2,3,4,5"
 const val HOLD_POSITION_ENTER_EDIT_SCREEN = "hold_position_enter_edit_screen"
 const val FINGERPRINT_ENCRYPT_DATA = "fingerprint_encrypt_data"
