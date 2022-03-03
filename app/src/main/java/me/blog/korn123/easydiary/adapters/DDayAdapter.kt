@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.adapters
 import android.app.Activity
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.simplemobiletools.commons.extensions.toast
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.databinding.ItemDdayAddBinding
 import me.blog.korn123.easydiary.databinding.ItemDdayBinding
@@ -64,15 +65,18 @@ class DDayAdapter(
 
         init {
             activity.run {
-                initTextSize(itemDDayAddBinding.root)
-                updateTextColors(itemDDayAddBinding.root)
-                updateAppViews(itemDDayAddBinding.root)
-                updateCardViewPolicy(itemDDayAddBinding.root)
-                FontUtils.setFontsTypeface(this, this.assets, null, itemDDayAddBinding.root)
+                itemDDayAddBinding.root.also {
+                    initTextSize(it)
+                    updateTextColors(it)
+                    updateAppViews(it)
+                    updateCardViewPolicy(it)
+                    FontUtils.setFontsTypeface(this, this.assets, null, it)
+                }
             }
         }
 
         fun bindTo(dDay: DDay) {
+            itemDDayAddBinding.root.setOnClickListener { activity.toast(dDay.title ?: "") }
             itemDDayAddBinding.run {}
         }
     }

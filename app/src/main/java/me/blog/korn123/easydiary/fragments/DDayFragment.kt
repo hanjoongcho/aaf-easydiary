@@ -33,7 +33,9 @@ class DDayFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         mDDayItems.add(DDay("Hello DDay!!!"))
-        mDDayItems.add(DDay("Awesome Day!!!"))
+        mDDayItems.add(DDay("Hello DDay!!!"))
+        mDDayItems.add(DDay("Hello DDay!!!"))
+        mDDayItems.add(DDay("New D-Day!!!"))
         mDDayAdapter = DDayAdapter(requireActivity(), mDDayItems)
 
         mBinging.run {
