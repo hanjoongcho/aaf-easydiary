@@ -4,6 +4,7 @@ import android.app.Activity
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import me.blog.korn123.commons.utils.FontUtils
+import me.blog.korn123.easydiary.databinding.ItemDdayAddBinding
 import me.blog.korn123.easydiary.databinding.ItemDdayBinding
 import me.blog.korn123.easydiary.extensions.initTextSize
 import me.blog.korn123.easydiary.extensions.updateAppViews
@@ -15,14 +16,27 @@ class DDayAdapter(
     val activity: Activity,
     private val dDayItems: MutableList<DDay>
 
-) : RecyclerView.Adapter<DDayAdapter.DDayViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DDayViewHolder {
-        return DDayViewHolder(ItemDdayBinding.inflate(activity.layoutInflater))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType == 0) {
+            true -> DDayViewHolder(ItemDdayBinding.inflate(activity.layoutInflater))
+            false -> DDayAddViewHolder(ItemDdayAddBinding.inflate(activity.layoutInflater))
+        }
     }
 
-    override fun onBindViewHolder(holder: DDayViewHolder, position: Int) {
-        holder.bindTo(dDayItems[position])
+    override fun getItemViewType(position: Int): Int {
+        return when (dDayItems.size == position.plus(1)) {
+            true -> 1
+            false -> 0
+        }
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        return when (dDayItems.size == position.plus(1)) {
+            true -> (holder as DDayAddViewHolder).bindTo(dDayItems[position])
+            false -> (holder as DDayViewHolder).bindTo(dDayItems[position])
+        }
     }
 
     inner class DDayViewHolder(private val itemDDayBinding: ItemDdayBinding) : RecyclerView.ViewHolder(itemDDayBinding.root) {
@@ -43,6 +57,23 @@ class DDayAdapter(
                 targetDate.text = "2022.03.03"
                 remainDays.text = "+100"
             }
+        }
+    }
+
+    inner class DDayAddViewHolder(private val itemDDayAddBinding: ItemDdayAddBinding) : RecyclerView.ViewHolder(itemDDayAddBinding.root) {
+
+        init {
+            activity.run {
+                initTextSize(itemDDayAddBinding.root)
+                updateTextColors(itemDDayAddBinding.root)
+                updateAppViews(itemDDayAddBinding.root)
+                updateCardViewPolicy(itemDDayAddBinding.root)
+                FontUtils.setFontsTypeface(this, this.assets, null, itemDDayAddBinding.root)
+            }
+        }
+
+        fun bindTo(dDay: DDay) {
+            itemDDayAddBinding.run {}
         }
     }
 

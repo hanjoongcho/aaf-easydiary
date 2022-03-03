@@ -205,6 +205,7 @@
         <item name="contentPadding">@dimen/dashboard_card_padding</item>
         <item name="cardCornerRadius">@dimen/dashboard_card_radius</item>
         <item name="fixedAppcompatPadding">true</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
     </style>
     <style name="text_popup_menu_item">
         <item name="android:layout_width">match_parent</item>

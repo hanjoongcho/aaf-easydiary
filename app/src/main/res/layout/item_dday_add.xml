@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<me.blog.korn123.easydiary.views.FixedCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/card_dashboard"
+    android:layout_width="100dp"
+    android:layout_height="wrap_content">
+    <me.blog.korn123.easydiary.views.FixedTextView
+        android:text="ADD"
+        app:applyGlobalColor="false"
+        app:applyGlobalSize="false"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</me.blog.korn123.easydiary.views.FixedCardView>
+
+
+
