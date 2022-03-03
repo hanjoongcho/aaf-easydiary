@@ -32,6 +32,12 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <LinearLayout
+                android:id="@+id/dDay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+            
+            <LinearLayout
                 android:orientation="vertical"
                 android:id="@+id/dashboard_daily_symbol"
                 android:layout_width="match_parent"
@@ -45,12 +51,6 @@
                 android:layout_height="200dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"/>
-
-            <LinearLayout
-                android:id="@+id/dDay"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
 
             <LinearLayout
                 android:id="@+id/summary"

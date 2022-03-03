@@ -15,4 +15,9 @@ open class DDay {
         this.title = title
         this.targetTimeStamp = targetTimeStamp
     }
+
+    fun getRemainDays(): String {
+        val diffDays = targetTimeStamp.minus(System.currentTimeMillis()).div((1000 * 60 * 60 * 24))
+        return if (diffDays >= 0) "D－$diffDays" else "D＋$diffDays"
+    }
 }

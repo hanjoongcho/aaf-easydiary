@@ -2,17 +2,15 @@ package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
-import com.simplemobiletools.commons.extensions.toast
 import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
+import me.blog.korn123.easydiary.databinding.DialogDdayBinding
 import me.blog.korn123.easydiary.databinding.ItemDdayAddBinding
 import me.blog.korn123.easydiary.databinding.ItemDdayBinding
-import me.blog.korn123.easydiary.extensions.initTextSize
-import me.blog.korn123.easydiary.extensions.updateAppViews
-import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
-import me.blog.korn123.easydiary.extensions.updateTextColors
+import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.models.DDay
 
 class DDayAdapter(
@@ -42,6 +40,35 @@ class DDayAdapter(
         }
     }
 
+    fun openDDayDialog(dDay: DDay, isNew: Boolean) {
+        activity.run activity@ {
+            val dDayBinding = DialogDdayBinding.inflate(layoutInflater).apply {
+                when (isNew) {
+                    true -> {
+                        title.hint = "Enter the name of the target date."
+                    }
+                    false -> {
+                        title.setText(dDay.title)
+                    }
+                }
+
+                targetDate.text = DateUtils.getDateStringFromTimeMillis(dDay.targetTimeStamp)
+                remainDays.text = dDay.getRemainDays()
+                root.setBackgroundColor(config.backgroundColor)
+                FontUtils.setFontsTypeface(this@activity, this@activity.assets, null, root)
+            }
+            var alertDialog: AlertDialog? = null
+            val builder = AlertDialog.Builder(this).apply {
+                setCancelable(false)
+                setPositiveButton(getString(android.R.string.ok), null)
+                setNegativeButton(getString(android.R.string.cancel)) { _, _ -> alertDialog?.dismiss() }
+            }
+            alertDialog = builder.create().apply {
+                updateAlertDialog(this, null, dDayBinding.root)
+            }
+        }
+    }
+
     inner class DDayViewHolder(private val itemDDayBinding: ItemDdayBinding) : RecyclerView.ViewHolder(itemDDayBinding.root) {
 
         init {
@@ -56,11 +83,13 @@ class DDayAdapter(
 
         fun bindTo(dDay: DDay) {
             EasyDiaryUtils.boldStringForce(activity, itemDDayBinding.remainDays)
-            val diffDays = dDay.targetTimeStamp.minus(System.currentTimeMillis()).div((1000 * 60 * 60 * 24))
             itemDDayBinding.run {
                 title.text = dDay.title
                 targetDate.text = DateUtils.getDateStringFromTimeMillis(dDay.targetTimeStamp)
-                remainDays.text = if (diffDays >= 0) "D－$diffDays" else "D＋$diffDays"
+                remainDays.text = dDay.getRemainDays()
+                root.setOnClickListener {
+                    openDDayDialog(dDay, false)
+                }
             }
         }
     }
@@ -80,8 +109,9 @@ class DDayAdapter(
         }
 
         fun bindTo(dDay: DDay) {
-            itemDDayAddBinding.root.setOnClickListener { activity.toast(dDay.title ?: "") }
-            itemDDayAddBinding.run {}
+            itemDDayAddBinding.root.setOnClickListener {
+                openDDayDialog(dDay, true)
+            }
         }
     }
 
