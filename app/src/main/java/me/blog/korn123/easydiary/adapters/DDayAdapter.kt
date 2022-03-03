@@ -40,6 +40,8 @@ class DDayAdapter(
         fun bindTo(dDay: DDay) {
             itemDDayBinding.run {
                 title.text = dDay.title
+                targetDate.text = "2022.03.03"
+                remainDays.text = "+100"
             }
         }
     }
