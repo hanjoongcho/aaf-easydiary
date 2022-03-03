@@ -23,7 +23,7 @@ class DashboardDialogFragment : DialogFragment() {
         super.onStart()
         requireActivity().run {
             getDisplayMetrics().also {
-                val width = it.widthPixels
+                val width = if (requireActivity().isLandScape()) it.widthPixels.minus(statusBarHeight()).minus(navigationBarHeight()) else it.widthPixels
                 val height = if (requireActivity().isLandScape()) it.heightPixels.minus(statusBarHeight()) else it.heightPixels.minus(statusBarHeight()).minus(navigationBarHeight())
                 val margin = 0
                 dialog?.window?.run {
@@ -160,5 +160,11 @@ class DashboardDialogFragment : DialogFragment() {
 //            root.setBackgroundColor(Color.RED)
             FontUtils.setFontsTypeface(requireContext(), null, root, true)
         }
+        requireActivity().updateStatusBarColor(config.screenBackgroundColor)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        requireActivity().updateStatusBarColor(config.primaryColor)
     }
 }
