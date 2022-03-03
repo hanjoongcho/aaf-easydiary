@@ -14,12 +14,11 @@
             tools:text="Awesome Day!!!"
             app:applyGlobalColor="false"
             app:applyGlobalSize="false"
-            android:textSize="15sp"
+            android:textSize="20sp"
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -27,12 +26,11 @@
             tools:text="2022.03.03"
             app:applyGlobalColor="false"
             app:applyGlobalSize="false"
-            android:textSize="25sp"
+            android:textSize="15sp"
             android:id="@+id/targetDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title" />
 
@@ -40,13 +38,12 @@
             tools:text="+100"
             app:applyGlobalColor="false"
             app:applyGlobalSize="false"
-            android:textSize="20sp"
+            android:textSize="30sp"
             android:id="@+id/remainDays"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/targetDate" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </me.blog.korn123.easydiary.views.FixedCardView>

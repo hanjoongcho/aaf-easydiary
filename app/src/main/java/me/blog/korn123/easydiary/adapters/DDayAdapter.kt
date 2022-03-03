@@ -4,6 +4,8 @@ import android.app.Activity
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.simplemobiletools.commons.extensions.toast
+import io.github.aafactory.commons.utils.DateUtils
+import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.databinding.ItemDdayAddBinding
 import me.blog.korn123.easydiary.databinding.ItemDdayBinding
@@ -53,10 +55,12 @@ class DDayAdapter(
         }
 
         fun bindTo(dDay: DDay) {
+            EasyDiaryUtils.boldStringForce(activity, itemDDayBinding.remainDays)
+            val diffDays = dDay.targetTimeStamp.minus(System.currentTimeMillis()).div((1000 * 60 * 60 * 24))
             itemDDayBinding.run {
                 title.text = dDay.title
-                targetDate.text = "2022.03.03"
-                remainDays.text = "+100"
+                targetDate.text = DateUtils.getDateStringFromTimeMillis(dDay.targetTimeStamp)
+                remainDays.text = if (diffDays >= 0) "D－$diffDays" else "D＋$diffDays"
             }
         }
     }

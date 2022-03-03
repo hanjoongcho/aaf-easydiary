@@ -116,11 +116,15 @@ object EasyDiaryUtils {
 
     fun boldString(context: Context, textView: TextView?) {
         if (context.config.boldStyleEnable) {
-            textView?.let { tv ->
-                val spannableString = SpannableString(tv.text)
-                spannableString.setSpan(StyleSpan(Typeface.BOLD), 0, tv.text.length, 0)
-                tv.text = spannableString
-            }
+            boldStringForce(context, textView)
+        }
+    }
+
+    fun boldStringForce(context: Context, textView: TextView?) {
+        textView?.let { tv ->
+            val spannableString = SpannableString(tv.text)
+            spannableString.setSpan(StyleSpan(Typeface.BOLD), 0, tv.text.length, 0)
+            tv.text = spannableString
         }
     }
 

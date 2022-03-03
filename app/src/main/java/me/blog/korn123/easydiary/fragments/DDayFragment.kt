@@ -32,7 +32,7 @@ class DDayFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mDDayItems.add(DDay("Hello DDay!!!"))
+        mDDayItems.add(DDay("Plan 2023", 1698332400000L))
         mDDayItems.add(DDay("Hello DDay!!!"))
         mDDayItems.add(DDay("Hello DDay!!!"))
         mDDayItems.add(DDay("New D-Day!!!"))

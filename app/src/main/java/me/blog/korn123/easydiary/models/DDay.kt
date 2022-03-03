@@ -8,5 +8,11 @@ open class DDay {
 
     constructor(title: String) {
         this.title = title
+        this.targetTimeStamp = System.currentTimeMillis()
+    }
+
+    constructor(title: String, targetTimeStamp: Long) {
+        this.title = title
+        this.targetTimeStamp = targetTimeStamp
     }
 }
