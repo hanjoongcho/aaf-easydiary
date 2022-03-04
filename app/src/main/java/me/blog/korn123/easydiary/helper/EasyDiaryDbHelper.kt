@@ -16,7 +16,7 @@ object EasyDiaryDbHelper {
     private val mDiaryConfig: RealmConfiguration by lazy {
         RealmConfiguration.Builder()
                 .name("diary.realm")
-                .schemaVersion(21)
+                .schemaVersion(22)
                 .migration(EasyDiaryMigration())
                 .modules(Realm.getDefaultModule()!!)
                 .build()
@@ -231,7 +231,7 @@ object EasyDiaryDbHelper {
      *   Manage Alarm model
      *
      ***************************************************************************************************/
-    fun insertTemporaryAlarm(workMode: Int = Alarm.WORK_MODE_DIARY_WRITING): Alarm {
+    fun makeTemporaryAlarm(workMode: Int = Alarm.WORK_MODE_DIARY_WRITING): Alarm {
         val alarm = Alarm().apply { this.workMode = workMode }
         val sequence = getInstance().where(Alarm::class.java).max("sequence") ?: 0
         when (sequence.toInt() == countAlarmAll().toInt()) {
@@ -306,6 +306,48 @@ object EasyDiaryDbHelper {
         getInstance().executeTransaction { realm ->
             realm.where(ActionLog::class.java).findAll().deleteAllFromRealm()
         }
+    }
+
+
+    /***************************************************************************************************
+     *   Manage DDay model
+     *
+     ***************************************************************************************************/
+    fun duplicateDDayBy(dDay: DDay, realmInstance: Realm = getInstance()): DDay {
+        return realmInstance.copyFromRealm(dDay)
+    }
+
+    private fun findDDayBy(realmInstance: Realm, sequence: Int): DDay? {
+        return realmInstance.where(DDay::class.java).equalTo("sequence", sequence).findFirst()
+    }
+
+    fun findDDayBy(sequence: Int): DDay? {
+        return findDDayBy(getInstance(), sequence)
+    }
+
+    fun findDDayAll(): List<DDay> = getInstance().where(DDay::class.java).findAll().sort("sequence", Sort.ASCENDING)
+
+    fun updateDDayBy(dDay: DDay) {
+
+        if (dDay.sequence == -1) {
+            val sequence = getInstance().where(DDay::class.java).max("sequence") ?: 0
+            dDay.sequence = sequence.toInt().plus(1)
+        }
+        getInstance().executeTransaction { realm -> realm.insertOrUpdate(dDay) }
+    }
+
+    fun deleteDDayBy(sequence: Int) {
+        findDDayBy(sequence)?.let {
+            getInstance().run {
+                beginTransaction()
+                it.deleteFromRealm()
+                commitTransaction()
+            }
+        }
+    }
+
+    fun countDDayAll(): Long {
+        return getInstance().where(DDay::class.java).count()
     }
 }
 

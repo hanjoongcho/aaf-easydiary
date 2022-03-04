@@ -1,6 +1,12 @@
 package me.blog.korn123.easydiary.models
 
-open class DDay {
+import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
+import kotlin.math.ceil
+
+open class DDay : RealmObject {
+    @PrimaryKey
+    var sequence: Int = -1
     var targetTimeStamp: Long = 0
     var title: String? = null
 
@@ -17,7 +23,7 @@ open class DDay {
     }
 
     fun getRemainDays(): String {
-        val diffDays = targetTimeStamp.minus(System.currentTimeMillis()).div((1000 * 60 * 60 * 24))
-        return if (diffDays >= 0) "D－$diffDays" else "D＋$diffDays"
+        val diffDays = ceil(targetTimeStamp.minus(System.currentTimeMillis()).div((1000 * 60 * 60 * 24).toDouble())).toInt()
+        return if (diffDays >= 0) "D－$diffDays" else "D＋${diffDays.unaryPlus()}"
     }
 }

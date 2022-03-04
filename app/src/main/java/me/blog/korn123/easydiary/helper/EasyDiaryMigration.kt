@@ -274,10 +274,19 @@ class EasyDiaryMigration : RealmMigration {
             //        }
         }
 
-        // schemaVersion 21 ~
+        // Migration from version 20 to 21
         if (currentVersion == 20L) {
             schema.rename("DiaryDto", "Diary")
             schema.rename("PhotoUriDto", "PhotoUri")
+            currentVersion++
+        }
+
+        // Migration from version 21 to 22
+        if (currentVersion == 21L) {
+            schema.create("DDay")
+                .addField("sequence", Int::class.java, FieldAttribute.PRIMARY_KEY)
+                .addField("targetTimeStamp", Long::class.java)
+                .addField("title", String::class.java)
             currentVersion++
         }
     }

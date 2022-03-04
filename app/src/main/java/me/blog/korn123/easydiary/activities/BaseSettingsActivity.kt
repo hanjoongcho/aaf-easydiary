@@ -39,7 +39,7 @@ open class BaseSettingsActivity : EasyDiaryActivity() {
         when (item.itemId) {
             R.id.addSchedule -> {
                 if (scheduleFragment is SettingsScheduleFragment) {
-                    scheduleFragment.openAlarmDialog(EasyDiaryDbHelper.insertTemporaryAlarm())
+                    scheduleFragment.openAlarmDialog(EasyDiaryDbHelper.makeTemporaryAlarm())
                 }
             }
         }
