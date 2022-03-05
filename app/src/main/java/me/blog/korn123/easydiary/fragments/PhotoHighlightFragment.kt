@@ -121,7 +121,8 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
                         for (i in 1..11) {
                             val pastMills = EasyDiaryUtils.convDateToTimeMillis(Calendar.MONTH, i.unaryMinus())
                             if (oldestDiary.currentTimeMillis < pastMills) {
-                                makeHistory(pastMills, MessageFormat.format(getString(R.string.monthly_highlight_tag), i))
+                                makeHistory(pastMills,
+                                    MessageFormat.format(getString(R.string.monthly_highlight_tag), i))
                             }
                         }
 

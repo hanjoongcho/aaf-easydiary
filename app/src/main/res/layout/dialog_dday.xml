@@ -49,7 +49,7 @@
             app:applyGlobalColor="false"
             app:applyGlobalSize="false"
             android:textSize="30sp"
-            android:id="@+id/remainDays"
+            android:id="@+id/dayRemaining"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView"

@@ -120,30 +120,7 @@
         android:src="@drawable/ic_cross"
         android:visibility="gone"
         app:fabSize="mini"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-    <View
-        android:visibility="gone"
-        android:id="@+id/dashboardDimmer"
-        android:background="?attr/colorPrimary"
-        android:orientation="vertical"
-        android:alpha="0.3"
-        android:gravity="center"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_width="0dp"
-        android:layout_height="0dp">
-    </View>
-    <ProgressBar
-        android:visibility="gone"
-        android:id="@+id/dashboardProgress"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_width="30dp"
-        android:layout_height="30dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
 

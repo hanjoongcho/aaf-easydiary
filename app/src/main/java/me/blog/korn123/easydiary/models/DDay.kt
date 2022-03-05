@@ -2,8 +2,8 @@ package me.blog.korn123.easydiary.models
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
+import java.text.MessageFormat
 import kotlin.math.abs
-import kotlin.math.ceil
 
 open class DDay : RealmObject {
     @PrimaryKey
@@ -23,18 +23,20 @@ open class DDay : RealmObject {
         this.targetTimeStamp = targetTimeStamp
     }
 
-    fun getRemainDays(): String {
+    fun getDayRemaining(): String {
         val oneDayMillis: Long = 1000 * 60 * 60 * 24
         val currentTimeStamp = System.currentTimeMillis()
-        val diffDays = abs(targetTimeStamp.minus(currentTimeStamp).div(oneDayMillis.toDouble())).toInt()
+        val diffDays = abs(targetTimeStamp.minus(currentTimeStamp).div(oneDayMillis))
         return if (targetTimeStamp > currentTimeStamp) "D－$diffDays" else "D＋${diffDays.unaryPlus()}"
     }
 
-    fun getRemainHours(): String {
+    fun getTimeRemaining(): String {
         val oneDayMillis: Long = 1000 * 60 * 60 * 24
         val oneHourMillis: Long = 1000 * 60 * 60
+        val oneMinuteMillis: Long = 1000 * 60
         val currentTimeStamp = System.currentTimeMillis()
-        val remainMillis = abs(targetTimeStamp.minus(currentTimeStamp) % oneDayMillis)
-        return remainMillis.div(oneHourMillis).toString()
+        val remainHourMillis = abs(targetTimeStamp.minus(currentTimeStamp).rem(oneDayMillis))
+        val remainMinuteMillis = abs(remainHourMillis.rem(oneHourMillis))
+        return "${MessageFormat.format("{0,number} {0,choice,1#Hour|1<Hours}", remainHourMillis.div(oneHourMillis))} ${MessageFormat.format("{0,number} {0,choice,1#Minute|1<Minutes}", remainMinuteMillis.div(oneMinuteMillis))}"
     }
 }

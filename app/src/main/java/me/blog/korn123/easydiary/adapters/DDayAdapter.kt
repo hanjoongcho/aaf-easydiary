@@ -68,7 +68,7 @@ class DDayAdapter(
 
                 targetDate.text = DateUtils.getDateStringFromTimeMillis(temporaryDDay.targetTimeStamp)
                 targetTime.text = DateUtils.timeMillisToDateTime(temporaryDDay.targetTimeStamp,  DateUtils.TIME_PATTERN)
-                remainDays.text = temporaryDDay.getRemainDays()
+                dayRemaining.text = temporaryDDay.getDayRemaining()
                 root.setBackgroundColor(config.backgroundColor)
                 FontUtils.setFontsTypeface(this@activity, this@activity.assets, null, root)
 
@@ -80,7 +80,7 @@ class DDayAdapter(
                         temporaryDDay.targetTimeStamp = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year, false, hourOfDay, minute)
                         targetDate.text = DateUtils.getDateStringFromTimeMillis(temporaryDDay.targetTimeStamp)
                         targetTime.text = DateUtils.timeMillisToDateTime(temporaryDDay.targetTimeStamp,  DateUtils.TIME_PATTERN)
-                        remainDays.text = temporaryDDay.getRemainDays()
+                        dayRemaining.text = temporaryDDay.getDayRemaining()
                     }, year, month, dayOfMonth)
                     datePickerDialog.show()
                 }
@@ -133,13 +133,13 @@ class DDayAdapter(
         }
 
         fun bindTo(dDay: DDay) {
-            EasyDiaryUtils.boldStringForce(activity, itemDDayBinding.remainDays)
+            EasyDiaryUtils.boldStringForce(activity, itemDDayBinding.dayRemaining)
             itemDDayBinding.run {
                 title.text = dDay.title
                 targetDate.text = DateUtils.getDateStringFromTimeMillis(dDay.targetTimeStamp)
                 targetTime.text = DateUtils.timeMillisToDateTime(dDay.targetTimeStamp,  DateUtils.TIME_PATTERN)
-                remainDays.text = dDay.getRemainDays()
-                remainHours.text = "${dDay.getRemainHours()}Hours"
+                dayRemaining.text = dDay.getDayRemaining()
+                timeRemaining.text = "${dDay.getTimeRemaining()}"
                 root.setOnClickListener {
                     openDDayDialog(EasyDiaryDbHelper.duplicateDDayBy(dDay), dDay)
                 }

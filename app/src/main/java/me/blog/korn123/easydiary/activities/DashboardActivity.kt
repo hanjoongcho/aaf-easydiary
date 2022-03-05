@@ -60,6 +60,9 @@ class DashboardActivity : EasyDiaryActivity() {
                 }
             })
 
+            // DDay
+            replace(R.id.dDay, DDayFragment())
+
             // DashBoardSummary
             replace(R.id.summary, DashBoardSummaryFragment())
 
