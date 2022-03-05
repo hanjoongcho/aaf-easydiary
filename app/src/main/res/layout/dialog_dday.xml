@@ -32,6 +32,19 @@
             app:layout_constraintTop_toBottomOf="@+id/title" />
 
         <me.blog.korn123.easydiary.views.FixedTextView
+            tools:text="18:60"
+            app:applyGlobalColor="false"
+            app:applyGlobalSize="false"
+            android:textSize="15sp"
+            android:layout_marginLeft="20dp"
+            android:id="@+id/targetTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            app:layout_constraintStart_toEndOf="@+id/targetDate" />
+
+        <me.blog.korn123.easydiary.views.FixedTextView
             tools:text="+100"
             app:applyGlobalColor="false"
             app:applyGlobalSize="false"

@@ -2,6 +2,8 @@ package me.blog.korn123.easydiary.adapters
 
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
+import android.text.format.DateFormat
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
@@ -47,29 +49,48 @@ class DDayAdapter(
     fun openDDayDialog(temporaryDDay: DDay, storedDDay: DDay? = null) {
         activity.run activity@ {
             val dDayBinding = DialogDdayBinding.inflate(layoutInflater).apply {
+                val calendar = Calendar.getInstance(Locale.getDefault())
                 when (storedDDay == null) {
                     true -> {
                         title.hint = "Enter the name of the target date."
+
                     }
                     false -> {
                         title.setText(temporaryDDay.title)
+                        calendar.timeInMillis = storedDDay.targetTimeStamp
                     }
                 }
+                var year = calendar.get(Calendar.YEAR)
+                var month = calendar.get(Calendar.MONTH)
+                var dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
+                var hourOfDay = calendar.get(Calendar.HOUR_OF_DAY)
+                var minute = calendar.get(Calendar.MINUTE)
 
                 targetDate.text = DateUtils.getDateStringFromTimeMillis(temporaryDDay.targetTimeStamp)
+                targetTime.text = DateUtils.timeMillisToDateTime(temporaryDDay.targetTimeStamp,  DateUtils.TIME_PATTERN)
                 remainDays.text = temporaryDDay.getRemainDays()
                 root.setBackgroundColor(config.backgroundColor)
                 FontUtils.setFontsTypeface(this@activity, this@activity.assets, null, root)
 
                 targetDate.setOnClickListener {
-                    val datePickerListener: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-                        temporaryDDay.targetTimeStamp = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year)
+                    val datePickerDialog = DatePickerDialog(this@activity, { _, y, m, d ->
+                        year = y
+                        month = m
+                        dayOfMonth = d
+                        temporaryDDay.targetTimeStamp = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year, false, hourOfDay, minute)
                         targetDate.text = DateUtils.getDateStringFromTimeMillis(temporaryDDay.targetTimeStamp)
+                        targetTime.text = DateUtils.timeMillisToDateTime(temporaryDDay.targetTimeStamp,  DateUtils.TIME_PATTERN)
                         remainDays.text = temporaryDDay.getRemainDays()
-                    }
-                    val calendar = Calendar.getInstance(Locale.getDefault())
-                    val datePickerDialog = DatePickerDialog(this@activity, datePickerListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
+                    }, year, month, dayOfMonth)
                     datePickerDialog.show()
+                }
+                targetTime.setOnClickListener {
+                    TimePickerDialog(this@activity, { _, h, m ->
+                        hourOfDay = h
+                        minute = m
+                        temporaryDDay.targetTimeStamp = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year, false, hourOfDay, minute)
+                        targetTime.text = DateUtils.timeMillisToDateTime(temporaryDDay.targetTimeStamp,  DateUtils.TIME_PATTERN)
+                    }, hourOfDay, minute, DateFormat.is24HourFormat(this@activity)).show()
                 }
             }
             var alertDialog: AlertDialog? = null
