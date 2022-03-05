@@ -33,7 +33,18 @@
             android:text="TextView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title" />
-
+        <me.blog.korn123.easydiary.views.FixedTextView
+            tools:text="2022.03.03"
+            app:applyGlobalColor="false"
+            app:applyGlobalSize="false"
+            android:layout_marginLeft="10dp"
+            android:textSize="15sp"
+            android:id="@+id/targetTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            app:layout_constraintStart_toEndOf="@+id/targetDate"
+            app:layout_constraintTop_toBottomOf="@+id/title" />
         <me.blog.korn123.easydiary.views.FixedTextView
             tools:text="+100"
             app:applyGlobalColor="false"
@@ -45,6 +56,17 @@
             android:text="TextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/targetDate" />
+        <me.blog.korn123.easydiary.views.FixedTextView
+            tools:text="8Hours"
+            app:applyGlobalColor="false"
+            app:applyGlobalSize="false"
+            android:textSize="15sp"
+            android:id="@+id/remainHours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/remainDays" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </me.blog.korn123.easydiary.views.FixedCardView>
 

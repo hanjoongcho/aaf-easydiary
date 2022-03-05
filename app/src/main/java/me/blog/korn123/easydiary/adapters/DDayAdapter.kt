@@ -104,14 +104,16 @@ class DDayAdapter(
                 getButton(AlertDialog.BUTTON_POSITIVE).run {
                     setOnClickListener {
                         when {
-                            dDayBinding.title.text.isEmpty() -> toast("Enter the name of the target date.")
+                            dDayBinding.title.text.isEmpty() -> {
+                                toast("Enter the name of the target date.")
+                            }
                             else -> {
                                 temporaryDDay.title = dDayBinding.title.text.toString()
                                 EasyDiaryDbHelper.updateDDayBy(temporaryDDay)
+                                dismiss()
+                                saveDDayCallback.invoke()
                             }
                         }
-                        dismiss()
-                        saveDDayCallback.invoke()
                     }
                 }
             }
@@ -135,7 +137,9 @@ class DDayAdapter(
             itemDDayBinding.run {
                 title.text = dDay.title
                 targetDate.text = DateUtils.getDateStringFromTimeMillis(dDay.targetTimeStamp)
+                targetTime.text = DateUtils.timeMillisToDateTime(dDay.targetTimeStamp,  DateUtils.TIME_PATTERN)
                 remainDays.text = dDay.getRemainDays()
+                remainHours.text = "${dDay.getRemainHours()}Hours"
                 root.setOnClickListener {
                     openDDayDialog(EasyDiaryDbHelper.duplicateDDayBy(dDay), dDay)
                 }
