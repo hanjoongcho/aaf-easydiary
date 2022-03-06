@@ -3,7 +3,9 @@ package me.blog.korn123.easydiary.adapters
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.DialogInterface
 import android.text.format.DateFormat
+import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +13,7 @@ import com.simplemobiletools.commons.extensions.toast
 import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
+import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.DialogDdayBinding
 import me.blog.korn123.easydiary.databinding.ItemDdayAddBinding
 import me.blog.korn123.easydiary.databinding.ItemDdayBinding
@@ -48,6 +51,7 @@ class DDayAdapter(
 
     fun openDDayDialog(temporaryDDay: DDay, storedDDay: DDay? = null) {
         activity.run activity@ {
+            var alertDialog: AlertDialog? = null
             val dDayBinding = DialogDdayBinding.inflate(layoutInflater).apply {
                 val calendar = Calendar.getInstance(Locale.getDefault())
                 when (storedDDay == null) {
@@ -66,6 +70,7 @@ class DDayAdapter(
                 var hourOfDay = calendar.get(Calendar.HOUR_OF_DAY)
                 var minute = calendar.get(Calendar.MINUTE)
 
+                activity.updateDrawableColorInnerCardView(deleteDDay)
                 targetDate.text = DateUtils.getDateStringFromTimeMillis(temporaryDDay.targetTimeStamp)
                 targetTime.text = DateUtils.timeMillisToDateTime(temporaryDDay.targetTimeStamp,  DateUtils.TIME_PATTERN)
                 dayRemaining.text = temporaryDDay.getDayRemaining()
@@ -92,8 +97,21 @@ class DDayAdapter(
                         targetTime.text = DateUtils.timeMillisToDateTime(temporaryDDay.targetTimeStamp,  DateUtils.TIME_PATTERN)
                     }, hourOfDay, minute, DateFormat.is24HourFormat(this@activity)).show()
                 }
+                when (storedDDay == null) {
+                    true -> deleteDDay.visibility = View.GONE
+                    false -> {
+                        deleteDDay.setOnClickListener {
+                            showAlertDialog("Are you sure you want to delete the selected D-Day?", { _, _ ->
+                                alertDialog?.dismiss()
+                                EasyDiaryDbHelper.beginTransaction()
+                                storedDDay.deleteFromRealm()
+                                EasyDiaryDbHelper.commitTransaction()
+                                saveDDayCallback.invoke()
+                            }, null)
+                        }
+                    }
+                }
             }
-            var alertDialog: AlertDialog? = null
             val builder = AlertDialog.Builder(this).apply {
                 setCancelable(false)
                 setPositiveButton(getString(android.R.string.ok), null)

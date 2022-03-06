@@ -16,9 +16,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/deleteDDay"
             app:layout_constraintTop_toTopOf="parent" />
-
+        <ImageView
+            android:id="@+id/deleteDDay"
+            android:src="@drawable/ic_delete_w"
+            app:layout_constraintStart_toEndOf="@+id/title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
         <me.blog.korn123.easydiary.views.FixedTextView
             tools:text="2022.03.03"
             app:applyGlobalColor="false"
