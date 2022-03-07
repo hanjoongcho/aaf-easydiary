@@ -44,6 +44,8 @@
                 android:orientation="vertical" />
 
             <me.blog.korn123.easydiary.views.FixedCardView
+                android:id="@+id/card_photo_highlight"
+                android:visibility="gone"
                 app:contentPaddingLeft="1dp"
                 app:contentPaddingRight="1dp"
                 style="@style/card_dashboard">
