@@ -51,6 +51,22 @@ class DiaryMainWidget : AppWidgetProvider() {
         }
     }
 
+    /**
+     * Update period in milliseconds, or 0 if the AppWidget will update itself.
+     * ```
+     * simple_app_widget_info.xml
+     *  <appwidget-provider
+     *  xmlns:android="http://schemas.android.com/apk/res/android"
+     *  android:initialLayout="@layout/widget_diary_main"
+     *  android:minHeight="110dp"
+     *  android:minWidth="250dp"
+     *  android:previewImage="@drawable/widget_preview_diary_main"
+     *  android:resizeMode="horizontal|vertical"
+     *  android:updatePeriodMillis="0"
+     *  android:widgetCategory="home_screen">
+     *  </appwidget-provider>
+     * ```
+     */
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         super.onUpdate(context, appWidgetManager, appWidgetIds)
         performUpdate(context)
@@ -96,8 +112,6 @@ class DiaryMainWidget : AppWidgetProvider() {
                     PendingIntent.getBroadcast(context, 0, this, context.pendingIntentFlag())
                 }
                 setPendingIntentTemplate(R.id.diaryListView, pendingIntent)
-
-
                 appWidgetManager.updateAppWidget(it, this)
                 appWidgetManager.notifyAppWidgetViewDataChanged(it, R.id.diaryListView)
             }
