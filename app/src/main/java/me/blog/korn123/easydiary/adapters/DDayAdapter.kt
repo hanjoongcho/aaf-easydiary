@@ -69,11 +69,15 @@ class DDayAdapter(
                 var dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
                 var hourOfDay = calendar.get(Calendar.HOUR_OF_DAY)
                 var minute = calendar.get(Calendar.MINUTE)
+                fun updateDDayInfo() {
+                    targetDate.text = DateUtils.getDateStringFromTimeMillis(temporaryDDay.targetTimeStamp)
+                    targetTime.text = DateUtils.timeMillisToDateTime(temporaryDDay.targetTimeStamp,  DateUtils.TIME_PATTERN)
+                    dayRemaining.text = temporaryDDay.getDayRemaining()
+                    timeRemaining.text = temporaryDDay.getTimeRemaining()
+                }
 
+                updateDDayInfo()
                 activity.updateDrawableColorInnerCardView(deleteDDay)
-                targetDate.text = DateUtils.getDateStringFromTimeMillis(temporaryDDay.targetTimeStamp)
-                targetTime.text = DateUtils.timeMillisToDateTime(temporaryDDay.targetTimeStamp,  DateUtils.TIME_PATTERN)
-                dayRemaining.text = temporaryDDay.getDayRemaining()
                 root.setBackgroundColor(config.backgroundColor)
                 FontUtils.setFontsTypeface(this@activity, this@activity.assets, null, root)
 
@@ -83,9 +87,7 @@ class DDayAdapter(
                         month = m
                         dayOfMonth = d
                         temporaryDDay.targetTimeStamp = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year, false, hourOfDay, minute)
-                        targetDate.text = DateUtils.getDateStringFromTimeMillis(temporaryDDay.targetTimeStamp)
-                        targetTime.text = DateUtils.timeMillisToDateTime(temporaryDDay.targetTimeStamp,  DateUtils.TIME_PATTERN)
-                        dayRemaining.text = temporaryDDay.getDayRemaining()
+                        updateDDayInfo()
                     }, year, month, dayOfMonth)
                     datePickerDialog.show()
                 }
@@ -94,7 +96,7 @@ class DDayAdapter(
                         hourOfDay = h
                         minute = m
                         temporaryDDay.targetTimeStamp = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year, false, hourOfDay, minute)
-                        targetTime.text = DateUtils.timeMillisToDateTime(temporaryDDay.targetTimeStamp,  DateUtils.TIME_PATTERN)
+                        updateDDayInfo()
                     }, hourOfDay, minute, DateFormat.is24HourFormat(this@activity)).show()
                 }
                 when (storedDDay == null) {

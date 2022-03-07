@@ -32,25 +32,46 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <LinearLayout
-                android:id="@+id/dDay"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
-            
-            <LinearLayout
                 android:orientation="vertical"
                 android:id="@+id/dashboard_daily_symbol"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
             <LinearLayout
-                android:visibility="gone"
-                android:orientation="vertical"
-                android:id="@+id/photoHighlight"
+                android:id="@+id/dDay"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"/>
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <me.blog.korn123.easydiary.views.FixedCardView
+                app:contentPaddingLeft="1dp"
+                app:contentPaddingRight="1dp"
+                style="@style/card_dashboard">
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <me.blog.korn123.easydiary.views.FixedTextView
+                        app:applyGlobalSize="false"
+                        app:applyGlobalColor="false"
+                        app:applyHighLight="true"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginLeft="19dp"
+                        android:text="Photo Highlight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/dashboard_title_h1"/>
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:orientation="vertical"
+                        android:id="@+id/photoHighlight"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"/>
+                </androidx.appcompat.widget.LinearLayoutCompat>
+            </me.blog.korn123.easydiary.views.FixedCardView>
 
             <LinearLayout
                 android:id="@+id/summary"

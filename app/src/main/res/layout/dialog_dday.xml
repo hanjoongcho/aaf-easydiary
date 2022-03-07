@@ -62,5 +62,16 @@
             android:text="TextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/targetDate" />
+        <me.blog.korn123.easydiary.views.FixedTextView
+            tools:text="8Hours"
+            app:applyGlobalColor="false"
+            app:applyGlobalSize="false"
+            android:textSize="15sp"
+            android:id="@+id/time_remaining"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dayRemaining" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
