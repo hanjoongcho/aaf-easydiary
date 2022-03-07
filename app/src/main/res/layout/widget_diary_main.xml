@@ -18,7 +18,6 @@
             android:src="@drawable/ic_update"
             android:layout_width="32dp"
             android:layout_height="32dp" />
-
         <ImageView
             android:layout_alignParentEnd="true"
             android:padding="3dp"
@@ -27,22 +26,22 @@
             android:layout_width="32dp"
             android:layout_height="32dp" />
     </RelativeLayout>
-
     <TextView
         android:id="@+id/widget_event_list_empty"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
         android:paddingStart="@dimen/big_margin"
         android:paddingEnd="@dimen/big_margin"
-        android:text="Empty!!!!!!"
+        android:text="There is no written diary or the diary is locked."
         android:textSize="@dimen/bigger_text_size" />
-
     <ListView
         android:id="@+id/diaryListView"
         android:padding="5dp"
         android:clipToPadding="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1">
     </ListView>
 </LinearLayout>
