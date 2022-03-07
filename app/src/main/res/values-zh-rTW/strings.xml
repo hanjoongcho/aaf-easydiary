@@ -858,4 +858,6 @@
     <string name="notification_channel_name_upload">Google Drive上傳</string>
     <string name="notification_channel_name_download">Google Drive下載</string>
     <string name="notification_channel_name_zip_helper">Management ZIP Backup</string>
+    <string name="enable_welcome_dashboard_popup_title">Welcome Dashboard popup</string>
+    <string name="enable_welcome_dashboard_popup_description">When this option is enabled, the dashboard will automatically open as a popup when the app is restarted after closing.</string>
 </resources>

@@ -858,4 +858,6 @@
     <string name="notification_channel_name_upload">Google Drive Upload</string>
     <string name="notification_channel_name_download">Google Drive Download</string>
     <string name="notification_channel_name_zip_helper">Management ZIP Backup</string>
+    <string name="enable_welcome_dashboard_popup_title">ウェルカムダッシュボードポップアップ</string>
+    <string name="enable_welcome_dashboard_popup_description">このオプションを有効にすると、アプリを閉じてから再起動すると、ダッシュボードがポップアップとして自動的に開きます。</string>
 </resources>

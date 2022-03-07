@@ -858,4 +858,6 @@
     <string name="notification_channel_name_upload">구글드라이브 업로드</string>
     <string name="notification_channel_name_download">구글드라이브 다운로드</string>
     <string name="notification_channel_name_zip_helper">ZIP 백업 관리</string>
+    <string name="enable_welcome_dashboard_popup_title">웰컴 대시보드</string>
+    <string name="enable_welcome_dashboard_popup_description">이 옵션을 활성화하면 앱을 닫은 후 다시 시작할 때 대시보드가 팝업으로 열립니다.</string>
 </resources>
