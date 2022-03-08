@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.dialogs
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,9 +24,19 @@ class DashboardDialogFragment : DialogFragment() {
         super.onStart()
         requireActivity().run {
 //            printDisplayMetrics()
+
             getDisplayMetrics().also {
                 val width = if (requireActivity().isLandScape()) it.widthPixels else it.widthPixels
-                val height = if (requireActivity().isLandScape()) it.heightPixels.minus(statusBarHeight()) else it.heightPixels.minus(statusBarHeight())
+                val height = if (requireActivity().isLandScape()) {
+                    it.heightPixels.minus(statusBarHeight())
+                } else {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        if (window.decorView.rootWindowInsets?.displayCutout != null) it.heightPixels else it.heightPixels.minus(statusBarHeight())
+                    } else {
+                        it.heightPixels.minus(statusBarHeight())
+                    }
+                }
+
                 val margin = 0
                 dialog?.window?.run {
 //                setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
