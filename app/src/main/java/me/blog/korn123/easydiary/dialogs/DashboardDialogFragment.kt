@@ -2,7 +2,6 @@ package me.blog.korn123.easydiary.dialogs
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -26,17 +25,16 @@ class DashboardDialogFragment : DialogFragment() {
 //            printDisplayMetrics()
 
             getDisplayMetrics().also {
-                val width = if (requireActivity().isLandScape()) it.widthPixels else it.widthPixels
-                val height = if (requireActivity().isLandScape()) {
-                    it.heightPixels.minus(statusBarHeight())
-                } else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                        if (window.decorView.rootWindowInsets?.displayCutout != null) it.heightPixels else it.heightPixels.minus(statusBarHeight())
-                    } else {
-                        it.heightPixels.minus(statusBarHeight())
-                    }
-                }
-
+//                val width = if (requireActivity().isLandScape()) it.widthPixels else it.widthPixels
+//                val height = if (requireActivity().isLandScape()) {
+//                    it.heightPixels.minus(statusBarHeight())
+//                } else {
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+//                        if (window.decorView.rootWindowInsets?.displayCutout != null) it.heightPixels else it.heightPixels.minus(statusBarHeight())
+//                    } else {
+//                        it.heightPixels.minus(statusBarHeight())
+//                    }
+//                }
                 dialog?.window?.run {
                     setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
                     setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -155,7 +153,7 @@ class DashboardDialogFragment : DialogFragment() {
                 // Commit
                 commit()
             }
-//            childFragmentManager.executePendingTransactions()
+            childFragmentManager.executePendingTransactions()
 //            EasyDiaryUtils.disableTouchEvent(dashboardDimmer)
 //            dashboardDimmer.visibility = View.GONE
 //            dashboardProgress.visibility = View.GONE
@@ -166,14 +164,13 @@ class DashboardDialogFragment : DialogFragment() {
         super.onResume()
         mBinding.run {
             root.setBackgroundColor(requireActivity().config.screenBackgroundColor)
-//            root.setBackgroundColor(Color.RED)
             FontUtils.setFontsTypeface(requireContext(), null, root, true)
         }
 //        requireActivity().updateStatusBarColor(config.screenBackgroundColor)
     }
 
-    override fun onPause() {
-        super.onPause()
+//    override fun onPause() {
+//        super.onPause()
 //        requireActivity().updateStatusBarColor(config.primaryColor)
-    }
+//    }
 }

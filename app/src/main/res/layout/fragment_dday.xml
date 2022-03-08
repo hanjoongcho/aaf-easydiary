@@ -7,13 +7,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <me.blog.korn123.easydiary.views.FixedTextView
             android:id="@+id/dashboardTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:text="D-Day"
+            android:text="D-Day (BETA)"
             android:textSize="@dimen/dashboard_title_h1"
             app:applyGlobalColor="false"
             app:applyGlobalSize="false"
@@ -21,7 +20,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_days"
             android:layout_width="0dp"
@@ -30,6 +28,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dashboardTitle" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </me.blog.korn123.easydiary.views.FixedCardView>

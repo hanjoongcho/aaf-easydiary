@@ -604,6 +604,11 @@
         v1.4.173.2 / 2022.02.12\n
         Fixed an error where the diary list could not be loaded when using widgets in Android 12 version
     </string>
+    <string name="release_264">
+        v1.4.173.3 / 2022.03.08\n
+        Added welcome dashboard feature\n
+        Added DDay setting feature to dashboard screen (Beta)
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  自1.4.47版本以来添加的资源点击这里。                                                      -->
