@@ -183,12 +183,12 @@ fun Activity.statusBarHeight(): Int {
 }
 
 fun Activity.navigationBarHeight(): Int {
-    var statusBarHeight = 0
+    var navigationBarHeight = 0
     val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
     if (resourceId > 0) {
-        statusBarHeight = resources.getDimensionPixelSize(resourceId)
+        navigationBarHeight = resources.getDimensionPixelSize(resourceId)
     }
-    return statusBarHeight
+    return navigationBarHeight
 }
 
 fun Activity.getDefaultDisplay(): Point {
@@ -202,14 +202,29 @@ fun Activity.getDisplayMetrics(): DisplayMetrics {
     val outMetrics = DisplayMetrics()
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         val display = display
-        display?.getRealMetrics(outMetrics)
+        display?.getMetrics(outMetrics)
+//        display?.getRealMetrics(outMetrics)
     } else {
-        @Suppress("DEPRECATION")
         val display = windowManager.defaultDisplay
-        @Suppress("DEPRECATION")
         display.getMetrics(outMetrics)
+//        display.getRealMetrics(outMetrics)
     }
     return outMetrics
+}
+
+fun Activity.printDisplayMetrics() {
+    val metrics = DisplayMetrics()
+    val realMetrics = DisplayMetrics()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        display?.getRealMetrics(realMetrics)
+        display?.getMetrics(metrics)
+    } else {
+        val display = windowManager.defaultDisplay
+        display.getRealMetrics(realMetrics)
+        display.getMetrics(metrics)
+    }
+    Log.i(AAF_TEST, "metrics: ${metrics.widthPixels} x ${metrics.heightPixels}")
+    Log.i(AAF_TEST, "realMetrics: ${realMetrics.widthPixels} x ${realMetrics.heightPixels}")
 }
 
 fun Activity.getRootViewHeight(): Int {

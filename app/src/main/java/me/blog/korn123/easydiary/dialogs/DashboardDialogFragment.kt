@@ -22,9 +22,10 @@ class DashboardDialogFragment : DialogFragment() {
     override fun onStart() {
         super.onStart()
         requireActivity().run {
+//            printDisplayMetrics()
             getDisplayMetrics().also {
-                val width = if (requireActivity().isLandScape()) it.widthPixels.minus(statusBarHeight()).minus(navigationBarHeight()) else it.widthPixels
-                val height = if (requireActivity().isLandScape()) it.heightPixels.minus(statusBarHeight()) else it.heightPixels.minus(statusBarHeight()).minus(navigationBarHeight())
+                val width = if (requireActivity().isLandScape()) it.widthPixels else it.widthPixels
+                val height = if (requireActivity().isLandScape()) it.heightPixels.minus(statusBarHeight()) else it.heightPixels.minus(statusBarHeight())
                 val margin = 0
                 dialog?.window?.run {
 //                setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
@@ -42,8 +43,6 @@ class DashboardDialogFragment : DialogFragment() {
         savedInstanceState: Bundle?
     ): View {
         mBinding = ActivityDashboardBinding.inflate(layoutInflater)
-
-
         return mBinding.root
     }
 
