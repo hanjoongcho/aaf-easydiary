@@ -107,8 +107,10 @@
                         <com.simplemobiletools.commons.views.MyTextView
                             style="@style/text_custom_theme_item"
                             android:text="EasyDiary Theme" />
+
                         <ImageView
-                            style="@style/image_custom_theme_icon"/>
+                            style="@style/image_custom_theme_icon"
+                            android:id="@+id/image_auto_setup_easy_diary_theme"/>
                     </RelativeLayout>
                     <RelativeLayout
                         style="@style/relative_theme_container"
@@ -117,7 +119,8 @@
                             style="@style/text_custom_theme_item"
                             android:text="Dark Theme"/>
                         <ImageView
-                            style="@style/image_custom_theme_icon"/>
+                            style="@style/image_custom_theme_icon"
+                            android:id="@+id/image_auto_setup_dark_theme"/>
                     </RelativeLayout>
                     <RelativeLayout
                         style="@style/relative_theme_container"
@@ -126,7 +129,8 @@
                             style="@style/text_custom_theme_item"
                             android:text="Green Theme" />
                         <ImageView
-                            style="@style/image_custom_theme_icon"/>
+                            style="@style/image_custom_theme_icon"
+                            android:id="@+id/image_auto_setup_green_theme"/>
                     </RelativeLayout>
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </ScrollView>

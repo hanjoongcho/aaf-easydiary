@@ -48,7 +48,7 @@ class CustomizationActivity : BaseSimpleActivity() {
             updateAppViews(mainHolder)
             updateCardViewPolicy(mainHolder)
             initTextSize(mainHolder)
-            updateDrawableColorInnerCardView(R.drawable.ic_update)
+            updateCustomThemeIcon(config.textColor)
             initColorVariables()
             setupColorsPickers()
 
@@ -124,6 +124,14 @@ class CustomizationActivity : BaseSimpleActivity() {
 
     override fun getMainViewGroup(): ViewGroup? = findViewById<ViewGroup>(R.id.main_holder)
 
+    private fun updateCustomThemeIcon(color: Int) {
+        mActivityCustomizationBinding.run {
+            updateDrawableColorInnerCardView(imageAutoSetupEasyDiaryTheme, color)
+            updateDrawableColorInnerCardView(imageAutoSetupDarkTheme, color)
+            updateDrawableColorInnerCardView(imageAutoSetupGreenTheme, color)
+        }
+    }
+
     private fun saveChanges(finishAfterSave: Boolean) {
         config.apply {
             textColor = curTextColor
@@ -168,8 +176,7 @@ class CustomizationActivity : BaseSimpleActivity() {
     private fun setCurrentTextColor(color: Int) {
         curTextColor = color
         updateTextColors(mActivityCustomizationBinding.mainHolder, curTextColor)
-        // FIXME: Fix to change imageview, not resource
-        // updateDrawableColorInnerCardView(R.drawable.ic_update , curTextColor)
+        updateCustomThemeIcon(curTextColor)
     }
 
     private fun setCurrentBackgroundColor(color: Int) {
