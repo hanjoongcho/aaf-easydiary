@@ -12,7 +12,6 @@
         android:layout_height="wrap_content">
         <com.simplemobiletools.commons.views.MyEditText
             tools:text="Awesome Day!!!"
-            android:textSize="20sp"
             android:inputType="text|textAutoCorrect|textAutoComplete"
             android:maxLines="1"
             android:id="@+id/title"
@@ -32,7 +31,6 @@
         <me.blog.korn123.easydiary.views.FixedTextView
             android:padding="10dp"
             tools:text="2022.03.03"
-            app:applyGlobalColor="false"
             app:applyGlobalSize="false"
             android:textSize="20sp"
             android:id="@+id/targetDate"
@@ -46,7 +44,6 @@
         <me.blog.korn123.easydiary.views.FixedTextView
             android:padding="10dp"
             tools:text="18:60"
-            app:applyGlobalColor="false"
             app:applyGlobalSize="false"
             android:textSize="20sp"
             android:layout_marginLeft="10dp"
@@ -60,7 +57,6 @@
 
         <me.blog.korn123.easydiary.views.FixedTextView
             tools:text="+100"
-            app:applyGlobalColor="false"
             app:applyGlobalSize="false"
             android:textSize="30sp"
             android:id="@+id/dayRemaining"
@@ -69,11 +65,8 @@
             android:text="TextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/targetDate" />
-        <me.blog.korn123.easydiary.views.FixedTextView
+        <com.simplemobiletools.commons.views.MyTextView
             tools:text="8Hours"
-            app:applyGlobalColor="false"
-            app:applyGlobalSize="false"
-            android:textSize="15sp"
             android:id="@+id/time_remaining"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
