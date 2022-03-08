@@ -11,11 +11,14 @@
         android:layout_height="wrap_content">
 
         <me.blog.korn123.easydiary.views.FixedTextView
-            tools:text="Awesome Day!!!"
+            tools:text="12345678901234567890sdf123"
             app:applyGlobalColor="false"
             app:applyGlobalSize="false"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:textSize="20sp"
             android:id="@+id/title"
+            android:maxWidth="200dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView"
