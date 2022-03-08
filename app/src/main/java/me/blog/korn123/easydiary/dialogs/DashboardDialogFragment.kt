@@ -38,7 +38,6 @@ class DashboardDialogFragment : DialogFragment() {
                 }
 
                 dialog?.window?.run {
-//                setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
                     setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
                     setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                     clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
