@@ -4,7 +4,7 @@
     <!--<color name="colorPrimary">#07ABB3</color>-->
     <!--<color name="colorAccent">@color/colorPrimary</color>-->
 
-    <!--App theme-->
+    <!-- App Theme -->
     <style name="AppTheme.FullScreen">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
@@ -25,7 +25,6 @@
         <item name="android:fastScrollTrackDrawable">@null</item>
         <item name="android:windowBackground">@null</item>
     </style>
-
     <style name="AppCard.Timeline">
         <item name="android:layout_width">wrap_content</item>
     </style>
@@ -39,6 +38,15 @@
         <item name="android:textColor">@color/default_text_color</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!-- PostcardViewerActivity Theme -->
+    <style name="CollapsingTextAppearance" parent="Base.TextAppearance.AppCompat.Widget.ActionBar.Title"/>
+    <style name="CollapsingTextAppearance.Inverse" >
+        <item name="android:textSize">25sp</item>
+    </style>
+    <style name="ToolBarWithNavigationBack">
+        <item name="navigationIcon">@drawable/abc_ic_ab_back_material</item>
     </style>
 
     <!--Layout Style-->
@@ -289,15 +297,4 @@
     <style name="CustomText" parent="TextAppearance.ShowcaseView.Detail.Light">
         <item name="android:textColor">#DEFFFFFF</item>
     </style>
-
-    <style name="CollapsingTextAppearance" parent="Base.TextAppearance.AppCompat.Widget.ActionBar.Title"/>
-    <style name="CollapsingTextAppearance.Inverse" >
-        <item name="android:textSize">25sp</item>
-    </style>
-    <style name="ToolBarWithNavigationBack">
-        <item name="navigationIcon">@drawable/abc_ic_ab_back_material</item>
-    </style>
-
-    <!-- Additional Theme -->
-
 </resources>
