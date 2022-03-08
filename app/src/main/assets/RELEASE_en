@@ -4,6 +4,10 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.173.3 (date: 2022.03.08)
+  * Added welcome dashboard feature
+  * Added DDay setting feature to dashboard screen (Beta)
+
 # Changes in 1.4.173.2 (date: 2022.02.12)
   * Fixed an error where the diary list could not be loaded when using widgets in Android 12 version
 
