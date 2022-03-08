@@ -37,10 +37,9 @@ class DashboardDialogFragment : DialogFragment() {
                     }
                 }
 
-                val margin = 0
                 dialog?.window?.run {
 //                setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-                    setLayout(width.minus(margin), height.minus(margin))
+                    setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
                     setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                     clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
                 }
@@ -171,11 +170,11 @@ class DashboardDialogFragment : DialogFragment() {
 //            root.setBackgroundColor(Color.RED)
             FontUtils.setFontsTypeface(requireContext(), null, root, true)
         }
-        requireActivity().updateStatusBarColor(config.screenBackgroundColor)
+//        requireActivity().updateStatusBarColor(config.screenBackgroundColor)
     }
 
     override fun onPause() {
         super.onPause()
-        requireActivity().updateStatusBarColor(config.primaryColor)
+//        requireActivity().updateStatusBarColor(config.primaryColor)
     }
 }
