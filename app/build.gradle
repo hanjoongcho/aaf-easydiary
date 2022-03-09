@@ -26,8 +26,8 @@ android {
         applicationId "me.blog.korn123.easydiary"
         minSdkVersion 19
         targetSdkVersion versions.compileSdk
-        versionCode 264
-        versionName '1.4.173.3'
+        versionCode 265
+        versionName '1.4.173.4'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -128,8 +128,8 @@ dependencies {
     implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
     implementation 'androidx.biometric:biometric:1.1.0'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
     implementation 'androidx.activity:activity-ktx:1.4.0'
     implementation 'androidx.fragment:fragment-ktx:1.4.1'
     implementation 'androidx.preference:preference-ktx:1.2.0'
@@ -137,14 +137,14 @@ dependencies {
     implementation ('androidx.work:work-runtime-ktx:2.7.1') { exclude group: 'com.google.guava', module: 'listenablefuture' }
 
     // google gms api
-    gmsDevImplementation 'com.google.android.gms:play-services-auth:20.0.1'
+    gmsDevImplementation 'com.google.android.gms:play-services-auth:20.1.0'
     gmsDevImplementation 'com.google.http-client:google-http-client-gson:1.26.0'
     gmsDevImplementation 'com.google.api-client:google-api-client-android:1.26.0'
     gmsDevImplementation 'com.google.apis:google-api-services-drive:v3-rev136-1.25.0'
     gmsDevImplementation 'com.google.android.play:core:1.10.3'
     gmsDevImplementation 'com.google.android.play:core-ktx:1.8.1'
 
-    gmsProdImplementation 'com.google.android.gms:play-services-auth:20.0.1'
+    gmsProdImplementation 'com.google.android.gms:play-services-auth:20.1.0'
     gmsProdImplementation 'com.google.http-client:google-http-client-gson:1.26.0'
     gmsProdImplementation 'com.google.api-client:google-api-client-android:1.26.0'
     gmsProdImplementation 'com.google.apis:google-api-services-drive:v3-rev136-1.25.0'
@@ -199,7 +199,7 @@ dependencies {
     androidTestImplementation 'androidx.test:core-ktx:1.4.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.ext:junit-ktx:1.1.3'
-    androidTestImplementation 'androidx.test:runner:1.4.1-alpha03'
+    androidTestImplementation 'androidx.test:runner:1.5.0-alpha01'
     androidTestImplementation('androidx.test.espresso:espresso-core:3.4.0-alpha02', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -209,7 +209,7 @@ dependencies {
     testImplementation 'androidx.test.ext:junit:1.1.3'
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.robolectric:robolectric:4.5-alpha-1'
-    testImplementation 'androidx.test.espresso:espresso-core:3.5.0-alpha03'
-    testImplementation 'androidx.test.espresso:espresso-intents:3.5.0-alpha03'
-    testImplementation 'androidx.test.ext:truth:1.5.0-alpha03'
+    testImplementation 'androidx.test.espresso:espresso-core:3.5.0-alpha04'
+    testImplementation 'androidx.test.espresso:espresso-intents:3.5.0-alpha04'
+    testImplementation 'androidx.test.ext:truth:1.5.0-alpha04'
 }

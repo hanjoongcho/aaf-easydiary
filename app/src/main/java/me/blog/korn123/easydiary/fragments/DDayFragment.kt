@@ -6,11 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.simplemobiletools.commons.extensions.toast
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
 import me.blog.korn123.easydiary.adapters.DDayAdapter
 import me.blog.korn123.easydiary.databinding.FragmentDdayBinding
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.DDay
+import me.blog.korn123.easydiary.views.SafeFlexboxLayoutManager
 
 class DDayFragment : Fragment() {
 
@@ -21,6 +23,8 @@ class DDayFragment : Fragment() {
     private lateinit var mBinging: FragmentDdayBinding
     private lateinit var mDDayAdapter: DDayAdapter
     private var mDDayItems: MutableList<DDay> = mutableListOf()
+    private lateinit var mLinearLayoutManager: LinearLayoutManager
+    private lateinit var mSafeFlexboxLayoutManager: SafeFlexboxLayoutManager
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -33,16 +37,20 @@ class DDayFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        mDDayItems.add(DDay("Plan 2023", 1698332400000L))
-//        mDDayItems.add(DDay("Hello DDay!!!"))
-//        mDDayItems.add(DDay("Hello DDay!!!"))
         mDDayAdapter = DDayAdapter(requireActivity(), mDDayItems) { updateDDayList() }
+        mLinearLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        mSafeFlexboxLayoutManager = SafeFlexboxLayoutManager(requireContext()).apply {
+            flexDirection = FlexDirection.ROW
+            flexWrap = FlexWrap.WRAP
+        }
         mBinging.run {
             recyclerDays.apply {
-                layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                layoutManager = mLinearLayoutManager
                 adapter = mDDayAdapter
             }
-//            addDDay.setOnClickListener { requireActivity().toast("ADD") }
+            dashboardTitle.setOnClickListener {
+                recyclerDays.layoutManager = if (recyclerDays.layoutManager is LinearLayoutManager) mSafeFlexboxLayoutManager else mLinearLayoutManager
+            }
         }
         updateDDayList()
     }

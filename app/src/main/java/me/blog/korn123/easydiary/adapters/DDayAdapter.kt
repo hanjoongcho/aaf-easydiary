@@ -3,7 +3,6 @@ package me.blog.korn123.easydiary.adapters
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.DialogInterface
 import android.text.format.DateFormat
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,6 @@ import com.simplemobiletools.commons.extensions.toast
 import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
-import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.DialogDdayBinding
 import me.blog.korn123.easydiary.databinding.ItemDdayAddBinding
 import me.blog.korn123.easydiary.databinding.ItemDdayBinding
@@ -77,9 +75,13 @@ class DDayAdapter(
                 }
 
                 updateDDayInfo()
-                activity.updateDrawableColorInnerCardView(deleteDDay)
-                root.setBackgroundColor(config.backgroundColor)
-                FontUtils.setFontsTypeface(this@activity, this@activity.assets, null, root)
+                updateDrawableColorInnerCardView(deleteDDay)
+                root.also {
+                    initTextSize(it)
+                    updateTextColors(it)
+                    it.setBackgroundColor(config.backgroundColor)
+                    FontUtils.setFontsTypeface(this@activity, this@activity.assets, null, it)
+                }
 
                 targetDate.setOnClickListener {
                     val datePickerDialog = DatePickerDialog(this@activity, { _, y, m, d ->
