@@ -48,8 +48,8 @@ class DDayFragment : Fragment() {
                 layoutManager = mLinearLayoutManager
                 adapter = mDDayAdapter
             }
-            dashboardTitle.setOnClickListener {
-                recyclerDays.layoutManager = if (recyclerDays.layoutManager is LinearLayoutManager) mSafeFlexboxLayoutManager else mLinearLayoutManager
+            flexboxOptionSwitcher.setOnCheckedChangeListener { _, isChecked ->
+                recyclerDays.layoutManager = if (isChecked) mSafeFlexboxLayoutManager else mLinearLayoutManager
             }
         }
         updateDDayList()
