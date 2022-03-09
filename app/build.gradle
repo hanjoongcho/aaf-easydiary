@@ -21,7 +21,10 @@ android {
         }
     }
 
-    // major.minor.maintenance.hotfix
+    /**
+     * @versionName: major.minor.maintenance.hotfix
+     * @minSdkVersion: 19 (Android 4.4 KitKat)
+     */
     defaultConfig {
         applicationId "me.blog.korn123.easydiary"
         minSdkVersion 19

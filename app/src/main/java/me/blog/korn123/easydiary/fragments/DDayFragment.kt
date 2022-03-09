@@ -6,10 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import me.blog.korn123.easydiary.adapters.DDayAdapter
 import me.blog.korn123.easydiary.databinding.FragmentDdayBinding
+import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.DDay
 import me.blog.korn123.easydiary.views.SafeFlexboxLayoutManager
@@ -45,15 +47,19 @@ class DDayFragment : Fragment() {
         }
         mBinging.run {
             recyclerDays.apply {
-                layoutManager = mLinearLayoutManager
+                layoutManager = getDDayLayoutManager()
                 adapter = mDDayAdapter
             }
             flexboxOptionSwitcher.setOnCheckedChangeListener { _, isChecked ->
-                recyclerDays.layoutManager = if (isChecked) mSafeFlexboxLayoutManager else mLinearLayoutManager
+                config.enableDDayFlexboxLayout = isChecked
+                recyclerDays.layoutManager = getDDayLayoutManager()
             }
+            flexboxOptionSwitcher.isChecked = config.enableDDayFlexboxLayout
         }
         updateDDayList()
     }
+
+    private fun getDDayLayoutManager(): RecyclerView.LayoutManager = if (config.enableDDayFlexboxLayout) mSafeFlexboxLayoutManager else mLinearLayoutManager
 
     private fun updateDDayList() {
         mDDayItems.run {
