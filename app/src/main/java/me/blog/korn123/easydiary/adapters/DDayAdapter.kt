@@ -8,8 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.flexbox.FlexboxItemDecoration
-import com.google.android.flexbox.FlexboxLayout
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.simplemobiletools.commons.extensions.toast
 import io.github.aafactory.commons.utils.DateUtils
@@ -54,7 +52,7 @@ class DDayAdapter(
         super.onViewAttachedToWindow(holder)
         val lp = holder.itemView.layoutParams
         if (lp is FlexboxLayoutManager.LayoutParams) {
-            lp.flexGrow = 1F
+            if (holder is DDayViewHolder) lp.flexGrow = 1F
         }
     }
 
