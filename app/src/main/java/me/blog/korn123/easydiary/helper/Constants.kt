@@ -570,6 +570,7 @@ const val SETTING_DIARY_MAIN_SPAN_COUNT_LANDSCAPE = "setting_diary_main_span_cou
 const val SETTING_DIARY_MAIN_SPAN_COUNT_PORTRAIT = "setting_diary_main_span_count_portrait"
 const val SETTING_ENABLE_STATUSBAR_DARKEN_COLOR = "setting_enable_statusbar_darken_color"
 const val SETTING_ENABLE_WELCOME_DASHBOARD_POPUP = "setting_enable_welcome_dashboard_popup"
+const val SETTING_ENABLE_DDAY_FLEXBOX_LAYOUT = "setting_enable_dday_flexbox_layout"
 const val SELECTED_SYMBOLS_DEFAULT = "1,2,3,4,5"
 const val HOLD_POSITION_ENTER_EDIT_SCREEN = "hold_position_enter_edit_screen"
 const val FINGERPRINT_ENCRYPT_DATA = "fingerprint_encrypt_data"

@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
-import io.github.aafactory.commons.activities.BaseSimpleActivity
 import io.github.aafactory.commons.extensions.holdCurrentOrientation
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R

@@ -17,9 +17,32 @@
             app:applyGlobalColor="false"
             app:applyGlobalSize="false"
             app:applyHighLight="true"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/flexbox_option_container"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:padding="10dp"
+            android:id="@+id/flexbox_option_container"
+            android:gravity="center"
+            app:layout_constraintStart_toEndOf="@id/dashboard_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/recycler_days"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp">
+            <me.blog.korn123.easydiary.views.FixedTextView
+                android:textSize="@dimen/dashboard_title_h1"
+                app:applyGlobalColor="false"
+                app:applyGlobalSize="false"
+                android:text="Flexbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/flexbox_option_switcher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_days"
             android:layout_width="0dp"

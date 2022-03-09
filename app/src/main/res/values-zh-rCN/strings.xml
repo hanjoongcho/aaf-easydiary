@@ -609,6 +609,10 @@
         Added welcome dashboard feature\n
         Added DDay setting feature to dashboard screen (Beta)
     </string>
+    <string name="release_265">
+        v1.4.173.4 / 2022.03.09\n
+        Improved dashboard DDay setting feature
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  自1.4.47版本以来添加的资源点击这里。                                                      -->
