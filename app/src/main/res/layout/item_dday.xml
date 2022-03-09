@@ -4,12 +4,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/card_dashboard"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_width="wrap_content">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-
         <me.blog.korn123.easydiary.views.FixedTextView
             tools:text="12345678901234567890sdf123"
             app:applyGlobalColor="false"
@@ -21,10 +19,8 @@
             android:maxWidth="200dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
         <me.blog.korn123.easydiary.views.FixedTextView
             tools:text="2022.03.03"
             app:applyGlobalColor="false"
@@ -33,7 +29,6 @@
             android:id="@+id/targetDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title" />
         <me.blog.korn123.easydiary.views.FixedTextView
@@ -45,7 +40,6 @@
             android:id="@+id/targetTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
             app:layout_constraintStart_toEndOf="@+id/targetDate"
             app:layout_constraintTop_toBottomOf="@+id/title" />
         <me.blog.korn123.easydiary.views.FixedTextView
@@ -56,7 +50,6 @@
             android:id="@+id/dayRemaining"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/targetDate" />
         <me.blog.korn123.easydiary.views.FixedTextView
@@ -67,7 +60,6 @@
             android:id="@+id/time_remaining"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dayRemaining" />
     </androidx.constraintlayout.widget.ConstraintLayout>
