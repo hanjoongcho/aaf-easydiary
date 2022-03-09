@@ -1,4 +1,3 @@
-
 package me.blog.korn123.commons.utils
 
 import android.annotation.SuppressLint
