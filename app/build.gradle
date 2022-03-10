@@ -22,15 +22,15 @@ android {
     }
 
     /**
-     * @versionName: major.minor.maintenance.hotfix
+     * @versionName: major.minor.maintenance(year+month).hotfix(day+sequence)
      * @minSdkVersion: 19 (Android 4.4 KitKat)
      */
     defaultConfig {
         applicationId "me.blog.korn123.easydiary"
         minSdkVersion 19
         targetSdkVersion versions.compileSdk
-        versionCode 265
-        versionName '1.4.173.4'
+        versionCode 266
+        versionName '1.4.202203.xx1'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
