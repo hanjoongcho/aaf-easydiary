@@ -27,16 +27,12 @@ import me.blog.korn123.easydiary.adapters.AlarmAdapter
 import me.blog.korn123.easydiary.databinding.DialogAlarmBinding
 import me.blog.korn123.easydiary.databinding.FragmentSettingsScheduleBinding
 import me.blog.korn123.easydiary.extensions.*
-import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.Alarm
-import java.util.*
 import kotlin.math.pow
 
 
 class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
-
-
     /***************************************************************************************************
      *   global properties
      *
@@ -109,10 +105,10 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
                 if (config.isSundayFirst) {
                     dayIndexes.moveLastItemToFront()
                 }
-                editAlarmDaysHolder.removeAllViews()
+                linearAlarmDaysHolder.removeAllViews()
                 dayIndexes.forEach {
                     val pow = 2.0.pow(it.toDouble()).toInt()
-                    val day = layoutInflater.inflate(R.layout.partial_alarm_day, editAlarmDaysHolder, false) as TextView
+                    val day = layoutInflater.inflate(R.layout.partial_alarm_day, linearAlarmDaysHolder, false) as TextView
                     day.text = dayLetters[it]
 
                     val isDayChecked = temporaryAlarm.days and pow != 0
@@ -129,31 +125,29 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
                         }
                         day.background = getProperDayDrawable(selectDay)
                         day.setTextColor(if (selectDay) config.backgroundColor else config.textColor)
-                        alarmDays.text = getSelectedDaysString(temporaryAlarm.days)
+                        textAlarmDays.text = getSelectedDaysString(temporaryAlarm.days)
                         EasyDiaryDbHelper.commitTransaction()
                     }
-
-                    editAlarmDaysHolder.addView(day)
+                    linearAlarmDaysHolder.addView(day)
                 }
-                alarmDays.text = getSelectedDaysString(temporaryAlarm.days)
-                alarmDays.setTextColor(config.textColor)
-                alarmSwitch.isChecked = temporaryAlarm.isEnabled
-                alarmDescription.setText(temporaryAlarm.label)
-                editAlarmTime.text = getFormattedTime(temporaryAlarm.timeInMinutes * 60, false, true)
-
-                editAlarmTime.setOnClickListener {
+                textAlarmDays.text = getSelectedDaysString(temporaryAlarm.days)
+                textAlarmDays.setTextColor(config.textColor)
+                switchAlarm.isChecked = temporaryAlarm.isEnabled
+                editAlarmDescription.setText(temporaryAlarm.label)
+                textAlarmTime.text = getFormattedTime(temporaryAlarm.timeInMinutes * 60, false, true)
+                textAlarmTime.setOnClickListener {
                     TimePickerDialog(this@activity, TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
                         temporaryAlarm.timeInMinutes = hourOfDay * 60 + minute
-                        editAlarmTime.text = getFormattedTime(temporaryAlarm.timeInMinutes * 60, false, true)
+                        textAlarmTime.text = getFormattedTime(temporaryAlarm.timeInMinutes * 60, false, true)
                     }, temporaryAlarm.timeInMinutes / 60, temporaryAlarm.timeInMinutes % 60, DateFormat.is24HourFormat(this@activity)).show()
                 }
-                alarmSwitch.setOnCheckedChangeListener { _, isChecked ->
+                switchAlarm.setOnCheckedChangeListener { _, isChecked ->
                     temporaryAlarm.isEnabled = isChecked
                 }
                 when (storedAlarm == null) {
-                    true -> { deleteAlarm.visibility = View.GONE }
+                    true -> { imageDeleteAlarm.visibility = View.GONE }
                     false -> {
-                        deleteAlarm.setOnClickListener {
+                        imageDeleteAlarm.setOnClickListener {
                             showAlertDialog("Are you sure you want to delete the selected schedule?", DialogInterface.OnClickListener { _, _ ->
                                 cancelAlarmClock(temporaryAlarm)
                                 alertDialog?.dismiss()
@@ -166,15 +160,15 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
                     }
                 }
                 when (temporaryAlarm.workMode) {
-                    Alarm.WORK_MODE_DIARY_WRITING -> diaryWriting.isChecked = true
-                    Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> diaryBackupLocal.isChecked = true
-                    Alarm.WORK_MODE_DIARY_BACKUP_GMS -> diaryBackupGMS.isChecked = true
+                    Alarm.WORK_MODE_DIARY_WRITING -> radioDiaryWriting.isChecked = true
+                    Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> radioDiaryBackupLocal.isChecked = true
+                    Alarm.WORK_MODE_DIARY_BACKUP_GMS -> radioDiaryBackupGms.isChecked = true
                 }
-                workModeGroup.setOnCheckedChangeListener { _, i ->
+                radioGroupWorkMode.setOnCheckedChangeListener { _, i ->
                     when (i) {
-                        R.id.diaryWriting -> temporaryAlarm.workMode = Alarm.WORK_MODE_DIARY_WRITING
-                        R.id.diaryBackupLocal -> temporaryAlarm.workMode = Alarm.WORK_MODE_DIARY_BACKUP_LOCAL
-                        R.id.diaryBackupGMS -> temporaryAlarm.workMode = Alarm.WORK_MODE_DIARY_BACKUP_GMS
+                        R.id.radio_diary_writing -> temporaryAlarm.workMode = Alarm.WORK_MODE_DIARY_WRITING
+                        R.id.radio_diary_backup_local -> temporaryAlarm.workMode = Alarm.WORK_MODE_DIARY_BACKUP_LOCAL
+                        R.id.radio_diary_backup_gms -> temporaryAlarm.workMode = Alarm.WORK_MODE_DIARY_BACKUP_GMS
                     }
                 }
 
@@ -184,7 +178,7 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
                 updateAppViews(root)
                 FontUtils.setFontsTypeface(this@activity, this@activity.assets, null, root)
 
-                if (BuildConfig.FLAVOR == "foss") diaryBackupGMS.visibility = View.GONE
+                if (BuildConfig.FLAVOR == "foss") radioDiaryBackupGms.visibility = View.GONE
             }
 
             alertDialog = builder.create().apply {
@@ -192,11 +186,11 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
                 getButton(AlertDialog.BUTTON_POSITIVE).run {
                     setOnClickListener {
                         when {
-                            dialogAlarmBinding.alarmDays.text.isEmpty() -> {
+                            dialogAlarmBinding.textAlarmDays.text.isEmpty() -> {
                                 toast("Please select days.")
                             }
-                            dialogAlarmBinding.alarmDescription.text.isEmpty() -> {
-                                dialogAlarmBinding.alarmDescription.run {
+                            dialogAlarmBinding.editAlarmDescription.text.isEmpty() -> {
+                                dialogAlarmBinding.editAlarmDescription.run {
                                     requestFocus()
                                     toast("Please input schedule description.")
                                     (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).showSoftInput(this@run, InputMethodManager.RESULT_UNCHANGED_SHOWN)
@@ -211,7 +205,7 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
                                 }
 
                                 // save alarm
-                                temporaryAlarm.label = dialogAlarmBinding?.alarmDescription?.text.toString()
+                                temporaryAlarm.label = dialogAlarmBinding?.editAlarmDescription?.text.toString()
                                 EasyDiaryDbHelper.updateAlarmBy(temporaryAlarm)
                                 alertDialog?.dismiss()
                                 updateAlarmList()

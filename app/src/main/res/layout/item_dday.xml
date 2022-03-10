@@ -27,7 +27,7 @@
             app:applyGlobalColor="false"
             app:applyGlobalSize="false"
             android:textSize="15sp"
-            android:id="@+id/targetDate"
+            android:id="@+id/text_target_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
@@ -38,21 +38,21 @@
             app:applyGlobalSize="false"
             android:layout_marginLeft="5dp"
             android:textSize="15sp"
-            android:id="@+id/targetTime"
+            android:id="@+id/text_target_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@+id/targetDate"
+            app:layout_constraintStart_toEndOf="@+id/text_target_date"
             app:layout_constraintTop_toBottomOf="@+id/title" />
         <me.blog.korn123.easydiary.views.FixedTextView
             tools:text="+100"
             app:applyGlobalColor="false"
             app:applyGlobalSize="false"
             android:textSize="30sp"
-            android:id="@+id/dayRemaining"
+            android:id="@+id/text_day_remaining"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/targetDate" />
+            app:layout_constraintTop_toBottomOf="@+id/text_target_date" />
         <me.blog.korn123.easydiary.views.FixedTextView
             tools:text="8Hours"
             app:applyGlobalColor="false"
@@ -62,7 +62,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dayRemaining" />
+            app:layout_constraintTop_toBottomOf="@+id/text_day_remaining" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </me.blog.korn123.easydiary.views.FixedCardView>
 
