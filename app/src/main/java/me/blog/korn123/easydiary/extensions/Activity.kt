@@ -581,9 +581,11 @@ fun Activity.diaryMainSpanCount(): Int = if (isLandScape()) config.diaryMainSpan
 
 fun Activity.postcardViewerSpanCount(): Int = if (isLandScape()) config.postcardSpanCountLandscape else config.postcardSpanCountPortrait
 
+fun Activity.getStatusBarColor(color: Int) = if (config.enableStatusBarDarkenColor) color.darkenColor() else color
+
 fun Activity.updateStatusBarColor(color: Int) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        window.statusBarColor = if (config.enableStatusBarDarkenColor) color.darkenColor() else color
+        window.statusBarColor = getStatusBarColor(color)
     }
 }
 

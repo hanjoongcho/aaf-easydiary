@@ -63,11 +63,11 @@ class DDayAdapter(
                 val calendar = Calendar.getInstance(Locale.getDefault())
                 when (storedDDay == null) {
                     true -> {
-                        title.hint = "Enter the name of the target date."
+                        textTitle.hint = "Enter the name of the target date."
 
                     }
                     false -> {
-                        title.setText(temporaryDDay.title)
+                        textTitle.setText(temporaryDDay.title)
                         calendar.timeInMillis = storedDDay.targetTimeStamp
                     }
                 }
@@ -77,14 +77,14 @@ class DDayAdapter(
                 var hourOfDay = calendar.get(Calendar.HOUR_OF_DAY)
                 var minute = calendar.get(Calendar.MINUTE)
                 fun updateDDayInfo() {
-                    targetDate.text = DateUtils.getDateStringFromTimeMillis(temporaryDDay.targetTimeStamp)
-                    targetTime.text = DateUtils.timeMillisToDateTime(temporaryDDay.targetTimeStamp,  DateUtils.TIME_PATTERN)
-                    dayRemaining.text = temporaryDDay.getDayRemaining()
-                    timeRemaining.text = temporaryDDay.getTimeRemaining()
+                    textTargetDate.text = DateUtils.getDateStringFromTimeMillis(temporaryDDay.targetTimeStamp)
+                    textTargetTime.text = DateUtils.timeMillisToDateTime(temporaryDDay.targetTimeStamp,  DateUtils.TIME_PATTERN)
+                    textDayRemaining.text = temporaryDDay.getDayRemaining()
+                    textTimeRemaining.text = temporaryDDay.getTimeRemaining()
                 }
 
                 updateDDayInfo()
-                updateDrawableColorInnerCardView(deleteDDay)
+                updateDrawableColorInnerCardView(imageDeleteDDay)
                 root.also {
                     initTextSize(it)
                     updateTextColors(it)
@@ -92,7 +92,7 @@ class DDayAdapter(
                     FontUtils.setFontsTypeface(this@activity, this@activity.assets, null, it)
                 }
 
-                targetDate.setOnClickListener {
+                textTargetDate.setOnClickListener {
                     val datePickerDialog = DatePickerDialog(this@activity, { _, y, m, d ->
                         year = y
                         month = m
@@ -102,7 +102,7 @@ class DDayAdapter(
                     }, year, month, dayOfMonth)
                     datePickerDialog.show()
                 }
-                targetTime.setOnClickListener {
+                textTargetTime.setOnClickListener {
                     TimePickerDialog(this@activity, { _, h, m ->
                         hourOfDay = h
                         minute = m
@@ -111,9 +111,9 @@ class DDayAdapter(
                     }, hourOfDay, minute, DateFormat.is24HourFormat(this@activity)).show()
                 }
                 when (storedDDay == null) {
-                    true -> deleteDDay.visibility = View.GONE
+                    true -> imageDeleteDDay.visibility = View.GONE
                     false -> {
-                        deleteDDay.setOnClickListener {
+                        imageDeleteDDay.setOnClickListener {
                             showAlertDialog("Are you sure you want to delete the selected D-Day?", { _, _ ->
                                 alertDialog?.dismiss()
                                 EasyDiaryDbHelper.beginTransaction()
@@ -135,11 +135,11 @@ class DDayAdapter(
                 getButton(AlertDialog.BUTTON_POSITIVE).run {
                     setOnClickListener {
                         when {
-                            dDayBinding.title.text.isEmpty() -> {
+                            dDayBinding.textTitle.text.isEmpty() -> {
                                 toast("Enter the name of the target date.")
                             }
                             else -> {
-                                temporaryDDay.title = dDayBinding.title.text.toString()
+                                temporaryDDay.title = dDayBinding.textTitle.text.toString()
                                 EasyDiaryDbHelper.updateDDayBy(temporaryDDay)
                                 dismiss()
                                 saveDDayCallback.invoke()
@@ -164,13 +164,13 @@ class DDayAdapter(
         }
 
         fun bindTo(dDay: DDay) {
-            EasyDiaryUtils.boldStringForce(activity, itemDDayBinding.dayRemaining)
+            EasyDiaryUtils.boldStringForce(activity, itemDDayBinding.textDayRemaining)
             itemDDayBinding.run {
-                title.text = dDay.title
-                targetDate.text = DateUtils.getDateStringFromTimeMillis(dDay.targetTimeStamp)
-                targetTime.text = DateUtils.timeMillisToDateTime(dDay.targetTimeStamp,  DateUtils.TIME_PATTERN)
-                dayRemaining.text = dDay.getDayRemaining()
-                timeRemaining.text = "${dDay.getTimeRemaining()}"
+                textTitle.text = dDay.title
+                textTargetDate.text = DateUtils.getDateStringFromTimeMillis(dDay.targetTimeStamp)
+                textTargetTime.text = DateUtils.timeMillisToDateTime(dDay.targetTimeStamp,  DateUtils.TIME_PATTERN)
+                textDayRemaining.text = dDay.getDayRemaining()
+                textTimeRemaining.text = "${dDay.getTimeRemaining()}"
                 root.setOnClickListener {
                     openDDayDialog(EasyDiaryDbHelper.duplicateDDayBy(dDay), dDay)
                 }

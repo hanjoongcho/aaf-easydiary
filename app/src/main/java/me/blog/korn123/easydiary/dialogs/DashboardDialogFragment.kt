@@ -1,12 +1,11 @@
 package me.blog.korn123.easydiary.dialogs
 
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import com.zhpan.bannerview.constants.PageStyle
 import io.github.aafactory.commons.extensions.dpToPixel
@@ -21,9 +20,8 @@ class DashboardDialogFragment : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        requireActivity().run {
+        requireActivity().run activity@ {
 //            printDisplayMetrics()
-
             getDisplayMetrics().also {
 //                val width = if (requireActivity().isLandScape()) it.widthPixels else it.widthPixels
 //                val height = if (requireActivity().isLandScape()) {
@@ -36,12 +34,20 @@ class DashboardDialogFragment : DialogFragment() {
 //                    }
 //                }
                 dialog?.window?.run {
-                    setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-                    setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                    clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+//                    setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+//                    setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//                    clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        statusBarColor = this@activity.getStatusBarColor(config.primaryColor)
+//                        statusBarColor = getDashboardBackgroundColor()
+                    }
                 }
             }
         }
+    }
+
+    override fun getTheme(): Int {
+        return R.style.AppTheme_FullScreen
     }
 
     override fun onCreateView(
@@ -56,9 +62,10 @@ class DashboardDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mBinding.run {
+            requireActivity().updateDrawableColorInnerCardView(close, Color.WHITE)
             appBar.visibility = View.GONE
             close.visibility = View.VISIBLE
-            close.setOnClickListener { dismiss() }
+            close.setOnClickListener { view -> view.postDelayed({ dismiss() }, 300)}
 
             val scaleFactor = if (requireActivity().isLandScape()) 0.5F else 1F
             (requireActivity().getDefaultDisplay().x * 0.8).toInt().also {
@@ -163,14 +170,17 @@ class DashboardDialogFragment : DialogFragment() {
     override fun onResume() {
         super.onResume()
         mBinding.run {
-            root.setBackgroundColor(requireActivity().config.screenBackgroundColor)
+            root.setBackgroundColor(getDashboardBackgroundColor())
+            requireActivity().updateTextColors(root)
             FontUtils.setFontsTypeface(requireContext(), null, root, true)
         }
 //        requireActivity().updateStatusBarColor(config.screenBackgroundColor)
     }
 
-//    override fun onPause() {
-//        super.onPause()
+    override fun onPause() {
+        super.onPause()
 //        requireActivity().updateStatusBarColor(config.primaryColor)
-//    }
+    }
+
+    private fun getDashboardBackgroundColor() = config.screenBackgroundColor
 }
