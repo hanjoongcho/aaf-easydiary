@@ -67,7 +67,7 @@
             app:layout_constraintTop_toBottomOf="@+id/text_target_date"
             />
         <com.simplemobiletools.commons.views.MyTextView
-            android:id="@+id/time_remaining"
+            android:id="@+id/text_time_remaining"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView"

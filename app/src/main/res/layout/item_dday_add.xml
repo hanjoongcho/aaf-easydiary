@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:gravity="top"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    >
     <me.blog.korn123.easydiary.views.FixedCardView
-        style="@style/card_dashboard"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        style="@style/card_dashboard"
+        >
         <me.blog.korn123.easydiary.views.FixedTextView
             android:text="ADD"
-            app:applyGlobalColor="false"
-            app:applyGlobalSize="false"
             android:textSize="15sp"
             android:layout_gravity="center"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            app:applyGlobalColor="false"
+            app:applyGlobalSize="false"
+            />
     </me.blog.korn123.easydiary.views.FixedCardView>
 </androidx.appcompat.widget.LinearLayoutCompat>
 

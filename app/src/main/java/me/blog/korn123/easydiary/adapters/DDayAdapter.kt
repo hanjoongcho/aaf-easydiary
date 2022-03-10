@@ -80,7 +80,7 @@ class DDayAdapter(
                     textTargetDate.text = DateUtils.getDateStringFromTimeMillis(temporaryDDay.targetTimeStamp)
                     textTargetTime.text = DateUtils.timeMillisToDateTime(temporaryDDay.targetTimeStamp,  DateUtils.TIME_PATTERN)
                     textDayRemaining.text = temporaryDDay.getDayRemaining()
-                    timeRemaining.text = temporaryDDay.getTimeRemaining()
+                    textTimeRemaining.text = temporaryDDay.getTimeRemaining()
                 }
 
                 updateDDayInfo()
@@ -166,11 +166,11 @@ class DDayAdapter(
         fun bindTo(dDay: DDay) {
             EasyDiaryUtils.boldStringForce(activity, itemDDayBinding.textDayRemaining)
             itemDDayBinding.run {
-                title.text = dDay.title
+                textTitle.text = dDay.title
                 textTargetDate.text = DateUtils.getDateStringFromTimeMillis(dDay.targetTimeStamp)
                 textTargetTime.text = DateUtils.timeMillisToDateTime(dDay.targetTimeStamp,  DateUtils.TIME_PATTERN)
                 textDayRemaining.text = dDay.getDayRemaining()
-                timeRemaining.text = "${dDay.getTimeRemaining()}"
+                textTimeRemaining.text = "${dDay.getTimeRemaining()}"
                 root.setOnClickListener {
                     openDDayDialog(EasyDiaryDbHelper.duplicateDDayBy(dDay), dDay)
                 }
