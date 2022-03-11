@@ -34,7 +34,6 @@ import org.apache.commons.io.FilenameUtils
 import java.io.File
 
 open class BaseDevActivity : EasyDiaryActivity() {  
-
     /***************************************************************************************************
      *   global properties
      *

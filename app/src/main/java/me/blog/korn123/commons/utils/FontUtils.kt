@@ -20,7 +20,6 @@ import java.util.*
 /**
  * Created by CHO HANJOONG on 2017-03-16.
  */
-
 object FontUtils {
     private var sTypeface: Typeface? = null
 

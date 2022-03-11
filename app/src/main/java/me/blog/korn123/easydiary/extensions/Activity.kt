@@ -32,7 +32,6 @@ import androidx.core.graphics.drawable.toBitmap
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.baseConfig
-import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.models.Release
 import io.github.aafactory.commons.extensions.triggerRestart
 import io.github.aafactory.commons.helpers.PERMISSION_ACCESS_COARSE_LOCATION
@@ -64,9 +63,54 @@ import java.io.File
 import java.util.*
 
 
-/**
- * Created by CHO HANJOONG on 2018-02-10.
- */
+/***************************************************************************************************
+ *   Confirm Permissions
+ *
+ ***************************************************************************************************/
+fun Activity.confirmPermission(permissions: Array<String>, requestCode: Int) {
+    if (permissions.any { permission ->  ActivityCompat.shouldShowRequestPermissionRationale(this, permission) }) {
+        AlertDialog.Builder(this)
+            .setMessage(getString(R.string.permission_confirmation_dialog_message))
+            .setTitle(getString(R.string.permission_confirmation_dialog_title))
+            .setPositiveButton(getString(R.string.ok)) { _, _ -> ActivityCompat.requestPermissions(this, permissions, requestCode) }
+            .show()
+    } else {
+        ActivityCompat.requestPermissions(this, permissions, requestCode)
+    }
+}
+
+fun Activity.confirmExternalStoragePermission(permissions: Array<String>, activityResultLauncher: ActivityResultLauncher<Array<String>>) {
+    if (permissions.any { permission ->  ActivityCompat.shouldShowRequestPermissionRationale(this, permission) }) {
+        AlertDialog.Builder(this)
+            .setMessage(getString(R.string.permission_confirmation_dialog_message))
+            .setTitle(getString(R.string.permission_confirmation_dialog_title))
+            .setPositiveButton(getString(R.string.ok)) { _, _ -> activityResultLauncher.launch(permissions) }
+            .show()
+    } else {
+        activityResultLauncher.launch(permissions)
+    }
+}
+
+
+/***************************************************************************************************
+ *   Messages
+ *
+ ***************************************************************************************************/
+fun Activity.makeToast(message: String) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+}
+
+fun Activity.makeSnackBar(message: String, duration: Int = Snackbar.LENGTH_SHORT) {
+    Snackbar
+        .make(findViewById(android.R.id.content), message, duration)
+        .setAction("Action", null).show()
+}
+
+
+/***************************************************************************************************
+ *   etc functions
+ *
+ ***************************************************************************************************/
 fun Activity.resumeLock() {
     if (config.aafPinLockPauseMillis > 0L && System.currentTimeMillis() - config.aafPinLockPauseMillis > 1000) {
         
@@ -103,29 +147,7 @@ fun Activity.openGooglePlayBy(targetAppId: String) {
     }
 }
 
-fun Activity.confirmPermission(permissions: Array<String>, requestCode: Int) {
-    if (permissions.any { permission ->  ActivityCompat.shouldShowRequestPermissionRationale(this, permission) }) {
-        AlertDialog.Builder(this)
-                .setMessage(getString(R.string.permission_confirmation_dialog_message))
-                .setTitle(getString(R.string.permission_confirmation_dialog_title))
-                .setPositiveButton(getString(R.string.ok)) { _, _ -> ActivityCompat.requestPermissions(this, permissions, requestCode) }
-                .show()
-    } else {
-        ActivityCompat.requestPermissions(this, permissions, requestCode)
-    }
-}
 
-fun Activity.confirmExternalStoragePermission(permissions: Array<String>, activityResultLauncher: ActivityResultLauncher<Array<String>>) {
-    if (permissions.any { permission ->  ActivityCompat.shouldShowRequestPermissionRationale(this, permission) }) {
-        AlertDialog.Builder(this)
-                .setMessage(getString(R.string.permission_confirmation_dialog_message))
-                .setTitle(getString(R.string.permission_confirmation_dialog_title))
-                .setPositiveButton(getString(R.string.ok)) { _, _ -> activityResultLauncher.launch(permissions) }
-                .show()
-    } else {
-        activityResultLauncher.launch(permissions)
-    }
-}
 
 fun Activity.checkWhatsNew(releases: List<Release>, currVersion: Int, applyFilter: Boolean = true) {
     when (applyFilter) {
@@ -150,15 +172,7 @@ fun Activity.checkWhatsNew(releases: List<Release>, currVersion: Int, applyFilte
     }
 }
 
-fun Activity.makeToast(message: String) {
-    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-}
 
-fun Activity.makeSnackBar(message: String, duration: Int = Snackbar.LENGTH_SHORT) {
-    Snackbar
-            .make(findViewById(android.R.id.content), message, duration)
-            .setAction("Action", null).show()
-}
 
 fun Activity.isLandScape(): Boolean {
     return resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
