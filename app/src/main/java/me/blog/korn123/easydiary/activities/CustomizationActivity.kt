@@ -96,7 +96,7 @@ class CustomizationActivity : BaseSimpleActivity() {
             setTheme(getThemeId(this))
         }
 
-        FontUtils.setFontsTypeface(applicationContext, assets, null, findViewById<ViewGroup>(android.R.id.content))
+        FontUtils.setFontsTypeface(applicationContext, null, findViewById(android.R.id.content))
         resumeLock()
     }
 

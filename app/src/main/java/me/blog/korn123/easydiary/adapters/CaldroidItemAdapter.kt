@@ -36,7 +36,7 @@ class CaldroidItemAdapter(
             binding.root.apply {
                 tag = binding
                 context?.initTextSize(this)
-                FontUtils.setFontsTypeface(context, context.assets, null, this)
+                FontUtils.setFontsTypeface(context, null, this)
                 setBackgroundColor(context.config.backgroundColor)
             }
         }

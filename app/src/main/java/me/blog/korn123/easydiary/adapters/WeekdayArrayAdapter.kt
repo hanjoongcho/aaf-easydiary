@@ -23,7 +23,7 @@ class WeekdayArrayAdapter(context: Context, private val textViewResourceId: Int,
         val weekDayView = inflater.inflate(textViewResourceId, null).apply {
             val textWeekday = findViewById<CalendarItem>(R.id.text_weekday)
             // Set content
-            FontUtils.setFontsTypeface(context, context.assets, "", this as ViewGroup)
+            FontUtils.setFontsTypeface(context, "", this as ViewGroup)
             context.initTextSize(this)
             textWeekday.run {
                 if (mDiameter == 0) mDiameter = FontUtils.measureTextWidth(paint, "55")

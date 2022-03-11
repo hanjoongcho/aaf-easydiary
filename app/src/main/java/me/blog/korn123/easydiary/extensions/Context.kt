@@ -320,7 +320,7 @@ fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null,
                             initTextSize(this)
                             updateTextColors(this)
                             updateAppViews(this)
-                            FontUtils.setFontsTypeface(this@updateAlertDialog, this@updateAlertDialog.assets, null, this)
+                            FontUtils.setFontsTypeface(this@updateAlertDialog, null, this)
                         }
                     }
                     setView(root)

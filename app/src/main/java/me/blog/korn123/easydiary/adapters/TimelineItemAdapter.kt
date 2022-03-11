@@ -110,6 +110,6 @@ class TimelineItemAdapter(
     }
 
     private fun setFontsTypeface(itemTimelineBinding: ItemTimelineBinding) {
-        FontUtils.setFontsTypeface(context, context.assets, null, itemTimelineBinding.root)
+        FontUtils.setFontsTypeface(context, null, itemTimelineBinding.root)
     }
 }

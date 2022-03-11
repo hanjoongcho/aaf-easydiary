@@ -59,7 +59,7 @@ class PinLockActivity : BaseSimpleActivity() {
 
     override fun onResume() {
         super.onResume()
-        FontUtils.setFontsTypeface(applicationContext, assets, null, mBinding.container)
+        FontUtils.setFontsTypeface(applicationContext, null, mBinding.container)
         mBinding.infoMessage.text = if (activityMode == ACTIVITY_SETTING) getString(R.string.pin_setting_guide_message) else getString(R.string.pin_unlock_guide_message)
     }
 

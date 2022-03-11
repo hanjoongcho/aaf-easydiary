@@ -96,7 +96,7 @@ class DiaryMainItemAdapter(
                         updateAppViews(this)
                         initTextSize(this)
                         updateCardViewPolicy(this)
-                        FontUtils.setFontsTypeface(context, context.assets, null, this)
+                        FontUtils.setFontsTypeface(context, null, this)
                     }
 
                     if (config.enableLocationInfo) {

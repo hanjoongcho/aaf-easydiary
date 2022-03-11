@@ -43,7 +43,7 @@ class CheatSheetAdapter(
                 activity.updateTextColors(root)
                 activity.updateAppViews(root)
                 activity.updateCardViewPolicy(root)
-                FontUtils.setFontsTypeface(activity, activity.assets, null, root)
+                FontUtils.setFontsTypeface(activity, null, root)
                 cardItem.setOnClickListener(this@CheatSheetViewHolder)
             }
         }

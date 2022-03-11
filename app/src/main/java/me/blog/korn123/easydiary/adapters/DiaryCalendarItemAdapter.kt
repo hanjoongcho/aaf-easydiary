@@ -43,7 +43,7 @@ class DiaryCalendarItemAdapter(
                 viewHolder
             }
         }.run {
-            FontUtils.setFontsTypeface(context, context.assets, null, item_holder)
+            FontUtils.setFontsTypeface(context, null, item_holder)
             val diaryDto = list[position]
             textView1.run {
                 text = when (StringUtils.isNotEmpty(diaryDto.title)) {

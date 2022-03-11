@@ -51,7 +51,6 @@ import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.models.PhotoUri
 import org.apache.commons.io.IOUtils
-import org.apache.commons.lang3.StringUtils
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream

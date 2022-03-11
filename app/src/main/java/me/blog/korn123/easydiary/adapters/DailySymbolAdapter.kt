@@ -36,7 +36,7 @@ class DailySymbolAdapter(
                     updateTextColors(itemView)
                     updateAppViews(itemView)
                     updateCardViewPolicy(itemView)
-                    FontUtils.setFontsTypeface(this, this.assets, null, itemView)
+                    FontUtils.setFontsTypeface(this, null, itemView)
                 }
             }
         }

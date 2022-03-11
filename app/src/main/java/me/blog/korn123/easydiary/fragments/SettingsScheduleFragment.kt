@@ -176,7 +176,7 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
                 this@activity.initTextSize(root)
                 updateTextColors(root)
                 updateAppViews(root)
-                FontUtils.setFontsTypeface(this@activity, this@activity.assets, null, root)
+                FontUtils.setFontsTypeface(this@activity, null, root)
 
                 if (BuildConfig.FLAVOR == "foss") radioDiaryBackupGms.visibility = View.GONE
             }

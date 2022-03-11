@@ -32,7 +32,7 @@ class OptionItemAdapter(
             activity.run {
                 initTextSize(itemView)
                 updateTextColors(itemView)
-                FontUtils.setFontsTypeface(this, this.assets, null, itemView)
+                FontUtils.setFontsTypeface(this, null, itemView)
             }
         }
 

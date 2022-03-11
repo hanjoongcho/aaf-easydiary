@@ -44,7 +44,7 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
         mBinding.lifecycleOwner = this
         mBinding.viewModel = viewModel
 
-        setSupportActionBar(mBinding.toolbar)
+        setSupportActionBar(mBinding.toolBar)
         mScrollable = createScrollable()
         mScrollable?.setScrollViewCallbacks(this)
     }

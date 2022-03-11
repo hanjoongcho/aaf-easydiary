@@ -21,7 +21,7 @@ class IntroActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         mBinding.root.run {
-            FontUtils.setFontsTypeface(this@IntroActivity, assets, null, this)
+            FontUtils.setFontsTypeface(this@IntroActivity, null, this)
             initTextSize(this)
             setBackgroundColor(config.primaryColor)
             updateStatusBarColor(config.primaryColor)

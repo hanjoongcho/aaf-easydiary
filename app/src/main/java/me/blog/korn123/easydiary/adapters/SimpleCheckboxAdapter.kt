@@ -42,7 +42,7 @@ class SimpleCheckboxAdapter (
                     activity.updateTextColors(this)
                     activity.initTextSize(this)
                     activity.updateAppViews(this)
-                    FontUtils.setFontsTypeface(activity, activity.assets, null, this)
+                    FontUtils.setFontsTypeface(activity, null, this)
                     setOnClickListener(this@SimpleCheckboxViewHolder)
                     itemSimpleCheckboxBinding.checkbox.setOnCheckedChangeListener(this@SimpleCheckboxViewHolder)
                 }

@@ -81,7 +81,7 @@ class FingerprintLockActivity : BaseSimpleActivity() {
 
         if (!mSettingComplete) {
             mBinding.guideMessage.text = getString(R.string.place_finger_description)
-            FontUtils.setFontsTypeface(applicationContext, assets, null, mBinding.container)
+            FontUtils.setFontsTypeface(applicationContext, null, mBinding.container)
             mBinding.changePinLock.visibility = if (mActivityMode == ACTIVITY_SETTING) View.GONE else View.VISIBLE
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

@@ -89,7 +89,7 @@ class DDayAdapter(
                     initTextSize(it)
                     updateTextColors(it)
                     it.setBackgroundColor(config.backgroundColor)
-                    FontUtils.setFontsTypeface(this@activity, this@activity.assets, null, it)
+                    FontUtils.setFontsTypeface(this@activity, null, it)
                 }
 
                 textTargetDate.setOnClickListener {
@@ -159,7 +159,7 @@ class DDayAdapter(
                 updateTextColors(itemDDayBinding.root)
                 updateAppViews(itemDDayBinding.root)
                 updateCardViewPolicy(itemDDayBinding.root)
-                FontUtils.setFontsTypeface(this, this.assets, null, itemDDayBinding.root)
+                FontUtils.setFontsTypeface(this, null, itemDDayBinding.root)
             }
         }
 
@@ -187,7 +187,7 @@ class DDayAdapter(
                     updateTextColors(it)
                     updateAppViews(it)
                     updateCardViewPolicy(it)
-                    FontUtils.setFontsTypeface(this, this.assets, null, it)
+                    FontUtils.setFontsTypeface(this, null, it)
                 }
             }
         }

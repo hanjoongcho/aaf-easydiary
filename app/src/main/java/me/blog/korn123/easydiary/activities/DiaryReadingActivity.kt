@@ -711,7 +711,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
 
         private fun setFontsTypeface() {
             activity?.let { it ->
-                FontUtils.setFontsTypeface(it, it.assets, "", mRootView)
+                FontUtils.setFontsTypeface(it, "", mRootView)
             }
         }
 

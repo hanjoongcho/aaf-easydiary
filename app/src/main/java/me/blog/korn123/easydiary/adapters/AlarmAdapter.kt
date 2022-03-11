@@ -57,7 +57,7 @@ class AlarmAdapter(
                 updateTextColors(viewHolderAlarmBinding.root)
                 updateAppViews(viewHolderAlarmBinding.root)
                 updateCardViewPolicy(viewHolderAlarmBinding.root)
-                FontUtils.setFontsTypeface(this, this.assets, null, viewHolderAlarmBinding.root)
+                FontUtils.setFontsTypeface(this, null, viewHolderAlarmBinding.root)
             }
 
             viewHolderAlarmBinding.root.setOnClickListener(this@AlarmViewHolder)

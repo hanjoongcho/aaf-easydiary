@@ -59,7 +59,7 @@ class PostcardAdapter(
         init {
             itemPostCardBinding.run {
                 activity.updateAppViews(root)
-                FontUtils.setFontsTypeface(activity, activity.assets, null, imageContainer)
+                FontUtils.setFontsTypeface(activity, null, imageContainer)
                 root.setOnClickListener(this@PostcardViewHolder)
                 checkItem.setOnCheckedChangeListener(this@PostcardViewHolder)
             }

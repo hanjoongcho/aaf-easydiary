@@ -29,7 +29,7 @@ class RealmFileItemAdapter(
                 initTextSize(itemView)
                 updateTextColors(itemView)
             }
-            FontUtils.setFontsTypeface(this.context, this.context.assets, null, itemView)
+            FontUtils.setFontsTypeface(this.context, null, itemView)
         }
 
         when (itemView.tag is ViewHolder) {

@@ -314,6 +314,6 @@ class SettingsFontFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun setFontsStyle() {
-        FontUtils.setFontsTypeface(requireActivity(), requireActivity().assets, null, mBinding.root)
+        FontUtils.setFontsTypeface(requireActivity(), null, mBinding.root)
     }
 }

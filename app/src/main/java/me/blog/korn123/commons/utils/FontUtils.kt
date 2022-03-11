@@ -55,6 +55,29 @@ object FontUtils {
         return result
     }
 
+    private fun initDefaultFontSetting(activity: Activity) {
+        activity.run {
+            // Initial font typeface setting
+            if (!preferencesContains(SETTING_FONT_NAME)) {
+                config.settingFontName = CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT
+            }
+
+            // Initial font size setting
+            if (!preferencesContains(SETTING_FONT_SIZE)) {
+                config.settingFontSize = CommonUtils.dpToPixelFloatValue(this, DEFAULT_FONT_SIZE_UN_SUPPORT_LANGUAGE.toFloat())
+            }
+        }
+    }
+
+    private fun initNanumPenFontSetting(activity: Activity) {
+        activity.run {
+            // Initial font size setting
+            if (!preferencesContains(SETTING_FONT_SIZE)) {
+                config.settingFontSize = CommonUtils.dpToPixelFloatValue(this, DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE.toFloat())
+            }
+        }
+    }
+
     fun getCommonTypeface(context: Context): Typeface? {
         if (sTypeface == null) {
             setCommonTypeface(context)
@@ -71,11 +94,7 @@ object FontUtils {
         sTypeface = getTypeface(context, commonFontName)
     }
 
-    fun setFontsTypeface(context: Context, assetManager: AssetManager, customFontName: String?, rootView: ViewGroup?) {
-        setFontsTypeface(context, customFontName, rootView, true)
-    }
-
-    fun setFontsTypeface(context: Context, customFontName: String?, rootView: ViewGroup?, customLineSpacing: Boolean) {
+    fun setFontsTypeface(context: Context, customFontName: String?, rootView: ViewGroup?, customLineSpacing: Boolean = true) {
         val typeface = if (StringUtils.isNotEmpty(customFontName)) getTypeface(context, customFontName) else getCommonTypeface(context)
         rootView?.let {
             setTypeface(context, it, typeface, customLineSpacing)
@@ -112,29 +131,6 @@ object FontUtils {
     }
 
     fun measureTextWidth(paint: Paint, text: String, scaleFactor: Float = 1.9f): Int = paint.measureText(text).toInt().times(scaleFactor).toInt()
-
-    private fun initDefaultFontSetting(activity: Activity) {
-        activity.run {
-            // Initial font typeface setting
-            if (!preferencesContains(SETTING_FONT_NAME)) {
-                config.settingFontName = CUSTOM_FONTS_UNSUPPORTED_LANGUAGE_DEFAULT
-            }
-
-            // Initial font size setting
-            if (!preferencesContains(SETTING_FONT_SIZE)) {
-                config.settingFontSize = CommonUtils.dpToPixelFloatValue(this, DEFAULT_FONT_SIZE_UN_SUPPORT_LANGUAGE.toFloat())
-            }
-        }
-    }
-
-    private fun initNanumPenFontSetting(activity: Activity) {
-        activity.run {
-            // Initial font size setting
-            if (!preferencesContains(SETTING_FONT_SIZE)) {
-                config.settingFontSize = CommonUtils.dpToPixelFloatValue(this, DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE.toFloat())
-            }
-        }
-    }
 
     fun checkFontSetting(activity: Activity) {
         activity.run {

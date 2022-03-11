@@ -46,7 +46,7 @@ class DiaryWeatherItemAdapter(
             }
         }.run {
             textView1.setTextColor(context.config.textColor)
-            FontUtils.setFontsTypeface(context, context.assets, null, item_holder)
+            FontUtils.setFontsTypeface(context, null, item_holder)
             FlavorUtils.initWeatherView(context, imageView1, mList[position].sequence, false)
             textView1.text = mList[position].description
             imageView1.visibility = if (mList[position].sequence == 0) View.GONE else View.VISIBLE
