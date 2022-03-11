@@ -49,6 +49,7 @@
 
         <me.blog.korn123.easydiary.views.CalendarItem
             android:maxLines="1"
+            android:ellipsize="end"
             android:textSize="@dimen/calendar_item_text_default"
             android:layout_marginLeft="1dp"
             android:layout_marginStart="1dp"
@@ -69,6 +70,7 @@
 
         <me.blog.korn123.easydiary.views.CalendarItem
             android:maxLines="1"
+            android:ellipsize="end"
             android:textSize="@dimen/calendar_item_text_default"
             android:layout_marginLeft="1dp"
             android:layout_marginStart="1dp"
@@ -89,6 +91,7 @@
 
         <me.blog.korn123.easydiary.views.CalendarItem
             android:maxLines="1"
+            android:ellipsize="end"
             android:textSize="@dimen/calendar_item_text_default"
             android:layout_marginLeft="1dp"
             android:layout_marginStart="1dp"
