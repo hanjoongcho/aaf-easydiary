@@ -43,6 +43,7 @@
                 android:id="@+id/text_contents"
                 android:layout_marginTop="@dimen/card_contents_padding"
                 android:maxLines="3"
+                android:ellipsize="end"
                 android:gravity="start"
                 style="@style/text_diary_main_item_inner_contents"/>
             <com.google.android.flexbox.FlexboxLayout

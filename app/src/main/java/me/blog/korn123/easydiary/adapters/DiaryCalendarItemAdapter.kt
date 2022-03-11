@@ -54,11 +54,11 @@ class DiaryCalendarItemAdapter(
                 when (context.config.enableContentsSummary) {
                     true -> {
                         maxLines = context.config.summaryMaxLines
-                        ellipsize = TextUtils.TruncateAt.valueOf("END")
+//                        ellipsize = TextUtils.TruncateAt.valueOf("END")
                     }
                     false -> {
                         maxLines = Integer.MAX_VALUE
-                        ellipsize = null
+//                        ellipsize = null
                     }
                 }
             }

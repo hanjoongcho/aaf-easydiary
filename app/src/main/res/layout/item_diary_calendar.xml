@@ -17,6 +17,7 @@
             <com.simplemobiletools.commons.views.MyTextView
                 android:textColor="@color/default_text_color"
                 android:maxLines="1"
+                android:ellipsize="end"
                 android:id="@+id/text1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

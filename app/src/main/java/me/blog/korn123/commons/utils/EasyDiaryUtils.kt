@@ -291,7 +291,8 @@ object EasyDiaryUtils {
     }
 
     fun summaryDiaryLabel(diary: Diary): String {
-        return if (!diary.title.isNullOrEmpty()) diary.title!! else StringUtils.abbreviate(diary.contents, 10)
+//        return if (!diary.title.isNullOrEmpty()) diary.title!! else StringUtils.abbreviate(diary.contents, 10)
+        return if (diary.title.isNullOrEmpty()) diary.contents!! else diary.title!!
     }
 
     fun datePickerToTimeMillis(dayOfMonth: Int, month: Int, year: Int, isFullHour: Boolean = false, hour: Int = 0, minute: Int = 0, second: Int = 0): Long {
