@@ -36,6 +36,7 @@ import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import io.realm.RealmList
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.commons.utils.EasyDiaryUtils.createBackgroundGradientDrawable
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.JasyptUtils
 import me.blog.korn123.easydiary.R
@@ -478,9 +479,18 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
 
     protected fun setupPhotoView() {
         val thumbnailSize = config.settingThumbnailSize
-        val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(applicationContext, thumbnailSize), CommonUtils.dpToPixel(applicationContext, thumbnailSize))
-        mBinding.partialEditContents.partialEditPhotoContainer.photoView.layoutParams = layoutParams
-        mBinding.partialEditContents.partialEditPhotoContainer.captureCamera.layoutParams = layoutParams
+        val imageXY = CommonUtils.dpToPixel(applicationContext, thumbnailSize)
+        val layoutParams = LinearLayout.LayoutParams(imageXY, imageXY)
+        mBinding.partialEditContents.partialEditPhotoContainer.run {
+            photoView.run {
+                setLayoutParams(layoutParams)
+                background = createBackgroundGradientDrawable(config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA, imageXY * PHOTO_CORNER_RADIUS_SCALE_FACTOR)
+            }
+            captureCamera.run {
+                setLayoutParams(layoutParams)
+                background = createBackgroundGradientDrawable(config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA, imageXY * PHOTO_CORNER_RADIUS_SCALE_FACTOR)
+            }
+        }
     }
 
     protected fun setupRecognizer() {

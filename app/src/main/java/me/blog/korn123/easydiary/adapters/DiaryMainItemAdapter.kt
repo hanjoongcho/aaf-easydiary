@@ -3,14 +3,10 @@ package me.blog.korn123.easydiary.adapters
 import android.animation.ArgbEvaluator
 import android.app.Activity
 import android.graphics.drawable.Drawable
-import android.graphics.drawable.GradientDrawable
-import android.view.RoundedCorner
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.ColorUtils
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
@@ -24,11 +20,11 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
-import io.github.aafactory.commons.extensions.dpToPixel
 import io.github.aafactory.commons.utils.CALCULATION
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.commons.utils.EasyDiaryUtils.createBackgroundGradientDrawable
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
@@ -37,6 +33,7 @@ import me.blog.korn123.easydiary.databinding.ItemDiaryMainBinding
 import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR
 import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
 import me.blog.korn123.easydiary.models.Diary
 import org.apache.commons.lang3.StringUtils
@@ -182,16 +179,13 @@ class DiaryMainItemAdapter(
                 photoViews.removeAllViews()
                 if (diary.photoUris?.size ?: 0 > 0) {
                     diary.photoUris?.map {
+                        val imageXY = CommonUtils.dpToPixel(activity, 32F)
                         val path = EasyDiaryUtils.getApplicationDataDirectory(activity) + it.getFilePath()
                         val imageView = ImageView(activity)
-                        val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(activity, 32F), CommonUtils.dpToPixel(activity, 32F))
+                        val layoutParams = LinearLayout.LayoutParams(imageXY, imageXY)
                         layoutParams.setMargins(0, CommonUtils.dpToPixel(activity, 1F), CommonUtils.dpToPixel(activity, 3F), 0)
                         imageView.layoutParams = layoutParams
-                        val drawable = ContextCompat.getDrawable(activity, R.drawable.bg_card_thumbnail)
-                        val gradient = drawable as GradientDrawable
-                        gradient.setColor(ColorUtils.setAlphaComponent(activity.config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA))
-                        imageView.background = gradient
-//                        imageView.scaleType = ImageView.ScaleType.CENTER
+                        imageView.background = createBackgroundGradientDrawable(activity.config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA, imageXY * PHOTO_CORNER_RADIUS_SCALE_FACTOR)
                         CommonUtils.dpToPixel(activity, 1.5F, CALCULATION.FLOOR).apply {
                             imageView.setPadding(this, this, this, this)
                         }
@@ -209,7 +203,7 @@ class DiaryMainItemAdapter(
                                 .placeholder(R.drawable.ic_error_7)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .priority(Priority.HIGH)
-                                .transform(MultiTransformation(CenterCrop(), RoundedCorners(activity.dpToPixel(5F))))
+                                .transform(MultiTransformation(CenterCrop(), RoundedCorners((imageXY * PHOTO_CORNER_RADIUS_SCALE_FACTOR).toInt())))
                         Glide.with(activity).load(path).listener(listener).apply(options).into(imageView)
 //                    if (photoViews.childCount >= maxPhotos) return@map
                         photoViews.addView(imageView)

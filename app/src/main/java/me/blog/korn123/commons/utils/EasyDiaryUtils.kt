@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Build
@@ -34,7 +35,10 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
+import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.google.common.reflect.TypeToken
 import com.google.gson.GsonBuilder
@@ -60,8 +64,11 @@ import java.util.*
 /**
  * Created by hanjoong on 2017-04-30.
  */
-
 object EasyDiaryUtils {
+    /***************************************************************************************************
+     *   Constants
+     *
+     ***************************************************************************************************/
     private const val HIGHLIGHT_COLOR: Int = 0x9FFFFF00.toInt()
 
     val easyDiaryMimeType: String
@@ -83,6 +90,38 @@ object EasyDiaryUtils {
             }
             return easyDiaryMimeType
         }
+
+
+    /***************************************************************************************************
+     *   Drawable Utils
+     *
+     ***************************************************************************************************/
+    fun createBackgroundGradientDrawable(color: Int, alpha: Int, cornerRadius: Float): Drawable {
+        val gradientDrawable = GradientDrawable().apply {
+            setColor(ColorUtils.setAlphaComponent(color, alpha))
+            setCornerRadius(cornerRadius)
+        }
+        return gradientDrawable
+    }
+
+    fun createAttachedPhotoView(context: Context, photoUri: PhotoUri, marginLeft:Float = 0F, marginTop:Float = 0F, marginRight:Float = 3F, marginBottom:Float = 0F): ImageView {
+        val thumbnailSize = CommonUtils.dpToPixel(context, context.config.settingThumbnailSize)
+        val cornerRadius = thumbnailSize * PHOTO_CORNER_RADIUS_SCALE_FACTOR
+        val imageView = ImageView(context)
+        val layoutParams = LinearLayout.LayoutParams(thumbnailSize, thumbnailSize)
+        layoutParams.setMargins(CommonUtils.dpToPixel(context, marginLeft), CommonUtils.dpToPixel(context, marginTop), CommonUtils.dpToPixel(context, marginRight), CommonUtils.dpToPixel(context, marginBottom))
+        imageView.layoutParams = layoutParams
+        imageView.background = createBackgroundGradientDrawable(context.config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA, cornerRadius)
+        val padding = (CommonUtils.dpToPixel(context, 2.5F, CALCULATION.FLOOR))
+        imageView.setPadding(padding, padding, padding, padding)
+        val options = RequestOptions()
+            .placeholder(R.drawable.ic_error_7)
+            .transform(MultiTransformation(CenterCrop(), RoundedCorners(cornerRadius.toInt())))
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .priority(Priority.HIGH)
+        Glide.with(context).load(getApplicationDataDirectory(context) + photoUri.getFilePath()).apply(options).into(imageView)
+        return imageView
+    }
 
     fun initWorkingDirectory(context: Context) {
 //        if (context.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
@@ -328,32 +367,6 @@ object EasyDiaryUtils {
             returnCursor.close()
         }
         return name ?: UUID.randomUUID().toString()
-    }
-
-    fun createAttachedPhotoView(context: Context, photoUri: PhotoUri, marginLeft:Float = 0F, marginTop:Float = 0F, marginRight:Float = 3F, marginBottom:Float = 0F, bgResourceId: Int = R.drawable.bg_card_thumbnail): ImageView {
-        val thumbnailSize = context.config.settingThumbnailSize
-//        val bitmap = photoUriToDownSamplingBitmap(context, photoUriDto, 0, thumbnailSize.toInt() - 5, thumbnailSize.toInt() - 5)
-        val imageView = ImageView(context)
-        val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(context, thumbnailSize), CommonUtils.dpToPixel(context, thumbnailSize))
-//        val marginLeft = if (photoIndex == 0)  0 else CommonUtils.dpToPixel(context, 3F)
-        layoutParams.setMargins(CommonUtils.dpToPixel(context, marginLeft), CommonUtils.dpToPixel(context, marginTop), CommonUtils.dpToPixel(context, marginRight), CommonUtils.dpToPixel(context, marginBottom))
-        imageView.layoutParams = layoutParams
-        val drawable = ContextCompat.getDrawable(context, bgResourceId)
-        val gradient = drawable as GradientDrawable
-        gradient.setColor(ColorUtils.setAlphaComponent(context.config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA))
-        imageView.background = gradient
-//        imageView.setImageBitmap(bitmap)
-        val padding = (CommonUtils.dpToPixel(context, 2.5F, CALCULATION.FLOOR))
-        imageView.setPadding(padding, padding, padding, padding)
-        imageView.scaleType = ImageView.ScaleType.CENTER
-        val options = RequestOptions()
-//                .error(R.drawable.error_7)
-                .placeholder(R.drawable.ic_error_7)
-                .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .priority(Priority.HIGH)
-        Glide.with(context).load(getApplicationDataDirectory(context) + photoUri.getFilePath()).apply(options).into(imageView)
-        return imageView
     }
 
     fun jsonFileToHashMap(filename: String): HashMap<String, Any> {
