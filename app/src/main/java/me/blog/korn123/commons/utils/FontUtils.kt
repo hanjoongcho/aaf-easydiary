@@ -2,7 +2,6 @@ package me.blog.korn123.commons.utils
 
 import android.app.Activity
 import android.content.Context
-import android.content.res.AssetManager
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.view.ViewGroup
