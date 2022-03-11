@@ -4,6 +4,7 @@ import android.animation.ArgbEvaluator
 import android.app.Activity
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
+import android.view.RoundedCorner
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -14,12 +15,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
+import io.github.aafactory.commons.extensions.dpToPixel
 import io.github.aafactory.commons.utils.CALCULATION
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
@@ -176,18 +181,17 @@ class DiaryMainItemAdapter(
 
                 photoViews.removeAllViews()
                 if (diary.photoUris?.size ?: 0 > 0) {
-                    val maxPhotos = CommonUtils.getDefaultDisplay(activity).x / CommonUtils.dpToPixel(activity, 40F)
                     diary.photoUris?.map {
                         val path = EasyDiaryUtils.getApplicationDataDirectory(activity) + it.getFilePath()
                         val imageView = ImageView(activity)
-                        val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(activity, 28F), CommonUtils.dpToPixel(activity, 28F))
+                        val layoutParams = LinearLayout.LayoutParams(CommonUtils.dpToPixel(activity, 35F), CommonUtils.dpToPixel(activity, 35F))
                         layoutParams.setMargins(0, CommonUtils.dpToPixel(activity, 1F), CommonUtils.dpToPixel(activity, 3F), 0)
                         imageView.layoutParams = layoutParams
                         val drawable = ContextCompat.getDrawable(activity, R.drawable.bg_card_thumbnail)
                         val gradient = drawable as GradientDrawable
                         gradient.setColor(ColorUtils.setAlphaComponent(activity.config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA))
                         imageView.background = gradient
-                        imageView.scaleType = ImageView.ScaleType.CENTER
+//                        imageView.scaleType = ImageView.ScaleType.CENTER
                         CommonUtils.dpToPixel(activity, 1.5F, CALCULATION.FLOOR).apply {
                             imageView.setPadding(this, this, this, this)
                         }
@@ -205,7 +209,7 @@ class DiaryMainItemAdapter(
                                 .placeholder(R.drawable.ic_error_7)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .priority(Priority.HIGH)
-                                .centerCrop()
+                                .transform(MultiTransformation(CenterCrop(), RoundedCorners(activity.dpToPixel(5F))))
                         Glide.with(activity).load(path).listener(listener).apply(options).into(imageView)
 //                    if (photoViews.childCount >= maxPhotos) return@map
                         photoViews.addView(imageView)
