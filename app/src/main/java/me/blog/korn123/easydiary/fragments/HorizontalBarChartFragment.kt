@@ -20,7 +20,7 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import io.github.aafactory.commons.utils.CommonUtils
 import kotlinx.coroutines.*
-import me.blog.korn123.commons.utils.ChartUtils
+import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
@@ -108,7 +108,7 @@ class HorizontalBarChartFragment : androidx.fragment.app.Fragment() {
         }
 
         mCoroutineJob = CoroutineScope(Dispatchers.IO).launch {
-            val sortedMap = ChartUtils.getSortedMapBySymbol(true)
+            val sortedMap = EasyDiaryUtils.getSortedMapBySymbol(true)
             val barEntries = ArrayList<BarEntry>()
             var index = 1F
             val itemArray = arrayListOf<HashMap<String, Int>>()

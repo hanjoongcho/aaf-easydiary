@@ -93,7 +93,57 @@ object EasyDiaryUtils {
 
 
     /***************************************************************************************************
-     *   Drawable Utils
+     *   String Utils
+     *
+     ***************************************************************************************************/
+    fun summaryDiaryLabel(diary: Diary): String {
+//        return if (!diary.title.isNullOrEmpty()) diary.title!! else StringUtils.abbreviate(diary.contents, 10)
+        return if (diary.title.isNullOrEmpty()) diary.contents!! else diary.title!!
+    }
+
+    fun searchWordIndexes(contents: String, searchWord: String): List<Int> {
+        val indexes = arrayListOf<Int>()
+        if (searchWord.isNotEmpty()) {
+            var index = contents.indexOf(searchWord, 0, true)
+            while (index >= 0) {
+                indexes.add(index)
+                index = contents.indexOf(searchWord, index.plus(1), true)
+            }
+        }
+        return indexes
+    }
+
+
+    /***************************************************************************************************
+     *   Date Utils
+     *
+     ***************************************************************************************************/
+    fun datePickerToTimeMillis(dayOfMonth: Int, month: Int, year: Int, isFullHour: Boolean = false, hour: Int = 0, minute: Int = 0, second: Int = 0): Long {
+        val cal = Calendar.getInstance(Locale.getDefault())
+        cal.set(Calendar.YEAR, year)
+        cal.set(Calendar.MONTH, month)
+        cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+        cal.set(Calendar.HOUR_OF_DAY, if (isFullHour) 23 else hour)
+        cal.set(Calendar.MINUTE, if (isFullHour) 59 else minute)
+        cal.set(Calendar.SECOND, if (isFullHour) 59 else second)
+        return cal.timeInMillis
+    }
+
+    fun convDateToTimeMillis(field: Int, amount: Int, isZeroHour: Boolean = true, isZeroMinute: Boolean = true, isZeroSecond: Boolean = true, isZeroMilliSecond: Boolean = true): Long {
+        val calendar = Calendar.getInstance(Locale.getDefault())
+        if (isZeroHour) calendar.set(Calendar.HOUR_OF_DAY, 0)
+        if (isZeroMinute) calendar.set(Calendar.MINUTE, 0)
+        if (isZeroSecond) calendar.set(Calendar.SECOND, 0)
+        if (isZeroMilliSecond) calendar.set(Calendar.MILLISECOND, 0)
+        if (amount != 0) {
+            calendar.add(field, amount)
+        }
+        return calendar.timeInMillis
+    }
+
+
+    /***************************************************************************************************
+     *   Image Utils
      *
      ***************************************************************************************************/
     fun createBackgroundGradientDrawable(color: Int, alpha: Int, cornerRadius: Float): Drawable {
@@ -123,6 +173,46 @@ object EasyDiaryUtils {
         return imageView
     }
 
+    fun downSamplingImage(context: Context, uri: Uri, destFile: File): String {
+        val mimeType = context.contentResolver.getType(uri) ?: MIME_TYPE_JPEG
+        val uriStream = context.contentResolver.openInputStream(uri)
+        when (mimeType) {
+            "image/gif" -> {
+//                Handler(Looper.getMainLooper()).post { context.toast(mimeType, Toast.LENGTH_SHORT) }
+                val fos = FileOutputStream(destFile)
+                IOUtils.copy(uriStream, fos)
+                uriStream?.close()
+                fos.close()
+            }
+            else ->{
+                val tempFile = File.createTempFile(UUID.randomUUID().toString(), "tmp")
+                val fos = FileOutputStream(tempFile)
+                IOUtils.copy(uriStream, fos)
+                val compressedFile = Compressor(context).setQuality(70).compressToFile(tempFile)
+                compressedFile.copyTo(destFile, true)
+                uriStream?.close()
+                fos.close()
+                tempFile.delete()
+            }
+        }
+        return mimeType
+    }
+
+    fun downSamplingImage(context: Context, srcFile: File, destFile: File) {
+        val compressedFile = Compressor(context).setQuality(70).compressToFile(srcFile)
+        compressedFile.copyTo(destFile, true)
+    }
+
+
+    /***************************************************************************************************
+     *   File Utils
+     *
+     ***************************************************************************************************/
+    private fun makeDirectory(path: String) {
+        val workingDirectory = File(path)
+        if (!workingDirectory.exists()) workingDirectory.mkdirs()
+    }
+
     fun initWorkingDirectory(context: Context) {
 //        if (context.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
             makeDirectory(getApplicationDataDirectory(context) + DIARY_PHOTO_DIRECTORY)
@@ -134,15 +224,12 @@ object EasyDiaryUtils {
 //        }
     }
 
+    fun getExternalStorageDirectory(): File = Environment.getExternalStorageDirectory()
+
     fun initLegacyWorkingDirectory(context: Context) {
         if (context.checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
             makeDirectory(getExternalStorageDirectory().absolutePath + BACKUP_EXCEL_DIRECTORY)
         }
-    }
-
-    private fun makeDirectory(path: String) {
-        val workingDirectory = File(path)
-        if (!workingDirectory.exists()) workingDirectory.mkdirs()
     }
 
     fun getApplicationDataDirectory(context: Context): String {
@@ -150,15 +237,39 @@ object EasyDiaryUtils {
         return context.applicationInfo.dataDir
     }
 
-    fun getExternalStorageDirectory(): File = Environment.getExternalStorageDirectory()
+    fun readFileWithSAF(mimeType: String, activityResultLauncher: ActivityResultLauncher<Intent>) {
+        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+            type = mimeType
+        }
+        activityResultLauncher.launch(intent)
+    }
 
-    fun boldString(context: Context, textView: TextView?) {
-        if (context.config.boldStyleEnable) {
-            boldStringForce(context, textView)
+    fun writeFileWithSAF(fileName: String, mimeType: String, activityResultLauncher: ActivityResultLauncher<Intent>) {
+        Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+            // Filter to only show results that can be "opened", such as
+            // a file (as opposed to a list of contacts or timezones).
+            addCategory(Intent.CATEGORY_OPENABLE)
+
+            type = mimeType
+            // Create a file with the requested MIME type.
+            putExtra(Intent.EXTRA_TITLE, fileName)
+        }.run {
+            activityResultLauncher.launch(this)
         }
     }
 
-    fun boldStringForce(context: Context, textView: TextView?) {
+
+    /***************************************************************************************************
+     *   View Utils
+     *
+     ***************************************************************************************************/
+    fun boldString(context: Context, textView: TextView?) {
+        if (context.config.boldStyleEnable) {
+            boldStringForce(textView)
+        }
+    }
+
+    fun boldStringForce(textView: TextView?) {
         textView?.let { tv ->
             val spannableString = SpannableString(tv.text)
             spannableString.setSpan(StyleSpan(Typeface.BOLD), 0, tv.text.length, 0)
@@ -230,6 +341,16 @@ object EasyDiaryUtils {
         spannableString.getSpans(0, spannableString.length, ForegroundColorSpan::class.java)?.forEach { spannableString.removeSpan(it) }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
+    fun disableTouchEvent(view: View) {
+        view.setOnTouchListener { _, _ -> true }
+    }
+
+
+    /***************************************************************************************************
+     *   Dialog Utils
+     *
+     ***************************************************************************************************/
     fun createSecondsPickerBuilder(context: Context, itemClickListener: AdapterView.OnItemClickListener, second: Int): AlertDialog.Builder {
         val builder = AlertDialog.Builder(context)
         builder.setNegativeButton(context.getString(android.R.string.cancel), null)
@@ -251,12 +372,119 @@ object EasyDiaryUtils {
         return builder
     }
 
+    fun openCustomOptionMenu(content: View, parent: View): PopupWindow {
+        val width = LinearLayout.LayoutParams.WRAP_CONTENT
+        val height = LinearLayout.LayoutParams.WRAP_CONTENT
+        val popup: PopupWindow = PopupWindow(content, width, height, true).apply {
+//            animationStyle = R.style.text_view_option_animation
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            showAtLocation(parent, Gravity.TOP or Gravity.RIGHT,0, CommonUtils.dpToPixel(parent.context, 24F))
+        }
+        content.x = 1000f
+        content.y = 0f
+        val animX = ObjectAnimator.ofFloat(content, "x", 0f)
+        val animY = ObjectAnimator.ofFloat(content, "y", 0f)
+        AnimatorSet().apply {
+            playTogether(animX, animY)
+            duration = 390
+            start()
+        }
+        return popup
+    }
+
+
+    /***************************************************************************************************
+     *   Conversion Utils
+     *
+     ***************************************************************************************************/
+    fun sequenceToPageIndex(diaryList: List<Diary>, sequence: Int): Int {
+        var pageIndex = 0
+        if (sequence > -1) {
+            for (i in diaryList.indices) {
+                if (diaryList[i].sequence == sequence) {
+                    pageIndex = i
+                    break
+                }
+            }
+        }
+        return pageIndex
+    }
+
+    fun queryName(resolver: ContentResolver, uri: Uri): String {
+        val returnCursor: Cursor? = resolver.query(uri, null, null, null, null)
+        var name: String? = null
+        returnCursor?.let {
+            val nameIndex = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+            it.moveToFirst()
+            name = returnCursor.getString(nameIndex);
+            returnCursor.close()
+        }
+        return name ?: UUID.randomUUID().toString()
+    }
+
+    fun jsonStringToHashMap(jsonString: String): HashMap<String, Any> {
+        val type = object : TypeToken<HashMap<String, Any>>(){}.type
+        return GsonBuilder().create().fromJson(jsonString, type)
+    }
+
+    fun jsonFileToHashMap(filename: String): HashMap<String, Any> {
+        val reader = JsonReader(FileReader(filename))
+        val type = object : TypeToken<HashMap<String, Any>>(){}.type
+        val map: HashMap<String, Any> = GsonBuilder().create().fromJson(reader, type)
+        reader.close()
+        return map
+    }
+
+    fun hashMapToJsonString(map: HashMap<String, Any>): String {
+        val gson = GsonBuilder().setPrettyPrinting().create()
+        return gson.toJson(map)
+    }
+
+    fun fromHtml(target: String): Spanned {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            return Html.fromHtml(target)
+        }
+        return Html.fromHtml(target, Html.FROM_HTML_MODE_LEGACY);
+    }
+
+
+    /***************************************************************************************************
+     *   Chart Utils
+     *
+     ***************************************************************************************************/
+    fun getSortedMapBySymbol(isReverse: Boolean = false, startTimeMillis: Long = 0, endTimeMillis: Long = 0): Map<Int, Int> {
+        val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
+        val listDiary = EasyDiaryDbHelper.findDiary(null, false, startTimeMillis, endTimeMillis, realmInstance = realmInstance)
+        realmInstance.close()
+        val map = hashMapOf<Int, Int>()
+        listDiary.map { diaryDto ->
+            val targetColumn = diaryDto.weather
+            if (targetColumn != 0) {
+                if (map[targetColumn] == null) {
+                    map[targetColumn] = 1
+                } else {
+                    map[targetColumn] = (map[targetColumn] ?: 0) + 1
+                }
+            }
+        }
+
+        return when(isReverse) {
+            true -> map.toList().sortedByDescending { (_, value) -> value }.toMap()
+            false -> map.toList().sortedBy { (_, value) -> value }.toMap()
+        }
+    }
+
+
+    /***************************************************************************************************
+     *   Legacy Utils
+     *
+     ***************************************************************************************************/
     fun photoUriToDownSamplingBitmap(
-            context: Context,
-            photoUri: PhotoUri,
-            requiredSize: Int = 50,
-            fixedWidth: Int = 45,
-            fixedHeight: Int = 45
+        context: Context,
+        photoUri: PhotoUri,
+        requiredSize: Int = 50,
+        fixedWidth: Int = 45,
+        fixedHeight: Int = 45
     ): Bitmap = try {
         when (photoUri.isContentUri()) {
             true -> {
@@ -296,166 +524,5 @@ object EasyDiaryUtils {
             null
         }
         return bitmap
-    }
-
-    fun downSamplingImage(context: Context, uri: Uri, destFile: File): String {
-        val mimeType = context.contentResolver.getType(uri) ?: MIME_TYPE_JPEG
-        val uriStream = context.contentResolver.openInputStream(uri)
-        when (mimeType) {
-            "image/gif" -> {
-//                Handler(Looper.getMainLooper()).post { context.toast(mimeType, Toast.LENGTH_SHORT) }
-                val fos = FileOutputStream(destFile)
-                IOUtils.copy(uriStream, fos)
-                uriStream?.close()
-                fos.close()
-            }
-            else ->{
-                val tempFile = File.createTempFile(UUID.randomUUID().toString(), "tmp")
-                val fos = FileOutputStream(tempFile)
-                IOUtils.copy(uriStream, fos)
-                val compressedFile = Compressor(context).setQuality(70).compressToFile(tempFile)
-                compressedFile.copyTo(destFile, true)
-                uriStream?.close()
-                fos.close()
-                tempFile.delete()
-            }
-        }
-        return mimeType
-    }
-
-    fun downSamplingImage(context: Context, srcFile: File, destFile: File) {
-        val compressedFile = Compressor(context).setQuality(70).compressToFile(srcFile)
-        compressedFile.copyTo(destFile, true)
-    }
-
-    fun summaryDiaryLabel(diary: Diary): String {
-//        return if (!diary.title.isNullOrEmpty()) diary.title!! else StringUtils.abbreviate(diary.contents, 10)
-        return if (diary.title.isNullOrEmpty()) diary.contents!! else diary.title!!
-    }
-
-    fun datePickerToTimeMillis(dayOfMonth: Int, month: Int, year: Int, isFullHour: Boolean = false, hour: Int = 0, minute: Int = 0, second: Int = 0): Long {
-        val cal = Calendar.getInstance(Locale.getDefault())
-        cal.set(Calendar.YEAR, year)
-        cal.set(Calendar.MONTH, month)
-        cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-        cal.set(Calendar.HOUR_OF_DAY, if (isFullHour) 23 else hour)
-        cal.set(Calendar.MINUTE, if (isFullHour) 59 else minute)
-        cal.set(Calendar.SECOND, if (isFullHour) 59 else second)
-        return cal.timeInMillis
-    }
-
-    fun sequenceToPageIndex(diaryList: List<Diary>, sequence: Int): Int {
-        var pageIndex = 0
-        if (sequence > -1) {
-            for (i in diaryList.indices) {
-                if (diaryList[i].sequence == sequence) {
-                    pageIndex = i
-                    break
-                }
-            }
-        }
-        return pageIndex
-    }
-
-    fun queryName(resolver: ContentResolver, uri: Uri): String {
-        val returnCursor: Cursor? = resolver.query(uri, null, null, null, null)
-        var name: String? = null
-        returnCursor?.let {
-            val nameIndex = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-            it.moveToFirst()
-            name = returnCursor.getString(nameIndex);
-            returnCursor.close()
-        }
-        return name ?: UUID.randomUUID().toString()
-    }
-
-    fun jsonFileToHashMap(filename: String): HashMap<String, Any> {
-        val reader = JsonReader(FileReader(filename))
-        val type = object : TypeToken<HashMap<String, Any>>(){}.type
-        val map: HashMap<String, Any> = GsonBuilder().create().fromJson(reader, type)
-        reader.close()
-        return map
-    }
-
-    fun fromHtml(target: String): Spanned {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-            return Html.fromHtml(target)
-        }
-        return Html.fromHtml(target, Html.FROM_HTML_MODE_LEGACY);
-    }
-
-    fun jsonStringToHashMap(jsonString: String): HashMap<String, Any> {
-        val type = object : TypeToken<HashMap<String, Any>>(){}.type
-        return GsonBuilder().create().fromJson(jsonString, type)
-    }
-
-    fun openCustomOptionMenu(content: View, parent: View): PopupWindow {
-        val width = LinearLayout.LayoutParams.WRAP_CONTENT
-        val height = LinearLayout.LayoutParams.WRAP_CONTENT
-        val popup: PopupWindow = PopupWindow(content, width, height, true).apply {
-//            animationStyle = R.style.text_view_option_animation
-            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            showAtLocation(parent, Gravity.TOP or Gravity.RIGHT,0, CommonUtils.dpToPixel(parent.context, 24F))
-        }
-        content.x = 1000f
-        content.y = 0f
-        val animX = ObjectAnimator.ofFloat(content, "x", 0f)
-        val animY = ObjectAnimator.ofFloat(content, "y", 0f)
-        AnimatorSet().apply {
-            playTogether(animX, animY)
-            duration = 390
-            start()
-        }
-        return popup
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    fun disableTouchEvent(view: View) {
-        view.setOnTouchListener { _, _ -> true }
-    }
-
-    fun readFileWithSAF(mimeType: String, activityResultLauncher: ActivityResultLauncher<Intent>) {
-        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
-            type = mimeType
-        }
-        activityResultLauncher.launch(intent)
-    }
-
-    fun writeFileWithSAF(fileName: String, mimeType: String, activityResultLauncher: ActivityResultLauncher<Intent>) {
-        Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-            // Filter to only show results that can be "opened", such as
-            // a file (as opposed to a list of contacts or timezones).
-            addCategory(Intent.CATEGORY_OPENABLE)
-
-            type = mimeType
-            // Create a file with the requested MIME type.
-            putExtra(Intent.EXTRA_TITLE, fileName)
-        }.run {
-            activityResultLauncher.launch(this)
-        }
-    }
-
-    fun searchWordIndexes(contents: String, searchWord: String): List<Int> {
-        val indexes = arrayListOf<Int>()
-        if (searchWord.isNotEmpty()) {
-            var index = contents.indexOf(searchWord, 0, true)
-            while (index >= 0) {
-                indexes.add(index)
-                index = contents.indexOf(searchWord, index.plus(1), true)
-            }
-        }
-        return indexes
-    }
-
-    fun convDateToTimeMillis(field: Int, amount: Int, isZeroHour: Boolean = true, isZeroMinute: Boolean = true, isZeroSecond: Boolean = true, isZeroMilliSecond: Boolean = true): Long {
-        val calendar = Calendar.getInstance(Locale.getDefault())
-        if (isZeroHour) calendar.set(Calendar.HOUR_OF_DAY, 0)
-        if (isZeroMinute) calendar.set(Calendar.MINUTE, 0)
-        if (isZeroSecond) calendar.set(Calendar.SECOND, 0)
-        if (isZeroMilliSecond) calendar.set(Calendar.MILLISECOND, 0)
-        if (amount != 0) {
-            calendar.add(field, amount)
-        }
-        return calendar.timeInMillis
     }
 }

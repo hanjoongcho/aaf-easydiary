@@ -164,7 +164,7 @@ class DDayAdapter(
         }
 
         fun bindTo(dDay: DDay) {
-            EasyDiaryUtils.boldStringForce(activity, itemDDayBinding.textDayRemaining)
+            EasyDiaryUtils.boldStringForce(itemDDayBinding.textDayRemaining)
             itemDDayBinding.run {
                 textTitle.text = dDay.title
                 textTargetDate.text = DateUtils.getDateStringFromTimeMillis(dDay.targetTimeStamp)

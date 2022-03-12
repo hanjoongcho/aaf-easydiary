@@ -53,6 +53,7 @@ import io.github.aafactory.commons.utils.DateUtils
 import io.github.aafactory.commons.views.ModalView
 import io.realm.Realm
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.commons.utils.EasyDiaryUtils.hashMapToJsonString
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryWritingActivity
@@ -437,9 +438,7 @@ fun Context.preferenceToJsonString(): String {
     // ETC.
     preferenceMap[SETTING_SELECTED_SYMBOLS] = config.selectedSymbols
 
-    val gson = GsonBuilder().setPrettyPrinting().create()
-    jsonString = gson.toJson(preferenceMap)
-    return jsonString
+    return hashMapToJsonString(preferenceMap)
 }
 
 fun Context.shareFile(targetFile: File) {

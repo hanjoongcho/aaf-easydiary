@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import io.github.aafactory.commons.utils.DateUtils
-import me.blog.korn123.commons.utils.ChartUtils
+import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.FragmentDashboardRankBinding
@@ -41,7 +41,7 @@ class DashBoardRankFragment : androidx.fragment.app.Fragment() {
                     val endDate = DateUtils.getDateStringFromTimeMillis(endMillis, SimpleDateFormat.MEDIUM)
                     val periodInfo = "$startDate - $endDate"
                     period.text = periodInfo
-                    ChartUtils.getSortedMapBySymbol(true, startMillis, endMillis)
+                    EasyDiaryUtils.getSortedMapBySymbol(true, startMillis, endMillis)
                 }
                 MODE_LAST_WEEK -> {
                     val calendar = Calendar.getInstance()
@@ -54,7 +54,7 @@ class DashBoardRankFragment : androidx.fragment.app.Fragment() {
                     val endDate = DateUtils.getDateStringFromTimeMillis(endMillis, SimpleDateFormat.MEDIUM)
                     val periodInfo = "$startDate - $endDate"
                     period.text = periodInfo
-                    ChartUtils.getSortedMapBySymbol(true, startMillis, endMillis)
+                    EasyDiaryUtils.getSortedMapBySymbol(true, startMillis, endMillis)
                 }
                 else -> {
                     val firstDiary = EasyDiaryDbHelper.findFirstDiary()
@@ -66,7 +66,7 @@ class DashBoardRankFragment : androidx.fragment.app.Fragment() {
                     val endDate = DateUtils.getDateStringFromTimeMillis(endMillis, SimpleDateFormat.MEDIUM)
                     val periodInfo = "$startDate - $endDate"
                     period.text = periodInfo
-                    ChartUtils.getSortedMapBySymbol(true)
+                    EasyDiaryUtils.getSortedMapBySymbol(true)
                 }
             }
 
