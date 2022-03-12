@@ -7,21 +7,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.CompoundButton
+import android.widget.ImageView
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView.SectionedAdapter
 import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
+import me.blog.korn123.commons.utils.EasyDiaryUtils.createThumbnailGlideOptions
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.databinding.ItemPostCardBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.updateAppViews
+import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.floor
 
 class PostcardAdapter(
         val activity: Activity,
@@ -79,12 +81,13 @@ class PostcardAdapter(
             activity.run {
                 val point =  CommonUtils.getDefaultDisplay(this)
                 val spanCount = if (activity.isLandScape()) config.postcardSpanCountLandscape else config.postcardSpanCountPortrait
-                val targetX = floor((point.x - CommonUtils.dpToPixelFloatValue(itemPostCardBinding.imageview.context, 9F)) / spanCount)
-                itemPostCardBinding.imageContainer.layoutParams.height = targetX.toInt()
-                itemPostCardBinding.imageview.layoutParams.height = targetX.toInt()
+                val targetX = point.x / spanCount
+                itemPostCardBinding.imageContainer.layoutParams.height = targetX
+                itemPostCardBinding.imageview.layoutParams.height = targetX
+                itemPostCardBinding.imageview.scaleType = ImageView.ScaleType.CENTER
                 Glide.with(itemPostCardBinding.imageview.context)
                         .load(postCard.file)
-//                .apply(RequestOptions().placeholder(R.drawable.ic_aaf_photos).fitCenter())
+                        .apply(createThumbnailGlideOptions(targetX * PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL * 0.2F))
                         .into(itemPostCardBinding.imageview)
             }
         }

@@ -155,7 +155,7 @@ object EasyDiaryUtils {
 
     fun createAttachedPhotoView(context: Context, photoUri: PhotoUri, marginLeft:Float = 0F, marginTop:Float = 0F, marginRight:Float = 3F, marginBottom:Float = 0F): ImageView {
         val thumbnailSize = CommonUtils.dpToPixel(context, context.config.settingThumbnailSize)
-        val cornerRadius = thumbnailSize * PHOTO_CORNER_RADIUS_SCALE_FACTOR
+        val cornerRadius = thumbnailSize * PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
         val imageView = ImageView(context)
         val layoutParams = LinearLayout.LayoutParams(thumbnailSize, thumbnailSize)
         layoutParams.setMargins(CommonUtils.dpToPixel(context, marginLeft), CommonUtils.dpToPixel(context, marginTop), CommonUtils.dpToPixel(context, marginRight), CommonUtils.dpToPixel(context, marginBottom))

@@ -22,7 +22,6 @@ limitations under the License.
     
     <androidx.appcompat.widget.AppCompatImageView
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:scaleType="centerCrop"
         android:id="@+id/imageview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

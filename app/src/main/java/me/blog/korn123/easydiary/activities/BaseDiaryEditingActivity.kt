@@ -484,11 +484,11 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
         mBinding.partialEditContents.partialEditPhotoContainer.run {
             photoView.run {
                 setLayoutParams(layoutParams)
-                background = createBackgroundGradientDrawable(config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA, imageXY * PHOTO_CORNER_RADIUS_SCALE_FACTOR)
+                background = createBackgroundGradientDrawable(config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA, imageXY * PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL)
             }
             captureCamera.run {
                 setLayoutParams(layoutParams)
-                background = createBackgroundGradientDrawable(config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA, imageXY * PHOTO_CORNER_RADIUS_SCALE_FACTOR)
+                background = createBackgroundGradientDrawable(config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA, imageXY * PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL)
             }
         }
     }
