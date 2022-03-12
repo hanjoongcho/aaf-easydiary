@@ -31,7 +31,6 @@ import android.view.View
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
@@ -162,14 +161,13 @@ object EasyDiaryUtils {
         layoutParams.setMargins(CommonUtils.dpToPixel(context, marginLeft), CommonUtils.dpToPixel(context, marginTop), CommonUtils.dpToPixel(context, marginRight), CommonUtils.dpToPixel(context, marginBottom))
         imageView.layoutParams = layoutParams
         imageView.background = createBackgroundGradientDrawable(context.config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA, cornerRadius)
+        imageView.scaleType = ImageView.ScaleType.CENTER
         val padding = (CommonUtils.dpToPixel(context, 2.5F, CALCULATION.FLOOR))
         imageView.setPadding(padding, padding, padding, padding)
-        val options = RequestOptions()
-            .placeholder(R.drawable.ic_error_7)
-            .transform(MultiTransformation(CenterCrop(), RoundedCorners(cornerRadius.toInt())))
-            .diskCacheStrategy(DiskCacheStrategy.ALL)
-            .priority(Priority.HIGH)
-        Glide.with(context).load(getApplicationDataDirectory(context) + photoUri.getFilePath()).apply(options).into(imageView)
+        Glide.with(context)
+            .load(getApplicationDataDirectory(context) + photoUri.getFilePath())
+            .apply(createThumbnailGlideOptions(cornerRadius))
+            .into(imageView)
         return imageView
     }
 
@@ -202,6 +200,15 @@ object EasyDiaryUtils {
         val compressedFile = Compressor(context).setQuality(70).compressToFile(srcFile)
         compressedFile.copyTo(destFile, true)
     }
+
+    fun createThumbnailGlideOptions(radius: Float): RequestOptions = createThumbnailGlideOptions(radius.toInt())
+
+    fun createThumbnailGlideOptions(radius: Int): RequestOptions = RequestOptions()
+        /*.error(R.drawable.error_7)*/
+        .placeholder(R.drawable.ic_error_7)
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
+        .priority(Priority.HIGH)
+        .transform(MultiTransformation(CenterCrop(), RoundedCorners(radius)))
 
 
     /***************************************************************************************************

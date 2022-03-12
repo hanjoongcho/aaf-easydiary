@@ -25,6 +25,7 @@ import io.github.aafactory.commons.utils.CommonUtils
 import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createBackgroundGradientDrawable
+import me.blog.korn123.commons.utils.EasyDiaryUtils.createThumbnailGlideOptions
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
@@ -186,6 +187,7 @@ class DiaryMainItemAdapter(
                         layoutParams.setMargins(0, CommonUtils.dpToPixel(activity, 1F), CommonUtils.dpToPixel(activity, 3F), 0)
                         imageView.layoutParams = layoutParams
                         imageView.background = createBackgroundGradientDrawable(activity.config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA, imageXY * PHOTO_CORNER_RADIUS_SCALE_FACTOR)
+                        imageView.scaleType = ImageView.ScaleType.CENTER
                         CommonUtils.dpToPixel(activity, 1.5F, CALCULATION.FLOOR).apply {
                             imageView.setPadding(this, this, this, this)
                         }
@@ -198,13 +200,10 @@ class DiaryMainItemAdapter(
                                 return false
                             }
                         }
-                        val options = RequestOptions()
-                                /*.error(R.drawable.error_7)*/
-                                .placeholder(R.drawable.ic_error_7)
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .priority(Priority.HIGH)
-                                .transform(MultiTransformation(CenterCrop(), RoundedCorners((imageXY * PHOTO_CORNER_RADIUS_SCALE_FACTOR).toInt())))
-                        Glide.with(activity).load(path).listener(listener).apply(options).into(imageView)
+                        Glide.with(activity).load(path)
+                            .listener(listener)
+                            .apply(createThumbnailGlideOptions(imageXY * PHOTO_CORNER_RADIUS_SCALE_FACTOR))
+                            .into(imageView)
 //                    if (photoViews.childCount >= maxPhotos) return@map
                         photoViews.addView(imageView)
                     }
