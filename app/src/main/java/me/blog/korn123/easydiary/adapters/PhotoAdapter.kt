@@ -11,8 +11,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.Options
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.RequestOptions.bitmapTransform
 import com.google.android.flexbox.FlexboxLayoutManager
+import com.simplemobiletools.commons.extensions.toast
 import io.github.aafactory.commons.utils.CommonUtils
 import jp.wasabeef.glide.transformations.BitmapTransformation
 import jp.wasabeef.glide.transformations.CropTransformation
@@ -21,6 +26,7 @@ import jp.wasabeef.glide.transformations.gpu.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.PostcardActivity
 import me.blog.korn123.easydiary.fragments.PhotoFlexItemOptionFragment
+import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR
 import kotlin.math.ceil
 import kotlin.math.sqrt
 
@@ -155,23 +161,24 @@ class PhotoAdapter(
 
             fun applyOption(context: Context, photoUri: String, viewMode: Int, filterMode: Int, imageView: ImageView) {
                 val rb = Glide.with(context).load(photoUri)
+                val radius = (imageView.layoutParams.width * PHOTO_CORNER_RADIUS_SCALE_FACTOR * 0.2).toInt()
                 when (viewMode) {
                     0 -> {
                         if (filterMode == 0) {
-                            rb.into(imageView)
+                            rb.apply(RequestOptions().transform(MultiTransformation(RoundedCorners(radius))))
+                                    .into(imageView)
                         } else {
-                            rb.apply(RequestOptions.bitmapTransform(createBitmapTransformation(filterMode))).into(imageView)
+                            rb.apply(RequestOptions().transform(MultiTransformation(createBitmapTransformation(filterMode), RoundedCorners(radius))))
+                                    .into(imageView)
                         }
-
                     }
                     else -> {
                         if (filterMode == 0) {
-                            rb.apply(RequestOptions.bitmapTransform(CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, getCropType(viewMode)))).into(imageView)
+                            rb.apply(RequestOptions().transform(MultiTransformation(CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, getCropType(viewMode)), RoundedCorners(radius))))
+                                .into(imageView)
                         } else {
-                            rb.apply(RequestOptions.bitmapTransform(MultiTransformation<Bitmap>(
-                                    CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, getCropType(viewMode)),
-                                    createBitmapTransformation(filterMode)
-                            ))).into(imageView)
+                            rb.apply(RequestOptions().transform(MultiTransformation(createBitmapTransformation(filterMode), CropTransformation(imageView.layoutParams.width, imageView.layoutParams.height, getCropType(viewMode)), RoundedCorners(radius))))
+                                .into(imageView)
                         }
                     }
                 }

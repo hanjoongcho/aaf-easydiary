@@ -46,7 +46,7 @@ limitations under the License.
                     android:gravity="center"
                     android:layout_weight="4"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content">
                     <ImageView
                         android:id="@+id/image_preview"
                         android:layout_width="100dp"
