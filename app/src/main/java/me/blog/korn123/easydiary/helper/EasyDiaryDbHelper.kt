@@ -325,7 +325,7 @@ object EasyDiaryDbHelper {
         return findDDayBy(getInstance(), sequence)
     }
 
-    fun findDDayAll(): List<DDay> = getInstance().where(DDay::class.java).findAll().sort("sequence", Sort.ASCENDING)
+    fun findDDayAll(): List<DDay> = getInstance().where(DDay::class.java).findAll().sort("targetTimeStamp", Sort.ASCENDING)
 
     fun updateDDayBy(dDay: DDay) {
 
