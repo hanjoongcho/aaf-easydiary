@@ -24,7 +24,10 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.RelativeSizeSpan
 import android.util.TypedValue
-import android.view.*
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.view.Window
 import android.widget.*
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
@@ -39,8 +42,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.graphics.ColorUtils
 import androidx.core.location.LocationManagerCompat
-import androidx.recyclerview.widget.GridLayoutManager
-import com.google.gson.GsonBuilder
 import com.simplemobiletools.commons.extensions.adjustAlpha
 import com.simplemobiletools.commons.extensions.formatMinutesToTimeString
 import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
@@ -56,11 +57,12 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils.hashMapToJsonString
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.activities.DiaryWritingActivity
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
+import me.blog.korn123.easydiary.activities.DiaryWritingActivity
 import me.blog.korn123.easydiary.databinding.DialogMessageBinding
 import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.models.ActionLog
 import me.blog.korn123.easydiary.models.Alarm
 import me.blog.korn123.easydiary.receivers.AlarmReceiver
 import me.blog.korn123.easydiary.views.FixedCardView
@@ -80,6 +82,204 @@ import kotlin.math.pow
  * https://github.com/SimpleMobileTools/Simple-Commons
  */
 
+/***************************************************************************************************
+ *   Alarm Extension
+ *
+ ***************************************************************************************************/
+fun Context.openNotification(alarm: Alarm) {
+    val pendingIntent = getOpenAlarmTabIntent(alarm)
+    val notification = getAlarmNotification(pendingIntent, alarm)
+    val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    notificationManager.notify(alarm.id, notification)
+
+    val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
+    if (isScreenOn()) {
+        scheduleNextAlarm(alarm, true)
+    } else {
+        scheduleNextAlarm(alarm, false)
+        powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.ON_AFTER_RELEASE, "myApp:notificationLock").apply {
+            acquire(3000)
+        }
+    }
+}
+
+fun Context.reExecuteGmsBackup(alarm: Alarm, errorMessage: String, className: String) {
+    EasyDiaryDbHelper.insertActionLog(ActionLog(className, "reExecuteGmsBackup", "ERROR", errorMessage), this)
+    EasyDiaryDbHelper.beginTransaction()
+    alarm.retryCount = alarm.retryCount.plus(1)
+    EasyDiaryDbHelper.commitTransaction()
+    openSnoozeNotification(alarm)
+}
+
+//fun Context.executeGmsBackup(alarm: Alarm) {
+//    val realmPath = EasyDiaryDbHelper.getRealmPath()
+//    GoogleOAuthHelper.getGoogleSignAccount(this)?.account?.let { account ->
+//        DriveServiceHelper(this, account).run {
+//            initDriveWorkingDirectory(DriveServiceHelper.AAF_EASY_DIARY_REALM_FOLDER_NAME) { realmFolderId ->
+//                if (realmFolderId != null) {
+//                    createFile(
+//                        realmFolderId, realmPath,
+//                        DIARY_DB_NAME + "_" + DateUtils.getCurrentDateTime("yyyyMMdd_HHmmss"),
+//                        EasyDiaryUtils.easyDiaryMimeType
+//                    ).addOnSuccessListener {
+//                        openNotification(alarm)
+//                    }.addOnFailureListener {}
+//                } else {
+//                    reExecuteGmsBackup(alarm, "The realm folder ID is not valid.")
+//                }
+//            }
+//        }
+//    }
+//}
+
+@SuppressLint("NewApi", "LaunchActivityFromNotification")
+fun Context.openSnoozeNotification(alarm: Alarm) {
+    val notificationManager = getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
+    if (isOreoPlus()) {
+        val importance = NotificationManager.IMPORTANCE_HIGH
+        val channel = NotificationChannel("${NOTIFICATION_CHANNEL_ID}_alarm", getString(R.string.notification_channel_name_alarm), importance)
+        channel.description = NOTIFICATION_CHANNEL_DESCRIPTION
+        notificationManager.createNotificationChannel(channel)
+    }
+
+    val builder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_alarm")
+        .setDefaults(Notification.DEFAULT_ALL)
+        .setWhen(System.currentTimeMillis())
+        .setSmallIcon(R.drawable.ic_easydiary)
+        .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_schedule_error))
+        .setOngoing(false)
+        .setAutoCancel(true)
+        .setContentTitle(getString(R.string.schedule_gms_error_title))
+        .setContentText(getString(R.string.schedule_gms_error_message))
+        .setStyle(NotificationCompat.BigTextStyle().bigText(getString(R.string.schedule_gms_error_message)).setSummaryText(getString(R.string.schedule_gms_error_title)))
+        .setContentIntent(
+            PendingIntent.getBroadcast(this, alarm.id, Intent(this, AlarmReceiver::class.java).apply {
+                putExtra(DOZE_SCHEDULE, true)
+            }, pendingIntentFlag())
+        )
+    notificationManager.notify(alarm.id, builder.build())
+}
+
+fun Context.getOpenAlarmTabIntent(alarm: Alarm): PendingIntent {
+    val intent: Intent? = when (alarm.workMode) {
+        Alarm.WORK_MODE_DIARY_WRITING -> {
+            Intent(this, DiaryWritingActivity::class.java).apply {
+                putExtra(DIARY_EXECUTION_MODE, EXECUTION_MODE_ACCESS_FROM_OUTSIDE)
+            }
+        }
+        Alarm.WORK_MODE_DIARY_BACKUP_LOCAL, Alarm.WORK_MODE_DIARY_BACKUP_GMS -> {
+            Intent(this, DiaryMainActivity::class.java)
+        }
+        else -> null
+    }
+    return PendingIntent.getActivity(this, alarm.id, intent, pendingIntentFlag())
+}
+
+fun Context.getAlarmIntent(alarm: Alarm): PendingIntent {
+    val intent = Intent(this, AlarmReceiver::class.java)
+    intent.putExtra(SettingsScheduleFragment.ALARM_ID, alarm.id)
+    return PendingIntent.getBroadcast(this, alarm.id, intent, pendingIntentFlag())
+}
+
+fun Context.cancelAlarmClock(alarm: Alarm) {
+    val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    alarmManager.cancel(getAlarmIntent(alarm))
+}
+
+fun Context.scheduleNextAlarm(alarm: Alarm, showToast: Boolean) {
+    val calendar = Calendar.getInstance()
+    calendar.firstDayOfWeek = Calendar.MONDAY
+    for (i in 0..7) {
+        val currentDay = (calendar.get(Calendar.DAY_OF_WEEK) + 5) % 7
+        val isCorrectDay = alarm.days and 2.0.pow(currentDay).toInt() != 0
+        val currentTimeInMinutes = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE)
+        if (isCorrectDay && (alarm.timeInMinutes > currentTimeInMinutes || i > 0)) {
+            val triggerInMinutes = alarm.timeInMinutes - currentTimeInMinutes + (i * DAY_MINUTES)
+            setupAlarmClock(alarm, triggerInMinutes * 60 - calendar.get(Calendar.SECOND))
+
+            if (showToast) {
+                showRemainingTimeMessage(triggerInMinutes)
+            }
+            break
+        } else {
+            calendar.add(Calendar.DAY_OF_MONTH, 1)
+        }
+    }
+}
+
+fun Context.setupAlarmClock(alarm: Alarm, triggerInSeconds: Int) {
+    val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    val targetMS = System.currentTimeMillis() + triggerInSeconds * 1000
+    AlarmManagerCompat.setAlarmClock(alarmManager, targetMS, getOpenAlarmTabIntent(alarm), getAlarmIntent(alarm))
+}
+
+fun Context.showRemainingTimeMessage(totalMinutes: Int) {
+    val fullString = String.format(getString(R.string.alarm_goes_off_in), formatMinutesToTimeString(totalMinutes))
+    toast(fullString, Toast.LENGTH_LONG)
+}
+
+fun Context.executeScheduledTask(alarm: Alarm) {
+    AlarmWorkExecutor(this).run { executeWork(alarm) }
+}
+
+fun Context.rescheduleEnabledAlarms() {
+    EasyDiaryDbHelper.findAlarmAll().forEach {
+        if (it.isEnabled) scheduleNextAlarm(it, false)
+    }
+}
+
+@SuppressLint("NewApi")
+fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): Notification {
+    if (isOreoPlus()) {
+        // Create the NotificationChannel
+        val importance = NotificationManager.IMPORTANCE_HIGH
+        val channel = NotificationChannel("${NOTIFICATION_CHANNEL_ID}_alarm", getString(R.string.notification_channel_name_alarm), importance)
+        channel.description = NOTIFICATION_CHANNEL_DESCRIPTION
+        // Register the channel with the system; you can't change the importance
+        // or other notification behaviors after this
+        val notificationManager = getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+    }
+
+    var largeIcon: Bitmap? = null
+    var description: String? = null
+    when (alarm.workMode) {
+        Alarm.WORK_MODE_DIARY_WRITING -> {
+            largeIcon = BitmapFactory.decodeResource(resources, R.drawable.ic_diary_writing)
+            description = getString(R.string.schedule_diary_writing_complete)
+        }
+        Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> {
+            largeIcon = BitmapFactory.decodeResource(resources, R.drawable.ic_diary_backup_local)
+            description = getString(R.string.schedule_backup_local_complete)
+        }
+        Alarm.WORK_MODE_DIARY_BACKUP_GMS -> {
+            largeIcon = BitmapFactory.decodeResource(resources, R.drawable.ic_googledrive_upload)
+            description = getString(R.string.schedule_backup_gms_complete)
+        }
+    }
+    val builder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_alarm")
+        .setDefaults(Notification.DEFAULT_ALL)
+        .setWhen(System.currentTimeMillis())
+        .setSmallIcon(R.drawable.ic_easydiary)
+        .setLargeIcon(largeIcon)
+        .setOngoing(false)
+        .setAutoCancel(true)
+        .setContentTitle(alarm.label)
+        .setContentText(description)
+        .setStyle(NotificationCompat.BigTextStyle().bigText(description)/*.setSummaryText(alarm.label)*/)
+        .setContentIntent(pendingIntent)
+        .setPriority(NotificationCompat.PRIORITY_HIGH)
+
+    val notification = builder.build()
+//    notification.flags = notification.flags or Notification.FLAG_INSISTENT
+    return notification
+}
+
+
+/***************************************************************************************************
+ *   ETC Extension
+ *
+ ***************************************************************************************************/
 val Context.config: Config get() = Config.newInstance(this)
 
 fun Context.pendingIntentFlag() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT else PendingIntent.FLAG_UPDATE_CURRENT
@@ -499,121 +699,6 @@ fun Context.formatTo12HourFormat(showSeconds: Boolean, hours: Int, minutes: Int,
 }
 
 fun Context.isScreenOn() = (getSystemService(Context.POWER_SERVICE) as PowerManager).isScreenOn
-
-fun Context.getOpenAlarmTabIntent(alarm: Alarm): PendingIntent {
-    val intent: Intent? = when (alarm.workMode) {
-        Alarm.WORK_MODE_DIARY_WRITING -> {
-            Intent(this, DiaryWritingActivity::class.java).apply {
-                putExtra(DIARY_EXECUTION_MODE, EXECUTION_MODE_ACCESS_FROM_OUTSIDE)
-            }
-        }
-        Alarm.WORK_MODE_DIARY_BACKUP_LOCAL, Alarm.WORK_MODE_DIARY_BACKUP_GMS -> {
-            Intent(this, DiaryMainActivity::class.java)
-        }
-        else -> null
-    }
-    return PendingIntent.getActivity(this, alarm.id, intent, pendingIntentFlag())
-}
-
-fun Context.getAlarmIntent(alarm: Alarm): PendingIntent {
-    val intent = Intent(this, AlarmReceiver::class.java)
-    intent.putExtra(SettingsScheduleFragment.ALARM_ID, alarm.id)
-    return PendingIntent.getBroadcast(this, alarm.id, intent, pendingIntentFlag())
-}
-
-fun Context.cancelAlarmClock(alarm: Alarm) {
-    val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    alarmManager.cancel(getAlarmIntent(alarm))
-}
-
-fun Context.scheduleNextAlarm(alarm: Alarm, showToast: Boolean) {
-    val calendar = Calendar.getInstance()
-    calendar.firstDayOfWeek = Calendar.MONDAY
-    for (i in 0..7) {
-        val currentDay = (calendar.get(Calendar.DAY_OF_WEEK) + 5) % 7
-        val isCorrectDay = alarm.days and 2.0.pow(currentDay).toInt() != 0
-        val currentTimeInMinutes = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE)
-        if (isCorrectDay && (alarm.timeInMinutes > currentTimeInMinutes || i > 0)) {
-            val triggerInMinutes = alarm.timeInMinutes - currentTimeInMinutes + (i * DAY_MINUTES)
-            setupAlarmClock(alarm, triggerInMinutes * 60 - calendar.get(Calendar.SECOND))
-
-            if (showToast) {
-                showRemainingTimeMessage(triggerInMinutes)
-            }
-            break
-        } else {
-            calendar.add(Calendar.DAY_OF_MONTH, 1)
-        }
-    }
-}
-
-fun Context.setupAlarmClock(alarm: Alarm, triggerInSeconds: Int) {
-    val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    val targetMS = System.currentTimeMillis() + triggerInSeconds * 1000
-    AlarmManagerCompat.setAlarmClock(alarmManager, targetMS, getOpenAlarmTabIntent(alarm), getAlarmIntent(alarm))
-}
-
-fun Context.showRemainingTimeMessage(totalMinutes: Int) {
-    val fullString = String.format(getString(R.string.alarm_goes_off_in), formatMinutesToTimeString(totalMinutes))
-    toast(fullString, Toast.LENGTH_LONG)
-}
-
-fun Context.executeScheduledTask(alarm: Alarm) {
-    AlarmWorkExecutor(this).run { executeWork(alarm) }
-}
-
-fun Context.rescheduleEnabledAlarms() {
-    EasyDiaryDbHelper.findAlarmAll().forEach {
-        if (it.isEnabled) scheduleNextAlarm(it, false)
-    }
-}
-
-@SuppressLint("NewApi")
-fun Context.getAlarmNotification(pendingIntent: PendingIntent, alarm: Alarm): Notification {
-    if (isOreoPlus()) {
-        // Create the NotificationChannel
-        val importance = NotificationManager.IMPORTANCE_HIGH
-        val channel = NotificationChannel("${NOTIFICATION_CHANNEL_ID}_alarm", getString(R.string.notification_channel_name_alarm), importance)
-        channel.description = NOTIFICATION_CHANNEL_DESCRIPTION
-        // Register the channel with the system; you can't change the importance
-        // or other notification behaviors after this
-        val notificationManager = getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(channel)
-    }
-
-    var largeIcon: Bitmap? = null
-    var description: String? = null
-    when (alarm.workMode) {
-        Alarm.WORK_MODE_DIARY_WRITING -> {
-            largeIcon = BitmapFactory.decodeResource(resources, R.drawable.ic_diary_writing)
-            description = getString(R.string.schedule_diary_writing_complete)
-        }
-        Alarm.WORK_MODE_DIARY_BACKUP_LOCAL -> {
-            largeIcon = BitmapFactory.decodeResource(resources, R.drawable.ic_diary_backup_local)
-            description = getString(R.string.schedule_backup_local_complete)
-        }
-        Alarm.WORK_MODE_DIARY_BACKUP_GMS -> {
-            largeIcon = BitmapFactory.decodeResource(resources, R.drawable.ic_googledrive_upload)
-            description = getString(R.string.schedule_backup_gms_complete)
-        }
-    }
-    val builder = NotificationCompat.Builder(applicationContext, "${NOTIFICATION_CHANNEL_ID}_alarm")
-            .setDefaults(Notification.DEFAULT_ALL)
-            .setWhen(System.currentTimeMillis())
-            .setSmallIcon(R.drawable.ic_easydiary)
-            .setLargeIcon(largeIcon)
-            .setOngoing(false)
-            .setAutoCancel(true)
-            .setContentTitle(alarm.label)
-            .setContentText(description)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(description)/*.setSummaryText(alarm.label)*/)
-            .setContentIntent(pendingIntent)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-
-    val notification = builder.build()
-//    notification.flags = notification.flags or Notification.FLAG_INSISTENT
-    return notification
-}
 
 @ColorInt
 @SuppressLint("ResourceAsColor")

@@ -16,7 +16,6 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textSize="20sp"
-            android:maxWidth="200dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="12345678901234567890sdf123"

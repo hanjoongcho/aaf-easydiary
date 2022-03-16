@@ -24,6 +24,7 @@ import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.createBackupContentText
 import me.blog.korn123.easydiary.extensions.pendingIntentFlag
+import me.blog.korn123.easydiary.extensions.reExecuteGmsBackup
 import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.ActionLog
@@ -142,7 +143,8 @@ class FullBackupService : Service() {
                 }
             }
             addOnFailureListener { exception ->
-                EasyDiaryDbHelper.insertActionLog(ActionLog("FullBackupService", "determineRemoteDrivePhotos", "ERROR", exception.message), applicationContext)
+                reExecuteGmsBackup(alarm, exception.message ?: "", FullBackupService::class.java.name)
+                stopSelf()
             }
         }
     }
@@ -155,10 +157,12 @@ class FullBackupService : Service() {
                 workStatus.successCount++
                 updateNotification(alarm, workStatus)
             }
-            addOnFailureListener {
+            addOnFailureListener { exception ->
                 workStatus.targetFilenamesCursor++
                 workStatus.failCount++
                 updateNotification(alarm, workStatus)
+                reExecuteGmsBackup(alarm, exception.message ?: "", FullBackupService::class.java.name)
+                stopSelf()
             }
         }
     }
