@@ -33,7 +33,7 @@ open class DDay : RealmObject {
             false -> {
                 val years = MessageFormat.format(yearFormat, diffDays.div(365))
                 val days = MessageFormat.format(dayFormat, diffDays.rem(365))
-                "$years $days"
+                "（$years $days）"
             }
         }
         return dayRemaining

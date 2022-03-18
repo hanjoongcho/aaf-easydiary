@@ -10,7 +10,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.simplemobiletools.commons.extensions.toast
-import io.github.aafactory.commons.utils.DateUtils
+import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
@@ -79,8 +79,9 @@ class DDayAdapter(
                 var minute = calendar.get(Calendar.MINUTE)
                 fun updateDDayInfo() {
                     textTargetDate.text = DateUtils.getDateStringFromTimeMillis(temporaryDDay.targetTimeStamp)
-                    textTargetTime.text = DateUtils.timeMillisToDateTime(temporaryDDay.targetTimeStamp,  DateUtils.TIME_PATTERN)
+                    textTargetTime.text = DateUtils.getTimeStringFromTimeMillis(temporaryDDay.targetTimeStamp)
                     textDayRemaining.text = temporaryDDay.getDayRemaining()
+                    textDayRemainingWithYear.text = temporaryDDay.getDayRemaining(false, activity.getString(R.string.year_message_format), activity.getString(R.string.day_message_format))
                     textTimeRemaining.text = temporaryDDay.getTimeRemaining()
                 }
 
@@ -168,8 +169,7 @@ class DDayAdapter(
             EasyDiaryUtils.boldStringForce(itemDDayBinding.textDayRemaining)
             itemDDayBinding.run {
                 textTitle.text = dDay.title
-                textTargetDate.text = DateUtils.getDateStringFromTimeMillis(dDay.targetTimeStamp)
-                textTargetTime.text = DateUtils.timeMillisToDateTime(dDay.targetTimeStamp,  DateUtils.TIME_PATTERN)
+                textTargetDate.text = DateUtils.getDateTimeStringFromTimeMillis(dDay.targetTimeStamp)
                 textDayRemaining.text = dDay.getDayRemaining()
                 textDayRemainingWithYear.text = dDay.getDayRemaining(false, activity.getString(R.string.year_message_format), activity.getString(R.string.day_message_format))
                 textTimeRemaining.text = dDay.getTimeRemaining()

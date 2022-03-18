@@ -66,6 +66,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_target_date"
             />
+        <me.blog.korn123.easydiary.views.FixedTextView
+            android:id="@+id/text_day_remaining_with_year"
+            android:textSize="10sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="（1Year 32Days）"
+            app:applyGlobalColor="false"
+            app:applyGlobalSize="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_day_remaining"
+            />
         <com.simplemobiletools.commons.views.MyTextView
             android:id="@+id/text_time_remaining"
             android:layout_width="wrap_content"
@@ -73,7 +84,7 @@
             android:text="TextView"
             tools:text="8Hours"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_day_remaining"
+            app:layout_constraintTop_toBottomOf="@+id/text_day_remaining_with_year"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
