@@ -869,4 +869,6 @@
     <string name="notification_channel_name_zip_helper">ZIP ᱥᱟᱹᱣᱛᱤ ᱫᱚᱦᱚ ᱥᱮᱢᱵᱷᱲᱟᱣ</string>
     <string name="enable_welcome_dashboard_popup_title">Welcome Dashboard popup</string>
     <string name="enable_welcome_dashboard_popup_description">When this option is enabled, the dashboard will automatically open as a popup when the app is restarted after closing.</string>
+    <string name="year_message_format">{0,number} {0,choice,1#Year|1&lt;Years}</string>
+    <string name="day_message_format">{0,number} {0,choice,1#Day|1&lt;Days}</string>
 </resources>

@@ -13,6 +13,7 @@ import com.simplemobiletools.commons.extensions.toast
 import io.github.aafactory.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
+import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.DialogDdayBinding
 import me.blog.korn123.easydiary.databinding.ItemDdayAddBinding
 import me.blog.korn123.easydiary.databinding.ItemDdayBinding
@@ -170,7 +171,8 @@ class DDayAdapter(
                 textTargetDate.text = DateUtils.getDateStringFromTimeMillis(dDay.targetTimeStamp)
                 textTargetTime.text = DateUtils.timeMillisToDateTime(dDay.targetTimeStamp,  DateUtils.TIME_PATTERN)
                 textDayRemaining.text = dDay.getDayRemaining()
-                textTimeRemaining.text = "${dDay.getTimeRemaining()}"
+                textDayRemainingWithYear.text = dDay.getDayRemaining(false, activity.getString(R.string.year_message_format), activity.getString(R.string.day_message_format))
+                textTimeRemaining.text = dDay.getTimeRemaining()
                 root.setOnClickListener {
                     openDDayDialog(EasyDiaryDbHelper.duplicateDDayBy(dDay), dDay)
                 }
