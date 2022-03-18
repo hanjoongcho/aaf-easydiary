@@ -22,7 +22,7 @@ android {
     }
 
     /**
-     * @versionName: major.minor.maintenance(year+month).hotfix(day+sequence)
+     * @versionName: major.minor.maintenance(versionCode).hotfix(date+sequence)
      * @minSdkVersion: 19 (Android 4.4 KitKat)
      */
     defaultConfig {
@@ -30,7 +30,7 @@ android {
         minSdkVersion 19
         targetSdkVersion versions.compileSdk
         versionCode 266
-        versionName '1.4.202203.xx1'
+        versionName '1.4.266.202203190'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
