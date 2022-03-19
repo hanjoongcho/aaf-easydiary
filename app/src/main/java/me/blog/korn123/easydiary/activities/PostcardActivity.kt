@@ -25,7 +25,7 @@ import com.google.android.flexbox.FlexboxLayoutManager
 import io.github.aafactory.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.CALCULATION
 import io.github.aafactory.commons.utils.CommonUtils
-import io.github.aafactory.commons.utils.DateUtils
+import me.blog.korn123.commons.utils.DateUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -78,7 +78,7 @@ class PostcardActivity : EasyDiaryActivity() {
             contents.text = diaryDto.contents
             date.text = when (diaryDto.isAllDay) {
                 true -> DateUtils.getFullPatternDate(diaryDto.currentTimeMillis)
-                false -> DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis)
+                false -> DateUtils.getDateTimeStringFromTimeMillis(diaryDto.currentTimeMillis)
             }
             EasyDiaryUtils.boldString(applicationContext, diaryTitle)
 

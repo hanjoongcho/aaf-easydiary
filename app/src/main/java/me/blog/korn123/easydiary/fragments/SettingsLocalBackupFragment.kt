@@ -18,7 +18,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import io.github.aafactory.commons.extensions.baseConfig
-import io.github.aafactory.commons.utils.DateUtils
+import me.blog.korn123.commons.utils.DateUtils
+
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -391,7 +392,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
             val isAllDay = row.createCell(IS_ALL_DAY).apply {cellStyle = bodyStyle}
 
             sequence.setCellValue(diaryDto.sequence.toDouble())
-            writeDate.setCellValue(DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis))
+            writeDate.setCellValue(DateUtils.getDateTimeStringFromTimeMillis(diaryDto.currentTimeMillis))
             title.setCellValue(diaryDto.title)
             contents.setCellValue(diaryDto.contents)
             attachPhotoNames.setCellValue(photoNames.toString())

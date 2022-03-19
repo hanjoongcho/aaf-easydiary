@@ -33,7 +33,7 @@ import androidx.core.content.ContextCompat
 import com.werb.pickphotoview.PickPhotoViewEx
 import com.werb.pickphotoview.util.PickConfig
 import io.github.aafactory.commons.utils.CommonUtils
-import io.github.aafactory.commons.utils.DateUtils
+import me.blog.korn123.commons.utils.DateUtils
 import io.realm.RealmList
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createBackgroundGradientDrawable

@@ -1,8 +1,8 @@
 package me.blog.korn123.easydiary.models
 
-import io.github.aafactory.commons.utils.DateUtils
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
+import me.blog.korn123.commons.utils.DateUtils
 
 open class ActionLog : RealmObject {
 

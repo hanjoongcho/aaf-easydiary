@@ -41,12 +41,12 @@ class DateUtils {
             return dateFormat.format(date)
         }
 
-        fun getFullPatternDateWithTime(timeMillis: Long): String {
-            val date = Date(timeMillis)
-            val dateFormat = SimpleDateFormat.getDateInstance(SimpleDateFormat.FULL, Locale.getDefault())
-            val hourFormat = SimpleDateFormat(TIME_PATTERN)
-            return String.format("%s %s", dateFormat.format(date), hourFormat.format(date))
-        }
+//        fun getFullPatternDateWithTime(timeMillis: Long): String {
+//            val date = Date(timeMillis)
+//            val dateFormat = SimpleDateFormat.getDateInstance(SimpleDateFormat.FULL, Locale.getDefault())
+//            val hourFormat = SimpleDateFormat(TIME_PATTERN)
+//            return String.format("%s %s", dateFormat.format(date), hourFormat.format(date))
+//        }
 
         fun getFullPatternDateWithTimeAndSeconds(timeMillis: Long, locale: Locale = Locale.getDefault()): String {
             val date = Date(timeMillis)

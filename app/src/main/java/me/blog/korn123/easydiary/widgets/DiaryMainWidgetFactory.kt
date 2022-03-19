@@ -9,7 +9,7 @@ import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import androidx.appcompat.content.res.AppCompatResources
 import com.simplemobiletools.commons.extensions.setVisibleIf
-import io.github.aafactory.commons.utils.DateUtils
+import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
@@ -43,7 +43,7 @@ class DiaryMainWidgetFactory(private val context: Context) : RemoteViewsService.
             setTextViewText(R.id.text2, diaryDto.contents)
             setTextViewText(R.id.text3, when (diaryDto.isAllDay) {
                 true -> DateUtils.getFullPatternDate(diaryDto.currentTimeMillis)
-                false -> DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis)
+                false -> DateUtils.getDateTimeStringFromTimeMillis(diaryDto.currentTimeMillis)
             })
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

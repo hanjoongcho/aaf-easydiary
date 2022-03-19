@@ -16,7 +16,7 @@ import com.bumptech.glide.request.target.Target
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
 import io.github.aafactory.commons.utils.CALCULATION
 import io.github.aafactory.commons.utils.CommonUtils
-import io.github.aafactory.commons.utils.DateUtils
+import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createBackgroundGradientDrawable
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createThumbnailGlideOptions
@@ -159,7 +159,7 @@ class DiaryMainItemAdapter(
 
                 textDateTime.text = when (diary.isAllDay) {
                     true -> DateUtils.getFullPatternDate(diary.currentTimeMillis)
-                    false -> DateUtils.getFullPatternDateWithTime(diary.currentTimeMillis)
+                    false -> DateUtils.getDateTimeStringFromTimeMillis(diary.currentTimeMillis)
                 }
                 if (activity.config.enableDebugMode) textDateTime.text = "[${diary.originSequence}] ${textDateTime.text}"
                 FlavorUtils.initWeatherView(activity, imageSymbol, diary.weather)

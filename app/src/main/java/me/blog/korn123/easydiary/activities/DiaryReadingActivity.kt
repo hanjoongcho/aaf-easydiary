@@ -24,7 +24,7 @@ import com.github.amlcurran.showcaseview.targets.ViewTarget
 import io.github.aafactory.commons.extensions.baseConfig
 import io.github.aafactory.commons.extensions.clearHoldOrientation
 import io.github.aafactory.commons.extensions.holdCurrentOrientation
-import io.github.aafactory.commons.utils.DateUtils
+import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createAttachedPhotoView
 import me.blog.korn123.commons.utils.FlavorUtils
@@ -642,7 +642,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 diaryContents.text = diaryDto.contents
                 date.text = when (diaryDto.isAllDay) {
                     true -> DateUtils.getFullPatternDate(diaryDto.currentTimeMillis)
-                    false -> DateUtils.getFullPatternDateWithTime(diaryDto.currentTimeMillis)
+                    false -> DateUtils.getDateTimeStringFromTimeMillis(diaryDto.currentTimeMillis)
                 }
                 initBottomContainer()
 

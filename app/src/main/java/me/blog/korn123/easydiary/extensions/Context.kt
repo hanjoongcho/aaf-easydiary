@@ -50,7 +50,7 @@ import com.simplemobiletools.commons.helpers.*
 import com.simplemobiletools.commons.views.*
 import io.github.aafactory.commons.extensions.dpToPixel
 import io.github.aafactory.commons.utils.CommonUtils
-import io.github.aafactory.commons.utils.DateUtils
+import me.blog.korn123.commons.utils.DateUtils
 import io.github.aafactory.commons.views.ModalView
 import io.realm.Realm
 import me.blog.korn123.commons.utils.EasyDiaryUtils
