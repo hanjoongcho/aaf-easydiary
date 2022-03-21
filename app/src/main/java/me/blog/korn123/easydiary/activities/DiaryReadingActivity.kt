@@ -641,7 +641,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 EasyDiaryUtils.boldString(requireContext(), diaryTitle)
                 diaryContents.text = diaryDto.contents
                 date.text = when (diaryDto.isAllDay) {
-                    true -> DateUtils.getFullPatternDate(diaryDto.currentTimeMillis)
+                    true -> DateUtils.getDateStringFromTimeMillis(diaryDto.currentTimeMillis)
                     false -> DateUtils.getDateTimeStringFromTimeMillis(diaryDto.currentTimeMillis)
                 }
                 initBottomContainer()

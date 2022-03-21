@@ -77,7 +77,7 @@ class PostcardActivity : EasyDiaryActivity() {
             }
             contents.text = diaryDto.contents
             date.text = when (diaryDto.isAllDay) {
-                true -> DateUtils.getFullPatternDate(diaryDto.currentTimeMillis)
+                true -> DateUtils.getDateStringFromTimeMillis(diaryDto.currentTimeMillis)
                 false -> DateUtils.getDateTimeStringFromTimeMillis(diaryDto.currentTimeMillis)
             }
             EasyDiaryUtils.boldString(applicationContext, diaryTitle)

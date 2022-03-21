@@ -158,7 +158,7 @@ class DiaryMainItemAdapter(
                 EasyDiaryUtils.boldString(activity, textTitle)
 
                 textDateTime.text = when (diary.isAllDay) {
-                    true -> DateUtils.getFullPatternDate(diary.currentTimeMillis)
+                    true -> DateUtils.getDateStringFromTimeMillis(diary.currentTimeMillis)
                     false -> DateUtils.getDateTimeStringFromTimeMillis(diary.currentTimeMillis)
                 }
                 if (activity.config.enableDebugMode) textDateTime.text = "[${diary.originSequence}] ${textDateTime.text}"

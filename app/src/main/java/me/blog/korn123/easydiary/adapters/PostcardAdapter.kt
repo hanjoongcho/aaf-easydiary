@@ -73,7 +73,7 @@ class PostcardAdapter(
             itemPostCardBinding.checkItem.isChecked = postCard.isItemChecked
             try {
                 val format = SimpleDateFormat(POSTCARD_DATE_FORMAT, Locale.getDefault())
-                timeStampView.text = DateUtils.getFullPatternDate(format.parse(postCard.file.name.split("_")[0]).time)
+                timeStampView.text = DateUtils.getDateStringFromTimeMillis(format.parse(postCard.file.name.split("_")[0]).time)
             } catch (e: Exception) {
                 timeStampView.text = GUIDE_MESSAGE
             }

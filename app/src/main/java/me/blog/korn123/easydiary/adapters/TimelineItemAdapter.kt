@@ -58,7 +58,7 @@ class TimelineItemAdapter(
                 titleContainer.visibility = View.GONE
                 topLine.visibility = View.GONE
             } else {
-                title.text = DateUtils.getFullPatternDate(diaryDto.currentTimeMillis)
+                title.text = DateUtils.getDateStringFromTimeMillis(diaryDto.currentTimeMillis)
                 titleContainer.visibility = View.VISIBLE
                 topLine.visibility = View.VISIBLE
             }

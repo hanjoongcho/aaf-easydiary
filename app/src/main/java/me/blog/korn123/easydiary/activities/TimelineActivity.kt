@@ -87,14 +87,14 @@ class TimelineActivity : EasyDiaryActivity() {
                 val filterSDate = savedInstanceState.getInt(FILTER_START_DATE, mCalendar.get(Calendar.DAY_OF_MONTH))
                 if (savedInstanceState.getBoolean(FILTER_START_ENABLE, false))  {
                     Log.i("aaf-t" , "get date $filterSYear $filterSMonth $filterSDate")
-                    mBinding.partialTimelineFilter.startDate.text = DateUtils.getFullPatternDate(EasyDiaryUtils.datePickerToTimeMillis(filterSDate, filterSMonth, filterSYear))
+                    mBinding.partialTimelineFilter.startDate.text = DateUtils.getDateStringFromTimeMillis(EasyDiaryUtils.datePickerToTimeMillis(filterSDate, filterSMonth, filterSYear))
                 }
 
                 val filterEYear = savedInstanceState.getInt(FILTER_START_YEAR, mCalendar.get(Calendar.YEAR))
                 val filterEMonth = savedInstanceState.getInt(FILTER_START_MONTH, mCalendar.get(Calendar.MONTH))
                 val filterEDate = savedInstanceState.getInt(FILTER_START_DATE, mCalendar.get(Calendar.DAY_OF_MONTH))
                 if (savedInstanceState.getBoolean(FILTER_END_ENABLE, false))  {
-                    mBinding.partialTimelineFilter.endDate.text = DateUtils.getFullPatternDate(EasyDiaryUtils.datePickerToTimeMillis(filterEDate, filterEMonth, filterEYear))
+                    mBinding.partialTimelineFilter.endDate.text = DateUtils.getDateStringFromTimeMillis(EasyDiaryUtils.datePickerToTimeMillis(filterEDate, filterEMonth, filterEYear))
                 }
 
                 mSDatePickerDialog = DatePickerDialog(this, mStartDateListener, filterSYear, filterSMonth, filterSDate)
@@ -242,14 +242,14 @@ class TimelineActivity : EasyDiaryActivity() {
 
     private var mStartDateListener: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
         val startMillis = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year)
-        mBinding.partialTimelineFilter.startDate.text = DateUtils.getFullPatternDate(startMillis)
+        mBinding.partialTimelineFilter.startDate.text = DateUtils.getDateStringFromTimeMillis(startMillis)
         refreshList()
         Log.i("aaf-t", "mStartDateListener")
     }
     
     private var mEndDateListener: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
         val endMillis = EasyDiaryUtils.datePickerToTimeMillis(dayOfMonth, month, year)
-        mBinding.partialTimelineFilter.endDate.text = DateUtils.getFullPatternDate(endMillis)
+        mBinding.partialTimelineFilter.endDate.text = DateUtils.getDateStringFromTimeMillis(endMillis)
         refreshList()
         Log.i("aaf-t", "mEndDateListener")
     }

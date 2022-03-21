@@ -521,11 +521,11 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
                     mHourOfDay, mMinute, mSecond
             )
 //            supportActionBar?.run {
-//                title = DateUtils.getFullPatternDate(mCurrentTimeMillis)
+//                title = DateUtils.getDateStringFromTimeMillis(mCurrentTimeMillis)
 //                subtitle = if (mBinding.partialEditContents.allDay.isChecked) "No time information" else DateUtils.timeMillisToDateTime(mCurrentTimeMillis, DateUtils.TIME_PATTERN_WITH_SECONDS)
 //            }
             mBinding.partialEditContents.date.text = when (mBinding.partialEditContents.allDay.isChecked) {
-                true -> DateUtils.getFullPatternDate(mCurrentTimeMillis)
+                true -> DateUtils.getDateStringFromTimeMillis(mCurrentTimeMillis)
                 false -> DateUtils.getFullPatternDateWithTimeAndSeconds(mCurrentTimeMillis)
             }
         } catch (e: ParseException) {

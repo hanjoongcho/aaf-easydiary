@@ -42,7 +42,7 @@ class DiaryMainWidgetFactory(private val context: Context) : RemoteViewsService.
             setTextViewText(R.id.text1, diaryDto.title)
             setTextViewText(R.id.text2, diaryDto.contents)
             setTextViewText(R.id.text3, when (diaryDto.isAllDay) {
-                true -> DateUtils.getFullPatternDate(diaryDto.currentTimeMillis)
+                true -> DateUtils.getDateStringFromTimeMillis(diaryDto.currentTimeMillis)
                 false -> DateUtils.getDateTimeStringFromTimeMillis(diaryDto.currentTimeMillis)
             })
 
