@@ -22,7 +22,7 @@
             app:layout_constraintTop_toTopOf="parent" />
         <ImageView
             android:id="@+id/image_d_day_sort_order"
-            android:src="@drawable/ic_sorting_asc"
+            android:src="@drawable/ic_sorting_desc"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:background="?attr/selectableItemBackgroundBorderless"

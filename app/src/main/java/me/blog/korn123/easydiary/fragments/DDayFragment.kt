@@ -30,7 +30,7 @@ class DDayFragment : Fragment() {
     private lateinit var mLinearLayoutManager: LinearLayoutManager
     private lateinit var mSafeFlexboxLayoutManager: SafeFlexboxLayoutManager
     private var mDDayItems: MutableList<DDay> = mutableListOf()
-    private var mDDaySortOrder = Sort.ASCENDING
+    private var mDDaySortOrder = Sort.DESCENDING
 
     /***************************************************************************************************
      *   override functions
@@ -48,7 +48,7 @@ class DDayFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mDDayAdapter = DDayAdapter(requireActivity(), mDDayItems) { updateDDayList() }
+        mDDayAdapter = DDayAdapter(requireActivity(), mDDayItems) { updateDDayList(mDDaySortOrder) }
         mLinearLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         mSafeFlexboxLayoutManager = SafeFlexboxLayoutManager(requireContext()).apply {
             flexDirection = FlexDirection.ROW
@@ -68,23 +68,23 @@ class DDayFragment : Fragment() {
             imageDDaySortOrder.setOnClickListener {
                 mDDaySortOrder = when (mDDaySortOrder) {
                     Sort.ASCENDING -> {
-                        imageDDaySortOrder.setImageResource(R.drawable.ic_sorting_asc)
+                        imageDDaySortOrder.setImageResource(R.drawable.ic_sorting_desc)
                         Sort.DESCENDING
                     }
                     Sort.DESCENDING -> {
-                        imageDDaySortOrder.setImageResource(R.drawable.ic_sorting_desc)
+                        imageDDaySortOrder.setImageResource(R.drawable.ic_sorting_asc)
                         Sort.ASCENDING
                     }
                 }
                 updateDDayList(mDDaySortOrder)
             }
         }
-        updateDDayList()
+        updateDDayList(mDDaySortOrder)
     }
 
     private fun getDDayLayoutManager(): RecyclerView.LayoutManager = if (config.enableDDayFlexboxLayout) mSafeFlexboxLayoutManager else mLinearLayoutManager
 
-    private fun updateDDayList(sortOrder: Sort = Sort.ASCENDING) {
+    private fun updateDDayList(sortOrder: Sort) {
         mDDayItems.run {
             clear()
             addAll(EasyDiaryDbHelper.findDDayAll(sortOrder))
