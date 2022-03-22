@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.models
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import me.blog.korn123.commons.utils.DateUtils
+import java.text.SimpleDateFormat
 
 open class ActionLog : RealmObject {
 
@@ -17,7 +18,7 @@ open class ActionLog : RealmObject {
 
     constructor(className: String?, signature: String?, key: String?, value: String?) : super() {
         this.sequence = sequence
-        this.className = "[${DateUtils.getFullPatternDateWithTimeAndSeconds(System.currentTimeMillis())}] $className"
+        this.className = "[${DateUtils.getDateTimeStringFromTimeMillis(System.currentTimeMillis(), SimpleDateFormat.FULL, SimpleDateFormat.FULL)}] $className"
         this.signature = signature
         this.key = key
         this.value = value

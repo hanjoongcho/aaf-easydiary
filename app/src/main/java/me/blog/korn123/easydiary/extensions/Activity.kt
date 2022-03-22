@@ -60,6 +60,7 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -429,7 +430,7 @@ fun Activity.createHtmlString(diaryList: List<Diary>): String {
             true -> html.append("<div class='title'> <div class='title-left'><img src='data:image/png;base64, ${resourceToBase64(resourceId)}' /></div> <div class='title-right'>${it.title}</div> </div>")
             false -> html.append("<div class='title'> <div class='title-right'>${it.title}</div> </div>")
         }
-        html.append("<div class='datetime'>${DateUtils.getFullPatternDateWithTimeAndSeconds(it.currentTimeMillis)}</div>")
+        html.append("<div class='datetime'>${DateUtils.getDateTimeStringFromTimeMillis(it.currentTimeMillis, SimpleDateFormat.FULL, SimpleDateFormat.FULL)}</div>")
         html.append("<pre class='contents'>")
         html.append(it.contents)
         html.append("</pre>")

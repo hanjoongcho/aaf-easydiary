@@ -300,7 +300,7 @@ class PostcardActivity : EasyDiaryActivity() {
             // generate postcard file another thread
             CoroutineScope(Dispatchers.Default).launch {
                 try {
-                    val diaryCardPath = "$DIARY_POSTCARD_DIRECTORY${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}_$mSequence.jpg"
+                    val diaryCardPath = "$DIARY_POSTCARD_DIRECTORY${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DASH)}_$mSequence.jpg"
                     mSavedDiaryCardPath = EasyDiaryUtils.getApplicationDataDirectory(this@PostcardActivity) + diaryCardPath
                     EasyDiaryUtils.initWorkingDirectory(this@PostcardActivity)
                     BitmapUtils.saveBitmapToFileCache(createBitmap(), mSavedDiaryCardPath)

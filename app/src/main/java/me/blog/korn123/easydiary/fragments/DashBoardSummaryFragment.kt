@@ -8,6 +8,7 @@ import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.FragmentDashboardSummaryBinding
 import me.blog.korn123.easydiary.extensions.config
+import java.text.SimpleDateFormat
 
 class DashBoardSummaryFragment : androidx.fragment.app.Fragment() {
     private lateinit var mBinding: FragmentDashboardSummaryBinding
@@ -30,19 +31,19 @@ class DashBoardSummaryFragment : androidx.fragment.app.Fragment() {
 
             val diaryBackupUsingGMSMillis = ctx.config.diaryBackupGoogle
             mBinding.diaryBackupUsingGMS.text = when {
-                diaryBackupUsingGMSMillis > 0L -> DateUtils.getFullPatternDateWithTimeAndSeconds(diaryBackupUsingGMSMillis)
+                diaryBackupUsingGMSMillis > 0L -> DateUtils.getDateTimeStringFromTimeMillis(diaryBackupUsingGMSMillis, SimpleDateFormat.FULL, SimpleDateFormat.FULL)
                 else -> getString(R.string.dashboard_backup_guide_message)
             }
 
             val photoBackupUsingGMSMillis = ctx.config.photoBackupGoogle
             mBinding.attachedPhotoBackupUsingGMS.text = when {
-                photoBackupUsingGMSMillis > 0L -> DateUtils.getFullPatternDateWithTimeAndSeconds(photoBackupUsingGMSMillis)
+                photoBackupUsingGMSMillis > 0L -> DateUtils.getDateTimeStringFromTimeMillis(photoBackupUsingGMSMillis, SimpleDateFormat.FULL, SimpleDateFormat.FULL)
                 else -> getString(R.string.dashboard_backup_guide_message)
             }
 
             val diaryBackupUsingLocal = ctx.config.diaryBackupLocal
             mBinding.diaryBackupLocal.text = when {
-                diaryBackupUsingLocal > 0L -> DateUtils.getFullPatternDateWithTimeAndSeconds(diaryBackupUsingLocal)
+                diaryBackupUsingLocal > 0L -> DateUtils.getDateTimeStringFromTimeMillis(diaryBackupUsingLocal, SimpleDateFormat.FULL, SimpleDateFormat.FULL)
                 else -> getString(R.string.dashboard_backup_guide_message)
             }
         }

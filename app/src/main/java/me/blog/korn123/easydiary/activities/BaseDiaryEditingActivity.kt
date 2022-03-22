@@ -48,6 +48,7 @@ import me.blog.korn123.easydiary.models.PhotoUri
 import org.apache.commons.lang3.StringUtils
 import java.io.File
 import java.text.ParseException
+import java.text.SimpleDateFormat
 import java.util.*
 
 abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
@@ -526,7 +527,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
 //            }
             mBinding.partialEditContents.date.text = when (mBinding.partialEditContents.allDay.isChecked) {
                 true -> DateUtils.getDateStringFromTimeMillis(mCurrentTimeMillis)
-                false -> DateUtils.getFullPatternDateWithTimeAndSeconds(mCurrentTimeMillis)
+                false -> DateUtils.getDateTimeStringFromTimeMillis(mCurrentTimeMillis, SimpleDateFormat.FULL, SimpleDateFormat.FULL)
             }
         } catch (e: ParseException) {
             e.printStackTrace()

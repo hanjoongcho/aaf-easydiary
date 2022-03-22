@@ -288,7 +288,7 @@ class TimelineActivity : EasyDiaryActivity() {
         if (mBinding.partialTimelineFilter.endDate.text.isNotEmpty()) endMillis = EasyDiaryUtils.datePickerToTimeMillis(mEDatePickerDialog.datePicker.dayOfMonth, mEDatePickerDialog.datePicker.month, mEDatePickerDialog.datePicker.year, true)
 
 
-        Log.i("aaf-t", "input date ${DateUtils.timeMillisToDateTime(startMillis, DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}")
+        Log.i("aaf-t", "input date ${DateUtils.timeMillisToDateTime(startMillis, DateUtils.DATE_TIME_PATTERN_WITHOUT_DASH)}")
         Log.i("aaf-t", "query ${mBinding.partialTimelineFilter.query.text}")
 
         mDiaryList.run {

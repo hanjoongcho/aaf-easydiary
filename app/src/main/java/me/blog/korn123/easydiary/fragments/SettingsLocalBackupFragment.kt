@@ -97,7 +97,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                         REQUEST_CODE_EXTERNAL_STORAGE_WITH_IMPORT_REALM -> showLocationSelectionPopup(MODE_RECOVERY, getString(R.string.recovery_internal_title), getString(R.string.recovery_internal_description), getString(R.string.recovery_external_title), getString(R.string.recovery_external_description))
                         REQUEST_CODE_EXTERNAL_STORAGE_WITH_DELETE_REALM -> deleteRealmFile()
                         REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_FULL_BACKUP -> setupLauncher(REQUEST_CODE_SAF_WRITE_ZIP) {
-                            EasyDiaryUtils.writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".zip", MIME_TYPE_ZIP, mRequestWriteFileWithSAF)
+                            EasyDiaryUtils.writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DASH) + ".zip", MIME_TYPE_ZIP, mRequestWriteFileWithSAF)
                         }
                     }
                 } else {
@@ -248,7 +248,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
     }
     
     private fun sendEmailWithExcel() {
-        val exportFileName = "aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}"
+        val exportFileName = "aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DASH)}"
         val builder = AlertDialog.Builder(requireActivity())
         builder.setTitle(getString(R.string.export_excel_title))
         builder.setIcon(ContextCompat.getDrawable(requireActivity(), R.drawable.ic_excel_3))
@@ -282,13 +282,13 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
 
     private fun createExportExcelUri() {
         setupLauncher(REQUEST_CODE_SAF_WRITE_XLS) {
-            EasyDiaryUtils.writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".xls", MIME_TYPE_XLS, mRequestWriteFileWithSAF)
+            EasyDiaryUtils.writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DASH) + ".xls", MIME_TYPE_XLS, mRequestWriteFileWithSAF)
         }
     }
 
     private fun exportExcel(uri: Uri?) {
 //        EasyDiaryUtils.initLegacyWorkingDirectory(mActivity)
-        val exportFileName = "aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}"
+        val exportFileName = "aaf-easydiray_${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DASH)}"
         val builder = AlertDialog.Builder(requireActivity())
         builder.setTitle(getString(R.string.export_excel_title))
         builder.setIcon(ContextCompat.getDrawable(requireActivity(), R.drawable.ic_excel_3))
@@ -468,7 +468,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
                 R.id.exportFullBackupFile -> {
                     when (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                         true -> setupLauncher(REQUEST_CODE_SAF_WRITE_ZIP) {
-                            EasyDiaryUtils.writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER) + ".zip", MIME_TYPE_ZIP, mRequestWriteFileWithSAF)
+                            EasyDiaryUtils.writeFileWithSAF(DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DASH) + ".zip", MIME_TYPE_ZIP, mRequestWriteFileWithSAF)
                         }
                         false -> setupLauncher(REQUEST_CODE_EXTERNAL_STORAGE_WITH_EXPORT_FULL_BACKUP) {
                             confirmExternalStoragePermission(EXTERNAL_STORAGE_PERMISSIONS, mRequestExternalStoragePermissionLauncher)
