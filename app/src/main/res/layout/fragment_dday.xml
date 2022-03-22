@@ -17,14 +17,25 @@
             app:applyGlobalColor="false"
             app:applyGlobalSize="false"
             app:applyHighLight="true"
-            app:layout_constraintEnd_toStartOf="@+id/flexbox_option_container"
+            app:layout_constraintEnd_toStartOf="@+id/image_d_day_sort_order"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/image_d_day_sort_order"
+            android:src="@drawable/ic_sorting_asc"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/recycler_days"
+            app:layout_constraintStart_toEndOf="@+id/dashboard_title"
+            app:layout_constraintEnd_toStartOf="@+id/flexbox_option_container"
+            />
         <androidx.appcompat.widget.LinearLayoutCompat
             android:padding="10dp"
             android:id="@+id/flexbox_option_container"
             android:gravity="center"
-            app:layout_constraintStart_toEndOf="@id/dashboard_title"
+            app:layout_constraintStart_toEndOf="@id/image_d_day_sort_order"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/recycler_days"

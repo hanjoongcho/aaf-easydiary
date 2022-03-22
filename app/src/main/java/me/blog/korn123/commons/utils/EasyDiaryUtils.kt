@@ -182,7 +182,7 @@ object EasyDiaryUtils {
                 uriStream?.close()
                 fos.close()
             }
-            else ->{
+            else -> {
                 val tempFile = File.createTempFile(UUID.randomUUID().toString(), "tmp")
                 val fos = FileOutputStream(tempFile)
                 IOUtils.copy(uriStream, fos)

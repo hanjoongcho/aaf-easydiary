@@ -9,9 +9,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
+import io.realm.Sort
+import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DDayAdapter
 import me.blog.korn123.easydiary.databinding.FragmentDdayBinding
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.DDay
 import me.blog.korn123.easydiary.views.SafeFlexboxLayoutManager
@@ -24,9 +27,15 @@ class DDayFragment : Fragment() {
      ***************************************************************************************************/
     private lateinit var mBinging: FragmentDdayBinding
     private lateinit var mDDayAdapter: DDayAdapter
-    private var mDDayItems: MutableList<DDay> = mutableListOf()
     private lateinit var mLinearLayoutManager: LinearLayoutManager
     private lateinit var mSafeFlexboxLayoutManager: SafeFlexboxLayoutManager
+    private var mDDayItems: MutableList<DDay> = mutableListOf()
+    private var mDDaySortOrder = Sort.ASCENDING
+
+    /***************************************************************************************************
+     *   override functions
+     *
+     ***************************************************************************************************/
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -55,16 +64,30 @@ class DDayFragment : Fragment() {
                 recyclerDays.layoutManager = getDDayLayoutManager()
             }
             flexboxOptionSwitcher.isChecked = config.enableDDayFlexboxLayout
+            requireActivity().updateDrawableColorInnerCardView(imageDDaySortOrder)
+            imageDDaySortOrder.setOnClickListener {
+                mDDaySortOrder = when (mDDaySortOrder) {
+                    Sort.ASCENDING -> {
+                        imageDDaySortOrder.setImageResource(R.drawable.ic_sorting_asc)
+                        Sort.DESCENDING
+                    }
+                    Sort.DESCENDING -> {
+                        imageDDaySortOrder.setImageResource(R.drawable.ic_sorting_desc)
+                        Sort.ASCENDING
+                    }
+                }
+                updateDDayList(mDDaySortOrder)
+            }
         }
         updateDDayList()
     }
 
     private fun getDDayLayoutManager(): RecyclerView.LayoutManager = if (config.enableDDayFlexboxLayout) mSafeFlexboxLayoutManager else mLinearLayoutManager
 
-    private fun updateDDayList() {
+    private fun updateDDayList(sortOrder: Sort = Sort.ASCENDING) {
         mDDayItems.run {
             clear()
-            addAll(EasyDiaryDbHelper.findDDayAll())
+            addAll(EasyDiaryDbHelper.findDDayAll(sortOrder))
             add(DDay("New D-Day!!!"))
         }
         mDDayAdapter.notifyDataSetChanged()
