@@ -88,11 +88,13 @@ class DashboardActivity : EasyDiaryActivity() {
                 statistics1.layoutParams.width = width
                 statistics2.layoutParams.width = width
                 statistics3.layoutParams.width = width
+                statistics4.layoutParams.width = width
                 if (isLandScape()) {
                     val height = getDefaultDisplay().y - statusBarHeight() - dpToPixel(20F)
                     statistics1.layoutParams.height = height
                     statistics2.layoutParams.height = height
                     statistics3.layoutParams.height = height
+                    statistics4.layoutParams.height = height
                 }
             }
         }
@@ -149,6 +151,15 @@ class DashboardActivity : EasyDiaryActivity() {
             replace(R.id.statistics3, HorizontalBarChartFragment().apply {
                 val args = Bundle()
                 args.putString(BarChartFragment.CHART_TITLE, symbolTopTenTitle)
+                arguments = args
+            })
+            commit()
+        }
+
+        supportFragmentManager.beginTransaction().run {
+            replace(R.id.statistics4, LineChartFragment().apply {
+                val args = Bundle()
+                args.putString(BarChartFragment.CHART_TITLE, "Weight")
                 arguments = args
             })
             commit()

@@ -114,6 +114,26 @@ object EasyDiaryUtils {
 
 
     /***************************************************************************************************
+     *   Number Utils
+     *
+     ***************************************************************************************************/
+    fun isNumberString(string: String?): Boolean = string?.toFloatOrNull() != null
+
+    fun isContainNumber(string: String?): Boolean {
+        return string?.contains("\\d+\\.?\\d+".toRegex()) ?: false
+    }
+
+    fun findNumber(string: String?): Float {
+        var number = 0f
+        string?.let {
+            val intRange = "\\d+\\.?\\d+".toRegex().find(it)?.range ?: IntRange(0, 0)
+            number = string.substring(intRange).toFloat()
+        }
+        return number
+    }
+
+
+    /***************************************************************************************************
      *   Date Utils
      *
      ***************************************************************************************************/

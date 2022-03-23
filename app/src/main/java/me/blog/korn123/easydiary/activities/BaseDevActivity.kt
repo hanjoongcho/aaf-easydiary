@@ -113,6 +113,16 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     edit().putBoolean("hasShot$SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER", false).apply()
                 }
             }
+            buttonWeight.setOnClickListener {
+                val diaryItems = EasyDiaryDbHelper.findDiary(null, false, 0, 0, DAILY_SCALE)
+                val sb = StringBuilder()
+                diaryItems.forEach { item ->
+                    item.title?.let {
+                        if (EasyDiaryUtils.isContainNumber(it)) sb.append(EasyDiaryUtils.findNumber(it)).append("\n")
+                    }
+                }
+                actionLog.text = sb.toString()
+            }
         }
     }
 
