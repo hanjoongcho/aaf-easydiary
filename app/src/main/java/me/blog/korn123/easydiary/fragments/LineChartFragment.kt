@@ -15,13 +15,10 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import kotlinx.coroutines.*
-import me.blog.korn123.commons.utils.DateUtils
+import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.chart.DayAxisValueFormatter
-import me.blog.korn123.easydiary.chart.IValueFormatterExt
-import me.blog.korn123.easydiary.chart.MyAxisValueFormatter
-import me.blog.korn123.easydiary.chart.XYMarkerView
+import me.blog.korn123.easydiary.chart.*
 import me.blog.korn123.easydiary.helper.DAILY_SCALE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.views.FixedTextView
@@ -65,7 +62,7 @@ class LineChartFragment : androidx.fragment.app.Fragment() {
         xAxis.labelCount = 7
         xAxis.valueFormatter = xAxisFormatter
 
-        val custom = MyAxisValueFormatter(context)
+        val custom = WeightAxisYValueFormatter(context)
 
         val leftAxis = mLineChart.axisLeft
         leftAxis.typeface = FontUtils.getCommonTypeface(requireContext())
@@ -140,33 +137,13 @@ class LineChartFragment : androidx.fragment.app.Fragment() {
         val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
         val listDiary = EasyDiaryDbHelper.findDiary(null, false, 0, 0, DAILY_SCALE, realmInstance = realmInstance)
         realmInstance.close()
-        val map = hashMapOf<Int, Int>()
-        listDiary.map { diaryDto ->
-            val writeHour = DateUtils.timeMillisToDateTime(diaryDto.currentTimeMillis, "HH")
-            val itemNumber = hourToItemNumber(Integer.parseInt(writeHour))
-            if (map[itemNumber] == null) {
-                map.put(itemNumber, 1)
-            } else {
-                map.put(itemNumber, (map[itemNumber] ?: 0) + 1)
+        val barEntries = ArrayList<Entry>()
+        listDiary.forEachIndexed { index, diaryDto ->
+            diaryDto.title?.let {
+                if (EasyDiaryUtils.isContainNumber(it)) barEntries.add(Entry(index.toFloat(), EasyDiaryUtils.findNumber(it)))
             }
         }
-        val barEntries = ArrayList<Entry>()
-        for (i in 1..count) {
-            var total = 0
-            if (map[i] != null) total = map[i] ?: 0
-            barEntries.add(Entry(i.toFloat(), total.toFloat()))
-        }
         return barEntries
-    }
-
-    private fun hourToItemNumber(hour: Int): Int = when (hour) {
-        in 0..3 -> 1
-        in 4..7 -> 2
-        in 8..11 -> 3
-        in 12..15 -> 4
-        in 16..19 -> 5
-        in 20..23 -> 6
-        else -> 0
     }
 
     companion object {
