@@ -106,24 +106,30 @@ class LineChartFragment : androidx.fragment.app.Fragment() {
 
         mCoroutineJob = CoroutineScope(Dispatchers.IO).launch {
             val barEntries = setData()
-            withContext(Dispatchers.Main) {
-                val barDataSet = LineDataSet(barEntries, getString(R.string.statistics_creation_time))
-                val iValueFormatter = IValueFormatterExt(context)
-                barDataSet.valueFormatter = iValueFormatter
-                val colors = intArrayOf(
-                    Color.rgb(193, 37, 82), Color.rgb(255, 102, 0), Color.rgb(245, 199, 0),
-                    Color.rgb(106, 150, 31), Color.rgb(179, 100, 53), Color.rgb(115, 130, 153))
-                barDataSet.setColors(*colors)
-                barDataSet.setDrawIcons(false)
-                barDataSet.setDrawValues(true)
-                val dataSets = ArrayList<ILineDataSet>()
-                dataSets.add(barDataSet)
-                val barData = LineData(dataSets)
-                barData.setValueTextSize(10f)
-                barData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
-                mLineChart.data = barData
-                mLineChart.animateY(2000)
-                mBarChartProgressBar.visibility = View.GONE
+            if (barEntries.isNotEmpty()) {
+                withContext(Dispatchers.Main) {
+                    val barDataSet = LineDataSet(barEntries, getString(R.string.statistics_creation_time))
+                    val iValueFormatter = IValueFormatterExt(context)
+                    barDataSet.valueFormatter = iValueFormatter
+                    val colors = intArrayOf(
+                        Color.rgb(193, 37, 82), Color.rgb(255, 102, 0), Color.rgb(245, 199, 0),
+                        Color.rgb(106, 150, 31), Color.rgb(179, 100, 53), Color.rgb(115, 130, 153))
+                    barDataSet.setColors(*colors)
+                    barDataSet.setDrawIcons(false)
+                    barDataSet.setDrawValues(true)
+                    val dataSets = ArrayList<ILineDataSet>()
+                    dataSets.add(barDataSet)
+                    val barData = LineData(dataSets)
+                    barData.setValueTextSize(10f)
+                    barData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
+                    mLineChart.data = barData
+                    mLineChart.animateY(2000)
+                    mBarChartProgressBar.visibility = View.GONE
+                }
+            } else {
+                withContext(Dispatchers.Main) {
+                    mBarChartProgressBar.visibility = View.GONE
+                }
             }
         }
     }
