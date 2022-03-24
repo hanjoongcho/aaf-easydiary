@@ -76,6 +76,7 @@ class LineChartFragment : androidx.fragment.app.Fragment() {
         leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
         leftAxis.spaceTop = 15f
         leftAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
+        leftAxis.labelCount = 20
 
         val rightAxis = mLineChart.axisRight
         rightAxis.setDrawGridLines(false)
@@ -84,6 +85,7 @@ class LineChartFragment : androidx.fragment.app.Fragment() {
         rightAxis.valueFormatter = custom
         rightAxis.spaceTop = 15f
         rightAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
+        rightAxis.labelCount = 20
 
         val l = mLineChart.legend
         l.typeface = FontUtils.getCommonTypeface(requireContext())
@@ -151,14 +153,24 @@ class LineChartFragment : androidx.fragment.app.Fragment() {
         realmInstance.close()
         val barEntries = ArrayList<Entry>()
         var index = 0
+        var sumWeight = 0F
         listDiary.reversed().forEach { diaryDto ->
             diaryDto.title?.let {
                 if (EasyDiaryUtils.isContainNumber(it)) {
-                    barEntries.add(Entry(index.toFloat(), EasyDiaryUtils.findNumber(it)))
+                    val weight = EasyDiaryUtils.findNumber(it)
+                    sumWeight += weight
+                    barEntries.add(Entry(index.toFloat(), weight))
                     mTimeMillisMap[index] = diaryDto.currentTimeMillis
                     index++
                 }
             }
+        }
+        if (index > 0) {
+            val average = sumWeight.div(index)
+            mLineChart.axisLeft.axisMinimum = average.minus(10)
+            mLineChart.axisLeft.axisMaximum = average.plus(10)
+            mLineChart.axisRight.axisMinimum = average.minus(10)
+            mLineChart.axisRight.axisMaximum = average.plus(10)
         }
         return barEntries
     }
