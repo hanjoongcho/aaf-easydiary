@@ -1,27 +1,32 @@
 package me.blog.korn123.easydiary.fragments
 
-import android.graphics.Color
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.widget.ContentLoadingProgressBar
 import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.components.Legend
-import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.components.YAxis
+import com.github.mikephil.charting.components.*
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.IAxisValueFormatter
+import com.github.mikephil.charting.formatter.IValueFormatter
+import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import com.github.mikephil.charting.utils.MPPointF
+import com.github.mikephil.charting.utils.ViewPortHandler
 import kotlinx.coroutines.*
+import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.chart.*
 import me.blog.korn123.easydiary.helper.DAILY_SCALE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.views.FixedTextView
+import java.text.SimpleDateFormat
 
 class LineChartFragment : androidx.fragment.app.Fragment() {
     private lateinit var mLineChart: LineChart
@@ -51,7 +56,7 @@ class LineChartFragment : androidx.fragment.app.Fragment() {
         // mChart.setDrawYLabels(false);
 //        barChart.zoom(1.5F, 0F, 0F, 0F)
 
-        val xAxisFormatter = DayAxisValueFormatter(context, mLineChart)
+        val xAxisFormatter = WeightXAxisValueFormatter(context)
 
         val xAxis = mLineChart.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
@@ -62,7 +67,7 @@ class LineChartFragment : androidx.fragment.app.Fragment() {
         xAxis.labelCount = 7
         xAxis.valueFormatter = xAxisFormatter
 
-        val custom = WeightAxisYValueFormatter(context)
+        val custom = WeightYAxisValueFormatter(context)
 
         val leftAxis = mLineChart.axisLeft
         leftAxis.typeface = FontUtils.getCommonTypeface(requireContext())
@@ -91,7 +96,7 @@ class LineChartFragment : androidx.fragment.app.Fragment() {
         l.textSize = 11f
         l.xEntrySpace = 4f
 
-        val mv = XYMarkerView(requireContext(), xAxisFormatter)
+        val mv = WeightMarkerView(requireContext(), xAxisFormatter)
         mv.chartView = mLineChart // For bounds control
         mLineChart.marker = mv // Set the marker to the chart
 
@@ -108,21 +113,21 @@ class LineChartFragment : androidx.fragment.app.Fragment() {
             val barEntries = setData()
             if (barEntries.isNotEmpty()) {
                 withContext(Dispatchers.Main) {
-                    val barDataSet = LineDataSet(barEntries, getString(R.string.statistics_creation_time))
-                    val iValueFormatter = IValueFormatterExt(context)
-                    barDataSet.valueFormatter = iValueFormatter
-                    val colors = intArrayOf(
-                        Color.rgb(193, 37, 82), Color.rgb(255, 102, 0), Color.rgb(245, 199, 0),
-                        Color.rgb(106, 150, 31), Color.rgb(179, 100, 53), Color.rgb(115, 130, 153))
-                    barDataSet.setColors(*colors)
-                    barDataSet.setDrawIcons(false)
-                    barDataSet.setDrawValues(true)
+                    val lineDataSet = LineDataSet(barEntries, "Weight")
+                    val iValueFormatter = WeightIValueFormatter(context)
+                    lineDataSet.valueFormatter = iValueFormatter
+//                    val colors = intArrayOf(
+//                        Color.rgb(193, 37, 82), Color.rgb(255, 102, 0), Color.rgb(245, 199, 0),
+//                        Color.rgb(106, 150, 31), Color.rgb(179, 100, 53), Color.rgb(115, 130, 153))
+//                    lineDataSet.setColors(*colors)
+                    lineDataSet.setDrawIcons(false)
+                    lineDataSet.setDrawValues(true)
                     val dataSets = ArrayList<ILineDataSet>()
-                    dataSets.add(barDataSet)
-                    val barData = LineData(dataSets)
-                    barData.setValueTextSize(10f)
-                    barData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
-                    mLineChart.data = barData
+                    dataSets.add(lineDataSet)
+                    val lineData = LineData(dataSets)
+                    lineData.setValueTextSize(10f)
+                    lineData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
+                    mLineChart.data = lineData
                     mLineChart.animateY(2000)
                     mBarChartProgressBar.visibility = View.GONE
                 }
@@ -139,14 +144,20 @@ class LineChartFragment : androidx.fragment.app.Fragment() {
         mCoroutineJob?.run { if (isActive) cancel() }
     }
 
+    val mTimeMillisMap = hashMapOf<Int, Long>()
     private fun setData(count: Int = 6, range: Float = 20F): ArrayList<Entry> {
         val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
         val listDiary = EasyDiaryDbHelper.findDiary(null, false, 0, 0, DAILY_SCALE, realmInstance = realmInstance)
         realmInstance.close()
         val barEntries = ArrayList<Entry>()
-        listDiary.forEachIndexed { index, diaryDto ->
+        var index = 0
+        listDiary.reversed().forEach { diaryDto ->
             diaryDto.title?.let {
-                if (EasyDiaryUtils.isContainNumber(it)) barEntries.add(Entry(index.toFloat(), EasyDiaryUtils.findNumber(it)))
+                if (EasyDiaryUtils.isContainNumber(it)) {
+                    barEntries.add(Entry(index.toFloat(), EasyDiaryUtils.findNumber(it)))
+                    mTimeMillisMap[index] = diaryDto.currentTimeMillis
+                    index++
+                }
             }
         }
         return barEntries
@@ -154,5 +165,56 @@ class LineChartFragment : androidx.fragment.app.Fragment() {
 
     companion object {
         const val CHART_TITLE = "chartTitle"
+    }
+
+    inner class WeightXAxisValueFormatter(private var context: Context?) : IAxisValueFormatter {
+        override fun getFormattedValue(value: Float, axis: AxisBase): String {
+            val timeMillis: Long = mTimeMillisMap[value.toInt()] ?: 0
+            return if (timeMillis > 0) DateUtils.getDateStringFromTimeMillis(timeMillis, SimpleDateFormat.SHORT) else "N/A$value"
+        }
+    }
+
+    inner class WeightYAxisValueFormatter(private var context: Context?) : IAxisValueFormatter {
+        override fun getFormattedValue(value: Float, axis: AxisBase): String {
+            return "${value}kg"
+        }
+    }
+
+    inner class WeightIValueFormatter(private var context: Context?) : IValueFormatter {
+
+        /**
+         * Called when a value (from labels inside the chart) is formatted
+         * before being drawn. For performance reasons, avoid excessive calculations
+         * and memory allocations inside this method.
+         *
+         * @param value           the value to be formatted
+         * @param entry           the entry the value belongs to - in e.g. BarChart, this is of class BarEntry
+         * @param dataSetIndex    the index of the DataSet the entry in focus belongs to
+         * @param viewPortHandler provides information about the current chart state (scale, translation, ...)
+         * @return the formatted label ready for being drawn
+         */
+        override fun getFormattedValue(value: Float, entry: Entry, dataSetIndex: Int, viewPortHandler: ViewPortHandler): String {
+            return "${value}kg"
+        }
+    }
+
+    inner class WeightMarkerView(context: Context, private val xAxisValueFormatter: IAxisValueFormatter) : MarkerView(context, R.layout.partial_custom_marker_view) {
+        private val tvContent: TextView = findViewById(R.id.tvContent)
+
+        // callbacks everytime the MarkerView is redrawn, can be used to update the
+        // content (user-interface)
+        override fun refreshContent(e: Entry?, highlight: Highlight?) {
+            e?.let { entry ->
+                tvContent.run {
+                    text = "${entry.y}kg"
+                    typeface = FontUtils.getCommonTypeface(context)
+                }
+                super.refreshContent(entry, highlight)
+            }
+        }
+
+        override fun getOffset(): MPPointF {
+            return MPPointF((-(width / 2)).toFloat(), (-height).toFloat())
+        }
     }
 }

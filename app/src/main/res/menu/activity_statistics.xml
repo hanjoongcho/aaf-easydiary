@@ -16,4 +16,9 @@
         android:orderInCategory="3"
         android:title="@string/statistics_symbol_top_ten"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/barChart4"
+        android:orderInCategory="4"
+        android:title="Weight"
+        app:showAsAction="never" />
 </menu>

@@ -10,6 +10,7 @@ import me.blog.korn123.easydiary.extensions.applyFontToMenuItem
 import me.blog.korn123.easydiary.fragments.BarChartFragment
 import me.blog.korn123.easydiary.fragments.BarChartFragmentT2
 import me.blog.korn123.easydiary.fragments.HorizontalBarChartFragment
+import me.blog.korn123.easydiary.fragments.LineChartFragment
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -42,6 +43,7 @@ class StatisticsActivity : ChartBase() {
         targetItems.add(menu.findItem(R.id.barChart))
         targetItems.add(menu.findItem(R.id.barChart2))
         targetItems.add(menu.findItem(R.id.barChart3))
+        targetItems.add(menu.findItem(R.id.barChart4))
         targetItems.map { item ->
             applyFontToMenuItem(item)
         }
@@ -70,6 +72,13 @@ class StatisticsActivity : ChartBase() {
                 supportActionBar?.title = getString(R.string.statistics_symbol_top_ten)
                 supportFragmentManager.beginTransaction().run {
                     replace(R.id.chartView, HorizontalBarChartFragment())
+                    commit()
+                }
+            }
+            R.id.barChart4 -> {
+                supportActionBar?.title = "Weight"
+                supportFragmentManager.beginTransaction().run {
+                    replace(R.id.chartView, LineChartFragment())
                     commit()
                 }
             }
