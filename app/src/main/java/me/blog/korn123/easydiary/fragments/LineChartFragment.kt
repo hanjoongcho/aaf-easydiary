@@ -57,46 +57,48 @@ class LineChartFragment : androidx.fragment.app.Fragment() {
 //        barChart.zoom(1.5F, 0F, 0F, 0F)
 
         val xAxisFormatter = WeightXAxisValueFormatter(context)
+        mLineChart.xAxis.run {
+            position = XAxis.XAxisPosition.BOTTOM
+            typeface = FontUtils.getCommonTypeface(requireContext())
+            labelRotationAngle = -45F
+            setDrawGridLines(false)
+            granularity = 1f // only intervals of 1 day
+            labelCount = 7
+            valueFormatter = xAxisFormatter
+        }
 
-        val xAxis = mLineChart.xAxis
-        xAxis.position = XAxis.XAxisPosition.BOTTOM
-        xAxis.typeface = FontUtils.getCommonTypeface(requireContext())
-        xAxis.labelRotationAngle = -45F
-        xAxis.setDrawGridLines(false)
-        xAxis.granularity = 1f // only intervals of 1 day
-        xAxis.labelCount = 7
-        xAxis.valueFormatter = xAxisFormatter
+        val yAxisFormatter = WeightYAxisValueFormatter(context)
+        mLineChart.axisLeft.run {
+            typeface = FontUtils.getCommonTypeface(requireContext())
+            setLabelCount(8, false)
+            valueFormatter = yAxisFormatter
+            setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
+            spaceTop = 15f
+            axisMinimum = 0f // this replaces setStartAtZero(true)
+            labelCount = 8
+        }
 
-        val custom = WeightYAxisValueFormatter(context)
+        mLineChart.axisRight.run {
+            setDrawGridLines(false)
+            typeface = FontUtils.getCommonTypeface(requireContext())
+            setLabelCount(8, false)
+            valueFormatter = yAxisFormatter
+            spaceTop = 15f
+            axisMinimum = 0f // this replaces setStartAtZero(true)
+            labelCount = 8
+        }
 
-        val leftAxis = mLineChart.axisLeft
-        leftAxis.typeface = FontUtils.getCommonTypeface(requireContext())
-        leftAxis.setLabelCount(8, false)
-        leftAxis.valueFormatter = custom
-        leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
-        leftAxis.spaceTop = 15f
-        leftAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
-        leftAxis.labelCount = 20
-
-        val rightAxis = mLineChart.axisRight
-        rightAxis.setDrawGridLines(false)
-        rightAxis.typeface = FontUtils.getCommonTypeface(requireContext())
-        rightAxis.setLabelCount(8, false)
-        rightAxis.valueFormatter = custom
-        rightAxis.spaceTop = 15f
-        rightAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
-        rightAxis.labelCount = 20
-
-        val l = mLineChart.legend
-        l.typeface = FontUtils.getCommonTypeface(requireContext())
-        l.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
-        l.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
-        l.orientation = Legend.LegendOrientation.HORIZONTAL
-        l.setDrawInside(false)
-        l.form = Legend.LegendForm.SQUARE
-        l.formSize = 9f
-        l.textSize = 11f
-        l.xEntrySpace = 4f
+        mLineChart.legend.run {
+            typeface = FontUtils.getCommonTypeface(requireContext())
+            verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
+            horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
+            orientation = Legend.LegendOrientation.HORIZONTAL
+            setDrawInside(false)
+            form = Legend.LegendForm.SQUARE
+            formSize = 9f
+            textSize = 11f
+            xEntrySpace = 4f
+        }
 
         val mv = WeightMarkerView(requireContext(), xAxisFormatter)
         mv.chartView = mLineChart // For bounds control
