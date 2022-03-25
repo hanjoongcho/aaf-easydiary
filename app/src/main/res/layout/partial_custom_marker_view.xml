@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:gravity="center"
     android:layout_width="wrap_content"
-    android:layout_height="40dp"
-    android:background="@drawable/ic_marker2" >
-
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_balloon" >
     <TextView
         android:id="@+id/tvContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="7dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:text=""
+        android:layout_marginBottom="7dp"
+        android:text="17"
         android:textSize="12dp"
-        android:textColor="@android:color/white"
+        android:textColor="#FBFBFB"
         android:ellipsize="end"
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceSmall" />
-
 </RelativeLayout>
