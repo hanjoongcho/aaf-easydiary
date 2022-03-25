@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.widget.ContentLoadingProgressBar
 import com.github.mikephil.charting.charts.LineChart
@@ -22,6 +23,7 @@ import com.github.mikephil.charting.utils.ViewPortHandler
 import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.StatisticsActivity
@@ -113,6 +115,10 @@ class LineChartFragment : androidx.fragment.app.Fragment() {
             if (title != null) {
                 mChartTitle.text = title
                 mChartTitle.visibility = View.VISIBLE
+                getView()?.findViewById<ImageView>(R.id.image_weight_symbol)?.let {
+                    it.visibility = View.VISIBLE
+                    FlavorUtils.initWeatherView(requireActivity(), it, DAILY_SCALE)
+                }
             }
         }
 

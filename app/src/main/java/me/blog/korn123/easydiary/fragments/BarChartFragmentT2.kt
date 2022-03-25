@@ -127,26 +127,28 @@ class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
                     mSequences.add(key)
                     barEntries.add(BarEntry(index++, value.toFloat(), drawable))
                 }
-                val barDataSet = BarDataSet(barEntries, getString(R.string.statistics_symbol_all))
-                val iValueFormatter = IValueFormatterExt(context)
-                barDataSet.valueFormatter = iValueFormatter
-                val colors = intArrayOf(
-                    Color.rgb(193, 37, 82), Color.rgb(255, 102, 0), Color.rgb(245, 199, 0),
-                    Color.rgb(106, 150, 31), Color.rgb(179, 100, 53), Color.rgb(115, 130, 153))
-                barDataSet.setColors(*colors)
-                barDataSet.setDrawIcons(true)
-                barDataSet.setDrawValues(false)
-                val dataSets = ArrayList<IBarDataSet>()
-                dataSets.add(barDataSet)
+                if (barEntries.isNotEmpty()) {
+                    val barDataSet = BarDataSet(barEntries, getString(R.string.statistics_symbol_all))
+                    val iValueFormatter = IValueFormatterExt(context)
+                    barDataSet.valueFormatter = iValueFormatter
+                    val colors = intArrayOf(
+                        Color.rgb(193, 37, 82), Color.rgb(255, 102, 0), Color.rgb(245, 199, 0),
+                        Color.rgb(106, 150, 31), Color.rgb(179, 100, 53), Color.rgb(115, 130, 153))
+                    barDataSet.setColors(*colors)
+                    barDataSet.setDrawIcons(true)
+                    barDataSet.setDrawValues(false)
+                    val dataSets = ArrayList<IBarDataSet>()
+                    dataSets.add(barDataSet)
 
-                val barData = BarData(dataSets)
-                barData.setValueTextSize(10f)
-                barData.setValueTypeface(mTypeface)
-                barData.barWidth = 0.9f
-                mBarChart.zoom((sortedMap.size / 6.0F), 0F, 0F, 0F)
-                mBarChart.data = barData
+                    val barData = BarData(dataSets)
+                    barData.setValueTextSize(10f)
+                    barData.setValueTypeface(mTypeface)
+                    barData.barWidth = 0.9f
+                    mBarChart.zoom((sortedMap.size / 6.0F), 0F, 0F, 0F)
+                    mBarChart.data = barData
 
-                mBarChart.animateY(2000)
+                    mBarChart.animateY(2000)
+                }
                 mBarChartProgressBar.visibility = View.GONE
             }
         }

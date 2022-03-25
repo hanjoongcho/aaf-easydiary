@@ -122,34 +122,36 @@ class HorizontalBarChartFragment : androidx.fragment.app.Fragment() {
             mSequences.reverse()
 
             withContext(Dispatchers.Main) {
-                itemArray.forEachIndexed { index, item ->
-                    val drawable: Drawable? = when (FlavorUtils.sequenceToSymbolResourceId(item["key"]!!) > 0) {
-                        true -> scaledDrawable(FlavorUtils.sequenceToSymbolResourceId(item["key"]!!), CommonUtils.dpToPixel(requireContext(),24F) , CommonUtils.dpToPixel(requireContext(),24F))
-                        false -> null
+                if (itemArray.isNotEmpty()) {
+                    itemArray.forEachIndexed { index, item ->
+                        val drawable: Drawable? = when (FlavorUtils.sequenceToSymbolResourceId(item["key"]!!) > 0) {
+                            true -> scaledDrawable(FlavorUtils.sequenceToSymbolResourceId(item["key"]!!), CommonUtils.dpToPixel(requireContext(),24F) , CommonUtils.dpToPixel(requireContext(),24F))
+                            false -> null
+                        }
+                        barEntries.add(BarEntry((index + 1F), item["value"]!!.toFloat(), drawable))
                     }
-                    barEntries.add(BarEntry((index + 1F), item["value"]!!.toFloat(), drawable))
-                }
-                val barDataSet = BarDataSet(barEntries, getString(R.string.statistics_symbol_top_ten))
-                val iValueFormatter = IValueFormatterExt(context)
-                barDataSet.valueFormatter = iValueFormatter
-                val colors = intArrayOf(
-                    Color.rgb(255, 102, 0), Color.rgb(245, 199, 0),
-                    Color.rgb(106, 150, 31), Color.rgb(179, 100, 53), Color.rgb(115, 130, 153)
-                )
-                barDataSet.setColors(*colors)
-                barDataSet.setDrawIcons(true)
-                barDataSet.setDrawValues(false)
-                val dataSets = ArrayList<IBarDataSet>()
-                dataSets.add(barDataSet)
+                    val barDataSet = BarDataSet(barEntries, getString(R.string.statistics_symbol_top_ten))
+                    val iValueFormatter = IValueFormatterExt(context)
+                    barDataSet.valueFormatter = iValueFormatter
+                    val colors = intArrayOf(
+                        Color.rgb(255, 102, 0), Color.rgb(245, 199, 0),
+                        Color.rgb(106, 150, 31), Color.rgb(179, 100, 53), Color.rgb(115, 130, 153)
+                    )
+                    barDataSet.setColors(*colors)
+                    barDataSet.setDrawIcons(true)
+                    barDataSet.setDrawValues(false)
+                    val dataSets = ArrayList<IBarDataSet>()
+                    dataSets.add(barDataSet)
 
-                val barData = BarData(dataSets)
-                barData.setValueTextSize(10f)
+                    val barData = BarData(dataSets)
+                    barData.setValueTextSize(10f)
 //        barData.setValueTypeface(mTfLight)
-                barData.barWidth = 0.9f
+                    barData.barWidth = 0.9f
 //        barChart.zoom((sortedMap.size / 6.0F), 0F, 0F, 0F)
-                mBarChart.data = barData
+                    mBarChart.data = barData
 
-                mBarChart.animateY(2000)
+                    mBarChart.animateY(2000)
+                }
                 mBarChartProgressBar.visibility = View.GONE
             }
         }
