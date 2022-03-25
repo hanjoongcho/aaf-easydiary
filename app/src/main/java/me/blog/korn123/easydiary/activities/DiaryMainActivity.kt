@@ -517,6 +517,18 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 ?: 0))
         mDiaryMainItemAdapter?.currentQuery = query
         mDiaryMainItemAdapter?.notifyDataSetChanged()
+        mBinding.run {
+            when (mDiaryList.isEmpty()) {
+                true -> {
+                    diaryListView.visibility = View.GONE
+                    textNoDiary.visibility = View.VISIBLE
+                }
+                false -> {
+                    diaryListView.visibility = View.VISIBLE
+                    textNoDiary.visibility = View.GONE
+                }
+            }
+        }
     }
 
     private fun initSampleData() {

@@ -6,12 +6,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import me.blog.korn123.commons.utils.DateUtils
@@ -309,9 +311,22 @@ class TimelineActivity : EasyDiaryActivity() {
             currentQuery = mBinding.partialTimelineFilter.query.text.toString()
             notifyDataSetChanged()
         }
+
+        mBinding.run {
+            when (mDiaryList.isEmpty()) {
+                true -> {
+                    timelineList.visibility = View.GONE
+                    textNoDiary.visibility = View.VISIBLE
+                }
+                false -> {
+                    timelineList.visibility = View.VISIBLE
+                    textNoDiary.visibility = View.GONE
+                }
+            }
+        }
     }
     
     private fun moveListViewScrollToBottom() {
-        Handler().post { mBinding.timelineList.setSelection(mDiaryList.size - 1) }
+        Handler(Looper.getMainLooper()).post { mBinding.timelineList.setSelection(mDiaryList.size - 1) }
     }
 }

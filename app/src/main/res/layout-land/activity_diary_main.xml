@@ -112,6 +112,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     style="@style/recycler_fast_scroll"
+                    tools:visibility="gone"
+                    />
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:id="@+id/text_no_diary"
+                    android:visibility="gone"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="There is no written diary."
+                    tools:visibility="visible"
                     />
             </androidx.appcompat.widget.LinearLayoutCompat>
         </LinearLayout>

@@ -103,10 +103,21 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
             <me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
                 android:id="@+id/diaryListView"
+                android:visibility="visible"
                 android:layout_marginTop="@dimen/card_layout_padding"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 style="@style/recycler_fast_scroll"
+                tools:visibility="gone"
+                />
+            <com.simplemobiletools.commons.views.MyTextView
+                android:id="@+id/text_no_diary"
+                android:visibility="gone"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="There is no written diary."
+                tools:visibility="visible"
                 />
         </LinearLayout>
         <com.simplemobiletools.commons.views.MyFloatingActionButton
