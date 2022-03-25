@@ -24,13 +24,15 @@ class StatisticsActivity : ChartBase() {
         setContentView(mBinding.root)
         setSupportActionBar(mBinding.toolbar)
         supportActionBar?.run {
-            title = getString(R.string.statistics_creation_time)
-            setDisplayHomeAsUpEnabled(true)    
+            title = if (isSingleChart()) "Weight" else getString(R.string.statistics_creation_time)
+            setDisplayHomeAsUpEnabled(true)
+            if (isSingleChart()) setHomeAsUpIndicator(R.drawable.ic_cross)
         }
 
+        val defaultChart = if (isSingleChart()) LineChartFragment() else BarChartFragment()
         supportFragmentManager.run {
             beginTransaction().run {
-                replace(R.id.chartView, BarChartFragment())
+                replace(R.id.chartView, defaultChart)
                 commit()
             }
             executePendingTransactions()
@@ -38,16 +40,16 @@ class StatisticsActivity : ChartBase() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.activity_statistics, menu)
-        val targetItems = mutableListOf<MenuItem>()
-        targetItems.add(menu.findItem(R.id.barChart))
-        targetItems.add(menu.findItem(R.id.barChart2))
-        targetItems.add(menu.findItem(R.id.barChart3))
-        targetItems.add(menu.findItem(R.id.barChart4))
-        targetItems.map { item ->
-            applyFontToMenuItem(item)
+        if (!isSingleChart()) {
+            menuInflater.inflate(R.menu.activity_statistics, menu)
+            val targetItems = mutableListOf<MenuItem>()
+            targetItems.add(menu.findItem(R.id.barChart))
+            targetItems.add(menu.findItem(R.id.barChart2))
+            targetItems.add(menu.findItem(R.id.barChart3))
+            targetItems.map { item ->
+                applyFontToMenuItem(item)
+            }
         }
-        
         return true
     }
 
@@ -75,14 +77,14 @@ class StatisticsActivity : ChartBase() {
                     commit()
                 }
             }
-            R.id.barChart4 -> {
-                supportActionBar?.title = "Weight"
-                supportFragmentManager.beginTransaction().run {
-                    replace(R.id.chartView, LineChartFragment())
-                    commit()
-                }
-            }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun isSingleChart(): Boolean = intent.getStringExtra(CHART_MODE) == MODE_SINGLE_CHART
+
+    companion object {
+        const val CHART_MODE = "chart_mode"
+        const val MODE_SINGLE_CHART = "mode_single_chart"
     }
 }

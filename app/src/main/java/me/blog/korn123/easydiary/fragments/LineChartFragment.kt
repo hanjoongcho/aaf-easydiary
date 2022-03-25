@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.fragments
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,8 +24,10 @@ import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.StatisticsActivity
 import me.blog.korn123.easydiary.helper.DAILY_SCALE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.views.FixedTextView
 import java.text.SimpleDateFormat
 
@@ -132,7 +135,7 @@ class LineChartFragment : androidx.fragment.app.Fragment() {
                     lineData.setValueTextSize(10f)
                     lineData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
                     mLineChart.data = lineData
-                    mLineChart.animateY(2000)
+                    mLineChart.animateY(600)
                     mBarChartProgressBar.visibility = View.GONE
                 }
             } else {
@@ -140,6 +143,16 @@ class LineChartFragment : androidx.fragment.app.Fragment() {
                     mBarChartProgressBar.visibility = View.GONE
                 }
             }
+        }
+
+        getView()?.findViewById<FixedTextView>(R.id.chartTitle)?.setOnClickListener {
+            TransitionHelper.startActivityWithTransition(
+                requireActivity(),
+                Intent(
+                    requireActivity(),
+                    StatisticsActivity::class.java
+                ).putExtra(StatisticsActivity.CHART_MODE, StatisticsActivity.MODE_SINGLE_CHART)
+            )
         }
     }
 
