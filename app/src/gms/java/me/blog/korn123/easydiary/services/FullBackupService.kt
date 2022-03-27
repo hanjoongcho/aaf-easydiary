@@ -50,6 +50,7 @@ class FullBackupService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onCreate() {
+        EasyDiaryDbHelper.insertActionLog(ActionLog(this::class.java.name, "onCreate", "INFO", "start"), this)
         val googleSignInAccount: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
         val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(this, Collections.singleton(DriveScopes.DRIVE_FILE))
         credential.selectedAccount = googleSignInAccount?.account
@@ -71,9 +72,11 @@ class FullBackupService : Service() {
             val notificationManager = getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(mChannel)
         }
+        EasyDiaryDbHelper.insertActionLog(ActionLog(this::class.java.name, "onCreate", "INFO", "end"), this)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        EasyDiaryDbHelper.insertActionLog(ActionLog(this::class.java.name, "onStartCommand", "INFO", "start"), this)
         mWorkingFolderId = intent?.getStringExtra(DriveServiceHelper.WORKING_FOLDER_ID) ?: ""
 
         // test alarm sequence is 5
@@ -83,6 +86,7 @@ class FullBackupService : Service() {
             workStatusList.add(workStatus)
             backupPhoto(it, workStatus)
         }
+        EasyDiaryDbHelper.insertActionLog(ActionLog(this::class.java.name, "onStartCommand", "INFO", "end"), this)
         return super.onStartCommand(intent, flags, startId)
     }
     
@@ -93,6 +97,7 @@ class FullBackupService : Service() {
 
     @SuppressLint("RestrictedApi")
     private fun backupPhoto(alarm: Alarm, workStatus: WorkStatus) {
+        EasyDiaryDbHelper.insertActionLog(ActionLog(this::class.java.name, "backupPhoto", "INFO", "start"), this)
         mNotificationBuilder.mActions.clear()
         mNotificationBuilder.setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
@@ -114,17 +119,21 @@ class FullBackupService : Service() {
         startForeground(NOTIFICATION_FOREGROUND_FULL_BACKUP_GMS_ID, mNotificationBuilder.build())
 
         determineRemoteDrivePhotos(null, alarm, workStatus)
+        EasyDiaryDbHelper.insertActionLog(ActionLog(this::class.java.name, "backupPhoto", "INFO", "end"), this)
     }
 
     private fun determineRemoteDrivePhotos(nextPageToken: String?, alarm: Alarm, workStatus: WorkStatus) {
+        EasyDiaryDbHelper.insertActionLog(ActionLog(this::class.java.name, "determineRemoteDrivePhotos", "INFO", "start"), this)
         mDriveServiceHelper.queryFiles("mimeType = '${DriveServiceHelper.MIME_TYPE_AAF_EASY_DIARY_PHOTO}' and trashed = false",  1000, nextPageToken).run {
             addOnSuccessListener { result ->
+                EasyDiaryDbHelper.insertActionLog(ActionLog(this::class.java.name, "determineRemoteDrivePhotos", "INFO", "progress-1"), this@FullBackupService)
                 result.files.map { photoFile ->
                     workStatus.remoteDriveFileNames.add(photoFile.name)
                 }
-
+                EasyDiaryDbHelper.insertActionLog(ActionLog(this::class.java.name, "determineRemoteDrivePhotos", "INFO", "progress-2"), this@FullBackupService)
                 when (result.nextPageToken == null) {
                     true -> {
+                        EasyDiaryDbHelper.insertActionLog(ActionLog(this::class.java.name, "determineRemoteDrivePhotos", "INFO", "progress-3"), this@FullBackupService)
                         val localPhotos = File(mPhotoPath).listFiles()
                         localPhotos.map { photo ->
                             if (!workStatus.remoteDriveFileNames.contains(photo.name)) {
@@ -139,7 +148,10 @@ class FullBackupService : Service() {
                             uploadDiaryPhoto(alarm, workStatus)
                         }
                     }
-                    false -> determineRemoteDrivePhotos(result.nextPageToken, alarm, workStatus)
+                    false -> {
+                        EasyDiaryDbHelper.insertActionLog(ActionLog(this::class.java.name, "determineRemoteDrivePhotos", "INFO", "progress-4"), this@FullBackupService)
+                        determineRemoteDrivePhotos(result.nextPageToken, alarm, workStatus)
+                    }
                 }
             }
             addOnFailureListener { exception ->
@@ -147,6 +159,7 @@ class FullBackupService : Service() {
                 stopSelf()
             }
         }
+        EasyDiaryDbHelper.insertActionLog(ActionLog(this::class.java.name, "determineRemoteDrivePhotos", "INFO", "end"), this)
     }
 
     private fun uploadDiaryPhoto(alarm: Alarm, workStatus: WorkStatus) {
