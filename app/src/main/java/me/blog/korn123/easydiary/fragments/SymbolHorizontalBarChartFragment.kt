@@ -24,21 +24,25 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.chart.DiaryCountingAxisValueFormatter
 import me.blog.korn123.easydiary.chart.IValueFormatterExt
-import me.blog.korn123.easydiary.chart.MyAxisValueFormatter
 import me.blog.korn123.easydiary.chart.XYMarkerView
 import me.blog.korn123.easydiary.extensions.scaledDrawable
 import me.blog.korn123.easydiary.views.FixedTextView
 
-class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
+class SymbolHorizontalBarChartFragment : androidx.fragment.app.Fragment() {
     private lateinit var mBarChart: BarChart
     private lateinit var mChartTitle: FixedTextView
     private lateinit var mBarChartProgressBar: ContentLoadingProgressBar
     private lateinit var mSymbolMap: HashMap<Int, String>
-    private val mSequences = arrayListOf<Int>()
+    private var mCoroutineJob: Job? = null
     private val mTypeface: Typeface
         get() = FontUtils.getCommonTypeface(requireContext())!!
-    private var mCoroutineJob: Job? = null
+    val mSequences = arrayListOf<Int>()
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_symbol_horizontal_barchart, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,46 +64,41 @@ class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
 
 //        barChart.setDrawGridBackground(true)
         // mChart.setDrawYLabels(false);
-        //barChart.zoom(3.5F, 0F, 0F, 0F)
+//        barChart.zoom(1.5F, 0F, 0F, 0F)
 
         val xAxisFormatter = AxisValueFormatter()
+        val diaryCountingAxisValueFormatter = DiaryCountingAxisValueFormatter(context)
+        mBarChart.xAxis.run {
+            position = XAxis.XAxisPosition.BOTTOM
+            typeface = mTypeface
+            setDrawGridLines(false)
+            granularity = 1f // only intervals of 1 day
+            labelCount = 7
+            valueFormatter = xAxisFormatter
+        }
 
-        val xAxis = mBarChart.xAxis
-        xAxis.position = XAxis.XAxisPosition.BOTTOM
-        xAxis.typeface = mTypeface
-        xAxis.labelRotationAngle = -45F
-        xAxis.setDrawGridLines(false)
-        xAxis.granularity = 1f // only intervals of 1 day
-        xAxis.labelCount = 7
-        xAxis.valueFormatter = xAxisFormatter
-        val custom = MyAxisValueFormatter(context)
+        mBarChart.axisLeft.run {
+            setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
+            axisMinimum = 0f // this replaces setStartAtZero(true)
+            typeface = mTypeface
+        }
 
-        val leftAxis = mBarChart.axisLeft
-        leftAxis.typeface = mTypeface
-        leftAxis.setLabelCount(8, false)
-        leftAxis.valueFormatter = custom
-        leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
-        leftAxis.spaceTop = 15f
-        leftAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
+        mBarChart.axisRight.run {
+            setDrawGridLines(false)
+            axisMinimum = 0f // this replaces setStartAtZero(true)
+        }
 
-        val rightAxis = mBarChart.axisRight
-        rightAxis.setDrawGridLines(false)
-        rightAxis.typeface = mTypeface
-        rightAxis.setLabelCount(8, false)
-        rightAxis.valueFormatter = custom
-        rightAxis.spaceTop = 15f
-        rightAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
-
-        val legend = mBarChart.legend
-        legend.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
-        legend.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
-        legend.orientation = Legend.LegendOrientation.HORIZONTAL
-        legend.setDrawInside(false)
-        legend.form = Legend.LegendForm.SQUARE
-        legend.formSize = 9f
-        legend.textSize = 11f
-        legend.xEntrySpace = 4f
-        legend.typeface = mTypeface
+        mBarChart.legend.run {
+            verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
+            horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
+            orientation = Legend.LegendOrientation.HORIZONTAL
+            setDrawInside(false)
+            form = Legend.LegendForm.SQUARE
+            formSize = 9f
+            textSize = 11f
+            xEntrySpace = 4f
+            typeface = mTypeface
+        }
 
         val mv = XYMarkerView(requireContext(), xAxisFormatter)
         mv.chartView = mBarChart // For bounds control
@@ -107,7 +106,7 @@ class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
 
         // determine title parameter
         arguments?.let { bundle ->
-            val title = bundle.getString(BarChartFragment.CHART_TITLE)
+            val title = bundle.getString(WritingBarChartFragment.CHART_TITLE)
             if (title != null) {
                 mChartTitle.text = title
                 mChartTitle.visibility = View.VISIBLE
@@ -116,24 +115,34 @@ class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
 
         mCoroutineJob = CoroutineScope(Dispatchers.IO).launch {
             val sortedMap = EasyDiaryUtils.getSortedMapBySymbol(true)
+            val barEntries = ArrayList<BarEntry>()
+            var index = 1F
+            val itemArray = arrayListOf<HashMap<String, Int>>()
+            sortedMap.forEach { (key, value) ->
+                if (index > 10) return@forEach
+                itemArray.add( hashMapOf("key" to key, "value" to value) )
+                mSequences.add(key)
+                index++
+            }
+            itemArray.reverse()
+            mSequences.reverse()
+
             withContext(Dispatchers.Main) {
-                val barEntries = ArrayList<BarEntry>()
-                var index = 1.0F
-                sortedMap.forEach { (key, value) ->
-                    val drawable: Drawable? = when (FlavorUtils.sequenceToSymbolResourceId(key) > 0) {
-                        true -> scaledDrawable(FlavorUtils.sequenceToSymbolResourceId(key), CommonUtils.dpToPixel(requireContext(),24F) ,CommonUtils.dpToPixel(requireContext(),24F))
-                        false -> null
+                if (itemArray.isNotEmpty()) {
+                    itemArray.forEachIndexed { index, item ->
+                        val drawable: Drawable? = when (FlavorUtils.sequenceToSymbolResourceId(item["key"]!!) > 0) {
+                            true -> scaledDrawable(FlavorUtils.sequenceToSymbolResourceId(item["key"]!!), CommonUtils.dpToPixel(requireContext(),24F) , CommonUtils.dpToPixel(requireContext(),24F))
+                            false -> null
+                        }
+                        barEntries.add(BarEntry((index + 1F), item["value"]!!.toFloat(), drawable))
                     }
-                    mSequences.add(key)
-                    barEntries.add(BarEntry(index++, value.toFloat(), drawable))
-                }
-                if (barEntries.isNotEmpty()) {
-                    val barDataSet = BarDataSet(barEntries, getString(R.string.statistics_symbol_all))
+                    val barDataSet = BarDataSet(barEntries, getString(R.string.statistics_symbol_top_ten))
                     val iValueFormatter = IValueFormatterExt(context)
                     barDataSet.valueFormatter = iValueFormatter
                     val colors = intArrayOf(
-                        Color.rgb(193, 37, 82), Color.rgb(255, 102, 0), Color.rgb(245, 199, 0),
-                        Color.rgb(106, 150, 31), Color.rgb(179, 100, 53), Color.rgb(115, 130, 153))
+                        Color.rgb(255, 102, 0), Color.rgb(245, 199, 0),
+                        Color.rgb(106, 150, 31), Color.rgb(179, 100, 53), Color.rgb(115, 130, 153)
+                    )
                     barDataSet.setColors(*colors)
                     barDataSet.setDrawIcons(true)
                     barDataSet.setDrawValues(false)
@@ -142,9 +151,9 @@ class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
 
                     val barData = BarData(dataSets)
                     barData.setValueTextSize(10f)
-                    barData.setValueTypeface(mTypeface)
+//        barData.setValueTypeface(mTfLight)
                     barData.barWidth = 0.9f
-                    mBarChart.zoom((sortedMap.size / 6.0F), 0F, 0F, 0F)
+//        barChart.zoom((sortedMap.size / 6.0F), 0F, 0F, 0F)
                     mBarChart.data = barData
 
                     mBarChart.animateY(2000)
@@ -157,10 +166,6 @@ class BarChartFragmentT2 : androidx.fragment.app.Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         mCoroutineJob?.run { if (isActive) cancel() }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_barchart, container, false)
     }
 
     inner class AxisValueFormatter : IAxisValueFormatter {

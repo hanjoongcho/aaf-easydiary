@@ -1,12 +1,9 @@
 package me.blog.korn123.easydiary.activities
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Message
 import android.view.View
 import com.zhpan.bannerview.constants.PageStyle
 import io.github.aafactory.commons.extensions.dpToPixel
-import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityDashboardBinding
 import me.blog.korn123.easydiary.extensions.getDefaultDisplay
@@ -128,9 +125,9 @@ class DashboardActivity : EasyDiaryActivity() {
 
         val chartTitle = getString(R.string.statistics_creation_time)
         supportFragmentManager.beginTransaction().run {
-            replace(R.id.statistics1, BarChartFragment().apply {
+            replace(R.id.statistics1, WritingBarChartFragment().apply {
                 val args = Bundle()
-                args.putString(BarChartFragment.CHART_TITLE, chartTitle)
+                args.putString(WritingBarChartFragment.CHART_TITLE, chartTitle)
                 arguments = args
             })
             commit()
@@ -138,9 +135,9 @@ class DashboardActivity : EasyDiaryActivity() {
 
         val symbolAllTitle = getString(R.string.statistics_symbol_all)
         supportFragmentManager.beginTransaction().run {
-            replace(R.id.statistics2, BarChartFragmentT2().apply {
+            replace(R.id.statistics2, SymbolBarChartFragment().apply {
                 val args = Bundle()
-                args.putString(BarChartFragment.CHART_TITLE, symbolAllTitle)
+                args.putString(WritingBarChartFragment.CHART_TITLE, symbolAllTitle)
                 arguments = args
             })
             commit()
@@ -148,18 +145,18 @@ class DashboardActivity : EasyDiaryActivity() {
 
         val symbolTopTenTitle = getString(R.string.statistics_symbol_top_ten)
         supportFragmentManager.beginTransaction().run {
-            replace(R.id.statistics3, HorizontalBarChartFragment().apply {
+            replace(R.id.statistics3, SymbolHorizontalBarChartFragment().apply {
                 val args = Bundle()
-                args.putString(BarChartFragment.CHART_TITLE, symbolTopTenTitle)
+                args.putString(WritingBarChartFragment.CHART_TITLE, symbolTopTenTitle)
                 arguments = args
             })
             commit()
         }
 
         supportFragmentManager.beginTransaction().run {
-            replace(R.id.statistics4, LineChartFragment().apply {
+            replace(R.id.statistics4, WeightLineChartFragment().apply {
                 val args = Bundle()
-                args.putString(BarChartFragment.CHART_TITLE, "Weight")
+                args.putString(WritingBarChartFragment.CHART_TITLE, "Weight")
                 arguments = args
             })
             commit()

@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.fragments
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,32 +8,34 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.ContentLoadingProgressBar
 import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.charts.BarLineChartBase
+import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
-import me.blog.korn123.commons.utils.DateUtils
 import kotlinx.coroutines.*
+import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.chart.DayAxisValueFormatter
+import me.blog.korn123.easydiary.chart.DiaryCountingAxisValueFormatter
 import me.blog.korn123.easydiary.chart.IValueFormatterExt
-import me.blog.korn123.easydiary.chart.MyAxisValueFormatter
 import me.blog.korn123.easydiary.chart.XYMarkerView
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.views.FixedTextView
 
-class BarChartFragment : androidx.fragment.app.Fragment() {
+class WritingBarChartFragment : androidx.fragment.app.Fragment() {
     private lateinit var mBarChart: BarChart
     private lateinit var mChartTitle: FixedTextView
     private lateinit var mBarChartProgressBar: ContentLoadingProgressBar
     private var mCoroutineJob: Job? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_barchart, container, false)
+        return inflater.inflate(R.layout.fragment_writing_barchart, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,44 +60,46 @@ class BarChartFragment : androidx.fragment.app.Fragment() {
 //        barChart.zoom(1.5F, 0F, 0F, 0F)
 
         val xAxisFormatter = DayAxisValueFormatter(context, mBarChart)
+        mBarChart.xAxis.run {
+            position = XAxis.XAxisPosition.BOTTOM
+            typeface = FontUtils.getCommonTypeface(requireContext())
+            labelRotationAngle = -45F
+            setDrawGridLines(false)
+            granularity = 1f // only intervals of 1 day
+            labelCount = 7
+            valueFormatter = xAxisFormatter
+        }
 
-        val xAxis = mBarChart.xAxis
-        xAxis.position = XAxis.XAxisPosition.BOTTOM
-        xAxis.typeface = FontUtils.getCommonTypeface(requireContext())
-        xAxis.labelRotationAngle = -45F
-        xAxis.setDrawGridLines(false)
-        xAxis.granularity = 1f // only intervals of 1 day
-        xAxis.labelCount = 7
-        xAxis.valueFormatter = xAxisFormatter
+        val diaryCountingAxisValueFormatter = DiaryCountingAxisValueFormatter(context)
+        mBarChart.axisLeft.run {
+            typeface = FontUtils.getCommonTypeface(requireContext())
+            setLabelCount(8, false)
+            valueFormatter = diaryCountingAxisValueFormatter
+            setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
+            spaceTop = 15f
+            axisMinimum = 0f // this replaces setStartAtZero(true)
+        }
 
-        val custom = MyAxisValueFormatter(context)
+        mBarChart.axisRight.run {
+            setDrawGridLines(false)
+            typeface = FontUtils.getCommonTypeface(requireContext())
+            setLabelCount(8, false)
+            valueFormatter = diaryCountingAxisValueFormatter
+            spaceTop = 15f
+            axisMinimum = 0f // this replaces setStartAtZero(true)
+        }
 
-        val leftAxis = mBarChart.axisLeft
-        leftAxis.typeface = FontUtils.getCommonTypeface(requireContext())
-        leftAxis.setLabelCount(8, false)
-        leftAxis.valueFormatter = custom
-        leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
-        leftAxis.spaceTop = 15f
-        leftAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
-
-        val rightAxis = mBarChart.axisRight
-        rightAxis.setDrawGridLines(false)
-        rightAxis.typeface = FontUtils.getCommonTypeface(requireContext())
-        rightAxis.setLabelCount(8, false)
-        rightAxis.valueFormatter = custom
-        rightAxis.spaceTop = 15f
-        rightAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
-
-        val l = mBarChart.legend
-        l.typeface = FontUtils.getCommonTypeface(requireContext())
-        l.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
-        l.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
-        l.orientation = Legend.LegendOrientation.HORIZONTAL
-        l.setDrawInside(false)
-        l.form = Legend.LegendForm.SQUARE
-        l.formSize = 9f
-        l.textSize = 11f
-        l.xEntrySpace = 4f
+        mBarChart.legend.run {
+            typeface = FontUtils.getCommonTypeface(requireContext())
+            verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
+            horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
+            orientation = Legend.LegendOrientation.HORIZONTAL
+            setDrawInside(false)
+            form = Legend.LegendForm.SQUARE
+            formSize = 9f
+            textSize = 11f
+            xEntrySpace = 4f
+        }
 
         val mv = XYMarkerView(requireContext(), xAxisFormatter)
         mv.chartView = mBarChart // For bounds control
@@ -178,5 +183,17 @@ class BarChartFragment : androidx.fragment.app.Fragment() {
 
     companion object {
         const val CHART_TITLE = "chartTitle"
+    }
+
+    class DayAxisValueFormatter(private var context: Context?, private val chart: BarLineChartBase<*>) : IAxisValueFormatter {
+        override fun getFormattedValue(value: Float, axis: AxisBase?): String = when (value.toInt()) {
+            1 -> context!!.getString(R.string.range_a)
+            2 -> context!!.getString(R.string.range_b)
+            3 -> context!!.getString(R.string.range_c)
+            4 -> context!!.getString(R.string.range_d)
+            5 -> context!!.getString(R.string.range_e)
+            6 -> context!!.getString(R.string.range_f)
+            else -> context!!.getString(R.string.range_g)
+        }
     }
 }

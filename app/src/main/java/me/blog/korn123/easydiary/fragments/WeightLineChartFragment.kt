@@ -33,14 +33,14 @@ import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.views.FixedTextView
 import java.text.SimpleDateFormat
 
-class LineChartFragment : androidx.fragment.app.Fragment() {
+class WeightLineChartFragment : androidx.fragment.app.Fragment() {
     private lateinit var mLineChart: LineChart
     private lateinit var mChartTitle: FixedTextView
     private lateinit var mBarChartProgressBar: ContentLoadingProgressBar
     private var mCoroutineJob: Job? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_line_chart, container, false)
+        return inflater.inflate(R.layout.fragment_weight_line_chart, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

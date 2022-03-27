@@ -7,10 +7,10 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.chart.ChartBase
 import me.blog.korn123.easydiary.databinding.ActivityStatisticsBinding
 import me.blog.korn123.easydiary.extensions.applyFontToMenuItem
-import me.blog.korn123.easydiary.fragments.BarChartFragment
-import me.blog.korn123.easydiary.fragments.BarChartFragmentT2
-import me.blog.korn123.easydiary.fragments.HorizontalBarChartFragment
-import me.blog.korn123.easydiary.fragments.LineChartFragment
+import me.blog.korn123.easydiary.fragments.WritingBarChartFragment
+import me.blog.korn123.easydiary.fragments.SymbolBarChartFragment
+import me.blog.korn123.easydiary.fragments.SymbolHorizontalBarChartFragment
+import me.blog.korn123.easydiary.fragments.WeightLineChartFragment
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -29,7 +29,7 @@ class StatisticsActivity : ChartBase() {
             if (isSingleChart()) setHomeAsUpIndicator(R.drawable.ic_cross)
         }
 
-        val defaultChart = if (isSingleChart()) LineChartFragment() else BarChartFragment()
+        val defaultChart = if (isSingleChart()) WeightLineChartFragment() else WritingBarChartFragment()
         supportFragmentManager.run {
             beginTransaction().run {
                 replace(R.id.chartView, defaultChart)
@@ -59,21 +59,21 @@ class StatisticsActivity : ChartBase() {
             R.id.barChart -> {
                 supportActionBar?.title = getString(R.string.statistics_creation_time)
                 supportFragmentManager.beginTransaction().run {
-                    replace(R.id.chartView, BarChartFragment())
+                    replace(R.id.chartView, WritingBarChartFragment())
                     commit()
                 }
             }
             R.id.barChart2 -> {
                 supportActionBar?.title = getString(R.string.statistics_symbol_all)
                 supportFragmentManager.beginTransaction().run {
-                    replace(R.id.chartView, BarChartFragmentT2())
+                    replace(R.id.chartView, SymbolBarChartFragment())
                     commit()
                 }
             }
             R.id.barChart3 -> {
                 supportActionBar?.title = getString(R.string.statistics_symbol_top_ten)
                 supportFragmentManager.beginTransaction().run {
-                    replace(R.id.chartView, HorizontalBarChartFragment())
+                    replace(R.id.chartView, SymbolHorizontalBarChartFragment())
                     commit()
                 }
             }

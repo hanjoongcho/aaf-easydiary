@@ -6,7 +6,7 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import me.blog.korn123.easydiary.R
 import java.text.DecimalFormat
 
-class MyAxisValueFormatter(private var context: Context?) : IAxisValueFormatter {
+class DiaryCountingAxisValueFormatter(private var context: Context?) : IAxisValueFormatter {
     private val mFormat: DecimalFormat = DecimalFormat("###,###,###,##0")
 
     override fun getFormattedValue(value: Float, axis: AxisBase): String {

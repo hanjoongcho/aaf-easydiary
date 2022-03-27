@@ -135,25 +135,25 @@ class DashboardDialogFragment : DialogFragment() {
 
                 // Statistics-Creation Time
                 val chartTitle = getString(R.string.statistics_creation_time)
-                replace(R.id.statistics1, BarChartFragment().apply {
+                replace(R.id.statistics1, WritingBarChartFragment().apply {
                     val args = Bundle()
-                    args.putString(BarChartFragment.CHART_TITLE, chartTitle)
+                    args.putString(WritingBarChartFragment.CHART_TITLE, chartTitle)
                     arguments = args
                 })
 
                 // Statistics-Symbol All
                 val symbolAllTitle = getString(R.string.statistics_symbol_all)
-                replace(R.id.statistics2, BarChartFragmentT2().apply {
+                replace(R.id.statistics2, SymbolBarChartFragment().apply {
                     val args = Bundle()
-                    args.putString(BarChartFragment.CHART_TITLE, symbolAllTitle)
+                    args.putString(WritingBarChartFragment.CHART_TITLE, symbolAllTitle)
                     arguments = args
                 })
 
                 // Statistics-Symbol TopTen
                 val symbolTopTenTitle = getString(R.string.statistics_symbol_top_ten)
-                replace(R.id.statistics3, HorizontalBarChartFragment().apply {
+                replace(R.id.statistics3, SymbolHorizontalBarChartFragment().apply {
                     val args = Bundle()
-                    args.putString(BarChartFragment.CHART_TITLE, symbolTopTenTitle)
+                    args.putString(WritingBarChartFragment.CHART_TITLE, symbolTopTenTitle)
                     arguments = args
                 })
 
