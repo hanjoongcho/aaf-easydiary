@@ -131,7 +131,7 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
                                 Intent(
                                     requireActivity(),
                                     StatisticsActivity::class.java
-                                ).putExtra(StatisticsActivity.CHART_MODE, StatisticsActivity.MODE_SINGLE_CHART)
+                                ).putExtra(StatisticsActivity.CHART_MODE, StatisticsActivity.MODE_SINGLE_LINE_CHART_WEIGHT)
                             )
                         }, 300)
                     }

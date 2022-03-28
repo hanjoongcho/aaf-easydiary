@@ -24,12 +24,17 @@ class StatisticsActivity : ChartBase() {
         setContentView(mBinding.root)
         setSupportActionBar(mBinding.toolbar)
         supportActionBar?.run {
-            title = if (isSingleChart()) "Weight" else getString(R.string.statistics_creation_time)
+            title = if (isSingleChart()) "" else getString(R.string.statistics_creation_time)
             setDisplayHomeAsUpEnabled(true)
             if (isSingleChart()) setHomeAsUpIndicator(R.drawable.ic_cross)
         }
 
-        val defaultChart = if (isSingleChart()) WeightLineChartFragment() else WritingBarChartFragment()
+        val defaultChart = when (intent.getStringExtra(CHART_MODE)) {
+            MODE_SINGLE_LINE_CHART_WEIGHT -> WeightLineChartFragment()
+            MODE_SINGLE_BAR_CHART_SYMBOL -> SymbolBarChartFragment()
+            else -> WritingBarChartFragment()
+        }
+            if (isSingleChart()) WeightLineChartFragment() else
         supportFragmentManager.run {
             beginTransaction().run {
                 replace(R.id.chartView, defaultChart)
@@ -81,10 +86,11 @@ class StatisticsActivity : ChartBase() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun isSingleChart(): Boolean = intent.getStringExtra(CHART_MODE) == MODE_SINGLE_CHART
+    private fun isSingleChart(): Boolean = intent.getStringExtra(CHART_MODE) != null
 
     companion object {
         const val CHART_MODE = "chart_mode"
-        const val MODE_SINGLE_CHART = "mode_single_chart"
+        const val MODE_SINGLE_LINE_CHART_WEIGHT = "mode_single_line_chart_weight"
+        const val MODE_SINGLE_BAR_CHART_SYMBOL = "mode_single_bar_chart_symbol"
     }
 }
