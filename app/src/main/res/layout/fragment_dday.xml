@@ -23,8 +23,8 @@
         <ImageView
             android:id="@+id/image_d_day_sort_order"
             android:src="@drawable/ic_sorting_desc"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackgroundBorderless"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/recycler_days"

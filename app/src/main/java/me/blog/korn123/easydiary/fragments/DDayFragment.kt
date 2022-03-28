@@ -64,7 +64,7 @@ class DDayFragment : Fragment() {
                 recyclerDays.layoutManager = getDDayLayoutManager()
             }
             flexboxOptionSwitcher.isChecked = config.enableDDayFlexboxLayout
-            requireActivity().updateDrawableColorInnerCardView(imageDDaySortOrder)
+            requireActivity().updateDrawableColorInnerCardView(imageDDaySortOrder, config.primaryColor)
             imageDDaySortOrder.setOnClickListener {
                 mDDaySortOrder = when (mDDaySortOrder) {
                     Sort.ASCENDING -> {

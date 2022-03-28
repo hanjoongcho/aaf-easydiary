@@ -33,6 +33,20 @@
             app:layout_constraintStart_toEndOf="@+id/image_weight_symbol"
             tools:text="Weight"
             tools:visibility="visible" />
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/image_expend_chart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginEnd="@dimen/dashboard_title_padding"
+            android:padding="5dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            tools:visibility="visible"
+            app:srcCompat="@drawable/ic_expand"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/lineChart"
+            />
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/lineChart"
             android:background="@drawable/bg_card_diary"

@@ -27,6 +27,8 @@ import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.StatisticsActivity
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
 import me.blog.korn123.easydiary.helper.DAILY_SCALE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.TransitionHelper
@@ -119,6 +121,21 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
                     it.visibility = View.VISIBLE
                     FlavorUtils.initWeatherView(requireActivity(), it, DAILY_SCALE)
                 }
+                getView()?.findViewById<ImageView>(R.id.image_expend_chart)?.let {
+                    it.visibility = View.VISIBLE
+                    requireActivity().updateDrawableColorInnerCardView(it, config.primaryColor)
+                    it.setOnClickListener { view ->
+                        view.postDelayed( {
+                            TransitionHelper.startActivityWithTransition(
+                                requireActivity(),
+                                Intent(
+                                    requireActivity(),
+                                    StatisticsActivity::class.java
+                                ).putExtra(StatisticsActivity.CHART_MODE, StatisticsActivity.MODE_SINGLE_CHART)
+                            )
+                        }, 300)
+                    }
+                }
             }
         }
 
@@ -149,16 +166,6 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
                     mBarChartProgressBar.visibility = View.GONE
                 }
             }
-        }
-
-        getView()?.findViewById<FixedTextView>(R.id.chartTitle)?.setOnClickListener {
-            TransitionHelper.startActivityWithTransition(
-                requireActivity(),
-                Intent(
-                    requireActivity(),
-                    StatisticsActivity::class.java
-                ).putExtra(StatisticsActivity.CHART_MODE, StatisticsActivity.MODE_SINGLE_CHART)
-            )
         }
     }
 

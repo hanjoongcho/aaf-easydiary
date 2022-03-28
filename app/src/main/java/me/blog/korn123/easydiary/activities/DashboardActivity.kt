@@ -6,6 +6,7 @@ import com.zhpan.bannerview.constants.PageStyle
 import io.github.aafactory.commons.extensions.dpToPixel
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityDashboardBinding
+import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.getDefaultDisplay
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.statusBarHeight
@@ -153,13 +154,15 @@ class DashboardActivity : EasyDiaryActivity() {
             commit()
         }
 
-        supportFragmentManager.beginTransaction().run {
-            replace(R.id.statistics4, WeightLineChartFragment().apply {
-                val args = Bundle()
-                args.putString(WritingBarChartFragment.CHART_TITLE, "Weight")
-                arguments = args
-            })
-            commit()
+        if (config.enableDebugMode) {
+            supportFragmentManager.beginTransaction().run {
+                replace(R.id.statistics4, WeightLineChartFragment().apply {
+                    val args = Bundle()
+                    args.putString(WritingBarChartFragment.CHART_TITLE, "Weight")
+                    arguments = args
+                })
+                commit()
+            }
         }
 
         supportFragmentManager.executePendingTransactions()
