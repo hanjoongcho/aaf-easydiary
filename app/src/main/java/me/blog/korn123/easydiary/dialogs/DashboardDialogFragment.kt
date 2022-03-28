@@ -81,11 +81,13 @@ class DashboardDialogFragment : DialogFragment() {
                 statistics1.layoutParams.width = width
                 statistics2.layoutParams.width = width
                 statistics3.layoutParams.width = width
+                statistics4.layoutParams.width = width
                 if (requireActivity().isLandScape()) {
                     val height = requireActivity().getDefaultDisplay().y - requireActivity().statusBarHeight() - requireActivity().dpToPixel(20F)
                     statistics1.layoutParams.height = height
                     statistics2.layoutParams.height = height
                     statistics3.layoutParams.height = height
+                    statistics4.layoutParams.height = height
                 }
             }
 
@@ -156,6 +158,15 @@ class DashboardDialogFragment : DialogFragment() {
                     args.putString(WritingBarChartFragment.CHART_TITLE, symbolTopTenTitle)
                     arguments = args
                 })
+
+                if (config.enableDebugMode) {
+                    mBinding.statistics4.visibility = View.VISIBLE
+                    replace(R.id.statistics4, WeightLineChartFragment().apply {
+                        val args = Bundle()
+                        args.putString(WritingBarChartFragment.CHART_TITLE, "Weight")
+                        arguments = args
+                    })
+                }
 
                 // Commit
                 commit()

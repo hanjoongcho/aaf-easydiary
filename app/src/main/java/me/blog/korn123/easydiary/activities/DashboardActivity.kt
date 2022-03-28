@@ -6,10 +6,7 @@ import com.zhpan.bannerview.constants.PageStyle
 import io.github.aafactory.commons.extensions.dpToPixel
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityDashboardBinding
-import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.getDefaultDisplay
-import me.blog.korn123.easydiary.extensions.isLandScape
-import me.blog.korn123.easydiary.extensions.statusBarHeight
+import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.fragments.*
 import me.blog.korn123.easydiary.fragments.PhotoHighlightFragment.Companion.PAGE_MARGIN
 import me.blog.korn123.easydiary.fragments.PhotoHighlightFragment.Companion.PAGE_STYLE
@@ -88,7 +85,7 @@ class DashboardActivity : EasyDiaryActivity() {
                 statistics3.layoutParams.width = width
                 statistics4.layoutParams.width = width
                 if (isLandScape()) {
-                    val height = getDefaultDisplay().y - statusBarHeight() - dpToPixel(20F)
+                    val height = getDefaultDisplay().y - statusBarHeight() - actionBarHeight()
                     statistics1.layoutParams.height = height
                     statistics2.layoutParams.height = height
                     statistics3.layoutParams.height = height
