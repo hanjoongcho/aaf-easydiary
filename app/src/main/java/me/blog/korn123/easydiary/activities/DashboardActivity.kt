@@ -155,6 +155,7 @@ class DashboardActivity : EasyDiaryActivity() {
         }
 
         if (config.enableDebugMode) {
+            mBinding.statistics4.visibility = View.VISIBLE
             supportFragmentManager.beginTransaction().run {
                 replace(R.id.statistics4, WeightLineChartFragment().apply {
                     val args = Bundle()
