@@ -196,6 +196,9 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
         return barEntries
     }
 
+    private fun xAxisTimeMillisToDate(timeMillis: Long): String =
+        if (timeMillis > 0) DateUtils.getDateStringFromTimeMillis(timeMillis, SimpleDateFormat.SHORT) else "N/A"
+
     companion object {
         const val CHART_TITLE = "chartTitle"
     }
@@ -203,7 +206,7 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
     inner class WeightXAxisValueFormatter(private var context: Context?) : IAxisValueFormatter {
         override fun getFormattedValue(value: Float, axis: AxisBase): String {
             val timeMillis: Long = mTimeMillisMap[value.toInt()] ?: 0
-            return if (timeMillis > 0) DateUtils.getDateStringFromTimeMillis(timeMillis, SimpleDateFormat.SHORT) else "N/A$value"
+            return xAxisTimeMillisToDate(timeMillis)
         }
     }
 
@@ -238,8 +241,9 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
         // content (user-interface)
         override fun refreshContent(e: Entry?, highlight: Highlight?) {
             e?.let { entry ->
+
                 tvContent.run {
-                    text = "${entry.y}kg"
+                    text = "${xAxisValueFormatter.getFormattedValue(entry.x, mLineChart.xAxis)}: ${entry.y}kg"
                     typeface = FontUtils.getCommonTypeface(context)
                 }
                 super.refreshContent(entry, highlight)

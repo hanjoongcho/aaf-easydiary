@@ -27,6 +27,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.chart.DiaryCountingAxisValueFormatter
 import me.blog.korn123.easydiary.chart.IValueFormatterExt
 import me.blog.korn123.easydiary.chart.XYMarkerView
+import me.blog.korn123.easydiary.extensions.darkenColor
 import me.blog.korn123.easydiary.extensions.scaledDrawable
 import me.blog.korn123.easydiary.views.FixedTextView
 
@@ -129,7 +130,10 @@ class SymbolHorizontalBarChartFragment : androidx.fragment.app.Fragment() {
 
             withContext(Dispatchers.Main) {
                 if (itemArray.isNotEmpty()) {
+                    val colorItems = arrayListOf<Int>()
+                    val defaultColor = Color.rgb(209, 232, 255)
                     itemArray.forEachIndexed { index, item ->
+                        colorItems.add(defaultColor.darkenColor(index * 2))
                         val drawable: Drawable? = when (FlavorUtils.sequenceToSymbolResourceId(item["key"]!!) > 0) {
                             true -> scaledDrawable(FlavorUtils.sequenceToSymbolResourceId(item["key"]!!), CommonUtils.dpToPixel(requireContext(),24F) , CommonUtils.dpToPixel(requireContext(),24F))
                             false -> null
@@ -139,11 +143,11 @@ class SymbolHorizontalBarChartFragment : androidx.fragment.app.Fragment() {
                     val barDataSet = BarDataSet(barEntries, getString(R.string.statistics_symbol_top_ten))
                     val iValueFormatter = IValueFormatterExt(context)
                     barDataSet.valueFormatter = iValueFormatter
-                    val colors = intArrayOf(
-                        Color.rgb(255, 102, 0), Color.rgb(245, 199, 0),
-                        Color.rgb(106, 150, 31), Color.rgb(179, 100, 53), Color.rgb(115, 130, 153)
-                    )
-                    barDataSet.setColors(*colors)
+//                    val colors = intArrayOf(
+//                        Color.rgb(255, 102, 0), Color.rgb(245, 199, 0),
+//                        Color.rgb(106, 150, 31), Color.rgb(179, 100, 53), Color.rgb(115, 130, 153)
+//                    )
+                    barDataSet.setColors(*colorItems.toIntArray())
                     barDataSet.setDrawIcons(true)
                     barDataSet.setDrawValues(false)
                     val dataSets = ArrayList<IBarDataSet>()

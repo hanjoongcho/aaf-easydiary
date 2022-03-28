@@ -122,8 +122,15 @@ class WritingBarChartFragment : androidx.fragment.app.Fragment() {
                     val iValueFormatter = IValueFormatterExt(context)
                     barDataSet.valueFormatter = iValueFormatter
                     val colors = intArrayOf(
-                        Color.rgb(193, 37, 82), Color.rgb(255, 102, 0), Color.rgb(245, 199, 0),
-                        Color.rgb(106, 150, 31), Color.rgb(179, 100, 53), Color.rgb(115, 130, 153))
+                        Color.rgb(0, 19, 26),
+                        Color.rgb(0, 71, 96),
+                        Color.rgb(0, 117, 158),
+                        Color.rgb(0, 176, 240),
+                        Color.rgb(0, 161, 218),
+                        Color.rgb(0, 117, 158),
+                        Color.rgb(0, 71, 96),
+                        Color.rgb(0, 19, 26)
+                    )
                     barDataSet.setColors(*colors)
                     barDataSet.setDrawIcons(false)
                     barDataSet.setDrawValues(true)
@@ -146,7 +153,7 @@ class WritingBarChartFragment : androidx.fragment.app.Fragment() {
         mCoroutineJob?.run { if (isActive) cancel() }
     }
 
-    private fun setData(count: Int = 6, range: Float = 20F): ArrayList<BarEntry> {
+    private fun setData(count: Int = 8, range: Float = 20F): ArrayList<BarEntry> {
         val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
         val listDiary = EasyDiaryDbHelper.findDiary(null, realmInstance = realmInstance)
         realmInstance.close()
@@ -172,13 +179,14 @@ class WritingBarChartFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun hourToItemNumber(hour: Int): Int = when (hour) {
-        in 0..3 -> 1
-        in 4..7 -> 2
-        in 8..11 -> 3
-        in 12..15 -> 4
-        in 16..19 -> 5
-        in 20..23 -> 6
-        else -> 0
+        in 1..3 -> 1
+        in 4..6 -> 2
+        in 7..9 -> 3
+        in 10..12 -> 4
+        in 13..15 -> 5
+        in 16..18 -> 6
+        in 19..21 -> 7
+        else -> 8
     }
 
     companion object {
@@ -193,6 +201,7 @@ class WritingBarChartFragment : androidx.fragment.app.Fragment() {
             4 -> context!!.getString(R.string.range_d)
             5 -> context!!.getString(R.string.range_e)
             6 -> context!!.getString(R.string.range_f)
+            7 -> context!!.getString(R.string.range_f)
             else -> context!!.getString(R.string.range_g)
         }
     }
