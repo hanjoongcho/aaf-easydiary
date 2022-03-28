@@ -7,11 +7,10 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.chart.ChartBase
 import me.blog.korn123.easydiary.databinding.ActivityStatisticsBinding
 import me.blog.korn123.easydiary.extensions.applyFontToMenuItem
-import me.blog.korn123.easydiary.extensions.makeToast
-import me.blog.korn123.easydiary.fragments.WritingBarChartFragment
 import me.blog.korn123.easydiary.fragments.SymbolBarChartFragment
 import me.blog.korn123.easydiary.fragments.SymbolHorizontalBarChartFragment
 import me.blog.korn123.easydiary.fragments.WeightLineChartFragment
+import me.blog.korn123.easydiary.fragments.WritingBarChartFragment
 
 /**
  * Created by CHO HANJOONG on 2017-03-16.
@@ -25,14 +24,20 @@ class StatisticsActivity : ChartBase() {
         setContentView(mBinding.root)
         setSupportActionBar(mBinding.toolbar)
         supportActionBar?.run {
-            title = if (isSingleChart()) "" else getString(R.string.statistics_creation_time)
             setDisplayHomeAsUpEnabled(true)
             if (isSingleChart()) setHomeAsUpIndicator(R.drawable.ic_cross)
+            title = when (intent.getStringExtra(CHART_MODE)) {
+                MODE_SINGLE_LINE_CHART_WEIGHT -> "Weight"
+                MODE_SINGLE_BAR_CHART_SYMBOL -> getString(R.string.statistics_symbol_all)
+                MODE_SINGLE_HORIZONTAL_BAR_CHART_SYMBOL -> getString(R.string.statistics_symbol_top_ten)
+                else -> getString(R.string.statistics_creation_time)
+            }
         }
 
         val defaultChart = when (intent.getStringExtra(CHART_MODE)) {
             MODE_SINGLE_LINE_CHART_WEIGHT -> WeightLineChartFragment()
             MODE_SINGLE_BAR_CHART_SYMBOL -> SymbolBarChartFragment()
+            MODE_SINGLE_HORIZONTAL_BAR_CHART_SYMBOL -> SymbolHorizontalBarChartFragment()
             else -> WritingBarChartFragment()
         }
         supportFragmentManager.run {
@@ -92,5 +97,7 @@ class StatisticsActivity : ChartBase() {
         const val CHART_MODE = "chart_mode"
         const val MODE_SINGLE_LINE_CHART_WEIGHT = "mode_single_line_chart_weight"
         const val MODE_SINGLE_BAR_CHART_SYMBOL = "mode_single_bar_chart_symbol"
+        const val MODE_SINGLE_HORIZONTAL_BAR_CHART_SYMBOL = "mode_single_horizontal_bar_chart_symbol"
+        const val MODE_SINGLE_BAR_CHART_WRITING = "mode_single_bar_chart_writing"
     }
 }

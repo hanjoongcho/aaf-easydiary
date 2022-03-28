@@ -1,11 +1,13 @@
 package me.blog.korn123.easydiary.fragments
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.widget.ContentLoadingProgressBar
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.BarLineChartBase
@@ -22,10 +24,14 @@ import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.StatisticsActivity
 import me.blog.korn123.easydiary.chart.DiaryCountingAxisValueFormatter
 import me.blog.korn123.easydiary.chart.IValueFormatterExt
 import me.blog.korn123.easydiary.chart.XYMarkerView
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.views.FixedTextView
 
 class WritingBarChartFragment : androidx.fragment.app.Fragment() {
@@ -111,6 +117,22 @@ class WritingBarChartFragment : androidx.fragment.app.Fragment() {
             if (title != null) {
                 mChartTitle.text = title
                 mChartTitle.visibility = View.VISIBLE
+
+                getView()?.findViewById<ImageView>(R.id.image_expend_chart)?.let {
+                    it.visibility = View.VISIBLE
+                    requireActivity().updateDrawableColorInnerCardView(it, config.primaryColor)
+                    it.setOnClickListener { view ->
+                        view.postDelayed( {
+                            TransitionHelper.startActivityWithTransition(
+                                requireActivity(),
+                                Intent(
+                                    requireActivity(),
+                                    StatisticsActivity::class.java
+                                )
+                            )
+                        }, 300)
+                    }
+                }
             }
         }
 

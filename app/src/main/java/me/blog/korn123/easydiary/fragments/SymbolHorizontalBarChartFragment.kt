@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.fragments
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
@@ -7,6 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.widget.ContentLoadingProgressBar
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.AxisBase
@@ -24,11 +26,15 @@ import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.StatisticsActivity
 import me.blog.korn123.easydiary.chart.DiaryCountingAxisValueFormatter
 import me.blog.korn123.easydiary.chart.IValueFormatterExt
 import me.blog.korn123.easydiary.chart.XYMarkerView
+import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.darkenColor
 import me.blog.korn123.easydiary.extensions.scaledDrawable
+import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
+import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.views.FixedTextView
 
 class SymbolHorizontalBarChartFragment : androidx.fragment.app.Fragment() {
@@ -111,6 +117,22 @@ class SymbolHorizontalBarChartFragment : androidx.fragment.app.Fragment() {
             if (title != null) {
                 mChartTitle.text = title
                 mChartTitle.visibility = View.VISIBLE
+
+                getView()?.findViewById<ImageView>(R.id.image_expend_chart)?.let {
+                    it.visibility = View.VISIBLE
+                    requireActivity().updateDrawableColorInnerCardView(it, config.primaryColor)
+                    it.setOnClickListener { view ->
+                        view.postDelayed( {
+                            TransitionHelper.startActivityWithTransition(
+                                requireActivity(),
+                                Intent(
+                                    requireActivity(),
+                                    StatisticsActivity::class.java
+                                ).putExtra(StatisticsActivity.CHART_MODE, StatisticsActivity.MODE_SINGLE_HORIZONTAL_BAR_CHART_SYMBOL)
+                            )
+                        }, 300)
+                    }
+                }
             }
         }
 
