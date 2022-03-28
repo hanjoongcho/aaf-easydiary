@@ -150,7 +150,7 @@ class SymbolBarChartFragment : androidx.fragment.app.Fragment() {
                 var index = 1.0F
                 sortedMap.forEach { (key, value) ->
                     val drawable: Drawable? = when (FlavorUtils.sequenceToSymbolResourceId(key) > 0) {
-                        true -> scaledDrawable(FlavorUtils.sequenceToSymbolResourceId(key), CommonUtils.dpToPixel(requireContext(),24F) ,CommonUtils.dpToPixel(requireContext(),24F))
+                        true -> scaledDrawable(FlavorUtils.sequenceToSymbolResourceId(key), CommonUtils.dpToPixel(requireContext(),20F) ,CommonUtils.dpToPixel(requireContext(),20F))
                         false -> null
                     }
                     mSequences.add(key)
