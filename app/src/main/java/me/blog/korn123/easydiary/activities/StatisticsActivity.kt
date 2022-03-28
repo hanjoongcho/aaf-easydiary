@@ -7,6 +7,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.chart.ChartBase
 import me.blog.korn123.easydiary.databinding.ActivityStatisticsBinding
 import me.blog.korn123.easydiary.extensions.applyFontToMenuItem
+import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.fragments.WritingBarChartFragment
 import me.blog.korn123.easydiary.fragments.SymbolBarChartFragment
 import me.blog.korn123.easydiary.fragments.SymbolHorizontalBarChartFragment
@@ -34,7 +35,6 @@ class StatisticsActivity : ChartBase() {
             MODE_SINGLE_BAR_CHART_SYMBOL -> SymbolBarChartFragment()
             else -> WritingBarChartFragment()
         }
-            if (isSingleChart()) WeightLineChartFragment() else
         supportFragmentManager.run {
             beginTransaction().run {
                 replace(R.id.chartView, defaultChart)
