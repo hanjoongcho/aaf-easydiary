@@ -201,8 +201,8 @@ class WritingBarChartFragment : androidx.fragment.app.Fragment() {
             4 -> context!!.getString(R.string.range_d)
             5 -> context!!.getString(R.string.range_e)
             6 -> context!!.getString(R.string.range_f)
-            7 -> context!!.getString(R.string.range_f)
-            else -> context!!.getString(R.string.range_g)
+            7 -> context!!.getString(R.string.range_g)
+            else -> context!!.getString(R.string.range_h)
         }
     }
 }
