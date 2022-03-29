@@ -20,7 +20,7 @@ import me.blog.korn123.easydiary.databinding.ItemPostCardBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.extensions.updateAppViews
-import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
+import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -87,7 +87,7 @@ class PostcardAdapter(
                 itemPostCardBinding.imageview.scaleType = ImageView.ScaleType.CENTER
                 Glide.with(itemPostCardBinding.imageview.context)
                         .load(postCard.file)
-                        .apply(createThumbnailGlideOptions(targetX * PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL * 0.2F))
+                        .apply(createThumbnailGlideOptions(targetX * PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL))
                         .into(itemPostCardBinding.imageview)
             }
         }
