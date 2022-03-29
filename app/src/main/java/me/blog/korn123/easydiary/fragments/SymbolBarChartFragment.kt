@@ -178,7 +178,7 @@ class SymbolBarChartFragment : androidx.fragment.app.Fragment() {
                     barData.setValueTextSize(10f)
                     barData.setValueTypeface(mTypeface)
                     barData.barWidth = 0.9f
-//                    mBarChart.zoom((sortedMap.size / 6.0F), 0F, 0F, 0F)
+                    mBarChart.zoom((sortedMap.size / 8.5F), 0F, 0F, 0F)
                     mBarChart.data = barData
 
                     mBarChart.animateY(2000)
