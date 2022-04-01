@@ -2,7 +2,9 @@ package me.blog.korn123.easydiary.fragments
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,12 +30,17 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.StatisticsActivity
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.isLandScape
+import me.blog.korn123.easydiary.extensions.makeToast
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
+import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.DAILY_SCALE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.views.FixedTextView
 import java.text.SimpleDateFormat
+import kotlin.random.Random
 
 class WeightLineChartFragment : androidx.fragment.app.Fragment() {
     private lateinit var mLineChart: LineChart
@@ -140,29 +147,146 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
         }
 
         mCoroutineJob = CoroutineScope(Dispatchers.IO).launch {
-            val barEntries = setData()
-            if (barEntries.isNotEmpty()) {
-                withContext(Dispatchers.Main) {
-                    val lineDataSet = LineDataSet(barEntries, "Weight")
-                    val iValueFormatter = WeightIValueFormatter(context)
-                    lineDataSet.valueFormatter = iValueFormatter
+            if (requireActivity().isLandScape()) {
+                val barEntries = setData()
+                if (barEntries.isNotEmpty()) {
+                    withContext(Dispatchers.Main) {
+                        val lineDataSet = LineDataSet(barEntries, "Weight")
+                        val iValueFormatter = WeightIValueFormatter(context)
+                        lineDataSet.valueFormatter = iValueFormatter
 //                    val colors = intArrayOf(
 //                        Color.rgb(193, 37, 82), Color.rgb(255, 102, 0), Color.rgb(245, 199, 0),
 //                        Color.rgb(106, 150, 31), Color.rgb(179, 100, 53), Color.rgb(115, 130, 153))
 //                    lineDataSet.setColors(*colors)
+                        lineDataSet.setDrawIcons(false)
+                        lineDataSet.setDrawValues(true)
+                        val dataSets = ArrayList<ILineDataSet>()
+                        dataSets.add(lineDataSet)
+                        val lineData = LineData(dataSets)
+                        lineData.setValueTextSize(10f)
+                        lineData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
+                        mLineChart.data = lineData
+                        mLineChart.animateY(600)
+                        mBarChartProgressBar.visibility = View.GONE
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        mBarChartProgressBar.visibility = View.GONE
+                    }
+                }
+            } else {
+                val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
+                val listDiary = EasyDiaryDbHelper.findDiary(null, false, 0, 0, DAILY_SCALE, realmInstance = realmInstance)
+                realmInstance.close()
+
+                var sumWeight = 0F
+                val filteredItems = arrayListOf<Diary>()
+                listDiary.reversed().forEach { diary ->
+                    diary.title?.let {
+                        if (EasyDiaryUtils.isContainNumber(it)) {
+                            val weight = EasyDiaryUtils.findNumber(it)
+                            sumWeight += weight
+                            filteredItems.add(diary)
+                        }
+                    }
+                }
+
+
+
+                val iterator = filteredItems.groupBy { item -> item.dateString!!.substring(0, 4) }.iterator()
+                val dataSets = ArrayList<ILineDataSet>()
+                var r = 10
+                var g = 70
+                var b = 10
+                while (iterator.hasNext()) {
+                    val element = iterator.next()
+                    val barEntries = ArrayList<Entry>()
+
+                    val monthMap = element.value.groupBy { it.dateString!!.substring(5, 7) }
+                    fun monthlyWeight(key: String): Float {
+                        return monthMap[key]?.let { monthlyItems ->
+                            var average = 0F
+                            var sum = 0F
+                            monthlyItems.map { sum += EasyDiaryUtils.findNumber(it.title) }
+                            average = sum.div(monthlyItems.size)
+                            average
+                        } ?: 0F
+                    }
+
+                    val averageInfo = arrayListOf<Float>().apply {
+                        add(monthlyWeight("01"))
+                        add(monthlyWeight("02"))
+                        add(monthlyWeight("03"))
+                        add(monthlyWeight("04"))
+                        add(monthlyWeight("05"))
+                        add(monthlyWeight("06"))
+                        add(monthlyWeight("07"))
+                        add(monthlyWeight("08"))
+                        add(monthlyWeight("09"))
+                        add(monthlyWeight("10"))
+                        add(monthlyWeight("11"))
+                        add(monthlyWeight("12"))
+                    }
+
+                    Log.i(AAF_TEST, "원본 ${averageInfo.joinToString(",")}")
+                    averageInfo.forEachIndexed { index, fl ->
+                        if (fl == 0f) {
+                            up@ for (seq in index..averageInfo.size.minus(1)) {
+                                if (averageInfo[seq] > 0F) {
+                                    averageInfo[index] = averageInfo[seq]
+                                    break@up
+                                }
+                            }
+                        }
+                    }
+                    Log.i(AAF_TEST, "앞 ${averageInfo.joinToString(",")}")
+                   averageInfo.forEachIndexed { index, fl ->
+                        if (fl == 0f) {
+                            down@ for (seq in index.minus(1) downTo 0) {
+                                if (averageInfo[seq] > 0F) {
+                                    averageInfo[index] = averageInfo[seq]
+                                    break@down
+                                }
+                            }
+                        }
+                    }
+                    Log.i(AAF_TEST, "뒤 ${averageInfo.joinToString(",")}")
+
+                    barEntries.add(Entry(1f, averageInfo[0]))
+                    barEntries.add(Entry(2f, averageInfo[1]))
+                    barEntries.add(Entry(3f, averageInfo[2]))
+                    barEntries.add(Entry(4f, averageInfo[3]))
+                    barEntries.add(Entry(5f, averageInfo[4]))
+                    barEntries.add(Entry(6f, averageInfo[5]))
+                    barEntries.add(Entry(7f, averageInfo[6]))
+                    barEntries.add(Entry(8f, averageInfo[7]))
+                    barEntries.add(Entry(9f, averageInfo[8]))
+                    barEntries.add(Entry(10f, averageInfo[9]))
+                    barEntries.add(Entry(11f, averageInfo[10]))
+                    barEntries.add(Entry(12f, averageInfo[11]))
+
+                    val lineDataSet = LineDataSet(barEntries, element.key)
+                    val iValueFormatter = WeightIValueFormatter(context)
+                    lineDataSet.valueFormatter = iValueFormatter
                     lineDataSet.setDrawIcons(false)
                     lineDataSet.setDrawValues(true)
-                    val dataSets = ArrayList<ILineDataSet>()
+                    lineDataSet.setColor(Color.rgb(Random.nextInt(0, 255), Random.nextInt(0, 255), Random.nextInt(0, 255)))
                     dataSets.add(lineDataSet)
+                }
+                withContext(Dispatchers.Main) {
+                    if (sumWeight > 0) {
+                        val average = sumWeight.div(filteredItems.size)
+                        mLineChart.axisLeft.axisMinimum = average.minus(10)
+                        mLineChart.axisLeft.axisMaximum = average.plus(10)
+                        mLineChart.axisRight.axisMinimum = average.minus(10)
+                        mLineChart.axisRight.axisMaximum = average.plus(10)
+                    }
+
                     val lineData = LineData(dataSets)
                     lineData.setValueTextSize(10f)
                     lineData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
                     mLineChart.data = lineData
                     mLineChart.animateY(600)
-                    mBarChartProgressBar.visibility = View.GONE
-                }
-            } else {
-                withContext(Dispatchers.Main) {
                     mBarChartProgressBar.visibility = View.GONE
                 }
             }
@@ -175,7 +299,7 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
     }
 
     val mTimeMillisMap = hashMapOf<Int, Long>()
-    private fun setData(count: Int = 6, range: Float = 20F): ArrayList<Entry> {
+    private fun setData(): ArrayList<Entry> {
         val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
         val listDiary = EasyDiaryDbHelper.findDiary(null, false, 0, 0, DAILY_SCALE, realmInstance = realmInstance)
         realmInstance.close()
@@ -212,8 +336,17 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
 
     inner class WeightXAxisValueFormatter(private var context: Context?) : IAxisValueFormatter {
         override fun getFormattedValue(value: Float, axis: AxisBase): String {
-            val timeMillis: Long = mTimeMillisMap[value.toInt()] ?: 0
-            return xAxisTimeMillisToDate(timeMillis)
+            val label = when (requireActivity().isLandScape()) {
+                true -> {
+                    val timeMillis: Long = mTimeMillisMap[value.toInt()] ?: 0
+                    xAxisTimeMillisToDate(timeMillis)
+                }
+                false -> {
+                    value.toInt().toString().padStart(2, '0')
+                }
+
+            }
+            return label
         }
     }
 
