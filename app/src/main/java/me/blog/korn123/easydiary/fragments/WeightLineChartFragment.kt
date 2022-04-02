@@ -48,6 +48,7 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
     private val mTimeMillisMap = hashMapOf<Int, Long>()
     private var mCoroutineJob: Job? = null
     private var mChartMode = "A"
+    private val mDataSets = ArrayList<ILineDataSet>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_weight_line_chart, container, false)
@@ -165,6 +166,7 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
 
     private fun drawChart() {
         mCoroutineJob = CoroutineScope(Dispatchers.IO).launch {
+            mDataSets.clear()
             if (mChartMode == "A") {
                 val barEntries = setData()
                 if (barEntries.isNotEmpty()) {
@@ -174,9 +176,8 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
                         lineDataSet.valueFormatter = iValueFormatter
                         lineDataSet.setDrawIcons(false)
                         lineDataSet.setDrawValues(true)
-                        val dataSets = ArrayList<ILineDataSet>()
-                        dataSets.add(lineDataSet)
-                        val lineData = LineData(dataSets)
+                        mDataSets.add(lineDataSet)
+                        val lineData = LineData(mDataSets)
                         lineData.setValueTextSize(10f)
                         lineData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
                         Color.rgb(
@@ -221,7 +222,6 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
                 }
 
                 val iterator = filteredItems.groupBy { item -> item.dateString!!.substring(0, 4) }.iterator()
-                val dataSets = ArrayList<ILineDataSet>()
                 while (iterator.hasNext()) {
                     val element = iterator.next()
                     val barEntries = ArrayList<Entry>()
@@ -258,7 +258,7 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
                         lineDataSet.circleColors = arrayListOf(it)
                         lineDataSet.color = it
                     }
-                    dataSets.add(lineDataSet)
+                    mDataSets.add(lineDataSet)
                 }
                 withContext(Dispatchers.Main) {
                     if (sumWeight > 0) {
@@ -269,7 +269,7 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
                         mLineChart.axisRight.axisMaximum = average.plus(10)
                     }
 
-                    val lineData = LineData(dataSets)
+                    val lineData = LineData(mDataSets)
                     lineData.setValueTextSize(10f)
                     lineData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
                     mLineChart.data = lineData
