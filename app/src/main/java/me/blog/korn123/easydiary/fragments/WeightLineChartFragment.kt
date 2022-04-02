@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,6 +32,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.StatisticsActivity
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
+import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.DAILY_SCALE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.TransitionHelper
@@ -177,6 +179,14 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
                         val lineData = LineData(dataSets)
                         lineData.setValueTextSize(10f)
                         lineData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
+                        Color.rgb(
+                            Random.nextInt(0, 255),
+                            Random.nextInt(0, 255),
+                            Random.nextInt(0, 255)
+                        ).also {
+                            lineDataSet.circleColors = arrayListOf(it)
+                            lineDataSet.color = it
+                        }
                         mLineChart.data = lineData
                         mLineChart.animateY(600)
                         mBarChartProgressBar.visibility = View.GONE
@@ -232,30 +242,6 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
                             add(monthlyWeight("$i".padStart(2, '0')))
                         }
                     }
-
-//                    Log.i(AAF_TEST, "원본 ${averageInfo.joinToString(",")}")
-    //                    averageInfo.forEachIndexed { index, fl ->
-    //                        if (fl == 0f) {
-    //                            up@ for (seq in index..averageInfo.size.minus(1)) {
-    //                                if (averageInfo[seq] > 0F) {
-    //                                    averageInfo[index] = averageInfo[seq]
-    //                                    break@up
-    //                                }
-    //                            }
-    //                        }
-    //                    }
-//                    Log.i(AAF_TEST, "앞 ${averageInfo.joinToString(",")}")
-    //                   averageInfo.forEachIndexed { index, fl ->
-    //                        if (fl == 0f) {
-    //                            down@ for (seq in index.minus(1) downTo 0) {
-    //                                if (averageInfo[seq] > 0F) {
-    //                                    averageInfo[index] = averageInfo[seq]
-    //                                    break@down
-    //                                }
-    //                            }
-    //                        }
-    //                    }
-//                    Log.i(AAF_TEST, "뒤 ${averageInfo.joinToString(",")}")
                     for (i in 1..12) {
                         if (averageInfo[i.minus(1)] > 0f) barEntries.add(Entry(i.toFloat(), averageInfo[i.minus(1)]))
                     }
@@ -264,11 +250,14 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
                     lineDataSet.valueFormatter = iValueFormatter
                     lineDataSet.setDrawIcons(false)
                     lineDataSet.setDrawValues(true)
-                    lineDataSet.color = Color.rgb(
+                    Color.rgb(
                         Random.nextInt(0, 255),
                         Random.nextInt(0, 255),
                         Random.nextInt(0, 255)
-                    )
+                    ).also {
+                        lineDataSet.circleColors = arrayListOf(it)
+                        lineDataSet.color = it
+                    }
                     dataSets.add(lineDataSet)
                 }
                 withContext(Dispatchers.Main) {
@@ -326,6 +315,35 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
 
     private fun xAxisTimeMillisToDate(timeMillis: Long): String =
         if (timeMillis > 0) DateUtils.getDateStringFromTimeMillis(timeMillis, SimpleDateFormat.SHORT) else "N/A"
+
+    private fun fillValueForward(averageInfo: ArrayList<Float>) {
+        Log.i(AAF_TEST, "원본 ${averageInfo.joinToString(",")}")
+        averageInfo.forEachIndexed { index, fl ->
+            if (fl == 0f) {
+                up@ for (seq in index..averageInfo.size.minus(1)) {
+                    if (averageInfo[seq] > 0F) {
+                        averageInfo[index] = averageInfo[seq]
+                        break@up
+                    }
+                }
+            }
+        }
+        Log.i(AAF_TEST, "앞 ${averageInfo.joinToString(",")}")
+    }
+
+    private fun fillValueBackward(averageInfo: ArrayList<Float>) {
+        averageInfo.forEachIndexed { index, fl ->
+            if (fl == 0f) {
+                down@ for (seq in index.minus(1) downTo 0) {
+                    if (averageInfo[seq] > 0F) {
+                        averageInfo[index] = averageInfo[seq]
+                        break@down
+                    }
+                }
+            }
+        }
+        Log.i(AAF_TEST, "뒤 ${averageInfo.joinToString(",")}")
+    }
 
     companion object {
         const val CHART_TITLE = "chartTitle"
