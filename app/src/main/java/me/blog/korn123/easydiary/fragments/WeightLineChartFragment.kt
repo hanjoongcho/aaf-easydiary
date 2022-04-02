@@ -86,7 +86,7 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
             setLabelCount(8, false)
             valueFormatter = yAxisFormatter
             setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
-            spaceTop = 15f
+            spaceTop = 0f
             axisMinimum = 0f // this replaces setStartAtZero(true)
             labelCount = 8
         }
@@ -96,7 +96,7 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
             typeface = FontUtils.getCommonTypeface(requireContext())
             setLabelCount(8, false)
             valueFormatter = yAxisFormatter
-            spaceTop = 15f
+            spaceTop = 0f
             axisMinimum = 0f // this replaces setStartAtZero(true)
             labelCount = 8
         }
