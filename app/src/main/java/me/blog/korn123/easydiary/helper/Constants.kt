@@ -602,4 +602,5 @@ const val PREVIOUS_ACTIVITY = "previous_activity"
 const val PREVIOUS_ACTIVITY_CREATE = 1
 const val AAF_TEST = "aaf-test"
 const val DOZE_SCHEDULE = "doze_schedule"
-const val PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL = 0.07F
+const val PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL = 0.05F
+const val PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL = 0.02F

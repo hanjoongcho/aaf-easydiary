@@ -21,6 +21,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.PostcardActivity
 import me.blog.korn123.easydiary.fragments.PhotoFlexItemOptionFragment
 import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
+import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL
 import kotlin.math.ceil
 import kotlin.math.sqrt
 
@@ -155,7 +156,7 @@ class PhotoAdapter(
 
             fun applyOption(context: Context, photoUri: String, viewMode: Int, filterMode: Int, imageView: ImageView) {
                 val glide = Glide.with(context).load(photoUri)
-                val radius = (imageView.layoutParams.width * PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL * 0.2).toInt()
+                val radius = (imageView.layoutParams.width * PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL).toInt()
                 when (viewMode) {
                     0 -> {
                         if (filterMode == 0) {
