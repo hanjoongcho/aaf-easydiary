@@ -9,9 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.RadioGroup
 import android.widget.TextView
-import androidx.core.widget.ContentLoadingProgressBar
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.*
 import com.github.mikephil.charting.data.Entry
@@ -30,6 +28,7 @@ import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.StatisticsActivity
+import me.blog.korn123.easydiary.databinding.FragmentWeightLineChartBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
 import me.blog.korn123.easydiary.helper.AAF_TEST
@@ -37,28 +36,30 @@ import me.blog.korn123.easydiary.helper.DAILY_SCALE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.models.Diary
-import me.blog.korn123.easydiary.views.FixedTextView
 import java.text.SimpleDateFormat
 import kotlin.random.Random
 
 class WeightLineChartFragment : androidx.fragment.app.Fragment() {
+    private lateinit var mBinding: FragmentWeightLineChartBinding
     private lateinit var mLineChart: LineChart
-    private lateinit var mChartTitle: FixedTextView
-    private lateinit var mBarChartProgressBar: ContentLoadingProgressBar
     private val mTimeMillisMap = hashMapOf<Int, Long>()
     private var mCoroutineJob: Job? = null
     private var mChartMode = "A"
     private val mDataSets = ArrayList<ILineDataSet>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_weight_line_chart, container, false)
+        mBinding = FragmentWeightLineChartBinding.inflate(layoutInflater)
+        return mBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mLineChart = view.findViewById(R.id.lineChart)
-        mChartTitle = view.findViewById(R.id.chartTitle)
-        mBarChartProgressBar = view.findViewById(R.id.barChartProgressBar)
+
+        // FIXME: When ViewBinding is used, the MATCH_PARENT option declared in the layout does not work, so it is temporarily declared here.
+        mBinding.root.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
+        mBinding.root.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+
+        mLineChart = mBinding.lineChart
         mLineChart.description.isEnabled = false
 
         // if more than 60 entries are displayed in the chart, no values will be
@@ -124,8 +125,8 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
         arguments?.let { bundle ->
             val title = bundle.getString(CHART_TITLE)
             if (title != null) {
-                mChartTitle.text = title
-                mChartTitle.visibility = View.VISIBLE
+                mBinding.chartTitle.text = title
+                mBinding.chartTitle.visibility = View.VISIBLE
                 getView()?.findViewById<ImageView>(R.id.image_weight_symbol)?.let {
                     it.visibility = View.VISIBLE
                     FlavorUtils.initWeatherView(requireActivity(), it, DAILY_SCALE)
@@ -150,16 +151,25 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
 
         drawChart()
 
-        getView()?.findViewById<RadioGroup>(R.id.radio_group_chart_option)?.setOnCheckedChangeListener { _, checkedId ->
-            when (checkedId) {
-                R.id.radio_button_option_a -> {
-                    mChartMode = "A"
-                    drawChart()
+        mBinding.run {
+            radioGroupChartOption.setOnCheckedChangeListener { _, checkedId ->
+                when (checkedId) {
+                    R.id.radio_button_option_a -> {
+                        mChartMode = "A"
+                        drawChart()
+                    }
+                    R.id.radio_button_option_b -> {
+                        mChartMode = "B"
+                        drawChart()
+                    }
                 }
-                R.id.radio_button_option_b -> {
-                    mChartMode = "B"
-                    drawChart()
+            }
+            checkOptionsFill.setOnCheckedChangeListener { _, isChecked ->
+                mDataSets.forEach {
+                    it.setDrawFilled(isChecked)
                 }
+//                mLineChart.notifyDataSetChanged()
+                mLineChart.invalidate()
             }
         }
     }
@@ -176,6 +186,7 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
                         lineDataSet.valueFormatter = iValueFormatter
                         lineDataSet.setDrawIcons(false)
                         lineDataSet.setDrawValues(true)
+                        lineDataSet.setDrawFilled(true)
                         mDataSets.add(lineDataSet)
                         val lineData = LineData(mDataSets)
                         lineData.setValueTextSize(10f)
@@ -187,14 +198,15 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
                         ).also {
                             lineDataSet.circleColors = arrayListOf(it)
                             lineDataSet.color = it
+                            lineDataSet.fillColor = it
                         }
                         mLineChart.data = lineData
                         mLineChart.animateY(600)
-                        mBarChartProgressBar.visibility = View.GONE
+                        mBinding.barChartProgressBar.visibility = View.GONE
                     }
                 } else {
                     withContext(Dispatchers.Main) {
-                        mBarChartProgressBar.visibility = View.GONE
+                        mBinding.barChartProgressBar.visibility = View.GONE
                     }
                 }
             } else {
@@ -250,6 +262,7 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
                     lineDataSet.valueFormatter = iValueFormatter
                     lineDataSet.setDrawIcons(false)
                     lineDataSet.setDrawValues(true)
+                    lineDataSet.setDrawFilled(true)
                     Color.rgb(
                         Random.nextInt(0, 255),
                         Random.nextInt(0, 255),
@@ -257,6 +270,7 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
                     ).also {
                         lineDataSet.circleColors = arrayListOf(it)
                         lineDataSet.color = it
+                        lineDataSet.fillColor = it
                     }
                     mDataSets.add(lineDataSet)
                 }
@@ -274,7 +288,7 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
                     lineData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
                     mLineChart.data = lineData
                     mLineChart.animateY(600)
-                    mBarChartProgressBar.visibility = View.GONE
+                    mBinding.barChartProgressBar.visibility = View.GONE
                 }
             }
         }
