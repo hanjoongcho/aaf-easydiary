@@ -12,10 +12,10 @@ import com.simplemobiletools.commons.extensions.setVisibleIf
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.Diary
-
 
 class DiaryMainWidgetFactory(private val context: Context) : RemoteViewsService.RemoteViewsFactory {
     private val diaryItems: ArrayList<Diary> = arrayListOf()
@@ -78,9 +78,11 @@ class DiaryMainWidgetFactory(private val context: Context) : RemoteViewsService.
     override fun onDestroy() {}
 
     private fun setData() {
-        val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
         diaryItems.clear()
-        diaryItems.addAll(EasyDiaryDbHelper.findDiary(null, false, 0, 0, 0, realmInstance))
-        realmInstance.close()
+        if (!context.config.aafPinLockEnable && !context.config.fingerprintLockEnable) {
+            val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
+            diaryItems.addAll(EasyDiaryDbHelper.findDiary(null, false, 0, 0, 0, realmInstance))
+            realmInstance.close()
+        }
     }
 }
