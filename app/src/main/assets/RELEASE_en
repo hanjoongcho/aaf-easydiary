@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.268.202204040 (date: 2022.04.04)
+  * Change the policy so that the diary list is not displayed in the widget when the lock function is used
+
 # Changes in 1.4.267.202203300 (date: 2022.03.30)
   * Improved dashboard chart feature
 

@@ -622,6 +622,10 @@
         v1.4.267.202203300 / 2022.03.30\n
         Improved dashboard chart feature
     </string>
+    <string name="release_268">
+        v1.4.268.202204040 / 2022.04.04\n
+        Change the policy so that the diary list is not displayed in the widget when the lock function is used
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  自1.4.47版本以来添加的资源点击这里。                                                      -->
