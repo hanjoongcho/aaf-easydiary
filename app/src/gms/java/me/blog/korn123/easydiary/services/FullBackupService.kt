@@ -155,7 +155,7 @@ class FullBackupService : Service() {
                 }
             }
             addOnFailureListener { exception ->
-                reExecuteGmsBackup(alarm, exception.message ?: "", FullBackupService::class.java.name)
+                reExecuteGmsBackup(alarm, "${exception.message ?: ""} (determineRemoteDrivePhotos)", FullBackupService::class.java.name)
                 stopSelf()
             }
         }
@@ -174,7 +174,7 @@ class FullBackupService : Service() {
                 workStatus.targetFilenamesCursor++
                 workStatus.failCount++
                 updateNotification(alarm, workStatus)
-                reExecuteGmsBackup(alarm, exception.message ?: "", FullBackupService::class.java.name)
+                reExecuteGmsBackup(alarm, "${exception.message ?: ""} (uploadDiaryPhoto)", FullBackupService::class.java.name)
                 stopSelf()
             }
         }
@@ -217,6 +217,9 @@ class FullBackupService : Service() {
                         ).addOnSuccessListener {
                             config.diaryBackupGoogle = System.currentTimeMillis()
                             launchCompleteNotification(alarm, dbFileName, workStatus)
+                        }.addOnFailureListener { exception ->
+                            reExecuteGmsBackup(alarm, "${exception.message ?: ""} (backupDiaryRealm)", FullBackupService::class.java.name)
+                            stopSelf()
                         }
                     } else {
                         EasyDiaryDbHelper.insertActionLog(ActionLog("FullBackupService", "backupDiaryRealm", "ERROR", "realmFolderId is null"), applicationContext)
