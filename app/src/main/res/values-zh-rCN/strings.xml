@@ -626,6 +626,10 @@
         v1.4.268.202204040 / 2022.04.04\n
         Change the policy so that the diary list is not displayed in the widget when the lock function is used
     </string>
+    <string name="release_269">
+        v1.4.269.202204110 / 2022.04.11\n
+        Change the policy so that the content is not visible in the list of recently used apps when using the lock function
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  自1.4.47版本以来添加的资源点击这里。                                                      -->
