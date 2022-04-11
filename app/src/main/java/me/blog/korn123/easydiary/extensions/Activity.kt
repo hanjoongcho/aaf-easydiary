@@ -135,10 +135,8 @@ fun Activity.resumeLock() {
 
 fun Activity.applyPolicyForRecentApps() {
     if (config.aafPinLockEnable || config.fingerprintLockEnable) {
-        makeToast("ADD")
         window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
     } else {
-        makeToast("CLEAR")
         window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
     }
 }
