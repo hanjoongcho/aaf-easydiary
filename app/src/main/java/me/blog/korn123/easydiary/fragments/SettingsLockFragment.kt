@@ -11,6 +11,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.FingerprintLockActivity
 import me.blog.korn123.easydiary.activities.PinLockActivity
 import me.blog.korn123.easydiary.databinding.FragmentSettingsLockBinding
+import me.blog.korn123.easydiary.extensions.applyPolicyForRecentApps
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.showAlertDialog
 import me.blog.korn123.easydiary.extensions.updateFragmentUI
@@ -66,6 +67,7 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
                                 mBinding.appLockSettingSwitcher.isChecked = false
                                 config.aafPinLockEnable = false
                                 showAlertDialog(getString(R.string.pin_setting_release), null)
+                                applyPolicyForRecentApps()
                             }
                         }
                         false -> {
@@ -82,6 +84,7 @@ class SettingsLockFragment : androidx.fragment.app.Fragment() {
                                 mBinding.fingerprintSwitcher.isChecked = false
                                 config.fingerprintLockEnable = false
                                 showAlertDialog(getString(R.string.fingerprint_setting_release), null)
+                                applyPolicyForRecentApps()
                             }
                             false -> {
                                 when (config.aafPinLockEnable) {

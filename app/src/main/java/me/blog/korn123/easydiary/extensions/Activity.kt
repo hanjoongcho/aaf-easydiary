@@ -21,6 +21,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AlertDialog
@@ -129,6 +130,16 @@ fun Activity.resumeLock() {
                 })
             }
         }
+    }
+}
+
+fun Activity.applyPolicyForRecentApps() {
+    if (config.aafPinLockEnable || config.fingerprintLockEnable) {
+        makeToast("ADD")
+        window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+    } else {
+        makeToast("CLEAR")
+        window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
     }
 }
 

@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.activities
 
 import android.os.Bundle
 import android.view.ViewGroup
+import android.view.WindowManager
 import com.simplemobiletools.commons.models.Release
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
@@ -40,6 +41,8 @@ open class EasyDiaryActivity : BaseSimpleActivity() {
             updateBackgroundColor(config.screenBackgroundColor)
             FontUtils.setFontsTypeface(applicationContext, null, findViewById<ViewGroup>(android.R.id.content), mCustomLineSpacing)
         }
+
+        applyPolicyForRecentApps()
     }
 
     override fun onBackPressed() {
