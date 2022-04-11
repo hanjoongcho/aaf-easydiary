@@ -2,7 +2,6 @@ package me.blog.korn123.easydiary.activities
 
 import android.os.Bundle
 import android.view.ViewGroup
-import android.view.WindowManager
 import com.simplemobiletools.commons.models.Release
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.BuildConfig
@@ -15,8 +14,8 @@ import me.blog.korn123.easydiary.extensions.*
 
 open class EasyDiaryActivity : BaseSimpleActivity() {
     var mCustomLineSpacing = true
-    val mRootView: ViewGroup? by lazy {
-        findViewById<ViewGroup>(R.id.main_holder)
+    private val mRootView: ViewGroup? by lazy {
+        findViewById(R.id.main_holder)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,9 +38,8 @@ open class EasyDiaryActivity : BaseSimpleActivity() {
                 updateCardViewPolicy(it)
             }
             updateBackgroundColor(config.screenBackgroundColor)
-            FontUtils.setFontsTypeface(applicationContext, null, findViewById<ViewGroup>(android.R.id.content), mCustomLineSpacing)
+            FontUtils.setFontsTypeface(applicationContext, null, findViewById(android.R.id.content), mCustomLineSpacing)
         }
-
         applyPolicyForRecentApps()
     }
 
@@ -57,7 +55,6 @@ open class EasyDiaryActivity : BaseSimpleActivity() {
     }
 
     override fun getMainViewGroup(): ViewGroup? = mRootView
-//    override fun getBackgroundAlpha(): Int = APP_BACKGROUND_ALPHA
 
     fun checkWhatsNewDialog(applyFilter: Boolean = true) {
         arrayListOf<Release>().apply {
@@ -170,6 +167,4 @@ open class EasyDiaryActivity : BaseSimpleActivity() {
             checkWhatsNew(this, BuildConfig.VERSION_CODE, applyFilter)
         }
     }
-
-
 }
