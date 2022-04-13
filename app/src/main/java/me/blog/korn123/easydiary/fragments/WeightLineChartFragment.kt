@@ -210,85 +210,86 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
                     }
                 }
             } else {
-                val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
-                val listDiary = EasyDiaryDbHelper.findDiary(
-                    null,
-                    false,
-                    0,
-                    0,
-                    DAILY_SCALE,
-                    realmInstance = realmInstance
-                )
-                realmInstance.close()
+                EasyDiaryDbHelper.getTemporaryInstance().let { realmInstance ->
+                    val listDiary = EasyDiaryDbHelper.findDiary(
+                        null,
+                        false,
+                        0,
+                        0,
+                        DAILY_SCALE,
+                        realmInstance = realmInstance
+                    )
 
-                var sumWeight = 0F
-                val filteredItems = arrayListOf<Diary>()
-                listDiary.reversed().forEach { diary ->
-                    diary.title?.let {
-                        if (EasyDiaryUtils.isContainNumber(it)) {
-                            val weight = EasyDiaryUtils.findNumber(it)
-                            sumWeight += weight
-                            filteredItems.add(diary)
+                    var sumWeight = 0F
+                    val filteredItems = arrayListOf<Diary>()
+                    listDiary.reversed().forEach { diary ->
+                        diary.title?.let {
+                            if (EasyDiaryUtils.isContainNumber(it)) {
+                                val weight = EasyDiaryUtils.findNumber(it)
+                                sumWeight += weight
+                                filteredItems.add(diary)
+                            }
                         }
                     }
-                }
 
-                val iterator = filteredItems.groupBy { item -> item.dateString!!.substring(0, 4) }.iterator()
-                while (iterator.hasNext()) {
-                    val element = iterator.next()
-                    val barEntries = ArrayList<Entry>()
+                    val iterator = filteredItems.groupBy { item -> item.dateString!!.substring(0, 4) }.iterator()
+                    while (iterator.hasNext()) {
+                        val element = iterator.next()
+                        val barEntries = ArrayList<Entry>()
 
-                    val monthMap = element.value.groupBy { it.dateString!!.substring(5, 7) }
-                    fun monthlyWeight(key: String): Float {
-                        return monthMap[key]?.let { monthlyItems ->
-                            var average = 0F
-                            var sum = 0F
-                            monthlyItems.map { sum += EasyDiaryUtils.findNumber(it.title) }
-                            average = sum.div(monthlyItems.size)
-                            average
-                        } ?: 0F
-                    }
+                        val monthMap = element.value.groupBy { it.dateString!!.substring(5, 7) }
+                        fun monthlyWeight(key: String): Float {
+                            return monthMap[key]?.let { monthlyItems ->
+                                var average = 0F
+                                var sum = 0F
+                                monthlyItems.map { sum += EasyDiaryUtils.findNumber(it.title) }
+                                average = sum.div(monthlyItems.size)
+                                average
+                            } ?: 0F
+                        }
 
-                    val averageInfo = arrayListOf<Float>().apply {
+                        val averageInfo = arrayListOf<Float>().apply {
+                            for (i in 1..12) {
+                                add(monthlyWeight("$i".padStart(2, '0')))
+                            }
+                        }
                         for (i in 1..12) {
-                            add(monthlyWeight("$i".padStart(2, '0')))
+                            if (averageInfo[i.minus(1)] > 0f) barEntries.add(Entry(i.toFloat(), averageInfo[i.minus(1)]))
                         }
+                        val lineDataSet = LineDataSet(barEntries, element.key)
+                        val iValueFormatter = WeightIValueFormatter(context)
+                        lineDataSet.valueFormatter = iValueFormatter
+                        lineDataSet.setDrawIcons(false)
+                        lineDataSet.setDrawValues(true)
+                        lineDataSet.setDrawFilled(true)
+                        Color.rgb(
+                            Random.nextInt(0, 255),
+                            Random.nextInt(0, 255),
+                            Random.nextInt(0, 255)
+                        ).also {
+                            lineDataSet.circleColors = arrayListOf(it)
+                            lineDataSet.color = it
+                            lineDataSet.fillColor = it
+                        }
+                        mDataSets.add(lineDataSet)
                     }
-                    for (i in 1..12) {
-                        if (averageInfo[i.minus(1)] > 0f) barEntries.add(Entry(i.toFloat(), averageInfo[i.minus(1)]))
-                    }
-                    val lineDataSet = LineDataSet(barEntries, element.key)
-                    val iValueFormatter = WeightIValueFormatter(context)
-                    lineDataSet.valueFormatter = iValueFormatter
-                    lineDataSet.setDrawIcons(false)
-                    lineDataSet.setDrawValues(true)
-                    lineDataSet.setDrawFilled(true)
-                    Color.rgb(
-                        Random.nextInt(0, 255),
-                        Random.nextInt(0, 255),
-                        Random.nextInt(0, 255)
-                    ).also {
-                        lineDataSet.circleColors = arrayListOf(it)
-                        lineDataSet.color = it
-                        lineDataSet.fillColor = it
-                    }
-                    mDataSets.add(lineDataSet)
-                }
-                withContext(Dispatchers.Main) {
-                    if (sumWeight > 0) {
-                        val average = sumWeight.div(filteredItems.size)
-                        mLineChart.axisLeft.axisMinimum = average.minus(10)
-                        mLineChart.axisLeft.axisMaximum = average.plus(10)
-                        mLineChart.axisRight.axisMinimum = average.minus(10)
-                        mLineChart.axisRight.axisMaximum = average.plus(10)
-                    }
+                    withContext(Dispatchers.Main) {
+                        if (sumWeight > 0) {
+                            val average = sumWeight.div(filteredItems.size)
+                            mLineChart.axisLeft.axisMinimum = average.minus(10)
+                            mLineChart.axisLeft.axisMaximum = average.plus(10)
+                            mLineChart.axisRight.axisMinimum = average.minus(10)
+                            mLineChart.axisRight.axisMaximum = average.plus(10)
+                        }
 
-                    val lineData = LineData(mDataSets)
-                    lineData.setValueTextSize(10f)
-                    lineData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
-                    mLineChart.data = lineData
-                    mLineChart.animateY(600)
-                    mBinding.barChartProgressBar.visibility = View.GONE
+                        val lineData = LineData(mDataSets)
+                        lineData.setValueTextSize(10f)
+                        lineData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
+                        mLineChart.data = lineData
+                        mLineChart.animateY(600)
+                        mBinding.barChartProgressBar.visibility = View.GONE
+                    }
+                    realmInstance.close()
                 }
             }
         }
@@ -300,29 +301,30 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun setData(): ArrayList<Entry> {
-        val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
-        val listDiary = EasyDiaryDbHelper.findDiary(null, false, 0, 0, DAILY_SCALE, realmInstance = realmInstance)
-        realmInstance.close()
         val barEntries = ArrayList<Entry>()
-        var index = 0
-        var sumWeight = 0F
-        listDiary.reversed().forEach { diaryDto ->
-            diaryDto.title?.let {
-                if (EasyDiaryUtils.isContainNumber(it)) {
-                    val weight = EasyDiaryUtils.findNumber(it)
-                    sumWeight += weight
-                    barEntries.add(Entry(index.toFloat(), weight))
-                    mTimeMillisMap[index] = diaryDto.currentTimeMillis
-                    index++
+        EasyDiaryDbHelper.getTemporaryInstance().let { realmInstance ->
+            val listDiary = EasyDiaryDbHelper.findDiary(null, false, 0, 0, DAILY_SCALE, realmInstance = realmInstance)
+            var index = 0
+            var sumWeight = 0F
+            listDiary.reversed().forEach { diaryDto ->
+                diaryDto.title?.let {
+                    if (EasyDiaryUtils.isContainNumber(it)) {
+                        val weight = EasyDiaryUtils.findNumber(it)
+                        sumWeight += weight
+                        barEntries.add(Entry(index.toFloat(), weight))
+                        mTimeMillisMap[index] = diaryDto.currentTimeMillis
+                        index++
+                    }
                 }
             }
-        }
-        if (index > 0) {
-            val average = sumWeight.div(index)
-            mLineChart.axisLeft.axisMinimum = average.minus(10)
-            mLineChart.axisLeft.axisMaximum = average.plus(10)
-            mLineChart.axisRight.axisMinimum = average.minus(10)
-            mLineChart.axisRight.axisMaximum = average.plus(10)
+            if (index > 0) {
+                val average = sumWeight.div(index)
+                mLineChart.axisLeft.axisMinimum = average.minus(10)
+                mLineChart.axisLeft.axisMaximum = average.plus(10)
+                mLineChart.axisRight.axisMinimum = average.minus(10)
+                mLineChart.axisRight.axisMaximum = average.plus(10)
+            }
+            realmInstance.close()
         }
         return barEntries
     }
