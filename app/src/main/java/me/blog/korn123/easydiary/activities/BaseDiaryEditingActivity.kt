@@ -527,7 +527,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
 //            }
             mBinding.partialEditContents.date.text = when (mBinding.partialEditContents.allDay.isChecked) {
                 true -> DateUtils.getDateStringFromTimeMillis(mCurrentTimeMillis)
-                false -> DateUtils.getDateTimeStringFromTimeMillis(mCurrentTimeMillis, SimpleDateFormat.FULL, SimpleDateFormat.FULL)
+                false -> DateUtils.getDateTimeStringFromTimeMillis(mCurrentTimeMillis, SimpleDateFormat.FULL, SimpleDateFormat.MEDIUM)
             }
         } catch (e: ParseException) {
             e.printStackTrace()

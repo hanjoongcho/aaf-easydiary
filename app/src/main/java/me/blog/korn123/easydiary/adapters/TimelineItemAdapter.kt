@@ -73,7 +73,7 @@ class TimelineItemAdapter(
             text1.text = when (diaryDto.isAllDay) {
                 true -> applyBoldToDate(context.resources.getString(R.string.all_day), mergedContents)
 //                false -> applyBoldToDate(DateUtils.timeMillisToDateTime(diaryDto.currentTimeMillis, DateUtils.TIME_PATTERN_WITH_SECONDS), mergedContents)
-                false -> applyBoldToDate(DateUtils.getTimeStringFromTimeMillis(diaryDto.currentTimeMillis, SimpleDateFormat.FULL), mergedContents)
+                false -> applyBoldToDate(DateUtils.getTimeStringFromTimeMillis(diaryDto.currentTimeMillis, SimpleDateFormat.MEDIUM), mergedContents)
             }
             itemHolder.let {
                 context.updateTextColors(it, 0, 0)
