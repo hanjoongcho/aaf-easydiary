@@ -630,8 +630,8 @@
         v1.4.269.202204110 / 2022.04.11\n
         Change the policy so that the content is not visible in the list of recently used apps when using the lock function
     </string>
-    <string name="release_270">
-        v1.4.270.202204140 / 2022.04.14\n
+    <string name="release_271">
+        v1.4.271.202204150 / 2022.04.15\n
         User Experience (UX) Optimization
     </string>
 
