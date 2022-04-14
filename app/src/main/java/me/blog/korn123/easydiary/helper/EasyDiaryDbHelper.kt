@@ -150,17 +150,22 @@ object EasyDiaryDbHelper {
 
         return when (EasyDiaryApplication.context?.config?.enableTaskSymbolTopOrder ?: false) {
             true -> {
-                val sortedList = realmInstance.copyFromRealm(results)
-                sortedList.sortWith(kotlin.Comparator { item1, item2 ->
-//                    Log.i("EDD", "${sortedList.indexOf(item1)}(${item1.sequence}) to ${sortedList.indexOf(item2)}(${item2.sequence}) ${item1.weather}, ${item2.weather}")
-                    when {
-                        item1.weather in 80..81 && item2.weather in 80..81 -> 0
-                        item1.weather in 80..81 -> -1
-                        item2.weather in 80..81 -> 1
-                        else -> 0
-                    }
-                })
-                sortedList
+                val mergedList = arrayListOf<Diary>()
+                val valueArray = arrayOf(80L, 81L)
+                mergedList.addAll(results.where().`in`("weather", valueArray).findAll())
+                mergedList.addAll(results.where().not().`in`("weather", valueArray).findAll())
+//                val sortedList = realmInstance.copyFromRealm(results)
+//                sortedList.sortWith(kotlin.Comparator { item1, item2 ->
+////                    Log.i("EDD", "${sortedList.indexOf(item1)}(${item1.sequence}) to ${sortedList.indexOf(item2)}(${item2.sequence}) ${item1.weather}, ${item2.weather}")
+//                    when {
+//                        item1.weather in 80..81 && item2.weather in 80..81 -> 0
+//                        item1.weather in 80..81 -> -1
+//                        item2.weather in 80..81 -> 1
+//                        else -> 0
+//                    }
+//                })
+//                sortedList
+                mergedList
             }
             else -> {
 //                realmInstance.copyFromRealm(results)

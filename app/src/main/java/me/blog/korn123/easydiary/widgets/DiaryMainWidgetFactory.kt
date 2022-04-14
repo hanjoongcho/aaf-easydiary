@@ -75,13 +75,17 @@ class DiaryMainWidgetFactory(private val context: Context) : RemoteViewsService.
 
     override fun getViewTypeCount(): Int = 1
 
-    override fun onDestroy() { mRealmInstance.close() }
+    override fun onDestroy() { }
 
-    private val mRealmInstance = EasyDiaryDbHelper.getTemporaryInstance()
     private fun setData() {
         diaryItems.clear()
         if (!context.config.aafPinLockEnable && !context.config.fingerprintLockEnable) {
-            diaryItems.addAll(EasyDiaryDbHelper.findDiary(null, false, 0, 0, 0, mRealmInstance))
+            EasyDiaryDbHelper.getTemporaryInstance().let { realmInstance ->
+                val realmList = EasyDiaryDbHelper.findDiary(null, false, 0, 0, 0, realmInstance)
+                val limit = if (realmList.size > 100) 100 else realmList.size
+                diaryItems.addAll(realmInstance.copyFromRealm(realmList.subList(0, limit)))
+                realmInstance.close()
+            }
         }
     }
 }
