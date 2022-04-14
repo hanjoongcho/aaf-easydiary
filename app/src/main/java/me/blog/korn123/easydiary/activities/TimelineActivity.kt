@@ -65,7 +65,9 @@ class TimelineActivity : EasyDiaryActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-        changeDrawableIconColor(config.primaryColor, R.drawable.ic_calendar_4_w)
+//        changeDrawableIconColor(config.primaryColor, R.drawable.ic_calendar_4_w)
+        changeDrawableIconColor(config.primaryColor, mBinding.partialTimelineFilter.startDatePicker)
+        changeDrawableIconColor(config.primaryColor, mBinding.partialTimelineFilter.endDatePicker)
 
         mTimelineItemAdapter = TimelineItemAdapter(this, R.layout.item_timeline, mDiaryList)
         mBinding.timelineList.adapter = mTimelineItemAdapter
