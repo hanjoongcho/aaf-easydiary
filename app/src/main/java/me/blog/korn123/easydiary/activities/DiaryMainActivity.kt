@@ -22,11 +22,11 @@ import com.nineoldandroids.view.ViewHelper
 import com.zhpan.bannerview.constants.PageStyle
 import io.github.aafactory.commons.extensions.makeToast
 import io.github.aafactory.commons.utils.CommonUtils
-import me.blog.korn123.commons.utils.DateUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R

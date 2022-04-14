@@ -301,13 +301,32 @@ object EasyDiaryDbHelper {
      *   Manage ActionLog model
      *
      ***************************************************************************************************/
+    private fun insertActionLog(actionLog: ActionLog, realmInstance: Realm = getInstance()) {
+        realmInstance.executeTransaction { realm ->
+            val sequence = realm.where(ActionLog::class.java).max("sequence") ?: 0
+            actionLog.sequence = sequence.toInt().plus(1)
+            realm.insert(actionLog)
+        }
+    }
+
+    /**
+     * ```
+     * Realm의 아래와 같은 특징이 있음
+     * Realm 인스턴스는 동일한 Theread ID로부터 호출되어야 함
+     * getInstance(RealmConfiguration configuration) signature로 리턴받은 Realm 인스턴스는 싱글톤으로 관리하던가 사용이 끝나면 close해야 함
+     * 명시적으로 close하지 않는경우 realm db파일 변경 시 app crash 사유가 됨
+     * Activity(UI Thread), Service, Receiver등은 동일한 Thread ID에서 동작함
+     * Activity(Background Thread), AppWidgetProvider등은 별도의 Thread ID에서 동작함
+     * ```
+     */
+    fun insertCurrentThreadInfo(className: String, signature: String, realmInstance: Realm = getInstance()) {
+        val actionLog = ActionLog(className, signature, "INFO", Thread.currentThread().id.toString())
+        insertActionLog(actionLog, realmInstance)
+    }
+
     fun insertActionLog(actionLog: ActionLog, context: Context) {
         if (context.config.enableDebugMode) {
-            getInstance().executeTransaction { realm ->
-                val sequence = realm.where(ActionLog::class.java).max("sequence") ?: 0
-                actionLog.sequence = sequence.toInt().plus(1)
-                realm.insert(actionLog)
-            }
+            insertActionLog(actionLog)
         }
     }
 
