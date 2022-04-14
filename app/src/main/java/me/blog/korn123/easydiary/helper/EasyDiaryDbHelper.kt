@@ -57,6 +57,9 @@ object EasyDiaryDbHelper {
         }
     }
 
+    fun <E : RealmModel?> copyFromRealm(realmObjects: Iterable<E>?): MutableList<E> = getInstance().copyFromRealm(realmObjects)
+
+
     /***************************************************************************************************
      *   Manage DiaryDto model
      *   Create: Insert
@@ -92,10 +95,12 @@ object EasyDiaryDbHelper {
     }
 
     fun duplicateDiaryBy(diary: Diary) {
-        diary.currentTimeMillis = System.currentTimeMillis()
-        diary.updateDateString()
-        diary.originSequence = DIARY_ORIGIN_SEQUENCE_INIT
-        insertDiary(diary)
+        getInstance().copyFromRealm(diary).run {
+            currentTimeMillis = System.currentTimeMillis()
+            updateDateString()
+            originSequence = DIARY_ORIGIN_SEQUENCE_INIT
+            insertDiary(this)
+        }
     }
 
     fun findTemporaryDiaryBy(originSequence: Int, realmInstance: Realm = getInstance()): Diary? {

@@ -75,16 +75,18 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.let {
                 mDiaryMainItemAdapter?.getSelectedItems()?.run {
-                    mBinding.progressCoroutine.visibility = View.VISIBLE
-                    CoroutineScope(Dispatchers.IO).launch {
-                        exportHtmlBook(it.data, this@run)
-                        withContext(Dispatchers.Main) {
-                            mBinding.progressCoroutine.visibility = View.GONE
-                            mDiaryMainItemAdapter?.getSelectedItems()?.forEach {
-                                it.isSelected = false
-                                EasyDiaryDbHelper.updateDiaryBy(it)
+                    EasyDiaryDbHelper.copyFromRealm(this).also { cloneItems ->
+                        mBinding.progressCoroutine.visibility = View.VISIBLE
+                        CoroutineScope(Dispatchers.IO).launch {
+                            exportHtmlBook(it.data, cloneItems)
+                            withContext(Dispatchers.Main) {
+                                mBinding.progressCoroutine.visibility = View.GONE
+                                cloneItems.forEach {
+                                    it.isSelected = false
+                                    EasyDiaryDbHelper.updateDiaryBy(it)
+                                }
+                                mDiaryMainItemAdapter?.notifyDataSetChanged()
                             }
-                            mDiaryMainItemAdapter?.notifyDataSetChanged()
                         }
                     }
                 }
@@ -196,8 +198,10 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                         true -> {
                             showAlertDialog(getString(R.string.duplicate_selected_items_confirm, this.size), { _, _ ->
                                 this.reversed().map {
+                                    EasyDiaryDbHelper.beginTransaction()
                                     it.isSelected = false
-                                    EasyDiaryDbHelper.updateDiaryBy(it)
+                                    EasyDiaryDbHelper.commitTransaction()
+                                    // EasyDiaryDbHelper.updateDiaryBy(it)
                                     EasyDiaryDbHelper.duplicateDiaryBy(it)
                                 }
                                 refreshList()
