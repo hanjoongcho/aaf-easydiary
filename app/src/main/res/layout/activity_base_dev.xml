@@ -131,8 +131,14 @@
                             android:layout_height="wrap_content"/>
                         <Button
                             app:layout_flexGrow="1"
-                            android:id="@+id/button_weight"
-                            android:text="Determine Weight"
+                            android:id="@+id/button_fingerprint"
+                            android:text="Fingerprint"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <Button
+                            app:layout_flexGrow="1"
+                            android:id="@+id/button_biometric"
+                            android:text="Biometric"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                     </com.google.android.flexbox.FlexboxLayout>

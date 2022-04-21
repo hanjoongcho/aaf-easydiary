@@ -21,6 +21,8 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.databinding.DataBindingUtil
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import kotlinx.coroutines.*
+import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningBiometric
+import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningFingerprint
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityBaseDevBinding
@@ -113,15 +115,11 @@ open class BaseDevActivity : EasyDiaryActivity() {
                     edit().putBoolean("hasShot$SHOWCASE_SINGLE_SHOT_POST_CARD_NUMBER", false).apply()
                 }
             }
-            buttonWeight.setOnClickListener {
-                val diaryItems = EasyDiaryDbHelper.findDiary(null, false, 0, 0, DAILY_SCALE)
-                val sb = StringBuilder()
-                diaryItems.forEach { item ->
-                    item.title?.let {
-                        if (EasyDiaryUtils.isContainNumber(it)) sb.append(EasyDiaryUtils.findNumber(it)).append("\n")
-                    }
-                }
-                actionLog.text = sb.toString()
+            buttonFingerprint.setOnClickListener {
+                startListeningFingerprint(this@BaseDevActivity)
+            }
+            buttonBiometric.setOnClickListener {
+                startListeningBiometric(this@BaseDevActivity)
             }
         }
     }
