@@ -37,7 +37,9 @@ android {
         renderscriptTargetApi 18
         renderscriptSupportModeEnabled true
         signingConfig signingConfigs.config
+        //ndk.debugSymbolLevel = 'FULL'
     }
+    //ndkVersion "25.0.8221429"
     flavorDimensions "buildType"
     productFlavors {
         gmsProd {
