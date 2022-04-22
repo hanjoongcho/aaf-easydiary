@@ -30,16 +30,16 @@ android {
         minSdkVersion 19
         targetSdkVersion versions.compileSdk
         versionCode 272
-        versionName '1.4.272.202204xx0'
+        versionName '1.4.272.202204220'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
         renderscriptTargetApi 18
         renderscriptSupportModeEnabled true
         signingConfig signingConfigs.config
-        //ndk.debugSymbolLevel = 'FULL'
+//        ndk.debugSymbolLevel = 'FULL'
     }
-    //ndkVersion "25.0.8221429"
+//    ndkVersion "25.0.8221429"
     flavorDimensions "buildType"
     productFlavors {
         gmsProd {

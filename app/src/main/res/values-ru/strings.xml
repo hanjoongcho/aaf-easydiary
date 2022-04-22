@@ -634,6 +634,10 @@
         v1.4.271.202204150 / 2022.04.15\n
         User Experience (UX) Optimization
     </string>
+    <string name="release_272">
+        v1.4.271.202204220 / 2022.04.22\n
+        Fixed abnormal termination error when exporting excel
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
