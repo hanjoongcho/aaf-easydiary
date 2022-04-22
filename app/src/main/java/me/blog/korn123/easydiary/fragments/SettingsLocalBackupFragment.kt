@@ -372,6 +372,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
         sheet.setColumnWidth(SYMBOL, 256 * 10)
         sheet.setColumnWidth(IS_ALL_DAY, 256 * 30)
         val diarySymbolMap = FlavorUtils.getDiarySymbolMap(requireActivity())
+        val size = diaryList.size
         diaryList.forEachIndexed { index, diaryDto ->
             val row = sheet.createRow(index + 1)
             val photoNames = StringBuffer()
@@ -403,7 +404,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
 
             requireActivity().runOnUiThread {
                 infoView?.run {
-                    text = "${index.plus(1)} / ${diaryList.size}\n$guideMessage"
+                    text = "${index.plus(1)} / $size\n$guideMessage"
                 }
             }
         }
