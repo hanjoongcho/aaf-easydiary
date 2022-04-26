@@ -29,8 +29,8 @@ android {
         applicationId "me.blog.korn123.easydiary"
         minSdkVersion 19
         targetSdkVersion versions.compileSdk
-        versionCode 272
-        versionName '1.4.272.202204220'
+        versionCode 273
+        versionName '1.4.273.202204260'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -125,7 +125,7 @@ configurations.all {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    // android
+    // androidx
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'androidx.cardview:cardview:1.0.0'
@@ -138,25 +138,26 @@ dependencies {
     implementation 'androidx.activity:activity-ktx:1.4.0'
     implementation 'androidx.fragment:fragment-ktx:1.4.1'
     implementation 'androidx.preference:preference-ktx:1.2.0'
-    implementation 'com.google.android.material:material:1.5.0'
     implementation ('androidx.work:work-runtime-ktx:2.7.1') { exclude group: 'com.google.guava', module: 'listenablefuture' }
 
-    // google gms api
+    // google components for develop package (not foss)
     gmsDevImplementation 'com.google.android.gms:play-services-auth:20.1.0'
-    gmsDevImplementation 'com.google.http-client:google-http-client-gson:1.26.0'
-    gmsDevImplementation 'com.google.api-client:google-api-client-android:1.26.0'
-    gmsDevImplementation 'com.google.apis:google-api-services-drive:v3-rev136-1.25.0'
     gmsDevImplementation 'com.google.android.play:core:1.10.3'
     gmsDevImplementation 'com.google.android.play:core-ktx:1.8.1'
+    gmsDevImplementation 'com.google.api-client:google-api-client-android:1.26.0'
+    gmsDevImplementation 'com.google.apis:google-api-services-drive:v3-rev136-1.25.0'
+    gmsDevImplementation 'com.google.http-client:google-http-client-gson:1.26.0'
 
+    // google components for production package (not foss)
     gmsProdImplementation 'com.google.android.gms:play-services-auth:20.1.0'
-    gmsProdImplementation 'com.google.http-client:google-http-client-gson:1.26.0'
-    gmsProdImplementation 'com.google.api-client:google-api-client-android:1.26.0'
-    gmsProdImplementation 'com.google.apis:google-api-services-drive:v3-rev136-1.25.0'
     gmsProdImplementation 'com.google.android.play:core:1.10.3'
     gmsProdImplementation 'com.google.android.play:core-ktx:1.8.1'
+    gmsProdImplementation 'com.google.api-client:google-api-client-android:1.26.0'
+    gmsProdImplementation 'com.google.apis:google-api-services-drive:v3-rev136-1.25.0'
+    gmsProdImplementation 'com.google.http-client:google-http-client-gson:1.26.0'
 
-    // google
+    // google components common
+    implementation 'com.google.android.material:material:1.5.0'
     implementation 'com.google.android:flexbox:1.0.0'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.google.guava:guava:27.0.1-android'
@@ -167,6 +168,7 @@ dependencies {
     // Therefore, we must use version 2.6 before the minimum supported Android version becomes API Level 26 or higher.
     implementation 'commons-io:commons-io:2.6'
     implementation 'org.apache.commons:commons-lang3:3.7'
+    implementation 'org.apache.poi:poi:3.13'
 
     // AAFactory
     implementation 'io.github.aafactory:commons:1.0.10'
@@ -175,26 +177,25 @@ dependencies {
     // etc.
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.31'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
-    implementation 'com.roomorama:caldroid:3.0.1'
-    implementation 'com.github.chrisbanes:PhotoView:2.1.3'  
+    implementation 'com.github.chrisbanes:PhotoView:2.1.3'
     implementation 'com.github.QuadFlask:colorpicker:0.0.15'
     implementation 'com.github.amlcurran.showcaseview:library:5.4.3'
-    implementation 'id.zelory:compressor:2.1.0'
-    implementation 'com.xw.repo:bubbleseekbar:3.17'
+    implementation 'com.github.zhpanvip:bannerviewpager:3.5.5'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
+    implementation 'com.github.ksoichiro:android-observablescrollview:1.5.2'
+    implementation 'com.roomorama:caldroid:3.0.1'
+    implementation 'com.xw.repo:bubbleseekbar:3.17'
+    implementation 'com.nineoldandroids:library:2.4.0'
+    implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:4.0'
+    implementation 'com.simplecityapps:recyclerview-fastscroll:2.0.1'
+    implementation 'org.jasypt:jasypt:1.9.2'
     implementation 'jp.wasabeef:glide-transformations:4.0.0'
     implementation 'jp.co.cyberagent.android:gpuimage:2.0.3'
-    implementation 'com.github.ksoichiro:android-observablescrollview:1.5.2'
-    implementation 'com.nineoldandroids:library:2.4.0'
-    implementation 'org.apache.poi:poi:3.13'
-    implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:4.0'
+    implementation 'id.zelory:compressor:2.1.0'
     implementation 'io.noties.markwon:core:4.6.2'
     implementation 'io.noties.markwon:syntax-highlight:4.6.2'
     implementation 'io.noties.markwon:ext-tables:4.6.2'
     implementation 'io.noties:prism4j:2.0.0'
-    implementation 'org.jasypt:jasypt:1.9.2'
-    implementation 'com.simplecityapps:recyclerview-fastscroll:2.0.1'
-    implementation 'com.github.zhpanvip:bannerviewpager:3.5.5'
     kapt 'io.noties:prism4j-bundler:2.0.0'
 
 //    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
@@ -212,9 +213,9 @@ dependencies {
     // test
     testImplementation 'androidx.test:core:1.4.0'
     testImplementation 'androidx.test.ext:junit:1.1.3'
-    testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.robolectric:robolectric:4.5-alpha-1'
     testImplementation 'androidx.test.espresso:espresso-core:3.5.0-alpha04'
     testImplementation 'androidx.test.espresso:espresso-intents:3.5.0-alpha04'
     testImplementation 'androidx.test.ext:truth:1.5.0-alpha04'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.robolectric:robolectric:4.5-alpha-1'
 }
