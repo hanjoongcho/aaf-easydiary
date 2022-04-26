@@ -32,11 +32,11 @@
             />
         <me.blog.korn123.easydiary.views.FixedTextView
             android:id="@+id/text_target_date"
-            android:padding="10dp"
             android:textSize="20sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
+            android:layout_marginTop="5dp"
             tools:text="2022.03.03"
             app:applyGlobalSize="false"
             app:layout_constraintStart_toStartOf="parent"
@@ -44,7 +44,6 @@
             />
         <me.blog.korn123.easydiary.views.FixedTextView
             android:id="@+id/text_target_time"
-            android:padding="10dp"
             android:textSize="20sp"
             android:layout_marginLeft="10dp"
             android:layout_width="wrap_content"
@@ -52,8 +51,8 @@
             android:background="?attr/selectableItemBackground"
             app:applyGlobalSize="false"
             tools:text="18:60"
-            app:layout_constraintTop_toBottomOf="@+id/text_title"
-            app:layout_constraintStart_toEndOf="@+id/text_target_date"
+            app:layout_constraintTop_toBottomOf="@+id/text_target_date"
+            app:layout_constraintEnd_toEndOf="@+id/text_target_date"
             />
         <me.blog.korn123.easydiary.views.FixedTextView
             android:id="@+id/text_day_remaining"
@@ -64,7 +63,7 @@
             tools:text="+100"
             app:applyGlobalSize="false"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_target_date"
+            app:layout_constraintTop_toBottomOf="@+id/text_target_time"
             />
         <me.blog.korn123.easydiary.views.FixedTextView
             android:id="@+id/text_day_remaining_with_year"
@@ -72,7 +71,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="（1Year 32Days）"
-            app:applyGlobalColor="false"
             app:applyGlobalSize="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_day_remaining"

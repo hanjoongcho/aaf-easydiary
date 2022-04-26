@@ -169,7 +169,8 @@ class DDayAdapter(
             EasyDiaryUtils.boldStringForce(itemDDayBinding.textDayRemaining)
             itemDDayBinding.run {
                 textTitle.text = dDay.title
-                textTargetDate.text = DateUtils.getDateTimeStringFromTimeMillis(dDay.targetTimeStamp)
+                textTargetDate.text = DateUtils.getDateStringFromTimeMillis(dDay.targetTimeStamp)
+                textTargetTime.text = DateUtils.getTimeStringFromTimeMillis(dDay.targetTimeStamp)
                 textDayRemaining.text = dDay.getDayRemaining()
                 textDayRemainingWithYear.text = dDay.getDayRemaining(false, activity.getString(R.string.year_message_format), activity.getString(R.string.day_message_format))
                 textTimeRemaining.text = dDay.getTimeRemaining()

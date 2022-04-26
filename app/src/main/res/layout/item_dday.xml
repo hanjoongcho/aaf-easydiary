@@ -36,6 +36,17 @@
             app:layout_constraintTop_toBottomOf="@+id/text_title"
             />
         <me.blog.korn123.easydiary.views.FixedTextView
+            android:id="@+id/text_target_time"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="2022.03.03"
+            app:applyGlobalColor="false"
+            app:applyGlobalSize="false"
+            app:layout_constraintEnd_toEndOf="@+id/text_target_date"
+            app:layout_constraintTop_toBottomOf="@+id/text_target_date"
+            />
+        <me.blog.korn123.easydiary.views.FixedTextView
             android:id="@+id/text_day_remaining"
             android:textSize="30sp"
             android:layout_width="wrap_content"
@@ -44,7 +55,7 @@
             app:applyGlobalColor="false"
             app:applyGlobalSize="false"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_target_date"
+            app:layout_constraintTop_toBottomOf="@+id/text_target_time"
             />
 
         <me.blog.korn123.easydiary.views.FixedTextView
