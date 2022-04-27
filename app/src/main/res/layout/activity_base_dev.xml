@@ -143,6 +143,18 @@
                             android:layout_height="wrap_content"/>
                         <Button
                             app:layout_flexGrow="1"
+                            android:id="@+id/button_disable_main"
+                            android:text="Disable Default Launcher"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <Button
+                            app:layout_flexGrow="1"
+                            android:id="@+id/button_enable_main"
+                            android:text="Enable Default Launcher"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <Button
+                            app:layout_flexGrow="1"
                             android:id="@+id/button_enable_custom_launcher"
                             android:text="Enable Custom Launcher"
                             android:layout_width="wrap_content"

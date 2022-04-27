@@ -3,8 +3,10 @@ package me.blog.korn123.easydiary.activities
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.*
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.location.Location
 import android.location.LocationListener
@@ -24,6 +26,7 @@ import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningBiometric
 import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningFingerprint
 import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityBaseDevBinding
 import me.blog.korn123.easydiary.extensions.*
@@ -291,6 +294,28 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 withContext(Dispatchers.Main) { updateConsole("4", name) }
             }
             updateConsole("2")
+        }
+
+        mBinding.buttonDisableMain.setOnClickListener {
+            val appId = BuildConfig.APPLICATION_ID
+            val defaultClassName = "${appId.removeSuffix(".debug")}.activities.IntroActivity"
+            //
+            packageManager.setComponentEnabledSetting(
+                ComponentName(appId, defaultClassName),
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP
+            )
+        }
+
+        mBinding.buttonEnableMain.setOnClickListener {
+            val appId = BuildConfig.APPLICATION_ID
+            val defaultClassName = "${appId.removeSuffix(".debug")}.activities.IntroActivity"
+            //
+            packageManager.setComponentEnabledSetting(
+                ComponentName(appId, defaultClassName),
+                PackageManager.COMPONENT_ENABLED_STATE_DEFAULT,
+                PackageManager.DONT_KILL_APP
+            )
         }
 
         mBinding.buttonEnableCustomLauncher.setOnClickListener {

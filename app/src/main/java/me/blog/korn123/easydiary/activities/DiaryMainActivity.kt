@@ -126,7 +126,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         setupReviewFlow()
         setupPhotoHighlight()
         checkIntent()
-        appLaunched()
 
         // test code
         if (config.enableDebugMode) {
