@@ -789,4 +789,11 @@ fun Activity.appLaunched() {
         PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
         PackageManager.DONT_KILL_APP
     )
+
+    val lineClassName = "${appId.removeSuffix(".debug")}.activities.IntroActivity.Line"
+    packageManager.setComponentEnabledSetting(
+        ComponentName(appId, lineClassName),
+        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+        PackageManager.DONT_KILL_APP
+    )
 }
