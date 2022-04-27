@@ -143,26 +143,20 @@
                             android:layout_height="wrap_content"/>
                         <Button
                             app:layout_flexGrow="1"
-                            android:id="@+id/button_disable_main"
-                            android:text="Disable Default Launcher"
+                            android:id="@+id/button_easy_diary_launcher"
+                            android:text="EasyDiary Launcher"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                         <Button
                             app:layout_flexGrow="1"
-                            android:id="@+id/button_enable_main"
-                            android:text="Enable Default Launcher"
+                            android:id="@+id/button_line_launcher"
+                            android:text="Line Launcher"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                         <Button
                             app:layout_flexGrow="1"
-                            android:id="@+id/button_enable_custom_launcher"
-                            android:text="Enable Custom Launcher"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                        <Button
-                            app:layout_flexGrow="1"
-                            android:id="@+id/button_disable_custom_launcher"
-                            android:text="Disable Custom Launcher"
+                            android:id="@+id/button_debug_launcher"
+                            android:text="Debug Launcher"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                     </com.google.android.flexbox.FlexboxLayout>

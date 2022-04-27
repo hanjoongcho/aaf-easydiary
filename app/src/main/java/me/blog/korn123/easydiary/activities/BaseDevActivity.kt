@@ -1,23 +1,21 @@
 package me.blog.korn123.easydiary.activities
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
-import android.app.*
-import android.content.ComponentName
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.RemoteViews
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.databinding.DataBindingUtil
@@ -26,7 +24,6 @@ import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningBiometric
 import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningFingerprint
 import me.blog.korn123.commons.utils.EasyDiaryUtils
-import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityBaseDevBinding
 import me.blog.korn123.easydiary.extensions.*
@@ -296,35 +293,21 @@ open class BaseDevActivity : EasyDiaryActivity() {
             updateConsole("2")
         }
 
-        mBinding.buttonDisableMain.setOnClickListener {
-            val appId = BuildConfig.APPLICATION_ID
-            val defaultClassName = "${appId.removeSuffix(".debug")}.activities.IntroActivity"
-            //
-            packageManager.setComponentEnabledSetting(
-                ComponentName(appId, defaultClassName),
-                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                PackageManager.DONT_KILL_APP
-            )
-        }
-
-        mBinding.buttonEnableMain.setOnClickListener {
-            val appId = BuildConfig.APPLICATION_ID
-            val defaultClassName = "${appId.removeSuffix(".debug")}.activities.IntroActivity"
-            //
-            packageManager.setComponentEnabledSetting(
-                ComponentName(appId, defaultClassName),
-                PackageManager.COMPONENT_ENABLED_STATE_DEFAULT,
-                PackageManager.DONT_KILL_APP
-            )
-        }
-
-        mBinding.buttonEnableCustomLauncher.setOnClickListener {
+        mBinding.buttonLineLauncher.setOnClickListener {
             checkAppIconColor("EasyDiary",false)
+            checkAppIconColor("Debug",false)
             checkAppIconColor("Line",true)
         }
 
-        mBinding.buttonDisableCustomLauncher.setOnClickListener {
+        mBinding.buttonDebugLauncher.setOnClickListener {
             checkAppIconColor("Line",false)
+            checkAppIconColor("EasyDiary",false)
+            checkAppIconColor("Debug",true)
+        }
+
+        mBinding.buttonEasyDiaryLauncher.setOnClickListener {
+            checkAppIconColor("Line",false)
+            checkAppIconColor("Debug",false)
             checkAppIconColor("EasyDiary",true)
         }
     }
