@@ -3,6 +3,7 @@ package me.blog.korn123.easydiary.extensions
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.*
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -42,10 +43,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.graphics.ColorUtils
 import androidx.core.location.LocationManagerCompat
+import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.extensions.adjustAlpha
-import com.simplemobiletools.commons.extensions.formatMinutesToTimeString
-import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
-import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.*
 import com.simplemobiletools.commons.views.*
 import io.github.aafactory.commons.extensions.dpToPixel
@@ -56,6 +55,7 @@ import io.realm.Realm
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils.hashMapToJsonString
 import me.blog.korn123.commons.utils.FontUtils
+import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.activities.DiaryWritingActivity
@@ -828,4 +828,32 @@ fun Context.getLabelBackground(): GradientDrawable {
 //        cornerRadius = dpToPixel(5F).toFloat()
         setStroke(strokeWidth, strokeColor)
     }
+}
+
+fun Context.checkAppIconColor(enable: Boolean = false) {
+    val appId = BuildConfig.APPLICATION_ID
+    toggleAppIconColor(appId, -1, -1, enable)
+//    if (appId.isNotEmpty() && baseConfig.lastIconColor != baseConfig.appIconColor) {
+//        getAppIconColors().forEachIndexed { index, color ->
+//            toggleAppIconColor(appId, index, color, false)
+//        }
+//
+//        getAppIconColors().forEachIndexed { index, color ->
+//            if (baseConfig.appIconColor == color) {
+//                toggleAppIconColor(appId, index, color, true)
+//            }
+//        }
+//    }
+}
+
+fun Context.toggleAppIconColor(appId: String, colorIndex: Int, color: Int, enable: Boolean) {
+//    val className = "${appId.removeSuffix(".debug")}.activities.SplashActivity${appIconColorStrings[colorIndex]}"
+    val className = "${appId.removeSuffix(".debug")}.activities.IntroActivity.Line"
+    val state = if (enable) PackageManager.COMPONENT_ENABLED_STATE_ENABLED else PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+    try {
+        packageManager.setComponentEnabledSetting(ComponentName(appId, className), state, PackageManager.DONT_KILL_APP)
+//        if (enable) {
+//            baseConfig.lastIconColor = color
+//        }
+    } catch (e: Exception) {}
 }

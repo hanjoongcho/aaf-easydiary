@@ -292,6 +292,14 @@ open class BaseDevActivity : EasyDiaryActivity() {
             }
             updateConsole("2")
         }
+
+        mBinding.buttonEnableCustomLauncher.setOnClickListener {
+            checkAppIconColor(true)
+        }
+
+        mBinding.buttonDisableCustomLauncher.setOnClickListener {
+            checkAppIconColor()
+        }
     }
 
 
