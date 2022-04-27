@@ -30,6 +30,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.StatisticsActivity
 import me.blog.korn123.easydiary.databinding.FragmentWeightLineChartBinding
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.darkenColor
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
 import me.blog.korn123.easydiary.helper.AAF_TEST
 import me.blog.korn123.easydiary.helper.DAILY_SCALE
@@ -191,14 +192,19 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
                         val lineData = LineData(mDataSets)
                         lineData.setValueTextSize(10f)
                         lineData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
-                        Color.rgb(
-                            Random.nextInt(0, 255),
-                            Random.nextInt(0, 255),
-                            Random.nextInt(0, 255)
-                        ).also {
-                            lineDataSet.circleColors = arrayListOf(it)
-                            lineDataSet.color = it
-                            lineDataSet.fillColor = it
+//                        Color.rgb(
+//                            Random.nextInt(0, 255),
+//                            Random.nextInt(0, 255),
+//                            Random.nextInt(0, 255)
+//                        ).also {
+//                            lineDataSet.circleColors = arrayListOf(it)
+//                            lineDataSet.color = it
+//                            lineDataSet.fillColor = it
+//                        }
+                        requireContext().config.primaryColor.also { color ->
+                            lineDataSet.circleColors = arrayListOf(color)
+                            lineDataSet.color = color
+                            lineDataSet.fillColor = color
                         }
                         mLineChart.data = lineData
                         mLineChart.animateY(600)
@@ -232,7 +238,10 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
                         }
                     }
 
-                    val iterator = filteredItems.groupBy { item -> item.dateString!!.substring(0, 4) }.iterator()
+                    val yearlyMap = filteredItems.groupBy { item -> item.dateString!!.substring(0, 4) }
+                    val iterator = yearlyMap.iterator()
+//                    val color = requireContext().config.primaryColor
+                    var itemIndex = yearlyMap.count()
                     while (iterator.hasNext()) {
                         val element = iterator.next()
                         val barEntries = ArrayList<Entry>()
@@ -262,16 +271,27 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
                         lineDataSet.setDrawIcons(false)
                         lineDataSet.setDrawValues(true)
                         lineDataSet.setDrawFilled(true)
-                        Color.rgb(
+                        Color.argb(
+                            50,
                             Random.nextInt(0, 255),
                             Random.nextInt(0, 255),
                             Random.nextInt(0, 255)
                         ).also {
-                            lineDataSet.circleColors = arrayListOf(it)
-                            lineDataSet.color = it
-                            lineDataSet.fillColor = it
+                            var color = it
+                            if (itemIndex == 1) {
+                                color = requireContext().config.primaryColor
+                                lineDataSet.setCircleColorHole(color)
+                            }
+                            lineDataSet.circleColors = arrayListOf(color)
+                            lineDataSet.color = color
+                            lineDataSet.fillColor = color
                         }
+//                        val darkenColor = color.darkenColor(itemIndex.times(-5))
+//                        lineDataSet.circleColors = arrayListOf(color)
+//                        lineDataSet.color = darkenColor
+//                        lineDataSet.fillColor = darkenColor
                         mDataSets.add(lineDataSet)
+                        itemIndex--
                     }
                     withContext(Dispatchers.Main) {
                         if (sumWeight > 0) {
