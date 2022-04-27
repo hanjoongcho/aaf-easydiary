@@ -40,6 +40,13 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <!-- Additional App Theme -->
+    <style name="AppTheme.Green_450" parent="AppTheme.NoActionBar">
+        <item name="colorPrimary">@color/md_green_450</item>
+        <item name="colorPrimaryDark">@color/md_green_450_dark</item>
+        <item name="colorAccent">@color/md_green_450</item>
+    </style>
+
     <!-- PostcardViewerActivity Theme -->
     <style name="CollapsingTextAppearance" parent="Base.TextAppearance.AppCompat.Widget.ActionBar.Title"/>
     <style name="CollapsingTextAppearance.Inverse" >

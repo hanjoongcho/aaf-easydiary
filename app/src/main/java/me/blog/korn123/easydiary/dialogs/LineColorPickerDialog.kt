@@ -11,11 +11,11 @@ import com.simplemobiletools.commons.extensions.setupDialogStuff
 import com.simplemobiletools.commons.extensions.toHex
 import com.simplemobiletools.commons.extensions.value
 import com.simplemobiletools.commons.interfaces.LineColorPickerListener
-import io.github.aafactory.commons.extensions.getThemeId
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.BaseSimpleActivity
 import me.blog.korn123.easydiary.databinding.DialogLineColorPickerBinding
 import me.blog.korn123.easydiary.extensions.darkenColor
+import me.blog.korn123.easydiary.extensions.getThemeId
 import me.blog.korn123.easydiary.helper.AUTO_SETTUP_SCREEN_BACKGROUND_DARKEN_COLOR
 
 /**

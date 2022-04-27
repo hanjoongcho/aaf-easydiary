@@ -10,5 +10,27 @@
     <color name="showCaseViewBackground">#E570A3B4</color>
 
     <!-- Additional Primary Colors -->
+    <color name="md_green_100">#C8E6C9</color>
+    <color name="md_green_200">#A5D6A7</color>
+    <color name="md_green_300">#81C784</color>
+    <color name="md_green_400">#66BB6A</color>
+    <color name="md_green_450">#06C756</color>
+    <color name="md_green_500">#4CAF50</color>
+    <color name="md_green_600">#43A047</color>
+    <color name="md_green_700">#388E3C</color>
+    <color name="md_green_800">#2E7D32</color>
+    <color name="md_green_850">#256E29</color>
+    <color name="md_green_900">#1B5E20</color>
 
+    <color name="md_green_100_dark">#ACDAAE</color>
+    <color name="md_green_200_dark">#89CA8D</color>
+    <color name="md_green_300_dark">#65BB69</color>
+    <color name="md_green_400_dark">#4CAC51</color>
+    <color name="md_green_450_dark">#06C756</color>
+    <color name="md_green_500_dark">#409343</color>
+    <color name="md_green_600_dark">#37833A</color>
+    <color name="md_green_700_dark">#2C7130</color>
+    <color name="md_green_800_dark">#235F26</color>
+    <color name="md_green_850_dark">#235F26</color>
+    <color name="md_green_900_dark">#113E15</color>
 </resources>

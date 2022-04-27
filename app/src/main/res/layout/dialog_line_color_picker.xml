@@ -6,22 +6,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/activity_margin">
+
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/layout_status_bar_darken_color"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
         <com.simplemobiletools.commons.views.MyTextView
             android:id="@+id/text_status_bar_darken_color"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="StatusBar Darken Color" />
+
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch_status_bar_darken_color"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <com.simplemobiletools.commons.views.LineColorPicker
