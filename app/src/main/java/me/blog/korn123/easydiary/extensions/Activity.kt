@@ -784,9 +784,10 @@ fun EasyDiaryActivity.migrateData(binging: ActivityDiaryMainBinding) {
 fun Activity.appLaunched() {
     val appId = BuildConfig.APPLICATION_ID
     val defaultClassName = "${appId.removeSuffix(".debug")}.activities.IntroActivity"
+    //
     packageManager.setComponentEnabledSetting(
         ComponentName(appId, defaultClassName),
-        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+        PackageManager.COMPONENT_ENABLED_STATE_DEFAULT,
         PackageManager.DONT_KILL_APP
     )
 
