@@ -3,8 +3,10 @@ package me.blog.korn123.easydiary.extensions
 import android.app.Activity
 import android.app.Dialog
 import android.content.ActivityNotFoundException
+import android.content.ComponentName
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -44,6 +46,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
+import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.activities.EasyDiaryActivity
@@ -776,4 +779,14 @@ fun EasyDiaryActivity.migrateData(binging: ActivityDiaryMainBinding) {
             }
         }
     }.start()
+}
+
+fun Activity.appLaunched() {
+    val appId = BuildConfig.APPLICATION_ID
+    val defaultClassName = "${appId.removeSuffix(".debug")}.activities.IntroActivity"
+    packageManager.setComponentEnabledSetting(
+        ComponentName(appId, defaultClassName),
+        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+        PackageManager.DONT_KILL_APP
+    )
 }

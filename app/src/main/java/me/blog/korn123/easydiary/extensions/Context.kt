@@ -857,3 +857,4 @@ fun Context.toggleAppIconColor(appId: String, colorIndex: Int, color: Int, enabl
 //        }
     } catch (e: Exception) {}
 }
+

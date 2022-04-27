@@ -109,7 +109,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         super.onCreate(savedInstanceState)
         mPopupMenuBinding = PopupMenuMainBinding.inflate(layoutInflater)
         forceInitRealmLessThanOreo()
-
         supportActionBar?.run {
             title = getString(R.string.read_diary_title)
         }
@@ -127,6 +126,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         setupReviewFlow()
         setupPhotoHighlight()
         checkIntent()
+        appLaunched()
 
         // test code
         if (config.enableDebugMode) {
