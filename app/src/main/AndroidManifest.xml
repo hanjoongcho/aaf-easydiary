@@ -49,6 +49,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
+        <activity-alias
+            android:name=".activities.IntroActivity.Default"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher"
+            android:roundIcon="@mipmap/ic_launcher_round"
+            android:targetActivity=".activities.IntroActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
         <activity android:name=".activities.DiaryWritingActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" android:excludeFromRecents="true" />
         <activity android:name=".activities.DiaryReadingActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" android:excludeFromRecents="true" />
         <activity android:name=".activities.DiaryEditingActivity" android:theme="@style/AppTheme.NoActionBar.TransparentBackground" />

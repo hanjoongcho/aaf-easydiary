@@ -294,11 +294,13 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
 
         mBinding.buttonEnableCustomLauncher.setOnClickListener {
-            checkAppIconColor(true)
+            checkAppIconColor("Default",false)
+            checkAppIconColor("Line",true)
         }
 
         mBinding.buttonDisableCustomLauncher.setOnClickListener {
-            checkAppIconColor()
+            checkAppIconColor("Line",false)
+            checkAppIconColor("Default",true)
         }
     }
 

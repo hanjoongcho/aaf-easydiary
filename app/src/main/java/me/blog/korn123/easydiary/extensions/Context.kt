@@ -830,9 +830,9 @@ fun Context.getLabelBackground(): GradientDrawable {
     }
 }
 
-fun Context.checkAppIconColor(enable: Boolean = false) {
+fun Context.checkAppIconColor(colorName: String, enable: Boolean = false) {
     val appId = BuildConfig.APPLICATION_ID
-    toggleAppIconColor(appId, -1, -1, enable)
+    toggleAppIconColor(appId, -1, -1, enable, colorName)
 //    if (appId.isNotEmpty() && baseConfig.lastIconColor != baseConfig.appIconColor) {
 //        getAppIconColors().forEachIndexed { index, color ->
 //            toggleAppIconColor(appId, index, color, false)
@@ -846,9 +846,9 @@ fun Context.checkAppIconColor(enable: Boolean = false) {
 //    }
 }
 
-fun Context.toggleAppIconColor(appId: String, colorIndex: Int, color: Int, enable: Boolean) {
+fun Context.toggleAppIconColor(appId: String, colorIndex: Int, color: Int, enable: Boolean, colorName: String) {
 //    val className = "${appId.removeSuffix(".debug")}.activities.SplashActivity${appIconColorStrings[colorIndex]}"
-    val className = "${appId.removeSuffix(".debug")}.activities.IntroActivity.Line"
+    val className = "${appId.removeSuffix(".debug")}.activities.IntroActivity.$colorName"
     val state = if (enable) PackageManager.COMPONENT_ENABLED_STATE_ENABLED else PackageManager.COMPONENT_ENABLED_STATE_DISABLED
     try {
         packageManager.setComponentEnabledSetting(ComponentName(appId, className), state, PackageManager.DONT_KILL_APP)
