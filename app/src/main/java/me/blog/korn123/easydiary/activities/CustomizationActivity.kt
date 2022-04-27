@@ -7,7 +7,6 @@ import android.view.MenuItem
 import android.view.ViewGroup
 import com.simplemobiletools.commons.dialogs.ColorPickerDialog
 import com.simplemobiletools.commons.extensions.setBackgroundWithStroke
-import io.github.aafactory.commons.extensions.getThemeId
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityCustomizationBinding
