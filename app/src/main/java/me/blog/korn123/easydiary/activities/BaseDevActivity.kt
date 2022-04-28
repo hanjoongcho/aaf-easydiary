@@ -300,15 +300,11 @@ open class BaseDevActivity : EasyDiaryActivity() {
         }
 
         mBinding.buttonDebugLauncher.setOnClickListener {
-            checkAppIconColor("Line",false)
-            checkAppIconColor("EasyDiary",false)
-            checkAppIconColor("Debug",true)
+            changeDebugLauncher()
         }
 
         mBinding.buttonEasyDiaryLauncher.setOnClickListener {
-            checkAppIconColor("Line",false)
-            checkAppIconColor("Debug",false)
-            checkAppIconColor("EasyDiary",true)
+            changeEasyDiaryLauncher()
         }
     }
 

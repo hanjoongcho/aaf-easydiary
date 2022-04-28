@@ -830,6 +830,18 @@ fun Context.getLabelBackground(): GradientDrawable {
     }
 }
 
+fun Context.changeDebugLauncher() {
+    checkAppIconColor("Line",false)
+    checkAppIconColor("EasyDiary",false)
+    checkAppIconColor("Debug",true)
+}
+
+fun Context.changeEasyDiaryLauncher() {
+    checkAppIconColor("Line",false)
+    checkAppIconColor("Debug",false)
+    checkAppIconColor("EasyDiary",true)
+}
+
 fun Context.checkAppIconColor(colorName: String, enable: Boolean = false) {
     val appId = BuildConfig.APPLICATION_ID
     toggleAppIconColor(appId, -1, -1, enable, colorName)
