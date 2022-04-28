@@ -161,6 +161,16 @@ class DashboardActivity : EasyDiaryActivity() {
                 })
                 commit()
             }
+
+            mBinding.statistics5.visibility = View.VISIBLE
+            supportFragmentManager.beginTransaction().run {
+                replace(R.id.statistics5, StockLineChartFragment().apply {
+                    val args = Bundle()
+                    args.putString(WritingBarChartFragment.CHART_TITLE, "Stock")
+                    arguments = args
+                })
+                commit()
+            }
         }
 
         supportFragmentManager.executePendingTransactions()
