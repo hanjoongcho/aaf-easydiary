@@ -16,6 +16,9 @@ import io.github.aafactory.commons.extensions.dpToPixel
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ItemHistoryBinding
+import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
 import me.blog.korn123.easydiary.models.History
 
 class HistoryAdapter : BaseBannerAdapter<History>() {
@@ -28,13 +31,18 @@ class HistoryAdapter : BaseBannerAdapter<History>() {
         val context = holder.itemView.context
         val binding = ItemHistoryBinding.bind(holder.itemView)
         binding.run {
+            if (history.attachedPhotoPath.isEmpty()) {
+                context.changeDrawableIconColor(context.config.primaryColor, bannerImage)
+            } else {
+                bannerImage.clearColorFilter()
+            }
             bannerImage.setRoundCorner(context.dpToPixel(8F))
             textDescription.typeface = FontUtils.getCommonTypeface(context)
             textDescription.text = history.date
             Glide.with(context)
                 .load(history.attachedPhotoPath)
                 .apply(RequestOptions()
-                    .error(R.drawable.ic_error_7)
+                    .error(if (history.attachedPhotoPath.isEmpty()) R.drawable.ic_padlock else R.drawable.ic_error_7)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .priority(Priority.HIGH)
                 )

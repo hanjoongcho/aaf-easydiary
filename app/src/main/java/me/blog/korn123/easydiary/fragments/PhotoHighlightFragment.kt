@@ -102,12 +102,12 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
                                 }
                             }
                             diaryItems.forEach {
-                                it.photoUris?.forEach { photoUri ->
+                                it.photoUrisWithEncryptionPolicy()?.forEach { photoUri ->
                                     historyItems.add(
                                         History(
                                             historyTag,
                                             DateUtils.getDateStringFromTimeMillis(it.currentTimeMillis, SimpleDateFormat.FULL),
-                                            EasyDiaryUtils.getApplicationDataDirectory(requireContext()) + photoUri.getFilePath(),
+                                            if (it.isEncrypt) "" else EasyDiaryUtils.getApplicationDataDirectory(requireContext()) + photoUri.getFilePath(),
                                             it.sequence
                                         )
                                     )
