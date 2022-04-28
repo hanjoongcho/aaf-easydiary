@@ -84,12 +84,14 @@ class DashboardActivity : EasyDiaryActivity() {
                 statistics2.layoutParams.width = width
                 statistics3.layoutParams.width = width
                 statistics4.layoutParams.width = width
+                statistics5.layoutParams.width = width
                 if (isLandScape()) {
                     val height = getDefaultDisplay().y - statusBarHeight() - actionBarHeight()
                     statistics1.layoutParams.height = height
                     statistics2.layoutParams.height = height
                     statistics3.layoutParams.height = height
                     statistics4.layoutParams.height = height
+                    statistics5.layoutParams.height = height
                 }
             }
         }
