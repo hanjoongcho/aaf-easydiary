@@ -30,4 +30,6 @@ open class PhotoUri : RealmObject {
     fun getFilePath(): String {
         return "$DIARY_PHOTO_DIRECTORY${FilenameUtils.getBaseName(photoUri)}"
     }
+
+    fun isEncrypt(): Boolean = photoUri?.isEmpty() ?: false
 }

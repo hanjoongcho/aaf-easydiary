@@ -663,7 +663,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                         if (photoContainer.childCount > 0) photoContainer.removeAllViews()
                         context?.let { appContext ->
 //                        val thumbnailSize = appContext.config.settingThumbnailSize
-                            diaryDto.photoUris?.forEachIndexed { index, item ->
+                            diaryDto.photoUrisWithEncryptionPolicy()?.forEachIndexed { index, item ->
                                 val marginRight = if (index == photoCount.minus(1)) 0F else 3F
                                 val imageView = when (requireActivity().isLandScape()) {
                                     true -> createAttachedPhotoView(appContext, item, 0F, 0F, marginRight, 0F)

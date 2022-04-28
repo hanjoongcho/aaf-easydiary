@@ -186,7 +186,7 @@ object EasyDiaryUtils {
         imageView.setPadding(padding, padding, padding, padding)
         Glide.with(context)
             .load(getApplicationDataDirectory(context) + photoUri.getFilePath())
-            .apply(createThumbnailGlideOptions(cornerRadius))
+            .apply(createThumbnailGlideOptions(cornerRadius, photoUri.isEncrypt()))
             .into(imageView)
         return imageView
     }
@@ -221,11 +221,11 @@ object EasyDiaryUtils {
         compressedFile.copyTo(destFile, true)
     }
 
-    fun createThumbnailGlideOptions(radius: Float): RequestOptions = createThumbnailGlideOptions(radius.toInt())
+    fun createThumbnailGlideOptions(radius: Float, isEncrypt: Boolean = false): RequestOptions = createThumbnailGlideOptions(radius.toInt(), isEncrypt)
 
-    fun createThumbnailGlideOptions(radius: Int): RequestOptions = RequestOptions()
+    fun createThumbnailGlideOptions(radius: Int, isEncrypt: Boolean = false): RequestOptions = RequestOptions()
         /*.error(R.drawable.error_7)*/
-        .placeholder(R.drawable.ic_error_7)
+        .placeholder(if (isEncrypt) R.drawable.ic_padlock else R.drawable.ic_error_7)
         .diskCacheStrategy(DiskCacheStrategy.ALL)
         .priority(Priority.HIGH)
         .transform(MultiTransformation(CenterCrop(), RoundedCorners(radius)))

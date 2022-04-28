@@ -175,9 +175,8 @@ class DiaryMainItemAdapter(
 
                 photoViews.removeAllViews()
                 if (diary.photoUris?.size ?: 0 > 0) {
-                    diary.photoUris?.map {
+                    diary.photoUrisWithEncryptionPolicy()?.map {
                         val imageXY = CommonUtils.dpToPixel(activity, 32F)
-                        val path = EasyDiaryUtils.getApplicationDataDirectory(activity) + it.getFilePath()
                         val imageView = ImageView(activity)
                         val layoutParams = LinearLayout.LayoutParams(imageXY, imageXY)
                         layoutParams.setMargins(0, CommonUtils.dpToPixel(activity, 1F), CommonUtils.dpToPixel(activity, 3F), 0)
@@ -196,9 +195,9 @@ class DiaryMainItemAdapter(
                                 return false
                             }
                         }
-                        Glide.with(activity).load(path)
+                        Glide.with(activity).load(EasyDiaryUtils.getApplicationDataDirectory(activity) + it.getFilePath())
                             .listener(listener)
-                            .apply(createThumbnailGlideOptions(imageXY * PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL))
+                            .apply(createThumbnailGlideOptions(imageXY * PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL, it.isEncrypt()))
                             .into(imageView)
 //                    if (photoViews.childCount >= maxPhotos) return@map
                         photoViews.addView(imageView)

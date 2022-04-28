@@ -68,4 +68,9 @@ open class Diary : RealmObject {
     fun updateDateString() {
         this.dateString = DateUtils.timeMillisToDateTime(this.currentTimeMillis, DateUtils.DATE_PATTERN_DASH)
     }
+
+    fun photoUrisWithEncryptionPolicy(): List<PhotoUri>? = when (isEncrypt) {
+        true -> { photoUris?.map { PhotoUri("") } }
+        false -> photoUris
+    }
 }
