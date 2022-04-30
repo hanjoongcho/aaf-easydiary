@@ -105,37 +105,32 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
         override fun instantiateItem(container: ViewGroup, position: Int): View {
             val viewHolder = LinearLayout(container.context).apply { tag = "view_$position" }
             val photoView = PhotoView(container.context)
-            val imageFilePath = EasyDiaryUtils.getApplicationDataDirectory(container.context) + diary.photoUris!![position]!!.getFilePath()
-
-            when (File(imageFilePath).exists()) {
-                false -> {
+            val imageFilePath = EasyDiaryUtils.getApplicationDataDirectory(container.context) + diary.photoUrisWithEncryptionPolicy()!![position].getFilePath()
+            when {
+                File(imageFilePath).isFile -> {
+                    // Now just add PhotoView to ViewPager and return it
+//                    photoView.setImageBitmap(bitmap)
+                    val options = RequestOptions()
+                        .error(R.drawable.ic_error_7)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .priority(Priority.HIGH)
+                    Glide.with(container.context)
+                        .load(imageFilePath)
+                        .apply(options)
+                        .into(photoView)
+                    viewHolder.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                    container.addView(viewHolder, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                    return viewHolder
+                }
+                else -> {
                     val textView = TextView(container.context)
                     textView.gravity = Gravity.CENTER
                     val padding = CommonUtils.dpToPixel(container.context, 10F)
                     textView.setPadding(padding, padding, padding, padding)
                     textView.typeface = FontUtils.getCommonTypeface(container.context)
-                    textView.text = container.context.getString(R.string.photo_view_error_info)
+                    textView.text = if (diary.isEncrypt) "The diary is encrypted. You will need to decrypt the diary to see the attached photos." else container.context.getString(R.string.photo_view_error_info)
                     textView.setTextColor(container.context.config.textColor)
                     viewHolder.addView(textView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-                    container.addView(viewHolder, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-                    return viewHolder
-                }
-                true -> {
-                    // Now just add PhotoView to ViewPager and return it
-//                    photoView.setImageBitmap(bitmap)
-                    diary.photoUris?.let {
-                        it[position]?.let { photoUriDto ->
-                            val options = RequestOptions()
-                                    .error(R.drawable.ic_error_7)
-                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                    .priority(Priority.HIGH)
-                            Glide.with(container.context)
-                                    .load(imageFilePath)
-                                    .apply(options)
-                                    .into(photoView)
-                        }
-                    }
-                    viewHolder.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
                     container.addView(viewHolder, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
                     return viewHolder
                 }
