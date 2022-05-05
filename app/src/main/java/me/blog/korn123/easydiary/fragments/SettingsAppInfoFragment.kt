@@ -12,6 +12,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.MarkDownViewerActivity
 import me.blog.korn123.easydiary.activities.SettingsActivity
 import me.blog.korn123.easydiary.databinding.FragmentSettingsAppInfoBinding
+import me.blog.korn123.easydiary.enums.Launcher
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.TransitionHelper
 
@@ -101,12 +102,12 @@ class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
                         true -> {
                             config.enableDebugMode = false
                             toast("Debug console is disabled.")
-                            changeEasyDiaryLauncher()
+                            toggleLauncher(Launcher.EASY_DIARY)
                         }
                         false -> {
                             config.enableDebugMode = true
                             toast("Debug console is enabled.")
-                            changeDebugLauncher()
+                            toggleLauncher(Launcher.DEBUG)
                         }
                     }
                     true

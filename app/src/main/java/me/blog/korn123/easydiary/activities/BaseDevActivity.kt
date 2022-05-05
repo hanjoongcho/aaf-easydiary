@@ -26,6 +26,7 @@ import me.blog.korn123.commons.utils.BiometricUtils.Companion.startListeningFing
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityBaseDevBinding
+import me.blog.korn123.easydiary.enums.Launcher
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.ActionLog
@@ -293,18 +294,20 @@ open class BaseDevActivity : EasyDiaryActivity() {
             updateConsole("2")
         }
 
-        mBinding.buttonLineLauncher.setOnClickListener {
-            checkAppIconColor("EasyDiary",false)
-            checkAppIconColor("Debug",false)
-            checkAppIconColor("Line",true)
+        mBinding.buttonEasyDiaryLauncher.setOnClickListener {
+            toggleLauncher(Launcher.EASY_DIARY)
+        }
+
+        mBinding.buttonDarkLauncher.setOnClickListener {
+            toggleLauncher(Launcher.DARK)
+        }
+
+        mBinding.buttonGreenLauncher.setOnClickListener {
+            toggleLauncher(Launcher.GREEN)
         }
 
         mBinding.buttonDebugLauncher.setOnClickListener {
-            changeDebugLauncher()
-        }
-
-        mBinding.buttonEasyDiaryLauncher.setOnClickListener {
-            changeEasyDiaryLauncher()
+            toggleLauncher(Launcher.DEBUG)
         }
     }
 

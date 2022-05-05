@@ -46,11 +46,24 @@
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name=".activities.IntroActivity.Line"
+            android:name=".activities.IntroActivity.Dark"
             android:enabled="false"
             android:exported="true"
-            android:icon="@mipmap/ic_launcher_line"
-            android:roundIcon="@mipmap/ic_launcher_line_round"
+            android:icon="@mipmap/ic_launcher_dark"
+            android:roundIcon="@mipmap/ic_launcher_dark_round"
+            android:targetActivity=".activities.IntroActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".activities.IntroActivity.Green"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher_green"
+            android:roundIcon="@mipmap/ic_launcher_green_round"
             android:targetActivity=".activities.IntroActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

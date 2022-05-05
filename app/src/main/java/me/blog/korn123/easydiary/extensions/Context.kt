@@ -60,6 +60,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.activities.DiaryWritingActivity
 import me.blog.korn123.easydiary.databinding.DialogMessageBinding
+import me.blog.korn123.easydiary.enums.Launcher
 import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.ActionLog
@@ -830,16 +831,11 @@ fun Context.getLabelBackground(): GradientDrawable {
     }
 }
 
-fun Context.changeDebugLauncher() {
-    checkAppIconColor("Line",false)
-    checkAppIconColor("EasyDiary",false)
-    checkAppIconColor("Debug",true)
-}
-
-fun Context.changeEasyDiaryLauncher() {
-    checkAppIconColor("Line",false)
-    checkAppIconColor("Debug",false)
-    checkAppIconColor("EasyDiary",true)
+val themeItems = listOf(Launcher.EASY_DIARY, Launcher.DARK, Launcher.GREEN, Launcher.DEBUG)
+fun Context.toggleLauncher(launcher: Launcher) {
+    themeItems.forEach {
+        checkAppIconColor(it.themeName,it == launcher)
+    }
 }
 
 fun Context.checkAppIconColor(colorName: String, enable: Boolean = false) {
