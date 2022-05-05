@@ -104,10 +104,15 @@
                     <RelativeLayout
                         style="@style/relative_theme_container"
                         android:id="@+id/auto_setup_easy_diary_theme">
+                        <ImageView
+                            android:id="@+id/image_easy_diary_launcher"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@mipmap/ic_launcher_round" />
                         <com.simplemobiletools.commons.views.MyTextView
                             style="@style/text_custom_theme_item"
+                            android:layout_toRightOf="@+id/image_easy_diary_launcher"
                             android:text="EasyDiary Theme" />
-
                         <ImageView
                             style="@style/image_custom_theme_icon"
                             android:id="@+id/image_auto_setup_easy_diary_theme"/>
@@ -115,9 +120,15 @@
                     <RelativeLayout
                         style="@style/relative_theme_container"
                         android:id="@+id/auto_setup_dark_theme">
+                        <ImageView
+                            android:id="@+id/image_easy_dark_launcher"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@mipmap/ic_launcher_dark_round" />
                         <com.simplemobiletools.commons.views.MyTextView
                             style="@style/text_custom_theme_item"
-                            android:text="Dark Theme"/>
+                            android:layout_toRightOf="@+id/image_easy_dark_launcher"
+                            android:text="Dark Theme" />
                         <ImageView
                             style="@style/image_custom_theme_icon"
                             android:id="@+id/image_auto_setup_dark_theme"/>
@@ -125,8 +136,14 @@
                     <RelativeLayout
                         style="@style/relative_theme_container"
                         android:id="@+id/auto_setup_green_theme">
+                        <ImageView
+                            android:id="@+id/image_easy_diary_green_launcher"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@mipmap/ic_launcher_green_round" />
                         <com.simplemobiletools.commons.views.MyTextView
                             style="@style/text_custom_theme_item"
+                            android:layout_toRightOf="@+id/image_easy_diary_green_launcher"
                             android:text="Green Theme" />
                         <ImageView
                             style="@style/image_custom_theme_icon"

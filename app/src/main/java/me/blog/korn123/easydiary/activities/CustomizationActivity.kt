@@ -11,6 +11,7 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityCustomizationBinding
 import me.blog.korn123.easydiary.dialogs.LineColorPickerDialog
+import me.blog.korn123.easydiary.enums.Launcher
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 
@@ -30,6 +31,7 @@ class CustomizationActivity : BaseSimpleActivity() {
     private var hasUnsavedChanges = false
     private var isLineColorPickerVisible = false
     private var curPrimaryLineColorPicker: LineColorPickerDialog? = null
+    private var launcher: Launcher? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +63,7 @@ class CustomizationActivity : BaseSimpleActivity() {
                 setCurrentScreenBackgroundColor(Color.parseColor(EASYDIARY_THEME_SCREEN_BACKGROUND_COLOR))
                 setCurrentTextColor(Color.parseColor(EASYDIARY_THEME_TEXT_COLOR))
                 colorChanged()
+                launcher = Launcher.EASY_DIARY
             }
             autoSetupDarkTheme.setOnClickListener {
                 setCurrentPrimaryColor(Color.parseColor(DARK_THEME_PRIMARY_COLOR))
@@ -68,6 +71,7 @@ class CustomizationActivity : BaseSimpleActivity() {
                 setCurrentScreenBackgroundColor(Color.parseColor(DARK_THEME_SCREEN_BACKGROUND_COLOR))
                 setCurrentTextColor(Color.parseColor(DARK_THEME_TEXT_COLOR))
                 colorChanged()
+                launcher = Launcher.DARK
             }
             autoSetupGreenTheme.setOnClickListener {
                 setCurrentPrimaryColor(Color.parseColor(GREEN_THEME_PRIMARY_COLOR))
@@ -75,6 +79,7 @@ class CustomizationActivity : BaseSimpleActivity() {
                 setCurrentScreenBackgroundColor(Color.parseColor(GREEN_THEME_SCREEN_BACKGROUND_COLOR))
                 setCurrentTextColor(Color.parseColor(GREEN_THEME_TEXT_COLOR))
                 colorChanged()
+                launcher = Launcher.GREEN
             }
         }
     }
@@ -107,7 +112,7 @@ class CustomizationActivity : BaseSimpleActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.save -> saveChanges(true)
+            R.id.save -> saveChanges()
             android.R.id.home -> super.onBackPressed()
 //            else -> return super.onOptionsItemSelected(item)
         }
@@ -131,7 +136,7 @@ class CustomizationActivity : BaseSimpleActivity() {
         }
     }
 
-    private fun saveChanges(finishAfterSave: Boolean) {
+    private fun saveChanges() {
         config.apply {
             textColor = curTextColor
             backgroundColor = curBackgroundColor
@@ -139,13 +144,8 @@ class CustomizationActivity : BaseSimpleActivity() {
             primaryColor = curPrimaryColor
             isThemeChanged = true
         }
-
-        hasUnsavedChanges = false
-        if (finishAfterSave) {
-            finish()
-        } else {
-            invalidateOptionsMenu()
-        }
+        finish()
+        launcher?.let { toggleLauncher(it) }
     }
 
     private fun initColorVariables() {
