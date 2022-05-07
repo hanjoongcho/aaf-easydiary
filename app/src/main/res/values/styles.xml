@@ -58,7 +58,7 @@
 
     <!--Layout Style-->
     <style name="linear_popup_menu_item">
-        <item name="android:paddingLeft">25dp</item>
+        <item name="android:paddingLeft">20dp</item>
         <item name="android:orientation">horizontal</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
