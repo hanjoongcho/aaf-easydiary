@@ -2,10 +2,7 @@ package me.blog.korn123.easydiary.extensions
 
 import android.app.Activity
 import android.app.Dialog
-import android.content.ActivityNotFoundException
-import android.content.ComponentName
-import android.content.DialogInterface
-import android.content.Intent
+import android.content.*
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Bitmap
@@ -101,7 +98,7 @@ fun Activity.confirmExternalStoragePermission(permissions: Array<String>, activi
  *   Messages
  *
  ***************************************************************************************************/
-fun Activity.makeToast(message: String) {
+fun Activity.makeToast(message: String, duration: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
 
@@ -797,4 +794,17 @@ fun Activity.appLaunched() {
         PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
         PackageManager.DONT_KILL_APP
     )
+}
+
+fun Activity.clearLockSettingsTemporary() {
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault())
+    val parsedDate: Date? = dateFormat.parse("2022-05-14 23:59:59")
+    parsedDate?.let {
+        val remainMinutes = it.time.minus(System.currentTimeMillis()).div(1000).div(60)
+        if (remainMinutes > 0) {
+            config.aafPinLockEnable = false
+            config.fingerprintLockEnable = false
+            showAlertDialog("Password lock setting is forcibly released. Password lock settings will be unavailable for the next $remainMinutes minutes.", null)
+        }
+    }
 }

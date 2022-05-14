@@ -34,7 +34,6 @@ class IntroActivity : AppCompatActivity() {
         forceInitRealmLessThanOreo()
         setContentView(mBinding.root)
         rescheduleEnabledAlarms()
-
         FontUtils.checkFontSetting(this)
 
         mHandler = object: Handler(this.mainLooper) {
