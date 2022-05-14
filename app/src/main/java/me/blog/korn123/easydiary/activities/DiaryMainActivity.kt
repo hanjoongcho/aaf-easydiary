@@ -126,7 +126,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         setupReviewFlow()
         setupPhotoHighlight()
         checkIntent()
-        clearLockSettingsTemporary()
+//        clearLockSettingsTemporary()
 
         // test code
         if (config.enableDebugMode) {
