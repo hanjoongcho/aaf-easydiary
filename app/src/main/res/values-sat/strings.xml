@@ -704,7 +704,7 @@
     <string name="fingerprint_authentication_info_changed">ᱥᱟᱫᱷᱚᱱ ᱨᱮᱭᱟᱜ ᱛᱤᱠᱟᱹᱴᱩᱵᱪᱷᱟᱯᱟ ᱚᱛᱷᱮᱱᱴᱤᱠᱮᱥᱚᱱ ᱵᱤᱵᱨᱚᱬ ᱵᱚᱫᱚᱞ ᱮᱱᱟ ᱟᱨ ᱢᱟᱲᱟᱝ ᱥᱮᱴ ᱟᱠᱟᱱ ᱚᱛᱷᱮᱱᱴᱤᱠᱮᱥᱚᱱ ᱵᱤᱵᱨᱚᱬ ᱵᱮᱵᱷᱟᱨ ᱵᱟᱭ ᱜᱟᱱᱚᱜᱼᱟ ᱾</string>
     <string name="pin_lock_title">PIN ᱠᱩᱞᱩᱯ ᱥᱟᱡᱟᱣ</string>
     <string name="pin_lock_summary">ᱮᱯᱞᱤᱠᱮᱥᱚᱱ ᱠᱩᱞᱩ ᱞᱟᱹᱜᱤᱫ PIN ᱥᱮᱴ ᱢᱮ ᱾</string>
-    <string name="pin_setting_complete">PIN ᱥᱟᱡᱟᱣ ᱫᱚ ᱪᱟᱵᱟᱮᱱᱟ ᱾</string>
+    <string name="pin_setting_complete">Do you want to set the PIN lock number to 「%s」?</string>
     <string name="pin_setting_release">PIN ᱠᱩᱞᱩᱯ ᱫᱚ ᱵᱚᱸᱫᱚ ᱜᱮᱭᱟ ᱾</string>
     <string name="pin_release_need_fingerprint_disable">PIN ᱠᱩᱞᱩᱯ ᱵᱚᱸᱫ ᱞᱟᱫᱜᱤᱫ, ᱟᱢ ᱛᱤᱠᱟᱹᱴᱩᱵᱪᱷᱟᱯᱟ ᱠᱩᱞᱩᱯ ᱵᱚᱸᱫ ᱛᱮ ᱦᱩᱭᱟᱢᱟ ᱾</string>
     <string name="pin_setting_guide_message">PIN ᱵᱮᱵᱷᱟᱨ ᱞᱟᱹᱜᱤᱫ ᱫᱚᱭᱟᱠᱟᱛᱮ ᱱᱚᱢᱵᱚᱨ ᱟᱫᱮᱨ ᱢᱮ ᱾</string>

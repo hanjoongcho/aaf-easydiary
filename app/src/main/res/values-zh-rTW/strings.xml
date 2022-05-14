@@ -704,7 +704,7 @@
     <string name="fingerprint_authentication_info_changed">The fingerprint authentication information of the device has changed and the previously set authentication information can not be used.</string>
     <string name="pin_lock_title">PIN碼鎖設定</string>
     <string name="pin_lock_summary">設定PIN碼鎖定應用程式</string>
-    <string name="pin_setting_complete">PIN碼設定完成</string>
+    <string name="pin_setting_complete">Do you want to set the PIN lock number to 「%s」?</string>
     <string name="pin_setting_release">PIN碼鎖定已停用</string>
     <string name="pin_release_need_fingerprint_disable">要停用PIN碼鎖定，您需要關閉指紋鎖定</string>
     <string name="pin_setting_guide_message">請輸入一組數字作為PIN碼</string>

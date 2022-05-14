@@ -704,7 +704,7 @@
     <string name="fingerprint_authentication_info_changed">Les informations d\'authentification par empreinte digitale du périphérique ont changé et les informations d\'authentification définies précédemment ne peuvent pas être utilisées.</string>
     <string name="pin_lock_title">Réglage du verrouillage par code PIN</string>
     <string name="pin_lock_summary">Définir le code PIN pour verrouiller l\'application.</string>
-    <string name="pin_setting_complete">Le réglage du code PIN est terminé.</string>
+    <string name="pin_setting_complete">Do you want to set the PIN lock number to 「%s」?</string>
     <string name="pin_setting_release">Verrouillage par code PIN désactivé.</string>
     <string name="pin_release_need_fingerprint_disable">Pour désactiver le verrouillage par code PIN, vous devez désactiver le verrouillage par empreinte digitale.</string>
     <string name="pin_setting_guide_message">Veuillez entrer un nombre à utiliser comme code PIN.</string>

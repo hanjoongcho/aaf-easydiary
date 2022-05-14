@@ -704,7 +704,7 @@
     <string name="fingerprint_authentication_info_changed">디바이스의 지문 인증 정보가 변경되어 이전에 설정된 인증 정보를 사용할 수 없습니다. 핀을 이용하여 잠금 해제 후 지문인식 잠금설정을 다시 진행하세요.</string>
     <string name="pin_lock_title">핀 잠금설정</string>
     <string name="pin_lock_summary">핀을 설정하여 애플리케이션을 잠금니다.</string>
-    <string name="pin_setting_complete">핀 잠금설정이 완료되었습니다.</string>
+    <string name="pin_setting_complete">핀 잠금번호를 「%s」로 설정하시겠습니까?</string>
     <string name="pin_setting_release">핀 잠금설정이 해제되었습니다.</string>
     <string name="pin_release_need_fingerprint_disable">핀 잠금설정을 해제하려면 지문인식 잠금설정을 해제해야 합니다.</string>
     <string name="pin_setting_guide_message">핀으로 사용할 숫자를 입력하세요.</string>

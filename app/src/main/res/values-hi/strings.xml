@@ -704,7 +704,7 @@
     <string name="fingerprint_authentication_info_changed">डिवाइस की फिंगरप्रिंट प्रमाणीकरण जानकारी बदल गई है और पहले से सेट प्रमाणीकरण जानकारी का उपयोग नहीं किया जा सकता है।</string>
     <string name="pin_lock_title">पिन लॉक सेटिंग</string>
     <string name="pin_lock_summary">एप्लिकेशन को लॉक करने के लिए पिन सेट करें।</string>
-    <string name="pin_setting_complete">पिन सेटिंग पूरी हो गई है।</string>
+    <string name="pin_setting_complete">पDo you want to set the PIN lock number to 「%s」?</string>
     <string name="pin_setting_release">पिन लॉक अक्षम।</string>
     <string name="pin_release_need_fingerprint_disable">पिन लॉक को अक्षम करने के लिए, आपको फिंगरप्रिंट लॉक को बंद करना होगा।</string>
     <string name="pin_setting_guide_message">पिन के रूप में उपयोग करने के लिए कृपया एक नंबर दर्ज करें।</string>

@@ -704,7 +704,7 @@
     <string name="fingerprint_authentication_info_changed">Le informazioni di autenticazione dell\'impronta digitale sono state modificate e le impostazioni precedenti non possono essere utilizzate.</string>
     <string name="pin_lock_title">Blocco PIN</string>
     <string name="pin_lock_summary">Imposta un codice PIN per bloccare l\'applicazione.</string>
-    <string name="pin_setting_complete">Codice PIN impostato.</string>
+    <string name="pin_setting_complete">Do you want to set the PIN lock number to 「%s」?</string>
     <string name="pin_setting_release">Blocco PIN disabilitato.</string>
     <string name="pin_release_need_fingerprint_disable">Per disabilitare il blocco PIN, disabilitare il blocco con impronta digitale.</string>
     <string name="pin_setting_guide_message">Inserire una sequenza numerica da usare come PIN.</string>

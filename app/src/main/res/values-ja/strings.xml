@@ -704,7 +704,7 @@
     <string name="fingerprint_authentication_info_changed">The fingerprint authentication information of the device has changed and the previously set authentication information can not be used.</string>
     <string name="pin_lock_title">PINロック設定</string>
     <string name="pin_lock_summary">アプリをロックするためのPINを設定します。</string>
-    <string name="pin_setting_complete">PINの設定が完了しました。</string>
+    <string name="pin_setting_complete">ピンロック番号を「％s」に設定しますか？</string>
     <string name="pin_setting_release">PINロックが無効です。</string>
     <string name="pin_release_need_fingerprint_disable">PINロックを無効にするには、指紋のロックを解除する必要があります。</string>
     <string name="pin_setting_guide_message">PINとして使用する番号を入力してください。</string>

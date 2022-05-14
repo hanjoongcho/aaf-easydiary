@@ -104,12 +104,18 @@ class PinLockActivity : BaseSimpleActivity() {
                     when (activityMode) {
                         ACTIVITY_SETTING -> {
                             holdCurrentOrientation()
-                            showAlertDialog(getString(R.string.pin_setting_complete), DialogInterface.OnClickListener { _, _ ->
-                                config.aafPinLockEnable = true
-                                config.aafPinLockSavedPassword = fullPassword
-                                pauseLock()
-                                finish()
-                            }, false)
+                            showAlertDialog(
+                                getString(R.string.pin_setting_complete, "$fullPassword"),
+                                { _, _ ->
+                                    config.aafPinLockEnable = true
+                                    config.aafPinLockSavedPassword = fullPassword
+                                    pauseLock()
+                                    finish()
+                                },
+                                { _, _ ->
+                                    finish()
+                                },
+                                false)
                         }
                         ACTIVITY_UNLOCK -> {
                             when (config.aafPinLockSavedPassword == fullPassword) {

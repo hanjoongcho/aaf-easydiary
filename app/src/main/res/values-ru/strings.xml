@@ -704,7 +704,7 @@
     <string name="fingerprint_authentication_info_changed">Информация аутентификации отпечатка пальца устройства изменилась, и ранее установленная информация аутентификации не может использоваться.</string>
     <string name="pin_lock_title">Настройка блокировки PIN-кода.</string>
     <string name="pin_lock_summary">Установите PIN-код для блокировки приложения.</string>
-    <string name="pin_setting_complete">Установка PIN-кода завершена.</string>
+    <string name="pin_setting_complete">Do you want to set the PIN lock number to 「%s」?</string>
     <string name="pin_setting_release">Блокировка PIN отключена.</string>
     <string name="pin_release_need_fingerprint_disable">Чтобы отключить блокировку PIN-кодом, необходимо отключить блокировку отпечатков пальцев.</string>
     <string name="pin_setting_guide_message">Пожалуйста, введите число для использования в качестве PIN-кода.</string>
