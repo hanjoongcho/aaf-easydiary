@@ -144,7 +144,7 @@ class SymbolBarChartFragment : androidx.fragment.app.Fragment() {
         }
 
         mCoroutineJob = CoroutineScope(Dispatchers.IO).launch {
-            val sortedMap = EasyDiaryUtils.getSortedMapBySymbol(true)
+            val sortedMap = EasyDiaryUtils.getSymbolUsedCountMap(true)
             withContext(Dispatchers.Main) {
                 val barEntries = ArrayList<BarEntry>()
                 var index = 1.0F

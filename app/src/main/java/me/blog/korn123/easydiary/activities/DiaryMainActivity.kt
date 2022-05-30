@@ -488,7 +488,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, createDiary)
         }
 
-        mBinding.feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog(getString(R.string.diary_symbol_search_message)) { symbolSequence ->
+        mBinding.feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog(getString(R.string.diary_symbol_search_message), viewModel.symbol.value ?: 0) { symbolSequence ->
             selectFeelingSymbol(symbolSequence)
             refreshList()
         }}

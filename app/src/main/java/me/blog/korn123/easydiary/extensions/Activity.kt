@@ -43,6 +43,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
+import me.blog.korn123.commons.utils.FlavorUtils.getDiarySymbolMap
 import me.blog.korn123.easydiary.BuildConfig
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
@@ -326,6 +327,17 @@ fun Activity.openFeelingSymbolDialog(guideMessage: String, selectedSymbolSequenc
 
     val itemList = arrayListOf<Array<String>>()
     val categoryList = arrayListOf<String>()
+    var tabIndex = 0
+
+    // Append recently used symbols
+    val symbolUsedCountMap = EasyDiaryUtils.getSymbolUsedCountMap(true)
+    if (symbolUsedCountMap.isNotEmpty()) {
+        val symbolMap = getDiarySymbolMap(this)
+        categoryList.add("Recently Used")
+        itemList.add(symbolUsedCountMap.entries.map { entry -> "${entry.key}|${symbolMap[entry.key]}" }.toTypedArray())
+        tabIndex = tabIndex.plus(1)
+    }
+
     addCategory(itemList, categoryList, "weather_item_array", getString(R.string.category_weather))
     addCategory(itemList, categoryList, "emotion_item_array", getString(R.string.category_emotion))
     addCategory(itemList, categoryList, "daily_item_array", getString(R.string.category_daily))
@@ -337,15 +349,15 @@ fun Activity.openFeelingSymbolDialog(guideMessage: String, selectedSymbolSequenc
     addCategory(itemList, categoryList, "flag_item_array", getString(R.string.category_flag))
 
     val currentItem = when {
-        selectedSymbolSequence < 40 -> 0
-        selectedSymbolSequence in 100..199 -> 1
-        selectedSymbolSequence in 80..83 -> 3
-        selectedSymbolSequence in 40..99 -> 2
-        selectedSymbolSequence in 250..299 -> 4
-        selectedSymbolSequence in 300..349 -> 5
-        selectedSymbolSequence in 200..249 -> 6
-        selectedSymbolSequence in 350..449 -> 7
-        selectedSymbolSequence in 450..749 -> 8
+        selectedSymbolSequence in 1..39 -> tabIndex
+        selectedSymbolSequence in 100..199 -> tabIndex.plus(1)
+        selectedSymbolSequence in 80..83 -> tabIndex.plus(3)
+        selectedSymbolSequence in 40..99 -> tabIndex.plus(2)
+        selectedSymbolSequence in 250..299 -> tabIndex.plus(4)
+        selectedSymbolSequence in 300..349 -> tabIndex.plus(5)
+        selectedSymbolSequence in 200..249 -> tabIndex.plus(6)
+        selectedSymbolSequence in 350..449 -> tabIndex.plus(7)
+        selectedSymbolSequence in 450..749 -> tabIndex.plus(8)
         else -> 0
     }
 

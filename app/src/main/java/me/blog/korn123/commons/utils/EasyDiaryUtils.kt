@@ -479,7 +479,7 @@ object EasyDiaryUtils {
      *   Chart Utils
      *
      ***************************************************************************************************/
-    fun getSortedMapBySymbol(isReverse: Boolean = false, startTimeMillis: Long = 0, endTimeMillis: Long = 0): Map<Int, Int> {
+    fun getSymbolUsedCountMap(isReverse: Boolean = false, startTimeMillis: Long = 0, endTimeMillis: Long = 0): Map<Int, Int> {
         EasyDiaryDbHelper.getTemporaryInstance().let { realmInstance ->
             val listDiary = EasyDiaryDbHelper.findDiary(null, false, startTimeMillis, endTimeMillis, realmInstance = realmInstance)
 

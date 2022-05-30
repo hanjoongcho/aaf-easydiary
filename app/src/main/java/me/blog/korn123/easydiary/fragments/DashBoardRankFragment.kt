@@ -41,7 +41,7 @@ class DashBoardRankFragment : androidx.fragment.app.Fragment() {
                     val endDate = DateUtils.getDateStringFromTimeMillis(endMillis, SimpleDateFormat.MEDIUM)
                     val periodInfo = "$startDate - $endDate"
                     period.text = periodInfo
-                    EasyDiaryUtils.getSortedMapBySymbol(true, startMillis, endMillis)
+                    EasyDiaryUtils.getSymbolUsedCountMap(true, startMillis, endMillis)
                 }
                 MODE_LAST_WEEK -> {
                     val calendar = Calendar.getInstance()
@@ -54,7 +54,7 @@ class DashBoardRankFragment : androidx.fragment.app.Fragment() {
                     val endDate = DateUtils.getDateStringFromTimeMillis(endMillis, SimpleDateFormat.MEDIUM)
                     val periodInfo = "$startDate - $endDate"
                     period.text = periodInfo
-                    EasyDiaryUtils.getSortedMapBySymbol(true, startMillis, endMillis)
+                    EasyDiaryUtils.getSymbolUsedCountMap(true, startMillis, endMillis)
                 }
                 else -> {
                     val firstDiary = EasyDiaryDbHelper.findFirstDiary()
@@ -66,7 +66,7 @@ class DashBoardRankFragment : androidx.fragment.app.Fragment() {
                     val endDate = DateUtils.getDateStringFromTimeMillis(endMillis, SimpleDateFormat.MEDIUM)
                     val periodInfo = "$startDate - $endDate"
                     period.text = periodInfo
-                    EasyDiaryUtils.getSortedMapBySymbol(true)
+                    EasyDiaryUtils.getSymbolUsedCountMap(true)
                 }
             }
 
