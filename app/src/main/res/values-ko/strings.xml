@@ -642,6 +642,10 @@
         v1.4.273.202205070 / 2022.05.07\n
         사용자경험(UX) 최적화
     </string>
+    <string name="release_274">
+        v1.4.274.202206010 / 2022.06.01\n
+        심볼 선택 다이얼로그에 「최근사용」 심볼 카테코리를 추가함
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -900,4 +904,5 @@
     <string name="enable_welcome_dashboard_popup_description">이 옵션을 활성화하면 앱을 닫은 후 다시 시작할 때 대시보드가 팝업으로 열립니다.</string>
     <string name="year_message_format">{0,number} {0,choice,1#Year|1&lt;Years}</string>
     <string name="day_message_format">{0,number} {0,choice,1#Day|1&lt;Days}</string>
+    <string name="recently_used_symbol">최근사용</string>
 </resources>

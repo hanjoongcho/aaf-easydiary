@@ -333,7 +333,7 @@ fun Activity.openFeelingSymbolDialog(guideMessage: String, selectedSymbolSequenc
     val symbolUsedCountMap = EasyDiaryUtils.getSymbolUsedCountMap(true)
     if (symbolUsedCountMap.isNotEmpty()) {
         val symbolMap = getDiarySymbolMap(this)
-        categoryList.add("Recently Used")
+        categoryList.add(getString(R.string.recently_used_symbol))
         itemList.add(symbolUsedCountMap.entries.map { entry -> "${entry.key}|${symbolMap[entry.key]}" }.toTypedArray())
         tabIndex = tabIndex.plus(1)
     }

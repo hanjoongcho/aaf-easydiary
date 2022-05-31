@@ -642,6 +642,10 @@
         v1.4.273.202205070 / 2022.05.07\n
         User Experience (UX) Optimization
     </string>
+    <string name="release_274">
+        v1.4.274.202206010 / 2022.06.01\n
+        Added the recently used symbol selection function to the symbol dialog
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -900,4 +904,5 @@
     <string name="enable_welcome_dashboard_popup_description">When this option is enabled, the dashboard will automatically open as a popup when the app is restarted after closing.</string>
     <string name="year_message_format">{0,number} {0,choice,1#Year|1&lt;Years}</string>
     <string name="day_message_format">{0,number} {0,choice,1#Day|1&lt;Days}</string>
+    <string name="recently_used_symbol">Recently Used</string>
 </resources>

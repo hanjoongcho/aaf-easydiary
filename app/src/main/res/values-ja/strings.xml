@@ -642,6 +642,10 @@
         v1.4.273.202205070 / 2022.05.07\n
         ユーザーエクスペリエンス（UX）の最適化
     </string>
+    <string name="release_274">
+        v1.4.274.202206010 / 2022.06.01\n
+        シンボル選択ダイアログに「最近使用」シンボルカテコリを追加する
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
@@ -900,4 +904,5 @@
     <string name="enable_welcome_dashboard_popup_description">このオプションを有効にすると、アプリを閉じてから再起動すると、ダッシュボードがポップアップとして自動的に開きます。</string>
     <string name="year_message_format">{0,number} {0,choice,1#Year|1&lt;Years}</string>
     <string name="day_message_format">{0,number} {0,choice,1#Day|1&lt;Days}</string>
+    <string name="recently_used_symbol">最近使用</string>
 </resources>
