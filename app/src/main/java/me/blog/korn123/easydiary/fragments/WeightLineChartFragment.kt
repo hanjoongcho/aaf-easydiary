@@ -350,7 +350,7 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun xAxisTimeMillisToDate(timeMillis: Long): String =
-        if (timeMillis > 0) DateUtils.getDateStringFromTimeMillis(timeMillis, SimpleDateFormat.SHORT) else "N/A"
+        if (timeMillis > 0) DateUtils.getDateStringFromTimeMillis(timeMillis, SimpleDateFormat.MEDIUM) else "N/A"
 
     private fun fillValueForward(averageInfo: ArrayList<Float>) {
         Log.i(AAF_TEST, "원본 ${averageInfo.joinToString(",")}")
