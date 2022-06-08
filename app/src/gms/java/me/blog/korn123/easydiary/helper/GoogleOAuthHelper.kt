@@ -13,7 +13,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.makeSnackBar
 
-class GoogleOAuthHelper { 
+class GoogleOAuthHelper {
     companion object {
         private lateinit var mAccountCallback: (Account) -> Unit
 
