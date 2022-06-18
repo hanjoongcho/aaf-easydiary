@@ -206,7 +206,7 @@
         <item name="applyGlobalColor">false</item>
         <item name="android:ellipsize">end</item>
         <item name="android:singleLine">true</item>
-        <item name="android:textSize">@dimen/dashboard_text_default</item>
+        <item name="android:textSize">@dimen/dashboard_text_medium</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>

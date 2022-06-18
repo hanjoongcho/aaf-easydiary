@@ -15,7 +15,7 @@
             android:id="@+id/text_title"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textSize="20sp"
+            android:textSize="@dimen/dashboard_text_large"
             android:textColor="@color/default_text_color"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
             />
         <me.blog.korn123.easydiary.views.FixedTextView
             android:id="@+id/text_target_date"
-            android:textSize="15sp"
+            android:textSize="@dimen/dashboard_text_medium"
             android:textColor="@color/default_text_color"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
             />
         <me.blog.korn123.easydiary.views.FixedTextView
             android:id="@+id/text_target_time"
-            android:textSize="15sp"
+            android:textSize="@dimen/dashboard_text_medium"
             android:textColor="@color/default_text_color"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
             />
         <me.blog.korn123.easydiary.views.FixedTextView
             android:id="@+id/text_day_remaining"
-            android:textSize="30sp"
+            android:textSize="@dimen/dashboard_text_large"
             android:textColor="@color/default_text_color"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
 
         <me.blog.korn123.easydiary.views.FixedTextView
             android:id="@+id/text_day_remaining_with_year"
-            android:textSize="10sp"
+            android:textSize="@dimen/dashboard_text_small"
             android:textColor="@color/default_text_color"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -77,7 +77,7 @@
 
         <me.blog.korn123.easydiary.views.FixedTextView
             android:id="@+id/text_time_remaining"
-            android:textSize="15sp"
+            android:textSize="@dimen/dashboard_text_medium"
             android:textColor="@color/default_text_color"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

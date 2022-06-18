@@ -46,7 +46,7 @@
                 android:id="@+id/period"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/dashboard_text_default"/>
+                android:textSize="@dimen/dashboard_text_medium"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView

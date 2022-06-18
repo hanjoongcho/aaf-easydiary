@@ -16,15 +16,16 @@
     <dimen name="calendar_item_text_xlarge">18dp</dimen>
     <dimen name="calendar_item_symbol_xlarge">15dp</dimen>
     <dimen name="dashboard_symbol_default">40dp</dimen>
-    <dimen name="dashboard_text_default">15sp</dimen>
     <dimen name="dashboard_text_large">20sp</dimen>
+    <dimen name="dashboard_text_medium">15sp</dimen>
+    <dimen name="dashboard_text_small">10sp</dimen>
+    <dimen name="dashboard_title_h1">20sp</dimen>
+    <dimen name="dashboard_title_h2">17sp</dimen>
+    <dimen name="dashboard_title_h3">14sp</dimen>
     <dimen name="dashboard_title_padding">10dp</dimen>
     <dimen name="dashboard_card_margin">10dp</dimen>
     <dimen name="dashboard_description_margin">10dp</dimen>
     <dimen name="dashboard_symbol_padding">5dp</dimen>
-    <dimen name="dashboard_title_h1">20sp</dimen>
-    <dimen name="dashboard_title_h2">17sp</dimen>
-    <dimen name="dashboard_title_h3">14sp</dimen>
     <dimen name="dashboard_card_radius">10dp</dimen>
     <dimen name="dashboard_card_padding">10dp</dimen>
 
