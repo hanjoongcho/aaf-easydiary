@@ -11,5 +11,6 @@
         <attr name="applyGlobalSize" format="boolean" />
         <attr name="applyGlobalColor" format="boolean" />
         <attr name="applyHighLight" format="boolean" />
+        <attr name="applyBoldStyle" format="boolean" />
     </declare-styleable>
 </resources>

@@ -51,13 +51,14 @@
             />
         <me.blog.korn123.easydiary.views.FixedTextView
             android:id="@+id/text_day_remaining"
-            android:textSize="@dimen/dashboard_text_large"
+            android:textSize="@dimen/dashboard_text_medium"
             android:textColor="@color/default_text_color"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="＋100"
             app:applyGlobalColor="false"
             app:applyGlobalSize="false"
+            app:applyBoldStyle="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_target_time"
             />

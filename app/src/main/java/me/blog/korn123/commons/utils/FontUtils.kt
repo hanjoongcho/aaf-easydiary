@@ -28,12 +28,15 @@ object FontUtils {
             when (val targetView = viewGroup.getChildAt(i)) {
                 is ViewGroup -> setTypeface(context, targetView, typeface, customLineSpacing)
                 is TextView -> {
-                    targetView.typeface = typeface
-                    if (customLineSpacing) {
-                        targetView.setLineSpacing(0F, context.config.lineSpacingScaleFactor)
-                    }
+                    targetView.also {
+                        it.typeface = typeface
+                        if (customLineSpacing) {
+                            it.setLineSpacing(0F, context.config.lineSpacingScaleFactor)
+                        }
 
-                    if (targetView is FixedTextView && targetView.applyHighLight) EasyDiaryUtils.highlightString(targetView)
+                        if (it is FixedTextView && it.applyHighLight) EasyDiaryUtils.highlightString(it)
+                        if (it is FixedTextView && it.applyBoldStyle) it.setTypeface(it.typeface, Typeface.BOLD)
+                    }
                 }
                 else -> {}
             }
