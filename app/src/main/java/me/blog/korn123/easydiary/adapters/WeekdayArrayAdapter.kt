@@ -26,10 +26,10 @@ class WeekdayArrayAdapter(context: Context, private val textViewResourceId: Int,
             FontUtils.setFontsTypeface(context, "", this as ViewGroup)
             context.initTextSize(this)
             textWeekday.run {
-                if (mDiameter == 0) mDiameter = FontUtils.measureTextWidth(paint, "55")
+//                if (mDiameter == 0) mDiameter = FontUtils.measureTextWidth(paint, "55")
                 text = getItem(position)
-                layoutParams?.width = mDiameter
-                layoutParams?.height = mDiameter
+//                layoutParams?.width = mDiameter
+//                layoutParams?.height = mDiameter
             }
 
             when (context.config.calendarStartDay) {

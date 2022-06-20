@@ -16,6 +16,7 @@
             tools:text="11"
             tools:background="@drawable/bg_calendar_circle"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:applyStroke="false"
             android:gravity="center"
