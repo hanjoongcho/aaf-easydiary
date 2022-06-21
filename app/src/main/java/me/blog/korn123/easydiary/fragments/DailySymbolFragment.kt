@@ -77,7 +77,7 @@ class DailySymbolFragment : Fragment() {
         val dateFormat = SimpleDateFormat(DateUtils.DATE_PATTERN_DASH, Locale.getDefault())
         val cal = Calendar.getInstance()
         cal.time = Date()
-        mBinding.month.text = cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())
+        mBinding.month.text = cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()).uppercase()
 
         mDailySymbolAdapter = DailySymbolAdapter(
             requireActivity(),
@@ -98,9 +98,14 @@ class DailySymbolFragment : Fragment() {
         mInitializeDailySymbolJob = CoroutineScope(Dispatchers.IO).launch { // launch a new coroutine and keep a reference to its Job
             for (num in 1..365) {
                 mDailySymbolList.add(
-                    DailySymbolAdapter.DailySymbol(dateFormat.format(cal.time), cal.get(
-                        Calendar.DAY_OF_WEEK), cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())!!, dayOfMonth.format(cal.time), cal.getDisplayName(
-                        Calendar.MONTH, Calendar.LONG, Locale.getDefault())!!))
+                    DailySymbolAdapter.DailySymbol(
+                        dateFormat.format(cal.time),
+                        cal.get(Calendar.DAY_OF_WEEK),
+                        cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())!!,
+                        dayOfMonth.format(cal.time),
+                        cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())!!.uppercase()
+                    )
+                )
                 cal.add(Calendar.DATE, -1)
             }
             withContext(Dispatchers.Main) {
