@@ -1,175 +1,195 @@
 <?xml version="1.0" encoding="utf-8"?>
-<HorizontalScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:scrollbars="none"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:scrollbars="none">
+
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
         <me.blog.korn123.easydiary.views.FixedCardView
-            android:layout_width="wrap_content"
-            style="@style/card_dashboard">
+            android:id="@+id/cardDriveBackup"
+            style="@style/card_dashboard"
+            android:layout_width="wrap_content">
+
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
                     <me.blog.korn123.easydiary.views.FixedTextView
-                        app:applyGlobalSize="false"
-                        app:applyGlobalColor="false"
-                        app:applyHighLight="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:padding="10dp"
                         android:text="@string/dashboard_title_backup_drive"
                         android:textSize="@dimen/dashboard_title_h1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        app:applyGlobalColor="false"
+                        app:applyGlobalSize="false"
+                        app:applyHighLight="true" />
                 </LinearLayout>
 
-                <me.blog.korn123.easydiary.views.FixedCardView
-                    style="@style/card_dashboard">
+                <me.blog.korn123.easydiary.views.FixedCardView style="@style/card_dashboard">
+
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
                         <ImageView
                             android:id="@+id/symbolGmsCard1"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:srcCompat="@drawable/ic_drive"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"/>
+                            app:srcCompat="@drawable/ic_drive" />
+
                         <me.blog.korn123.easydiary.views.FixedTextView
                             android:id="@+id/topLabelGmsCard1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
-                            app:layout_constraintStart_toEndOf="@+id/symbolGmsCard1"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:applyGlobalSize="false"
-                            app:applyGlobalColor="false"
                             android:text="@string/last_diary_backup_time"
                             android:textSize="@dimen/dashboard_title_h2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                        <me.blog.korn123.easydiary.views.FixedTextView
-                            android:layout_marginStart="10dp"
-                            app:layout_constraintTop_toBottomOf="@+id/topLabelGmsCard1"
-                            app:layout_constraintStart_toEndOf="@+id/symbolGmsCard1"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:applyGlobalSize="false"
                             app:applyGlobalColor="false"
-                            tools:text="2020 11 27"
+                            app:applyGlobalSize="false"
+                            app:layout_constraintStart_toEndOf="@+id/symbolGmsCard1"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <me.blog.korn123.easydiary.views.FixedTextView
                             android:id="@+id/diaryBackupUsingGMS"
-                            android:textSize="@dimen/dashboard_title_h3"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:textSize="@dimen/dashboard_title_h3"
+                            app:applyGlobalColor="false"
+                            app:applyGlobalSize="false"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/symbolGmsCard1"
+                            app:layout_constraintTop_toBottomOf="@+id/topLabelGmsCard1"
+                            tools:text="2020 11 27" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </me.blog.korn123.easydiary.views.FixedCardView>
-                <me.blog.korn123.easydiary.views.FixedCardView
-                    style="@style/card_dashboard">
+
+                <me.blog.korn123.easydiary.views.FixedCardView style="@style/card_dashboard">
+
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
                         <ImageView
                             android:id="@+id/symbolGmsCard2"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:srcCompat="@drawable/ic_drive"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"/>
+                            app:srcCompat="@drawable/ic_drive" />
+
                         <me.blog.korn123.easydiary.views.FixedTextView
                             android:id="@+id/topLabelGmsCard2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
-                            app:layout_constraintStart_toEndOf="@+id/symbolGmsCard2"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:applyGlobalSize="false"
-                            app:applyGlobalColor="false"
                             android:text="@string/last_photo_backup_time"
                             android:textSize="@dimen/dashboard_title_h2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                        <me.blog.korn123.easydiary.views.FixedTextView
-                            app:layout_constraintTop_toBottomOf="@+id/topLabelGmsCard2"
-                            app:layout_constraintStart_toEndOf="@+id/symbolGmsCard2"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            android:layout_marginStart="10dp"
-                            app:applyGlobalSize="false"
                             app:applyGlobalColor="false"
-                            tools:text="2020 11 27"
+                            app:applyGlobalSize="false"
+                            app:layout_constraintStart_toEndOf="@+id/symbolGmsCard2"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <me.blog.korn123.easydiary.views.FixedTextView
                             android:id="@+id/attachedPhotoBackupUsingGMS"
-                            android:textSize="@dimen/dashboard_title_h3"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:textSize="@dimen/dashboard_title_h3"
+                            app:applyGlobalColor="false"
+                            app:applyGlobalSize="false"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/symbolGmsCard2"
+                            app:layout_constraintTop_toBottomOf="@+id/topLabelGmsCard2"
+                            tools:text="2020 11 27" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </me.blog.korn123.easydiary.views.FixedCardView>
             </LinearLayout>
         </me.blog.korn123.easydiary.views.FixedCardView>
 
         <me.blog.korn123.easydiary.views.FixedCardView
-            android:layout_width="wrap_content"
-            style="@style/card_dashboard">
+            android:id="@+id/cardLocalBackup"
+            style="@style/card_dashboard"
+            android:layout_width="wrap_content">
+
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
                     <me.blog.korn123.easydiary.views.FixedTextView
-                        app:applyGlobalSize="false"
-                        app:applyGlobalColor="false"
-                        app:applyHighLight="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:padding="10dp"
                         android:text="@string/dashboard_title_backup_local"
                         android:textSize="@dimen/dashboard_title_h1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        app:applyGlobalColor="false"
+                        app:applyGlobalSize="false"
+                        app:applyHighLight="true" />
                 </LinearLayout>
-                <me.blog.korn123.easydiary.views.FixedCardView
-                    style="@style/card_dashboard">
+
+                <me.blog.korn123.easydiary.views.FixedCardView style="@style/card_dashboard">
+
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
                         <ImageView
                             android:id="@+id/symbolLocalCard1"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:srcCompat="@drawable/ic_server"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"/>
+                            app:srcCompat="@drawable/ic_server" />
+
                         <me.blog.korn123.easydiary.views.FixedTextView
                             android:id="@+id/topLabelLocalCard1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
-                            app:layout_constraintStart_toEndOf="@+id/symbolLocalCard1"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:applyGlobalSize="false"
-                            app:applyGlobalColor="false"
                             android:text="@string/last_diary_backup_time"
                             android:textSize="@dimen/dashboard_title_h2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                        <me.blog.korn123.easydiary.views.FixedTextView
-                            app:layout_constraintTop_toBottomOf="@+id/topLabelLocalCard1"
-                            app:layout_constraintStart_toEndOf="@+id/symbolLocalCard1"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            android:layout_marginStart="10dp"
-                            app:applyGlobalSize="false"
                             app:applyGlobalColor="false"
+                            app:applyGlobalSize="false"
+                            app:layout_constraintStart_toEndOf="@+id/symbolLocalCard1"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <me.blog.korn123.easydiary.views.FixedTextView
                             android:id="@+id/diaryBackupLocal"
-                            android:textSize="@dimen/dashboard_title_h3"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:textSize="@dimen/dashboard_title_h3"
+                            app:applyGlobalColor="false"
+                            app:applyGlobalSize="false"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/symbolLocalCard1"
+                            app:layout_constraintTop_toBottomOf="@+id/topLabelLocalCard1" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </me.blog.korn123.easydiary.views.FixedCardView>
             </LinearLayout>

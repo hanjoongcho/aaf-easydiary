@@ -8,6 +8,8 @@ import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.FragmentDashboardSummaryBinding
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.getDefaultDisplay
+import me.blog.korn123.easydiary.extensions.isLandScape
 import java.text.SimpleDateFormat
 
 class DashBoardSummaryFragment : androidx.fragment.app.Fragment() {
@@ -25,10 +27,14 @@ class DashBoardSummaryFragment : androidx.fragment.app.Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         context?.let { ctx ->
-            mBinding.run {
-
+            requireActivity().run {
+                val scaleFactor = if (isLandScape()) 0.5F else 1F
+                (getDefaultDisplay().x * 0.8).toInt().also {
+                    val width = it.times(scaleFactor).toInt()
+                    mBinding.cardDriveBackup.layoutParams.width = width
+                    mBinding.cardLocalBackup.layoutParams.width = width
+                }
             }
-
             val diaryBackupUsingGMSMillis = ctx.config.diaryBackupGoogle
             mBinding.diaryBackupUsingGMS.text = when {
                 diaryBackupUsingGMSMillis > 0L -> DateUtils.getDateTimeStringFromTimeMillis(diaryBackupUsingGMSMillis, SimpleDateFormat.FULL, SimpleDateFormat.FULL)

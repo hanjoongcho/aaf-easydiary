@@ -71,7 +71,7 @@ class DashboardActivity : EasyDiaryActivity() {
 
         mBinding.run {
             val scaleFactor = if (isLandScape()) 0.5F else 1F
-            (getDefaultDisplay().x * 0.8).toInt().also {
+            (getDefaultDisplay().x * 0.95).toInt().also {
                 val width = it.times(scaleFactor).toInt()
                 lifetime.layoutParams.width = width
                 lastMonth.layoutParams.width = width
