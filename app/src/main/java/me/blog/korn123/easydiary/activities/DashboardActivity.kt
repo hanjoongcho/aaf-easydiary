@@ -3,7 +3,6 @@ package me.blog.korn123.easydiary.activities
 import android.os.Bundle
 import android.view.View
 import com.zhpan.bannerview.constants.PageStyle
-import io.github.aafactory.commons.extensions.dpToPixel
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityDashboardBinding
 import me.blog.korn123.easydiary.extensions.*
@@ -70,21 +69,18 @@ class DashboardActivity : EasyDiaryActivity() {
         }
 
         mBinding.run {
-            val scaleFactor = if (isLandScape()) 0.5F else 1F
-            (getDefaultDisplay().x * 0.95).toInt().also {
-                val width = it.times(scaleFactor).toInt()
-                lifetime.layoutParams.width = width
-                lastMonth.layoutParams.width = width
-                lastWeek.layoutParams.width = width
+            getDashboardCardWidth(0.9F).also {
+                lifetime.layoutParams.width = it
+                lastMonth.layoutParams.width = it
+                lastWeek.layoutParams.width = it
             }
 
-            (getDefaultDisplay().x * 0.95).toInt().also {
-                val width = it.times(scaleFactor).toInt()
-                statistics1.layoutParams.width = width
-                statistics2.layoutParams.width = width
-                statistics3.layoutParams.width = width
-                statistics4.layoutParams.width = width
-                statistics5.layoutParams.width = width
+            getDashboardCardWidth(0.95F).also {
+                statistics1.layoutParams.width = it
+                statistics2.layoutParams.width = it
+                statistics3.layoutParams.width = it
+                statistics4.layoutParams.width = it
+                statistics5.layoutParams.width = it
                 if (isLandScape()) {
                     val height = getDefaultDisplay().y - statusBarHeight() - actionBarHeight()
                     statistics1.layoutParams.height = height

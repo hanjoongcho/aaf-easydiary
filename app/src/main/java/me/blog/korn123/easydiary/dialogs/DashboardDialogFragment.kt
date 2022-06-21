@@ -67,22 +67,19 @@ class DashboardDialogFragment : DialogFragment() {
             close.visibility = View.VISIBLE
             close.setOnClickListener { view -> view.postDelayed({ dismiss() }, 300)}
 
-            val scaleFactor = if (requireActivity().isLandScape()) 0.5F else 1F
-            (requireActivity().getDefaultDisplay().x * 0.8).toInt().also {
-                val width = it.times(scaleFactor).toInt()
-                lifetime.layoutParams.width = width
-                lastMonth.layoutParams.width = width
-                lastWeek.layoutParams.width = width
+            requireActivity().getDashboardCardWidth(0.9F).also {
+                lifetime.layoutParams.width = it
+                lastMonth.layoutParams.width = it
+                lastWeek.layoutParams.width = it
 //                dDay.layoutParams.width = width
             }
 
-            (requireActivity().getDefaultDisplay().x * 0.95).toInt().also {
-                val width = it.times(scaleFactor).toInt()
-                statistics1.layoutParams.width = width
-                statistics2.layoutParams.width = width
-                statistics3.layoutParams.width = width
-                statistics4.layoutParams.width = width
-                statistics5.layoutParams.width = width
+            requireActivity().getDashboardCardWidth(0.95F).also {
+                statistics1.layoutParams.width = it
+                statistics2.layoutParams.width = it
+                statistics3.layoutParams.width = it
+                statistics4.layoutParams.width = it
+                statistics5.layoutParams.width = it
                 if (requireActivity().isLandScape()) {
                     val height = requireActivity().getDefaultDisplay().y - requireActivity().statusBarHeight() - requireActivity().dpToPixel(20F)
                     statistics1.layoutParams.height = height

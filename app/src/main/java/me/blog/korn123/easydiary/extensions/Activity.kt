@@ -109,6 +109,118 @@ fun Activity.makeSnackBar(message: String, duration: Int = Snackbar.LENGTH_SHORT
         .setAction("Action", null).show()
 }
 
+fun Activity.makeSnackBar(view: View, message: String) {
+    Snackbar.make(view, message, Snackbar.LENGTH_SHORT).setAction("Action", null).show()
+}
+
+fun Activity.showAlertDialog(title: String?, message: String, positiveListener: DialogInterface.OnClickListener?, negativeListener: DialogInterface.OnClickListener?, cancelable: Boolean = true) {
+    val builder = AlertDialog.Builder(this)
+    builder.setCancelable(cancelable)
+    builder.setNegativeButton(getString(R.string.cancel), negativeListener)
+    builder.setPositiveButton(getString(R.string.ok), positiveListener)
+    builder.create().apply {
+        updateAlertDialog(this, message, null, title)
+    }
+}
+
+fun Activity.showAlertDialog(message: String, positiveListener: DialogInterface.OnClickListener, negativeListener: DialogInterface.OnClickListener?, cancelable: Boolean = true) {
+    showAlertDialog(null, message, positiveListener, negativeListener, cancelable)
+}
+
+fun Activity.showAlertDialog(title: String?, message: String, positiveListener: DialogInterface.OnClickListener?, cancelable: Boolean = true) {
+    val builder = AlertDialog.Builder(this)
+    builder.setCancelable(cancelable)
+    builder.setPositiveButton(getString(R.string.ok), positiveListener)
+    builder.create().apply {
+        updateAlertDialog(this, message, null, title)
+    }
+}
+
+fun Activity.showAlertDialog(message: String, positiveListener: DialogInterface.OnClickListener?, cancelable: Boolean = true) {
+    showAlertDialog(null, message, positiveListener, cancelable)
+}
+
+
+/***************************************************************************************************
+ *   Screen Dimension
+ *
+ ***************************************************************************************************/
+fun Activity.isLandScape(): Boolean {
+    return resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+}
+
+fun Activity.actionBarHeight(): Int {
+    val typedValue = TypedValue()
+    var actionBarHeight = 0
+    if (theme.resolveAttribute(android.R.attr.actionBarSize, typedValue, true)){
+        actionBarHeight = TypedValue.complexToDimensionPixelSize(typedValue.data, resources.displayMetrics)
+    }
+    return actionBarHeight
+}
+
+fun Activity.statusBarHeight(): Int {
+    var statusBarHeight = 0
+    val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
+    if (resourceId > 0) {
+        statusBarHeight = resources.getDimensionPixelSize(resourceId)
+    }
+    return statusBarHeight
+}
+
+fun Activity.navigationBarHeight(): Int {
+    var navigationBarHeight = 0
+    val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
+    if (resourceId > 0) {
+        navigationBarHeight = resources.getDimensionPixelSize(resourceId)
+    }
+    return navigationBarHeight
+}
+
+fun Activity.getDefaultDisplay(): Point {
+    val display = windowManager.defaultDisplay
+    val size = Point()
+    display.getSize(size)
+    return size
+}
+
+fun Activity.getDashboardCardWidth(ratio: Float): Int {
+    val scaleFactor = if (isLandScape()) 0.5F else 1F
+    return getDefaultDisplay().x.times(ratio).times(scaleFactor).toInt()
+}
+
+fun Activity.getDisplayMetrics(): DisplayMetrics {
+    val outMetrics = DisplayMetrics()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        val display = display
+        display?.getMetrics(outMetrics)
+//        display?.getRealMetrics(outMetrics)
+    } else {
+        val display = windowManager.defaultDisplay
+        display.getMetrics(outMetrics)
+//        display.getRealMetrics(outMetrics)
+    }
+    return outMetrics
+}
+
+fun Activity.printDisplayMetrics() {
+    val metrics = DisplayMetrics()
+    val realMetrics = DisplayMetrics()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        display?.getRealMetrics(realMetrics)
+        display?.getMetrics(metrics)
+    } else {
+        val display = windowManager.defaultDisplay
+        display.getRealMetrics(realMetrics)
+        display.getMetrics(metrics)
+    }
+    Log.i(AAF_TEST, "metrics: ${metrics.widthPixels} x ${metrics.heightPixels}")
+    Log.i(AAF_TEST, "realMetrics: ${realMetrics.widthPixels} x ${realMetrics.heightPixels}")
+}
+
+fun Activity.getRootViewHeight(): Int {
+    return getDefaultDisplay().y - actionBarHeight() - statusBarHeight()
+}
+
 
 /***************************************************************************************************
  *   etc functions
@@ -158,8 +270,6 @@ fun Activity.openGooglePlayBy(targetAppId: String) {
     }
 }
 
-
-
 fun Activity.checkWhatsNew(releases: List<Release>, currVersion: Int, applyFilter: Boolean = true) {
     when (applyFilter) {
         true -> {
@@ -183,79 +293,6 @@ fun Activity.checkWhatsNew(releases: List<Release>, currVersion: Int, applyFilte
     }
 }
 
-
-
-fun Activity.isLandScape(): Boolean {
-    return resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-}
-
-fun Activity.actionBarHeight(): Int {
-    val typedValue = TypedValue()
-    var actionBarHeight = 0
-    if (theme.resolveAttribute(android.R.attr.actionBarSize, typedValue, true)){
-        actionBarHeight = TypedValue.complexToDimensionPixelSize(typedValue.data, resources.displayMetrics)
-    }
-    return actionBarHeight
-}
-
-fun Activity.statusBarHeight(): Int {
-    var statusBarHeight = 0
-    val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
-    if (resourceId > 0) {
-        statusBarHeight = resources.getDimensionPixelSize(resourceId)
-    }
-    return statusBarHeight
-}
-
-fun Activity.navigationBarHeight(): Int {
-    var navigationBarHeight = 0
-    val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
-    if (resourceId > 0) {
-        navigationBarHeight = resources.getDimensionPixelSize(resourceId)
-    }
-    return navigationBarHeight
-}
-
-fun Activity.getDefaultDisplay(): Point {
-    val display = windowManager.defaultDisplay
-    val size = Point()
-    display.getSize(size)
-    return size
-}
-
-fun Activity.getDisplayMetrics(): DisplayMetrics {
-    val outMetrics = DisplayMetrics()
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        val display = display
-        display?.getMetrics(outMetrics)
-//        display?.getRealMetrics(outMetrics)
-    } else {
-        val display = windowManager.defaultDisplay
-        display.getMetrics(outMetrics)
-//        display.getRealMetrics(outMetrics)
-    }
-    return outMetrics
-}
-
-fun Activity.printDisplayMetrics() {
-    val metrics = DisplayMetrics()
-    val realMetrics = DisplayMetrics()
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        display?.getRealMetrics(realMetrics)
-        display?.getMetrics(metrics)
-    } else {
-        val display = windowManager.defaultDisplay
-        display.getRealMetrics(realMetrics)
-        display.getMetrics(metrics)
-    }
-    Log.i(AAF_TEST, "metrics: ${metrics.widthPixels} x ${metrics.heightPixels}")
-    Log.i(AAF_TEST, "realMetrics: ${realMetrics.widthPixels} x ${realMetrics.heightPixels}")
-}
-
-fun Activity.getRootViewHeight(): Int {
-    return getDefaultDisplay().y - actionBarHeight() - statusBarHeight()
-}
-
 fun Activity.startActivityWithTransition(intent: Intent) {
     startActivity(intent)
     overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
@@ -277,37 +314,6 @@ fun Activity.refreshApp() {
     val readDiaryIntent = Intent(this, DiaryMainActivity::class.java)
     readDiaryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
     TransitionHelper.startActivityWithTransition(this, readDiaryIntent)
-}
-
-fun Activity.makeSnackBar(view: View, message: String) {
-    Snackbar.make(view, message, Snackbar.LENGTH_SHORT).setAction("Action", null).show()
-}
-
-fun Activity.showAlertDialog(title: String?, message: String, positiveListener: DialogInterface.OnClickListener?, negativeListener: DialogInterface.OnClickListener?, cancelable: Boolean = true) {
-    val builder = AlertDialog.Builder(this)
-    builder.setCancelable(cancelable)
-    builder.setNegativeButton(getString(R.string.cancel), negativeListener)
-    builder.setPositiveButton(getString(R.string.ok), positiveListener)
-    builder.create().apply {
-        updateAlertDialog(this, message, null, title)
-    }
-}
-
-fun Activity.showAlertDialog(message: String, positiveListener: DialogInterface.OnClickListener, negativeListener: DialogInterface.OnClickListener?, cancelable: Boolean = true) {
-    showAlertDialog(null, message, positiveListener, negativeListener, cancelable)
-}
-
-fun Activity.showAlertDialog(title: String?, message: String, positiveListener: DialogInterface.OnClickListener?, cancelable: Boolean = true) {
-    val builder = AlertDialog.Builder(this)
-    builder.setCancelable(cancelable)
-    builder.setPositiveButton(getString(R.string.ok), positiveListener)
-    builder.create().apply {
-        updateAlertDialog(this, message, null, title)
-    }
-}
-
-fun Activity.showAlertDialog(message: String, positiveListener: DialogInterface.OnClickListener?, cancelable: Boolean = true) {
-    showAlertDialog(null, message, positiveListener, cancelable)
 }
 
 fun Activity.startMainActivityWithClearTask() {
