@@ -20,8 +20,6 @@ import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.nineoldandroids.view.ViewHelper
 import com.zhpan.bannerview.constants.PageStyle
-import io.github.aafactory.commons.extensions.makeToast
-import io.github.aafactory.commons.utils.CommonUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -312,7 +310,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             true -> {
                 mBinding.layoutBannerContainer.visibility = View.VISIBLE
                 if (isLandScape()) {
-                    val point = CommonUtils.getDefaultDisplay(this@DiaryMainActivity)
+                    val point = getDefaultDisplay()
                     val historyWidth = (point.x / 2.5).toInt()
                     mBinding.layoutBannerContainer.layoutParams.width = historyWidth
                     mBinding.diaryListView.layoutParams.width = point.x.minus(historyWidth)

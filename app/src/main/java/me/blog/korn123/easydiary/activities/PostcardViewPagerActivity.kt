@@ -5,11 +5,11 @@ import android.os.Bundle
 import android.view.*
 import android.widget.TextView
 import com.github.chrisbanes.photoview.PhotoView
-import io.github.aafactory.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityPhotoViewPagerBinding
+import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.shareFile
 import me.blog.korn123.easydiary.helper.DIARY_POSTCARD_DIRECTORY
 import me.blog.korn123.easydiary.helper.MIME_TYPE_JPEG
@@ -92,7 +92,7 @@ class PostcardViewPagerActivity : EasyDiaryActivity() {
                 true -> {
                     val textView = TextView(container.context)
                     textView.gravity = Gravity.CENTER
-                    val padding = CommonUtils.dpToPixel(container.context, 10F)
+                    val padding = container.context.dpToPixel(10F)
                     textView.setPadding(padding, padding, padding, padding)
                     FontUtils.setTypefaceDefault(textView)
                     textView.text = container.context.getString(R.string.photo_view_error_info)

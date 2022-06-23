@@ -32,7 +32,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.werb.pickphotoview.PickPhotoViewEx
 import com.werb.pickphotoview.util.PickConfig
-import io.github.aafactory.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.DateUtils
 import io.realm.RealmList
 import me.blog.korn123.commons.utils.EasyDiaryUtils
@@ -480,7 +479,7 @@ abstract class BaseDiaryEditingActivity : EasyDiaryActivity() {
 
     protected fun setupPhotoView() {
         val thumbnailSize = config.settingThumbnailSize
-        val imageXY = CommonUtils.dpToPixel(applicationContext, thumbnailSize)
+        val imageXY = applicationContext.dpToPixel(thumbnailSize)
         val layoutParams = LinearLayout.LayoutParams(imageXY, imageXY)
         mBinding.partialEditContents.partialEditPhotoContainer.run {
             photoView.run {

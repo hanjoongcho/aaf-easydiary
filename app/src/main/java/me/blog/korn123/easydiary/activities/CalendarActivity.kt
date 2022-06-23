@@ -13,7 +13,6 @@ import android.widget.LinearLayout
 import com.roomorama.caldroid.CaldroidFragment
 import com.roomorama.caldroid.CaldroidFragmentEx
 import com.roomorama.caldroid.CaldroidListener
-import io.github.aafactory.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.DateUtils
 import io.realm.Sort
 import me.blog.korn123.easydiary.R
@@ -21,6 +20,7 @@ import me.blog.korn123.easydiary.activities.DiaryWritingActivity.Companion.INITI
 import me.blog.korn123.easydiary.adapters.DiaryCalendarItemAdapter
 import me.blog.korn123.easydiary.databinding.ActivityCalendarBinding
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.dpToPixelFloatValue
 import me.blog.korn123.easydiary.extensions.isLandScape
 import me.blog.korn123.easydiary.fragments.CalendarFragment
 import me.blog.korn123.easydiary.helper.*
@@ -74,7 +74,7 @@ class CalendarActivity : EasyDiaryActivity() {
 
         if (config.enableCardViewPolicy) {
             mBinding.calendarCard.useCompatPadding = true
-            mBinding.calendarCard.cardElevation = CommonUtils.dpToPixelFloatValue(this, 2F)
+            mBinding.calendarCard.cardElevation = dpToPixelFloatValue(2F)
         } else {
             mBinding.calendarCard.useCompatPadding = false
             mBinding.calendarCard.cardElevation = 0F

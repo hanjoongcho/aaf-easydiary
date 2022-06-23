@@ -22,19 +22,18 @@ import com.github.amlcurran.showcaseview.targets.ViewTarget
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
-import io.github.aafactory.commons.utils.BitmapUtils
-import io.github.aafactory.commons.utils.CALCULATION
-import io.github.aafactory.commons.utils.CommonUtils
-import me.blog.korn123.commons.utils.DateUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import me.blog.korn123.commons.utils.BitmapUtils
+import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.PhotoAdapter
 import me.blog.korn123.easydiary.databinding.ActivityPostcardBinding
+import me.blog.korn123.easydiary.enums.Calculation
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.*
 import java.io.File
@@ -135,7 +134,7 @@ class PostcardActivity : EasyDiaryActivity() {
                     if (mPhotoAdapter.postCardPhotoItems.none { item -> item.forceSinglePhotoPosition }) {
                         layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
                     } else {
-                        layoutParams.height = CommonUtils.getDefaultDisplay(this@PostcardActivity).x
+                        layoutParams.height = getDefaultDisplay().x
                     }
 
                 }
@@ -383,8 +382,8 @@ class PostcardActivity : EasyDiaryActivity() {
 
     companion object {
         fun calcPhotoGridHeight(activity: Activity): Int {
-            val point =  CommonUtils.getDefaultDisplay(activity)
-            return point.y - activity.actionBarHeight() - activity.statusBarHeight() - CommonUtils.dpToPixel(activity, 30F, CALCULATION.CEIL)
+            val point =  activity.getDefaultDisplay()
+            return point.y - activity.actionBarHeight() - activity.statusBarHeight() - activity.dpToPixel(30F, Calculation.CEIL)
         }
     }
 }

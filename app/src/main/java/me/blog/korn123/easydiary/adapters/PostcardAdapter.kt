@@ -12,14 +12,11 @@ import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView.SectionedAdapter
-import io.github.aafactory.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createThumbnailGlideOptions
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.databinding.ItemPostCardBinding
-import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.isLandScape
-import me.blog.korn123.easydiary.extensions.updateAppViews
+import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL
 import java.io.File
 import java.text.SimpleDateFormat
@@ -69,7 +66,7 @@ class PostcardAdapter(
 
         fun bindTo(postCard: PostCard) {
             val timeStampView = itemPostCardBinding.createdDate
-            timeStampView.setTextSize(TypedValue.COMPLEX_UNIT_PX, CommonUtils.dpToPixelFloatValue(activity, 10F))
+            timeStampView.setTextSize(TypedValue.COMPLEX_UNIT_PX, activity.dpToPixelFloatValue(10F))
             itemPostCardBinding.checkItem.isChecked = postCard.isItemChecked
             try {
                 val format = SimpleDateFormat(POSTCARD_DATE_FORMAT, Locale.getDefault())
@@ -79,7 +76,7 @@ class PostcardAdapter(
             }
 
             activity.run {
-                val point =  CommonUtils.getDefaultDisplay(this)
+                val point =  getDefaultDisplay()
                 val spanCount = if (activity.isLandScape()) config.postcardSpanCountLandscape else config.postcardSpanCountPortrait
                 val targetX = point.x / spanCount
                 itemPostCardBinding.imageContainer.layoutParams.height = targetX

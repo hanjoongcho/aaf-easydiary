@@ -43,13 +43,13 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.graphics.ColorUtils
 import androidx.core.location.LocationManagerCompat
-import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.extensions.adjustAlpha
+import com.simplemobiletools.commons.extensions.formatMinutesToTimeString
+import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
+import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.*
 import com.simplemobiletools.commons.views.*
-import io.github.aafactory.commons.extensions.dpToPixel
-import io.github.aafactory.commons.utils.CommonUtils
-import io.github.aafactory.commons.views.ModalView
+import io.github.aafactory.commons.extensions.getPermissionString
 import io.realm.Realm
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
@@ -60,6 +60,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.activities.DiaryWritingActivity
 import me.blog.korn123.easydiary.databinding.DialogMessageBinding
+import me.blog.korn123.easydiary.enums.Calculation
 import me.blog.korn123.easydiary.enums.Launcher
 import me.blog.korn123.easydiary.fragments.SettingsScheduleFragment
 import me.blog.korn123.easydiary.helper.*
@@ -72,7 +73,6 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import java.io.File
 import java.io.FileOutputStream
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.pow
 
@@ -337,7 +337,6 @@ fun Context.updateTextColors(viewGroup: ViewGroup, tmpTextColor: Int = 0, tmpAcc
                     is MyFloatingActionButton -> it.backgroundTintList = ColorStateList.valueOf(accentColor)
                     is MySeekBar -> it.setColors(textColor, accentColor, backgroundColor)
                     is MyButton -> it.setColors(textColor, accentColor, backgroundColor)
-                    is ModalView -> it.setBackgroundColor(accentColor)
                     is ViewGroup -> updateTextColors(it, textColor, accentColor)
                 }
             }
@@ -410,13 +409,13 @@ fun Context.updateCardViewPolicy(viewGroup: ViewGroup) {
                     is FixedCardView -> {
                         if (it.fixedAppcompatPadding) {
                             it.useCompatPadding = true
-                            it.cardElevation = CommonUtils.dpToPixelFloatValue(this, 2F)
+                            it.cardElevation = dpToPixelFloatValue(2F)
                         }
                     }
                     is CardView -> {
                         if (config.enableCardViewPolicy) {
                             it.useCompatPadding = true
-                            it.cardElevation = CommonUtils.dpToPixelFloatValue(this, 2F)
+                            it.cardElevation = dpToPixelFloatValue(2F)
                         } else {
                             it.useCompatPadding = false
                             it.cardElevation = 0F
@@ -450,7 +449,7 @@ fun Context.initTextSize(viewGroup: ViewGroup) {
     if (isNightMode()) return
 
     val cnt = viewGroup.childCount
-    val defaultFontSize: Float = CommonUtils.dpToPixelFloatValue(this, DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE.toFloat())
+    val defaultFontSize: Float = dpToPixelFloatValue(DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE.toFloat())
     val settingFontSize: Float = config.settingFontSize
     (0 until cnt)
             .map { index -> viewGroup.getChildAt(index) }
@@ -483,7 +482,7 @@ fun Context.initTextSize(viewGroup: ViewGroup) {
 fun Context.initTextSize(textView: TextView) {
     if (isNightMode()) return
 
-    val defaultFontSize: Float = CommonUtils.dpToPixelFloatValue(this, DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE.toFloat())
+    val defaultFontSize: Float = dpToPixelFloatValue(DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE.toFloat())
     val settingFontSize: Float = config.settingFontSize
     textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
 }
@@ -536,7 +535,7 @@ fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null,
         if (!isNightMode()) window?.setBackgroundDrawable(GradientDrawable().apply {
             shape = GradientDrawable.RECTANGLE
             setColor(config.backgroundColor)
-            cornerRadius = CommonUtils.dpToPixelFloatValue(this@updateAlertDialog, 3F)
+            cornerRadius = dpToPixelFloatValue(3F)
             alpha = backgroundAlpha
         })
 
@@ -548,7 +547,7 @@ fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null,
                 if (!isNightMode()) setTextColor(config.textColor)
 //                setBackgroundColor(ContextCompat.getColor(this@updateAlertDialog, R.color.white))
                 typeface = globalTypeface
-                val padding = CommonUtils.dpToPixel(this@updateAlertDialog, 15F)
+                val padding = dpToPixel(15F)
                 setPadding(padding * 2, padding, padding * 2, padding)
                 setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18F)
 //                        setBackgroundColor(resources.getColor(android.R.color.white))
@@ -868,3 +867,32 @@ fun Context.toggleAppIconColor(appId: String, colorIndex: Int, color: Int, enabl
     } catch (e: Exception) {}
 }
 
+fun Context.dpToPixelFloatValue(dp: Float): Float {
+    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics)
+}
+
+fun Context.dpToPixel(dp: Float, policy: Calculation = Calculation.CEIL): Int {
+    val px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics)
+    return when (policy) {
+        Calculation.CEIL -> Math.ceil(px.toDouble()).toInt()
+        Calculation.ROUND -> Math.round(px)
+        Calculation.FLOOR -> Math.floor(px.toDouble()).toInt()
+    }
+}
+
+fun Context.hasPermission(permId: Int) = ContextCompat.checkSelfPermission(this, getPermissionString(permId)) == PackageManager.PERMISSION_GRANTED
+
+fun Context.getPermissionString(id: Int) = when (id) {
+    PERMISSION_READ_STORAGE -> Manifest.permission.READ_EXTERNAL_STORAGE
+    PERMISSION_WRITE_STORAGE -> Manifest.permission.WRITE_EXTERNAL_STORAGE
+    PERMISSION_CAMERA -> Manifest.permission.CAMERA
+    PERMISSION_RECORD_AUDIO -> Manifest.permission.RECORD_AUDIO
+    PERMISSION_READ_CONTACTS -> Manifest.permission.READ_CONTACTS
+    PERMISSION_WRITE_CONTACTS -> Manifest.permission.WRITE_CONTACTS
+    PERMISSION_READ_CALENDAR -> Manifest.permission.READ_CALENDAR
+    PERMISSION_WRITE_CALENDAR -> Manifest.permission.WRITE_CALENDAR
+    PERMISSION_CALL_PHONE -> Manifest.permission.CALL_PHONE
+    io.github.aafactory.commons.helpers.PERMISSION_ACCESS_FINE_LOCATION ->  Manifest.permission.ACCESS_FINE_LOCATION
+    io.github.aafactory.commons.helpers.PERMISSION_ACCESS_COARSE_LOCATION -> Manifest.permission.ACCESS_COARSE_LOCATION
+    else -> ""
+}

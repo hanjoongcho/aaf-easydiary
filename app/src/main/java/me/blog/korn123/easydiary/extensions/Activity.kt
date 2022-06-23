@@ -1,8 +1,10 @@
 package me.blog.korn123.easydiary.extensions
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.*
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Bitmap
@@ -33,10 +35,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
-import io.github.aafactory.commons.extensions.triggerRestart
 import io.github.aafactory.commons.helpers.PERMISSION_ACCESS_COARSE_LOCATION
-import io.github.aafactory.commons.helpers.PERMISSION_ACCESS_FINE_LOCATION
-import io.github.aafactory.commons.utils.BitmapUtils
+import me.blog.korn123.commons.utils.BitmapUtils
 import io.github.aafactory.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.DateUtils
 import kotlinx.coroutines.GlobalScope
@@ -825,4 +825,24 @@ fun Activity.clearLockSettingsTemporary() {
             showAlertDialog("Password lock setting is forcibly released. Password lock settings will be unavailable for the next $remainMinutes minutes.", null)
         }
     }
+}
+
+fun Activity.triggerRestart(cls: Class<*>) {
+    val intent = Intent(this, cls)
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    this.startActivity(intent)
+    finish()
+    Runtime.getRuntime().exit(0)
+}
+
+@SuppressLint("SourceLockedOrientationActivity")
+fun Activity.holdCurrentOrientation() {
+    when (resources.configuration.orientation) {
+        Configuration.ORIENTATION_PORTRAIT -> requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        Configuration.ORIENTATION_LANDSCAPE -> requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+    }
+}
+
+fun Activity.clearHoldOrientation() {
+    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
 }

@@ -43,13 +43,12 @@ import com.google.common.reflect.TypeToken
 import com.google.gson.GsonBuilder
 import com.google.gson.stream.JsonReader
 import id.zelory.compressor.Compressor
-import io.github.aafactory.commons.utils.BitmapUtils
-import io.github.aafactory.commons.utils.CALCULATION
-import io.github.aafactory.commons.utils.CommonUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.SecondItemAdapter
+import me.blog.korn123.easydiary.enums.Calculation
 import me.blog.korn123.easydiary.extensions.checkPermission
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.Diary
 import me.blog.korn123.easydiary.models.PhotoUri
@@ -174,15 +173,15 @@ object EasyDiaryUtils {
     }
 
     fun createAttachedPhotoView(context: Context, photoUri: PhotoUri, marginLeft:Float = 0F, marginTop:Float = 0F, marginRight:Float = 3F, marginBottom:Float = 0F): ImageView {
-        val thumbnailSize = CommonUtils.dpToPixel(context, context.config.settingThumbnailSize)
+        val thumbnailSize = context.dpToPixel(context.config.settingThumbnailSize)
         val cornerRadius = thumbnailSize * PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
         val imageView = ImageView(context)
         val layoutParams = LinearLayout.LayoutParams(thumbnailSize, thumbnailSize)
-        layoutParams.setMargins(CommonUtils.dpToPixel(context, marginLeft), CommonUtils.dpToPixel(context, marginTop), CommonUtils.dpToPixel(context, marginRight), CommonUtils.dpToPixel(context, marginBottom))
+        layoutParams.setMargins(context.dpToPixel(marginLeft), context.dpToPixel(marginTop), context.dpToPixel(marginRight), context.dpToPixel(marginBottom))
         imageView.layoutParams = layoutParams
         imageView.background = createBackgroundGradientDrawable(context.config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA, cornerRadius)
         imageView.scaleType = ImageView.ScaleType.CENTER
-        val padding = (CommonUtils.dpToPixel(context, 2.5F, CALCULATION.FLOOR))
+        val padding = (context.dpToPixel(2.5F, Calculation.FLOOR))
         imageView.setPadding(padding, padding, padding, padding)
         Glide.with(context)
             .load(getApplicationDataDirectory(context) + photoUri.getFilePath())
@@ -405,7 +404,7 @@ object EasyDiaryUtils {
         val popup: PopupWindow = PopupWindow(content, width, height, true).apply {
 //            animationStyle = R.style.text_view_option_animation
             setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            showAtLocation(parent, Gravity.TOP or Gravity.RIGHT,0, CommonUtils.dpToPixel(parent.context, 24F))
+            showAtLocation(parent, Gravity.TOP or Gravity.RIGHT,0, parent.context.dpToPixel(24F))
         }
         content.x = 1000f
         content.y = 0f
@@ -516,12 +515,12 @@ object EasyDiaryUtils {
     ): Bitmap = try {
         when (photoUri.isContentUri()) {
             true -> {
-                BitmapUtils.decodeFile(context, Uri.parse(photoUri.photoUri), CommonUtils.dpToPixel(context, fixedWidth.toFloat(), CALCULATION.FLOOR), CommonUtils.dpToPixel(context, fixedHeight.toFloat(), CALCULATION.FLOOR))
+                BitmapUtils.decodeFile(context, Uri.parse(photoUri.photoUri), context.dpToPixel(fixedWidth.toFloat(), Calculation.FLOOR), context.dpToPixel(fixedHeight.toFloat(), Calculation.FLOOR))
             }
             false -> {
                 when (fixedWidth == fixedHeight) {
-                    true -> BitmapUtils.decodeFileCropCenter(getApplicationDataDirectory(context) + photoUri.getFilePath(), CommonUtils.dpToPixel(context, fixedWidth.toFloat(), CALCULATION.FLOOR))
-                    false -> BitmapUtils.decodeFile(getApplicationDataDirectory(context) + photoUri.getFilePath(), CommonUtils.dpToPixel(context, fixedWidth.toFloat(), CALCULATION.FLOOR), CommonUtils.dpToPixel(context, fixedHeight.toFloat(), CALCULATION.FLOOR))
+                    true -> BitmapUtils.decodeFileCropCenter(getApplicationDataDirectory(context) + photoUri.getFilePath(), context.dpToPixel(fixedWidth.toFloat(), Calculation.FLOOR))
+                    false -> BitmapUtils.decodeFile(getApplicationDataDirectory(context) + photoUri.getFilePath(), context.dpToPixel(fixedWidth.toFloat(), Calculation.FLOOR), context.dpToPixel(fixedHeight.toFloat(), Calculation.FLOOR))
                 }
 
             }
