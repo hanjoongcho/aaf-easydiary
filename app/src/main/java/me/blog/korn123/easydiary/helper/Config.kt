@@ -6,10 +6,8 @@ import android.text.format.DateFormat
 import androidx.preference.PreferenceManager
 import com.simplemobiletools.commons.extensions.getSharedPrefs
 import com.simplemobiletools.commons.helpers.*
-import io.github.aafactory.commons.helpers.AAF_PIN_LOCK_PAUSE_MILLIS
-import io.github.aafactory.commons.helpers.AAF_THEME_CHANGE
-import io.github.aafactory.commons.utils.CommonUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.dpToPixelFloatValue
 import java.util.*
 
 /**
@@ -82,7 +80,7 @@ class Config(val context: Context) {
         set(previousActivity) = legacyPrefs.edit().putInt(PREVIOUS_ACTIVITY, previousActivity).apply()
 
     var settingFontSize: Float
-        get() = legacyPrefs.getFloat(SETTING_FONT_SIZE, CommonUtils.dpToPixelFloatValue(context, DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE.toFloat()))
+        get() = legacyPrefs.getFloat(SETTING_FONT_SIZE, context.dpToPixelFloatValue(DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE.toFloat()))
         set(settingFontSize) = legacyPrefs.edit().putFloat(SETTING_FONT_SIZE, settingFontSize).apply()
 
     var diarySearchQueryCaseSensitive: Boolean

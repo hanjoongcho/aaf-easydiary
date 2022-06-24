@@ -605,5 +605,13 @@ const val DOZE_SCHEDULE = "doze_schedule"
 const val PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL = 0.05F
 const val PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL = 0.02F
 
+
+/***************************************************************************************************
+ *   AAFactory Legacy
+ *
+ ***************************************************************************************************/
 const val PERMISSION_ACCESS_COARSE_LOCATION = 10
 const val PERMISSION_ACCESS_FINE_LOCATION = 11
+
+const val AAF_PIN_LOCK_PAUSE_MILLIS = "aaf_pin_lock_pause_millis"
+const val AAF_THEME_CHANGE = "aaf_theme_change"

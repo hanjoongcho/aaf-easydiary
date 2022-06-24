@@ -20,7 +20,6 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
-import io.github.aafactory.commons.utils.CommonUtils
 import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
@@ -30,10 +29,7 @@ import me.blog.korn123.easydiary.activities.StatisticsActivity
 import me.blog.korn123.easydiary.chart.DiaryCountingAxisValueFormatter
 import me.blog.korn123.easydiary.chart.IValueFormatterExt
 import me.blog.korn123.easydiary.chart.XYMarkerView
-import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.darkenColor
-import me.blog.korn123.easydiary.extensions.scaledDrawable
-import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
+import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.TransitionHelper
 import me.blog.korn123.easydiary.views.FixedTextView
 
@@ -157,7 +153,7 @@ class SymbolHorizontalBarChartFragment : androidx.fragment.app.Fragment() {
                     itemArray.forEachIndexed { index, item ->
                         colorItems.add(defaultColor.darkenColor(index * 2))
                         val drawable: Drawable? = when (FlavorUtils.sequenceToSymbolResourceId(item["key"]!!) > 0) {
-                            true -> scaledDrawable(FlavorUtils.sequenceToSymbolResourceId(item["key"]!!), CommonUtils.dpToPixel(requireContext(),24F) , CommonUtils.dpToPixel(requireContext(),24F))
+                            true -> scaledDrawable(FlavorUtils.sequenceToSymbolResourceId(item["key"]!!), requireContext().dpToPixel(24F) , requireContext().dpToPixel(24F))
                             false -> null
                         }
                         barEntries.add(BarEntry((index + 1F), item["value"]!!.toFloat(), drawable))

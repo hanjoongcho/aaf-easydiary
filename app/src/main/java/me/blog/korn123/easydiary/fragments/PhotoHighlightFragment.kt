@@ -9,7 +9,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.zhpan.bannerview.BannerViewPager
 import com.zhpan.bannerview.constants.IndicatorGravity
 import com.zhpan.bannerview.constants.PageStyle
-import io.github.aafactory.commons.extensions.dpToPixel
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.easydiary.R
@@ -17,6 +16,7 @@ import me.blog.korn123.easydiary.activities.DiaryReadingActivity
 import me.blog.korn123.easydiary.adapters.HistoryAdapter
 import me.blog.korn123.easydiary.databinding.FragmentPhotoHighlightBinding
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.TransitionHelper

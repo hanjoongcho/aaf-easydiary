@@ -21,15 +21,8 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.fragment.app.viewModels
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
-import io.github.aafactory.commons.extensions.baseConfig
-import io.github.aafactory.commons.extensions.clearHoldOrientation
-import io.github.aafactory.commons.extensions.holdCurrentOrientation
-import me.blog.korn123.commons.utils.DateUtils
-import me.blog.korn123.commons.utils.EasyDiaryUtils
+import me.blog.korn123.commons.utils.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createAttachedPhotoView
-import me.blog.korn123.commons.utils.FlavorUtils
-import me.blog.korn123.commons.utils.FontUtils
-import me.blog.korn123.commons.utils.JasyptUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.*
 import me.blog.korn123.easydiary.extensions.*
@@ -240,7 +233,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             var confirmPass = ""
             holdCurrentOrientation()
             val popupView = root.apply {
-                setBackgroundColor(ColorUtils.setAlphaComponent(baseConfig.backgroundColor, 250))
+                setBackgroundColor(ColorUtils.setAlphaComponent(config.backgroundColor, 250))
                 decMode1.setTextColor(config.textColor)
                 decMode2.setTextColor(config.textColor)
             }

@@ -1,7 +1,6 @@
 package me.blog.korn123.easydiary.adapters
 
 import android.content.Context
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,14 +8,10 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
-import io.github.aafactory.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.initTextSize
-import me.blog.korn123.easydiary.extensions.updateAppViews
-import me.blog.korn123.easydiary.extensions.updateTextColors
+import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.models.Diary
 import org.apache.commons.lang3.StringUtils
 
@@ -74,7 +69,7 @@ class DiaryCalendarItemAdapter(
             if (cardView is androidx.cardview.widget.CardView) {
                 if (context.config.enableCardViewPolicy) {
                     cardView.useCompatPadding = true
-                    cardView.cardElevation = CommonUtils.dpToPixelFloatValue(context, 2F)
+                    cardView.cardElevation = context.dpToPixelFloatValue(2F)
                 } else {
                     cardView.useCompatPadding = false
                     cardView.cardElevation = 0F

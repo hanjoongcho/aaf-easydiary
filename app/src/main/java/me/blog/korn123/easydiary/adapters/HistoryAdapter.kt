@@ -12,13 +12,12 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.zhpan.bannerview.BaseBannerAdapter
 import com.zhpan.bannerview.BaseViewHolder
-import io.github.aafactory.commons.extensions.dpToPixel
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ItemHistoryBinding
 import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
+import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.models.History
 
 class HistoryAdapter : BaseBannerAdapter<History>() {

@@ -10,12 +10,12 @@ import com.bumptech.glide.Priority
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.github.chrisbanes.photoview.PhotoView
-import io.github.aafactory.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityPhotoViewPagerBinding
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.shareFile
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.Diary
@@ -125,7 +125,7 @@ class PhotoViewPagerActivity : EasyDiaryActivity() {
                 else -> {
                     val textView = TextView(container.context)
                     textView.gravity = Gravity.CENTER
-                    val padding = CommonUtils.dpToPixel(container.context, 10F)
+                    val padding = container.context.dpToPixel(10F)
                     textView.setPadding(padding, padding, padding, padding)
                     textView.typeface = FontUtils.getCommonTypeface(container.context)
                     textView.text = if (diary.isEncrypt) "The diary is encrypted. You will need to decrypt the diary to see the attached photos." else container.context.getString(R.string.photo_view_error_info)

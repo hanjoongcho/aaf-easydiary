@@ -17,7 +17,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import io.github.aafactory.commons.extensions.baseConfig
 import me.blog.korn123.commons.utils.DateUtils
 
 import kotlinx.coroutines.CoroutineScope
@@ -538,7 +537,7 @@ class SettingsLocalBackupFragment : androidx.fragment.app.Fragment() {
             modeExternalTitle.text = externalTitle
             modeExternalDescription.text = externalDescription
 
-            root.setBackgroundColor(requireActivity().baseConfig.backgroundColor)
+            root.setBackgroundColor(requireActivity().config.backgroundColor)
             closePopup.setOnClickListener { dialog?.dismiss() }
             modeInternal.setOnClickListener {
                 when (popupMode) {

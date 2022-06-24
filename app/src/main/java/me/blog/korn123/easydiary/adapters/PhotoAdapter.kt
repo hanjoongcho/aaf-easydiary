@@ -12,15 +12,14 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
-import io.github.aafactory.commons.utils.CommonUtils
 import jp.wasabeef.glide.transformations.BitmapTransformation
 import jp.wasabeef.glide.transformations.CropTransformation
 import jp.wasabeef.glide.transformations.GrayscaleTransformation
 import jp.wasabeef.glide.transformations.gpu.*
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.PostcardActivity
+import me.blog.korn123.easydiary.extensions.getDefaultDisplay
 import me.blog.korn123.easydiary.fragments.PhotoFlexItemOptionFragment
-import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
 import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_SMALL
 import kotlin.math.ceil
 import kotlin.math.sqrt
@@ -96,7 +95,7 @@ class PhotoAdapter(
         }
 
         fun bindTo(postCardPhotoItem: PostCardPhotoItem) {
-            val point =  CommonUtils.getDefaultDisplay(activity)
+            val point =  activity.getDefaultDisplay()
             val height = PostcardActivity.calcPhotoGridHeight(activity)
             val size = if (point.x > point.y) height else point.x
 

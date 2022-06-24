@@ -14,8 +14,6 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
-import io.github.aafactory.commons.utils.CALCULATION
-import io.github.aafactory.commons.utils.CommonUtils
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createBackgroundGradientDrawable
@@ -25,6 +23,7 @@ import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.databinding.ItemDiaryMainBinding
+import me.blog.korn123.easydiary.enums.Calculation
 import me.blog.korn123.easydiary.enums.DiaryMode
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
@@ -176,14 +175,14 @@ class DiaryMainItemAdapter(
                 photoViews.removeAllViews()
                 if (diary.photoUris?.size ?: 0 > 0) {
                     diary.photoUrisWithEncryptionPolicy()?.map {
-                        val imageXY = CommonUtils.dpToPixel(activity, 32F)
+                        val imageXY = activity.dpToPixel(32F)
                         val imageView = ImageView(activity)
                         val layoutParams = LinearLayout.LayoutParams(imageXY, imageXY)
-                        layoutParams.setMargins(0, CommonUtils.dpToPixel(activity, 1F), CommonUtils.dpToPixel(activity, 3F), 0)
+                        layoutParams.setMargins(0, activity.dpToPixel(1F), activity.dpToPixel(3F), 0)
                         imageView.layoutParams = layoutParams
                         imageView.background = createBackgroundGradientDrawable(activity.config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA, imageXY * PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL)
                         imageView.scaleType = ImageView.ScaleType.CENTER
-                        CommonUtils.dpToPixel(activity, 1.5F, CALCULATION.FLOOR).apply {
+                        activity.dpToPixel(1.5F, Calculation.FLOOR).apply {
                             imageView.setPadding(this, this, this, this)
                         }
                         val listener = object : RequestListener<Drawable> {

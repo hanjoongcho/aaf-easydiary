@@ -49,7 +49,6 @@ import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
 import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.*
 import com.simplemobiletools.commons.views.*
-import io.github.aafactory.commons.extensions.getPermissionString
 import io.realm.Realm
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
@@ -892,7 +891,7 @@ fun Context.getPermissionString(id: Int) = when (id) {
     PERMISSION_READ_CALENDAR -> Manifest.permission.READ_CALENDAR
     PERMISSION_WRITE_CALENDAR -> Manifest.permission.WRITE_CALENDAR
     PERMISSION_CALL_PHONE -> Manifest.permission.CALL_PHONE
-    io.github.aafactory.commons.helpers.PERMISSION_ACCESS_FINE_LOCATION ->  Manifest.permission.ACCESS_FINE_LOCATION
-    io.github.aafactory.commons.helpers.PERMISSION_ACCESS_COARSE_LOCATION -> Manifest.permission.ACCESS_COARSE_LOCATION
+    PERMISSION_ACCESS_FINE_LOCATION ->  Manifest.permission.ACCESS_FINE_LOCATION
+    PERMISSION_ACCESS_COARSE_LOCATION -> Manifest.permission.ACCESS_COARSE_LOCATION
     else -> ""
 }

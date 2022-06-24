@@ -8,7 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import androidx.recyclerview.widget.GridLayoutManager
-import io.github.aafactory.commons.utils.ColorUtils
+import me.blog.korn123.commons.utils.ColorUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R

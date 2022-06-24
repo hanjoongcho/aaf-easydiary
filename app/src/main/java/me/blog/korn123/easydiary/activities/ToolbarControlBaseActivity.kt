@@ -27,10 +27,10 @@ import com.github.ksoichiro.android.observablescrollview.ScrollState
 import com.github.ksoichiro.android.observablescrollview.Scrollable
 import com.nineoldandroids.animation.ValueAnimator
 import com.nineoldandroids.view.ViewHelper
-import io.github.aafactory.commons.utils.CommonUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityDiaryMainBinding
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.viewmodels.DiaryMainViewModel
 
 abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(), ObservableScrollViewCallbacks {
@@ -118,10 +118,10 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
         var isShow = false
         val rootView = findViewById<View>(android.R.id.content)
         val heightDiff = rootView.rootView.height - rootView.height
-        if (heightDiff > CommonUtils.dpToPixel(this, 200F)) {
+        if (heightDiff > dpToPixel(200F)) {
             isShow = true
         }
-        Log.i("keypadIsShown", "$heightDiff, ${CommonUtils.dpToPixel(this, 200F)}")
+        Log.i("keypadIsShown", "$heightDiff, ${dpToPixel(200F)}")
 
         return isShow
     }

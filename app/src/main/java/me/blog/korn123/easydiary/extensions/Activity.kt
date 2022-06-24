@@ -3,7 +3,10 @@ package me.blog.korn123.easydiary.extensions
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
-import android.content.*
+import android.content.ActivityNotFoundException
+import android.content.ComponentName
+import android.content.DialogInterface
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
@@ -35,12 +38,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
-import io.github.aafactory.commons.helpers.PERMISSION_ACCESS_COARSE_LOCATION
-import me.blog.korn123.commons.utils.BitmapUtils
-import io.github.aafactory.commons.utils.CommonUtils
-import me.blog.korn123.commons.utils.DateUtils
+import id.zelory.compressor.Compressor
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import me.blog.korn123.commons.utils.BitmapUtils
+import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FlavorUtils.getDiarySymbolMap
@@ -62,6 +64,7 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -693,7 +696,7 @@ fun EasyDiaryActivity.migrateData(binging: ActivityDiaryMainBinding) {
 //                Log.i("PHOTO-URI", dto.photoUri)
             if (dto.isContentUri()) {
                 val photoPath = EasyDiaryUtils.getApplicationDataDirectory(this@migrateData) + DIARY_PHOTO_DIRECTORY + UUID.randomUUID().toString()
-                CommonUtils.uriToFile(this@migrateData, Uri.parse(dto.photoUri), photoPath)
+                uriToFile(Uri.parse(dto.photoUri), photoPath)
                 realmInstance.beginTransaction()
                 dto.photoUri = FILE_URI_PREFIX + photoPath
                 realmInstance.commitTransaction()
@@ -825,6 +828,25 @@ fun Activity.clearLockSettingsTemporary() {
             showAlertDialog("Password lock setting is forcibly released. Password lock settings will be unavailable for the next $remainMinutes minutes.", null)
         }
     }
+}
+
+fun Activity.uriToFile(uri: Uri, photoPath: String): Boolean {
+    var result = false
+    try {
+        val tempFile = File.createTempFile("TEMP_PHOTO", "AAF").apply { deleteOnExit() }
+        val inputStream = contentResolver.openInputStream(uri)
+        val outputStream = FileOutputStream(tempFile)
+        IOUtils.copy(inputStream, outputStream)
+        IOUtils.closeQuietly(inputStream)
+        IOUtils.closeQuietly(outputStream)
+
+        val compressedFile = Compressor(this).setQuality(70).compressToFile(tempFile)
+        FileUtils.copyFile(compressedFile, File(photoPath))
+        result = true
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+    return result
 }
 
 fun Activity.triggerRestart(cls: Class<*>) {
