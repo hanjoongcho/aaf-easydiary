@@ -1,4 +1,4 @@
-<io.github.aafactory.commons.views.LabelLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<me.blog.korn123.easydiary.views.LabelLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/bottomToolbar"
@@ -60,5 +60,5 @@
                 style="@style/SettingsCategory" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-</io.github.aafactory.commons.views.LabelLayout>
+</me.blog.korn123.easydiary.views.LabelLayout>
    

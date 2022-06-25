@@ -1,4 +1,4 @@
-<io.github.aafactory.commons.views.LabelLayout
+<me.blog.korn123.easydiary.views.LabelLayout
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -34,5 +34,5 @@
             android:layout_marginEnd="10dp"
             android:src="@drawable/ic_collapse" />
     </LinearLayout>
-</io.github.aafactory.commons.views.LabelLayout>
+</me.blog.korn123.easydiary.views.LabelLayout>
    
