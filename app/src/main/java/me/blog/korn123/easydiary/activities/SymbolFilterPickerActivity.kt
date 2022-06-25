@@ -62,7 +62,7 @@ class SymbolFilterPickerActivity : EasyDiaryActivity() {
 
         mBinding.recyclerView.apply {
             layoutManager = androidx.recyclerview.widget.GridLayoutManager(this@SymbolFilterPickerActivity, 4)
-            addItemDecoration(SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding)))
+            addItemDecoration(SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.component_margin_small)))
             adapter = mSymbolFilterAdapter
         }
         updateSymbolFilter()

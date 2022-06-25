@@ -53,7 +53,7 @@ class PostcardViewerActivity : EasyDiaryActivity() {
 //            justifyContent = JustifyContent.FLEX_START 
 //        }
         
-        val spacesItemDecoration = GridItemDecorationPostcardViewer(resources.getDimensionPixelSize(R.dimen.card_layout_padding), this)
+        val spacesItemDecoration = GridItemDecorationPostcardViewer(resources.getDimensionPixelSize(R.dimen.component_margin_small), this)
         mGridLayoutManager = GridLayoutManager(this, if (isLandScape()) config.postcardSpanCountLandscape else config.postcardSpanCountPortrait)
 
         EasyDiaryUtils.initWorkingDirectory(this@PostcardViewerActivity)

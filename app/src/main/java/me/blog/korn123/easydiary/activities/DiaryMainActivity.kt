@@ -585,7 +585,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             layoutManager = mGridLayoutManager
             addItemDecoration(
                 GridItemDecorationDiaryMain(
-                    resources.getDimensionPixelSize(R.dimen.card_layout_padding),
+                    resources.getDimensionPixelSize(R.dimen.component_margin_small),
                     this@DiaryMainActivity
                 )
             )

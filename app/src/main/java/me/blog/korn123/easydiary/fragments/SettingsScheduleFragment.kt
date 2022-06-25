@@ -66,7 +66,7 @@ class SettingsScheduleFragment() : androidx.fragment.app.Fragment() {
 
         mBinding.alarmRecyclerView.apply {
             layoutManager = androidx.recyclerview.widget.GridLayoutManager(mActivity, 1)
-            addItemDecoration(SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.card_layout_padding)))
+            addItemDecoration(SpacesItemDecoration(resources.getDimensionPixelSize(R.dimen.component_margin_small)))
             adapter = mAlarmAdapter
         }
 

@@ -47,7 +47,7 @@
         android:id="@+id/main_holder"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:orientation="vertical"
-        android:padding="@dimen/card_layout_padding"
+        android:padding="@dimen/component_margin_small"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <include android:id="@+id/content_post_card_viewer" layout="@layout/partial_content_post_card_viewer"/>

@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp">
             <LinearLayout
-                android:padding="@dimen/card_layout_padding"
+                android:padding="@dimen/component_margin_small"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">

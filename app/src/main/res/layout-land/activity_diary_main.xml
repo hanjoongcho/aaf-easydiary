@@ -29,7 +29,7 @@
         </com.google.android.material.appbar.AppBarLayout>
         <LinearLayout
             android:id="@+id/main_holder"
-            android:padding="@dimen/card_layout_padding"
+            android:padding="@dimen/component_margin_small"
             android:orientation="vertical"
             android:layout_marginTop="?attr/actionBarSize"
             android:layout_width="match_parent"
@@ -108,7 +108,7 @@
                 </androidx.appcompat.widget.LinearLayoutCompat>
                 <me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
                     android:id="@+id/diaryListView"
-                    android:layout_marginTop="@dimen/card_layout_padding"
+                    android:layout_marginTop="@dimen/component_margin_small"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     style="@style/recycler_fast_scroll"

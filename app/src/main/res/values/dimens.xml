@@ -28,10 +28,9 @@
     <dimen name="dashboard_symbol_padding">5dp</dimen>
     <dimen name="dashboard_card_radius">10dp</dimen>
     <dimen name="dashboard_card_padding">10dp</dimen>
+    <dimen name="component_margin_small">1dp</dimen>
 
     <!--override dimens-->
-    <dimen name="card_layout_padding">1dp</dimen>
-    <dimen name="card_layout_margin">1dp</dimen>
     <dimen name="card_contents_padding">15dp</dimen>
 
     <dimen name="dp_18">18dp</dimen>
