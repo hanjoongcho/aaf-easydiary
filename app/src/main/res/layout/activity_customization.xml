@@ -18,7 +18,7 @@
     </com.google.android.material.appbar.AppBarLayout>
     <RelativeLayout
         android:id="@+id/main_holder"
-        android:padding="@dimen/card_layout_padding"
+        android:padding="@dimen/component_margin_small"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <androidx.cardview.widget.CardView

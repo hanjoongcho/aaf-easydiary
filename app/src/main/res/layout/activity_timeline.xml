@@ -16,8 +16,8 @@
         <ListView
             android:fastScrollAlwaysVisible="false"
             android:fastScrollEnabled="true"
-            android:paddingTop="@dimen/card_layout_padding"
-            android:paddingBottom="@dimen/card_layout_padding"
+            android:paddingTop="@dimen/component_margin_small"
+            android:paddingBottom="@dimen/component_margin_small"
             android:dividerHeight="0dp"
             android:divider="@null"
             android:listSelector="@android:color/transparent"
