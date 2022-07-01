@@ -666,6 +666,8 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                                 imageView.setOnClickListener(PhotoClickListener(getSequence(), index))
                             }
                         }
+                    } else {
+                        photoContainerScrollView.visibility = View.GONE
                     }
                 }
 
