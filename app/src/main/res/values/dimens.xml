@@ -23,6 +23,7 @@
     <dimen name="dashboard_text_medium">15sp</dimen>
     <dimen name="dashboard_text_large">20sp</dimen>
     <dimen name="calendar_item_text_default">9sp</dimen>
+    <dimen name="widget_text_medium">16sp</dimen>
 
     <!-- Component Size -->
     <dimen name="app_bar_height">180dp</dimen>

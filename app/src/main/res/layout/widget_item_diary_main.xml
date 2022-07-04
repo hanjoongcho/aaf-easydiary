@@ -1,41 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:padding="5dp"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/widgetItem"
-    style="@style/LinearLayoutVertical">
-    <LinearLayout
-        style="@style/LinearLayoutHorizontal">
+    style="@style/LinearLayoutVertical"
+    android:padding="5dp">
+
+    <LinearLayout style="@style/LinearLayoutHorizontal">
+
         <ImageView
             android:id="@+id/diarySymbol"
-            android:layout_marginEnd="10dp"
             android:layout_width="@dimen/diary_symbol_width"
-            android:layout_height="@dimen/diary_symbol_width" />
+            android:layout_height="@dimen/diary_symbol_width"
+            android:layout_marginEnd="10dp" />
 
         <LinearLayout
             style="@style/LinearLayoutVertical"
             android:layout_width="0dp"
             android:layout_weight="1">
-            <TextView
-                tools:text="Today is a very pleasant day."
-                android:id="@+id/text1"
-                android:gravity="center_vertical"
-                style="@style/text_diary_main_item_inner_contents"/>
 
             <TextView
-                tools:text="2020년 06월 22일 월요일 09:44"
+                android:id="@+id/text1"
+                style="@style/text_diary_main_item_inner_contents"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/widget_text_medium"
+                tools:text="Today is a very pleasant day." />
+
+            <TextView
                 android:id="@+id/text3"
+                style="@style/text_diary_main_item_inner_contents"
                 android:gravity="end"
-                style="@style/text_diary_main_item_inner_contents"/>
+                android:textSize="@dimen/widget_text_medium"
+                tools:text="2020년 06월 22일 월요일 09:44" />
         </LinearLayout>
     </LinearLayout>
 
     <TextView
-        tools:text="Easy diary in a optimize to..."
         android:id="@+id/text2"
+        style="@style/text_diary_main_item_inner_contents"
         android:layout_marginTop="@dimen/card_contents_padding"
-        android:maxLines="3"
         android:gravity="start"
-        style="@style/text_diary_main_item_inner_contents"/>
+        android:maxLines="3"
+        android:textSize="@dimen/widget_text_medium"
+        tools:text="Easy diary in a optimize to..." />
 </LinearLayout>
