@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <me.blog.korn123.easydiary.views.FixedCardView
+        android:id="@+id/cardDriveBackup"
         android:visibility="gone"
         style="@style/card_dashboard">
         <LinearLayout
@@ -68,7 +69,9 @@
     </me.blog.korn123.easydiary.views.FixedCardView>
 
     <me.blog.korn123.easydiary.views.FixedCardView
-        style="@style/card_dashboard">
+        android:id="@+id/cardLocalBackup"
+        style="@style/card_dashboard"
+        android:layout_width="wrap_content">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
