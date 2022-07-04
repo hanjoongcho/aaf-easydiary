@@ -53,6 +53,7 @@ class HistoryAdapter : BaseBannerAdapter<History>() {
                         isFirstResource: Boolean
                     ): Boolean {
                         bannerImage.scaleType = ImageView.ScaleType.CENTER
+                        context.changeDrawableIconColor(context.config.primaryColor, bannerImage)
                         return false
                     }
 
@@ -63,6 +64,7 @@ class HistoryAdapter : BaseBannerAdapter<History>() {
                         dataSource: DataSource?,
                         isFirstResource: Boolean
                     ): Boolean {
+                        bannerImage.clearColorFilter()
                         return false
                     }
                 })
