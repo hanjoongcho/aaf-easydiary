@@ -203,7 +203,7 @@
     </style>
     <style name="text_dashboard_description">
         <item name="applyGlobalSize">false</item>
-        <item name="applyGlobalColor">false</item>
+        <item name="applyGlobalColor">true</item>
         <item name="android:ellipsize">end</item>
         <item name="android:singleLine">true</item>
         <item name="android:textSize">@dimen/dashboard_text_medium</item>
@@ -220,6 +220,7 @@
         <item name="contentPadding">@dimen/dashboard_card_padding</item>
         <item name="cardCornerRadius">@dimen/dashboard_card_radius</item>
         <item name="fixedAppcompatPadding">true</item>
+        <item name="applyCardBackgroundColor">true</item>
         <item name="android:foreground">?attr/selectableItemBackground</item>
     </style>
     <style name="text_popup_menu_item">

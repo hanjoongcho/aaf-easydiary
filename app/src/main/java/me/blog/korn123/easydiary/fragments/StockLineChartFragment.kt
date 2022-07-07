@@ -76,6 +76,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         mLineChart.xAxis.run {
             position = XAxis.XAxisPosition.BOTTOM
             typeface = FontUtils.getCommonTypeface(requireContext())
+            color = requireContext().config.textColor
             labelRotationAngle = -45F
             setDrawGridLines(false)
             granularity = 1f // only intervals of 1 day

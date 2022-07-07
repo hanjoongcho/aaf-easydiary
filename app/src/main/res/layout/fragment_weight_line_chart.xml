@@ -29,7 +29,7 @@
             android:visibility="gone"
             app:applyGlobalColor="false"
             app:applyGlobalSize="false"
-            app:applyHighLight="true"
+            app:applyHighLight="false"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/radio_group_chart_option"
             app:layout_constraintStart_toEndOf="@+id/image_weight_symbol"

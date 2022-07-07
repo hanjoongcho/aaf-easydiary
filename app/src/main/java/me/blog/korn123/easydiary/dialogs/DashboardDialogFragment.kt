@@ -188,6 +188,7 @@ class DashboardDialogFragment : DialogFragment() {
         mBinding.run {
             root.setBackgroundColor(getDashboardBackgroundColor())
             requireActivity().updateTextColors(root)
+            requireActivity().updateAppViews(root)
             FontUtils.setFontsTypeface(requireContext(), null, root, true)
         }
 //        requireActivity().updateStatusBarColor(config.screenBackgroundColor)
