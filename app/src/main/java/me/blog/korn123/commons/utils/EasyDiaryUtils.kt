@@ -313,9 +313,30 @@ object EasyDiaryUtils {
     fun highlightString(textView: TextView) {
         val spannableString = SpannableString(textView.text)
         spannableString.setSpan(BackgroundColorSpan(HIGHLIGHT_COLOR), 0, textView.text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString.setSpan(ForegroundColorSpan(Color.BLACK), 0, textView.text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 //        spannableString.setSpan(UnderlineSpan(), 0, textView.text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 //        spannableString.setSpan(StyleSpan(Typeface.ITALIC), 0, textView.text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         textView.text = spannableString
+    }
+
+    fun highlightStringIgnoreCase(textView: TextView?, input: String?, highlightColor: Int = HIGHLIGHT_COLOR) {
+        textView?.let { tv ->
+            input?.let { targetString ->
+                val inputLower = targetString.toLowerCase()
+                val contentsLower = tv.text.toString().toLowerCase()
+                val spannableString = SpannableString(tv.text)
+                removeSpans(spannableString)
+
+                var indexOfKeyword = contentsLower.indexOf(inputLower)
+                while (indexOfKeyword >= 0) {
+                    spannableString.setSpan(BackgroundColorSpan(highlightColor), indexOfKeyword, indexOfKeyword + inputLower.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    spannableString.setSpan(ForegroundColorSpan(Color.BLACK), indexOfKeyword, indexOfKeyword + targetString.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+                    indexOfKeyword = contentsLower.indexOf(inputLower, indexOfKeyword + inputLower.length)
+                }
+                tv.text = spannableString
+            }
+        }
     }
 
     fun highlightString(textView: TextView?, input: String?, highlightColor: Int = HIGHLIGHT_COLOR) {
@@ -337,26 +358,6 @@ object EasyDiaryUtils {
                 }
 
                 //Set the final text on TextView
-                tv.text = spannableString
-            }
-        }
-    }
-
-    fun highlightStringIgnoreCase(textView: TextView?, input: String?, highlightColor: Int = HIGHLIGHT_COLOR) {
-        textView?.let { tv -> 
-            input?.let { targetString ->
-                val inputLower = targetString.toLowerCase()
-                val contentsLower = tv.text.toString().toLowerCase()
-                val spannableString = SpannableString(tv.text)
-                removeSpans(spannableString)
-
-                var indexOfKeyword = contentsLower.indexOf(inputLower)
-                while (indexOfKeyword >= 0) {
-                    spannableString.setSpan(BackgroundColorSpan(highlightColor), indexOfKeyword, indexOfKeyword + inputLower.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    spannableString.setSpan(ForegroundColorSpan(Color.BLACK), indexOfKeyword, indexOfKeyword + targetString.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-                    indexOfKeyword = contentsLower.indexOf(inputLower, indexOfKeyword + inputLower.length)
-                }
                 tv.text = spannableString
             }
         }
