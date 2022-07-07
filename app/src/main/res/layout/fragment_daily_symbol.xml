@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textSize="@dimen/dashboard_title_h2"
-            app:applyGlobalColor="false"
+            app:applyGlobalColor="true"
             app:applyGlobalSize="false"
             tools:text="11월" />
 

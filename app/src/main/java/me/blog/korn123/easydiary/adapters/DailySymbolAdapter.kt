@@ -43,6 +43,7 @@ class DailySymbolAdapter(
 
         fun bindTo(dailySymbol: DailySymbol) {
             binding.dayOfMonth.text = dailySymbol.dayOfMonth
+            binding.dayOfMonth.setTextColor(activity.config.textColor)
             binding.dayOfWeek.text = dailySymbol.dayOfWeekStr.uppercase(Locale.getDefault())
             binding.dayOfWeek.setTextColor(when (dailySymbol.dayOfWeekNum) {
                 Calendar.SATURDAY -> Color.BLUE
