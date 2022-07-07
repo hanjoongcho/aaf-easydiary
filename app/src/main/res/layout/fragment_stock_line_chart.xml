@@ -29,7 +29,7 @@
             android:visibility="gone"
             app:applyGlobalColor="true"
             app:applyGlobalSize="false"
-            app:applyHighLight="true"
+            app:applyHighLight="false"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/lineChart"
             app:layout_constraintStart_toEndOf="@+id/image_stock_symbol"

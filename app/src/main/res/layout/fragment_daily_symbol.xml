@@ -15,9 +15,9 @@
             android:padding="10dp"
             android:text="@string/dashboard_title_daily_symbol_tile"
             android:textSize="@dimen/dashboard_title_h1"
-            app:applyGlobalColor="false"
+            app:applyGlobalColor="true"
             app:applyGlobalSize="false"
-            app:applyHighLight="true" />
+            app:applyHighLight="false" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
