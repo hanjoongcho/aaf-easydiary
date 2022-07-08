@@ -27,7 +27,7 @@
             android:layout_margin="@dimen/dashboard_title_padding"
             android:textSize="@dimen/dashboard_title_h1"
             android:visibility="gone"
-            app:applyGlobalColor="false"
+            app:applyGlobalColor="true"
             app:applyGlobalSize="false"
             app:applyHighLight="false"
             app:layout_constraintTop_toTopOf="parent"

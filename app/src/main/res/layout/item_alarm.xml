@@ -27,7 +27,7 @@
                     android:text="Diary Writing"
                     android:textColor="?attr/colorPrimary"
                     android:textSize="11dp"
-                    app:applyGlobalColor="false"
+                    app:applyGlobalColor="true"
                     app:applyGlobalSize="false" />
 
                 <me.blog.korn123.easydiary.views.FixedTextView

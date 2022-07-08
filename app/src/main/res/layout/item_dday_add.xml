@@ -19,7 +19,7 @@
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:applyGlobalColor="false"
+            app:applyGlobalColor="true"
             app:applyGlobalSize="false"
             />
     </me.blog.korn123.easydiary.views.FixedCardView>

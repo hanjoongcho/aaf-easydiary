@@ -96,7 +96,7 @@
                         style="@style/text_dashboard_ranking"
                         android:gravity="center"
                         android:text="1"
-                        app:applyGlobalColor="false"
+                        app:applyGlobalColor="true"
                         app:applyGlobalSize="false"
                         tools:ignore="MissingConstraints" />
 
@@ -151,7 +151,7 @@
                         style="@style/text_dashboard_ranking"
                         android:gravity="center"
                         android:text="2"
-                        app:applyGlobalColor="false"
+                        app:applyGlobalColor="true"
                         app:applyGlobalSize="false"
                         tools:ignore="MissingConstraints" />
 
@@ -206,7 +206,7 @@
                         style="@style/text_dashboard_ranking"
                         android:gravity="center"
                         android:text="3"
-                        app:applyGlobalColor="false"
+                        app:applyGlobalColor="true"
                         app:applyGlobalSize="false"
                         tools:ignore="MissingConstraints" />
 
@@ -261,7 +261,7 @@
                         style="@style/text_dashboard_ranking"
                         android:gravity="center"
                         android:text="4"
-                        app:applyGlobalColor="false"
+                        app:applyGlobalColor="true"
                         app:applyGlobalSize="false"
                         tools:ignore="MissingConstraints" />
 
