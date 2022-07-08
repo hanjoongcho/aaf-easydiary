@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<me.blog.korn123.easydiary.views.FixedCardView style="@style/card_dashboard"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<me.blog.korn123.easydiary.views.FixedCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/card_dashboard"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <me.blog.korn123.easydiary.views.FixedTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -18,10 +20,12 @@
             app:applyGlobalColor="true"
             app:applyGlobalSize="false"
             app:applyHighLight="false" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <com.google.android.flexbox.FlexboxLayout
                 android:id="@+id/selectedSymbolFlexBox"
                 android:layout_width="0dp"
@@ -30,16 +34,18 @@
                 app:alignContent="stretch"
                 app:alignItems="stretch"
                 app:flexWrap="wrap" />
+
             <me.blog.korn123.easydiary.views.FixedCardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:contentPadding="3dp"
+                app:applyCardBackgroundColor="true"
+                app:contentPadding="@dimen/dashboard_symbol_padding"
                 app:fixedAppcompatPadding="true">
 
                 <ImageView
                     android:id="@+id/editSymbolFilter"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/dashboard_symbol_large"
+                    android:layout_height="@dimen/dashboard_symbol_large"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     app:srcCompat="@drawable/ic_select_symbol" />
             </me.blog.korn123.easydiary.views.FixedCardView>
@@ -50,7 +56,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textSize="@dimen/dashboard_title_h2"
+            android:textSize="@dimen/dashboard_text_large"
             app:applyGlobalColor="true"
             app:applyGlobalSize="false"
             tools:text="11월" />

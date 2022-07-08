@@ -14,9 +14,9 @@
             android:padding="10dp"
             android:text="D-Day (BETA)"
             android:textSize="@dimen/dashboard_title_h1"
-            app:applyGlobalColor="false"
+            app:applyGlobalColor="true"
             app:applyGlobalSize="false"
-            app:applyHighLight="true"
+            app:applyHighLight="false"
             app:layout_constraintEnd_toStartOf="@+id/image_d_day_sort_order"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -44,7 +44,7 @@
             android:layout_height="0dp">
             <me.blog.korn123.easydiary.views.FixedTextView
                 android:textSize="@dimen/dashboard_text_medium"
-                app:applyGlobalColor="false"
+                app:applyGlobalColor="true"
                 app:applyGlobalSize="false"
                 android:text="Flexbox"
                 android:layout_width="wrap_content"

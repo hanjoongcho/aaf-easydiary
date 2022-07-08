@@ -84,8 +84,8 @@
 
                     <ImageView
                         android:id="@+id/symbolRank1"
-                        android:layout_width="@dimen/dashboard_symbol_default"
-                        android:layout_height="@dimen/dashboard_symbol_default"
+                        android:layout_width="@dimen/dashboard_symbol_large"
+                        android:layout_height="@dimen/dashboard_symbol_large"
                         android:padding="@dimen/dashboard_symbol_padding"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/markRank1"
@@ -139,8 +139,8 @@
 
                     <ImageView
                         android:id="@+id/symbolRank2"
-                        android:layout_width="@dimen/dashboard_symbol_default"
-                        android:layout_height="@dimen/dashboard_symbol_default"
+                        android:layout_width="@dimen/dashboard_symbol_large"
+                        android:layout_height="@dimen/dashboard_symbol_large"
                         android:padding="@dimen/dashboard_symbol_padding"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/markRank2"
@@ -194,8 +194,8 @@
 
                     <ImageView
                         android:id="@+id/symbolRank3"
-                        android:layout_width="@dimen/dashboard_symbol_default"
-                        android:layout_height="@dimen/dashboard_symbol_default"
+                        android:layout_width="@dimen/dashboard_symbol_large"
+                        android:layout_height="@dimen/dashboard_symbol_large"
                         android:padding="@dimen/dashboard_symbol_padding"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/markRank3"
@@ -249,8 +249,8 @@
 
                     <ImageView
                         android:id="@+id/symbolRank4"
-                        android:layout_width="@dimen/dashboard_symbol_default"
-                        android:layout_height="@dimen/dashboard_symbol_default"
+                        android:layout_width="@dimen/dashboard_symbol_large"
+                        android:layout_height="@dimen/dashboard_symbol_large"
                         android:padding="@dimen/dashboard_symbol_padding"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/markRank4"
