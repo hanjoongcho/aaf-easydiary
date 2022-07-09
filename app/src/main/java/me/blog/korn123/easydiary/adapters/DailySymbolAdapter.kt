@@ -65,6 +65,7 @@ class DailySymbolAdapter(
                 FlavorUtils.initWeatherView(activity, partialDailySymbolBinding.dailySymbol, diary.weather)
                 binding.symbolFlexbox.addView(partialDailySymbolBinding.root)
             }
+            activity.updateAppViews(binding.symbolFlexbox)
         }
     }
 

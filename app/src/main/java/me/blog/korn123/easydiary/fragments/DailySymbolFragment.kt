@@ -18,6 +18,7 @@ import me.blog.korn123.easydiary.adapters.DailySymbolAdapter
 import me.blog.korn123.easydiary.databinding.FragmentDailySymbolBinding
 import me.blog.korn123.easydiary.databinding.PartialDailySymbolBinding
 import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.updateAppViews
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -135,6 +136,7 @@ class DailySymbolFragment : Fragment() {
                     month.visibility = View.VISIBLE
                     dailyCardRecyclerView.visibility = View.VISIBLE
                     dailyCardProgressBar.visibility = View.GONE
+                    requireActivity().updateAppViews(selectedSymbolFlexBox)
                 }
             }
         }
