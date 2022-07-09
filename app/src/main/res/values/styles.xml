@@ -219,8 +219,10 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="contentPadding">@dimen/dashboard_card_padding</item>
         <item name="cardCornerRadius">@dimen/dashboard_card_radius</item>
-        <item name="fixedAppcompatPadding">true</item>
-        <item name="applyCardBackgroundColor">true</item>
+        <item name="fixedAppcompatPadding">false</item>
+        <item name="applyCardBackgroundColor">false</item>
+        <item name="cardElevation">0dp</item>
+        <item name="cardBackgroundColor">@android:color/transparent</item>
         <item name="android:foreground">?attr/selectableItemBackground</item>
     </style>
     <style name="text_popup_menu_item">
