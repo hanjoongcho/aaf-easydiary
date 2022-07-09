@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     app:contentPadding="@dimen/dashboard_symbol_padding"
     app:fixedAppcompatPadding="true"
-    app:applyCardBackgroundColor="true"
+    app:applyCardBackgroundColor="false"
+    app:dashboardInnerCard="true"
     >
 
     <ImageView

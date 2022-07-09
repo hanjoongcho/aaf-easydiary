@@ -352,7 +352,10 @@ fun Context.updateAppViews(viewGroup: ViewGroup, tmpBackgroundColor: Int = 0) {
                 when (it) {
                     is CardView -> {
                         when (it is FixedCardView) {
-                            true -> { if (it.applyCardBackgroundColor) it.setCardBackgroundColor(backgroundColor) }
+                            true -> {
+                                if (it.applyCardBackgroundColor) it.setCardBackgroundColor(backgroundColor)
+                                if (it.dashboardInnerCard) it.setCardBackgroundColor(config.textColor)
+                            }
                             false -> it.setCardBackgroundColor(backgroundColor)
                         }
                         updateAppViews(it)
