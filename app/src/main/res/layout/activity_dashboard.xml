@@ -49,7 +49,7 @@
 
             <me.blog.korn123.easydiary.views.FixedCardView
                 android:id="@+id/card_photo_highlight"
-                style="@style/card_dashboard"
+                style="@style/card_dashboard_container"
                 android:visibility="gone"
                 app:contentPaddingLeft="1dp"
                 app:contentPaddingRight="1dp">
