@@ -33,6 +33,7 @@ class DashboardActivity : EasyDiaryActivity() {
 //        setTheme(getThemeId())
         super.onCreate(null)
 
+        mScreenBackgroundColor = config.backgroundColor
         mBinding = ActivityDashboardBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
         setSupportActionBar(mBinding.toolbar)
