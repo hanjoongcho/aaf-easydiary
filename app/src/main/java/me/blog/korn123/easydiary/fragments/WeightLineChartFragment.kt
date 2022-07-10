@@ -78,6 +78,7 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
         mLineChart.xAxis.run {
             position = XAxis.XAxisPosition.BOTTOM
             typeface = FontUtils.getCommonTypeface(requireContext())
+            textColor = requireContext().config.textColor
             labelRotationAngle = -45F
             setDrawGridLines(false)
             granularity = 1f // only intervals of 1 day
@@ -88,6 +89,7 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
         val yAxisFormatter = WeightYAxisValueFormatter(context)
         mLineChart.axisLeft.run {
             typeface = FontUtils.getCommonTypeface(requireContext())
+            textColor = requireContext().config.textColor
             setLabelCount(8, false)
             valueFormatter = yAxisFormatter
             setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
@@ -99,6 +101,7 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
         mLineChart.axisRight.run {
             setDrawGridLines(false)
             typeface = FontUtils.getCommonTypeface(requireContext())
+            textColor = requireContext().config.textColor
             setLabelCount(8, false)
             valueFormatter = yAxisFormatter
             spaceTop = 0f
@@ -108,6 +111,7 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
 
         mLineChart.legend.run {
             typeface = FontUtils.getCommonTypeface(requireContext())
+            textColor = requireContext().config.textColor
             verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
             horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
             orientation = Legend.LegendOrientation.HORIZONTAL
@@ -165,6 +169,7 @@ class WeightLineChartFragment : androidx.fragment.app.Fragment() {
                     }
                 }
             }
+            checkOptionsFill.setTextColor(requireContext().config.textColor)
             checkOptionsFill.setOnCheckedChangeListener { _, isChecked ->
                 mDataSets.forEach {
                     it.setDrawFilled(isChecked)

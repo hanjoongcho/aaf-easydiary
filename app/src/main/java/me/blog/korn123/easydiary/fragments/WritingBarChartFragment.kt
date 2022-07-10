@@ -69,6 +69,7 @@ class WritingBarChartFragment : androidx.fragment.app.Fragment() {
         mBarChart.xAxis.run {
             position = XAxis.XAxisPosition.BOTTOM
             typeface = FontUtils.getCommonTypeface(requireContext())
+            textColor = requireContext().config.textColor
             labelRotationAngle = -45F
             setDrawGridLines(false)
             granularity = 1f // only intervals of 1 day
@@ -79,6 +80,7 @@ class WritingBarChartFragment : androidx.fragment.app.Fragment() {
         val diaryCountingAxisValueFormatter = DiaryCountingAxisValueFormatter(context)
         mBarChart.axisLeft.run {
             typeface = FontUtils.getCommonTypeface(requireContext())
+            textColor = requireContext().config.textColor
             setLabelCount(8, false)
             valueFormatter = diaryCountingAxisValueFormatter
             setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
@@ -89,6 +91,7 @@ class WritingBarChartFragment : androidx.fragment.app.Fragment() {
         mBarChart.axisRight.run {
             setDrawGridLines(false)
             typeface = FontUtils.getCommonTypeface(requireContext())
+            textColor = requireContext().config.textColor
             setLabelCount(8, false)
             valueFormatter = diaryCountingAxisValueFormatter
             spaceTop = 15f
@@ -97,6 +100,7 @@ class WritingBarChartFragment : androidx.fragment.app.Fragment() {
 
         mBarChart.legend.run {
             typeface = FontUtils.getCommonTypeface(requireContext())
+            textColor = requireContext().config.textColor
             verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
             horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
             orientation = Legend.LegendOrientation.HORIZONTAL

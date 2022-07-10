@@ -74,6 +74,7 @@ class SymbolHorizontalBarChartFragment : androidx.fragment.app.Fragment() {
         mBarChart.xAxis.run {
             position = XAxis.XAxisPosition.BOTTOM
             typeface = mTypeface
+            textColor = requireContext().config.textColor
             setDrawGridLines(false)
             granularity = 1f // only intervals of 1 day
             labelCount = 7
@@ -84,6 +85,7 @@ class SymbolHorizontalBarChartFragment : androidx.fragment.app.Fragment() {
             setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
             axisMinimum = 0f // this replaces setStartAtZero(true)
             typeface = mTypeface
+            textColor = requireContext().config.textColor
         }
 
         mBarChart.axisRight.run {
@@ -101,6 +103,7 @@ class SymbolHorizontalBarChartFragment : androidx.fragment.app.Fragment() {
             textSize = 11f
             xEntrySpace = 4f
             typeface = mTypeface
+            textColor = requireContext().config.textColor
         }
 
         val mv = XYMarkerView(requireContext(), xAxisFormatter)
