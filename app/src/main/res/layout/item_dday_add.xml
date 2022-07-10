@@ -11,7 +11,7 @@
     <me.blog.korn123.easydiary.views.FixedCardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/card_dashboard"
+        style="@style/card_dashboard_inner"
         >
         <me.blog.korn123.easydiary.views.FixedTextView
             android:text="ADD"

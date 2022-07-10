@@ -230,6 +230,7 @@
         <item name="contentPadding">5dp</item>
         <item name="fixedAppcompatPadding">true</item>
         <item name="applyCardBackgroundColor">true</item>
+        <item name="dashboardInnerCard">true</item>
         <item name="android:foreground">?attr/selectableItemBackground</item>
     </style>
     <style name="text_popup_menu_item">

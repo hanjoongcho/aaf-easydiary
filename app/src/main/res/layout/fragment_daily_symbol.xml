@@ -35,12 +35,7 @@
                 app:alignItems="stretch"
                 app:flexWrap="wrap" />
 
-            <me.blog.korn123.easydiary.views.FixedCardView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:applyCardBackgroundColor="true"
-                app:contentPadding="@dimen/dashboard_symbol_padding"
-                app:fixedAppcompatPadding="true">
+            <me.blog.korn123.easydiary.views.FixedCardView style="@style/card_dashboard_inner">
 
                 <ImageView
                     android:id="@+id/editSymbolFilter"
