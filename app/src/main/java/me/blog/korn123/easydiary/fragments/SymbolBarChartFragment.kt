@@ -177,6 +177,7 @@ class SymbolBarChartFragment : androidx.fragment.app.Fragment() {
                     val barData = BarData(dataSets)
                     barData.setValueTextSize(10f)
                     barData.setValueTypeface(mTypeface)
+                    barData.setValueTextColor(requireContext().config.textColor)
                     barData.barWidth = 0.9f
                     mBarChart.zoom((sortedMap.size / 8.5F), 0F, 0F, 0F)
                     mBarChart.data = barData

@@ -165,6 +165,7 @@ class WritingBarChartFragment : androidx.fragment.app.Fragment() {
                     val barData = BarData(dataSets)
                     barData.setValueTextSize(10f)
                     barData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
+                    barData.setValueTextColor(requireContext().config.textColor)
                     barData.barWidth = 0.9f
                     mBarChart.data = barData
                     mBarChart.animateY(2000)
