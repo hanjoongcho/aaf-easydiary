@@ -7,8 +7,9 @@
 
     <me.blog.korn123.easydiary.views.FixedCardView
         android:id="@+id/container"
-        app:contentPadding="@dimen/dashboard_card_padding"
-        style="@style/card_dashboard_inner">
+        style="@style/card_dashboard_inner"
+        android:layout_width="match_parent"
+        app:contentPadding="@dimen/dashboard_card_padding">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

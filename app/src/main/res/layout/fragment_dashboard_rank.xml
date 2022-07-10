@@ -70,9 +70,9 @@
 
             <me.blog.korn123.easydiary.views.FixedCardView
                 android:id="@+id/rank1"
-                style="@style/card_dashboard"
+                style="@style/card_dashboard_inner"
                 android:layout_width="0dp"
-                app:applyCardBackgroundColor="true"
+                app:contentPadding="@dimen/dashboard_card_padding"
                 app:layout_constraintEnd_toStartOf="@+id/rank2"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toStartOf="parent"
@@ -126,8 +126,9 @@
 
             <me.blog.korn123.easydiary.views.FixedCardView
                 android:id="@+id/rank2"
-                style="@style/card_dashboard"
+                style="@style/card_dashboard_inner"
                 android:layout_width="0dp"
+                app:contentPadding="@dimen/dashboard_card_padding"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/rank1"
@@ -181,8 +182,9 @@
 
             <me.blog.korn123.easydiary.views.FixedCardView
                 android:id="@+id/rank3"
-                style="@style/card_dashboard"
+                style="@style/card_dashboard_inner"
                 android:layout_width="0dp"
+                app:contentPadding="@dimen/dashboard_card_padding"
                 app:layout_constraintEnd_toStartOf="@id/rank4"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toStartOf="parent"
@@ -236,8 +238,9 @@
 
             <me.blog.korn123.easydiary.views.FixedCardView
                 android:id="@+id/rank4"
-                style="@style/card_dashboard"
+                style="@style/card_dashboard_inner"
                 android:layout_width="0dp"
+                app:contentPadding="@dimen/dashboard_card_padding"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/rank3"
