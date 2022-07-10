@@ -120,7 +120,7 @@ class WritingBarChartFragment : androidx.fragment.app.Fragment() {
 
                 getView()?.findViewById<ImageView>(R.id.image_expend_chart)?.let {
                     it.visibility = View.VISIBLE
-                    requireActivity().updateDrawableColorInnerCardView(it, config.primaryColor)
+                    requireActivity().updateDrawableColorInnerCardView(it, config.textColor)
                     it.setOnClickListener { view ->
                         view.postDelayed( {
                             TransitionHelper.startActivityWithTransition(

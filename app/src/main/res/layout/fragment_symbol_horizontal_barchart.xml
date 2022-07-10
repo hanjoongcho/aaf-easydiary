@@ -20,7 +20,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/barChart"
             app:applyGlobalSize="false"
-            app:applyGlobalColor="false"
+            app:applyGlobalColor="true"
             app:applyHighLight="false"
             />
         <androidx.appcompat.widget.AppCompatImageView
