@@ -13,7 +13,7 @@
 
         <me.blog.korn123.easydiary.views.FixedCardView
             android:id="@+id/cardDriveBackup"
-            style="@style/card_dashboard_container"
+            style="@style/card_dashboard"
             android:layout_width="300dp">
 
             <LinearLayout
@@ -81,7 +81,7 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </me.blog.korn123.easydiary.views.FixedCardView>
 
-                <me.blog.korn123.easydiary.views.FixedCardView style="@style/card_dashboard_container">
+                <me.blog.korn123.easydiary.views.FixedCardView style="@style/card_dashboard">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -129,7 +129,7 @@
 
         <me.blog.korn123.easydiary.views.FixedCardView
             android:id="@+id/cardLocalBackup"
-            style="@style/card_dashboard_container"
+            style="@style/card_dashboard"
             android:layout_width="wrap_content">
 
             <LinearLayout
@@ -153,7 +153,7 @@
                         app:applyHighLight="false" />
                 </LinearLayout>
 
-                <me.blog.korn123.easydiary.views.FixedCardView style="@style/card_dashboard_container">
+                <me.blog.korn123.easydiary.views.FixedCardView style="@style/card_dashboard">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"

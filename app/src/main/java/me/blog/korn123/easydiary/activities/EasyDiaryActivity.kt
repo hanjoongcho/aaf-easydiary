@@ -14,7 +14,6 @@ import me.blog.korn123.easydiary.extensions.*
 
 open class EasyDiaryActivity : BaseSimpleActivity() {
     var mCustomLineSpacing = true
-    var mScreenBackgroundColor: Int = 0
     private val mRootView: ViewGroup? by lazy {
         findViewById(R.id.main_holder)
     }
@@ -22,7 +21,6 @@ open class EasyDiaryActivity : BaseSimpleActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         useDynamicTheme = !isNightMode()
         super.onCreate(savedInstanceState)
-        mScreenBackgroundColor = config.screenBackgroundColor
     }
 
     override fun onResume() {
@@ -39,7 +37,7 @@ open class EasyDiaryActivity : BaseSimpleActivity() {
                 updateAppViews(it)
                 updateCardViewPolicy(it)
             }
-            updateBackgroundColor(mScreenBackgroundColor)
+            updateBackgroundColor(config.screenBackgroundColor)
             FontUtils.setFontsTypeface(applicationContext, null, findViewById(android.R.id.content), mCustomLineSpacing)
         }
         applyPolicyForRecentApps()

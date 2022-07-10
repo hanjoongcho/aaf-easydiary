@@ -199,5 +199,5 @@ class DashboardDialogFragment : DialogFragment() {
 //        requireActivity().updateStatusBarColor(config.primaryColor)
     }
 
-    private fun getDashboardBackgroundColor() = config.backgroundColor
+    private fun getDashboardBackgroundColor() = config.screenBackgroundColor
 }
