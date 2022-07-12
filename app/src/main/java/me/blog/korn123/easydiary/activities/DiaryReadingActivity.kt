@@ -243,9 +243,12 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             val popupWindow = PopupWindow(popupView, width, height, true).apply {
                 showAtLocation(findViewById<ViewGroup>(android.R.id.content).rootView, Gravity.CENTER, 0, 0)
             }
+
             closePopup.setOnClickListener {
-                popupWindow.dismiss()
-                clearHoldOrientation()
+                it.postDelayed({
+                    popupWindow.dismiss()
+                    clearHoldOrientation()
+                }, 300)
             }
 
             fun clearPassView() {
