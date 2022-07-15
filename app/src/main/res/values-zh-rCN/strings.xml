@@ -646,6 +646,10 @@
         v1.4.274.202206010 / 2022.06.01\n
         Added the recently used symbol selection function to the symbol dialog
     </string>
+    <string name="release_275">
+        v1.4.275.202207150 / 2022.07.15\n
+        User Experience (UX) Optimization
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  自1.4.47版本以来添加的资源点击这里。                                                      -->
