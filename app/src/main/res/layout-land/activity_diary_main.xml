@@ -1,192 +1,199 @@
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
             name="view_model"
-            type="me.blog.korn123.easydiary.viewmodels.DiaryMainViewModel"
-            />
+            type="me.blog.korn123.easydiary.viewmodels.DiaryMainViewModel" />
     </data>
+
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
+
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay"
-            >
+            android:theme="@style/AppTheme.AppBarOverlay">
+
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/tool_bar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay"
-                />
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
         </com.google.android.material.appbar.AppBarLayout>
+
         <LinearLayout
             android:id="@+id/main_holder"
-            android:padding="@dimen/component_margin_small"
-            android:orientation="vertical"
-            android:layout_marginTop="?attr/actionBarSize"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            >
+            android:layout_marginTop="?attr/actionBarSize"
+            android:orientation="vertical"
+            android:padding="@dimen/component_margin_small">
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/searchCard"
-                app:contentPadding="10dp"
                 style="@style/AppCard"
-                >
+                app:contentPadding="10dp">
+
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    >
+                    android:orientation="horizontal">
+
                     <LinearLayout
                         android:id="@+id/feelingSymbolButton"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:orientation="horizontal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        >
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:orientation="horizontal">
+
                         <ImageView
-                            app:symbolSequence="@{view_model.symbol}"
                             android:layout_width="@dimen/diary_symbol_width"
                             android:layout_height="@dimen/diary_symbol_height"
                             android:layout_marginEnd="10dp"
-                            />
+                            app:symbolSequence="@{view_model.symbol}" />
+
                         <com.simplemobiletools.commons.views.MyTextView
                             android:id="@+id/symbolTextArrow"
-                            android:text="▼"
-                            android:textSize="10dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginEnd="10dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            />
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginEnd="10dp"
+                            android:text="▼"
+                            android:textSize="10dp" />
                     </LinearLayout>
+
                     <com.simplemobiletools.commons.views.MyEditText
                         android:id="@+id/query"
-                        android:background="@android:color/transparent"
-                        android:gravity="center_vertical"
-                        android:hint="@string/guide_message_2"
-                        android:inputType="text|textAutoCorrect|textAutoComplete"
-                        android:imeOptions="actionDone"
-                        android:maxLines="1"
-                        android:layout_weight="1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        />
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:gravity="center_vertical"
+                        android:hint="@string/guide_message_2"
+                        android:imeOptions="actionDone"
+                        android:inputType="text|textAutoCorrect|textAutoComplete"
+                        android:maxLines="1" />
+
                     <ImageView
                         android:id="@+id/img_clear_query"
-                        android:src="@drawable/ic_delete"
-                        android:padding="3dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:layout_gravity="end|center_vertical"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        />
+                        android:layout_gravity="end|center_vertical"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:padding="3dp"
+                        android:src="@drawable/ic_delete" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+
             <androidx.appcompat.widget.LinearLayoutCompat
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                >
+                android:orientation="horizontal">
+
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:id="@+id/layout_banner_container"
-                    android:orientation="vertical"
-                    android:visibility="gone"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    tools:visibility="visible"
-                    >
-                </androidx.appcompat.widget.LinearLayoutCompat>
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    tools:visibility="visible"></androidx.appcompat.widget.LinearLayoutCompat>
+
                 <me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
                     android:id="@+id/diaryListView"
-                    android:layout_marginTop="@dimen/component_margin_small"
+                    style="@style/recycler_fast_scroll"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    style="@style/recycler_fast_scroll"
-                    tools:visibility="gone"
-                    />
+                    android:layout_marginTop="@dimen/component_margin_small"
+                    tools:visibility="gone" />
+
                 <com.simplemobiletools.commons.views.MyTextView
                     android:id="@+id/text_no_diary"
-                    android:visibility="gone"
-                    android:gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:gravity="center"
                     android:text="There is no written diary."
-                    tools:visibility="visible"
-                    />
+                    android:visibility="gone"
+                    tools:visibility="visible" />
             </androidx.appcompat.widget.LinearLayoutCompat>
         </LinearLayout>
+
         <com.simplemobiletools.commons.views.MyFloatingActionButton
             android:id="@+id/insertDiaryButton"
-            android:contentDescription="@string/write_diary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
-            app:srcCompat="@drawable/ic_edit"
-            />
+            android:contentDescription="@string/write_diary"
+            app:srcCompat="@drawable/ic_edit" />
+
         <LinearLayout
             android:id="@+id/modalContainer"
-            android:orientation="vertical"
-            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:alpha="0.3"
             android:background="?attr/colorPrimary"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </LinearLayout>
+            android:gravity="center"
+            android:orientation="vertical"></LinearLayout>
+
         <LinearLayout
             android:id="@+id/progressDialog"
-            android:padding="20dp"
-            android:background="@android:color/white"
-            android:orientation="vertical"
-            android:layout_gravity="center"
-            android:gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@android:color/white"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="20dp">
+
             <com.simplemobiletools.commons.views.MyTextView
                 android:id="@+id/migrationMessage"
-                android:text="@string/diary_photo_migration_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                />
+                android:text="@string/diary_photo_migration_message" />
+
             <ProgressBar
-                android:layout_marginTop="10dp"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                />
+                android:layout_marginTop="10dp" />
+
             <com.simplemobiletools.commons.views.MyTextView
                 android:id="@+id/progressInfo"
-                android:layout_gravity="end"
-                android:layout_marginTop="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                />
+                android:layout_gravity="end"
+                android:layout_marginTop="10dp" />
         </LinearLayout>
+
         <ProgressBar
             android:id="@+id/progress_coroutine"
-            android:visibility="gone"
-            android:layout_gravity="center"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            />
-        <ImageView
-            android:padding="20dp"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:orientation="horizontal"
-            android:layout_marginEnd="-15dp"
-            android:src="@drawable/ic_arrow"
-            android:id="@+id/img_open_dashboard"
-            android:layout_gravity="end|bottom"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="-36dp"
+            android:background="@drawable/bg_circle_button">
+
+            <ImageView
+                android:id="@+id/img_open_dashboard"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="end|center_vertical"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:orientation="horizontal"
+                android:padding="7dp"
+                android:src="@drawable/ic_arrow" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
     </FrameLayout>
 </layout>

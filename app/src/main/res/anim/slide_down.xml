@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shareInterpolator="@android:interpolator/accelerate_quad">
+
+    <translate
+        android:duration="700"
+        android:fromYDelta="0%"
+        android:toYDelta="100%"/>
+</set>
