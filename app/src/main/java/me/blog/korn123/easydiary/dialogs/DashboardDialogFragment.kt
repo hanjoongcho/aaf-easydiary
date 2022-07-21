@@ -60,6 +60,8 @@ class DashboardDialogFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        dialog?.window?.attributes?.windowAnimations = R.style.DialogAnimation
+
         mBinding.run {
             requireActivity().updateDrawableColorInnerCardView(close, Color.WHITE)
             appBar.visibility = View.GONE

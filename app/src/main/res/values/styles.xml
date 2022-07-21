@@ -315,4 +315,10 @@
     <style name="CustomText" parent="TextAppearance.ShowcaseView.Detail.Light">
         <item name="android:textColor">#DEFFFFFF</item>
     </style>
+
+    <!-- Animations for Dialogs-->
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/right_to_center</item>
+        <item name="android:windowExitAnimation">@anim/center_to_right</item>
+    </style>
 </resources>
