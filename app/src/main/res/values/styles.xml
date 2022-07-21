@@ -318,7 +318,7 @@
 
     <!-- Animations for Dialogs-->
     <style name="DialogAnimation">
-        <item name="android:windowEnterAnimation">@anim/right_to_center</item>
-        <item name="android:windowExitAnimation">@anim/center_to_right</item>
+        <item name="android:windowEnterAnimation">@anim/slide_down</item>
+        <item name="android:windowExitAnimation">@anim/slide_up</item>
     </style>
 </resources>

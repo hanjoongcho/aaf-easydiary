@@ -2,6 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:icon="@drawable/ic_statistics"
+        android:id="@+id/dashboard"
+        android:orderInCategory="100"
+        android:title="@string/speech_to_text"
+        app:showAsAction="always" />
+    <item
         android:icon="@drawable/ic_planner"
         android:id="@+id/planner"
         android:orderInCategory="100"

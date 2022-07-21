@@ -276,6 +276,14 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             }
             R.id.microphone -> showSpeechDialog()
             R.id.popupMenu -> openCustomOptionMenu()
+            R.id.dashboard -> {
+                DashboardDialogFragment().apply {
+                    show(
+                        supportFragmentManager,
+                        "DashboardDialog"
+                    )
+                }
+            }
         }
         return super.onOptionsItemSelected(item)
     }

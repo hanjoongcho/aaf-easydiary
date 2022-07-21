@@ -92,13 +92,17 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/layout_banner_container"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:orientation="vertical"
-                android:visibility="gone"
-                tools:visibility="visible"></androidx.appcompat.widget.LinearLayoutCompat>
+                android:layout_height="150dp">
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/layout_banner_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+            </FrameLayout>
 
             <me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
                 android:id="@+id/diaryListView"
@@ -176,14 +180,14 @@
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end|center_vertical"
-            android:layout_marginEnd="-36dp"
+            android:layout_gravity="end|top"
+            android:layout_marginEnd="10dp"
             android:background="@drawable/bg_circle_button">
 
             <ImageView
                 android:id="@+id/img_open_dashboard"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_gravity="end|center_vertical"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:orientation="horizontal"
