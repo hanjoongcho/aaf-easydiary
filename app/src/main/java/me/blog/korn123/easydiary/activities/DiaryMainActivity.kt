@@ -60,38 +60,40 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     private var mShowcaseView: ShowcaseView? = null
     private var mPopupWindow: PopupWindow? = null
     private var mLastHistoryCheckMillis = System.currentTimeMillis()
-    private val mRequestSpeechInputLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.let {
-                mBinding.query.setText(it[0])
-                mBinding.query.setSelection(it[0].length)
+    private val mRequestSpeechInputLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.let {
+                    mBinding.query.setText(it[0])
+                    mBinding.query.setSelection(it[0].length)
+                }
             }
+            pauseLock()
         }
-        pauseLock()
-    }
-    private val mRequestSAFForHtmlBookLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            result.data?.let {
-                mDiaryMainItemAdapter?.getSelectedItems()?.run {
-                    EasyDiaryDbHelper.copyFromRealm(this).also { cloneItems ->
-                        mBinding.progressCoroutine.visibility = View.VISIBLE
-                        CoroutineScope(Dispatchers.IO).launch {
-                            exportHtmlBook(it.data, cloneItems)
-                            withContext(Dispatchers.Main) {
-                                mBinding.progressCoroutine.visibility = View.GONE
-                                cloneItems.forEach {
-                                    it.isSelected = false
-                                    EasyDiaryDbHelper.updateDiaryBy(it)
+    private val mRequestSAFForHtmlBookLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data?.let {
+                    mDiaryMainItemAdapter?.getSelectedItems()?.run {
+                        EasyDiaryDbHelper.copyFromRealm(this).also { cloneItems ->
+                            mBinding.progressCoroutine.visibility = View.VISIBLE
+                            CoroutineScope(Dispatchers.IO).launch {
+                                exportHtmlBook(it.data, cloneItems)
+                                withContext(Dispatchers.Main) {
+                                    mBinding.progressCoroutine.visibility = View.GONE
+                                    cloneItems.forEach {
+                                        it.isSelected = false
+                                        EasyDiaryDbHelper.updateDiaryBy(it)
+                                    }
+                                    mDiaryMainItemAdapter?.notifyDataSetChanged()
                                 }
-                                mDiaryMainItemAdapter?.notifyDataSetChanged()
                             }
                         }
                     }
                 }
             }
+            pauseLock()
         }
-        pauseLock()
-    }
     var mDiaryMode = DiaryMode.READ
 
 
@@ -115,6 +117,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         initDiaryGrid()
         initDummyData()
         updateDrawableColorInnerCardView(mBinding.imgClearQuery)
+        changeDrawableIconColor(config.primaryColor, mBinding.imgOpenDashboard)
         bindEvent()
         initShowcase()
         EasyDiaryUtils.initWorkingDirectory(this@DiaryMainActivity)
@@ -128,8 +131,26 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
         // test code
         if (config.enableDebugMode) {
-            makeToast("Notification id is ${intent.getIntExtra(BaseDevActivity.NOTIFICATION_ID, -1)}")
+            makeToast(
+                "Notification id is ${
+                    intent.getIntExtra(
+                        BaseDevActivity.NOTIFICATION_ID,
+                        -1
+                    )
+                }"
+            )
             intent.getStringExtra(NOTIFICATION_INFO)?.let { makeToast("Notification info is $it") }
+        }
+
+        mBinding.imgOpenDashboard.setOnClickListener { view ->
+            view.postDelayed({
+                DashboardDialogFragment().apply {
+                    show(
+                        supportFragmentManager,
+                        "DashboardDialog"
+                    )
+                }
+            }, 300)
         }
     }
 
@@ -152,18 +173,27 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             config.previousActivity = -1
         }
 
-        if (ViewHelper.getTranslationY(mBinding.appBar) < 0) mBinding.searchCard.useCompatPadding = false
+        if (ViewHelper.getTranslationY(mBinding.appBar) < 0) mBinding.searchCard.useCompatPadding =
+            false
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             REQUEST_CODE_EXTERNAL_STORAGE -> if (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                 openPostcardViewer()
             } else {
-                makeSnackBar(findViewById(android.R.id.content), getString(R.string.guide_message_3))
+                makeSnackBar(
+                    findViewById(android.R.id.content),
+                    getString(R.string.guide_message_3)
+                )
             }
-            else -> {}
+            else -> {
+            }
         }
     }
 
@@ -179,10 +209,15 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 mDiaryMainItemAdapter?.getSelectedItems()?.run {
                     when (this.isNotEmpty()) {
                         true -> {
-                            showAlertDialog(getString(R.string.delete_selected_items_confirm, this.size), { _, _ ->
-                                this.forEach { EasyDiaryDbHelper.deleteDiaryBy(it.sequence) }
-                                refreshList()
-                            }, null)
+                            showAlertDialog(
+                                getString(
+                                    R.string.delete_selected_items_confirm,
+                                    this.size
+                                ), { _, _ ->
+                                    this.forEach { EasyDiaryDbHelper.deleteDiaryBy(it.sequence) }
+                                    refreshList()
+                                }, null
+                            )
                         }
                         false -> {
                             showAlertDialog(getString(R.string.no_items_warning), null)
@@ -194,17 +229,26 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 mDiaryMainItemAdapter?.getSelectedItems()?.run {
                     when (this.isNotEmpty()) {
                         true -> {
-                            showAlertDialog(getString(R.string.duplicate_selected_items_confirm, this.size), { _, _ ->
-                                this.reversed().map {
-                                    EasyDiaryDbHelper.beginTransaction()
-                                    it.isSelected = false
-                                    EasyDiaryDbHelper.commitTransaction()
-                                    // EasyDiaryDbHelper.updateDiaryBy(it)
-                                    EasyDiaryDbHelper.duplicateDiaryBy(it)
-                                }
-                                refreshList()
-                                Handler(Looper.getMainLooper()).post { mBinding.diaryListView.layoutManager?.scrollToPosition(0) }
-                            }, null)
+                            showAlertDialog(
+                                getString(
+                                    R.string.duplicate_selected_items_confirm,
+                                    this.size
+                                ), { _, _ ->
+                                    this.reversed().map {
+                                        EasyDiaryDbHelper.beginTransaction()
+                                        it.isSelected = false
+                                        EasyDiaryDbHelper.commitTransaction()
+                                        // EasyDiaryDbHelper.updateDiaryBy(it)
+                                        EasyDiaryDbHelper.duplicateDiaryBy(it)
+                                    }
+                                    refreshList()
+                                    Handler(Looper.getMainLooper()).post {
+                                        mBinding.diaryListView.layoutManager?.scrollToPosition(
+                                            0
+                                        )
+                                    }
+                                }, null
+                            )
                         }
                         false -> {
                             showAlertDialog(getString(R.string.no_items_warning), null)
@@ -214,7 +258,11 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             }
             R.id.saveAsHtml -> {
 //                writeFileWithSAF("${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DELIMITER)}.html", MIME_TYPE_HTML, REQUEST_CODE_SAF_HTML_BOOK)
-                EasyDiaryUtils.writeFileWithSAF("${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DASH)}.html", MIME_TYPE_HTML, mRequestSAFForHtmlBookLauncher)
+                EasyDiaryUtils.writeFileWithSAF(
+                    "${DateUtils.getCurrentDateTime(DateUtils.DATE_TIME_PATTERN_WITHOUT_DASH)}.html",
+                    MIME_TYPE_HTML,
+                    mRequestSAFForHtmlBookLauncher
+                )
             }
             R.id.timeline -> {
                 val timelineIntent = Intent(this@DiaryMainActivity, TimelineActivity::class.java)
@@ -296,14 +344,19 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                     putFloat(PhotoHighlightFragment.PAGE_MARGIN, 5F)
                     putBoolean(PhotoHighlightFragment.AUTO_PLAY, true)
                 }
-                togglePhotoHighlightCallback = { isVisible: Boolean -> togglePhotoHighlight(isVisible) }
+                togglePhotoHighlightCallback =
+                    { isVisible: Boolean -> togglePhotoHighlight(isVisible) }
             })
             commit()
         }
     }
 
     private fun togglePhotoHighlight(isVisible: Boolean) {
-        if (config.enableDebugMode) makeToast("History Highlight Last updated time: ${System.currentTimeMillis().minus(mLastHistoryCheckMillis) / 1000}seconds ago")
+        if (config.enableDebugMode) makeToast(
+            "History Highlight Last updated time: ${
+                System.currentTimeMillis().minus(mLastHistoryCheckMillis) / 1000
+            }seconds ago"
+        )
 
 
         when (isVisible) {
@@ -346,14 +399,29 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                     when (checkPermission(EXTERNAL_STORAGE_PERMISSIONS)) {
                         true -> openPostcardViewer()
                         false -> {
-                            confirmPermission(EXTERNAL_STORAGE_PERMISSIONS, REQUEST_CODE_EXTERNAL_STORAGE)
+                            confirmPermission(
+                                EXTERNAL_STORAGE_PERMISSIONS,
+                                REQUEST_CODE_EXTERNAL_STORAGE
+                            )
                         }
                     }
                 }
-                R.id.dashboard -> TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, Intent(this@DiaryMainActivity, DashboardActivity::class.java))
-                R.id.chart -> TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, Intent(this@DiaryMainActivity, StatisticsActivity::class.java))
-                R.id.settings -> TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, Intent(this@DiaryMainActivity, SettingsActivity::class.java))
-                R.id.devConsole -> TransitionHelper.startActivityWithTransition(this, Intent(this, DevActivity::class.java))
+                R.id.dashboard -> TransitionHelper.startActivityWithTransition(
+                    this@DiaryMainActivity,
+                    Intent(this@DiaryMainActivity, DashboardActivity::class.java)
+                )
+                R.id.chart -> TransitionHelper.startActivityWithTransition(
+                    this@DiaryMainActivity,
+                    Intent(this@DiaryMainActivity, StatisticsActivity::class.java)
+                )
+                R.id.settings -> TransitionHelper.startActivityWithTransition(
+                    this@DiaryMainActivity,
+                    Intent(this@DiaryMainActivity, SettingsActivity::class.java)
+                )
+                R.id.devConsole -> TransitionHelper.startActivityWithTransition(
+                    this,
+                    Intent(this, DevActivity::class.java)
+                )
                 R.id.gridLayout -> openGridSettingDialog(mBinding.mainHolder, 1) { spanCount ->
                     mGridLayoutManager.spanCount = spanCount
                     mBinding.diaryListView.invalidateItemDecorations()
@@ -378,8 +446,12 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
     private fun openCustomOptionMenu() {
         FontUtils.setFontsTypeface(this@DiaryMainActivity, null, mPopupMenuBinding.root, true)
-        mPopupMenuBinding.devConsole.visibility = if (config.enableDebugMode) View.VISIBLE else View.GONE
-        mPopupWindow = EasyDiaryUtils.openCustomOptionMenu(mPopupMenuBinding.root, findViewById(R.id.popupMenu))
+        mPopupMenuBinding.devConsole.visibility =
+            if (config.enableDebugMode) View.VISIBLE else View.GONE
+        mPopupWindow = EasyDiaryUtils.openCustomOptionMenu(
+            mPopupMenuBinding.root,
+            findViewById(R.id.popupMenu)
+        )
         mPopupMenuBinding.run {
             updateDrawableColorInnerCardView(imgDevConsole)
             updateDrawableColorInnerCardView(imgPostcard)
@@ -398,12 +470,18 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     private fun initShowcase() {
         val margin = ((resources.displayMetrics.density * 12) as Number).toInt()
 
-        val centerParams = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        val centerParams = RelativeLayout.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
         centerParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
         centerParams.addRule(RelativeLayout.CENTER_HORIZONTAL)
         centerParams.setMargins(0, 0, 0, margin)
 
-        val leftParams = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        val leftParams = RelativeLayout.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
         leftParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
         leftParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT)
         leftParams.setMargins(margin, margin, margin, margin)
@@ -448,15 +526,15 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         }
 
         mShowcaseView = ShowcaseView.Builder(this)
-                .withMaterialShowcase()
-                .setTarget(ViewTarget(mBinding.insertDiaryButton))
-                .setContentTitle(getString(R.string.read_diary_showcase_title_1))
-                .setContentText(getString(R.string.read_diary_showcase_message_1))
-                .setStyle(R.style.ShowcaseTheme)
-                .singleShot(SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER.toLong())
-                .setOnClickListener(showcaseViewOnClickListener)
-                .blockAllTouches()
-                .build()
+            .withMaterialShowcase()
+            .setTarget(ViewTarget(mBinding.insertDiaryButton))
+            .setContentTitle(getString(R.string.read_diary_showcase_title_1))
+            .setContentText(getString(R.string.read_diary_showcase_message_1))
+            .setStyle(R.style.ShowcaseTheme)
+            .singleShot(SHOWCASE_SINGLE_SHOT_READ_DIARY_NUMBER.toLong())
+            .setOnClickListener(showcaseViewOnClickListener)
+            .blockAllTouches()
+            .build()
         mShowcaseView?.setButtonText(getString(R.string.read_diary_showcase_button_1))
         mShowcaseView?.setButtonPosition(centerParams)
     }
@@ -479,17 +557,22 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
         EasyDiaryUtils.disableTouchEvent(mBinding.modalContainer)
 
-        mBinding.insertDiaryButton.setOnClickListener{
+        mBinding.insertDiaryButton.setOnClickListener {
             val createDiary = Intent(this@DiaryMainActivity, DiaryWritingActivity::class.java)
             //                startActivity(createDiary);
             //                DiaryMainActivity.this.overridePendingTransition(R.anim.anim_right_to_center, R.anim.anim_center_to_left);
             TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, createDiary)
         }
 
-        mBinding.feelingSymbolButton.setOnClickListener { openFeelingSymbolDialog(getString(R.string.diary_symbol_search_message), viewModel.symbol.value ?: 0) { symbolSequence ->
-            selectFeelingSymbol(symbolSequence)
-            refreshList()
-        }}
+        mBinding.feelingSymbolButton.setOnClickListener {
+            openFeelingSymbolDialog(
+                getString(R.string.diary_symbol_search_message),
+                viewModel.symbol.value ?: 0
+            ) { symbolSequence ->
+                selectFeelingSymbol(symbolSequence)
+                refreshList()
+            }
+        }
     }
 
     private fun selectFeelingSymbol(index: Int = SYMBOL_SELECT_ALL) {
@@ -499,7 +582,10 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     private fun showSpeechDialog() {
         try {
             Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
-                putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+                putExtra(
+                    RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                    RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+                )
                 putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
             }.run { mRequestSpeechInputLauncher.launch(this) }
         } catch (e: ActivityNotFoundException) {
@@ -509,14 +595,19 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
     private fun refreshList() {
         var queryString = ""
-        if (StringUtils.isNotEmpty(mBinding.query.text)) queryString = mBinding.query.text.toString()
+        if (StringUtils.isNotEmpty(mBinding.query.text)) queryString =
+            mBinding.query.text.toString()
         refreshList(queryString)
     }
 
     private fun refreshList(query: String) {
         mDiaryList.clear()
-        mDiaryList.addAll(EasyDiaryDbHelper.findDiary(query, config.diarySearchQueryCaseSensitive, 0, 0, viewModel.symbol.value
-                ?: 0))
+        mDiaryList.addAll(
+            EasyDiaryDbHelper.findDiary(
+                query, config.diarySearchQueryCaseSensitive, 0, 0, viewModel.symbol.value
+                    ?: 0
+            )
+        )
         mDiaryMainItemAdapter?.currentQuery = query
         mDiaryMainItemAdapter?.notifyDataSetChanged()
         mBinding.run {
@@ -534,26 +625,42 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
     }
 
     private fun initSampleData() {
-        EasyDiaryDbHelper.insertDiary(Diary(
+        EasyDiaryDbHelper.insertDiary(
+            Diary(
                 DIARY_SEQUENCE_INIT,
-                System.currentTimeMillis() - 395000000L, getString(R.string.sample_diary_title_1), getString(R.string.sample_diary_1),
+                System.currentTimeMillis() - 395000000L,
+                getString(R.string.sample_diary_title_1),
+                getString(R.string.sample_diary_1),
                 1
-        ))
-        EasyDiaryDbHelper.insertDiary(Diary(
+            )
+        )
+        EasyDiaryDbHelper.insertDiary(
+            Diary(
                 DIARY_SEQUENCE_INIT,
-                System.currentTimeMillis() - 263000000L, getString(R.string.sample_diary_title_2), getString(R.string.sample_diary_2),
+                System.currentTimeMillis() - 263000000L,
+                getString(R.string.sample_diary_title_2),
+                getString(R.string.sample_diary_2),
                 2
-        ))
-        EasyDiaryDbHelper.insertDiary(Diary(
+            )
+        )
+        EasyDiaryDbHelper.insertDiary(
+            Diary(
                 DIARY_SEQUENCE_INIT,
-                System.currentTimeMillis() - 132000000L, getString(R.string.sample_diary_title_3), getString(R.string.sample_diary_3),
+                System.currentTimeMillis() - 132000000L,
+                getString(R.string.sample_diary_title_3),
+                getString(R.string.sample_diary_3),
                 3
-        ))
-        EasyDiaryDbHelper.insertDiary(Diary(
+            )
+        )
+        EasyDiaryDbHelper.insertDiary(
+            Diary(
                 DIARY_SEQUENCE_INIT,
-                System.currentTimeMillis() - 4000000L, getString(R.string.sample_diary_title_4), getString(R.string.sample_diary_4),
+                System.currentTimeMillis() - 4000000L,
+                getString(R.string.sample_diary_title_4),
+                getString(R.string.sample_diary_4),
                 4
-        ))
+            )
+        )
     }
 
     private fun initDummyData() {
