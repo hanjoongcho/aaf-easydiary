@@ -73,6 +73,14 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
+    <style name="linear_floating_icon_container">
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/bg_circle_button</item>
+        <item name="android:layout_marginBottom">16dp</item>
+        <item name="android:layout_gravity">end|bottom</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
     <style name="relative_theme_container">
         <item name="layout_goneMarginTop">@dimen/medium_margin</item>
         <item name="android:layout_width">match_parent</item>
@@ -129,6 +137,12 @@
     <style name="image_custom_toolbar_icon">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+    </style>
+    <style name="image_floating_icon_medium">
+        <item name="android:layout_width">32dp</item>
+        <item name="android:layout_height">32dp</item>
         <item name="android:padding">5dp</item>
         <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
     </style>

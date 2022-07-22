@@ -174,40 +174,22 @@
             android:visibility="gone" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_marginEnd="90dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/bg_circle_button"
-            android:gravity="center">
+            style="@style/linear_floating_icon_container"
+            android:layout_marginEnd="90dp">
 
             <ImageView
                 android:id="@+id/img_open_dashboard"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:orientation="horizontal"
-                android:padding="5dp"
+                style="@style/image_floating_icon_medium"
                 android:src="@drawable/ic_statistics" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_marginEnd="138dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/bg_circle_button"
-            android:gravity="center">
+            style="@style/linear_floating_icon_container"
+            android:layout_marginEnd="140dp">
 
             <ImageView
                 android:id="@+id/img_microphone"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:orientation="horizontal"
-                android:padding="5dp"
+                style="@style/image_floating_icon_medium"
                 android:src="@drawable/ic_microphone" />
         </androidx.appcompat.widget.LinearLayoutCompat>
     </FrameLayout>
