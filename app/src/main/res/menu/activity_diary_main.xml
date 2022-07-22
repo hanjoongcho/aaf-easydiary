@@ -14,12 +14,6 @@
         android:title="@string/menu_timeline"
         app:showAsAction="always" />
     <item
-        android:icon="@drawable/ic_microphone"
-        android:id="@+id/microphone"
-        android:orderInCategory="100"
-        android:title="@string/speech_to_text"
-        app:showAsAction="always" />
-    <item
         android:icon="@drawable/ic_options_three_dots"
         android:id="@+id/popupMenu"
         android:orderInCategory="100"

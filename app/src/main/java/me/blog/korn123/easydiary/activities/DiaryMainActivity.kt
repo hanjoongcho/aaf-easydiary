@@ -141,8 +141,11 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             intent.getStringExtra(NOTIFICATION_INFO)?.let { makeToast("Notification info is $it") }
         }
 
+        mBinding.run {
+            changeDrawableIconColor(config.primaryColor, imgMicrophone)
+            imgMicrophone.setOnClickListener { showSpeechDialog() }
+        }
         changeDrawableIconColor(config.primaryColor, mBinding.imgOpenDashboard)
-        changeDrawableIconColor(config.primaryColor, mBinding.imgMicrophone)
         mBinding.imgOpenDashboard.setOnClickListener { view ->
             view.postDelayed({
                 DashboardDialogFragment().apply {
@@ -275,7 +278,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                 //                startActivity(calendarIntent);
                 TransitionHelper.startActivityWithTransition(this@DiaryMainActivity, calendarIntent)
             }
-            R.id.microphone -> showSpeechDialog()
+//            R.id.microphone -> showSpeechDialog()
             R.id.popupMenu -> openCustomOptionMenu()
         }
         return super.onOptionsItemSelected(item)
@@ -514,8 +517,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                         setContentText(getString(R.string.read_diary_showcase_message_5))
                     }
                     4 -> {
-                        setButtonPosition(centerParams)
-                        setTarget(ViewTarget(R.id.microphone, this@DiaryMainActivity))
+                        setButtonPosition(leftParams)
+                        setTarget(ViewTarget(R.id.img_microphone, this@DiaryMainActivity))
                         setContentTitle(getString(R.string.read_diary_showcase_title_3))
                         setContentText(getString(R.string.read_diary_showcase_message_3))
                         setButtonText(getString(R.string.create_diary_showcase_button_2))

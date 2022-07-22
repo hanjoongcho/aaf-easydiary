@@ -92,18 +92,13 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <FrameLayout
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/layout_banner_container"
                 android:layout_width="match_parent"
-                android:layout_height="150dp">
-
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:id="@+id/layout_banner_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:orientation="vertical"
-                    android:visibility="gone"
-                    tools:visibility="visible" />
-            </FrameLayout>
+                android:layout_height="150dp"
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible" />
 
             <me.blog.korn123.easydiary.views.FastScrollObservableRecyclerView
                 android:id="@+id/diaryListView"
