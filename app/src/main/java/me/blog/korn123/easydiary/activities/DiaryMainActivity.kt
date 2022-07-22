@@ -117,7 +117,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         initDiaryGrid()
         initDummyData()
         updateDrawableColorInnerCardView(mBinding.imgClearQuery)
-        changeDrawableIconColor(config.primaryColor, mBinding.imgOpenDashboard)
         bindEvent()
         initShowcase()
         EasyDiaryUtils.initWorkingDirectory(this@DiaryMainActivity)
@@ -142,6 +141,8 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             intent.getStringExtra(NOTIFICATION_INFO)?.let { makeToast("Notification info is $it") }
         }
 
+        changeDrawableIconColor(config.primaryColor, mBinding.imgOpenDashboard)
+        changeDrawableIconColor(config.primaryColor, mBinding.imgMicrophone)
         mBinding.imgOpenDashboard.setOnClickListener { view ->
             view.postDelayed({
                 DashboardDialogFragment().apply {
@@ -276,14 +277,6 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             }
             R.id.microphone -> showSpeechDialog()
             R.id.popupMenu -> openCustomOptionMenu()
-            R.id.dashboard -> {
-                DashboardDialogFragment().apply {
-                    show(
-                        supportFragmentManager,
-                        "DashboardDialog"
-                    )
-                }
-            }
         }
         return super.onOptionsItemSelected(item)
     }

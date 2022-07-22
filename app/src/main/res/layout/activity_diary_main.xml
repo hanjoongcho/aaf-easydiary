@@ -194,5 +194,22 @@
                 android:padding="5dp"
                 android:src="@drawable/ic_statistics" />
         </androidx.appcompat.widget.LinearLayoutCompat>
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|bottom"
+            android:gravity="center"
+            android:layout_marginStart="64dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_circle_button">
+            <ImageView
+                android:id="@+id/img_microphone"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:orientation="horizontal"
+                android:padding="5dp"
+                android:src="@drawable/ic_microphone" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
     </FrameLayout>
 </layout>
