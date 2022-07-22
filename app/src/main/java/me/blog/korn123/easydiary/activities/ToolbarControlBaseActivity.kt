@@ -87,11 +87,39 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
     private fun showToolbar() {
         moveToolbar(0F)
         if (config.enableCardViewPolicy) mBinding.searchCard.useCompatPadding = true
+        mBinding.run {
+            insertDiaryButton.run {
+//                visibility = View.VISIBLE
+                animate().alpha(1F).setDuration(300)
+            }
+            (imgMicrophone.parent as View).run {
+//                visibility = View.VISIBLE
+                animate().alpha(1F).setDuration(300)
+            }
+            (imgOpenDashboard.parent as View).run {
+//                visibility = View.VISIBLE
+                animate().alpha(1F).setDuration(300)
+            }
+        }
     }
 
     private fun hideToolbar() {
         moveToolbar(-mBinding.appBar.height.toFloat())
         mBinding.searchCard.useCompatPadding = false
+        mBinding.run {
+            insertDiaryButton.run {
+//                visibility = View.GONE
+                animate().alpha(0F).setDuration(300)
+            }
+            (imgMicrophone.parent as View).run {
+//                visibility = View.GONE
+                animate().alpha(0F).setDuration(300)
+            }
+            (imgOpenDashboard.parent as View).run {
+//                visibility = View.GONE
+                animate().alpha(0F).setDuration(300)
+            }
+        }
     }
 
     private fun moveToolbar(toTranslationY: Float) {

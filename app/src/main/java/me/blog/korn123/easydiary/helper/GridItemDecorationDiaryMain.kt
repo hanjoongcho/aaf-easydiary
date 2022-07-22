@@ -14,8 +14,8 @@ class GridItemDecorationDiaryMain(private val space: Int, private val activity: 
         val isStartColumn = position % spanCount == 0
         outRect.top = if (isTopColumn) 0 else space
         outRect.left = if (isStartColumn) 0 else space
-        parent.adapter?.run {
-            outRect.bottom = if (position == itemCount.minus(1)) activity.dpToPixel(80F) else 0
-        }
+//        parent.adapter?.run {
+//            outRect.bottom = if (position == itemCount.minus(1)) activity.dpToPixel(80F) else 0
+//        }
     }
 }

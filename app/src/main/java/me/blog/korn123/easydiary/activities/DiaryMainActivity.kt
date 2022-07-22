@@ -143,18 +143,18 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
 
         mBinding.run {
             changeDrawableIconColor(config.primaryColor, imgMicrophone)
+            changeDrawableIconColor(config.primaryColor, mBinding.imgOpenDashboard)
             imgMicrophone.setOnClickListener { showSpeechDialog() }
-        }
-        changeDrawableIconColor(config.primaryColor, mBinding.imgOpenDashboard)
-        mBinding.imgOpenDashboard.setOnClickListener { view ->
-            view.postDelayed({
-                DashboardDialogFragment().apply {
-                    show(
-                        supportFragmentManager,
-                        "DashboardDialog"
-                    )
-                }
-            }, 300)
+            imgOpenDashboard.setOnClickListener { view ->
+                view.postDelayed({
+                    DashboardDialogFragment().apply {
+                        show(
+                            supportFragmentManager,
+                            "DashboardDialog"
+                        )
+                    }
+                }, 300)
+            }
         }
     }
 
