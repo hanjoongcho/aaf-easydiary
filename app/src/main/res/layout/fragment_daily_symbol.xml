@@ -60,9 +60,10 @@
             android:id="@+id/dailyCardRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <androidx.core.widget.ContentLoadingProgressBar
+            android:layout_margin="20dp"
             android:id="@+id/dailyCardProgressBar"
             style="?android:progressBarStyleLarge"
             android:layout_width="30dp"

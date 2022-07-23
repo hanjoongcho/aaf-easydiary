@@ -122,7 +122,26 @@ open class BaseDevActivity : EasyDiaryActivity() {
             buttonBiometric.setOnClickListener {
                 startListeningBiometric(this@BaseDevActivity)
             }
+            buttonEasyDiaryLauncher.setOnClickListener {
+                toggleLauncher(Launcher.EASY_DIARY)
+            }
+
+            buttonDarkLauncher.setOnClickListener {
+                toggleLauncher(Launcher.DARK)
+            }
+
+            buttonGreenLauncher.setOnClickListener {
+                toggleLauncher(Launcher.GREEN)
+            }
+
+            buttonDebugLauncher.setOnClickListener {
+                toggleLauncher(Launcher.DEBUG)
+            }
+            buttonResetFontSize.setOnClickListener {
+                config.settingFontSize = dpToPixelFloatValue(DEFAULT_FONT_SIZE_UN_SUPPORT_LANGUAGE.toFloat())
+            }
         }
+
     }
 
     private fun setupNotification() {
@@ -292,22 +311,6 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 withContext(Dispatchers.Main) { updateConsole("4", name) }
             }
             updateConsole("2")
-        }
-
-        mBinding.buttonEasyDiaryLauncher.setOnClickListener {
-            toggleLauncher(Launcher.EASY_DIARY)
-        }
-
-        mBinding.buttonDarkLauncher.setOnClickListener {
-            toggleLauncher(Launcher.DARK)
-        }
-
-        mBinding.buttonGreenLauncher.setOnClickListener {
-            toggleLauncher(Launcher.GREEN)
-        }
-
-        mBinding.buttonDebugLauncher.setOnClickListener {
-            toggleLauncher(Launcher.DEBUG)
         }
     }
 
