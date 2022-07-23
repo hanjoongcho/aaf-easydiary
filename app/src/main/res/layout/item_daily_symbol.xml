@@ -21,6 +21,7 @@
             tools:text="토"
             android:textStyle="bold"
             android:textSize="@dimen/dashboard_text_large"
+            android:padding="@dimen/diary_card_text_padding"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <me.blog.korn123.easydiary.views.FixedTextView

@@ -17,6 +17,7 @@
 
             <me.blog.korn123.easydiary.views.FixedTextView
                 android:id="@+id/text_title"
+                android:padding="@dimen/diary_card_text_padding"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
