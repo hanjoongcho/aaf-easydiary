@@ -13,7 +13,7 @@
             android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/dashboard_title_h1"
+            android:textSize="@dimen/dashboard_text_large"
             tools:visibility="visible"
             tools:text="Chart Title"
             app:layout_constraintTop_toTopOf="parent"

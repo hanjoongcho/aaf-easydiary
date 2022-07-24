@@ -20,7 +20,7 @@
                 android:id="@+id/dashboard_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/dashboard_title_h1"
+                android:textSize="@dimen/dashboard_text_large"
                 app:applyGlobalColor="true"
                 app:applyGlobalSize="false"
                 app:applyHighLight="false"

@@ -64,7 +64,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="19dp"
                         android:text="Photo Highlight"
-                        android:textSize="@dimen/dashboard_title_h1"
+                        android:textSize="@dimen/dashboard_text_large"
                         app:applyGlobalColor="true"
                         app:applyGlobalSize="false"
                         app:applyHighLight="false"

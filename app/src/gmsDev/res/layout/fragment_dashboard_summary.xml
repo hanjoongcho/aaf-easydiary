@@ -28,7 +28,7 @@
                         app:applyHighLight="false"
                         android:padding="10dp"
                         android:text="@string/dashboard_title_backup_drive"
-                        android:textSize="@dimen/dashboard_title_h1"
+                        android:textSize="@dimen/dashboard_text_large"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                 </LinearLayout>
@@ -47,7 +47,7 @@
                             app:applyGlobalSize="false"
                             app:applyGlobalColor="true"
                             android:text="@string/last_diary_backup_time"
-                            android:textSize="@dimen/dashboard_title_h2"
+                            android:textSize="@dimen/dashboard_text_medium"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                         <me.blog.korn123.easydiary.views.FixedTextView
@@ -59,7 +59,7 @@
                             app:applyGlobalColor="true"
                             tools:text="2020 11 27"
                             android:id="@+id/diaryBackupUsingGMS"
-                            android:textSize="@dimen/dashboard_title_h3"
+                            android:textSize="@dimen/dashboard_text_small"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -78,7 +78,7 @@
                             app:applyGlobalSize="false"
                             app:applyGlobalColor="true"
                             android:text="@string/last_photo_backup_time"
-                            android:textSize="@dimen/dashboard_title_h2"
+                            android:textSize="@dimen/dashboard_text_medium"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                         <me.blog.korn123.easydiary.views.FixedTextView
@@ -90,7 +90,7 @@
                             app:applyGlobalColor="true"
                             tools:text="2020 11 27"
                             android:id="@+id/attachedPhotoBackupUsingGMS"
-                            android:textSize="@dimen/dashboard_title_h3"
+                            android:textSize="@dimen/dashboard_text_small"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -116,7 +116,7 @@
                         app:applyHighLight="false"
                         android:padding="10dp"
                         android:text="@string/dashboard_title_backup_local"
-                        android:textSize="@dimen/dashboard_title_h1"
+                        android:textSize="@dimen/dashboard_text_large"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                 </LinearLayout>
@@ -134,7 +134,7 @@
                             app:applyGlobalSize="false"
                             app:applyGlobalColor="true"
                             android:text="@string/last_diary_backup_time"
-                            android:textSize="@dimen/dashboard_title_h2"
+                            android:textSize="@dimen/dashboard_text_medium"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                         <me.blog.korn123.easydiary.views.FixedTextView
@@ -146,7 +146,7 @@
                             app:applyGlobalSize="false"
                             app:applyGlobalColor="true"
                             android:id="@+id/diaryBackupLocal"
-                            android:textSize="@dimen/dashboard_title_h3"
+                            android:textSize="@dimen/dashboard_text_small"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                     </androidx.constraintlayout.widget.ConstraintLayout>

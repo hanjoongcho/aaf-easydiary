@@ -17,9 +17,6 @@
     <dimen name="diary_card_text_padding">2dp</dimen>
 
     <!-- Font Size -->
-    <dimen name="dashboard_title_h1">20sp</dimen>
-    <dimen name="dashboard_title_h2">17sp</dimen>
-    <dimen name="dashboard_title_h3">14sp</dimen>
     <dimen name="dashboard_text_small">10sp</dimen>
     <dimen name="dashboard_text_medium">15sp</dimen>
     <dimen name="dashboard_text_large">20sp</dimen>
