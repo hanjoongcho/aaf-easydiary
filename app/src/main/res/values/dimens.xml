@@ -17,8 +17,8 @@
     <dimen name="diary_card_text_padding">2dp</dimen>
 
     <!-- Font Size -->
-    <dimen name="dashboard_text_small">10sp</dimen>
-    <dimen name="dashboard_text_medium">15sp</dimen>
+    <dimen name="dashboard_text_small">14sp</dimen>
+    <dimen name="dashboard_text_medium">17sp</dimen>
     <dimen name="dashboard_text_large">20sp</dimen>
     <dimen name="calendar_item_text_default">9sp</dimen>
     <dimen name="widget_text_medium">16sp</dimen>
