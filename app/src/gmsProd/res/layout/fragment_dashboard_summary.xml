@@ -58,8 +58,8 @@
                             android:id="@+id/topLabelGmsCard1"
                             style="@style/text_dashboard_summary_sub_title"
                             android:text="@string/last_diary_backup_time"
-                            app:layout_constraintStart_toEndOf="@+id/symbolGmsCard1"
                             app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/symbolGmsCard1"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <me.blog.korn123.easydiary.views.FixedTextView
@@ -163,8 +163,8 @@
                             style="@style/text_dashboard_summary_sub_title"
                             android:text="@string/last_diary_backup_time"
                             android:textSize="@dimen/dashboard_text_medium"
-                            app:layout_constraintStart_toEndOf="@+id/symbolLocalCard1"
                             app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/symbolLocalCard1"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <me.blog.korn123.easydiary.views.FixedTextView
@@ -175,7 +175,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/symbolLocalCard1"
                             app:layout_constraintTop_toBottomOf="@+id/topLabelLocalCard1"
-                            tools:text="2020 11 27"/>
+                            tools:text="2020 11 27" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </me.blog.korn123.easydiary.views.FixedCardView>
             </LinearLayout>

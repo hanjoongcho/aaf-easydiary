@@ -1,68 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
     <me.blog.korn123.easydiary.views.FixedCardView
         android:id="@+id/cardDriveBackup"
-        android:visibility="gone"
-        style="@style/card_dashboard">
+        style="@style/card_dashboard"
+        android:visibility="gone">
+
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
                 <ImageView
-                    android:layout_marginLeft="10dp"
                     android:layout_width="35dp"
-                    android:layout_height="35dp"/>
+                    android:layout_height="35dp"
+                    android:layout_marginLeft="10dp" />
+
                 <me.blog.korn123.easydiary.views.FixedTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:padding="10dp"
                     android:text="@string/dashboard_title_backup_drive"
-                    android:textSize="@dimen/dashboard_text_large"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:textSize="@dimen/dashboard_text_large" />
             </LinearLayout>
 
-            <me.blog.korn123.easydiary.views.FixedCardView
-                style="@style/card_dashboard">
+            <me.blog.korn123.easydiary.views.FixedCardView style="@style/card_dashboard">
+
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
                     <me.blog.korn123.easydiary.views.FixedTextView
-                        android:text="@string/last_diary_backup_time"
-                        android:textSize="@dimen/dashboard_text_medium"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:text="@string/last_diary_backup_time"
+                        android:textSize="@dimen/dashboard_text_medium" />
+
                     <me.blog.korn123.easydiary.views.FixedTextView
                         android:id="@+id/diaryBackupUsingGMS"
-                        android:textSize="@dimen/dashboard_text_small"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/dashboard_text_small" />
                 </LinearLayout>
             </me.blog.korn123.easydiary.views.FixedCardView>
-            <me.blog.korn123.easydiary.views.FixedCardView
-                style="@style/card_dashboard">
+
+            <me.blog.korn123.easydiary.views.FixedCardView style="@style/card_dashboard">
+
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
                     <me.blog.korn123.easydiary.views.FixedTextView
-                        android:text="@string/last_photo_backup_time"
-                        android:textSize="@dimen/dashboard_text_medium"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:text="@string/last_photo_backup_time"
+                        android:textSize="@dimen/dashboard_text_medium" />
+
                     <me.blog.korn123.easydiary.views.FixedTextView
                         android:id="@+id/attachedPhotoBackupUsingGMS"
-                        android:textSize="@dimen/dashboard_text_small"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/dashboard_text_small" />
                 </LinearLayout>
             </me.blog.korn123.easydiary.views.FixedCardView>
         </LinearLayout>
@@ -72,43 +81,49 @@
         android:id="@+id/cardLocalBackup"
         style="@style/card_dashboard"
         android:layout_width="wrap_content">
+
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
                 <me.blog.korn123.easydiary.views.FixedTextView
-                    app:applyGlobalSize="false"
-                    app:applyGlobalColor="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:padding="10dp"
                     android:text="@string/dashboard_title_backup_local"
                     android:textSize="@dimen/dashboard_text_large"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    app:applyGlobalColor="true"
+                    app:applyGlobalSize="false" />
             </LinearLayout>
-            <me.blog.korn123.easydiary.views.FixedCardView
-                style="@style/card_dashboard">
+
+            <me.blog.korn123.easydiary.views.FixedCardView style="@style/card_dashboard">
+
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
                     <me.blog.korn123.easydiary.views.FixedTextView
-                        app:applyGlobalSize="false"
-                        app:applyGlobalColor="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="@string/last_diary_backup_time"
                         android:textSize="@dimen/dashboard_text_medium"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-                    <me.blog.korn123.easydiary.views.FixedTextView
-                        app:applyGlobalSize="false"
                         app:applyGlobalColor="true"
+                        app:applyGlobalSize="false" />
+
+                    <me.blog.korn123.easydiary.views.FixedTextView
                         android:id="@+id/diaryBackupLocal"
-                        android:textSize="@dimen/dashboard_text_small"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/dashboard_text_small"
+                        app:applyGlobalColor="true"
+                        app:applyGlobalSize="false" />
                 </LinearLayout>
             </me.blog.korn123.easydiary.views.FixedCardView>
         </LinearLayout>
