@@ -343,7 +343,7 @@
 
     <!-- Animations for Dialogs-->
     <style name="DialogAnimation">
-        <item name="android:windowEnterAnimation">@anim/fade_in_long</item>
-        <item name="android:windowExitAnimation">@anim/fade_out_long</item>
+        <item name="android:windowEnterAnimation">@anim/fade_in_medium</item>
+        <item name="android:windowExitAnimation">@anim/fade_out_medium</item>
     </style>
 </resources>
