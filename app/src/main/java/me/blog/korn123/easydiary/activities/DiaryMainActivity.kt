@@ -410,10 +410,10 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
                         }
                     }
                 }
-                R.id.dashboard -> TransitionHelper.startActivityWithTransition(
-                    this@DiaryMainActivity,
-                    Intent(this@DiaryMainActivity, DashboardActivity::class.java)
-                )
+//                R.id.dashboard -> TransitionHelper.startActivityWithTransition(
+//                    this@DiaryMainActivity,
+//                    Intent(this@DiaryMainActivity, DashboardActivity::class.java)
+//                )
                 R.id.chart -> TransitionHelper.startActivityWithTransition(
                     this@DiaryMainActivity,
                     Intent(this@DiaryMainActivity, StatisticsActivity::class.java)
@@ -440,7 +440,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
             updateTextColors(this.root)
             FontUtils.setFontsTypeface(this@DiaryMainActivity, null, this.root, true)
             postCard.setOnClickListener(customItemClickListener)
-            dashboard.setOnClickListener(customItemClickListener)
+//            dashboard.setOnClickListener(customItemClickListener)
             chart.setOnClickListener(customItemClickListener)
             settings.setOnClickListener(customItemClickListener)
             devConsole.setOnClickListener(customItemClickListener)
@@ -459,7 +459,7 @@ class DiaryMainActivity : ToolbarControlBaseActivity<FastScrollObservableRecycle
         mPopupMenuBinding.run {
             updateDrawableColorInnerCardView(imgDevConsole)
             updateDrawableColorInnerCardView(imgPostcard)
-            updateDrawableColorInnerCardView(imgDashboard)
+//            updateDrawableColorInnerCardView(imgDashboard)
             updateDrawableColorInnerCardView(imgStatistics)
             updateDrawableColorInnerCardView(imgSettings)
             updateDrawableColorInnerCardView(imgGridLayout)

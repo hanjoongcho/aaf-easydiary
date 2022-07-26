@@ -55,17 +55,6 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
             <androidx.appcompat.widget.LinearLayoutCompat
                 style="@style/linear_popup_menu_item"
-                android:id="@+id/dashboard">
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:src="@drawable/ic_statistics"
-                    android:id="@+id/img_dashboard"
-                    style="@style/image_popup_menu_icon" />
-                <me.blog.korn123.easydiary.views.FixedTextView
-                    style="@style/text_popup_menu_item"
-                    android:text="@string/menu_dashboard" />
-            </androidx.appcompat.widget.LinearLayoutCompat>
-            <androidx.appcompat.widget.LinearLayoutCompat
-                style="@style/linear_popup_menu_item"
                 android:id="@+id/chart">
                 <androidx.appcompat.widget.AppCompatImageView
                     android:src="@drawable/ic_combo"
