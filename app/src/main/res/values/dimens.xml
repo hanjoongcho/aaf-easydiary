@@ -14,7 +14,7 @@
     <dimen name="dashboard_card_padding">15dp</dimen>
     <dimen name="dashboard_symbol_padding">5dp</dimen>
     <dimen name="dashboard_title_padding">10dp</dimen>
-    <dimen name="diary_card_text_padding">2dp</dimen>
+    <dimen name="diary_card_text_padding">3sp</dimen>
 
     <!-- Font Size -->
     <dimen name="dashboard_text_small">14sp</dimen>

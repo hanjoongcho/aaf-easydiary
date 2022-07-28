@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import kotlinx.coroutines.*
+import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
@@ -97,9 +98,11 @@ class FontItemAdapter(val activity: Activity, private val layoutResourceId: Int,
                     holder.textView.run {
                         val tf = FontUtils.getTypeface(context, list[position]["fontName"])
                         withContext(Dispatchers.Main) {
+                            val label = if (activity.config.enableDebugMode) "\uD83C\uDF0E\uD83D\uDCF1${list[position]["disPlayFontName"]}" else list[position]["disPlayFontName"]
                             typeface = tf
-                            text = list[position]["disPlayFontName"]
+                            text = label
                         }
+                        if (activity.config.enableDebugMode) EasyDiaryUtils.highlightString(this)
                     }
                     Log.i(AAF_TEST, "${holder.position} End")
                 }
