@@ -875,6 +875,10 @@ fun Context.dpToPixelFloatValue(dp: Float): Float {
     return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics)
 }
 
+fun Context.spToPixelFloatValue(sp: Float): Float {
+    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, resources.displayMetrics)
+}
+
 fun Context.dpToPixel(dp: Float, policy: Calculation = Calculation.CEIL): Int {
     val px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics)
     return when (policy) {

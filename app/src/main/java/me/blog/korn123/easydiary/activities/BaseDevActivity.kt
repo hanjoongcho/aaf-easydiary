@@ -138,7 +138,8 @@ open class BaseDevActivity : EasyDiaryActivity() {
                 toggleLauncher(Launcher.DEBUG)
             }
             buttonResetFontSize.setOnClickListener {
-                config.settingFontSize = dpToPixelFloatValue(DEFAULT_FONT_SIZE_UN_SUPPORT_LANGUAGE.toFloat())
+                config.settingFontSize = spToPixelFloatValue(DEFAULT_FONT_SIZE_UN_SUPPORT_LANGUAGE.toFloat())
+                makeToast("DP:${dpToPixelFloatValue(DEFAULT_FONT_SIZE_UN_SUPPORT_LANGUAGE.toFloat())} , SP:${spToPixelFloatValue(DEFAULT_FONT_SIZE_UN_SUPPORT_LANGUAGE.toFloat())}")
             }
         }
 
