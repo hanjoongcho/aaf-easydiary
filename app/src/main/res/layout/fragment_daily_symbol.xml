@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:text="@string/dashboard_title_daily_symbol_tile"
-            android:textSize="@dimen/dashboard_text_large"
+            android:textSize="@dimen/basic_text_large"
             app:applyGlobalColor="true"
             app:applyGlobalSize="false"
             app:applyHighLight="false" />
@@ -51,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textSize="@dimen/dashboard_text_large"
+            android:textSize="@dimen/basic_text_large"
             app:applyGlobalColor="true"
             app:applyGlobalSize="false"
             tools:text="11월" />

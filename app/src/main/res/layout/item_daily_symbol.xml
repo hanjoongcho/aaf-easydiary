@@ -20,7 +20,7 @@
             android:gravity="center"
             tools:text="토"
             android:textStyle="bold"
-            android:textSize="@dimen/dashboard_text_medium"
+            android:textSize="@dimen/basic_text_medium"
             android:padding="@dimen/diary_card_text_padding"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
@@ -34,7 +34,7 @@
             android:gravity="center"
             tools:text="20"
             android:textStyle="bold"
-            android:textSize="@dimen/dashboard_text_medium"
+            android:textSize="@dimen/basic_text_medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -60,7 +60,7 @@
             android:id="@+id/noItemMessage"
             android:gravity="center"
             android:text="N/A"
-            android:textSize="@dimen/dashboard_text_medium"
+            android:textSize="@dimen/basic_text_medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </androidx.constraintlayout.widget.ConstraintLayout>

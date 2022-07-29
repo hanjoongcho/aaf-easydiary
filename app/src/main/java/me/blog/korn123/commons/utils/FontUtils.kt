@@ -10,6 +10,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixelFloatValue
 import me.blog.korn123.easydiary.extensions.preferencesContains
+import me.blog.korn123.easydiary.extensions.spToPixelFloatValue
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.views.FixedTextView
 import org.apache.commons.io.FilenameUtils
@@ -65,7 +66,7 @@ object FontUtils {
 
             // Initial font size setting
             if (!preferencesContains(SETTING_FONT_SIZE)) {
-                config.settingFontSize = dpToPixelFloatValue(DEFAULT_FONT_SIZE_UN_SUPPORT_LANGUAGE.toFloat())
+                config.settingFontSize = spToPixelFloatValue(DEFAULT_FONT_SIZE_UN_SUPPORT_LANGUAGE.toFloat())
             }
         }
     }

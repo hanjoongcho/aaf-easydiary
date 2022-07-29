@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dashboard_title_padding"
-            android:textSize="@dimen/dashboard_text_large"
+            android:textSize="@dimen/basic_text_large"
             android:visibility="gone"
             app:applyGlobalColor="true"
             app:applyGlobalSize="false"
