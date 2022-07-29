@@ -208,8 +208,8 @@
         <item name="android:padding">@dimen/diary_card_text_padding</item>
     </style>
     <style name="text_dashboard_ranking">
-        <item name="android:layout_width">34sp</item>
-        <item name="android:layout_height">34sp</item>
+        <item name="android:layout_width">30sp</item>
+        <item name="android:layout_height">30sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">@dimen/basic_text_medium</item>
         <item name="android:background">@drawable/ic_star</item>

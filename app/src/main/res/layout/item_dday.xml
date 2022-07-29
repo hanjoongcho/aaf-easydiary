@@ -23,7 +23,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textColor="@color/default_text_color"
-                android:textSize="@dimen/basic_text_large"
+                android:textSize="@dimen/basic_text_medium"
                 app:applyGlobalColor="true"
                 app:applyGlobalSize="false"
                 app:layout_constraintStart_toStartOf="parent"
