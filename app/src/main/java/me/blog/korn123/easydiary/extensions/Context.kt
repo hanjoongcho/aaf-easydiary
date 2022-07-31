@@ -453,7 +453,7 @@ fun Context.initTextSize(viewGroup: ViewGroup) {
     if (isNightMode()) return
 
     val cnt = viewGroup.childCount
-    val defaultFontSize: Float = dpToPixelFloatValue(DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE.toFloat())
+    val defaultFontSize: Float = dpToPixelFloatValue(SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat())
     val settingFontSize: Float = config.settingFontSize
     (0 until cnt)
             .map { index -> viewGroup.getChildAt(index) }
@@ -486,7 +486,7 @@ fun Context.initTextSize(viewGroup: ViewGroup) {
 fun Context.initTextSize(textView: TextView) {
     if (isNightMode()) return
 
-    val defaultFontSize: Float = dpToPixelFloatValue(DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE.toFloat())
+    val defaultFontSize: Float = dpToPixelFloatValue(SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat())
     val settingFontSize: Float = config.settingFontSize
     textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, settingFontSize)
 }

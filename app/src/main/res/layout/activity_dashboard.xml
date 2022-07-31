@@ -24,7 +24,7 @@
         android:id="@+id/dashboard_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:padding="0dp"
+        android:paddingBottom="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -119,6 +119,7 @@
             </HorizontalScrollView>
 
             <HorizontalScrollView
+                android:layout_marginBottom="62dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scrollbars="none">
@@ -172,7 +173,8 @@
         android:src="@drawable/ic_cross"
         android:visibility="gone"
         app:fabSize="mini"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 

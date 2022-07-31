@@ -533,9 +533,10 @@ const val POSTCARD_SEQUENCE = "postcard_sequence"
 //const val OPEN_URL_INFO = "open_url_info"
 const val THUMBNAIL_BACKGROUND_ALPHA = 170
 
-const val DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE = 20
-const val DEFAULT_FONT_SIZE_UN_SUPPORT_LANGUAGE = 15
-const val DEFAULT_THUMBNAIL_SIZE_DP = 50
+const val SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP    = 20
+const val UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP = 15
+const val CHART_LABEL_FONT_SIZE_DEFAULT_DP         = 11F
+const val THUMBNAIL_SIZE_DEFAULT_DP                = 50
 const val DEFAULT_CALENDAR_FONT_SCALE = -1F
 
 const val POSTCARD_BG_COLOR = "postcard_bg_color"

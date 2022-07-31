@@ -66,7 +66,7 @@ object FontUtils {
 
             // Initial font size setting
             if (!preferencesContains(SETTING_FONT_SIZE)) {
-                config.settingFontSize = spToPixelFloatValue(DEFAULT_FONT_SIZE_UN_SUPPORT_LANGUAGE.toFloat())
+                config.settingFontSize = spToPixelFloatValue(UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat())
             }
         }
     }
@@ -75,7 +75,7 @@ object FontUtils {
         activity.run {
             // Initial font size setting
             if (!preferencesContains(SETTING_FONT_SIZE)) {
-                config.settingFontSize = dpToPixelFloatValue(DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE.toFloat())
+                config.settingFontSize = dpToPixelFloatValue(SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat())
             }
         }
     }

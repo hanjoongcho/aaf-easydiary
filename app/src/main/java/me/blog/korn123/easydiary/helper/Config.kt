@@ -80,7 +80,7 @@ class Config(val context: Context) {
         set(previousActivity) = legacyPrefs.edit().putInt(PREVIOUS_ACTIVITY, previousActivity).apply()
 
     var settingFontSize: Float
-        get() = legacyPrefs.getFloat(SETTING_FONT_SIZE, context.dpToPixelFloatValue(DEFAULT_FONT_SIZE_SUPPORT_LANGUAGE.toFloat()))
+        get() = legacyPrefs.getFloat(SETTING_FONT_SIZE, context.dpToPixelFloatValue(SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat()))
         set(settingFontSize) = legacyPrefs.edit().putFloat(SETTING_FONT_SIZE, settingFontSize).apply()
 
     var diarySearchQueryCaseSensitive: Boolean
@@ -100,7 +100,7 @@ class Config(val context: Context) {
         set(lineSpacingScaleFactor) = legacyPrefs.edit().putFloat(LINE_SPACING_SCALE_FACTOR, lineSpacingScaleFactor).apply()
 
     var settingThumbnailSize: Float
-        get() = prefs.getFloat(SETTING_THUMBNAIL_SIZE, DEFAULT_THUMBNAIL_SIZE_DP.toFloat())
+        get() = prefs.getFloat(SETTING_THUMBNAIL_SIZE, THUMBNAIL_SIZE_DEFAULT_DP.toFloat())
         set(settingThumbnailSize) = prefs.edit().putFloat(SETTING_THUMBNAIL_SIZE, settingThumbnailSize).apply()
 
     var settingCalendarFontScale: Float

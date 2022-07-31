@@ -142,9 +142,9 @@
         <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
     </style>
     <style name="image_floating_icon_medium">
-        <item name="android:layout_width">32dp</item>
-        <item name="android:layout_height">32dp</item>
-        <item name="android:padding">5dp</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:layout_width">45dp</item>
+        <item name="android:layout_height">45dp</item>
         <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
     </style>
     <style name="image_popup_menu_icon">

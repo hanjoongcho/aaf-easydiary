@@ -31,10 +31,7 @@ import me.blog.korn123.easydiary.activities.StatisticsActivity
 import me.blog.korn123.easydiary.databinding.FragmentStockLineChartBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
-import me.blog.korn123.easydiary.helper.AAF_TEST
-import me.blog.korn123.easydiary.helper.DAILY_STOCK
-import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
-import me.blog.korn123.easydiary.helper.TransitionHelper
+import me.blog.korn123.easydiary.helper.*
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -76,6 +73,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         mLineChart.xAxis.run {
             position = XAxis.XAxisPosition.BOTTOM
             typeface = FontUtils.getCommonTypeface(requireContext())
+            textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
             textColor = requireContext().config.textColor
             labelRotationAngle = -45F
             setDrawGridLines(false)
@@ -87,6 +85,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         val yAxisFormatter = WeightYAxisValueFormatter(context)
         mLineChart.axisLeft.run {
             typeface = FontUtils.getCommonTypeface(requireContext())
+            textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
             textColor = requireContext().config.textColor
             setLabelCount(8, false)
             valueFormatter = yAxisFormatter
@@ -99,6 +98,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         mLineChart.axisRight.run {
             setDrawGridLines(false)
             typeface = FontUtils.getCommonTypeface(requireContext())
+            textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
             textColor = requireContext().config.textColor
             setLabelCount(8, false)
             valueFormatter = yAxisFormatter
@@ -109,6 +109,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 
         mLineChart.legend.run {
             typeface = FontUtils.getCommonTypeface(requireContext())
+            textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
             textColor = requireContext().config.textColor
             verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
             horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
@@ -116,7 +117,6 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             setDrawInside(false)
             form = Legend.LegendForm.SQUARE
             formSize = 9f
-            textSize = 11f
             xEntrySpace = 4f
         }
 
@@ -169,7 +169,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                     lineDataSet.setDrawFilled(true)
                     mDataSets.add(lineDataSet)
                     val lineData = LineData(mDataSets)
-                    lineData.setValueTextSize(10f)
+                    lineData.setValueTextSize(CHART_LABEL_FONT_SIZE_DEFAULT_DP)
                     lineData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
                     lineData.setValueTextColor(requireContext().config.textColor)
 //                        Color.rgb(
@@ -306,6 +306,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 tvContent.run {
                     text = "${xAxisValueFormatter.getFormattedValue(entry.x, mLineChart.xAxis)}: ${getCurrencyFormat().format(entry.y)}"
                     typeface = FontUtils.getCommonTypeface(context)
+                    textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
                 }
                 super.refreshContent(entry, highlight)
             }
