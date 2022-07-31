@@ -175,7 +175,7 @@
 
         <androidx.appcompat.widget.LinearLayoutCompat
             style="@style/linear_floating_icon_container"
-            android:layout_marginEnd="88dp">
+            android:layout_marginEnd="84dp">
 
             <ImageView
                 android:id="@+id/img_open_dashboard"
@@ -185,7 +185,7 @@
 
         <androidx.appcompat.widget.LinearLayoutCompat
             style="@style/linear_floating_icon_container"
-            android:layout_marginEnd="146dp">
+            android:layout_marginEnd="140dp">
 
             <ImageView
                 android:id="@+id/img_microphone"
