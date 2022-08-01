@@ -92,14 +92,6 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
                 visibility = View.VISIBLE
                 animate().alpha(1F).setDuration(300).setListener(null)
             }
-            (imgMicrophone.parent as View).run {
-                visibility = View.VISIBLE
-                animate().alpha(1F).setDuration(300).setListener(null)
-            }
-            (imgOpenDashboard.parent as View).run {
-                visibility = View.VISIBLE
-                animate().alpha(1F).setDuration(300).setListener(null)
-            }
         }
     }
 
@@ -109,27 +101,6 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
         mBinding.run {
             insertDiaryButton.run {
 //                visibility = View.GONE
-                animate().alpha(0.1F).setDuration(300).setListener(object : android.animation.Animator.AnimatorListener {
-                    override fun onAnimationStart(animation: android.animation.Animator?) {}
-                    override fun onAnimationEnd(animation: android.animation.Animator?) {
-                        visibility = View.GONE
-                    }
-                    override fun onAnimationCancel(animation: android.animation.Animator?) {}
-                    override fun onAnimationRepeat(animation: android.animation.Animator?) {}
-                })
-            }
-            (imgMicrophone.parent as View).run {
-//                visibility = View.GONE
-                animate().alpha(0.1F).setDuration(300).setListener(object : android.animation.Animator.AnimatorListener {
-                    override fun onAnimationStart(animation: android.animation.Animator?) {}
-                    override fun onAnimationEnd(animation: android.animation.Animator?) {
-                        visibility = View.GONE
-                    }
-                    override fun onAnimationCancel(animation: android.animation.Animator?) {}
-                    override fun onAnimationRepeat(animation: android.animation.Animator?) {}
-                })
-            }
-            (imgOpenDashboard.parent as View).run {
                 animate().alpha(0.1F).setDuration(300).setListener(object : android.animation.Animator.AnimatorListener {
                     override fun onAnimationStart(animation: android.animation.Animator?) {}
                     override fun onAnimationEnd(animation: android.animation.Animator?) {
