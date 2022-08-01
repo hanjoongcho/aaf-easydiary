@@ -31,7 +31,7 @@
                         android:layout_height="wrap_content"
                         android:padding="10dp"
                         android:text="@string/dashboard_title_backup_drive"
-                        android:textSize="@dimen/dashboard_text_large"
+                        android:textSize="@dimen/basic_text_large"
                         app:applyGlobalColor="true"
                         app:applyGlobalSize="false"
                         app:applyHighLight="false" />
@@ -55,7 +55,7 @@
                         <me.blog.korn123.easydiary.views.FixedTextView
                             android:id="@+id/diaryBackupUsingGMS"
                             style="@style/text_dashboard_summary_sub_title"
-                            android:textSize="@dimen/dashboard_text_small"
+                            android:textSize="@dimen/basic_text_small"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -82,7 +82,7 @@
                         <me.blog.korn123.easydiary.views.FixedTextView
                             android:id="@+id/attachedPhotoBackupUsingGMS"
                             style="@style/text_dashboard_summary_sub_title"
-                            android:textSize="@dimen/dashboard_text_small"
+                            android:textSize="@dimen/basic_text_small"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -113,7 +113,7 @@
                         android:layout_height="wrap_content"
                         android:padding="10dp"
                         android:text="@string/dashboard_title_backup_local"
-                        android:textSize="@dimen/dashboard_text_large"
+                        android:textSize="@dimen/basic_text_large"
                         app:applyGlobalColor="true"
                         app:applyGlobalSize="false"
                         app:applyHighLight="false" />
@@ -137,7 +137,7 @@
                         <me.blog.korn123.easydiary.views.FixedTextView
                             android:id="@+id/diaryBackupLocal"
                             style="@style/text_dashboard_summary_sub_title"
-                            android:textSize="@dimen/dashboard_text_small"
+                            android:textSize="@dimen/basic_text_small"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
