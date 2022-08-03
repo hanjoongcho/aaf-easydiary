@@ -182,7 +182,7 @@ class CaldroidItemAdapter(
                 setBackgroundResource(0)
                 when (dateTime.weekDay) {
                     1 -> setTextColor(Color.RED)
-                    7 -> setTextColor(Color.BLUE)
+                    7 -> setTextColor(Color.rgb(0, 0, 139))
                     else -> {
                         if (isSelect) setTextColor(Color.BLACK) else setTextColor(context.config.textColor)
                     }

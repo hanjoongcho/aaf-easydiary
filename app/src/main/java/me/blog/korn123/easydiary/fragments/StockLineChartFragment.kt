@@ -181,7 +181,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 //                            lineDataSet.color = it
 //                            lineDataSet.fillColor = it
 //                        }
-                    val color = if (barEntries[0].y < barEntries[barEntries.size.minus(1)].y) Color.RED else Color.BLUE
+                    val color = if (barEntries[0].y < barEntries[barEntries.size.minus(1)].y) Color.RED else Color.rgb(0, 0, 139)
                     lineDataSet.circleColors = arrayListOf(color)
                     lineDataSet.color = color
                     lineDataSet.fillColor = color

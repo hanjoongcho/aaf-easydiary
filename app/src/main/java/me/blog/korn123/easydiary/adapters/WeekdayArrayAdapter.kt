@@ -36,20 +36,20 @@ class WeekdayArrayAdapter(context: Context, private val textViewResourceId: Int,
                 CALENDAR_START_DAY_SUNDAY -> {
                     when (position) {
                         0 -> textWeekday.setTextColor(Color.RED)
-                        6 -> textWeekday.setTextColor(Color.BLUE)
+                        6 -> textWeekday.setTextColor(Color.rgb(0, 0, 139))
                         else -> textWeekday.setTextColor(context.config.textColor)
                     }
                 }
                 CALENDAR_START_DAY_MONDAY -> {
                     when (position) {
-                        5 -> textWeekday.setTextColor(Color.BLUE)
+                        5 -> textWeekday.setTextColor(Color.rgb(0, 0, 139))
                         6 -> textWeekday.setTextColor(Color.RED)
                         else -> textWeekday.setTextColor(context.config.textColor)
                     }
                 }
                 CALENDAR_START_DAY_SATURDAY -> {
                     when (position) {
-                        0 -> textWeekday.setTextColor(Color.BLUE)
+                        0 -> textWeekday.setTextColor(Color.rgb(0, 0, 139))
                         1 -> textWeekday.setTextColor(Color.RED)
                         else -> textWeekday.setTextColor(context.config.textColor)
                     }
