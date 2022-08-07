@@ -179,6 +179,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                     val lineData = LineData(mDataSets)
                     lineData.setValueTextSize(10f)
                     lineData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
+                    lineData.setDrawValues(false)
                     mLineChart.data = lineData
                     mLineChart.animateY(600)
                     mBinding.barChartProgressBar.visibility = View.GONE
@@ -221,9 +222,9 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             }
             if (index > 0) {
                 val average = sumWeight.div(index)
-                mLineChart.axisLeft.axisMinimum = average.minus(5000000)
+//                mLineChart.axisLeft.axisMinimum = average.minus(5000000)
                 mLineChart.axisLeft.axisMaximum = average.plus(3000000)
-                mLineChart.axisRight.axisMinimum = average.minus(5000000)
+//                mLineChart.axisRight.axisMinimum = average.minus(5000000)
                 mLineChart.axisRight.axisMaximum = average.plus(3000000)
             }
             sumDataSetSize = totalEntries.size
