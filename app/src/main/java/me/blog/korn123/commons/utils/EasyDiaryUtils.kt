@@ -122,6 +122,10 @@ object EasyDiaryUtils {
         return string?.contains("\\d+\\.?\\d+".toRegex()) ?: false
     }
 
+    fun isStockNumber(string: String?): Boolean {
+        return string?.matches("\\d+,{1}\\d+".toRegex()) ?: false
+    }
+
     fun findNumber(string: String?): Float {
         var number = 0f
         string?.let {

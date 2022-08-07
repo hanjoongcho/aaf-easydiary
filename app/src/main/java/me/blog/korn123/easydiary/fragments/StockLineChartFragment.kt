@@ -2,7 +2,6 @@ package me.blog.korn123.easydiary.fragments
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -158,33 +157,27 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     private fun drawChart() {
         mCoroutineJob = CoroutineScope(Dispatchers.IO).launch {
             mDataSets.clear()
-            val barEntries = setData()
-            if (barEntries.isNotEmpty()) {
+            setData()
+            if (sumDataSetSize > 0) {
                 withContext(Dispatchers.Main) {
-                    val lineDataSet = LineDataSet(barEntries, "Evaluated Price")
-                    val iValueFormatter = WeightIValueFormatter(context)
-                    lineDataSet.valueFormatter = iValueFormatter
-                    lineDataSet.setDrawIcons(false)
-                    lineDataSet.setDrawValues(true)
-                    lineDataSet.setDrawFilled(true)
-                    mDataSets.add(lineDataSet)
+//                    val lineDataSet = LineDataSet(barEntries, "Evaluated Price")
+//                    val iValueFormatter = WeightIValueFormatter(context)
+//                    lineDataSet.valueFormatter = iValueFormatter
+//                    lineDataSet.setDrawIcons(false)
+//                    lineDataSet.setDrawValues(true)
+//                    lineDataSet.setDrawFilled(true)
+//                    mDataSets.add(lineDataSet)
+//                    val lineData = LineData(mDataSets)
+//                    lineData.setValueTextSize(CHART_LABEL_FONT_SIZE_DEFAULT_DP)
+//                    lineData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
+//                    lineData.setValueTextColor(requireContext().config.textColor)
+//                    val color = if (barEntries[0].y < barEntries[barEntries.size.minus(1)].y) Color.RED else Color.rgb(0, 0, 139)
+//                    lineDataSet.circleColors = arrayListOf(color)
+//                    lineDataSet.color = color
+//                    lineDataSet.fillColor = color
                     val lineData = LineData(mDataSets)
-                    lineData.setValueTextSize(CHART_LABEL_FONT_SIZE_DEFAULT_DP)
+                    lineData.setValueTextSize(10f)
                     lineData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
-                    lineData.setValueTextColor(requireContext().config.textColor)
-//                        Color.rgb(
-//                            Random.nextInt(0, 255),
-//                            Random.nextInt(0, 255),
-//                            Random.nextInt(0, 255)
-//                        ).also {
-//                            lineDataSet.circleColors = arrayListOf(it)
-//                            lineDataSet.color = it
-//                            lineDataSet.fillColor = it
-//                        }
-                    val color = if (barEntries[0].y < barEntries[barEntries.size.minus(1)].y) Color.RED else Color.rgb(0, 0, 139)
-                    lineDataSet.circleColors = arrayListOf(color)
-                    lineDataSet.color = color
-                    lineDataSet.fillColor = color
                     mLineChart.data = lineData
                     mLineChart.animateY(600)
                     mBinding.barChartProgressBar.visibility = View.GONE
@@ -198,33 +191,49 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         mCoroutineJob?.run { if (isActive) cancel() }
     }
 
-    private fun setData(): ArrayList<Entry> {
-        val barEntries = ArrayList<Entry>()
+    var sumDataSetSize = 0
+    private fun setData() {
+        val totalEntries = ArrayList<Entry>()
+        val krEntries = ArrayList<Entry>()
+        val usEntries = ArrayList<Entry>()
         EasyDiaryDbHelper.getTemporaryInstance().let { realmInstance ->
             val listDiary = EasyDiaryDbHelper.findDiary(null, false, 0, 0, DAILY_STOCK, realmInstance = realmInstance)
             var index = 0
             var sumWeight = 0F
             listDiary.reversed().forEach { diaryDto ->
                 diaryDto.title?.let {
-                    if (EasyDiaryUtils.isContainNumber(it)) {
-                        val weight = EasyDiaryUtils.findNumber(it)
-                        sumWeight += weight
-                        barEntries.add(Entry(index.toFloat(), weight))
-                        mTimeMillisMap[index] = diaryDto.currentTimeMillis
-                        index++
+                    if (EasyDiaryUtils.isStockNumber(it)) {
+                        try {
+                            val amountArray = it.split(",")
+                            val krAmount = amountArray[0].toFloat()
+                            val usAmount = amountArray[1].toFloat()
+                            val sum = krAmount.plus(usAmount)
+                            sumWeight += sum
+                            totalEntries.add(Entry(index.toFloat(), sum))
+                            krEntries.add(Entry(index.toFloat(), krAmount))
+                            usEntries.add(Entry(index.toFloat(), usAmount))
+                            mTimeMillisMap[index] = diaryDto.currentTimeMillis
+                            index++
+                        } catch (e: Exception) { Log.i(AAF_TEST, e.message ?: "") }
                     }
                 }
             }
             if (index > 0) {
                 val average = sumWeight.div(index)
-                mLineChart.axisLeft.axisMinimum = average.minus(3000000)
+                mLineChart.axisLeft.axisMinimum = average.minus(5000000)
                 mLineChart.axisLeft.axisMaximum = average.plus(3000000)
-                mLineChart.axisRight.axisMinimum = average.minus(3000000)
+                mLineChart.axisRight.axisMinimum = average.minus(5000000)
                 mLineChart.axisRight.axisMaximum = average.plus(3000000)
             }
+            sumDataSetSize = totalEntries.size
+            val sumDataSet = LineDataSet(totalEntries, "SUM")
+            val krDataSet = LineDataSet(krEntries, "KR")
+            val usDataSet = LineDataSet(usEntries, "US")
+            mDataSets.add(sumDataSet)
+            mDataSets.add(krDataSet)
+            mDataSets.add(usDataSet)
             realmInstance.close()
         }
-        return barEntries
     }
 
     private fun xAxisTimeMillisToDate(timeMillis: Long): String =
