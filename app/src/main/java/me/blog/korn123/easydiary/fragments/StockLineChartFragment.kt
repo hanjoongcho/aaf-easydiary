@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.fragments
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -226,9 +227,11 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 mLineChart.axisRight.axisMaximum = average.plus(3000000)
             }
             sumDataSetSize = totalEntries.size
-            val sumDataSet = LineDataSet(totalEntries, "SUM")
-            val krDataSet = LineDataSet(krEntries, "KR")
-            val usDataSet = LineDataSet(usEntries, "US")
+            val plusColor = Color.rgb(200, 0, 0)
+            val minusColor = Color.rgb(0, 0, 139)
+            val sumDataSet = LineDataSet(totalEntries, "SUM").apply { color = if (totalEntries[totalEntries.size.minus(1)].y > 8000000) plusColor else minusColor }
+            val krDataSet = LineDataSet(krEntries, "KR").apply { color = if (krEntries[krEntries.size.minus(1)].y > 4000000) plusColor else minusColor }
+            val usDataSet = LineDataSet(usEntries, "US").apply { color = if (usEntries[usEntries.size.minus(1)].y > 4000000) plusColor else minusColor }
             mDataSets.add(sumDataSet)
             mDataSets.add(krDataSet)
             mDataSets.add(usDataSet)
