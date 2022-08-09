@@ -182,8 +182,11 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                     lineData.setDrawValues(false)
                     mLineChart.data = lineData
                     mLineChart.animateY(600)
-                    mBinding.barChartProgressBar.visibility = View.GONE
                 }
+            }
+
+            withContext(Dispatchers.Main) {
+                mBinding.barChartProgressBar.visibility = View.GONE
             }
         }
     }
@@ -226,16 +229,16 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 mLineChart.axisLeft.axisMaximum = average.plus(3000000)
 //                mLineChart.axisRight.axisMinimum = average.minus(5000000)
                 mLineChart.axisRight.axisMaximum = average.plus(3000000)
+                sumDataSetSize = totalEntries.size
+                val plusColor = Color.rgb(200, 0, 0)
+                val minusColor = Color.rgb(0, 0, 139)
+                val sumDataSet = LineDataSet(totalEntries, "SUM").apply { color = if (totalEntries[totalEntries.size.minus(1)].y > 8000000) plusColor else minusColor }
+                val krDataSet = LineDataSet(krEntries, "KR").apply { color = if (krEntries[krEntries.size.minus(1)].y > 4000000) plusColor else minusColor }
+                val usDataSet = LineDataSet(usEntries, "US").apply { color = if (usEntries[usEntries.size.minus(1)].y > 4000000) plusColor else minusColor }
+                mDataSets.add(sumDataSet)
+                mDataSets.add(krDataSet)
+                mDataSets.add(usDataSet)
             }
-            sumDataSetSize = totalEntries.size
-            val plusColor = Color.rgb(200, 0, 0)
-            val minusColor = Color.rgb(0, 0, 139)
-            val sumDataSet = LineDataSet(totalEntries, "SUM").apply { color = if (totalEntries[totalEntries.size.minus(1)].y > 8000000) plusColor else minusColor }
-            val krDataSet = LineDataSet(krEntries, "KR").apply { color = if (krEntries[krEntries.size.minus(1)].y > 4000000) plusColor else minusColor }
-            val usDataSet = LineDataSet(usEntries, "US").apply { color = if (usEntries[usEntries.size.minus(1)].y > 4000000) plusColor else minusColor }
-            mDataSets.add(sumDataSet)
-            mDataSets.add(krDataSet)
-            mDataSets.add(usDataSet)
             realmInstance.close()
         }
     }
