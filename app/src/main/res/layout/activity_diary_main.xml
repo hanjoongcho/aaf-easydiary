@@ -130,6 +130,7 @@
 
         <LinearLayout
             android:id="@+id/modalContainer"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:alpha="0.3"
@@ -139,6 +140,7 @@
 
         <LinearLayout
             android:id="@+id/progressDialog"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

@@ -694,6 +694,12 @@ fun EasyDiaryActivity.migrateData(binging: ActivityDiaryMainBinding) {
         val realmInstance = EasyDiaryDbHelper.getTemporaryInstance()
         val listPhotoUri = EasyDiaryDbHelper.findPhotoUriAll(realmInstance)
         var isFontDirMigrate = false
+
+        runOnUiThread {
+            binging.progressDialog.visibility = View.VISIBLE
+            binging.modalContainer.visibility = View.VISIBLE
+        }
+
         for ((index, dto) in listPhotoUri.withIndex()) {
 //                Log.i("PHOTO-URI", dto.photoUri)
             if (dto.isContentUri()) {
