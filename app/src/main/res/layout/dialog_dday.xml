@@ -1,88 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="0dp"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/AppCard"
-    >
+    app:cardCornerRadius="0dp">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
+
         <com.simplemobiletools.commons.views.MyEditText
             android:id="@+id/text_title"
-            android:inputType="text|textAutoCorrect|textAutoComplete"
-            android:maxLines="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:text="Awesome Day!!!"
-            app:layout_constraintStart_toStartOf="parent"
+            android:inputType="text|textAutoCorrect|textAutoComplete"
+            android:maxLines="1"
             app:layout_constraintEnd_toStartOf="@+id/image_delete_d_day"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            />
+            tools:text="Awesome Day!!!" />
+
         <ImageView
             android:id="@+id/image_delete_d_day"
-            android:src="@drawable/ic_delete_w"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@+id/text_title"
+            android:src="@drawable/ic_delete_w"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/text_title"
-            />
+            app:layout_constraintStart_toEndOf="@+id/text_title"
+            app:layout_constraintTop_toTopOf="@+id/text_title" />
+
         <me.blog.korn123.easydiary.views.FixedTextView
             android:id="@+id/text_target_date"
-            android:textSize="20sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackground"
             android:layout_marginTop="5dp"
-            tools:text="2022.03.03"
+            android:background="?attr/selectableItemBackground"
+            android:textSize="@dimen/basic_text_medium"
             app:applyGlobalSize="false"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_title"
-            />
+            tools:text="2022.03.03" />
+
         <me.blog.korn123.easydiary.views.FixedTextView
             android:id="@+id/text_target_time"
-            android:textSize="20sp"
-            android:layout_marginLeft="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:background="?attr/selectableItemBackground"
+            android:textSize="@dimen/basic_text_medium"
             app:applyGlobalSize="false"
-            tools:text="18:60"
-            app:layout_constraintTop_toBottomOf="@+id/text_target_date"
             app:layout_constraintEnd_toEndOf="@+id/text_target_date"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/text_target_date"
+            tools:text="18:60" />
+
         <me.blog.korn123.easydiary.views.FixedTextView
             android:id="@+id/text_day_remaining"
-            android:textSize="30sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView"
-            tools:text="+100"
+            android:textSize="@dimen/basic_text_large"
             app:applyGlobalSize="false"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/text_day_remaining_with_year"
             app:layout_constraintTop_toBottomOf="@+id/text_target_time"
-            />
+            tools:text="+100" />
+
         <me.blog.korn123.easydiary.views.FixedTextView
             android:id="@+id/text_day_remaining_with_year"
-            android:textSize="10sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="（1Year 32Days）"
+            android:textSize="@dimen/basic_text_small"
             app:applyGlobalSize="false"
+            app:layout_constraintBottom_toBottomOf="@+id/text_day_remaining"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_day_remaining"
-            />
+            tools:text="（1Year 32Days）" />
+
         <com.simplemobiletools.commons.views.MyTextView
             android:id="@+id/text_time_remaining"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView"
-            tools:text="8Hours"
+            android:textSize="@dimen/basic_text_medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_day_remaining_with_year"
-            />
+            tools:text="8Hours" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

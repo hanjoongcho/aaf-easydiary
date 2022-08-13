@@ -9,7 +9,7 @@
         android:id="@+id/container"
         style="@style/card_dashboard_inner"
         android:layout_width="match_parent"
-        app:contentPadding="@dimen/dashboard_card_padding">
+        app:contentPadding="@dimen/card_contents_padding">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -35,7 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/default_text_color"
-                android:textSize="@dimen/basic_text_medium"
+                android:textSize="@dimen/basic_text_small"
                 app:applyGlobalColor="true"
                 app:applyGlobalSize="false"
                 app:layout_constraintStart_toStartOf="parent"
@@ -47,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/default_text_color"
-                android:textSize="@dimen/basic_text_medium"
+                android:textSize="@dimen/basic_text_small"
                 app:applyGlobalColor="true"
                 app:applyGlobalSize="false"
                 app:layout_constraintEnd_toEndOf="@+id/text_target_date"
@@ -66,30 +66,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_target_time"
                 tools:text="＋100" />
-
-            <me.blog.korn123.easydiary.views.FixedTextView
-                android:id="@+id/text_day_remaining_with_year"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/default_text_color"
-                android:textSize="@dimen/basic_text_small"
-                app:applyGlobalColor="true"
-                app:applyGlobalSize="false"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text_day_remaining"
-                tools:text="（1Year 32Days）" />
-
-            <me.blog.korn123.easydiary.views.FixedTextView
-                android:id="@+id/text_time_remaining"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/default_text_color"
-                android:textSize="@dimen/basic_text_medium"
-                app:applyGlobalColor="true"
-                app:applyGlobalSize="false"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text_day_remaining_with_year"
-                tools:text="8Hours" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </me.blog.korn123.easydiary.views.FixedCardView>
 </androidx.appcompat.widget.LinearLayoutCompat>

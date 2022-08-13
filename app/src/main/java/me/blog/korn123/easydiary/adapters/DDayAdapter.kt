@@ -20,6 +20,7 @@ import me.blog.korn123.easydiary.databinding.ItemDdayBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.DDay
+import java.text.SimpleDateFormat
 import java.util.*
 
 class DDayAdapter(
@@ -169,11 +170,11 @@ class DDayAdapter(
             EasyDiaryUtils.boldStringForce(itemDDayBinding.textDayRemaining)
             itemDDayBinding.run {
                 textTitle.text = dDay.title
-                textTargetDate.text = DateUtils.getDateStringFromTimeMillis(dDay.targetTimeStamp)
-                textTargetTime.text = DateUtils.getTimeStringFromTimeMillis(dDay.targetTimeStamp)
+                textTargetDate.text = DateUtils.getDateStringFromTimeMillis(dDay.targetTimeStamp, SimpleDateFormat.MEDIUM)
+                textTargetTime.text = DateUtils.getTimeStringFromTimeMillis(dDay.targetTimeStamp, SimpleDateFormat.SHORT)
                 textDayRemaining.text = dDay.getDayRemaining()
-                textDayRemainingWithYear.text = dDay.getDayRemaining(false, activity.getString(R.string.year_message_format), activity.getString(R.string.day_message_format))
-                textTimeRemaining.text = dDay.getTimeRemaining()
+//                textDayRemainingWithYear.text = dDay.getDayRemaining(false, activity.getString(R.string.year_message_format), activity.getString(R.string.day_message_format))
+//                textTimeRemaining.text = dDay.getTimeRemaining()
                 root.setOnClickListener {
                     openDDayDialog(EasyDiaryDbHelper.duplicateDDayBy(dDay), dDay)
                 }
