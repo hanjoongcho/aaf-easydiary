@@ -171,7 +171,7 @@ class DDayAdapter(
             itemDDayBinding.run {
                 textTitle.text = dDay.title
                 textTargetDate.text = DateUtils.getDateStringFromTimeMillis(dDay.targetTimeStamp, SimpleDateFormat.MEDIUM)
-                textTargetTime.text = DateUtils.getTimeStringFromTimeMillis(dDay.targetTimeStamp, SimpleDateFormat.SHORT)
+//                textTargetTime.text = DateUtils.getTimeStringFromTimeMillis(dDay.targetTimeStamp, SimpleDateFormat.SHORT)
                 textDayRemaining.text = dDay.getDayRemaining()
 //                textDayRemainingWithYear.text = dDay.getDayRemaining(false, activity.getString(R.string.year_message_format), activity.getString(R.string.day_message_format))
 //                textTimeRemaining.text = dDay.getTimeRemaining()
