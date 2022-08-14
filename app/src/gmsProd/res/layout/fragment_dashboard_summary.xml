@@ -65,7 +65,7 @@
                         <me.blog.korn123.easydiary.views.FixedTextView
                             android:id="@+id/diaryBackupUsingGMS"
                             style="@style/text_dashboard_summary_sub_title"
-                            android:textSize="@dimen/basic_text_small"
+                            android:textSize="@dimen/basic_text_extra_small"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/symbolGmsCard1"
@@ -103,7 +103,7 @@
                         <me.blog.korn123.easydiary.views.FixedTextView
                             android:id="@+id/attachedPhotoBackupUsingGMS"
                             style="@style/text_dashboard_summary_sub_title"
-                            android:textSize="@dimen/basic_text_small"
+                            android:textSize="@dimen/basic_text_extra_small"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/symbolGmsCard2"
@@ -170,7 +170,7 @@
                         <me.blog.korn123.easydiary.views.FixedTextView
                             android:id="@+id/diaryBackupLocal"
                             style="@style/text_dashboard_summary_sub_title"
-                            android:textSize="@dimen/basic_text_small"
+                            android:textSize="@dimen/basic_text_extra_small"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/symbolLocalCard1"

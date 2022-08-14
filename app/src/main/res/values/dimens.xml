@@ -17,6 +17,7 @@
     <dimen name="diary_card_text_padding">3sp</dimen>
 
     <!-- Font Size -->
+    <dimen name="basic_text_extra_small">11sp</dimen>
     <dimen name="basic_text_small">13sp</dimen>
     <dimen name="basic_text_medium">15sp</dimen>
     <dimen name="basic_text_large">17sp</dimen>
