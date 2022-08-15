@@ -193,6 +193,7 @@
         <item>317|Swimming</item>
         <item>318|Tennis</item>
         <item>319|Tennis</item>
+        <item>334|Trip</item>
     </string-array>
     <string-array name="landscape_item_array">
         <item>200|Beach</item>
