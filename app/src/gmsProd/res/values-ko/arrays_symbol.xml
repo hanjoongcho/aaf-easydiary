@@ -158,6 +158,8 @@
         <item>43|Vitamins</item>
     </string-array>
     <string-array name="leisure_item_array">
+        <item>334|Trip</item>
+        <item>335|Playground</item>
         <item>330|Bicycle</item>
         <item>331|Friends</item>
         <item>332|Friends</item>
@@ -193,7 +195,6 @@
         <item>317|Swimming</item>
         <item>318|Tennis</item>
         <item>319|Tennis</item>
-        <item>334|Trip</item>
     </string-array>
     <string-array name="landscape_item_array">
         <item>200|Beach</item>

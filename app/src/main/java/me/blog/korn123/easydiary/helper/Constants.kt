@@ -232,6 +232,7 @@ const val LEISURE_FRIENDS_1 = 331
 const val LEISURE_FRIENDS_2 = 332
 const val LEISURE_FRIENDS_3 = 333
 const val LEISURE_TRIP = 334
+const val LEISURE_PLAYGROUND = 335
 
 // Symbol 350 ~ 449
 const val SYMBOL_YOUTUBE = 350

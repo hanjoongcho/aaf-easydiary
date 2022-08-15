@@ -213,6 +213,7 @@ object FlavorUtils {
         LEISURE_FRIENDS_2 -> R.drawable.ic_friends2
         LEISURE_FRIENDS_3 -> R.drawable.ic_friends3
         LEISURE_TRIP -> R.drawable.ic_automobile
+        LEISURE_PLAYGROUND -> R.drawable.ic_playground
 
         SYMBOL_YOUTUBE -> R.drawable.ic_youtube
         SYMBOL_NETFLIX -> R.drawable.ic_netflix
