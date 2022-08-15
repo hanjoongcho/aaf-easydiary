@@ -341,6 +341,10 @@ fun Context.updateTextColors(viewGroup: ViewGroup, tmpTextColor: Int = 0, tmpAcc
             }
 }
 
+fun Context.updateDashboardInnerCard(cardView: CardView) {
+    if (config.backgroundColor != -1) cardView.setCardBackgroundColor(config.backgroundColor.darkenColor(-2))
+}
+
 fun Context.updateAppViews(viewGroup: ViewGroup, tmpBackgroundColor: Int = 0) {
     if (isNightMode()) return
 
@@ -355,7 +359,7 @@ fun Context.updateAppViews(viewGroup: ViewGroup, tmpBackgroundColor: Int = 0) {
                             true -> {
                                 if (it.applyCardBackgroundColor) it.setCardBackgroundColor(backgroundColor)
                                 if (it.dashboardInnerCard) {
-                                    if (config.backgroundColor != -1) it.setCardBackgroundColor(config.backgroundColor.darkenColor(-2))
+                                    updateDashboardInnerCard(it)
                                 }
                             }
                             false -> it.setCardBackgroundColor(backgroundColor)

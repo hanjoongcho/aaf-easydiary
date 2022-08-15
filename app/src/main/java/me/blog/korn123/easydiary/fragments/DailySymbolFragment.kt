@@ -19,6 +19,7 @@ import me.blog.korn123.easydiary.databinding.FragmentDailySymbolBinding
 import me.blog.korn123.easydiary.databinding.PartialDailySymbolBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.updateAppViews
+import me.blog.korn123.easydiary.extensions.updateDashboardInnerCard
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -127,17 +128,25 @@ class DailySymbolFragment : Fragment() {
                     val partialDailySymbolBinding = PartialDailySymbolBinding.inflate(layoutInflater)
                     withContext(Dispatchers.Main) {
                         FlavorUtils.initWeatherView(requireContext(), partialDailySymbolBinding.dailySymbol, sequence.toInt())
+                        requireActivity().updateDashboardInnerCard(partialDailySymbolBinding.root)
                         selectedSymbolFlexBox.addView(partialDailySymbolBinding.root)
                     }
                 }
 
-                requireActivity().runOnUiThread {
+                withContext(Dispatchers.Main) {
                     mDailySymbolAdapter.notifyDataSetChanged()
                     month.visibility = View.VISIBLE
                     dailyCardRecyclerView.visibility = View.VISIBLE
                     dailyCardProgressBar.visibility = View.GONE
-                    requireActivity().updateAppViews(selectedSymbolFlexBox)
+//                    requireActivity().updateAppViews(selectedSymbolFlexBox)
                 }
+//                requireActivity().runOnUiThread {
+//                    mDailySymbolAdapter.notifyDataSetChanged()
+//                    month.visibility = View.VISIBLE
+//                    dailyCardRecyclerView.visibility = View.VISIBLE
+//                    dailyCardProgressBar.visibility = View.GONE
+//                    requireActivity().updateAppViews(selectedSymbolFlexBox)
+//                }
             }
         }
     }

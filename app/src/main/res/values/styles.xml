@@ -208,10 +208,10 @@
         <item name="android:padding">@dimen/diary_card_text_padding</item>
     </style>
     <style name="text_dashboard_ranking">
-        <item name="android:layout_width">30sp</item>
-        <item name="android:layout_height">30sp</item>
+        <item name="android:layout_width">26sp</item>
+        <item name="android:layout_height">26sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">@dimen/basic_text_medium</item>
+        <item name="android:textSize">@dimen/basic_text_small</item>
         <item name="android:background">@drawable/ic_star</item>
         <item name="layout_constraintTop_toTopOf">parent</item>
         <item name="layout_constraintLeft_toLeftOf">parent</item>
@@ -221,7 +221,7 @@
         <item name="applyGlobalColor">true</item>
         <item name="android:ellipsize">end</item>
         <item name="android:singleLine">true</item>
-        <item name="android:textSize">@dimen/basic_text_medium</item>
+        <item name="android:textSize">@dimen/basic_text_small</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>

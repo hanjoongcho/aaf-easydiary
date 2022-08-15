@@ -60,7 +60,7 @@
             android:id="@+id/noItemMessage"
             android:gravity="center"
             android:text="N/A"
-            android:textSize="@dimen/basic_text_medium"
+            android:textSize="@dimen/basic_text_small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
