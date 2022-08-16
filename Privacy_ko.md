@@ -1,10 +1,11 @@
 ## 이지 다이어리 개인정보 보호정책 [(English)](https://github.com/hanjoongcho/aaf-easydiary/blob/master/Privacy.md)
 ![](https://raw.githubusercontent.com/hanjoongcho/aaf-easydiary/master/app/src/main/res/mipmap-xxhdpi/ic_launcher.png)   
 
+v2022.08.16-01   
 이지 다이어리를 개발하고 배포하는 Awesome Application Factory(이하"AAF")는 영리를 목적으로 하는 법인 또는 개인 사업자가 아닙니다.  
 오프소스 라이브러리를 매쉬업하여 사용자가 광고없이 무료로 편리한 애프리케이션을 사용 할 수 있도록 애플리케이션을 개발하고 배포하는 것을 목적으로 합니다.  
 따라서 AAF의 애플리케이션은 사용자의 데이터 및 개인정보를 저장하기 위해 별도의 서버를 운영하지 않으며, 불필요하게 사용자의 개인정보를 취급하지도 않습니다. 만약 사용중인 애플리케이션에 대한 백업 및 복구를 사용자가 원하는경우 사용자의 동의하에 Google의 OAuth인증을 통하여 사용자 개인의 Google Drive에 애플리케이션 데이터를 저장하고 이후 백업 요청 시 사용합니다.  
-백업 데이터는 사용자가 Google Drive에서 별도로 공유설정을 진행하지 않는한 외부로 공개되지 않습니다.
+백업 데이터는 사용자가 Google Drive에서 별도로 공유설정을 진행하지 않는한 외부로 공개되지 않습니다.   
 
 ---
 
@@ -17,12 +18,6 @@
 
 ---
 
-### ☑️ 정보의 수집 및 사용  
-이지 다이어리는 보다 향상된 기능 제공을 위해 소프트웨어가 정상적으로 동작이 가능하도록 권한을 요청하거나 사용자 디바이스의 저장소에 접근 할 수 있습니다.
-사용자가 직접 작성하거나 위치정보 확인 기능을 이용하여 위치정보를 저장하는 경우에도 사용자의 디바이스 저장소에 해당 정보가 저장되며 별도의 서버로 전송되지 않습니다.
-
----
-
 ### ☑️ 요청되는 기본권한과 요청 이유
 Normal Permissions은 사용자의 추가 승인없이 애플리케이션이 설치되면 자동으로 부여되는 Permission입니다.
 
@@ -31,31 +26,49 @@ Normal Permissions은 사용자의 추가 승인없이 애플리케이션이 설
 * 이지 다이어리 스케줄러 기능을 사용하는 경우 사용자가 설정한 시간에 맞춰 Notification을 제공하고 예약된 작업을 진행하기 위해 필요한 권한입니다.
 #### INTERNET
 * Allows applications to open network sockets.
+* 사용자가 매뉴얼, 자주 묻는 질문, 개인정보 보호정책등을 열람하는 경우 필요한 권한입니다.
 #### FOREGROUND_SERVICE
-* WIP
+* Allows a regular application to use Service.startForeground.
+* 전체데이터를 백업하거나 복구할때 진행 상태를 알림창에서 제공하기 위해 필요한 권한입니다.
 #### RECEIVE_BOOT_COMPLETED
-* WIP
+* Allows an application to receive the Intent.ACTION_BOOT_COMPLETED that is broadcast after the system finishes booting. If you don't request this permission, you will not receive the broadcast at that time. Though holding this permission does not have any security implications, it can have a negative impact on the user experience by increasing the amount of time it takes the system to start and allowing applications to have themselves running without the user being aware of them. As such, you must explicitly declare your use of this facility to make that visible to the user.
+* 디바이스가 다시 시작되었을때 스케줄러에 설정된 작업을 재등록 하기위해 필요한 권한입니다.
 #### VIBRATE
-* WIP
+* Allows access to the vibrator.
+* 스케줄러로 예약된 작업이 시작되거나 완료되었을때 사용자에게 진동알림을 주기위해 필요한 권한입니다.
 #### SCHEDULE_EXACT_ALARM
-* WIP
+* Allows applications to use exact alarm APIs.
+* 이지 다이어리 스케줄러 기능을 사용하는 경우 사용자가 설정한 시간에 맞춰 Notification을 제공하고 예약된 작업을 진행하기 위해 필요한 권한입니다.
 #### USE_BIOMETRIC
-* WIP
+* Allows an app to use device supported biometric modalities.
+* 사용자가 지문 잠금 기능을 사용할때 필요한 권한입니다.
 #### USE_FINGERPRINT
-* WIP
+* Allows an app to use fingerprint hardware.
+* 사용자가 지문 잠금 기능을 사용할때 필요한 권한입니다.
 
 ---
 
-### ☑️ 요청되는 위험권한관 요청 이유
+### ☑️ 요청되는 위험권한 요청 이유
 Dangerous Permissions은 사용자의 추가 승인을 받은 경우에만 부여되는 Permission입니다.
 #### READ_EXTERNAL_STORAGE
-* WIP
+* Allows an application to read from external storage.
+* 사용자의 저장소에 있는 폰트파일이나, 사진등을 읽기 위해 필요한 권한입니다. 
 #### WRITE_EXTERNAL_STORAGE
-* WIP
+* Allows an application to write to external storage.
+* 사용자의 저장소에 포스트카드, 백업파일등을 저장하기 위해 필요한 권한입니다.
 #### ACCESS_FINE_LOCATION
-* WIP
+* Allows an app to access precise location. Alternatively, you might want ACCESS_COARSE_LOCATION.
+* 사용자가 다이어리 작성위치 저장 옵션을 활성화 하는 경우 다이어리가 작성된 위치의 정확한 주소정보를 취득하기 위해 필요한 권한입니다.
 #### ACCESS_COARSE_LOCATION
-* WIP
+* Allows an app to access approximate location. Alternatively, you might want ACCESS_FINE_LOCATION.
+* 사용자가 다이어리 작성위치 저장 옵션을 활성화 하는 경우 다이어리가 작성된 위치의 근사치 주소정보를 취득하기 위해 필요한 권한입니다.
+
+---
+
+### ☑️ 정보의 수집 및 사용  
+이지 다이어리는 보다 향상된 기능 제공을 위해 소프트웨어가 정상적으로 동작이 가능하도록 권한을 요청하고 취득한 권한을 이용하여 디바이스의 저장소에 접근 하거나 위치정보를 취득 할 수 있습니다.   
+이렇게 취득된 정보는 사용자가 작성한 콘텐츠와 함께 사용자의 디바이스 저장소에 저장될 수 있지만 개발자가 열람하거나 별도의 서버로 전송되지 않습니다.
+사용자가 Google의 OAuth인증을 통하여 사용자 개인의 Google Drive를 연결하여 다이어리 데이터를 개인의 Google Drive에 저장하더라도 개발자는 해당 정보를 열람 할 수 없습니다.
 
 ---
 
@@ -64,13 +77,16 @@ Dangerous Permissions은 사용자의 추가 승인을 받은 경우에만 부�
 __개인정보__  
 * 개발자는 소프트웨어를 사용하는 동안 개인을 식별할 수 있는 데이터를 수집하지 않습니다.
 
+__위치정보__  
+* 사용자가 위치정보 사용 옵션을 활성화 하는경우 다이어리 작성 시 위치정보가 작성된 콘텐츠와 함께 저장됩니다.
+
 __네트워크 데이터의 사용__  
 * 이지 다이어리는 기본적으로 데이터를 사용하지 않지만 다음의 경우에는 데이터를 사용합니다.  
   1. 사용자가 구글 드라이브를 이용하여 백업 또는 복구 기능을 실행하는 경우  
   2. 사용자가 다이어리 포스트카드를 공유하는 경우  
   3. 사용자가 매뉴얼, 자주 묻는 질문, 개인정보 보호정책등을 열람하는 경우  
 
-__디바이스 데이터의 이용__  
+__디바이스 데이터의 사용__  
 * 저장소 접근 권한이 활성화되면 개발자가 아닌 소프트웨어가 다음과 같은 권한을 갖게 됩니다.  
   1. SD 카드의 내용 읽기  
   2. SD 카드의 내용 수정 또는 삭제  
