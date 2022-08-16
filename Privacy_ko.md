@@ -48,7 +48,7 @@ Normal Permissions은 사용자의 추가 승인없이 애플리케이션이 설
 
 ---
 
-### ☑️ 요청되는 위험권한 요청 이유
+### ☑️ 요청되는 위험권한과 요청 이유
 Dangerous Permissions은 사용자의 추가 승인을 받은 경우에만 부여되는 Permission입니다.
 #### READ_EXTERNAL_STORAGE
 * Allows an application to read from external storage.
