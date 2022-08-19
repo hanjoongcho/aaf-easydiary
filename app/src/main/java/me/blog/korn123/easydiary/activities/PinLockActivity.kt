@@ -6,19 +6,13 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ActivityPinLockBinding
-import me.blog.korn123.easydiary.extensions.*
-import org.apache.commons.io.FileUtils
-import org.apache.commons.io.IOUtils
-import java.io.File
-import java.net.HttpURLConnection
-import java.net.URL
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.holdCurrentOrientation
+import me.blog.korn123.easydiary.extensions.pauseLock
+import me.blog.korn123.easydiary.extensions.showAlertDialog
 
 
 class PinLockActivity : BaseSimpleActivity() {
@@ -39,32 +33,6 @@ class PinLockActivity : BaseSimpleActivity() {
             mPasswordView[1] = pass2
             mPasswordView[2] = pass3
             mPasswordView[3] = pass4
-
-            // FIXME: remove temporary code
-            num0.setOnLongClickListener {
-                CoroutineScope(Dispatchers.IO).launch {
-                    val url = URL("https://raw.githubusercontent.com/AAFactory/aafactory-commons/master/data/test.json")
-                    val httpConn = url.openConnection() as HttpURLConnection
-                    val responseCode = httpConn.responseCode
-                    // always check HTTP response code first
-                    if (responseCode == HttpURLConnection.HTTP_OK) {
-                        // opens input stream from the HTTP connection
-                        val inputStream = httpConn.inputStream
-                        val lines = IOUtils.readLines(inputStream, "UTF-8")
-                        withContext(Dispatchers.Main) {
-                            makeToast(lines[0])
-                            if (lines[0].contains("true")) {
-                                config.aafPinLockEnable = false
-                                config.fingerprintLockEnable = false
-                                finish()
-                            }
-                        }
-                        inputStream.close()
-                    }
-                    httpConn.disconnect()
-                }
-                false
-            }
             num0.setOnClickListener(keyPadClickListener)
             num1.setOnClickListener(keyPadClickListener)
             num2.setOnClickListener(keyPadClickListener)
