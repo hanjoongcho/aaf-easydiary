@@ -257,6 +257,7 @@ const val SYMBOL_JAVA = 368
 const val SYMBOL_SLIDESHARE = 369
 const val SYMBOL_NETFLIX = 370
 const val SYMBOL_GIT = 371
+const val SYMBOL_JAVASCRIPT = 372
 
 // FLAGS 450 ~ 749
 // 001 ~ 010
