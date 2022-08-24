@@ -34,7 +34,10 @@ import me.blog.korn123.easydiary.services.BaseNotificationService
 import me.blog.korn123.easydiary.services.NotificationService
 import me.blog.korn123.easydiary.viewmodels.BaseDevViewModel
 import org.apache.commons.io.FilenameUtils
+import org.apache.commons.io.IOUtils
 import java.io.File
+import java.net.HttpURLConnection
+import java.net.URL
 
 open class BaseDevActivity : EasyDiaryActivity() {  
     /***************************************************************************************************
@@ -140,6 +143,32 @@ open class BaseDevActivity : EasyDiaryActivity() {
             buttonResetFontSize.setOnClickListener {
                 config.settingFontSize = spToPixelFloatValue(UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat())
                 makeToast("DP:${dpToPixelFloatValue(UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat())} , SP:${spToPixelFloatValue(UN_SUPPORT_LANGUAGE_FONT_SIZE_DEFAULT_SP.toFloat())}")
+            }
+            buttonHttpConnection.setOnClickListener {
+                CoroutineScope(Dispatchers.IO).launch {
+                    val url = URL("https://raw.githubusercontent.com/AAFactory/aafactory-commons/master/data/test.json")
+                    val httpConn = url.openConnection() as HttpURLConnection
+                    val responseCode = httpConn.responseCode
+
+                    withContext(Dispatchers.Main) {
+                        makeToast("Response Code: $responseCode")
+                    }
+                    if (responseCode == HttpURLConnection.HTTP_OK) {
+                        // opens input stream from the HTTP connection
+                        val inputStream = httpConn.inputStream
+                        val lines = IOUtils.readLines(inputStream, "UTF-8")
+                        withContext(Dispatchers.Main) {
+                            makeToast(lines[0])
+//                            if (lines[0].contains("true")) {
+//                                config.aafPinLockEnable = false
+//                                config.fingerprintLockEnable = false
+//                                finish()
+//                            }
+                        }
+                        inputStream.close()
+                    }
+                    httpConn.disconnect()
+                }
             }
         }
 
