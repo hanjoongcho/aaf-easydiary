@@ -49,8 +49,8 @@
             android:background="?attr/selectableItemBackground"
             android:textSize="@dimen/basic_text_medium"
             app:applyGlobalSize="false"
-            app:layout_constraintEnd_toEndOf="@+id/text_target_date"
-            app:layout_constraintTop_toBottomOf="@+id/text_target_date"
+            app:layout_constraintStart_toEndOf="@+id/text_target_date"
+            app:layout_constraintBaseline_toBaselineOf="@+id/text_target_date"
             tools:text="18:60" />
 
         <me.blog.korn123.easydiary.views.FixedTextView
