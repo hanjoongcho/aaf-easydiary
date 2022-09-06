@@ -51,7 +51,7 @@ class DashboardActivity : EasyDiaryActivity() {
                 }
                 togglePhotoHighlightCallback = { isVisible: Boolean ->
                     mBinding.photoHighlight.visibility = if (isVisible) View.VISIBLE else View.GONE
-                    if (!isLandScape()) mBinding.cardPhotoHighlight?.visibility = if (isVisible) View.VISIBLE else View.GONE
+//                    if (!isLandScape()) mBinding.cardPhotoHighlight?.visibility = if (isVisible) View.VISIBLE else View.GONE
                 }
             })
 

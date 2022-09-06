@@ -101,7 +101,7 @@ class DashboardDialogFragment : DialogFragment() {
                     }
                     togglePhotoHighlightCallback = { isVisible: Boolean ->
                         photoHighlight.visibility = if (isVisible) View.VISIBLE else View.GONE
-                        if (!requireActivity().isLandScape()) cardPhotoHighlight?.visibility = if (isVisible) View.VISIBLE else View.GONE
+//                        if (!requireActivity().isLandScape()) cardPhotoHighlight?.visibility = if (isVisible) View.VISIBLE else View.GONE
                     }
                 })
 

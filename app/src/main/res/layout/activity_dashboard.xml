@@ -36,6 +36,15 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/photoHighlight"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:orientation="vertical"
+                android:visibility="gone" />
+
+            <LinearLayout
                 android:id="@+id/dashboard_daily_symbol"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -46,41 +55,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical" />
-
-            <me.blog.korn123.easydiary.views.FixedCardView
-                android:id="@+id/card_photo_highlight"
-                style="@style/card_dashboard"
-                android:visibility="gone"
-                app:contentPaddingLeft="1dp"
-                app:contentPaddingRight="1dp">
-
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <me.blog.korn123.easydiary.views.FixedTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="19dp"
-                        android:text="Photo Highlight"
-                        android:textSize="@dimen/basic_text_large"
-                        app:applyGlobalColor="true"
-                        app:applyGlobalSize="false"
-                        app:applyHighLight="false"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <LinearLayout
-                        android:id="@+id/photoHighlight"
-                        android:layout_width="match_parent"
-                        android:layout_height="150dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp"
-                        android:orientation="vertical"
-                        android:visibility="gone" />
-                </androidx.appcompat.widget.LinearLayoutCompat>
-            </me.blog.korn123.easydiary.views.FixedCardView>
 
             <LinearLayout
                 android:id="@+id/summary"
@@ -119,9 +93,9 @@
             </HorizontalScrollView>
 
             <HorizontalScrollView
-                android:layout_marginBottom="62dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="62dp"
                 android:scrollbars="none">
 
                 <androidx.appcompat.widget.LinearLayoutCompat
@@ -173,8 +147,8 @@
         android:src="@drawable/ic_cross"
         android:visibility="gone"
         app:fabSize="mini"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 
