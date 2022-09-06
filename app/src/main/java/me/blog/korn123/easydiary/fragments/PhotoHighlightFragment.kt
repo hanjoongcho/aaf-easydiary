@@ -2,6 +2,8 @@ package me.blog.korn123.easydiary.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,7 +54,7 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
 
     override fun onResume() {
         super.onResume()
-        updateHistory()
+        Handler(Looper.getMainLooper()).post { updateHistory() }
     }
 
 
