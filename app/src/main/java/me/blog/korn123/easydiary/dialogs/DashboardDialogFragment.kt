@@ -107,6 +107,7 @@ class DashboardDialogFragment : DialogFragment() {
 
                 // DDay
                 replace(R.id.dDay, DDayFragment())
+                replace(R.id.diary, DiaryFragment())
 
                 // DashBoardSummary
                 replace(R.id.summary, DashBoardSummaryFragment())

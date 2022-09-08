@@ -26,7 +26,8 @@
 
     <!-- Component Size -->
     <dimen name="app_bar_height">180dp</dimen>
-    <dimen name="dashboard_card_radius">10dp</dimen>
+    <dimen name="dashboard_card_radius">@dimen/card_radius</dimen>
+    <dimen name="dashboard_card_radius_inner">10dp</dimen>
     <dimen name="dashboard_symbol_small">20dp</dimen>
     <dimen name="dashboard_symbol_medium">25dp</dimen>
     <dimen name="dashboard_symbol_large">40dp</dimen>

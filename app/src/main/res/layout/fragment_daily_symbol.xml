@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/card_dashboard"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    app:cardCornerRadius="@dimen/card_radius">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -63,12 +64,12 @@
             android:visibility="visible" />
 
         <androidx.core.widget.ContentLoadingProgressBar
-            android:layout_margin="20dp"
             android:id="@+id/dailyCardProgressBar"
             style="?android:progressBarStyleLarge"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:layout_margin="20dp" />
     </LinearLayout>
 </me.blog.korn123.easydiary.views.FixedCardView>
 

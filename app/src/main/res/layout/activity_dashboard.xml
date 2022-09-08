@@ -50,6 +50,13 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical" />
 
+
+            <LinearLayout
+                android:id="@+id/diary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
             <LinearLayout
                 android:id="@+id/dDay"
                 android:layout_width="match_parent"

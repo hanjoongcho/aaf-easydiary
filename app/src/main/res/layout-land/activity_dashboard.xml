@@ -1,16 +1,17 @@
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_holder"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <com.google.android.material.appbar.AppBarLayout
-        app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:layout_constraintTop_toTopOf="parent">
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -18,8 +19,8 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
     </com.google.android.material.appbar.AppBarLayout>
+
     <LinearLayout
-        android:visibility="gone"
         android:id="@+id/photoHighlight"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -27,6 +28,7 @@
         android:layout_marginTop="0dp"
         android:layout_marginRight="2dp"
         android:orientation="vertical"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/dashboard_container"
         app:layout_constraintHorizontal_weight="1"
@@ -38,9 +40,9 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:padding="0dp"
-        app:layout_constraintHorizontal_weight="2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="2"
         app:layout_constraintStart_toEndOf="@id/photoHighlight"
         app:layout_constraintTop_toBottomOf="@+id/app_bar">
 
@@ -50,13 +52,19 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:orientation="vertical"
                 android:id="@+id/dashboard_daily_symbol"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
 
             <LinearLayout
                 android:id="@+id/dDay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <LinearLayout
+                android:id="@+id/diary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical" />
@@ -106,28 +114,33 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
                     <LinearLayout
                         android:id="@+id/statistics5"
-                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="450dp"
-                        android:orientation="vertical" />
+                        android:orientation="vertical"
+                        android:visibility="gone" />
+
                     <LinearLayout
                         android:id="@+id/statistics4"
-                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="450dp"
-                        android:orientation="vertical" />
+                        android:orientation="vertical"
+                        android:visibility="gone" />
+
                     <LinearLayout
                         android:id="@+id/statistics3"
                         android:layout_width="match_parent"
                         android:layout_height="450dp"
                         android:orientation="vertical" />
+
                     <LinearLayout
                         android:id="@+id/statistics1"
                         android:layout_width="match_parent"
                         android:layout_height="450dp"
                         android:orientation="vertical" />
+
                     <LinearLayout
                         android:id="@+id/statistics2"
                         android:layout_width="match_parent"
@@ -151,6 +164,7 @@
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
     <com.simplemobiletools.commons.views.MyFloatingActionButton
         android:id="@+id/close"
         android:layout_width="wrap_content"
@@ -159,7 +173,7 @@
         android:src="@drawable/ic_cross"
         android:visibility="gone"
         app:fabSize="mini"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 
