@@ -7,9 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import io.realm.Sort
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryReadingActivity
+import me.blog.korn123.easydiary.adapters.DiaryDashboardItemAdapter
 import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
 import me.blog.korn123.easydiary.databinding.FragmentDiaryBinding
 import me.blog.korn123.easydiary.extensions.config
@@ -23,7 +23,7 @@ class DiaryFragment : Fragment() {
      *
      ***************************************************************************************************/
     private lateinit var mBinding: FragmentDiaryBinding
-    private var mDiaryMainItemAdapter: DiaryMainItemAdapter? = null
+    private var mDiaryDashboardItemAdapter: DiaryDashboardItemAdapter? = null
     private var mDiaryList: ArrayList<Diary> = arrayListOf()
 
 
@@ -43,16 +43,16 @@ class DiaryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mDiaryMainItemAdapter = DiaryMainItemAdapter(requireActivity(), mDiaryList, {
+        mDiaryDashboardItemAdapter = DiaryDashboardItemAdapter(requireActivity(), mDiaryList, {
             val detailIntent = Intent(requireContext(), DiaryReadingActivity::class.java)
             detailIntent.putExtra(DIARY_SEQUENCE, it.sequence)
-            detailIntent.putExtra(SELECTED_SEARCH_QUERY, mDiaryMainItemAdapter?.currentQuery)
+            detailIntent.putExtra(SELECTED_SEARCH_QUERY, mDiaryDashboardItemAdapter?.currentQuery)
             detailIntent.putExtra(SELECTED_SYMBOL_SEQUENCE, 0)
             TransitionHelper.startActivityWithTransition(requireActivity(), detailIntent)
         }, {})
 
         mBinding.recyclerDiary.run {
-            adapter = mDiaryMainItemAdapter
+            adapter = mDiaryDashboardItemAdapter
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             addItemDecoration(
                 GridItemDecorationDiaryMain(
@@ -71,6 +71,6 @@ class DiaryFragment : Fragment() {
             EasyDiaryDbHelper.findDiary(
                 null, config.diarySearchQueryCaseSensitive, 0, 0, 0)
         )
-        mDiaryMainItemAdapter?.notifyDataSetChanged()
+        mDiaryDashboardItemAdapter?.notifyDataSetChanged()
     }
 }

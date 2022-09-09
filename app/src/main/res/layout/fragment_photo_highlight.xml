@@ -26,15 +26,16 @@
         app:contentPadding="5dp"
         app:cardBackgroundColor="?attr/colorPrimary"
         android:alpha="0.8">
+
         <me.blog.korn123.easydiary.views.FixedTextView
-            app:applyGlobalSize="false"
-            app:applyGlobalColor="false"
-            android:layout_gravity="center"
             android:id="@+id/text_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:textColor="#FFFFFF"
             android:textSize="13dp"
+            app:applyGlobalColor="false"
+            app:applyGlobalSize="false"
             tools:text="100" />
     </me.blog.korn123.easydiary.views.FixedCardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

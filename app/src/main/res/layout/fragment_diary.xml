@@ -13,16 +13,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <me.blog.korn123.easydiary.views.FixedTextView
-        android:id="@+id/dashboard_title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:text="Diary"
-        android:textSize="@dimen/basic_text_medium"
-        app:applyGlobalColor="true"
-        app:applyGlobalSize="false"
-        app:applyHighLight="false"
+    <me.blog.korn123.easydiary.views.FixedCardView
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginStart="5dp"
+        app:fixedAppcompatPadding="true"
+        app:contentPadding="5dp"
+        app:cardBackgroundColor="?attr/colorPrimary"
+        android:alpha="0.8">
+
+        <me.blog.korn123.easydiary.views.FixedTextView
+            android:id="@+id/dashboard_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="#FFFFFF"
+            android:textSize="@dimen/basic_text_medium"
+            android:text="Diary"
+            app:applyGlobalColor="true"
+            app:applyGlobalSize="false"
+            app:applyHighLight="false" />
+    </me.blog.korn123.easydiary.views.FixedCardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
