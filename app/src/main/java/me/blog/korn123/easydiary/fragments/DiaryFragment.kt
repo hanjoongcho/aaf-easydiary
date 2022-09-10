@@ -72,7 +72,7 @@ class DiaryFragment : Fragment() {
         mDiaryList.clear()
         val diaryList: List<Diary> = when (arguments?.getString(MODE_FLAG, MODE_PREVIOUS_100)) {
             MODE_TASK -> EasyDiaryDbHelper.findDiary(null, config.diarySearchQueryCaseSensitive, 0, 0, 0).filter { item -> item.weather in 80..83 }
-            else -> EasyDiaryDbHelper.findDiary(null, config.diarySearchQueryCaseSensitive, 0, 0, 0)
+            else -> EasyDiaryDbHelper.findDiary(null, config.diarySearchQueryCaseSensitive, 0, 0, 0).subList(0, 100)
         }
         mDiaryList.addAll(diaryList)
         mDiaryDashboardItemAdapter?.notifyDataSetChanged()

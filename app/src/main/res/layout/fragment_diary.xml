@@ -23,7 +23,7 @@
         app:fixedAppcompatPadding="true"
         app:contentPadding="5dp"
         app:cardBackgroundColor="?attr/colorPrimary"
-        android:alpha="0.5">
+        android:alpha="0.8">
 
         <me.blog.korn123.easydiary.views.FixedTextView
             android:id="@+id/text_title"
@@ -33,7 +33,7 @@
             android:textColor="#FFFFFF"
             android:textSize="@dimen/basic_text_small"
             android:text="Task"
-            app:applyGlobalColor="true"
+            app:applyGlobalColor="false"
             app:applyGlobalSize="false"
             app:applyHighLight="false" />
     </me.blog.korn123.easydiary.views.FixedCardView>
