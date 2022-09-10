@@ -23,7 +23,7 @@
         app:fixedAppcompatPadding="true"
         app:contentPadding="5dp"
         app:cardBackgroundColor="?attr/colorPrimary"
-        android:alpha="0.8">
+        android:alpha="0.5">
 
         <me.blog.korn123.easydiary.views.FixedTextView
             android:id="@+id/text_title"

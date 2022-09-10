@@ -89,7 +89,8 @@ class DiaryDashboardItemAdapter(
                     }
                 }
 
-                textContents.text = if (diary.contents?.length ?: 0 > 10) "${diary.contents?.substring(0, 10)}..." else diary.contents
+//                textContents.text = if (diary.contents?.length ?: 0 > 10) "${diary.contents?.substring(0, 10)}..." else diary.contents
+                textContents.text = diary.contents
                 textDateTime.text = when (diary.isAllDay) {
                     true -> DateUtils.getDateStringFromTimeMillis(diary.currentTimeMillis)
                     false -> DateUtils.getDateTimeStringFromTimeMillis(diary.currentTimeMillis)
