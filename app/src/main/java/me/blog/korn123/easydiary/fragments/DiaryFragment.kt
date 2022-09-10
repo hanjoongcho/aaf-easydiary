@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryReadingActivity
 import me.blog.korn123.easydiary.adapters.DiaryDashboardItemAdapter
-import me.blog.korn123.easydiary.adapters.DiaryMainItemAdapter
 import me.blog.korn123.easydiary.databinding.FragmentDiaryBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.helper.*
@@ -62,15 +61,26 @@ class DiaryFragment : Fragment() {
             )
         }
 
+        mBinding.textTitle.text = when (arguments?.getString(MODE_FLAG, MODE_PREVIOUS_100)) {
+            MODE_TASK -> "Task"
+            else -> "Previous 100"
+        }
         refreshList()
     }
 
     private fun refreshList() {
         mDiaryList.clear()
-        mDiaryList.addAll(
-            EasyDiaryDbHelper.findDiary(
-                null, config.diarySearchQueryCaseSensitive, 0, 0, 0)
-        )
+        val diaryList: List<Diary> = when (arguments?.getString(MODE_FLAG, MODE_PREVIOUS_100)) {
+            MODE_TASK -> EasyDiaryDbHelper.findDiary(null, config.diarySearchQueryCaseSensitive, 0, 0, 0).filter { item -> item.weather in 80..83 }
+            else -> EasyDiaryDbHelper.findDiary(null, config.diarySearchQueryCaseSensitive, 0, 0, 0)
+        }
+        mDiaryList.addAll(diaryList)
         mDiaryDashboardItemAdapter?.notifyDataSetChanged()
+    }
+
+    companion object {
+        const val MODE_FLAG = "mode"
+        const val MODE_TASK = "task"
+        const val MODE_PREVIOUS_100 = "previous100"
     }
 }

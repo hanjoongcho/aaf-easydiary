@@ -26,13 +26,13 @@
         android:alpha="0.8">
 
         <me.blog.korn123.easydiary.views.FixedTextView
-            android:id="@+id/dashboard_title"
+            android:id="@+id/text_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textColor="#FFFFFF"
-            android:textSize="@dimen/basic_text_medium"
-            android:text="Diary"
+            android:textSize="@dimen/basic_text_small"
+            android:text="Task"
             app:applyGlobalColor="true"
             app:applyGlobalSize="false"
             app:applyHighLight="false" />

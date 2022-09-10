@@ -107,7 +107,20 @@ class DashboardDialogFragment : DialogFragment() {
 
                 // DDay
                 replace(R.id.dDay, DDayFragment())
-                replace(R.id.diary, DiaryFragment())
+
+                // Diary Task
+                replace(R.id.diary_task, DiaryFragment().apply {
+                    arguments = Bundle().apply {
+                        putString(DiaryFragment.MODE_FLAG, DiaryFragment.MODE_TASK)
+                    }
+                })
+
+                // Diary Previous 100
+                replace(R.id.diary_previous100, DiaryFragment().apply {
+                    arguments = Bundle().apply {
+                        putString(DiaryFragment.MODE_FLAG, DiaryFragment.MODE_PREVIOUS_100)
+                    }
+                })
 
                 // DashBoardSummary
                 replace(R.id.summary, DashBoardSummaryFragment())
