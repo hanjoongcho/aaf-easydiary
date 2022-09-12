@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_diary"
+
+    <com.zhpan.bannerview.BannerViewPager
+        android:id="@+id/banner_view_pager_diary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -14,25 +15,25 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <me.blog.korn123.easydiary.views.FixedCardView
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
         android:layout_marginStart="5dp"
-        app:fixedAppcompatPadding="true"
-        app:contentPadding="5dp"
+        android:layout_marginTop="3dp"
+        android:alpha="0.8"
         app:cardBackgroundColor="?attr/colorPrimary"
-        android:alpha="0.8">
+        app:contentPadding="5dp"
+        app:fixedAppcompatPadding="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <me.blog.korn123.easydiary.views.FixedTextView
             android:id="@+id/text_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:text="Task"
             android:textColor="#FFFFFF"
             android:textSize="@dimen/basic_text_small"
-            android:text="Task"
             app:applyGlobalColor="false"
             app:applyGlobalSize="false"
             app:applyHighLight="false" />
