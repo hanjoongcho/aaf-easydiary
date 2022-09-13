@@ -45,6 +45,7 @@ class FigureIndicatorView : BaseIndicatorView {
 //                textSize = context.config.settingFontSize
                 val text = "${getCurrentPosition().plus(1)}/${getPageSize()}"
                 val textWidth = this.measureText(text).toInt()
+//                radius = textWidth
                 val fontMetricsInt = this.fontMetricsInt
                 val baseline = ((measuredHeight - fontMetricsInt.bottom + fontMetricsInt.top) / 2
                         - fontMetricsInt.top)
