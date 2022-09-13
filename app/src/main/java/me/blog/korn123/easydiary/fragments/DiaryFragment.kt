@@ -8,16 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.zhpan.bannerview.BannerViewPager
-import com.zhpan.bannerview.constants.IndicatorGravity
 import com.zhpan.bannerview.constants.PageStyle
-import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.DiaryDashboardItemAdapter
 import me.blog.korn123.easydiary.databinding.FragmentDiaryBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.models.Diary
-import me.blog.korn123.easydiary.views.FigureIndicatorView
 
 class DiaryFragment : Fragment() {
 
@@ -92,13 +89,14 @@ class DiaryFragment : Fragment() {
             setPageMargin(requireContext().dpToPixel(5F))
             setPageStyle(PageStyle.MULTI_PAGE_SCALE)
             setRevealWidth(requireContext().dpToPixel(20F))
-            FigureIndicatorView(requireContext()).apply {
-                setRadius(resources.getDimensionPixelOffset(R.dimen.dp_18))
-                setTextSize(resources.getDimensionPixelOffset(R.dimen.sp_13))
-                setBackgroundColor(config.primaryColor)
-                setIndicatorGravity(IndicatorGravity.END)
-                setIndicatorView(this)
-            }
+            setIndicatorVisibility(View.INVISIBLE)
+//            FigureIndicatorView(requireContext()).apply {
+//                setRadius(resources.getDimensionPixelOffset(R.dimen.dp_18))
+//                setTextSize(resources.getDimensionPixelOffset(R.dimen.sp_13))
+//                setBackgroundColor(config.primaryColor)
+//                setIndicatorGravity(IndicatorGravity.END)
+//                setIndicatorView(this)
+//            }
         }
     }
 
@@ -112,6 +110,7 @@ class DiaryFragment : Fragment() {
         mBannerDiary.run {
             create(mDiaryList)
         }
+        mBinding.cardTitle.visibility = View.VISIBLE
     }
 
     companion object {

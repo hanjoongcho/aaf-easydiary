@@ -15,6 +15,9 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <me.blog.korn123.easydiary.views.FixedCardView
+        android:id="@+id/card_title"
+        android:visibility="gone"
+        tools:visibility="visible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"

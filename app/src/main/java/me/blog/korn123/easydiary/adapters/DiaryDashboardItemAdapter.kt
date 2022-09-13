@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.zhpan.bannerview.BaseBannerAdapter
 import com.zhpan.bannerview.BaseViewHolder
 import me.blog.korn123.commons.utils.DateUtils
+import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.databinding.ItemDiaryDashboardBinding
@@ -157,6 +158,7 @@ class DiaryDashboardItemAdapter : BaseBannerAdapter<Diary>() {
                 } else {
                     locationContainer.visibility = View.GONE
                 }
+
                 if (config.enableCountCharacters) {
                     contentsLength.run {
                         text = context.getString(R.string.diary_contents_length, diary.contents?.length ?: 0)
@@ -165,6 +167,8 @@ class DiaryDashboardItemAdapter : BaseBannerAdapter<Diary>() {
                 } else {
                     contentsLengthContainer.visibility = View.GONE
                 }
+
+                FlavorUtils.initWeatherView(this, imageSymbol, diary.weather)
 
                 textContents.maxLines = when (config.enableContentsSummary) {
                     true -> config.summaryMaxLines
