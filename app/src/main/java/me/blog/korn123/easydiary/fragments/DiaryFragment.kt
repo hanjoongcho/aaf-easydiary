@@ -1,6 +1,7 @@
 package me.blog.korn123.easydiary.fragments
 
 import android.content.Intent
+import android.graphics.Paint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -13,6 +14,7 @@ import com.zhpan.bannerview.constants.IndicatorGravity
 import com.zhpan.bannerview.constants.PageStyle
 import io.github.aafactory.commons.extensions.dpToPixel
 import io.github.aafactory.commons.utils.CommonUtils
+import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryReadingActivity
 import me.blog.korn123.easydiary.adapters.DiaryDashboardItemAdapter
@@ -99,13 +101,6 @@ class DiaryFragment : Fragment() {
             setPageStyle(PageStyle.MULTI_PAGE_SCALE)
             setRevealWidth(requireContext().dpToPixel(20F))
 //            setIndicatorVisibility(View.INVISIBLE)
-            FigureIndicatorView(requireContext()).apply {
-                setRadius(requireContext().dpToPixel(24F))
-                setTextSize(requireContext().dpToPixel(12F))
-                setBackgroundColor(config.primaryColor)
-                setIndicatorGravity(IndicatorGravity.END)
-                setIndicatorView(this)
-            }
         }
     }
 
@@ -117,6 +112,21 @@ class DiaryFragment : Fragment() {
         }
         mDiaryList.addAll(diaryList)
         mBannerDiary.run {
+            var textWidth = 0
+            Paint().run {
+                typeface = FontUtils.getCommonTypeface(context)
+                textSize = requireContext().dpToPixel(12F).toFloat()
+                textWidth = this.measureText("${mDiaryList.size}/${mDiaryList.size}").toInt()
+            }
+            FigureIndicatorView(requireContext()).apply {
+                setRadius(textWidth.times(0.6).toInt())
+                setTextSize(requireContext().dpToPixel(12F))
+                setBackgroundColor(config.primaryColor)
+                setIndicatorGravity(IndicatorGravity.END)
+                setIndicatorView(this)
+                alpha = 0.5F
+            }
+
             setOnPageClickListener { _, position ->
                 TransitionHelper.startActivityWithTransition(
                     requireActivity(),

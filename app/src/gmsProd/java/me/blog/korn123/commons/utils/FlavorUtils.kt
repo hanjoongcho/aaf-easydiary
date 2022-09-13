@@ -237,7 +237,7 @@ object FlavorUtils {
         SYMBOL_JAVA -> R.drawable.ic_java
         SYMBOL_SLIDESHARE -> R.drawable.ic_slideshare
         SYMBOL_GIT -> R.drawable.ic_git
-        SYMBOL_JAVASCRIPT -> R.drawable.ic_javascript
+//        SYMBOL_JAVASCRIPT -> R.drawable.ic_javascript
 
         FLAG_MAURITIUS -> R.drawable.ic_001_mauritius
         FLAG_AUSTRIA -> R.drawable.ic_003_austria

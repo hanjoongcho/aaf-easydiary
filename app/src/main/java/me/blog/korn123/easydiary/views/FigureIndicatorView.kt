@@ -9,7 +9,6 @@ import androidx.annotation.ColorInt
 import com.zhpan.bannerview.utils.BannerUtils
 import com.zhpan.indicator.base.BaseIndicatorView
 import me.blog.korn123.commons.utils.FontUtils
-import me.blog.korn123.easydiary.extensions.config
 
 /**
  * This class from 'com.example.zhpan.banner.view.FigureIndicatorView'
@@ -24,7 +23,11 @@ class FigureIndicatorView : BaseIndicatorView {
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         mPaint = Paint()
     }
 
@@ -39,13 +42,12 @@ class FigureIndicatorView : BaseIndicatorView {
             mPaint?.run {
                 typeface = FontUtils.getCommonTypeface(context)
                 color = backgroundColor
-                canvas.drawCircle(width / 2f, height / 2f, radius.toFloat(), this)
+                canvas.drawOval(0F, 0F, width.toFloat(), height.toFloat(), this)
                 color = textColor
                 textSize = mTextSize.toFloat()
 //                textSize = context.config.settingFontSize
                 val text = "${getCurrentPosition().plus(1)}/${getPageSize()}"
                 val textWidth = this.measureText(text).toInt()
-//                radius = textWidth
                 val fontMetricsInt = this.fontMetricsInt
                 val baseline = ((measuredHeight - fontMetricsInt.bottom + fontMetricsInt.top) / 2
                         - fontMetricsInt.top)
