@@ -1,9 +1,7 @@
 package me.blog.korn123.easydiary.views
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
+import android.graphics.*
 import android.util.AttributeSet
 import androidx.annotation.ColorInt
 import com.zhpan.bannerview.utils.BannerUtils
@@ -29,11 +27,22 @@ class FigureIndicatorView : BaseIndicatorView {
         defStyleAttr
     ) {
         mPaint = Paint()
+        alpha = 0.7F
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        setMeasuredDimension(2 * radius, 2 * radius)
+        var height = 0
+        var width = 0
+        mPaint?.run {
+            typeface = FontUtils.getCommonTypeface(context)
+            textSize = mTextSize.toFloat()
+            val fontMetricsInt = this.fontMetricsInt
+            height = fontMetricsInt.descent.minus(fontMetricsInt.ascent)
+            width = this.measureText("${getPageSize()}/${getPageSize()}").toInt()
+        }
+        setRadius(width.times(0.7).toInt())
+        setMeasuredDimension(2 * radius, height.times(1.4).toInt())
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -42,7 +51,7 @@ class FigureIndicatorView : BaseIndicatorView {
             mPaint?.run {
                 typeface = FontUtils.getCommonTypeface(context)
                 color = backgroundColor
-                canvas.drawOval(0F, 0F, width.toFloat(), height.toFloat(), this)
+                canvas.drawRoundRect(RectF(0F, 0F, width.toFloat(), height.toFloat()), radius.div(5F), radius.div(5F), this)
                 color = textColor
                 textSize = mTextSize.toFloat()
 //                textSize = context.config.settingFontSize

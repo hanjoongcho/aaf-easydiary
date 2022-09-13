@@ -19,6 +19,7 @@ import me.blog.korn123.easydiary.adapters.HistoryAdapter
 import me.blog.korn123.easydiary.databinding.FragmentPhotoHighlightBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
+import me.blog.korn123.easydiary.extensions.spToPixelFloatValue
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.TransitionHelper
@@ -74,7 +75,7 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
             setRevealWidth(requireContext().dpToPixel(arguments?.getFloat(REVEAL_WIDTH) ?: 10F))
             FigureIndicatorView(requireContext()).apply {
                 setRadius(resources.getDimensionPixelOffset(R.dimen.dp_18))
-                setTextSize(resources.getDimensionPixelOffset(R.dimen.sp_13))
+                setTextSize(requireContext().spToPixelFloatValue(12F).toInt())
                 setBackgroundColor(config.primaryColor)
                 setIndicatorGravity(IndicatorGravity.END)
                 setIndicatorView(this)

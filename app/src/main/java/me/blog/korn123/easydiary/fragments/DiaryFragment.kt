@@ -21,6 +21,7 @@ import me.blog.korn123.easydiary.adapters.DiaryDashboardItemAdapter
 import me.blog.korn123.easydiary.databinding.FragmentDiaryBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
+import me.blog.korn123.easydiary.extensions.spToPixelFloatValue
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.TransitionHelper
@@ -112,19 +113,11 @@ class DiaryFragment : Fragment() {
         }
         mDiaryList.addAll(diaryList)
         mBannerDiary.run {
-            var textWidth = 0
-            Paint().run {
-                typeface = FontUtils.getCommonTypeface(context)
-                textSize = requireContext().dpToPixel(12F).toFloat()
-                textWidth = this.measureText("${mDiaryList.size}/${mDiaryList.size}").toInt()
-            }
             FigureIndicatorView(requireContext()).apply {
-                setRadius(textWidth.times(0.6).toInt())
-                setTextSize(requireContext().dpToPixel(12F))
+                setTextSize(requireContext().spToPixelFloatValue(12F).toInt())
                 setBackgroundColor(config.primaryColor)
                 setIndicatorGravity(IndicatorGravity.END)
                 setIndicatorView(this)
-                alpha = 0.5F
             }
 
             setOnPageClickListener { _, position ->
