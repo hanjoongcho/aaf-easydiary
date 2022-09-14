@@ -108,8 +108,16 @@ class DiaryFragment : Fragment() {
     private fun updateDiary() {
         mDiaryList.clear()
         val diaryList: List<Diary> = when (arguments?.getString(MODE_FLAG, MODE_PREVIOUS_100)) {
-            MODE_TASK -> EasyDiaryDbHelper.findDiary(null, config.diarySearchQueryCaseSensitive, 0, 0, 0).filter { item -> item.weather in 80..83 }
-            else -> EasyDiaryDbHelper.findDiary(null, config.diarySearchQueryCaseSensitive, 0, 0, 0).subList(0, 100)
+            MODE_TASK -> EasyDiaryDbHelper.findDiary(
+                null,
+                config.diarySearchQueryCaseSensitive,
+                0,
+                0,
+                0
+            ).filter { item -> item.weather in 80..83 }
+            else -> EasyDiaryDbHelper.findDiary(null, config.diarySearchQueryCaseSensitive, 0, 0, 0)
+                .filter { item -> item.weather < 80 || item.weather > 83 }
+                .run { if (this.size > 100) this.subList(0, 100) else this }
         }
         mDiaryList.addAll(diaryList)
         mBannerDiary.run {
