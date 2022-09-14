@@ -1,7 +1,6 @@
 package me.blog.korn123.easydiary.fragments
 
 import android.content.Intent
-import android.graphics.Paint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -13,14 +12,10 @@ import com.zhpan.bannerview.BannerViewPager
 import com.zhpan.bannerview.constants.IndicatorGravity
 import com.zhpan.bannerview.constants.PageStyle
 import io.github.aafactory.commons.extensions.dpToPixel
-import io.github.aafactory.commons.utils.CommonUtils
-import me.blog.korn123.commons.utils.FontUtils
-import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.activities.DiaryReadingActivity
 import me.blog.korn123.easydiary.adapters.DiaryDashboardItemAdapter
 import me.blog.korn123.easydiary.databinding.FragmentDiaryBinding
 import me.blog.korn123.easydiary.extensions.config
-import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.spToPixelFloatValue
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
@@ -75,7 +70,10 @@ class DiaryFragment : Fragment() {
 //        }
 
         mBinding.textTitle.text = when (arguments?.getString(MODE_FLAG, MODE_PREVIOUS_100)) {
-            MODE_TASK -> "Task"
+            MODE_TASK_TODO -> "Open Task"
+            MODE_TASK_DOING -> "DOING"
+            MODE_TASK_DONE -> "Closed Task"
+            MODE_TASK_CANCEL -> "CANCEL"
             else -> "Previous 100"
         }
         setupDiary()
@@ -108,13 +106,34 @@ class DiaryFragment : Fragment() {
     private fun updateDiary() {
         mDiaryList.clear()
         val diaryList: List<Diary> = when (arguments?.getString(MODE_FLAG, MODE_PREVIOUS_100)) {
-            MODE_TASK -> EasyDiaryDbHelper.findDiary(
+            MODE_TASK_TODO -> EasyDiaryDbHelper.findDiary(
                 null,
                 config.diarySearchQueryCaseSensitive,
                 0,
                 0,
                 0
-            ).filter { item -> item.weather in 80..83 }
+            ).filter { item -> item.weather in 80..81 }
+            MODE_TASK_DOING -> EasyDiaryDbHelper.findDiary(
+                null,
+                config.diarySearchQueryCaseSensitive,
+                0,
+                0,
+                81
+            )
+            MODE_TASK_DONE -> EasyDiaryDbHelper.findDiary(
+                null,
+                config.diarySearchQueryCaseSensitive,
+                0,
+                0,
+                0
+            ).filter { item -> item.weather in 82..83 }
+            MODE_TASK_CANCEL -> EasyDiaryDbHelper.findDiary(
+                null,
+                config.diarySearchQueryCaseSensitive,
+                0,
+                0,
+                83
+            )
             else -> EasyDiaryDbHelper.findDiary(null, config.diarySearchQueryCaseSensitive, 0, 0, 0)
                 .filter { item -> item.weather < 80 || item.weather > 83 }
                 .run { if (this.size > 100) this.subList(0, 100) else this }
@@ -142,8 +161,11 @@ class DiaryFragment : Fragment() {
     }
 
     companion object {
-        const val MODE_FLAG = "mode"
-        const val MODE_TASK = "task"
-        const val MODE_PREVIOUS_100 = "previous100"
+        const val MODE_FLAG = "mode_flag"
+        const val MODE_TASK_TODO = "mode_task_todo"
+        const val MODE_TASK_DOING = "mode_task_doing"
+        const val MODE_TASK_DONE = "mode_task_done"
+        const val MODE_TASK_CANCEL = "mode_task_cancel"
+        const val MODE_PREVIOUS_100 = "mode_previous_100"
     }
 }

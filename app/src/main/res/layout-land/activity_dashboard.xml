@@ -64,13 +64,31 @@
                 android:orientation="vertical" />
 
             <LinearLayout
-                android:id="@+id/diary_task"
+                android:id="@+id/fragment_diary_todo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical" />
 
             <LinearLayout
-                android:id="@+id/diary_previous100"
+                android:id="@+id/fragment_diary_doing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <LinearLayout
+                android:id="@+id/fragment_diary_done"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <LinearLayout
+                android:id="@+id/fragment_diary_cancel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <LinearLayout
+                android:id="@+id/fragment_diary_previous100"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical" />

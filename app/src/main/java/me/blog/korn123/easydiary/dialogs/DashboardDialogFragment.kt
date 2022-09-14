@@ -108,15 +108,36 @@ class DashboardDialogFragment : DialogFragment() {
                 // DDay
                 replace(R.id.dDay, DDayFragment())
 
-                // Diary Task
-                replace(R.id.diary_task, DiaryFragment().apply {
+                // TODO
+                replace(R.id.fragment_diary_todo, DiaryFragment().apply {
                     arguments = Bundle().apply {
-                        putString(DiaryFragment.MODE_FLAG, DiaryFragment.MODE_TASK)
+                        putString(DiaryFragment.MODE_FLAG, DiaryFragment.MODE_TASK_TODO)
                     }
                 })
 
+                // DOING
+//                replace(R.id.fragment_diary_doing, DiaryFragment().apply {
+//                    arguments = Bundle().apply {
+//                        putString(DiaryFragment.MODE_FLAG, DiaryFragment.MODE_TASK_DOING)
+//                    }
+//                })
+
+                // DONE
+                replace(R.id.fragment_diary_done, DiaryFragment().apply {
+                    arguments = Bundle().apply {
+                        putString(DiaryFragment.MODE_FLAG, DiaryFragment.MODE_TASK_DONE)
+                    }
+                })
+
+                // CANCEL
+//                replace(R.id.fragment_diary_cancel, DiaryFragment().apply {
+//                    arguments = Bundle().apply {
+//                        putString(DiaryFragment.MODE_FLAG, DiaryFragment.MODE_TASK_CANCEL)
+//                    }
+//                })
+
                 // Diary Previous 100
-                replace(R.id.diary_previous100, DiaryFragment().apply {
+                replace(R.id.fragment_diary_previous100, DiaryFragment().apply {
                     arguments = Bundle().apply {
                         putString(DiaryFragment.MODE_FLAG, DiaryFragment.MODE_PREVIOUS_100)
                     }
