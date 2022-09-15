@@ -96,10 +96,11 @@ class DiaryFragment : Fragment() {
             setAutoPlay(false)
             setInterval(3000)
             setScrollDuration(800)
-            setPageMargin(requireContext().dpToPixel(5F))
-            setPageStyle(PageStyle.MULTI_PAGE_SCALE)
-            setRevealWidth(requireContext().dpToPixel(20F))
+            setPageMargin(requireContext().dpToPixel(0F))
+//            setPageStyle(PageStyle.MULTI_PAGE_SCALE)
+            setRevealWidth(0, requireContext().dpToPixel(30F))
 //            setIndicatorVisibility(View.INVISIBLE)
+            removeDefaultPageTransformer()
         }
     }
 

@@ -27,7 +27,7 @@ class FigureIndicatorView : BaseIndicatorView {
         defStyleAttr
     ) {
         mPaint = Paint()
-        alpha = 0.7F
+        alpha = 0.6F
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
