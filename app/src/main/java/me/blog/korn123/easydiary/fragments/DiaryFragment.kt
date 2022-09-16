@@ -100,7 +100,7 @@ class DiaryFragment : Fragment() {
 //            setPageStyle(PageStyle.MULTI_PAGE_SCALE)
             setRevealWidth(0, requireContext().dpToPixel(30F))
 //            setIndicatorVisibility(View.INVISIBLE)
-            removeDefaultPageTransformer()
+//            removeDefaultPageTransformer()
         }
     }
 
@@ -141,6 +141,21 @@ class DiaryFragment : Fragment() {
         }
         mDiaryList.addAll(diaryList)
         mBannerDiary.run {
+            when (arguments?.getString(MODE_FLAG, MODE_PREVIOUS_100)) {
+                MODE_PREVIOUS_100 -> {
+                    setPageMargin(requireContext().dpToPixel(0F))
+                    setPageStyle(PageStyle.MULTI_PAGE_SCALE)
+                    setRevealWidth(requireContext().dpToPixel(0F), requireContext().dpToPixel(20F))
+                    removeDefaultPageTransformer()
+                }
+                else -> {
+                    setPageMargin(requireContext().dpToPixel(0F))
+                    setPageStyle(PageStyle.MULTI_PAGE_SCALE)
+                    setRevealWidth(requireContext().dpToPixel(0F), requireContext().dpToPixel(20F))
+                    removeDefaultPageTransformer()
+                }
+            }
+
             FigureIndicatorView(requireContext()).apply {
                 setTextSize(requireContext().spToPixelFloatValue(12F).toInt())
                 setBackgroundColor(config.primaryColor)
