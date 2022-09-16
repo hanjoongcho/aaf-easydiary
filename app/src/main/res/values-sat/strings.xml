@@ -658,6 +658,10 @@
         v1.4.279.202208250 / 2022.08.25\n
         Improved main screen and dashboard screen UX
     </string>
+    <string name="release_280">
+        v1.4.280.202209160 / 2022.09.16\n
+        Improved Dashboard UX
+    </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
     <!--  Resources added since version 1.4.47 here.                                                      -->
