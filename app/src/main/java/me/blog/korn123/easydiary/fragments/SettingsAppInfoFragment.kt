@@ -123,13 +123,13 @@ class SettingsAppInfoFragment() : androidx.fragment.app.Fragment() {
     private fun setupInvite() {
         mBinding.inviteSummary.text = String.format(getString(R.string.invite_friends_summary), getString(R.string.app_name))
         mBinding.invite.setOnClickListener {
-            val text = String.format(getString(io.github.aafactory.commons.R.string.share_text), getString(R.string.app_name), getStoreUrl())
+            val text = String.format(getString(R.string.share_text), getString(R.string.app_name), getStoreUrl())
             Intent().apply {
                 action = Intent.ACTION_SEND
                 putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
                 putExtra(Intent.EXTRA_TEXT, text)
                 type = "text/plain"
-                startActivity(Intent.createChooser(this, getString(io.github.aafactory.commons.R.string.invite_via)))
+                startActivity(Intent.createChooser(this, getString(R.string.invite_via)))
             }
         }
     }

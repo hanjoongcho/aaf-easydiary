@@ -215,7 +215,7 @@ fun Context.setupAlarmClock(alarm: Alarm, triggerInSeconds: Int) {
 }
 
 fun Context.showRemainingTimeMessage(totalMinutes: Int) {
-    val fullString = String.format(getString(io.github.aafactory.commons.R.string.alarm_goes_off_in), formatMinutesToTimeString(totalMinutes))
+    val fullString = String.format(getString(R.string.alarm_goes_off_in), formatMinutesToTimeString(totalMinutes))
     toast(fullString, Toast.LENGTH_LONG)
 }
 
@@ -704,7 +704,7 @@ fun Context.getFormattedTime(passedSeconds: Int, showSeconds: Boolean, makeAmPmS
 }
 
 fun Context.formatTo12HourFormat(showSeconds: Boolean, hours: Int, minutes: Int, seconds: Int): String {
-    val appendable = getString(if (hours >= 12) io.github.aafactory.commons.R.string.p_m else io.github.aafactory.commons.R.string.a_m)
+    val appendable = getString(if (hours >= 12) R.string.p_m else R.string.a_m)
     val newHours = if (hours == 0 || hours == 12) 12 else hours % 12
     return "${formatTime(showSeconds, false, newHours, minutes, seconds)} $appendable"
 }
