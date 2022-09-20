@@ -11,10 +11,10 @@ import android.graphics.Color
 import android.widget.RemoteViews
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import me.blog.korn123.easydiary.R
-import me.blog.korn123.easydiary.activities.DiaryWritingActivity
 import me.blog.korn123.easydiary.activities.DiaryReadingActivity
+import me.blog.korn123.easydiary.activities.DiaryWritingActivity
 import me.blog.korn123.easydiary.extensions.changeBitmapColor
-import me.blog.korn123.easydiary.extensions.pendingIntentFlag
+import me.blog.korn123.easydiary.extensions.pendingIntentFlagMutable
 import me.blog.korn123.easydiary.helper.DIARY_EXECUTION_MODE
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EXECUTION_MODE_ACCESS_FROM_OUTSIDE
@@ -109,7 +109,7 @@ class DiaryMainWidget : AppWidgetProvider() {
                 ).run {
                     action = OPEN_READ_PAGE
 
-                    PendingIntent.getBroadcast(context, 0, this, context.pendingIntentFlag())
+                    PendingIntent.getBroadcast(context, 0, this, context.pendingIntentFlagMutable())
                 }
                 setPendingIntentTemplate(R.id.diaryListView, pendingIntent)
                 appWidgetManager.updateAppWidget(it, this)
@@ -121,7 +121,7 @@ class DiaryMainWidget : AppWidgetProvider() {
     private fun setupIntent(context: Context, views: RemoteViews, action: String, id: Int) {
         Intent(context, DiaryMainWidget::class.java).apply {
             this.action = action
-            val pendingIntent = PendingIntent.getBroadcast(context, 0, this, context.pendingIntentFlag())
+            val pendingIntent = PendingIntent.getBroadcast(context, 0, this, context.pendingIntentFlagMutable())
             views.setOnClickPendingIntent(id, pendingIntent)
         }
     }
