@@ -4,7 +4,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'realm-android'
 
 ext.versions = [
-    compileSdk: 31
+    compileSdk: 33
 ]
 
 android {
@@ -127,21 +127,21 @@ dependencies {
 
     // androidx
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.biometric:biometric:1.1.0'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
-    implementation 'androidx.activity:activity-ktx:1.4.0'
-    implementation 'androidx.fragment:fragment-ktx:1.4.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+    implementation 'androidx.activity:activity-ktx:1.6.0'
+    implementation 'androidx.fragment:fragment-ktx:1.5.3'
     implementation 'androidx.preference:preference-ktx:1.2.0'
     implementation ('androidx.work:work-runtime-ktx:2.7.1') { exclude group: 'com.google.guava', module: 'listenablefuture' }
 
     // google components for develop package (not foss)
-    gmsDevImplementation 'com.google.android.gms:play-services-auth:20.1.0'
+    gmsDevImplementation 'com.google.android.gms:play-services-auth:20.3.0'
     gmsDevImplementation 'com.google.android.play:core:1.10.3'
     gmsDevImplementation 'com.google.android.play:core-ktx:1.8.1'
     gmsDevImplementation 'com.google.api-client:google-api-client-android:1.26.0'
@@ -149,7 +149,7 @@ dependencies {
     gmsDevImplementation 'com.google.http-client:google-http-client-gson:1.26.0'
 
     // google components for production package (not foss)
-    gmsProdImplementation 'com.google.android.gms:play-services-auth:20.1.0'
+    gmsProdImplementation 'com.google.android.gms:play-services-auth:20.3.0'
     gmsProdImplementation 'com.google.android.play:core:1.10.3'
     gmsProdImplementation 'com.google.android.play:core-ktx:1.8.1'
     gmsProdImplementation 'com.google.api-client:google-api-client-android:1.26.0'
@@ -157,7 +157,7 @@ dependencies {
     gmsProdImplementation 'com.google.http-client:google-http-client-gson:1.26.0'
 
     // google components common
-    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'com.google.android.material:material:1.6.1'
     implementation 'com.google.android:flexbox:1.0.0'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.google.guava:guava:27.0.1-android'
@@ -175,7 +175,7 @@ dependencies {
 //    implementation project(":aafactory-commons")
 
     // etc.
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.31'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     implementation 'com.github.chrisbanes:PhotoView:2.1.3'
     implementation 'com.github.QuadFlask:colorpicker:0.0.15'
@@ -205,7 +205,7 @@ dependencies {
     androidTestImplementation 'androidx.test:core-ktx:1.4.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.ext:junit-ktx:1.1.3'
-    androidTestImplementation 'androidx.test:runner:1.5.0-alpha01'
+    androidTestImplementation 'androidx.test:runner:1.5.0-alpha04'
     androidTestImplementation('androidx.test.espresso:espresso-core:3.4.0-alpha02', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -213,9 +213,9 @@ dependencies {
     // test
     testImplementation 'androidx.test:core:1.4.0'
     testImplementation 'androidx.test.ext:junit:1.1.3'
-    testImplementation 'androidx.test.espresso:espresso-core:3.5.0-alpha04'
-    testImplementation 'androidx.test.espresso:espresso-intents:3.5.0-alpha04'
-    testImplementation 'androidx.test.ext:truth:1.5.0-alpha04'
+    testImplementation 'androidx.test.espresso:espresso-core:3.5.0-alpha07'
+    testImplementation 'androidx.test.espresso:espresso-intents:3.5.0-alpha07'
+    testImplementation 'androidx.test.ext:truth:1.5.0-alpha07'
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.robolectric:robolectric:4.5-alpha-1'
 }

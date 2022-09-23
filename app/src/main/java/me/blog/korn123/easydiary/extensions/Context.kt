@@ -801,7 +801,7 @@ fun Context.getFromLocation(latitude: Double, longitude: Double, maxResults: Int
 //    val lon = java.lang.Double.parseDouble(String.format("%.7f", longitude))
     val addressList = arrayListOf<Address>()
     try {
-        addressList.addAll(Geocoder(this, Locale.getDefault()).getFromLocation(latitude, longitude, maxResults))
+        addressList.addAll(Geocoder(this, Locale.getDefault()).getFromLocation(latitude, longitude, maxResults)!!)
     } catch (e: Exception) {
         toast(e.message ?: "Error")
     }

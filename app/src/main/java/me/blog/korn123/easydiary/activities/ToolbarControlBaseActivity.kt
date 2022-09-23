@@ -16,6 +16,7 @@
 
 package me.blog.korn123.easydiary.activities
 
+import android.animation.Animator
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -101,13 +102,19 @@ abstract class ToolbarControlBaseActivity<S : Scrollable> : EasyDiaryActivity(),
         mBinding.run {
             insertDiaryButton.run {
 //                visibility = View.GONE
-                animate().alpha(0.1F).setDuration(300).setListener(object : android.animation.Animator.AnimatorListener {
-                    override fun onAnimationStart(animation: android.animation.Animator?) {}
-                    override fun onAnimationEnd(animation: android.animation.Animator?) {
+                animate().alpha(0.1F).setDuration(300).setListener(object : Animator.AnimatorListener {
+                    //                    override fun onAnimationStart(animation: android.animation.Animator?) {}
+//                    override fun onAnimationEnd(animation: android.animation.Animator?) {
+//                        visibility = View.GONE
+//                    }
+//                    override fun onAnimationCancel(animation: android.animation.Animator?) {}
+//                    override fun onAnimationRepeat(animation: android.animation.Animator?) {}
+                    override fun onAnimationStart(p0: Animator) {}
+                    override fun onAnimationEnd(p0: Animator) {
                         visibility = View.GONE
                     }
-                    override fun onAnimationCancel(animation: android.animation.Animator?) {}
-                    override fun onAnimationRepeat(animation: android.animation.Animator?) {}
+                    override fun onAnimationCancel(p0: Animator) {}
+                    override fun onAnimationRepeat(p0: Animator) {}
                 })
             }
         }
