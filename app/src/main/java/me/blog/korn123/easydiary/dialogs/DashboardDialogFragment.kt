@@ -98,6 +98,7 @@ class DashboardDialogFragment : DialogFragment() {
                         putInt(PhotoHighlightFragment.PAGE_STYLE, PageStyle.MULTI_PAGE_SCALE)
                         putFloat(PhotoHighlightFragment.REVEAL_WIDTH, 20F)
                         putFloat(PhotoHighlightFragment.PAGE_MARGIN, 5F)
+                        putBoolean(PhotoHighlightFragment.AUTO_PLAY, true)
                     }
                     togglePhotoHighlightCallback = { isVisible: Boolean ->
                         photoHighlight.visibility = if (isVisible) View.VISIBLE else View.GONE
