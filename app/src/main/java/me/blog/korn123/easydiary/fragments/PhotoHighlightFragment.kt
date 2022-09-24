@@ -69,7 +69,7 @@ class PhotoHighlightFragment : androidx.fragment.app.Fragment() {
             adapter = HistoryAdapter()
             setAutoPlay(arguments?.getBoolean(AUTO_PLAY) ?: false)
             setInterval(3000)
-            setScrollDuration(800)
+            setScrollDuration(1000)
             setPageMargin(requireContext().dpToPixel(arguments?.getFloat(PAGE_MARGIN) ?: 10F))
             setPageStyle(arguments?.getInt(PAGE_STYLE) ?: PageStyle.MULTI_PAGE_SCALE)
             setRevealWidth(requireContext().dpToPixel(arguments?.getFloat(REVEAL_WIDTH) ?: 10F))

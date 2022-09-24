@@ -95,7 +95,7 @@ class DiaryFragment : Fragment() {
             adapter = DiaryDashboardItemAdapter()
             setAutoPlay(true)
             setInterval(3000)
-            setScrollDuration(800)
+            setScrollDuration(1000)
             setPageMargin(requireContext().dpToPixel(0F))
 //            setPageStyle(PageStyle.MULTI_PAGE_SCALE)
             setRevealWidth(0, requireContext().dpToPixel(30F))
