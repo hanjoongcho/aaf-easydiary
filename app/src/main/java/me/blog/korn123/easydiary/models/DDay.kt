@@ -2,7 +2,6 @@ package me.blog.korn123.easydiary.models
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
-import me.blog.korn123.easydiary.R
 import java.text.MessageFormat
 import kotlin.math.abs
 
@@ -26,10 +25,13 @@ open class DDay : RealmObject {
 
     fun getDayRemaining(onlyDays: Boolean = true, yearFormat: String = "", dayFormat: String = ""): String {
         val oneDayMillis: Long = 1000 * 60 * 60 * 24
-        val currentTimeStamp = System.currentTimeMillis()
-        val diffDays = abs(targetTimeStamp.minus(currentTimeStamp).div(oneDayMillis))
+//        val today = Date()
+        val todayTimeStamp = System.currentTimeMillis()
+//        val targetDate = Date(targetTimeStamp)
+//        val diffDays = abs(targetDate.time.minus(today.time).div(oneDayMillis))
+        val diffDays = abs(targetTimeStamp.minus(todayTimeStamp).div(oneDayMillis))
         val dayRemaining = when (onlyDays) {
-            true -> if (targetTimeStamp > currentTimeStamp) "D－$diffDays" else "D＋$diffDays"
+            true -> if (targetTimeStamp > todayTimeStamp) "D－$diffDays" else "D＋$diffDays"
             false -> {
                 val years = MessageFormat.format(yearFormat, diffDays.div(365))
                 val days = MessageFormat.format(dayFormat, diffDays.rem(365))
