@@ -41,7 +41,7 @@ open class DDay : RealmObject {
                     calendar.add(Calendar.YEAR, 1)
                     if (calendar.timeInMillis > end) {
                         calendar.add(Calendar.YEAR, -1)
-                        break;
+                        break
                     } else {
                         countYear++
                     }
