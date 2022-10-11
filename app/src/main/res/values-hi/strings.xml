@@ -603,64 +603,64 @@
     </string>
     <string name="release_263">
         v1.4.173.2 / 2022.02.12\n
-        Fixed an error where the diary list could not be loaded when using widgets in Android 12 version
+        Android 12 संस्करण में विजेट का उपयोग करते समय डायरी सूची लोड नहीं की जा सकने वाली त्रुटि को ठीक किया गया
     </string>
     <string name="release_264">
         v1.4.173.3 / 2022.03.08\n
-        Added welcome dashboard feature\n
-        Added DDay setting feature to dashboard screen (Beta)
+		जोड़ा गया स्वागत डैशबोर्ड सुविधा\n
+		डैशबोर्ड स्क्रीन (बीटा) में जोड़ा गया DDay सेटिंग फीचर
     </string>
     <string name="release_265">
         v1.4.173.4 / 2022.03.09\n
-        Improved dashboard DDay setting feature
+		बेहतर डैशबोर्ड DDay सेटिंग सुविधा
     </string>
     <string name="release_266">
         v1.4.266.202203210 / 2022.03.21\n
-        Improved dashboard DDay setting feature
+		बेहतर डैशबोर्ड DDay सेटिंग सुविधा
     </string>
     <string name="release_267">
         v1.4.267.202203300 / 2022.03.30\n
-        Improved dashboard chart feature
+		बेहतर डैशबोर्ड चार्ट सुविधा
     </string>
     <string name="release_268">
         v1.4.268.202204040 / 2022.04.04\n
-        Change the policy so that the diary list is not displayed in the widget when the lock function is used
+		नीति बदलें ताकि लॉक फ़ंक्शन का उपयोग करने पर डायरी सूची विजेट में प्रदर्शित न हो
     </string>
     <string name="release_269">
         v1.4.269.202204110 / 2022.04.11\n
-        Change the policy so that the content is not visible in the list of recently used apps when using the lock function
+		नीति बदलें ताकि लॉक फ़ंक्शन का उपयोग करते समय हाल ही में उपयोग किए गए ऐप्स की सूची में सामग्री दिखाई न दे
     </string>
     <string name="release_271">
         v1.4.271.202204150 / 2022.04.15\n
-        User Experience (UX) Optimization
+		उपयोगकर्ता अनुभव (यूएक्स) अनुकूलन
     </string>
     <string name="release_272">
         v1.4.272.202204220 / 2022.04.22\n
-        Fixed abnormal termination error when exporting excel
+		एक्सेल निर्यात करते समय फिक्स्ड असामान्य समाप्ति त्रुटि
     </string>
     <string name="release_273">
         v1.4.273.202205070 / 2022.05.07\n
-        User Experience (UX) Optimization
+		उपयोगकर्ता अनुभव (यूएक्स) अनुकूलन
     </string>
     <string name="release_274">
         v1.4.274.202206010 / 2022.06.01\n
-        Added the recently used symbol selection function to the symbol dialog
+		प्रतीक संवाद में हाल ही में उपयोग किए गए प्रतीक चयन फ़ंक्शन को जोड़ा गया
     </string>
     <string name="release_275">
         v1.4.275.202207150 / 2022.07.15\n
-        User Experience (UX) Optimization
+		उपयोगकर्ता अनुभव (यूएक्स) अनुकूलन
     </string>
     <string name="release_277">
         v1.4.277.202208170 / 2022.08.17\n
-        User Experience (UX) Optimization
+		उपयोगकर्ता अनुभव (यूएक्स) अनुकूलन
     </string>
     <string name="release_279">
         v1.4.279.202208250 / 2022.08.25\n
-        Improved main screen and dashboard screen UX
+		बेहतर मुख्य स्क्रीन और डैशबोर्ड स्क्रीन UX
     </string>
     <string name="release_280">
         v1.4.280.202209160 / 2022.09.16\n
-        Improved Dashboard UX
+		बेहतर डैशबोर्ड UX
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -916,9 +916,9 @@
     <string name="notification_channel_name_upload">Google Drive अपलोड</string>
     <string name="notification_channel_name_download">Google Drive डाउनलोड</string>
     <string name="notification_channel_name_zip_helper">प्रबंधन ज़िप बैकअप</string>
-    <string name="enable_welcome_dashboard_popup_title">Welcome Dashboard popup</string>
-    <string name="enable_welcome_dashboard_popup_description">When this option is enabled, the dashboard will automatically open as a popup when the app is restarted after closing.</string>
+    <string name="enable_welcome_dashboard_popup_title">स्वागत डैशबोर्ड पॉपअप</string>
+    <string name="enable_welcome_dashboard_popup_description">जब यह विकल्प सक्षम होता है, तो बंद होने के बाद ऐप के पुनरारंभ होने पर डैशबोर्ड स्वचालित रूप से पॉपअप के रूप में खुल जाएगा।</string>
     <string name="year_message_format">{0,number} {0,choice,1#Year|1&lt;Years}</string>
     <string name="day_message_format">{0,number} {0,choice,1#Day|1&lt;Days}</string>
-    <string name="recently_used_symbol">Recently Used</string>
+    <string name="recently_used_symbol">हाल ही में उपयोग किया गया</string>
 </resources>

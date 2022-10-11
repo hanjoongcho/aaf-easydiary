@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <resources>
     <string name="app_name">ᱥᱚᱦᱚᱡᱽ ᱰᱟᱭᱨᱤ</string>
     <string name="common_create_seconds">ᱛᱮᱭᱟᱨ ᱴᱤᱡ</string>
@@ -602,65 +603,64 @@
         ᱰᱟᱭᱨᱤ ᱯᱚᱥᱴᱠᱟᱰ ᱛᱮᱭᱟᱨ ᱥᱠᱨᱤᱱ ᱨᱮ ᱪᱷᱟᱹᱱᱤᱭᱜ ᱵᱮᱵᱷᱟᱨ ᱡᱷᱚᱜ ᱟᱡ ᱛᱮ ᱵᱚᱸᱫᱚᱜ ᱦᱤᱰᱟᱹᱜ ᱠᱚ ᱴᱷᱤᱠᱮᱱᱟ ᱾
     </string>
     <string name="release_263">
-        v1.4.173.2 / 2022.02.12\n
-        Fixed an error where the diary list could not be loaded when using widgets in Android 12 version
+		v1.4.173.2 / 2022.02.12\n 
+		Android 12 ᱦᱟᱹᱞᱤᱭᱟᱠ ᱨᱮ ᱣᱤᱡᱮᱰ ᱵᱮᱵᱷᱟᱨ ᱡᱷᱚᱜ ᱰᱟᱭᱨᱤ ᱨᱮᱭᱟᱜ ᱞᱤᱥᱴᱤ ᱵᱟᱝ ᱞᱟᱫᱮ ᱫᱟᱲᱮᱭᱟᱜ ᱠᱚ ᱨᱮᱭᱟᱜ ᱵᱷᱩᱞ ᱥᱩᱜᱷᱟᱹᱨ ᱮᱱᱟ
     </string>
     <string name="release_264">
-        v1.4.173.3 / 2022.03.08\n
-        Added welcome dashboard feature\n
-        Added DDay setting feature to dashboard screen (Beta)
+		v1.4.173.3 / 2022.03.08\n 
+		ᱥᱟᱹᱜᱩᱱ ᱫᱟᱨᱟᱢ ᱰᱮᱥᱵᱚᱰ ᱯᱷᱤᱪᱚᱨ ᱥᱮᱞᱮᱫ ᱮᱱᱟ\n  
+		ᱰᱮᱥᱵᱚᱰ ᱥᱠᱨᱤᱱ (ᱵᱮᱴᱟ) ᱨᱮ ᱯᱷᱤᱪᱚᱨ ᱥᱟᱡᱟᱣ ᱯᱷᱤᱪᱚᱨ ᱥᱮᱞᱮᱫ ᱮᱱᱟ
     </string>
     <string name="release_265">
-        v1.4.173.4 / 2022.03.09\n
-        Improved dashboard DDay setting feature
+		v1.4.173.4 / 2022.03.09\n 
+		ᱰᱮᱥᱵᱚᱰ DDay ᱥᱟᱡᱟᱣᱠᱚ ᱥᱩᱫᱷᱨᱟᱹᱣ ᱮᱱᱟ
     </string>
     <string name="release_266">
-        v1.4.266.202203210 / 2022.03.21\n
-        Improved dashboard DDay setting feature
+		v1.4.266.202203210 / 2022.03.21\n 
+		ᱰᱮᱥᱵᱚᱰ DDay ᱥᱟᱡᱟᱣᱠᱚ ᱥᱩᱫᱷᱨᱟᱹᱣ ᱮᱱᱟ
     </string>
     <string name="release_267">
-        v1.4.267.202203300 / 2022.03.30\n
-        Improved dashboard chart feature
+		v1.4.267.202203300 / 2022.03.30\n 
+		ᱰᱮᱥᱵᱚᱰ ᱪᱟᱨᱴ ᱯᱷᱤᱪᱚᱨ ᱥᱩᱫᱷᱨᱟᱹᱣ ᱮᱱᱟ
     </string>
     <string name="release_268">
-        v1.4.268.202204040 / 2022.04.04\n
-        Change the policy so that the diary list is not displayed in the widget when the lock function is used
+		v1.4.268.202204040 / 2022.04.04\n 
+		ᱠᱩᱞᱩᱯ ᱯᱷᱚᱝᱥᱚᱱ ᱵᱮᱵᱷᱟᱨ ᱡᱷᱚᱜ ᱰᱟᱭᱨᱤ ᱨᱮᱭᱟᱜ ᱞᱤᱥᱴᱤ ᱫᱚ ᱣᱤᱡᱤᱰ ᱨᱮ ᱟᱞᱚ ᱧᱮᱞᱚᱜ ᱞᱟᱹᱜᱤᱫ ᱱᱤᱛᱤ ᱵᱚᱫᱚᱞ ᱦᱩᱭ ᱾
     </string>
     <string name="release_269">
-        v1.4.269.202204110 / 2022.04.11\n
-        Change the policy so that the content is not visible in the list of recently used apps when using the lock function
+		v1.4.269.202204110 / 2022.04.11\n 
+		ᱠᱩᱞᱩᱯ ᱯᱷᱚᱝᱥᱚᱱ ᱵᱮᱵᱷᱟᱨ ᱡᱷᱚᱜ ᱡᱤᱱᱤᱥ ᱫᱚ ᱱᱮᱱᱮ ᱵᱮᱵᱷᱟᱨ ᱠᱟᱱ ᱮᱯ ᱨᱮ ᱟᱞᱚ ᱧᱮᱞᱚᱜ ᱞᱟᱹᱜᱤᱫ ᱱᱤᱛᱤ ᱵᱚᱫᱚᱞ ᱦᱩᱭ ᱾
     </string>
     <string name="release_271">
-        v1.4.271.202204150 / 2022.04.15\n
-        User Experience (UX) Optimization
+		v1.4.271.202204150 / 2022.04.15\n 
+		ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱟᱹᱠᱤᱞ (UX) ᱟᱸᱥ
     </string>
     <string name="release_272">
-        v1.4.272.202204220 / 2022.04.22\n
-        Fixed abnormal termination error when exporting excel
+		v1.4.272.202204220 / 2022.04.22\n 
+		excel ᱵᱷᱮᱡᱟ ᱡᱷᱚᱜ ᱟᱡ ᱛᱮ ᱵᱚᱸᱫ ᱰᱤᱜᱟᱹᱣ ᱠᱚ ᱴᱷᱤᱠ ᱮᱱᱟ
     </string>
     <string name="release_273">
-        v1.4.273.202205070 / 2022.05.07\n
-        User Experience (UX) Optimization
-    </string>
+		v1.4.273.202205070 / 2022.05.07\n 
+		ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱟᱹᱠᱤᱞ (UX) ᱟᱸᱥ</string>
     <string name="release_274">
-        v1.4.274.202206010 / 2022.06.01\n
-        Added the recently used symbol selection function to the symbol dialog
+		v1.4.274.202206010 / 2022.06.01\n 
+		ᱪᱤᱱᱦᱟᱹ ᱰᱟᱭᱞᱚᱜᱽ ᱨᱮ ᱱᱮᱱᱮ ᱵᱮᱵᱷᱟᱨ ᱪᱤᱱᱦᱟᱹ ᱵᱟᱪᱷᱟᱣ ᱯᱷᱚᱝᱥᱚᱱ ᱥᱮᱞᱮᱫ ᱮᱱᱟ ᱾
     </string>
     <string name="release_275">
-        v1.4.275.202207150 / 2022.07.15\n
-        User Experience (UX) Optimization
+		v1.4.275.202207150 / 2022.07.15\n 
+		ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱟᱹᱠᱤᱞ (UX) ᱟᱸᱥ
     </string>
     <string name="release_277">
-        v1.4.277.202208170 / 2022.08.17\n
-        User Experience (UX) Optimization
+		v1.4.277.202208170 / 2022.08.17\n 
+		ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱟᱹᱠᱤᱞ (UX) ᱟᱸᱥ
     </string>
     <string name="release_279">
-        v1.4.279.202208250 / 2022.08.25\n
-        Improved main screen and dashboard screen UX
+		v1.4.279.202208250 / 2022.08.25\n 
+		ᱢᱩᱬᱩᱛ ᱥᱠᱨᱤᱱ ᱟᱨ ᱰᱮᱥᱵᱚᱰ ᱥᱠᱨᱤᱱ UX ᱥᱩᱫᱷᱨᱟᱹᱣ ᱮᱱᱟ
     </string>
     <string name="release_280">
-        v1.4.280.202209160 / 2022.09.16\n
-        Improved Dashboard UX
+		v1.4.280.202209160 / 2022.09.16\n 
+		UX ᱰᱮᱥᱵᱚᱰ ᱥᱩᱫᱷᱨᱟᱹᱣ ᱮᱱᱟ
     </string>
 
     <!--  //////////////////////////////////////////////////////////////////////////////////////////////  -->
@@ -724,7 +724,7 @@
     <string name="fingerprint_authentication_info_changed">ᱥᱟᱫᱷᱚᱱ ᱨᱮᱭᱟᱜ ᱛᱤᱠᱟᱹᱴᱩᱵᱪᱷᱟᱯᱟ ᱚᱛᱷᱮᱱᱴᱤᱠᱮᱥᱚᱱ ᱵᱤᱵᱨᱚᱬ ᱵᱚᱫᱚᱞ ᱮᱱᱟ ᱟᱨ ᱢᱟᱲᱟᱝ ᱥᱮᱴ ᱟᱠᱟᱱ ᱚᱛᱷᱮᱱᱴᱤᱠᱮᱥᱚᱱ ᱵᱤᱵᱨᱚᱬ ᱵᱮᱵᱷᱟᱨ ᱵᱟᱭ ᱜᱟᱱᱚᱜᱼᱟ ᱾</string>
     <string name="pin_lock_title">PIN ᱠᱩᱞᱩᱯ ᱥᱟᱡᱟᱣ</string>
     <string name="pin_lock_summary">ᱮᱯᱞᱤᱠᱮᱥᱚᱱ ᱠᱩᱞᱩ ᱞᱟᱹᱜᱤᱫ PIN ᱥᱮᱴ ᱢᱮ ᱾</string>
-    <string name="pin_setting_complete">Do you want to set the PIN lock number to 「%s」?</string>
+    <string name="pin_setting_complete">ᱟᱢ ᱫᱚ ᱪᱮᱫ「%s」ᱞᱮᱠᱷᱟ PIN ᱠᱩᱞᱩᱯ ᱱᱚᱢᱵᱚᱨ ᱫᱚᱦᱚ ᱥᱟᱢᱟᱢ ᱠᱟᱱᱟ ᱥᱮ ?</string>
     <string name="pin_setting_release">PIN ᱠᱩᱞᱩᱯ ᱫᱚ ᱵᱚᱸᱫᱚ ᱜᱮᱭᱟ ᱾</string>
     <string name="pin_release_need_fingerprint_disable">PIN ᱠᱩᱞᱩᱯ ᱵᱚᱸᱫ ᱞᱟᱫᱜᱤᱫ, ᱟᱢ ᱛᱤᱠᱟᱹᱴᱩᱵᱪᱷᱟᱯᱟ ᱠᱩᱞᱩᱯ ᱵᱚᱸᱫ ᱛᱮ ᱦᱩᱭᱟᱢᱟ ᱾</string>
     <string name="pin_setting_guide_message">PIN ᱵᱮᱵᱷᱟᱨ ᱞᱟᱹᱜᱤᱫ ᱫᱚᱭᱟᱠᱟᱛᱮ ᱱᱚᱢᱵᱚᱨ ᱟᱫᱮᱨ ᱢᱮ ᱾</string>
@@ -916,9 +916,9 @@
     <string name="notification_channel_name_upload">Google Drive ᱞᱟᱫᱮ</string>
     <string name="notification_channel_name_download">Google Drive ᱰᱟᱩᱱᱞᱚᱰ</string>
     <string name="notification_channel_name_zip_helper">ZIP ᱥᱟᱹᱣᱛᱤ ᱫᱚᱦᱚ ᱥᱮᱢᱵᱷᱲᱟᱣ</string>
-    <string name="enable_welcome_dashboard_popup_title">Welcome Dashboard popup</string>
-    <string name="enable_welcome_dashboard_popup_description">When this option is enabled, the dashboard will automatically open as a popup when the app is restarted after closing.</string>
+    <string name="enable_welcome_dashboard_popup_title">ᱥᱟᱹᱜᱩᱱ ᱫᱟᱨᱟᱢ ᱰᱮᱥᱵᱚᱰ ᱯᱚᱯᱚᱯᱷ</string>
+    <string name="enable_welcome_dashboard_popup_description">ᱱᱚᱶᱟ ᱵᱟᱪᱷᱟᱣ ᱮᱢ ᱪᱷᱚ ᱞᱮᱠᱷᱟᱱ, ᱮᱯ ᱵᱚᱱᱫ ᱠᱟᱛᱮ ᱫᱩᱦᱲᱟᱹ ᱮᱛᱦᱚᱵ ᱞᱮᱠᱷᱟᱱ ᱰᱮᱥᱵᱚᱰ ᱫᱚ ᱟᱡ ᱛᱮ ᱠᱷᱩᱞᱟᱹᱜᱼᱟ ᱾</string>
     <string name="year_message_format">{0,number} {0,choice,1#Year|1&lt;Years}</string>
     <string name="day_message_format">{0,number} {0,choice,1#Day|1&lt;Days}</string>
-    <string name="recently_used_symbol">Recently Used</string>
+    <string name="recently_used_symbol">ᱱᱮᱱᱮ ᱵᱮᱵᱷᱟᱨ ᱠᱟᱱ</string>
 </resources>
