@@ -16,34 +16,34 @@
             android:layout_height="wrap_content">
 
             <View
-                android:layout_marginStart="5dp"
+                android:layout_marginEnd="3dp"
                 android:id="@+id/img_light_red"
                 android:layout_width="10dp"
                 android:layout_height="10dp"
                 android:background="@drawable/bg_circle_red"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/text_title"
-                app:layout_constraintBottom_toBottomOf="@+id/text_title" />
+                app:layout_constraintTop_toTopOf="@+id/text_day_remaining"
+                app:layout_constraintEnd_toStartOf="@+id/img_light_orange"
+                app:layout_constraintBottom_toBottomOf="@+id/text_day_remaining" />
 
             <View
-                android:layout_marginStart="3dp"
+                android:layout_marginEnd="3dp"
                 android:id="@+id/img_light_orange"
                 android:layout_width="10dp"
                 android:layout_height="10dp"
                 android:background="@drawable/bg_circle_orange"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/img_light_red"
-                app:layout_constraintBottom_toBottomOf="@+id/text_title" />
+                app:layout_constraintTop_toTopOf="@+id/text_day_remaining"
+                app:layout_constraintEnd_toStartOf="@+id/img_light_green"
+                app:layout_constraintBottom_toBottomOf="@+id/text_day_remaining" />
 
             <View
-                android:layout_marginStart="3dp"
+                android:layout_marginEnd="5dp"
                 android:id="@+id/img_light_green"
                 android:layout_width="10dp"
                 android:layout_height="10dp"
                 android:background="@drawable/bg_circle_green"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/img_light_orange"
-                app:layout_constraintBottom_toBottomOf="@+id/text_title"/>
+                app:layout_constraintTop_toTopOf="@+id/text_day_remaining"
+                app:layout_constraintEnd_toStartOf="@+id/text_day_remaining"
+                app:layout_constraintBottom_toBottomOf="@+id/text_day_remaining" />
 
             <me.blog.korn123.easydiary.views.FixedTextView
                 android:id="@+id/text_title"
