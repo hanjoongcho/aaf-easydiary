@@ -16,37 +16,34 @@
             android:layout_height="wrap_content">
 
             <View
-                android:alpha="0.3"
                 android:layout_marginStart="5dp"
                 android:id="@+id/img_light_red"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
                 android:background="@drawable/bg_circle_red"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/text_title"
-                app:layout_constraintBottom_toBottomOf="@+id/text_title"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintBottom_toBottomOf="@+id/text_title" />
 
             <View
-                android:alpha="0.3"
-                android:layout_marginStart="5dp"
-                android:id="@+id/img_light_green"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:background="@drawable/bg_circle_green"
+                android:layout_marginStart="3dp"
+                android:id="@+id/img_light_orange"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:background="@drawable/bg_circle_orange"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/img_light_red"
-                app:layout_constraintBottom_toBottomOf="@+id/text_title"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintBottom_toBottomOf="@+id/text_title" />
 
             <View
-                android:alpha="0.3"
-                android:layout_marginStart="5dp"
-                android:id="@+id/img_light_blue"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:background="@drawable/bg_circle_blue"
-                app:layout_constraintStart_toEndOf="@+id/img_light_green"
-                app:layout_constraintBottom_toBottomOf="@+id/text_title"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_marginStart="3dp"
+                android:id="@+id/img_light_green"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:background="@drawable/bg_circle_green"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/img_light_orange"
+                app:layout_constraintBottom_toBottomOf="@+id/text_title"/>
 
             <me.blog.korn123.easydiary.views.FixedTextView
                 android:id="@+id/text_title"

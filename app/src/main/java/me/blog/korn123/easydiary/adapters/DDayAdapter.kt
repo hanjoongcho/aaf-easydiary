@@ -173,6 +173,23 @@ class DDayAdapter(
                 textTargetDate.text = DateUtils.getDateStringFromTimeMillis(dDay.targetTimeStamp, SimpleDateFormat.MEDIUM)
 //                textTargetTime.text = DateUtils.getTimeStringFromTimeMillis(dDay.targetTimeStamp, SimpleDateFormat.SHORT)
                 textDayRemaining.text = dDay.getDayRemaining()
+                when {
+                    dDay.getDayRemaining().startsWith("D＋0") -> {
+                        imgLightRed.alpha = 0.1F
+                        imgLightOrange.alpha = 1F
+                        imgLightGreen.alpha = 0.1F
+                    }
+                    dDay.getDayRemaining().startsWith("D＋") -> {
+                        imgLightRed.alpha = 1F
+                        imgLightOrange.alpha = 0.1F
+                        imgLightGreen.alpha = 0.1F
+                    }
+                    else -> {
+                        imgLightRed.alpha = 0.1F
+                        imgLightOrange.alpha = 0.1F
+                        imgLightGreen.alpha = 1F
+                    }
+                }
 //                textDayRemainingWithYear.text = dDay.getDayRemaining(false, activity.getString(R.string.year_message_format), activity.getString(R.string.day_message_format))
 //                textTimeRemaining.text = dDay.getTimeRemaining()
                 root.setOnClickListener {
