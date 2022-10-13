@@ -12,6 +12,7 @@ import android.speech.tts.UtteranceProgressListener
 import android.text.Editable
 import android.text.SpannableString
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
@@ -91,6 +92,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
     override fun onResume() {
         super.onResume()
         initModule()
+        mSectionsPagerAdapter.notifyDataSetChanged()
     }
     
     override fun onPause() {
