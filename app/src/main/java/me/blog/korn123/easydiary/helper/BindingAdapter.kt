@@ -8,6 +8,7 @@ object BindingAdapter {
     @BindingAdapter("symbolSequence")
     @JvmStatic
     fun bindSrcCompat(imageView: ImageView, symbolSequence: Int) {
-        imageView.setImageResource(FlavorUtils.sequenceToSymbolResourceId(symbolSequence))
+//        imageView.setImageResource(FlavorUtils.sequenceToSymbolResourceId(symbolSequence))
+        FlavorUtils.initWeatherView(imageView.context, imageView, symbolSequence)
     }
 }

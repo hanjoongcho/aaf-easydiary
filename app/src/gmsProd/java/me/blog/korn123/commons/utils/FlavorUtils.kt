@@ -1,6 +1,7 @@
 package me.blog.korn123.commons.utils
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.view.View
 import android.widget.ImageView
@@ -319,29 +320,43 @@ object FlavorUtils {
         else -> 0
     }
 
-    fun initWeatherView(context: Context, imageView: ImageView?, weatherFlag: Int, isShowEmptyWeatherView: Boolean = false, applyWhiteFilter: Boolean = false) {
+    fun initWeatherView(
+        context: Context,
+        imageView: ImageView?,
+        weatherFlag: Int,
+        isShowEmptyWeatherView: Boolean = false,
+        applyWhiteFilter: Boolean = false
+    ) {
         imageView?.run {
             visibility = if (!isShowEmptyWeatherView && weatherFlag < 1) View.GONE else View.VISIBLE
             if (weatherFlag < 10000) {
                 setImageResource(sequenceToSymbolResourceId(weatherFlag))
             } else {
-                setImageBitmap(BitmapFactory.decodeFile(EasyDiaryUtils.getApplicationDataDirectory(context) + EasyDiaryDbHelper.findDiaryBy(3414)?.photoUris?.get(0)?.getFilePath()))
+                setImageBitmap(customSymbolSequenceToBitmap(context, 3419))
             }
         }
+    }
+
+    fun customSymbolSequenceToBitmap(context: Context, sequence: Int): Bitmap {
+        return BitmapFactory.decodeFile(
+            EasyDiaryUtils.getApplicationDataDirectory(context) + EasyDiaryDbHelper.findDiaryBy(
+                sequence
+            )?.photoUris?.get(0)?.getFilePath()
+        )
     }
 
     fun getDiarySymbolMap(context: Context): HashMap<Int, String> {
         val symbolMap = hashMapOf<Int, String>()
         val symbolArray = arrayOf(
-                *context.resources.getStringArray(R.array.weather_item_array),
-                *context.resources.getStringArray(R.array.emotion_item_array),
-                *context.resources.getStringArray(R.array.daily_item_array),
-                *context.resources.getStringArray(R.array.tasks_item_array),
-                *context.resources.getStringArray(R.array.food_item_array),
-                *context.resources.getStringArray(R.array.leisure_item_array),
-                *context.resources.getStringArray(R.array.landscape_item_array),
-                *context.resources.getStringArray(R.array.symbol_item_array),
-                *context.resources.getStringArray(R.array.flag_item_array)
+            *context.resources.getStringArray(R.array.weather_item_array),
+            *context.resources.getStringArray(R.array.emotion_item_array),
+            *context.resources.getStringArray(R.array.daily_item_array),
+            *context.resources.getStringArray(R.array.tasks_item_array),
+            *context.resources.getStringArray(R.array.food_item_array),
+            *context.resources.getStringArray(R.array.leisure_item_array),
+            *context.resources.getStringArray(R.array.landscape_item_array),
+            *context.resources.getStringArray(R.array.symbol_item_array),
+            *context.resources.getStringArray(R.array.flag_item_array)
         )
 
         symbolArray.map { item ->
