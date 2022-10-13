@@ -345,7 +345,10 @@ fun Activity.openFeelingSymbolDialog(guideMessage: String, selectedSymbolSequenc
     if (symbolUsedCountMap.isNotEmpty()) {
         val symbolMap = getDiarySymbolMap(this)
         categoryList.add(getString(R.string.recently_used_symbol))
-        itemList.add(symbolUsedCountMap.entries.map { entry -> "${entry.key}|${symbolMap[entry.key]}" }.toTypedArray())
+        val usedSymbols = arrayListOf<String>()
+        usedSymbols.add("10000|custom")
+        usedSymbols.addAll(symbolUsedCountMap.entries.map { entry -> "${entry.key}|${symbolMap[entry.key]}" }.toTypedArray())
+        itemList.add(usedSymbols.toTypedArray())
         tabIndex = tabIndex.plus(1)
     }
 

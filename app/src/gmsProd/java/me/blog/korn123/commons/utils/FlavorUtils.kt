@@ -1,6 +1,7 @@
 package me.blog.korn123.commons.utils
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.view.View
 import android.widget.ImageView
 import me.blog.korn123.easydiary.R
@@ -321,7 +322,11 @@ object FlavorUtils {
     fun initWeatherView(context: Context, imageView: ImageView?, weatherFlag: Int, isShowEmptyWeatherView: Boolean = false, applyWhiteFilter: Boolean = false) {
         imageView?.run {
             visibility = if (!isShowEmptyWeatherView && weatherFlag < 1) View.GONE else View.VISIBLE
-            setImageResource(sequenceToSymbolResourceId(weatherFlag))
+            if (weatherFlag < 10000) {
+                setImageResource(sequenceToSymbolResourceId(weatherFlag))
+            } else {
+                setImageBitmap(BitmapFactory.decodeFile(EasyDiaryUtils.getApplicationDataDirectory(context) + EasyDiaryDbHelper.findDiaryBy(3414)?.photoUris?.get(0)?.getFilePath()))
+            }
         }
     }
 
