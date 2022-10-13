@@ -87,11 +87,29 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical" />
 
-            <LinearLayout
-                android:id="@+id/fragment_diary_previous100"
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:orientation="horizontal">
+
+                <com.simplemobiletools.commons.views.MyFloatingActionButton
+                    android:id="@+id/insertDiaryButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|top"
+                    android:layout_margin="10dp"
+                    android:contentDescription="@string/write_diary"
+                    android:visibility="gone"
+                    app:fabSize="mini"
+                    app:maxImageSize="15dp"
+                    app:srcCompat="@drawable/ic_edit" />
+
+                <LinearLayout
+                    android:id="@+id/fragment_diary_previous100"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
             <LinearLayout
                 android:id="@+id/summary"

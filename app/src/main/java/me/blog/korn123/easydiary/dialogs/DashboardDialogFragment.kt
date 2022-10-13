@@ -1,5 +1,6 @@
 package me.blog.korn123.easydiary.dialogs
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -10,9 +11,11 @@ import androidx.fragment.app.DialogFragment
 import com.zhpan.bannerview.constants.PageStyle
 import me.blog.korn123.commons.utils.FontUtils
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.activities.DiaryWritingActivity
 import me.blog.korn123.easydiary.databinding.ActivityDashboardBinding
 import me.blog.korn123.easydiary.extensions.*
 import me.blog.korn123.easydiary.fragments.*
+import me.blog.korn123.easydiary.helper.TransitionHelper
 
 class DashboardDialogFragment : DialogFragment() {
     private lateinit var mBinding: ActivityDashboardBinding
@@ -218,6 +221,11 @@ class DashboardDialogFragment : DialogFragment() {
 //            EasyDiaryUtils.disableTouchEvent(dashboardDimmer)
 //            dashboardDimmer.visibility = View.GONE
 //            dashboardProgress.visibility = View.GONE
+            insertDiaryButton.post { insertDiaryButton.visibility = View.VISIBLE }
+            insertDiaryButton.setOnClickListener {
+                val createDiary = Intent(requireActivity(), DiaryWritingActivity::class.java)
+                TransitionHelper.startActivityWithTransition(requireActivity(), createDiary)
+            }
         }
     }
 
