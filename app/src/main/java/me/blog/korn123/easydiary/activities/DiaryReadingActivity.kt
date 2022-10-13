@@ -91,6 +91,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
     override fun onResume() {
         super.onResume()
         initModule()
+        mSectionsPagerAdapter.notifyDataSetChanged()
     }
     
     override fun onPause() {
