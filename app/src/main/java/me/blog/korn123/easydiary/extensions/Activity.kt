@@ -39,6 +39,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
 import id.zelory.compressor.Compressor
+import io.realm.RealmList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -60,6 +61,7 @@ import me.blog.korn123.easydiary.databinding.ActivityDiaryMainBinding
 import me.blog.korn123.easydiary.dialogs.WhatsNewDialog
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.Diary
+import me.blog.korn123.easydiary.models.PhotoUri
 import me.blog.korn123.easydiary.views.SlidingTabLayout
 import org.apache.commons.codec.binary.Base64
 import org.apache.commons.io.FileUtils
@@ -331,6 +333,12 @@ fun Activity.startMainActivityWithClearTask() {
 
 fun Activity.isAccessFromOutside(): Boolean = intent.getStringExtra(DIARY_EXECUTION_MODE) == EXECUTION_MODE_ACCESS_FROM_OUTSIDE
 
+// FIXME: WIP START
+fun getCustomSymbolPaths(sequence: Int): List<PhotoUri> {
+    // EasyDiaryUtils.getApplicationDataDirectory(this)
+    return EasyDiaryDbHelper.findDiaryBy(sequence)?.photoUris ?: listOf()
+}
+
 fun Activity.openFeelingSymbolDialog(guideMessage: String, selectedSymbolSequence: Int = 0, callback: (Int) -> Unit) {
     var dialog: Dialog? = null
     val inflater = getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -345,12 +353,23 @@ fun Activity.openFeelingSymbolDialog(guideMessage: String, selectedSymbolSequenc
     if (symbolUsedCountMap.isNotEmpty()) {
         val symbolMap = getDiarySymbolMap(this)
         categoryList.add(getString(R.string.recently_used_symbol))
-        val usedSymbols = arrayListOf<String>()
-        usedSymbols.add("10000|custom")
-        usedSymbols.addAll(symbolUsedCountMap.entries.map { entry -> "${entry.key}|${symbolMap[entry.key]}" }.toTypedArray())
-        itemList.add(usedSymbols.toTypedArray())
-        tabIndex = tabIndex.plus(1)
+        itemList.add(symbolUsedCountMap.entries.map { entry -> "${entry.key}|${symbolMap[entry.key] ?: "🎃"}" }.toTypedArray())
+        tabIndex++
     }
+
+    // Append user customization symbols
+    // FIXME: WIP START
+    var customSymbolSequence = 10000
+    if (config.enableDebugMode) {
+        val customSymbols = arrayListOf<String>()
+        categoryList.add("Custom")
+        getCustomSymbolPaths(3419).forEach { item ->
+//            item.getFilePath()
+            customSymbols.add("$customSymbolSequence|${customSymbolSequence++}")
+        }
+        itemList.add(customSymbols.toTypedArray())
+    }
+    // FIXME: WIP END
 
     addCategory(itemList, categoryList, "weather_item_array", getString(R.string.category_weather))
     addCategory(itemList, categoryList, "emotion_item_array", getString(R.string.category_emotion))

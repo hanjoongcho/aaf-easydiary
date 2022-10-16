@@ -3,9 +3,20 @@ package me.blog.korn123.commons.utils
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.Drawable
+import android.view.RoundedCorner
 import android.view.View
 import android.widget.ImageView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.dpToPixel
+import me.blog.korn123.easydiary.extensions.getCustomSymbolPaths
 import me.blog.korn123.easydiary.helper.*
 import me.blog.korn123.easydiary.models.DiarySymbol
 
@@ -332,18 +343,34 @@ object FlavorUtils {
             if (weatherFlag < 10000) {
                 setImageResource(sequenceToSymbolResourceId(weatherFlag))
             } else {
-                setImageBitmap(customSymbolSequenceToBitmap(context, 3419))
+//                setImageBitmap(customSymbolSequenceToBitmap(context, 3419))
+                // FIXME: WIP START
+                val targetIndex = weatherFlag.minus(10000)
+                val filePath = if (getCustomSymbolPaths(3419).size > targetIndex) getCustomSymbolPaths(3419).get(targetIndex).getFilePath() else ""
+                Glide.with(this)
+                    .load(EasyDiaryUtils.getApplicationDataDirectory(context) + filePath)
+                    .listener(object : RequestListener<Drawable> {
+                        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                            return false
+                        }
+                        override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                            return false
+                        }
+                    })
+                    .transform(CenterCrop(), RoundedCorners(context.dpToPixel(5F)))
+                    .into(this)
+                // FIXME: WIP END
             }
         }
     }
 
-    fun customSymbolSequenceToBitmap(context: Context, sequence: Int): Bitmap {
-        return BitmapFactory.decodeFile(
-            EasyDiaryUtils.getApplicationDataDirectory(context) + EasyDiaryDbHelper.findDiaryBy(
-                sequence
-            )?.photoUris?.get(0)?.getFilePath()
-        )
-    }
+//    private fun customSymbolSequenceToBitmap(context: Context, sequence: Int): Bitmap {
+//        return BitmapFactory.decodeFile(
+//            EasyDiaryUtils.getApplicationDataDirectory(context) + EasyDiaryDbHelper.findDiaryBy(
+//                sequence
+//            )?.photoUris?.get(0)?.getFilePath()
+//        )
+//    }
 
     fun getDiarySymbolMap(context: Context): HashMap<Int, String> {
         val symbolMap = hashMapOf<Int, String>()

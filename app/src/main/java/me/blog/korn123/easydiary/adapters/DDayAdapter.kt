@@ -174,7 +174,7 @@ class DDayAdapter(
 //                textTargetTime.text = DateUtils.getTimeStringFromTimeMillis(dDay.targetTimeStamp, SimpleDateFormat.SHORT)
                 textDayRemaining.text = dDay.getDayRemaining()
                 when {
-                    dDay.getDayRemaining().startsWith("D＋0") -> {
+                    dDay.getDayRemaining().matches(Regex("^D－0$|^D＋0$")) -> {
                         imgLightRed.alpha = 0.1F
                         imgLightOrange.alpha = 1F
                         imgLightGreen.alpha = 0.1F
