@@ -1,8 +1,6 @@
 package me.blog.korn123.commons.utils
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.view.RoundedCorner
 import android.view.View
@@ -328,6 +326,7 @@ object FlavorUtils {
         FLAG_UNITED_KINGDOM -> R.drawable.ic_260_united_kingdom
         FLAG_THAILAND -> R.drawable.ic_238_thailand
 
+        SYMBOL_EASTER_EGG -> R.drawable.ic_easter_egg
         else -> 0
     }
 
@@ -340,13 +339,13 @@ object FlavorUtils {
     ) {
         imageView?.run {
             visibility = if (!isShowEmptyWeatherView && weatherFlag < 1) View.GONE else View.VISIBLE
-            if (weatherFlag < 10000) {
+            if (weatherFlag < SYMBOL_USER_CUSTOM_START) {
                 setImageResource(sequenceToSymbolResourceId(weatherFlag))
             } else {
 //                setImageBitmap(customSymbolSequenceToBitmap(context, 3419))
                 // FIXME: WIP START
-                val targetIndex = weatherFlag.minus(10000)
-                val filePath = if (getCustomSymbolPaths(3419).size > targetIndex) getCustomSymbolPaths(3419)[targetIndex].getFilePath() else ""
+                val targetIndex = weatherFlag.minus(SYMBOL_USER_CUSTOM_START)
+                val filePath = if (getCustomSymbolPaths(SYMBOL_EASTER_EGG).size > targetIndex) getCustomSymbolPaths(SYMBOL_EASTER_EGG)[targetIndex].getFilePath() else ""
                 Glide.with(this)
                     .load(EasyDiaryUtils.getApplicationDataDirectory(context) + filePath)
                     .listener(object : RequestListener<Drawable> {

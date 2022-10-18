@@ -19,6 +19,8 @@ const val WORK_MANAGER_RECOVERY = "work_manager_recovery"
  *
  ***************************************************************************************************/
 const val SYMBOL_SELECT_ALL = 9999
+const val SYMBOL_EASTER_EGG = 10000
+const val SYMBOL_USER_CUSTOM_START = 10001
 
 //  Weather 0 ~ 39
 const val WEATHER_SUNNY = 1

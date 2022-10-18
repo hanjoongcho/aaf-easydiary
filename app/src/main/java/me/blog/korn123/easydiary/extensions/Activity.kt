@@ -39,10 +39,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
 import id.zelory.compressor.Compressor
-import io.realm.RealmList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import me.blog.korn123.commons.utils.BitmapUtils
 import me.blog.korn123.commons.utils.DateUtils
@@ -334,9 +332,11 @@ fun Activity.startMainActivityWithClearTask() {
 fun Activity.isAccessFromOutside(): Boolean = intent.getStringExtra(DIARY_EXECUTION_MODE) == EXECUTION_MODE_ACCESS_FROM_OUTSIDE
 
 // FIXME: WIP START
-fun getCustomSymbolPaths(sequence: Int): List<PhotoUri> {
+fun getCustomSymbolPaths(symbolSequence: Int): List<PhotoUri> {
     // EasyDiaryUtils.getApplicationDataDirectory(this)
-    return EasyDiaryDbHelper.findDiaryBy(sequence)?.photoUris ?: listOf()
+    val items = EasyDiaryDbHelper.findDiary(null, false, 0, 0, symbolSequence)
+    val diary = if (items.isNotEmpty()) items[0] else null
+    return diary?.photoUris ?: listOf()
 }
 
 fun Activity.openFeelingSymbolDialog(guideMessage: String, selectedSymbolSequence: Int = 0, callback: (Int) -> Unit) {
@@ -369,15 +369,15 @@ fun Activity.openFeelingSymbolDialog(guideMessage: String, selectedSymbolSequenc
 
     // Append user customization symbols
     // FIXME: WIP START
-    var customSymbolSequence = 10000
+    var customSymbolSequence = SYMBOL_USER_CUSTOM_START
     if (config.enableDebugMode) {
         val customSymbols = arrayListOf<String>()
         categoryList.add("Custom")
-        getCustomSymbolPaths(3419).forEach { item ->
+        getCustomSymbolPaths(SYMBOL_EASTER_EGG).forEach { item ->
 //            item.getFilePath()
             customSymbols.add("$customSymbolSequence|${customSymbolSequence++}")
         }
-        itemList.add(arrayOf(getUncheckedSymbolItem(), *customSymbols.toTypedArray()))
+        itemList.add(arrayOf(getUncheckedSymbolItem(), "$SYMBOL_EASTER_EGG|Easter Egg", *customSymbols.toTypedArray()))
     }
     // FIXME: WIP END
 
