@@ -353,23 +353,9 @@ fun Activity.openFeelingSymbolDialog(guideMessage: String, selectedSymbolSequenc
     if (symbolUsedCountMap.isNotEmpty()) {
         val symbolMap = getDiarySymbolMap(this)
         categoryList.add(getString(R.string.recently_used_symbol))
-        itemList.add(symbolUsedCountMap.entries.map { entry -> "${entry.key}|${symbolMap[entry.key] ?: "🎃"}" }.toTypedArray())
+        itemList.add(arrayOf(getUncheckedSymbolItem(), *symbolUsedCountMap.entries.map { entry -> "${entry.key}|${symbolMap[entry.key] ?: "🎃"}" }.toTypedArray()))
         tabIndex++
     }
-
-    // Append user customization symbols
-    // FIXME: WIP START
-    var customSymbolSequence = 10000
-    if (config.enableDebugMode) {
-        val customSymbols = arrayListOf<String>()
-        categoryList.add("Custom")
-        getCustomSymbolPaths(3419).forEach { item ->
-//            item.getFilePath()
-            customSymbols.add("$customSymbolSequence|${customSymbolSequence++}")
-        }
-        itemList.add(customSymbols.toTypedArray())
-    }
-    // FIXME: WIP END
 
     addCategory(itemList, categoryList, "weather_item_array", getString(R.string.category_weather))
     addCategory(itemList, categoryList, "emotion_item_array", getString(R.string.category_emotion))
@@ -381,16 +367,30 @@ fun Activity.openFeelingSymbolDialog(guideMessage: String, selectedSymbolSequenc
     addCategory(itemList, categoryList, "symbol_item_array", getString(R.string.category_symbol))
     addCategory(itemList, categoryList, "flag_item_array", getString(R.string.category_flag))
 
-    val currentItem = when {
-        selectedSymbolSequence in 1..39 -> tabIndex
-        selectedSymbolSequence in 100..199 -> tabIndex.plus(1)
-        selectedSymbolSequence in 80..83 -> tabIndex.plus(3)
-        selectedSymbolSequence in 40..99 -> tabIndex.plus(2)
-        selectedSymbolSequence in 250..299 -> tabIndex.plus(4)
-        selectedSymbolSequence in 300..349 -> tabIndex.plus(5)
-        selectedSymbolSequence in 200..249 -> tabIndex.plus(6)
-        selectedSymbolSequence in 350..449 -> tabIndex.plus(7)
-        selectedSymbolSequence in 450..749 -> tabIndex.plus(8)
+    // Append user customization symbols
+    // FIXME: WIP START
+    var customSymbolSequence = 10000
+    if (config.enableDebugMode) {
+        val customSymbols = arrayListOf<String>()
+        categoryList.add("Custom")
+        getCustomSymbolPaths(3419).forEach { item ->
+//            item.getFilePath()
+            customSymbols.add("$customSymbolSequence|${customSymbolSequence++}")
+        }
+        itemList.add(arrayOf(getUncheckedSymbolItem(), *customSymbols.toTypedArray()))
+    }
+    // FIXME: WIP END
+
+    val currentItem = when (selectedSymbolSequence) {
+        in 1..39 -> tabIndex
+        in 100..199 -> tabIndex.plus(1)
+        in 80..83 -> tabIndex.plus(3)
+        in 40..99 -> tabIndex.plus(2)
+        in 250..299 -> tabIndex.plus(4)
+        in 300..349 -> tabIndex.plus(5)
+        in 200..249 -> tabIndex.plus(6)
+        in 350..449 -> tabIndex.plus(7)
+        in 450..749 -> tabIndex.plus(8)
         else -> 0
     }
 
@@ -430,9 +430,18 @@ fun Activity.openFeelingSymbolDialog(guideMessage: String, selectedSymbolSequenc
 fun Activity.addCategory(itemList: ArrayList<Array<String>>, categoryList: ArrayList<String>, resourceName: String, categoryName: String) {
     val resourceId = resources.getIdentifier(resourceName, "array", packageName)
     if (resourceId != 0) {
-        itemList.add(resources.getStringArray(resourceId))
+        if (resourceName == "weather_item_array") {
+            itemList.add(resources.getStringArray(resourceId))
+        } else {
+            itemList.add(arrayOf(getUncheckedSymbolItem(), *resources.getStringArray(resourceId)))
+        }
         categoryList.add(categoryName)
     }
+}
+
+fun Activity.getUncheckedSymbolItem(): String {
+    val resourceId = resources.getIdentifier("weather_item_array", "array", packageName)
+    return if (resourceId != 0) resources.getStringArray(resourceId)[0] else "-1|N/A"
 }
 
 fun Activity.getLayoutLayoutInflater(): LayoutInflater{

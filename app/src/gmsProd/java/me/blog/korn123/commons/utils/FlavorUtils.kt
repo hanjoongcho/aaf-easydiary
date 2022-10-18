@@ -346,7 +346,7 @@ object FlavorUtils {
 //                setImageBitmap(customSymbolSequenceToBitmap(context, 3419))
                 // FIXME: WIP START
                 val targetIndex = weatherFlag.minus(10000)
-                val filePath = if (getCustomSymbolPaths(3419).size > targetIndex) getCustomSymbolPaths(3419).get(targetIndex).getFilePath() else ""
+                val filePath = if (getCustomSymbolPaths(3419).size > targetIndex) getCustomSymbolPaths(3419)[targetIndex].getFilePath() else ""
                 Glide.with(this)
                     .load(EasyDiaryUtils.getApplicationDataDirectory(context) + filePath)
                     .listener(object : RequestListener<Drawable> {
