@@ -74,8 +74,25 @@ class DiaryMainWidgetFactory(private val context: Context) : RemoteViewsService.
                         val targetIndex = diaryDto.weather.minus(SYMBOL_USER_CUSTOM_START)
                         val photoUris = getCustomSymbolPaths(SYMBOL_EASTER_EGG, realmInstance)
                         val filePath = if (photoUris.size > targetIndex) photoUris[targetIndex].getFilePath() else ""
-                        setImageViewBitmap(R.id.diarySymbol, BitmapUtils.decodeFileCropCenter(EasyDiaryUtils.getApplicationDataDirectory(context) + filePath, 300))
+//                        setImageViewBitmap(R.id.diarySymbol, BitmapUtils.decodeFileCropCenter(EasyDiaryUtils.getApplicationDataDirectory(context) + filePath, 300))
+
+                        Glide
+                            .with(context).asBitmap()
+                            .load(EasyDiaryUtils.getApplicationDataDirectory(context) + filePath)
+                            .transform(CenterCrop(), RoundedCorners(context.dpToPixel(5F)))
+                            .into(object : CustomTarget<Bitmap>(300, 300) {
+                                override fun onResourceReady(
+                                    resource: Bitmap,
+                                    transition: Transition<in Bitmap>?
+                                ) {
+                                    setImageViewBitmap(R.id.diarySymbol, resource)
+
+                                }
+
+                                override fun onLoadCleared(placeholder: Drawable?) {}
+                            })
                         realmInstance.close()
+
                     }
                 }
             } else {
