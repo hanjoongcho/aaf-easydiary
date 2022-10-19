@@ -39,6 +39,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
 import id.zelory.compressor.Compressor
+import io.realm.Realm
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -332,9 +333,9 @@ fun Activity.startMainActivityWithClearTask() {
 fun Activity.isAccessFromOutside(): Boolean = intent.getStringExtra(DIARY_EXECUTION_MODE) == EXECUTION_MODE_ACCESS_FROM_OUTSIDE
 
 // FIXME: WIP START
-fun getCustomSymbolPaths(symbolSequence: Int): List<PhotoUri> {
+fun getCustomSymbolPaths(symbolSequence: Int, realmInstance: Realm = EasyDiaryDbHelper.getTemporaryInstance()): List<PhotoUri> {
     // EasyDiaryUtils.getApplicationDataDirectory(this)
-    val items = EasyDiaryDbHelper.findDiary(null, false, 0, 0, symbolSequence)
+    val items = EasyDiaryDbHelper.findDiary(null, false, 0, 0, symbolSequence, realmInstance)
     val diary = if (items.isNotEmpty()) items[0] else null
     return diary?.photoUris ?: listOf()
 }
