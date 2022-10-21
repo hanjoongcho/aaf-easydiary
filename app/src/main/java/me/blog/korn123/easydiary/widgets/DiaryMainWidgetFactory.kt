@@ -71,18 +71,20 @@ class DiaryMainWidgetFactory(private val context: Context) : RemoteViewsService.
                 if (diaryDto.weather < SYMBOL_USER_CUSTOM_START) {
                     setImageViewResource(R.id.diarySymbol, FlavorUtils.sequenceToSymbolResourceId(diaryDto.weather))
                 } else {
-                    EasyDiaryDbHelper.getTemporaryInstance().let { realmInstance ->
-                        val targetIndex = diaryDto.weather.minus(SYMBOL_USER_CUSTOM_START)
-                        val photoUris = getCustomSymbolPaths(SYMBOL_EASTER_EGG, realmInstance)
-                        val filePath = if (photoUris.size > targetIndex) photoUris[targetIndex].getFilePath() else ""
+                    if (context.config.enableDebugMode) {
+                        EasyDiaryDbHelper.getTemporaryInstance().let { realmInstance ->
+                            val targetIndex = diaryDto.weather.minus(SYMBOL_USER_CUSTOM_START)
+                            val photoUris = getCustomSymbolPaths(SYMBOL_EASTER_EGG, realmInstance)
+                            val filePath = if (photoUris.size > targetIndex) photoUris[targetIndex].getFilePath() else ""
 //                        setImageViewBitmap(R.id.diarySymbol, BitmapUtils.decodeFileCropCenter(EasyDiaryUtils.getApplicationDataDirectory(context) + filePath, 300))
-                        val futureBitmap = Glide
-                            .with(context).asBitmap()
-                            .load(EasyDiaryUtils.getApplicationDataDirectory(context) + filePath)
-                            .transform(CenterCrop(), RoundedCorners(context.dpToPixel(5F)))
-                            .submit(300, 300)
-                        setImageViewBitmap(R.id.diarySymbol, futureBitmap.get())
-                        realmInstance.close()
+                            val futureBitmap = Glide
+                                .with(context).asBitmap()
+                                .load(EasyDiaryUtils.getApplicationDataDirectory(context) + filePath)
+                                .transform(CenterCrop(), RoundedCorners(context.dpToPixel(5F)))
+                                .submit(300, 300)
+                            setImageViewBitmap(R.id.diarySymbol, futureBitmap.get())
+                            realmInstance.close()
+                        }
                     }
                 }
             } else {

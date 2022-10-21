@@ -13,6 +13,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import me.blog.korn123.easydiary.R
+import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.getCustomSymbolPaths
 import me.blog.korn123.easydiary.helper.*
@@ -344,20 +345,22 @@ object FlavorUtils {
             } else {
 //                setImageBitmap(customSymbolSequenceToBitmap(context, 3419))
                 // FIXME: WIP START
-                val targetIndex = weatherFlag.minus(SYMBOL_USER_CUSTOM_START)
-                val filePath = if (getCustomSymbolPaths(SYMBOL_EASTER_EGG).size > targetIndex) getCustomSymbolPaths(SYMBOL_EASTER_EGG)[targetIndex].getFilePath() else ""
-                Glide.with(this)
-                    .load(EasyDiaryUtils.getApplicationDataDirectory(context) + filePath)
-                    .listener(object : RequestListener<Drawable> {
-                        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                            return false
-                        }
-                        override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                            return false
-                        }
-                    })
-                    .transform(CenterCrop(), RoundedCorners(context.dpToPixel(5F)))
-                    .into(this)
+                if (context.config.enableDebugMode) {
+                    val targetIndex = weatherFlag.minus(SYMBOL_USER_CUSTOM_START)
+                    val filePath = if (getCustomSymbolPaths(SYMBOL_EASTER_EGG).size > targetIndex) getCustomSymbolPaths(SYMBOL_EASTER_EGG)[targetIndex].getFilePath() else ""
+                    Glide.with(this)
+                        .load(EasyDiaryUtils.getApplicationDataDirectory(context) + filePath)
+                        .listener(object : RequestListener<Drawable> {
+                            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                                return false
+                            }
+                            override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                                return false
+                            }
+                        })
+                        .transform(CenterCrop(), RoundedCorners(context.dpToPixel(5F)))
+                        .into(this)
+                }
                 // FIXME: WIP END
             }
         }
