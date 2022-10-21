@@ -333,9 +333,9 @@ fun Activity.startMainActivityWithClearTask() {
 fun Activity.isAccessFromOutside(): Boolean = intent.getStringExtra(DIARY_EXECUTION_MODE) == EXECUTION_MODE_ACCESS_FROM_OUTSIDE
 
 // FIXME: WIP START
-fun getCustomSymbolPaths(symbolSequence: Int, realmInstance: Realm = EasyDiaryDbHelper.getTemporaryInstance()): List<PhotoUri> {
+fun getCustomSymbolPaths(symbolSequence: Int, realmInstance: Realm? = null): List<PhotoUri> {
     // EasyDiaryUtils.getApplicationDataDirectory(this)
-    val items = EasyDiaryDbHelper.findDiary(null, false, 0, 0, symbolSequence, realmInstance)
+    val items = EasyDiaryDbHelper.findDiary(null, false, 0, 0, symbolSequence, realmInstance!!)
     val diary = if (items.isNotEmpty()) items[0] else null
     return diary?.photoUris ?: listOf()
 }

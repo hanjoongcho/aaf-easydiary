@@ -17,6 +17,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.DownsampleStrategy
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.FutureTarget
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.Target
@@ -75,24 +76,13 @@ class DiaryMainWidgetFactory(private val context: Context) : RemoteViewsService.
                         val photoUris = getCustomSymbolPaths(SYMBOL_EASTER_EGG, realmInstance)
                         val filePath = if (photoUris.size > targetIndex) photoUris[targetIndex].getFilePath() else ""
 //                        setImageViewBitmap(R.id.diarySymbol, BitmapUtils.decodeFileCropCenter(EasyDiaryUtils.getApplicationDataDirectory(context) + filePath, 300))
-
-                        Glide
+                        val futureBitmap = Glide
                             .with(context).asBitmap()
                             .load(EasyDiaryUtils.getApplicationDataDirectory(context) + filePath)
                             .transform(CenterCrop(), RoundedCorners(context.dpToPixel(5F)))
-                            .into(object : CustomTarget<Bitmap>(300, 300) {
-                                override fun onResourceReady(
-                                    resource: Bitmap,
-                                    transition: Transition<in Bitmap>?
-                                ) {
-                                    setImageViewBitmap(R.id.diarySymbol, resource)
-
-                                }
-
-                                override fun onLoadCleared(placeholder: Drawable?) {}
-                            })
+                            .submit(300, 300)
+                        setImageViewBitmap(R.id.diarySymbol, futureBitmap.get())
                         realmInstance.close()
-
                     }
                 }
             } else {
