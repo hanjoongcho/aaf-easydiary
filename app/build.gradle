@@ -29,8 +29,8 @@ android {
         applicationId "me.blog.korn123.easydiary"
         minSdkVersion 19
         targetSdkVersion versions.compileSdk
-        versionCode 282
-        versionName '1.4.282.202210220'
+        versionCode 283
+        versionName '1.4.283.202210240'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -99,15 +99,9 @@ android {
         }
     }
     packagingOptions {
-        exclude 'META-INF/commons_release.kotlin_module'
-        exclude 'META-INF/rxjava.properties'
-        exclude 'META-INF/DEPENDENCIES'
-    }
-    lintOptions {
-        checkReleaseBuilds false
-        // Or, if you prefer, you can continue to check for errors in release builds,
-        // but continue the build even when errors are found:
-        abortOnError false
+        resources {
+            excludes += ['META-INF/commons_release.kotlin_module', 'META-INF/rxjava.properties', 'META-INF/DEPENDENCIES']
+        }
     }
     kotlinOptions {
         jvmTarget = "1.8"
@@ -115,6 +109,11 @@ android {
     compileOptions {
         targetCompatibility JavaVersion.VERSION_1_8
         sourceCompatibility JavaVersion.VERSION_1_8
+    }
+    namespace 'me.blog.korn123.easydiary'
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
     }
 }
 
@@ -205,7 +204,7 @@ dependencies {
     androidTestImplementation 'androidx.test:core-ktx:1.4.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.ext:junit-ktx:1.1.3'
-    androidTestImplementation 'androidx.test:runner:1.5.0-alpha04'
+    androidTestImplementation 'androidx.test:runner:1.5.0-beta01'
     androidTestImplementation('androidx.test.espresso:espresso-core:3.4.0-alpha02', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -213,9 +212,9 @@ dependencies {
     // test
     testImplementation 'androidx.test:core:1.4.0'
     testImplementation 'androidx.test.ext:junit:1.1.3'
-    testImplementation 'androidx.test.espresso:espresso-core:3.5.0-alpha07'
-    testImplementation 'androidx.test.espresso:espresso-intents:3.5.0-alpha07'
-    testImplementation 'androidx.test.ext:truth:1.5.0-alpha07'
+    testImplementation 'androidx.test.espresso:espresso-core:3.5.0-beta01'
+    testImplementation 'androidx.test.espresso:espresso-intents:3.5.0-beta01'
+    testImplementation 'androidx.test.ext:truth:1.5.0-beta01'
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.robolectric:robolectric:4.5-alpha-1'
 }
