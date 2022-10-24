@@ -71,6 +71,7 @@ class DiaryMainWidgetFactory(private val context: Context) : RemoteViewsService.
                 if (diaryDto.weather < SYMBOL_USER_CUSTOM_START) {
                     setImageViewResource(R.id.diarySymbol, FlavorUtils.sequenceToSymbolResourceId(diaryDto.weather))
                 } else {
+                    // FIXME: WIP START
                     if (context.config.enableDebugMode) {
                         EasyDiaryDbHelper.getTemporaryInstance().let { realmInstance ->
                             val targetIndex = diaryDto.weather.minus(SYMBOL_USER_CUSTOM_START)
@@ -86,6 +87,7 @@ class DiaryMainWidgetFactory(private val context: Context) : RemoteViewsService.
                             realmInstance.close()
                         }
                     }
+                    // FIXME: WIP END
                 }
             } else {
                 val drawable = AppCompatResources.getDrawable(context, FlavorUtils.sequenceToSymbolResourceId(diaryDto.weather))

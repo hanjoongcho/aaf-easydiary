@@ -234,9 +234,6 @@ fun Activity.getRootViewHeight(): Int {
  ***************************************************************************************************/
 fun Activity.resumeLock() {
     if (config.aafPinLockPauseMillis > 0L && System.currentTimeMillis() - config.aafPinLockPauseMillis > 1000) {
-        
-        // FIXME remove test code
-//        Toast.makeText(this, "${(System.currentTimeMillis() - config.aafPinLockPauseMillis) / 1000}", Toast.LENGTH_LONG).show()
         when {
             config.fingerprintLockEnable -> {
                 startActivity(Intent(this, FingerprintLockActivity::class.java).apply {
