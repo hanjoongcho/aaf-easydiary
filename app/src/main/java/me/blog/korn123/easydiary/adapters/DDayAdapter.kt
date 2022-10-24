@@ -169,10 +169,12 @@ class DDayAdapter(
         fun bindTo(dDay: DDay) {
             EasyDiaryUtils.boldStringForce(itemDDayBinding.textDayRemaining)
             itemDDayBinding.run {
+                val targetDateString = DateUtils.getDateStringFromTimeMillis(dDay.targetTimeStamp, SimpleDateFormat.MEDIUM)
+                val currentDateString = DateUtils.getDateStringFromTimeMillis(System.currentTimeMillis(), SimpleDateFormat.MEDIUM)
                 textTitle.text = dDay.title
-                textTargetDate.text = DateUtils.getDateStringFromTimeMillis(dDay.targetTimeStamp, SimpleDateFormat.MEDIUM)
+                textTargetDate.text = targetDateString
 //                textTargetTime.text = DateUtils.getTimeStringFromTimeMillis(dDay.targetTimeStamp, SimpleDateFormat.SHORT)
-                textDayRemaining.text = dDay.getDayRemaining()
+                textDayRemaining.text = if (targetDateString == currentDateString) "D-Day" else dDay.getDayRemaining()
                 when {
                     dDay.getDayRemaining().matches(Regex("^D－0$|^D＋0$")) -> {
                         imgLightRed.alpha = 0.1F
