@@ -2,6 +2,7 @@ package me.blog.korn123.easydiary.adapters
 
 import android.animation.ArgbEvaluator
 import android.app.Activity
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,13 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
+import io.noties.markwon.Markwon
+import io.noties.markwon.ext.tables.TablePlugin
+import io.noties.markwon.ext.tables.TableTheme
+import io.noties.markwon.syntax.Prism4jThemeDefault
+import io.noties.markwon.syntax.SyntaxHighlightPlugin
+import io.noties.markwon.utils.ColorUtils
+import io.noties.markwon.utils.Dip
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createBackgroundGradientDrawable
@@ -93,6 +101,10 @@ class DiaryMainItemAdapter(
                         initTextSize(this)
                         updateCardViewPolicy(this)
                         FontUtils.setFontsTypeface(context, null, this)
+
+
+                        Markwon.builder(activity)
+                            .build().apply { setMarkdown(textMarkdown, diary.contents!!) }
                     }
 
                     if (config.enableLocationInfo) {
