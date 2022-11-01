@@ -65,6 +65,12 @@
                             android:id="@+id/diaryContents"
                             android:gravity="start"
                             style="@style/text_diary_read_fragment_inner_contents"/>
+                        <com.simplemobiletools.commons.views.MyTextView
+                            android:id="@+id/text_markdown"
+                            android:layout_marginTop="@dimen/card_contents_padding"
+                            android:ellipsize="end"
+                            android:gravity="start"
+                            style="@style/text_diary_main_item_inner_contents"/>
                     </LinearLayout>
                 </ScrollView>
                 <RelativeLayout

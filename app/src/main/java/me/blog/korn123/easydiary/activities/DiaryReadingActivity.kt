@@ -21,6 +21,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.fragment.app.viewModels
 import com.github.amlcurran.showcaseview.ShowcaseView
 import com.github.amlcurran.showcaseview.targets.ViewTarget
+import io.noties.markwon.Markwon
 import me.blog.korn123.commons.utils.*
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createAttachedPhotoView
 import me.blog.korn123.easydiary.R
@@ -631,6 +632,9 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         private fun initContents() {
             val diaryDto = EasyDiaryDbHelper.findDiaryBy(getSequence())!!
             mBinding.run {
+                Markwon.builder(requireContext())
+                    .build().apply { setMarkdown(textMarkdown, diaryDto.contents!!) }
+
                 if (StringUtils.isEmpty(diaryDto.title)) {
                     diaryTitle.visibility = View.GONE
                 }

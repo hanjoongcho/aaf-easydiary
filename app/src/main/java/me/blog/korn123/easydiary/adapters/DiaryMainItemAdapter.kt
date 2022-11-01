@@ -219,6 +219,11 @@ class DiaryMainItemAdapter(
                     true -> activity.config.summaryMaxLines
                     false -> Integer.MAX_VALUE
                 }
+
+                textMarkdown.maxLines = when (activity.config.enableContentsSummary) {
+                    true -> activity.config.summaryMaxLines
+                    false -> Integer.MAX_VALUE
+                }
             }
         }
     }
