@@ -1,149 +1,172 @@
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
     <data>
-        <import type="android.view.View"/>
+
+        <import type="android.view.View" />
+
         <variable
             name="view_model"
             type="me.blog.korn123.easydiary.viewmodels.DiaryReadViewModel" />
     </data>
+
     <LinearLayout
         android:id="@+id/main_holder"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
         <me.blog.korn123.easydiary.views.FixedCardView
-            app:fixedAppcompatPadding="false"
+            style="@style/AppCard"
+            android:layout_height="match_parent"
+            android:layout_margin="0dp"
             app:applyCardBackgroundColor="true"
             app:cardCornerRadius="0dp"
             app:contentPadding="0dp"
-            android:layout_margin="0dp"
-            android:layout_height="match_parent"
-            style="@style/AppCard">
+            app:fixedAppcompatPadding="false">
+
             <androidx.appcompat.widget.LinearLayoutCompat
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
                 <ScrollView
                     android:id="@+id/scroll_diary_contents"
-                    android:fillViewport="false"
                     android:layout_width="match_parent"
+                    android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:layout_height="0dp">
+                    android:fillViewport="false">
+
                     <LinearLayout
-                        android:padding="@dimen/card_contents_padding"
-                        style="@style/LinearLayoutVertical">
+                        style="@style/LinearLayoutVertical"
+                        android:padding="@dimen/card_contents_padding">
+
                         <LinearLayout
-                            android:layout_height="wrap_content"
-                            style="@style/LinearLayoutHorizontal">
+                            style="@style/LinearLayoutHorizontal"
+                            android:layout_height="wrap_content">
+
                             <ImageView
                                 android:id="@+id/weather"
-                                android:layout_marginEnd="10dp"
                                 android:layout_width="32dp"
-                                android:layout_height="32dp" />
+                                android:layout_height="32dp"
+                                android:layout_marginEnd="10dp" />
+
                             <LinearLayout
-                                android:orientation="vertical"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
                                 <com.simplemobiletools.commons.views.MyTextView
-                                    tools:text="Diary Title"
                                     android:id="@+id/diaryTitle"
+                                    style="@style/text_diary_read_fragment_inner_contents"
                                     android:gravity="center_vertical"
-                                    style="@style/text_diary_read_fragment_inner_contents"/>
+                                    tools:text="Diary Title" />
+
                                 <com.simplemobiletools.commons.views.MyTextView
-                                    tools:text="2021년10월23일 토요일 05:14"
-                                    android:textColor="@color/default_text_color"
-                                    android:gravity="center_vertical|end"
                                     android:id="@+id/date"
-                                    style="@style/text_diary_read_fragment_inner_contents"/>
+                                    style="@style/text_diary_read_fragment_inner_contents"
+                                    android:gravity="center_vertical|end"
+                                    android:textColor="@color/default_text_color"
+                                    tools:text="2021년10월23일 토요일 05:14" />
                             </LinearLayout>
                         </LinearLayout>
 
                         <com.simplemobiletools.commons.views.MyTextView
-                            android:layout_marginTop="@dimen/card_contents_padding"
-                            android:id="@+id/diaryContents"
-                            android:gravity="start"
-                            style="@style/text_diary_read_fragment_inner_contents"/>
-                        <com.simplemobiletools.commons.views.MyTextView
                             android:id="@+id/text_markdown"
+                            style="@style/text_diary_main_item_inner_contents"
                             android:layout_marginTop="@dimen/card_contents_padding"
                             android:ellipsize="end"
-                            android:gravity="start"
-                            style="@style/text_diary_main_item_inner_contents"/>
+                            android:gravity="start" />
+
+                        <com.simplemobiletools.commons.views.MyTextView
+                            android:id="@+id/diaryContents"
+                            style="@style/text_diary_read_fragment_inner_contents"
+                            android:layout_marginTop="@dimen/card_contents_padding"
+                            android:gravity="start" />
+
                     </LinearLayout>
                 </ScrollView>
+
                 <RelativeLayout
-                    android:visibility="@{ view_model.isShowAddress || view_model.isShowContentsCounting ? View.VISIBLE : View.GONE }"
+                    android:id="@+id/layout_info_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:paddingLeft="@dimen/card_contents_padding"
                     android:paddingRight="@dimen/card_contents_padding"
                     android:paddingBottom="@dimen/card_contents_padding"
-                    android:id="@+id/layout_info_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:visibility="@{ view_model.isShowAddress || view_model.isShowContentsCounting ? View.VISIBLE : View.GONE }">
+
                     <me.blog.korn123.easydiary.views.FixedCardView
-                        app:fixedAppcompatPadding="true"
-                        android:visibility="@{ view_model.isShowAddress ? View.VISIBLE : View.GONE }"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignWithParentIfMissing="true"
                         android:layout_toStartOf="@+id/card_contents_counting"
-                        android:layout_alignWithParentIfMissing="true">
+                        android:visibility="@{ view_model.isShowAddress ? View.VISIBLE : View.GONE }"
+                        app:fixedAppcompatPadding="true">
+
                         <LinearLayout
-                            android:padding="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:foreground="?attr/selectableItemBackgroundBorderless"
                             android:gravity="center"
                             android:orientation="horizontal"
-                            android:foreground="?attr/selectableItemBackgroundBorderless"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
+                            android:padding="5dp">
+
                             <ImageView
-                                android:layout_marginEnd="3dp"
                                 android:id="@+id/locationSymbol"
-                                android:src="@drawable/ic_map_marker_2"
                                 android:layout_width="10dp"
-                                android:layout_height="10dp"/>
+                                android:layout_height="10dp"
+                                android:layout_marginEnd="3dp"
+                                android:src="@drawable/ic_map_marker_2" />
+
                             <TextView
                                 android:id="@+id/locationLabel"
-                                android:text="There is no location information. Click to update location information."
-                                android:textColor="?attr/colorPrimary"
                                 android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
                                 android:ellipsize="end"
                                 android:singleLine="true"
-                                android:layout_height="wrap_content"/>
+                                android:text="There is no location information. Click to update location information."
+                                android:textColor="?attr/colorPrimary" />
                         </LinearLayout>
                     </me.blog.korn123.easydiary.views.FixedCardView>
+
                     <me.blog.korn123.easydiary.views.FixedCardView
                         android:id="@+id/card_contents_counting"
-                        app:fixedAppcompatPadding="true"
-                        android:visibility="@{ view_model.isShowContentsCounting ? View.VISIBLE : View.GONE }"
-                        android:layout_marginStart="5dp"
-                        android:layout_alignParentEnd="true"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginStart="5dp"
+                        android:visibility="@{ view_model.isShowContentsCounting ? View.VISIBLE : View.GONE }"
+                        app:fixedAppcompatPadding="true">
+
                         <TextView
-                            tools:text="100"
                             android:id="@+id/contentsLength"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:padding="5dp"
                             android:textColor="?attr/colorPrimary"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            tools:text="100" />
                     </me.blog.korn123.easydiary.views.FixedCardView>
                 </RelativeLayout>
+
                 <RelativeLayout
-                    tools:visibility="visible"
                     android:id="@+id/photoContainerScrollView"
-                    android:visibility="gone"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
                     <HorizontalScrollView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
+
                         <LinearLayout
                             android:id="@+id/photoContainer"
-                            android:gravity="center"
-                            android:orientation="horizontal"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
-                        </LinearLayout>
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal"></LinearLayout>
                     </HorizontalScrollView>
                 </RelativeLayout>
             </androidx.appcompat.widget.LinearLayoutCompat>

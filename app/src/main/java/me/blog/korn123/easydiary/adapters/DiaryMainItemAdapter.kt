@@ -2,7 +2,6 @@ package me.blog.korn123.easydiary.adapters
 
 import android.animation.ArgbEvaluator
 import android.app.Activity
-import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.view.View
 import android.view.ViewGroup
@@ -15,13 +14,6 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
-import io.noties.markwon.Markwon
-import io.noties.markwon.ext.tables.TablePlugin
-import io.noties.markwon.ext.tables.TableTheme
-import io.noties.markwon.syntax.Prism4jThemeDefault
-import io.noties.markwon.syntax.SyntaxHighlightPlugin
-import io.noties.markwon.utils.ColorUtils
-import io.noties.markwon.utils.Dip
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createBackgroundGradientDrawable
@@ -33,7 +25,13 @@ import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.databinding.ItemDiaryMainBinding
 import me.blog.korn123.easydiary.enums.Calculation
 import me.blog.korn123.easydiary.enums.DiaryMode
-import me.blog.korn123.easydiary.extensions.*
+import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
+import me.blog.korn123.easydiary.extensions.config
+import me.blog.korn123.easydiary.extensions.dpToPixel
+import me.blog.korn123.easydiary.extensions.initTextSize
+import me.blog.korn123.easydiary.extensions.updateAppViews
+import me.blog.korn123.easydiary.extensions.updateCardViewPolicy
+import me.blog.korn123.easydiary.extensions.updateTextColors
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
 import me.blog.korn123.easydiary.helper.THUMBNAIL_BACKGROUND_ALPHA
@@ -101,10 +99,6 @@ class DiaryMainItemAdapter(
                         initTextSize(this)
                         updateCardViewPolicy(this)
                         FontUtils.setFontsTypeface(context, null, this)
-
-
-                        Markwon.builder(activity)
-                            .build().apply { setMarkdown(textMarkdown, diary.contents!!) }
                     }
 
                     if (config.enableLocationInfo) {
@@ -216,11 +210,6 @@ class DiaryMainItemAdapter(
                 }
 
                 textContents.maxLines = when (activity.config.enableContentsSummary) {
-                    true -> activity.config.summaryMaxLines
-                    false -> Integer.MAX_VALUE
-                }
-
-                textMarkdown.maxLines = when (activity.config.enableContentsSummary) {
                     true -> activity.config.summaryMaxLines
                     false -> Integer.MAX_VALUE
                 }
