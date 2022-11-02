@@ -71,14 +71,6 @@
                                     tools:text="2021년10월23일 토요일 05:14" />
                             </LinearLayout>
                         </LinearLayout>
-
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:id="@+id/text_markdown"
-                            style="@style/text_diary_main_item_inner_contents"
-                            android:layout_marginTop="@dimen/card_contents_padding"
-                            android:ellipsize="end"
-                            android:gravity="start" />
-
                         <com.simplemobiletools.commons.views.MyTextView
                             android:id="@+id/diaryContents"
                             style="@style/text_diary_read_fragment_inner_contents"

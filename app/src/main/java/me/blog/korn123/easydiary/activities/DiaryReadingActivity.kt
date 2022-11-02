@@ -632,15 +632,13 @@ class DiaryReadingActivity : EasyDiaryActivity() {
         private fun initContents() {
             val diaryDto = EasyDiaryDbHelper.findDiaryBy(getSequence())!!
             mBinding.run {
-                Markwon.builder(requireContext())
-                    .build().apply { setMarkdown(textMarkdown, diaryDto.contents!!) }
-
                 if (StringUtils.isEmpty(diaryDto.title)) {
                     diaryTitle.visibility = View.GONE
                 }
                 diaryTitle.text = diaryDto.title
                 EasyDiaryUtils.boldString(requireContext(), diaryTitle)
-                diaryContents.text = diaryDto.contents
+                if (requireActivity().config.enableDebugMode) Markwon.builder(requireContext())
+                    .build().apply { setMarkdown(diaryContents, diaryDto.contents!!) } else diaryContents.text = diaryDto.contents
                 date.text = when (diaryDto.isAllDay) {
                     true -> DateUtils.getDateStringFromTimeMillis(diaryDto.currentTimeMillis)
                     false -> DateUtils.getDateTimeStringFromTimeMillis(diaryDto.currentTimeMillis)
