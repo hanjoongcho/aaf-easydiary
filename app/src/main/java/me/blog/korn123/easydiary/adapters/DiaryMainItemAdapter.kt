@@ -14,6 +14,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
+import io.noties.markwon.Markwon
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createBackgroundGradientDrawable
@@ -39,15 +40,20 @@ import me.blog.korn123.easydiary.models.Diary
 import org.apache.commons.lang3.StringUtils
 
 class DiaryMainItemAdapter(
-        val activity: Activity,
-        private val diaryItems: List<Diary>,
-        val itemClickCallback: (diary: Diary) -> Unit,
-        val itemLongClickCallback: () -> Unit
-) : RecyclerView.Adapter<DiaryMainItemAdapter.ViewHolder>(), FastScrollRecyclerView.SectionedAdapter {
+    val activity: Activity,
+    private val diaryItems: List<Diary>,
+    val itemClickCallback: (diary: Diary) -> Unit,
+    val itemLongClickCallback: () -> Unit
+) : RecyclerView.Adapter<DiaryMainItemAdapter.ViewHolder>(),
+    FastScrollRecyclerView.SectionedAdapter {
     var currentQuery: String? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(activity, ItemDiaryMainBinding.inflate(activity.layoutInflater, parent, false), this)
+        return ViewHolder(
+            activity,
+            ItemDiaryMainBinding.inflate(activity.layoutInflater, parent, false),
+            this
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -67,6 +73,7 @@ class DiaryMainItemAdapter(
             } ?: ""
             return ellipsisString
         }
+
         val label = when (diaryItems[position].title?.isNotEmpty() ?: false) {
             true -> String.format("%s", ellipsis(diaryItems[position].title))
             false -> String.format("%s", ellipsis(diaryItems[position].contents))
@@ -83,7 +90,9 @@ class DiaryMainItemAdapter(
     }
 
     inner class ViewHolder(
-            val activity: Activity, private val itemDiaryMainBinding: ItemDiaryMainBinding, val adapter: DiaryMainItemAdapter
+        val activity: Activity,
+        private val itemDiaryMainBinding: ItemDiaryMainBinding,
+        val adapter: DiaryMainItemAdapter
     ) : RecyclerView.ViewHolder(itemDiaryMainBinding.root) {
         fun bindTo(diary: Diary) {
             itemDiaryMainBinding.run {
@@ -109,7 +118,9 @@ class DiaryMainItemAdapter(
 
                             locationLabel.text = it.address
                             locationContainer.visibility = View.VISIBLE
-                        } ?: { locationContainer.visibility = View.GONE } ()
+                        } ?: run {
+                            locationContainer.visibility = View.GONE
+                        }
                     } else {
                         locationContainer.visibility = View.GONE
                     }
@@ -119,7 +130,10 @@ class DiaryMainItemAdapter(
 //                        setTextColor(config.textColor)
 //                        background = getLabelBackground()
 
-                            text = context.getString(R.string.diary_contents_length, diary.contents?.length ?: 0)
+                            text = context.getString(
+                                R.string.diary_contents_length,
+                                diary.contents?.length ?: 0
+                            )
                         }
                         contentsLengthContainer.visibility = View.VISIBLE
                     } else {
@@ -148,7 +162,10 @@ class DiaryMainItemAdapter(
                     textTitle.visibility = View.VISIBLE
                 }
                 textTitle.text = diary.title
-                textContents.text = diary.contents
+                if (activity.config.enableDebugMode) Markwon.builder(activity)
+                    .build()
+                    .apply { setMarkdown(textContents, diary.contents!!) } else textContents.text =
+                    diary.contents
 
                 // highlight current query
                 if (StringUtils.isNotEmpty(currentQuery)) {
@@ -168,13 +185,15 @@ class DiaryMainItemAdapter(
                     true -> DateUtils.getDateStringFromTimeMillis(diary.currentTimeMillis)
                     false -> DateUtils.getDateTimeStringFromTimeMillis(diary.currentTimeMillis)
                 }
-                if (activity.config.enableDebugMode) textDateTime.text = "[${diary.originSequence}] ${textDateTime.text}"
+                if (activity.config.enableDebugMode) textDateTime.text =
+                    "[${diary.originSequence}] ${textDateTime.text}"
                 FlavorUtils.initWeatherView(activity, imageSymbol, diary.weather)
 
                 when (diary.photoUris?.size ?: 0 > 0) {
                     true -> {
                         photoViews.visibility = View.VISIBLE
                     }
+
                     false -> photoViews.visibility = View.GONE
                 }
 
@@ -184,25 +203,51 @@ class DiaryMainItemAdapter(
                         val imageXY = activity.dpToPixel(32F)
                         val imageView = ImageView(activity)
                         val layoutParams = LinearLayout.LayoutParams(imageXY, imageXY)
-                        layoutParams.setMargins(0, activity.dpToPixel(1F), activity.dpToPixel(3F), 0)
+                        layoutParams.setMargins(
+                            0,
+                            activity.dpToPixel(1F),
+                            activity.dpToPixel(3F),
+                            0
+                        )
                         imageView.layoutParams = layoutParams
-                        imageView.background = createBackgroundGradientDrawable(activity.config.primaryColor, THUMBNAIL_BACKGROUND_ALPHA, imageXY * PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL)
+                        imageView.background = createBackgroundGradientDrawable(
+                            activity.config.primaryColor,
+                            THUMBNAIL_BACKGROUND_ALPHA,
+                            imageXY * PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL
+                        )
                         imageView.scaleType = ImageView.ScaleType.CENTER
                         activity.dpToPixel(1.5F, Calculation.FLOOR).apply {
                             imageView.setPadding(this, this, this, this)
                         }
                         val listener = object : RequestListener<Drawable> {
-                            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                            override fun onLoadFailed(
+                                e: GlideException?,
+                                model: Any?,
+                                target: Target<Drawable>?,
+                                isFirstResource: Boolean
+                            ): Boolean {
                                 return false
                             }
 
-                            override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                            override fun onResourceReady(
+                                resource: Drawable?,
+                                model: Any?,
+                                target: Target<Drawable>?,
+                                dataSource: DataSource?,
+                                isFirstResource: Boolean
+                            ): Boolean {
                                 return false
                             }
                         }
-                        Glide.with(activity).load(EasyDiaryUtils.getApplicationDataDirectory(activity) + it.getFilePath())
+                        Glide.with(activity)
+                            .load(EasyDiaryUtils.getApplicationDataDirectory(activity) + it.getFilePath())
                             .listener(listener)
-                            .apply(createThumbnailGlideOptions(imageXY * PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL, it.isEncrypt()))
+                            .apply(
+                                createThumbnailGlideOptions(
+                                    imageXY * PHOTO_CORNER_RADIUS_SCALE_FACTOR_NORMAL,
+                                    it.isEncrypt()
+                                )
+                            )
                             .into(imageView)
 //                    if (photoViews.childCount >= maxPhotos) return@map
                         photoViews.addView(imageView)
