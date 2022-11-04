@@ -922,10 +922,11 @@ fun Activity.clearHoldOrientation() {
 fun Activity.applyMarkDownPolicy(contentsView: TextView, contents: String, isTimeline: Boolean = false, dateString: String = "") {
     when (config.enableDebugMode) {
         true -> {
+            val boldDate = if (isTimeline) "**$dateString**  \n$contents" else contents
             Markwon.builder(this)
                 .usePlugin(MovementMethodPlugin.none())
                 .build()
-                .apply { setMarkdown(contentsView, contents) }
+                .apply { setMarkdown(contentsView, boldDate) }
         }
         false -> {
             if (isTimeline) applyBoldToDate(dateString, contents) else contentsView.text = contents
