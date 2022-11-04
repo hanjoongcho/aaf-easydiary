@@ -15,6 +15,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
 import io.noties.markwon.Markwon
+import io.noties.markwon.movement.MovementMethodPlugin
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils.createBackgroundGradientDrawable
@@ -163,6 +164,7 @@ class DiaryMainItemAdapter(
                 }
                 textTitle.text = diary.title
                 if (activity.config.enableDebugMode) Markwon.builder(activity)
+                    .usePlugin(MovementMethodPlugin.none())
                     .build()
                     .apply { setMarkdown(textContents, diary.contents!!) } else textContents.text =
                     diary.contents
