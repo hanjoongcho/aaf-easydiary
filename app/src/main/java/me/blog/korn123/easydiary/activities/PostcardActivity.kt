@@ -74,7 +74,8 @@ class PostcardActivity : EasyDiaryActivity() {
                 true -> diaryTitle.visibility = View.GONE
                 false -> diaryTitle.text = diaryDto.title
             }
-            contents.text = diaryDto.contents
+//            contents.text = diaryDto.contents
+            applyMarkDownPolicy(contents, diaryDto.contents!!)
             date.text = when (diaryDto.isAllDay) {
                 true -> DateUtils.getDateStringFromTimeMillis(diaryDto.currentTimeMillis)
                 false -> DateUtils.getDateTimeStringFromTimeMillis(diaryDto.currentTimeMillis)

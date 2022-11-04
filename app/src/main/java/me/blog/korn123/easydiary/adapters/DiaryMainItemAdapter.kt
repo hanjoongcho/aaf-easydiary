@@ -188,7 +188,7 @@ class DiaryMainItemAdapter(
                     "[${diary.originSequence}] ${textDateTime.text}"
                 FlavorUtils.initWeatherView(activity, imageSymbol, diary.weather)
 
-                when (diary.photoUris?.size ?: 0 > 0) {
+                when ((diary.photoUris?.size ?: 0) > 0) {
                     true -> {
                         photoViews.visibility = View.VISIBLE
                     }
@@ -197,7 +197,7 @@ class DiaryMainItemAdapter(
                 }
 
                 photoViews.removeAllViews()
-                if (diary.photoUris?.size ?: 0 > 0) {
+                if ((diary.photoUris?.size ?: 0) > 0) {
                     diary.photoUrisWithEncryptionPolicy()?.map {
                         val imageXY = activity.dpToPixel(32F)
                         val imageView = ImageView(activity)

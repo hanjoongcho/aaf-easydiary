@@ -75,6 +75,7 @@ class TimelineItemAdapter(
 //                false -> applyBoldToDate(DateUtils.timeMillisToDateTime(diaryDto.currentTimeMillis, DateUtils.TIME_PATTERN_WITH_SECONDS), mergedContents)
                 false -> applyBoldToDate(DateUtils.getTimeStringFromTimeMillis(diaryDto.currentTimeMillis, SimpleDateFormat.MEDIUM), mergedContents)
             }
+//            activity.applyMarkDownPolicy(text1, text1.text.toString())
             itemHolder.let {
                 context.updateTextColors(it, 0, 0)
                 context.updateAppViews(it)
