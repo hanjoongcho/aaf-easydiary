@@ -637,8 +637,7 @@ class DiaryReadingActivity : EasyDiaryActivity() {
                 }
                 diaryTitle.text = diaryDto.title
                 EasyDiaryUtils.boldString(requireContext(), diaryTitle)
-                if (requireActivity().config.enableDebugMode) Markwon.builder(requireContext())
-                    .build().apply { setMarkdown(diaryContents, diaryDto.contents!!) } else diaryContents.text = diaryDto.contents
+                requireActivity().applyMarkDownPolicy(diaryContents, diaryDto.contents!!)
                 date.text = when (diaryDto.isAllDay) {
                     true -> DateUtils.getDateStringFromTimeMillis(diaryDto.currentTimeMillis)
                     false -> DateUtils.getDateTimeStringFromTimeMillis(diaryDto.currentTimeMillis)

@@ -39,6 +39,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.models.Release
 import id.zelory.compressor.Compressor
+import io.noties.markwon.Markwon
+import io.noties.markwon.movement.MovementMethodPlugin
 import io.realm.Realm
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -912,4 +914,16 @@ fun Activity.holdCurrentOrientation() {
 
 fun Activity.clearHoldOrientation() {
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+}
+
+fun Activity.applyMarkDownPolicy(contentsView: TextView, contents: String) {
+    when (config.enableDebugMode) {
+        true -> {
+            Markwon.builder(this)
+                .usePlugin(MovementMethodPlugin.none())
+                .build()
+                .apply { setMarkdown(contentsView, contents) }
+        }
+        false -> { contentsView.text = contents }
+    }
 }

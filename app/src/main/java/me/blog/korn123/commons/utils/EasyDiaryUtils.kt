@@ -43,6 +43,8 @@ import com.google.common.reflect.TypeToken
 import com.google.gson.GsonBuilder
 import com.google.gson.stream.JsonReader
 import id.zelory.compressor.Compressor
+import io.noties.markwon.Markwon
+import io.noties.markwon.movement.MovementMethodPlugin
 import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.adapters.SecondItemAdapter
 import me.blog.korn123.easydiary.enums.Calculation

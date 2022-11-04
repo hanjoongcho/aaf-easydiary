@@ -27,6 +27,7 @@ import me.blog.korn123.easydiary.activities.DiaryMainActivity
 import me.blog.korn123.easydiary.databinding.ItemDiaryMainBinding
 import me.blog.korn123.easydiary.enums.Calculation
 import me.blog.korn123.easydiary.enums.DiaryMode
+import me.blog.korn123.easydiary.extensions.applyMarkDownPolicy
 import me.blog.korn123.easydiary.extensions.changeDrawableIconColor
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
@@ -163,11 +164,7 @@ class DiaryMainItemAdapter(
                     textTitle.visibility = View.VISIBLE
                 }
                 textTitle.text = diary.title
-                if (activity.config.enableDebugMode) Markwon.builder(activity)
-                    .usePlugin(MovementMethodPlugin.none())
-                    .build()
-                    .apply { setMarkdown(textContents, diary.contents!!) } else textContents.text =
-                    diary.contents
+                activity.applyMarkDownPolicy(textContents, diary.contents!!)
 
                 // highlight current query
                 if (StringUtils.isNotEmpty(currentQuery)) {
