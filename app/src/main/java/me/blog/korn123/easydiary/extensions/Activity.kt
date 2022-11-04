@@ -14,11 +14,14 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Point
+import android.graphics.Typeface
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
+import android.text.SpannableString
+import android.text.style.StyleSpan
 import android.util.DisplayMetrics
 import android.util.Log
 import android.util.TypedValue
@@ -916,7 +919,7 @@ fun Activity.clearHoldOrientation() {
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
 }
 
-fun Activity.applyMarkDownPolicy(contentsView: TextView, contents: String) {
+fun Activity.applyMarkDownPolicy(contentsView: TextView, contents: String, isTimeline: Boolean = false, dateString: String = "") {
     when (config.enableDebugMode) {
         true -> {
             Markwon.builder(this)
@@ -924,6 +927,14 @@ fun Activity.applyMarkDownPolicy(contentsView: TextView, contents: String) {
                 .build()
                 .apply { setMarkdown(contentsView, contents) }
         }
-        false -> { contentsView.text = contents }
+        false -> {
+            if (isTimeline) applyBoldToDate(dateString, contents) else contentsView.text = contents
+        }
     }
+}
+
+fun Activity.applyBoldToDate(dateString: String, summary: String): SpannableString {
+    val spannableString = SpannableString("$dateString\n$summary")
+    if (config.boldStyleEnable) spannableString.setSpan(StyleSpan(Typeface.BOLD), 0, dateString.length, 0)
+    return spannableString
 }

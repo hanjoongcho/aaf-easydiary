@@ -70,10 +70,10 @@ class TimelineItemAdapter(
                 false -> "${diaryDto.contents}"
             }
             if (context.config.enableDebugMode) mergedContents = "[${diaryDto.originSequence}] $mergedContents"
-            text1.text = when (diaryDto.isAllDay) {
-                true -> applyBoldToDate(context.resources.getString(R.string.all_day), mergedContents)
+            when (diaryDto.isAllDay) {
+                true -> activity.applyMarkDownPolicy(text1, mergedContents, true, context.resources.getString(R.string.all_day))
 //                false -> applyBoldToDate(DateUtils.timeMillisToDateTime(diaryDto.currentTimeMillis, DateUtils.TIME_PATTERN_WITH_SECONDS), mergedContents)
-                false -> applyBoldToDate(DateUtils.getTimeStringFromTimeMillis(diaryDto.currentTimeMillis, SimpleDateFormat.MEDIUM), mergedContents)
+                false -> activity.applyMarkDownPolicy(text1, mergedContents, true, DateUtils.getTimeStringFromTimeMillis(diaryDto.currentTimeMillis, SimpleDateFormat.MEDIUM))
             }
 //            activity.applyMarkDownPolicy(text1, text1.text.toString())
             itemHolder.let {
@@ -104,12 +104,6 @@ class TimelineItemAdapter(
         }
 
         return itemView
-    }
-
-    private fun applyBoldToDate(dateString: String, summary: String): SpannableString {
-        val spannableString = SpannableString("$dateString\n$summary")
-        if (context.config.boldStyleEnable) spannableString.setSpan(StyleSpan(Typeface.BOLD), 0, dateString.length, 0)
-        return spannableString
     }
 
     private fun setFontsTypeface(itemTimelineBinding: ItemTimelineBinding) {
