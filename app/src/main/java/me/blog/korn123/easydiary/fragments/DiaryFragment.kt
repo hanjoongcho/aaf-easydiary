@@ -92,7 +92,7 @@ class DiaryFragment : Fragment() {
     private fun setupDiary() {
         mBannerDiary = (mBinding.bannerViewPagerDiary as BannerViewPager<Diary>).apply {
             setLifecycleRegistry(lifecycle)
-            adapter = DiaryDashboardItemAdapter()
+            adapter = DiaryDashboardItemAdapter(requireActivity())
             setAutoPlay(false)
             setInterval(3000)
             setScrollDuration(1000)
