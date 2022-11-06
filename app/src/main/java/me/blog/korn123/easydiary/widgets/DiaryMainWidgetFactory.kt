@@ -4,26 +4,14 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.drawable.Drawable
 import android.os.Build
-import android.util.Log
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import androidx.appcompat.content.res.AppCompatResources
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.DownsampleStrategy
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.FutureTarget
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.target.Target
-import com.bumptech.glide.request.transition.Transition
 import com.simplemobiletools.commons.extensions.setVisibleIf
-import me.blog.korn123.commons.utils.BitmapUtils
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
@@ -31,7 +19,7 @@ import me.blog.korn123.easydiary.R
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.dpToPixel
 import me.blog.korn123.easydiary.extensions.getCustomSymbolPaths
-import me.blog.korn123.easydiary.helper.AAF_TEST
+import me.blog.korn123.easydiary.extensions.parsedMarkdownString
 import me.blog.korn123.easydiary.helper.DIARY_SEQUENCE
 import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
 import me.blog.korn123.easydiary.helper.SYMBOL_EASTER_EGG
@@ -61,7 +49,7 @@ class DiaryMainWidgetFactory(private val context: Context) : RemoteViewsService.
 
         widgetItem.run {
             setTextViewText(R.id.text1, diaryDto.title)
-            setTextViewText(R.id.text2, diaryDto.contents)
+            setTextViewText(R.id.text2,context.parsedMarkdownString(diaryDto.contents!!))
             setTextViewText(R.id.text3, when (diaryDto.isAllDay) {
                 true -> DateUtils.getDateStringFromTimeMillis(diaryDto.currentTimeMillis)
                 false -> DateUtils.getDateTimeStringFromTimeMillis(diaryDto.currentTimeMillis)

@@ -23,7 +23,9 @@ import android.os.PowerManager
 import android.preference.PreferenceManager
 import android.text.Spannable
 import android.text.SpannableString
+import android.text.Spanned
 import android.text.style.RelativeSizeSpan
+import android.text.style.StyleSpan
 import android.util.TypedValue
 import android.view.MenuItem
 import android.view.View
@@ -49,6 +51,8 @@ import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
 import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.*
 import com.simplemobiletools.commons.views.*
+import io.noties.markwon.Markwon
+import io.noties.markwon.movement.MovementMethodPlugin
 import io.realm.Realm
 import me.blog.korn123.commons.utils.DateUtils
 import me.blog.korn123.commons.utils.EasyDiaryUtils
@@ -909,3 +913,26 @@ fun Context.getPermissionString(id: Int) = when (id) {
     PERMISSION_ACCESS_COARSE_LOCATION -> Manifest.permission.ACCESS_COARSE_LOCATION
     else -> ""
 }
+
+fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTimeline: Boolean = false, dateString: String = "") {
+    when (config.enableDebugMode) {
+        true -> {
+            val boldDate = if (isTimeline) "**$dateString**  \n$contents" else contents
+            Markwon.builder(this)
+                .usePlugin(MovementMethodPlugin.none())
+                .build()
+                .apply { setMarkdown(contentsView, boldDate) }
+        }
+        false -> {
+            if (isTimeline) applyBoldToDate(dateString, contents) else contentsView.text = contents
+        }
+    }
+}
+
+fun Context.applyBoldToDate(dateString: String, summary: String): SpannableString {
+    val spannableString = SpannableString("$dateString\n$summary")
+    if (config.boldStyleEnable) spannableString.setSpan(StyleSpan(Typeface.BOLD), 0, dateString.length, 0)
+    return spannableString
+}
+
+fun Context.parsedMarkdownString(markdownString: String): Spanned = Markwon.builder(this).build().toMarkdown(markdownString)
