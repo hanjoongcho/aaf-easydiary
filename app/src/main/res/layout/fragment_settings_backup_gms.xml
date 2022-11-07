@@ -1,116 +1,133 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
     <LinearLayout
-        android:orientation="vertical"
-        android:padding="@dimen/component_margin_small"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/component_margin_small">
+
         <androidx.cardview.widget.CardView
             android:id="@+id/signInGoogleOAuth"
-            android:orientation="vertical"
-            style="@style/AppCard.Settings">
-            <androidx.constraintlayout.widget.ConstraintLayout
-                style="@style/LinearLayoutVertical">
+            style="@style/AppCard.Settings"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout style="@style/LinearLayoutVertical">
+
                 <com.simplemobiletools.commons.views.MyTextView
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:text="@string/google_drive_account_sign_in_title"
                     android:id="@+id/signInGoogleOAuthTitle"
-                    style="@style/SettingsTitle" />
+                    style="@style/SettingsTitle"
+                    android:text="@string/google_drive_account_sign_in_title"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
-                    android:visibility="gone"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/signInGoogleOAuthTitle"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginTop="10dp"
                     android:id="@+id/profilePhoto"
                     android:layout_width="50dp"
-                    android:layout_height="50dp"/>
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/signInGoogleOAuthTitle"
+                    tools:visibility="visible" />
 
                 <com.simplemobiletools.commons.views.MyTextView
                     android:id="@+id/accountInfo"
+                    style="@style/SettingsSummary"
+                    android:layout_width="0dp"
                     android:text="@string/google_drive_account_sign_in_description"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/profilePhoto"
+                    app:layout_constraintTop_toBottomOf="@+id/signInGoogleOAuthTitle"
                     android:layout_marginStart="10dp"
                     app:layout_goneMarginLeft="0dp"
-                    app:layout_constraintLeft_toRightOf="@+id/profilePhoto"
-                    app:layout_constraintTop_toBottomOf="@+id/signInGoogleOAuthTitle"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_width="wrap_content"
-                    style="@style/SettingsSummary" />
+                    tools:text="OK" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/signOutGoogleOAuth"
             style="@style/AppCard.Settings">
-            <LinearLayout
-                style="@style/LinearLayoutVertical">
+
+            <LinearLayout style="@style/LinearLayoutVertical">
+
                 <com.simplemobiletools.commons.views.MyTextView
-                    android:text="@string/google_drive_account_sign_out_title"
-                    style="@style/SettingsTitle" />
+                    style="@style/SettingsTitle"
+                    android:text="@string/google_drive_account_sign_out_title" />
+
                 <com.simplemobiletools.commons.views.MyTextView
-                    android:text="@string/google_drive_account_sign_out_description"
-                    style="@style/SettingsSummary" />
+                    style="@style/SettingsSummary"
+                    android:text="@string/google_drive_account_sign_out_description" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/backupSetting"
             style="@style/AppCard.Settings">
-            <LinearLayout
-                style="@style/LinearLayoutVertical">
+
+            <LinearLayout style="@style/LinearLayoutVertical">
+
                 <com.simplemobiletools.commons.views.MyTextView
-                    android:text="@string/backup_diary"
-                    style="@style/SettingsTitle" />
+                    style="@style/SettingsTitle"
+                    android:text="@string/backup_diary" />
+
                 <com.simplemobiletools.commons.views.MyTextView
-                    android:text="@string/backup_diary_summary"
-                    style="@style/SettingsSummary" />
+                    style="@style/SettingsSummary"
+                    android:text="@string/backup_diary_summary" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/restoreSetting"
             style="@style/AppCard.Settings">
-            <LinearLayout
-                style="@style/LinearLayoutVertical">
+
+            <LinearLayout style="@style/LinearLayoutVertical">
+
                 <com.simplemobiletools.commons.views.MyTextView
-                    android:text="@string/restore_diary"
-                    style="@style/SettingsTitle" />
+                    style="@style/SettingsTitle"
+                    android:text="@string/restore_diary" />
+
                 <com.simplemobiletools.commons.views.MyTextView
-                    android:text="@string/restore_diary_summary"
-                    style="@style/SettingsSummary" />
+                    style="@style/SettingsSummary"
+                    android:text="@string/restore_diary_summary" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/backupAttachPhoto"
             style="@style/AppCard.Settings">
-            <LinearLayout
-                style="@style/LinearLayoutVertical">
+
+            <LinearLayout style="@style/LinearLayoutVertical">
+
                 <com.simplemobiletools.commons.views.MyTextView
-                    android:text="@string/backup_attach_photo_title"
-                    style="@style/SettingsTitle" />
+                    style="@style/SettingsTitle"
+                    android:text="@string/backup_attach_photo_title" />
+
                 <com.simplemobiletools.commons.views.MyTextView
-                    android:text="@string/backup_attach_photo_summary"
-                    style="@style/SettingsSummary" />
+                    style="@style/SettingsSummary"
+                    android:text="@string/backup_attach_photo_summary" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/recoverAttachPhoto"
             style="@style/AppCard.Settings">
-            <LinearLayout
-                style="@style/LinearLayoutVertical">
+
+            <LinearLayout style="@style/LinearLayoutVertical">
+
                 <com.simplemobiletools.commons.views.MyTextView
-                    android:text="@string/recover_attach_photo_title"
-                    style="@style/SettingsTitle" />
+                    style="@style/SettingsTitle"
+                    android:text="@string/recover_attach_photo_title" />
+
                 <com.simplemobiletools.commons.views.MyTextView
-                    android:text="@string/recover_attach_photo_summary"
-                    style="@style/SettingsSummary" />
+                    style="@style/SettingsSummary"
+                    android:text="@string/recover_attach_photo_summary" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </LinearLayout>
