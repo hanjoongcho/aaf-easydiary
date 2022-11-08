@@ -77,6 +77,7 @@ import org.apache.commons.io.IOUtils
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.pow
 
 
@@ -914,17 +915,17 @@ fun Context.getPermissionString(id: Int) = when (id) {
     else -> ""
 }
 
-fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTimeline: Boolean = false, dateString: String = "") {
+fun Context.applyMarkDownPolicy(contentsView: TextView, contents: String, isTimeline: Boolean = false, lineBreakStrings: ArrayList<String> = arrayListOf()) {
     when (config.enableDebugMode) {
         true -> {
-            val boldDate = if (isTimeline) "**$dateString**  \n$contents" else contents
+            val boldDate = if (isTimeline) "**${lineBreakStrings[0]}**  \n$contents" else contents
             Markwon.builder(this)
                 .usePlugin(MovementMethodPlugin.none())
                 .build()
                 .apply { setMarkdown(contentsView, boldDate) }
         }
         false -> {
-            if (isTimeline) applyBoldToDate(dateString, contents) else contentsView.text = contents
+            contentsView.text = if (isTimeline) applyBoldToDate(lineBreakStrings[0], contents) else contents
         }
     }
 }
