@@ -71,14 +71,14 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 
         val xAxisFormatter = WeightXAxisValueFormatter(context)
         mLineChart.xAxis.run {
+            setDrawGridLines(false)
             position = XAxis.XAxisPosition.BOTTOM
             typeface = FontUtils.getCommonTypeface(requireContext())
             textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
             textColor = requireContext().config.textColor
             labelRotationAngle = -45F
-            setDrawGridLines(false)
             granularity = 1f // only intervals of 1 day
-            labelCount = 7
+            labelCount = 5
             valueFormatter = xAxisFormatter
         }
 
@@ -96,28 +96,31 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         }
 
         mLineChart.axisRight.run {
-            setDrawGridLines(false)
-            typeface = FontUtils.getCommonTypeface(requireContext())
-            textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
-            textColor = requireContext().config.textColor
-            setLabelCount(8, false)
-            valueFormatter = yAxisFormatter
-            spaceTop = 0f
-            axisMinimum = 0f // this replaces setStartAtZero(true)
-            labelCount = 8
+            isEnabled = false
+//            setDrawGridLines(false)
+//            typeface = FontUtils.getCommonTypeface(requireContext())
+//            textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
+//            textColor = requireContext().config.textColor
+//            setLabelCount(8, false)
+//            valueFormatter = yAxisFormatter
+//            spaceTop = 0f
+//            axisMinimum = 0f // this replaces setStartAtZero(true)
+//            labelCount = 8
         }
 
         mLineChart.legend.run {
             typeface = FontUtils.getCommonTypeface(requireContext())
             textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
             textColor = requireContext().config.textColor
-            verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
+            verticalAlignment = Legend.LegendVerticalAlignment.TOP
             horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
-            orientation = Legend.LegendOrientation.HORIZONTAL
+            orientation = Legend.LegendOrientation.VERTICAL
             setDrawInside(false)
-            form = Legend.LegendForm.SQUARE
+            form = Legend.LegendForm.CIRCLE
             formSize = 9f
             xEntrySpace = 4f
+            isWordWrapEnabled = true
+            xOffset = 5F
         }
 
         val mv = WeightMarkerView(requireContext(), xAxisFormatter)
@@ -198,25 +201,33 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 
     var sumDataSetSize = 0
     private fun setData() {
-        val totalEntries = ArrayList<Entry>()
-        val krEntries = ArrayList<Entry>()
-        val usEntries = ArrayList<Entry>()
+        val krPrincipalEntries = arrayListOf<Entry>()
+        val usPrincipalEntries = arrayListOf<Entry>()
+        val totalPrincipalEntries = arrayListOf<Entry>()
+        val krEvaluatedPriceEntries = arrayListOf<Entry>()
+        val usEvaluatedPriceEntries = arrayListOf<Entry>()
+        val totalEvaluatedPriceEntries = arrayListOf<Entry>()
         EasyDiaryDbHelper.getTemporaryInstance().let { realmInstance ->
             val listDiary = EasyDiaryDbHelper.findDiary(null, false, 0, 0, DAILY_STOCK, realmInstance = realmInstance)
             var index = 0
-            var sumWeight = 0F
+            var totalSum = 0F
             listDiary.reversed().forEach { diaryDto ->
                 diaryDto.title?.let {
                     if (EasyDiaryUtils.isStockNumber(it)) {
                         try {
                             val amountArray = it.split(",")
-                            val krAmount = amountArray[0].toFloat()
-                            val usAmount = amountArray[1].toFloat()
-                            val sum = krAmount.plus(usAmount)
-                            sumWeight += sum
-                            totalEntries.add(Entry(index.toFloat(), sum))
-                            krEntries.add(Entry(index.toFloat(), krAmount))
-                            usEntries.add(Entry(index.toFloat(), usAmount))
+                            val krEvaluatedPrice = amountArray[0].toFloat()
+                            val usEvaluatedPrice = amountArray[1].toFloat()
+                            val krPrincipal = if (amountArray.size > 2) amountArray[2].toFloat() else 4000000F
+                            val usPrincipal = if (amountArray.size > 3) amountArray[3].toFloat() else 4000000F
+                            val sum = krEvaluatedPrice.plus(usEvaluatedPrice)
+                            totalSum += sum
+                            krPrincipalEntries.add(Entry(index.toFloat(), krPrincipal))
+                            krEvaluatedPriceEntries.add(Entry(index.toFloat(), krEvaluatedPrice))
+                            usPrincipalEntries.add(Entry(index.toFloat(), usPrincipal))
+                            usEvaluatedPriceEntries.add(Entry(index.toFloat(), usEvaluatedPrice))
+                            totalPrincipalEntries.add(Entry(index.toFloat(), krPrincipal.plus(usPrincipal)))
+                            totalEvaluatedPriceEntries.add(Entry(index.toFloat(), sum))
                             mTimeMillisMap[index] = diaryDto.currentTimeMillis
                             index++
                         } catch (e: Exception) { Log.i(AAF_TEST, e.message ?: "") }
@@ -224,20 +235,63 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 }
             }
             if (index > 0) {
-                val average = sumWeight.div(index)
+                val average = totalSum.div(index)
 //                mLineChart.axisLeft.axisMinimum = average.minus(5000000)
                 mLineChart.axisLeft.axisMaximum = average.plus(3000000)
 //                mLineChart.axisRight.axisMinimum = average.minus(5000000)
                 mLineChart.axisRight.axisMaximum = average.plus(3000000)
-                sumDataSetSize = totalEntries.size
+                sumDataSetSize = totalEvaluatedPriceEntries.size
                 val plusColor = Color.rgb(200, 0, 0)
-                val minusColor = Color.rgb(0, 0, 139)
-                val sumDataSet = LineDataSet(totalEntries, "SUM").apply { color = if (totalEntries[totalEntries.size.minus(1)].y > 8000000) plusColor else minusColor }
-                val krDataSet = LineDataSet(krEntries, "KR").apply { color = if (krEntries[krEntries.size.minus(1)].y > 4000000) plusColor else minusColor }
-                val usDataSet = LineDataSet(usEntries, "US").apply { color = if (usEntries[usEntries.size.minus(1)].y > 4000000) plusColor else minusColor }
-                mDataSets.add(sumDataSet)
-                mDataSets.add(krDataSet)
-                mDataSets.add(usDataSet)
+                val minusColor = Color.rgb(0, 0, 204)
+
+                val krPrincipalDataSet = LineDataSet(krPrincipalEntries, "KR/JP-P").apply {
+                    Color.argb(100, 255, 102, 0).also {
+                        color = it
+                        setCircleColor(it)
+                        setCircleColorHole(it)
+                    }
+                }
+                val krEvaluatedPriceDataSet = LineDataSet(krEvaluatedPriceEntries, "KR/JP-EP").apply {
+                    Color.argb(255, 255, 102, 0).also {
+                        color = it
+                        setCircleColor(it)
+                        setCircleColorHole(it)
+                    }
+                }
+                val usPrincipalDataSet = LineDataSet(usPrincipalEntries, "US-P").apply {
+                    Color.argb(100, 102, 0, 120).also {
+                        color = it
+                        setCircleColor(it)
+                        setCircleColorHole(it)
+                    }
+                }
+                val usEvaluatedPriceDataSet = LineDataSet(usEvaluatedPriceEntries, "US-EP").apply {
+                    Color.argb(255, 102, 0, 120).also {
+                        color = it
+                        setCircleColor(it)
+                        setCircleColorHole(it)
+                    }
+                }
+                val totalPrincipalDataSet = LineDataSet(totalPrincipalEntries, "Total-P").apply {
+                    Color.argb(100, 0, 0, 0).also {
+                        color = it
+                        setCircleColor(it)
+                        setCircleColorHole(it)
+                    }
+                }
+                val totalEvaluatedPriceDataSet = LineDataSet(totalEvaluatedPriceEntries, "Total-EP").apply {
+                    (if (totalEvaluatedPriceEntries[totalEvaluatedPriceEntries.size.minus(1)].y > totalPrincipalEntries[totalPrincipalEntries.size.minus(1)].y) plusColor else minusColor).also {
+                        color = it
+                        setCircleColor(it)
+                        setCircleColorHole(it)
+                    }
+                }
+                mDataSets.add(krPrincipalDataSet)
+                mDataSets.add(krEvaluatedPriceDataSet)
+                mDataSets.add(usPrincipalDataSet)
+                mDataSets.add(usEvaluatedPriceDataSet)
+                mDataSets.add(totalPrincipalDataSet)
+                mDataSets.add(totalEvaluatedPriceDataSet)
             }
             realmInstance.close()
         }

@@ -125,7 +125,7 @@ object EasyDiaryUtils {
     }
 
     fun isStockNumber(string: String?): Boolean {
-        return string?.matches("\\d+,{1}\\d+".toRegex()) ?: false
+        return "$string,".matches("^(\\d+,)+$".toRegex())
     }
 
     fun findNumber(string: String?): Float {
