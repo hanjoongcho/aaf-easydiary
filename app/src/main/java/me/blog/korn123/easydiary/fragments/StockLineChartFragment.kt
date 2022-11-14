@@ -23,6 +23,7 @@ import com.github.mikephil.charting.utils.MPPointF
 import com.github.mikephil.charting.utils.ViewPortHandler
 import kotlinx.coroutines.*
 import me.blog.korn123.commons.utils.DateUtils
+import me.blog.korn123.commons.utils.DateUtils.DATE_PATTERN_DASH
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
@@ -70,6 +71,8 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 //        barChart.zoom(1.5F, 0F, 0F, 0F)
 
         val xAxisFormatter = WeightXAxisValueFormatter(context)
+//        mLineChart.extraBottomOffset = 10F
+        mLineChart.extraRightOffset = 10F
         mLineChart.xAxis.run {
             setDrawGridLines(false)
             position = XAxis.XAxisPosition.BOTTOM
@@ -112,15 +115,15 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             typeface = FontUtils.getCommonTypeface(requireContext())
             textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
             textColor = requireContext().config.textColor
-            verticalAlignment = Legend.LegendVerticalAlignment.TOP
+            verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
             horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
-            orientation = Legend.LegendOrientation.VERTICAL
+            orientation = Legend.LegendOrientation.HORIZONTAL
             setDrawInside(false)
             form = Legend.LegendForm.CIRCLE
             formSize = 9f
             xEntrySpace = 4f
             isWordWrapEnabled = true
-            xOffset = 5F
+//            xOffset = 5F
         }
 
         val mv = WeightMarkerView(requireContext(), xAxisFormatter)
@@ -340,6 +343,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             val timeMillis: Long = mTimeMillisMap[value.toInt()] ?: 0
             return xAxisTimeMillisToDate(timeMillis)
         }
+
     }
 
     inner class WeightYAxisValueFormatter(private var context: Context?) : IAxisValueFormatter {
