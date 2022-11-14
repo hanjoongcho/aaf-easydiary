@@ -71,7 +71,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 //        barChart.zoom(1.5F, 0F, 0F, 0F)
 
         val xAxisFormatter = WeightXAxisValueFormatter(context)
-//        mLineChart.extraBottomOffset = 10F
+        mLineChart.extraBottomOffset = 10F
         mLineChart.extraRightOffset = 10F
         mLineChart.xAxis.run {
             setDrawGridLines(false)
@@ -96,6 +96,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             spaceTop = 0f
             axisMinimum = 0f // this replaces setStartAtZero(true)
             labelCount = 8
+            setDrawGridLines(false)
         }
 
         mLineChart.axisRight.run {
@@ -112,16 +113,17 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         }
 
         mLineChart.legend.run {
+//            isEnabled = false
             typeface = FontUtils.getCommonTypeface(requireContext())
             textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
             textColor = requireContext().config.textColor
-            verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
-            horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
+            verticalAlignment = Legend.LegendVerticalAlignment.TOP
+//            horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
             orientation = Legend.LegendOrientation.HORIZONTAL
-            setDrawInside(false)
+//            setDrawInside(false)
             form = Legend.LegendForm.CIRCLE
-            formSize = 9f
-            xEntrySpace = 4f
+//            formSize = 9f
+//            xEntrySpace = 4f
             isWordWrapEnabled = true
 //            xOffset = 5F
         }
