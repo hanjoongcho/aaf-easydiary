@@ -212,6 +212,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         val krEvaluatedPriceEntries = arrayListOf<Entry>()
         val usEvaluatedPriceEntries = arrayListOf<Entry>()
         val totalEvaluatedPriceEntries = arrayListOf<Entry>()
+        val totalTradingProfitEntries = arrayListOf<Entry>()
         EasyDiaryDbHelper.getTemporaryInstance().let { realmInstance ->
             val listDiary = EasyDiaryDbHelper.findDiary(null, false, 0, 0, DAILY_STOCK, realmInstance = realmInstance)
             var index = 0
@@ -233,6 +234,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                             usEvaluatedPriceEntries.add(Entry(index.toFloat(), usEvaluatedPrice))
                             totalPrincipalEntries.add(Entry(index.toFloat(), krPrincipal.plus(usPrincipal)))
                             totalEvaluatedPriceEntries.add(Entry(index.toFloat(), sum))
+                            totalTradingProfitEntries.add(Entry(index.toFloat(), sum.minus(krPrincipal.plus(usPrincipal))))
                             mTimeMillisMap[index] = diaryDto.currentTimeMillis
                             index++
                         } catch (e: Exception) { Log.i(AAF_TEST, e.message ?: "") }
@@ -241,10 +243,10 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             }
             if (index > 0) {
                 val average = totalSum.div(index)
-//                mLineChart.axisLeft.axisMinimum = average.minus(5000000)
-                mLineChart.axisLeft.axisMaximum = average.plus(3000000)
-//                mLineChart.axisRight.axisMinimum = average.minus(5000000)
-                mLineChart.axisRight.axisMaximum = average.plus(3000000)
+                mLineChart.axisLeft.axisMinimum = -4000000F
+//                mLineChart.axisLeft.axisMaximum = average.plus(3000000)
+                mLineChart.axisRight.axisMinimum = -4000000F
+//                mLineChart.axisRight.axisMaximum = average.plus(3000000)
                 sumDataSetSize = totalEvaluatedPriceEntries.size
                 val plusColor = Color.rgb(200, 0, 0)
                 val minusColor = Color.rgb(0, 0, 204)
@@ -291,19 +293,30 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                         setCircleColorHole(it)
                     }
                 }
+                val totalTradingProfitDataSet = LineDataSet(totalTradingProfitEntries, "Total-Profit").apply {
+                    Color.argb(255, 0, 153, 51).also {
+                        setDrawFilled(true)
+                        color = it
+                        fillColor = it
+                        setCircleColor(it)
+                        setCircleColorHole(it)
+                    }
+                }
+
                 mDataSets.add(krPrincipalDataSet)
                 mDataSets.add(krEvaluatedPriceDataSet)
                 mDataSets.add(usPrincipalDataSet)
                 mDataSets.add(usEvaluatedPriceDataSet)
                 mDataSets.add(totalPrincipalDataSet)
                 mDataSets.add(totalEvaluatedPriceDataSet)
+                mDataSets.add(totalTradingProfitDataSet)
             }
             realmInstance.close()
         }
     }
 
     private fun xAxisTimeMillisToDate(timeMillis: Long): String =
-        if (timeMillis > 0) DateUtils.getDateStringFromTimeMillis(timeMillis, SimpleDateFormat.MEDIUM) else "N/A"
+        if (timeMillis > 0) DateUtils.getDateStringFromTimeMillis(timeMillis, SimpleDateFormat.SHORT) else "N/A"
 
     private fun fillValueForward(averageInfo: ArrayList<Float>) {
         Log.i(AAF_TEST, "원본 ${averageInfo.joinToString(",")}")
@@ -372,15 +385,21 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         }
     }
 
-    inner class WeightMarkerView(context: Context, private val xAxisValueFormatter: IAxisValueFormatter) : MarkerView(context, R.layout.partial_custom_marker_view) {
-        private val tvContent: TextView = findViewById(R.id.tvContent)
+    inner class WeightMarkerView(context: Context, private val xAxisValueFormatter: IAxisValueFormatter) : MarkerView(context, R.layout.partial_marker_view_stock) {
+        private val textLabelX: TextView = findViewById(R.id.textLabelX)
+        private val textLabelY: TextView = findViewById(R.id.textLabelY)
 
         // callbacks everytime the MarkerView is redrawn, can be used to update the
         // content (user-interface)
         override fun refreshContent(e: Entry?, highlight: Highlight?) {
             e?.let { entry ->
-                tvContent.run {
-                    text = "${xAxisValueFormatter.getFormattedValue(entry.x, mLineChart.xAxis)}: ${getCurrencyFormat().format(entry.y)}"
+                textLabelX.run {
+                    text = xAxisValueFormatter.getFormattedValue(entry.x, mLineChart.xAxis)
+                    typeface = FontUtils.getCommonTypeface(context)
+                    textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
+                }
+                textLabelY.run {
+                    text = getCurrencyFormat().format(entry.y)
                     typeface = FontUtils.getCommonTypeface(context)
                     textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
                 }
@@ -388,8 +407,8 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             }
         }
 
-        override fun getOffset(): MPPointF {
-            return MPPointF((-(width / 2)).toFloat(), (-height).toFloat())
-        }
+//        override fun getOffset(): MPPointF {
+//            return MPPointF((-(width / 2)).toFloat(), (-height).toFloat())
+//        }
     }
 }
