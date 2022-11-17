@@ -306,7 +306,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 val usPrincipalDataSet = LineDataSet(usPrincipalEntries, "US Principal").apply {
                     color = colorPrincipal
                     setCircleColor(colorPrincipal)
-                    setCircleColorHole(colorPrincipal)
+//                    setCircleColorHole(colorPrincipal)
                 }
                 val usEvaluatedPriceDataSet = LineDataSet(usEvaluatedPriceEntries, "US Evaluated Price").apply {
                     (if (usEvaluatedPriceEntries[usEvaluatedPriceEntries.size.minus(1)].y > usPrincipalEntries[usPrincipalEntries.size.minus(1)].y) plusColor else minusColor).also {
