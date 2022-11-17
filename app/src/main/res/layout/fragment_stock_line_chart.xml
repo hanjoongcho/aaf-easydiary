@@ -18,7 +18,7 @@
             tools:visibility="visible"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/lineChart"
+            app:layout_constraintBottom_toTopOf="@+id/radio_group_chart_option"
              />
         <me.blog.korn123.easydiary.views.FixedTextView
             android:id="@+id/chartTitle"
@@ -31,7 +31,7 @@
             app:applyGlobalSize="false"
             app:applyHighLight="false"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/lineChart"
+            app:layout_constraintBottom_toTopOf="@+id/radio_group_chart_option"
             app:layout_constraintStart_toEndOf="@+id/image_stock_symbol"
             tools:text="Weight"
             tools:visibility="visible" />
@@ -47,13 +47,43 @@
             app:srcCompat="@drawable/ic_expand"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/lineChart"
+            app:layout_constraintBottom_toTopOf="@+id/radio_group_chart_option"
             />
+
+        <RadioGroup
+            android:id="@+id/radio_group_chart_option"
+            android:padding="10dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/image_expend_chart"
+            >
+            <RadioButton
+                android:id="@+id/radio_button_option_a"
+                android:text="KR/JP"
+                android:checked="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <RadioButton
+                android:id="@+id/radio_button_option_b"
+                android:text="US"
+                android:checked="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <RadioButton
+                android:id="@+id/radio_button_option_c"
+                android:text="Total"
+                android:checked="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </RadioGroup>
+
+
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/lineChart"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@id/image_stock_symbol"
+            app:layout_constraintTop_toBottomOf="@id/radio_group_chart_option"
             app:layout_constraintBottom_toBottomOf="parent"
             />
         <androidx.core.widget.ContentLoadingProgressBar
