@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.4.285.202211170 (date: 2022.11.17)
+  * Changed not to check storage access permission in TIRAMISU (Android 13) version
+
 # Changes in 1.4.284.202210260 (date: 2022.10.26)
   * Improved Dashboard UX
 

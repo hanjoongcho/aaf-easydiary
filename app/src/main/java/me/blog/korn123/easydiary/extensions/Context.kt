@@ -582,10 +582,16 @@ fun Context.updateAlertDialog(alertDialog: AlertDialog, message: String? = null,
 }
 
 fun Context.checkPermission(permissions: Array<String>): Boolean {
-    val listDeniedPermissions: List<String> = permissions.filter { permission -> 
-        ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_DENIED
+    return when (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && permissions === EXTERNAL_STORAGE_PERMISSIONS) {
+        true -> true
+        false -> {
+            val listDeniedPermissions: List<String> = permissions.filter { permission ->
+                ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_DENIED
+            }
+            listDeniedPermissions.isEmpty()
+        }
     }
-    return listDeniedPermissions.isEmpty()
+
 }
 
 fun Context.preferencesContains(key: String): Boolean {
