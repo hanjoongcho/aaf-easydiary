@@ -243,7 +243,8 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 
         val totalPrincipalEntries = arrayListOf<Entry>()
         val totalEvaluatedPriceEntries = arrayListOf<Entry>()
-        val totalTradingProfitEntries = arrayListOf<Entry>()
+        val totalTradingProfitNegativeEntries = arrayListOf<Entry>()
+        val totalTradingProfitPositiveEntries = arrayListOf<Entry>()
 
         EasyDiaryDbHelper.getTemporaryInstance().let { realmInstance ->
             val listDiary = EasyDiaryDbHelper.findDiary(null, false, 0, 0, DAILY_STOCK, realmInstance = realmInstance)
@@ -285,7 +286,14 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 
                             totalPrincipalEntries.add(Entry(index.toFloat(), krPrincipal.plus(usPrincipal)))
                             totalEvaluatedPriceEntries.add(Entry(index.toFloat(), sum))
-                            totalTradingProfitEntries.add(Entry(index.toFloat(), sum.minus(krPrincipal.plus(usPrincipal))))
+                            diff = krEvaluatedPrice.plus(usEvaluatedPrice).minus(krPrincipal.plus(usPrincipal))
+                            if (diff >= 0) {
+                                totalTradingProfitPositiveEntries.add(Entry(index.toFloat(), diff))
+                                totalTradingProfitNegativeEntries.add(Entry(index.toFloat(), 0F))
+                            } else {
+                                totalTradingProfitPositiveEntries.add(Entry(index.toFloat(), 0F))
+                                totalTradingProfitNegativeEntries.add(Entry(index.toFloat(), diff))
+                            }
 
                             mTimeMillisMap[index] = diaryDto.currentTimeMillis
                             index++
@@ -366,14 +374,21 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 //                        setCircleColorHole(it)
                     }
                 }
-                val totalTradingProfitDataSet = LineDataSet(totalTradingProfitEntries, "Total Trading Profit").apply {
-                    (if (totalTradingProfitEntries[totalTradingProfitEntries.size.minus(1)].y >= 0) plusColor else minusColor).also {
-                        setDrawFilled(true)
-                        color = it
-                        fillColor = it
-                        setCircleColor(it)
-                        setCircleColorHole(it)
-                    }
+                val totalTradingProfitNegativeDataSet = LineDataSet(totalTradingProfitNegativeEntries, "Total Trading Profit").apply {
+                    setDrawFilled(true)
+                    setDrawCircles(false)
+                    color = minusColor
+                    fillColor = minusColor
+//                    setCircleColor(minusColor)
+//                        setCircleColorHole(it)
+                }
+                val totalTradingProfitPositiveDataSet = LineDataSet(totalTradingProfitPositiveEntries, "Total Trading Profit").apply {
+                    setDrawFilled(true)
+                    setDrawCircles(false)
+                    color = plusColor
+                    fillColor = plusColor
+//                    setCircleColor(plusColor)
+//                        setCircleColorHole(it)
                 }
 
                 when (mChartMode) {
@@ -400,9 +415,10 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                     "C" -> {
                         mDataSets.add(totalPrincipalDataSet)
                         mDataSets.add(totalEvaluatedPriceDataSet)
-                        mDataSets.add(totalTradingProfitDataSet)
-                        mLineChart.axisLeft.axisMinimum = totalTradingProfitDataSet.yMin.minus(500000F)
-                        mLineChart.axisRight.axisMinimum = totalTradingProfitDataSet.yMin.minus(500000F)
+                        mDataSets.add(totalTradingProfitPositiveDataSet)
+                        mDataSets.add(totalTradingProfitNegativeDataSet)
+                        mLineChart.axisLeft.axisMinimum = totalTradingProfitNegativeDataSet.yMin
+                        mLineChart.axisRight.axisMinimum = totalTradingProfitNegativeDataSet.yMin
                         mLineChart.axisLeft.axisMaximum = totalPrincipalDataSet.yMax.plus(2000000)
                         mLineChart.axisRight.axisMaximum = totalPrincipalDataSet.yMax.plus(2000000)
                     }
