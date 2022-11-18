@@ -186,29 +186,15 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     private fun drawChart() {
         mCoroutineJob?.run { if (isActive) cancel() }
         mCoroutineJob = CoroutineScope(Dispatchers.IO).launch {
+            mLineChart.highlightValue(null)
             mDataSets.clear()
             setData()
             if (sumDataSetSize > 0) {
                 withContext(Dispatchers.Main) {
-//                    val lineDataSet = LineDataSet(barEntries, "Evaluated Price")
-//                    val iValueFormatter = WeightIValueFormatter(context)
-//                    lineDataSet.valueFormatter = iValueFormatter
-//                    lineDataSet.setDrawIcons(false)
-//                    lineDataSet.setDrawValues(true)
-//                    lineDataSet.setDrawFilled(true)
-//                    mDataSets.add(lineDataSet)
-//                    val lineData = LineData(mDataSets)
-//                    lineData.setValueTextSize(CHART_LABEL_FONT_SIZE_DEFAULT_DP)
-//                    lineData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
-//                    lineData.setValueTextColor(requireContext().config.textColor)
-//                    val color = if (barEntries[0].y < barEntries[barEntries.size.minus(1)].y) Color.RED else Color.rgb(0, 0, 139)
-//                    lineDataSet.circleColors = arrayListOf(color)
-//                    lineDataSet.color = color
-//                    lineDataSet.fillColor = color
                     val lineData = LineData(mDataSets)
                     lineData.setValueTextSize(10f)
                     lineData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
-                    lineData.setDrawValues(false)
+//                    lineData.setDrawValues(false)
                     mLineChart.data = lineData
                     mLineChart.animateY(600)
                 }

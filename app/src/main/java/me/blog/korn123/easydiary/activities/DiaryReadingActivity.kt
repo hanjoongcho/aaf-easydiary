@@ -738,7 +738,8 @@ class DiaryReadingActivity : EasyDiaryActivity() {
             EasyDiaryDbHelper.findDiaryBy(getSequence())?.let { diaryDto ->
                 mBinding.run {
                     diaryTitle.text = JasyptUtils.decrypt(diaryDto.title!!, inputPass)
-                    diaryContents.text = JasyptUtils.decrypt(diaryDto.contents!!, inputPass)
+//                    diaryContents.text = JasyptUtils.decrypt(diaryDto.contents!!, inputPass)
+                    requireActivity().applyMarkDownPolicy(diaryContents, JasyptUtils.decrypt(diaryDto.contents!!, inputPass))
                 }
             }
         }
