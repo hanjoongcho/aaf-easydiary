@@ -11,7 +11,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.components.*
+import com.github.mikephil.charting.components.AxisBase
+import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.components.MarkerView
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
@@ -19,11 +23,13 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.formatter.IValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
-import com.github.mikephil.charting.utils.MPPointF
 import com.github.mikephil.charting.utils.ViewPortHandler
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.blog.korn123.commons.utils.DateUtils
-import me.blog.korn123.commons.utils.DateUtils.DATE_PATTERN_DASH
 import me.blog.korn123.commons.utils.EasyDiaryUtils
 import me.blog.korn123.commons.utils.FlavorUtils
 import me.blog.korn123.commons.utils.FontUtils
@@ -32,10 +38,14 @@ import me.blog.korn123.easydiary.activities.StatisticsActivity
 import me.blog.korn123.easydiary.databinding.FragmentStockLineChartBinding
 import me.blog.korn123.easydiary.extensions.config
 import me.blog.korn123.easydiary.extensions.updateDrawableColorInnerCardView
-import me.blog.korn123.easydiary.helper.*
+import me.blog.korn123.easydiary.helper.AAF_TEST
+import me.blog.korn123.easydiary.helper.CHART_LABEL_FONT_SIZE_DEFAULT_DP
+import me.blog.korn123.easydiary.helper.DAILY_STOCK
+import me.blog.korn123.easydiary.helper.EasyDiaryDbHelper
+import me.blog.korn123.easydiary.helper.TransitionHelper
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 class StockLineChartFragment : androidx.fragment.app.Fragment() {
     private lateinit var mBinding: FragmentStockLineChartBinding
@@ -43,7 +53,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
     private val mTimeMillisMap = hashMapOf<Int, Long>()
     private var mCoroutineJob: Job? = null
     private val mDataSets = ArrayList<ILineDataSet>()
-    private var mChartMode = "A"
+    private var mChartMode = "C"
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = FragmentStockLineChartBinding.inflate(layoutInflater)
@@ -97,7 +107,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
             spaceTop = 0f
             axisMinimum = 0f // this replaces setStartAtZero(true)
             labelCount = 8
-            setDrawGridLines(false)
+            setDrawGridLines(true)
         }
 
         mLineChart.axisRight.run {
@@ -114,7 +124,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
         }
 
         mLineChart.legend.run {
-//            isEnabled = false
+            isEnabled = false
             typeface = FontUtils.getCommonTypeface(requireContext())
             textSize = CHART_LABEL_FONT_SIZE_DEFAULT_DP
             textColor = requireContext().config.textColor
@@ -194,7 +204,7 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                     val lineData = LineData(mDataSets)
                     lineData.setValueTextSize(10f)
                     lineData.setValueTypeface(FontUtils.getCommonTypeface(requireContext()))
-//                    lineData.setDrawValues(false)
+                    lineData.setDrawValues(false)
                     mLineChart.data = lineData
                     mLineChart.animateY(600)
                 }
@@ -213,24 +223,25 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 
     var sumDataSetSize = 0
     private fun setData() {
+        val dark = Color.rgb(26, 26, 26)
         val plusColor = Color.rgb(204, 31, 8)
         val minusColor = Color.rgb(6, 57, 112)
         val colorPrincipal = Color.argb(255, 135, 62, 35)
 
         val krPrincipalEntries = arrayListOf<Entry>()
         val krEvaluatedPriceEntries = arrayListOf<Entry>()
-        val krTradingProfitNegativeEntries = arrayListOf<Entry>()
-        val krTradingProfitPositiveEntries = arrayListOf<Entry>()
+        val krTradingProfitEntries = arrayListOf<Entry>()
+        val krColors = arrayListOf<Int>()
 
         val usPrincipalEntries = arrayListOf<Entry>()
         val usEvaluatedPriceEntries = arrayListOf<Entry>()
-        val usTradingProfitNegativeEntries = arrayListOf<Entry>()
-        val usTradingProfitPositiveEntries = arrayListOf<Entry>()
+        val usTradingProfitEntries = arrayListOf<Entry>()
+        val usColors = arrayListOf<Int>()
 
         val totalPrincipalEntries = arrayListOf<Entry>()
         val totalEvaluatedPriceEntries = arrayListOf<Entry>()
-        val totalTradingProfitNegativeEntries = arrayListOf<Entry>()
-        val totalTradingProfitPositiveEntries = arrayListOf<Entry>()
+        val totalTradingProfitEntries = arrayListOf<Entry>()
+        val totalColors = arrayListOf<Int>()
 
         EasyDiaryDbHelper.getTemporaryInstance().let { realmInstance ->
             val listDiary = EasyDiaryDbHelper.findDiary(null, false, 0, 0, DAILY_STOCK, realmInstance = realmInstance)
@@ -251,35 +262,38 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                             krPrincipalEntries.add(Entry(index.toFloat(), krPrincipal))
                             krEvaluatedPriceEntries.add(Entry(index.toFloat(), krEvaluatedPrice))
                             diff = krEvaluatedPrice.minus(krPrincipal)
-                            if (diff >= 0) {
-                                krTradingProfitPositiveEntries.add(Entry(index.toFloat(), diff))
-                                krTradingProfitNegativeEntries.add(Entry(index.toFloat(), 0F))
-                            } else {
-                                krTradingProfitPositiveEntries.add(Entry(index.toFloat(), 0F))
-                                krTradingProfitNegativeEntries.add(Entry(index.toFloat(), diff))
-                            }
+                            if (diff >= 0) krColors.add(plusColor) else krColors.add(minusColor)
+//                            if (diff >= 0) {
+                                krTradingProfitEntries.add(Entry(index.toFloat(), diff))
+//                                krTradingProfitNegativeEntries.add(Entry(index.toFloat(), 0F))
+//                            } else {
+//                                krTradingProfitEntries.add(Entry(index.toFloat(), 0F))
+//                                krTradingProfitNegativeEntries.add(Entry(index.toFloat(), diff))
+//                            }
 
                             usPrincipalEntries.add(Entry(index.toFloat(), usPrincipal))
                             usEvaluatedPriceEntries.add(Entry(index.toFloat(), usEvaluatedPrice))
                             diff = usEvaluatedPrice.minus(usPrincipal)
-                            if (diff >= 0) {
-                                usTradingProfitPositiveEntries.add(Entry(index.toFloat(), diff))
-                                usTradingProfitNegativeEntries.add(Entry(index.toFloat(), 0F))
-                            } else {
-                                usTradingProfitPositiveEntries.add(Entry(index.toFloat(), 0F))
-                                usTradingProfitNegativeEntries.add(Entry(index.toFloat(), diff))
-                            }
+                            if (diff >= 0) usColors.add(plusColor) else usColors.add(minusColor)
+//                            if (diff >= 0) {
+                                usTradingProfitEntries.add(Entry(index.toFloat(), diff))
+//                                usTradingProfitNegativeEntries.add(Entry(index.toFloat(), 0F))
+//                            } else {
+//                                usTradingProfitPositiveEntries.add(Entry(index.toFloat(), 0F))
+//                                usTradingProfitNegativeEntries.add(Entry(index.toFloat(), diff))
+//                            }
 
                             totalPrincipalEntries.add(Entry(index.toFloat(), krPrincipal.plus(usPrincipal)))
                             totalEvaluatedPriceEntries.add(Entry(index.toFloat(), sum))
                             diff = krEvaluatedPrice.plus(usEvaluatedPrice).minus(krPrincipal.plus(usPrincipal))
-                            if (diff >= 0) {
-                                totalTradingProfitPositiveEntries.add(Entry(index.toFloat(), diff))
-                                totalTradingProfitNegativeEntries.add(Entry(index.toFloat(), 0F))
-                            } else {
-                                totalTradingProfitPositiveEntries.add(Entry(index.toFloat(), 0F))
-                                totalTradingProfitNegativeEntries.add(Entry(index.toFloat(), diff))
-                            }
+                            if (diff >= 0) totalColors.add(plusColor) else totalColors.add(minusColor)
+//                            if (diff >= 0) {
+                                totalTradingProfitEntries.add(Entry(index.toFloat(), diff))
+//                                totalTradingProfitNegativeEntries.add(Entry(index.toFloat(), 0F))
+//                            } else {
+//                                totalTradingProfitPositiveEntries.add(Entry(index.toFloat(), 0F))
+//                                totalTradingProfitNegativeEntries.add(Entry(index.toFloat(), diff))
+//                            }
 
                             mTimeMillisMap[index] = diaryDto.currentTimeMillis
                             index++
@@ -296,27 +310,18 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 //                    setCircleColorHole(colorPrincipal)
                 }
                 val krEvaluatedPriceDataSet = LineDataSet(krEvaluatedPriceEntries, "KR/JP Evaluated Price").apply {
-                    (if (krEvaluatedPriceEntries[krEvaluatedPriceEntries.size.minus(1)].y > krPrincipalEntries[krPrincipalEntries.size.minus(1)].y) plusColor else minusColor).also {
-                        color = it
-                        setCircleColor(it)
-//                        setCircleColorHole(it)
-                    }
+                    setDrawCircles(true)
+                    colors = krColors
+                    circleColors = krColors
                 }
-                val krTradingProfitNegativeDataSet = LineDataSet(krTradingProfitNegativeEntries, "KR/JP Trading Profit").apply {
+                val krTradingProfitPositiveDataSet = LineDataSet(krTradingProfitEntries, "KR/JP Trading Profit").apply {
                     setDrawFilled(true)
-                    setDrawCircles(false)
-                    color = minusColor
-                    fillColor = minusColor
-//                    setCircleColor(minusColor)
-//                        setCircleColorHole(it)
-                }
-                val krTradingProfitPositiveDataSet = LineDataSet(krTradingProfitPositiveEntries, "KR/JP Trading Profit").apply {
-                    setDrawFilled(true)
-                    setDrawCircles(false)
-                    color = plusColor
-                    fillColor = plusColor
-//                    setCircleColor(plusColor)
-//                        setCircleColorHole(it)
+                    setDrawCircles(true)
+                    setDrawCircleHole(true)
+                    colors = krColors
+                    circleColors = krColors
+                    setCircleColorHole(requireContext().config.primaryColor)
+                    fillColor = requireContext().config.primaryColor
                 }
 
                 val usPrincipalDataSet = LineDataSet(usPrincipalEntries, "US Principal").apply {
@@ -325,56 +330,37 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
 //                    setCircleColorHole(colorPrincipal)
                 }
                 val usEvaluatedPriceDataSet = LineDataSet(usEvaluatedPriceEntries, "US Evaluated Price").apply {
-                    (if (usEvaluatedPriceEntries[usEvaluatedPriceEntries.size.minus(1)].y > usPrincipalEntries[usPrincipalEntries.size.minus(1)].y) plusColor else minusColor).also {
-                        color = it
-                        setCircleColor(it)
-//                        setCircleColorHole(it)
-                    }
+                    setDrawCircles(true)
+                    colors = usColors
+                    circleColors = usColors
                 }
-                val usTradingProfitNegativeDataSet = LineDataSet(usTradingProfitNegativeEntries, "US Trading Profit").apply {
+                val usTradingProfitDataSet = LineDataSet(usTradingProfitEntries, "US Trading Profit").apply {
                     setDrawFilled(true)
-                    setDrawCircles(false)
-                    color = minusColor
-                    fillColor = minusColor
-//                    setCircleColor(minusColor)
-//                        setCircleColorHole(it)
-                }
-                val usTradingProfitPositiveDataSet = LineDataSet(usTradingProfitPositiveEntries, "US Trading Profit").apply {
-                    setDrawFilled(true)
-                    setDrawCircles(false)
-                    color = plusColor
-                    fillColor = plusColor
-//                    setCircleColor(plusColor)
-//                        setCircleColorHole(it)
+                    setDrawCircles(true)
+                    setDrawCircleHole(true)
+                    colors = usColors
+                    circleColors = usColors
+                    setCircleColorHole(requireContext().config.primaryColor)
+                    fillColor = requireContext().config.primaryColor
                 }
 
                 val totalPrincipalDataSet = LineDataSet(totalPrincipalEntries, "Total Principal").apply {
                     color = colorPrincipal
                     setCircleColor(colorPrincipal)
-//                    setCircleColorHole(colorPrincipal)
                 }
                 val totalEvaluatedPriceDataSet = LineDataSet(totalEvaluatedPriceEntries, "Total Evaluated Price").apply {
-                    (if (totalEvaluatedPriceEntries[totalEvaluatedPriceEntries.size.minus(1)].y > totalPrincipalEntries[totalPrincipalEntries.size.minus(1)].y) plusColor else minusColor).also {
-                        color = it
-                        setCircleColor(it)
-//                        setCircleColorHole(it)
-                    }
+                    setDrawCircles(true)
+                    colors = totalColors
+                    circleColors = totalColors
                 }
-                val totalTradingProfitNegativeDataSet = LineDataSet(totalTradingProfitNegativeEntries, "Total Trading Profit").apply {
+                val totalTradingProfitDataSet = LineDataSet(totalTradingProfitEntries, "Total Trading Profit").apply {
                     setDrawFilled(true)
-                    setDrawCircles(false)
-                    color = minusColor
-                    fillColor = minusColor
-//                    setCircleColor(minusColor)
-//                        setCircleColorHole(it)
-                }
-                val totalTradingProfitPositiveDataSet = LineDataSet(totalTradingProfitPositiveEntries, "Total Trading Profit").apply {
-                    setDrawFilled(true)
-                    setDrawCircles(false)
-                    color = plusColor
-                    fillColor = plusColor
-//                    setCircleColor(plusColor)
-//                        setCircleColorHole(it)
+                    setDrawCircles(true)
+                    setDrawCircleHole(true)
+                    colors = totalColors
+                    circleColors = totalColors
+                    setCircleColorHole(requireContext().config.primaryColor)
+                    fillColor = requireContext().config.primaryColor
                 }
 
                 when (mChartMode) {
@@ -382,29 +368,26 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                         mDataSets.add(krPrincipalDataSet)
                         mDataSets.add(krEvaluatedPriceDataSet)
                         mDataSets.add(krTradingProfitPositiveDataSet)
-                        mDataSets.add(krTradingProfitNegativeDataSet)
-                        mLineChart.axisLeft.axisMinimum = krTradingProfitNegativeDataSet.yMin
-                        mLineChart.axisRight.axisMinimum = krTradingProfitNegativeDataSet.yMin
+                        mLineChart.axisLeft.axisMinimum = krTradingProfitPositiveDataSet.yMin.minus(100000)
+                        mLineChart.axisRight.axisMinimum = krTradingProfitPositiveDataSet.yMin.minus(100000)
                         mLineChart.axisLeft.axisMaximum = krPrincipalDataSet.yMax.plus(2000000)
                         mLineChart.axisRight.axisMaximum = krPrincipalDataSet.yMax.plus(2000000)
                     }
                     "B" -> {
                         mDataSets.add(usPrincipalDataSet)
                         mDataSets.add(usEvaluatedPriceDataSet)
-                        mDataSets.add(usTradingProfitPositiveDataSet)
-                        mDataSets.add(usTradingProfitNegativeDataSet)
-                        mLineChart.axisLeft.axisMinimum = usTradingProfitNegativeDataSet.yMin
-                        mLineChart.axisRight.axisMinimum = usTradingProfitNegativeDataSet.yMin
+                        mDataSets.add(usTradingProfitDataSet)
+                        mLineChart.axisLeft.axisMinimum = usTradingProfitDataSet.yMin.minus(100000)
+                        mLineChart.axisRight.axisMinimum = usTradingProfitDataSet.yMin.minus(100000)
                         mLineChart.axisLeft.axisMaximum = usPrincipalDataSet.yMax.plus(2000000)
                         mLineChart.axisRight.axisMaximum = usPrincipalDataSet.yMax.plus(2000000)
                     }
                     "C" -> {
                         mDataSets.add(totalPrincipalDataSet)
                         mDataSets.add(totalEvaluatedPriceDataSet)
-                        mDataSets.add(totalTradingProfitPositiveDataSet)
-                        mDataSets.add(totalTradingProfitNegativeDataSet)
-                        mLineChart.axisLeft.axisMinimum = totalTradingProfitNegativeDataSet.yMin
-                        mLineChart.axisRight.axisMinimum = totalTradingProfitNegativeDataSet.yMin
+                        mDataSets.add(totalTradingProfitDataSet)
+                        mLineChart.axisLeft.axisMinimum = totalTradingProfitDataSet.yMin.minus(100000)
+                        mLineChart.axisRight.axisMinimum = totalTradingProfitDataSet.yMin.minus(100000)
                         mLineChart.axisLeft.axisMaximum = totalPrincipalDataSet.yMax.plus(2000000)
                         mLineChart.axisRight.axisMaximum = totalPrincipalDataSet.yMax.plus(2000000)
                     }
