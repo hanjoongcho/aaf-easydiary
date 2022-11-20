@@ -258,42 +258,23 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                             val usPrincipal = if (amountArray.size > 3) amountArray[3].toFloat() else 4000000F
                             val sum = krEvaluatedPrice.plus(usEvaluatedPrice)
                             totalSum += sum
-                            var diff = 0F
+                            var diff = krEvaluatedPrice.minus(krPrincipal)
                             krPrincipalEntries.add(Entry(index.toFloat(), krPrincipal))
                             krEvaluatedPriceEntries.add(Entry(index.toFloat(), krEvaluatedPrice))
-                            diff = krEvaluatedPrice.minus(krPrincipal)
+                            krTradingProfitEntries.add(Entry(index.toFloat(), diff))
                             if (diff >= 0) krColors.add(plusColor) else krColors.add(minusColor)
-//                            if (diff >= 0) {
-                                krTradingProfitEntries.add(Entry(index.toFloat(), diff))
-//                                krTradingProfitNegativeEntries.add(Entry(index.toFloat(), 0F))
-//                            } else {
-//                                krTradingProfitEntries.add(Entry(index.toFloat(), 0F))
-//                                krTradingProfitNegativeEntries.add(Entry(index.toFloat(), diff))
-//                            }
 
                             usPrincipalEntries.add(Entry(index.toFloat(), usPrincipal))
                             usEvaluatedPriceEntries.add(Entry(index.toFloat(), usEvaluatedPrice))
                             diff = usEvaluatedPrice.minus(usPrincipal)
                             if (diff >= 0) usColors.add(plusColor) else usColors.add(minusColor)
-//                            if (diff >= 0) {
-                                usTradingProfitEntries.add(Entry(index.toFloat(), diff))
-//                                usTradingProfitNegativeEntries.add(Entry(index.toFloat(), 0F))
-//                            } else {
-//                                usTradingProfitPositiveEntries.add(Entry(index.toFloat(), 0F))
-//                                usTradingProfitNegativeEntries.add(Entry(index.toFloat(), diff))
-//                            }
+                            usTradingProfitEntries.add(Entry(index.toFloat(), diff))
 
                             totalPrincipalEntries.add(Entry(index.toFloat(), krPrincipal.plus(usPrincipal)))
                             totalEvaluatedPriceEntries.add(Entry(index.toFloat(), sum))
                             diff = krEvaluatedPrice.plus(usEvaluatedPrice).minus(krPrincipal.plus(usPrincipal))
                             if (diff >= 0) totalColors.add(plusColor) else totalColors.add(minusColor)
-//                            if (diff >= 0) {
-                                totalTradingProfitEntries.add(Entry(index.toFloat(), diff))
-//                                totalTradingProfitNegativeEntries.add(Entry(index.toFloat(), 0F))
-//                            } else {
-//                                totalTradingProfitPositiveEntries.add(Entry(index.toFloat(), 0F))
-//                                totalTradingProfitNegativeEntries.add(Entry(index.toFloat(), diff))
-//                            }
+                            totalTradingProfitEntries.add(Entry(index.toFloat(), diff))
 
                             mTimeMillisMap[index] = diaryDto.currentTimeMillis
                             index++
@@ -488,9 +469,5 @@ class StockLineChartFragment : androidx.fragment.app.Fragment() {
                 super.refreshContent(entry, highlight)
             }
         }
-
-//        override fun getOffset(): MPPointF {
-//            return MPPointF((-(width / 2)).toFloat(), (-height).toFloat())
-//        }
     }
 }
